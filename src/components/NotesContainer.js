@@ -1,16 +1,26 @@
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { Note } from './Note'
+import { useNotes } from '../hooks/useNotes'
+import { HomeMessage } from './HomeMessage'
 
 export function NotesContainer() {
+    const { notes, loading } = useNotes()
+
     return (
         <ScrollView
             overScrollMode='never'
             style={styles.scrollContainer}
         >
             <View style={styles.notesContainer}>
-                <Note title='Note 1' content='This is the first note' />
-                <Note title='Note 2' content='This is the second note' />
-                <Note title='Note 3' content='This is the third note' />
+                {loading && <HomeMessage label='Loading...' />}
+
+                {notes.map(({ title, note }, index) => (
+                    <Note key={index} title={title} note={note} />
+                ))}
+
+                {notes.length === 0 && !loading && (
+                    <HomeMessage label='No notes yet' />
+                )}
             </View>
         </ScrollView>
     )

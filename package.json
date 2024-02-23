@@ -18,7 +18,8 @@
     "react-native-screens": "~3.29.0",
     "expo-linking": "~6.2.2",
     "expo-constants": "~15.4.5",
-    "expo-font": "~11.10.3"
+    "expo-font": "~11.10.3",
+    "@react-native-async-storage/async-storage": "1.21.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

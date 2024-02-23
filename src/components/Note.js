@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { colors, fonts } from '../constants'
 
-export function Note({ title, content }) {
+export function Note({ title, note }) {
     return (
         <View style={styles.noteContainer}>
             <Text style={styles.noteTitle}>{title}</Text>
-            <Text style={styles.noteContent}>{content}</Text>
+            <Text style={styles.noteContent}>{note}</Text>
         </View>
     )
 }

@@ -1,8 +1,24 @@
+import { useState } from 'react'
+import { router } from 'expo-router'
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import { Button } from '../../src/components'
 import { colors, fonts } from '../../src/constants'
+import { useNotes } from '../../src/hooks/useNotes'
 
 export default function Note() {
+    const { saveNote } = useNotes()
+    const [title, setTitle] = useState('')
+    const [note, setNote] = useState('')
+
+    const handleSave = () => {
+        saveNote({
+            title,
+            note,
+        })
+
+        router.navigate('/')
+    }
+
     return (
         <View style={styles.container}>
             <ScrollView
@@ -13,8 +29,10 @@ export default function Note() {
                     <View style={styles.titleContainer}>
                         <TextInput
                             multiline
+                            value={title}
                             style={styles.title}
                             placeholder='Your title...'
+                            onChangeText={(text) => setTitle(text)}
                             placeholderTextColor={`${colors.text}80`}
                         />
                     </View>
@@ -26,8 +44,10 @@ export default function Note() {
                     <View style={styles.inputContainer}>
                         <TextInput
                             multiline
+                            value={note}
                             style={styles.input}
                             placeholder='Type your note here...'
+                            onChangeText={(text) => setNote(text)}
                             placeholderTextColor={`${colors.text}80`}
                         />
                     </View>
@@ -35,12 +55,12 @@ export default function Note() {
                         <Button
                             label='Save'
                             variant='primary'
-                            onPress={() => { }}
+                            onPress={handleSave}
                         />
                         <Button
                             label='Cancel'
                             variant='secondary'
-                            onPress={() => { }}
+                            onPress={() => router.navigate('/')}
                         />
                     </View>
                 </View>
