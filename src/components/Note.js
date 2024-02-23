@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
+import { colors, fonts } from '../constants'
 
 export function Note({ title, content }) {
     return (
@@ -14,18 +15,18 @@ const styles = StyleSheet.create({
         width: '85%',
         padding: 20,
         borderRadius: 16,
-        backgroundColor: '#28282c',
+        backgroundColor: colors.foreground,
     },
     noteTitle: {
         fontSize: 16,
-        color: 'white',
+        color: colors.text,
         paddingBottom: 10,
-        fontFamily: 'Roboto-Mono',
+        fontFamily: fonts.mono,
         textTransform: 'uppercase',
     },
     noteContent: {
         fontSize: 16,
-        color: 'white',
+        color: colors.text,
         fontFamily: 'Roboto-Mono',
     },
 })

@@ -2,6 +2,7 @@ import { useCallback, useEffect } from 'react'
 import { Stack } from 'expo-router'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
+import { colors, fonts } from '../src/constants'
 
 export default function AppLayout() {
     const [fontsLoaded, fontError] = useFonts({
@@ -33,7 +34,7 @@ export default function AppLayout() {
                 headerTitleAlign: 'center',
 
                 headerStyle: {
-                    backgroundColor: '#18181b',
+                    backgroundColor: colors.background,
                 },
             }}
             onLayout={onLayoutRootView}
@@ -44,8 +45,8 @@ export default function AppLayout() {
                     headerTitle: 'NOTES',
                     headerTitleStyle: {
                         fontSize: 16,
-                        color: 'white',
-                        fontFamily: 'Roboto-Mono',
+                        color: colors.text,
+                        fontFamily: fonts.mono,
                     },
                 }}
             />
