@@ -1,7 +1,3 @@
-import { Note } from './Note'
-import { NotesContainer } from './NotesContainer'
-
-export {
-    Note,
-    NotesContainer,
-}
+export { Note } from './Note'
+export { NotesContainer } from './NotesContainer'
+export { FloatingButton } from './FloatingButton'
