@@ -17,12 +17,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#28282c',
     },
     noteTitle: {
-        fontSize: 20,
+        fontSize: 16,
         color: 'white',
         paddingBottom: 10,
+        fontFamily: 'Roboto-Mono',
+        textTransform: 'uppercase',
     },
     noteContent: {
         fontSize: 16,
         color: 'white',
+        fontFamily: 'Roboto-Mono',
     },
 })
