@@ -36,6 +36,12 @@ export default function AppLayout() {
                 headerStyle: {
                     backgroundColor: colors.background,
                 },
+
+                headerTitleStyle: {
+                    fontSize: 16,
+                    color: colors.text,
+                    fontFamily: fonts.mono,
+                },
             }}
             onLayout={onLayoutRootView}
         >
@@ -43,11 +49,12 @@ export default function AppLayout() {
                 name='index'
                 options={{
                     headerTitle: 'NOTES',
-                    headerTitleStyle: {
-                        fontSize: 16,
-                        color: colors.text,
-                        fontFamily: fonts.mono,
-                    },
+                }}
+            />
+            <Stack.Screen
+                name='note/index'
+                options={{
+                    headerTitle: 'ADD NOTE',
                 }}
             />
         </Stack>
