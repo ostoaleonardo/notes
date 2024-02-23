@@ -1,4 +1,5 @@
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Button } from '../../src/components'
 import { colors, fonts } from '../../src/constants'
 
 export default function Note() {
@@ -28,6 +29,18 @@ export default function Note() {
                             style={styles.input}
                             placeholder='Type your note here...'
                             placeholderTextColor={`${colors.text}80`}
+                        />
+                    </View>
+                    <View style={styles.buttonsContainer}>
+                        <Button
+                            label='Save'
+                            variant='primary'
+                            onPress={() => { }}
+                        />
+                        <Button
+                            label='Cancel'
+                            variant='secondary'
+                            onPress={() => { }}
                         />
                     </View>
                 </View>
@@ -81,5 +94,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: colors.text,
         fontFamily: fonts.mono,
+    },
+    buttonsContainer: {
+        width: '100%',
+        marginTop: 32,
+        gap: 16,
     },
 })
