@@ -32,6 +32,7 @@ export default function AppLayout() {
             screenOptions={{
                 headerShadowVisible: false,
                 headerTitleAlign: 'center',
+                headerTintColor: colors.text,
 
                 headerStyle: {
                     backgroundColor: colors.background,
