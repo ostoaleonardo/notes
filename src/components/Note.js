@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
+import Animated, { CurvedTransition, FadeOutLeft } from 'react-native-reanimated'
 import { Swipeable } from 'react-native-gesture-handler'
 import { useNotes } from '../hooks'
 import { colors, fonts } from '../constants'
@@ -17,7 +18,11 @@ export function Note({ id, title, note }) {
     const { deleteNote } = useNotes()
 
     return (
-        <View style={styles.swipeableContainer}>
+        <Animated.View
+            exiting={FadeOutLeft}
+            layout={CurvedTransition}
+            style={styles.swipeableContainer}
+        >
             <Swipeable
                 onSwipeableOpen={() => deleteNote(id)}
                 renderRightActions={() => (
@@ -29,7 +34,7 @@ export function Note({ id, title, note }) {
                     <Text style={styles.noteContent}>{note}</Text>
                 </View>
             </Swipeable>
-        </View>
+        </Animated.View>
     )
 }
 
