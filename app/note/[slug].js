@@ -1,19 +1,25 @@
-import { useState } from 'react'
-import { router } from 'expo-router'
-import * as Crypto from 'expo-crypto'
+import { useEffect, useState } from 'react'
+import { router, useLocalSearchParams } from 'expo-router'
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import { Button } from '../../src/components'
 import { useNotes } from '../../src/hooks'
 import { colors, fonts } from '../../src/constants'
 
-export default function Note() {
-    const { saveNote } = useNotes()
+export default function EditNote() {
+    const { slug } = useLocalSearchParams()
+    const { getNote, updateNote } = useNotes()
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
 
+    useEffect(() => {
+        const note = getNote(slug)
+        setTitle(note.title)
+        setNote(note.note)
+    }, [slug])
+
     const handleSave = () => {
-        saveNote({
-            id: Crypto.randomUUID(),
+        updateNote({
+            id: slug,
             title,
             note,
         })
@@ -83,7 +89,7 @@ const styles = StyleSheet.create({
     noteContainer: {
         width: '100%',
         padding: 24,
-        alignItems: 'center',
+        alignItems: 'flex-start',
     },
     titleContainer: {
         width: '100%',

@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Animated, { CurvedTransition, FadeOutLeft } from 'react-native-reanimated'
 import { Swipeable } from 'react-native-gesture-handler'
 import { useNotes } from '../hooks'
 import { colors, fonts } from '../constants'
+import { router } from 'expo-router'
 
 export function DeleteAction() {
     return (
@@ -17,6 +18,10 @@ export function DeleteAction() {
 export function Note({ id, title, note }) {
     const { deleteNote } = useNotes()
 
+    const goToEdit = () => {
+        router.navigate('/note/' + id)
+    }
+
     return (
         <Animated.View
             exiting={FadeOutLeft}
@@ -29,10 +34,13 @@ export function Note({ id, title, note }) {
                     <DeleteAction />
                 )}
             >
-                <View style={styles.noteContainer}>
+                <Pressable
+                    onPress={goToEdit}
+                    style={styles.noteContainer}
+                >
                     <Text style={styles.noteTitle}>{title}</Text>
                     <Text style={styles.noteContent}>{note}</Text>
-                </View>
+                </Pressable>
             </Swipeable>
         </Animated.View>
     )

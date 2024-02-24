@@ -60,6 +60,12 @@ export default function AppLayout() {
                         headerTitle: 'ADD NOTE',
                     }}
                 />
+                <Stack.Screen
+                    name='note/[slug]'
+                    options={{
+                        headerTitle: 'EDIT NOTE',
+                    }}
+                />
             </Stack>
         </Providers>
     )
