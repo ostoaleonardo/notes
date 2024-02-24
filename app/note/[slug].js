@@ -3,6 +3,7 @@ import { router, useLocalSearchParams } from 'expo-router'
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import { Button } from '../../src/components'
 import { useNotes } from '../../src/hooks'
+import { getDate } from '../../src/utils'
 import { colors, fonts } from '../../src/constants'
 
 export default function EditNote() {
@@ -10,11 +11,15 @@ export default function EditNote() {
     const { getNote, updateNote } = useNotes()
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
+    const [createdAt, setCreatedAt] = useState('')
+    const [updatedAt, setUpdatedAt] = useState('')
 
     useEffect(() => {
         const note = getNote(slug)
         setTitle(note.title)
         setNote(note.note)
+        setCreatedAt(note.createdAt)
+        setUpdatedAt(note.updatedAt)
     }, [slug])
 
     const handleSave = () => {
@@ -22,6 +27,8 @@ export default function EditNote() {
             id: slug,
             title,
             note,
+            createdAt,
+            updatedAt: getDate(),
         })
 
         router.navigate('/')
@@ -43,6 +50,11 @@ export default function EditNote() {
                             onChangeText={(text) => setTitle(text)}
                             placeholderTextColor={`${colors.text}80`}
                         />
+                    </View>
+                    <View style={styles.dateContainer}>
+                        <Text style={styles.date}>
+                            {updatedAt ? `Updated: ${updatedAt}` : `Created: ${createdAt}`}
+                        </Text>
                     </View>
                     <View style={styles.labelContainer}>
                         <Text style={styles.label}>
@@ -93,12 +105,23 @@ const styles = StyleSheet.create({
     },
     titleContainer: {
         width: '100%',
-        marginBottom: 32,
     },
     title: {
         fontSize: 24,
         color: colors.text,
         fontFamily: fonts.mono,
+    },
+    dateContainer: {
+        width: '100%',
+        marginTop: 8,
+        marginBottom: 24,
+    },
+    date: {
+        fontSize: 12,
+        opacity: 0.5,
+        color: colors.text,
+        fontFamily: fonts.mono,
+        textTransform: 'uppercase',
     },
     labelContainer: {
         width: '100%',

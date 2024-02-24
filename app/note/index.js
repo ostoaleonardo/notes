@@ -4,6 +4,7 @@ import * as Crypto from 'expo-crypto'
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import { Button } from '../../src/components'
 import { useNotes } from '../../src/hooks'
+import { getDate } from '../../src/utils'
 import { colors, fonts } from '../../src/constants'
 
 export default function Note() {
@@ -16,6 +17,7 @@ export default function Note() {
             id: Crypto.randomUUID(),
             title,
             note,
+            createdAt: getDate(),
         })
 
         router.navigate('/')
