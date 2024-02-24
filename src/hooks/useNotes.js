@@ -21,9 +21,16 @@ export function useNotes() {
         AsyncStorage.setItem('notes', JSON.stringify(newNotes))
     }
 
+    const deleteNote = (id) => {
+        const newNotes = notes.filter((note) => note.id !== id)
+        setNotes(newNotes)
+        AsyncStorage.setItem('notes', JSON.stringify(newNotes))
+    }
+
     return {
         notes,
         loading,
         saveNote,
+        deleteNote
     }
 }

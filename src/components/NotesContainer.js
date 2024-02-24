@@ -14,8 +14,8 @@ export function NotesContainer() {
             <View style={styles.notesContainer}>
                 {loading && <HomeMessage label='Loading...' />}
 
-                {notes.map(({ title, note }, index) => (
-                    <Note key={index} title={title} note={note} />
+                {notes.map(({ id, title, note }, index) => (
+                    <Note key={index} id={id} title={title} note={note} />
                 ))}
 
                 {notes.length === 0 && !loading && (
@@ -32,10 +32,8 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     notesContainer: {
-        flex: 1,
-        gap: 24,
         width: '100%',
+        gap: 16,
         paddingVertical: 24,
-        alignItems: 'center',
     },
 })

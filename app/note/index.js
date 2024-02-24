@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { router } from 'expo-router'
+import * as Crypto from 'expo-crypto'
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import { Button } from '../../src/components'
 import { colors, fonts } from '../../src/constants'
@@ -12,6 +13,7 @@ export default function Note() {
 
     const handleSave = () => {
         saveNote({
+            id: Crypto.randomUUID(),
             title,
             note,
         })
