@@ -2,6 +2,7 @@ import { useCallback, useEffect } from 'react'
 import { Stack } from 'expo-router'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
+import { Providers } from './providers'
 import { colors, fonts } from '../src/constants'
 
 export default function AppLayout() {
@@ -28,36 +29,38 @@ export default function AppLayout() {
     }
 
     return (
-        <Stack
-            screenOptions={{
-                headerShadowVisible: false,
-                headerTitleAlign: 'center',
-                headerTintColor: colors.text,
+        <Providers>
+            <Stack
+                screenOptions={{
+                    headerShadowVisible: false,
+                    headerTitleAlign: 'center',
+                    headerTintColor: colors.text,
 
-                headerStyle: {
-                    backgroundColor: colors.background,
-                },
+                    headerStyle: {
+                        backgroundColor: colors.background,
+                    },
 
-                headerTitleStyle: {
-                    fontSize: 16,
-                    color: colors.text,
-                    fontFamily: fonts.mono,
-                },
-            }}
-            onLayout={onLayoutRootView}
-        >
-            <Stack.Screen
-                name='index'
-                options={{
-                    headerTitle: 'NOTES',
+                    headerTitleStyle: {
+                        fontSize: 16,
+                        color: colors.text,
+                        fontFamily: fonts.mono,
+                    },
                 }}
-            />
-            <Stack.Screen
-                name='note/index'
-                options={{
-                    headerTitle: 'ADD NOTE',
-                }}
-            />
-        </Stack>
+                onLayout={onLayoutRootView}
+            >
+                <Stack.Screen
+                    name='index'
+                    options={{
+                        headerTitle: 'NOTES',
+                    }}
+                />
+                <Stack.Screen
+                    name='note/index'
+                    options={{
+                        headerTitle: 'ADD NOTE',
+                    }}
+                />
+            </Stack>
+        </Providers>
     )
 }

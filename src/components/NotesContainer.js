@@ -1,4 +1,5 @@
 import { ScrollView, StyleSheet, View } from 'react-native'
+import Animated, { CurvedTransition, LinearTransition } from 'react-native-reanimated'
 import { Note } from './Note'
 import { HomeMessage } from './HomeMessage'
 import { useNotes } from '../hooks'
@@ -14,8 +15,8 @@ export function NotesContainer() {
             <View style={styles.notesContainer}>
                 {loading && <HomeMessage label='Loading...' />}
 
-                {notes.map(({ id, title, note }, index) => (
-                    <Note key={index} id={id} title={title} note={note} />
+                {notes.map(({ id, title, note }) => (
+                    <Note key={id} id={id} title={title} note={note} />
                 ))}
 
                 {notes.length === 0 && !loading && (

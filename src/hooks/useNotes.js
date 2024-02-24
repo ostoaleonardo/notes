@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { NoteContext } from '../context/NoteContext'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export function useNotes() {
-    const [notes, setNotes] = useState([])
+    const { notes, setNotes } = useContext(NoteContext)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
