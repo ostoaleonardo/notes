@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text } from 'react-native'
-import { colors, fonts } from '../constants'
 import { Link } from 'expo-router'
+import { colors, fonts } from '../constants'
 
 export function FloatingButton() {
     return (

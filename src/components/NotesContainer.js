@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { Note } from './Note'
-import { useNotes } from '../hooks/useNotes'
 import { HomeMessage } from './HomeMessage'
+import { useNotes } from '../hooks'
 
 export function NotesContainer() {
     const { notes, loading } = useNotes()

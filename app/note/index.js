@@ -3,8 +3,8 @@ import { router } from 'expo-router'
 import * as Crypto from 'expo-crypto'
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import { Button } from '../../src/components'
+import { useNotes } from '../../src/hooks'
 import { colors, fonts } from '../../src/constants'
-import { useNotes } from '../../src/hooks/useNotes'
 
 export default function Note() {
     const { saveNote } = useNotes()
