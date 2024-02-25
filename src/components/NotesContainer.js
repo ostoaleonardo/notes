@@ -1,10 +1,10 @@
 import { ScrollView, StyleSheet, View } from 'react-native'
-import { Note } from './SwipeableCard/Note'
+import { Note } from './SwipeableCard'
 import { HomeMessage } from './HomeMessage'
 import { useNotes } from '../hooks'
 
-export function NotesContainer() {
-    const { notes, loading } = useNotes()
+export function NotesContainer({ filteredNotes }) {
+    const { loading } = useNotes()
 
     return (
         <ScrollView
@@ -14,11 +14,11 @@ export function NotesContainer() {
             <View style={styles.notesContainer}>
                 {loading && <HomeMessage label='Loading...' />}
 
-                {notes.map(({ id, title, note }) => (
+                {filteredNotes.map(({ id, title, note }) => (
                     <Note key={id} id={id} title={title} note={note} />
                 ))}
 
-                {notes.length === 0 && !loading && (
+                {filteredNotes.length === 0 && !loading && (
                     <HomeMessage label='No notes yet' />
                 )}
             </View>
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     notesContainer: {
-        width: '100%',
+        flex: 1,
         gap: 16,
         paddingVertical: 24,
     },

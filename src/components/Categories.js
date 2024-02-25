@@ -1,11 +1,21 @@
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { Chip } from './Chip/Chip'
-import { useState } from 'react'
-import { useCategories } from '../hooks'
+import { useEffect, useState } from 'react'
+import { useCategories, useNotes } from '../hooks'
 
-export function Categories() {
+export function Categories({ setFilteredNotes }) {
+    const { notes } = useNotes()
     const { categories } = useCategories()
     const [selected, setSelected] = useState('All')
+
+    useEffect(() => {
+        if (selected === 'All') {
+            setFilteredNotes(notes)
+        } else {
+            const filtered = notes.filter((note) => note.categories.includes(selected))
+            setFilteredNotes(filtered)
+        }
+    }, [selected, notes])
 
     return (
         <View style={styles.container}>
