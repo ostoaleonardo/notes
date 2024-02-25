@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { router } from 'expo-router'
 import * as Crypto from 'expo-crypto'
-import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
-import { Button } from '../../src/components'
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Button, CategoryModal, Chip, ChipContent, RemoveChipButton } from '../../src/components'
 import { useNotes } from '../../src/hooks'
 import { getDate } from '../../src/utils'
 import { colors, fonts } from '../../src/constants'
@@ -11,16 +11,31 @@ export default function Note() {
     const { saveNote } = useNotes()
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
+    const [categories, setCategories] = useState(['All'])
+    const [isModalVisible, setIsModalVisible] = useState(false)
 
     const handleSave = () => {
         saveNote({
             id: Crypto.randomUUID(),
             title,
             note,
+            categories,
             createdAt: getDate(),
         })
 
         router.navigate('/')
+    }
+
+    const handleModal = () => {
+        setIsModalVisible(!isModalVisible)
+    }
+
+    const handleAddCategory = (category) => {
+        if (category && !categories.includes(category)) {
+            setCategories([...categories, category])
+        } else {
+            setCategories(categories.filter((c) => c !== category))
+        }
     }
 
     return (
@@ -39,6 +54,40 @@ export default function Note() {
                             onChangeText={(text) => setTitle(text)}
                             placeholderTextColor={`${colors.text}80`}
                         />
+                    </View>
+                    <View style={styles.categoriesContainer}>
+                        <Text style={styles.label}>
+                            Categories:
+                        </Text>
+                        <ScrollView
+                            horizontal
+                            overScrollMode='never'
+                            style={styles.scrollCategories}
+                            showsHorizontalScrollIndicator={false}
+                        >
+                            <View style={styles.chipsContainer}>
+                                {categories.slice(1).map((category) => (
+                                    <Chip
+                                        key={category}
+                                        label={category}
+                                        variant='solid'
+                                        endContent={
+                                            <RemoveChipButton
+                                                onPress={() => handleAddCategory(category)}
+                                            />
+                                        }
+                                    />
+                                ))}
+                                <Chip
+                                    label='Add'
+                                    variant='bordered'
+                                    onPress={handleModal}
+                                    endContent={
+                                        <ChipContent />
+                                    }
+                                />
+                            </View>
+                        </ScrollView>
                     </View>
                     <View style={styles.labelContainer}>
                         <Text style={styles.label}>
@@ -69,6 +118,12 @@ export default function Note() {
                     </View>
                 </View>
             </ScrollView>
+            <CategoryModal
+                isVisible={isModalVisible}
+                onClose={handleModal}
+                noteCategories={categories}
+                handleAddCategory={handleAddCategory}
+            />
         </View>
     )
 }
@@ -95,6 +150,18 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: colors.text,
         fontFamily: fonts.mono,
+    },
+    categoriesContainer: {
+        width: '100%',
+        marginBottom: 16,
+    },
+    scrollCategories: {
+        width: '100%',
+        paddingVertical: 16,
+    },
+    chipsContainer: {
+        gap: 8,
+        flexDirection: 'row',
     },
     labelContainer: {
         width: '100%',

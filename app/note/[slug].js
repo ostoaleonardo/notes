@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
-import { Button } from '../../src/components'
+import { Button, CategoryModal, Chip, ChipContent, RemoveChipButton } from '../../src/components'
 import { useNotes } from '../../src/hooks'
 import { getDate } from '../../src/utils'
 import { colors, fonts } from '../../src/constants'
@@ -11,13 +11,16 @@ export default function EditNote() {
     const { getNote, updateNote } = useNotes()
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
+    const [categories, setCategories] = useState([])
     const [createdAt, setCreatedAt] = useState('')
     const [updatedAt, setUpdatedAt] = useState('')
+    const [isModalVisible, setIsModalVisible] = useState(false)
 
     useEffect(() => {
         const note = getNote(slug)
         setTitle(note.title)
         setNote(note.note)
+        setCategories(note.categories)
         setCreatedAt(note.createdAt)
         setUpdatedAt(note.updatedAt)
     }, [slug])
@@ -27,11 +30,24 @@ export default function EditNote() {
             id: slug,
             title,
             note,
+            categories,
             createdAt,
             updatedAt: getDate(),
         })
 
         router.navigate('/')
+    }
+
+    const handleModal = () => {
+        setIsModalVisible(!isModalVisible)
+    }
+
+    const handleAddCategory = (category) => {
+        if (category && !categories.includes(category)) {
+            setCategories([...categories, category])
+        } else {
+            setCategories(categories.filter((c) => c !== category))
+        }
     }
 
     return (
@@ -55,6 +71,40 @@ export default function EditNote() {
                         <Text style={styles.date}>
                             {updatedAt ? `Updated: ${updatedAt}` : `Created: ${createdAt}`}
                         </Text>
+                    </View>
+                    <View style={styles.categoriesContainer}>
+                        <Text style={styles.label}>
+                            Categories:
+                        </Text>
+                        <ScrollView
+                            horizontal
+                            overScrollMode='never'
+                            style={styles.scrollCategories}
+                            showsHorizontalScrollIndicator={false}
+                        >
+                            <View style={styles.chipsContainer}>
+                                {categories.slice(1).map((category) => (
+                                    <Chip
+                                        key={category}
+                                        label={category}
+                                        variant='solid'
+                                        endContent={
+                                            <RemoveChipButton
+                                                onPress={() => handleAddCategory(category)}
+                                            />
+                                        }
+                                    />
+                                ))}
+                                <Chip
+                                    label='Add'
+                                    variant='bordered'
+                                    onPress={handleModal}
+                                    endContent={
+                                        <ChipContent />
+                                    }
+                                />
+                            </View>
+                        </ScrollView>
                     </View>
                     <View style={styles.labelContainer}>
                         <Text style={styles.label}>
@@ -85,6 +135,12 @@ export default function EditNote() {
                     </View>
                 </View>
             </ScrollView>
+            <CategoryModal
+                isVisible={isModalVisible}
+                onClose={handleModal}
+                noteCategories={categories}
+                handleAddCategory={handleAddCategory}
+            />
         </View>
     )
 }
@@ -122,6 +178,18 @@ const styles = StyleSheet.create({
         color: colors.text,
         fontFamily: fonts.mono,
         textTransform: 'uppercase',
+    },
+    categoriesContainer: {
+        width: '100%',
+        marginBottom: 16,
+    },
+    scrollCategories: {
+        width: '100%',
+        paddingVertical: 16,
+    },
+    chipsContainer: {
+        gap: 8,
+        flexDirection: 'row',
     },
     labelContainer: {
         width: '100%',

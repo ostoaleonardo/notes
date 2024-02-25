@@ -1,5 +1,4 @@
 import { ScrollView, StyleSheet, View } from 'react-native'
-import Animated, { CurvedTransition, LinearTransition } from 'react-native-reanimated'
 import { Note } from './Note'
 import { HomeMessage } from './HomeMessage'
 import { useNotes } from '../hooks'
