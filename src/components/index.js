@@ -1,4 +1,4 @@
-export { Note } from './Note'
+export { Note } from './SwipeableCard'
 export { NotesContainer } from './NotesContainer'
 export { FloatingButton } from './FloatingButton'
 export { Button } from './Button'

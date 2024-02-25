@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, View } from 'react-native'
-import { Note } from './Note'
+import { Note } from './SwipeableCard/Note'
 import { HomeMessage } from './HomeMessage'
 import { useNotes } from '../hooks'
 

@@ -1,19 +1,10 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { router } from 'expo-router'
+import { Pressable, StyleSheet, Text } from 'react-native'
 import Animated, { CurvedTransition, FadeOutLeft } from 'react-native-reanimated'
 import { Swipeable } from 'react-native-gesture-handler'
-import { useNotes } from '../hooks'
-import { colors, fonts } from '../constants'
-import { router } from 'expo-router'
-
-export function DeleteAction() {
-    return (
-        <View style={styles.deleteContainer}>
-            <Text style={styles.deleteText}>
-                Delete
-            </Text>
-        </View>
-    )
-}
+import { DeleteAction } from '.'
+import { useNotes } from '../../hooks'
+import { colors, fonts } from '../../constants'
 
 export function Note({ id, title, note }) {
     const { deleteNote } = useNotes()
@@ -26,13 +17,14 @@ export function Note({ id, title, note }) {
         <Animated.View
             exiting={FadeOutLeft}
             layout={CurvedTransition}
-            style={styles.swipeableContainer}
+            style={styles.container}
         >
             <Swipeable
                 onSwipeableOpen={() => deleteNote(id)}
                 renderRightActions={() => (
                     <DeleteAction />
                 )}
+                containerStyle={styles.swipeableContainer}
             >
                 <Pressable
                     onPress={goToEdit}
@@ -47,28 +39,19 @@ export function Note({ id, title, note }) {
 }
 
 const styles = StyleSheet.create({
-    swipeableContainer: {
+    container: {
         width: '100%',
-    },
-    deleteContainer: {
-        width: 100,
-        marginRight: 24,
-        borderRadius: 16,
         alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: colors.primary,
     },
-    deleteText: {
-        fontSize: 12,
-        color: colors.text,
-        fontFamily: fonts.mono,
-        textTransform: 'uppercase',
+    swipeableContainer: {
+        minWidth: '100%',
+        alignItems: 'center',
+        paddingHorizontal: 24,
     },
     noteContainer: {
-        width: '90%',
+        minWidth: '100%',
         padding: 20,
         borderRadius: 16,
-        marginHorizontal: 16,
         backgroundColor: colors.foreground,
     },
     noteTitle: {
