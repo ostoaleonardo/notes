@@ -2,7 +2,7 @@ import { router } from 'expo-router'
 import { Pressable, StyleSheet, Text } from 'react-native'
 import Animated, { CurvedTransition, FadeOutLeft } from 'react-native-reanimated'
 import { Swipeable } from 'react-native-gesture-handler'
-import { DeleteAction } from '.'
+import { DeleteAction } from './DeleteAction'
 import { useNotes } from '../../hooks'
 import { colors, fonts } from '../../constants'
 

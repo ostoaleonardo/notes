@@ -8,7 +8,7 @@ import 'react-native-gesture-handler'
 
 export default function App() {
     const { notes } = useNotes()
-    const [filteredNotes, setFilteredNotes] = useState(notes)
+    const [filteredNotes, setFilteredNotes] = useState([])
 
     return (
         <View style={styles.container}>

@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, View } from 'react-native'
-import { Chip } from './Chip/Chip'
 import { useEffect, useState } from 'react'
+import { Chip } from './Chip'
 import { useCategories, useNotes } from '../hooks'
 
 export function Categories({ setFilteredNotes }) {
