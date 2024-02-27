@@ -1,6 +1,6 @@
 import { router } from 'expo-router'
 import { Pressable, StyleSheet, Text } from 'react-native'
-import Animated, { CurvedTransition, FadeOutLeft } from 'react-native-reanimated'
+import Animated, { CurvedTransition, FadeInUp, SlideOutLeft } from 'react-native-reanimated'
 import { Swipeable } from 'react-native-gesture-handler'
 import { DeleteAction } from './DeleteAction'
 import { useNotes } from '../../hooks'
@@ -15,7 +15,8 @@ export function Note({ id, title, note }) {
 
     return (
         <Animated.View
-            exiting={FadeOutLeft}
+            entering={FadeInUp}
+            exiting={SlideOutLeft}
             layout={CurvedTransition}
             style={styles.container}
         >
