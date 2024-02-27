@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { router } from 'expo-router'
 import * as Crypto from 'expo-crypto'
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
-import { Button, CategoryModal, Chip, ChipContent, RemoveChipButton } from '../../src/components'
+import { ScrollView, StyleSheet, View } from 'react-native'
+import { Button, CategoryModal, Chip, ChipContent, LargeInput, RemoveChipButton, TextArea, TitleSection } from '../../src/components'
 import { useNotes } from '../../src/hooks'
 import { getDate } from '../../src/utils'
-import { colors, fonts } from '../../src/constants'
+import { colors } from '../../src/constants'
 
 export default function Note() {
     const { saveNote } = useNotes()
@@ -46,19 +46,16 @@ export default function Note() {
             >
                 <View style={styles.noteContainer}>
                     <View style={styles.titleContainer}>
-                        <TextInput
-                            multiline
+                        <LargeInput
                             value={title}
-                            style={styles.title}
+                            onChangeText={setTitle}
                             placeholder='Your title...'
-                            onChangeText={(text) => setTitle(text)}
-                            placeholderTextColor={`${colors.text}80`}
                         />
                     </View>
                     <View style={styles.categoriesContainer}>
-                        <Text style={styles.label}>
-                            Categories:
-                        </Text>
+                        <View style={styles.titleContainer}>
+                            <TitleSection title='Categories' />
+                        </View>
                         <ScrollView
                             horizontal
                             overScrollMode='never'
@@ -82,26 +79,17 @@ export default function Note() {
                                     label='Add'
                                     variant='bordered'
                                     onPress={handleModal}
-                                    endContent={
-                                        <ChipContent />
-                                    }
+                                    endContent={<ChipContent />}
                                 />
                             </View>
                         </ScrollView>
                     </View>
-                    <View style={styles.labelContainer}>
-                        <Text style={styles.label}>
-                            Note:
-                        </Text>
-                    </View>
-                    <View style={styles.inputContainer}>
-                        <TextInput
-                            multiline
+                    <View style={styles.sectionContainer}>
+                        <TitleSection title='Note' />
+                        <TextArea
                             value={note}
-                            style={styles.input}
+                            onChangeText={setNote}
                             placeholder='Type your note here...'
-                            onChangeText={(text) => setNote(text)}
-                            placeholderTextColor={`${colors.text}80`}
                         />
                     </View>
                     <View style={styles.buttonsContainer}>
@@ -139,20 +127,15 @@ const styles = StyleSheet.create({
     },
     noteContainer: {
         width: '100%',
-        padding: 24,
-        alignItems: 'center',
+        paddingVertical: 24,
     },
     titleContainer: {
         width: '100%',
-        marginBottom: 32,
-    },
-    title: {
-        fontSize: 24,
-        color: colors.text,
-        fontFamily: fonts.mono,
+        paddingHorizontal: 24,
     },
     categoriesContainer: {
         width: '100%',
+        marginTop: 24,
         marginBottom: 16,
     },
     scrollCategories: {
@@ -162,32 +145,17 @@ const styles = StyleSheet.create({
     chipsContainer: {
         gap: 8,
         flexDirection: 'row',
+        paddingHorizontal: 24,
     },
-    labelContainer: {
+    sectionContainer: {
         width: '100%',
-        marginBottom: 16,
-    },
-    label: {
-        fontSize: 16,
-        opacity: 0.8,
-        color: colors.text,
-        fontFamily: fonts.mono,
-    },
-    inputContainer: {
-        width: '100%',
-        minHeight: 200,
-        padding: 16,
-        borderRadius: 16,
-        backgroundColor: colors.foreground,
-    },
-    input: {
-        fontSize: 16,
-        color: colors.text,
-        fontFamily: fonts.mono,
+        gap: 16,
+        paddingHorizontal: 24,
     },
     buttonsContainer: {
         width: '100%',
-        marginTop: 32,
         gap: 16,
+        marginTop: 32,
+        paddingHorizontal: 24,
     },
 })

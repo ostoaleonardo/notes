@@ -3,6 +3,7 @@ import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 
 import { colors, fonts } from '../constants'
 import { Check } from './Check'
 import { useCategories } from '../hooks'
+import { Category } from './SwipeableCategory'
 
 export function CategoryModal({ isVisible, onClose, noteCategories, handleAddCategory }) {
     const { categories, addCategory } = useCategories()
@@ -49,18 +50,15 @@ export function CategoryModal({ isVisible, onClose, noteCategories, handleAddCat
                         <ScrollView
                             overScrollMode='never'
                             style={styles.scrollContainer}
+                            showsVerticalScrollIndicator={false}
                         >
                             {categories.slice(1).map((category, index) => (
-                                <Pressable
+                                <Category
                                     key={index}
-                                    style={styles.categoryContainer}
+                                    category={category}
                                     onPress={() => handleAddCategory(category)}
-                                >
-                                    <Text key={category} style={styles.label}>
-                                        {category}
-                                    </Text>
-                                    <Check checked={noteCategories.includes(category)} />
-                                </Pressable>
+                                    isSelected={noteCategories.includes(category)}
+                                />
                             ))}
                         </ScrollView>
                     )}
@@ -128,21 +126,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    scrollContainer: {
-        flex: 1,
-        width: '100%',
-    },
-    categoryContainer: {
-        width: '100%',
-        padding: 16,
-        flexDirection: 'row',
-        borderBottomWidth: 2,
-        borderBottomColor: `${colors.text}26`,
-        justifyContent: 'space-between',
-    },
     label: {
         fontSize: 16,
         fontFamily: fonts.mono,
         color: `${colors.text}80`,
+    },
+    scrollContainer: {
+        flex: 1,
+        width: '100%',
     },
 })
