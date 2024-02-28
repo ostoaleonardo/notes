@@ -2,9 +2,9 @@ import { StyleSheet, Text } from 'react-native'
 import { Link } from 'expo-router'
 import { colors, fonts } from '../../constants'
 
-export function FloatingButton({ label }) {
+export function FloatingButton({ label, href }) {
     return (
-        <Link href='/note' style={styles.linkContainer}>
+        <Link href={href} style={styles.linkContainer}>
             <Text style={styles.text}>{label}</Text>
         </Link>
     )
