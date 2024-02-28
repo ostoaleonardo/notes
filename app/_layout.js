@@ -2,6 +2,8 @@ import { useCallback, useEffect } from 'react'
 import { Stack } from 'expo-router'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
+import { Menu, Settings } from '../src/icons'
+import { IconButton } from '../src/components'
 import { Providers } from './providers'
 import { colors, fonts } from '../src/constants'
 
@@ -52,6 +54,18 @@ export default function AppLayout() {
                     name='index'
                     options={{
                         headerTitle: 'NOTES',
+                        headerLeft: () => (
+                            <IconButton
+                                onPress={() => { }}
+                                icon={<Menu width={24} height={24} color={colors.text} />}
+                            />
+                        ),
+                        headerRight: () => (
+                            <IconButton
+                                onPress={() => { }}
+                                icon={<Settings width={24} height={24} color={colors.text} />}
+                            />
+                        ),
                     }}
                 />
                 <Stack.Screen
@@ -66,7 +80,7 @@ export default function AppLayout() {
                         headerTitle: 'EDIT NOTE',
                     }}
                 />
-            </Stack>
-        </Providers>
+            </Stack >
+        </Providers >
     )
 }

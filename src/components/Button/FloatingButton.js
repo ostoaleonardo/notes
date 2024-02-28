@@ -1,19 +1,17 @@
-import { Pressable, StyleSheet, Text } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 import { Link } from 'expo-router'
-import { colors, fonts } from '../constants'
+import { colors, fonts } from '../../constants'
 
-export function FloatingButton() {
+export function FloatingButton({ label }) {
     return (
-        <Link href='/note' style={styles.container}>
-            <Pressable>
-                <Text style={styles.text}>+ Add Note</Text>
-            </Pressable>
+        <Link href='/note' style={styles.linkContainer}>
+            <Text style={styles.text}>{label}</Text>
         </Link>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
+    linkContainer: {
         position: 'absolute',
         bottom: 32,
         right: 32,

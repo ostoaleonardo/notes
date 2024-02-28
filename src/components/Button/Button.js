@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text } from 'react-native'
-import { colors, fonts } from '../../src/constants'
+import { colors, fonts } from '../../constants'
 
 export function Button({ label, onPress, variant = 'primary' || 'secondary' }) {
     const buttonStyles = variant === 'primary' ? styles.primaryButton : styles.secondaryButton
