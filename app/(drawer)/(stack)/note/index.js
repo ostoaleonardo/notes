@@ -3,7 +3,7 @@ import { router } from 'expo-router'
 import * as Crypto from 'expo-crypto'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { Button, CategoryModal, Chip, ChipContent, LargeInput, RemoveChipButton, TextArea, TitleSection } from '../../../../src/components'
-import { useNotes } from '../../../../src/hooks'
+import { useHeaderTitle, useNotes } from '../../../../src/hooks'
 import { getDate } from '../../../../src/utils'
 import { colors } from '../../../../src/constants'
 
@@ -13,6 +13,8 @@ export default function Note() {
     const [note, setNote] = useState('')
     const [categories, setCategories] = useState(['All'])
     const [isModalVisible, setIsModalVisible] = useState(false)
+
+    useHeaderTitle('Add Note')
 
     const handleSave = () => {
         saveNote({

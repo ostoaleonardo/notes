@@ -2,10 +2,13 @@ import { useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, View } from 'react-native'
 import { Categories, FloatingButton, NotesContainer } from '../../../../src/components'
+import { useHeaderTitle } from '../../../../src/hooks'
 import { colors } from '../../../../src/constants'
 
 export default function App() {
     const [filteredNotes, setFilteredNotes] = useState([])
+
+    useHeaderTitle('Notes')
 
     return (
         <View style={styles.container}>

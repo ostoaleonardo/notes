@@ -1,7 +1,10 @@
 import { Drawer } from 'expo-router/drawer'
+import { useGlobalSearchParams } from 'expo-router'
 import { colors, fonts } from '../../src/constants'
 
 export default function DrawerLayout() {
+    const params = useGlobalSearchParams()
+
     return (
         <Drawer
             screenOptions={{
@@ -42,7 +45,7 @@ export default function DrawerLayout() {
             <Drawer.Screen
                 name='(stack)'
                 options={{
-                    title: 'Notes',
+                    title: params.title ?? 'Notes',
                 }}
             />
             <Drawer.Screen

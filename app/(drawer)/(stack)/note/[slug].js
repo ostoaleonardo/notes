@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
-import { router, useLocalSearchParams } from 'expo-router'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { Button, CategoryModal, Chip, ChipContent, LargeInput, RemoveChipButton, TextArea, TitleSection } from '../../../../src/components'
-import { useNotes } from '../../../../src/hooks'
+import { useHeaderTitle, useNotes } from '../../../../src/hooks'
 import { getDate } from '../../../../src/utils'
 import { colors, fonts } from '../../../../src/constants'
 
 export default function EditNote() {
+    const router = useRouter()
     const { slug } = useLocalSearchParams()
     const { getNote, updateNote } = useNotes()
     const [title, setTitle] = useState('')
@@ -15,6 +16,8 @@ export default function EditNote() {
     const [createdAt, setCreatedAt] = useState('')
     const [updatedAt, setUpdatedAt] = useState('')
     const [isModalVisible, setIsModalVisible] = useState(false)
+
+    useHeaderTitle('Edit Note')
 
     useEffect(() => {
         const note = getNote(slug)
