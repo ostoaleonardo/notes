@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import { Button, CategoryModal, Chip, ChipContent, LargeInput, RemoveChipButton, TextArea, TitleSection } from '../../src/components'
-import { useNotes } from '../../src/hooks'
-import { getDate } from '../../src/utils'
-import { colors, fonts } from '../../src/constants'
+import { Button, CategoryModal, Chip, ChipContent, LargeInput, RemoveChipButton, TextArea, TitleSection } from '../../../../src/components'
+import { useNotes } from '../../../../src/hooks'
+import { getDate } from '../../../../src/utils'
+import { colors, fonts } from '../../../../src/constants'
 
 export default function EditNote() {
     const { slug } = useLocalSearchParams()
@@ -35,7 +35,7 @@ export default function EditNote() {
             updatedAt: getDate(),
         })
 
-        router.navigate('/')
+        router.navigate('/(drawer)/(stack)/home')
     }
 
     const handleModal = () => {
@@ -118,7 +118,7 @@ export default function EditNote() {
                         <Button
                             label='Cancel'
                             variant='secondary'
-                            onPress={() => router.navigate('/')}
+                            onPress={() => router.navigate('/(drawer)/(stack)/home')}
                         />
                     </View>
                 </View>

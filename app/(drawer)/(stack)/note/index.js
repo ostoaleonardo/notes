@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { router } from 'expo-router'
 import * as Crypto from 'expo-crypto'
 import { ScrollView, StyleSheet, View } from 'react-native'
-import { Button, CategoryModal, Chip, ChipContent, LargeInput, RemoveChipButton, TextArea, TitleSection } from '../../src/components'
-import { useNotes } from '../../src/hooks'
-import { getDate } from '../../src/utils'
-import { colors } from '../../src/constants'
+import { Button, CategoryModal, Chip, ChipContent, LargeInput, RemoveChipButton, TextArea, TitleSection } from '../../../../src/components'
+import { useNotes } from '../../../../src/hooks'
+import { getDate } from '../../../../src/utils'
+import { colors } from '../../../../src/constants'
 
 export default function Note() {
     const { saveNote } = useNotes()
@@ -23,7 +23,7 @@ export default function Note() {
             createdAt: getDate(),
         })
 
-        router.navigate('/')
+        router.navigate('/(drawer)/(stack)/home')
     }
 
     const handleModal = () => {
@@ -101,7 +101,7 @@ export default function Note() {
                         <Button
                             label='Cancel'
                             variant='secondary'
-                            onPress={() => router.navigate('/')}
+                            onPress={() => router.navigate('/(drawer)/(stack)/home')}
                         />
                     </View>
                 </View>
