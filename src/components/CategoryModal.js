@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
-import { colors, fonts } from '../constants'
-import { Check } from './Check'
-import { useCategories } from '../hooks'
 import { Category } from './SwipeableCategory'
+import { useCategories } from '../hooks'
+import { colors, fonts } from '../constants'
 
 export function CategoryModal({ isVisible, onClose, noteCategories, handleAddCategory }) {
     const { categories, addCategory } = useCategories()
@@ -29,7 +28,7 @@ export function CategoryModal({ isVisible, onClose, noteCategories, handleAddCat
                         value={newCategory}
                         style={styles.input}
                         placeholder='Add category...'
-                        placeholderTextColor={`${colors.text}80`}
+                        placeholderTextColor={colors.text50}
                         onChangeText={(text) => setNewCategory(text)}
                     />
                     <Pressable
@@ -108,7 +107,7 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         color: colors.text,
         fontFamily: fonts.mono,
-        backgroundColor: `${colors.text}26`,
+        backgroundColor: colors.text15,
     },
     addCategoryButton: {
         padding: 16,
@@ -128,8 +127,8 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 16,
+        color: colors.text50,
         fontFamily: fonts.mono,
-        color: `${colors.text}80`,
     },
     scrollContainer: {
         flex: 1,

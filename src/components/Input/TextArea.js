@@ -10,7 +10,7 @@ export function TextArea({ value, onChangeText, placeholder }) {
                 style={styles.input}
                 placeholder={placeholder}
                 onChangeText={onChangeText}
-                placeholderTextColor={`${colors.text}80`}
+                placeholderTextColor={colors.text50}
             />
         </View>
     )

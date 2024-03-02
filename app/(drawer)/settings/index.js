@@ -1,11 +1,28 @@
-import { SectionListComponent, StyleSheet, Text, View } from 'react-native'
-import { colors, fonts } from '../../../src/constants'
-import { TitleSection } from '../../../src/components'
 import { useState } from 'react'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Languages, ModalSheet, TitleSection } from '../../../src/components'
+import { colors, fonts } from '../../../src/constants'
+
+const SETTINGS_OPTIONS = [
+    {
+        title: 'Language',
+        component: <Languages />
+    },
+    // {
+    //     title: 'Themes',
+    //     component: <Themes />
+    // }
+]
 
 export default function Settings() {
-    const [language, setLanguage] = useState('English')
-    const [theme, setTheme] = useState('Orange')
+    const [selected, setSelected] = useState(SETTINGS_OPTIONS[0])
+    const [language, setLanguages] = useState('English')
+    // const [theme, setTheme] = useState('Orange')
+    const [isModalVisible, setIsModalVisible] = useState(false)
+
+    const handleModal = () => {
+        setIsModalVisible(!isModalVisible)
+    }
 
     return (
         <View style={styles.container}>
@@ -14,18 +31,24 @@ export default function Settings() {
             </Text>
             <View style={styles.sectionContainer}>
                 <TitleSection title='Language' />
-                <View style={styles.cardContainer}>
+                <Pressable
+                    onPress={handleModal}
+                    style={styles.cardContainer}
+                >
                     <Text style={styles.label}>
                         {language}
                     </Text>
                     <Text style={styles.label}>
                         {'>'}
                     </Text>
-                </View>
+                </Pressable>
             </View>
-            <View style={styles.sectionContainer}>
+            {/* <View style={styles.sectionContainer}>
                 <TitleSection title='Theme' />
-                <View style={styles.cardContainer}>
+                <Pressable
+                    onPress={handleModal}
+                    style={styles.cardContainer}
+                >
                     <View style={styles.colorContainer}>
                         <View style={styles.color} />
                         <Text style={styles.label}>
@@ -35,8 +58,16 @@ export default function Settings() {
                     <Text style={styles.label}>
                         {'>'}
                     </Text>
-                </View>
-            </View>
+                </Pressable>
+            </View> */}
+
+            <ModalSheet
+                isVisible={isModalVisible}
+                onClose={handleModal}
+                title={selected.title}
+            >
+                {selected.component}
+            </ModalSheet>
         </View>
     )
 }

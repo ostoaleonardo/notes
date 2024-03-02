@@ -1,34 +1,34 @@
-import { Pressable, StyleSheet, Text } from 'react-native'
-import Animated, { CurvedTransition, FadeOutLeft } from 'react-native-reanimated'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { Check } from '../Check'
 import { colors, fonts } from '../../constants'
 
-export function Category({ category, onPress, isSelected }) {
+export function ModalOption({ onPress, label, isSelected }) {
     return (
-        <Animated.View
-            exiting={FadeOutLeft}
-            layout={CurvedTransition}
-            style={styles.container}
-        >
+        <View style={styles.container}>
             <Pressable
                 onPress={onPress}
-                style={styles.categoryContainer}
+                style={styles.optionContainer}
             >
                 <Text style={styles.label}>
-                    {category}
+                    {label}
                 </Text>
                 <Check checked={isSelected} />
             </Pressable>
-        </Animated.View>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
+    scrollContainer: {
+        flex: 1,
+        width: '100%',
+    },
+
     container: {
         width: '100%',
         alignItems: 'center',
     },
-    categoryContainer: {
+    optionContainer: {
         minWidth: '100%',
         padding: 16,
         flexDirection: 'row',

@@ -36,7 +36,7 @@ export default function DrawerLayout() {
                     textTransform: 'uppercase',
                 },
 
-                drawerActiveBackgroundColor: `${colors.primary}20`,
+                drawerActiveBackgroundColor: colors.primary15,
                 drawerActiveTintColor: colors.primary,
 
                 drawerInactiveTintColor: colors.text,

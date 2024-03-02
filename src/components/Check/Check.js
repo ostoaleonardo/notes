@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: 'center',
         justifyContent: 'center',
-        borderColor: `${colors.text}26`,
+        borderColor: colors.text15,
     },
     checked: {
         width: 12,
@@ -31,6 +31,6 @@ const styles = StyleSheet.create({
         width: 12,
         height: 12,
         borderRadius: 4,
-        backgroundColor: `${colors.text}26`,
+        backgroundColor: colors.text15,
     },
 })

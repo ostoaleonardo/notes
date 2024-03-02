@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 48,
         alignItems: 'center',
-        borderColor: `${colors.text}80`,
+        borderColor: colors.text50,
     },
     secondaryLabel: {
         fontSize: 16,
