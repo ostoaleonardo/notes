@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { router } from 'expo-router'
 import * as Crypto from 'expo-crypto'
 import { ScrollView, StyleSheet, View } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import { Button, CategoryModal, Chip, ChipContent, LargeInput, RemoveChipButton, TextArea, TitleSection } from '../../../../src/components'
 import { useHeaderTitle, useNotes } from '../../../../src/hooks'
 import { getDate } from '../../../../src/utils'
@@ -9,12 +10,13 @@ import { colors } from '../../../../src/constants'
 
 export default function Note() {
     const { saveNote } = useNotes()
+    const { t } = useTranslation()
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
     const [categories, setCategories] = useState(['All'])
     const [isModalVisible, setIsModalVisible] = useState(false)
 
-    useHeaderTitle('Add Note')
+    useHeaderTitle(t('headerTitle.addNote'))
 
     const handleSave = () => {
         saveNote({
@@ -51,12 +53,12 @@ export default function Note() {
                         <LargeInput
                             value={title}
                             onChangeText={setTitle}
-                            placeholder='Your title...'
+                            placeholder={t('addNote.titlePlaceholder')}
                         />
                     </View>
                     <View style={styles.categoriesContainer}>
                         <View style={styles.titleContainer}>
-                            <TitleSection title='Categories' />
+                            <TitleSection title={t('title.categories')} />
                         </View>
                         <ScrollView
                             horizontal
@@ -78,31 +80,31 @@ export default function Note() {
                                     />
                                 ))}
                                 <Chip
-                                    label='Add'
                                     variant='bordered'
                                     onPress={handleModal}
+                                    label={t('categories.add')}
                                     endContent={<ChipContent />}
                                 />
                             </View>
                         </ScrollView>
                     </View>
                     <View style={styles.sectionContainer}>
-                        <TitleSection title='Note' />
+                        <TitleSection title={t('title.note')} />
                         <TextArea
                             value={note}
                             onChangeText={setNote}
-                            placeholder='Type your note here...'
+                            placeholder={t('addNote.notePlaceholder')}
                         />
                     </View>
                     <View style={styles.buttonsContainer}>
                         <Button
-                            label='Save'
                             variant='primary'
+                            label={t('buttons.save')}
                             onPress={handleSave}
                         />
                         <Button
-                            label='Cancel'
                             variant='secondary'
+                            label={t('buttons.cancel')}
                             onPress={() => router.navigate('/(drawer)/(stack)/home')}
                         />
                     </View>

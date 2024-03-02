@@ -1,0 +1,39 @@
+{
+    "language": "Español",
+    "title": {
+        "categories": "Categorías",
+        "note": "Nota"
+    },
+    "addNote": {
+        "titlePlaceholder": "Tu título...",
+        "notePlaceholder": "Escribe tu nota aquí..."
+    },
+    "editNote": {
+        "created": "Creado:",
+        "updated": "Actualizado:"
+    },
+    "settings": {
+        "language": "Idioma",
+        "theme": "Tema"
+    },
+    "headerTitle": {
+        "notes": "Notas",
+        "addNote": "Añadir Nota",
+        "editNote": "Editar Nota",
+        "settings": "Ajustes"
+    },
+    "buttons": {
+        "addNote": "Añadir Nota",
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "delete": "Borrar"
+    },
+    "categories": {
+        "all": "Todo",
+        "add": "Añadir"
+    },
+    "drawer": {
+        "notes": "Notas",
+        "settings": "Ajustes"
+    }
+}

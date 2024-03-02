@@ -2,8 +2,10 @@ import { ScrollView, StyleSheet, View } from 'react-native'
 import { useEffect, useState } from 'react'
 import { Chip } from './Chip'
 import { useCategories, useNotes } from '../hooks'
+import { useTranslation } from 'react-i18next'
 
 export function Categories({ setFilteredNotes }) {
+    const { t } = useTranslation()
     const { notes } = useNotes()
     const { categories } = useCategories()
     const [selected, setSelected] = useState('All')
@@ -29,9 +31,9 @@ export function Categories({ setFilteredNotes }) {
                     {categories.map((category) => (
                         <Chip
                             key={category}
-                            label={category}
                             onPress={() => setSelected(category)}
                             variant={category === selected ? 'solid' : 'bordered'}
+                            label={category === 'All' ? t('categories.all') : category}
                         />
                     ))}
                 </View>

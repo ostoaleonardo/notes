@@ -1,8 +1,10 @@
 import { Drawer } from 'expo-router/drawer'
+import { useTranslation } from 'react-i18next'
 import { useGlobalSearchParams } from 'expo-router'
 import { colors, fonts } from '../../src/constants'
 
 export default function DrawerLayout() {
+    const { t } = useTranslation()
     const params = useGlobalSearchParams()
 
     return (
@@ -45,13 +47,13 @@ export default function DrawerLayout() {
             <Drawer.Screen
                 name='(stack)'
                 options={{
-                    title: params.title ?? 'Notes',
+                    title: params.title ?? t('drawer.notes'),
                 }}
             />
             <Drawer.Screen
                 name='settings/index'
                 options={{
-                    title: 'Settings',
+                    title: t('drawer.settings'),
                 }}
             />
         </Drawer>

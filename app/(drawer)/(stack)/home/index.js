@@ -1,20 +1,22 @@
 import { useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, View } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import { Categories, FloatingButton, NotesContainer } from '../../../../src/components'
 import { useHeaderTitle } from '../../../../src/hooks'
 import { colors } from '../../../../src/constants'
 
 export default function App() {
+    const { t } = useTranslation()
     const [filteredNotes, setFilteredNotes] = useState([])
 
-    useHeaderTitle('Notes')
+    useHeaderTitle(t('headerTitle.notes'))
 
     return (
         <View style={styles.container}>
             <Categories setFilteredNotes={setFilteredNotes} />
             <NotesContainer filteredNotes={filteredNotes} />
-            <FloatingButton label='+ Add Note' href='/note' />
+            <FloatingButton label={t('buttons.addNote')} href='/note' />
             <StatusBar style='inverted' />
         </View>
     )

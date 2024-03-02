@@ -1,0 +1,39 @@
+{
+    "language": "English",
+    "title": {
+        "categories": "Categories",
+        "note": "Note"
+    },
+    "addNote": {
+        "titlePlaceholder": "Your title...",
+        "notePlaceholder": "Type your note here..."
+    },
+    "editNote": {
+        "created": "Created:",
+        "updated": "Updated:"
+    },
+    "settings": {
+        "language": "Language",
+        "theme": "Theme"
+    },
+    "headerTitle": {
+        "notes": "Notes",
+        "addNote": "Add Note",
+        "editNote": "Edit Note",
+        "settings": "Settings"
+    },
+    "buttons": {
+        "addNote": "Add Note",
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete"
+    },
+    "categories": {
+        "all": "All",
+        "add": "Add"
+    },
+    "drawer": {
+        "notes": "Notes",
+        "settings": "Settings"
+    }
+}

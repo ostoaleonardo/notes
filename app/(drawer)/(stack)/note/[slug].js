@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import { Button, CategoryModal, Chip, ChipContent, LargeInput, RemoveChipButton, TextArea, TitleSection } from '../../../../src/components'
 import { useHeaderTitle, useNotes } from '../../../../src/hooks'
 import { getDate } from '../../../../src/utils'
@@ -8,6 +9,7 @@ import { colors, fonts } from '../../../../src/constants'
 
 export default function EditNote() {
     const router = useRouter()
+    const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
     const { getNote, updateNote } = useNotes()
     const [title, setTitle] = useState('')
@@ -17,7 +19,7 @@ export default function EditNote() {
     const [updatedAt, setUpdatedAt] = useState('')
     const [isModalVisible, setIsModalVisible] = useState(false)
 
-    useHeaderTitle('Edit Note')
+    useHeaderTitle(t('headerTitle.editNote'))
 
     useEffect(() => {
         const note = getNote(slug)
@@ -64,17 +66,20 @@ export default function EditNote() {
                         <LargeInput
                             value={title}
                             onChangeText={setTitle}
-                            placeholder='Your title...'
+                            placeholder={t('addNote.titlePlaceholder')}
                         />
                     </View>
                     <View style={styles.dateContainer}>
                         <Text style={styles.date}>
-                            {updatedAt ? `Updated: ${updatedAt}` : `Created: ${createdAt}`}
+                            {updatedAt
+                                ? `${t('editNote.updated')} ${updatedAt}`
+                                : `${t('editNote.created')} ${createdAt}`
+                            }
                         </Text>
                     </View>
                     <View style={styles.categoriesContainer}>
                         <View style={styles.titleContainer}>
-                            <TitleSection title='Categories' />
+                            <TitleSection title={t('title.categories')} />
                         </View>
                         <ScrollView
                             horizontal
@@ -96,31 +101,31 @@ export default function EditNote() {
                                     />
                                 ))}
                                 <Chip
-                                    label='Add'
                                     variant='bordered'
                                     onPress={handleModal}
+                                    label={t('categories.add')}
                                     endContent={<ChipContent />}
                                 />
                             </View>
                         </ScrollView>
                     </View>
                     <View style={styles.sectionContainer}>
-                        <TitleSection title='Note' />
+                        <TitleSection title={t('title.note')} />
                         <TextArea
                             value={note}
                             onChangeText={setNote}
-                            placeholder='Type your note here...'
+                            placeholder={t('addNote.notePlaceholder')}
                         />
                     </View>
                     <View style={styles.buttonsContainer}>
                         <Button
-                            label='Save'
                             variant='primary'
+                            label={t('buttons.save')}
                             onPress={handleSave}
                         />
                         <Button
-                            label='Cancel'
                             variant='secondary'
+                            label={t('buttons.cancel')}
                             onPress={() => router.navigate('/(drawer)/(stack)/home')}
                         />
                     </View>

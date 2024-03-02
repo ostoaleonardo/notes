@@ -1,11 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { colors, fonts } from '../../constants'
+import { useTranslation } from 'react-i18next'
 
 export function DeleteAction() {
+    const { t } = useTranslation()
+
     return (
         <View style={styles.deleteContainer}>
             <Text style={styles.deleteText}>
-                Delete
+                {t('buttons.delete')}
             </Text>
         </View>
     )

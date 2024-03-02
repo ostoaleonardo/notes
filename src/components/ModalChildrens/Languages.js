@@ -1,11 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { ModalOption } from './ModalOption'
-
-const LANGUAGES = ['English', 'Spanish']
+import { useLanguage } from '../../hooks'
+import { LANGUAGES } from '../../constants'
 
 export function Languages() {
-    const [isSelected, setIsSelected] = useState(LANGUAGES[0])
+    const { currentLanguage, changeLanguage } = useLanguage()
+    const [isSelected, setIsSelected] = useState(currentLanguage)
+
+    const handleLanguage = (code) => {
+        changeLanguage(code)
+        setIsSelected(code)
+    }
 
     return (
         <ScrollView
@@ -13,12 +19,12 @@ export function Languages() {
             style={styles.scrollContainer}
             showsVerticalScrollIndicator={false}
         >
-            {LANGUAGES.map((language) => (
+            {LANGUAGES.map(({ code, name }) => (
                 <ModalOption
-                    key={language}
-                    label={language}
-                    onPress={() => setIsSelected(language)}
-                    isSelected={isSelected === language ? true : false}
+                    key={code}
+                    label={name}
+                    onPress={() => handleLanguage(code)}
+                    isSelected={isSelected === code ? true : false}
                 />
             ))}
         </ScrollView>

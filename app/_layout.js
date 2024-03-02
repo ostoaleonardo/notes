@@ -3,8 +3,10 @@ import { Slot } from 'expo-router'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import { Providers } from './providers'
+import { useLanguage } from '../src/hooks'
 
 export default function DrawerLayout() {
+    const { initLanguage } = useLanguage()
     const [fontsLoaded, fontError] = useFonts({
         'Roboto-Mono': require('../assets/fonts/RobotoMono.ttf'),
     })
@@ -12,6 +14,7 @@ export default function DrawerLayout() {
     useEffect(() => {
         const loadFont = async () => {
             await SplashScreen.preventAutoHideAsync()
+            initLanguage()
         }
 
         loadFont()

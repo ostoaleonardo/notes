@@ -1,72 +1,70 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { Languages, ModalSheet, TitleSection } from '../../../src/components'
+import { Languages, ModalSheet, Themes, TitleSection } from '../../../src/components'
 import { colors, fonts } from '../../../src/constants'
 
 const SETTINGS_OPTIONS = [
     {
-        title: 'Language',
-        component: <Languages />
+        title: 'settings.language',
+        children: <Languages />
     },
-    // {
-    //     title: 'Themes',
-    //     component: <Themes />
-    // }
+    {
+        title: 'settings.theme',
+        children: <Themes />
+    }
 ]
 
 export default function Settings() {
+    const { t } = useTranslation()
     const [selected, setSelected] = useState(SETTINGS_OPTIONS[0])
-    const [language, setLanguages] = useState('English')
-    // const [theme, setTheme] = useState('Orange')
     const [isModalVisible, setIsModalVisible] = useState(false)
 
-    const handleModal = () => {
+    const handleModal = (option) => {
         setIsModalVisible(!isModalVisible)
+        setSelected(option)
     }
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>
-                Settings
-            </Text>
             <View style={styles.sectionContainer}>
-                <TitleSection title='Language' />
+                <TitleSection title={t('settings.language')} />
                 <Pressable
-                    onPress={handleModal}
+                    onPress={() => handleModal(SETTINGS_OPTIONS[0])}
                     style={styles.cardContainer}
                 >
                     <Text style={styles.label}>
-                        {language}
+                        {t('language')}
                     </Text>
                     <Text style={styles.label}>
                         {'>'}
                     </Text>
                 </Pressable>
             </View>
-            {/* <View style={styles.sectionContainer}>
-                <TitleSection title='Theme' />
+            <View style={styles.sectionContainer}>
+                <TitleSection title={t('settings.theme')} />
                 <Pressable
-                    onPress={handleModal}
+                    onPress={() => handleModal(SETTINGS_OPTIONS[1])}
                     style={styles.cardContainer}
                 >
                     <View style={styles.colorContainer}>
                         <View style={styles.color} />
                         <Text style={styles.label}>
-                            {theme}
+                            Orange
                         </Text>
                     </View>
                     <Text style={styles.label}>
                         {'>'}
                     </Text>
                 </Pressable>
-            </View> */}
+            </View>
 
             <ModalSheet
                 isVisible={isModalVisible}
-                onClose={handleModal}
-                title={selected.title}
+                onClose={() => setIsModalVisible(!isModalVisible)}
+                title={t(selected.title)}
             >
-                {selected.component}
+                {selected.children}
             </ModalSheet>
         </View>
     )
@@ -78,15 +76,10 @@ const styles = StyleSheet.create({
         padding: 24,
         backgroundColor: colors.background,
     },
-    title: {
-        fontSize: 24,
-        color: colors.text,
-        fontFamily: fonts.mono,
-    },
     sectionContainer: {
         width: '100%',
         gap: 16,
-        marginTop: 24,
+        marginBottom: 24,
     },
     cardContainer: {
         borderRadius: 16,
