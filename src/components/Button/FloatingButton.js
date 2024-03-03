@@ -1,10 +1,18 @@
 import { StyleSheet, Text } from 'react-native'
 import { Link } from 'expo-router'
+import { useTheme } from '../../hooks'
 import { colors, fonts } from '../../constants'
 
 export function FloatingButton({ label, href }) {
+    const { theme } = useTheme()
+
     return (
-        <Link href={href} style={styles.linkContainer}>
+        <Link
+            href={href}
+            style={[styles.linkContainer, {
+                backgroundColor: theme.primary
+            }]}
+        >
             <Text style={styles.text}>{label}</Text>
         </Link>
     )

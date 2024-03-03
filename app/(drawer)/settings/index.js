@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { Languages, ModalSheet, Themes, TitleSection } from '../../../src/components'
 import { colors, fonts } from '../../../src/constants'
+import { useTheme } from '../../../src/hooks'
 
 const SETTINGS_OPTIONS = [
     {
@@ -17,6 +18,7 @@ const SETTINGS_OPTIONS = [
 
 export default function Settings() {
     const { t } = useTranslation()
+    const { color, theme } = useTheme()
     const [selected, setSelected] = useState(SETTINGS_OPTIONS[0])
     const [isModalVisible, setIsModalVisible] = useState(false)
 
@@ -48,9 +50,9 @@ export default function Settings() {
                     style={styles.cardContainer}
                 >
                     <View style={styles.colorContainer}>
-                        <View style={styles.color} />
+                        <View style={[styles.color, { backgroundColor: theme.primary }]} />
                         <Text style={styles.label}>
-                            Orange
+                            {color}
                         </Text>
                     </View>
                     <Text style={styles.label}>

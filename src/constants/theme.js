@@ -1,9 +1,15 @@
+import { getTheme } from '../utils'
+
+const theme = getTheme()
+
 const PRIMARY = '#fb471f'
 const TEXT = '#ffffff'
+const BACKGROUND = '#09090b'
+const FOREGROUND = '#18181b'
 
 export const colors = {
-    background: '#09090b',
-    foreground: '#18181b',
+    background: BACKGROUND,
+    foreground: FOREGROUND,
 
     primary: PRIMARY,
     primary15: `${PRIMARY}26`,

@@ -1,11 +1,18 @@
 import { useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { ModalOption } from './ModalOption'
+import { useTheme } from '../../hooks'
 
 const THEMES = ['Orange', 'Violet', 'Teal']
 
 export function Themes() {
-    const [isSelected, setIsSelected] = useState(THEMES[0])
+    const { color, changeTheme } = useTheme()
+    const [isSelected, setIsSelected] = useState(color)
+
+    const handleTheme = (theme) => {
+        changeTheme(theme)
+        setIsSelected(theme)
+    }
 
     return (
         <ScrollView
@@ -17,7 +24,7 @@ export function Themes() {
                 <ModalOption
                     key={theme}
                     label={theme}
-                    onPress={() => setIsSelected(theme)}
+                    onPress={() => handleTheme(theme)}
                     isSelected={isSelected === theme ? true : false}
                 />
             ))}

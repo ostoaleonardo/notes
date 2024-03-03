@@ -1,8 +1,13 @@
 import { StyleSheet, View } from 'react-native'
 import { colors } from '../../constants'
+import { useTheme } from '../../hooks'
 
 export function Check({ checked }) {
-    const checkStyle = checked ? styles.checked : styles.unchecked
+    const { theme } = useTheme()
+
+    const checkStyle = checked
+        ? [styles.checked, { backgroundColor: theme.primary }]
+        : styles.unchecked
 
     return (
         <View style={styles.checkContainer}>
