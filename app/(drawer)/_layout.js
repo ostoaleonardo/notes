@@ -1,6 +1,7 @@
 import { Drawer } from 'expo-router/drawer'
 import { useTranslation } from 'react-i18next'
 import { useGlobalSearchParams } from 'expo-router'
+import { DrawerItems } from '../../src/components'
 import { colors, fonts } from '../../src/constants'
 
 export default function DrawerLayout() {
@@ -26,23 +27,9 @@ export default function DrawerLayout() {
                 drawerStyle: {
                     backgroundColor: colors.background,
                 },
-
-                drawerItemStyle: {
-                    borderRadius: 16,
-                    paddingVertical: 4,
-                    paddingHorizontal: 8,
-                },
-
-                drawerLabelStyle: {
-                    fontFamily: fonts.mono,
-                    textTransform: 'uppercase',
-                },
-
-                drawerActiveBackgroundColor: colors.primary15,
-                drawerActiveTintColor: colors.primary,
-
-                drawerInactiveTintColor: colors.text,
             }}
+
+            drawerContent={(props) => <DrawerItems {...props} />}
         >
             <Drawer.Screen
                 name='(stack)'
@@ -56,6 +43,12 @@ export default function DrawerLayout() {
                     title: t('drawer.settings'),
                 }}
             />
-        </Drawer>
+            <Drawer.Screen
+                name='categories/index'
+                options={{
+                    title: t('drawer.categories'),
+                }}
+            />
+        </Drawer >
     )
 }

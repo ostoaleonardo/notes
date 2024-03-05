@@ -34,6 +34,7 @@
     },
     "drawer": {
         "notes": "Notas",
-        "settings": "Ajustes"
+        "settings": "Ajustes",
+        "categories": "Categorías"
     }
 }
