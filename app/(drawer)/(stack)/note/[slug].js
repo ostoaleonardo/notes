@@ -131,6 +131,7 @@ export default function EditNote() {
                     </View>
                 </View>
             </ScrollView>
+            
             <CategoryModal
                 isVisible={isModalVisible}
                 onClose={handleModal}

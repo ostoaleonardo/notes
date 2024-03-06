@@ -4,6 +4,7 @@ const TEXT = '#ffffff'
 export const colors = {
     background: '#09090b',
     foreground: '#18181b',
+    overlay: '#00000080',
 
     primary: PRIMARY,
     primary15: `${PRIMARY}26`,

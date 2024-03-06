@@ -10,7 +10,6 @@ export default function Categories() {
 
     const handleModal = (option) => {
         setIsModalVisible(!isModalVisible)
-        setSelected(option)
     }
 
     return (

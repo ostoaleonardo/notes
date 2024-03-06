@@ -4,7 +4,10 @@ export function IconButton({ icon, onPress }) {
     return (
         <Pressable
             onPress={onPress}
-            style={styles.container}
+            style={({ pressed }) => [
+                styles.container,
+                pressed && { opacity: 0.5 },
+            ]}
         >
             {icon}
         </Pressable>
@@ -13,6 +16,10 @@ export function IconButton({ icon, onPress }) {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 16,
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 })

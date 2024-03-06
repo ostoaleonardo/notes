@@ -110,6 +110,7 @@ export default function Note() {
                     </View>
                 </View>
             </ScrollView>
+            
             <CategoryModal
                 isVisible={isModalVisible}
                 onClose={handleModal}
