@@ -1,40 +1,38 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView, StyleSheet, TextInput, View } from 'react-native'
-import { CategoryCard, HomeMessage, SquareButton, TitleSection } from '../../../src/components'
+import { ScrollView, StyleSheet, View } from 'react-native'
+import { CategoryCard, HomeMessage, SmallInput, SquareButton, TitleSection, UpdateCategoryModal } from '../../../src/components'
 import { useCategories } from '../../../src/hooks'
-import { colors, fonts } from '../../../src/constants'
+import { colors } from '../../../src/constants'
 
 export default function Categories() {
     const { t } = useTranslation()
     const [newCategory, setNewCategory] = useState('')
+    const [categorySelected, setCategorySelected] = useState('')
     const [isModalVisible, setIsModalVisible] = useState(false)
     const { categories, addCategory, removeCategory } = useCategories()
 
     const handleModal = (option) => {
         setIsModalVisible(!isModalVisible)
+        setCategorySelected(option)
     }
 
     return (
         <View style={styles.container}>
             <View style={styles.inputContainer}>
-                <TextInput
+                <SmallInput
                     value={newCategory}
-                    style={styles.input}
+                    onChangeText={setNewCategory}
                     placeholder={t('categories.newCategory')}
-                    placeholderTextColor={colors.text50}
-                    onChangeText={(text) => setNewCategory(text)}
                 />
                 <SquareButton
                     label={t('categories.add')}
                     onPress={() => addCategory(newCategory)}
                 />
             </View>
-
             <View style={styles.sectionContainer}>
                 <TitleSection title={t('categories.yourCategories')} />
             </View>
-
             <View style={styles.categoriesContainer}>
                 {categories.length === 1 ? (
                     <HomeMessage label={t('messages.noCategories')} />
@@ -49,6 +47,7 @@ export default function Categories() {
                                 <CategoryCard
                                     key={index}
                                     category={category}
+                                    onPress={() => handleModal(category)}
                                     onDelete={() => removeCategory(category)}
                                 />
                             ))}
@@ -56,6 +55,13 @@ export default function Categories() {
                     </ScrollView>
                 )}
             </View>
+
+            <UpdateCategoryModal
+                isVisible={isModalVisible}
+                onClose={() => setIsModalVisible(!isModalVisible)}
+                title={t('categories.updateCategory')}
+                categorySelected={categorySelected}
+            />
         </View>
     )
 }
@@ -70,21 +76,11 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         gap: 16,
+        padding: 24,
         paddingBottom: 16,
-        paddingHorizontal: 24,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-    },
-    input: {
-        flex: 1,
-        height: 72,
-        padding: 16,
-        fontSize: 16,
-        borderRadius: 16,
-        color: colors.text,
-        fontFamily: fonts.mono,
-        backgroundColor: colors.foreground,
     },
     categoriesContainer: {
         flex: 1,

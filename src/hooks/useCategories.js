@@ -28,9 +28,16 @@ export function useCategories() {
         AsyncStorage.setItem('categories', JSON.stringify(newCategories))
     }
 
+    const updateCategory = (oldCategory, newCategory) => {
+        const newCategories = categories.map((category) => (category === oldCategory ? newCategory : category))
+        setCategories(newCategories)
+        AsyncStorage.setItem('categories', JSON.stringify(newCategories))
+    }
+
     return {
         categories,
         addCategory,
         removeCategory,
+        updateCategory,
     }
 }
