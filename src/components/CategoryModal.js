@@ -19,7 +19,7 @@ export function CategoryModal({ isVisible, onClose, noteCategories, handleAddCat
                 <TextInput
                     value={newCategory}
                     style={styles.input}
-                    placeholder='Add category...'
+                    placeholder='Type a new category...'
                     placeholderTextColor={colors.text50}
                     onChangeText={(text) => setNewCategory(text)}
                 />

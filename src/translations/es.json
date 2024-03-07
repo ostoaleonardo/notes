@@ -12,6 +12,13 @@
         "created": "Creado:",
         "updated": "Actualizado:"
     },
+    "categories": {
+        "newCategory": "Nueva categoría...",
+        "yourCategories": "Tus categorías",
+        "noCategories": "Todavía no tienes categorías",
+        "all": "Todo",
+        "add": "Añadir"
+    },
     "settings": {
         "language": "Idioma",
         "theme": "Tema"
@@ -27,10 +34,6 @@
         "save": "Guardar",
         "cancel": "Cancelar",
         "delete": "Borrar"
-    },
-    "categories": {
-        "all": "Todo",
-        "add": "Añadir"
     },
     "drawer": {
         "notes": "Notas",
