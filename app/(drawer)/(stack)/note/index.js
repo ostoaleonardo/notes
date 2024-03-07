@@ -103,7 +103,7 @@ export default function Note() {
                             onPress={handleSave}
                         />
                         <Button
-                            variant='secondary'
+                            variant='outline'
                             label={t('buttons.cancel')}
                             onPress={() => router.navigate('/(drawer)/(stack)/home')}
                         />

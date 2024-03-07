@@ -1,48 +1,62 @@
 import { Pressable, StyleSheet, Text } from 'react-native'
 import { colors, fonts } from '../../constants'
 
-export function Button({ label, onPress, variant = 'primary' || 'secondary' }) {
-    const buttonStyles = variant === 'primary' ? styles.primaryButton : styles.secondaryButton
-    const labelStyles = variant === 'primary' ? styles.primaryLabel : styles.secondaryLabel
+export function Button({ label, onPress, variant }) {
+    const styles = getStyles(variant)
 
     return (
         <Pressable
             onPress={onPress}
-            style={buttonStyles}
+            style={styles.container}
         >
-            <Text style={labelStyles}>
+            <Text style={styles.label}>
                 {label}
             </Text>
         </Pressable>
     )
 }
 
-const styles = StyleSheet.create({
-    primaryButton: {
-        width: '100%',
-        padding: 16,
-        borderRadius: 48,
-        alignItems: 'center',
-        backgroundColor: colors.primary,
-    },
-    primaryLabel: {
-        fontSize: 16,
-        color: colors.text,
-        fontFamily: fonts.mono,
-        textTransform: 'uppercase',
-    },
-    secondaryButton: {
-        width: '100%',
-        padding: 16,
-        borderWidth: 2,
-        borderRadius: 48,
-        alignItems: 'center',
-        borderColor: colors.text50,
-    },
-    secondaryLabel: {
-        fontSize: 16,
-        color: colors.text,
-        fontFamily: fonts.mono,
-        textTransform: 'uppercase',
-    },
-})
+const getStyles = (variant) => {
+    let backgroundColor, borderColor, color
+
+    switch (variant) {
+        case 'primary':
+            backgroundColor = colors.primary
+            borderColor = colors.primary
+            color = colors.text
+            break
+        case 'secondary':
+            backgroundColor = colors.text
+            borderColor = colors.text
+            color = colors.background
+            break
+        case 'outline':
+            backgroundColor = 'transparent'
+            borderColor = colors.text15
+            color = colors.text
+            break
+        default:
+            backgroundColor = colors.primary
+            borderColor = colors.primary
+            color = colors.text
+            break
+    }
+
+    return StyleSheet.create({
+        container: {
+            width: '100%',
+            padding: 16,
+            borderColor,
+            borderWidth: 2,
+            backgroundColor,
+            borderRadius: 48,
+            alignItems: 'center',
+        },
+        label: {
+            color,
+            fontSize: 16,
+            fontFamily: fonts.mono,
+            textTransform: 'uppercase',
+        },
+    })
+}
