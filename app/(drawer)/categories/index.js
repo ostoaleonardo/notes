@@ -37,7 +37,7 @@ export default function Categories() {
 
             <View style={styles.categoriesContainer}>
                 {categories.length === 1 ? (
-                    <HomeMessage label={t('categories.noCategories')} />
+                    <HomeMessage label={t('messages.noCategories')} />
                 ) : (
                     <ScrollView
                         overScrollMode='never'

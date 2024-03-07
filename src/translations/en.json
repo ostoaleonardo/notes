@@ -15,7 +15,6 @@
     "categories": {
         "newCategory": "New category...",
         "yourCategories": "Your categories",
-        "noCategories": "You don't have any categories yet",
         "all": "All",
         "add": "Add"
     },
@@ -34,6 +33,11 @@
         "save": "Save",
         "cancel": "Cancel",
         "delete": "Delete"
+    },
+    "messages": {
+        "loading": "Loading...",
+        "noNotes": "You don't have notes yet",
+        "noCategories": "You don't have categories yet"
     },
     "drawer": {
         "notes": "Notes",

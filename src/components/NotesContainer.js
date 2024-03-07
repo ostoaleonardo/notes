@@ -1,9 +1,11 @@
 import { ScrollView, StyleSheet, View } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import { Note } from './SwipeableCard'
 import { HomeMessage } from './HomeMessage'
 import { useNotes } from '../hooks'
 
 export function NotesContainer({ filteredNotes }) {
+    const { t } = useTranslation()
     const { loading } = useNotes()
 
     return (
@@ -12,14 +14,14 @@ export function NotesContainer({ filteredNotes }) {
             style={styles.scrollContainer}
         >
             <View style={styles.notesContainer}>
-                {loading && <HomeMessage label='Loading...' />}
+                {loading && <HomeMessage label={t('messages.loading')} />}
 
                 {filteredNotes.map(({ id, title, note }) => (
                     <Note key={id} id={id} title={title} note={note} />
                 ))}
 
                 {filteredNotes.length === 0 && !loading && (
-                    <HomeMessage label='No notes yet' />
+                    <HomeMessage label={t('messages.noNotes')} />
                 )}
             </View>
         </ScrollView>
