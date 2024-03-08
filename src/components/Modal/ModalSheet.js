@@ -1,4 +1,4 @@
-import { Modal, StyleSheet, Text, View } from 'react-native'
+import { KeyboardAvoidingView, Modal, StyleSheet, Text, View } from 'react-native'
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 import { IconButton } from '../Button'
 import { colors, fonts } from '../../constants'
@@ -17,25 +17,34 @@ export function ModalSheet({ isVisible, onClose, title, children }) {
                 style={styles.modalBackdrop}
                 onStartShouldSetResponder={onClose}
             />
-            <View style={styles.modalContent}>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.title}>
-                        {title}
-                    </Text>
-                    <IconButton
-                        icon={<Text style={styles.closeText}>✕</Text>}
-                        onPress={onClose}
-                    />
+            <KeyboardAvoidingView
+                behavior='height'
+                style={styles.keyboardAvoidingView}
+            >
+                <View style={styles.modalContent}>
+                    <View style={styles.titleContainer}>
+                        <Text style={styles.title}>
+                            {title}
+                        </Text>
+                        <IconButton
+                            icon={<Text style={styles.closeText}>✕</Text>}
+                            onPress={onClose}
+                        />
+                    </View>
+                    <View style={styles.bodyContainer}>
+                        {children}
+                    </View>
                 </View>
-                <View style={styles.bodyContainer}>
-                    {children}
-                </View>
-            </View>
+            </KeyboardAvoidingView>
         </Modal>
     )
 }
 
 const styles = StyleSheet.create({
+    keyboardAvoidingView: {
+        flex: 1,
+        width: '100%',
+    },
     modalBackdrop: {
         position: 'absolute',
         top: 0,
