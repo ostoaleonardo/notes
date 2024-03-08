@@ -1,7 +1,9 @@
 import { StyleSheet, TextInput } from 'react-native'
 import { colors, fonts } from '../../constants'
 
-export function SmallInput({ value, onChangeText, placeholder }) {
+export function SmallInput({ value, onChangeText, placeholder, variant }) {
+    const styles = getStyles(variant)
+
     return (
         <TextInput
             value={value}
@@ -13,15 +15,44 @@ export function SmallInput({ value, onChangeText, placeholder }) {
     )
 }
 
-const styles = StyleSheet.create({
-    input: {
-        flex: 1,
-        height: 72,
-        padding: 16,
-        fontSize: 16,
-        borderRadius: 16,
-        color: colors.text,
-        fontFamily: fonts.mono,
-        backgroundColor: colors.foreground,
-    },
-})
+const getStyles = (variant) => {
+    let backgroundColor, borderColor, color
+
+    switch (variant) {
+        case 'solid':
+            backgroundColor = colors.text15
+            borderColor = 'transparent'
+            color = colors.text
+            break
+        case 'ghost':
+            backgroundColor = 'transparent'
+            borderColor = 'transparent'
+            color = colors.text
+            break
+        case 'outline':
+            backgroundColor = 'transparent'
+            borderColor = colors.text15
+            color = colors.text
+            break
+        default:
+            backgroundColor = colors.text15
+            borderColor = 'transparent'
+            color = colors.text
+            break
+    }
+
+    return StyleSheet.create({
+        input: {
+            flex: 1,
+            height: 72,
+            padding: 16,
+            fontSize: 16,
+            borderColor,
+            borderWidth: 2,
+            backgroundColor,
+            borderRadius: 16,
+            color: colors.text,
+            fontFamily: fonts.mono,
+        },
+    })
+}
