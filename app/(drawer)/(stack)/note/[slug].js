@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Button, CategoryModal, Chip, ChipContent, LargeInput, RemoveChipButton, TextArea, TitleSection } from '../../../../src/components'
-import { useHeaderTitle, useNotes } from '../../../../src/hooks'
-import { getDate } from '../../../../src/utils'
-import { colors, fonts } from '../../../../src/constants'
+import { Button, CategoryModal, Chip, ChipContent, LargeInput, RemoveChipButton, TextArea, TitleSection } from '@/components'
+import { useHeaderTitle, useNotes } from '@/hooks'
+import { getDate } from '@/utils'
+import { colors, fonts } from '@/constants'
 
 export default function EditNote() {
     const router = useRouter()
@@ -131,7 +131,7 @@ export default function EditNote() {
                     </View>
                 </View>
             </ScrollView>
-            
+
             <CategoryModal
                 isVisible={isModalVisible}
                 onClose={handleModal}

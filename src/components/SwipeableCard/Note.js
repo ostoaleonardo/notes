@@ -3,8 +3,8 @@ import { Pressable, StyleSheet, Text } from 'react-native'
 import Animated, { CurvedTransition, FadeInUp, SlideOutLeft } from 'react-native-reanimated'
 import { Swipeable } from 'react-native-gesture-handler'
 import { DeleteAction } from './DeleteAction'
-import { useNotes } from '../../hooks'
-import { colors, fonts } from '../../constants'
+import { useNotes } from '@/hooks'
+import { colors, fonts } from '@/constants'
 
 export function Note({ id, title, note }) {
     const { deleteNote } = useNotes()

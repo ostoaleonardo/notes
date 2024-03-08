@@ -1,5 +1,5 @@
 import { StyleSheet, TextInput } from 'react-native'
-import { colors, fonts } from '../../constants'
+import { colors, fonts } from '@/constants'
 
 export function SmallInput({ value, onChangeText, placeholder, variant }) {
     const styles = getStyles(variant)

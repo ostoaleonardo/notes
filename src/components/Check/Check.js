@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native'
-import { colors } from '../../constants'
+import { colors } from '@/constants'
 
 export function Check({ checked }) {
     const checkStyle = checked ? styles.checked : styles.unchecked

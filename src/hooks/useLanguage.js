@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getLocales } from 'expo-localization'
-import i18next from '../i18n/i18next'
+import i18next from '@/i18n/i18next'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export function useLanguage() {

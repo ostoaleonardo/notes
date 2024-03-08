@@ -1,6 +1,6 @@
 import { KeyboardAvoidingView, Modal, StyleSheet, Text, View } from 'react-native'
 import { IconButton } from '../Button'
-import { colors, fonts } from '../../constants'
+import { colors, fonts } from '@/constants'
 
 export function ModalSheet({ isVisible, onClose, title, children }) {
     return (

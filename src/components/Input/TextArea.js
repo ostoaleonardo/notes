@@ -1,5 +1,5 @@
 import { StyleSheet, TextInput, View } from 'react-native'
-import { colors, fonts } from '../../constants'
+import { colors, fonts } from '@/constants'
 
 export function TextArea({ value, onChangeText, placeholder }) {
     return (

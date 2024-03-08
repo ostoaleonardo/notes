@@ -1,8 +1,8 @@
 import { Drawer } from 'expo-router/drawer'
 import { useTranslation } from 'react-i18next'
 import { useGlobalSearchParams } from 'expo-router'
-import { DrawerItems } from '../../src/components'
-import { colors, fonts } from '../../src/constants'
+import { DrawerItems } from '@/components'
+import { colors, fonts } from '@/constants'
 
 export default function DrawerLayout() {
     const { t } = useTranslation()

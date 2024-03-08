@@ -3,10 +3,10 @@ import { router } from 'expo-router'
 import * as Crypto from 'expo-crypto'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Button, CategoryModal, Chip, ChipContent, LargeInput, RemoveChipButton, TextArea, TitleSection } from '../../../../src/components'
-import { useHeaderTitle, useNotes } from '../../../../src/hooks'
-import { getDate } from '../../../../src/utils'
-import { colors } from '../../../../src/constants'
+import { Button, CategoryModal, Chip, ChipContent, LargeInput, RemoveChipButton, TextArea, TitleSection } from '@/components'
+import { useHeaderTitle, useNotes } from '@/hooks'
+import { getDate } from '@/utils'
+import { colors } from '@/constants'
 
 export default function Note() {
     const { saveNote } = useNotes()
@@ -110,7 +110,7 @@ export default function Note() {
                     </View>
                 </View>
             </ScrollView>
-            
+
             <CategoryModal
                 isVisible={isModalVisible}
                 onClose={handleModal}

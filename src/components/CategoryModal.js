@@ -5,8 +5,8 @@ import { ModalSheet } from './Modal'
 import { SmallInput } from './Input'
 import { SquareButton } from './Button'
 import { Category } from './Category'
-import { useCategories } from '../hooks'
-import { colors, fonts } from '../constants'
+import { useCategories } from '@/hooks'
+import { colors, fonts } from '@/constants'
 
 export function CategoryModal({ isVisible, onClose, noteCategories, handleAddCategory }) {
     const { t } = useTranslation()

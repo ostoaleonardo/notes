@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { Check } from '../Check'
-import { colors, fonts } from '../../constants'
+import { colors, fonts } from '@/constants'
 
 export function ModalOption({ onPress, label, isSelected }) {
     return (

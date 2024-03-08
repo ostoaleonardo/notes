@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
-import { colors, fonts } from '../../constants'
 import { useTranslation } from 'react-i18next'
+import { colors, fonts } from '@/constants'
 
 export function DeleteAction() {
     const { t } = useTranslation()

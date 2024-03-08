@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Categories, FloatingButton, NotesContainer } from '../../../../src/components'
-import { useHeaderTitle } from '../../../../src/hooks'
-import { colors } from '../../../../src/constants'
+import { Categories, FloatingButton, NotesContainer } from '@/components'
+import { useHeaderTitle } from '@/hooks'
+import { colors } from '@/constants'
 
 export default function App() {
     const { t } = useTranslation()

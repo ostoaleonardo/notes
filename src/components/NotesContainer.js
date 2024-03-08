@@ -2,7 +2,7 @@ import { ScrollView, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Note } from './SwipeableCard'
 import { Message } from './Message'
-import { useNotes } from '../hooks'
+import { useNotes } from '@/hooks'
 
 export function NotesContainer({ filteredNotes }) {
     const { t } = useTranslation()

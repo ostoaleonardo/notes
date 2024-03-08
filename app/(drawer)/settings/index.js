@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { Languages, ModalSheet, Themes, TitleSection } from '../../../src/components'
-import { colors, fonts } from '../../../src/constants'
+import { Languages, ModalSheet, Themes, TitleSection } from '@/components'
+import { colors, fonts } from '@/constants'
 
 const SETTINGS_OPTIONS = [
     {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { useCategories } from '../hooks'
+import { useCategories } from '@/hooks'
 import { ModalSheet } from './Modal'
 import { LargeInput } from './Input'
 import { Button } from './Button'

@@ -3,7 +3,7 @@ import { Slot } from 'expo-router'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import { Providers } from './providers'
-import { useLanguage } from '../src/hooks'
+import { useLanguage } from '@/hooks'
 
 export default function DrawerLayout() {
     const { initLanguage } = useLanguage()

@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { ModalOption } from './ModalOption'
-import { useLanguage } from '../../hooks'
-import { LANGUAGES } from '../../constants'
+import { useLanguage } from '@/hooks'
+import { LANGUAGES } from '@/constants'
 
 export function Languages() {
     const { currentLanguage, changeLanguage } = useLanguage()

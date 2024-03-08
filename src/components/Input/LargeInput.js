@@ -1,5 +1,5 @@
 import { StyleSheet, TextInput } from 'react-native'
-import { colors, fonts } from '../../constants'
+import { colors, fonts } from '@/constants'
 
 export function LargeInput({ value, onChangeText, placeholder }) {
     return (

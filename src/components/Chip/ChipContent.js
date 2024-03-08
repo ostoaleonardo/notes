@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import { colors, fonts } from '../../constants'
+import { colors, fonts } from '@/constants'
 
 export function ChipContent() {
     return (

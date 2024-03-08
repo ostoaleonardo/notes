@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, View } from 'react-native'
-import { CategoryCard, Message, SmallInput, SquareButton, TitleSection, UpdateCategoryModal } from '../../../src/components'
-import { useCategories } from '../../../src/hooks'
-import { colors } from '../../../src/constants'
+import { CategoryCard, Message, SmallInput, SquareButton, TitleSection, UpdateCategoryModal } from '@/components'
+import { useCategories } from '@/hooks'
+import { colors } from '@/constants'
 
 export default function Categories() {
     const { t } = useTranslation()
