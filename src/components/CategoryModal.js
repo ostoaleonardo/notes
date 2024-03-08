@@ -1,12 +1,12 @@
 import { useState } from 'react'
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { ModalSheet } from './Modal'
 import { SmallInput } from './Input'
-import { Category } from './SwipeableCategory'
+import { SquareButton } from './Button'
+import { Category } from './Category'
 import { useCategories } from '../hooks'
 import { colors, fonts } from '../constants'
-import { SquareButton } from './Button'
 
 export function CategoryModal({ isVisible, onClose, noteCategories, handleAddCategory }) {
     const { t } = useTranslation()

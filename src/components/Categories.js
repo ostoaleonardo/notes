@@ -1,8 +1,8 @@
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Chip } from './Chip'
 import { useCategories, useNotes } from '../hooks'
-import { useTranslation } from 'react-i18next'
 
 export function Categories({ setFilteredNotes }) {
     const { t } = useTranslation()

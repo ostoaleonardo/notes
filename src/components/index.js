@@ -1,25 +1,38 @@
+// Buttons
+export { Button } from './Button'
+export { FloatingButton } from './Button'
+export { SquareButton } from './Button'
+export { IconButton } from './Button'
+export { Check } from './Check'
+
+// Chips
+export { Chip } from './Chip'
+export { ChipContent } from './Chip'
+export { RemoveChipButton } from './Chip'
+
+// Cards
 export { Note } from './SwipeableCard'
 export { CategoryCard } from './SwipeableCard'
 export { DeleteAction } from './SwipeableCard'
-export { NotesContainer } from './NotesContainer'
-export { FloatingButton } from './Button'
-export { Button } from './Button'
-export { IconButton } from './Button'
-export { SquareButton } from './Button'
-export { HomeMessage } from './HomeMessage'
-export { Categories } from './Categories'
-export { TitleSection } from './TitleSection'
-export { Chip } from './Chip'
-export { RemoveChipButton } from './Chip'
-export { ChipContent } from './Chip'
+export { Category } from './Category'
+
+// Inputs
+export { LargeInput } from './Input'
+export { SmallInput } from './Input'
+export { TextArea } from './Input'
+
+// Modals
+export { ModalSheet } from './Modal'
 export { CategoryModal } from './CategoryModal'
 export { UpdateCategoryModal } from './UpdateCategoryModal'
-export { Category } from './SwipeableCategory'
-export { Check } from './Check'
-export { LargeInput } from './Input/LargeInput'
-export { SmallInput } from './Input/SmallInput'
-export { TextArea } from './Input/TextArea'
-export { ModalSheet } from './Modal'
 export { Languages } from './ModalChildrens'
 export { Themes } from './ModalChildrens'
+
+// Drawer
 export { DrawerItems } from './Drawer'
+
+// Others
+export { Categories } from './Categories'
+export { NotesContainer } from './NotesContainer'
+export { TitleSection } from './TitleSection'
+export { Message } from './Message'

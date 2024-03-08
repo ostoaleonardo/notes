@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text } from 'react-native'
 import Animated, { CurvedTransition, FadeOutLeft } from 'react-native-reanimated'
-import { Check } from '../Check'
-import { colors, fonts } from '../../constants'
+import { Check } from './Check'
+import { colors, fonts } from '../constants'
 
 export function Category({ category, onPress, isSelected }) {
     return (

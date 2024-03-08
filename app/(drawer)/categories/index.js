@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, View } from 'react-native'
-import { CategoryCard, HomeMessage, SmallInput, SquareButton, TitleSection, UpdateCategoryModal } from '../../../src/components'
+import { CategoryCard, Message, SmallInput, SquareButton, TitleSection, UpdateCategoryModal } from '../../../src/components'
 import { useCategories } from '../../../src/hooks'
 import { colors } from '../../../src/constants'
 
@@ -35,7 +35,7 @@ export default function Categories() {
             </View>
             <View style={styles.categoriesContainer}>
                 {categories.length === 1 ? (
-                    <HomeMessage label={t('messages.noCategories')} />
+                    <Message label={t('messages.noCategories')} />
                 ) : (
                     <ScrollView
                         overScrollMode='never'

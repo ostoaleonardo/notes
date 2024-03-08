@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { colors, fonts } from '../constants'
 
-export function HomeMessage({ label }) {
+export function Message({ label }) {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>{label}</Text>
