@@ -1,11 +1,15 @@
 import { useState } from 'react'
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
-import { Category } from './SwipeableCategory'
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import { ModalSheet } from './Modal'
+import { SmallInput } from './Input'
+import { Category } from './SwipeableCategory'
 import { useCategories } from '../hooks'
 import { colors, fonts } from '../constants'
+import { SquareButton } from './Button'
 
 export function CategoryModal({ isVisible, onClose, noteCategories, handleAddCategory }) {
+    const { t } = useTranslation()
     const { categories, addCategory } = useCategories()
     const [newCategory, setNewCategory] = useState('')
 
@@ -13,24 +17,19 @@ export function CategoryModal({ isVisible, onClose, noteCategories, handleAddCat
         <ModalSheet
             isVisible={isVisible}
             onClose={onClose}
-            title='Add Category or select one'
+            title={t('categories.yourCategories')}
         >
             <View style={styles.inputContainer}>
-                <TextInput
+                <SmallInput
+                    variant='solid'
                     value={newCategory}
-                    style={styles.input}
-                    placeholder='Type a new category...'
-                    placeholderTextColor={colors.text50}
-                    onChangeText={(text) => setNewCategory(text)}
+                    onChangeText={setNewCategory}
+                    placeholder={t('categories.newCategory')}
                 />
-                <Pressable
-                    style={styles.addCategoryButton}
+                <SquareButton
+                    label={t('categories.add')}
                     onPress={() => addCategory(newCategory)}
-                >
-                    <Text style={styles.addCategoryText}>
-                        Add
-                    </Text>
-                </Pressable>
+                />
             </View>
             <View style={styles.categoriesContainer}>
                 {categories.length === 1 ? (
@@ -64,26 +63,6 @@ const styles = StyleSheet.create({
         paddingBottom: 24,
         flexDirection: 'row',
         alignItems: 'center',
-    },
-    input: {
-        flex: 1,
-        padding: 16,
-        fontSize: 16,
-        borderRadius: 16,
-        color: colors.text,
-        fontFamily: fonts.mono,
-        backgroundColor: colors.text15,
-    },
-    addCategoryButton: {
-        padding: 16,
-        borderRadius: 16,
-        backgroundColor: colors.primary,
-    },
-    addCategoryText: {
-        fontSize: 16,
-        color: colors.text,
-        fontFamily: fonts.mono,
-        textTransform: 'uppercase',
     },
     categoriesContainer: {
         flex: 1,
