@@ -1,5 +1,4 @@
 import { KeyboardAvoidingView, Modal, StyleSheet, Text, View } from 'react-native'
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 import { IconButton } from '../Button'
 import { colors, fonts } from '../../constants'
 
@@ -11,16 +10,14 @@ export function ModalSheet({ isVisible, onClose, title, children }) {
             animationType='slide'
             statusBarTranslucent
         >
-            <Animated.View
-                entering={FadeIn}
-                exiting={FadeOut}
-                style={styles.modalBackdrop}
-                onStartShouldSetResponder={onClose}
-            />
             <KeyboardAvoidingView
                 behavior='height'
                 style={styles.keyboardAvoidingView}
             >
+                <View
+                    style={styles.modalBackdrop}
+                    onStartShouldSetResponder={onClose}
+                />
                 <View style={styles.modalContent}>
                     <View style={styles.titleContainer}>
                         <Text style={styles.title}>
@@ -42,8 +39,8 @@ export function ModalSheet({ isVisible, onClose, title, children }) {
 
 const styles = StyleSheet.create({
     keyboardAvoidingView: {
-        flex: 1,
         width: '100%',
+        height: '100%',
     },
     modalBackdrop: {
         position: 'absolute',
