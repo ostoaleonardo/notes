@@ -3,6 +3,8 @@ export { Button } from './Button'
 export { FloatingButton } from './Button'
 export { SquareButton } from './Button'
 export { IconButton } from './Button'
+export { PickerImage } from './Button'
+export { ImagePreview } from './Button'
 export { Check } from './Check'
 
 // Chips

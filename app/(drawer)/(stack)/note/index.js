@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { router } from 'expo-router'
 import * as Crypto from 'expo-crypto'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Button, CategoryModal, Chip, ChipContent, LargeInput, RemoveChipButton, TextArea, TitleSection } from '@/components'
+import { Button, CategoryModal, Chip, ChipContent, ImagePreview, LargeInput, PickerImage, RemoveChipButton, TextArea, TitleSection } from '@/components'
 import { useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
 import { colors } from '@/constants'
@@ -14,6 +14,7 @@ export default function Note() {
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
     const [categories, setCategories] = useState(['All'])
+    const [images, setImages] = useState([])
     const [isModalVisible, setIsModalVisible] = useState(false)
 
     useHeaderTitle(t('headerTitle.addNote'))
@@ -23,6 +24,7 @@ export default function Note() {
             id: Crypto.randomUUID(),
             title,
             note,
+            images,
             categories,
             createdAt: getDate(),
         })
@@ -40,6 +42,14 @@ export default function Note() {
         } else {
             setCategories(categories.filter((c) => c !== category))
         }
+    }
+
+    const handleAddImage = (image) => {
+        setImages([...images, image])
+    }
+
+    const handleRemoveImage = (image) => {
+        setImages(images.filter((img) => img !== image))
     }
 
     return (
@@ -96,6 +106,31 @@ export default function Note() {
                             placeholder={t('addNote.notePlaceholder')}
                         />
                     </View>
+                    <ScrollView
+                        horizontal
+                        overScrollMode='never'
+                        showsHorizontalScrollIndicator={false}
+                    >
+                        <View style={styles.imagesContainer}>
+                            <View style={styles.previewsContainer}>
+                                {images.map((image, index) => (
+                                    <ImagePreview
+                                        key={index}
+                                        image={image}
+                                        removeImage={() => handleRemoveImage(image)}
+                                    />
+                                ))}
+                            </View>
+                            <View style={styles.pickerContainer}>
+                                <PickerImage
+                                    pickCamera
+                                    setImage={handleAddImage}
+                                />
+                                <View style={styles.separator} />
+                                <PickerImage setImage={handleAddImage} />
+                            </View>
+                        </View>
+                    </ScrollView>
                     <View style={styles.buttonsContainer}>
                         <Button
                             variant='primary'
@@ -162,5 +197,29 @@ const styles = StyleSheet.create({
         gap: 16,
         marginTop: 32,
         paddingHorizontal: 24,
+    },
+    imagesContainer: {
+        width: '100%',
+        gap: 8,
+        marginTop: 16,
+        flexDirection: 'row',
+        paddingHorizontal: 24,
+    },
+    pickerContainer: {
+        borderRadius: 24,
+        overflow: 'hidden',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    separator: {
+        position: 'absolute',
+        width: '100%',
+        height: 1,
+        opacity: 0.5,
+        backgroundColor: colors.foreground,
+    },
+    previewsContainer: {
+        gap: 8,
+        flexDirection: 'row',
     },
 })
