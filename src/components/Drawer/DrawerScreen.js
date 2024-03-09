@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { usePathname } from 'expo-router'
+import { router, usePathname } from 'expo-router'
 import { DrawerItem } from '@react-navigation/drawer'
 import { colors, fonts } from '@/constants'
 
@@ -11,6 +11,7 @@ export function DrawerScreen({ label, icon, path }) {
             label={label}
             style={styles.item}
             labelStyle={styles.label}
+            pressColor='transparent'
             activeTintColor={colors.primary}
             inactiveTintColor={colors.text}
             activeBackgroundColor={colors.primary15}
