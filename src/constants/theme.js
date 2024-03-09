@@ -10,9 +10,10 @@ export const colors = {
     primary15: `${PRIMARY}26`,
 
     text: TEXT,
+    text75: `${TEXT}bf`,
     text50: `${TEXT}80`,
     text15: `${TEXT}26`,
-    text5: `${TEXT}0D`
+    text5: `${TEXT}0d`
 }
 
 export const fonts = {
