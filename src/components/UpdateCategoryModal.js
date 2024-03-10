@@ -16,7 +16,9 @@ export function UpdateCategoryModal({ isVisible, onClose, title, categorySelecte
     }, [categorySelected])
 
     const handleUpdateCategory = () => {
-        updateCategory(categorySelected, newCategory)
+        if (!newCategory.trim()) return
+
+        updateCategory(categorySelected, newCategory.trim())
         onClose()
     }
 

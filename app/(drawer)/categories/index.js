@@ -18,7 +18,9 @@ export default function Categories() {
     }
 
     const handleAddCategory = (category) => {
-        addCategory(category)
+        if (!category.trim()) return
+
+        addCategory(category.trim())
         setNewCategory('')
     }
 
