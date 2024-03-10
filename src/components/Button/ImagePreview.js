@@ -3,7 +3,7 @@ import { colors } from '@/constants'
 
 export function ImagePreview({ image, removeImage }) {
     const handleOpenImage = () => {
-        // Linking.openURL(image)
+        Linking.openURL(image)
     }
 
     return (

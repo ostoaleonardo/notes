@@ -66,7 +66,6 @@ export default function Categories() {
             <UpdateCategoryModal
                 isVisible={isModalVisible}
                 onClose={() => setIsModalVisible(!isModalVisible)}
-                title={t('categories.updateCategory')}
                 categorySelected={categorySelected}
             />
         </View>

@@ -112,15 +112,17 @@ export default function Note() {
                         showsHorizontalScrollIndicator={false}
                     >
                         <View style={styles.imagesContainer}>
-                            <View style={styles.previewsContainer}>
-                                {images.map((image, index) => (
-                                    <ImagePreview
-                                        key={index}
-                                        image={image}
-                                        removeImage={() => handleRemoveImage(image)}
-                                    />
-                                ))}
-                            </View>
+                            {images.length > 0 &&
+                                <View style={styles.previewsContainer}>
+                                    {images.map((image, index) => (
+                                        <ImagePreview
+                                            key={index}
+                                            image={image}
+                                            removeImage={() => handleRemoveImage(image)}
+                                        />
+                                    ))}
+                                </View>
+                            }
                             <View style={styles.pickerContainer}>
                                 <PickerImage
                                     pickCamera

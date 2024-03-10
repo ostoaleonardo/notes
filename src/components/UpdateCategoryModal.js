@@ -6,7 +6,7 @@ import { ModalSheet } from './Modal'
 import { LargeInput } from './Input'
 import { Button } from './Button'
 
-export function UpdateCategoryModal({ isVisible, onClose, title, categorySelected }) {
+export function UpdateCategoryModal({ isVisible, onClose, categorySelected }) {
     const { t } = useTranslation()
     const { updateCategory } = useCategories()
     const [newCategory, setNewCategory] = useState('')
@@ -26,13 +26,13 @@ export function UpdateCategoryModal({ isVisible, onClose, title, categorySelecte
         <ModalSheet
             isVisible={isVisible}
             onClose={onClose}
-            title={title}
+            title={t('categories.updateCategory')}
         >
             <View style={styles.container}>
                 <LargeInput
                     value={newCategory}
                     onChangeText={setNewCategory}
-                    placeholder={t('categories.newCategory')}
+                    placeholder={categorySelected}
                 />
                 <Button
                     label={t('buttons.update')}

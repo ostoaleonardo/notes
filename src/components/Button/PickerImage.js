@@ -19,7 +19,6 @@ export function PickerImage({ setImage, pickCamera }) {
     const handlePickGallery = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsMultipleSelection: true,
             allowsEditing: true,
             quality: 1,
         })
@@ -60,10 +59,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: colors.text,
-    },
-    title: {
-        fontSize: 16,
-        color: colors.background,
-        transform: [{ rotate: '45deg' }],
     },
 })
