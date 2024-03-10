@@ -22,12 +22,21 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
-      }
+      },
+      "package": "com.monospace.notes"
     },
     "plugins": [
       "expo-router",
       "expo-font",
       "expo-localization"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "319d937a-0136-4d14-b677-d958cc1b7996"
+      }
+    }
   }
 }
