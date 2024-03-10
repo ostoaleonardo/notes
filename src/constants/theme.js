@@ -1,4 +1,4 @@
-const PRIMARY = '#fb471f'
+const PRIMARY = '#c8102e'
 const TEXT = '#ffffff'
 
 export const colors = {
