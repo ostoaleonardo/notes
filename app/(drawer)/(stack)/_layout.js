@@ -4,6 +4,7 @@ export default function StackLayout() {
     return (
         <Stack
             screenOptions={{
+                animation: 'ios',
                 headerShown: false,
             }}
         />
