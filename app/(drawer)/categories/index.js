@@ -17,6 +17,11 @@ export default function Categories() {
         setCategorySelected(option)
     }
 
+    const handleAddCategory = (category) => {
+        addCategory(category)
+        setNewCategory('')
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.inputContainer}>
@@ -27,7 +32,7 @@ export default function Categories() {
                 />
                 <SquareButton
                     label={t('categories.add')}
-                    onPress={() => addCategory(newCategory)}
+                    onPress={() => handleAddCategory(newCategory)}
                 />
             </View>
             <View style={styles.sectionContainer}>
