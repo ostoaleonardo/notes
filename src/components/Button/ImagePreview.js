@@ -1,16 +1,12 @@
-import { Image, Linking, Pressable, StyleSheet } from 'react-native'
+import { Image, Pressable, StyleSheet } from 'react-native'
 import { Cross } from '@/icons'
 import { colors } from '@/constants'
 
-export function ImagePreview({ image, removeImage }) {
-    const handleOpenImage = () => {
-        Linking.openURL(image)
-    }
-
+export function ImagePreview({ image, openImage, removeImage }) {
     return (
         <Pressable
+            onPress={openImage}
             style={styles.container}
-            onPress={handleOpenImage}
         >
             <Image
                 style={styles.image}

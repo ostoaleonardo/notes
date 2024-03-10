@@ -3,6 +3,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Button, CategoryModal, Chip, ChipContent, ImagePreview, LargeInput, PickerImage, RemoveChipButton, TextArea, TitleSection } from '@/components'
+import ImageView from 'react-native-image-viewing'
 import { useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
 import { colors, fonts } from '@/constants'
@@ -19,6 +20,8 @@ export default function EditNote() {
     const [createdAt, setCreatedAt] = useState('')
     const [updatedAt, setUpdatedAt] = useState('')
     const [isModalVisible, setIsModalVisible] = useState(false)
+    const [galleryIndex, setGalleryIndex] = useState(0)
+    const [isGalleryVisible, setIsGalleryVisible] = useState(false)
 
     useHeaderTitle(t('headerTitle.editNote'))
 
@@ -26,6 +29,7 @@ export default function EditNote() {
         const note = getNote(slug)
         setTitle(note.title)
         setNote(note.note)
+        console.log(note.images)
         setImages(note.images)
         setCategories(note.categories)
         setCreatedAt(note.createdAt)
@@ -64,6 +68,11 @@ export default function EditNote() {
 
     const handleRemoveImage = (image) => {
         setImages(images.filter((img) => img !== image))
+    }
+
+    const handleOpenImage = (index) => {
+        setIsGalleryVisible(true)
+        setGalleryIndex(index)
     }
 
     return (
@@ -140,6 +149,7 @@ export default function EditNote() {
                                         <ImagePreview
                                             key={index}
                                             image={image}
+                                            openImage={() => handleOpenImage(index)}
                                             removeImage={() => handleRemoveImage(image)}
                                         />
                                     ))}
@@ -175,6 +185,12 @@ export default function EditNote() {
                 onClose={handleModal}
                 noteCategories={categories}
                 handleAddCategory={handleAddCategory}
+            />
+            <ImageView
+                imageIndex={galleryIndex}
+                visible={isGalleryVisible}
+                images={images.map((url) => ({ uri: url }))}
+                onRequestClose={() => setIsGalleryVisible(false)}
             />
         </View>
     )

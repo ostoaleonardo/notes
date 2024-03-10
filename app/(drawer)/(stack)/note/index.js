@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { router } from 'expo-router'
 import * as Crypto from 'expo-crypto'
-import { Image, ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Button, CategoryModal, Chip, ChipContent, ImagePreview, LargeInput, PickerImage, RemoveChipButton, TextArea, TitleSection } from '@/components'
+import ImageView from 'react-native-image-viewing'
 import { useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
 import { colors } from '@/constants'
@@ -16,6 +17,8 @@ export default function Note() {
     const [categories, setCategories] = useState(['All'])
     const [images, setImages] = useState([])
     const [isModalVisible, setIsModalVisible] = useState(false)
+    const [galleryIndex, setGalleryIndex] = useState(0)
+    const [isGalleryVisible, setIsGalleryVisible] = useState(false)
 
     useHeaderTitle(t('headerTitle.addNote'))
 
@@ -50,6 +53,11 @@ export default function Note() {
 
     const handleRemoveImage = (image) => {
         setImages(images.filter((img) => img !== image))
+    }
+
+    const handleOpenImage = (index) => {
+        setIsGalleryVisible(true)
+        setGalleryIndex(index)
     }
 
     return (
@@ -118,6 +126,7 @@ export default function Note() {
                                         <ImagePreview
                                             key={index}
                                             image={image}
+                                            openImage={() => handleOpenImage(index)}
                                             removeImage={() => handleRemoveImage(image)}
                                         />
                                     ))}
@@ -153,6 +162,12 @@ export default function Note() {
                 onClose={handleModal}
                 noteCategories={categories}
                 handleAddCategory={handleAddCategory}
+            />
+            <ImageView
+                imageIndex={galleryIndex}
+                visible={isGalleryVisible}
+                images={images.map((url) => ({ uri: url }))}
+                onRequestClose={() => setIsGalleryVisible(false)}
             />
         </View>
     )
