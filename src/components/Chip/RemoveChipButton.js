@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet } from 'react-native'
 import { Cross } from '@/icons'
-import { colors, fonts } from '@/constants'
+import { colors } from '@/constants'
 
 export function RemoveChipButton({ onPress }) {
     return (
@@ -26,12 +26,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: colors.text15,
-    },
-    text: {
-        fontSize: 8,
-        color: colors.text,
-        fontWeight: 'bold',
-        fontFamily: fonts.mono,
-        textTransform: 'uppercase',
     },
 })

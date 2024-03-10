@@ -79,11 +79,6 @@ const styles = StyleSheet.create({
         color: colors.text,
         fontFamily: fonts.mono,
     },
-    closeText: {
-        fontSize: 12,
-        color: colors.text,
-        fontFamily: fonts.mono,
-    },
     bodyContainer: {
         width: '100%',
         height: '100%',

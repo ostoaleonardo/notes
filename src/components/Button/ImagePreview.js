@@ -53,8 +53,4 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: colors.overlay,
     },
-    removeText: {
-        fontSize: 10,
-        color: colors.text,
-    },
 })
