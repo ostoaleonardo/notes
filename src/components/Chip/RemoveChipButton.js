@@ -1,4 +1,5 @@
-import { Pressable, StyleSheet, Text } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
+import { Cross } from '@/icons'
 import { colors, fonts } from '@/constants'
 
 export function RemoveChipButton({ onPress }) {
@@ -7,9 +8,12 @@ export function RemoveChipButton({ onPress }) {
             onPress={onPress}
             style={styles.container}
         >
-            <Text style={styles.text}>
-                ✕
-            </Text>
+            <Cross
+                width={16}
+                height={16}
+                rotation={45}
+                color={colors.text}
+            />
         </Pressable>
     )
 }

@@ -1,5 +1,6 @@
 import { KeyboardAvoidingView, Modal, StyleSheet, Text, View } from 'react-native'
 import { IconButton } from '../Button'
+import { Cross } from '@/icons'
 import { colors, fonts } from '@/constants'
 
 export function ModalSheet({ isVisible, onClose, title, children }) {
@@ -24,7 +25,14 @@ export function ModalSheet({ isVisible, onClose, title, children }) {
                             {title}
                         </Text>
                         <IconButton
-                            icon={<Text style={styles.closeText}>✕</Text>}
+                            icon={
+                                <Cross
+                                    width={24}
+                                    height={24}
+                                    rotation={45}
+                                    color={colors.text}
+                                />
+                            }
                             onPress={onClose}
                         />
                     </View>

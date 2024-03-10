@@ -1,12 +1,15 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import { Cross } from '@/icons'
 import { colors, fonts } from '@/constants'
 
 export function ChipContent() {
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>
-                ✕
-            </Text>
+            <Cross
+                width={16}
+                height={16}
+                color={colors.text}
+            />
         </View>
     )
 }

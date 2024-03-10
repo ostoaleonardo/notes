@@ -1,4 +1,5 @@
-import { Image, Linking, Pressable, StyleSheet, Text } from 'react-native'
+import { Image, Linking, Pressable, StyleSheet } from 'react-native'
+import { Cross } from '@/icons'
 import { colors } from '@/constants'
 
 export function ImagePreview({ image, removeImage }) {
@@ -19,7 +20,12 @@ export function ImagePreview({ image, removeImage }) {
                 onPress={removeImage}
                 style={styles.removeButton}
             >
-                <Text style={styles.removeText}>✕</Text>
+                <Cross
+                    width={24}
+                    height={24}
+                    rotation={45}
+                    color={colors.text}
+                />
             </Pressable>
         </Pressable>
     )
