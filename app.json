@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "notes",
+    "name": "Notes",
     "slug": "notes",
     "scheme": "notes",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
