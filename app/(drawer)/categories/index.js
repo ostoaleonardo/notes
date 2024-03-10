@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import * as Crypto from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { CategoryCard, Message, SmallInput, SquareButton, TitleSection, UpdateCategoryModal } from '@/components'
@@ -12,15 +13,18 @@ export default function Categories() {
     const [isModalVisible, setIsModalVisible] = useState(false)
     const { categories, addCategory, removeCategory } = useCategories()
 
-    const handleModal = (option) => {
+    const handleModal = (id) => {
         setIsModalVisible(!isModalVisible)
-        setCategorySelected(option)
+        setCategorySelected(id)
     }
 
     const handleAddCategory = (category) => {
         if (!category.trim()) return
 
-        addCategory(category.trim())
+        addCategory({
+            id: Crypto.randomUUID(),
+            name: category.trim()
+        })
         setNewCategory('')
     }
 
@@ -50,12 +54,12 @@ export default function Categories() {
                         showsVerticalScrollIndicator={false}
                     >
                         <View style={styles.categoryCardsContainer}>
-                            {categories.slice(1).map((category, index) => (
+                            {categories.slice(1).map(({ id, name }) => (
                                 <CategoryCard
-                                    key={index}
-                                    category={category}
-                                    onPress={() => handleModal(category)}
-                                    onDelete={() => removeCategory(category)}
+                                    key={id}
+                                    category={name}
+                                    onPress={() => handleModal(id)}
+                                    onDelete={() => removeCategory(id)}
                                 />
                             ))}
                         </View>

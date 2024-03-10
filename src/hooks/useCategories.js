@@ -22,22 +22,33 @@ export function useCategories() {
         }
     }
 
-    const removeCategory = (category) => {
-        const newCategories = categories.filter((c) => c !== category)
+    const removeCategory = (id) => {
+        const newCategories = categories.filter((category) => category.id !== id)
         setCategories(newCategories)
         AsyncStorage.setItem('categories', JSON.stringify(newCategories))
     }
 
-    const updateCategory = (oldCategory, newCategory) => {
-        const newCategories = categories.map((category) => (category === oldCategory ? newCategory : category))
+    const updateCategory = (id, newName) => {
+        const newCategories = categories.map((category) => (
+            category.id === id
+                ? {
+                    ...category,
+                    name: newName
+                } : category
+        ))
         setCategories(newCategories)
         AsyncStorage.setItem('categories', JSON.stringify(newCategories))
+    }
+
+    const getCategory = (id) => {
+        return categories.find((category) => category.id === id) || {}
     }
 
     return {
         categories,
+        getCategory,
         addCategory,
         removeCategory,
-        updateCategory,
+        updateCategory
     }
 }

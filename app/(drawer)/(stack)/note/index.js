@@ -5,16 +5,17 @@ import { ScrollView, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Button, CategoryModal, Chip, ChipContent, ImagePreview, LargeInput, PickerImage, RemoveChipButton, TextArea, TitleSection } from '@/components'
 import ImageView from 'react-native-image-viewing'
-import { useHeaderTitle, useNotes } from '@/hooks'
+import { useCategories, useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
-import { colors } from '@/constants'
+import { DEFAULT_CATEGORIES, colors } from '@/constants'
 
 export default function Note() {
-    const { saveNote } = useNotes()
     const { t } = useTranslation()
+    const { saveNote } = useNotes()
+    const { categories } = useCategories()
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
-    const [categories, setCategories] = useState(['All'])
+    const [categoryIds, setCategoryIds] = useState([DEFAULT_CATEGORIES[0].id])
     const [images, setImages] = useState([])
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [galleryIndex, setGalleryIndex] = useState(0)
@@ -28,7 +29,7 @@ export default function Note() {
             title,
             note,
             images,
-            categories,
+            categories: categoryIds,
             createdAt: getDate(),
         })
 
@@ -39,11 +40,11 @@ export default function Note() {
         setIsModalVisible(!isModalVisible)
     }
 
-    const handleAddCategory = (category) => {
-        if (category && !categories.includes(category)) {
-            setCategories([...categories, category])
+    const handleAddCategory = (id) => {
+        if (!categoryIds.includes(id)) {
+            setCategoryIds([...categoryIds, id])
         } else {
-            setCategories(categories.filter((c) => c !== category))
+            setCategoryIds(categoryIds.filter((categoryId) => categoryId !== id))
         }
     }
 
@@ -85,14 +86,14 @@ export default function Note() {
                             showsHorizontalScrollIndicator={false}
                         >
                             <View style={styles.chipsContainer}>
-                                {categories.slice(1).map((category) => (
+                                {categories.slice(1).map(({ id, name }) => categoryIds.includes(id) && (
                                     <Chip
-                                        key={category}
-                                        label={category}
+                                        key={id}
+                                        label={name}
                                         variant='solid'
                                         endContent={
                                             <RemoveChipButton
-                                                onPress={() => handleAddCategory(category)}
+                                                onPress={() => handleAddCategory(id)}
                                             />
                                         }
                                     />
@@ -160,7 +161,7 @@ export default function Note() {
             <CategoryModal
                 isVisible={isModalVisible}
                 onClose={handleModal}
-                noteCategories={categories}
+                noteCategories={categoryIds}
                 handleAddCategory={handleAddCategory}
             />
             <ImageView

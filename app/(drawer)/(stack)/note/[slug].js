@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Button, CategoryModal, Chip, ChipContent, ImagePreview, LargeInput, PickerImage, RemoveChipButton, TextArea, TitleSection } from '@/components'
 import ImageView from 'react-native-image-viewing'
-import { useHeaderTitle, useNotes } from '@/hooks'
+import { useCategories, useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
 import { colors, fonts } from '@/constants'
 
@@ -12,11 +12,12 @@ export default function EditNote() {
     const router = useRouter()
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
+    const { categories } = useCategories()
     const { getNote, updateNote } = useNotes()
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
     const [images, setImages] = useState([])
-    const [categories, setCategories] = useState([])
+    const [categoryIds, setCategoryIds] = useState([])
     const [createdAt, setCreatedAt] = useState('')
     const [updatedAt, setUpdatedAt] = useState('')
     const [isModalVisible, setIsModalVisible] = useState(false)
@@ -29,9 +30,8 @@ export default function EditNote() {
         const note = getNote(slug)
         setTitle(note.title)
         setNote(note.note)
-        console.log(note.images)
         setImages(note.images)
-        setCategories(note.categories)
+        setCategoryIds(note.categories)
         setCreatedAt(note.createdAt)
         setUpdatedAt(note.updatedAt)
     }, [slug])
@@ -42,7 +42,7 @@ export default function EditNote() {
             title,
             note,
             images,
-            categories,
+            categories: categoryIds,
             createdAt,
             updatedAt: getDate(),
         })
@@ -54,11 +54,11 @@ export default function EditNote() {
         setIsModalVisible(!isModalVisible)
     }
 
-    const handleAddCategory = (category) => {
-        if (category && !categories.includes(category)) {
-            setCategories([...categories, category])
+    const handleAddCategory = (id) => {
+        if (!categoryIds.includes(id)) {
+            setCategoryIds([...categoryIds, id])
         } else {
-            setCategories(categories.filter((c) => c !== category))
+            setCategoryIds(categoryIds.filter((categoryId) => categoryId !== id))
         }
     }
 
@@ -108,14 +108,14 @@ export default function EditNote() {
                             showsHorizontalScrollIndicator={false}
                         >
                             <View style={styles.chipsContainer}>
-                                {categories.slice(1).map((category) => (
+                                {categories.slice(1).map(({ id, name }) => categoryIds.includes(id) && (
                                     <Chip
-                                        key={category}
-                                        label={category}
+                                        key={id}
+                                        label={name}
                                         variant='solid'
                                         endContent={
                                             <RemoveChipButton
-                                                onPress={() => handleAddCategory(category)}
+                                                onPress={() => handleAddCategory(id)}
                                             />
                                         }
                                     />
@@ -183,7 +183,7 @@ export default function EditNote() {
             <CategoryModal
                 isVisible={isModalVisible}
                 onClose={handleModal}
-                noteCategories={categories}
+                noteCategories={categoryIds}
                 handleAddCategory={handleAddCategory}
             />
             <ImageView

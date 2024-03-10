@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
+import * as Crypto from 'expo-crypto'
 import { ModalSheet } from './Modal'
 import { SmallInput } from './Input'
 import { SquareButton } from './Button'
@@ -12,6 +13,16 @@ export function CategoryModal({ isVisible, onClose, noteCategories, handleAddCat
     const { t } = useTranslation()
     const { categories, addCategory } = useCategories()
     const [newCategory, setNewCategory] = useState('')
+
+    const handleSaveCategory = (category) => {
+        if (!category.trim()) return
+
+        addCategory({
+            id: Crypto.randomUUID(),
+            name: category.trim()
+        })
+        setNewCategory('')
+    }
 
     return (
         <ModalSheet
@@ -28,7 +39,7 @@ export function CategoryModal({ isVisible, onClose, noteCategories, handleAddCat
                 />
                 <SquareButton
                     label={t('categories.add')}
-                    onPress={() => addCategory(newCategory)}
+                    onPress={() => handleSaveCategory(newCategory)}
                 />
             </View>
             <View style={styles.categoriesContainer}>
@@ -42,12 +53,12 @@ export function CategoryModal({ isVisible, onClose, noteCategories, handleAddCat
                         style={styles.scrollContainer}
                         showsVerticalScrollIndicator={false}
                     >
-                        {categories.slice(1).map((category, index) => (
+                        {categories.slice(1).map(({ id, name }) => (
                             <Category
-                                key={index}
-                                category={category}
-                                onPress={() => handleAddCategory(category)}
-                                isSelected={noteCategories.includes(category)}
+                                key={id}
+                                category={name}
+                                onPress={() => handleAddCategory(id)}
+                                isSelected={noteCategories.includes(id)}
                             />
                         ))}
                     </ScrollView>

@@ -8,11 +8,14 @@ import { Button } from './Button'
 
 export function UpdateCategoryModal({ isVisible, onClose, categorySelected }) {
     const { t } = useTranslation()
-    const { updateCategory } = useCategories()
+    const { getCategory, updateCategory } = useCategories()
     const [newCategory, setNewCategory] = useState('')
+    const [placeholder, setPlaceholder] = useState('')
 
     useEffect(() => {
-        setNewCategory(categorySelected)
+        const category = getCategory(categorySelected)
+        setPlaceholder(category.name)
+        setNewCategory(category.name)
     }, [categorySelected])
 
     const handleUpdateCategory = () => {
@@ -32,7 +35,7 @@ export function UpdateCategoryModal({ isVisible, onClose, categorySelected }) {
                 <LargeInput
                     value={newCategory}
                     onChangeText={setNewCategory}
-                    placeholder={categorySelected}
+                    placeholder={placeholder}
                 />
                 <Button
                     label={t('buttons.update')}

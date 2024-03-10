@@ -8,10 +8,10 @@ export function Categories({ setFilteredNotes }) {
     const { t } = useTranslation()
     const { notes } = useNotes()
     const { categories } = useCategories()
-    const [selected, setSelected] = useState('All')
+    const [selected, setSelected] = useState('all')
 
     useEffect(() => {
-        if (selected === 'All') {
+        if (selected === 'all') {
             setFilteredNotes(notes)
         } else {
             const filtered = notes.filter((note) => note.categories.includes(selected))
@@ -28,12 +28,12 @@ export function Categories({ setFilteredNotes }) {
                 showsHorizontalScrollIndicator={false}
             >
                 <View style={styles.chipsContainer}>
-                    {categories.map((category) => (
+                    {categories.map(({ id, name }) => (
                         <Chip
-                            key={category}
-                            onPress={() => setSelected(category)}
-                            variant={category === selected ? 'solid' : 'bordered'}
-                            label={category === 'All' ? t('categories.all') : category}
+                            key={id}
+                            onPress={() => setSelected(id)}
+                            variant={id === selected ? 'solid' : 'bordered'}
+                            label={id === 'all' ? t('categories.all') : name}
                         />
                     ))}
                 </View>
