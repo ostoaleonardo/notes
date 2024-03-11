@@ -2,7 +2,7 @@ import { useState } from 'react'
 import * as Crypto from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, View } from 'react-native'
-import { CategoryCard, Message, SmallInput, SquareButton, TitleSection, UpdateCategoryModal } from '@/components'
+import { SwipeableCategory, Message, SmallInput, SquareButton, TitleSection, UpdateCategoryModal } from '@/components'
 import { useCategories } from '@/hooks'
 import { colors } from '@/constants'
 
@@ -56,7 +56,7 @@ export default function Categories() {
                     >
                         <View style={styles.categoryCardsContainer}>
                             {categories.slice(1).map(({ id, name }) => (
-                                <CategoryCard
+                                <SwipeableCategory
                                     key={id}
                                     category={name}
                                     onPress={() => handleModal(id)}

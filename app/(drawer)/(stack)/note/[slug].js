@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Button, CategoryModal, Chip, ChipContent, ImagePreview, LargeInput, PickerImage, RemoveChipButton, TextArea, TitleSection } from '@/components'
+import { Button, CategoriesModal, Chip, ChipContent, ImagePreview, LargeInput, PickerImage, RemoveChipButton, TextArea, TitleSection } from '@/components'
 import ImageView from 'react-native-image-viewing'
 import { useCategories, useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
@@ -180,7 +180,7 @@ export default function EditNote() {
                 </View>
             </ScrollView>
 
-            <CategoryModal
+            <CategoriesModal
                 isVisible={isModalVisible}
                 onClose={handleModal}
                 noteCategories={categoryIds}

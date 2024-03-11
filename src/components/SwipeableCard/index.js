@@ -1,3 +1,3 @@
-export { Note } from './Note'
-export { CategoryCard } from './CategoryCard'
+export { SwipeableNote } from './SwipeableNote'
+export { SwipeableCategory } from './SwipeableCategory'
 export { DeleteAction } from './DeleteAction'

@@ -3,7 +3,7 @@ import { router } from 'expo-router'
 import * as Crypto from 'expo-crypto'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Button, CategoryModal, Chip, ChipContent, ImagePreview, LargeInput, PickerImage, RemoveChipButton, TextArea, TitleSection } from '@/components'
+import { Button, CategoriesModal, Chip, ChipContent, ImagePreview, LargeInput, PickerImage, RemoveChipButton, TextArea, TitleSection } from '@/components'
 import ImageView from 'react-native-image-viewing'
 import { useCategories, useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
@@ -158,7 +158,7 @@ export default function Note() {
                 </View>
             </ScrollView>
 
-            <CategoryModal
+            <CategoriesModal
                 isVisible={isModalVisible}
                 onClose={handleModal}
                 noteCategories={categoryIds}

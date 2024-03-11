@@ -2,14 +2,14 @@ import { useState } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as Crypto from 'expo-crypto'
-import { ModalSheet } from './Modal'
-import { SmallInput } from './Input'
-import { SquareButton } from './Button'
-import { Category } from './Category'
+import { ModalSheet } from '../Modal'
+import { SmallInput } from '../Input'
+import { SquareButton } from '../Button'
+import { Category } from '../Card/Category'
 import { useCategories } from '@/hooks'
 import { colors, fonts } from '@/constants'
 
-export function CategoryModal({ isVisible, onClose, noteCategories, handleAddCategory }) {
+export function CategoriesModal({ isVisible, onClose, noteCategories, handleAddCategory }) {
     const { t } = useTranslation()
     const { categories, addCategory } = useCategories()
     const [newCategory, setNewCategory] = useState('')

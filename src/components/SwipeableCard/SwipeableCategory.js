@@ -4,7 +4,7 @@ import { Swipeable } from 'react-native-gesture-handler'
 import { DeleteAction } from './DeleteAction'
 import { colors, fonts } from '@/constants'
 
-export function CategoryCard({ category, onPress, onDelete }) {
+export function SwipeableCategory({ category, onPress, onDelete }) {
     return (
         <Animated.View
             entering={FadeInUp}

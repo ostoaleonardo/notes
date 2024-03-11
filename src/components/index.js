@@ -13,10 +13,10 @@ export { ChipContent } from './Chip'
 export { RemoveChipButton } from './Chip'
 
 // Cards
-export { Note } from './SwipeableCard'
-export { CategoryCard } from './SwipeableCard'
+export { SwipeableNote } from './SwipeableCard'
+export { SwipeableCategory } from './SwipeableCard'
 export { DeleteAction } from './SwipeableCard'
-export { Category } from './Category'
+export { Category } from './Card'
 
 // Inputs
 export { LargeInput } from './Input'
@@ -25,16 +25,18 @@ export { TextArea } from './Input'
 
 // Modals
 export { ModalSheet } from './Modal'
-export { CategoryModal } from './CategoryModal'
-export { UpdateCategoryModal } from './UpdateCategoryModal'
+export { CategoriesModal } from './ModalChildrens'
+export { UpdateCategoryModal } from './ModalChildrens'
 export { Languages } from './ModalChildrens'
 export { Themes } from './ModalChildrens'
 
 // Drawer
 export { DrawerItems } from './Drawer'
 
+// Text
+export { TitleSection } from './Text'
+export { Message } from './Text'
+
 // Others
 export { Categories } from './Categories'
 export { NotesContainer } from './NotesContainer'
-export { TitleSection } from './TitleSection'
-export { Message } from './Message'

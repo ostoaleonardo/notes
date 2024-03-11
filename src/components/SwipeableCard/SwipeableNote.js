@@ -7,7 +7,7 @@ import { useNotes } from '@/hooks'
 import { getDimensions } from '@/utils'
 import { colors, fonts } from '@/constants'
 
-export function Note({ id, title, note, images }) {
+export function SwipeableNote({ id, title, note, images }) {
     const { deleteNote } = useNotes()
     const width = getDimensions(images.length)
 

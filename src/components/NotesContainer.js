@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Note } from './SwipeableCard'
-import { Message } from './Message'
+import { SwipeableNote } from './SwipeableCard'
+import { Message } from './Text'
 import { useNotes } from '@/hooks'
 
 export function NotesContainer({ filteredNotes }) {
@@ -17,7 +17,13 @@ export function NotesContainer({ filteredNotes }) {
                 {loading && <Message label={t('messages.loading')} />}
 
                 {filteredNotes.map(({ id, title, note, images }) => (
-                    <Note key={id} id={id} title={title} note={note} images={images} />
+                    <SwipeableNote
+                        key={id}
+                        id={id}
+                        title={title}
+                        note={note}
+                        images={images}
+                    />
                 ))}
 
                 {filteredNotes.length === 0 && !loading && (
