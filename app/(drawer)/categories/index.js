@@ -32,6 +32,7 @@ export default function Categories() {
         <View style={styles.container}>
             <View style={styles.inputContainer}>
                 <SmallInput
+                    variant='solid'
                     value={newCategory}
                     onChangeText={setNewCategory}
                     placeholder={t('categories.newCategory')}

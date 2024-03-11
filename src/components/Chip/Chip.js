@@ -30,7 +30,7 @@ const getChipStyles = (variant, hasEndContent) => {
             borderColor = colors.primary
             break
         case 'bordered':
-            backgroundColor = 'transparent'
+            backgroundColor = colors.transparent
             borderColor = colors.text15
             break
         default:

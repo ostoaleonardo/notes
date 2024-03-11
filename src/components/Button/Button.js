@@ -31,7 +31,7 @@ const getStyles = (variant) => {
             color = colors.background
             break
         case 'outline':
-            backgroundColor = 'transparent'
+            backgroundColor = colors.transparent
             borderColor = colors.text15
             color = colors.text
             break

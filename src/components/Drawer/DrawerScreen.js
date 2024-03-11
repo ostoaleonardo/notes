@@ -11,7 +11,7 @@ export function DrawerScreen({ label, icon, path }) {
             label={label}
             style={styles.item}
             labelStyle={styles.label}
-            pressColor='transparent'
+            pressColor={colors.transparent}
             activeTintColor={colors.primary}
             inactiveTintColor={colors.text}
             activeBackgroundColor={colors.primary15}

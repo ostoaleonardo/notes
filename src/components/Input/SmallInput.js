@@ -20,23 +20,23 @@ const getStyles = (variant) => {
 
     switch (variant) {
         case 'solid':
-            backgroundColor = colors.text15
-            borderColor = 'transparent'
+            backgroundColor = colors.foreground
+            borderColor = colors.transparent
             color = colors.text
             break
         case 'ghost':
-            backgroundColor = 'transparent'
-            borderColor = 'transparent'
+            backgroundColor = colors.transparent
+            borderColor = colors.transparent
             color = colors.text
             break
         case 'outline':
-            backgroundColor = 'transparent'
+            backgroundColor = colors.transparent
             borderColor = colors.text15
             color = colors.text
             break
         default:
             backgroundColor = colors.text15
-            borderColor = 'transparent'
+            borderColor = colors.transparent
             color = colors.text
             break
     }

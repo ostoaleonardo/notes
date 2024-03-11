@@ -32,7 +32,6 @@ export function CategoryModal({ isVisible, onClose, noteCategories, handleAddCat
         >
             <View style={styles.inputContainer}>
                 <SmallInput
-                    variant='solid'
                     value={newCategory}
                     onChangeText={setNewCategory}
                     placeholder={t('categories.newCategory')}
