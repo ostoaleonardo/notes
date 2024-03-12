@@ -1,17 +1,26 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import * as Crypto from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, View } from 'react-native'
-import { SwipeableCategory, Message, SmallInput, SquareButton, TitleSection, UpdateCategoryModal } from '@/components'
+import { SwipeableCategory, Message, SmallInput, SquareButton, TitleSection, UpdateCategoryModal, Toast } from '@/components'
 import { useCategories } from '@/hooks'
 import { colors } from '@/constants'
 
 export default function Categories() {
     const { t } = useTranslation()
+    const { categories, addCategory, removeCategory } = useCategories()
     const [newCategory, setNewCategory] = useState('')
     const [categorySelected, setCategorySelected] = useState('')
     const [isModalVisible, setIsModalVisible] = useState(false)
-    const { categories, addCategory, removeCategory } = useCategories()
+    const [message, setMessage] = useState('')
+    const [isCategoryUpdated, setIsCategoryUpdated] = useState(false)
+
+    useEffect(() => {
+        if (isCategoryUpdated) {
+            setIsCategoryUpdated(false)
+            handleToast(t('messages.categoryUpdated'))
+        }
+    }, [isCategoryUpdated])
 
     const handleModal = (id) => {
         setIsModalVisible(!isModalVisible)
@@ -19,13 +28,23 @@ export default function Categories() {
     }
 
     const handleAddCategory = (category) => {
-        if (!category.trim()) return
+        if (!category.trim()) {
+            handleToast(t('messages.emptyCategory'))
+            return
+        }
 
         addCategory({
             id: Crypto.randomUUID(),
             name: category.trim()
         })
+
         setNewCategory('')
+        handleToast(t('messages.categoryAdded'))
+    }
+
+    const handleToast = (message) => {
+        setMessage(message)
+        setTimeout(() => setMessage(''), 3000)
     }
 
     return (
@@ -72,7 +91,9 @@ export default function Categories() {
                 isVisible={isModalVisible}
                 onClose={() => setIsModalVisible(!isModalVisible)}
                 categorySelected={categorySelected}
+                setIsCategoryUpdated={setIsCategoryUpdated}
             />
+            <Toast message={message} />
         </View>
     )
 }

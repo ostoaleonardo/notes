@@ -24,6 +24,8 @@ export default function Note() {
     useHeaderTitle(t('headerTitle.addNote'))
 
     const handleSave = () => {
+        if (!title.trim() && !note.trim()) return
+
         saveNote({
             id: Crypto.randomUUID(),
             title,

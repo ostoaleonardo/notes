@@ -39,7 +39,11 @@
     "messages": {
         "loading": "Cargando...",
         "noNotes": "Todavía no tienes notas",
-        "noCategories": "Todavía no tienes categorías"
+        "noCategories": "Todavía no tienes categorías",
+        "addACategory": "Añade el nombre de la categoría",
+        "emptyCategory": "El nombre de la categoría no puede estar vacío",
+        "categoryAdded": "Categoría añadida",
+        "categoryUpdated": "Categoría actualizada"
     },
     "drawer": {
         "notes": "Notas",

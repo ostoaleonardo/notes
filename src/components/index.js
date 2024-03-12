@@ -38,5 +38,6 @@ export { TitleSection } from './Text'
 export { Message } from './Text'
 
 // Others
+export { Toast } from './Toast'
 export { Categories } from './Categories'
 export { NotesContainer } from './NotesContainer'

@@ -1,13 +1,17 @@
 import { Pressable, StyleSheet, Text } from 'react-native'
 import { colors, fonts } from '@/constants'
 
-export function Button({ label, onPress, variant }) {
+export function Button({ label, onPress, disabled, variant }) {
     const styles = getStyles(variant)
 
     return (
         <Pressable
             onPress={onPress}
-            style={styles.container}
+            disabled={disabled}
+            style={[
+                styles.container,
+                disabled && { opacity: 0.5 }
+            ]}
         >
             <Text style={styles.label}>
                 {label}

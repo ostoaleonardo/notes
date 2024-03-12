@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { useCategories } from '@/hooks'
 import { ModalSheet } from '../Modal'
 import { LargeInput } from '../Input'
 import { Button } from '../Button'
+import { useCategories } from '@/hooks'
 
-export function UpdateCategoryModal({ isVisible, onClose, categorySelected }) {
+export function UpdateCategoryModal({ isVisible, onClose, categorySelected, setIsCategoryUpdated }) {
     const { t } = useTranslation()
     const { getCategory, updateCategory } = useCategories()
     const [newCategory, setNewCategory] = useState('')
     const [placeholder, setPlaceholder] = useState('')
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true)
 
     useEffect(() => {
         const category = getCategory(categorySelected)
@@ -18,10 +19,16 @@ export function UpdateCategoryModal({ isVisible, onClose, categorySelected }) {
         setNewCategory(category.name)
     }, [categorySelected])
 
+    useEffect(() => {
+        const isDisabled = !newCategory || !newCategory.trim() || newCategory.trim() === placeholder
+        setIsButtonDisabled(isDisabled)
+    }, [newCategory])
+
     const handleUpdateCategory = () => {
-        if (!newCategory.trim()) return
+        if (isButtonDisabled) return
 
         updateCategory(categorySelected, newCategory.trim())
+        setIsCategoryUpdated(true)
         onClose()
     }
 
@@ -38,8 +45,9 @@ export function UpdateCategoryModal({ isVisible, onClose, categorySelected }) {
                     placeholder={placeholder}
                 />
                 <Button
-                    label={t('buttons.update')}
+                    disabled={isButtonDisabled}
                     onPress={handleUpdateCategory}
+                    label={t('buttons.update')}
                 />
             </View>
         </ModalSheet>
