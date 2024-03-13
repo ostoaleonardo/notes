@@ -25,8 +25,15 @@ export default function Note() {
     useHeaderTitle(t('headerTitle.addNote'))
 
     const handleSave = () => {
-        if (!title) return handleToast(t('messages.emptyTitle'))
-        if (!note) return handleToast(t('messages.emptyNote'))
+        if (!title.trim()) {
+            handleToast(t('messages.emptyTitle'))
+            return
+        }
+
+        if (!note.trim()) {
+            handleToast(t('messages.emptyNote'))
+            return
+        }
 
         saveNote({
             id: Crypto.randomUUID(),
