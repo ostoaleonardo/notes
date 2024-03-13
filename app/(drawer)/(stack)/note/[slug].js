@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Button, CategoriesModal, Chip, ChipContent, ImagePreview, LargeInput, PickerImage, RemoveChipButton, TextArea, TitleSection } from '@/components'
+import { Button, CategoriesModal, Chip, ChipContent, ImagePreview, LargeInput, PickerImage, RemoveChipButton, TextArea, TitleSection, Toast } from '@/components'
 import ImageView from 'react-native-image-viewing'
 import { useCategories, useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
@@ -23,6 +23,7 @@ export default function EditNote() {
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [galleryIndex, setGalleryIndex] = useState(0)
     const [isGalleryVisible, setIsGalleryVisible] = useState(false)
+    const [message, setMessage] = useState('')
 
     useHeaderTitle(t('headerTitle.editNote'))
 
@@ -37,10 +38,20 @@ export default function EditNote() {
     }, [slug])
 
     const handleSave = () => {
+        if (!title.trim()) {
+            handleToast(t('messages.emptyTitle'))
+            return
+        }
+
+        if (!note.trim()) {
+            handleToast(t('messages.emptyNote'))
+            return
+        }
+
         updateNote({
             id: slug,
-            title,
-            note,
+            title: title.trim(),
+            note: note.trim(),
             images,
             categories: categoryIds,
             createdAt,
@@ -73,6 +84,11 @@ export default function EditNote() {
     const handleOpenImage = (index) => {
         setIsGalleryVisible(true)
         setGalleryIndex(index)
+    }
+
+    const handleToast = (message) => {
+        setMessage(message)
+        setTimeout(() => setMessage(''), 3000)
     }
 
     return (
@@ -192,6 +208,7 @@ export default function EditNote() {
                 images={images.map((url) => ({ uri: url }))}
                 onRequestClose={() => setIsGalleryVisible(false)}
             />
+            <Toast message={message} />
         </View>
     )
 }
