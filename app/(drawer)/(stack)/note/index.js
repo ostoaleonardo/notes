@@ -3,7 +3,7 @@ import { router } from 'expo-router'
 import * as Crypto from 'expo-crypto'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Button, CategoriesModal, Chip, ChipContent, ImagePreview, LargeInput, PickerImage, RemoveChipButton, TextArea, TitleSection } from '@/components'
+import { Button, CategoriesModal, Chip, ChipContent, ImagePreview, LargeInput, PickerImage, RemoveChipButton, TextArea, TitleSection, Toast } from '@/components'
 import ImageView from 'react-native-image-viewing'
 import { useCategories, useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
@@ -20,11 +20,13 @@ export default function Note() {
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [galleryIndex, setGalleryIndex] = useState(0)
     const [isGalleryVisible, setIsGalleryVisible] = useState(false)
+    const [message, setMessage] = useState('')
 
     useHeaderTitle(t('headerTitle.addNote'))
 
     const handleSave = () => {
-        if (!title.trim() && !note.trim()) return
+        if (!title) return handleToast(t('messages.emptyTitle'))
+        if (!note) return handleToast(t('messages.emptyNote'))
 
         saveNote({
             id: Crypto.randomUUID(),
@@ -61,6 +63,11 @@ export default function Note() {
     const handleOpenImage = (index) => {
         setIsGalleryVisible(true)
         setGalleryIndex(index)
+    }
+
+    const handleToast = (message) => {
+        setMessage(message)
+        setTimeout(() => setMessage(''), 3000)
     }
 
     return (
@@ -172,6 +179,7 @@ export default function Note() {
                 images={images.map((url) => ({ uri: url }))}
                 onRequestClose={() => setIsGalleryVisible(false)}
             />
+            <Toast message={message} />
         </View>
     )
 }
