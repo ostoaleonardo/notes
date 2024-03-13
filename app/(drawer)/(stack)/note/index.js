@@ -37,8 +37,8 @@ export default function Note() {
 
         saveNote({
             id: Crypto.randomUUID(),
-            title,
-            note,
+            title: title.trim(),
+            note: note.trim(),
             images,
             categories: categoryIds,
             createdAt: getDate(),
