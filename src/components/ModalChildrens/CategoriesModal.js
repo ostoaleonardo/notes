@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as Crypto from 'expo-crypto'
 import { ModalSheet } from '../Modal'
 import { SmallInput } from '../Input'
 import { SquareButton } from '../Button'
-import { Category } from '../Card/Category'
+import { Category } from '../Card'
 import { useCategories } from '@/hooks'
 import { colors, fonts } from '@/constants'
 
@@ -13,6 +13,11 @@ export function CategoriesModal({ isVisible, onClose, noteCategories, handleAddC
     const { t } = useTranslation()
     const { categories, addCategory } = useCategories()
     const [newCategory, setNewCategory] = useState('')
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true)
+
+    useEffect(() => {
+        setIsButtonDisabled(!newCategory.trim())
+    }, [newCategory])
 
     const handleSaveCategory = (category) => {
         if (!category.trim()) return
@@ -37,6 +42,7 @@ export function CategoriesModal({ isVisible, onClose, noteCategories, handleAddC
                     placeholder={t('categories.newCategory')}
                 />
                 <SquareButton
+                    disabled={isButtonDisabled}
                     label={t('categories.add')}
                     onPress={() => handleSaveCategory(newCategory)}
                 />

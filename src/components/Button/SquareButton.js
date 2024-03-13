@@ -1,11 +1,15 @@
 import { Pressable, StyleSheet, Text } from 'react-native'
 import { colors, fonts } from '@/constants'
 
-export function SquareButton({ onPress, label }) {
+export function SquareButton({ onPress, disabled, label }) {
     return (
         <Pressable
             onPress={onPress}
-            style={styles.container}
+            disabled={disabled}
+            style={[
+                styles.container,
+                disabled && { opacity: 0.5 }
+            ]}
         >
             <Text style={styles.label}>
                 {label}
