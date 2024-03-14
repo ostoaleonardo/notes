@@ -21,7 +21,11 @@
     },
     "settings": {
         "language": "Language",
-        "theme": "Theme"
+        "theme": "Theme",
+        "about": "About",
+        "checkUpdates": "Check for updates",
+        "yourVersion": "Your version is up to date",
+        "newVersion": "New version available"
     },
     "headerTitle": {
         "notes": "Notes",

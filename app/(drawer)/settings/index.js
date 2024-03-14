@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { Languages, ModalSheet, Themes, TitleSection } from '@/components'
+import { Languages, ModalSheet, TitleSection } from '@/components'
 import { colors, fonts } from '@/constants'
 
 const SETTINGS_OPTIONS = [
@@ -9,10 +9,10 @@ const SETTINGS_OPTIONS = [
         title: 'settings.language',
         children: <Languages />
     },
-    {
-        title: 'settings.theme',
-        children: <Themes />
-    }
+    // {
+    //     title: 'settings.theme',
+    //     children: <Themes />
+    // }
 ]
 
 export default function Settings() {
@@ -42,19 +42,21 @@ export default function Settings() {
                 </Pressable>
             </View>
             <View style={styles.sectionContainer}>
-                <TitleSection title={t('settings.theme')} />
+                <TitleSection title={t('settings.about')} />
                 <Pressable
-                    onPress={() => handleModal(SETTINGS_OPTIONS[1])}
+                    onPress={() => { }}
                     style={styles.cardContainer}
                 >
-                    <View style={styles.colorContainer}>
-                        <View style={styles.color} />
+                    <View>
                         <Text style={styles.label}>
-                            Orange
+                            {t('settings.checkUpdates')}
+                        </Text>
+                        <Text style={styles.placeholder}>
+                            {t('settings.yourVersion')}
                         </Text>
                     </View>
                     <Text style={styles.label}>
-                        {'>'}
+                        1.0.0
                     </Text>
                 </Pressable>
             </View>
@@ -73,6 +75,7 @@ export default function Settings() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        gap: 8,
         padding: 24,
         backgroundColor: colors.background,
     },
@@ -86,24 +89,19 @@ const styles = StyleSheet.create({
         paddingVertical: 32,
         paddingHorizontal: 24,
         flexDirection: 'row',
+        alignItems: 'center',
         justifyContent: 'space-between',
         backgroundColor: colors.foreground,
     },
     label: {
         fontSize: 16,
-        opacity: 0.8,
         color: colors.text,
         fontFamily: fonts.mono,
     },
-    colorContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 16,
+    placeholder: {
+        fontSize: 12,
+        opacity: 0.6,
+        color: colors.text,
+        fontFamily: fonts.mono,
     },
-    color: {
-        width: 16,
-        height: 16,
-        borderRadius: 8,
-        backgroundColor: colors.primary,
-    }
 })
