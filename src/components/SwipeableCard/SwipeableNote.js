@@ -76,13 +76,14 @@ const styles = StyleSheet.create({
     noteContainer: {
         minWidth: '100%',
         padding: 20,
+        gap: 8,
         borderRadius: 16,
         backgroundColor: colors.foreground,
     },
     noteImages: {
         width: '100%',
         gap: 8,
-        marginTop: 16,
+        marginTop: 8,
         flexWrap: 'wrap',
         flexDirection: 'row',
     },
