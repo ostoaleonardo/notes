@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import * as Application from 'expo-application'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { Languages, ModalSheet, TitleSection } from '@/components'
 import { colors, fonts } from '@/constants'
@@ -19,6 +20,7 @@ export default function Settings() {
     const { t } = useTranslation()
     const [selected, setSelected] = useState(SETTINGS_OPTIONS[0])
     const [isModalVisible, setIsModalVisible] = useState(false)
+    const { nativeApplicationVersion } = Application
 
     const handleModal = (option) => {
         setIsModalVisible(!isModalVisible)
@@ -56,7 +58,7 @@ export default function Settings() {
                         </Text>
                     </View>
                     <Text style={styles.label}>
-                        1.0.0
+                        {nativeApplicationVersion}
                     </Text>
                 </Pressable>
             </View>
