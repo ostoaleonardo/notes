@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, Text } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 import Animated, { CurvedTransition, FadeInUp, SlideOutLeft } from 'react-native-reanimated'
 import { Swipeable } from 'react-native-gesture-handler'
 import { DeleteAction } from './DeleteAction'
-import { colors, fonts } from '@/constants'
+import { Typography } from '../Text'
+import { colors } from '@/constants'
 
 export function SwipeableCategory({ category, onPress, onDelete }) {
     return (
@@ -24,9 +25,9 @@ export function SwipeableCategory({ category, onPress, onDelete }) {
                     onPress={onPress}
                     style={styles.categoryContainer}
                 >
-                    <Text style={styles.label}>
+                    <Typography variant='paragraph'>
                         {category}
-                    </Text>
+                    </Typography>
                 </Pressable>
             </Swipeable>
         </Animated.View>
@@ -48,10 +49,5 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 16,
         backgroundColor: colors.foreground,
-    },
-    label: {
-        fontSize: 16,
-        color: colors.text50,
-        fontFamily: fonts.mono,
     },
 })

@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.foreground,
     },
     input: {
-        fontSize: 16,
+        fontSize: 14,
         color: colors.text,
         fontFamily: fonts.mono,
     },

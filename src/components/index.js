@@ -34,8 +34,7 @@ export { Themes } from './ModalChildrens'
 export { DrawerItems } from './Drawer'
 
 // Text
-export { TitleSection } from './Text'
-export { Message } from './Text'
+export { Typography } from './Text'
 
 // Others
 export { Toast } from './Toast'

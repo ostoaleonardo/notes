@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { SwipeableNote } from './SwipeableCard'
-import { Message } from './Text'
+import { Typography } from './Text'
 import { useNotes } from '@/hooks'
 
 export function NotesContainer({ filteredNotes }) {
@@ -14,7 +14,11 @@ export function NotesContainer({ filteredNotes }) {
             style={styles.scrollContainer}
         >
             <View style={styles.notesContainer}>
-                {loading && <Message label={t('messages.loading')} />}
+                {loading && (
+                    <Typography variant='paragraph'>
+                        {t('messages.loading')}
+                    </Typography>
+                )}
 
                 {filteredNotes.map(({ id, title, note, images }) => (
                     <SwipeableNote
@@ -27,7 +31,9 @@ export function NotesContainer({ filteredNotes }) {
                 ))}
 
                 {filteredNotes.length === 0 && !loading && (
-                    <Message label={t('messages.noNotes')} />
+                    <Typography variant='paragraph'>
+                        {t('messages.noNotes')}
+                    </Typography>
                 )}
             </View>
         </ScrollView>
@@ -43,5 +49,6 @@ const styles = StyleSheet.create({
         flex: 1,
         gap: 16,
         paddingVertical: 24,
+        alignItems: 'center',
     },
 })

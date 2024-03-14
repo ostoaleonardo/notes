@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import * as Application from 'expo-application'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { Languages, ModalSheet, TitleSection } from '@/components'
-import { colors, fonts } from '@/constants'
+import { Pressable, StyleSheet, View } from 'react-native'
+import { Languages, ModalSheet, Typography } from '@/components'
+import { colors } from '@/constants'
 
 const SETTINGS_OPTIONS = [
     {
@@ -30,36 +30,49 @@ export default function Settings() {
     return (
         <View style={styles.container}>
             <View style={styles.sectionContainer}>
-                <TitleSection title={t('settings.language')} />
-                <Pressable
-                    onPress={() => handleModal(SETTINGS_OPTIONS[0])}
-                    style={styles.cardContainer}
+                <Typography
+                    opacity={0.5}
+                    variant='subtitle'
                 >
-                    <Text style={styles.label}>
+                    {t('settings.language')}
+                </Typography>
+                <Pressable
+                    style={styles.cardContainer}
+                    onPress={() => handleModal(SETTINGS_OPTIONS[0])}
+                >
+                    <Typography variant='paragraph'>
                         {t('language')}
-                    </Text>
-                    <Text style={styles.label}>
+                    </Typography>
+                    <Typography variant='paragraph'>
                         {'>'}
-                    </Text>
+                    </Typography>
                 </Pressable>
             </View>
             <View style={styles.sectionContainer}>
-                <TitleSection title={t('settings.about')} />
+                <Typography
+                    opacity={0.5}
+                    variant='subtitle'
+                >
+                    {t('settings.about')}
+                </Typography>
                 <Pressable
                     onPress={() => { }}
                     style={styles.cardContainer}
                 >
                     <View>
-                        <Text style={styles.label}>
+                        <Typography variant='paragraph'>
                             {t('settings.checkUpdates')}
-                        </Text>
-                        <Text style={styles.placeholder}>
+                        </Typography>
+                        <Typography
+                            opacity={0.5}
+                            variant='caption'
+                        >
                             {t('settings.yourVersion')}
-                        </Text>
+                        </Typography>
                     </View>
-                    <Text style={styles.label}>
+                    <Typography variant='paragraph'>
                         {nativeApplicationVersion}
-                    </Text>
+                    </Typography>
                 </Pressable>
             </View>
 
@@ -94,16 +107,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         backgroundColor: colors.foreground,
-    },
-    label: {
-        fontSize: 16,
-        color: colors.text,
-        fontFamily: fonts.mono,
-    },
-    placeholder: {
-        fontSize: 12,
-        opacity: 0.6,
-        color: colors.text,
-        fontFamily: fonts.mono,
     },
 })

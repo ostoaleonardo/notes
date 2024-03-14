@@ -1,7 +1,8 @@
-import { Pressable, StyleSheet, Text } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 import Animated, { CurvedTransition, FadeOutLeft } from 'react-native-reanimated'
+import { Typography } from '../Text'
 import { Check } from '../Check'
-import { colors, fonts } from '@/constants'
+import { colors } from '@/constants'
 
 export function Category({ category, onPress, isSelected }) {
     return (
@@ -14,9 +15,9 @@ export function Category({ category, onPress, isSelected }) {
                 onPress={onPress}
                 style={styles.categoryContainer}
             >
-                <Text style={styles.label}>
+                <Typography variant='paragraph'>
                     {category}
-                </Text>
+                </Typography>
                 <Check checked={isSelected} />
             </Pressable>
         </Animated.View>
@@ -35,10 +36,5 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         justifyContent: 'space-between',
         borderBottomColor: colors.text5,
-    },
-    label: {
-        fontSize: 16,
-        color: colors.text50,
-        fontFamily: fonts.mono,
     },
 })

@@ -1,4 +1,5 @@
-import { KeyboardAvoidingView, Modal, StyleSheet, Text, View } from 'react-native'
+import { KeyboardAvoidingView, Modal, StyleSheet, View } from 'react-native'
+import { Typography } from '../Text'
 import { IconButton } from '../Button'
 import { Cross } from '@/icons'
 import { colors, fonts } from '@/constants'
@@ -20,10 +21,13 @@ export function ModalSheet({ isVisible, onClose, title, children }) {
                     onStartShouldSetResponder={onClose}
                 />
                 <View style={styles.modalContent}>
-                    <View style={styles.titleContainer}>
-                        <Text style={styles.title}>
+                    <View style={styles.headerContainer}>
+                        <Typography
+                            opacity={0.5}
+                            variant='subtitle'
+                        >
                             {title}
-                        </Text>
+                        </Typography>
                         <IconButton
                             icon={
                                 <Cross
@@ -69,15 +73,10 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 18,
         backgroundColor: colors.foreground,
     },
-    titleContainer: {
+    headerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-    },
-    title: {
-        fontSize: 16,
-        color: colors.text,
-        fontFamily: fonts.mono,
     },
     bodyContainer: {
         width: '100%',

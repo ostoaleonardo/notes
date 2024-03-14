@@ -3,7 +3,7 @@ import { router } from 'expo-router'
 import * as Crypto from 'expo-crypto'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Button, CategoriesModal, Chip, ChipContent, ImagePreview, LargeInput, PickerImage, RemoveChipButton, TextArea, TitleSection, Toast } from '@/components'
+import { Button, CategoriesModal, Chip, ChipContent, ImagePreview, LargeInput, PickerImage, RemoveChipButton, TextArea, Toast, Typography } from '@/components'
 import ImageView from 'react-native-image-viewing'
 import { useCategories, useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
@@ -93,7 +93,12 @@ export default function Note() {
                     </View>
                     <View style={styles.categoriesContainer}>
                         <View style={styles.titleContainer}>
-                            <TitleSection title={t('title.categories')} />
+                            <Typography
+                                opacity={0.5}
+                                variant='subtitle'
+                            >
+                                {t('title.categories')}
+                            </Typography>
                         </View>
                         <ScrollView
                             horizontal
@@ -124,7 +129,12 @@ export default function Note() {
                         </ScrollView>
                     </View>
                     <View style={styles.sectionContainer}>
-                        <TitleSection title={t('title.note')} />
+                        <Typography
+                            opacity={0.5}
+                            variant='subtitle'
+                        >
+                            {t('title.note')}
+                        </Typography>
                         <TextArea
                             value={note}
                             onChangeText={setNote}

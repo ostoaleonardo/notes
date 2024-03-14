@@ -1,6 +1,7 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
+import { Typography } from '../Text'
 import { Check } from '../Check'
-import { colors, fonts } from '@/constants'
+import { colors } from '@/constants'
 
 export function ModalOption({ onPress, label, isSelected }) {
     return (
@@ -9,9 +10,9 @@ export function ModalOption({ onPress, label, isSelected }) {
                 onPress={onPress}
                 style={styles.optionContainer}
             >
-                <Text style={styles.label}>
+                <Typography variant='paragraph'>
                     {label}
-                </Text>
+                </Typography>
                 <Check checked={isSelected} />
             </Pressable>
         </View>
@@ -19,11 +20,6 @@ export function ModalOption({ onPress, label, isSelected }) {
 }
 
 const styles = StyleSheet.create({
-    scrollContainer: {
-        flex: 1,
-        width: '100%',
-    },
-
     container: {
         width: '100%',
         alignItems: 'center',
@@ -35,10 +31,5 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         justifyContent: 'space-between',
         borderBottomColor: colors.text5,
-    },
-    label: {
-        fontSize: 16,
-        color: colors.text50,
-        fontFamily: fonts.mono,
     },
 })

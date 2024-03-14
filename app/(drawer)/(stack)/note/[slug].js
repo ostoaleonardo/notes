@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Button, CategoriesModal, Chip, ChipContent, ImagePreview, LargeInput, PickerImage, RemoveChipButton, TextArea, TitleSection, Toast } from '@/components'
+import { Button, CategoriesModal, Chip, ChipContent, ImagePreview, LargeInput, PickerImage, RemoveChipButton, TextArea, Toast, Typography } from '@/components'
 import ImageView from 'react-native-image-viewing'
 import { useCategories, useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
-import { colors, fonts } from '@/constants'
+import { colors } from '@/constants'
 
 export default function EditNote() {
     const router = useRouter()
@@ -106,16 +106,25 @@ export default function EditNote() {
                         />
                     </View>
                     <View style={styles.dateContainer}>
-                        <Text style={styles.date}>
+                        <Typography
+                            uppercase
+                            opacity={0.5}
+                            variant='caption'
+                        >
                             {updatedAt
                                 ? `${t('editNote.updated')} ${updatedAt}`
                                 : `${t('editNote.created')} ${createdAt}`
                             }
-                        </Text>
+                        </Typography>
                     </View>
                     <View style={styles.categoriesContainer}>
                         <View style={styles.titleContainer}>
-                            <TitleSection title={t('title.categories')} />
+                            <Typography
+                                opacity={0.5}
+                                variant='subtitle'
+                            >
+                                {t('title.categories')}
+                            </Typography>
                         </View>
                         <ScrollView
                             horizontal
@@ -146,7 +155,12 @@ export default function EditNote() {
                         </ScrollView>
                     </View>
                     <View style={styles.sectionContainer}>
-                        <TitleSection title={t('title.note')} />
+                        <Typography
+                            opacity={0.5}
+                            variant='subtitle'
+                        >
+                            {t('title.note')}
+                        </Typography>
                         <TextArea
                             value={note}
                             onChangeText={setNote}
@@ -234,13 +248,6 @@ const styles = StyleSheet.create({
         width: '100%',
         marginTop: 8,
         paddingHorizontal: 24,
-    },
-    date: {
-        fontSize: 12,
-        opacity: 0.5,
-        color: colors.text,
-        fontFamily: fonts.mono,
-        textTransform: 'uppercase',
     },
     categoriesContainer: {
         width: '100%',

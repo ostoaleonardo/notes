@@ -1,5 +1,6 @@
-import { Pressable, StyleSheet, Text } from 'react-native'
-import { colors, fonts } from '@/constants'
+import { Pressable, StyleSheet } from 'react-native'
+import { Typography } from '../Text'
+import { colors } from '@/constants'
 
 export function SquareButton({ onPress, disabled, label }) {
     return (
@@ -11,9 +12,12 @@ export function SquareButton({ onPress, disabled, label }) {
                 disabled && { opacity: 0.5 }
             ]}
         >
-            <Text style={styles.label}>
+            <Typography
+                uppercase
+                variant='caption'
+            >
                 {label}
-            </Text>
+            </Typography>
         </Pressable>
     )
 }
@@ -26,11 +30,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: colors.primary,
-    },
-    label: {
-        fontSize: 12,
-        color: colors.text,
-        fontFamily: fonts.mono,
-        textTransform: 'uppercase',
     },
 })

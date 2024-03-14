@@ -58,7 +58,7 @@ const getStyles = (variant) => {
         },
         label: {
             color,
-            fontSize: 16,
+            fontSize: 14,
             fontFamily: fonts.mono,
             textTransform: 'uppercase',
         },

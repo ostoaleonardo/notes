@@ -46,7 +46,7 @@ const getStyles = (variant) => {
             flex: 1,
             height: 72,
             padding: 16,
-            fontSize: 16,
+            fontSize: 14,
             borderColor,
             borderWidth: 2,
             backgroundColor,

@@ -1,20 +1,26 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
-import { colors, fonts } from '@/constants'
+import { Image, StyleSheet, View } from 'react-native'
+import { Typography } from '../Text'
+import { colors } from '@/constants'
+
+const icon = require('../../../assets/icon.png')
 
 export function DrawerHeader() {
     return (
         <View style={styles.headerContainer}>
             <Image
-                source={require('../../../assets/icon.png')}
+                source={icon}
                 style={styles.icon}
             />
             <View style={styles.appInfo}>
-                <Text style={styles.appName}>
+                <Typography variant='paragraph'>
                     Notes
-                </Text>
-                <Text style={styles.appVersion}>
+                </Typography>
+                <Typography
+                    opacity={0.5}
+                    variant='caption'
+                >
                     1.0.0
-                </Text>
+                </Typography>
             </View>
         </View>
     )
@@ -35,15 +41,5 @@ const styles = StyleSheet.create({
     appInfo: {
         gap: 4,
         marginLeft: 8,
-    },
-    appName: {
-        fontSize: 16,
-        color: colors.text,
-        fontFamily: fonts.mono,
-    },
-    appVersion: {
-        fontSize: 12,
-        color: colors.text50,
-        fontFamily: fonts.mono,
     },
 })

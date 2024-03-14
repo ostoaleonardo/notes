@@ -1,17 +1,26 @@
-import { StyleSheet, Text } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { Link } from 'expo-router'
-import { colors, fonts } from '@/constants'
+import { Typography } from '../Text'
+import { colors } from '@/constants'
 
 export function FloatingButton({ label, href }) {
     return (
-        <Link href={href} style={styles.linkContainer}>
-            <Text style={styles.text}>{label}</Text>
+        <Link
+            href={href}
+            style={styles.container}
+        >
+            <Typography
+                uppercase
+                variant='paragraph'
+            >
+                {label}
+            </Typography>
         </Link>
     )
 }
 
 const styles = StyleSheet.create({
-    linkContainer: {
+    container: {
         position: 'absolute',
         bottom: 32,
         right: 32,
@@ -19,11 +28,5 @@ const styles = StyleSheet.create({
         paddingVertical: 24,
         paddingHorizontal: 32,
         backgroundColor: colors.primary,
-    },
-    text: {
-        fontSize: 16,
-        color: colors.text,
-        fontFamily: fonts.mono,
-        textTransform: 'uppercase',
     },
 })

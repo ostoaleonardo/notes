@@ -1,5 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { colors, fonts } from '@/constants'
+import { Pressable, StyleSheet, View } from 'react-native'
+import { Typography } from '../Text'
+import { colors } from '@/constants'
 
 export function Chip({ label, onPress, variant, endContent }) {
     const styles = getChipStyles(variant, endContent !== undefined ? true : false)
@@ -7,12 +8,16 @@ export function Chip({ label, onPress, variant, endContent }) {
     return (
         <Pressable
             onPress={onPress}
-            style={styles.chipContainer}
+            style={styles.container}
         >
-            <View style={styles.container}>
-                <Text style={styles.chipText}>
+            <View style={styles.content}>
+                <Typography
+                    bold
+                    uppercase
+                    variant='caption'
+                >
                     {label}
-                </Text>
+                </Typography>
                 {endContent}
             </View>
         </Pressable>
@@ -40,7 +45,7 @@ const getChipStyles = (variant, hasEndContent) => {
     }
 
     return StyleSheet.create({
-        chipContainer: {
+        container: {
             borderWidth: 2,
             borderRadius: 32,
             paddingVertical: 8,
@@ -48,22 +53,12 @@ const getChipStyles = (variant, hasEndContent) => {
             paddingRight,
             borderColor,
             backgroundColor,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
         },
-        container: {
+        content: {
             gap: 16,
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
-        },
-        chipText: {
-            fontSize: 12,
-            color: colors.text,
-            fontWeight: 'bold',
-            fontFamily: fonts.mono,
-            textTransform: 'uppercase',
         },
     })
 }

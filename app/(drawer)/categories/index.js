@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import * as Crypto from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, View } from 'react-native'
-import { SwipeableCategory, Message, SmallInput, SquareButton, TitleSection, UpdateCategoryModal, Toast } from '@/components'
+import { SwipeableCategory, SmallInput, SquareButton, UpdateCategoryModal, Toast, Typography } from '@/components'
 import { useCategories } from '@/hooks'
 import { colors } from '@/constants'
 
@@ -62,11 +62,15 @@ export default function Categories() {
                 />
             </View>
             <View style={styles.sectionContainer}>
-                <TitleSection title={t('categories.yourCategories')} />
+                <Typography variant='paragraph'>
+                    {t('categories.yourCategories')}
+                </Typography>
             </View>
             <View style={styles.categoriesContainer}>
                 {categories.length === 1 ? (
-                    <Message label={t('messages.noCategories')} />
+                    <Typography variant='paragraph'>
+                        {t('messages.noCategories')}
+                    </Typography>
                 ) : (
                     <ScrollView
                         overScrollMode='never'
@@ -116,6 +120,8 @@ const styles = StyleSheet.create({
     },
     categoriesContainer: {
         flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     scrollContainer: {
         flex: 1,

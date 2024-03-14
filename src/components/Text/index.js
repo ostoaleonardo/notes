@@ -1,2 +1,1 @@
-export { TitleSection } from './TitleSection'
-export { Message } from './Message'
+export { Typography } from './Typography'

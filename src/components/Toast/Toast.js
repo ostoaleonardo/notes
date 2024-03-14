@@ -1,6 +1,7 @@
-import { StyleSheet, Text } from 'react-native'
-import { colors, fonts } from '@/constants'
+import { StyleSheet } from 'react-native'
 import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated'
+import { Typography } from '../Text'
+import { colors } from '@/constants'
 
 export function Toast({ message }) {
     return (
@@ -10,7 +11,9 @@ export function Toast({ message }) {
                 exiting={SlideOutDown}
                 style={styles.container}
             >
-                <Text style={styles.text}>{message}</Text>
+                <Typography variant='paragraph'>
+                    {message}
+                </Typography>
             </Animated.View>
         )
     )
@@ -25,10 +28,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: colors.primary,
-    },
-    text: {
-        color: colors.text,
-        textAlign: 'center',
-        fontFamily: fonts.mono,
     },
 })
