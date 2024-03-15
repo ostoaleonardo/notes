@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import * as Application from 'expo-application'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { Linking, Pressable, StyleSheet, View } from 'react-native'
 import { Languages, ModalSheet, Typography } from '@/components'
-import { colors } from '@/constants'
+import { PLAY_STORE_URL, colors } from '@/constants'
 
 const SETTINGS_OPTIONS = [
     {
@@ -56,7 +56,7 @@ export default function Settings() {
                     {t('settings.about')}
                 </Typography>
                 <Pressable
-                    onPress={() => { }}
+                    onPress={() => Linking.openURL(PLAY_STORE_URL)}
                     style={styles.cardContainer}
                 >
                     <View>
