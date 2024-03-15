@@ -68,7 +68,10 @@ export default function Categories() {
             </View>
             <View style={styles.categoriesContainer}>
                 {categories.length === 1 ? (
-                    <Typography variant='paragraph'>
+                    <Typography
+                        opacity={0.5}
+                        variant='paragraph'
+                    >
                         {t('messages.noCategories')}
                     </Typography>
                 ) : (
