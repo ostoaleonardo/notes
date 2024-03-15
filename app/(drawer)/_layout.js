@@ -12,6 +12,7 @@ export default function DrawerLayout() {
         <Drawer
             screenOptions={{
                 headerTitleAlign: 'center',
+                headerShadowVisible: false,
                 headerTintColor: colors.text,
 
                 headerStyle: {
