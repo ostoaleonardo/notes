@@ -20,7 +20,8 @@ export default function DrawerLayout() {
                 },
 
                 headerTitleStyle: {
-                    fontSize: 14,
+                    fontSize: 12,
+                    letterSpacing: 1,
                     fontFamily: fonts.mono,
                     textTransform: 'uppercase',
                 },
