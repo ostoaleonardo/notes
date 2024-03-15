@@ -17,7 +17,7 @@ export default function App() {
             <Categories setFilteredNotes={setFilteredNotes} />
             <NotesContainer filteredNotes={filteredNotes} />
             <FloatingButton label={t('buttons.addNote')} href='/note' />
-            <StatusBar style='inverted' />
+            <StatusBar style='auto' />
         </View>
     )
 }
