@@ -10,9 +10,19 @@ export function useLanguage() {
     useEffect(() => {
         const locales = getLocales()
         const { languageCode } = locales[0]
-        
+
         setDeviceLanguage(languageCode)
     }, [])
+
+    const getLanguage = (languageCode) => {
+        const supportedLanguages = ['en', 'es']
+
+        if (supportedLanguages.includes(languageCode)) {
+            return languageCode
+        } else {
+            return 'en'
+        }
+    }
 
     const changeLanguage = (lan) => {
         i18next.changeLanguage(lan)
@@ -23,9 +33,10 @@ export function useLanguage() {
         AsyncStorage.getItem('userLanguage')
             .then((lan) => {
                 if (lan) {
-                    i18next.changeLanguage(lan)
+                    changeLanguage(lan)
                 } else {
-                    i18next.changeLanguage(deviceLanguage)
+                    const lan = getLanguage(deviceLanguage)
+                    changeLanguage(lan)
                 }
             })
     }
