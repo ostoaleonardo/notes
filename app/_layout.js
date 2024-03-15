@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Slot } from 'expo-router'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
@@ -7,6 +7,7 @@ import { useLanguage } from '@/hooks'
 
 export default function DrawerLayout() {
     const { initLanguage } = useLanguage()
+    const [isReady, setIsReady] = useState(false)
     const [fontsLoaded, fontError] = useFonts({
         'Roboto-Mono': require('../assets/fonts/RobotoMono.ttf'),
     })
@@ -15,16 +16,17 @@ export default function DrawerLayout() {
         const prepare = async () => {
             await SplashScreen.preventAutoHideAsync()
             initLanguage()
+            setIsReady(true)
         }
 
         prepare()
     }, [])
 
     const onLayoutRootView = useCallback(async () => {
-        if (fontsLoaded || fontError) {
+        if (isReady) {
             await SplashScreen.hideAsync()
         }
-    }, [fontsLoaded, fontError])
+    }, [isReady])
 
     if (!fontsLoaded && !fontError) {
         return null
