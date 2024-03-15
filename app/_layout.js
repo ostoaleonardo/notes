@@ -12,12 +12,12 @@ export default function DrawerLayout() {
     })
 
     useEffect(() => {
-        const loadFont = async () => {
+        const prepare = async () => {
             await SplashScreen.preventAutoHideAsync()
             initLanguage()
         }
 
-        loadFont()
+        prepare()
     }, [])
 
     const onLayoutRootView = useCallback(async () => {
