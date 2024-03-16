@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import * as Application from 'expo-application'
 import { Linking, Pressable, StyleSheet, View } from 'react-native'
 import { Languages, ModalSheet, Typography } from '@/components'
+import { getGooglePlayVersion } from '@/utils'
 import { PLAY_STORE_URL, colors } from '@/constants'
 
 const SETTINGS_OPTIONS = [
@@ -20,7 +21,21 @@ export default function Settings() {
     const { t } = useTranslation()
     const [selected, setSelected] = useState(SETTINGS_OPTIONS[0])
     const [isModalVisible, setIsModalVisible] = useState(false)
+    const [updateAvailable, setUpdateAvailable] = useState(false)
     const { nativeApplicationVersion } = Application
+
+    useEffect(() => {
+        const fetchGooglePlayData = async () => {
+            const { updateAvailable } = await getGooglePlayVersion(
+                PLAY_STORE_URL,
+                nativeApplicationVersion
+            )
+
+            setUpdateAvailable(updateAvailable)
+        }
+
+        fetchGooglePlayData()
+    }, [])
 
     const handleModal = (option) => {
         setIsModalVisible(!isModalVisible)
@@ -67,7 +82,10 @@ export default function Settings() {
                             opacity={0.5}
                             variant='caption'
                         >
-                            {t('settings.yourVersion')}
+                            {updateAvailable
+                                ? t('settings.newVersion')
+                                : t('settings.yourVersion')
+                            }
                         </Typography>
                     </View>
                     <Typography variant='paragraph'>
