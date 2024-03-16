@@ -29,6 +29,7 @@ export { ModalSheet } from './Modal'
 export { CategoriesModal } from './ModalChildrens'
 export { UpdateCategoryModal } from './ModalChildrens'
 export { PasswordModal } from './ModalChildrens'
+export { UpdatePasswordModal } from './ModalChildrens'
 export { Languages } from './ModalChildrens'
 export { Themes } from './ModalChildrens'
 

@@ -5,7 +5,7 @@ import { IconButton } from '../Button'
 import { Eye } from '@/icons'
 import { colors } from '@/constants'
 
-export function PasswordInput({ password, onChangeText }) {
+export function PasswordInput({ password, onChangeText, ...props }) {
     const [showPassword, setShowPassword] = useState(false)
 
     const handlePassword = () => setShowPassword(!showPassword)
@@ -13,7 +13,7 @@ export function PasswordInput({ password, onChangeText }) {
     return (
         <View style={styles.container}>
             <LargeInput
-                autoFocus
+                {...props}
                 value={password}
                 onChangeText={onChangeText}
                 placeholder='········'

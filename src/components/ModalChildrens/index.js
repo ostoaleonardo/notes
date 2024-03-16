@@ -1,5 +1,6 @@
 export { CategoriesModal } from './CategoriesModal'
 export { UpdateCategoryModal } from './UpdateCategoryModal'
 export { PasswordModal } from './PasswordModal'
+export { UpdatePasswordModal } from './UpdatePasswordModal'
 export { Languages } from './Languages'
 export { Themes } from './Themes'

@@ -51,6 +51,7 @@ export default function Password() {
         <View style={styles.container}>
             <View style={styles.passwordContainer}>
                 <PasswordInput
+                    autoFocus
                     value={password}
                     onChangeText={setPassword}
                 />

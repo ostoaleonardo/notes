@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Button, CategoriesModal, Chip, ChipContent, IconButton, ImagePreview, LargeInput, PasswordModal, PickerImage, RemoveChipButton, TextArea, Toast, Typography } from '@/components'
+import { Button, CategoriesModal, Chip, ChipContent, IconButton, ImagePreview, LargeInput, PickerImage, RemoveChipButton, TextArea, Toast, Typography, UpdatePasswordModal } from '@/components'
 import ImageView from 'react-native-image-viewing'
 import { useCategories, useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
@@ -252,9 +252,10 @@ export default function EditNote() {
                 noteCategories={categoryIds}
                 handleAddCategory={handleAddCategory}
             />
-            <PasswordModal
+            <UpdatePasswordModal
                 isVisible={isPasswordModalVisible}
                 onClose={handlePasswordModal}
+                password={password}
                 handlePassword={handlePassword}
             />
             <ImageView

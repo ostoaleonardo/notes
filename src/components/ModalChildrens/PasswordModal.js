@@ -30,6 +30,7 @@ export function PasswordModal({ isVisible, onClose, handlePassword }) {
         >
             <View style={styles.container}>
                 <PasswordInput
+                    autoFocus
                     password={passwordInput}
                     onChangeText={setPasswordInput}
                 />

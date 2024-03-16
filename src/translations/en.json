@@ -28,6 +28,9 @@
         "yourVersion": "Your version is up to date",
         "newVersion": "New version available"
     },
+    "password": {
+        "updatePassword": "Update password"
+    },
     "headerTitle": {
         "notes": "Notes",
         "addNote": "Add Note",
