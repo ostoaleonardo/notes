@@ -2,7 +2,8 @@
     "language": "English",
     "title": {
         "categories": "Categories",
-        "note": "Note"
+        "note": "Note",
+        "password": "Password"
     },
     "addNote": {
         "titlePlaceholder": "Your title...",
@@ -38,7 +39,8 @@
         "save": "Save",
         "cancel": "Cancel",
         "delete": "Delete",
-        "update": "Update"
+        "update": "Update",
+        "enter": "Enter"
     },
     "messages": {
         "loading": "Loading...",
@@ -51,7 +53,8 @@
         "addACategory": "Add the category name",
         "emptyCategory": "Category name can't be empty",
         "categoryAdded": "Category added",
-        "categoryUpdated": "Category updated"
+        "categoryUpdated": "Category updated",
+        "wrongPassword": "Wrong password"
     },
     "drawer": {
         "notes": "Notes",

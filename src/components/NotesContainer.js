@@ -23,13 +23,14 @@ export function NotesContainer({ filteredNotes }) {
                     </Typography>
                 )}
 
-                {filteredNotes.map(({ id, title, note, images }) => (
+                {filteredNotes.map(({ id, title, note, images, password }) => (
                     <SwipeableNote
                         key={id}
                         id={id}
                         title={title}
                         note={note}
                         images={images}
+                        hasPassword={!!password}
                     />
                 ))}
 

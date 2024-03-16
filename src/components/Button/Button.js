@@ -1,11 +1,12 @@
 import { Pressable, StyleSheet, Text } from 'react-native'
 import { colors, fonts } from '@/constants'
 
-export function Button({ label, onPress, disabled, variant }) {
+export function Button({ label, onPress, disabled, variant, ...props }) {
     const styles = getStyles(variant)
 
     return (
         <Pressable
+            {...props}
             onPress={onPress}
             disabled={disabled}
             style={[

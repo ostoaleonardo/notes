@@ -2,7 +2,8 @@
     "language": "Español",
     "title": {
         "categories": "Categorías",
-        "note": "Nota"
+        "note": "Nota",
+        "password": "Contraseña"
     },
     "addNote": {
         "titlePlaceholder": "Tu título...",
@@ -38,7 +39,8 @@
         "save": "Guardar",
         "cancel": "Cancelar",
         "delete": "Borrar",
-        "update": "Actualizar"
+        "update": "Actualizar",
+        "enter": "Entrar"
     },
     "messages": {
         "loading": "Cargando...",
@@ -51,7 +53,8 @@
         "addACategory": "Añade el nombre de la categoría",
         "emptyCategory": "El nombre de la categoría no puede estar vacío",
         "categoryAdded": "Categoría añadida",
-        "categoryUpdated": "Categoría actualizada"
+        "categoryUpdated": "Categoría actualizada",
+        "wrongPassword": "Contraseña incorrecta"
     },
     "drawer": {
         "notes": "Notas",

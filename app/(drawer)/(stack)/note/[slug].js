@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Button, CategoriesModal, Chip, ChipContent, ImagePreview, LargeInput, PickerImage, RemoveChipButton, TextArea, Toast, Typography } from '@/components'
+import { Button, CategoriesModal, Chip, ChipContent, IconButton, ImagePreview, LargeInput, PasswordModal, PickerImage, RemoveChipButton, TextArea, Toast, Typography } from '@/components'
 import ImageView from 'react-native-image-viewing'
 import { useCategories, useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
+import { Lock, Unlock } from '@/icons'
 import { colors } from '@/constants'
 
 export default function EditNote() {
@@ -17,10 +18,12 @@ export default function EditNote() {
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
     const [images, setImages] = useState([])
+    const [password, setPassword] = useState('')
     const [categoryIds, setCategoryIds] = useState([])
     const [createdAt, setCreatedAt] = useState('')
     const [updatedAt, setUpdatedAt] = useState('')
     const [isModalVisible, setIsModalVisible] = useState(false)
+    const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false)
     const [galleryIndex, setGalleryIndex] = useState(0)
     const [isGalleryVisible, setIsGalleryVisible] = useState(false)
     const [message, setMessage] = useState('')
@@ -32,6 +35,7 @@ export default function EditNote() {
         setTitle(note.title)
         setNote(note.note)
         setImages(note.images)
+        setPassword(note.password)
         setCategoryIds(note.categories)
         setCreatedAt(note.createdAt)
         setUpdatedAt(note.updatedAt)
@@ -53,6 +57,7 @@ export default function EditNote() {
             title: title.trim(),
             note: note.trim(),
             images,
+            password,
             categories: categoryIds,
             createdAt,
             updatedAt: getDate(),
@@ -61,8 +66,12 @@ export default function EditNote() {
         router.navigate('/(drawer)/(stack)/home')
     }
 
-    const handleModal = () => {
+    const handleCategoriesModal = () => {
         setIsModalVisible(!isModalVisible)
+    }
+
+    const handlePasswordModal = () => {
+        setIsPasswordModalVisible(!isPasswordModalVisible)
     }
 
     const handleAddCategory = (id) => {
@@ -71,6 +80,11 @@ export default function EditNote() {
         } else {
             setCategoryIds(categoryIds.filter((categoryId) => categoryId !== id))
         }
+    }
+
+    const handlePassword = (password) => {
+        setPassword(password)
+        setIsPasswordModalVisible(false)
     }
 
     const handleAddImage = (image) => {
@@ -100,6 +114,7 @@ export default function EditNote() {
                 <View style={styles.noteContainer}>
                     <View style={styles.titleContainer}>
                         <LargeInput
+                            multiline
                             value={title}
                             onChangeText={setTitle}
                             placeholder={t('addNote.titlePlaceholder')}
@@ -147,9 +162,9 @@ export default function EditNote() {
                                 ))}
                                 <Chip
                                     variant='bordered'
-                                    onPress={handleModal}
                                     label={t('categories.add')}
                                     endContent={<ChipContent />}
+                                    onPress={handleCategoriesModal}
                                 />
                             </View>
                         </ScrollView>
@@ -196,11 +211,32 @@ export default function EditNote() {
                         </View>
                     </ScrollView>
                     <View style={styles.buttonsContainer}>
-                        <Button
-                            variant='primary'
-                            label={t('buttons.save')}
-                            onPress={handleSave}
-                        />
+                        <View style={styles.rowContainer}>
+                            <Button
+                                flex={1}
+                                variant='primary'
+                                label={t('buttons.save')}
+                                onPress={handleSave}
+                            />
+                            <IconButton
+                                size='md'
+                                variant='secondary'
+                                onPress={() => setIsPasswordModalVisible(true)}
+                                icon={
+                                    password
+                                        ? <Lock
+                                            width={20}
+                                            height={20}
+                                            color={colors.background}
+                                        />
+                                        : <Unlock
+                                            width={20}
+                                            height={20}
+                                            color={colors.background}
+                                        />
+                                }
+                            />
+                        </View>
                         <Button
                             variant='outline'
                             label={t('buttons.cancel')}
@@ -212,9 +248,14 @@ export default function EditNote() {
 
             <CategoriesModal
                 isVisible={isModalVisible}
-                onClose={handleModal}
+                onClose={handleCategoriesModal}
                 noteCategories={categoryIds}
                 handleAddCategory={handleAddCategory}
+            />
+            <PasswordModal
+                isVisible={isPasswordModalVisible}
+                onClose={handlePasswordModal}
+                handlePassword={handlePassword}
             />
             <ImageView
                 imageIndex={galleryIndex}
@@ -273,6 +314,13 @@ const styles = StyleSheet.create({
         gap: 16,
         marginTop: 32,
         paddingHorizontal: 24,
+    },
+    rowContainer: {
+        width: '100%',
+        gap: 12,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     imagesContainer: {
         width: '100%',

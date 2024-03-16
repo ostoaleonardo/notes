@@ -29,6 +29,8 @@ export function ModalSheet({ isVisible, onClose, title, children }) {
                             {title}
                         </Typography>
                         <IconButton
+                            size='sm'
+                            variant='light'
                             icon={
                                 <Cross
                                     width={24}

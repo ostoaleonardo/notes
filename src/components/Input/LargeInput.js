@@ -1,10 +1,10 @@
 import { StyleSheet, TextInput } from 'react-native'
 import { colors, fonts } from '@/constants'
 
-export function LargeInput({ value, onChangeText, placeholder }) {
+export function LargeInput({ value, onChangeText, placeholder, ...props }) {
     return (
         <TextInput
-            multiline
+            {...props}
             value={value}
             style={styles.input}
             placeholder={placeholder}
@@ -16,7 +16,7 @@ export function LargeInput({ value, onChangeText, placeholder }) {
 
 const styles = StyleSheet.create({
     input: {
-        width: '100%',
+        flex: 1,
         fontSize: 24,
         color: colors.text,
         fontFamily: fonts.mono,

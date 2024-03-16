@@ -22,11 +22,13 @@ export { Category } from './Card'
 export { LargeInput } from './Input'
 export { SmallInput } from './Input'
 export { TextArea } from './Input'
+export { PasswordInput } from './Input'
 
 // Modals
 export { ModalSheet } from './Modal'
 export { CategoriesModal } from './ModalChildrens'
 export { UpdateCategoryModal } from './ModalChildrens'
+export { PasswordModal } from './ModalChildrens'
 export { Languages } from './ModalChildrens'
 export { Themes } from './ModalChildrens'
 

@@ -8,12 +8,16 @@ import { useNotes } from '@/hooks'
 import { getDimensions } from '@/utils'
 import { colors } from '@/constants'
 
-export function SwipeableNote({ id, title, note, images }) {
+export function SwipeableNote({ id, title, note, images, hasPassword }) {
     const { deleteNote } = useNotes()
     const width = getDimensions(images.length)
 
     const goToEdit = () => {
-        router.navigate('/note/' + id)
+        if (hasPassword) {
+            router.navigate('/note/password/' + id)
+        } else {
+            router.navigate('/note/' + id)
+        }
     }
 
     return (
