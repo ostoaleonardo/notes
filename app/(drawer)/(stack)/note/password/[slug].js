@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import * as Crypto from 'expo-crypto'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
@@ -12,18 +13,29 @@ export default function Password() {
     const { slug } = useLocalSearchParams()
     const { getNote } = useNotes()
     const [password, setPassword] = useState('')
-    const [correctPassword, setCorrectPassword] = useState(false)
+    const [encryptedInput, setEncryptedInput] = useState('')
+    const [encryptedPassword, setEncryptedPassword] = useState('')
     const [message, setMessage] = useState('')
 
     useHeaderTitle(t('title.password'))
 
     useEffect(() => {
         const note = getNote(slug)
-        setCorrectPassword(note.password)
+        setEncryptedPassword(note.password)
     }, [slug])
 
-    const handlePassword = (password) => {
-        if (password === correctPassword) {
+    useEffect(() => {
+        (async () => {
+            const digest = await Crypto.digestStringAsync(
+                Crypto.CryptoDigestAlgorithm.SHA256,
+                password
+            )
+            setEncryptedInput(digest)
+        })()
+    }, [password])
+
+    const handlePassword = () => {
+        if (encryptedInput === encryptedPassword) {
             router.push('/note/' + slug)
         } else {
             handleToast(t('messages.wrongPassword'))
@@ -44,8 +56,8 @@ export default function Password() {
                 />
                 <View style={styles.buttonsContainer}>
                     <Button
+                        onPress={handlePassword}
                         label={t('buttons.enter')}
-                        onPress={() => handlePassword(password)}
                     />
                     <Button
                         variant='outline'
