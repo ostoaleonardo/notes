@@ -62,7 +62,10 @@ export default function Categories() {
                 />
             </View>
             <View style={styles.sectionContainer}>
-                <Typography variant='paragraph'>
+                <Typography
+                    opacity={0.5}
+                    variant='paragraph'
+                >
                     {t('categories.yourCategories')}
                 </Typography>
             </View>
