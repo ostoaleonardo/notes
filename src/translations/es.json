@@ -57,7 +57,9 @@
         "emptyCategory": "El nombre de la categoría no puede estar vacío",
         "categoryAdded": "Categoría añadida",
         "categoryUpdated": "Categoría actualizada",
-        "wrongPassword": "Contraseña incorrecta"
+        "wrongPassword": "Contraseña incorrecta",
+        "samePassword": "La contraseña no puede ser la misma",
+        "lengthPassword": "La contraseña debe tener al menos 4 caracteres"
     },
     "drawer": {
         "notes": "Notas",

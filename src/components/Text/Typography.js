@@ -1,7 +1,7 @@
 import { StyleSheet, Text } from 'react-native'
 import { colors, fonts } from '@/constants'
 
-export function Typography({ children, variant = 'paragraph', bold, uppercase, color, opacity }) {
+export function Typography({ children, variant = 'paragraph', bold, uppercase, color, opacity, textAlign }) {
     const variantStyles = styles[variant]
 
     return (
@@ -11,6 +11,7 @@ export function Typography({ children, variant = 'paragraph', bold, uppercase, c
             uppercase && styles.uppercase,
             color && { color },
             opacity && { opacity },
+            textAlign && { textAlign },
         ]}>
             {children}
         </Text>

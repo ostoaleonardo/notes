@@ -9,6 +9,7 @@ export function LargeInput({ value, onChangeText, placeholder, ...props }) {
             style={styles.input}
             placeholder={placeholder}
             onChangeText={onChangeText}
+            cursorColor={colors.primary}
             placeholderTextColor={colors.text50}
         />
     )

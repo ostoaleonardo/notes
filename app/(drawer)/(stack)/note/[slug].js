@@ -18,7 +18,8 @@ export default function EditNote() {
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
     const [images, setImages] = useState([])
-    const [password, setPassword] = useState('')
+    const [currentPassword, setCurrentPassword] = useState('')
+    const [newPassword, setNewPassword] = useState('')
     const [categoryIds, setCategoryIds] = useState([])
     const [createdAt, setCreatedAt] = useState('')
     const [updatedAt, setUpdatedAt] = useState('')
@@ -35,7 +36,7 @@ export default function EditNote() {
         setTitle(note.title)
         setNote(note.note)
         setImages(note.images)
-        setPassword(note.password)
+        setCurrentPassword(note.password)
         setCategoryIds(note.categories)
         setCreatedAt(note.createdAt)
         setUpdatedAt(note.updatedAt)
@@ -57,7 +58,7 @@ export default function EditNote() {
             title: title.trim(),
             note: note.trim(),
             images,
-            password,
+            password: newPassword || currentPassword,
             categories: categoryIds,
             createdAt,
             updatedAt: getDate(),
@@ -83,7 +84,7 @@ export default function EditNote() {
     }
 
     const handlePassword = (password) => {
-        setPassword(password)
+        setNewPassword(password)
         setIsPasswordModalVisible(false)
     }
 
@@ -223,7 +224,7 @@ export default function EditNote() {
                                 variant='secondary'
                                 onPress={() => setIsPasswordModalVisible(true)}
                                 icon={
-                                    password
+                                    currentPassword
                                         ? <Lock
                                             width={20}
                                             height={20}
@@ -255,7 +256,7 @@ export default function EditNote() {
             <UpdatePasswordModal
                 isVisible={isPasswordModalVisible}
                 onClose={handlePasswordModal}
-                password={password}
+                currentPassword={currentPassword}
                 handlePassword={handlePassword}
             />
             <ImageView

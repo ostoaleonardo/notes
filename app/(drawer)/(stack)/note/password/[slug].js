@@ -3,6 +3,7 @@ import * as Crypto from 'expo-crypto'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
+import * as Animatable from 'react-native-animatable'
 import { Button, PasswordInput, Toast } from '@/components'
 import { useHeaderTitle, useNotes } from '@/hooks'
 import { colors } from '@/constants'
@@ -15,6 +16,7 @@ export default function Password() {
     const [password, setPassword] = useState('')
     const [encryptedInput, setEncryptedInput] = useState('')
     const [encryptedPassword, setEncryptedPassword] = useState('')
+    const [isWrongPassword, setIsWrongPassword] = useState(false)
     const [message, setMessage] = useState('')
 
     useHeaderTitle(t('title.password'))
@@ -38,6 +40,7 @@ export default function Password() {
         if (encryptedInput === encryptedPassword) {
             router.push('/note/' + slug)
         } else {
+            setIsWrongPassword(true)
             handleToast(t('messages.wrongPassword'))
         }
     }
@@ -50,11 +53,18 @@ export default function Password() {
     return (
         <View style={styles.container}>
             <View style={styles.passwordContainer}>
-                <PasswordInput
-                    autoFocus
-                    value={password}
-                    onChangeText={setPassword}
-                />
+                <Animatable.View
+                    animation={isWrongPassword ? 'shake' : undefined}
+                    onAnimationEnd={() => setIsWrongPassword(false)}
+
+                >
+                    <PasswordInput
+                        autoFocus
+                        value={password}
+                        onChangeText={setPassword}
+                        onBlur={() => setMessage('')}
+                    />
+                </Animatable.View>
                 <View style={styles.buttonsContainer}>
                     <Button
                         onPress={handlePassword}

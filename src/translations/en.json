@@ -57,7 +57,9 @@
         "emptyCategory": "Category name can't be empty",
         "categoryAdded": "Category added",
         "categoryUpdated": "Category updated",
-        "wrongPassword": "Wrong password"
+        "wrongPassword": "Wrong password",
+        "samePassword": "The password can't be the same",
+        "lengthPassword": "The password must have at least 4 characters"
     },
     "drawer": {
         "notes": "Notes",
