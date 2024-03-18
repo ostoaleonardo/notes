@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import * as Crypto from 'expo-crypto'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as Animatable from 'react-native-animatable'
 import { Button, PasswordInput, Toast } from '@/components'
 import { useHeaderTitle, useNotes } from '@/hooks'
+import { getEncryptedPassword } from '@/utils'
 import { colors } from '@/constants'
 
 export default function Password() {
@@ -28,10 +28,7 @@ export default function Password() {
 
     useEffect(() => {
         (async () => {
-            const digest = await Crypto.digestStringAsync(
-                Crypto.CryptoDigestAlgorithm.SHA256,
-                password
-            )
+            const digest = await getEncryptedPassword(password)
             setEncryptedInput(digest)
         })()
     }, [password])

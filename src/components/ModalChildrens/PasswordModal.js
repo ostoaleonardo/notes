@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import * as Crypto from 'expo-crypto'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as Animatable from 'react-native-animatable'
@@ -7,6 +6,7 @@ import { ModalSheet } from '../Modal'
 import { Typography } from '../Text'
 import { PasswordInput } from '../Input'
 import { Button } from '../Button'
+import { getEncryptedPassword } from '@/utils'
 import { colors } from '@/constants'
 
 export function PasswordModal({ isVisible, onClose, handlePassword }) {
@@ -17,10 +17,7 @@ export function PasswordModal({ isVisible, onClose, handlePassword }) {
 
     useEffect(() => {
         (async () => {
-            const digest = await Crypto.digestStringAsync(
-                Crypto.CryptoDigestAlgorithm.SHA256,
-                passwordInput
-            )
+            const digest = await getEncryptedPassword(passwordInput)
             setEncryptedPassword(digest)
         })()
     }, [passwordInput])
