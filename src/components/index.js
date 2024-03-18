@@ -17,6 +17,8 @@ export { SwipeableNote } from './SwipeableCard'
 export { SwipeableCategory } from './SwipeableCard'
 export { DeleteAction } from './SwipeableCard'
 export { Category } from './Card'
+export { SettingCard } from './Card'
+export { AppVersionCard } from './Card'
 
 // Inputs
 export { LargeInput } from './Input'
