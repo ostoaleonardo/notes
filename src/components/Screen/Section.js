@@ -11,7 +11,7 @@ export function Section({ title, children, paddingVertical = 0, paddingHorizonta
                 <View style={styles.titleContainer}>
                     <Typography
                         opacity={0.5}
-                        variant='subtitle'
+                        variant='paragraph'
                     >
                         {title}
                     </Typography>

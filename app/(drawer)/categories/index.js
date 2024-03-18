@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import * as Crypto from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, View } from 'react-native'
-import { SwipeableCategory, SmallInput, SquareButton, UpdateCategoryModal, Toast, Typography } from '@/components'
+import { SwipeableCategory, SmallInput, SquareButton, UpdateCategoryModal, Toast, Typography, Section } from '@/components'
 import { useCategories } from '@/hooks'
 import { colors } from '@/constants'
 
@@ -61,15 +61,10 @@ export default function Categories() {
                     onPress={() => handleAddCategory(newCategory)}
                 />
             </View>
-            <View style={styles.sectionContainer}>
-                <Typography
-                    opacity={0.5}
-                    variant='paragraph'
-                >
-                    {t('categories.yourCategories')}
-                </Typography>
-            </View>
-            <View style={styles.categoriesContainer}>
+            <Section
+                title={t('categories.yourCategories')}
+                contentStyle={styles.categoriesContainer}
+            >
                 {categories.length === 1 ? (
                     <Typography
                         opacity={0.5}
@@ -95,7 +90,7 @@ export default function Categories() {
                         </View>
                     </ScrollView>
                 )}
-            </View>
+            </Section>
 
             <UpdateCategoryModal
                 isVisible={isModalVisible}
@@ -113,21 +108,16 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: colors.background,
     },
-    sectionContainer: {
-        padding: 24,
-    },
     inputContainer: {
         gap: 16,
         padding: 24,
-        paddingBottom: 16,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
     },
     categoriesContainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        width: '100%',
+        height: '100%',
     },
     scrollContainer: {
         flex: 1,
