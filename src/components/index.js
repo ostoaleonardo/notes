@@ -39,7 +39,17 @@ export { DrawerItems } from './Drawer'
 // Text
 export { Typography } from './Text'
 
+// Scroll
+export { Scroll } from './Scroll'
+
 // Others
 export { Toast } from './Toast'
 export { Categories } from './Categories'
 export { NotesContainer } from './NotesContainer'
+
+// Screen
+export { Section } from './Screen'
+export { DateNote } from './Screen'
+export { NoteButtons } from './Screen'
+export { ImageCarousel } from './Screen'
+export { CategoryCarousel } from './Screen'
