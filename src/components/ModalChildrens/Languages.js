@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { ModalOption } from './ModalOption'
 import { useLanguage } from '@/hooks'
-import { LANGUAGES } from '@/constants'
+import { LANGUAGES, colors } from '@/constants'
 
 export function Languages() {
     const { currentLanguage, changeLanguage } = useLanguage()
@@ -35,5 +35,6 @@ const styles = StyleSheet.create({
     scrollContainer: {
         flex: 1,
         width: '100%',
+        paddingBottom: 24,
     },
 })

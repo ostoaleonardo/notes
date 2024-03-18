@@ -8,6 +8,7 @@ import { SquareButton } from '../Button'
 import { Category } from '../Card'
 import { Typography } from '../Text'
 import { useCategories } from '@/hooks'
+import { colors } from '@/constants'
 
 export function CategoriesModal({ isVisible, onClose, noteCategories, handleAddCategory }) {
     const { t } = useTranslation()
@@ -61,14 +62,16 @@ export function CategoriesModal({ isVisible, onClose, noteCategories, handleAddC
                         style={styles.scrollContainer}
                         showsVerticalScrollIndicator={false}
                     >
-                        {categories.slice(1).map(({ id, name }) => (
-                            <Category
-                                key={id}
-                                category={name}
-                                onPress={() => handleAddCategory(id)}
-                                isSelected={noteCategories.includes(id)}
-                            />
-                        ))}
+                        <View style={styles.contentContainer}>
+                            {categories.slice(1).map(({ id, name }) => (
+                                <Category
+                                    key={id}
+                                    category={name}
+                                    onPress={() => handleAddCategory(id)}
+                                    isSelected={noteCategories.includes(id)}
+                                />
+                            ))}
+                        </View>
                     </ScrollView>
                 )}
             </View>
@@ -84,12 +87,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     categoriesContainer: {
-        flex: 1,
+        minHeight: 200,
+        maxHeight: 300,
         alignItems: 'center',
         justifyContent: 'center',
     },
     scrollContainer: {
         flex: 1,
         width: '100%',
+    },
+    contentContainer: {
+        flex: 1,
+        paddingBottom: 24,
+        alignItems: 'center',
     },
 })

@@ -122,13 +122,13 @@ export function UpdatePasswordModal({ isVisible, onClose, currentPassword, handl
 const styles = StyleSheet.create({
     container: {
         width: '100%',
+        paddingVertical: 24,
         alignItems: 'center',
         justifyContent: 'center',
     },
     passwordsContainer: {
         width: '100%',
         gap: 32,
-        marginTop: 24,
         marginBottom: 32,
         alignItems: 'center',
         justifyContent: 'center',

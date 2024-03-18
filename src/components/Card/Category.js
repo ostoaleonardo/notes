@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet } from 'react-native'
-import Animated, { CurvedTransition, FadeOutLeft } from 'react-native-reanimated'
+import Animated, { CurvedTransition, FadeInUp } from 'react-native-reanimated'
 import { Typography } from '../Text'
 import { Check } from '../Check'
 import { colors } from '@/constants'
@@ -7,7 +7,7 @@ import { colors } from '@/constants'
 export function Category({ category, onPress, isSelected }) {
     return (
         <Animated.View
-            exiting={FadeOutLeft}
+            exiting={FadeInUp}
             layout={CurvedTransition}
             style={styles.container}
         >
@@ -30,10 +30,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     categoryContainer: {
-        minWidth: '100%',
+        width: '100%',
         padding: 16,
         flexDirection: 'row',
         borderBottomWidth: 2,
+        alignItems: 'center',
         justifyContent: 'space-between',
         borderBottomColor: colors.text5,
     },

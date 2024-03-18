@@ -2,7 +2,7 @@ import { KeyboardAvoidingView, Modal, StyleSheet, View } from 'react-native'
 import { Typography } from '../Text'
 import { IconButton } from '../Button'
 import { Cross } from '@/icons'
-import { colors, fonts } from '@/constants'
+import { colors } from '@/constants'
 
 export function ModalSheet({ isVisible, onClose, title, children }) {
     return (
@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         width: '100%',
-        paddingVertical: 20,
-        paddingHorizontal: 20,
+        paddingTop: 24,
+        paddingHorizontal: 24,
         borderTopLeftRadius: 18,
         borderTopRightRadius: 18,
         backgroundColor: colors.foreground,
