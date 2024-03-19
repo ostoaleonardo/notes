@@ -17,7 +17,6 @@ export function NotesContainer({ filteredNotes }) {
                 {loading && (
                     <Typography
                         opacity={0.5}
-                        variant='paragraph'
                     >
                         {t('messages.loading')}
                     </Typography>
@@ -37,7 +36,6 @@ export function NotesContainer({ filteredNotes }) {
                 {filteredNotes.length === 0 && !loading && (
                     <Typography
                         opacity={0.5}
-                        variant='paragraph'
                     >
                         {t('messages.noNotes')}
                     </Typography>

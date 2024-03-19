@@ -40,11 +40,10 @@ export function SwipeableNote({ id, title, note, images, hasPassword }) {
                 >
                     <Typography
                         uppercase
-                        variant='paragraph'
                     >
                         {title}
                     </Typography>
-                    <Typography variant='paragraph'>
+                    <Typography>
                         {note}
                     </Typography>
                     {images.length > 0 && (

@@ -25,7 +25,7 @@ export function SwipeableCategory({ category, onPress, onDelete }) {
                     onPress={onPress}
                     style={styles.categoryContainer}
                 >
-                    <Typography variant='paragraph'>
+                    <Typography>
                         {category}
                     </Typography>
                 </Pressable>

@@ -10,7 +10,7 @@ export function ModalOption({ onPress, label, isSelected }) {
                 onPress={onPress}
                 style={styles.optionContainer}
             >
-                <Typography variant='paragraph'>
+                <Typography>
                     {label}
                 </Typography>
                 <Check checked={isSelected} />

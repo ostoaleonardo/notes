@@ -11,7 +11,6 @@ export function FloatingButton({ label, href }) {
         >
             <Typography
                 uppercase
-                variant='paragraph'
             >
                 {label}
             </Typography>

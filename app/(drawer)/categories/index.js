@@ -68,7 +68,6 @@ export default function Categories() {
                 {categories.length === 1 ? (
                     <Typography
                         opacity={0.5}
-                        variant='paragraph'
                     >
                         {t('messages.noCategories')}
                     </Typography>

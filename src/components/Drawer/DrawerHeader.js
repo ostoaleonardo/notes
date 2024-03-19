@@ -12,7 +12,7 @@ export function DrawerHeader() {
                 style={styles.icon}
             />
             <View style={styles.appInfo}>
-                <Typography variant='paragraph'>
+                <Typography>
                     Notes
                 </Typography>
                 <Typography

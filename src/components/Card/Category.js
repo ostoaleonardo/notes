@@ -15,7 +15,7 @@ export function Category({ category, onPress, isSelected }) {
                 onPress={onPress}
                 style={styles.categoryContainer}
             >
-                <Typography variant='paragraph'>
+                <Typography>
                     {category}
                 </Typography>
                 <Check checked={isSelected} />
