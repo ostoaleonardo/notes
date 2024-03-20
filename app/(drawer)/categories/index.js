@@ -63,7 +63,8 @@ export default function Categories() {
             </View>
             <Section
                 title={t('categories.yourCategories')}
-                contentStyle={styles.categoriesContainer}
+                containerStyle={styles.sectionContainer}
+                contentStyle={styles.sectionContainer}
             >
                 {categories.length === 1 ? (
                     <Typography
@@ -74,6 +75,7 @@ export default function Categories() {
                 ) : (
                     <ScrollView
                         overScrollMode='never'
+                        // fadingEdgeLength={100}
                         style={styles.scrollContainer}
                         showsVerticalScrollIndicator={false}
                     >
@@ -114,16 +116,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
     },
-    categoriesContainer: {
-        width: '100%',
-        height: '100%',
+    sectionContainer: {
+        flex: 1,
     },
     scrollContainer: {
         flex: 1,
-        width: '100%',
     },
     categoryCardsContainer: {
-        flex: 1,
+        width: '100%',
         gap: 16,
         paddingBottom: 24,
     },
