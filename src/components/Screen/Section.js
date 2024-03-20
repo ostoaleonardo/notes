@@ -1,11 +1,12 @@
 import { StyleSheet, View } from 'react-native'
 import { Typography } from '../Text'
 
-export function Section({ title, children, paddingVertical = 0, paddingHorizontal = 0, contentStyle }) {
+export function Section({ title, children, paddingVertical = 0, paddingHorizontal = 0, containerStyle, contentStyle }) {
     return (
         <View style={[
             styles.container,
-            { paddingVertical, paddingHorizontal }
+            containerStyle,
+            { paddingVertical, paddingHorizontal },
         ]}>
             {title &&
                 <View style={styles.titleContainer}>
