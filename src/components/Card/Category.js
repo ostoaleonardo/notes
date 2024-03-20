@@ -7,13 +7,12 @@ import { colors } from '@/constants'
 export function Category({ category, onPress, isSelected }) {
     return (
         <Animated.View
-            exiting={FadeInUp}
+            entering={FadeInUp}
             layout={CurvedTransition}
-            style={styles.container}
         >
             <Pressable
                 onPress={onPress}
-                style={styles.categoryContainer}
+                style={styles.container}
             >
                 <Typography>
                     {category}
@@ -26,10 +25,6 @@ export function Category({ category, onPress, isSelected }) {
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        alignItems: 'center',
-    },
-    categoryContainer: {
         width: '100%',
         padding: 16,
         flexDirection: 'row',

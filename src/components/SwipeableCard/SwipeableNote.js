@@ -26,7 +26,6 @@ export function SwipeableNote({ id, title, note, images, hasPassword }) {
             entering={FadeInUp}
             exiting={SlideOutLeft}
             layout={CurvedTransition}
-            style={styles.container}
         >
             <Swipeable
                 onSwipeableOpen={() => deleteNote(id)}
@@ -86,7 +85,6 @@ export function SwipeableNote({ id, title, note, images, hasPassword }) {
                             </>
                         }
                     </View>
-
                 </Pressable>
             </Swipeable>
         </Animated.View>
@@ -94,10 +92,6 @@ export function SwipeableNote({ id, title, note, images, hasPassword }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        alignItems: 'center',
-    },
     swipeableContainer: {
         minWidth: '100%',
         alignItems: 'center',

@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, View } from 'react-native'
+import Animated, { CurvedTransition, FadeInLeft, FadeOutLeft } from 'react-native-reanimated'
 import { Typography } from '../Text'
 import { colors } from '@/constants'
 
@@ -6,21 +7,27 @@ export function Chip({ label, onPress, variant, endContent }) {
     const styles = getChipStyles(variant, endContent !== undefined ? true : false)
 
     return (
-        <Pressable
-            onPress={onPress}
-            style={styles.container}
+        <Animated.View
+            entering={FadeInLeft}
+            exiting={FadeOutLeft}
+            layout={CurvedTransition}
         >
-            <View style={styles.content}>
-                <Typography
-                    bold
-                    uppercase
-                    variant='caption'
-                >
-                    {label}
-                </Typography>
-                {endContent}
-            </View>
-        </Pressable>
+            <Pressable
+                onPress={onPress}
+                style={styles.container}
+            >
+                <View style={styles.content}>
+                    <Typography
+                        bold
+                        uppercase
+                        variant='caption'
+                    >
+                        {label}
+                    </Typography>
+                    {endContent}
+                </View>
+            </Pressable>
+        </Animated.View>
     )
 }
 
