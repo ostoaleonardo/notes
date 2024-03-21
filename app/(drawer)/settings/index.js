@@ -32,7 +32,7 @@ export default function Settings() {
                     onPress={() => handleModal(SETTINGS_OPTIONS[0])}
                 >
                     <Typography>
-                        {t('settings.language')}
+                        {t('language')}
                     </Typography>
                 </SettingCard>
             </Section>

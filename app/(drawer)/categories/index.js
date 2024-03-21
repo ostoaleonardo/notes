@@ -75,7 +75,6 @@ export default function Categories() {
                 ) : (
                     <ScrollView
                         overScrollMode='never'
-                        // fadingEdgeLength={100}
                         style={styles.scrollContainer}
                         showsVerticalScrollIndicator={false}
                     >
@@ -118,6 +117,8 @@ const styles = StyleSheet.create({
     },
     sectionContainer: {
         flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     scrollContainer: {
         flex: 1,
