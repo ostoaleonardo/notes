@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { CategoriesModal, CategoryCarousel, DateNote, ImageCarousel, LargeInput, NoteButtons, Scroll, Section, TextArea, Toast, UpdatePasswordModal } from '@/components'
+import { CategoriesModal, CategoryCarousel, DateNote, ImageCarousel, LargeInput, NoteButtons, PasswordModal, Scroll, Section, TextArea, Toast, UpdatePasswordModal } from '@/components'
 import ImageView from 'react-native-image-viewing'
 import { useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
@@ -16,6 +16,7 @@ export default function EditNote() {
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
     const [images, setImages] = useState([])
+    const [hasPassword, setHasPassword] = useState(false)
     const [currentPassword, setCurrentPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [categoryIds, setCategoryIds] = useState([])
@@ -23,6 +24,7 @@ export default function EditNote() {
     const [updatedAt, setUpdatedAt] = useState('')
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false)
+    const [isUpdatePasswordModalVisible, setIsUpdatePasswordModalVisible] = useState(false)
     const [galleryIndex, setGalleryIndex] = useState(0)
     const [isGalleryVisible, setIsGalleryVisible] = useState(false)
     const [message, setMessage] = useState('')
@@ -34,10 +36,14 @@ export default function EditNote() {
         setTitle(note.title)
         setNote(note.note)
         setImages(note.images)
-        setCurrentPassword(note.password)
         setCategoryIds(note.categories)
         setCreatedAt(note.createdAt)
         setUpdatedAt(note.updatedAt)
+
+        if (note.password) {
+            setHasPassword(true)
+            setCurrentPassword(note.password)
+        }
     }, [slug])
 
     const handleSave = () => {
@@ -70,7 +76,11 @@ export default function EditNote() {
     }
 
     const handlePasswordModal = () => {
-        setIsPasswordModalVisible(!isPasswordModalVisible)
+        if (hasPassword) {
+            setIsUpdatePasswordModalVisible(!isUpdatePasswordModalVisible)
+        } else {
+            setIsPasswordModalVisible(!isPasswordModalVisible)
+        }
     }
 
     const handleAddCategory = (id) => {
@@ -84,6 +94,7 @@ export default function EditNote() {
     const handlePassword = (password) => {
         setNewPassword(password)
         setIsPasswordModalVisible(false)
+        setIsUpdatePasswordModalVisible(false)
     }
 
     const handleAddImage = (image) => {
@@ -157,7 +168,7 @@ export default function EditNote() {
                 <NoteButtons
                     onSave={handleSave}
                     onOpenModal={handlePasswordModal}
-                    hasPassword={!!currentPassword}
+                    hasPassword={hasPassword}
                 />
             </Scroll>
 
@@ -167,8 +178,13 @@ export default function EditNote() {
                 noteCategories={categoryIds}
                 handleAddCategory={handleAddCategory}
             />
-            <UpdatePasswordModal
+            <PasswordModal
                 isVisible={isPasswordModalVisible}
+                onClose={handlePasswordModal}
+                handlePassword={handlePassword}
+            />
+            <UpdatePasswordModal
+                isVisible={isUpdatePasswordModalVisible}
                 onClose={handlePasswordModal}
                 currentPassword={currentPassword}
                 handlePassword={handlePassword}
