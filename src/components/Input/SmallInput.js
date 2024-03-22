@@ -9,8 +9,9 @@ export function SmallInput({ value, onChangeText, placeholder, variant }) {
             value={value}
             style={styles.input}
             placeholder={placeholder}
-            placeholderTextColor={colors.text50}
             onChangeText={onChangeText}
+            cursorColor={colors.primary}
+            placeholderTextColor={colors.text50}
         />
     )
 }
