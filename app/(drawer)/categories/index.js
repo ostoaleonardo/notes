@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import * as Crypto from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
-import { ScrollView, StyleSheet, View } from 'react-native'
-import { SwipeableCategory, SmallInput, SquareButton, UpdateCategoryModal, Toast, Typography, Section } from '@/components'
+import { StyleSheet, View } from 'react-native'
+import { SwipeableCategory, SmallInput, SquareButton, UpdateCategoryModal, Toast, Typography, Section, Scroll } from '@/components'
 import { useCategories } from '@/hooks'
 import { colors } from '@/constants'
 
@@ -73,22 +73,16 @@ export default function Categories() {
                         {t('message.noCategories')}
                     </Typography>
                 ) : (
-                    <ScrollView
-                        overScrollMode='never'
-                        style={styles.scrollContainer}
-                        showsVerticalScrollIndicator={false}
-                    >
-                        <View style={styles.categoryCardsContainer}>
-                            {categories.slice(1).map(({ id, name }) => (
-                                <SwipeableCategory
-                                    key={id}
-                                    category={name}
-                                    onPress={() => handleModal(id)}
-                                    onDelete={() => removeCategory(id)}
-                                />
-                            ))}
-                        </View>
-                    </ScrollView>
+                    <Scroll contentStyle={styles.categoryCardsContainer}>
+                        {categories.slice(1).map(({ id, name }) => (
+                            <SwipeableCategory
+                                key={id}
+                                category={name}
+                                onPress={() => handleModal(id)}
+                                onDelete={() => removeCategory(id)}
+                            />
+                        ))}
+                    </Scroll>
                 )}
             </Section>
 
@@ -119,9 +113,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    scrollContainer: {
-        flex: 1,
     },
     categoryCardsContainer: {
         width: '100%',

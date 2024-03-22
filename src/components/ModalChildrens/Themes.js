@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { ModalOption } from './ModalOption'
+import { Scroll } from '../Scroll'
 
 const THEMES = ['Orange', 'Violet', 'Teal']
 
@@ -8,11 +9,7 @@ export function Themes() {
     const [isSelected, setIsSelected] = useState(THEMES[0])
 
     return (
-        <ScrollView
-            overScrollMode='never'
-            style={styles.scrollContainer}
-            showsVerticalScrollIndicator={false}
-        >
+        <Scroll containerStyle={styles.scrollContainer}>
             {THEMES.map((theme) => (
                 <ModalOption
                     key={theme}
@@ -21,7 +18,7 @@ export function Themes() {
                     isSelected={isSelected === theme ? true : false}
                 />
             ))}
-        </ScrollView>
+        </Scroll>
     )
 }
 

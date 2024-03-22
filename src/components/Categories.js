@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
+import { Scroll } from './Scroll'
 import { Chip } from './Chip'
 import { useCategories, useNotes } from '@/hooks'
 
@@ -21,23 +22,20 @@ export function Categories({ setFilteredNotes }) {
 
     return (
         <View style={styles.container}>
-            <ScrollView
+            <Scroll
                 horizontal
-                overScrollMode='never'
-                style={styles.scrollContainer}
-                showsHorizontalScrollIndicator={false}
+                containerStyle={styles.scrollContainer}
+                contentStyle={styles.chipsContainer}
             >
-                <View style={styles.chipsContainer}>
-                    {categories.map(({ id, name }) => (
-                        <Chip
-                            key={id}
-                            onPress={() => setSelected(id)}
-                            variant={id === selected ? 'solid' : 'bordered'}
-                            label={id === 'all' ? t('categories.all') : name}
-                        />
-                    ))}
-                </View>
-            </ScrollView>
+                {categories.map(({ id, name }) => (
+                    <Chip
+                        key={id}
+                        onPress={() => setSelected(id)}
+                        variant={id === selected ? 'solid' : 'bordered'}
+                        label={id === 'all' ? t('categories.all') : name}
+                    />
+                ))}
+            </Scroll>
         </View>
     )
 }

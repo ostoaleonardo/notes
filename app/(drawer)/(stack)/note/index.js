@@ -90,9 +90,7 @@ export default function Note() {
 
     return (
         <View style={styles.container}>
-            <Scroll
-                contentStyle={styles.scrollContainer}
-            >
+            <Scroll contentStyle={styles.scrollContainer}>
                 <Section
                     paddingHorizontal={24}
                 >
@@ -168,7 +166,6 @@ const styles = StyleSheet.create({
         backgroundColor: colors.background,
     },
     scrollContainer: {
-        width: '100%',
         paddingVertical: 24,
     },
 })

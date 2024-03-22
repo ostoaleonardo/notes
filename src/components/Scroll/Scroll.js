@@ -1,11 +1,13 @@
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, View } from 'react-native'
 
-export function Scroll({ children, contentStyle, ...props }) {
+export function Scroll({ children, containerStyle, contentStyle, ...props }) {
     return (
         <ScrollView
             {...props}
             overScrollMode='never'
-            style={styles.container}
+            style={containerStyle}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
         >
             <View style={contentStyle}>
                 {children}
@@ -13,9 +15,3 @@ export function Scroll({ children, contentStyle, ...props }) {
         </ScrollView>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    }
-})

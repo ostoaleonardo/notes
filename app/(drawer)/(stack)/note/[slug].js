@@ -123,9 +123,7 @@ export default function EditNote() {
 
     return (
         <View style={styles.container}>
-            <Scroll
-                contentStyle={styles.scrollContainer}
-            >
+            <Scroll contentStyle={styles.scrollContainer}>
                 <Section
                     paddingHorizontal={24}
                 >
@@ -213,7 +211,6 @@ const styles = StyleSheet.create({
         backgroundColor: colors.background,
     },
     scrollContainer: {
-        flex: 1,
-        width: '100%',
+        paddingVertical: 24,
     },
 })

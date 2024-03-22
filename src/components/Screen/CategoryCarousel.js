@@ -12,7 +12,6 @@ export function CategoryCarousel({ categoryIds, onAddCategory, onCategoriesModal
         <Scroll
             horizontal
             contentStyle={styles.container}
-            showsHorizontalScrollIndicator={false}
         >
             {categories.slice(1).map(({ id, name }) =>
                 categoryIds.includes(id) && (

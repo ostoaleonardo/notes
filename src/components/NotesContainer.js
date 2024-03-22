@@ -1,7 +1,8 @@
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { SwipeableNote } from './SwipeableCard'
 import { Typography } from './Text'
+import { Scroll } from './Scroll'
 import { useNotes } from '@/hooks'
 
 export function NotesContainer({ filteredNotes }) {
@@ -9,11 +10,7 @@ export function NotesContainer({ filteredNotes }) {
     const { loading } = useNotes()
 
     return (
-        <ScrollView
-            overScrollMode='never'
-            style={styles.scrollContainer}
-        >
-            <View style={styles.notesContainer}>
+        <Scroll contentStyle={styles.notesContainer}>
                 {loading && (
                     <Typography
                         opacity={0.5}
@@ -40,16 +37,11 @@ export function NotesContainer({ filteredNotes }) {
                         {t('message.noNotes')}
                     </Typography>
                 )}
-            </View>
-        </ScrollView>
+        </Scroll>
     )
 }
 
 const styles = StyleSheet.create({
-    scrollContainer: {
-        flex: 1,
-        width: '100%',
-    },
     notesContainer: {
         flex: 1,
         gap: 16,

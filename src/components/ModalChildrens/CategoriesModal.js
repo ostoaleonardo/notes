@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as Crypto from 'expo-crypto'
 import { ModalSheet } from '../Modal'
 import { SmallInput } from '../Input'
 import { SquareButton } from '../Button'
+import { Scroll } from '../Scroll'
 import { Category } from '../Card'
 import { Typography } from '../Text'
 import { useCategories } from '@/hooks'
-import { colors } from '@/constants'
 
 export function CategoriesModal({ isVisible, onClose, noteCategories, handleAddCategory }) {
     const { t } = useTranslation()
@@ -56,22 +56,16 @@ export function CategoriesModal({ isVisible, onClose, noteCategories, handleAddC
                         {t('message.noCategories')}
                     </Typography>
                 ) : (
-                    <ScrollView
-                        overScrollMode='never'
-                        style={styles.scrollContainer}
-                        showsVerticalScrollIndicator={false}
-                    >
-                        <View style={styles.contentContainer}>
-                            {categories.slice(1).map(({ id, name }) => (
-                                <Category
-                                    key={id}
-                                    category={name}
-                                    onPress={() => handleAddCategory(id)}
-                                    isSelected={noteCategories.includes(id)}
-                                />
-                            ))}
-                        </View>
-                    </ScrollView>
+                    <Scroll contentStyle={styles.contentContainer}>
+                        {categories.slice(1).map(({ id, name }) => (
+                            <Category
+                                key={id}
+                                category={name}
+                                onPress={() => handleAddCategory(id)}
+                                isSelected={noteCategories.includes(id)}
+                            />
+                        ))}
+                    </Scroll>
                 )}
             </View>
         </ModalSheet>
@@ -90,10 +84,6 @@ const styles = StyleSheet.create({
         maxHeight: 300,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    scrollContainer: {
-        flex: 1,
-        width: '100%',
     },
     contentContainer: {
         flex: 1,

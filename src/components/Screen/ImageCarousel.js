@@ -1,15 +1,14 @@
 import { StyleSheet, View } from 'react-native'
-import { Scroll } from '../Scroll/Scroll'
+import Animated, { LinearTransition } from 'react-native-reanimated'
+import { Scroll } from '../Scroll'
 import { ImagePreview, PickerImage } from '../Button'
 import { colors } from '@/constants'
-import Animated, { CurvedTransition, FadeInLeft, FadeOutLeft, LinearTransition, SlideOutDown } from 'react-native-reanimated'
 
 export function ImageCarousel({ images, onAddImage, onOpenImage, onRemoveImage }) {
     return (
         <Scroll
             horizontal
             contentStyle={styles.container}
-            showsHorizontalScrollIndicator={false}
         >
             {images.length > 0 &&
                 <View style={styles.imagesContainer}>
