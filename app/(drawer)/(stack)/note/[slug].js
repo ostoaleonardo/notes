@@ -83,18 +83,24 @@ export default function EditNote() {
         }
     }
 
+    const handlePassword = (password) => {
+        setNewPassword(password)
+        setIsPasswordModalVisible(false)
+        setIsUpdatePasswordModalVisible(false)
+    }
+
+    const handleRemovePassword = () => {
+        setHasPassword(false)
+        setCurrentPassword('')
+        setIsUpdatePasswordModalVisible(false)
+    }
+
     const handleAddCategory = (id) => {
         if (!categoryIds.includes(id)) {
             setCategoryIds([...categoryIds, id])
         } else {
             setCategoryIds(categoryIds.filter((categoryId) => categoryId !== id))
         }
-    }
-
-    const handlePassword = (password) => {
-        setNewPassword(password)
-        setIsPasswordModalVisible(false)
-        setIsUpdatePasswordModalVisible(false)
     }
 
     const handleAddImage = (image) => {
@@ -188,6 +194,7 @@ export default function EditNote() {
                 onClose={handlePasswordModal}
                 currentPassword={currentPassword}
                 handlePassword={handlePassword}
+                onDelete={handleRemovePassword}
             />
             <ImageView
                 imageIndex={galleryIndex}

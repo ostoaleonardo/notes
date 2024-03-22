@@ -57,17 +57,17 @@ export default function Note() {
         setIsPasswordModalVisible(!isPasswordModalVisible)
     }
 
+    const handlePassword = (password) => {
+        setPassword(password)
+        setIsPasswordModalVisible(false)
+    }
+
     const handleAddCategory = (id) => {
         if (!categoryIds.includes(id)) {
             setCategoryIds([...categoryIds, id])
         } else {
             setCategoryIds(categoryIds.filter((categoryId) => categoryId !== id))
         }
-    }
-
-    const handlePassword = (password) => {
-        setPassword(password)
-        setIsPasswordModalVisible(false)
     }
 
     const handleAddImage = (image) => {

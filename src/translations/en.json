@@ -29,7 +29,8 @@
         "newVersion": "New version available"
     },
     "password": {
-        "updatePassword": "Update password"
+        "updatePassword": "Update password",
+        "remove": "Remove password"
     },
     "headerTitle": {
         "notes": "Notes",

@@ -9,7 +9,7 @@ import { Button } from '../Button'
 import { getEncryptedPassword } from '@/utils'
 import { colors } from '@/constants'
 
-export function UpdatePasswordModal({ isVisible, onClose, currentPassword, handlePassword }) {
+export function UpdatePasswordModal({ isVisible, onClose, currentPassword, handlePassword, onDelete }) {
     const { t } = useTranslation()
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
@@ -114,6 +114,11 @@ export function UpdatePasswordModal({ isVisible, onClose, currentPassword, handl
                     disabled={isButtonDisabled}
                     onPress={checkPassword}
                 />
+                <Button
+                    variant='outline'
+                    label={t('password.remove')}
+                    onPress={onDelete}
+                />
             </View>
         </ModalSheet>
     )
@@ -122,6 +127,7 @@ export function UpdatePasswordModal({ isVisible, onClose, currentPassword, handl
 const styles = StyleSheet.create({
     container: {
         width: '100%',
+        gap: 16,
         paddingVertical: 24,
         alignItems: 'center',
         justifyContent: 'center',
