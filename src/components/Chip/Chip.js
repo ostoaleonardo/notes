@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, View } from 'react-native'
-import Animated, { CurvedTransition, FadeInLeft, FadeOutLeft } from 'react-native-reanimated'
+import Animated, { CurvedTransition, FadeInLeft, FadeOutLeft, LinearTransition } from 'react-native-reanimated'
 import { Typography } from '../Text'
 import { colors } from '@/constants'
 
@@ -10,7 +10,7 @@ export function Chip({ label, onPress, variant, endContent }) {
         <Animated.View
             entering={FadeInLeft}
             exiting={FadeOutLeft}
-            layout={CurvedTransition}
+            layout={LinearTransition}
         >
             <Pressable
                 onPress={onPress}

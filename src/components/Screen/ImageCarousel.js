@@ -2,6 +2,7 @@ import { StyleSheet, View } from 'react-native'
 import { Scroll } from '../Scroll/Scroll'
 import { ImagePreview, PickerImage } from '../Button'
 import { colors } from '@/constants'
+import Animated, { CurvedTransition, FadeInLeft, FadeOutLeft, LinearTransition, SlideOutDown } from 'react-native-reanimated'
 
 export function ImageCarousel({ images, onAddImage, onOpenImage, onRemoveImage }) {
     return (
@@ -22,20 +23,24 @@ export function ImageCarousel({ images, onAddImage, onOpenImage, onRemoveImage }
                     ))}
                 </View>
             }
-            <View style={styles.pickerContainer}>
+            <Animated.View
+                layout={LinearTransition}
+                style={styles.pickerContainer}
+            >
                 <PickerImage
                     pickCamera
                     setImage={onAddImage}
                 />
                 <View style={styles.separator} />
                 <PickerImage setImage={onAddImage} />
-            </View>
+            </Animated.View>
         </Scroll>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         width: '100%',
         gap: 8,
         marginTop: 16,

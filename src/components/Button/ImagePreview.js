@@ -1,29 +1,36 @@
 import { Image, Pressable, StyleSheet } from 'react-native'
+import Animated, { FadeInDown, FadeOutDown, LinearTransition } from 'react-native-reanimated'
 import { Cross } from '@/icons'
 import { colors } from '@/constants'
 
 export function ImagePreview({ image, openImage, removeImage }) {
     return (
-        <Pressable
-            onPress={openImage}
-            style={styles.container}
+        <Animated.View
+            entering={FadeInDown}
+            exiting={FadeOutDown}
+            layout={LinearTransition}
         >
-            <Image
-                style={styles.image}
-                source={{ uri: image }}
-            />
             <Pressable
-                onPress={removeImage}
-                style={styles.removeButton}
+                onPress={openImage}
+                style={styles.container}
             >
-                <Cross
-                    width={24}
-                    height={24}
-                    rotation={45}
-                    color={colors.text}
+                <Image
+                    style={styles.image}
+                    source={{ uri: image }}
                 />
+                <Pressable
+                    onPress={removeImage}
+                    style={styles.removeButton}
+                >
+                    <Cross
+                        width={24}
+                        height={24}
+                        rotation={45}
+                        color={colors.text}
+                    />
+                </Pressable>
             </Pressable>
-        </Pressable>
+        </Animated.View>
     )
 }
 
