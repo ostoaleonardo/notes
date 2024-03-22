@@ -42,10 +42,10 @@ export function UpdatePasswordModal({ isVisible, onClose, currentPassword, handl
         if (encryptedOldPassword === currentPassword) {
             if (encryptedOldPassword === encryptedNewPassword) {
                 setIsInvalidPassword(true)
-                setMessage('messages.samePassword')
+                setMessage('message.samePassword')
             } else if (newPassword.length < 4) {
                 setIsInvalidPassword(true)
-                setMessage('messages.lengthPassword')
+                setMessage('message.lengthPassword')
             } else {
                 handlePassword(encryptedNewPassword)
                 onClose()
@@ -59,7 +59,7 @@ export function UpdatePasswordModal({ isVisible, onClose, currentPassword, handl
         <ModalSheet
             isVisible={isVisible}
             onClose={onClose}
-            title={t('password.updatePassword')}
+            title={t('password.update')}
         >
             <View style={styles.container}>
                 <View style={styles.passwordsContainer}>
@@ -83,7 +83,7 @@ export function UpdatePasswordModal({ isVisible, onClose, currentPassword, handl
                             textAlign='center'
                             color={colors.primary}
                         >
-                            {isWrongPassword && t('messages.wrongPassword')}
+                            {isWrongPassword && t('message.wrongPassword')}
                         </Typography>
                     </View>
                     <View style={styles.inputContainer}>
@@ -110,7 +110,7 @@ export function UpdatePasswordModal({ isVisible, onClose, currentPassword, handl
                     </View>
                 </View>
                 <Button
-                    label={t('buttons.update')}
+                    label={t('button.update')}
                     disabled={isButtonDisabled}
                     onPress={checkPassword}
                 />

@@ -34,13 +34,13 @@ export function CategoriesModal({ isVisible, onClose, noteCategories, handleAddC
         <ModalSheet
             isVisible={isVisible}
             onClose={onClose}
-            title={t('categories.yourCategories')}
+            title={t('title.yourCategories')}
         >
             <View style={styles.inputContainer}>
                 <SmallInput
                     value={newCategory}
                     onChangeText={setNewCategory}
-                    placeholder={t('categories.newCategory')}
+                    placeholder={t('placeholder.category')}
                 />
                 <SquareButton
                     disabled={isButtonDisabled}
@@ -53,7 +53,7 @@ export function CategoriesModal({ isVisible, onClose, noteCategories, handleAddC
                     <Typography
                         opacity={0.5}
                     >
-                        {t('messages.noCategories')}
+                        {t('message.noCategories')}
                     </Typography>
                 ) : (
                     <ScrollView

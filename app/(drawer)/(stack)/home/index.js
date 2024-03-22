@@ -10,13 +10,13 @@ export default function App() {
     const { t } = useTranslation()
     const [filteredNotes, setFilteredNotes] = useState([])
 
-    useHeaderTitle(t('headerTitle.notes'))
+    useHeaderTitle(t('header.notes'))
 
     return (
         <View style={styles.container}>
             <Categories setFilteredNotes={setFilteredNotes} />
             <NotesContainer filteredNotes={filteredNotes} />
-            <FloatingButton label={t('buttons.addNote')} href='/note' />
+            <FloatingButton label={t('button.addNote')} href='/note' />
             <StatusBar style='auto' />
         </View>
     )

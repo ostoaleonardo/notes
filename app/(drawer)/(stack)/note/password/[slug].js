@@ -19,7 +19,7 @@ export default function Password() {
     const [isWrongPassword, setIsWrongPassword] = useState(false)
     const [message, setMessage] = useState('')
 
-    useHeaderTitle(t('title.password'))
+    useHeaderTitle(t('header.password'))
 
     useEffect(() => {
         const note = getNote(slug)
@@ -38,7 +38,7 @@ export default function Password() {
             router.push('/note/' + slug)
         } else {
             setIsWrongPassword(true)
-            handleToast(t('messages.wrongPassword'))
+            handleToast(t('message.wrongPassword'))
         }
     }
 
@@ -65,11 +65,11 @@ export default function Password() {
                 <View style={styles.buttonsContainer}>
                     <Button
                         onPress={handlePassword}
-                        label={t('buttons.enter')}
+                        label={t('button.enter')}
                     />
                     <Button
                         variant='outline'
-                        label={t('buttons.cancel')}
+                        label={t('button.cancel')}
                         onPress={() => router.back()}
                     />
                 </View>

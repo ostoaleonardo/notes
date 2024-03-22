@@ -23,16 +23,16 @@ export default function Note() {
     const [isGalleryVisible, setIsGalleryVisible] = useState(false)
     const [message, setMessage] = useState('')
 
-    useHeaderTitle(t('headerTitle.addNote'))
+    useHeaderTitle(t('header.addNote'))
 
     const handleSave = () => {
         if (!title.trim()) {
-            handleToast(t('messages.emptyTitle'))
+            handleToast(t('message.emptyTitle'))
             return
         }
 
         if (!note.trim()) {
-            handleToast(t('messages.emptyNote'))
+            handleToast(t('message.emptyNote'))
             return
         }
 
@@ -100,7 +100,7 @@ export default function Note() {
                         multiline
                         value={title}
                         onChangeText={setTitle}
-                        placeholder={t('addNote.titlePlaceholder')}
+                        placeholder={t('placeholder.title')}
                     />
                 </Section>
 
@@ -122,7 +122,7 @@ export default function Note() {
                     <TextArea
                         value={note}
                         onChangeText={setNote}
-                        placeholder={t('addNote.notePlaceholder')}
+                        placeholder={t('placeholder.note')}
                     />
                 </Section>
 

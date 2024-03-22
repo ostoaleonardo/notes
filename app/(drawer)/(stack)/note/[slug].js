@@ -29,7 +29,7 @@ export default function EditNote() {
     const [isGalleryVisible, setIsGalleryVisible] = useState(false)
     const [message, setMessage] = useState('')
 
-    useHeaderTitle(t('headerTitle.editNote'))
+    useHeaderTitle(t('header.editNote'))
 
     useEffect(() => {
         const note = getNote(slug)
@@ -48,12 +48,12 @@ export default function EditNote() {
 
     const handleSave = () => {
         if (!title.trim()) {
-            handleToast(t('messages.emptyTitle'))
+            handleToast(t('message.emptyTitle'))
             return
         }
 
         if (!note.trim()) {
-            handleToast(t('messages.emptyNote'))
+            handleToast(t('message.emptyNote'))
             return
         }
 
@@ -133,7 +133,7 @@ export default function EditNote() {
                         multiline
                         value={title}
                         onChangeText={setTitle}
-                        placeholder={t('addNote.titlePlaceholder')}
+                        placeholder={t('placeholder.title')}
                     />
                 </Section>
 
@@ -160,7 +160,7 @@ export default function EditNote() {
                     <TextArea
                         value={note}
                         onChangeText={setNote}
-                        placeholder={t('addNote.notePlaceholder')}
+                        placeholder={t('placeholder.note')}
                     />
                 </Section>
 

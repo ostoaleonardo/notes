@@ -12,7 +12,7 @@ export function DeleteAction() {
                 uppercase
                 variant='caption'
             >
-                {t('buttons.delete')}
+                {t('button.delete')}
             </Typography>
         </View>
     )

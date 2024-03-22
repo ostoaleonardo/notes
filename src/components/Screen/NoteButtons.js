@@ -16,7 +16,7 @@ export function NoteButtons({ onSave, onOpenModal, hasPassword }) {
                 <Button
                     flex={1}
                     variant='primary'
-                    label={t('buttons.save')}
+                    label={t('button.save')}
                     onPress={onSave}
                 />
                 <IconButton
@@ -40,7 +40,7 @@ export function NoteButtons({ onSave, onOpenModal, hasPassword }) {
             </View>
             <Button
                 variant='outline'
-                label={t('buttons.cancel')}
+                label={t('button.cancel')}
                 onPress={() => router.navigate(HOME_ROUTE)}
             />
         </View>

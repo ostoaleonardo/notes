@@ -42,13 +42,13 @@ export default function DrawerLayout() {
             <Drawer.Screen
                 name='settings/index'
                 options={{
-                    title: t('drawer.settings'),
+                    title: t('header.settings'),
                 }}
             />
             <Drawer.Screen
                 name='categories/index'
                 options={{
-                    title: t('drawer.categories'),
+                    title: t('header.categories'),
                 }}
             />
         </Drawer >

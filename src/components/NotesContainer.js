@@ -18,7 +18,7 @@ export function NotesContainer({ filteredNotes }) {
                     <Typography
                         opacity={0.5}
                     >
-                        {t('messages.loading')}
+                        {t('message.loading')}
                     </Typography>
                 )}
 
@@ -37,7 +37,7 @@ export function NotesContainer({ filteredNotes }) {
                     <Typography
                         opacity={0.5}
                     >
-                        {t('messages.noNotes')}
+                        {t('message.noNotes')}
                     </Typography>
                 )}
             </View>

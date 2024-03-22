@@ -18,7 +18,7 @@ export default function Categories() {
     useEffect(() => {
         if (isCategoryUpdated) {
             setIsCategoryUpdated(false)
-            handleToast(t('messages.categoryUpdated'))
+            handleToast(t('message.categoryUpdated'))
         }
     }, [isCategoryUpdated])
 
@@ -29,7 +29,7 @@ export default function Categories() {
 
     const handleAddCategory = (category) => {
         if (!category.trim()) {
-            handleToast(t('messages.emptyCategory'))
+            handleToast(t('message.emptyCategory'))
             return
         }
 
@@ -39,7 +39,7 @@ export default function Categories() {
         })
 
         setNewCategory('')
-        handleToast(t('messages.categoryAdded'))
+        handleToast(t('message.categoryAdded'))
     }
 
     const handleToast = (message) => {
@@ -54,7 +54,7 @@ export default function Categories() {
                     variant='solid'
                     value={newCategory}
                     onChangeText={setNewCategory}
-                    placeholder={t('categories.newCategory')}
+                    placeholder={t('placeholder.category')}
                 />
                 <SquareButton
                     label={t('categories.add')}
@@ -62,7 +62,7 @@ export default function Categories() {
                 />
             </View>
             <Section
-                title={t('categories.yourCategories')}
+                title={t('title.yourCategories')}
                 containerStyle={styles.sectionContainer}
                 contentStyle={styles.sectionContainer}
             >
@@ -70,7 +70,7 @@ export default function Categories() {
                     <Typography
                         opacity={0.5}
                     >
-                        {t('messages.noCategories')}
+                        {t('message.noCategories')}
                     </Typography>
                 ) : (
                     <ScrollView

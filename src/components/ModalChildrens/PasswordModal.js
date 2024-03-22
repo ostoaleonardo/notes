@@ -35,7 +35,7 @@ export function PasswordModal({ isVisible, onClose, handlePassword }) {
         <ModalSheet
             isVisible={isVisible}
             onClose={onClose}
-            title={t('title.password')}
+            title={t('password.add')}
         >
             <View style={styles.container}>
                 <View style={styles.inputContainer}>
@@ -52,12 +52,12 @@ export function PasswordModal({ isVisible, onClose, handlePassword }) {
                         textAlign='center'
                         color={colors.primary}
                     >
-                        {isInvalidPassword && t('messages.lengthPassword')}
+                        {isInvalidPassword && t('message.lengthPassword')}
                     </Typography>
                 </View>
                 <Button
                     onPress={checkPassword}
-                    label={t('buttons.save')}
+                    label={t('button.save')}
                 />
             </View>
         </ModalSheet>

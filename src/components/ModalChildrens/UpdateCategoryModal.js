@@ -36,7 +36,7 @@ export function UpdateCategoryModal({ isVisible, onClose, categorySelected, setI
         <ModalSheet
             isVisible={isVisible}
             onClose={onClose}
-            title={t('categories.updateCategory')}
+            title={t('categories.update')}
         >
             <View style={styles.container}>
                 <LargeInput
@@ -47,7 +47,7 @@ export function UpdateCategoryModal({ isVisible, onClose, categorySelected, setI
                 <Button
                     disabled={isButtonDisabled}
                     onPress={handleUpdateCategory}
-                    label={t('buttons.update')}
+                    label={t('button.update')}
                 />
             </View>
         </ModalSheet>

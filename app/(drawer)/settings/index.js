@@ -6,7 +6,7 @@ import { colors } from '@/constants'
 
 const SETTINGS_OPTIONS = [
     {
-        title: 'settings.language',
+        title: 'title.language',
         children: <Languages />
     },
 ]
@@ -24,7 +24,7 @@ export default function Settings() {
     return (
         <View style={styles.container}>
             <Section
-                title={t('settings.language')}
+                title={t('title.language')}
                 contentStyle={{ paddingHorizontal: 24 }}
             >
                 <SettingCard
@@ -37,7 +37,7 @@ export default function Settings() {
                 </SettingCard>
             </Section>
             <Section
-                title={t('settings.about')}
+                title={t('title.about')}
                 contentStyle={{ paddingHorizontal: 24 }}
             >
                 <AppVersionCard />

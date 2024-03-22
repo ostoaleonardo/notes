@@ -2,43 +2,40 @@
     "language": "Español",
     "title": {
         "categories": "Categorías",
+        "yourCategories": "Tus categorías",
         "note": "Nota",
-        "password": "Contraseña"
-    },
-    "addNote": {
-        "titlePlaceholder": "Tu título...",
-        "notePlaceholder": "Escribe tu nota aquí..."
+        "language": "Idioma",
+        "about": "Acerca de"
     },
     "editNote": {
         "created": "Creado:",
         "updated": "Actualizado:"
     },
     "categories": {
-        "newCategory": "Nueva categoría...",
-        "yourCategories": "Tus categorías",
-        "updateCategory": "Actualizar categoría",
         "all": "Todo",
-        "add": "Añadir"
+        "add": "Añadir",
+        "update": "Actualizar categoría"
     },
     "settings": {
-        "language": "Idioma",
         "theme": "Tema",
-        "about": "Acerca de",
         "checkUpdates": "Buscar actualizaciones",
         "yourVersion": "Su versión está actualizada",
         "newVersion": "Nueva versión disponible"
     },
     "password": {
-        "updatePassword": "Actualizar contraseña",
+        "add": "Añadir contraseña",
+        "update": "Actualizar contraseña",
         "remove": "Eliminar contraseña"
     },
-    "headerTitle": {
+    "header": {
         "notes": "Notas",
         "addNote": "Añadir Nota",
         "editNote": "Editar Nota",
+        "categories": "Categorías",
+        "password": "Contraseña",
         "settings": "Ajustes"
     },
-    "buttons": {
+    "button": {
         "addNote": "Añadir Nota",
         "save": "Guardar",
         "cancel": "Cancelar",
@@ -46,7 +43,7 @@
         "update": "Actualizar",
         "enter": "Entrar"
     },
-    "messages": {
+    "message": {
         "loading": "Cargando...",
         "noNotes": "Todavía no tienes notas",
         "noCategories": "Todavía no tienes categorías",
@@ -61,6 +58,11 @@
         "wrongPassword": "Contraseña incorrecta",
         "samePassword": "La contraseña no puede ser la misma",
         "lengthPassword": "La contraseña debe tener al menos 4 caracteres"
+    },
+    "placeholder": {
+        "title": "Tu título...",
+        "note": "Escribe tu nota aquí...",
+        "category": "Nueva categoría..."
     },
     "drawer": {
         "notes": "Notas",

@@ -2,43 +2,40 @@
     "language": "English",
     "title": {
         "categories": "Categories",
+        "yourCategories": "Your categories",
         "note": "Note",
-        "password": "Password"
-    },
-    "addNote": {
-        "titlePlaceholder": "Your title...",
-        "notePlaceholder": "Type your note here..."
+        "language": "Language",
+        "about": "About"
     },
     "editNote": {
         "created": "Created:",
         "updated": "Updated:"
     },
     "categories": {
-        "newCategory": "New category...",
-        "yourCategories": "Your categories",
-        "updateCategory": "Update category",
         "all": "All",
-        "add": "Add"
+        "add": "Add",
+        "update": "Update category"
     },
     "settings": {
-        "language": "Language",
         "theme": "Theme",
-        "about": "About",
         "checkUpdates": "Check for updates",
         "yourVersion": "Your version is up to date",
         "newVersion": "New version available"
     },
     "password": {
-        "updatePassword": "Update password",
+        "add": "Add password",
+        "update": "Update password",
         "remove": "Remove password"
     },
-    "headerTitle": {
+    "header": {
         "notes": "Notes",
         "addNote": "Add Note",
         "editNote": "Edit Note",
+        "categories": "Categories",
+        "password": "Password",
         "settings": "Settings"
     },
-    "buttons": {
+    "button": {
         "addNote": "Add Note",
         "save": "Save",
         "cancel": "Cancel",
@@ -46,7 +43,7 @@
         "update": "Update",
         "enter": "Enter"
     },
-    "messages": {
+    "message": {
         "loading": "Loading...",
         "noNotes": "You don't have notes yet",
         "noCategories": "You don't have categories yet",
@@ -61,6 +58,11 @@
         "wrongPassword": "Wrong password",
         "samePassword": "The password can't be the same",
         "lengthPassword": "The password must have at least 4 characters"
+    },
+    "placeholder": {
+        "title": "Your title...",
+        "note": "Type your note here...",
+        "category": "New category..."
     },
     "drawer": {
         "notes": "Notes",
