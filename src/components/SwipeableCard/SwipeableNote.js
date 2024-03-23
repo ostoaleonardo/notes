@@ -6,7 +6,8 @@ import { Lock } from '@/icons'
 import { getDimensions } from '@/utils'
 import { colors } from '@/constants'
 
-export function SwipeableNote({ id, title, note, images, hasPassword, onDelete, isOpen, onOpen }) {
+export function SwipeableNote({ noteData, isOpen, onOpen, onDelete }) {
+    const { id, title, note, images, hasPassword } = noteData
     const width = getDimensions(images.length)
 
     const goToEdit = () => {
@@ -80,11 +81,6 @@ export function SwipeableNote({ id, title, note, images, hasPassword, onDelete, 
 }
 
 const styles = StyleSheet.create({
-    swipeableContainer: {
-        minWidth: '100%',
-        alignItems: 'center',
-        paddingHorizontal: 24,
-    },
     pressableContainer: {
         minWidth: '100%',
         padding: 20,
