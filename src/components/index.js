@@ -49,6 +49,7 @@ export { Scroll } from './Scroll'
 export { Toast } from './Toast'
 export { Categories } from './Categories'
 export { NotesContainer } from './NotesContainer'
+export { CategoriesContainer } from './CategoriesContainer'
 
 // Screen
 export { Section } from './Screen'

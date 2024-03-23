@@ -3,7 +3,7 @@ import { SwipeableCard } from './SwipeableCard'
 import { Typography } from '../Text'
 import { colors } from '@/constants'
 
-export function SwipeableCategory({ category, onPress, onDelete, isOpen, onOpen }) {
+export function SwipeableCategory({ category, onPress, isOpen, onOpen, onDelete }) {
     return (
         <SwipeableCard
             isOpen={isOpen}

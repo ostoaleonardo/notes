@@ -2,19 +2,18 @@ import { useEffect, useState } from 'react'
 import * as Crypto from 'expo-crypto'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { SwipeableCategory, SmallInput, SquareButton, UpdateCategoryModal, Toast, Typography, Section, Scroll } from '@/components'
+import { SmallInput, SquareButton, UpdateCategoryModal, Toast, CategoriesContainer } from '@/components'
 import { useCategories } from '@/hooks'
 import { colors } from '@/constants'
 
 export default function Categories() {
     const { t } = useTranslation()
-    const { categories, addCategory, removeCategory } = useCategories()
+    const { addCategory } = useCategories()
     const [newCategory, setNewCategory] = useState('')
     const [categorySelected, setCategorySelected] = useState('')
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [message, setMessage] = useState('')
     const [isCategoryUpdated, setIsCategoryUpdated] = useState(false)
-    const [openCategory, setOpenCategory] = useState(null)
 
     useEffect(() => {
         if (isCategoryUpdated) {
@@ -62,32 +61,9 @@ export default function Categories() {
                     onPress={() => handleAddCategory(newCategory)}
                 />
             </View>
-            <Section
-                title={t('title.yourCategories')}
-                containerStyle={styles.sectionContainer}
-                contentStyle={styles.sectionContainer}
-            >
-                {categories.length === 1 ? (
-                    <Typography
-                        opacity={0.5}
-                    >
-                        {t('message.noCategories')}
-                    </Typography>
-                ) : (
-                    <Scroll contentStyle={styles.categoryCardsContainer}>
-                        {categories.slice(1).map(({ id, name }) => (
-                            <SwipeableCategory
-                                key={id}
-                                category={name}
-                                onPress={() => handleModal(id)}
-                                onDelete={() => removeCategory(id)}
-                                isOpen={openCategory === id}
-                                onOpen={() => setOpenCategory(id)}
-                            />
-                        ))}
-                    </Scroll>
-                )}
-            </Section>
+            <CategoriesContainer
+                onPress={handleModal}
+            />
 
             <UpdateCategoryModal
                 isVisible={isModalVisible}
@@ -111,15 +87,5 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-    },
-    sectionContainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    categoryCardsContainer: {
-        width: '100%',
-        gap: 16,
-        paddingBottom: 24,
     },
 })
