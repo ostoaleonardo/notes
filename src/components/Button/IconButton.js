@@ -14,10 +14,9 @@ export function IconButton({ icon, variant = 'primary', size = 'sm', onPress }) 
     return (
         <Pressable
             onPress={onPress}
-            style={({ pressed }) => [
+            style={[
                 styles.container,
                 variantStyles,
-                pressed && { opacity: 0.5 },
                 { width: iconSize, height: iconSize },
             ]}
         >
