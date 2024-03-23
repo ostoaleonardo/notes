@@ -11,7 +11,7 @@ export function Toast({ message }) {
                 exiting={SlideOutDown}
                 style={styles.container}
             >
-                <Typography>
+                <Typography textAlign='center'>
                     {message}
                 </Typography>
             </Animated.View>
