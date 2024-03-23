@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import * as Crypto from 'expo-crypto'
-import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import { SwipeableCategory, SmallInput, SquareButton, UpdateCategoryModal, Toast, Typography, Section, Scroll } from '@/components'
 import { useCategories } from '@/hooks'
 import { colors } from '@/constants'
@@ -14,6 +14,7 @@ export default function Categories() {
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [message, setMessage] = useState('')
     const [isCategoryUpdated, setIsCategoryUpdated] = useState(false)
+    const [openCategory, setOpenCategory] = useState(null)
 
     useEffect(() => {
         if (isCategoryUpdated) {
@@ -80,6 +81,8 @@ export default function Categories() {
                                 category={name}
                                 onPress={() => handleModal(id)}
                                 onDelete={() => removeCategory(id)}
+                                isOpen={openCategory === id}
+                                onOpen={() => setOpenCategory(id)}
                             />
                         ))}
                     </Scroll>

@@ -13,6 +13,7 @@ export { ChipContent } from './Chip'
 export { RemoveChipButton } from './Chip'
 
 // Cards
+export { SwipeableCard } from './SwipeableCard'
 export { SwipeableNote } from './SwipeableCard'
 export { SwipeableCategory } from './SwipeableCard'
 export { DeleteAction } from './SwipeableCard'

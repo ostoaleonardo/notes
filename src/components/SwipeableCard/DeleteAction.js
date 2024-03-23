@@ -1,20 +1,23 @@
-import { StyleSheet, View } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Typography } from '../Text'
 import { colors } from '@/constants'
 
-export function DeleteAction() {
+export function DeleteAction({ onPress }) {
     const { t } = useTranslation()
 
     return (
-        <View style={styles.deleteContainer}>
+        <Pressable
+            onPress={onPress}
+            style={styles.deleteContainer}
+        >
             <Typography
                 uppercase
                 variant='caption'
             >
                 {t('button.delete')}
             </Typography>
-        </View>
+        </Pressable>
     )
 }
 

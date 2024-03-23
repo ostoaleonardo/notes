@@ -1,13 +1,15 @@
+import { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { SwipeableNote } from './SwipeableCard'
-import { Typography } from './Text'
 import { Scroll } from './Scroll'
+import { Typography } from './Text'
+import { SwipeableNote } from './SwipeableCard'
 import { useNotes } from '@/hooks'
 
 export function NotesContainer({ filteredNotes }) {
     const { t } = useTranslation()
-    const { loading } = useNotes()
+    const { loading, deleteNote } = useNotes()
+    const [openNote, setOpenNote] = useState(null)
 
     return (
         <Scroll contentStyle={styles.notesContainer}>
@@ -27,6 +29,9 @@ export function NotesContainer({ filteredNotes }) {
                         note={note}
                         images={images}
                         hasPassword={!!password}
+                        onDelete={() => deleteNote(id)}
+                        isOpen={openNote === id}
+                        onOpen={() => setOpenNote(id)}
                     />
                 ))}
 
