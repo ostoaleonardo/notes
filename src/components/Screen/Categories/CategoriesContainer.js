@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Section } from './Screen'
-import { Typography } from './Text'
-import { Scroll } from './Scroll'
-import { SwipeableCategory } from './SwipeableCard'
+import { Section } from '../Section'
+import { Typography } from '../../Text'
+import { Scroll } from '../../Scroll'
+import { SwipeableCategory } from '../../SwipeableCard'
 import { useCategories } from '@/hooks'
 
 export function CategoriesContainer({ onPress }) {

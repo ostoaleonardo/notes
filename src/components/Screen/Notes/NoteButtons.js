@@ -1,7 +1,7 @@
-import { StyleSheet, View } from 'react-native'
 import { router } from 'expo-router'
+import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Button, IconButton } from '../Button'
+import { Button, IconButton } from '../../Button'
 import { Lock, Unlock } from '@/icons'
 import { colors } from '@/constants'
 

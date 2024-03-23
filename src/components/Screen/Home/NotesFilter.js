@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Scroll } from './Scroll'
-import { Chip } from './Chip'
+import { Scroll } from '../../Scroll'
+import { Chip } from '../../Chip'
 import { useCategories, useNotes } from '@/hooks'
 
-export function Categories({ setFilteredNotes }) {
+export function NotesFilter({ setFilteredNotes }) {
     const { t } = useTranslation()
     const { notes } = useNotes()
     const { categories } = useCategories()

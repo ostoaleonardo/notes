@@ -1,0 +1,1 @@
+export { CategoriesContainer } from './CategoriesContainer'

@@ -47,11 +47,11 @@ export { Scroll } from './Scroll'
 
 // Others
 export { Toast } from './Toast'
-export { Categories } from './Categories'
-export { NotesContainer } from './NotesContainer'
-export { CategoriesContainer } from './CategoriesContainer'
 
-// Screen
+// Screen components
+export { NotesFilter } from './Screen'
+export { NotesContainer } from './Screen'
+export { CategoriesContainer } from './Screen'
 export { Section } from './Screen'
 export { DateNote } from './Screen'
 export { NoteButtons } from './Screen'

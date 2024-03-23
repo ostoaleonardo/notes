@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import Animated, { LinearTransition } from 'react-native-reanimated'
-import { Scroll } from '../Scroll'
-import { ImagePreview, PickerImage } from '../Button'
+import { Scroll } from '../../Scroll'
+import { ImagePreview, PickerImage } from '../../Button'
 import { colors } from '@/constants'
 
 export function ImageCarousel({ images, onAddImage, onOpenImage, onRemoveImage }) {

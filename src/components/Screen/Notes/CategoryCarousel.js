@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Scroll } from '../Scroll'
-import { Chip, ChipContent, RemoveChipButton } from '../Chip'
+import { Scroll } from '../../Scroll'
+import { Chip, ChipContent, RemoveChipButton } from '../../Chip'
 import { useCategories } from '@/hooks'
 
 export function CategoryCarousel({ categoryIds, onAddCategory, onCategoriesModal }) {
