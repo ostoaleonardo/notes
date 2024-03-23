@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, View } from 'react-native'
 import { Typography } from '../Text'
 import { Check } from '../Check'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export function ModalOption({ onPress, label, isSelected }) {
     return (
@@ -30,6 +30,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderBottomWidth: 2,
         justifyContent: 'space-between',
-        borderBottomColor: colors.text5,
+        borderBottomColor: COLORS.text5,
     },
 })

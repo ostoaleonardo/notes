@@ -1,7 +1,7 @@
 const PRIMARY = '#c8102e'
 const TEXT = '#ffffff'
 
-export const colors = {
+export const COLORS = {
     background: '#09090b',
     foreground: '#18181b',
     overlay: '#00000080',
@@ -17,6 +17,6 @@ export const colors = {
     text5: `${TEXT}0d`
 }
 
-export const fonts = {
+export const FONTS = {
     mono: 'Roboto-Mono',
 }

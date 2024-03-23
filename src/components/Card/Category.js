@@ -2,7 +2,7 @@ import { Pressable, StyleSheet } from 'react-native'
 import Animated, { CurvedTransition, FadeInUp } from 'react-native-reanimated'
 import { Typography } from '../Text'
 import { Check } from '../Check'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export function Category({ category, onPress, isSelected }) {
     return (
@@ -31,6 +31,6 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         alignItems: 'center',
         justifyContent: 'space-between',
-        borderBottomColor: colors.text5,
+        borderBottomColor: COLORS.text5,
     },
 })

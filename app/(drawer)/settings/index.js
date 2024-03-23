@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 import { AppVersionCard, Languages, ModalSheet, Section, SettingCard, Typography } from '@/components'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 const SETTINGS_OPTIONS = [
     {
@@ -59,6 +59,6 @@ const styles = StyleSheet.create({
         flex: 1,
         gap: 24,
         paddingVertical: 24,
-        backgroundColor: colors.background,
+        backgroundColor: COLORS.background,
     },
 })

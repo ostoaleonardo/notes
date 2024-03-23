@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
 import { Link } from 'expo-router'
 import { Typography } from '../Text'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export function FloatingButton({ label, href }) {
     return (
@@ -26,6 +26,6 @@ const styles = StyleSheet.create({
         borderRadius: 48,
         paddingVertical: 24,
         paddingHorizontal: 32,
-        backgroundColor: colors.primary,
+        backgroundColor: COLORS.primary,
     },
 })

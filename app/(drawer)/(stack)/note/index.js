@@ -7,7 +7,7 @@ import { CategoriesModal, CategoryCarousel, ImageCarousel, LargeInput, NoteButto
 import ImageView from 'react-native-image-viewing'
 import { useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
-import { DEFAULT_CATEGORIES, colors } from '@/constants'
+import { DEFAULT_CATEGORIES, COLORS } from '@/constants'
 
 export default function Note() {
     const { t } = useTranslation()
@@ -163,7 +163,7 @@ export default function Note() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.background,
+        backgroundColor: COLORS.background,
     },
     scrollContainer: {
         paddingVertical: 24,

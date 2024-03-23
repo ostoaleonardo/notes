@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { Picture, Camera } from '@/icons'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export function PickerImage({ setImage, pickCamera }) {
     const handlePickCamera = async () => {
@@ -38,13 +38,13 @@ export function PickerImage({ setImage, pickCamera }) {
                     <Camera
                         width={24}
                         height={24}
-                        color={colors.background}
+                        color={COLORS.background}
                     />
                 ) : (
                     <Picture
                         width={24}
                         height={24}
-                        color={colors.background}
+                        color={COLORS.background}
                     />
                 )
             }
@@ -58,6 +58,6 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: colors.text,
+        backgroundColor: COLORS.text,
     },
 })

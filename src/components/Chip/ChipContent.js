@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import { Cross } from '@/icons'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export function ChipContent() {
     return (
@@ -8,7 +8,7 @@ export function ChipContent() {
             <Cross
                 width={16}
                 height={16}
-                color={colors.text}
+                color={COLORS.text}
             />
         </View>
     )
@@ -21,6 +21,6 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: colors.text15,
+        backgroundColor: COLORS.text15,
     },
 })

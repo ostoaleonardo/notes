@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet } from 'react-native'
 import { Typography } from '../Text'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export function SquareButton({ onPress, disabled, label }) {
     return (
@@ -29,6 +29,6 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: colors.primary,
+        backgroundColor: COLORS.primary,
     },
 })

@@ -2,7 +2,7 @@ import { KeyboardAvoidingView, Modal, StyleSheet, View } from 'react-native'
 import { Typography } from '../Text'
 import { IconButton } from '../Button'
 import { Cross } from '@/icons'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export function ModalSheet({ isVisible, onClose, title, children }) {
     return (
@@ -36,7 +36,7 @@ export function ModalSheet({ isVisible, onClose, title, children }) {
                                     width={24}
                                     height={24}
                                     rotation={45}
-                                    color={colors.text}
+                                    color={COLORS.text}
                                 />
                             }
                             onPress={onClose}
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
         left: 0,
         width: '100%',
         height: '100%',
-        backgroundColor: colors.overlay,
+        backgroundColor: COLORS.overlay,
     },
     modalContent: {
         position: 'absolute',
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 24,
         borderTopLeftRadius: 18,
         borderTopRightRadius: 18,
-        backgroundColor: colors.foreground,
+        backgroundColor: COLORS.foreground,
     },
     headerContainer: {
         flexDirection: 'row',

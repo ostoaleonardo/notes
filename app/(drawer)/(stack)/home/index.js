@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { NotesFilter, FloatingButton, NotesContainer } from '@/components'
 import { useHeaderTitle } from '@/hooks'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export default function App() {
     const { t } = useTranslation()
@@ -25,6 +25,6 @@ export default function App() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.background,
+        backgroundColor: COLORS.background,
     },
 })

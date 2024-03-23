@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
 import { router, usePathname } from 'expo-router'
 import { DrawerItem } from '@react-navigation/drawer'
-import { colors, fonts } from '@/constants'
+import { COLORS, FONTS } from '@/constants'
 
 export function DrawerScreen({ label, icon, path }) {
     const pathname = usePathname()
@@ -11,10 +11,10 @@ export function DrawerScreen({ label, icon, path }) {
             label={label}
             style={styles.item}
             labelStyle={styles.label}
-            pressColor={colors.transparent}
-            activeTintColor={colors.primary}
-            inactiveTintColor={colors.text}
-            activeBackgroundColor={colors.primary15}
+            pressColor={COLORS.transparent}
+            activeTintColor={COLORS.primary}
+            inactiveTintColor={COLORS.text}
+            activeBackgroundColor={COLORS.primary15}
             focused={pathname === path}
             onPress={() => {
                 router.push(path)
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
     },
     label: {
-        fontFamily: fonts.mono,
+        fontFamily: FONTS.mono,
         textTransform: 'uppercase',
     },
 })

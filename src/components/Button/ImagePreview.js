@@ -1,7 +1,7 @@
 import { Image, Pressable, StyleSheet } from 'react-native'
 import Animated, { FadeInDown, FadeOutDown, LinearTransition } from 'react-native-reanimated'
 import { Cross } from '@/icons'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export function ImagePreview({ image, openImage, removeImage }) {
     return (
@@ -26,7 +26,7 @@ export function ImagePreview({ image, openImage, removeImage }) {
                         width={24}
                         height={24}
                         rotation={45}
-                        color={colors.text}
+                        color={COLORS.text}
                     />
                 </Pressable>
             </Pressable>
@@ -54,6 +54,6 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: colors.overlay,
+        backgroundColor: COLORS.overlay,
     },
 })

@@ -1,5 +1,5 @@
 import { StyleSheet, Text } from 'react-native'
-import { colors, fonts } from '@/constants'
+import { COLORS, FONTS } from '@/constants'
 
 export function Typography({ children, variant = 'paragraph', bold, uppercase, color, opacity, textAlign }) {
     const variantStyles = styles[variant]
@@ -21,23 +21,23 @@ export function Typography({ children, variant = 'paragraph', bold, uppercase, c
 const styles = StyleSheet.create({
     title: {
         fontSize: 18,
-        color: colors.text,
-        fontFamily: fonts.mono,
+        color: COLORS.text,
+        fontFamily: FONTS.mono,
     },
     subtitle: {
         fontSize: 16,
-        color: colors.text,
-        fontFamily: fonts.mono,
+        color: COLORS.text,
+        fontFamily: FONTS.mono,
     },
     paragraph: {
         fontSize: 14,
-        color: colors.text,
-        fontFamily: fonts.mono,
+        color: COLORS.text,
+        fontFamily: FONTS.mono,
     },
     caption: {
         fontSize: 12,
-        color: colors.text,
-        fontFamily: fonts.mono,
+        color: COLORS.text,
+        fontFamily: FONTS.mono,
     },
     uppercase: {
         textTransform: 'uppercase',

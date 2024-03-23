@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Typography } from '../Text'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export function DeleteAction({ onPress }) {
     const { t } = useTranslation()
@@ -28,6 +28,6 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: colors.primary,
+        backgroundColor: COLORS.primary,
     },
 })

@@ -6,7 +6,7 @@ import { CategoriesModal, CategoryCarousel, DateNote, ImageCarousel, LargeInput,
 import ImageView from 'react-native-image-viewing'
 import { useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export default function EditNote() {
     const router = useRouter()
@@ -208,7 +208,7 @@ export default function EditNote() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.background,
+        backgroundColor: COLORS.background,
     },
     scrollContainer: {
         paddingVertical: 24,

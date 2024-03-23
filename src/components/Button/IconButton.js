@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet } from 'react-native'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 const sizes = {
     sm: 32,
@@ -33,17 +33,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     primary: {
-        backgroundColor: colors.primary,
+        backgroundColor: COLORS.primary,
     },
     secondary: {
-        backgroundColor: colors.text,
+        backgroundColor: COLORS.text,
     },
     outline: {
         borderWidth: 2,
-        borderColor: colors.text15,
-        backgroundColor: colors.transparent,
+        borderColor: COLORS.text15,
+        backgroundColor: COLORS.transparent,
     },
     light: {
-        backgroundColor: colors.transparent,
+        backgroundColor: COLORS.transparent,
     },
 })

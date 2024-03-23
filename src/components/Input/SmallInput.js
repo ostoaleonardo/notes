@@ -1,5 +1,5 @@
 import { StyleSheet, TextInput } from 'react-native'
-import { colors, fonts } from '@/constants'
+import { COLORS, FONTS } from '@/constants'
 
 export function SmallInput({ value, onChangeText, placeholder, variant }) {
     const styles = getStyles(variant)
@@ -10,8 +10,8 @@ export function SmallInput({ value, onChangeText, placeholder, variant }) {
             style={styles.input}
             placeholder={placeholder}
             onChangeText={onChangeText}
-            cursorColor={colors.primary}
-            placeholderTextColor={colors.text50}
+            cursorColor={COLORS.primary}
+            placeholderTextColor={COLORS.text50}
         />
     )
 }
@@ -21,24 +21,24 @@ const getStyles = (variant) => {
 
     switch (variant) {
         case 'solid':
-            backgroundColor = colors.foreground
-            borderColor = colors.transparent
-            color = colors.text
+            backgroundColor = COLORS.foreground
+            borderColor = COLORS.transparent
+            color = COLORS.text
             break
         case 'ghost':
-            backgroundColor = colors.transparent
-            borderColor = colors.transparent
-            color = colors.text
+            backgroundColor = COLORS.transparent
+            borderColor = COLORS.transparent
+            color = COLORS.text
             break
         case 'outline':
-            backgroundColor = colors.transparent
-            borderColor = colors.text15
-            color = colors.text
+            backgroundColor = COLORS.transparent
+            borderColor = COLORS.text15
+            color = COLORS.text
             break
         default:
-            backgroundColor = colors.text15
-            borderColor = colors.transparent
-            color = colors.text
+            backgroundColor = COLORS.text15
+            borderColor = COLORS.transparent
+            color = COLORS.text
             break
     }
 
@@ -52,8 +52,8 @@ const getStyles = (variant) => {
             borderWidth: 2,
             backgroundColor,
             borderRadius: 16,
-            color: colors.text,
-            fontFamily: fonts.mono,
+            color: COLORS.text,
+            fontFamily: FONTS.mono,
         },
     })
 }

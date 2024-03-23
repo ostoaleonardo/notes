@@ -6,7 +6,7 @@ import * as Animatable from 'react-native-animatable'
 import { Button, PasswordInput, Toast } from '@/components'
 import { useHeaderTitle, useNotes } from '@/hooks'
 import { getEncryptedPassword } from '@/utils'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export default function Password() {
     const router = useRouter()
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: colors.background,
+        backgroundColor: COLORS.background,
     },
     passwordContainer: {
         width: '100%',

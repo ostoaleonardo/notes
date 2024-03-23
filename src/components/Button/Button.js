@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text } from 'react-native'
-import { colors, fonts } from '@/constants'
+import { COLORS, FONTS } from '@/constants'
 
 export function Button({ label, onPress, disabled, variant, ...props }) {
     const styles = getStyles(variant)
@@ -26,24 +26,24 @@ const getStyles = (variant) => {
 
     switch (variant) {
         case 'primary':
-            backgroundColor = colors.primary
-            borderColor = colors.primary
-            color = colors.text
+            backgroundColor = COLORS.primary
+            borderColor = COLORS.primary
+            color = COLORS.text
             break
         case 'secondary':
-            backgroundColor = colors.text
-            borderColor = colors.text
-            color = colors.background
+            backgroundColor = COLORS.text
+            borderColor = COLORS.text
+            color = COLORS.background
             break
         case 'outline':
-            backgroundColor = colors.transparent
-            borderColor = colors.text15
-            color = colors.text
+            backgroundColor = COLORS.transparent
+            borderColor = COLORS.text15
+            color = COLORS.text
             break
         default:
-            backgroundColor = colors.primary
-            borderColor = colors.primary
-            color = colors.text
+            backgroundColor = COLORS.primary
+            borderColor = COLORS.primary
+            color = COLORS.text
             break
     }
 
@@ -60,7 +60,7 @@ const getStyles = (variant) => {
         label: {
             color,
             fontSize: 14,
-            fontFamily: fonts.mono,
+            fontFamily: FONTS.mono,
             textTransform: 'uppercase',
         },
     })

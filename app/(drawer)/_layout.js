@@ -2,7 +2,7 @@ import { Drawer } from 'expo-router/drawer'
 import { useTranslation } from 'react-i18next'
 import { useGlobalSearchParams } from 'expo-router'
 import { DrawerItems } from '@/components'
-import { colors, fonts } from '@/constants'
+import { COLORS, FONTS } from '@/constants'
 
 export default function DrawerLayout() {
     const { t } = useTranslation()
@@ -13,21 +13,21 @@ export default function DrawerLayout() {
             screenOptions={{
                 headerTitleAlign: 'center',
                 headerShadowVisible: false,
-                headerTintColor: colors.text,
+                headerTintColor: COLORS.text,
 
                 headerStyle: {
-                    backgroundColor: colors.background,
+                    backgroundColor: COLORS.background,
                 },
 
                 headerTitleStyle: {
                     fontSize: 12,
                     letterSpacing: 1,
-                    fontFamily: fonts.mono,
+                    fontFamily: FONTS.mono,
                     textTransform: 'uppercase',
                 },
 
                 drawerStyle: {
-                    backgroundColor: colors.background,
+                    backgroundColor: COLORS.background,
                 },
             }}
 

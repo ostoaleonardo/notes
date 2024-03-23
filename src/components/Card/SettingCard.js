@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet } from 'react-native'
 import { Typography } from '../Text'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export function SettingCard({ rightLabel, onPress, children }) {
     return (
@@ -24,6 +24,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: colors.foreground,
+        backgroundColor: COLORS.foreground,
     },
 })

@@ -7,7 +7,7 @@ import { Typography } from '../Text'
 import { PasswordInput } from '../Input'
 import { Button } from '../Button'
 import { getEncryptedPassword } from '@/utils'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export function UpdatePasswordModal({ isVisible, onClose, currentPassword, handlePassword, onDelete }) {
     const { t } = useTranslation()
@@ -81,7 +81,7 @@ export function UpdatePasswordModal({ isVisible, onClose, currentPassword, handl
                         <Typography
                             variant='caption'
                             textAlign='center'
-                            color={colors.primary}
+                            color={COLORS.primary}
                         >
                             {isWrongPassword && t('message.wrongPassword')}
                         </Typography>
@@ -103,7 +103,7 @@ export function UpdatePasswordModal({ isVisible, onClose, currentPassword, handl
                         <Typography
                             variant='caption'
                             textAlign='center'
-                            color={colors.primary}
+                            color={COLORS.primary}
                         >
                             {isInvalidPassword && t(message)}
                         </Typography>

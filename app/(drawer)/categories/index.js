@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { SmallInput, SquareButton, UpdateCategoryModal, Toast, CategoriesContainer } from '@/components'
 import { useCategories } from '@/hooks'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export default function Categories() {
     const { t } = useTranslation()
@@ -79,7 +79,7 @@ export default function Categories() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.background,
+        backgroundColor: COLORS.background,
     },
     inputContainer: {
         gap: 16,

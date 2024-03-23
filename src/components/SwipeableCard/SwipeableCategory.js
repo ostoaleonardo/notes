@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet } from 'react-native'
 import { SwipeableCard } from './SwipeableCard'
 import { Typography } from '../Text'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export function SwipeableCategory({ category, onPress, isOpen, onOpen, onDelete }) {
     return (
@@ -27,6 +27,6 @@ const styles = StyleSheet.create({
         minWidth: '100%',
         padding: 20,
         borderRadius: 16,
-        backgroundColor: colors.foreground,
+        backgroundColor: COLORS.foreground,
     },
 })

@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, View } from 'react-native'
-import Animated, { CurvedTransition, FadeInLeft, FadeOutLeft, LinearTransition } from 'react-native-reanimated'
+import Animated, { FadeInLeft, FadeOutLeft, LinearTransition } from 'react-native-reanimated'
 import { Typography } from '../Text'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export function Chip({ label, onPress, variant, endContent }) {
     const styles = getChipStyles(variant, endContent !== undefined ? true : false)
@@ -38,16 +38,16 @@ const getChipStyles = (variant, hasEndContent) => {
 
     switch (variant) {
         case 'solid':
-            backgroundColor = colors.primary
-            borderColor = colors.primary
+            backgroundColor = COLORS.primary
+            borderColor = COLORS.primary
             break
         case 'bordered':
-            backgroundColor = colors.transparent
-            borderColor = colors.text15
+            backgroundColor = COLORS.transparent
+            borderColor = COLORS.text15
             break
         default:
-            backgroundColor = colors.primary
-            borderColor = colors.primary
+            backgroundColor = COLORS.primary
+            borderColor = COLORS.primary
             break
     }
 

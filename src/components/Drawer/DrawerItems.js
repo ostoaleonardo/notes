@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { DrawerHeader } from './DrawerHeader'
 import { DrawerScreen } from './DrawerScreen'
 import { Category, Pencil, Settings } from '@/icons'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export function DrawerItems() {
     const { t } = useTranslation()
@@ -34,6 +34,6 @@ export function DrawerItems() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.background,
+        backgroundColor: COLORS.background,
     },
 })

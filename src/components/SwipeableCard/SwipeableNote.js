@@ -4,7 +4,7 @@ import { SwipeableCard } from './SwipeableCard'
 import { Typography } from '../Text'
 import { Lock } from '@/icons'
 import { getDimensions } from '@/utils'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export function SwipeableNote({ noteData, isOpen, onOpen, onDelete }) {
     const { id, title, note, images, hasPassword } = noteData
@@ -69,7 +69,7 @@ export function SwipeableNote({ noteData, isOpen, onOpen, onDelete }) {
                                 <Lock
                                     width={12}
                                     height={12}
-                                    color={colors.text}
+                                    color={COLORS.text}
                                 />
                             </View>
                         </>
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
         minWidth: '100%',
         padding: 20,
         borderRadius: 16,
-        backgroundColor: colors.foreground,
+        backgroundColor: COLORS.foreground,
     },
     noteContainer: {
         width: '100%',
@@ -110,19 +110,19 @@ const styles = StyleSheet.create({
         width: '80%',
         height: 10,
         borderRadius: 6,
-        backgroundColor: colors.text5,
+        backgroundColor: COLORS.text5,
     },
     skeleton2: {
         width: '60%',
         height: 10,
         borderRadius: 16,
-        backgroundColor: colors.text5,
+        backgroundColor: COLORS.text5,
     },
     iconContainer: {
         position: 'absolute',
         right: 0,
         padding: 8,
         borderRadius: 16,
-        backgroundColor: colors.text5,
+        backgroundColor: COLORS.text5,
     },
 })

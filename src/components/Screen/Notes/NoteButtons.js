@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Button, IconButton } from '../../Button'
 import { Lock, Unlock } from '@/icons'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 const HOME_ROUTE = '/(drawer)/(stack)/home'
 
@@ -28,12 +28,12 @@ export function NoteButtons({ onSave, onOpenModal, hasPassword }) {
                             ? <Lock
                                 width={20}
                                 height={20}
-                                color={colors.background}
+                                color={COLORS.background}
                             />
                             : <Unlock
                                 width={20}
                                 height={20}
-                                color={colors.background}
+                                color={COLORS.background}
                             />
                     }
                 />

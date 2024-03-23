@@ -1,6 +1,6 @@
 import { Image, StyleSheet, View } from 'react-native'
 import { Typography } from '../Text'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 const icon = require('../../../assets/icon.png')
 
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     headerContainer: {
         padding: 16,
         paddingVertical: 32,
-        backgroundColor: colors.background,
+        backgroundColor: COLORS.background,
     },
     icon: {
         width: 64,

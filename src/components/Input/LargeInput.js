@@ -1,5 +1,5 @@
 import { StyleSheet, TextInput } from 'react-native'
-import { colors, fonts } from '@/constants'
+import { COLORS, FONTS } from '@/constants'
 
 export function LargeInput({ value, onChangeText, placeholder, ...props }) {
     return (
@@ -9,8 +9,8 @@ export function LargeInput({ value, onChangeText, placeholder, ...props }) {
             style={styles.input}
             placeholder={placeholder}
             onChangeText={onChangeText}
-            cursorColor={colors.primary}
-            placeholderTextColor={colors.text50}
+            cursorColor={COLORS.primary}
+            placeholderTextColor={COLORS.text50}
         />
     )
 }
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     input: {
         flex: 1,
         fontSize: 24,
-        color: colors.text,
-        fontFamily: fonts.mono,
+        color: COLORS.text,
+        fontFamily: FONTS.mono,
     },
 })

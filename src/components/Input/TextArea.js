@@ -1,5 +1,5 @@
 import { StyleSheet, TextInput, View } from 'react-native'
-import { colors, fonts } from '@/constants'
+import { COLORS, FONTS } from '@/constants'
 
 export function TextArea({ value, onChangeText, placeholder }) {
     return (
@@ -10,8 +10,8 @@ export function TextArea({ value, onChangeText, placeholder }) {
                 style={styles.input}
                 placeholder={placeholder}
                 onChangeText={onChangeText}
-                cursorColor={colors.primary}
-                placeholderTextColor={colors.text50}
+                cursorColor={COLORS.primary}
+                placeholderTextColor={COLORS.text50}
             />
         </View>
     )
@@ -23,11 +23,11 @@ const styles = StyleSheet.create({
         minHeight: 200,
         padding: 16,
         borderRadius: 16,
-        backgroundColor: colors.foreground,
+        backgroundColor: COLORS.foreground,
     },
     input: {
         fontSize: 14,
-        color: colors.text,
-        fontFamily: fonts.mono,
+        color: COLORS.text,
+        fontFamily: FONTS.mono,
     },
 })

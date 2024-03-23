@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { LargeInput } from './LargeInput'
 import { IconButton } from '../Button'
 import { Eye } from '@/icons'
-import { colors } from '@/constants'
+import { COLORS } from '@/constants'
 
 export function PasswordInput({ password, onChangeText, ...props }) {
     const [showPassword, setShowPassword] = useState(false)
@@ -28,7 +28,7 @@ export function PasswordInput({ password, onChangeText, ...props }) {
                     <Eye
                         width={24}
                         height={24}
-                        color={showPassword ? colors.text : colors.text15}
+                        color={showPassword ? COLORS.text : COLORS.text15}
                     />
                 }
                 size='md'
