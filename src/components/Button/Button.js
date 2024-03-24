@@ -22,27 +22,31 @@ export function Button({ label, onPress, disabled, variant, ...props }) {
 }
 
 const getStyles = (variant) => {
-    let backgroundColor, borderColor, color
+    let backgroundColor, borderWidth, borderColor, color
 
     switch (variant) {
         case 'primary':
             backgroundColor = COLORS.primary
             borderColor = COLORS.primary
+            borderWidth = 0
             color = COLORS.text
             break
         case 'secondary':
             backgroundColor = COLORS.text
             borderColor = COLORS.text
+            borderWidth = 0
             color = COLORS.background
             break
         case 'outline':
             backgroundColor = COLORS.transparent
             borderColor = COLORS.text15
+            borderWidth = 2
             color = COLORS.text
             break
         default:
             backgroundColor = COLORS.primary
             borderColor = COLORS.primary
+            borderWidth = 0
             color = COLORS.text
             break
     }
@@ -52,7 +56,7 @@ const getStyles = (variant) => {
             width: '100%',
             padding: 16,
             borderColor,
-            borderWidth: 2,
+            borderWidth,
             backgroundColor,
             borderRadius: 48,
             alignItems: 'center',
