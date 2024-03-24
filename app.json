@@ -24,7 +24,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#09090b"
       },
-      "package": "com.monospace.notes"
+      "package": "com.monospace.notes",
+      "versionCode": 2
     },
     "plugins": [
       "expo-router",
