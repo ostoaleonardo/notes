@@ -1,9 +1,11 @@
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Typography } from '../../Text'
+import { getFormattedDate } from '@/utils'
 
 export function DateNote({ createdAt, updatedAt }) {
     const { t } = useTranslation()
+    const date = getFormattedDate(updatedAt || createdAt)
 
     return (
         <View style={styles.container}>
@@ -13,9 +15,9 @@ export function DateNote({ createdAt, updatedAt }) {
                 variant='caption'
             >
                 {updatedAt
-                    ? `${t('editNote.updated')} ${updatedAt}`
-                    : `${t('editNote.created')} ${createdAt}`
-                }
+                    ? t('editNote.updated')
+                    : t('editNote.created')
+                } {date}
             </Typography>
         </View>
     )
