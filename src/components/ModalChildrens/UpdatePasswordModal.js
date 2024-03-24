@@ -64,11 +64,8 @@ export function UpdatePasswordModal({ isVisible, onClose, currentPassword, handl
             <View style={styles.container}>
                 <View style={styles.passwordsContainer}>
                     <View style={styles.inputContainer}>
-                        <Typography
-                            uppercase
-                            variant='caption'
-                        >
-                            Old Password
+                        <Typography variant='caption'>
+                            {t('password.current')}
                         </Typography>
                         <Animatable.View animation={isWrongPassword ? 'shake' : undefined}>
                             <PasswordInput
@@ -87,11 +84,8 @@ export function UpdatePasswordModal({ isVisible, onClose, currentPassword, handl
                         </Typography>
                     </View>
                     <View style={styles.inputContainer}>
-                        <Typography
-                            uppercase
-                            variant='caption'
-                        >
-                            New Password
+                        <Typography variant='caption'>
+                            {t('password.new')}
                         </Typography>
                         <Animatable.View animation={isInvalidPassword ? 'shake' : undefined}>
                             <PasswordInput

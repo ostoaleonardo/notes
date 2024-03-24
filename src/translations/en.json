@@ -25,7 +25,9 @@
     "password": {
         "add": "Add password",
         "update": "Update password",
-        "remove": "Remove password"
+        "remove": "Remove password",
+        "current": "Current password",
+        "new": "New password"
     },
     "header": {
         "notes": "Notes",
