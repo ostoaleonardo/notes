@@ -3,6 +3,22 @@ const DEV = process.env.VARIANT === 'development'
 const NAME = DEV ? 'Notes (Dev)' : 'Notes'
 const PACKAGE = DEV ? 'com.monospace.notes.dev' : 'com.monospace.notes'
 
+const widgetConfig = {
+  fonts: ['./assets/fonts/RobotoMono.ttf'],
+  widgets: [
+    {
+      name: 'Note',
+      label: 'A note',
+      minWidth: '320dp',
+      minHeight: '60dp',
+      resizeMode: 'horizontal|vertical',
+      description: 'Preview a note',
+      previewImage: './assets/widgets/note.png',
+      updatePeriodMillis: 1800000,
+    },
+  ],
+};
+
 export default {
   name: NAME,
   slug: 'notes',
@@ -31,7 +47,8 @@ export default {
   plugins: [
     'expo-router',
     'expo-font',
-    'expo-localization'
+    'expo-localization',
+    ['react-native-android-widget', widgetConfig]
   ],
   extra: {
     router: {

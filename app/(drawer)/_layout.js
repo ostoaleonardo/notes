@@ -51,6 +51,12 @@ export default function DrawerLayout() {
                     title: t('header.categories'),
                 }}
             />
+            <Drawer.Screen
+                name='widgets/index'
+                options={{
+                    title: 'Widgets'
+                }}
+            />
         </Drawer >
     )
 }

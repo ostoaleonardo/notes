@@ -1,0 +1,1 @@
+export { NoteWidget } from './NoteWidget'

@@ -27,6 +27,11 @@ export function DrawerItems() {
                 icon={Settings}
                 label={t('drawer.settings')}
             />
+            <DrawerScreen
+                path='/widgets'
+                icon={Settings}
+                label='Widgets'
+            />
         </DrawerContentScrollView>
     )
 }
