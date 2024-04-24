@@ -1,6 +1,6 @@
 <div align="center">
 <a target="_blank" href="https://play.google.com/store/apps/details?id=com.monospace.notes" title="Notes on Google Play">
-<img width="160" alt="Notes icon" src="assets/icon.png" />
+<img width="160" alt="Notes icon" src="assets/adaptive-icon.png" />
 </a>
 
 # <samp>Notes<samp>
@@ -12,12 +12,16 @@
 
 <samp>Organize your ideas easily with Notes!<samp>
 
+<br />
+
 ## <samp>Features<samp>
 
 -   <samp>Add notes with images.<samp>
 -   <samp>Organized with categories.<samp>
 -   <samp>Password protection.<samp>
 -   <samp>Minimalist and easy to use UI.<samp>
+
+<br />
 
 ## <samp>Download<samp>
 
