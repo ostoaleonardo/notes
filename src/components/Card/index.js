@@ -1,3 +1,3 @@
 export { Category } from './Category'
-export { SettingCard } from './SettingCard'
+export { SettingsCard } from './SettingsCard'
 export { AppVersionCard } from './AppVersionCard'

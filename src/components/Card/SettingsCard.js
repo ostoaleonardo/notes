@@ -2,16 +2,18 @@ import { Pressable, StyleSheet } from 'react-native'
 import { Typography } from '../Text'
 import { COLORS } from '@/constants'
 
-export function SettingCard({ rightLabel, onPress, children }) {
+export function SettingsCard({ rightLabel, rightContent, onPress, children }) {
     return (
         <Pressable
             onPress={onPress}
             style={styles.container}
         >
             {children}
-            <Typography>
-                {rightLabel}
-            </Typography>
+            {rightContent || (
+                <Typography>
+                    {rightLabel}
+                </Typography>
+            )}
         </Pressable>
     )
 }

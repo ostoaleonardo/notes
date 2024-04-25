@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Linking, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as Application from 'expo-application'
-import { SettingCard } from './SettingCard'
+import { SettingsCard } from './SettingsCard'
 import { Typography } from '../Text'
 import { getGooglePlayVersion } from '@/utils'
 import { GOOGLE_PLAY_URL } from '@/constants'
@@ -24,7 +24,7 @@ export function AppVersionCard() {
     }, [])
 
     return (
-        <SettingCard
+        <SettingsCard
             rightLabel={nativeApplicationVersion}
             onPress={() => Linking.openURL(GOOGLE_PLAY_URL)}
         >
@@ -42,6 +42,6 @@ export function AppVersionCard() {
                     }
                 </Typography>
             </View>
-        </SettingCard>
+        </SettingsCard>
     )
 }

@@ -26,9 +26,8 @@ export {
 
 export {
     Category,
-    SettingCard,
-    AppVersionCard,
-    GoogleSignInCard
+    SettingsCard,
+    AppVersionCard
 } from './Card'
 
 // Inputs
