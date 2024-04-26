@@ -5,6 +5,7 @@
         "yourCategories": "Tus categorías",
         "note": "Nota",
         "language": "Idioma",
+        "backupSync": "Copia de seguridad",
         "about": "Acerca de"
     },
     "editNote": {
@@ -18,6 +19,9 @@
     },
     "settings": {
         "theme": "Tema",
+        "googleSignIn": "Iniciar sesión con Google",
+        "signIn": "Iniciar sesión",
+        "signOut": "Cerrar sesión",
         "checkUpdates": "Buscar actualizaciones",
         "yourVersion": "Su versión está actualizada",
         "newVersion": "Nueva versión disponible"
