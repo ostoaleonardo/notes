@@ -13,13 +13,11 @@ export default function DrawerLayout() {
     })
 
     useEffect(() => {
-        const prepare = async () => {
+        (async () => {
             await SplashScreen.preventAutoHideAsync()
             initLanguage()
             setIsReady(true)
-        }
-
-        prepare()
+        })()
     }, [])
 
     const onLayoutRootView = useCallback(async () => {

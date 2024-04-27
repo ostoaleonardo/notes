@@ -1,3 +1,4 @@
+export { ROUTES } from './routes'
 export { COLORS, FONTS } from './theme'
 export { LANGUAGES } from './languages'
 export { DEFAULT_CATEGORIES } from './defaultCategories'
