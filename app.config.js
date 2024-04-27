@@ -26,12 +26,14 @@ export default {
       backgroundColor: '#09090b'
     },
     package: PACKAGE,
-    versionCode: 2
+    versionCode: 2,
+    googleServicesFile: './google-services.json'
   },
   plugins: [
     'expo-router',
     'expo-font',
-    'expo-localization'
+    'expo-localization',
+    '@react-native-google-signin/google-signin'
   ],
   extra: {
     router: {
