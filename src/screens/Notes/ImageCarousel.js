@@ -1,4 +1,5 @@
 import { StyleSheet, View } from 'react-native'
+import Animated, { LinearTransition } from 'react-native-reanimated'
 import { ImagePreview, PickerImage, Scroll } from '@/components'
 import { COLORS } from '@/constants'
 
