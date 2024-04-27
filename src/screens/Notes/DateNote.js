@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Typography } from '../../Text'
+import { Typography } from '@/components'
 import { getFormattedDate } from '@/utils'
 
 export function DateNote({ createdAt, updatedAt }) {

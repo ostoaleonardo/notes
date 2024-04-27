@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { ModalSheet } from '../Modal'
-import { LargeInput } from '../Input'
-import { Button } from '../Button'
+import { Button, LargeInput, ModalSheet } from '@/components'
 import { useCategories } from '@/hooks'
 
 export function UpdateCategoryModal({ isVisible, onClose, categorySelected, setIsCategoryUpdated }) {

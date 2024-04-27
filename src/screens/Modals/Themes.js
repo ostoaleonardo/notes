@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { StyleSheet } from 'react-native'
-import { ModalOption } from './ModalOption'
-import { Scroll } from '../Scroll'
+import { ModalOption, Scroll } from '@/components'
 
 const THEMES = ['Orange', 'Violet', 'Teal']
 

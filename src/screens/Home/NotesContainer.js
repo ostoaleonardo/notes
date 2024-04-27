@@ -1,9 +1,7 @@
 import { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Scroll } from '../../Scroll'
-import { Typography } from '../../Text'
-import { SwipeableNote } from '../../SwipeableCard'
+import { Scroll, SwipeableNote, Typography } from '@/components'
 import { useNotes } from '@/hooks'
 
 export function NotesContainer({ filteredNotes }) {

@@ -1,4 +1,3 @@
-export { Section } from '../Section'
 export { DateNote } from './DateNote'
 export { NoteButtons } from './NoteButtons'
 export { ImageCarousel } from './ImageCarousel'

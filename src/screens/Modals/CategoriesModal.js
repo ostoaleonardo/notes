@@ -1,14 +1,9 @@
 import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import * as Crypto from 'expo-crypto'
-import { ModalSheet } from '../Modal'
-import { SmallInput } from '../Input'
-import { SquareButton } from '../Button'
-import { Scroll } from '../Scroll'
-import { Category } from '../Card'
-import { Typography } from '../Text'
+import { Category, ModalSheet, Scroll, SmallInput, SquareButton, Typography } from '@/components'
 import { useCategories } from '@/hooks'
+import * as Crypto from 'expo-crypto'
 
 export function CategoriesModal({ isVisible, onClose, noteCategories, handleAddCategory }) {
     const { t } = useTranslation()

@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Scroll } from '../../Scroll'
-import { Chip } from '../../Chip'
+import { Chip, Scroll } from '@/components'
 import { useCategories, useNotes } from '@/hooks'
 
 export function NotesFilter({ setFilteredNotes }) {

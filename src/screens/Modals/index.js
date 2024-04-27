@@ -1,3 +1,4 @@
+export { AccountModal } from './AccountModal'
 export { CategoriesModal } from './CategoriesModal'
 export { UpdateCategoryModal } from './UpdateCategoryModal'
 export { PasswordModal } from './PasswordModal'

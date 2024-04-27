@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { StyleSheet } from 'react-native'
-import { Scroll } from '../Scroll'
-import { ModalOption } from './ModalOption'
+import { ModalOption, Scroll } from '@/components'
 import { useLanguage } from '@/hooks'
 import { LANGUAGES } from '@/constants'
 
