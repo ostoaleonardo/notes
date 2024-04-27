@@ -1,3 +1,9 @@
+// Avatars
+export {
+    Avatar,
+    User
+} from './Avatar'
+
 // Buttons
 export {
     Button,
@@ -7,8 +13,6 @@ export {
     PickerImage,
     ImagePreview
 } from './Button'
-
-export { Check } from './Check'
 
 // Chips
 export {
@@ -27,7 +31,8 @@ export {
 export {
     Category,
     SettingsCard,
-    AppVersionCard
+    AppVersionCard,
+    GoogleSignInCard
 } from './Card'
 
 // Inputs
@@ -39,15 +44,10 @@ export {
 } from './Input'
 
 // Modals
-export { ModalSheet } from './Modal'
 export {
-    CategoriesModal,
-    UpdateCategoryModal,
-    PasswordModal,
-    UpdatePasswordModal,
-    Languages,
-    Themes
-} from './ModalChildrens'
+    ModalSheet,
+    ModalOption
+} from './Modal'
 
 // Drawer
 export { DrawerItems } from './Drawer'
@@ -57,18 +57,8 @@ export { Typography } from './Text'
 
 // Scroll
 export { Scroll } from './Scroll'
+export { Section } from './Section'
 
 // Others
 export { Toast } from './Toast'
-
-// Screen components
-export {
-    NotesFilter,
-    NotesContainer,
-    CategoriesContainer,
-    Section,
-    DateNote,
-    NoteButtons,
-    ImageCarousel,
-    CategoryCarousel
-} from './Screen'
+export { Check } from './Check'
