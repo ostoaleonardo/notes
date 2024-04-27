@@ -2,6 +2,7 @@ import { Drawer } from 'expo-router/drawer'
 import { useTranslation } from 'react-i18next'
 import { useGlobalSearchParams } from 'expo-router'
 import { DrawerItems } from '@/components'
+import { HeaderAvatar } from '@/screens'
 import { COLORS, FONTS } from '@/constants'
 
 export default function DrawerLayout() {
@@ -37,6 +38,10 @@ export default function DrawerLayout() {
                 name='(stack)'
                 options={{
                     title: params.title ?? t('drawer.notes'),
+                    headerRight: () => <HeaderAvatar />,
+                    headerRightContainerStyle: {
+                        marginRight: 16,
+                    },
                 }}
             />
             <Drawer.Screen

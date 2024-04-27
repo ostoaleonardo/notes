@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { AppVersionCard, Languages, ModalSheet, Section, SettingCard, Typography } from '@/components'
+import { AppVersionCard, Languages, ModalSheet, Section, SettingsCard, Typography } from '@/components'
 import { COLORS } from '@/constants'
 
 const SETTINGS_OPTIONS = [
@@ -27,15 +27,21 @@ export default function Settings() {
                 title={t('title.language')}
                 contentStyle={{ paddingHorizontal: 24 }}
             >
-                <SettingCard
+                <SettingsCard
                     rightLabel='>'
                     onPress={() => handleModal(SETTINGS_OPTIONS[0])}
                 >
                     <Typography>
                         {t('language')}
                     </Typography>
-                </SettingCard>
+                </SettingsCard>
             </Section>
+            {/* <Section
+                title={t('title.backupSync')}
+                contentStyle={{ paddingHorizontal: 24 }}
+            >
+                <GoogleSignInCard />
+            </Section> */}
             <Section
                 title={t('title.about')}
                 contentStyle={{ paddingHorizontal: 24 }}
