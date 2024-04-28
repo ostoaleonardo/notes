@@ -5,12 +5,13 @@ import { COLORS, FONTS } from '@/constants'
 
 export function DrawerScreen({ label, icon, path }) {
     const pathname = usePathname()
+    const labelStyle = pathname === path ? styles.activeLabel : styles.label
 
     return (
         <DrawerItem
             label={label}
             style={styles.item}
-            labelStyle={styles.label}
+            labelStyle={labelStyle}
             pressColor={COLORS.transparent}
             activeTintColor={COLORS.primary}
             inactiveTintColor={COLORS.text}
@@ -38,6 +39,10 @@ const styles = StyleSheet.create({
     },
     label: {
         fontFamily: FONTS.mono,
+        textTransform: 'uppercase',
+    },
+    activeLabel: {
+        fontFamily: FONTS.monoBold,
         textTransform: 'uppercase',
     },
 })

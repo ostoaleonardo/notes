@@ -1,17 +1,25 @@
 import { StyleSheet, Text } from 'react-native'
 import { COLORS, FONTS } from '@/constants'
 
+const SIZE_VARIANTS = {
+    title: 18,
+    subtitle: 16,
+    paragraph: 14,
+    caption: 12
+}
+
 export function Typography({ children, variant = 'paragraph', bold, uppercase, color, opacity, textAlign }) {
-    const variantStyles = styles[variant]
+    const fontSize = SIZE_VARIANTS[variant]
 
     return (
         <Text style={[
-            variantStyles,
-            bold && styles.bold,
-            uppercase && styles.uppercase,
+            styles.base,
+            { fontSize },
             color && { color },
             opacity && { opacity },
             textAlign && { textAlign },
+            uppercase && styles.uppercase,
+            bold ? styles.bold : styles.regular
         ]}>
             {children}
         </Text>
@@ -19,30 +27,16 @@ export function Typography({ children, variant = 'paragraph', bold, uppercase, c
 }
 
 const styles = StyleSheet.create({
-    title: {
-        fontSize: 18,
+    base: {
         color: COLORS.text,
-        fontFamily: FONTS.mono,
-    },
-    subtitle: {
-        fontSize: 16,
-        color: COLORS.text,
-        fontFamily: FONTS.mono,
-    },
-    paragraph: {
-        fontSize: 14,
-        color: COLORS.text,
-        fontFamily: FONTS.mono,
-    },
-    caption: {
-        fontSize: 12,
-        color: COLORS.text,
-        fontFamily: FONTS.mono,
     },
     uppercase: {
         textTransform: 'uppercase',
     },
+    regular: {
+        fontFamily: FONTS.mono,
+    },
     bold: {
-        fontWeight: 'bold',
+        fontFamily: FONTS.monoBold,
     },
 })

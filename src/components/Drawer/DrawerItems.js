@@ -3,7 +3,7 @@ import { DrawerContentScrollView } from '@react-navigation/drawer'
 import { useTranslation } from 'react-i18next'
 import { DrawerHeader } from './DrawerHeader'
 import { DrawerScreen } from './DrawerScreen'
-import { Category, Pencil, Settings } from '@/icons'
+import { Pencil, Settings, Shapes } from '@/icons'
 import { COLORS } from '@/constants'
 
 export function DrawerItems() {
@@ -19,7 +19,7 @@ export function DrawerItems() {
             />
             <DrawerScreen
                 path='/categories'
-                icon={Category}
+                icon={Shapes}
                 label={t('drawer.categories')}
             />
             <DrawerScreen
