@@ -1,4 +1,4 @@
-import { Path, Svg } from 'react-native-svg';
+import { Path, Svg } from 'react-native-svg'
 
 export const Lock = (props) => (
     <Svg viewBox='0 -960 960 960' fill='currentColor' {...props}>

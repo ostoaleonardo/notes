@@ -1,4 +1,4 @@
-import { Circle, G, Path, Svg } from 'react-native-svg'
+import { Path, Svg } from 'react-native-svg'
 
 export const Settings = (props) => (
     <Svg viewBox='0 -960 960 960' fill='currentColor' {...props}>
