@@ -19,4 +19,5 @@ export const COLORS = {
 
 export const FONTS = {
     mono: 'Roboto-Mono',
+    monoBold: 'Roboto-Mono-Bold'
 }
