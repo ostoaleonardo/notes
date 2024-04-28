@@ -10,6 +10,7 @@ export default function DrawerLayout() {
     const [isReady, setIsReady] = useState(false)
     const [fontsLoaded, fontError] = useFonts({
         'Roboto-Mono': require('../assets/fonts/RobotoMono.ttf'),
+        'Roboto-Mono-Bold': require('../assets/fonts/RobotoMono-Bold.ttf')
     })
 
     useEffect(() => {
