@@ -1,7 +1,7 @@
 import { Path, Svg } from 'react-native-svg'
 
 export const Check = (props) => (
-    <Svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24' {...props}>
-        <Path fill="currentColor" d="m10 15.586l-3.293-3.293l-1.414 1.414L10 18.414l9.707-9.707l-1.414-1.414z" />
+    <Svg viewBox='0 -960 960 960' fill='currentColor' {...props}>
+        <Path d='m382-324.77 352.08-352.08q5.84-5.84 13.77-6.23 7.92-.38 14.53 6.23 6.62 6.62 6.62 14.27 0 7.66-6.62 14.27l-357.76 358q-9.7 9.69-22.62 9.69-12.92 0-22.62-9.69l-162-162q-5.84-5.84-6.11-13.88-.27-8.04 6.35-14.66 6.61-6.61 14.26-6.61 7.66 0 14.27 6.61L382-324.77Z' />
     </Svg>
 )
