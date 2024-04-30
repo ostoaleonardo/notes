@@ -7,12 +7,13 @@ const sizes = {
     lg: 64,
 }
 
-export function IconButton({ icon, variant = 'primary', size = 'sm', onPress }) {
+export function IconButton({ icon, disabled, variant = 'primary', size = 'sm', onPress }) {
     const variantStyles = styles[variant]
     const iconSize = sizes[size]
 
     return (
         <Pressable
+            disabled={disabled}
             onPress={onPress}
             style={[
                 styles.container,
