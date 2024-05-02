@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Slot } from 'expo-router'
+import { Stack } from 'expo-router'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { Providers } from './providers'
 import { useLanguage } from '@/hooks'
-import { SCOPES } from '@/constants'
+import { COLORS, SCOPES } from '@/constants'
 
 export default function DrawerLayout() {
     const { initLanguage } = useLanguage()
     const [isReady, setIsReady] = useState(false)
     const [fontsLoaded, fontError] = useFonts({
-        'Roboto-Mono': require('../assets/fonts/RobotoMono.ttf'),
-        'Roboto-Mono-Bold': require('../assets/fonts/RobotoMono-Bold.ttf')
+        'SpaceMono': require('../assets/fonts/SpaceMono-Regular.ttf'),
+        'SpaceMono-Bold': require('../assets/fonts/SpaceMono-Bold.ttf')
     })
 
     useEffect(() => {
@@ -36,7 +36,20 @@ export default function DrawerLayout() {
 
     return (
         <Providers>
-            <Slot onLayout={onLayoutRootView} />
+            <Stack
+                onLayout={onLayoutRootView}
+                screenOptions={{
+                    animation: 'fade',
+                    headerShown: false,
+                    
+                    contentStyle: {
+                        backgroundColor: COLORS.background
+                    }
+                }}
+            >
+                <Stack.Screen name='(drawer)' />
+                <Stack.Screen name='signin/index' />
+            </Stack>
         </Providers>
     )
 }
