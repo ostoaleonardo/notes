@@ -1,71 +1,65 @@
-import { Pressable, StyleSheet, Text } from 'react-native'
+import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native'
 import { COLORS, FONTS } from '@/constants'
 
-export function Button({ label, onPress, disabled, variant, ...props }) {
-    const styles = getStyles(variant)
+const COLOR_VARIANTS = {
+    primary: COLORS.text,
+    secondary: COLORS.background,
+    outline: COLORS.text
+}
+
+export function Button({ label, onPress, disabled, isLoading, variant = 'primary', ...props }) {
+    const buttonVariant = styles[variant]
+    const colorVariant = COLOR_VARIANTS[variant]
 
     return (
         <Pressable
             {...props}
             onPress={onPress}
-            disabled={disabled}
+            disabled={disabled || isLoading}
             style={[
-                styles.container,
+                styles.base,
+                buttonVariant,
                 disabled && { opacity: 0.5 }
             ]}
         >
-            <Text style={styles.label}>
+            {isLoading && <ActivityIndicator color={colorVariant} />}
+
+            <Text
+                style={[
+                    styles.label,
+                    { color: colorVariant }
+                ]}
+            >
                 {label}
             </Text>
-        </Pressable>
+        </Pressable >
     )
 }
 
-const getStyles = (variant) => {
-    let backgroundColor, borderWidth, borderColor, color
-
-    switch (variant) {
-        case 'primary':
-            backgroundColor = COLORS.primary
-            borderColor = COLORS.primary
-            borderWidth = 0
-            color = COLORS.text
-            break
-        case 'secondary':
-            backgroundColor = COLORS.text
-            borderColor = COLORS.text
-            borderWidth = 0
-            color = COLORS.background
-            break
-        case 'outline':
-            backgroundColor = COLORS.transparent
-            borderColor = COLORS.text15
-            borderWidth = 2
-            color = COLORS.text
-            break
-        default:
-            backgroundColor = COLORS.primary
-            borderColor = COLORS.primary
-            borderWidth = 0
-            color = COLORS.text
-            break
-    }
-
-    return StyleSheet.create({
-        container: {
-            width: '100%',
-            padding: 16,
-            borderColor,
-            borderWidth,
-            backgroundColor,
-            borderRadius: 48,
-            alignItems: 'center',
-        },
-        label: {
-            color,
-            fontSize: 14,
-            fontFamily: FONTS.mono,
-            textTransform: 'uppercase',
-        },
-    })
-}
+const styles = StyleSheet.create({
+    base: {
+        width: '100%',
+        gap: 16,
+        padding: 16,
+        borderRadius: 48,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    label: {
+        fontSize: 14,
+        fontFamily: FONTS.mono,
+        textTransform: 'uppercase',
+    },
+    primary: {
+        color: COLORS.text,
+        backgroundColor: COLORS.primary,
+    },
+    secondary: {
+        backgroundColor: COLORS.text,
+    },
+    outline: {
+        borderWidth: 2,
+        borderColor: COLORS.text15,
+    },
+})
