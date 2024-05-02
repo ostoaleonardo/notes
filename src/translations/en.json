@@ -1,78 +1,79 @@
 {
-    "language": "English",
-    "title": {
-        "categories": "Categories",
-        "yourCategories": "Your categories",
-        "note": "Note",
-        "language": "Language",
-        "backupSync": "Backups & Sync",
-        "about": "About"
-    },
-    "editNote": {
-        "created": "Created:",
-        "updated": "Updated:"
-    },
-    "categories": {
-        "all": "All",
-        "add": "Add",
-        "update": "Update category"
-    },
-    "settings": {
-        "theme": "Theme",
-        "googleSignIn": "Sign in with Google",
-        "signIn": "Sign in",
-        "signOut": "Sign out",
-        "checkUpdates": "Check for updates",
-        "yourVersion": "Your version is up to date",
-        "newVersion": "New version available"
-    },
-    "password": {
-        "add": "Add password",
-        "update": "Update password",
-        "remove": "Remove password",
-        "current": "Current password",
-        "new": "New password"
-    },
-    "header": {
-        "notes": "Notes",
-        "addNote": "Add Note",
-        "editNote": "Edit Note",
-        "categories": "Categories",
-        "password": "Password",
-        "settings": "Settings"
-    },
-    "button": {
-        "addNote": "Add Note",
-        "save": "Save",
-        "cancel": "Cancel",
-        "delete": "Delete",
-        "update": "Update",
-        "enter": "Enter"
-    },
-    "message": {
-        "loading": "Loading...",
-        "noNotes": "You don't have notes yet",
-        "noCategories": "You don't have categories yet",
-        "noteAdded": "Note added",
-        "noteUpdated": "Note updated",
-        "emptyTitle": "Title can't be empty",
-        "emptyNote": "Note can't be empty",
-        "addACategory": "Add the category name",
-        "emptyCategory": "Category name can't be empty",
-        "categoryAdded": "Category added",
-        "categoryUpdated": "Category updated",
-        "wrongPassword": "Wrong password",
-        "samePassword": "The password can't be the same",
-        "lengthPassword": "The password must have at least 4 characters"
-    },
-    "placeholder": {
-        "title": "Your title...",
-        "note": "Type your note here...",
-        "category": "New category..."
-    },
-    "drawer": {
-        "notes": "Notes",
-        "settings": "Settings",
-        "categories": "Categories"
-    }
+	"language": "English",
+	"title": {
+		"categories": "Categories",
+		"yourCategories": "Your categories",
+		"note": "Note",
+		"language": "Language",
+		"backupSync": "Backups & Sync",
+		"about": "About"
+	},
+	"welcome": {
+		"tagline": "The best way to keep your notes organized",
+		"signIn": "Sign in with Google"
+	},
+	"editNote": {
+		"created": "Created:",
+		"updated": "Updated:"
+	},
+	"categories": {
+		"all": "All",
+		"add": "Add",
+		"update": "Update category"
+	},
+	"settings": {
+		"theme": "Theme",
+		"checkUpdates": "Check for updates",
+		"yourVersion": "Your version is up to date",
+		"newVersion": "New version available"
+	},
+	"password": {
+		"add": "Add password",
+		"update": "Update password",
+		"remove": "Remove password",
+		"current": "Current password",
+		"new": "New password"
+	},
+	"header": {
+		"notes": "Notes",
+		"addNote": "Add Note",
+		"editNote": "Edit Note",
+		"categories": "Categories",
+		"password": "Password",
+		"settings": "Settings"
+	},
+	"button": {
+		"addNote": "Add Note",
+		"save": "Save",
+		"cancel": "Cancel",
+		"delete": "Delete",
+		"update": "Update",
+		"enter": "Enter"
+	},
+	"message": {
+		"loading": "Loading...",
+		"noNotes": "You don't have notes yet",
+		"noCategories": "You don't have categories yet",
+		"noteAdded": "Note added",
+		"noteUpdated": "Note updated",
+		"emptyTitle": "Title can't be empty",
+		"emptyNote": "Note can't be empty",
+		"addACategory": "Add the category name",
+		"emptyCategory": "Category name can't be empty",
+		"categoryAdded": "Category added",
+		"categoryUpdated": "Category updated",
+		"wrongPassword": "Wrong password",
+		"samePassword": "The password can't be the same",
+		"lengthPassword": "The password must have at least 4 characters"
+	},
+	"placeholder": {
+		"title": "Your title...",
+		"note": "Type your note here...",
+		"category": "New category..."
+	},
+	"drawer": {
+		"notes": "Notes",
+		"settings": "Settings",
+		"categories": "Categories"
+	}
 }

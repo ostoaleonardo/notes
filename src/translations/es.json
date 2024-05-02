@@ -8,6 +8,10 @@
         "backupSync": "Copia de seguridad",
         "about": "Acerca de"
     },
+    "welcome": {
+        "tagline": "La mejor forma de mantener tus notas organizadas",
+        "signIn": "Iniciar sesión con Google"
+	},
     "editNote": {
         "created": "Creado:",
         "updated": "Actualizado:"
@@ -19,9 +23,6 @@
     },
     "settings": {
         "theme": "Tema",
-        "googleSignIn": "Iniciar sesión con Google",
-        "signIn": "Iniciar sesión",
-        "signOut": "Cerrar sesión",
         "checkUpdates": "Buscar actualizaciones",
         "yourVersion": "Su versión está actualizada",
         "newVersion": "Nueva versión disponible"
