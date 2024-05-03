@@ -3,13 +3,16 @@ import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated'
 import { Typography } from '../Text'
 import { COLORS } from '@/constants'
 
-export function Toast({ message }) {
+export function Toast({ message, backgroundColor }) {
     return (
         message && (
             <Animated.View
                 entering={SlideInDown}
                 exiting={SlideOutDown}
-                style={styles.container}
+                style={[
+                    styles.container,
+                    { backgroundColor }
+                ]}
             >
                 <Typography textAlign='center'>
                     {message}
