@@ -10,7 +10,8 @@
     },
     "welcome": {
         "tagline": "La mejor forma de mantener tus notas organizadas",
-        "signIn": "Iniciar sesión con Google"
+        "signIn": "Iniciar sesión con Google",
+        "signInError": "Error al iniciar sesión, inténtalo de nuevo"
 	},
     "editNote": {
         "created": "Creado:",
