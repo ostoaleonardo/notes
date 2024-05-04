@@ -1,3 +1,4 @@
 export const ROUTES = {
-    HOME: '(drawer)/(stack)/home'
+    SIGN_IN: '/signin',
+    HOME: '/home'
 }
