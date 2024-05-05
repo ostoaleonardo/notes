@@ -1,13 +1,15 @@
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { AuthProvider, NoteProvider } from '@/context'
+import { AuthProvider, NoteProvider, SyncProvider } from '@/context'
 
 export function Providers({ children }) {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <AuthProvider>
-                <NoteProvider>
-                    {children}
-                </NoteProvider>
+                <SyncProvider>
+                    <NoteProvider>
+                        {children}
+                    </NoteProvider>
+                </SyncProvider>
             </AuthProvider>
         </GestureHandlerRootView>
     )
