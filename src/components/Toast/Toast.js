@@ -10,8 +10,8 @@ export function Toast({ message, backgroundColor }) {
                 entering={SlideInDown}
                 exiting={SlideOutDown}
                 style={[
-                    { backgroundColor },
-                    styles.container
+                    styles.container,
+                    backgroundColor && { backgroundColor },
                 ]}
             >
                 <Typography textAlign='center'>
