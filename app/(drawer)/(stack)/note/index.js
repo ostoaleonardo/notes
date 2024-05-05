@@ -96,6 +96,7 @@ export default function Note() {
                     paddingHorizontal={24}
                 >
                     <LargeInput
+                        bold
                         multiline
                         value={title}
                         onChangeText={setTitle}
