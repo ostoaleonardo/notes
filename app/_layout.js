@@ -41,7 +41,7 @@ export default function DrawerLayout() {
                 screenOptions={{
                     animation: 'fade',
                     headerShown: false,
-                    
+
                     contentStyle: {
                         backgroundColor: COLORS.background
                     }
