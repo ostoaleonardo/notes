@@ -1,3 +1,9 @@
+// Sign in screen components
+export {
+    Shade,
+    Stripe
+} from './SignIn'
+
 // Home screen components
 export {
     HeaderAvatar,
