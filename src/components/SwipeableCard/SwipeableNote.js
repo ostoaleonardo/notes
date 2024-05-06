@@ -30,7 +30,8 @@ export function SwipeableNote({ noteData, isOpen, onOpen, onDelete }) {
             >
                 <View style={styles.noteContainer}>
                     <Typography
-                        uppercase
+                        bold
+                        variant='subtitle'
                     >
                         {title}
                     </Typography>
