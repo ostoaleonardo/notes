@@ -1,8 +1,11 @@
-import { useState } from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { useEffect } from 'react'
+import { router } from 'expo-router'
+import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Button, Check, ModalSheet, Typography, User } from '@/components'
-import { useAuth } from '@/hooks'
+import { Button, ModalSheet, Typography, User } from '@/components'
+import { useAuth, useGoogleDrive } from '@/hooks'
+import { getFormattedDate } from '@/utils'
+import { LogOut, Sync } from '@/icons'
 import { COLORS } from '@/constants'
 
 function OptionCard({ rightLabel, rightContent, onPress, children }) {
@@ -36,10 +39,17 @@ function OptionCard({ rightLabel, rightContent, onPress, children }) {
 
 export function AccountModal({ isVisible, onClose }) {
     const { t } = useTranslation()
-    const { user, signIn, signOut } = useAuth()
-    const [isEnabled, setIsEnabled] = useState(false)
+    const { user, isSignedIn, signIn, signOut } = useAuth()
+    const { lastSync, isSyncing } = useGoogleDrive()
 
-    const toggleSwitch = () => setIsEnabled(!isEnabled)
+    const syncDate = getFormattedDate(lastSync)
+
+    useEffect(() => {
+        if (!isSignedIn) {
+            onClose()
+            router.replace('/signin')
+        }
+    }, [isSignedIn])
 
     return (
         <ModalSheet
@@ -70,38 +80,38 @@ export function AccountModal({ isVisible, onClose }) {
                 {user.givenName ? (
                     <View style={styles.optionsContainer}>
                         <OptionCard
-                            rightLabel='>'
+                            rightContent={
+                                isSyncing
+                                    ? <ActivityIndicator color={COLORS.text} />
+                                    : <Sync width={20} height={20} color={COLORS.text} />
+                            }
                         >
                             <View>
                                 <Typography>
-                                    Sync now
+                                    {t('welcome.lastSync')}
                                 </Typography>
-                                <Typography
-                                    opacity={0.5}
-                                    variant='caption'
-                                >
-                                    Last synced 2 days ago
-                                </Typography>
+                                {lastSync && (
+                                    <Typography
+                                        opacity={0.5}
+                                        variant='caption'
+                                    >
+                                        {syncDate}
+                                    </Typography>
+                                )}
                             </View>
                         </OptionCard>
                         <OptionCard
-                            onPress={toggleSwitch}
+                            onPress={signOut}
                             rightContent={
-                                <Pressable onPress={toggleSwitch}>
-                                    <Check checked={isEnabled} />
-                                </Pressable>
+                                <LogOut
+                                    width={20}
+                                    height={20}
+                                    color={COLORS.text}
+                                />
                             }
                         >
                             <Typography>
-                                Enable auto sync
-                            </Typography>
-                        </OptionCard>
-                        <OptionCard
-                            rightLabel='>'
-                            onPress={signOut}
-                        >
-                            <Typography>
-                                {t('Sign Out')}
+                                {t('welcome.signOut')}
                             </Typography>
                         </OptionCard>
                     </View>
