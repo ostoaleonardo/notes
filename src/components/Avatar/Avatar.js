@@ -1,14 +1,12 @@
 import { Image, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Typography } from '../Text'
-import { useAuth } from '@/hooks'
+import { useUser } from '@/hooks'
 import { COLORS } from '@/constants'
-
-const READ_ONLY = true
 
 export function Avatar({ color }) {
     const { t } = useTranslation()
-    const { user } = useAuth(READ_ONLY)
+    const { user } = useUser()
     const { givenName, photo } = user
 
     const containerStyles = {
