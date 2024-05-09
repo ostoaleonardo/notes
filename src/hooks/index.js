@@ -1,4 +1,5 @@
 // Auth & sync
+export { useUser } from './useUser'
 export { useAuth } from './useAuth'
 export { useGoogleDrive } from './useGoogleDrive'
 
