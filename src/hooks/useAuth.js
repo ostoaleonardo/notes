@@ -1,30 +1,37 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin'
 import { AuthContext } from '@/context'
 
 export function useAuth() {
-    const { user, setUser, isSignedIn, setIsSignedIn } = useContext(AuthContext)
+    const { setUser, isSignedIn, setIsSignedIn } = useContext(AuthContext)
+    const [isLoading, setIsLoading] = useState(false)
 
     const signIn = async () => {
+        setIsLoading(true)
+
         try {
             await GoogleSignin.hasPlayServices()
             const userInfo = await GoogleSignin.signIn()
-            setUser(userInfo.user)
-            setIsSignedIn(true)
+
+            if (userInfo) {
+                const accessToken = await getAccessToken()
+                setUser({ ...userInfo.user, accessToken })
+                setIsSignedIn(true)
+
+                return accessToken
+            }
+
+            return null
         } catch (error) {
             switch (error.code) {
-                case statusCodes.SIGN_IN_CANCELLED:
-                    console.log('User cancelled the login flow')
-                    break
-                case statusCodes.IN_PROGRESS:
-                    console.log('Operation (e.g. sign in) is in progress already')
-                    break
                 case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
-                    console.log('Play services not available or outdated')
+                    // Handle error
                     break
                 default:
-                    console.log('Some other error happened')
+                    return null
             }
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -34,7 +41,7 @@ export function useAuth() {
             setUser({})
             setIsSignedIn(false)
         } catch (error) {
-            console.error(error)
+            // Handle error
         }
     }
 
@@ -55,8 +62,6 @@ export function useAuth() {
 
     useEffect(() => {
         (async () => {
-            if (user.accessToken) return
-
             const isSignedIn = await getIsSignedIn()
             setIsSignedIn(isSignedIn)
 
@@ -70,10 +75,12 @@ export function useAuth() {
     }, [])
 
     return {
-        user,
         signIn,
         signOut,
+        isLoading,
         isSignedIn,
+        setIsSignedIn,
+        getIsSignedIn,
         getCurrentUser
     }
 }
