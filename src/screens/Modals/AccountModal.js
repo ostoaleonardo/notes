@@ -3,7 +3,7 @@ import { router } from 'expo-router'
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Button, ModalSheet, Typography, User } from '@/components'
-import { useAuth, useGoogleDrive } from '@/hooks'
+import { useAuth, useGoogleDrive, useUser } from '@/hooks'
 import { getFormattedDate } from '@/utils'
 import { LogOut, Sync } from '@/icons'
 import { COLORS } from '@/constants'
@@ -39,7 +39,8 @@ function OptionCard({ rightLabel, rightContent, onPress, children }) {
 
 export function AccountModal({ isVisible, onClose }) {
     const { t } = useTranslation()
-    const { user, isSignedIn, signIn, signOut } = useAuth()
+    const { user } = useUser()
+    const { isSignedIn, signIn, signOut } = useAuth()
     const { lastSync, isSyncing } = useGoogleDrive()
 
     const syncDate = getFormattedDate(lastSync)
@@ -55,7 +56,7 @@ export function AccountModal({ isVisible, onClose }) {
         <ModalSheet
             isVisible={isVisible}
             onClose={onClose}
-            title='Account'
+            title={t('title.backupSync')}
         >
             <View style={styles.container}>
                 {user.givenName ? (
@@ -66,13 +67,13 @@ export function AccountModal({ isVisible, onClose }) {
                 ) : (
                     <View style={styles.welcomeContainer}>
                         <Typography variant='title'>
-                            Welcome to Notes
+                            Notes
                         </Typography>
                         <Typography
                             opacity={0.5}
-                            variant='caption'
+                            textAlign='center'
                         >
-                            Sign in to sync your notes across devices
+                            {t('welcome.tagline')}
                         </Typography>
                     </View>
                 )}
@@ -118,7 +119,7 @@ export function AccountModal({ isVisible, onClose }) {
                 ) : (
                     <Button
                         onPress={signIn}
-                        label='Sign in with Google'
+                        label={t('welcome.signIn')}
                     />
                 )}
             </View>
