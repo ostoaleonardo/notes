@@ -1,7 +1,7 @@
 const DEV = process.env.VARIANT === 'development'
 
 const NAME = DEV ? 'Notes (Dev)' : 'Notes'
-const PACKAGE = DEV ? 'com.monospace.notes.dev' : 'com.monospace.notes'
+const PACKAGE = DEV ? 'com.monospace.notes' : 'com.monospace.notes'
 
 export default {
   name: NAME,
@@ -33,6 +33,7 @@ export default {
     'expo-router',
     'expo-font',
     'expo-localization',
+    "expo-local-authentication",
     '@react-native-google-signin/google-signin'
   ],
   extra: {
