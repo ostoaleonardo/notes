@@ -4,15 +4,16 @@ import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as Animatable from 'react-native-animatable'
 import { Button, PasswordInput, Toast } from '@/components'
-import { useHeaderTitle, useNotes } from '@/hooks'
+import { useHaptics, useHeaderTitle, useNotes } from '@/hooks'
 import { getEncryptedPassword } from '@/utils'
-import { COLORS } from '@/constants'
+import { COLORS, FEEDBACK_TYPES } from '@/constants'
 
 export default function Password() {
     const router = useRouter()
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
     const { getNote } = useNotes()
+    const { vibrate } = useHaptics()
     const [password, setPassword] = useState('')
     const [encryptedInput, setEncryptedInput] = useState('')
     const [encryptedPassword, setEncryptedPassword] = useState('')
@@ -38,6 +39,7 @@ export default function Password() {
             router.push('/note/' + slug)
         } else {
             setIsWrongPassword(true)
+            vibrate(FEEDBACK_TYPES.ERROR)
             handleToast(t('message.wrongPassword'))
         }
     }
