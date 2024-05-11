@@ -7,11 +7,12 @@ import { getDimensions } from '@/utils'
 import { COLORS } from '@/constants'
 
 export function SwipeableNote({ noteData, isOpen, onOpen, onDelete }) {
-    const { id, title, note, images, hasPassword } = noteData
+    const { id, title, note, images, hasPassword, hasBiometrics } = noteData
+    const isLocked = hasPassword || hasBiometrics
     const width = getDimensions(images.length)
 
     const goToEdit = () => {
-        if (hasPassword) {
+        if (isLocked) {
             router.navigate('/note/password/' + id)
         } else {
             router.navigate('/note/' + id)
@@ -36,7 +37,7 @@ export function SwipeableNote({ noteData, isOpen, onOpen, onDelete }) {
                         {title}
                     </Typography>
 
-                    {!hasPassword &&
+                    {!isLocked &&
                         <>
                             <Typography>
                                 {note}
@@ -59,7 +60,7 @@ export function SwipeableNote({ noteData, isOpen, onOpen, onDelete }) {
                         </>
                     }
 
-                    {hasPassword &&
+                    {isLocked &&
                         <>
                             <View style={styles.skeletonContainer}>
                                 <View style={styles.skeleton1} />

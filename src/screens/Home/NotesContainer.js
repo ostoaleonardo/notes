@@ -19,7 +19,7 @@ export function NotesContainer({ filteredNotes }) {
                 </Typography>
             )}
 
-            {filteredNotes.map(({ id, title, note, images, password }) => (
+            {filteredNotes.map(({ id, title, note, images, password, biometrics }) => (
                 <SwipeableNote
                     key={id}
                     noteData={{
@@ -28,6 +28,7 @@ export function NotesContainer({ filteredNotes }) {
                         note,
                         images,
                         hasPassword: !!password,
+                        hasBiometrics: biometrics,
                     }}
                     isOpen={openNote === id}
                     onOpen={() => setOpenNote(id)}
