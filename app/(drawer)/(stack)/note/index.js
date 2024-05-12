@@ -18,6 +18,7 @@ export default function Note() {
     const [categoryIds, setCategoryIds] = useState([DEFAULT_CATEGORIES[0].id])
     const [images, setImages] = useState([])
     const [password, setPassword] = useState('')
+    const [biometrics, setBiometrics] = useState(false)
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false)
     const [galleryIndex, setGalleryIndex] = useState(0)
@@ -43,6 +44,7 @@ export default function Note() {
             note: note.trim(),
             images,
             password,
+            biometrics,
             categories: categoryIds,
             createdAt: getDate(),
         })
@@ -150,6 +152,8 @@ export default function Note() {
                 isVisible={isPasswordModalVisible}
                 onClose={handlePasswordModal}
                 handlePassword={handlePassword}
+                biometrics={biometrics}
+                setBiometrics={setBiometrics}
             />
             <ImageView
                 imageIndex={galleryIndex}

@@ -3,11 +3,13 @@ import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as Animatable from 'react-native-animatable'
 import { Button, ModalSheet, PasswordInput, Typography } from '@/components'
+import { useLocalAuthentication } from '@/hooks'
 import { getEncryptedPassword } from '@/utils'
 import { COLORS } from '@/constants'
 
-export function PasswordModal({ isVisible, onClose, handlePassword }) {
+export function PasswordModal({ isVisible, onClose, handlePassword, biometrics, setBiometrics }) {
     const { t } = useTranslation()
+    const { hasBiometrics, authenticate } = useLocalAuthentication()
     const [passwordInput, setPasswordInput] = useState('')
     const [encryptedPassword, setEncryptedPassword] = useState('')
     const [isInvalidPassword, setIsInvalidPassword] = useState(false)
@@ -26,6 +28,19 @@ export function PasswordModal({ isVisible, onClose, handlePassword }) {
         }
 
         handlePassword(encryptedPassword)
+    }
+
+    const handleBiometrics = async () => {
+        if (biometrics) {
+            setBiometrics(false)
+            return
+        }
+
+        const success = await authenticate()
+
+        if (success) {
+            setBiometrics(true)
+        }
     }
 
     return (
@@ -52,10 +67,19 @@ export function PasswordModal({ isVisible, onClose, handlePassword }) {
                         {isInvalidPassword && t('message.lengthPassword')}
                     </Typography>
                 </View>
-                <Button
-                    onPress={checkPassword}
-                    label={t('button.save')}
-                />
+                <View style={styles.buttonsContainer}>
+                    <Button
+                        onPress={checkPassword}
+                        label={t('button.save')}
+                    />
+                    {hasBiometrics && (
+                        <Button
+                            variant='outline'
+                            onPress={handleBiometrics}
+                            label={biometrics ? t('biometric.remove') : t('biometric.lock')}
+                        />
+                    )}
+                </View>
             </View>
         </ModalSheet>
     )
@@ -72,5 +96,9 @@ const styles = StyleSheet.create({
     inputContainer: {
         width: '100%',
         alignItems: 'center',
+    },
+    buttonsContainer: {
+        width: '100%',
+        gap: 16,
     },
 })
