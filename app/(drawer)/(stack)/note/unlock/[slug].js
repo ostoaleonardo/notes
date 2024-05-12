@@ -43,7 +43,7 @@ export default function Password() {
 
     const handlePassword = () => {
         if (encryptedInput === encryptedPassword) {
-            router.replace('/note/' + slug)
+            router.replace('/note/edit/' + slug)
         } else {
             setIsWrongPassword(true)
             vibrate(FEEDBACK_TYPES.ERROR)
@@ -55,7 +55,7 @@ export default function Password() {
         const success = await authenticate()
 
         if (success) {
-            router.replace('/note/' + slug)
+            router.replace('/note/edit/' + slug)
         }
     }
 
