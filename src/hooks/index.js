@@ -12,3 +12,6 @@ export { useStorage } from './useStorage'
 export { useLanguage } from './useLanguage'
 export { useHeaderTitle } from './useHeaderTitle'
 
+// Utils
+export { useHaptics } from './useHaptics'
+export { useLocalAuthentication } from './useLocalAuthentication'
