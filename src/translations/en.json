@@ -37,6 +37,10 @@
 		"current": "Current password",
 		"new": "New password"
 	},
+	"biometric": {
+		"unlock": "Use fingerprint",
+		"auth": "Biometric authentication"
+	},
 	"header": {
 		"notes": "Notes",
 		"addNote": "Add Note",

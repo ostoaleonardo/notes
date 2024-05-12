@@ -37,6 +37,10 @@
 		"current": "Contraseña actual",
 		"new": "Nueva contraseña"
 	},
+	"biometric": {
+		"unlock": "Usar huella dactilar",
+		"auth": "Autenticación biométrica"
+	},
 	"header": {
 		"notes": "Notas",
 		"addNote": "Añadir Nota",
