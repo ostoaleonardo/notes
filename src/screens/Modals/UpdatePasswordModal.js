@@ -3,22 +3,24 @@ import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as Animatable from 'react-native-animatable'
 import { Button, ModalSheet, PasswordInput, Typography } from '@/components'
+import { useLocalAuthentication } from '@/hooks'
 import { getEncryptedPassword } from '@/utils'
 import { COLORS } from '@/constants'
 
-export function UpdatePasswordModal({ isVisible, onClose, currentPassword, handlePassword, onDelete }) {
+export function UpdatePasswordModal({ isVisible, onClose, currentPassword, handlePassword, onDelete, biometrics, setBiometrics }) {
     const { t } = useTranslation()
+    const { hasBiometrics, authenticate } = useLocalAuthentication()
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [encryptedOldPassword, setEncryptedOldPassword] = useState('')
     const [encryptedNewPassword, setEncryptedNewPassword] = useState('')
     const [isWrongPassword, setIsWrongPassword] = useState(false)
     const [isInvalidPassword, setIsInvalidPassword] = useState(false)
-    const [isButtonDisabled, setIsButtonDisabled] = useState(false)
+    const [canUpdate, setCanUpdate] = useState(false)
     const [message, setMessage] = useState('')
 
     useEffect(() => {
-        setIsButtonDisabled(!oldPassword || !newPassword)
+        setCanUpdate(oldPassword && newPassword)
     }, [oldPassword, newPassword])
 
     useEffect(() => {
@@ -36,6 +38,12 @@ export function UpdatePasswordModal({ isVisible, onClose, currentPassword, handl
     }, [newPassword])
 
     const checkPassword = () => {
+        if (!canUpdate) {
+            onDelete()
+            onClose()
+            return
+        }
+
         if (encryptedOldPassword === currentPassword) {
             if (encryptedOldPassword === encryptedNewPassword) {
                 setIsInvalidPassword(true)
@@ -49,6 +57,19 @@ export function UpdatePasswordModal({ isVisible, onClose, currentPassword, handl
             }
         } else {
             setIsWrongPassword(true)
+        }
+    }
+
+    const handleBiometrics = async () => {
+        if (biometrics) {
+            setBiometrics(false)
+            return
+        }
+
+        const success = await authenticate()
+
+        if (success) {
+            setBiometrics(true)
         }
     }
 
@@ -101,15 +122,16 @@ export function UpdatePasswordModal({ isVisible, onClose, currentPassword, handl
                     </View>
                 </View>
                 <Button
-                    label={t('button.update')}
-                    disabled={isButtonDisabled}
                     onPress={checkPassword}
+                    label={canUpdate ? t('password.update') : t('password.remove')}
                 />
-                <Button
-                    variant='outline'
-                    label={t('password.remove')}
-                    onPress={onDelete}
-                />
+                {hasBiometrics && (
+                    <Button
+                        variant='outline'
+                        onPress={handleBiometrics}
+                        label={biometrics ? t('biometric.remove') : t('biometric.lock')}
+                    />
+                )}
             </View>
         </ModalSheet>
     )
