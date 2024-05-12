@@ -13,9 +13,9 @@ export function SwipeableNote({ noteData, isOpen, onOpen, onDelete }) {
 
     const goToEdit = () => {
         if (isLocked) {
-            router.navigate('/note/password/' + id)
+            router.navigate('/note/unlock/' + id)
         } else {
-            router.navigate('/note/' + id)
+            router.navigate('/note/edit/' + id)
         }
     }
 
