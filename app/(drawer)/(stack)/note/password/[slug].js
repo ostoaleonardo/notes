@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { StyleSheet, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as Animatable from 'react-native-animatable'
 import { Button, PasswordInput, Toast } from '@/components'
-import { useHaptics, useHeaderTitle, useNotes } from '@/hooks'
+import { useHaptics, useHeaderTitle, useLocalAuthentication, useNotes } from '@/hooks'
 import { getEncryptedPassword } from '@/utils'
+import { Fingerprint } from '@/icons'
 import { COLORS, FEEDBACK_TYPES } from '@/constants'
 
 export default function Password() {
@@ -14,7 +15,8 @@ export default function Password() {
     const { slug } = useLocalSearchParams()
     const { getNote } = useNotes()
     const { vibrate } = useHaptics()
-    const [password, setPassword] = useState('')
+    const { isLoading, hasBiometrics, authenticate } = useLocalAuthentication()
+    const [passwordInput, setPasswordInput] = useState('')
     const [encryptedInput, setEncryptedInput] = useState('')
     const [encryptedPassword, setEncryptedPassword] = useState('')
     const [isWrongPassword, setIsWrongPassword] = useState(false)
@@ -22,25 +24,38 @@ export default function Password() {
 
     useHeaderTitle(t('header.password'))
 
+    const { biometrics, password } = getNote(slug)
+
     useEffect(() => {
-        const note = getNote(slug)
-        setEncryptedPassword(note.password)
-    }, [slug])
+        setEncryptedPassword(password)
+
+        if (biometrics && hasBiometrics) {
+            handleBiometrics()
+        }
+    }, [slug, hasBiometrics])
 
     useEffect(() => {
         (async () => {
-            const digest = await getEncryptedPassword(password)
+            const digest = await getEncryptedPassword(passwordInput)
             setEncryptedInput(digest)
         })()
-    }, [password])
+    }, [passwordInput])
 
     const handlePassword = () => {
         if (encryptedInput === encryptedPassword) {
-            router.push('/note/' + slug)
+            router.replace('/note/' + slug)
         } else {
             setIsWrongPassword(true)
             vibrate(FEEDBACK_TYPES.ERROR)
             handleToast(t('message.wrongPassword'))
+        }
+    }
+
+    const handleBiometrics = async () => {
+        const success = await authenticate()
+
+        if (success) {
+            router.replace('/note/' + slug)
         }
     }
 
@@ -49,28 +64,53 @@ export default function Password() {
         setTimeout(() => setMessage(''), 3000)
     }
 
+    if (biometrics && isLoading) return (
+        <View style={styles.container}>
+            <ActivityIndicator
+                size='large'
+                color={COLORS.primary}
+            />
+        </View>
+    )
+
     return (
         <View style={styles.container}>
             <View style={styles.passwordContainer}>
-                <Animatable.View
-                    animation={isWrongPassword ? 'shake' : undefined}
-                    onAnimationEnd={() => setIsWrongPassword(false)}
-
-                >
-                    <PasswordInput
-                        autoFocus
-                        value={password}
-                        onChangeText={setPassword}
-                        onBlur={() => setMessage('')}
+                {password || !biometrics ? (
+                    <Animatable.View
+                        animation={isWrongPassword ? 'shake' : undefined}
+                        onAnimationEnd={() => setIsWrongPassword(false)}
+                    >
+                        <PasswordInput
+                            value={passwordInput}
+                            onChangeText={setPasswordInput}
+                            onBlur={() => setMessage('')}
+                            autoFocus={!biometrics && !hasBiometrics}
+                        />
+                    </Animatable.View>
+                ) : (
+                    <Fingerprint
+                        width={96}
+                        height={96}
+                        fill={COLORS.text50}
                     />
-                </Animatable.View>
+                )}
                 <View style={styles.buttonsContainer}>
+                    {password && (
+                        <Button
+                            onPress={handlePassword}
+                            label={t('button.enter')}
+                        />
+                    )}
+                    {biometrics && hasBiometrics && (
+                        <Button
+                            variant='flat'
+                            onPress={handleBiometrics}
+                            label={t('biometric.unlock')}
+                        />
+                    )}
                     <Button
-                        onPress={handlePassword}
-                        label={t('button.enter')}
-                    />
-                    <Button
-                        variant='outline'
+                        variant='light'
                         label={t('button.cancel')}
                         onPress={() => router.back()}
                     />
