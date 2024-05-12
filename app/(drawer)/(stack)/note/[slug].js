@@ -7,7 +7,7 @@ import { LargeInput, Scroll, Section, TextArea, Toast } from '@/components'
 import { CategoriesModal, CategoryCarousel, DateNote, ImageCarousel, NoteButtons, PasswordModal, UpdatePasswordModal } from '@/screens'
 import { useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
-import { COLORS } from '@/constants'
+import { COLORS, ROUTES } from '@/constants'
 
 export default function EditNote() {
     const router = useRouter()
@@ -20,6 +20,7 @@ export default function EditNote() {
     const [hasPassword, setHasPassword] = useState(false)
     const [currentPassword, setCurrentPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
+    const [biometrics, setBiometrics] = useState(false)
     const [categoryIds, setCategoryIds] = useState([])
     const [createdAt, setCreatedAt] = useState('')
     const [updatedAt, setUpdatedAt] = useState('')
@@ -40,6 +41,7 @@ export default function EditNote() {
         setCategoryIds(note.categories)
         setCreatedAt(note.createdAt)
         setUpdatedAt(note.updatedAt)
+        setBiometrics(note.biometrics)
 
         if (note.password) {
             setHasPassword(true)
@@ -64,12 +66,13 @@ export default function EditNote() {
             note: note.trim(),
             images,
             password: newPassword || currentPassword,
+            biometrics,
             categories: categoryIds,
             createdAt,
             updatedAt: getDate(),
         })
 
-        router.navigate('/(drawer)/(stack)/home')
+        router.navigate(ROUTES.HOME)
     }
 
     const handleCategoriesModal = () => {
@@ -188,6 +191,8 @@ export default function EditNote() {
                 isVisible={isPasswordModalVisible}
                 onClose={handlePasswordModal}
                 handlePassword={handlePassword}
+                biometrics={biometrics}
+                setBiometrics={setBiometrics}
             />
             <UpdatePasswordModal
                 isVisible={isUpdatePasswordModalVisible}
@@ -195,6 +200,8 @@ export default function EditNote() {
                 currentPassword={currentPassword}
                 handlePassword={handlePassword}
                 onDelete={handleRemovePassword}
+                biometrics={biometrics}
+                setBiometrics={setBiometrics}
             />
             <ImageView
                 imageIndex={galleryIndex}
