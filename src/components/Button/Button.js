@@ -4,7 +4,9 @@ import { COLORS, FONTS } from '@/constants'
 const COLOR_VARIANTS = {
     primary: COLORS.text,
     secondary: COLORS.background,
-    outline: COLORS.text
+    outline: COLORS.text,
+    flat: COLORS.text,
+    light: COLORS.text,
 }
 
 export function Button({ label, onPress, disabled, isLoading, variant = 'primary', ...props }) {
@@ -57,6 +59,9 @@ const styles = StyleSheet.create({
     },
     secondary: {
         backgroundColor: COLORS.text,
+    },
+    flat: {
+        backgroundColor: COLORS.foreground,
     },
     outline: {
         borderWidth: 2,
