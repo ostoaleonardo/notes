@@ -12,8 +12,8 @@
 		"tagline": "La mejor forma de mantener tus notas organizadas",
 		"signIn": "Iniciar sesión con Google",
 		"signInError": "Error al iniciar sesión, inténtalo de nuevo",
-        "lastSync": "Última sincronización",
-        "signOut": "Cerrar sesión"
+		"lastSync": "Última sincronización",
+		"signOut": "Cerrar sesión"
 	},
 	"editNote": {
 		"created": "Creado:",
@@ -38,7 +38,9 @@
 		"new": "Nueva contraseña"
 	},
 	"biometric": {
-		"unlock": "Usar huella dactilar",
+		"lock": "Bloquear con huella dactilar",
+		"unlock": "Desbloquear con huella dactilar",
+		"remove": "Eliminar huella dactilar",
 		"auth": "Autenticación biométrica"
 	},
 	"header": {

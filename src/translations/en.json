@@ -38,7 +38,9 @@
 		"new": "New password"
 	},
 	"biometric": {
-		"unlock": "Use fingerprint",
+		"lock": "Lock with fingerprint",
+		"unlock": "Unlock with fingerprint",
+		"remove": "Remove fingerprint",
 		"auth": "Biometric authentication"
 	},
 	"header": {
