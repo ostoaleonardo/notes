@@ -18,17 +18,20 @@ export function ImagePreview({ image, openImage, removeImage }) {
                     style={styles.image}
                     source={{ uri: image }}
                 />
-                <Pressable
-                    onPress={removeImage}
-                    style={styles.removeButton}
-                >
-                    <Cross
-                        width={24}
-                        height={24}
-                        rotation={45}
-                        color={COLORS.text}
-                    />
-                </Pressable>
+
+                {removeImage && (
+                    <Pressable
+                        onPress={removeImage}
+                        style={styles.removeButton}
+                    >
+                        <Cross
+                            width={24}
+                            height={24}
+                            rotation={45}
+                            color={COLORS.text}
+                        />
+                    </Pressable>
+                )}
             </Pressable>
         </Animated.View>
     )
@@ -36,7 +39,6 @@ export function ImagePreview({ image, openImage, removeImage }) {
 
 const styles = StyleSheet.create({
     container: {
-        position: 'relative',
         width: 100,
         height: 100,
     },
