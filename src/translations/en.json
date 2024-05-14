@@ -47,6 +47,7 @@
 		"notes": "Notes",
 		"addNote": "Add Note",
 		"editNote": "Edit Note",
+		"viewNote": "View Note",
 		"categories": "Categories",
 		"password": "Password",
 		"settings": "Settings"
@@ -54,6 +55,8 @@
 	"button": {
 		"addNote": "Add Note",
 		"save": "Save",
+		"edit": "Edit",
+		"back": "Back",
 		"cancel": "Cancel",
 		"delete": "Delete",
 		"update": "Update",
