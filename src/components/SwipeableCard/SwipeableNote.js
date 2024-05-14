@@ -15,7 +15,7 @@ export function SwipeableNote({ noteData, isOpen, onOpen, onDelete }) {
         if (isLocked) {
             router.navigate('/note/unlock/' + id)
         } else {
-            router.navigate('/note/edit/' + id)
+            router.navigate('/note/view/' + id)
         }
     }
 
