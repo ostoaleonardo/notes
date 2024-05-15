@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Chip, ChipContent, RemoveChipButton, Scroll } from '@/components'
 import { useCategories } from '@/hooks'
 
-export function CategoryCarousel({ categoryIds, onAddCategory, onCategoriesModal }) {
+export function CategoryCarousel({ categoryIds, onAddCategory, onCategoriesModal, disabled }) {
     const { t } = useTranslation()
     const { categories } = useCategories()
 
@@ -19,19 +19,24 @@ export function CategoryCarousel({ categoryIds, onAddCategory, onCategoriesModal
                         label={name}
                         variant='solid'
                         endContent={
-                            <RemoveChipButton
-                                onPress={() => onAddCategory(id)}
-                            />
+                            !disabled && (
+                                <RemoveChipButton
+                                    onPress={() => onAddCategory(id)}
+                                />
+                            )
                         }
                     />
                 )
             )}
-            <Chip
-                variant='bordered'
-                label={t('categories.add')}
-                endContent={<ChipContent />}
-                onPress={onCategoriesModal}
-            />
+
+            {!disabled && categories.length > 1 && (
+                <Chip
+                    variant='bordered'
+                    label={t('categories.add')}
+                    endContent={<ChipContent />}
+                    onPress={onCategoriesModal}
+                />
+            )}
         </Scroll>
     )
 }
