@@ -4,7 +4,7 @@ import { Typography } from '../Text'
 import { COLORS } from '@/constants'
 
 export function Chip({ label, onPress, variant, endContent }) {
-    const styles = getChipStyles(variant, endContent !== undefined ? true : false)
+    const styles = getChipStyles(variant, endContent ? true : false)
 
     return (
         <Animated.View
