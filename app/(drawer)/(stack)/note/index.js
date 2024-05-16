@@ -93,47 +93,54 @@ export default function Note() {
 
     return (
         <View style={styles.container}>
-            <Scroll contentStyle={styles.scrollContainer}>
-                <Section
-                    paddingHorizontal={24}
-                >
-                    <LargeInput
-                        bold
-                        multiline
-                        value={title}
-                        onChangeText={setTitle}
-                        placeholder={t('placeholder.title')}
-                    />
-                </Section>
+            <Scroll
+                contentStyle={styles.scrollContainer}
+                contentContainerStyle={{ flexGrow: 1 }}
+            >
+                <View style={styles.topContainer}>
+                    <View>
+                        <Section
+                            paddingHorizontal={24}
+                        >
+                            <LargeInput
+                                bold
+                                multiline
+                                value={title}
+                                onChangeText={setTitle}
+                                placeholder={t('placeholder.title')}
+                            />
+                        </Section>
 
-                <Section
-                    paddingVertical={24}
-                    title={t('title.categories')}
-                >
-                    <CategoryCarousel
-                        categoryIds={categoryIds}
-                        onAddCategory={handleAddCategory}
-                        onCategoriesModal={handleCategoriesModal}
-                    />
-                </Section>
+                        <Section
+                            paddingVertical={24}
+                            title={t('title.categories')}
+                        >
+                            <CategoryCarousel
+                                categoryIds={categoryIds}
+                                onAddCategory={handleAddCategory}
+                                onCategoriesModal={handleCategoriesModal}
+                            />
+                        </Section>
 
-                <Section
-                    title={t('title.note')}
-                    contentStyle={{ paddingHorizontal: 24 }}
-                >
-                    <TextArea
-                        value={note}
-                        onChangeText={setNote}
-                        placeholder={t('placeholder.note')}
-                    />
-                </Section>
+                        <Section
+                            title={t('title.note')}
+                            contentStyle={{ paddingHorizontal: 24 }}
+                        >
+                            <TextArea
+                                value={note}
+                                onChangeText={setNote}
+                                placeholder={t('placeholder.note')}
+                            />
+                        </Section>
+                    </View>
 
-                <ImageCarousel
-                    images={images}
-                    onAddImage={handleAddImage}
-                    onOpenImage={handleOpenImage}
-                    onRemoveImage={handleRemoveImage}
-                />
+                    <ImageCarousel
+                        images={images}
+                        onAddImage={handleAddImage}
+                        onOpenImage={handleOpenImage}
+                        onRemoveImage={handleRemoveImage}
+                    />
+                </View>
 
                 <NoteButtons
                     onSave={handleSave}
@@ -169,9 +176,15 @@ export default function Note() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.background,
     },
     scrollContainer: {
+        flex: 1,
         paddingVertical: 24,
+        justifyContent: 'space-between',
+    },
+    topContainer: {
+        flex: 1,
+        gap: 40,
+        justifyContent: 'space-between',
     },
 })
