@@ -6,7 +6,6 @@ import ImageView from 'react-native-image-viewing'
 import { Button, Scroll, Section, Typography } from '@/components'
 import { CategoryCarousel, DateNote, ImageCarousel } from '@/screens'
 import { useHeaderTitle, useNotes } from '@/hooks'
-import { COLORS } from '@/constants'
 
 export default function ViewNote() {
     const router = useRouter()
@@ -119,7 +118,6 @@ export default function ViewNote() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.background,
     },
     scrollContainer: {
         flex: 1,
