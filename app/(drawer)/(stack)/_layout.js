@@ -1,3 +1,4 @@
+import { COLORS } from '@/constants'
 import { Stack } from 'expo-router'
 
 export default function StackLayout() {
@@ -6,6 +7,10 @@ export default function StackLayout() {
             screenOptions={{
                 animation: 'ios',
                 headerShown: false,
+
+                contentStyle: {
+                    backgroundColor: COLORS.background,
+                },
             }}
         />
     )
