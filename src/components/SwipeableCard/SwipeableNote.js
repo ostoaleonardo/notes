@@ -2,13 +2,15 @@ import { router } from 'expo-router'
 import { Image, Pressable, StyleSheet, View } from 'react-native'
 import { SwipeableCard } from './SwipeableCard'
 import { Typography } from '../Text'
-import { Lock } from '@/icons'
+import { useLocalAuthentication } from '@/hooks'
 import { getDimensions } from '@/utils'
+import { Lock } from '@/icons'
 import { COLORS } from '@/constants'
 
-export function SwipeableNote({ noteData, isOpen, onOpen, onDelete }) {
-    const { id, title, note, images, hasPassword, hasBiometrics } = noteData
-    const isLocked = hasPassword || hasBiometrics
+export function SwipeableNote({ data, isOpen, onOpen, onDelete }) {
+    const { id, title, note, images, password, biometrics } = data
+    const { hasBiometrics } = useLocalAuthentication()
+    const isLocked = password || (biometrics && hasBiometrics)
     const width = getDimensions(images.length)
 
     const goToEdit = () => {
@@ -45,7 +47,7 @@ export function SwipeableNote({ noteData, isOpen, onOpen, onDelete }) {
 
                             {images.length > 0 && (
                                 <View style={styles.noteImages}>
-                                    {images.map((image, index) => (
+                                    {images.slice(0, 3).map((image, index) => (
                                         <Image
                                             key={index}
                                             source={{ uri: image }}
@@ -96,7 +98,7 @@ const styles = StyleSheet.create({
     noteImages: {
         width: '100%',
         gap: 8,
-        marginTop: 8,
+        marginTop: 12,
         flexWrap: 'wrap',
         flexDirection: 'row',
     },
