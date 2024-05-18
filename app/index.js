@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Redirect } from 'expo-router'
-import { useAuth } from '@/hooks'
+import { useAuth, useLocalAuthentication } from '@/hooks'
 import { ROUTES } from '@/constants'
+
 
 export default function App() {
     const [isReady, setIsReady] = useState(false)
     const { isSignedIn, setIsSignedIn, getIsSignedIn } = useAuth()
+
+    useLocalAuthentication()
 
     useEffect(() => {
         (async () => {
