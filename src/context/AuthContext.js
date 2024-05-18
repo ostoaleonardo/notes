@@ -5,6 +5,7 @@ export const AuthContext = createContext()
 export function AuthProvider({ children }) {
     const [user, setUser] = useState({})
     const [isSignedIn, setIsSignedIn] = useState(false)
+    const [hasBiometrics, setHasBiometrics] = useState(false)
 
     return (
         <AuthContext.Provider
@@ -12,7 +13,9 @@ export function AuthProvider({ children }) {
                 user,
                 setUser,
                 isSignedIn,
-                setIsSignedIn
+                setIsSignedIn,
+                hasBiometrics,
+                setHasBiometrics
             }}
         >
             {children}
