@@ -30,6 +30,10 @@ export default function DrawerLayout() {
                 drawerStyle: {
                     backgroundColor: COLORS.background,
                 },
+
+                sceneContainerStyle: {
+                    backgroundColor: COLORS.background,
+                },
             }}
 
             drawerContent={(props) => <DrawerItems {...props} />}
@@ -40,7 +44,17 @@ export default function DrawerLayout() {
                     title: params.title ?? t('drawer.notes'),
                     headerRight: () => <HeaderAvatar />,
                     headerRightContainerStyle: {
-                        marginRight: 16,
+                        paddingRight: 16,
+                    },
+                }}
+            />
+            <Drawer.Screen
+                name='categories/index'
+                options={{
+                    title: t('header.categories'),
+                    headerRight: () => <HeaderAvatar />,
+                    headerRightContainerStyle: {
+                        paddingRight: 16,
                     },
                 }}
             />
@@ -48,12 +62,6 @@ export default function DrawerLayout() {
                 name='settings/index'
                 options={{
                     title: t('header.settings'),
-                }}
-            />
-            <Drawer.Screen
-                name='categories/index'
-                options={{
-                    title: t('header.categories'),
                 }}
             />
         </Drawer>

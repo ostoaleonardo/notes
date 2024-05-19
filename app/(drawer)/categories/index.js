@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next'
 import { SmallInput, SquareButton, Toast } from '@/components'
 import { CategoriesContainer, UpdateCategoryModal } from '@/screens'
 import { useCategories } from '@/hooks'
-import { COLORS } from '@/constants'
 
 export default function Categories() {
     const { t } = useTranslation()
@@ -80,7 +79,6 @@ export default function Categories() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.background,
     },
     inputContainer: {
         gap: 16,
