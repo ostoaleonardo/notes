@@ -25,7 +25,7 @@ export function SwipeableNote({ data, isOpen, onOpen, onDelete }) {
         <SwipeableCard
             isOpen={isOpen}
             onOpen={onOpen}
-            onDelete={onDelete}
+            onDelete={() => onDelete(id, isLocked)}
         >
             <Pressable
                 onPress={goToEdit}
