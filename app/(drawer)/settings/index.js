@@ -37,12 +37,6 @@ export default function Settings() {
                     </Typography>
                 </SettingsCard>
             </Section>
-            {/* <Section
-                title={t('title.backupSync')}
-                contentStyle={{ paddingHorizontal: 24 }}
-            >
-                <GoogleSignInCard />
-            </Section> */}
             <Section
                 title={t('title.about')}
                 contentStyle={{ paddingHorizontal: 24 }}
