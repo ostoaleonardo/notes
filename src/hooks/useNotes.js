@@ -34,7 +34,7 @@ export function useNotes() {
     }
 
     const getNote = (id) => {
-        return notes.find((note) => note.id === id)
+        return notes.find((note) => note.id === id) || {}
     }
 
     const updateBackup = async (newNotes) => {
