@@ -25,7 +25,6 @@
 		"update": "Update category"
 	},
 	"settings": {
-		"theme": "Theme",
 		"checkUpdates": "Check for updates",
 		"yourVersion": "Your version is up to date",
 		"newVersion": "New version available"
@@ -38,6 +37,7 @@
 		"new": "New password"
 	},
 	"biometric": {
+		"use": "Use fingerprint",
 		"lock": "Lock with fingerprint",
 		"unlock": "Unlock with fingerprint",
 		"remove": "Remove fingerprint",
@@ -45,9 +45,10 @@
 	},
 	"header": {
 		"notes": "Notes",
-		"addNote": "Add Note",
-		"editNote": "Edit Note",
-		"viewNote": "View Note",
+		"addNote": "Add note",
+		"editNote": "Edit note",
+		"viewNote": "View note",
+		"removeNote": "Remove note",
 		"categories": "Categories",
 		"password": "Password",
 		"settings": "Settings"
