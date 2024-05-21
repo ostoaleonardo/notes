@@ -15,12 +15,14 @@ export const COLORS = {
     foreground5: `${FOREGROUND}0d`,
 
     primary: PRIMARY,
+    primary75: `${PRIMARY}bf`,
     primary15: `${PRIMARY}26`,
 
     text: TEXT,
     text75: `${TEXT}bf`,
     text50: `${TEXT}80`,
     text15: `${TEXT}26`,
+    text10: `${TEXT}1a`,
     text5: `${TEXT}0d`
 }
 
