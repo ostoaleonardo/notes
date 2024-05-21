@@ -30,7 +30,7 @@ export function NotesFilter({ setFilteredNotes }) {
                     <Chip
                         key={id}
                         onPress={() => setSelected(id)}
-                        variant={id === selected ? 'solid' : 'bordered'}
+                        variant={id === selected ? 'flat' : 'bordered'}
                         label={id === 'all' ? t('categories.all') : name}
                     />
                 ))}

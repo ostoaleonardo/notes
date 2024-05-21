@@ -17,7 +17,7 @@ export function CategoryCarousel({ categoryIds, onAddCategory, onCategoriesModal
                     <Chip
                         key={id}
                         label={name}
-                        variant='solid'
+                        variant='flat'
                         endContent={
                             !disabled && (
                                 <RemoveChipButton
