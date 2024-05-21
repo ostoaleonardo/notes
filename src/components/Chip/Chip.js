@@ -3,8 +3,15 @@ import Animated, { FadeInLeft, FadeOutLeft, LinearTransition } from 'react-nativ
 import { Typography } from '../Text'
 import { COLORS } from '@/constants'
 
+const COLOR_VARIANTS = {
+    primary: COLORS.text,
+    bordered: COLORS.text,
+    flat: COLORS.primary
+}
+
 export function Chip({ label, onPress, variant, endContent }) {
     const styles = getChipStyles(variant, endContent ? true : false)
+    const colorVariant = COLOR_VARIANTS[variant]
 
     return (
         <Animated.View
@@ -21,6 +28,7 @@ export function Chip({ label, onPress, variant, endContent }) {
                         bold
                         uppercase
                         variant='caption'
+                        color={colorVariant}
                     >
                         {label}
                     </Typography>
@@ -41,9 +49,13 @@ const getChipStyles = (variant, hasEndContent) => {
             backgroundColor = COLORS.primary
             borderColor = COLORS.primary
             break
+        case 'flat':
+            backgroundColor = COLORS.primary15
+            borderColor = COLORS.transparent
+            break
         case 'bordered':
             backgroundColor = COLORS.transparent
-            borderColor = COLORS.text15
+            borderColor = COLORS.text10
             break
         default:
             backgroundColor = COLORS.primary
@@ -53,7 +65,7 @@ const getChipStyles = (variant, hasEndContent) => {
 
     return StyleSheet.create({
         container: {
-            borderWidth: 2,
+            borderWidth: 1,
             borderRadius: 32,
             paddingVertical: 8,
             paddingLeft,

@@ -12,7 +12,7 @@ export function RemoveChipButton({ onPress }) {
                 width={16}
                 height={16}
                 rotation={45}
-                color={COLORS.text}
+                color={COLORS.background}
             />
         </Pressable>
     )
@@ -25,6 +25,6 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: COLORS.text15,
+        backgroundColor: COLORS.primary75,
     },
 })
