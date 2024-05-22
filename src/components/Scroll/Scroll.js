@@ -4,7 +4,7 @@ export function Scroll({ children, containerStyle, contentStyle, ...props }) {
     return (
         <ScrollView
             {...props}
-            overScrollMode='never'
+            bounces={true}
             style={containerStyle}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
