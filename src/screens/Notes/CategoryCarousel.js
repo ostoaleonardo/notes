@@ -1,4 +1,3 @@
-import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Chip, ChipContent, RemoveChipButton, Scroll } from '@/components'
 import { useCategories } from '@/hooks'
@@ -10,7 +9,14 @@ export function CategoryCarousel({ categoryIds, onAddCategory, onCategoriesModal
     return (
         <Scroll
             horizontal
-            contentStyle={styles.container}
+            contentContainerStyle={{
+                flexGrow: 1,
+                paddingHorizontal: 24,
+            }}
+            contentStyle={{
+                gap: 8,
+                flexDirection: 'row',
+            }}
         >
             {categories.slice(1).map(({ id, name }) =>
                 categoryIds.includes(id) && (
@@ -40,11 +46,3 @@ export function CategoryCarousel({ categoryIds, onAddCategory, onCategoriesModal
         </Scroll>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        gap: 8,
-        flexDirection: 'row',
-        paddingHorizontal: 24,
-    },
-})
