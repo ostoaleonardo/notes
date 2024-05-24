@@ -7,8 +7,15 @@ export function ImageCarousel({ images, onAddImage, onOpenImage, onRemoveImage, 
     return (
         <Scroll
             horizontal
-            contentStyle={styles.container}
-            containerStyle={{ maxHeight: 100 }}
+            overScrollMode='never'
+            contentContainerStyle={{
+                flexGrow: 1,
+                gap: 8,
+                paddingHorizontal: 24,
+            }}
+            containerStyle={{
+                maxHeight: 100,
+            }}
         >
             {images.length > 0 &&
                 images.map((image, index) => (
@@ -16,7 +23,7 @@ export function ImageCarousel({ images, onAddImage, onOpenImage, onRemoveImage, 
                         key={index}
                         image={image}
                         openImage={() => onOpenImage(index)}
-                        removeImage={!readOnly && (() => onRemoveImage(index))}
+                        removeImage={!readOnly && (() => onRemoveImage(image))}
                     />
                 ))
             }
@@ -39,12 +46,6 @@ export function ImageCarousel({ images, onAddImage, onOpenImage, onRemoveImage, 
 }
 
 const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        gap: 8,
-        flexDirection: 'row',
-        paddingHorizontal: 24,
-    },
     pickerContainer: {
         borderRadius: 24,
         overflow: 'hidden',

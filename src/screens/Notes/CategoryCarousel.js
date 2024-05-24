@@ -9,13 +9,11 @@ export function CategoryCarousel({ categoryIds, onAddCategory, onCategoriesModal
     return (
         <Scroll
             horizontal
+            overScrollMode='never'
             contentContainerStyle={{
                 flexGrow: 1,
-                paddingHorizontal: 24,
-            }}
-            contentStyle={{
                 gap: 8,
-                flexDirection: 'row',
+                paddingHorizontal: 24,
             }}
         >
             {categories.slice(1).map(({ id, name }) =>
