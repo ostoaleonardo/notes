@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Chip, Scroll } from '@/components'
 import { useCategories, useNotes } from '@/hooks'
 
-export function NotesFilter({ setFilteredNotes }) {
+export function FilterCarousel({ setFilteredNotes }) {
     const { t } = useTranslation()
     const { notes } = useNotes()
     const { categories } = useCategories()
@@ -14,7 +14,7 @@ export function NotesFilter({ setFilteredNotes }) {
         if (selected === 'all') {
             setFilteredNotes(notes)
         } else {
-            const filtered = notes.filter((note) => note.categories.includes(selected))
+            const filtered = notes.filter(({ categories }) => categories.includes(selected))
             setFilteredNotes(filtered)
         }
     }, [selected, notes])
@@ -23,8 +23,13 @@ export function NotesFilter({ setFilteredNotes }) {
         <View style={styles.container}>
             <Scroll
                 horizontal
-                containerStyle={styles.scrollContainer}
-                contentStyle={styles.chipsContainer}
+                overScrollMode='never'
+                contentContainerStyle={{
+                    flexGrow: 1,
+                    gap: 8,
+                    paddingVertical: 16,
+                    paddingHorizontal: 24,
+                }}
             >
                 {categories.map(({ id, name }) => (
                     <Chip

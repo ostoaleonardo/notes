@@ -7,7 +7,7 @@ export {
 // Home screen components
 export {
     HeaderAvatar,
-    NotesFilter,
+    FilterCarousel,
     NotesContainer
 } from './Home'
 
