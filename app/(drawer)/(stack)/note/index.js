@@ -3,12 +3,12 @@ import { router } from 'expo-router'
 import * as Crypto from 'expo-crypto'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
+import ImageView from 'react-native-image-viewing'
 import { LargeInput, Scroll, Section, TextArea, Toast } from '@/components'
 import { CategoriesModal, CategoryCarousel, ImageCarousel, NoteButtons, PasswordModal } from '@/screens'
-import ImageView from 'react-native-image-viewing'
 import { useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
-import { DEFAULT_CATEGORIES, COLORS } from '@/constants'
+import { DEFAULT_CATEGORIES } from '@/constants'
 
 export default function Note() {
     const { t } = useTranslation()
@@ -93,10 +93,7 @@ export default function Note() {
 
     return (
         <View style={styles.container}>
-            <Scroll
-                contentStyle={styles.scrollContainer}
-                contentContainerStyle={{ flexGrow: 1 }}
-            >
+            <Scroll contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.topContainer}>
                     <View>
                         <Section
@@ -169,7 +166,7 @@ export default function Note() {
                 onRequestClose={() => setIsGalleryVisible(false)}
             />
             <Toast message={message} />
-        </View >
+        </View>
     )
 }
 
@@ -178,9 +175,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     scrollContainer: {
-        flex: 1,
+        flexGrow: 1,
         paddingVertical: 24,
-        justifyContent: 'space-between',
     },
     topContainer: {
         flex: 1,

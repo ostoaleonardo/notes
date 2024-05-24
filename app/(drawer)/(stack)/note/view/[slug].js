@@ -40,10 +40,7 @@ export default function ViewNote() {
 
     return (
         <View style={styles.container}>
-            <Scroll
-                contentStyle={styles.scrollContainer}
-                contentContainerStyle={{ flexGrow: 1 }}
-            >
+            <Scroll contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.topContainer}>
                     <View>
                         <Section
@@ -120,9 +117,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     scrollContainer: {
-        flex: 1,
+        flexGrow: 1,
         paddingVertical: 24,
-        justifyContent: 'space-between',
     },
     topContainer: {
         flex: 1,

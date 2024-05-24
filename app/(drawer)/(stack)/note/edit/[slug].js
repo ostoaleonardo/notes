@@ -7,7 +7,7 @@ import { LargeInput, Scroll, Section, TextArea, Toast } from '@/components'
 import { CategoriesModal, CategoryCarousel, DateNote, ImageCarousel, NoteButtons, PasswordModal, UpdatePasswordModal } from '@/screens'
 import { useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
-import { COLORS, ROUTES } from '@/constants'
+import { ROUTES } from '@/constants'
 
 export default function EditNote() {
     const router = useRouter()
@@ -127,10 +127,7 @@ export default function EditNote() {
 
     return (
         <View style={styles.container}>
-            <Scroll
-                contentStyle={styles.scrollContainer}
-                contentContainerStyle={{ flexGrow: 1 }}
-            >
+            <Scroll contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.topContainer}>
                     <View>
                         <Section
@@ -226,6 +223,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     scrollContainer: {
+        flexGrow: 1,
         paddingVertical: 24,
     },
     topContainer: {
