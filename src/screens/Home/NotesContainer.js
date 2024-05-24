@@ -20,7 +20,7 @@ export function NotesContainer({ filteredNotes }) {
     }
 
     return (
-        <Scroll contentStyle={styles.notesContainer}>
+        <Scroll contentContainerStyle={styles.notesContainer}>
             {loading && (
                 <Typography
                     opacity={0.5}
@@ -59,7 +59,6 @@ export function NotesContainer({ filteredNotes }) {
 
 const styles = StyleSheet.create({
     notesContainer: {
-        flex: 1,
         gap: 16,
         paddingVertical: 24,
         alignItems: 'center',
