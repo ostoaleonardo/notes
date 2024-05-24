@@ -22,7 +22,7 @@ export function CategoriesContainer({ onPress }) {
                     {t('message.noCategories')}
                 </Typography>
             ) : (
-                <Scroll contentStyle={styles.categoryCardsContainer}>
+                <Scroll contentContainerStyle={styles.categoryContainer}>
                     {categories.slice(1).map(({ id, name }) => (
                         <SwipeableCategory
                             key={id}
@@ -45,8 +45,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    categoryCardsContainer: {
-        width: '100%',
+    categoryContainer: {
         gap: 16,
         paddingBottom: 24,
     },
