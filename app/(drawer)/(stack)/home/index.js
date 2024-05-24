@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { FloatingButton } from '@/components'
-import { NotesContainer, NotesFilter } from '@/screens'
+import { NotesContainer, FilterCarousel } from '@/screens'
 import { useHeaderTitle } from '@/hooks'
 import { COLORS } from '@/constants'
 
@@ -15,7 +15,7 @@ export default function App() {
 
     return (
         <View style={styles.container}>
-            <NotesFilter setFilteredNotes={setFilteredNotes} />
+            <FilterCarousel setFilteredNotes={setFilteredNotes} />
             <NotesContainer filteredNotes={filteredNotes} />
             <FloatingButton label={t('button.addNote')} href='/note' />
             <StatusBar style='auto' />

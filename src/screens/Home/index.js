@@ -1,3 +1,3 @@
 export { HeaderAvatar } from './HeaderAvatar'
-export { NotesFilter } from './NotesFilter'
+export { FilterCarousel } from './FilterCarousel'
 export { NotesContainer } from './NotesContainer'
