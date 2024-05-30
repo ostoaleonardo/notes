@@ -4,6 +4,7 @@
 </a>
 
 # <samp>Notes<samp>
+
 </div>
 
 <br />
@@ -20,6 +21,13 @@
 -   <samp>Organized with categories.<samp>
 -   <samp>Password protection.<samp>
 -   <samp>Minimalist and easy to use UI.<samp>
+
+## <samp>Next version<samp>
+
+-   <samp>Authentication with Google.<samp>
+-   <samp>Backup and sync.<samp>
+-   <samp>Haptic feedback.<samp>
+-   <samp>Fingerprint security.<samp>
 
 <br />
 
