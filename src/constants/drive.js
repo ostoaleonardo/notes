@@ -1,4 +1,6 @@
 const GOOGLE_APIS = {
+    FILES_LIST: 'https://www.googleapis.com/drive/v3/files',
+    SIMPLE_UPLOAD: 'https://www.googleapis.com/upload/drive/v3/files?uploadType=media',
     MULTIPART_UPLOAD: 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',
 }
 
