@@ -8,6 +8,7 @@ export { STORAGE_KEYS } from './storageKeys'
 export { SCOPES } from './googleSignIn'
 export {
     GOOGLE_APIS,
+    UPLOAD_TYPES,
     MIME_TYPES,
     DELIMITER,
     CLOSE_DELIMITER
