@@ -5,6 +5,8 @@ export const NoteContext = createContext()
 
 export function NoteProvider({ children }) {
     const [notes, setNotes] = useState([])
+    const [notesToSync, setNotesToSync] = useState([])
+    const [notesIdBackup, setNotesIdBackup] = useState({})
     const [categories, setCategories] = useState(DEFAULT_CATEGORIES)
 
     return (
@@ -12,6 +14,10 @@ export function NoteProvider({ children }) {
             value={{
                 notes,
                 setNotes,
+                notesToSync,
+                setNotesToSync,
+                notesIdBackup,
+                setNotesIdBackup,
                 categories,
                 setCategories
             }}
