@@ -12,7 +12,6 @@
 		"tagline": "La mejor forma de mantener tus notas organizadas",
 		"signIn": "Iniciar sesión con Google",
 		"signInError": "Error al iniciar sesión, inténtalo de nuevo",
-		"lastSync": "Última sincronización",
 		"signOut": "Cerrar sesión"
 	},
 	"editNote": {
