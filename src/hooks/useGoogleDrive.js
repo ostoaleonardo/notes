@@ -1,133 +1,119 @@
-import { useContext, useEffect } from 'react'
-import { GDrive, MimeTypes } from '@robinbobin/react-native-google-drive-api-wrapper'
+import { useContext } from 'react'
 import { AuthContext, SyncContext } from '@/context'
 import { useStorage } from './useStorage'
-import { STORAGE_KEYS } from '@/constants'
+import { CLOSE_DELIMITER, DELIMITER, GOOGLE_APIS, MIME_TYPES } from '@/constants'
+import { UPLOAD_TYPES } from '@/constants/drive'
 
 export function useGoogleDrive() {
     const { user } = useContext(AuthContext)
-    const { lastSync, setLastSync, isSyncing, setIsSyncing } = useContext(SyncContext)
-    const { setItem, getItem } = useStorage()
+    const { isSyncing, setIsSyncing } = useContext(SyncContext)
+    const { getItem } = useStorage()
 
     const accessToken = user.accessToken
 
-    const uploadBackup = async (backupKey, fileName, backupData) => {
+    const uploadBackup = async (backupData, fileId) => {
         try {
             setIsSyncing(true)
-            const backupId = await getItem(backupKey)
-            const fileId = backupId ? backupId : await getBackupFileId(accessToken, fileName)
 
             if (fileId) {
-                await replaceFile(accessToken, backupData, fileId)
+                console.log('replacing file...')
+                const response = await replaceFile(accessToken, backupData, fileId)
+                return response
             } else {
-                await uploadFile(accessToken, fileName, backupData, backupKey)
+                console.log('uploading file...')
+                const response = await multipartUpload(accessToken, backupData)
+                return response
             }
         } catch (error) {
-            // Handle error
+            console.log('error uploading file', error)
+            return error
         } finally {
             setIsSyncing(false)
         }
     }
 
-    const uploadFile = async (accessToken, fileName, backupData, backupId) => {
-        const gdrive = new GDrive()
-        gdrive.accessToken = accessToken
+    const multipartUpload = async (accessToken, backupData) => {
+        const { id } = backupData
+
+        const metadata = {
+            name: 'note-' + id + '.json',
+            // parents: ['appDataFolder']
+        }
+
+        const metadataString = JSON.stringify(metadata)
+        const contentString = JSON.stringify(backupData)
+
+        const multipartRequestBody =
+            DELIMITER +
+            'Content-Type: ' + MIME_TYPES.JSON + '\r\n\r\n' +
+            metadataString +
+            DELIMITER +
+            'Content-Type: ' + MIME_TYPES.JSON + '\r\n\r\n' +
+            contentString +
+            CLOSE_DELIMITER
 
         try {
-            const { id } = await gdrive.files.newMultipartUploader()
-                .setRequestBody({
-                    name: fileName,
-                    parents: ['appDataFolder']
-                })
-                .setData(backupData, MimeTypes.JSON)
-                .execute()
+            const { id } = await fetch(GOOGLE_APIS.UPLOAD + UPLOAD_TYPES.MULTIPART, {
+                method: 'POST',
+                headers: new Headers({
+                    Authorization: 'Bearer ' + accessToken,
+                    'Content-Type': 'multipart/related; boundary=foo_bar_baz',
+                }),
+                body: multipartRequestBody
+            })
+                .then(response => response.json())
 
-            if (id) {
-                saveLastSync()
-                await setItem(backupId, id)
-            }
-
-            return id
+            return { id }
         } catch (error) {
-            return null
+            return error
         }
     }
 
     const replaceFile = async (accessToken, backupData, fileId) => {
-        const gdrive = new GDrive()
-        gdrive.accessToken = accessToken
-
         try {
-            const response = await gdrive.files.newMultipartUploader()
-                .setData(backupData, MimeTypes.JSON)
-                .setIdOfFileToUpdate(fileId)
-                .execute()
+            const { id, error } = await fetch(GOOGLE_APIS.UPLOAD + '/' + fileId + UPLOAD_TYPES.SIMPLE, {
+                method: 'PATCH',
+                headers: new Headers({
+                    Authorization: 'Bearer ' + accessToken,
+                    'Content-Type': 'application/json',
+                }),
+                body: JSON.stringify(backupData)
+            })
+                .then(response => response.json())
 
-            if (response) {
-                saveLastSync()
-            }
+            return { id, error }
         } catch (error) {
-            // Handle error
+            return { error }
         }
     }
 
-    const getBackupFileId = async (accessToken, fileName) => {
-        const gdrive = new GDrive()
-        gdrive.accessToken = accessToken
-
+    const searchFile = async (accessToken, fileName) => {
         try {
-            const { files } = await gdrive.files.list({
-                q: `name = "${fileName}"`,
-                spaces: 'appDataFolder',
-                fields: 'files(id, name, size, mimeType)'
+            const response = await fetch(`${GOOGLE_APIS.FILES_LIST}?q=name="${fileName}"`, {
+                method: 'GET',
+                headers: new Headers({
+                    Authorization: 'Bearer ' + accessToken
+                })
             })
+                .then(response => response.json())
 
-            if (files.length > 0) {
-                return files[0].id
-            }
-
-            return null
+            console.log(response)
         } catch (error) {
             return null
         }
     }
 
     const downloadBackup = async (accessToken, backupKey, fileName) => {
-        const gdrive = new GDrive()
-        gdrive.accessToken = accessToken
-
         try {
-            const backupId = await getItem(backupKey)
-            const fileId = backupId ? backupId : await getBackupFileId(accessToken, fileName)
-
-            if (fileId) {
-                const data = await gdrive.files.getJson(fileId)
-                return data
-            }
-
-            return null
+            // TODO
         } catch (error) {
             return null
         }
     }
 
-    const saveLastSync = async () => {
-        const lastSync = new Date().toISOString()
-        await setItem(STORAGE_KEYS.LAST_SYNC, lastSync)
-        setLastSync(lastSync)
-    }
-
-    useEffect(() => {
-        (async () => {
-            const lastSync = await getItem(STORAGE_KEYS.LAST_SYNC)
-            setLastSync(lastSync)
-        })()
-    }, [])
-
     return {
         uploadBackup,
         downloadBackup,
-        lastSync,
         isSyncing
     }
 }
