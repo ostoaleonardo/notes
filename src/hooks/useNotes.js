@@ -1,52 +1,49 @@
 import { useContext, useEffect, useState } from 'react'
-import { useGoogleDrive } from './useGoogleDrive'
+import { useNotesBackup } from './useNotesBackup'
 import { useStorage } from './useStorage'
 import { NoteContext } from '@/context'
+import { STORAGE_KEYS } from '@/constants'
 
 export function useNotes() {
     const { notes, setNotes } = useContext(NoteContext)
-    const { isSyncing, uploadBackup } = useGoogleDrive()
+    const { backup, isSyncing } = useNotesBackup()
     const { setItem, getItem } = useStorage()
     const [loading, setLoading] = useState(true)
 
     const saveNote = (note) => {
-        const newNotes = [note, ...notes]
-        setNotes(newNotes)
-        updateBackup(newNotes)
+        const localNotes = [note, ...notes]
+        updateBackup(localNotes, note, 'create')
     }
 
     const deleteNote = (id) => {
-        const newNotes = notes.filter((note) => note.id !== id)
-        setNotes(newNotes)
-        updateBackup(newNotes)
+        const localNotes = notes.filter((note) => note.id !== id)
+        updateBackup(localNotes, { id }, 'delete')
     }
 
     const updateNote = (note) => {
-        const newNotes = notes.map((n) => {
-            if (n.id === note.id) {
-                return note
-            }
+        const localNotes = notes.map((n) => {
+            if (n.id === note.id) return note
             return n
         })
 
-        setNotes(newNotes)
-        updateBackup(newNotes)
+        updateBackup(localNotes, note, 'update')
     }
 
     const getNote = (id) => {
         return notes.find((note) => note.id === id) || {}
     }
 
-    const updateBackup = async (newNotes) => {
-        await setItem('notes', JSON.stringify(newNotes))
-        await uploadBackup('notesFileId', 'notes.json', JSON.stringify(newNotes))
+    const updateBackup = async (localNotes, note, action) => {
+        setNotes(localNotes)
+        await setItem(STORAGE_KEYS.NOTES, JSON.stringify(localNotes))
+        await backup(action, note)
     }
 
     useEffect(() => {
         (async () => {
             if (isSyncing) return
 
-            const notes = await getItem('notes')
+            const notes = await getItem(STORAGE_KEYS.NOTES)
 
             if (notes) {
                 setNotes(JSON.parse(notes))
@@ -58,11 +55,10 @@ export function useNotes() {
 
     return {
         notes,
-        setNotes,
-        loading,
+        getNote,
         saveNote,
         deleteNote,
         updateNote,
-        getNote
+        loading
     }
 }
