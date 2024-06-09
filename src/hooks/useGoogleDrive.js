@@ -1,47 +1,19 @@
 import { useContext } from 'react'
-import { AuthContext, SyncContext } from '@/context'
-import { useStorage } from './useStorage'
-import { CLOSE_DELIMITER, DELIMITER, GOOGLE_APIS, MIME_TYPES } from '@/constants'
-import { UPLOAD_TYPES } from '@/constants/drive'
+import { AuthContext } from '@/context'
+import { CLOSE_DELIMITER, DELIMITER, GOOGLE_APIS, MIME_TYPES, UPLOAD_TYPES } from '@/constants'
 
 export function useGoogleDrive() {
     const { user } = useContext(AuthContext)
-    const { isSyncing, setIsSyncing } = useContext(SyncContext)
-    const { getItem } = useStorage()
-
     const accessToken = user.accessToken
 
-    const uploadBackup = async (backupData, fileId) => {
-        try {
-            setIsSyncing(true)
-
-            if (fileId) {
-                console.log('replacing file...')
-                const response = await replaceFile(accessToken, backupData, fileId)
-                return response
-            } else {
-                console.log('uploading file...')
-                const response = await multipartUpload(accessToken, backupData)
-                return response
-            }
-        } catch (error) {
-            console.log('error uploading file', error)
-            return error
-        } finally {
-            setIsSyncing(false)
-        }
-    }
-
-    const multipartUpload = async (accessToken, backupData) => {
-        const { id } = backupData
-
+    const multipartUpload = async (data, fileName) => {
         const metadata = {
-            name: 'note-' + id + '.json',
-            // parents: ['appDataFolder']
+            name: fileName + '.json',
+            parents: ['appDataFolder']
         }
 
         const metadataString = JSON.stringify(metadata)
-        const contentString = JSON.stringify(backupData)
+        const contentString = JSON.stringify(data)
 
         const multipartRequestBody =
             DELIMITER +
@@ -69,7 +41,7 @@ export function useGoogleDrive() {
         }
     }
 
-    const replaceFile = async (accessToken, backupData, fileId) => {
+    const updateFile = async (data, fileId) => {
         try {
             const { id, error } = await fetch(GOOGLE_APIS.UPLOAD + '/' + fileId + UPLOAD_TYPES.SIMPLE, {
                 method: 'PATCH',
@@ -77,7 +49,7 @@ export function useGoogleDrive() {
                     Authorization: 'Bearer ' + accessToken,
                     'Content-Type': 'application/json',
                 }),
-                body: JSON.stringify(backupData)
+                body: JSON.stringify(data)
             })
                 .then(response => response.json())
 
@@ -87,9 +59,25 @@ export function useGoogleDrive() {
         }
     }
 
-    const searchFile = async (accessToken, fileName) => {
+    const deleteFile = async (fileId) => {
         try {
-            const response = await fetch(`${GOOGLE_APIS.FILES_LIST}?q=name="${fileName}"`, {
+            const response = await fetch(GOOGLE_APIS.FILES + '/' + fileId, {
+                method: 'DELETE',
+                headers: new Headers({
+                    Authorization: 'Bearer ' + accessToken
+                })
+            })
+                .then(response => response.json())
+
+            return response
+        } catch (error) {
+            return null
+        }
+    }
+
+    const listFiles = async (accessToken, query) => {
+        try {
+            const { files, error } = await fetch(GOOGLE_APIS.FILES + '?spaces=appDataFolder&q=' + query, {
                 method: 'GET',
                 headers: new Headers({
                     Authorization: 'Bearer ' + accessToken
@@ -97,23 +85,37 @@ export function useGoogleDrive() {
             })
                 .then(response => response.json())
 
-            console.log(response)
+            if (error) {
+                return []
+            }
+
+            return files
         } catch (error) {
-            return null
+            return []
         }
     }
 
-    const downloadBackup = async (accessToken, backupKey, fileName) => {
+    const getFile = async (accessToken, fileId) => {
         try {
-            // TODO
+            const response = await fetch(GOOGLE_APIS.FILES + '/' + fileId + '?alt=media', {
+                method: 'GET',
+                headers: new Headers({
+                    Authorization: 'Bearer ' + accessToken
+                })
+            })
+                .then(response => response.json())
+
+            return response
         } catch (error) {
             return null
         }
     }
 
     return {
-        uploadBackup,
-        downloadBackup,
-        isSyncing
+        multipartUpload,
+        updateFile,
+        deleteFile,
+        listFiles,
+        getFile
     }
 }
