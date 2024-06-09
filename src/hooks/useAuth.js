@@ -1,10 +1,12 @@
 import { useContext, useEffect, useState } from 'react'
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin'
 import { AuthContext } from '@/context'
+import { useStorage } from './useStorage'
 
 export function useAuth() {
     const { setUser, isSignedIn, setIsSignedIn } = useContext(AuthContext)
     const [isLoading, setIsLoading] = useState(false)
+    const { clear } = useStorage()
 
     const signIn = async () => {
         setIsLoading(true)
@@ -38,6 +40,7 @@ export function useAuth() {
     const signOut = async () => {
         try {
             await GoogleSignin.signOut()
+            await clear()
             setUser({})
             setIsSignedIn(false)
         } catch (error) {
