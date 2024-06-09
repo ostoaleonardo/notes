@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Button, ModalSheet, Typography, User } from '@/components'
 import { useAuth, useUser } from '@/hooks'
 import { LogOut } from '@/icons'
-import { COLORS } from '@/constants'
+import { COLORS, ROUTES } from '@/constants'
 
 function OptionCard({ rightLabel, rightContent, onPress, children }) {
     const styles = StyleSheet.create({
@@ -44,7 +44,7 @@ export function AccountModal({ isVisible, onClose }) {
     useEffect(() => {
         if (!isSignedIn) {
             onClose()
-            router.replace('/signin')
+            router.replace(ROUTES.SIGN_IN)
         }
     }, [isSignedIn])
 
