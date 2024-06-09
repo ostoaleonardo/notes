@@ -1,12 +1,10 @@
 import { useEffect } from 'react'
 import { router } from 'expo-router'
-import { useNetInfo } from '@react-native-community/netinfo'
-import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Button, ModalSheet, Typography, User } from '@/components'
-import { useAuth, useGoogleDrive, useUser } from '@/hooks'
-import { getFormattedDate } from '@/utils'
-import { LogOut, Offline, Sync } from '@/icons'
+import { useAuth, useUser } from '@/hooks'
+import { LogOut } from '@/icons'
 import { COLORS } from '@/constants'
 
 function OptionCard({ rightLabel, rightContent, onPress, children }) {
@@ -41,11 +39,7 @@ function OptionCard({ rightLabel, rightContent, onPress, children }) {
 export function AccountModal({ isVisible, onClose }) {
     const { t } = useTranslation()
     const { user } = useUser()
-    const { isConnected } = useNetInfo()
     const { isSignedIn, signIn, signOut } = useAuth()
-    const { lastSync, isSyncing } = useGoogleDrive()
-
-    const syncDate = getFormattedDate(lastSync)
 
     useEffect(() => {
         if (!isSignedIn) {
@@ -82,29 +76,6 @@ export function AccountModal({ isVisible, onClose }) {
 
                 {user.givenName ? (
                     <View style={styles.optionsContainer}>
-                        <OptionCard
-                            rightContent={
-                                isSyncing
-                                    ? <ActivityIndicator color={COLORS.text} />
-                                    : isConnected
-                                        ? <Sync width={20} height={20} color={COLORS.text} />
-                                        : <Offline width={20} height={20} color={COLORS.text} />
-                            }
-                        >
-                            <View>
-                                <Typography>
-                                    {t('welcome.lastSync')}
-                                </Typography>
-                                {lastSync && (
-                                    <Typography
-                                        opacity={0.5}
-                                        variant='caption'
-                                    >
-                                        {syncDate}
-                                    </Typography>
-                                )}
-                            </View>
-                        </OptionCard>
                         <OptionCard
                             onPress={signOut}
                             rightContent={
