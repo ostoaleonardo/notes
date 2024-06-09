@@ -1,11 +1,13 @@
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Typography } from '@/components'
+import { useLanguage } from '@/hooks'
 import { getFormattedDate } from '@/utils'
 
 export function DateNote({ createdAt, updatedAt }) {
     const { t } = useTranslation()
-    const date = getFormattedDate(updatedAt || createdAt)
+    const { currentLanguage } = useLanguage()
+    const date = getFormattedDate(updatedAt || createdAt, currentLanguage)
 
     return (
         <View style={styles.container}>
