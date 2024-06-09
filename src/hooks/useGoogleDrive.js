@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import { AuthContext } from '@/context'
-import { CLOSE_DELIMITER, DELIMITER, GOOGLE_APIS, MIME_TYPES, UPLOAD_TYPES } from '@/constants'
+import { getMultipartRequestBody } from '@/utils'
+import { GOOGLE_APIS, UPLOAD_TYPES } from '@/constants'
 
 export function useGoogleDrive() {
     const { user } = useContext(AuthContext)
@@ -12,17 +13,7 @@ export function useGoogleDrive() {
             parents: ['appDataFolder']
         }
 
-        const metadataString = JSON.stringify(metadata)
-        const contentString = JSON.stringify(data)
-
-        const multipartRequestBody =
-            DELIMITER +
-            'Content-Type: ' + MIME_TYPES.JSON + '\r\n\r\n' +
-            metadataString +
-            DELIMITER +
-            'Content-Type: ' + MIME_TYPES.JSON + '\r\n\r\n' +
-            contentString +
-            CLOSE_DELIMITER
+        const requestBody = getMultipartRequestBody(metadata, data)
 
         try {
             const { id } = await fetch(GOOGLE_APIS.UPLOAD + UPLOAD_TYPES.MULTIPART, {
@@ -31,7 +22,7 @@ export function useGoogleDrive() {
                     Authorization: 'Bearer ' + accessToken,
                     'Content-Type': 'multipart/related; boundary=foo_bar_baz',
                 }),
-                body: multipartRequestBody
+                body: requestBody
             })
                 .then(response => response.json())
 
@@ -46,8 +37,7 @@ export function useGoogleDrive() {
             const { id, error } = await fetch(GOOGLE_APIS.UPLOAD + '/' + fileId + UPLOAD_TYPES.SIMPLE, {
                 method: 'PATCH',
                 headers: new Headers({
-                    Authorization: 'Bearer ' + accessToken,
-                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + accessToken
                 }),
                 body: JSON.stringify(data)
             })
