@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native'
 import { Avatar } from '@/components'
 import { AccountModal } from '../Modals'
-import { useGoogleDrive } from '@/hooks'
 import { COLORS } from '@/constants'
+import { SyncContext } from '@/context'
 
 export function HeaderAvatar() {
-    const { isSyncing } = useGoogleDrive()
+    const { isSyncing } = useContext(SyncContext)
     const [isModalVisible, setIsModalVisible] = useState(false)
 
     const handleModal = () => {
