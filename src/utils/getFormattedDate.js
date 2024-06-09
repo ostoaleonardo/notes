@@ -1,10 +1,7 @@
-import { useLanguage } from '@/hooks'
-
-export const getFormattedDate = (timestamp) => {
-    const { currentLanguage } = useLanguage()
+export const getFormattedDate = (timestamp, language) => {
     const date = new Date(timestamp)
 
-    return date.toLocaleDateString(currentLanguage, {
+    return date.toLocaleDateString(language, {
         day: 'numeric',
         month: 'short',
         year: 'numeric',
