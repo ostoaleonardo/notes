@@ -1,7 +1,11 @@
-// Auth & sync
+// Auth
 export { useUser } from './useUser'
 export { useAuth } from './useAuth'
+
+// Backup
 export { useGoogleDrive } from './useGoogleDrive'
+export { useNotesBackup } from './useNotesBackup'
+export { useCategoriesBackup } from './useCategoriesBackup'
 
 // Notes
 export { useNotes } from './useNotes'
