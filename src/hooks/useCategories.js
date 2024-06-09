@@ -1,56 +1,50 @@
 import { useContext, useEffect } from 'react'
-import { useGoogleDrive } from './useGoogleDrive'
-import { useStorage } from './useStorage'
 import { NoteContext } from '@/context'
+import { useStorage } from './useStorage'
+import { useCategoriesBackup } from './useCategoriesBackup'
+import { STORAGE_KEYS } from '@/constants'
 
 export function useCategories() {
     const { categories, setCategories } = useContext(NoteContext)
-    const { isSyncing, uploadBackup } = useGoogleDrive()
+    const { backup, isSyncing } = useCategoriesBackup()
     const { setItem, getItem } = useStorage()
 
     const addCategory = (category) => {
         if (category && !categories.includes(category)) {
-            const newCategories = [...categories, category]
-            setCategories(newCategories)
-            updateBackup(newCategories)
+            const localCategories = [...categories, category]
+            updateBackup(localCategories)
         }
     }
 
-    const removeCategory = (id) => {
-        const newCategories = categories.filter((category) => category.id !== id)
-        setCategories(newCategories)
-        updateBackup(newCategories)
+    const deleteCategory = (id) => {
+        const localCategories = categories.filter((category) => category.id !== id)
+        updateBackup(localCategories)
     }
 
-    const updateCategory = (id, newName) => {
-        const newCategories = categories.map((category) => {
-            if (category.id === id) {
-                return {
-                    ...category,
-                    name: newName
-                }
-            }
-            return category
+    const updateCategory = (category) => {
+        const localCategories = categories.map((c) => {
+            if (c.id === category.id) return category
+            return c
         })
 
-        setCategories(newCategories)
-        updateBackup(newCategories)
+        updateBackup(localCategories)
     }
 
     const getCategory = (id) => {
         return categories.find((category) => category.id === id) || {}
     }
 
-    const updateBackup = async (newCategories) => {
-        await setItem('categories', JSON.stringify(newCategories))
-        await uploadBackup('categoriesFileId', 'categories.json', JSON.stringify(newCategories))
+    const updateBackup = async (localCategories) => {
+        setCategories(localCategories)
+        await setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(localCategories))
+        await backup(localCategories)
     }
 
     useEffect(() => {
         (async () => {
             if (isSyncing) return
 
-            const categories = await getItem('categories')
+            const categories = await getItem(STORAGE_KEYS.CATEGORIES)
 
             if (categories) {
                 setCategories(JSON.parse(categories))
@@ -62,7 +56,7 @@ export function useCategories() {
         categories,
         getCategory,
         addCategory,
-        removeCategory,
+        deleteCategory,
         updateCategory
     }
 }
