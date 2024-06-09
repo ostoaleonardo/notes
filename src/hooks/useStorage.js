@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { STORAGE_KEYS } from '@/constants'
 
 export function useStorage() {
     const setItem = async (key, value) => {
@@ -10,5 +11,9 @@ export function useStorage() {
         return value
     }
 
-    return { setItem, getItem }
+    const clear = async () => {
+        await AsyncStorage.multiRemove(Object.values(STORAGE_KEYS))
+    }
+
+    return { setItem, getItem, clear }
 }
