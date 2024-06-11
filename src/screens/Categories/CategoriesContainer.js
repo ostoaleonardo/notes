@@ -6,7 +6,7 @@ import { useCategories } from '@/hooks'
 
 export function CategoriesContainer({ onPress }) {
     const { t } = useTranslation()
-    const { categories, removeCategory } = useCategories()
+    const { categories, deleteCategory } = useCategories()
     const [openCategory, setOpenCategory] = useState(null)
 
     return (
@@ -30,7 +30,7 @@ export function CategoriesContainer({ onPress }) {
                             onPress={() => onPress(id)}
                             isOpen={openCategory === id}
                             onOpen={() => setOpenCategory(id)}
-                            onDelete={() => removeCategory(id)}
+                            onDelete={() => deleteCategory(id)}
                         />
                     ))}
                 </Scroll>
