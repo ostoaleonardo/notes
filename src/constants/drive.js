@@ -1,5 +1,5 @@
 const GOOGLE_APIS = {
-    FILES_LIST: 'https://www.googleapis.com/drive/v3/files',
+    FILES: 'https://www.googleapis.com/drive/v3/files',
     UPLOAD: 'https://www.googleapis.com/upload/drive/v3/files'
 }
 
