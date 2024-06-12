@@ -5,13 +5,13 @@ import { useTranslation } from 'react-i18next'
 import { Button, Toast, Typography } from '@/components'
 import { Shade, Stripe } from '@/screens'
 import { useAuth, useGoogleDrive, useStorage } from '@/hooks'
-import { COLORS, DEFAULT_CATEGORIES, ROUTES } from '@/constants'
+import { COLORS, DEFAULT_CATEGORIES, ROUTES, STORAGE_KEYS } from '@/constants'
 
 export default function SignIn() {
     const { t } = useTranslation()
     const { signIn } = useAuth()
     const { setItem } = useStorage()
-    const { downloadBackup } = useGoogleDrive()
+    const { listFiles, getFile } = useGoogleDrive()
     const [message, setMessage] = useState('')
     const [isLoading, setIsLoading] = useState(false)
 
@@ -21,20 +21,30 @@ export default function SignIn() {
             const accessToken = await signIn()
 
             if (accessToken) {
-                const notesBackup = await downloadBackup(accessToken, 'notesFileId', 'notes.json')
-                const categoriesBackup = await downloadBackup(accessToken, 'categoriesFileId', 'categories.json')
+                const categoriesListFile = await listFiles(accessToken, 'name="categories.json"')
 
-                if (notesBackup) {
-                    await setItem('notes', JSON.stringify(notesBackup))
+                if (categoriesListFile.length) {
+                    const categoriesFile = categoriesListFile[0].id
+                    const categories = await getFile(accessToken, categoriesFile)
+
+                    await setItem(STORAGE_KEYS.CATEGORIES_FILE_ID, categoriesFile)
+                    await setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(categories))
                 } else {
-                    await setItem('notes', JSON.stringify([]))
+                    await setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(DEFAULT_CATEGORIES))
                 }
 
-                if (categoriesBackup) {
-                    await setItem('categories', JSON.stringify(categoriesBackup))
-                } else {
-                    await setItem('categories', JSON.stringify(DEFAULT_CATEGORIES))
+                const notesFiles = await listFiles(accessToken, 'name contains "note"')
+                const notes = []
+                const notesIdBackup = {}
+
+                for (const { id } of notesFiles) {
+                    const content = await getFile(accessToken, id)
+                    notesIdBackup[content.id] = id
+                    notes.push(content)
                 }
+
+                await setItem(STORAGE_KEYS.NOTES, JSON.stringify(notes))
+                await setItem(STORAGE_KEYS.NOTES_ID_BACKUP, JSON.stringify(notesIdBackup))
 
                 router.replace(ROUTES.HOME)
             }
