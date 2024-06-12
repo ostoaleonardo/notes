@@ -1,11 +1,12 @@
 const GOOGLE_APIS = {
     FILES: 'https://www.googleapis.com/drive/v3/files',
-    UPLOAD: 'https://www.googleapis.com/upload/drive/v3/files'
+    UPLOAD: 'https://www.googleapis.com/upload/drive/v3/files',
+    CHANGES: 'https://www.googleapis.com/drive/v3/changes'
 }
 
 const UPLOAD_TYPES = {
-    SIMPLE: '?uploadType=media',
-    MULTIPART: '?uploadType=multipart',
+    SIMPLE: 'media',
+    MULTIPART: 'multipart'
 }
 
 const MIME_TYPES = {
