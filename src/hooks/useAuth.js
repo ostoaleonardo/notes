@@ -4,7 +4,7 @@ import { AuthContext } from '@/context'
 import { useStorage } from './useStorage'
 
 export function useAuth() {
-    const { setUser, isSignedIn, setIsSignedIn } = useContext(AuthContext)
+    const { setUser, setAccessToken, isSignedIn, setIsSignedIn } = useContext(AuthContext)
     const [isLoading, setIsLoading] = useState(false)
     const { clear } = useStorage()
 
@@ -13,11 +13,12 @@ export function useAuth() {
 
         try {
             await GoogleSignin.hasPlayServices()
-            const userInfo = await GoogleSignin.signIn()
+            const { user } = await GoogleSignin.signIn()
 
-            if (userInfo) {
+            if (user) {
                 const accessToken = await getAccessToken()
-                setUser({ ...userInfo.user, accessToken })
+                setUser(user)
+                setAccessToken(accessToken)
                 setIsSignedIn(true)
 
                 return accessToken
@@ -42,6 +43,7 @@ export function useAuth() {
             await GoogleSignin.signOut()
             await clear()
             setUser({})
+            setAccessToken('')
             setIsSignedIn(false)
         } catch (error) {
             // Handle error
@@ -54,13 +56,13 @@ export function useAuth() {
     }
 
     const getCurrentUser = async () => {
-        const currentUser = await GoogleSignin.getCurrentUser()
-        return currentUser.user
+        const { user } = await GoogleSignin.getCurrentUser()
+        return user
     }
 
     const getAccessToken = async () => {
-        const tokens = await GoogleSignin.getTokens()
-        return tokens.accessToken
+        const { accessToken } = await GoogleSignin.getTokens()
+        return accessToken
     }
 
     useEffect(() => {
@@ -72,7 +74,8 @@ export function useAuth() {
                 const currentUser = await getCurrentUser()
                 const accessToken = await getAccessToken()
 
-                setUser({ ...currentUser, accessToken })
+                setUser(currentUser)
+                setAccessToken(accessToken)
             }
         })()
     }, [])
