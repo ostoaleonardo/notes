@@ -25,7 +25,11 @@ export function UpdateCategoryModal({ isVisible, onClose, categorySelected, setI
     const handleUpdateCategory = () => {
         if (isButtonDisabled) return
 
-        updateCategory(categorySelected, newCategory.trim())
+        updateCategory({
+            id: categorySelected,
+            name: newCategory.trim()
+        })
+
         setIsCategoryUpdated(true)
         onClose()
     }
