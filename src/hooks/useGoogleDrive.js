@@ -4,8 +4,7 @@ import { getMultipartRequestBody } from '@/utils'
 import { GOOGLE_APIS, UPLOAD_TYPES } from '@/constants'
 
 export function useGoogleDrive() {
-    const { user } = useContext(AuthContext)
-    const accessToken = user.accessToken
+    const { accessToken } = useContext(AuthContext)
 
     const multipartUpload = async (data, fileName) => {
         const metadata = {
@@ -13,10 +12,17 @@ export function useGoogleDrive() {
             parents: ['appDataFolder']
         }
 
+        const url = new URL(GOOGLE_APIS.UPLOAD)
+        const params = new URLSearchParams({
+            uploadType: UPLOAD_TYPES.MULTIPART
+        })
+
+        url.search = params.toString()
+
         const requestBody = getMultipartRequestBody(metadata, data)
 
         try {
-            const { id } = await fetch(GOOGLE_APIS.UPLOAD + UPLOAD_TYPES.MULTIPART, {
+            const { id } = await fetch(url, {
                 method: 'POST',
                 headers: new Headers({
                     Authorization: 'Bearer ' + accessToken,
@@ -33,8 +39,15 @@ export function useGoogleDrive() {
     }
 
     const updateFile = async (data, fileId) => {
+        const url = new URL(GOOGLE_APIS.UPLOAD + '/' + fileId)
+        const params = new URLSearchParams({
+            uploadType: UPLOAD_TYPES.SIMPLE
+        })
+
+        url.search = params.toString()
+
         try {
-            const { id, error } = await fetch(GOOGLE_APIS.UPLOAD + '/' + fileId + UPLOAD_TYPES.SIMPLE, {
+            const { id, error } = await fetch(url, {
                 method: 'PATCH',
                 headers: new Headers({
                     Authorization: 'Bearer ' + accessToken
@@ -66,8 +79,16 @@ export function useGoogleDrive() {
     }
 
     const listFiles = async (accessToken, query) => {
+        const url = new URL(GOOGLE_APIS.FILES)
+        const params = new URLSearchParams({
+            spaces: 'appDataFolder',
+            q: query
+        })
+
+        url.search = params.toString()
+
         try {
-            const { files, error } = await fetch(GOOGLE_APIS.FILES + '?spaces=appDataFolder&q=' + query, {
+            const { files, error } = await fetch(url, {
                 method: 'GET',
                 headers: new Headers({
                     Authorization: 'Bearer ' + accessToken
@@ -86,8 +107,15 @@ export function useGoogleDrive() {
     }
 
     const getFile = async (accessToken, fileId) => {
+        const url = new URL(GOOGLE_APIS.FILES + '/' + fileId)
+        const params = new URLSearchParams({
+            alt: 'media'
+        })
+
+        url.search = params.toString()
+
         try {
-            const response = await fetch(GOOGLE_APIS.FILES + '/' + fileId + '?alt=media', {
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: new Headers({
                     Authorization: 'Bearer ' + accessToken
