@@ -129,11 +129,59 @@ export function useGoogleDrive() {
         }
     }
 
+    const getPageToken = async () => {
+        try {
+            const { startPageToken } = await fetch(GOOGLE_APIS.CHANGES + '/startPageToken', {
+                method: 'GET',
+                headers: new Headers({
+                    Authorization: 'Bearer ' + accessToken
+                })
+            })
+                .then(response => response.json())
+
+            return startPageToken
+        } catch (error) {
+            return null
+        }
+    }
+
+    const listChanges = async () => {
+        if (!accessToken) return
+
+        const pageToken = await getPageToken()
+        const url = new URL(GOOGLE_APIS.CHANGES)
+        const params = new URLSearchParams({
+            spaces: 'appDataFolder',
+            pageToken
+        })
+
+        url.search = params.toString()
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: new Headers({
+                    Authorization: 'Bearer ' + accessToken
+                })
+            })
+                .then(response => response.json())
+
+            if (response.error) {
+                return {}
+            }
+
+            return response
+        } catch (error) {
+            return null
+        }
+    }
+
     return {
         multipartUpload,
         updateFile,
         deleteFile,
         listFiles,
-        getFile
+        getFile,
+        listChanges
     }
 }
