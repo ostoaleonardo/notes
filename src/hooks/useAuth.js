@@ -1,15 +1,18 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin'
 import { AuthContext } from '@/context'
-import { useStorage } from './useStorage'
 
 export function useAuth() {
-    const { setUser, setAccessToken, isSignedIn, setIsSignedIn } = useContext(AuthContext)
-    const [isLoading, setIsLoading] = useState(false)
-    const { clear } = useStorage()
+    const {
+        setUser,
+        setAccessToken,
+        isSignedIn,
+        setIsSignedIn,
+        setIsAuthenticating
+    } = useContext(AuthContext)
 
     const signIn = async () => {
-        setIsLoading(true)
+        setIsAuthenticating(true)
 
         try {
             await GoogleSignin.hasPlayServices()
@@ -34,14 +37,13 @@ export function useAuth() {
                     return null
             }
         } finally {
-            setIsLoading(false)
+            setIsAuthenticating(false)
         }
     }
 
     const signOut = async () => {
         try {
             await GoogleSignin.signOut()
-            await clear()
             setUser({})
             setAccessToken('')
             setIsSignedIn(false)
@@ -56,37 +58,44 @@ export function useAuth() {
     }
 
     const getCurrentUser = async () => {
-        const { user } = await GoogleSignin.getCurrentUser()
-        return user
+        try {
+            const { user } = await GoogleSignin.getCurrentUser()
+            return user
+        } catch (error) {
+            return null
+        }
     }
 
     const getAccessToken = async () => {
-        const { accessToken } = await GoogleSignin.getTokens()
-        return accessToken
+        try {
+            const { accessToken } = await GoogleSignin.getTokens()
+            return accessToken
+        } catch (error) {
+            return null
+        }
     }
 
     useEffect(() => {
         (async () => {
-            const isSignedIn = await getIsSignedIn()
-            setIsSignedIn(isSignedIn)
+            if (!isSignedIn) return
+            setIsAuthenticating(true)
 
-            if (isSignedIn) {
-                const currentUser = await getCurrentUser()
-                const accessToken = await getAccessToken()
+            const currentUser = await getCurrentUser()
+            setUser(currentUser)
 
-                setUser(currentUser)
-                setAccessToken(accessToken)
-            }
+            const accessToken = await getAccessToken()
+            setAccessToken(accessToken)
+
+            setIsAuthenticating(false)
         })()
     }, [])
 
     return {
-        signIn,
-        signOut,
-        isLoading,
         isSignedIn,
         setIsSignedIn,
+        signIn,
+        signOut,
         getIsSignedIn,
-        getCurrentUser
+        getAccessToken,
     }
 }
