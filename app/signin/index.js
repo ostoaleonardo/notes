@@ -10,7 +10,7 @@ import { COLORS, DEFAULT_CATEGORIES, ROUTES, STORAGE_KEYS } from '@/constants'
 export default function SignIn() {
     const { t } = useTranslation()
     const { signIn } = useAuth()
-    const { setItem } = useStorage()
+    const { setItem, clear } = useStorage()
     const { listFiles, getFile } = useGoogleDrive()
     const [message, setMessage] = useState('')
     const [isLoading, setIsLoading] = useState(false)
@@ -18,6 +18,7 @@ export default function SignIn() {
     const signInAndSync = async () => {
         try {
             setIsLoading(true)
+            await clear()
             const accessToken = await signIn()
 
             if (accessToken) {
@@ -25,7 +26,7 @@ export default function SignIn() {
 
                 if (categoriesListFile.length) {
                     const categoriesFile = categoriesListFile[0].id
-                    const categories = await getFile(accessToken, categoriesFile)
+                    const categories = await getFile(categoriesFile, accessToken)
 
                     await setItem(STORAGE_KEYS.CATEGORIES_FILE_ID, categoriesFile)
                     await setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(categories))
@@ -38,7 +39,7 @@ export default function SignIn() {
                 const notesIdBackup = {}
 
                 for (const { id } of notesFiles) {
-                    const content = await getFile(accessToken, id)
+                    const content = await getFile(id, accessToken)
                     notesIdBackup[content.id] = id
                     notes.push(content)
                 }
