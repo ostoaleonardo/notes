@@ -106,7 +106,7 @@ export function useGoogleDrive() {
         }
     }
 
-    const getFile = async (accessToken, fileId) => {
+    const getFile = async (fileId, newToken) => {
         const url = new URL(GOOGLE_APIS.FILES + '/' + fileId)
         const params = new URLSearchParams({
             alt: 'media'
@@ -118,7 +118,7 @@ export function useGoogleDrive() {
             const response = await fetch(url, {
                 method: 'GET',
                 headers: new Headers({
-                    Authorization: 'Bearer ' + accessToken
+                    Authorization: 'Bearer ' + (newToken || accessToken)
                 })
             })
                 .then(response => response.json())
@@ -145,10 +145,9 @@ export function useGoogleDrive() {
         }
     }
 
-    const listChanges = async () => {
+    const listChanges = async (pageToken) => {
         if (!accessToken) return
 
-        const pageToken = await getPageToken()
         const url = new URL(GOOGLE_APIS.CHANGES)
         const params = new URLSearchParams({
             spaces: 'appDataFolder',
@@ -172,7 +171,7 @@ export function useGoogleDrive() {
 
             return response
         } catch (error) {
-            return null
+            return {}
         }
     }
 
@@ -182,6 +181,7 @@ export function useGoogleDrive() {
         deleteFile,
         listFiles,
         getFile,
+        getPageToken,
         listChanges
     }
 }
