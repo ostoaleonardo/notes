@@ -89,7 +89,6 @@ export function useSync() {
         }
     }
 
-    // Sync every 15 seconds
     useEffect(() => {
         const interval = setInterval(async () => {
             if (isSyncing) return
@@ -107,7 +106,6 @@ export function useSync() {
         return () => clearInterval(interval)
     }, [isSyncing])
 
-    // useeffect to get the page token on first load
     useEffect(() => {
         (async () => {
             await initPageToken()
@@ -115,8 +113,8 @@ export function useSync() {
     }, [])
 
     return {
+        sync,
         isSyncing,
-        setIsSyncing,
-        sync
+        setIsSyncing
     }
 }
