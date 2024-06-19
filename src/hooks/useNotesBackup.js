@@ -134,7 +134,6 @@ export function useNotesBackup() {
 
     return {
         backup,
-        deleteBackup,
         isSyncing
     }
 }
