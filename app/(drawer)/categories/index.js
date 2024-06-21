@@ -12,13 +12,13 @@ export default function Categories() {
     const [newCategory, setNewCategory] = useState('')
     const [categorySelected, setCategorySelected] = useState('')
     const [isModalVisible, setIsModalVisible] = useState(false)
-    const [message, setMessage] = useState('')
     const [isCategoryUpdated, setIsCategoryUpdated] = useState(false)
+    const [message, setMessage] = useState('')
 
     useEffect(() => {
         if (isCategoryUpdated) {
             setIsCategoryUpdated(false)
-            handleToast(t('message.categoryUpdated'))
+            setMessage(t('message.categoryUpdated'))
         }
     }, [isCategoryUpdated])
 
@@ -29,7 +29,7 @@ export default function Categories() {
 
     const handleAddCategory = (category) => {
         if (!category.trim()) {
-            handleToast(t('message.emptyCategory'))
+            setMessage(t('message.emptyCategory'))
             return
         }
 
@@ -39,12 +39,7 @@ export default function Categories() {
         })
 
         setNewCategory('')
-        handleToast(t('message.categoryAdded'))
-    }
-
-    const handleToast = (message) => {
-        setMessage(message)
-        setTimeout(() => setMessage(''), 3000)
+        setMessage(t('message.categoryAdded'))
     }
 
     return (
@@ -71,7 +66,10 @@ export default function Categories() {
                 categorySelected={categorySelected}
                 setIsCategoryUpdated={setIsCategoryUpdated}
             />
-            <Toast message={message} />
+            <Toast
+                message={message}
+                setMessage={setMessage}
+            />
         </View>
     )
 }

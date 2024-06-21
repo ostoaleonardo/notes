@@ -47,7 +47,7 @@ export default function Password() {
         } else {
             setIsWrongPassword(true)
             vibrate(FEEDBACK_TYPES.ERROR)
-            handleToast(t('message.wrongPassword'))
+            setMessage(t('message.wrongPassword'))
         }
     }
 
@@ -57,11 +57,6 @@ export default function Password() {
         if (success) {
             router.replace('/note/view/' + slug)
         }
-    }
-
-    const handleToast = (message) => {
-        setMessage(message)
-        setTimeout(() => setMessage(''), 3000)
     }
 
     if (biometrics && isLoading) return (
@@ -116,7 +111,11 @@ export default function Password() {
                     />
                 </View>
             </View>
-            <Toast message={message} />
+            
+            <Toast
+                message={message}
+                setMessage={setMessage}
+            />
         </View>
     )
 }

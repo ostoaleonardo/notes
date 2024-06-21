@@ -8,7 +8,7 @@ import { LargeInput, Scroll, Section, TextArea, Toast } from '@/components'
 import { CategoriesModal, CategoryCarousel, ImageCarousel, NoteButtons, PasswordModal } from '@/screens'
 import { useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
-import { DEFAULT_CATEGORIES } from '@/constants'
+import { DEFAULT_CATEGORIES, ROUTES } from '@/constants'
 
 export default function Note() {
     const { t } = useTranslation()
@@ -29,12 +29,12 @@ export default function Note() {
 
     const handleSave = () => {
         if (!title.trim()) {
-            handleToast(t('message.emptyTitle'))
+            setMessage(t('message.emptyTitle'))
             return
         }
 
         if (!note.trim()) {
-            handleToast(t('message.emptyNote'))
+            setMessage(t('message.emptyNote'))
             return
         }
 
@@ -49,7 +49,7 @@ export default function Note() {
             createdAt: getDate(),
         })
 
-        router.navigate('/(drawer)/(stack)/home')
+        router.navigate(ROUTES.HOME)
     }
 
     const handleCategoriesModal = () => {
@@ -84,11 +84,6 @@ export default function Note() {
     const handleOpenImage = (index) => {
         setIsGalleryVisible(true)
         setGalleryIndex(index)
-    }
-
-    const handleToast = (message) => {
-        setMessage(message)
-        setTimeout(() => setMessage(''), 3000)
     }
 
     return (
@@ -165,7 +160,10 @@ export default function Note() {
                 images={images.map((url) => ({ uri: url }))}
                 onRequestClose={() => setIsGalleryVisible(false)}
             />
-            <Toast message={message} />
+            <Toast
+                message={message}
+                setMessage={setMessage}
+            />
         </View>
     )
 }
