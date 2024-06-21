@@ -1,24 +1,33 @@
+import { useEffect } from 'react'
 import { StyleSheet } from 'react-native'
 import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated'
 import { Typography } from '../Text'
 import { COLORS } from '@/constants'
 
-export function Toast({ message, backgroundColor }) {
+export function Toast({ message, setMessage, timeout = 3000, backgroundColor }) {
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setMessage('')
+        }, timeout)
+
+        return () => clearTimeout(timer)
+    }, [message, timeout])
+
+    if (!message) return null
+
     return (
-        message && (
-            <Animated.View
-                entering={SlideInDown}
-                exiting={SlideOutDown}
-                style={[
-                    styles.container,
-                    backgroundColor && { backgroundColor },
-                ]}
-            >
-                <Typography textAlign='center'>
-                    {message}
-                </Typography>
-            </Animated.View>
-        )
+        <Animated.View
+            entering={SlideInDown}
+            exiting={SlideOutDown}
+            style={[
+                styles.container,
+                backgroundColor && { backgroundColor },
+            ]}
+        >
+            <Typography textAlign='center'>
+                {message}
+            </Typography>
+        </Animated.View>
     )
 }
 
