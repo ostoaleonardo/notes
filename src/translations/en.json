@@ -12,6 +12,7 @@
 		"tagline": "The best way to keep your notes organized",
 		"signIn": "Sign in with Google",
 		"signInError": "Error signing in, try again",
+		"noConnection": "You don't have an internet connection",
 		"signOut": "Sign out"
 	},
 	"editNote": {
