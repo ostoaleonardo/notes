@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { router } from 'expo-router'
 import { Image, StyleSheet, View } from 'react-native'
+import { useNetInfo } from '@react-native-community/netinfo'
 import { useTranslation } from 'react-i18next'
 import { Button, Toast, Typography } from '@/components'
 import { Shade, Stripe } from '@/screens'
@@ -11,11 +12,17 @@ export default function SignIn() {
     const { t } = useTranslation()
     const { signIn } = useAuth()
     const { setItem, clear } = useStorage()
+    const { isInternetReachable } = useNetInfo()
     const { listFiles, getFile } = useGoogleDrive()
-    const [message, setMessage] = useState('')
     const [isLoading, setIsLoading] = useState(false)
+    const [message, setMessage] = useState('')
 
     const signInAndSync = async () => {
+        if (!isInternetReachable) {
+            setMessage(t('welcome.noConnection'))
+            return
+        }
+
         try {
             setIsLoading(true)
             await clear()
@@ -51,7 +58,6 @@ export default function SignIn() {
             }
         } catch (error) {
             setMessage(t('welcome.signInError'))
-            setTimeout(() => setMessage(''), 3000)
         } finally {
             setIsLoading(false)
         }
@@ -103,12 +109,11 @@ export default function SignIn() {
                 <Stripe color={COLORS.foreground25} />
             </View>
 
-            {message && (
-                <Toast
-                    message={message}
-                    backgroundColor={COLORS.foreground}
-                />
-            )}
+            <Toast
+                message={message}
+                setMessage={setMessage}
+                backgroundColor={COLORS.foreground}
+            />
         </View>
     )
 }
