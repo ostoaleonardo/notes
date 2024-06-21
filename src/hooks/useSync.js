@@ -1,14 +1,16 @@
 import { useContext, useEffect } from 'react'
+import { useNetInfo } from '@react-native-community/netinfo'
 import { useGoogleDrive } from './useGoogleDrive'
 import { useStorage } from './useStorage'
 import { NoteContext, SyncContext } from '@/context'
 import { STORAGE_KEYS } from '@/constants'
 
 export function useSync() {
+    const { isConnected } = useNetInfo()
+    const { setItem, getItem } = useStorage()
+    const { getPageToken, listChanges, getFile } = useGoogleDrive()
     const { isSyncing, setIsSyncing } = useContext(SyncContext)
     const { setNotes, setCategories } = useContext(NoteContext)
-    const { getPageToken, listChanges, getFile } = useGoogleDrive()
-    const { setItem, getItem } = useStorage()
 
     const initPageToken = async () => {
         let pageToken = await getItem(STORAGE_KEYS.PAGE_TOKEN)
@@ -75,7 +77,6 @@ export function useSync() {
                     }
                 }
 
-                // Update changes
                 if (changesApplied) {
                     setNotes(newNotes)
                     await setItem(STORAGE_KEYS.NOTES, JSON.stringify(newNotes))
@@ -89,10 +90,10 @@ export function useSync() {
         }
     }
 
-    useEffect(() => {
-        const interval = setInterval(async () => {
-            if (isSyncing) return
+    const runSync = async () => {
+        if (isSyncing) return
 
+        if (isConnected) {
             try {
                 setIsSyncing(true)
                 await sync()
@@ -101,14 +102,21 @@ export function useSync() {
             } finally {
                 setIsSyncing(false)
             }
-        }, 15000)
+        }
+    }
 
+    useEffect(() => {
+        runSync()
+
+        const interval = setInterval(runSync, 10000)
         return () => clearInterval(interval)
-    }, [isSyncing])
+    }, [isConnected])
 
     useEffect(() => {
         (async () => {
-            await initPageToken()
+            if (isConnected) {
+                await initPageToken()
+            }
         })()
     }, [])
 
