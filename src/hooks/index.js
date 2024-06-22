@@ -16,6 +16,7 @@ export { useStorage } from './useStorage'
 // UI
 export { useLanguage } from './useLanguage'
 export { useHeaderTitle } from './useHeaderTitle'
+export { useBottomSheet } from './useBottomSheet'
 
 // Utils
 export { useHaptics } from './useHaptics'
