@@ -1,79 +1,60 @@
-import { KeyboardAvoidingView, Modal, StyleSheet, View } from 'react-native'
+import { forwardRef } from 'react'
+import { StyleSheet, View } from 'react-native'
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
 import { Typography } from '../Text'
 import { IconButton } from '../Button'
 import { Cross } from '@/icons'
 import { COLORS } from '@/constants'
 
-export function ModalSheet({ isVisible, onClose, title, children }) {
+export const ModalSheet = forwardRef(({ title, children, onClose, contentContainerStyle }, ref) => {
+    const snapPoints = ['50%', '75%']
+
     return (
-        <Modal
-            transparent
-            visible={isVisible}
-            animationType='slide'
-            statusBarTranslucent
+        <BottomSheet
+            ref={ref}
+            index={-1}
+            onClose={onClose}
+            enablePanDownToClose
+            snapPoints={snapPoints}
+            backgroundStyle={{ backgroundColor: COLORS.foreground }}
+            handleIndicatorStyle={{ backgroundColor: COLORS.text50 }}
         >
-            <KeyboardAvoidingView
-                behavior='height'
-                style={styles.keyboardAvoidingView}
-            >
-                <View
-                    style={styles.modalBackdrop}
-                    onStartShouldSetResponder={onClose}
-                />
-                <View style={styles.modalContent}>
-                    <View style={styles.headerContainer}>
-                        <Typography
-                            opacity={0.5}
-                            variant='subtitle'
-                        >
-                            {title}
-                        </Typography>
-                        <IconButton
-                            size='sm'
-                            variant='light'
-                            icon={
-                                <Cross
-                                    width={24}
-                                    height={24}
-                                    rotation={45}
-                                    color={COLORS.text}
-                                />
-                            }
-                            onPress={onClose}
-                        />
-                    </View>
-                    <View style={styles.bodyContainer}>
-                        {children}
-                    </View>
+            <BottomSheetView style={{ paddingHorizontal: 24 }}>
+                <View style={styles.headerContainer}>
+                    <Typography
+                        opacity={0.5}
+                        variant='subtitle'
+                    >
+                        {title}
+                    </Typography>
+                    <IconButton
+                        size='sm'
+                        variant='light'
+                        icon={
+                            <Cross
+                                width={24}
+                                height={24}
+                                rotation={45}
+                                color={COLORS.text}
+                            />
+                        }
+                        onPress={onClose}
+                    />
                 </View>
-            </KeyboardAvoidingView>
-        </Modal>
+                <View
+                    style={[
+                        styles.bodyContainer,
+                        contentContainerStyle
+                    ]}
+                >
+                    {children}
+                </View>
+            </BottomSheetView>
+        </BottomSheet>
     )
-}
+})
 
 const styles = StyleSheet.create({
-    keyboardAvoidingView: {
-        width: '100%',
-        height: '100%',
-    },
-    modalBackdrop: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundColor: COLORS.overlay,
-    },
-    modalContent: {
-        position: 'absolute',
-        bottom: 0,
-        width: '100%',
-        paddingTop: 24,
-        paddingHorizontal: 24,
-        borderTopLeftRadius: 18,
-        borderTopRightRadius: 18,
-        backgroundColor: COLORS.foreground,
-    },
     headerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
