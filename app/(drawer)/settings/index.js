@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 import { AppVersionCard, ModalSheet, Section, SettingsCard, Typography } from '@/components'
 import { Languages } from '@/screens'
+import { useBottomSheet } from '@/hooks'
 
 const SETTINGS_OPTIONS = [
     {
@@ -13,12 +14,12 @@ const SETTINGS_OPTIONS = [
 
 export default function Settings() {
     const { t } = useTranslation()
+    const { bottomSheetRef, onOpen, onClose } = useBottomSheet()
     const [selected, setSelected] = useState(SETTINGS_OPTIONS[0])
-    const [isModalVisible, setIsModalVisible] = useState(false)
 
     const handleModal = (option) => {
-        setIsModalVisible(!isModalVisible)
         setSelected(option)
+        onOpen()
     }
 
     return (
@@ -44,8 +45,8 @@ export default function Settings() {
             </Section>
 
             <ModalSheet
-                isVisible={isModalVisible}
-                onClose={() => setIsModalVisible(!isModalVisible)}
+                ref={bottomSheetRef}
+                onClose={onClose}
                 title={t(selected.title)}
             >
                 {selected.children}
