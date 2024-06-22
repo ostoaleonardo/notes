@@ -9,7 +9,7 @@ import { useBottomSheet, useCategories } from '@/hooks'
 export default function Categories() {
     const { t } = useTranslation()
     const { addCategory } = useCategories()
-    const { bottomSheetRef, onOpen, onClose } = useBottomSheet()
+    const { ref, onOpen, onClose } = useBottomSheet()
     const [newCategory, setNewCategory] = useState('')
     const [categorySelected, setCategorySelected] = useState('')
     const [isCategoryUpdated, setIsCategoryUpdated] = useState(false)
@@ -62,7 +62,7 @@ export default function Categories() {
             />
 
             <UpdateCategoryModal
-                ref={bottomSheetRef}
+                ref={ref}
                 onClose={onClose}
                 categorySelected={categorySelected}
                 setIsCategoryUpdated={setIsCategoryUpdated}

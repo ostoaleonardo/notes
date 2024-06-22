@@ -14,7 +14,7 @@ const SETTINGS_OPTIONS = [
 
 export default function Settings() {
     const { t } = useTranslation()
-    const { bottomSheetRef, onOpen, onClose } = useBottomSheet()
+    const { ref, onOpen, onClose } = useBottomSheet()
     const [selected, setSelected] = useState(SETTINGS_OPTIONS[0])
 
     const handleModal = (option) => {
@@ -45,7 +45,7 @@ export default function Settings() {
             </Section>
 
             <ModalSheet
-                ref={bottomSheetRef}
+                ref={ref}
                 onClose={onClose}
                 title={t(selected.title)}
             >

@@ -1,14 +1,14 @@
 import { useRef } from 'react'
 
 export function useBottomSheet() {
-    const bottomSheetRef = useRef(null)
+    const ref = useRef(null)
 
-    const onOpen = () => bottomSheetRef.current.snapToIndex(0)
-    const onClose = () => bottomSheetRef.current.close()
+    const onOpen = () => ref.current.snapToIndex(0)
+    const onClose = () => ref.current.close()
 
     return {
+        ref,
         onOpen,
-        onClose,
-        bottomSheetRef
+        onClose
     }
 }
