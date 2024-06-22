@@ -4,27 +4,28 @@ import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { SmallInput, SquareButton, Toast } from '@/components'
 import { CategoriesContainer, UpdateCategoryModal } from '@/screens'
-import { useCategories } from '@/hooks'
+import { useBottomSheet, useCategories } from '@/hooks'
 
 export default function Categories() {
     const { t } = useTranslation()
     const { addCategory } = useCategories()
+    const { bottomSheetRef, onOpen, onClose } = useBottomSheet()
     const [newCategory, setNewCategory] = useState('')
     const [categorySelected, setCategorySelected] = useState('')
-    const [isModalVisible, setIsModalVisible] = useState(false)
     const [isCategoryUpdated, setIsCategoryUpdated] = useState(false)
     const [message, setMessage] = useState('')
 
     useEffect(() => {
         if (isCategoryUpdated) {
+            setCategorySelected('')
             setIsCategoryUpdated(false)
             setMessage(t('message.categoryUpdated'))
         }
     }, [isCategoryUpdated])
 
     const handleModal = (id) => {
-        setIsModalVisible(!isModalVisible)
         setCategorySelected(id)
+        onOpen()
     }
 
     const handleAddCategory = (category) => {
@@ -61,8 +62,8 @@ export default function Categories() {
             />
 
             <UpdateCategoryModal
-                isVisible={isModalVisible}
-                onClose={() => setIsModalVisible(!isModalVisible)}
+                ref={bottomSheetRef}
+                onClose={onClose}
                 categorySelected={categorySelected}
                 setIsCategoryUpdated={setIsCategoryUpdated}
             />
