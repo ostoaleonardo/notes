@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { forwardRef, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, LargeInput, ModalSheet } from '@/components'
 import { useCategories } from '@/hooks'
 
-export function UpdateCategoryModal({ isVisible, onClose, categorySelected, setIsCategoryUpdated }) {
+export const UpdateCategoryModal = forwardRef(({ onClose, categorySelected, setIsCategoryUpdated }, ref) => {
     const { t } = useTranslation()
     const { getCategory, updateCategory } = useCategories()
     const [newCategory, setNewCategory] = useState('')
@@ -12,9 +11,9 @@ export function UpdateCategoryModal({ isVisible, onClose, categorySelected, setI
     const [isButtonDisabled, setIsButtonDisabled] = useState(true)
 
     useEffect(() => {
-        const category = getCategory(categorySelected)
-        setPlaceholder(category.name)
-        setNewCategory(category.name)
+        const { name } = getCategory(categorySelected)
+        setPlaceholder(name)
+        setNewCategory(name)
     }, [categorySelected])
 
     useEffect(() => {
@@ -30,36 +29,30 @@ export function UpdateCategoryModal({ isVisible, onClose, categorySelected, setI
             name: newCategory.trim()
         })
 
-        setIsCategoryUpdated(true)
         onClose()
+        setIsCategoryUpdated(true)
     }
 
     return (
         <ModalSheet
-            isVisible={isVisible}
+            ref={ref}
             onClose={onClose}
             title={t('categories.update')}
+            contentContainerStyle={{
+                paddingVertical: 24,
+                gap: 40,
+            }}
         >
-            <View style={styles.container}>
-                <LargeInput
-                    value={newCategory}
-                    onChangeText={setNewCategory}
-                    placeholder={placeholder}
-                />
-                <Button
-                    disabled={isButtonDisabled}
-                    onPress={handleUpdateCategory}
-                    label={t('button.update')}
-                />
-            </View>
+            <LargeInput
+                value={newCategory}
+                onChangeText={setNewCategory}
+                placeholder={placeholder}
+            />
+            <Button
+                disabled={isButtonDisabled}
+                onPress={handleUpdateCategory}
+                label={t('button.update')}
+            />
         </ModalSheet>
     )
-}
-
-const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        gap: 40,
-        paddingVertical: 24,
-    },
 })
