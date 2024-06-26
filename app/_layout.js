@@ -49,6 +49,15 @@ export default function DrawerLayout() {
             >
                 <Stack.Screen name='(drawer)' />
                 <Stack.Screen name='signin/index' />
+                <Stack.Screen
+                    name='modal'
+                    options={{
+                        presentation: 'transparentModal',
+                        contentStyle: {
+                            backgroundColor: COLORS.transparent
+                        },
+                    }}
+                />
             </Stack>
         </Providers>
     )
