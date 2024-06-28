@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { StyleSheet } from 'react-native'
 import { ModalOption, Scroll } from '@/components'
 import { useLanguage } from '@/hooks'
 import { LANGUAGES } from '@/constants'
@@ -14,23 +13,20 @@ export function Languages() {
     }
 
     return (
-        <Scroll containerStyle={styles.scrollContainer}>
+        <Scroll
+            containerStyle={{
+                width: '100%',
+                paddingBottom: 24,
+            }}
+        >
             {LANGUAGES.map(({ code, name }) => (
                 <ModalOption
                     key={code}
                     label={name}
+                    isSelected={isSelected === code}
                     onPress={() => handleLanguage(code)}
-                    isSelected={isSelected === code ? true : false}
                 />
             ))}
         </Scroll>
     )
 }
-
-const styles = StyleSheet.create({
-    scrollContainer: {
-        flex: 1,
-        width: '100%',
-        paddingBottom: 24,
-    },
-})
