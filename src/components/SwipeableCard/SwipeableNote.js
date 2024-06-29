@@ -77,7 +77,7 @@ export function SwipeableNote({ data, isOpen, onOpen, onDelete }) {
                                 <Lock
                                     width={12}
                                     height={12}
-                                    color={COLORS.text}
+                                    color={COLORS.white}
                                 />
                             </View>
                         </>
@@ -93,44 +93,44 @@ const styles = StyleSheet.create({
         minWidth: '100%',
         padding: 20,
         borderRadius: 16,
-        backgroundColor: COLORS.foreground,
+        backgroundColor: COLORS.foreground
     },
     noteContainer: {
         width: '100%',
-        gap: 8,
+        gap: 8
     },
     noteImages: {
         width: '100%',
         gap: 8,
         marginTop: 12,
         flexWrap: 'wrap',
-        flexDirection: 'row',
+        flexDirection: 'row'
     },
     noteImage: {
         aspectRatio: 1,
-        borderRadius: 16,
+        borderRadius: 16
     },
     skeletonContainer: {
         width: '100%',
-        gap: 8,
+        gap: 8
     },
     skeleton1: {
         width: '80%',
         height: 10,
         borderRadius: 6,
-        backgroundColor: COLORS.text5,
+        backgroundColor: COLORS.white5
     },
     skeleton2: {
         width: '60%',
         height: 10,
         borderRadius: 16,
-        backgroundColor: COLORS.text5,
+        backgroundColor: COLORS.white5
     },
     iconContainer: {
         position: 'absolute',
         right: 0,
         padding: 8,
         borderRadius: 16,
-        backgroundColor: COLORS.text5,
+        backgroundColor: COLORS.white5
     },
 })
