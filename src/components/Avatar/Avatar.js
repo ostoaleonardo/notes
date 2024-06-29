@@ -12,7 +12,7 @@ export function Avatar({ user, color, size = 40 }) {
         width: size,
         height: size,
         borderRadius: size / 2,
-        backgroundColor: color || COLORS.text15
+        backgroundColor: color || COLORS.foreground
     }
 
     return (
