@@ -28,7 +28,7 @@ export function PasswordInput({ password, onChangeText, ...props }) {
                     <Eye
                         width={24}
                         height={24}
-                        color={showPassword ? COLORS.text : COLORS.text15}
+                        color={showPassword ? COLORS.white : COLORS.white15}
                     />
                 }
                 size='md'
@@ -44,6 +44,6 @@ const styles = StyleSheet.create({
         width: '70%',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'space-between'
     },
 })

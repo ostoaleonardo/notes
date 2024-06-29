@@ -25,13 +25,13 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: COLORS.text75,
+        backgroundColor: COLORS.white75
     },
     uncheckedContainer: {
         width: 24,
         height: 24,
         borderWidth: 2,
         borderRadius: 12,
-        borderColor: COLORS.text15,
+        borderColor: COLORS.white15
     },
 })

@@ -8,7 +8,7 @@ export function ChipContent() {
             <Cross
                 width={16}
                 height={16}
-                color={COLORS.text}
+                color={COLORS.white}
             />
         </View>
     )
@@ -21,6 +21,6 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: COLORS.text10,
+        backgroundColor: COLORS.white10
     },
 })

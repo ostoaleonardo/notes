@@ -11,7 +11,7 @@ export function SmallInput({ value, onChangeText, placeholder, variant }) {
             placeholder={placeholder}
             onChangeText={onChangeText}
             cursorColor={COLORS.primary}
-            placeholderTextColor={COLORS.text50}
+            placeholderTextColor={COLORS.white50}
         />
     )
 }
@@ -23,22 +23,22 @@ const getStyles = (variant) => {
         case 'solid':
             backgroundColor = COLORS.foreground
             borderColor = COLORS.transparent
-            color = COLORS.text
+            color = COLORS.white
             break
         case 'ghost':
             backgroundColor = COLORS.transparent
             borderColor = COLORS.transparent
-            color = COLORS.text
+            color = COLORS.white
             break
         case 'outline':
             backgroundColor = COLORS.transparent
-            borderColor = COLORS.text15
-            color = COLORS.text
+            borderColor = COLORS.white15
+            color = COLORS.white
             break
         default:
-            backgroundColor = COLORS.text15
+            backgroundColor = COLORS.white15
             borderColor = COLORS.transparent
-            color = COLORS.text
+            color = COLORS.white
             break
     }
 
@@ -52,8 +52,8 @@ const getStyles = (variant) => {
             borderWidth: 2,
             backgroundColor,
             borderRadius: 16,
-            color: COLORS.text,
-            fontFamily: FONTS.spaceMono,
+            color: COLORS.white,
+            fontFamily: FONTS.azeretLight
         },
     })
 }

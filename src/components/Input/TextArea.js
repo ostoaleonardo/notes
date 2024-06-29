@@ -12,7 +12,7 @@ export function TextArea({ value, onChangeText, placeholder, ...props }) {
                 placeholder={placeholder}
                 onChangeText={onChangeText}
                 cursorColor={COLORS.primary}
-                placeholderTextColor={COLORS.text50}
+                placeholderTextColor={COLORS.white50}
             />
         </View>
     )
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     },
     input: {
         fontSize: 14,
-        color: COLORS.text,
-        fontFamily: FONTS.azeretMedium
+        color: COLORS.white,
+        fontFamily: FONTS.azeretLight
     },
 })

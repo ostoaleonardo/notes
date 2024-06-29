@@ -13,7 +13,7 @@ export function LargeInput({ value, onChangeText, bold, placeholder, ...props })
             placeholder={placeholder}
             onChangeText={onChangeText}
             cursorColor={COLORS.primary}
-            placeholderTextColor={COLORS.text50}
+            placeholderTextColor={COLORS.white50}
         />
     )
 }
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     input: {
         width: '100%',
         fontSize: 24,
-        color: COLORS.text,
+        color: COLORS.white,
         fontFamily: FONTS.spaceMono
     },
     bold: {

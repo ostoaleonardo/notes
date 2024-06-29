@@ -4,8 +4,8 @@ import { Typography } from '../Text'
 import { COLORS } from '@/constants'
 
 const COLOR_VARIANTS = {
-    primary: COLORS.text,
-    bordered: COLORS.text,
+    primary: COLORS.white,
+    bordered: COLORS.white,
     flat: COLORS.primary
 }
 
@@ -55,7 +55,7 @@ const getChipStyles = (variant, hasEndContent) => {
             break
         case 'bordered':
             backgroundColor = COLORS.transparent
-            borderColor = COLORS.text10
+            borderColor = COLORS.white10
             break
         default:
             backgroundColor = COLORS.primary
