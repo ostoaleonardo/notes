@@ -28,7 +28,7 @@ export function ImagePreview({ image, openImage, removeImage }) {
                             width={24}
                             height={24}
                             rotation={45}
-                            color={COLORS.text}
+                            color={COLORS.silver}
                         />
                     </Pressable>
                 )}

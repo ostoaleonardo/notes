@@ -3,11 +3,11 @@ import { Typography } from '../Text'
 import { COLORS } from '@/constants'
 
 const COLOR_VARIANTS = {
-    primary: COLORS.text,
+    primary: COLORS.white,
     secondary: COLORS.background,
-    outline: COLORS.text,
-    flat: COLORS.text,
-    light: COLORS.text,
+    outline: COLORS.white,
+    flat: COLORS.white,
+    light: COLORS.white
 }
 
 export function Button({ label, onPress, disabled, isLoading, variant = 'primary', ...props }) {
@@ -45,20 +45,20 @@ const styles = StyleSheet.create({
         borderRadius: 48,
         alignItems: 'center',
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     primary: {
-        color: COLORS.text,
-        backgroundColor: COLORS.primary,
+        color: COLORS.white,
+        backgroundColor: COLORS.primary
     },
     secondary: {
-        backgroundColor: COLORS.text,
+        backgroundColor: COLORS.white
     },
     flat: {
-        backgroundColor: COLORS.foreground,
+        backgroundColor: COLORS.foreground
     },
     outline: {
         borderWidth: 2,
-        borderColor: COLORS.text10,
+        borderColor: COLORS.white10
     },
 })

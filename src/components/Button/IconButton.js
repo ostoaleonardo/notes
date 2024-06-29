@@ -33,17 +33,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     primary: {
-        backgroundColor: COLORS.primary,
+        backgroundColor: COLORS.primary
     },
     secondary: {
-        backgroundColor: COLORS.text,
+        backgroundColor: COLORS.white
     },
     outline: {
         borderWidth: 2,
-        borderColor: COLORS.text15,
-        backgroundColor: COLORS.transparent,
+        borderColor: COLORS.white15,
+        backgroundColor: COLORS.transparent
     },
     light: {
-        backgroundColor: COLORS.transparent,
+        backgroundColor: COLORS.transparent
     },
 })
