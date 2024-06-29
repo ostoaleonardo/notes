@@ -12,6 +12,7 @@ export function DateNote({ createdAt, updatedAt }) {
     return (
         <View style={styles.container}>
             <Typography
+                bold
                 uppercase
                 opacity={0.5}
                 variant='caption'
