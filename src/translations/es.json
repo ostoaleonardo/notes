@@ -5,15 +5,20 @@
 		"yourCategories": "Tus categorías",
 		"note": "Nota",
 		"language": "Idioma",
-		"backupSync": "Copia de seguridad",
-		"about": "Acerca de"
+		"about": "Acerca de la aplicación"
 	},
 	"welcome": {
 		"tagline": "La mejor forma de mantener tus notas organizadas",
 		"signIn": "Iniciar sesión con Google",
 		"signInError": "Error al iniciar sesión, inténtalo de nuevo",
-		"noConnection": "No tienes conexión a internet",
-		"signOut": "Cerrar sesión"
+		"noConnection": "No tienes conexión a internet"
+	},
+	"profile": {
+		"alias": "Alias",
+		"email": "Correo electrónico",
+		"signIn": "Iniciar sesión",
+		"signOut": "Cerrar sesión",
+		"error": "Error al iniciar sesión, inténtalo de nuevo"
 	},
 	"editNote": {
 		"created": "Creado:",
@@ -25,9 +30,8 @@
 		"update": "Actualizar categoría"
 	},
 	"settings": {
-		"checkUpdates": "Buscar actualizaciones",
-		"yourVersion": "Su versión está actualizada",
-		"newVersion": "Nueva versión disponible"
+		"updates": "Actualización de software",
+		"version": "Versión"
 	},
 	"password": {
 		"add": "Añadir contraseña",
@@ -51,7 +55,8 @@
 		"removeNote": "Eliminar nota",
 		"categories": "Categorías",
 		"password": "Contraseña",
-		"settings": "Ajustes"
+		"settings": "Ajustes",
+		"profile": "Perfil"
 	},
 	"button": {
 		"addNote": "Añadir Nota",

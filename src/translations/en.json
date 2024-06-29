@@ -5,15 +5,19 @@
 		"yourCategories": "Your categories",
 		"note": "Note",
 		"language": "Language",
-		"backupSync": "Backups & Sync",
-		"about": "About"
+		"about": "About the app"
 	},
 	"welcome": {
 		"tagline": "The best way to keep your notes organized",
 		"signIn": "Sign in with Google",
 		"signInError": "Error signing in, try again",
-		"noConnection": "You don't have an internet connection",
-		"signOut": "Sign out"
+		"noConnection": "You don't have an internet connection"
+	},
+	"profile": {
+		"alias": "Alias",
+		"email": "Email",
+		"signOut": "Sign out",
+		"error": "Error signing in, try again"
 	},
 	"editNote": {
 		"created": "Created:",
@@ -25,9 +29,8 @@
 		"update": "Update category"
 	},
 	"settings": {
-		"checkUpdates": "Check for updates",
-		"yourVersion": "Your version is up to date",
-		"newVersion": "New version available"
+		"updates": "Software update",
+		"version": "Version"
 	},
 	"password": {
 		"add": "Add password",
@@ -51,7 +54,8 @@
 		"removeNote": "Remove note",
 		"categories": "Categories",
 		"password": "Password",
-		"settings": "Settings"
+		"settings": "Settings",
+		"profile": "Profile"
 	},
 	"button": {
 		"addNote": "Add Note",
