@@ -16,7 +16,7 @@ export default function Settings() {
                 <Option
                     rightContent={
                         <ArrowForward
-                            color={COLORS.text}
+                            color={COLORS.white}
                         />
                     }
                     onPress={() => router.push({
@@ -39,7 +39,7 @@ export default function Settings() {
                 style={{
                     height: 1,
                     marginHorizontal: 24,
-                    backgroundColor: COLORS.text10
+                    backgroundColor: COLORS.white10
                 }}
             />
 
