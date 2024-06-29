@@ -1,47 +1,37 @@
-import { useEffect, useState } from 'react'
 import { Linking, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as Application from 'expo-application'
-import { SettingsCard } from './SettingsCard'
+import { Option } from './Option'
 import { Typography } from '../Text'
-import { getGooglePlayVersion } from '@/utils'
-import { GOOGLE_PLAY_URL } from '@/constants'
+import { OpenInNew } from '@/icons'
+import { COLORS, GOOGLE_PLAY_URL } from '@/constants'
 
 export function AppVersionCard() {
     const { t } = useTranslation()
-    const [updateAvailable, setUpdateAvailable] = useState(false)
     const { nativeApplicationVersion } = Application
 
-    useEffect(() => {
-        (async () => {
-            const { updateAvailable } = await getGooglePlayVersion(
-                GOOGLE_PLAY_URL,
-                nativeApplicationVersion
-            )
-
-            setUpdateAvailable(updateAvailable)
-        })()
-    }, [])
-
     return (
-        <SettingsCard
-            rightLabel={nativeApplicationVersion}
+        <Option
             onPress={() => Linking.openURL(GOOGLE_PLAY_URL)}
+            rightContent={
+                <OpenInNew
+                    color={COLORS.text}
+                />
+            }
         >
-            <View>
-                <Typography>
-                    {t('settings.checkUpdates')}
+            <View style={{ gap: 4 }}>
+                <Typography
+                    uppercase
+                >
+                    {t('settings.updates')}
                 </Typography>
                 <Typography
                     opacity={0.5}
                     variant='caption'
                 >
-                    {updateAvailable
-                        ? t('settings.newVersion')
-                        : t('settings.yourVersion')
-                    }
+                    {t('settings.version')} {nativeApplicationVersion}
                 </Typography>
             </View>
-        </SettingsCard>
+        </Option>
     )
 }
