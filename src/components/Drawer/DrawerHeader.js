@@ -19,7 +19,7 @@ export function DrawerHeader() {
             <Pressable>
                 <Avatar
                     user={user}
-                    color={COLORS.text15}
+                    color={COLORS.white10}
                 />
                 <View style={styles.userContainer}>
                     <Typography
@@ -28,7 +28,7 @@ export function DrawerHeader() {
                     >
                         {givenName}
                     </Typography>
-                    <ArrowForward color={COLORS.text} />
+                    <ArrowForward color={COLORS.white} />
                 </View>
             </Pressable>
         </Link>
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         paddingBottom: 24,
         paddingHorizontal: 24,
         borderBottomWidth: 1,
-        borderBottomColor: COLORS.text5
+        borderBottomColor: COLORS.white5
     },
     userContainer: {
         flexDirection: 'row',

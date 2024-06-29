@@ -10,14 +10,14 @@ export function DrawerScreen({ label, path }) {
         <Pressable
             style={{
                 paddingVertical: 16,
-                paddingHorizontal: 24,
+                paddingHorizontal: 24
             }}
             onPress={() => router.push(path)}
-            android_ripple={{ color: 'rgba(0, 0, 0, 0.1)' }}
+            android_ripple={{ color:  COLORS.white5 }}
         >
             <Typography
                 uppercase
-                color={pathname === path ? COLORS.text : COLORS.text50}
+                color={pathname === path ? COLORS.white : COLORS.white75}
             >
                 {label}
             </Typography>
