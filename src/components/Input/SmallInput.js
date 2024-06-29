@@ -53,7 +53,7 @@ const getStyles = (variant) => {
             backgroundColor,
             borderRadius: 16,
             color: COLORS.text,
-            fontFamily: FONTS.mono,
+            fontFamily: FONTS.spaceMono,
         },
     })
 }
