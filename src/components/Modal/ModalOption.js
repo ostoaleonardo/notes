@@ -30,6 +30,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderBottomWidth: 2,
         justifyContent: 'space-between',
-        borderBottomColor: COLORS.text5,
+        borderBottomColor: COLORS.white5
     },
 })

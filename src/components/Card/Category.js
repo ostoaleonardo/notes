@@ -31,6 +31,6 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         alignItems: 'center',
         justifyContent: 'space-between',
-        borderBottomColor: COLORS.text5,
+        borderBottomColor: COLORS.white5
     },
 })

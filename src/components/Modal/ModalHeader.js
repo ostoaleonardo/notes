@@ -6,10 +6,9 @@ import { COLORS } from '@/constants'
 
 export function ModalHeader({ title, onClose }) {
     return (
-        <View style={styles.headerContainer}>
+        <View style={styles.container}>
             <Typography
                 opacity={0.5}
-                variant='subtitle'
             >
                 {title}
             </Typography>
@@ -22,7 +21,7 @@ export function ModalHeader({ title, onClose }) {
                         width={24}
                         height={24}
                         rotation={45}
-                        color={COLORS.text}
+                        color={COLORS.white}
                     />
                 }
             />
@@ -31,9 +30,9 @@ export function ModalHeader({ title, onClose }) {
 }
 
 const styles = StyleSheet.create({
-    headerContainer: {
+    container: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'space-between'
     }
 })

@@ -15,7 +15,7 @@ export function AppVersionCard() {
             onPress={() => Linking.openURL(GOOGLE_PLAY_URL)}
             rightContent={
                 <OpenInNew
-                    color={COLORS.text}
+                    color={COLORS.white}
                 />
             }
         >

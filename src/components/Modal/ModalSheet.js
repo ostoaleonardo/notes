@@ -1,46 +1,35 @@
-import { forwardRef } from 'react'
+import { forwardRef, useCallback } from 'react'
 import { StyleSheet, View } from 'react-native'
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
-import { Typography } from '../Text'
-import { IconButton } from '../Button'
-import { Cross } from '@/icons'
+import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet'
+import { ModalHeader } from './ModalHeader'
 import { COLORS } from '@/constants'
 
-export const ModalSheet = forwardRef(({ title, children, onClose, contentContainerStyle }, ref) => {
-    const snapPoints = ['50%', '75%']
+export function ModalSheet({ title, children, onClose, contentContainerStyle }) {
+    const snapPoints = ['50%']
+
+    const renderBackdrop = useCallback((props) => (
+        <BottomSheetBackdrop
+            {...props}
+            appearsOnIndex={0}
+            disappearsOnIndex={-1}
+        />
+    ), [])
 
     return (
         <BottomSheet
-            ref={ref}
-            index={-1}
             onClose={onClose}
+            enableDynamicSizing
             enablePanDownToClose
             snapPoints={snapPoints}
+            backdropComponent={renderBackdrop}
             backgroundStyle={{ backgroundColor: COLORS.foreground }}
-            handleIndicatorStyle={{ backgroundColor: COLORS.text50 }}
+            handleIndicatorStyle={{ backgroundColor: COLORS.white50 }}
         >
             <BottomSheetView style={{ paddingHorizontal: 24 }}>
-                <View style={styles.headerContainer}>
-                    <Typography
-                        opacity={0.5}
-                        variant='subtitle'
-                    >
-                        {title}
-                    </Typography>
-                    <IconButton
-                        size='sm'
-                        variant='light'
-                        icon={
-                            <Cross
-                                width={24}
-                                height={24}
-                                rotation={45}
-                                color={COLORS.text}
-                            />
-                        }
-                        onPress={onClose}
-                    />
-                </View>
+                <ModalHeader
+                    title={title}
+                    onClose={onClose}
+                />
                 <View
                     style={[
                         styles.bodyContainer,
@@ -50,20 +39,14 @@ export const ModalSheet = forwardRef(({ title, children, onClose, contentContain
                     {children}
                 </View>
             </BottomSheetView>
-        </BottomSheet>
+        </BottomSheet >
     )
-})
+}
 
 const styles = StyleSheet.create({
-    headerContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
     bodyContainer: {
         width: '100%',
-        height: '100%',
         paddingTop: 24,
-        alignItems: 'center',
-    },
+        alignItems: 'center'
+    }
 })
