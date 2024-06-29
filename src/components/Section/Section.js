@@ -5,13 +5,16 @@ export function Section({ title, children, paddingVertical = 0, paddingHorizonta
     return (
         <View style={[
             styles.container,
-            containerStyle,
             { paddingVertical, paddingHorizontal },
+            containerStyle
         ]}>
             {title &&
                 <View style={styles.titleContainer}>
                     <Typography
-                        opacity={0.5}
+                        bold
+                        uppercase
+                        opacity={0.6}
+                        variant='caption'
                     >
                         {title}
                     </Typography>
@@ -20,7 +23,7 @@ export function Section({ title, children, paddingVertical = 0, paddingHorizonta
 
             <View style={[
                 styles.contentContainer,
-                contentStyle,
+                contentStyle
             ]}>
                 {children}
             </View>
@@ -31,13 +34,13 @@ export function Section({ title, children, paddingVertical = 0, paddingHorizonta
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        gap: 16,
+        gap: 16
     },
     titleContainer: {
         width: '100%',
-        paddingHorizontal: 24,
+        paddingHorizontal: 24
     },
     contentContainer: {
-        width: '100%',
-    },
+        width: '100%'
+    }
 })
