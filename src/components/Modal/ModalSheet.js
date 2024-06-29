@@ -1,4 +1,4 @@
-import { forwardRef, useCallback } from 'react'
+import { useCallback } from 'react'
 import { StyleSheet, View } from 'react-native'
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet'
 import { ModalHeader } from './ModalHeader'
