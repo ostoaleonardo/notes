@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Button, Toast, Typography } from '@/components'
 import { Shade, Stripe } from '@/screens'
 import { useAuth, useGoogleDrive, useStorage } from '@/hooks'
-import { COLORS, DEFAULT_CATEGORIES, ROUTES, STORAGE_KEYS } from '@/constants'
+import { COLORS, DEFAULT_CATEGORIES, FONTS, ROUTES, STORAGE_KEYS } from '@/constants'
 
 export default function SignIn() {
     const { t } = useTranslation()
@@ -83,6 +83,7 @@ export default function SignIn() {
                     <Typography
                         bold
                         variant='title'
+                        fontFamily={FONTS.spaceMonoBold}
                     >
                         NOTES
                     </Typography>
@@ -93,7 +94,7 @@ export default function SignIn() {
                         {t('welcome.tagline')}
                     </Typography>
                 </View>
-                <View style={styles.bottomContainer}>
+                <View style={{ width: '100%' }}>
                     <Button
                         variant='secondary'
                         isLoading={isLoading}
@@ -121,12 +122,7 @@ export default function SignIn() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.primary,
-    },
-    gradient: {
-        position: 'absolute',
-        width: '100%',
-        height: '100%'
+        backgroundColor: COLORS.primary
     },
     decorations: {
         position: 'absolute',
@@ -135,7 +131,7 @@ const styles = StyleSheet.create({
         gap: 16,
         alignItems: 'center',
         paddingTop: 48,
-        paddingHorizontal: 24,
+        paddingHorizontal: 24
     },
     landingContainer: {
         flex: 1,
@@ -143,27 +139,22 @@ const styles = StyleSheet.create({
         padding: 24,
         paddingVertical: 40,
         alignItems: 'center',
-        justifyContent: 'flex-end',
+        justifyContent: 'flex-end'
     },
     topContainer: {
         width: '100%',
         gap: 16,
-        alignItems: 'center',
-    },
-    bottomContainer: {
-        width: '100%',
-        gap: 16,
-        alignItems: 'center',
+        alignItems: 'center'
     },
     icon: {
         width: 96,
         height: 96,
-        borderRadius: 24,
+        borderRadius: 24
     },
     stripes: {
         position: 'absolute',
         bottom: 0,
         width: '100%',
-        flexDirection: 'row',
+        flexDirection: 'row'
     }
 })
