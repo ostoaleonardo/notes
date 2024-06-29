@@ -1,48 +1,26 @@
-import { StyleSheet } from 'react-native'
+import { Pressable } from 'react-native'
 import { router, usePathname } from 'expo-router'
-import { DrawerItem } from '@react-navigation/drawer'
-import { COLORS, FONTS } from '@/constants'
+import { Typography } from '../Text'
+import { COLORS } from '@/constants'
 
-export function DrawerScreen({ label, icon, path }) {
+export function DrawerScreen({ label, path }) {
     const pathname = usePathname()
-    const labelStyle = pathname === path ? styles.activeLabel : styles.label
 
     return (
-        <DrawerItem
-            label={label}
-            style={styles.item}
-            labelStyle={labelStyle}
-            pressColor={COLORS.transparent}
-            activeTintColor={COLORS.primary}
-            inactiveTintColor={COLORS.text}
-            activeBackgroundColor={COLORS.primary15}
-            focused={pathname === path}
-            onPress={() => {
-                router.push(path)
+        <Pressable
+            style={{
+                paddingVertical: 16,
+                paddingHorizontal: 24,
             }}
-            icon={({ color, size }) => (
-                icon({
-                    width: size,
-                    height: size,
-                    color
-                })
-            )}
-        />
+            onPress={() => router.push(path)}
+            android_ripple={{ color: 'rgba(0, 0, 0, 0.1)' }}
+        >
+            <Typography
+                uppercase
+                color={pathname === path ? COLORS.text : COLORS.text50}
+            >
+                {label}
+            </Typography>
+        </Pressable>
     )
 }
-
-const styles = StyleSheet.create({
-    item: {
-        borderRadius: 16,
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-    },
-    label: {
-        fontFamily: FONTS.mono,
-        textTransform: 'uppercase',
-    },
-    activeLabel: {
-        fontFamily: FONTS.monoBold,
-        textTransform: 'uppercase',
-    },
-})

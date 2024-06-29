@@ -1,45 +1,52 @@
-import { Image, StyleSheet, View } from 'react-native'
+import { Link } from 'expo-router'
+import { Pressable, StyleSheet, View } from 'react-native'
 import { Typography } from '../Text'
+import { Avatar } from '../Avatar'
+import { ArrowForward } from '@/icons'
+import { useUser } from '@/hooks'
 import { COLORS } from '@/constants'
 
-const icon = require('../../../assets/icon.png')
-
 export function DrawerHeader() {
+    const { user } = useUser()
+    const { givenName } = user
+
     return (
-        <View style={styles.headerContainer}>
-            <Image
-                source={icon}
-                style={styles.icon}
-            />
-            <View style={styles.appInfo}>
-                <Typography>
-                    Notes
-                </Typography>
-                <Typography
-                    opacity={0.5}
-                    variant='caption'
-                >
-                    1.0.0
-                </Typography>
-            </View>
-        </View>
+        <Link
+            asChild
+            href='/profile'
+            style={styles.container}
+        >
+            <Pressable>
+                <Avatar
+                    user={user}
+                    color={COLORS.text15}
+                />
+                <View style={styles.userContainer}>
+                    <Typography
+                        uppercase
+                        variant='subtitle'
+                    >
+                        {givenName}
+                    </Typography>
+                    <ArrowForward color={COLORS.text} />
+                </View>
+            </Pressable>
+        </Link>
     )
 }
 
 const styles = StyleSheet.create({
-    headerContainer: {
-        padding: 16,
-        paddingVertical: 32,
-        backgroundColor: COLORS.background,
+    container: {
+        gap: 12,
+        paddingTop: 16,
+        paddingBottom: 24,
+        paddingHorizontal: 24,
+        borderBottomWidth: 1,
+        borderBottomColor: COLORS.text5
     },
-    icon: {
-        width: 64,
-        height: 64,
-        borderRadius: 16,
-        marginBottom: 16,
-    },
-    appInfo: {
-        gap: 4,
-        marginLeft: 8,
-    },
+    userContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    }
 })
