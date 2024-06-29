@@ -1,3 +1,4 @@
+export { ArrowForward } from './ArrowForward'
 export { Camera } from './Camera'
 export { Check } from './Check'
 export { Cross } from './Cross'
