@@ -34,14 +34,18 @@ export function SwipeableNote({ data, isOpen, onOpen, onDelete }) {
                 <View style={styles.noteContainer}>
                     <Typography
                         bold
-                        variant='subtitle'
+                        uppercase
+                        variant='caption'
                     >
                         {title}
                     </Typography>
 
                     {!isLocked &&
                         <>
-                            <Typography>
+                            <Typography
+                                bold
+                                variant='caption'
+                            >
                                 {note}
                             </Typography>
 

@@ -12,6 +12,7 @@ export function DeleteAction({ onPress }) {
             style={styles.deleteContainer}
         >
             <Typography
+                bold
                 uppercase
                 variant='caption'
             >
