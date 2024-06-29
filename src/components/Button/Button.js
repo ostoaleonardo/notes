@@ -1,5 +1,6 @@
-import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native'
-import { COLORS, FONTS } from '@/constants'
+import { ActivityIndicator, Pressable, StyleSheet } from 'react-native'
+import { Typography } from '../Text'
+import { COLORS } from '@/constants'
 
 const COLOR_VARIANTS = {
     primary: COLORS.text,
@@ -26,15 +27,13 @@ export function Button({ label, onPress, disabled, isLoading, variant = 'primary
         >
             {isLoading && <ActivityIndicator color={colorVariant} />}
 
-            <Text
-                style={[
-                    styles.label,
-                    { color: colorVariant }
-                ]}
+            <Typography
+                uppercase
+                color={colorVariant}
             >
                 {label}
-            </Text>
-        </Pressable >
+            </Typography>
+        </Pressable>
     )
 }
 
@@ -48,11 +47,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
     },
-    label: {
-        fontSize: 14,
-        fontFamily: FONTS.mono,
-        textTransform: 'uppercase',
-    },
     primary: {
         color: COLORS.text,
         backgroundColor: COLORS.primary,
@@ -65,6 +59,6 @@ const styles = StyleSheet.create({
     },
     outline: {
         borderWidth: 2,
-        borderColor: COLORS.text15,
+        borderColor: COLORS.text10,
     },
 })
