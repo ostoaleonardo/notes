@@ -8,7 +8,7 @@ export function LargeInput({ value, onChangeText, bold, placeholder, ...props })
             value={value}
             style={[
                 styles.input,
-                bold && styles.monoBold
+                bold && styles.bold
             ]}
             placeholder={placeholder}
             onChangeText={onChangeText}
@@ -20,12 +20,12 @@ export function LargeInput({ value, onChangeText, bold, placeholder, ...props })
 
 const styles = StyleSheet.create({
     input: {
-        flex: 1,
+        width: '100%',
         fontSize: 24,
         color: COLORS.text,
-        fontFamily: FONTS.mono,
+        fontFamily: FONTS.spaceMono
     },
-    monoBold: {
-        fontFamily: FONTS.monoBold,
-    },
+    bold: {
+        fontFamily: FONTS.spaceMonoBold
+    }
 })
