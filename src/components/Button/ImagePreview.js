@@ -28,7 +28,7 @@ export function ImagePreview({ image, openImage, removeImage }) {
                             width={24}
                             height={24}
                             rotation={45}
-                            color={COLORS.silver}
+                            color={COLORS.white}
                         />
                     </Pressable>
                 )}
@@ -40,12 +40,12 @@ export function ImagePreview({ image, openImage, removeImage }) {
 const styles = StyleSheet.create({
     container: {
         width: 100,
-        height: 100,
+        height: 100
     },
     image: {
         width: '100%',
         height: '100%',
-        borderRadius: 24,
+        borderRadius: 24
     },
     removeButton: {
         position: 'absolute',
@@ -56,6 +56,6 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: COLORS.overlay,
-    },
+        backgroundColor: COLORS.foreground75
+    }
 })
