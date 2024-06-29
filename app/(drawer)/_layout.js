@@ -2,7 +2,6 @@ import { Drawer } from 'expo-router/drawer'
 import { useTranslation } from 'react-i18next'
 import { useGlobalSearchParams } from 'expo-router'
 import { DrawerItems } from '@/components'
-import { HeaderAvatar } from '@/screens'
 import { COLORS, FONTS } from '@/constants'
 
 export default function DrawerLayout() {
@@ -23,12 +22,12 @@ export default function DrawerLayout() {
                 headerTitleStyle: {
                     fontSize: 12,
                     letterSpacing: 1,
-                    fontFamily: FONTS.mono,
+                    fontFamily: FONTS.spaceMono,
                     textTransform: 'uppercase',
                 },
 
                 drawerStyle: {
-                    backgroundColor: COLORS.background,
+                    backgroundColor: COLORS.foreground,
                 },
 
                 sceneContainerStyle: {
@@ -42,7 +41,6 @@ export default function DrawerLayout() {
                 name='(stack)'
                 options={{
                     title: params.title ?? t('drawer.notes'),
-                    headerRight: () => <HeaderAvatar />,
                     headerRightContainerStyle: {
                         paddingRight: 16,
                     },
@@ -52,7 +50,6 @@ export default function DrawerLayout() {
                 name='categories/index'
                 options={{
                     title: t('header.categories'),
-                    headerRight: () => <HeaderAvatar />,
                     headerRightContainerStyle: {
                         paddingRight: 16,
                     },
@@ -62,6 +59,12 @@ export default function DrawerLayout() {
                 name='settings/index'
                 options={{
                     title: t('header.settings'),
+                }}
+            />
+            <Drawer.Screen
+                name='profile/index'
+                options={{
+                    title: t('header.profile'),
                 }}
             />
         </Drawer>
