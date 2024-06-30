@@ -1,4 +1,5 @@
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { AuthProvider, NoteProvider, SyncProvider } from '@/context'
 
 export function Providers({ children }) {
@@ -7,7 +8,9 @@ export function Providers({ children }) {
             <AuthProvider>
                 <SyncProvider>
                     <NoteProvider>
-                        {children}
+                        <BottomSheetModalProvider>
+                            {children}
+                        </BottomSheetModalProvider>
                     </NoteProvider>
                 </SyncProvider>
             </AuthProvider>
