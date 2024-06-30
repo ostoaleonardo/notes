@@ -5,27 +5,39 @@ import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
 import { LargeInput, Scroll, Section, TextArea, Toast } from '@/components'
-import { CategoriesModal, CategoryCarousel, ImageCarousel, NoteButtons, PasswordModal } from '@/screens'
-import { useHeaderTitle, useNotes } from '@/hooks'
+import { AddPassword, Categories, CategoryCarousel, ImageCarousel, NoteButtons } from '@/screens'
+import { useBottomSheet, useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
 import { DEFAULT_CATEGORIES, ROUTES } from '@/constants'
 
 export default function Note() {
     const { t } = useTranslation()
     const { saveNote } = useNotes()
+
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
-    const [categoryIds, setCategoryIds] = useState([DEFAULT_CATEGORIES[0].id])
+    const [categories, setCategories] = useState(DEFAULT_CATEGORIES.map(({ id }) => id))
     const [images, setImages] = useState([])
     const [password, setPassword] = useState('')
     const [biometrics, setBiometrics] = useState(false)
-    const [isModalVisible, setIsModalVisible] = useState(false)
-    const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false)
+
     const [galleryIndex, setGalleryIndex] = useState(0)
     const [isGalleryVisible, setIsGalleryVisible] = useState(false)
     const [message, setMessage] = useState('')
 
     useHeaderTitle(t('header.addNote'))
+
+    const {
+        ref: categoriesBottomRef,
+        onOpen: onOpenCategories,
+        onClose: onCloseCategories
+    } = useBottomSheet()
+
+    const {
+        ref: passwordBottomRef,
+        onOpen: onOpenPassword,
+        onClose: onClosePassword
+    } = useBottomSheet()
 
     const handleSave = () => {
         if (!title.trim()) {
@@ -45,31 +57,18 @@ export default function Note() {
             images,
             password,
             biometrics,
-            categories: categoryIds,
+            categories,
             createdAt: getDate(),
         })
 
         router.navigate(ROUTES.HOME)
     }
 
-    const handleCategoriesModal = () => {
-        setIsModalVisible(!isModalVisible)
-    }
-
-    const handlePasswordModal = () => {
-        setIsPasswordModalVisible(!isPasswordModalVisible)
-    }
-
-    const handlePassword = (password) => {
-        setPassword(password)
-        setIsPasswordModalVisible(false)
-    }
-
-    const handleAddCategory = (id) => {
-        if (!categoryIds.includes(id)) {
-            setCategoryIds([...categoryIds, id])
+    const handleCategories = (id) => {
+        if (!categories.includes(id)) {
+            setCategories([...categories, id])
         } else {
-            setCategoryIds(categoryIds.filter((categoryId) => categoryId !== id))
+            setCategories(categories.filter((categoryId) => categoryId !== id))
         }
     }
 
@@ -87,7 +86,7 @@ export default function Note() {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={{ flex: 1 }}>
             <Scroll contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.topContainer}>
                     <View>
@@ -104,13 +103,13 @@ export default function Note() {
                         </Section>
 
                         <Section
-                            paddingVertical={24}
                             title={t('title.categories')}
+                            paddingVertical={24}
                         >
                             <CategoryCarousel
-                                categoryIds={categoryIds}
-                                onAddCategory={handleAddCategory}
-                                onCategoriesModal={handleCategoriesModal}
+                                selectedCategories={categories}
+                                onCategories={handleCategories}
+                                onCategoriesModal={onOpenCategories}
                             />
                         </Section>
 
@@ -136,21 +135,21 @@ export default function Note() {
 
                 <NoteButtons
                     onSave={handleSave}
-                    onOpenModal={handlePasswordModal}
                     hasPassword={!!password}
+                    onOpenModal={onOpenPassword}
                 />
             </Scroll>
 
-            <CategoriesModal
-                isVisible={isModalVisible}
-                onClose={handleCategoriesModal}
-                noteCategories={categoryIds}
-                handleAddCategory={handleAddCategory}
+            <Categories
+                ref={categoriesBottomRef}
+                onClose={onCloseCategories}
+                selectedCategories={categories}
+                handleCategories={handleCategories}
             />
-            <PasswordModal
-                isVisible={isPasswordModalVisible}
-                onClose={handlePasswordModal}
-                handlePassword={handlePassword}
+            <AddPassword
+                ref={passwordBottomRef}
+                onClose={onClosePassword}
+                setPassword={setPassword}
                 biometrics={biometrics}
                 setBiometrics={setBiometrics}
             />
@@ -169,16 +168,13 @@ export default function Note() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
     scrollContainer: {
         flexGrow: 1,
-        paddingVertical: 24,
+        paddingVertical: 24
     },
     topContainer: {
         flex: 1,
         gap: 40,
-        justifyContent: 'space-between',
+        justifyContent: 'space-between'
     },
 })
