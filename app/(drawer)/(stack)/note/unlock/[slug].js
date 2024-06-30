@@ -87,7 +87,7 @@ export default function Password() {
                     <Fingerprint
                         width={96}
                         height={96}
-                        fill={COLORS.text50}
+                        fill={COLORS.white50}
                     />
                 )}
                 <View style={styles.buttonsContainer}>
@@ -111,7 +111,7 @@ export default function Password() {
                     />
                 </View>
             </View>
-            
+
             <Toast
                 message={message}
                 setMessage={setMessage}
@@ -124,16 +124,16 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     passwordContainer: {
         width: '100%',
         alignItems: 'center',
-        paddingHorizontal: 24,
+        paddingHorizontal: 24
     },
     buttonsContainer: {
         width: '100%',
         gap: 16,
-        marginTop: 64,
-    },
+        marginTop: 64
+    }
 })
