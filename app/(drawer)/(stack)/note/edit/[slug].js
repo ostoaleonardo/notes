@@ -4,8 +4,8 @@ import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
 import { LargeInput, Scroll, Section, TextArea, Toast } from '@/components'
-import { CategoriesModal, CategoryCarousel, DateNote, ImageCarousel, NoteButtons, PasswordModal, UpdatePasswordModal } from '@/screens'
-import { useHeaderTitle, useNotes } from '@/hooks'
+import { AddPassword, Categories, CategoryCarousel, DateNote, ImageCarousel, NoteButtons, UpdatePassword } from '@/screens'
+import { useBottomSheet, useHeaderTitle, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
 import { ROUTES } from '@/constants'
 
@@ -14,31 +14,49 @@ export default function EditNote() {
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
     const { getNote, updateNote } = useNotes()
+
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
+    const [categories, setCategories] = useState([])
     const [images, setImages] = useState([])
-    const [hasPassword, setHasPassword] = useState(false)
-    const [currentPassword, setCurrentPassword] = useState('')
-    const [newPassword, setNewPassword] = useState('')
-    const [biometrics, setBiometrics] = useState(false)
-    const [categoryIds, setCategoryIds] = useState([])
     const [createdAt, setCreatedAt] = useState('')
     const [updatedAt, setUpdatedAt] = useState('')
-    const [isModalVisible, setIsModalVisible] = useState(false)
-    const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false)
-    const [isUpdatePasswordModalVisible, setIsUpdatePasswordModalVisible] = useState(false)
+
+    const [currentPassword, setCurrentPassword] = useState('')
+    const [newPassword, setNewPassword] = useState('')
+    const [hasPassword, setHasPassword] = useState(false)
+    const [biometrics, setBiometrics] = useState(false)
+
     const [galleryIndex, setGalleryIndex] = useState(0)
     const [isGalleryVisible, setIsGalleryVisible] = useState(false)
     const [message, setMessage] = useState('')
 
     useHeaderTitle(t('header.editNote'))
 
+    const {
+        ref: categoriesBottomRef,
+        onOpen: onOpenCategories,
+        onClose: onCloseCategories
+    } = useBottomSheet()
+
+    const {
+        ref: passwordBottomRef,
+        onOpen: onOpenPassword,
+        onClose: onClosePassword
+    } = useBottomSheet()
+
+    const {
+        ref: updatePasswordBottomRef,
+        onOpen: onOpenUpdatePassword,
+        onClose: onCloseUpdatePassword
+    } = useBottomSheet()
+
     useEffect(() => {
         const note = getNote(slug)
         setTitle(note.title)
         setNote(note.note)
         setImages(note.images)
-        setCategoryIds(note.categories)
+        setCategories(note.categories)
         setCreatedAt(note.createdAt)
         setUpdatedAt(note.updatedAt)
         setBiometrics(note.biometrics)
@@ -67,7 +85,7 @@ export default function EditNote() {
             images,
             password: newPassword || currentPassword,
             biometrics,
-            categories: categoryIds,
+            categories: categories,
             createdAt,
             updatedAt: getDate(),
         })
@@ -75,35 +93,17 @@ export default function EditNote() {
         router.navigate(ROUTES.HOME)
     }
 
-    const handleCategoriesModal = () => {
-        setIsModalVisible(!isModalVisible)
-    }
-
-    const handlePasswordModal = () => {
-        if (hasPassword) {
-            setIsUpdatePasswordModalVisible(!isUpdatePasswordModalVisible)
-        } else {
-            setIsPasswordModalVisible(!isPasswordModalVisible)
-        }
-    }
-
-    const handlePassword = (password) => {
-        setNewPassword(password)
-        setIsPasswordModalVisible(false)
-        setIsUpdatePasswordModalVisible(false)
-    }
-
     const handleRemovePassword = () => {
         setHasPassword(false)
         setCurrentPassword('')
-        setIsUpdatePasswordModalVisible(false)
+        onCloseUpdatePassword()
     }
 
-    const handleAddCategory = (id) => {
-        if (!categoryIds.includes(id)) {
-            setCategoryIds([...categoryIds, id])
+    const handleCategories = (id) => {
+        if (!categories.includes(id)) {
+            setCategories([...categories, id])
         } else {
-            setCategoryIds(categoryIds.filter((categoryId) => categoryId !== id))
+            setCategories(categories.filter((categoryId) => categoryId !== id))
         }
     }
 
@@ -121,7 +121,7 @@ export default function EditNote() {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={{ flex: 1 }}>
             <Scroll contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.topContainer}>
                     <View>
@@ -147,9 +147,9 @@ export default function EditNote() {
                             title={t('title.categories')}
                         >
                             <CategoryCarousel
-                                categoryIds={categoryIds}
-                                onAddCategory={handleAddCategory}
-                                onCategoriesModal={handleCategoriesModal}
+                                selectedCategories={categories}
+                                onCategories={handleCategories}
+                                onCategoriesModal={onOpenCategories}
                             />
                         </Section>
 
@@ -175,29 +175,29 @@ export default function EditNote() {
 
                 <NoteButtons
                     onSave={handleSave}
-                    onOpenModal={handlePasswordModal}
-                    hasPassword={hasPassword}
+                    hasPassword={!!currentPassword}
+                    onOpenModal={hasPassword ? onOpenUpdatePassword : onOpenPassword}
                 />
             </Scroll>
 
-            <CategoriesModal
-                isVisible={isModalVisible}
-                onClose={handleCategoriesModal}
-                noteCategories={categoryIds}
-                handleAddCategory={handleAddCategory}
+            <Categories
+                ref={categoriesBottomRef}
+                onClose={onCloseCategories}
+                selectedCategories={categories}
+                handleCategories={handleCategories}
             />
-            <PasswordModal
-                isVisible={isPasswordModalVisible}
-                onClose={handlePasswordModal}
-                handlePassword={handlePassword}
+            <AddPassword
+                ref={passwordBottomRef}
+                onClose={onClosePassword}
+                setPassword={setCurrentPassword}
                 biometrics={biometrics}
                 setBiometrics={setBiometrics}
             />
-            <UpdatePasswordModal
-                isVisible={isUpdatePasswordModalVisible}
-                onClose={handlePasswordModal}
+            <UpdatePassword
+                ref={updatePasswordBottomRef}
+                onClose={onCloseUpdatePassword}
                 currentPassword={currentPassword}
-                handlePassword={handlePassword}
+                tooglePassword={setNewPassword}
                 onDelete={handleRemovePassword}
                 biometrics={biometrics}
                 setBiometrics={setBiometrics}
@@ -217,16 +217,13 @@ export default function EditNote() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
     scrollContainer: {
         flexGrow: 1,
-        paddingVertical: 24,
+        paddingVertical: 24
     },
     topContainer: {
         flex: 1,
         gap: 40,
-        justifyContent: 'space-between',
-    },
+        justifyContent: 'space-between'
+    }
 })
