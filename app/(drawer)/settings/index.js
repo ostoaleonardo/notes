@@ -1,12 +1,14 @@
-import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { AppVersionCard, Section, Option, Typography } from '@/components'
+import { AppVersionCard, Section, Option, Typography, Separator } from '@/components'
 import { ArrowForward } from '@/icons'
+import { Languages } from '@/screens'
+import { useBottomSheet } from '@/hooks'
 import { COLORS } from '@/constants'
 
 export default function Settings() {
     const { t } = useTranslation()
+    const { ref, onOpen, onClose } = useBottomSheet()
 
     return (
         <View style={styles.container}>
@@ -14,18 +16,12 @@ export default function Settings() {
                 title={t('title.language')}
             >
                 <Option
+                    onPress={onOpen}
                     rightContent={
                         <ArrowForward
                             color={COLORS.white}
                         />
                     }
-                    onPress={() => router.push({
-                        pathname: 'modal',
-                        params: {
-                            section: 'settings',
-                            modal: 'language'
-                        }
-                    })}
                 >
                     <Typography
                         uppercase
@@ -35,19 +31,18 @@ export default function Settings() {
                 </Option>
             </Section>
 
-            <View
-                style={{
-                    height: 1,
-                    marginHorizontal: 24,
-                    backgroundColor: COLORS.white10
-                }}
-            />
+            <Separator style={{ marginHorizontal: 24 }} />
 
             <Section
                 title={t('title.about')}
             >
                 <AppVersionCard />
             </Section>
+
+            <Languages
+                ref={ref}
+                onClose={onClose}
+            />
         </View>
     )
 }
