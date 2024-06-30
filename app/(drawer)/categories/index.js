@@ -1,30 +1,30 @@
-import { useEffect, useState } from 'react'
 import * as Crypto from 'expo-crypto'
+import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { SmallInput, SquareButton, Toast } from '@/components'
-import { CategoriesContainer, UpdateCategoryModal } from '@/screens'
+import { CategoriesContainer, UpdateCategory } from '@/screens'
 import { useBottomSheet, useCategories } from '@/hooks'
 
 export default function Categories() {
     const { t } = useTranslation()
-    const { addCategory } = useCategories()
     const { ref, onOpen, onClose } = useBottomSheet()
+    const { addCategory } = useCategories()
     const [newCategory, setNewCategory] = useState('')
-    const [categorySelected, setCategorySelected] = useState('')
-    const [isCategoryUpdated, setIsCategoryUpdated] = useState(false)
+    const [selectedCategory, setSelectedCategory] = useState('')
+    const [isUpdatedCategory, setIsUpdatedCategory] = useState(false)
     const [message, setMessage] = useState('')
 
     useEffect(() => {
-        if (isCategoryUpdated) {
-            setCategorySelected('')
-            setIsCategoryUpdated(false)
+        if (isUpdatedCategory) {
+            setSelectedCategory('')
+            setIsUpdatedCategory(false)
             setMessage(t('message.categoryUpdated'))
         }
-    }, [isCategoryUpdated])
+    }, [isUpdatedCategory])
 
     const handleModal = (id) => {
-        setCategorySelected(id)
+        setSelectedCategory(id)
         onOpen()
     }
 
@@ -61,11 +61,11 @@ export default function Categories() {
                 onPress={handleModal}
             />
 
-            <UpdateCategoryModal
+            <UpdateCategory
                 ref={ref}
                 onClose={onClose}
-                categorySelected={categorySelected}
-                setIsCategoryUpdated={setIsCategoryUpdated}
+                selectedCategory={selectedCategory}
+                setIsUpdatedCategory={setIsUpdatedCategory}
             />
             <Toast
                 message={message}
@@ -77,13 +77,13 @@ export default function Categories() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flexGrow: 1,
     },
     inputContainer: {
         gap: 16,
         padding: 24,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'space-between'
     },
 })
