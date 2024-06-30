@@ -1,10 +1,10 @@
-const FOREGROUND = '#18181b'
+const BACKGROUND = '#000000'
+const FOREGROUND = '#1c1d1f'
 const PRIMARY = '#c8102e'
-const TEXT = '#ffffff'
+const WHITE = '#f0f2f1'
 
 export const COLORS = {
-    background: '#09090b',
-    overlay: '#00000080',
+    background: BACKGROUND,
     transparent: 'transparent',
 
     foreground: FOREGROUND,
@@ -18,15 +18,18 @@ export const COLORS = {
     primary75: `${PRIMARY}bf`,
     primary15: `${PRIMARY}26`,
 
-    text: TEXT,
-    text75: `${TEXT}bf`,
-    text50: `${TEXT}80`,
-    text15: `${TEXT}26`,
-    text10: `${TEXT}1a`,
-    text5: `${TEXT}0d`
+    white: WHITE,
+    white75: `${WHITE}bf`,
+    white50: `${WHITE}80`,
+    white25: `${WHITE}40`,
+    white15: `${WHITE}26`,
+    white10: `${WHITE}1a`,
+    white5: `${WHITE}0d`
 }
 
 export const FONTS = {
-    mono: 'SpaceMono',
-    monoBold: 'SpaceMono-Bold'
+    spaceMono: 'SpaceMono-Regular',
+    spaceMonoBold: 'SpaceMono-Bold',
+    azeretLight: 'AzeretMono-Light',
+    azeretMedium: 'AzeretMono-Medium'
 }
