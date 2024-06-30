@@ -8,18 +8,19 @@ const SIZE_VARIANTS = {
     caption: 12
 }
 
-export function Typography({ children, bold, uppercase, color, opacity, textAlign, variant = 'paragraph' }) {
-    const fontSize = SIZE_VARIANTS[variant]
+export function Typography({ children, bold, uppercase, color, opacity, textAlign, fontSize, fontFamily, variant = 'paragraph' }) {
+    const fontVariant = fontSize || SIZE_VARIANTS[variant]
 
     return (
         <Text style={[
             styles.base,
-            { fontSize },
             color && { color },
             opacity && { opacity },
+            { fontSize: fontVariant },
             textAlign && { textAlign },
             uppercase && styles.uppercase,
-            bold ? styles.bold : styles.regular
+            bold ? styles.bold : styles.regular,
+            fontFamily && { fontFamily }
         ]}>
             {children}
         </Text>
@@ -28,15 +29,15 @@ export function Typography({ children, bold, uppercase, color, opacity, textAlig
 
 const styles = StyleSheet.create({
     base: {
-        color: COLORS.text,
+        color: COLORS.white
     },
     uppercase: {
-        textTransform: 'uppercase',
+        textTransform: 'uppercase'
     },
     regular: {
-        fontFamily: FONTS.mono,
+        fontFamily: FONTS.azeretLight
     },
     bold: {
-        fontFamily: FONTS.monoBold,
-    },
+        fontFamily: FONTS.azeretMedium
+    }
 })
