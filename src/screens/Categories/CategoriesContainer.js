@@ -43,10 +43,11 @@ const styles = StyleSheet.create({
     sectionContainer: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     categoryContainer: {
+        flexGrow: 1,
         gap: 16,
-        paddingBottom: 24,
-    },
+        paddingBottom: 24
+    }
 })
