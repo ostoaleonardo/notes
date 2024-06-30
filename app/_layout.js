@@ -11,8 +11,10 @@ export default function DrawerLayout() {
     const { initLanguage } = useLanguage()
     const [isReady, setIsReady] = useState(false)
     const [fontsLoaded, fontError] = useFonts({
-        'SpaceMono': require('../assets/fonts/SpaceMono-Regular.ttf'),
-        'SpaceMono-Bold': require('../assets/fonts/SpaceMono-Bold.ttf')
+        'SpaceMono-Regular': require('../assets/fonts/SpaceMono-Regular.ttf'),
+        'SpaceMono-Bold': require('../assets/fonts/SpaceMono-Bold.ttf'),
+        'AzeretMono-Light': require('../assets/fonts/AzeretMono-Light.ttf'),
+        'AzeretMono-Medium': require('../assets/fonts/AzeretMono-Medium.ttf')
     })
 
     useEffect(() => {
@@ -39,7 +41,6 @@ export default function DrawerLayout() {
             <Stack
                 onLayout={onLayoutRootView}
                 screenOptions={{
-                    animation: 'fade',
                     headerShown: false,
 
                     contentStyle: {
@@ -49,15 +50,6 @@ export default function DrawerLayout() {
             >
                 <Stack.Screen name='(drawer)' />
                 <Stack.Screen name='signin/index' />
-                <Stack.Screen
-                    name='modal'
-                    options={{
-                        presentation: 'transparentModal',
-                        contentStyle: {
-                            backgroundColor: COLORS.transparent
-                        },
-                    }}
-                />
             </Stack>
         </Providers>
     )
