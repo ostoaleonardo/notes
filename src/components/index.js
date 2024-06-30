@@ -30,9 +30,8 @@ export {
 
 export {
     Category,
-    SettingsCard,
-    AppVersionCard,
-    GoogleSignInCard
+    Option,
+    AppVersionCard
 } from './Card'
 
 // Inputs
@@ -46,6 +45,7 @@ export {
 // Modals
 export {
     ModalSheet,
+    ModalHeader,
     ModalOption
 } from './Modal'
 
@@ -58,6 +58,7 @@ export { Typography } from './Text'
 // Scroll
 export { Scroll } from './Scroll'
 export { Section } from './Section'
+export { Separator } from './Scroll'
 
 // Others
 export { Toast } from './Toast'
