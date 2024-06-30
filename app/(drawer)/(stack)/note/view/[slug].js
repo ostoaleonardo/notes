@@ -3,19 +3,20 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
-import { Button, Scroll, Section, Typography } from '@/components'
+import { Button, LargeInput, Scroll, Section, TextArea } from '@/components'
 import { CategoryCarousel, DateNote, ImageCarousel } from '@/screens'
 import { useHeaderTitle, useNotes } from '@/hooks'
 
 export default function ViewNote() {
     const router = useRouter()
     const { t } = useTranslation()
-    const { slug } = useLocalSearchParams()
     const { getNote } = useNotes()
+    const { slug } = useLocalSearchParams()
+
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
     const [images, setImages] = useState([])
-    const [categoryIds, setCategoryIds] = useState([])
+    const [categories, setCategories] = useState([])
     const [createdAt, setCreatedAt] = useState('')
     const [updatedAt, setUpdatedAt] = useState('')
     const [galleryIndex, setGalleryIndex] = useState(0)
@@ -28,7 +29,7 @@ export default function ViewNote() {
         setTitle(note.title)
         setNote(note.note)
         setImages(note.images)
-        setCategoryIds(note.categories)
+        setCategories(note.categories)
         setCreatedAt(note.createdAt)
         setUpdatedAt(note.updatedAt)
     }, [slug])
@@ -39,19 +40,19 @@ export default function ViewNote() {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={{ flex: 1 }}>
             <Scroll contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.topContainer}>
                     <View>
                         <Section
                             paddingHorizontal={24}
                         >
-                            <Typography
+                            <LargeInput
                                 bold
-                                variant='title'
-                            >
-                                {title}
-                            </Typography>
+                                readOnly
+                                multiline
+                                value={title}
+                            />
                         </Section>
 
                         <DateNote
@@ -59,24 +60,25 @@ export default function ViewNote() {
                             updatedAt={updatedAt}
                         />
 
-                        {categoryIds.length > 1 && (
+                        {categories.length > 1 && (
                             <Section
-                                containerStyle={{ paddingTop: 24 }}
+                                containerStyle={{ paddingTop: 32 }}
                             >
                                 <CategoryCarousel
                                     disabled
-                                    categoryIds={categoryIds}
+                                    selectedCategories={categories}
                                 />
                             </Section>
                         )}
 
                         <Section
-                            containerStyle={{ paddingTop: 24 }}
-                            contentStyle={{ paddingHorizontal: 24 }}
+                            paddingVertical={24}
+                            paddingHorizontal={24}
                         >
-                            <Typography variant='subtitle'>
-                                {note}
-                            </Typography>
+                            <TextArea
+                                readOnly
+                                value={note}
+                            />
                         </Section>
                     </View>
 
@@ -113,21 +115,18 @@ export default function ViewNote() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
     scrollContainer: {
         flexGrow: 1,
-        paddingVertical: 24,
+        paddingVertical: 24
     },
     topContainer: {
         flex: 1,
         gap: 40,
-        justifyContent: 'space-between',
+        justifyContent: 'space-between'
     },
     buttonContainer: {
         gap: 16,
         marginTop: 32,
-        paddingHorizontal: 24,
+        paddingHorizontal: 24
     }
 })
