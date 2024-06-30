@@ -1,12 +1,13 @@
 import { Pressable, StyleSheet } from 'react-native'
 import { Typography } from '../Text'
+import { COLORS } from '@/constants'
 
 export function Option({ rightLabel, rightContent, onPress, children }) {
     return (
         <Pressable
             onPress={onPress}
             style={styles.container}
-            android_ripple={{ color: 'rgba(0, 0, 0, 0.1)' }}
+            android_ripple={{ color: COLORS.white5 }}
         >
             {children}
             {rightContent || (
