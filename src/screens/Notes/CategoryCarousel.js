@@ -3,12 +3,12 @@ import { Chip, ChipContent, RemoveChipButton, Scroll } from '@/components'
 import { useCategories } from '@/hooks'
 import { DEFAULT_CATEGORIES } from '@/constants'
 
-export function CategoryCarousel({ categoryIds, onAddCategory, onCategoriesModal, disabled = false }) {
+export function CategoryCarousel({ selectedCategories, onCategories, onCategoriesModal, disabled = false }) {
     const { t } = useTranslation()
     const { categories } = useCategories()
 
     const filteredCategories =
-        categories.filter(({ id }) => categoryIds.includes(id) &&
+        categories.filter(({ id }) => selectedCategories.includes(id) &&
             !DEFAULT_CATEGORIES.map(({ id }) => id).includes(id))
 
     return (
@@ -18,7 +18,7 @@ export function CategoryCarousel({ categoryIds, onAddCategory, onCategoriesModal
             contentContainerStyle={{
                 flexGrow: 1,
                 gap: 8,
-                paddingHorizontal: 24,
+                paddingHorizontal: 24
             }}
         >
             {filteredCategories.map(({ id, name }) =>
@@ -29,7 +29,7 @@ export function CategoryCarousel({ categoryIds, onAddCategory, onCategoriesModal
                     endContent={
                         !disabled && (
                             <RemoveChipButton
-                                onPress={() => onAddCategory(id)}
+                                onPress={() => onCategories(id)}
                             />
                         )
                     }
