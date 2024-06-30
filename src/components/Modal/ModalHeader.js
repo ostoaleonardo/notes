@@ -31,6 +31,7 @@ export function ModalHeader({ title, onClose }) {
 
 const styles = StyleSheet.create({
     container: {
+        marginBottom: 16,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'

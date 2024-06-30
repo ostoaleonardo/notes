@@ -5,31 +5,25 @@ import { COLORS } from '@/constants'
 
 export function ModalOption({ onPress, label, isSelected }) {
     return (
-        <View style={styles.container}>
-            <Pressable
-                onPress={onPress}
-                style={styles.optionContainer}
-            >
-                <Typography>
-                    {label}
-                </Typography>
-                <Check checked={isSelected} />
-            </Pressable>
-        </View>
+        <Pressable
+            onPress={onPress}
+            style={styles.container}
+            android_ripple={{ color: COLORS.white5 }}
+        >
+            <Typography>
+                {label}
+            </Typography>
+            <Check checked={isSelected} />
+        </Pressable>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        alignItems: 'center',
-    },
-    optionContainer: {
         minWidth: '100%',
-        padding: 16,
+        paddingVertical: 16,
+        paddingHorizontal: 24,
         flexDirection: 'row',
-        borderBottomWidth: 2,
-        justifyContent: 'space-between',
-        borderBottomColor: COLORS.white5
-    },
+        justifyContent: 'space-between'
+    }
 })
