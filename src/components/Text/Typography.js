@@ -8,20 +8,23 @@ const SIZE_VARIANTS = {
     caption: 12
 }
 
-export function Typography({ children, bold, uppercase, color, opacity, textAlign, fontSize, fontFamily, variant = 'paragraph' }) {
+export function Typography({ children, bold, uppercase, color, opacity, textAlign, fontSize, fontFamily, variant = 'paragraph', ...props }) {
     const fontVariant = fontSize || SIZE_VARIANTS[variant]
 
     return (
-        <Text style={[
-            styles.base,
-            color && { color },
-            opacity && { opacity },
-            { fontSize: fontVariant },
-            textAlign && { textAlign },
-            uppercase && styles.uppercase,
-            bold ? styles.bold : styles.regular,
-            fontFamily && { fontFamily }
-        ]}>
+        <Text
+            style={[
+                styles.base,
+                color && { color },
+                opacity && { opacity },
+                { fontSize: fontVariant },
+                textAlign && { textAlign },
+                uppercase && styles.uppercase,
+                bold ? styles.bold : styles.regular,
+                fontFamily && { fontFamily },
+            ]}
+            {...props}
+        >
             {children}
         </Text>
     )
