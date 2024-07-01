@@ -97,5 +97,6 @@ export function useAuth() {
         signOut,
         getIsSignedIn,
         getAccessToken,
+        getCurrentUser
     }
 }
