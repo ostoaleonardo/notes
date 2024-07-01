@@ -3,9 +3,9 @@ import { Typography } from '../Text'
 import { COLORS } from '@/constants'
 
 export function Avatar({ user, color, size = 40 }) {
-    const { givenName, photo } = user
+    const { name, photo } = user
 
-    if (!givenName) return null
+    if (!name) return null
 
     const containerStyles = {
         ...styles.container,
@@ -27,7 +27,7 @@ export function Avatar({ user, color, size = 40 }) {
                     variant='title'
                     fontSize={size / 2}
                 >
-                    {givenName[0]}
+                    {name[0]}
                 </Typography>
             </View>
         )

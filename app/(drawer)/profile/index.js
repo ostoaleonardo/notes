@@ -26,7 +26,7 @@ function Option({ title, description }) {
 export default function Profile() {
     const { t } = useTranslation()
     const { user } = useUser()
-    const { givenName, email } = user
+    const { name, email } = user
     const { signOut } = useAuth()
 
     return (
@@ -42,7 +42,7 @@ export default function Profile() {
                 <View style={{ gap: 32 }}>
                     <Option
                         title={t('profile.alias')}
-                        description={givenName}
+                        description={name}
                     />
                     <Option
                         title={t('profile.email')}

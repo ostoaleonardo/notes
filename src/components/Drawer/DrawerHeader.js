@@ -8,7 +8,7 @@ import { COLORS } from '@/constants'
 
 export function DrawerHeader() {
     const { user } = useUser()
-    const { givenName } = user
+    const { name } = user
 
     return (
         <Link
@@ -24,9 +24,10 @@ export function DrawerHeader() {
                 <View style={styles.userContainer}>
                     <Typography
                         uppercase
+                        numberOfLines={1}
                         variant='subtitle'
                     >
-                        {givenName}
+                        {name}
                     </Typography>
                     <ArrowForward color={COLORS.white} />
                 </View>
