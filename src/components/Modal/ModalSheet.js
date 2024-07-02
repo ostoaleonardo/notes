@@ -4,8 +4,6 @@ import { ModalHeader } from './ModalHeader'
 import { COLORS } from '@/constants'
 
 export const ModalSheet = forwardRef(({ title, children, onClose, contentContainerStyle, ...prop }, ref) => {
-    const snapPoints = ['50%', '70%', '95%']
-
     const renderBackdrop = useCallback((props) => (
         <BottomSheetBackdrop
             {...props}
@@ -19,7 +17,6 @@ export const ModalSheet = forwardRef(({ title, children, onClose, contentContain
             ref={ref}
             onClose={onClose}
             enablePanDownToClose
-            snapPoints={snapPoints}
             backdropComponent={renderBackdrop}
             backgroundStyle={{ backgroundColor: COLORS.foreground }}
             handleIndicatorStyle={{ backgroundColor: COLORS.white50 }}

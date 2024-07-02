@@ -1,9 +1,12 @@
-import { useState } from 'react'
-import { ModalOption, Scroll } from '@/components'
+import { forwardRef, useState } from 'react'
+import { ModalSheet, ModalOption, Separator } from '@/components'
+import { FlatList } from 'react-native-gesture-handler'
+import { useTranslation } from 'react-i18next'
 import { useLanguage } from '@/hooks'
 import { LANGUAGES } from '@/constants'
 
-export function Languages() {
+export const Languages = forwardRef(({ onClose }, ref) => {
+    const { t } = useTranslation()
     const { currentLanguage, changeLanguage } = useLanguage()
     const [isSelected, setIsSelected] = useState(currentLanguage)
 
@@ -13,20 +16,24 @@ export function Languages() {
     }
 
     return (
-        <Scroll
-            containerStyle={{
-                width: '100%',
-                paddingBottom: 24,
-            }}
+        <ModalSheet
+            ref={ref}
+            onClose={onClose}
+            snapPoints={['30%', '40%']}
+            title={t('title.language')}
         >
-            {LANGUAGES.map(({ code, name }) => (
-                <ModalOption
-                    key={code}
-                    label={name}
-                    isSelected={isSelected === code}
-                    onPress={() => handleLanguage(code)}
-                />
-            ))}
-        </Scroll>
+            <FlatList
+                data={LANGUAGES}
+                keyExtractor={({ code }) => code}
+                ItemSeparatorComponent={<Separator style={{ marginHorizontal: 24 }} />}
+                renderItem={({ item }) => (
+                    <ModalOption
+                        label={item.name}
+                        isSelected={isSelected === item.code}
+                        onPress={() => handleLanguage(item.code)}
+                    />
+                )}
+            />
+        </ModalSheet>
     )
-}
+})
