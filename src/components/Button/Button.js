@@ -29,6 +29,7 @@ export function Button({ label, onPress, disabled, isLoading, variant = 'primary
 
             <Typography
                 uppercase
+                variant='caption'
                 color={colorVariant}
             >
                 {label}
@@ -41,14 +42,13 @@ const styles = StyleSheet.create({
     base: {
         width: '100%',
         gap: 16,
-        padding: 16,
+        padding: 18,
         borderRadius: 48,
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'center'
     },
     primary: {
-        color: COLORS.white,
         backgroundColor: COLORS.primary
     },
     secondary: {
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.foreground
     },
     outline: {
-        borderWidth: 2,
-        borderColor: COLORS.white10
+        borderWidth: 1,
+        borderColor: COLORS.white15
     },
 })

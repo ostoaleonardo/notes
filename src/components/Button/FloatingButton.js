@@ -11,6 +11,8 @@ export function FloatingButton({ label, href }) {
         >
             <Typography
                 uppercase
+                variant='caption'
+                color={COLORS.white}
             >
                 {label}
             </Typography>
