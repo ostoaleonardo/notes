@@ -51,7 +51,7 @@
 		"addNote": "Add note",
 		"editNote": "Edit note",
 		"viewNote": "View note",
-		"removeNote": "Remove note",
+		"deleteNote": "Delete note",
 		"categories": "Categories",
 		"password": "Password",
 		"settings": "Settings",
