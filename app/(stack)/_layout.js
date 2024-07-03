@@ -34,6 +34,12 @@ export default function StackLayout() {
                 }}
             />
             <Stack.Screen
+                name='(notes)'
+                options={{
+                    headerShown: false
+                }}
+            />
+            <Stack.Screen
                 name='categories/index'
                 options={{
                     title: t('header.categories').toUpperCase()
