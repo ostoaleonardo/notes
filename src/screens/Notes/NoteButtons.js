@@ -3,9 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Button, IconButton } from '@/components'
 import { Lock, Unlock } from '@/icons'
-import { COLORS } from '@/constants'
-
-const HOME_ROUTE = '/(drawer)/(stack)/home'
+import { COLORS, ROUTES } from '@/constants'
 
 export function NoteButtons({ onSave, onOpenModal, hasPassword }) {
     const { t } = useTranslation()
@@ -41,7 +39,7 @@ export function NoteButtons({ onSave, onOpenModal, hasPassword }) {
             <Button
                 variant='outline'
                 label={t('button.cancel')}
-                onPress={() => router.navigate(HOME_ROUTE)}
+                onPress={() => router.navigate(ROUTES.HOME)}
             />
         </View>
     )

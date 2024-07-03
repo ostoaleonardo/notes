@@ -5,7 +5,7 @@ import { Typography } from '../Text'
 import { useLocalAuthentication } from '@/hooks'
 import { getDimensions } from '@/utils'
 import { Lock } from '@/icons'
-import { COLORS } from '@/constants'
+import { COLORS, ROUTES } from '@/constants'
 
 export function SwipeableNote({ data, isOpen, onOpen, onDelete }) {
     const { id, title, note, images, password, biometrics } = data
@@ -15,9 +15,9 @@ export function SwipeableNote({ data, isOpen, onOpen, onDelete }) {
 
     const goToEdit = () => {
         if (isLocked) {
-            router.navigate('/note/unlock/' + id)
+            router.push(ROUTES.UNLOCK_NOTE + id)
         } else {
-            router.navigate('/note/view/' + id)
+            router.push(ROUTES.VIEW_NOTE + id)
         }
     }
 
@@ -132,5 +132,5 @@ const styles = StyleSheet.create({
         padding: 8,
         borderRadius: 16,
         backgroundColor: COLORS.white5
-    },
+    }
 })
