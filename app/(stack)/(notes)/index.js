@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
 import { LargeInput, Scroll, Section, TextArea, Toast } from '@/components'
 import { AddPassword, Categories, CategoryCarousel, ImageCarousel, NoteButtons } from '@/screens'
-import { useBottomSheet, useHeaderTitle, useNotes } from '@/hooks'
+import { useBottomSheet, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
 import { DEFAULT_CATEGORIES, ROUTES } from '@/constants'
 
@@ -24,8 +24,6 @@ export default function Note() {
     const [galleryIndex, setGalleryIndex] = useState(0)
     const [isGalleryVisible, setIsGalleryVisible] = useState(false)
     const [message, setMessage] = useState('')
-
-    useHeaderTitle(t('header.addNote'))
 
     const {
         ref: categoriesBottomRef,
@@ -176,5 +174,5 @@ const styles = StyleSheet.create({
         flex: 1,
         gap: 40,
         justifyContent: 'space-between'
-    },
+    }
 })

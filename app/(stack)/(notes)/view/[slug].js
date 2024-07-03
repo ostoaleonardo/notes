@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
 import { Button, LargeInput, Scroll, Section, TextArea } from '@/components'
 import { CategoryCarousel, DateNote, ImageCarousel } from '@/screens'
-import { useHeaderTitle, useNotes } from '@/hooks'
+import { useNotes } from '@/hooks'
+import { ROUTES } from '@/constants'
 
 export default function ViewNote() {
     const router = useRouter()
@@ -21,8 +22,6 @@ export default function ViewNote() {
     const [updatedAt, setUpdatedAt] = useState('')
     const [galleryIndex, setGalleryIndex] = useState(0)
     const [isGalleryVisible, setIsGalleryVisible] = useState(false)
-
-    useHeaderTitle(t('header.viewNote'))
 
     useEffect(() => {
         const note = getNote(slug)
@@ -94,7 +93,7 @@ export default function ViewNote() {
                 <View style={styles.buttonContainer}>
                     <Button
                         label={t('button.edit')}
-                        onPress={() => router.push('/note/edit/' + slug)}
+                        onPress={() => router.push(ROUTES.EDIT_NOTE + slug)}
                     />
                     <Button
                         variant='outline'

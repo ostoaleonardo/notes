@@ -4,25 +4,24 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as Animatable from 'react-native-animatable'
 import { Button, PasswordInput, Toast } from '@/components'
-import { useHaptics, useHeaderTitle, useLocalAuthentication, useNotes } from '@/hooks'
+import { useHaptics, useLocalAuthentication, useNotes } from '@/hooks'
 import { getEncryptedPassword } from '@/utils'
 import { Fingerprint } from '@/icons'
-import { COLORS, FEEDBACK_TYPES } from '@/constants'
+import { COLORS, FEEDBACK_TYPES, ROUTES } from '@/constants'
 
 export default function Password() {
     const router = useRouter()
     const { t } = useTranslation()
-    const { slug } = useLocalSearchParams()
     const { getNote } = useNotes()
     const { vibrate } = useHaptics()
+    const { slug } = useLocalSearchParams()
     const { isLoading, hasBiometrics, authenticate } = useLocalAuthentication()
+    
     const [passwordInput, setPasswordInput] = useState('')
     const [encryptedInput, setEncryptedInput] = useState('')
     const [encryptedPassword, setEncryptedPassword] = useState('')
     const [isWrongPassword, setIsWrongPassword] = useState(false)
     const [message, setMessage] = useState('')
-
-    useHeaderTitle(t('header.password'))
 
     const { biometrics, password } = getNote(slug)
 
@@ -43,7 +42,7 @@ export default function Password() {
 
     const handlePassword = () => {
         if (encryptedInput === encryptedPassword) {
-            router.replace('/note/view/' + slug)
+            router.replace(ROUTES.VIEW_NOTE + slug)
         } else {
             setIsWrongPassword(true)
             vibrate(FEEDBACK_TYPES.ERROR)
@@ -55,7 +54,7 @@ export default function Password() {
         const success = await authenticate()
 
         if (success) {
-            router.replace('/note/view/' + slug)
+            router.replace(ROUTES.VIEW_NOTE + slug)
         }
     }
 
