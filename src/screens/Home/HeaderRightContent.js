@@ -4,7 +4,7 @@ import { ActivityIndicator, View } from 'react-native'
 import { IconButton } from '@/components'
 import { Settings } from '@/icons'
 import { SyncContext } from '@/context'
-import { COLORS } from '@/constants'
+import { COLORS, ROUTES } from '@/constants'
 
 export function HeaderRightContent() {
     const { isSyncing } = useContext(SyncContext)
@@ -15,7 +15,7 @@ export function HeaderRightContent() {
 
             <IconButton
                 variant='light'
-                onPress={() => router.push('settings')}
+                onPress={() => router.push(ROUTES.SETTINGS)}
                 icon={
                     <Settings
                         width={28}
