@@ -6,9 +6,9 @@ export {
 
 // Home screen components
 export {
-    HeaderAvatar,
     FilterCarousel,
-    NotesContainer
+    NotesContainer,
+    HeaderRightContent
 } from './Home'
 
 // Categories screen components
@@ -26,11 +26,10 @@ export {
 
 // Modals
 export {
-    AccountModal,
-    CategoriesModal,
-    UpdateCategoryModal,
-    PasswordModal,
-    UpdatePasswordModal,
-    Themes,
-    Languages
+    Languages,
+    DeleteNote,
+    UpdateCategory,
+    Categories,
+    AddPassword,
+    UpdatePassword
 } from './Modals'
