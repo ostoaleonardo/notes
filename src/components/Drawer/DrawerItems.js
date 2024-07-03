@@ -1,8 +1,9 @@
+import { View } from 'react-native'
 import { DrawerContentScrollView } from '@react-navigation/drawer'
 import { useTranslation } from 'react-i18next'
 import { DrawerHeader } from './DrawerHeader'
 import { DrawerScreen } from './DrawerScreen'
-import { View } from 'react-native'
+import { ROUTES } from '@/constants'
 
 export function DrawerItems() {
     const { t } = useTranslation()
@@ -12,16 +13,12 @@ export function DrawerItems() {
             <DrawerHeader />
             <View style={{ paddingVertical: 16 }}>
                 <DrawerScreen
-                    path='/home'
+                    path={ROUTES.HOME}
                     label={t('drawer.notes')}
                 />
                 <DrawerScreen
-                    path='/categories'
+                    path={ROUTES.CATEGORIES}
                     label={t('drawer.categories')}
-                />
-                <DrawerScreen
-                    path='/settings'
-                    label={t('drawer.settings')}
                 />
             </View>
         </DrawerContentScrollView>
