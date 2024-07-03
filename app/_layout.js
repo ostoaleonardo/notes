@@ -48,7 +48,7 @@ export default function DrawerLayout() {
                     }
                 }}
             >
-                <Stack.Screen name='(drawer)' />
+                <Stack.Screen name='(stack)' />
                 <Stack.Screen name='signin/index' />
             </Stack>
         </Providers>
