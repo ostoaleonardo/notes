@@ -90,7 +90,7 @@ export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
                     <Fingerprint
                         width={96}
                         height={96}
-                        fill={COLORS.white50}
+                        fill={COLORS.white}
                     />
                 )}
             </View>
