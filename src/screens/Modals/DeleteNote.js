@@ -25,7 +25,7 @@ export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
         setEncryptedPassword(password)
 
         if (biometrics && hasBiometrics) {
-            // handleBiometrics()
+            handleBiometrics()
         }
     }, [password])
 
