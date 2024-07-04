@@ -4,7 +4,7 @@ import { Typography } from '../Text'
 import { Avatar } from '../Avatar'
 import { ArrowForward } from '@/icons'
 import { useUser } from '@/hooks'
-import { COLORS } from '@/constants'
+import { COLORS, ROUTES } from '@/constants'
 
 export function DrawerHeader() {
     const { user } = useUser()
@@ -13,7 +13,7 @@ export function DrawerHeader() {
     return (
         <Link
             asChild
-            href='/profile'
+            href={ROUTES.PROFILE}
             style={styles.container}
         >
             <Pressable>
