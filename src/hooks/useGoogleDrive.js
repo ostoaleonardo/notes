@@ -26,7 +26,7 @@ export function useGoogleDrive() {
                 method: 'POST',
                 headers: new Headers({
                     Authorization: 'Bearer ' + accessToken,
-                    'Content-Type': 'multipart/related; boundary=foo_bar_baz',
+                    'Content-Type': 'multipart/related; boundary=foo_bar_baz'
                 }),
                 body: requestBody
             })
@@ -64,17 +64,17 @@ export function useGoogleDrive() {
 
     const deleteFile = async (fileId) => {
         try {
-            const response = await fetch(GOOGLE_APIS.FILES + '/' + fileId, {
+            const success = await fetch(GOOGLE_APIS.FILES + '/' + fileId, {
                 method: 'DELETE',
                 headers: new Headers({
                     Authorization: 'Bearer ' + accessToken
                 })
             })
-                .then(response => response.json())
+                .then(response => response.ok)
 
-            return response
+            return success
         } catch (error) {
-            return null
+            return false
         }
     }
 
