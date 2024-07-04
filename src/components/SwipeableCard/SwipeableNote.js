@@ -29,84 +29,86 @@ export function SwipeableNote({ data, isOpen, onOpen, onDelete }) {
         >
             <Pressable
                 onPress={goToEdit}
-                style={styles.pressableContainer}
+                style={styles.container}
             >
-                <View style={styles.noteContainer}>
-                    <Typography
-                        bold
-                        uppercase
-                        variant='caption'
-                    >
-                        {title}
-                    </Typography>
+                <View style={styles.headerContainer}>
+                    <View style={{ flex: 1 }}>
+                        <Typography
+                            bold
+                            uppercase
+                            variant='caption'
+                        >
+                            {title}
+                        </Typography>
+                    </View>
 
-                    {!isLocked &&
-                        <>
-                            <Typography
-                                bold
-                                variant='caption'
-                            >
-                                {note}
-                            </Typography>
-
-                            {images.length > 0 && (
-                                <View style={styles.noteImages}>
-                                    {images.slice(0, 3).map((image, index) => (
-                                        <Image
-                                            key={index}
-                                            source={{ uri: image }}
-                                            style={[styles.noteImage, {
-                                                width: width + '%',
-                                                height: width + '%',
-                                            }]}
-                                        />
-                                    ))}
-                                </View>
-                            )}
-                        </>
-                    }
-
-                    {isLocked &&
-                        <>
-                            <View style={styles.skeletonContainer}>
-                                <View style={styles.skeleton1} />
-                                <View style={styles.skeleton2} />
-                            </View>
-
-                            <View style={styles.iconContainer}>
-                                <Lock
-                                    width={12}
-                                    height={12}
-                                    color={COLORS.white}
-                                />
-                            </View>
-                        </>
-                    }
+                    {isLocked && (
+                        <Lock
+                            width={16}
+                            height={16}
+                            color={COLORS.white}
+                        />
+                    )}
                 </View>
+
+                {!isLocked && (
+                    <View style={{ width: '100%' }}>
+                        <Typography
+                            variant='caption'
+                            numberOfLines={5}
+                        >
+                            {note}
+                        </Typography>
+
+                        {images.length > 0 && (
+                            <View style={styles.imagesContainer}>
+                                {images.slice(0, 3).map((image, index) => (
+                                    <Image
+                                        key={index}
+                                        source={{ uri: image }}
+                                        style={[styles.image, {
+                                            width: width + '%',
+                                            height: width + '%'
+                                        }]}
+                                    />
+                                ))}
+                            </View>
+                        )}
+                    </View>
+                )}
+
+                {isLocked && (
+                    <View style={styles.skeletonContainer}>
+                        <View style={styles.skeleton1} />
+                        <View style={styles.skeleton2} />
+                    </View>
+                )}
             </Pressable>
         </SwipeableCard>
     )
 }
 
 const styles = StyleSheet.create({
-    pressableContainer: {
+    container: {
         minWidth: '100%',
+        gap: 16,
         padding: 20,
         borderRadius: 16,
         backgroundColor: COLORS.foreground
     },
-    noteContainer: {
-        width: '100%',
-        gap: 8
+    headerContainer: {
+        gap: 16,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
-    noteImages: {
+    imagesContainer: {
         width: '100%',
         gap: 8,
         marginTop: 12,
         flexWrap: 'wrap',
         flexDirection: 'row'
     },
-    noteImage: {
+    image: {
         aspectRatio: 1,
         borderRadius: 16
     },
@@ -123,13 +125,6 @@ const styles = StyleSheet.create({
     skeleton2: {
         width: '60%',
         height: 10,
-        borderRadius: 16,
-        backgroundColor: COLORS.white5
-    },
-    iconContainer: {
-        position: 'absolute',
-        right: 0,
-        padding: 8,
         borderRadius: 16,
         backgroundColor: COLORS.white5
     }
