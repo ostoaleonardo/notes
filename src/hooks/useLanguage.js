@@ -1,53 +1,37 @@
-import { useEffect, useState } from 'react'
-import { getLocales } from 'expo-localization'
 import i18next from '@/i18n/i18next'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { getLocales } from 'expo-localization'
+import { useStorage } from './useStorage'
+import { STORAGE_KEYS } from '@/constants'
+
+const SUPPORTED_LANGUAGES = ['en', 'es']
 
 export function useLanguage() {
-    const [deviceLanguage, setDeviceLanguage] = useState('')
+    const { setItem, getItem } = useStorage()
     const currentLanguage = i18next.language
 
-    useEffect(() => {
+    const getLanguage = () => {
         const locales = getLocales()
         const { languageCode } = locales[0]
 
-        setDeviceLanguage(languageCode)
-    }, [])
-
-    const getLanguage = (languageCode) => {
-        const supportedLanguages = ['en', 'es']
-
-        if (supportedLanguages.includes(languageCode)) {
-            return languageCode
-        } else {
-            return 'en'
-        }
+        return SUPPORTED_LANGUAGES.includes(languageCode) ? languageCode : 'en'
     }
 
     const changeLanguage = (lan) => {
         i18next.changeLanguage(lan)
-        saveLanguageToStorage(lan)
+        setItem(STORAGE_KEYS.USER_LANGUAGE, lan)
     }
 
-    const initLanguage = () => {
-        AsyncStorage.getItem('userLanguage')
-            .then((lan) => {
-                if (lan) {
-                    changeLanguage(lan)
-                } else {
-                    const lan = getLanguage(deviceLanguage)
-                    changeLanguage(lan)
-                }
-            })
-    }
+    const initLanguage = async () => {
+        (async () => {
+            const userLanguage = await getItem(STORAGE_KEYS.USER_LANGUAGE)
+            const defaultLanguage = getLanguage()
 
-    const saveLanguageToStorage = (lan) => {
-        AsyncStorage.setItem('userLanguage', lan)
+            changeLanguage(userLanguage || defaultLanguage)
+        })()
     }
 
     return {
         currentLanguage,
-        deviceLanguage,
         initLanguage,
         changeLanguage
     }
