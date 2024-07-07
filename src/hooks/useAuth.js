@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react'
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { AuthContext } from '@/context'
 
 export function useAuth() {
