@@ -22,12 +22,10 @@ export function useLanguage() {
     }
 
     const initLanguage = async () => {
-        (async () => {
-            const userLanguage = await getItem(STORAGE_KEYS.USER_LANGUAGE)
-            const defaultLanguage = getLanguage()
+        const userLanguage = await getItem(STORAGE_KEYS.USER_LANGUAGE)
+        const defaultLanguage = getLanguage()
 
-            changeLanguage(userLanguage || defaultLanguage)
-        })()
+        changeLanguage(userLanguage || defaultLanguage)
     }
 
     return {
