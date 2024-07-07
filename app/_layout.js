@@ -21,7 +21,7 @@ export default function DrawerLayout() {
         (async () => {
             await SplashScreen.preventAutoHideAsync()
             GoogleSignin.configure({ scopes: SCOPES })
-            initLanguage()
+            await initLanguage()
             setIsReady(true)
         })()
     }, [])
