@@ -29,13 +29,7 @@ export function useAuth() {
 
             return null
         } catch (error) {
-            switch (error.code) {
-                case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
-                    // Handle error
-                    break
-                default:
-                    return null
-            }
+            return null
         } finally {
             setIsAuthenticating(false)
         }
@@ -53,8 +47,11 @@ export function useAuth() {
     }
 
     const getIsSignedIn = async () => {
-        const isSignedIn = await GoogleSignin.isSignedIn()
-        return isSignedIn
+        try {
+            return await GoogleSignin.isSignedIn()
+        } catch (error) {
+            return false
+        }
     }
 
     const getCurrentUser = async () => {
