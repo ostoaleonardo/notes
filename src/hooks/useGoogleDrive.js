@@ -22,7 +22,7 @@ export function useGoogleDrive() {
         const requestBody = getMultipartRequestBody(metadata, data)
 
         try {
-            const { id } = await fetch(url, {
+            const { id, error } = await fetch(url, {
                 method: 'POST',
                 headers: new Headers({
                     Authorization: 'Bearer ' + accessToken,
@@ -32,9 +32,9 @@ export function useGoogleDrive() {
             })
                 .then(response => response.json())
 
-            return { id }
+            return { id, error }
         } catch (error) {
-            return error
+            return { error }
         }
     }
 
