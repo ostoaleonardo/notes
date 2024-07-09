@@ -4,12 +4,15 @@ export const SyncContext = createContext()
 
 export function SyncProvider({ children }) {
     const [isSyncing, setIsSyncing] = useState(false)
+    const [isBackingUp, setIsBackingUp] = useState(false)
 
     return (
         <SyncContext.Provider
             value={{
                 isSyncing,
-                setIsSyncing
+                setIsSyncing,
+                isBackingUp,
+                setIsBackingUp
             }}
         >
             {children}
