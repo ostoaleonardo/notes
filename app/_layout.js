@@ -11,8 +11,6 @@ export default function DrawerLayout() {
     const { initLanguage } = useLanguage()
     const [isReady, setIsReady] = useState(false)
     const [fontsLoaded, fontError] = useFonts({
-        'SpaceMono-Regular': require('../assets/fonts/SpaceMono-Regular.ttf'),
-        'SpaceMono-Bold': require('../assets/fonts/SpaceMono-Bold.ttf'),
         'AzeretMono-Light': require('../assets/fonts/AzeretMono-Light.ttf'),
         'AzeretMono-Medium': require('../assets/fonts/AzeretMono-Medium.ttf')
     })
