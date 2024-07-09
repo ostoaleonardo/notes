@@ -23,9 +23,9 @@ const styles = StyleSheet.create({
         width: '100%',
         fontSize: 24,
         color: COLORS.white,
-        fontFamily: FONTS.spaceMono
+        fontFamily: FONTS.azeretLight
     },
     bold: {
-        fontFamily: FONTS.spaceMonoBold
+        fontFamily: FONTS.azeretMedium
     }
 })
