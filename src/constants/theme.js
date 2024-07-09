@@ -28,8 +28,6 @@ export const COLORS = {
 }
 
 export const FONTS = {
-    spaceMono: 'SpaceMono-Regular',
-    spaceMonoBold: 'SpaceMono-Bold',
     azeretLight: 'AzeretMono-Light',
     azeretMedium: 'AzeretMono-Medium'
 }
