@@ -63,22 +63,21 @@ export const Categories = forwardRef(({ selectedCategories, handleCategories, on
 
             <FlatList
                 horizontal={false}
+                alignItems='center'
                 data={categories.slice(1)}
                 keyExtractor={({ id }) => id}
                 showsVerticalScrollIndicator={false}
                 ItemSeparatorComponent={<Separator />}
                 renderItem={({ item }) => renderItems(item)}
                 ListEmptyComponent={() => (
-                    <Typography
-                        opacity={0.5}
-                    >
-                        {t('message.noCategories')}
-                    </Typography>
+                    <View style={{ paddingTop: 64 }}>
+                        <Typography
+                            opacity={0.5}
+                        >
+                            {t('message.noCategories')}
+                        </Typography>
+                    </View>
                 )}
-            // contentContainerStyle={{
-            //     paddingBottom: 24,
-            //     paddingHorizontal: 24
-            // }}
             />
         </ModalSheet>
     )
@@ -89,16 +88,11 @@ const styles = StyleSheet.create({
         gap: 16,
         paddingBottom: 24,
         flexDirection: 'row',
-        alignItems: 'center',
-    },
-    categoriesContainer: {
-        flexGrow: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        alignItems: 'center'
     },
     contentContainer: {
         flexGrow: 1,
         paddingBottom: 24,
-        alignItems: 'center',
-    },
+        alignItems: 'center'
+    }
 })
