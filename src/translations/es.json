@@ -16,7 +16,6 @@
 	"profile": {
 		"alias": "Alias",
 		"email": "Correo electrónico",
-		"signIn": "Iniciar sesión",
 		"signOut": "Cerrar sesión",
 		"error": "Error al iniciar sesión, inténtalo de nuevo"
 	},
