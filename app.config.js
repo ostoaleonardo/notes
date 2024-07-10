@@ -1,39 +1,30 @@
-const DEV = process.env.VARIANT === 'development'
-
-const NAME = DEV ? 'Notes (Dev)' : 'Notes'
-const PACKAGE = DEV ? 'com.monospace.notes' : 'com.monospace.notes'
-
 export default {
-  name: NAME,
+  name: 'Notes',
   slug: 'notes',
   scheme: 'notes',
-  version: '1.0.0',
+  version: '1.1.0',
   orientation: 'portrait',
   icon: './assets/icon.png',
-  userInterfaceStyle: 'dark',
-  backgroundColor: '#09090b',
+  backgroundColor: '#07080a',
   splash: {
     image: './assets/splash.png',
     resizeMode: 'contain',
-    backgroundColor: '#09090b'
+    backgroundColor: '#07080a'
   },
-  assetBundlePatterns: [
-    '**/*'
-  ],
   android: {
     adaptiveIcon: {
       foregroundImage: './assets/adaptive-icon.png',
-      backgroundColor: '#09090b'
+      backgroundColor: '#07080a'
     },
-    package: PACKAGE,
+    package: 'com.monospace.notes',
     versionCode: 2,
-    googleServicesFile: './google-services.json'
+    googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
   },
   plugins: [
     'expo-router',
     'expo-font',
     'expo-localization',
-    "expo-local-authentication",
+    'expo-local-authentication',
     '@react-native-google-signin/google-signin'
   ],
   extra: {
