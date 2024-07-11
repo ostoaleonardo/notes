@@ -12,7 +12,6 @@
     "@gorhom/bottom-sheet": "^4.6.3",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-native-community/netinfo": "11.3.1",
-    "@react-native-google-signin/google-signin": "^11.0.1",
     "@react-navigation/drawer": "^6.6.9",
     "expo": "^51.0.17",
     "expo-application": "~5.9.1",
