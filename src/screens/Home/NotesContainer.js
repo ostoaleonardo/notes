@@ -27,12 +27,12 @@ export function NotesContainer({ onOpen, filteredNotes, selectedNote, setSelecte
                 </Typography>
             )}
 
-            {filteredNotes.map(({ id, ...note }) => (
+            {filteredNotes.map((note) => (
                 <SwipeableNote
-                    key={id}
-                    data={{ id, ...note }}
-                    isOpen={selectedNote === id}
-                    onOpen={() => setSelectedNote(id)}
+                    key={note.id}
+                    data={note}
+                    isOpen={selectedNote === note.id}
+                    onOpen={() => setSelectedNote(note.id)}
                     onDelete={handleDelete}
                 />
             ))}
