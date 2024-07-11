@@ -48,7 +48,7 @@ export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
     }
 
     const handleBiometrics = async () => {
-        const success = await authenticate()
+        const success = await authenticate(t('header.deleteNote'))
 
         if (success) {
             deleteNote(id)

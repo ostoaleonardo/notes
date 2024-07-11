@@ -38,7 +38,7 @@ export const AddPassword = forwardRef(({ setPassword, biometrics, setBiometrics,
             return
         }
 
-        const success = await authenticate()
+        const success = await authenticate(t('biometric.lock'))
 
         if (success) {
             setBiometrics(true)

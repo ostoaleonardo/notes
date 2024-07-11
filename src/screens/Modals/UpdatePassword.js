@@ -67,7 +67,7 @@ export const UpdatePassword = forwardRef(({ currentPassword, tooglePassword, onD
             return
         }
 
-        const success = await authenticate()
+        const success = await authenticate(t('biometric.lock'))
 
         if (success) {
             setBiometrics(true)

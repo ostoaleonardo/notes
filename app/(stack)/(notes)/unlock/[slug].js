@@ -16,7 +16,7 @@ export default function Password() {
     const { vibrate } = useHaptics()
     const { slug } = useLocalSearchParams()
     const { isLoading, hasBiometrics, authenticate } = useLocalAuthentication()
-    
+
     const [passwordInput, setPasswordInput] = useState('')
     const [encryptedInput, setEncryptedInput] = useState('')
     const [encryptedPassword, setEncryptedPassword] = useState('')
@@ -51,7 +51,7 @@ export default function Password() {
     }
 
     const handleBiometrics = async () => {
-        const success = await authenticate()
+        const success = await authenticate(t('biometric.unlock'))
 
         if (success) {
             router.replace(ROUTES.VIEW_NOTE + slug)
