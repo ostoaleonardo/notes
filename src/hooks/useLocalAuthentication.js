@@ -1,11 +1,9 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import { AppState } from 'react-native'
 import * as LocalAuthentication from 'expo-local-authentication'
-import { useTranslation } from 'react-i18next'
 import { AuthContext } from '@/context'
 
 export function useLocalAuthentication() {
-    const { t } = useTranslation()
     const { hasBiometrics, setHasBiometrics } = useContext(AuthContext)
     const [isLoading, setIsLoading] = useState(true)
     const appState = useRef(AppState.currentState)
@@ -37,11 +35,11 @@ export function useLocalAuthentication() {
         setIsLoading(false)
     }
 
-    const authenticate = async () => {
+    const authenticate = async (message) => {
         if (!hasBiometrics) return
 
         const { success } = await LocalAuthentication.authenticateAsync({
-            promptMessage: t('biometric.auth')
+            promptMessage: message
         })
 
         return success
