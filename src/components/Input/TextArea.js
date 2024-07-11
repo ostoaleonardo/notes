@@ -12,6 +12,7 @@ export function TextArea({ value, onChangeText, placeholder, ...props }) {
                 placeholder={placeholder}
                 onChangeText={onChangeText}
                 cursorColor={COLORS.primary}
+                selectionColor={COLORS.primary}
                 placeholderTextColor={COLORS.white50}
             />
         </View>
