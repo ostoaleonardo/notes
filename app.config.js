@@ -17,7 +17,7 @@ export default {
       backgroundColor: '#07080a'
     },
     package: 'com.monospace.notes',
-    versionCode: 2,
+    versionCode: 3,
     googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
   },
   plugins: [
