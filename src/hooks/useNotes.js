@@ -1,12 +1,10 @@
 import { useContext, useEffect, useState } from 'react'
-import { useNotesBackup } from './useNotesBackup'
 import { useStorage } from './useStorage'
 import { NoteContext } from '@/context'
 import { STORAGE_KEYS } from '@/constants'
 
 export function useNotes() {
     const { notes, setNotes } = useContext(NoteContext)
-    const { backup, isSyncing } = useNotesBackup()
     const { setItem, getItem } = useStorage()
     const [loading, setLoading] = useState(true)
 
@@ -33,16 +31,13 @@ export function useNotes() {
         return notes.find((note) => note.id === id) || {}
     }
 
-    const updateBackup = async (localNotes, note, action) => {
+    const updateBackup = async (localNotes) => {
         setNotes(localNotes)
         await setItem(STORAGE_KEYS.NOTES, JSON.stringify(localNotes))
-        await backup(action, note)
     }
 
     useEffect(() => {
         (async () => {
-            if (isSyncing) return
-
             const notes = await getItem(STORAGE_KEYS.NOTES)
 
             if (notes) {

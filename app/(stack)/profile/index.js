@@ -1,8 +1,9 @@
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { Avatar, Button, Typography } from '@/components'
-import { useAuth, useUser } from '@/hooks'
+import { Button, Typography } from '@/components'
+// import { Avatar, Button, Typography } from '@/components'
+// import { useAuth, useUser } from '@/hooks'
 import { ROUTES } from '@/constants'
 
 function Option({ title, description }) {
@@ -25,29 +26,29 @@ function Option({ title, description }) {
 
 export default function Profile() {
     const { t } = useTranslation()
-    const { user } = useUser()
-    const { name, email } = user
-    const { signOut } = useAuth()
+    // const { user } = useUser()
+    // const { name, email } = user
+    // const { signOut } = useAuth()
 
     return (
         <View style={styles.container}>
             <View style={{ gap: 56 }}>
                 <View style={{ alignItems: 'center' }}>
-                    <Avatar
+                    {/* <Avatar
                         size={192}
                         user={user}
-                    />
+                    /> */}
                 </View>
 
                 <View style={{ gap: 32 }}>
-                    <Option
+                    {/* <Option
                         title={t('profile.alias')}
                         description={name}
                     />
                     <Option
                         title={t('profile.email')}
                         description={email}
-                    />
+                    /> */}
                 </View>
             </View>
 
@@ -55,7 +56,7 @@ export default function Profile() {
                 variant='secondary'
                 label={t('profile.signOut')}
                 onPress={() => {
-                    signOut()
+                    // signOut()
                     router.replace(ROUTES.SIGN_IN)
                 }}
             />

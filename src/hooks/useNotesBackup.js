@@ -2,31 +2,35 @@ import { useContext, useEffect } from 'react'
 import { useNetInfo } from '@react-native-community/netinfo'
 import { useGoogleDrive } from './useGoogleDrive'
 import { useStorage } from './useStorage'
-import { useSync } from './useSync'
-import { NoteContext } from '@/context'
+import { useAuth } from './useAuth'
+import { NoteContext, SyncContext } from '@/context'
 import { STORAGE_KEYS } from '@/constants'
 
 export function useNotesBackup() {
-    const { isConnected } = useNetInfo()
+    const { isInternetReachable } = useNetInfo()
     const { setItem, getItem } = useStorage()
     const { multipartUpload, updateFile, deleteFile } = useGoogleDrive()
-    const { isSyncing, setIsSyncing } = useSync()
+    const { isSignedIn } = useAuth()
+    const { isSyncing, setIsSyncing, isBackingUp, setIsBackingUp } = useContext(SyncContext)
     const { notesToSync, setNotesToSync, notesIdBackup, setNotesIdBackup } = useContext(NoteContext)
 
     const backup = async (action, note) => {
+        if (!isSignedIn) return
+        let success = false
+
         try {
             setIsSyncing(true)
 
-            if (isConnected) {
+            if (isInternetReachable) {
                 switch (action) {
                     case 'create':
-                        await createBackup(note)
+                        success = await createBackup(note)
                         break
                     case 'update':
-                        await updateBackup(note)
+                        success = await updateBackup(note)
                         break
                     case 'delete':
-                        await deleteBackup(note.id)
+                        success = await deleteBackup(note.id)
                         break
                     default:
                         break
@@ -39,6 +43,7 @@ export function useNotesBackup() {
         }
         finally {
             setIsSyncing(false)
+            return success
         }
     }
 
@@ -47,19 +52,24 @@ export function useNotesBackup() {
         const fileName = 'note-' + noteId
 
         try {
-            const { id } = await multipartUpload(note, fileName)
+            const { id, error } = await multipartUpload(note, fileName)
 
-            const newNotesIdBackup = {
-                ...notesIdBackup,
-                [noteId]: id
+            if (error) {
+                throw new Error(error.message)
             }
 
             if (id) {
-                setNotesIdBackup(newNotesIdBackup)
-                await setItem(STORAGE_KEYS.NOTES_ID_BACKUP, JSON.stringify(newNotesIdBackup))
+                const newNotesIdBackup = {
+                    ...notesIdBackup,
+                    [noteId]: id
+                }
+
+                updateNotesIdBackup(newNotesIdBackup)
             }
+
+            return true
         } catch (error) {
-            console.log('error creating backup', error)
+            return false
         }
     }
 
@@ -69,9 +79,15 @@ export function useNotesBackup() {
 
         if (id) {
             try {
-                await updateFile(note, id)
+                const { error } = await updateFile(note, id)
+
+                if (error) {
+                    throw new Error(error.message)
+                }
+
+                return true
             } catch (error) {
-                console.log('error updating backup', error)
+                return false
             }
         } else {
             await createBackup(note)
@@ -83,9 +99,18 @@ export function useNotesBackup() {
 
         if (id) {
             try {
-                await deleteFile(id)
+                const success = await deleteFile(id)
+
+                if (success) {
+                    const newNotesIdBackup = { ...notesIdBackup }
+                    delete newNotesIdBackup[noteId]
+
+                    updateNotesIdBackup(newNotesIdBackup)
+                }
+
+                return success
             } catch (error) {
-                console.log('error deleting backup', error)
+                return false
             }
         }
     }
@@ -96,28 +121,42 @@ export function useNotesBackup() {
         setNotesToSync(newNotesToSync)
     }
 
+    const updateNotesIdBackup = async (newNotesIdBackup) => {
+        setNotesIdBackup(newNotesIdBackup)
+        await setItem(STORAGE_KEYS.NOTES_ID_BACKUP, JSON.stringify(newNotesIdBackup))
+    }
+
     const syncNotes = async () => {
+        if (!isSignedIn) return
+
         try {
-            if (isSyncing) return
+            setIsBackingUp(true)
+            const newNotesToSync = []
 
             for (const { action, note } of notesToSync) {
-                await backup(action, note)
+                const success = await backup(action, note)
+
+                if (!success) {
+                    newNotesToSync.push({ action, note })
+                }
             }
 
-            setNotesToSync([])
-            await setItem(STORAGE_KEYS.NOTES_TO_SYNC, JSON.stringify([]))
+            setNotesToSync(newNotesToSync)
+            await setItem(STORAGE_KEYS.NOTES_TO_SYNC, JSON.stringify(newNotesToSync))
         } catch (error) {
             // Handle error
+        } finally {
+            setIsBackingUp(false)
         }
     }
 
     useEffect(() => {
         (async () => {
-            const idBackup = await getItem(STORAGE_KEYS.NOTES_ID_BACKUP)
+            const notesIdBackup = await getItem(STORAGE_KEYS.NOTES_ID_BACKUP)
             const notesToSync = await getItem(STORAGE_KEYS.NOTES_TO_SYNC)
 
-            if (idBackup) {
-                setNotesIdBackup(JSON.parse(idBackup))
+            if (notesIdBackup) {
+                setNotesIdBackup(JSON.parse(notesIdBackup))
             }
 
             if (notesToSync) {
@@ -127,10 +166,14 @@ export function useNotesBackup() {
     }, [])
 
     useEffect(() => {
-        if (isConnected && notesToSync.length) {
-            syncNotes()
+        if (isInternetReachable && notesToSync.length > 0 && !isBackingUp) {
+            const timer = setTimeout(() => {
+                syncNotes()
+            }, 2000)
+
+            return () => clearTimeout(timer)
         }
-    }, [isConnected, notesToSync])
+    }, [isInternetReachable, notesToSync, isBackingUp])
 
     return {
         backup,

@@ -2,10 +2,9 @@ import { useCallback, useEffect, useState } from 'react'
 import { Stack } from 'expo-router'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { Providers } from './providers'
 import { useLanguage } from '@/hooks'
-import { COLORS, SCOPES } from '@/constants'
+import { COLORS } from '@/constants'
 
 export default function DrawerLayout() {
     const { initLanguage } = useLanguage()
@@ -18,7 +17,6 @@ export default function DrawerLayout() {
     useEffect(() => {
         (async () => {
             await SplashScreen.preventAutoHideAsync()
-            GoogleSignin.configure({ scopes: SCOPES })
             await initLanguage()
             setIsReady(true)
         })()

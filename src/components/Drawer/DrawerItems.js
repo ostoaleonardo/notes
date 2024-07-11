@@ -1,7 +1,6 @@
 import { View } from 'react-native'
 import { DrawerContentScrollView } from '@react-navigation/drawer'
 import { useTranslation } from 'react-i18next'
-import { DrawerHeader } from './DrawerHeader'
 import { DrawerScreen } from './DrawerScreen'
 import { ROUTES } from '@/constants'
 
@@ -10,7 +9,6 @@ export function DrawerItems() {
 
     return (
         <DrawerContentScrollView>
-            <DrawerHeader />
             <View style={{ paddingVertical: 16 }}>
                 <DrawerScreen
                     path={ROUTES.HOME}

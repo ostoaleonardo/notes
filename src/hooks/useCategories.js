@@ -1,12 +1,10 @@
 import { useContext, useEffect } from 'react'
 import { NoteContext } from '@/context'
 import { useStorage } from './useStorage'
-import { useCategoriesBackup } from './useCategoriesBackup'
 import { STORAGE_KEYS } from '@/constants'
 
 export function useCategories() {
     const { categories, setCategories } = useContext(NoteContext)
-    const { backup, isSyncing } = useCategoriesBackup()
     const { setItem, getItem } = useStorage()
 
     const addCategory = (category) => {
@@ -37,13 +35,10 @@ export function useCategories() {
     const updateBackup = async (localCategories) => {
         setCategories(localCategories)
         await setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(localCategories))
-        await backup(localCategories)
     }
 
     useEffect(() => {
         (async () => {
-            if (isSyncing) return
-
             const categories = await getItem(STORAGE_KEYS.CATEGORIES)
 
             if (categories) {

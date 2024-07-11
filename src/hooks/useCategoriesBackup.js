@@ -6,7 +6,7 @@ import { SyncContext } from '@/context'
 import { STORAGE_KEYS } from '@/constants'
 
 export function useCategoriesBackup() {
-    const { isConnected } = useNetInfo()
+    const { isInternetReachable } = useNetInfo()
     const { setItem, getItem } = useStorage()
     const { multipartUpload, updateFile } = useGoogleDrive()
     const { isSyncing, setIsSyncing } = useContext(SyncContext)
@@ -16,7 +16,7 @@ export function useCategoriesBackup() {
         try {
             setIsSyncing(true)
 
-            if (isConnected) {
+            if (isInternetReachable) {
                 if (fileId) {
                     await updateBackup(categories)
                 } else {
@@ -24,7 +24,7 @@ export function useCategoriesBackup() {
                 }
             }
         } catch (error) {
-            
+            // Handle error
         }
         finally {
             setIsSyncing(false)

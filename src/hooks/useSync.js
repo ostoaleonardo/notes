@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useNetInfo } from '@react-native-community/netinfo'
 import { useGoogleDrive } from './useGoogleDrive'
 import { useStorage } from './useStorage'
@@ -6,11 +6,12 @@ import { NoteContext, SyncContext } from '@/context'
 import { STORAGE_KEYS } from '@/constants'
 
 export function useSync() {
-    const { isConnected } = useNetInfo()
     const { setItem, getItem } = useStorage()
+    const { isInternetReachable } = useNetInfo()
     const { getPageToken, listChanges, getFile } = useGoogleDrive()
     const { isSyncing, setIsSyncing } = useContext(SyncContext)
     const { setNotes, setCategories } = useContext(NoteContext)
+    const [pageToken, setPageToken] = useState(null)
 
     const initPageToken = async () => {
         let pageToken = await getItem(STORAGE_KEYS.PAGE_TOKEN)
@@ -93,7 +94,7 @@ export function useSync() {
     const runSync = async () => {
         if (isSyncing) return
 
-        if (isConnected) {
+        if (isInternetReachable) {
             try {
                 setIsSyncing(true)
                 await sync()
@@ -105,20 +106,20 @@ export function useSync() {
         }
     }
 
-    useEffect(() => {
-        runSync()
+    // useEffect(() => {
+    //     runSync()
 
-        const interval = setInterval(runSync, 10000)
-        return () => clearInterval(interval)
-    }, [isConnected])
+    //     const interval = setInterval(runSync, 10000)
+    //     return () => clearInterval(interval)
+    // }, [isInternetReachable])
 
-    useEffect(() => {
-        (async () => {
-            if (isConnected) {
-                await initPageToken()
-            }
-        })()
-    }, [])
+    // useEffect(() => {
+    //     (async () => {
+    //         if (isInternetReachable) {
+    //             await initPageToken()
+    //         }
+    //     })()
+    // }, [])
 
     return {
         sync,
