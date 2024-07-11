@@ -17,15 +17,13 @@ export default {
       backgroundColor: '#07080a'
     },
     package: 'com.monospace.notes',
-    versionCode: 3,
-    googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
+    versionCode: 3
   },
   plugins: [
     'expo-router',
     'expo-font',
     'expo-localization',
-    'expo-local-authentication',
-    '@react-native-google-signin/google-signin'
+    'expo-local-authentication'
   ],
   extra: {
     router: {
