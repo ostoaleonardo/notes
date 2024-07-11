@@ -46,12 +46,6 @@ export default function StackLayout() {
                 }}
             />
             <Stack.Screen
-                name='profile/index'
-                options={{
-                    title: t('header.profile').toUpperCase()
-                }}
-            />
-            <Stack.Screen
                 name='settings/index'
                 options={{
                     title: t('header.settings').toUpperCase()
