@@ -1,4 +1,4 @@
-const BACKGROUND = '#000000'
+const BACKGROUND = '#07080a'
 const FOREGROUND = '#121318'
 const PRIMARY = '#c8102e'
 const WHITE = '#f0f2f1'
