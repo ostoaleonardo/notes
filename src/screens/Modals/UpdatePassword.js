@@ -3,12 +3,13 @@ import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as Animatable from 'react-native-animatable'
 import { ModalSheet, Button, PasswordInput, Typography } from '@/components'
-import { useLocalAuthentication } from '@/hooks'
+import { useHaptics, useLocalAuthentication } from '@/hooks'
 import { getEncryptedPassword } from '@/utils'
-import { COLORS } from '@/constants'
+import { COLORS, FEEDBACK_TYPES } from '@/constants'
 
 export const UpdatePassword = forwardRef(({ currentPassword, tooglePassword, onDelete, biometrics, setBiometrics, onClose }, ref) => {
     const { t } = useTranslation()
+    const { vibrate } = useHaptics()
     const { hasBiometrics, authenticate } = useLocalAuthentication()
 
     const [oldPassword, setOldPassword] = useState('')
@@ -48,22 +49,27 @@ export const UpdatePassword = forwardRef(({ currentPassword, tooglePassword, onD
         if (encryptedOldPassword === currentPassword) {
             if (encryptedOldPassword === encryptedNewPassword) {
                 setIsInvalidPassword(true)
+                vibrate(FEEDBACK_TYPES.WARNING)
                 setMessage('message.samePassword')
             } else if (newPassword.length < 4) {
                 setIsInvalidPassword(true)
+                vibrate(FEEDBACK_TYPES.WARNING)
                 setMessage('message.lengthPassword')
             } else {
                 tooglePassword(encryptedNewPassword)
+                vibrate(FEEDBACK_TYPES.SUCCESS)
                 onClose()
             }
         } else {
             setIsWrongPassword(true)
+            vibrate(FEEDBACK_TYPES.ERROR)
         }
     }
 
     const handleBiometrics = async () => {
         if (biometrics) {
             setBiometrics(false)
+            vibrate(FEEDBACK_TYPES.SUCCESS)
             return
         }
 
@@ -71,6 +77,7 @@ export const UpdatePassword = forwardRef(({ currentPassword, tooglePassword, onD
 
         if (success) {
             setBiometrics(true)
+            vibrate(FEEDBACK_TYPES.SUCCESS)
         }
     }
 

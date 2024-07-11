@@ -42,6 +42,7 @@ export default function Password() {
 
     const handlePassword = () => {
         if (encryptedInput === encryptedPassword) {
+            vibrate(FEEDBACK_TYPES.SUCCESS)
             router.replace(ROUTES.VIEW_NOTE + slug)
         } else {
             setIsWrongPassword(true)
@@ -54,6 +55,7 @@ export default function Password() {
         const success = await authenticate(t('biometric.unlock'))
 
         if (success) {
+            vibrate(FEEDBACK_TYPES.SUCCESS)
             router.replace(ROUTES.VIEW_NOTE + slug)
         }
     }

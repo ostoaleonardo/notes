@@ -4,12 +4,14 @@ import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { SmallInput, SquareButton, Toast } from '@/components'
 import { CategoriesContainer, UpdateCategory } from '@/screens'
-import { useBottomSheet, useCategories } from '@/hooks'
+import { useBottomSheet, useCategories, useHaptics } from '@/hooks'
+import { FEEDBACK_TYPES } from '@/constants'
 
 export default function Categories() {
     const { t } = useTranslation()
-    const { ref, onOpen, onClose } = useBottomSheet()
+    const { vibrate } = useHaptics()
     const { addCategory } = useCategories()
+    const { ref, onOpen, onClose } = useBottomSheet()
     const [newCategory, setNewCategory] = useState('')
     const [selectedCategory, setSelectedCategory] = useState('')
     const [isUpdatedCategory, setIsUpdatedCategory] = useState(false)
@@ -29,17 +31,13 @@ export default function Categories() {
     }
 
     const handleAddCategory = (category) => {
-        if (!category.trim()) {
-            setMessage(t('message.emptyCategory'))
-            return
-        }
-
         addCategory({
             id: Crypto.randomUUID(),
             name: category.trim()
         })
 
         setNewCategory('')
+        vibrate(FEEDBACK_TYPES.SUCCESS)
         setMessage(t('message.categoryAdded'))
     }
 
@@ -54,6 +52,7 @@ export default function Categories() {
                 />
                 <SquareButton
                     label={t('categories.add')}
+                    disabled={!newCategory.trim()}
                     onPress={() => handleAddCategory(newCategory)}
                 />
             </View>

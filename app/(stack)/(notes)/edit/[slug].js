@@ -5,13 +5,14 @@ import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
 import { LargeInput, Scroll, Section, TextArea, Toast } from '@/components'
 import { AddPassword, Categories, CategoryCarousel, DateNote, ImageCarousel, NoteButtons, UpdatePassword } from '@/screens'
-import { useBottomSheet, useNotes } from '@/hooks'
+import { useBottomSheet, useHaptics, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
-import { ROUTES } from '@/constants'
+import { FEEDBACK_TYPES, ROUTES } from '@/constants'
 
 export default function EditNote() {
     const router = useRouter()
     const { t } = useTranslation()
+    const { vibrate } = useHaptics()
     const { slug } = useLocalSearchParams()
     const { getNote, updateNote } = useNotes()
 
@@ -68,11 +69,13 @@ export default function EditNote() {
     const handleSave = () => {
         if (!title.trim()) {
             setMessage(t('message.emptyTitle'))
+            vibrate(FEEDBACK_TYPES.ERROR)
             return
         }
 
         if (!note.trim()) {
             setMessage(t('message.emptyNote'))
+            vibrate(FEEDBACK_TYPES.ERROR)
             return
         }
 
@@ -88,6 +91,7 @@ export default function EditNote() {
             updatedAt: getDate(),
         })
 
+        vibrate(FEEDBACK_TYPES.SUCCESS)
         router.navigate(ROUTES.HOME)
     }
 

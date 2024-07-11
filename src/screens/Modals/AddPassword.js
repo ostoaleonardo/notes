@@ -3,12 +3,13 @@ import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as Animatable from 'react-native-animatable'
 import { ModalSheet, Button, PasswordInput, Typography } from '@/components'
-import { useLocalAuthentication } from '@/hooks'
+import { useHaptics, useLocalAuthentication } from '@/hooks'
 import { getEncryptedPassword } from '@/utils'
-import { COLORS } from '@/constants'
+import { COLORS, FEEDBACK_TYPES } from '@/constants'
 
 export const AddPassword = forwardRef(({ setPassword, biometrics, setBiometrics, onClose }, ref) => {
     const { t } = useTranslation()
+    const { vibrate } = useHaptics()
     const { hasBiometrics, authenticate } = useLocalAuthentication()
     const [passwordInput, setPasswordInput] = useState('')
     const [encryptedPassword, setEncryptedPassword] = useState('')
@@ -23,11 +24,13 @@ export const AddPassword = forwardRef(({ setPassword, biometrics, setBiometrics,
 
     const checkPassword = () => {
         if (passwordInput.length < 4) {
+            vibrate(FEEDBACK_TYPES.ERROR)
             setIsInvalidPassword(true)
             setPassword('')
             return
         }
 
+        vibrate(FEEDBACK_TYPES.SUCCESS)
         setPassword(encryptedPassword)
         onClose()
     }
@@ -35,6 +38,7 @@ export const AddPassword = forwardRef(({ setPassword, biometrics, setBiometrics,
     const handleBiometrics = async () => {
         if (biometrics) {
             setBiometrics(false)
+            vibrate(FEEDBACK_TYPES.SUCCESS)
             return
         }
 
@@ -42,6 +46,7 @@ export const AddPassword = forwardRef(({ setPassword, biometrics, setBiometrics,
 
         if (success) {
             setBiometrics(true)
+            vibrate(FEEDBACK_TYPES.SUCCESS)
         }
     }
 

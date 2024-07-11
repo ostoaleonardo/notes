@@ -3,11 +3,13 @@ import { StyleSheet, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { useTranslation } from 'react-i18next'
 import { ModalSheet, Category, SmallInput, SquareButton, Typography, Separator } from '@/components'
-import { useCategories } from '@/hooks'
+import { useCategories, useHaptics } from '@/hooks'
 import * as Crypto from 'expo-crypto'
+import { FEEDBACK_TYPES } from '@/constants'
 
 export const Categories = forwardRef(({ selectedCategories, handleCategories, onClose }, ref) => {
     const { t } = useTranslation()
+    const { vibrate } = useHaptics()
     const { categories, addCategory } = useCategories()
     const [newCategory, setNewCategory] = useState('')
     const [isButtonDisabled, setIsButtonDisabled] = useState(true)
@@ -25,6 +27,7 @@ export const Categories = forwardRef(({ selectedCategories, handleCategories, on
         })
 
         setNewCategory('')
+        vibrate(FEEDBACK_TYPES.SUCCESS)
     }
 
     const renderItems = useCallback(({ id, name }) => (

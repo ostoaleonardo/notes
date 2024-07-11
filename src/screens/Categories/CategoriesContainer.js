@@ -2,12 +2,19 @@ import { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Scroll, Section, SwipeableCategory, Typography } from '@/components'
-import { useCategories } from '@/hooks'
+import { useCategories, useHaptics } from '@/hooks'
+import { FEEDBACK_TYPES } from '@/constants'
 
 export function CategoriesContainer({ onPress }) {
     const { t } = useTranslation()
+    const { vibrate } = useHaptics()
     const { categories, deleteCategory } = useCategories()
     const [openCategory, setOpenCategory] = useState(null)
+
+    const handleDeleteCategory = (id) => {
+        deleteCategory(id)
+        vibrate(FEEDBACK_TYPES.SUCCESS)
+    }
 
     return (
         <Section
@@ -30,7 +37,7 @@ export function CategoriesContainer({ onPress }) {
                             onPress={() => onPress(id)}
                             isOpen={openCategory === id}
                             onOpen={() => setOpenCategory(id)}
-                            onDelete={() => deleteCategory(id)}
+                            onDelete={() => handleDeleteCategory(id)}
                         />
                     ))}
                 </Scroll>

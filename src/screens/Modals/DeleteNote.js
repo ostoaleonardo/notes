@@ -10,10 +10,10 @@ import { COLORS, FEEDBACK_TYPES } from '@/constants'
 
 export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
     const { t } = useTranslation()
+    const { vibrate } = useHaptics()
     const { getNote, deleteNote } = useNotes()
     const { password, biometrics } = getNote(id)
     const { hasBiometrics, authenticate } = useLocalAuthentication()
-    const { vibrate } = useHaptics()
 
     const [passwordInput, setPasswordInput] = useState('')
     const [encryptedInput, setEncryptedInput] = useState('')
@@ -23,10 +23,6 @@ export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
 
     useEffect(() => {
         setEncryptedPassword(password)
-
-        if (biometrics && hasBiometrics) {
-            handleBiometrics()
-        }
     }, [password])
 
     useEffect(() => {
@@ -39,6 +35,7 @@ export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
     const handlePassword = () => {
         if (encryptedInput === encryptedPassword) {
             deleteNote(id)
+            vibrate(FEEDBACK_TYPES.SUCCESS)
             onClose()
         } else {
             setIsWrongPassword(true)
@@ -52,6 +49,7 @@ export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
 
         if (success) {
             deleteNote(id)
+            vibrate(FEEDBACK_TYPES.SUCCESS)
             onClose()
         }
     }

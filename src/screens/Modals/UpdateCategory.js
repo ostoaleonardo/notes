@@ -1,10 +1,12 @@
 import { forwardRef, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ModalSheet, Button, LargeInput } from '@/components'
-import { useCategories } from '@/hooks'
+import { useCategories, useHaptics } from '@/hooks'
+import { FEEDBACK_TYPES } from '@/constants'
 
 export const UpdateCategory = forwardRef(({ selectedCategory, setIsUpdatedCategory, onClose }, ref) => {
     const { t } = useTranslation()
+    const { vibrate } = useHaptics()
     const { getCategory, updateCategory } = useCategories()
     const [newCategory, setNewCategory] = useState('')
     const [placeholder, setPlaceholder] = useState('')
@@ -25,12 +27,13 @@ export const UpdateCategory = forwardRef(({ selectedCategory, setIsUpdatedCatego
         if (isButtonDisabled) return
 
         updateCategory({
-            id,
+            id: selectedCategory,
             name: newCategory.trim()
         })
 
         onClose()
         setIsUpdatedCategory(true)
+        vibrate(FEEDBACK_TYPES.SUCCESS)
     }
 
     return (
