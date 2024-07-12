@@ -1,0 +1,94 @@
+{
+	"language": "Nederlands",
+	"title": {
+		"categories": "Categorieën",
+		"yourCategories": "Jouw categorieën",
+		"note": "Notitie",
+		"language": "Taal",
+		"about": "Over de app"
+	},
+	"welcome": {
+		"tagline": "De beste manier om je notities geordend te houden",
+		"signIn": "Log in met Google",
+		"signInError": "Fout bij inloggen, probeer het opnieuw",
+		"noConnection": "Je hebt geen internetverbinding"
+	},
+	"profile": {
+		"alias": "Alias",
+		"email": "E-mailadres",
+		"signOut": "Uitloggen"
+	},
+	"editNote": {
+		"created": "Gemaakt op:",
+		"updated": "Gewijzigd:"
+	},
+	"categories": {
+		"all": "Alle",
+		"add": "Toevoegen",
+		"update": "Categorie bewerken"
+	},
+	"settings": {
+		"updates": "Software bijwerken",
+		"version": "Versie"
+	},
+	"password": {
+		"add": "Wachtwoord toevoegen",
+		"update": "Wachtwoord wijzigen",
+		"remove": "Wachtwoord verwijderen",
+		"current": "Huidig wachtwoord",
+		"new": "Nieuw wachtwoord"
+	},
+	"biometric": {
+		"use": "Vingerafdruk gebruiken",
+		"lock": "Vergrendel met vingerafdruk",
+		"unlock": "Ontgrendel met vingerafdruk",
+		"remove": "Vingerafdruk verwijderen",
+		"auth": "Biometrische authenticatie"
+	},
+	"header": {
+		"notes": "Notities",
+		"addNote": "Notitie toevoegen",
+		"editNote": "Notitie bewerken",
+		"viewNote": "Notitie bekijken",
+		"deleteNote": "Notitie verwijderen",
+		"categories": "Categorieën",
+		"password": "Wachtwoord",
+		"settings": "Instellingen",
+		"profile": "Profiel"
+	},
+	"button": {
+		"addNote": "Notitie toevoegen",
+		"save": "Opslaan",
+		"edit": "Bewerken",
+		"back": "Terug",
+		"cancel": "Annuleren",
+		"delete": "Verwijderen",
+		"update": "Bijwerken",
+		"enter": "Invoeren"
+	},
+	"message": {
+		"loading": "Laden...",
+		"noNotes": "Je hebt nog geen notities",
+		"noCategories": "Je hebt nog geen categorieën",
+		"noteAdded": "Notitie toegevoegd",
+		"noteUpdated": "Notitie bijgewerkt",
+		"emptyTitle": "Titel mag niet leeg zijn",
+		"emptyNote": "Notitie mag niet leeg zijn",
+		"emptyCategory": "Categorienaam mag niet leeg zijn",
+		"categoryAdded": "Categorie toegevoegd",
+		"categoryUpdated": "Categorie bijgewerkt",
+		"wrongPassword": "Wachtwoord onjuist",
+		"samePassword": "Het wachtwoord mag niet hetzelfde zijn",
+		"lengthPassword": "Het wachtwoord moet uit minstens 4 tekens bestaan"
+	},
+	"placeholder": {
+		"title": "Je titel...",
+		"note": "Typ uw notitie hier...",
+		"category": "Nieuwe categorie..."
+	},
+	"drawer": {
+		"notes": "Notities",
+		"settings": "Instellingen",
+		"categories": "Categorieën"
+	}
+}

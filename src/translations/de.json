@@ -1,0 +1,94 @@
+{
+	"language": "Deutsch",
+	"title": {
+		"categories": "Kategorien",
+		"yourCategories": "Deine Kategorien",
+		"note": "Notiz",
+		"language": "Sprache",
+		"about": "Über die App"
+	},
+	"welcome": {
+		"tagline": "Der beste Weg, deine Notizen zu organisieren",
+		"signIn": "Mit Google anmelden",
+		"signInError": "Fehler bei der Anmeldung, versuch noch einmal",
+		"noConnection": "Du hast keine Internetverbindung"
+	},
+	"profile": {
+		"alias": "Alias",
+		"email": "E-Mail",
+		"signOut": "Abmelden"
+	},
+	"editNote": {
+		"created": "Kreiert:",
+		"updated": "Aktualisiert:"
+	},
+	"categories": {
+		"all": "Alle",
+		"add": "Hinzufügen",
+		"update": "Kategorie aktualisieren"
+	},
+	"settings": {
+		"updates": "Software-Aktualisierung",
+		"version": "Version"
+	},
+	"password": {
+		"add": "Passwort hinzufügen",
+		"update": "Passwort aktualisieren",
+		"remove": "Passwort beseitigen",
+		"current": "Aktuelles Passwort",
+		"new": "Neues Passwort"
+	},
+	"biometric": {
+		"use": "Fingerabdruck verwenden",
+		"lock": "Mit Fingerabdruck sperren",
+		"unlock": "Mit Fingerabdruck entsperren",
+		"remove": "Fingerabdruck beseitigen",
+		"auth": "Biometrische Authentifizierung"
+	},
+	"header": {
+		"notes": "Notizen",
+		"addNote": "Notiz hinzufügen",
+		"editNote": "Notiz bearbeiten",
+		"viewNote": "Notiz sehen",
+		"deleteNote": "Notiz beseitigen",
+		"categories": "Kategorien",
+		"password": "Passwort",
+		"settings": "Einstellungen",
+		"profile": "Profil"
+	},
+	"button": {
+		"addNote": "Notiz hinzufügen",
+		"save": "Speichern",
+		"edit": "Bearbeiten",
+		"back": "Zurück",
+		"cancel": "Beenden",
+		"delete": "Beseitigen",
+		"update": "Aktualisieren",
+		"enter": "Eingeben"
+	},
+	"message": {
+		"loading": "Wird geladen...",
+		"noNotes": "Du hast noch keine Notizen",
+		"noCategories": "Du hast noch keine Kategorien",
+		"noteAdded": "Notiz hinzugefügt",
+		"noteUpdated": "Notiz aktualisiert",
+		"emptyTitle": "Titel darf nicht leer sein",
+		"emptyNote": "Die Notiz darf nicht leer sein",
+		"emptyCategory": "Der Kategoriename darf nicht leer sein",
+		"categoryAdded": "Kategorie hinzugefügt",
+		"categoryUpdated": "Kategorie aktualisiert",
+		"wrongPassword": "Falsches Passwort",
+		"samePassword": "Das Passwort darf nicht gleich sein",
+		"lengthPassword": "Das Passwort muss mindestens 4 Zeichen haben"
+	},
+	"placeholder": {
+		"title": "Dein Titel...",
+		"note": "Schreib deine Notiz hier...",
+		"category": "Neue Kategorie..."
+	},
+	"drawer": {
+		"notes": "Notizen",
+		"settings": "Einstellungen",
+		"categories": "Kategorien"
+	}
+}

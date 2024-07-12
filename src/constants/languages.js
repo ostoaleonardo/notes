@@ -1,10 +1,18 @@
 export const LANGUAGES = [
     {
         code: 'en',
-        name: 'English',
+        name: 'English'
     },
     {
         code: 'es',
         name: 'Español'
+    },
+    {
+        code: 'de',
+        name: 'Deutsch'
+    },
+    {
+        code: 'nl',
+        name: 'Nederlands'
     }
 ]

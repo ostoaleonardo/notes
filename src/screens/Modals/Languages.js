@@ -19,7 +19,7 @@ export const Languages = forwardRef(({ onClose }, ref) => {
         <ModalSheet
             ref={ref}
             onClose={onClose}
-            snapPoints={['30%', '40%']}
+            snapPoints={['40%', '50%']}
             title={t('title.language')}
         >
             <FlatList
