@@ -16,8 +16,7 @@
 	"profile": {
 		"alias": "Alias",
 		"email": "Correo electrónico",
-		"signOut": "Cerrar sesión",
-		"error": "Error al iniciar sesión, inténtalo de nuevo"
+		"signOut": "Cerrar sesión"
 	},
 	"editNote": {
 		"created": "Creado:",
@@ -75,7 +74,6 @@
 		"noteUpdated": "Nota actualizada",
 		"emptyTitle": "El título no puede estar vacío",
 		"emptyNote": "La nota no puede estar vacía",
-		"addACategory": "Añade el nombre de la categoría",
 		"emptyCategory": "El nombre de la categoría no puede estar vacío",
 		"categoryAdded": "Categoría añadida",
 		"categoryUpdated": "Categoría actualizada",

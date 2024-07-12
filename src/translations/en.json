@@ -16,8 +16,7 @@
 	"profile": {
 		"alias": "Alias",
 		"email": "Email",
-		"signOut": "Sign out",
-		"error": "Error signing in, try again"
+		"signOut": "Sign out"
 	},
 	"editNote": {
 		"created": "Created:",
@@ -69,13 +68,12 @@
 	},
 	"message": {
 		"loading": "Loading...",
-		"noNotes": "You don't have notes yet",
-		"noCategories": "You don't have categories yet",
+		"noNotes": "You don't have any notes yet",
+		"noCategories": "You don't have any categories yet",
 		"noteAdded": "Note added",
 		"noteUpdated": "Note updated",
 		"emptyTitle": "Title can't be empty",
 		"emptyNote": "Note can't be empty",
-		"addACategory": "Add the category name",
 		"emptyCategory": "Category name can't be empty",
 		"categoryAdded": "Category added",
 		"categoryUpdated": "Category updated",
