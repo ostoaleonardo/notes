@@ -2,7 +2,7 @@ export default {
   name: 'Notes',
   slug: 'notes',
   scheme: 'notes',
-  version: '1.1.1',
+  version: '1.2.0',
   orientation: 'portrait',
   icon: './assets/icon.png',
   backgroundColor: '#07080a',
@@ -17,13 +17,21 @@ export default {
       backgroundColor: '#07080a'
     },
     package: 'com.monospace.notes',
-    versionCode: 4
+    versionCode: 5
   },
   plugins: [
     'expo-router',
     'expo-font',
     'expo-localization',
-    'expo-local-authentication'
+    'expo-local-authentication',
+    [
+      'expo-build-properties', {
+        android: {
+          enableProguardInReleaseBuilds: true,
+          enableShrinkResourcesInReleaseBuilds: true
+        }
+      }
+    ]
   ],
   extra: {
     router: {
