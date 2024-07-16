@@ -38,13 +38,13 @@ export function PickerImage({ setImage, pickCamera }) {
                     <Camera
                         width={24}
                         height={24}
-                        color={COLORS.background}
+                        color={COLORS.dark.background}
                     />
                 ) : (
                     <Picture
                         width={24}
                         height={24}
-                        color={COLORS.background}
+                        color={COLORS.dark.background}
                     />
                 )
             }
@@ -58,6 +58,6 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: COLORS.white
-    },
+        backgroundColor: COLORS.common.white
+    }
 })

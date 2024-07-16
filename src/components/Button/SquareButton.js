@@ -15,6 +15,7 @@ export function SquareButton({ onPress, disabled, label }) {
             <Typography
                 uppercase
                 variant='caption'
+                color={COLORS.common.white}
             >
                 {label}
             </Typography>
@@ -24,11 +25,13 @@ export function SquareButton({ onPress, disabled, label }) {
 
 const styles = StyleSheet.create({
     container: {
-        width: 72,
+        width: 'auto',
+        minWidth: 72,
         height: 72,
         borderRadius: 16,
+        paddingHorizontal: 8,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: COLORS.primary
-    },
+        backgroundColor: COLORS.common.accent
+    }
 })

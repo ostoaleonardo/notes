@@ -18,7 +18,7 @@ export function IconButton({ icon, disabled, variant = 'primary', size = 'sm', o
             style={[
                 styles.container,
                 variantStyles,
-                { width: iconSize, height: iconSize },
+                { width: iconSize, height: iconSize }
             ]}
         >
             {icon}
@@ -30,20 +30,16 @@ const styles = StyleSheet.create({
     container: {
         borderRadius: 16,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     primary: {
-        backgroundColor: COLORS.primary
-    },
-    secondary: {
-        backgroundColor: COLORS.white
+        backgroundColor: COLORS.common.white
     },
     outline: {
-        borderWidth: 2,
-        borderColor: COLORS.white15,
-        backgroundColor: COLORS.transparent
+        borderWidth: 1,
+        borderColor: COLORS.common.white15
     },
     light: {
-        backgroundColor: COLORS.transparent
-    },
+        backgroundColor: COLORS.common.transparent
+    }
 })

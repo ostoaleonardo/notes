@@ -12,7 +12,7 @@ export function FloatingButton({ label, href }) {
             <Typography
                 uppercase
                 variant='caption'
-                color={COLORS.white}
+                color={COLORS.common.white}
             >
                 {label}
             </Typography>
@@ -28,6 +28,6 @@ const styles = StyleSheet.create({
         borderRadius: 48,
         paddingVertical: 24,
         paddingHorizontal: 32,
-        backgroundColor: COLORS.primary
-    },
+        backgroundColor: COLORS.common.accent
+    }
 })
