@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
+import { useTheme } from 'react-native-paper'
 import { LargeInput } from './LargeInput'
 import { IconButton } from '../Button'
 import { Eye } from '@/icons'
-import { COLORS } from '@/constants'
 
 export function PasswordInput({ password, onChangeText, ...props }) {
+    const { colors } = useTheme()
     const [showPassword, setShowPassword] = useState(false)
 
     const handlePassword = () => setShowPassword(!showPassword)
@@ -28,7 +29,7 @@ export function PasswordInput({ password, onChangeText, ...props }) {
                     <Eye
                         width={24}
                         height={24}
-                        color={showPassword ? COLORS.white : COLORS.white15}
+                        color={showPassword ? colors.onBackground : colors.onBackground + '66'}
                     />
                 }
                 size='md'
@@ -45,5 +46,5 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
-    },
+    }
 })

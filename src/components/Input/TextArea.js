@@ -1,19 +1,25 @@
 import { StyleSheet, TextInput, View } from 'react-native'
-import { COLORS, FONTS } from '@/constants'
+import { useTheme } from 'react-native-paper'
+import { FONTS } from '@/constants'
 
 export function TextArea({ value, onChangeText, placeholder, ...props }) {
+    const { colors } = useTheme()
+
     return (
         <View style={styles.inputContainer}>
             <TextInput
                 {...props}
                 multiline
                 value={value}
-                style={styles.input}
+                style={[
+                    styles.input,
+                    { color: colors.onBackground }
+                ]}
                 placeholder={placeholder}
                 onChangeText={onChangeText}
-                cursorColor={COLORS.primary}
-                selectionColor={COLORS.primary}
-                placeholderTextColor={COLORS.white50}
+                cursorColor={colors.tertiary}
+                selectionColor={colors.tertiary}
+                placeholderTextColor={colors.onBackground + '66'}
             />
         </View>
     )
@@ -26,7 +32,6 @@ const styles = StyleSheet.create({
     },
     input: {
         fontSize: 14,
-        color: COLORS.white,
         fontFamily: FONTS.azeretLight
-    },
+    }
 })

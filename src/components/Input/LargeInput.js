@@ -1,19 +1,23 @@
 import { StyleSheet, TextInput } from 'react-native'
-import { COLORS, FONTS } from '@/constants'
+import { useTheme } from 'react-native-paper'
+import { FONTS } from '@/constants'
 
 export function LargeInput({ value, onChangeText, bold, placeholder, ...props }) {
+    const { colors } = useTheme()
+
     return (
         <TextInput
             {...props}
             value={value}
             style={[
                 styles.input,
-                bold && styles.bold
+                bold && styles.bold,
+                { color: colors.onBackground }
             ]}
             placeholder={placeholder}
             onChangeText={onChangeText}
-            cursorColor={COLORS.primary}
-            placeholderTextColor={COLORS.white50}
+            cursorColor={colors.tertiary}
+            placeholderTextColor={colors.onBackground + '66'}
         />
     )
 }
@@ -22,7 +26,6 @@ const styles = StyleSheet.create({
     input: {
         width: '100%',
         fontSize: 24,
-        color: COLORS.white,
         fontFamily: FONTS.azeretLight
     },
     bold: {
