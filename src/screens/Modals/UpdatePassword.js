@@ -104,7 +104,7 @@ export const UpdatePassword = forwardRef(({ currentPassword, tooglePassword, onD
                     <Typography
                         variant='caption'
                         textAlign='center'
-                        color={COLORS.primary}
+                        color={COLORS.common.accent}
                     >
                         {isWrongPassword && t('message.wrongPassword')}
                     </Typography>
@@ -123,7 +123,7 @@ export const UpdatePassword = forwardRef(({ currentPassword, tooglePassword, onD
                     <Typography
                         variant='caption'
                         textAlign='center'
-                        color={COLORS.primary}
+                        color={COLORS.common.accent}
                     >
                         {isInvalidPassword && t(message)}
                     </Typography>

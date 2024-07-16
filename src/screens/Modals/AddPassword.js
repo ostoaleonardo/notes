@@ -69,7 +69,7 @@ export const AddPassword = forwardRef(({ setPassword, biometrics, setBiometrics,
                 <Typography
                     variant='caption'
                     textAlign='center'
-                    color={COLORS.primary}
+                    color={COLORS.common.accent}
                 >
                     {isInvalidPassword && t('message.lengthPassword')}
                 </Typography>

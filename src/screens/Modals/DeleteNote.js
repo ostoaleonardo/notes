@@ -7,9 +7,11 @@ import { useHaptics, useLocalAuthentication, useNotes } from '@/hooks'
 import { getEncryptedPassword } from '@/utils'
 import { Fingerprint } from '@/icons'
 import { COLORS, FEEDBACK_TYPES } from '@/constants'
+import { useTheme } from 'react-native-paper'
 
 export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
     const { t } = useTranslation()
+    const { colors } = useTheme()
     const { vibrate } = useHaptics()
     const { getNote, deleteNote } = useNotes()
     const { password, biometrics } = getNote(id)
@@ -79,7 +81,7 @@ export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
                         <Typography
                             variant='caption'
                             textAlign='center'
-                            color={COLORS.primary}
+                            color={COLORS.common.accent}
                         >
                             {message && t('message.wrongPassword')}
                         </Typography>
@@ -88,7 +90,7 @@ export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
                     <Fingerprint
                         width={96}
                         height={96}
-                        fill={COLORS.white}
+                        fill={colors.onBackground}
                     />
                 )}
             </View>
