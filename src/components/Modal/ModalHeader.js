@@ -1,10 +1,12 @@
 import { StyleSheet, View } from 'react-native'
+import { useTheme } from 'react-native-paper'
 import { Typography } from '../Text'
 import { IconButton } from '../Button'
 import { Cross } from '@/icons'
-import { COLORS } from '@/constants'
 
 export function ModalHeader({ title, onClose }) {
+    const { colors } = useTheme()
+
     return (
         <View style={styles.container}>
             <Typography
@@ -21,7 +23,7 @@ export function ModalHeader({ title, onClose }) {
                         width={24}
                         height={24}
                         rotation={45}
-                        color={COLORS.white}
+                        color={colors.onSurface}
                     />
                 }
             />

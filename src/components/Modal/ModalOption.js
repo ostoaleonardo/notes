@@ -1,14 +1,16 @@
-import { Pressable, StyleSheet, View } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
+import { useTheme } from 'react-native-paper'
 import { Typography } from '../Text'
 import { Check } from '../Check'
-import { COLORS } from '@/constants'
 
 export function ModalOption({ onPress, label, isSelected }) {
+    const { colors } = useTheme()
+
     return (
         <Pressable
             onPress={onPress}
             style={styles.container}
-            android_ripple={{ color: COLORS.white5 }}
+            android_ripple={{ color: colors.onBackground + '1a' }}
         >
             <Typography>
                 {label}

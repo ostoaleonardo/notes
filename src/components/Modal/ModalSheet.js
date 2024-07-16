@@ -1,9 +1,11 @@
 import { forwardRef, useCallback } from 'react'
+import { useTheme } from 'react-native-paper'
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet'
 import { ModalHeader } from './ModalHeader'
-import { COLORS } from '@/constants'
 
 export const ModalSheet = forwardRef(({ title, children, onClose, contentContainerStyle, ...prop }, ref) => {
+    const { colors } = useTheme()
+
     const renderBackdrop = useCallback((props) => (
         <BottomSheetBackdrop
             {...props}
@@ -18,8 +20,8 @@ export const ModalSheet = forwardRef(({ title, children, onClose, contentContain
             onClose={onClose}
             enablePanDownToClose
             backdropComponent={renderBackdrop}
-            backgroundStyle={{ backgroundColor: COLORS.foreground }}
-            handleIndicatorStyle={{ backgroundColor: COLORS.white50 }}
+            backgroundStyle={{ backgroundColor: colors.surface }}
+            handleIndicatorStyle={{ backgroundColor: colors.onBackground + '66' }}
             {...prop}
         >
             <BottomSheetView style={{ paddingHorizontal: 24 }}>
