@@ -1,9 +1,12 @@
 import { Pressable, StyleSheet } from 'react-native'
+import { useTheme } from 'react-native-paper'
 import { SwipeableCard } from './SwipeableCard'
 import { Typography } from '../Text'
 import { COLORS } from '@/constants'
 
 export function SwipeableCategory({ category, onPress, isOpen, onOpen, onDelete }) {
+    const { colors } = useTheme()
+
     return (
         <SwipeableCard
             isOpen={isOpen}
@@ -12,7 +15,10 @@ export function SwipeableCategory({ category, onPress, isOpen, onOpen, onDelete 
         >
             <Pressable
                 onPress={onPress}
-                style={styles.pressableContainer}
+                style={[
+                    styles.container,
+                    { backgroundColor: colors.surface }
+                ]}
             >
                 <Typography>
                     {category}
@@ -23,10 +29,9 @@ export function SwipeableCategory({ category, onPress, isOpen, onOpen, onDelete 
 }
 
 const styles = StyleSheet.create({
-    pressableContainer: {
+    container: {
         minWidth: '100%',
         padding: 20,
-        borderRadius: 16,
-        backgroundColor: COLORS.foreground,
-    },
+        borderRadius: 16
+    }
 })

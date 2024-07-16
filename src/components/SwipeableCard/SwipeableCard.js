@@ -35,6 +35,6 @@ export function SwipeableCard({ children, isOpen, onOpen, onDelete }) {
 
 const styles = StyleSheet.create({
     container: {
-        paddingHorizontal: 24,
-    },
+        paddingHorizontal: 24
+    }
 })

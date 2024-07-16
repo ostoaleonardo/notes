@@ -9,11 +9,12 @@ export function DeleteAction({ onPress }) {
     return (
         <Pressable
             onPress={onPress}
-            style={styles.deleteContainer}
+            style={styles.container}
         >
             <Typography
                 uppercase
                 variant='caption'
+                color={COLORS.common.white}
             >
                 {t('button.delete')}
             </Typography>
@@ -22,12 +23,12 @@ export function DeleteAction({ onPress }) {
 }
 
 const styles = StyleSheet.create({
-    deleteContainer: {
+    container: {
         width: 100,
         marginRight: 24,
         borderRadius: 16,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: COLORS.primary
-    },
+        backgroundColor: COLORS.common.accent
+    }
 })
