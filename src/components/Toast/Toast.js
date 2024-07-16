@@ -21,10 +21,13 @@ export function Toast({ message, setMessage, timeout = 3000, backgroundColor }) 
             exiting={SlideOutDown}
             style={[
                 styles.container,
-                backgroundColor && { backgroundColor },
+                backgroundColor && { backgroundColor }
             ]}
         >
-            <Typography textAlign='center'>
+            <Typography
+                textAlign='center'
+                color={COLORS.common.white}
+            >
                 {message}
             </Typography>
         </Animated.View>
@@ -39,6 +42,6 @@ const styles = StyleSheet.create({
         padding: 16,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: COLORS.primary,
-    },
+        backgroundColor: COLORS.common.accent
+    }
 })

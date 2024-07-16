@@ -1,5 +1,6 @@
 import { StyleSheet, Text } from 'react-native'
-import { COLORS, FONTS } from '@/constants'
+import { useTheme } from 'react-native-paper'
+import { FONTS } from '@/constants'
 
 const SIZE_VARIANTS = {
     title: 24,
@@ -8,20 +9,20 @@ const SIZE_VARIANTS = {
     caption: 12
 }
 
-export function Typography({ children, bold, uppercase, color, opacity, textAlign, fontSize, fontFamily, variant = 'paragraph', ...props }) {
+export function Typography({ children, bold, uppercase, color, opacity, textAlign, fontSize, variant = 'paragraph', ...props }) {
+    const { colors } = useTheme()
     const fontVariant = fontSize || SIZE_VARIANTS[variant]
 
     return (
         <Text
             style={[
-                styles.base,
+                { fontSize: fontVariant },
+                { color: colors.onBackground },
                 color && { color },
                 opacity && { opacity },
-                { fontSize: fontVariant },
                 textAlign && { textAlign },
                 uppercase && styles.uppercase,
-                bold ? styles.bold : styles.regular,
-                fontFamily && { fontFamily },
+                bold ? styles.bold : styles.regular
             ]}
             {...props}
         >
@@ -31,9 +32,6 @@ export function Typography({ children, bold, uppercase, color, opacity, textAlig
 }
 
 const styles = StyleSheet.create({
-    base: {
-        color: COLORS.white
-    },
     uppercase: {
         textTransform: 'uppercase'
     },
