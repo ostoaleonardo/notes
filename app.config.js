@@ -5,13 +5,21 @@ export default {
   version: '1.2.0',
   orientation: 'portrait',
   icon: './assets/icon.png',
-  backgroundColor: '#07080a',
+  userInterfaceStyle: 'automatic',
   splash: {
     image: './assets/splash.png',
     resizeMode: 'contain',
-    backgroundColor: '#07080a'
+    backgroundColor: '#d7d8d8'
   },
   android: {
+    splash: {
+      image: './assets/splash.png',
+      resizeMode: 'contain',
+      backgroundColor: '#d7d8d8',
+      dark: {
+        backgroundColor: '#06080a'
+      }
+    },
     adaptiveIcon: {
       foregroundImage: './assets/adaptive-icon.png',
       backgroundColor: '#07080a'
