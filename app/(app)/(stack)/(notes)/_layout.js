@@ -1,19 +1,21 @@
 import { Stack } from 'expo-router'
+import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { COLORS, FONTS } from '@/constants'
+import { FONTS } from '@/constants'
 
-export default function StackLayout() {
+export default function NotesLayout() {
     const { t } = useTranslation()
+    const { colors } = useTheme()
 
     return (
         <Stack
             screenOptions={{
                 headerTitleAlign: 'center',
                 headerShadowVisible: false,
-                headerTintColor: COLORS.white,
+                headerTintColor: colors.onBackground,
 
                 headerStyle: {
-                    backgroundColor: COLORS.background
+                    backgroundColor: colors.background
                 },
 
                 headerTitleStyle: {
@@ -23,32 +25,32 @@ export default function StackLayout() {
                 },
 
                 contentStyle: {
-                    backgroundColor: COLORS.background
+                    backgroundColor: colors.background
                 }
             }}
         >
             <Stack.Screen
-                name='(drawer)'
+                name='index'
                 options={{
-                    headerShown: false
+                    title: t('header.addNote').toUpperCase()
                 }}
             />
             <Stack.Screen
-                name='(notes)'
+                name='view/[slug]'
                 options={{
-                    headerShown: false
+                    title: t('header.viewNote').toUpperCase()
                 }}
             />
             <Stack.Screen
-                name='categories/index'
+                name='edit/[slug]'
                 options={{
-                    title: t('header.categories').toUpperCase()
+                    title: t('header.editNote').toUpperCase()
                 }}
             />
             <Stack.Screen
-                name='settings/index'
+                name='unlock/[slug]'
                 options={{
-                    title: t('header.settings').toUpperCase()
+                    title: t('header.password').toUpperCase()
                 }}
             />
         </Stack>

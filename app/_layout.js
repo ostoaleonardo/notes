@@ -1,13 +1,19 @@
-import { useCallback, useEffect, useState } from 'react'
-import { Stack } from 'expo-router'
+import { useEffect, useState } from 'react'
+import { useColorScheme } from 'react-native'
+import { Slot } from 'expo-router'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import { Providers } from './providers'
-import { useLanguage } from '@/hooks'
-import { COLORS } from '@/constants'
+import { useLanguage, useStorage } from '@/hooks'
+import { STORAGE_KEYS } from '@/constants'
 
-export default function DrawerLayout() {
+SplashScreen.preventAutoHideAsync()
+
+export default function MainLayout() {
+    const colorScheme = useColorScheme()
     const { initLanguage } = useLanguage()
+    const { getItem } = useStorage()
+    const [userTheme, setUserTheme] = useState('')
     const [isReady, setIsReady] = useState(false)
     const [fontsLoaded, fontError] = useFonts({
         'AzeretMono-Light': require('../assets/fonts/AzeretMono-Light.ttf'),
@@ -16,15 +22,18 @@ export default function DrawerLayout() {
 
     useEffect(() => {
         (async () => {
-            await SplashScreen.preventAutoHideAsync()
+            const userTheme = await getItem(STORAGE_KEYS.THEME)
+            const theme = userTheme && userTheme !== 'system' ? userTheme : colorScheme
+            setUserTheme(theme)
+
             await initLanguage()
             setIsReady(true)
         })()
     }, [])
 
-    const onLayoutRootView = useCallback(async () => {
-        if (isReady) {
-            await SplashScreen.hideAsync()
+    useEffect(() => {
+        if (isReady && userTheme) {
+            SplashScreen.hideAsync()
         }
     }, [isReady])
 
@@ -33,19 +42,8 @@ export default function DrawerLayout() {
     }
 
     return (
-        <Providers>
-            <Stack
-                onLayout={onLayoutRootView}
-                screenOptions={{
-                    headerShown: false,
-
-                    contentStyle: {
-                        backgroundColor: COLORS.background
-                    }
-                }}
-            >
-                <Stack.Screen name='(stack)' />
-            </Stack>
+        <Providers userTheme={userTheme}>
+            <Slot />
         </Providers>
     )
 }

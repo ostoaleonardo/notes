@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
+import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import * as Animatable from 'react-native-animatable'
 import { Button, PasswordInput, Toast } from '@/components'
 import { useHaptics, useLocalAuthentication, useNotes } from '@/hooks'
 import { getEncryptedPassword } from '@/utils'
 import { Fingerprint } from '@/icons'
-import { COLORS, FEEDBACK_TYPES, ROUTES } from '@/constants'
+import { FEEDBACK_TYPES, ROUTES } from '@/constants'
 
 export default function Password() {
     const router = useRouter()
     const { t } = useTranslation()
+    const { colors } = useTheme()
     const { getNote } = useNotes()
     const { vibrate } = useHaptics()
     const { slug } = useLocalSearchParams()
@@ -64,7 +66,7 @@ export default function Password() {
         <View style={styles.container}>
             <ActivityIndicator
                 size='large'
-                color={COLORS.primary}
+                color={colors.onBackground}
             />
         </View>
     )
@@ -88,7 +90,7 @@ export default function Password() {
                     <Fingerprint
                         width={96}
                         height={96}
-                        fill={COLORS.white}
+                        fill={colors.onBackground}
                     />
                 )}
                 <View style={styles.buttonsContainer}>

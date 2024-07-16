@@ -45,7 +45,6 @@ export default function Categories() {
         <View style={styles.container}>
             <View style={styles.inputContainer}>
                 <SmallInput
-                    variant='solid'
                     value={newCategory}
                     onChangeText={setNewCategory}
                     placeholder={t('placeholder.category')}
@@ -76,7 +75,7 @@ export default function Categories() {
 
 const styles = StyleSheet.create({
     container: {
-        flexGrow: 1,
+        flexGrow: 1
     },
     inputContainer: {
         gap: 16,
@@ -84,5 +83,5 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
-    },
+    }
 })
