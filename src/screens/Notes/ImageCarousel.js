@@ -50,13 +50,13 @@ const styles = StyleSheet.create({
         borderRadius: 24,
         overflow: 'hidden',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     separator: {
         position: 'absolute',
         width: '100%',
         height: 1,
         opacity: 0.5,
-        backgroundColor: COLORS.foreground,
-    },
+        backgroundColor: COLORS.dark.background
+    }
 })

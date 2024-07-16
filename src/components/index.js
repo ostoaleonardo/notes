@@ -1,9 +1,3 @@
-// Avatars
-export {
-    Avatar,
-    User
-} from './Avatar'
-
 // Buttons
 export {
     Button,
@@ -55,6 +49,9 @@ export { DrawerItems } from './Drawer'
 // Text
 export { Typography } from './Text'
 
+// Checks
+export { Check } from './Check'
+
 // Scroll
 export { Scroll } from './Scroll'
 export { Section } from './Section'
@@ -62,4 +59,3 @@ export { Separator } from './Scroll'
 
 // Others
 export { Toast } from './Toast'
-export { Check } from './Check'

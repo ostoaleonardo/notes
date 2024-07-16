@@ -1,5 +1,6 @@
 import { forwardRef, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
+import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import * as Animatable from 'react-native-animatable'
 import { ModalSheet, Button, PasswordInput, Typography } from '@/components'
@@ -7,7 +8,6 @@ import { useHaptics, useLocalAuthentication, useNotes } from '@/hooks'
 import { getEncryptedPassword } from '@/utils'
 import { Fingerprint } from '@/icons'
 import { COLORS, FEEDBACK_TYPES } from '@/constants'
-import { useTheme } from 'react-native-paper'
 
 export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
     const { t } = useTranslation()

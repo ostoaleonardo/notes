@@ -1,13 +1,15 @@
 import { Pressable, StyleSheet } from 'react-native'
+import { useTheme } from 'react-native-paper'
 import { Typography } from '../Text'
-import { COLORS } from '@/constants'
 
 export function Option({ rightLabel, rightContent, onPress, children }) {
+    const { colors } = useTheme()
+
     return (
         <Pressable
             onPress={onPress}
             style={styles.container}
-            android_ripple={{ color: COLORS.white5 }}
+            android_ripple={{ color: colors.onBackground + '1a' }}
         >
             {children}
             {rightContent || (
@@ -26,5 +28,5 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
-    },
+    }
 })

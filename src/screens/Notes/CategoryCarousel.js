@@ -25,7 +25,6 @@ export function CategoryCarousel({ selectedCategories, onCategories, onCategorie
                 <Chip
                     key={id}
                     label={name}
-                    variant='flat'
                     endContent={
                         !disabled && (
                             <RemoveChipButton

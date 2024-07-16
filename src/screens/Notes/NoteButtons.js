@@ -19,19 +19,18 @@ export function NoteButtons({ onSave, onOpenModal, hasPassword }) {
                 />
                 <IconButton
                     size='md'
-                    variant='secondary'
                     onPress={() => onOpenModal(true)}
                     icon={
                         hasPassword
                             ? <Lock
                                 width={20}
                                 height={20}
-                                color={COLORS.background}
+                                color={COLORS.dark.background}
                             />
                             : <Unlock
                                 width={20}
                                 height={20}
-                                color={COLORS.background}
+                                color={COLORS.dark.background}
                             />
                     }
                 />
@@ -50,14 +49,14 @@ const styles = StyleSheet.create({
         width: '100%',
         gap: 16,
         marginTop: 32,
-        paddingHorizontal: 24,
+        paddingHorizontal: 24
     },
     rowContainer: {
         width: '100%',
         gap: 12,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
-    },
+        justifyContent: 'space-between'
+    }
 })
 

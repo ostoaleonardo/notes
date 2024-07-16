@@ -1,17 +1,25 @@
 import { StyleSheet, View } from 'react-native'
+import { useTheme } from 'react-native-paper'
 import { Check as CheckIcon } from '@/icons'
-import { COLORS } from '@/constants'
 
 export function Check({ checked }) {
-    const containerStyle = checked ? styles.checkedContainer : styles.uncheckedContainer
+    const { colors } = useTheme()
+    const containerStyle = checked
+        ? [
+            styles.checkedContainer,
+            { backgroundColor: colors.onBackground }
+        ] : [
+            styles.uncheckedContainer,
+            { borderColor: colors.onBackground + '33' }
+        ]
 
     return (
-        <View style={containerStyle}>
+        <View style={[styles.base, containerStyle]}>
             {checked &&
                 <CheckIcon
                     width={16}
                     height={16}
-                    color={COLORS.foreground}
+                    color={colors.background}
                 />
             }
         </View>
@@ -19,19 +27,16 @@ export function Check({ checked }) {
 }
 
 const styles = StyleSheet.create({
-    checkedContainer: {
+    base: {
         width: 24,
         height: 24,
-        borderRadius: 12,
+        borderRadius: 12
+    },
+    checkedContainer: {
         alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: COLORS.white75
+        justifyContent: 'center'
     },
     uncheckedContainer: {
-        width: 24,
-        height: 24,
-        borderWidth: 2,
-        borderRadius: 12,
-        borderColor: COLORS.white15
-    },
+        borderWidth: 2
+    }
 })

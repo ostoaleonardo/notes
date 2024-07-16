@@ -1,11 +1,11 @@
 import { Pressable } from 'react-native'
-import { router, usePathname } from 'expo-router'
+import { useTheme } from 'react-native-paper'
+import { router } from 'expo-router'
 import { Typography } from '../Text'
-import { COLORS } from '@/constants'
 import { ArrowForward } from '@/icons'
 
 export function DrawerScreen({ label, path }) {
-    const pathname = usePathname()
+    const { colors } = useTheme()
 
     return (
         <Pressable
@@ -16,15 +16,14 @@ export function DrawerScreen({ label, path }) {
                 justifyContent: 'space-between'
             }}
             onPress={() => router.push(path)}
-            android_ripple={{ color: COLORS.white5 }}
+            android_ripple={{ color: colors.onBackground + '1a' }}
         >
             <Typography
                 uppercase
-                color={pathname === path ? COLORS.white : COLORS.white75}
             >
                 {label}
             </Typography>
-            <ArrowForward fill={COLORS.white75} />
+            <ArrowForward fill={colors.onBackground} />
         </Pressable>
     )
 }

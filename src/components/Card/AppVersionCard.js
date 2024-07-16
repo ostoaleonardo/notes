@@ -1,13 +1,15 @@
 import { Linking, View } from 'react-native'
+import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import * as Application from 'expo-application'
 import { Option } from './Option'
 import { Typography } from '../Text'
 import { OpenInNew } from '@/icons'
-import { COLORS, GOOGLE_PLAY_URL } from '@/constants'
+import { GOOGLE_PLAY_URL } from '@/constants'
 
 export function AppVersionCard() {
     const { t } = useTranslation()
+    const { colors } = useTheme()
     const { nativeApplicationVersion } = Application
 
     return (
@@ -15,7 +17,7 @@ export function AppVersionCard() {
             onPress={() => Linking.openURL(GOOGLE_PLAY_URL)}
             rightContent={
                 <OpenInNew
-                    color={COLORS.white}
+                    color={colors.onBackground}
                 />
             }
         >

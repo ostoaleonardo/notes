@@ -1,10 +1,13 @@
 import { router } from 'expo-router'
 import { View } from 'react-native'
+import { useTheme } from 'react-native-paper'
 import { IconButton } from '@/components'
 import { Settings } from '@/icons'
-import { COLORS, ROUTES } from '@/constants'
+import { ROUTES } from '@/constants'
 
 export function HeaderRightContent() {
+    const { colors } = useTheme()
+
     return (
         <View style={{ gap: 8, flexDirection: 'row' }}>
             <IconButton
@@ -14,7 +17,7 @@ export function HeaderRightContent() {
                     <Settings
                         width={28}
                         height={28}
-                        fill={COLORS.white}
+                        fill={colors.onBackground}
                     />
                 }
             />

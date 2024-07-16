@@ -28,14 +28,14 @@ export function FilterCarousel({ setFilteredNotes }) {
                     flexGrow: 1,
                     gap: 8,
                     paddingVertical: 16,
-                    paddingHorizontal: 24,
+                    paddingHorizontal: 24
                 }}
             >
                 {categories.map(({ id, name }) => (
                     <Chip
                         key={id}
                         onPress={() => setSelected(id)}
-                        variant={id === selected ? 'flat' : 'bordered'}
+                        variant={id === selected ? 'primary' : 'bordered'}
                         label={id === 'all' ? t('categories.all') : name}
                     />
                 ))}
@@ -46,16 +46,16 @@ export function FilterCarousel({ setFilteredNotes }) {
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
+        width: '100%'
     },
     scrollContainer: {
         width: '100%',
-        paddingVertical: 16,
+        paddingVertical: 16
     },
     chipsContainer: {
         gap: 8,
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: 24,
-    },
+        paddingHorizontal: 24
+    }
 })
