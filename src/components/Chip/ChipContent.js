@@ -1,14 +1,21 @@
 import { StyleSheet, View } from 'react-native'
+import { useTheme } from 'react-native-paper'
 import { Cross } from '@/icons'
-import { COLORS } from '@/constants'
 
 export function ChipContent() {
+    const { colors } = useTheme()
+
     return (
-        <View style={styles.container}>
+        <View
+            style={[
+                styles.container,
+                { backgroundColor: colors.onSurface }
+            ]}
+        >
             <Cross
                 width={16}
                 height={16}
-                color={COLORS.white}
+                color={colors.surface}
             />
         </View>
     )
@@ -20,7 +27,6 @@ const styles = StyleSheet.create({
         height: 16,
         borderRadius: 16,
         alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: COLORS.white10
-    },
+        justifyContent: 'center'
+    }
 })

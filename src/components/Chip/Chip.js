@@ -1,17 +1,25 @@
 import { Pressable, StyleSheet, View } from 'react-native'
+import { useTheme } from 'react-native-paper'
 import Animated, { FadeInLeft, FadeOutLeft, LinearTransition } from 'react-native-reanimated'
 import { Typography } from '../Text'
-import { COLORS } from '@/constants'
 
-const COLOR_VARIANTS = {
-    primary: COLORS.white,
-    bordered: COLORS.white,
-    flat: COLORS.primary
-}
+export function Chip({ label, onPress, variant = 'primary', endContent }) {
+    const { colors } = useTheme()
 
-export function Chip({ label, onPress, variant, endContent }) {
-    const styles = getChipStyles(variant, endContent ? true : false)
-    const colorVariant = COLOR_VARIANTS[variant]
+    const VARIANTS = {
+        primary: {
+            color: colors.background,
+            backgroundColor: colors.onBackground,
+            borderColor: colors.onBackground
+        },
+        bordered: {
+            color: colors.onBackground,
+            backgroundColor: colors.transparent,
+            borderColor: colors.outline
+        }
+    }
+
+    const { color, backgroundColor, borderColor } = VARIANTS[variant]
 
     return (
         <Animated.View
@@ -21,14 +29,22 @@ export function Chip({ label, onPress, variant, endContent }) {
         >
             <Pressable
                 onPress={onPress}
-                style={styles.container}
+                style={{
+                    borderWidth: 1,
+                    borderRadius: 32,
+                    paddingVertical: 8,
+                    borderColor,
+                    backgroundColor,
+                    paddingLeft: endContent ? 16 : 24,
+                    paddingRight: endContent ? 8 : 24
+                }}
             >
                 <View style={styles.content}>
                     <Typography
                         bold
                         uppercase
+                        color={color}
                         variant='caption'
-                        color={colorVariant}
                     >
                         {label}
                     </Typography>
@@ -39,45 +55,11 @@ export function Chip({ label, onPress, variant, endContent }) {
     )
 }
 
-const getChipStyles = (variant, hasEndContent) => {
-    let backgroundColor, borderColor
-    const paddingLeft = hasEndContent ? 16 : 24
-    const paddingRight = hasEndContent ? 8 : 24
-
-    switch (variant) {
-        case 'solid':
-            backgroundColor = COLORS.primary
-            borderColor = COLORS.primary
-            break
-        case 'flat':
-            backgroundColor = COLORS.primary15
-            borderColor = COLORS.transparent
-            break
-        case 'bordered':
-            backgroundColor = COLORS.transparent
-            borderColor = COLORS.white10
-            break
-        default:
-            backgroundColor = COLORS.primary
-            borderColor = COLORS.primary
-            break
+const styles = StyleSheet.create({
+    content: {
+        gap: 8,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
     }
-
-    return StyleSheet.create({
-        container: {
-            borderWidth: 1,
-            borderRadius: 32,
-            paddingVertical: 8,
-            paddingLeft,
-            paddingRight,
-            borderColor,
-            backgroundColor,
-        },
-        content: {
-            gap: 16,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-    })
-}
+})

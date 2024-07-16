@@ -1,18 +1,23 @@
 import { Pressable, StyleSheet } from 'react-native'
 import { Cross } from '@/icons'
-import { COLORS } from '@/constants'
+import { useTheme } from 'react-native-paper'
 
 export function RemoveChipButton({ onPress }) {
+    const { colors } = useTheme()
+
     return (
         <Pressable
             onPress={onPress}
-            style={styles.container}
+            style={[
+                styles.container,
+                { backgroundColor: colors.background }
+            ]}
         >
             <Cross
                 width={16}
                 height={16}
                 rotation={45}
-                color={COLORS.background}
+                color={colors.onBackground}
             />
         </Pressable>
     )
@@ -24,7 +29,6 @@ const styles = StyleSheet.create({
         height: 16,
         borderRadius: 16,
         alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: COLORS.primary75,
-    },
+        justifyContent: 'center'
+    }
 })
