@@ -9,13 +9,13 @@ export function ChipContent() {
         <View
             style={[
                 styles.container,
-                { backgroundColor: colors.onSurface }
+                { backgroundColor: colors.onBackground + '26' }
             ]}
         >
             <Cross
                 width={16}
                 height={16}
-                color={colors.surface}
+                color={colors.onBackground}
             />
         </View>
     )

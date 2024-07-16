@@ -47,8 +47,7 @@ export const Categories = forwardRef(({ selectedCategories, handleCategories, on
             title={t('categories.update')}
             contentContainerStyle={{
                 flex: 1,
-                paddingBottom: 24,
-                paddingHorizontal: 24
+                paddingBottom: 24
             }}
         >
             <View style={styles.inputContainer}>
@@ -70,7 +69,7 @@ export const Categories = forwardRef(({ selectedCategories, handleCategories, on
                 data={categories.slice(1)}
                 keyExtractor={({ id }) => id}
                 showsVerticalScrollIndicator={false}
-                ItemSeparatorComponent={<Separator />}
+                ItemSeparatorComponent={<Separator style={{ marginHorizontal: 24 }} />}
                 renderItem={({ item }) => renderItems(item)}
                 ListEmptyComponent={() => (
                     <View style={{ paddingTop: 64 }}>
@@ -90,6 +89,7 @@ const styles = StyleSheet.create({
     inputContainer: {
         gap: 16,
         paddingBottom: 24,
+        paddingHorizontal: 24,
         flexDirection: 'row',
         alignItems: 'center'
     },

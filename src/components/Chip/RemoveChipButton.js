@@ -10,14 +10,14 @@ export function RemoveChipButton({ onPress }) {
             onPress={onPress}
             style={[
                 styles.container,
-                { backgroundColor: colors.background }
+                { backgroundColor: colors.background + '26' }
             ]}
         >
             <Cross
                 width={16}
                 height={16}
                 rotation={45}
-                color={colors.onBackground}
+                color={colors.background}
             />
         </Pressable>
     )
