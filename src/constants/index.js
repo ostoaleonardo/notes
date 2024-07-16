@@ -1,5 +1,6 @@
 export { ROUTES } from './routes'
-export { COLORS, FONTS } from './theme'
+export { THEMES } from './themes'
+export { COLORS, FONTS } from './themes'
 export { LANGUAGES } from './languages'
 export { DEFAULT_CATEGORIES } from './defaultCategories'
 export { FEEDBACK_TYPES } from './feedbackTypes'

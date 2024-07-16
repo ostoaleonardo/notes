@@ -6,6 +6,7 @@ export const ROUTES = {
     VIEW_NOTE: '/view/',
     UNLOCK_NOTE: '/unlock/',
     EDIT_NOTE: '/edit/',
-    SETTINGS: '/settings',
+    SETTINGS: '(settings)',
+    THEME: '/theme',
     PROFILE: '/profile'
 }
