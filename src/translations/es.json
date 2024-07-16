@@ -28,6 +28,8 @@
 		"update": "Actualizar categoría"
 	},
 	"settings": {
+		"theme": "Tema de color",
+		"chooseTheme": "Elige un tema de color para la aplicación.",
 		"updates": "Actualización de software",
 		"version": "Versión"
 	},
@@ -54,6 +56,7 @@
 		"categories": "Categorías",
 		"password": "Contraseña",
 		"settings": "Ajustes",
+		"theme": "Tema de color",
 		"profile": "Perfil"
 	},
 	"button": {
