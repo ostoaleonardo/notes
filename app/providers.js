@@ -5,15 +5,18 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { AuthProvider, NoteProvider, ThemeProvider } from '@/context'
 import { THEMES } from '@/constants'
 
-export function Providers({ userTheme, children }) {
-    const [theme, setTheme] = useState('')
+export function Providers({ initialTheme, children }) {
+    const [theme, setTheme] = useState({})
 
     useEffect(() => {
-        setTheme(THEMES[userTheme])
-    }, [userTheme])
+        setTheme(THEMES[initialTheme.name])
+    }, [initialTheme])
 
     return (
-        <ThemeProvider setTheme={setTheme}>
+        <ThemeProvider
+            initialTheme={initialTheme}
+            setTheme={setTheme}
+        >
             <PaperProvider theme={theme}>
                 <GestureHandlerRootView style={{ flex: 1 }}>
                     <AuthProvider>

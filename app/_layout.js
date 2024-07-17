@@ -13,7 +13,7 @@ export default function MainLayout() {
     const colorScheme = useColorScheme()
     const { initLanguage } = useLanguage()
     const { getItem } = useStorage()
-    const [userTheme, setUserTheme] = useState('')
+    const [initialTheme, setInitialTheme] = useState({})
     const [isReady, setIsReady] = useState(false)
     const [fontsLoaded, fontError] = useFonts({
         'AzeretMono-Light': require('../assets/fonts/AzeretMono-Light.ttf'),
@@ -22,9 +22,9 @@ export default function MainLayout() {
 
     useEffect(() => {
         (async () => {
-            const userTheme = await getItem(STORAGE_KEYS.THEME)
-            const theme = userTheme && userTheme !== 'system' ? userTheme : colorScheme
-            setUserTheme(theme)
+            const mode = await getItem(STORAGE_KEYS.THEME) || 'system'
+            const name = themeMode !== 'system' ? themeMode : colorScheme
+            setInitialTheme({ mode, name })
 
             await initLanguage()
             setIsReady(true)
@@ -32,7 +32,7 @@ export default function MainLayout() {
     }, [])
 
     useEffect(() => {
-        if (isReady && userTheme) {
+        if (isReady && initialTheme) {
             SplashScreen.hideAsync()
         }
     }, [isReady])
@@ -42,7 +42,7 @@ export default function MainLayout() {
     }
 
     return (
-        <Providers userTheme={userTheme}>
+        <Providers initialTheme={initialTheme}>
             <Slot />
         </Providers>
     )

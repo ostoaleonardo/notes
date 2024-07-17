@@ -1,10 +1,10 @@
 import { createContext, useEffect, useState } from 'react'
-import { THEMES } from '@/constants'
 import { useColorScheme } from 'react-native'
+import { THEMES } from '@/constants'
 
 export const ThemeContext = createContext()
 
-export function ThemeProvider({ setTheme, children }) {
+export function ThemeProvider({ initialTheme, setTheme, children }) {
     const [userTheme, setUserTheme] = useState('system')
     const colorScheme = useColorScheme()
 
@@ -12,6 +12,10 @@ export function ThemeProvider({ setTheme, children }) {
         const theme = userTheme !== 'system' ? userTheme : colorScheme
         setTheme(THEMES[theme])
     }, [userTheme, colorScheme])
+
+    useEffect(() => {
+        setUserTheme(initialTheme.mode)
+    }, [initialTheme])
 
     return (
         <ThemeContext.Provider
