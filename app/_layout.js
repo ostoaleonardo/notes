@@ -23,7 +23,7 @@ export default function MainLayout() {
     useEffect(() => {
         (async () => {
             const mode = await getItem(STORAGE_KEYS.THEME) || 'system'
-            const name = themeMode !== 'system' ? themeMode : colorScheme
+            const name = mode !== 'system' ? mode : colorScheme
             setInitialTheme({ mode, name })
 
             await initLanguage()
