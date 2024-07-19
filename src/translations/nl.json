@@ -3,9 +3,18 @@
 	"title": {
 		"categories": "Categorieën",
 		"yourCategories": "Jouw categorieën",
-		"note": "Notitie",
-		"language": "Taal",
+		"updateCategory": "Categorie bewerken",
+		"deleteNote": "Notitie verwijderen",
 		"about": "Over de app"
+	},
+	"header": {
+		"notes": "Notities",
+		"addNote": "Notitie toevoegen",
+		"editNote": "Notitie bewerken",
+		"viewNote": "Notitie bekijken",
+		"categories": "Categorieën",
+		"settings": "Instellingen",
+		"profile": "Profiel"
 	},
 	"welcome": {
 		"tagline": "De beste manier om je notities geordend te houden",
@@ -18,14 +27,13 @@
 		"email": "E-mailadres",
 		"signOut": "Uitloggen"
 	},
-	"editNote": {
+	"date": {
 		"created": "Gemaakt op:",
 		"updated": "Gewijzigd:"
 	},
 	"categories": {
 		"all": "Alle",
-		"add": "Toevoegen",
-		"update": "Categorie bewerken"
+		"add": "Toevoegen"
 	},
 	"settings": {
 		"updates": "Software bijwerken",
@@ -45,17 +53,6 @@
 		"remove": "Vingerafdruk verwijderen",
 		"auth": "Biometrische authenticatie"
 	},
-	"header": {
-		"notes": "Notities",
-		"addNote": "Notitie toevoegen",
-		"editNote": "Notitie bewerken",
-		"viewNote": "Notitie bekijken",
-		"deleteNote": "Notitie verwijderen",
-		"categories": "Categorieën",
-		"password": "Wachtwoord",
-		"settings": "Instellingen",
-		"profile": "Profiel"
-	},
 	"button": {
 		"addNote": "Notitie toevoegen",
 		"save": "Opslaan",
@@ -70,11 +67,8 @@
 		"loading": "Laden...",
 		"noNotes": "Je hebt nog geen notities",
 		"noCategories": "Je hebt nog geen categorieën",
-		"noteAdded": "Notitie toegevoegd",
-		"noteUpdated": "Notitie bijgewerkt",
 		"emptyTitle": "Titel mag niet leeg zijn",
 		"emptyNote": "Notitie mag niet leeg zijn",
-		"emptyCategory": "Categorienaam mag niet leeg zijn",
 		"categoryAdded": "Categorie toegevoegd",
 		"categoryUpdated": "Categorie bijgewerkt",
 		"wrongPassword": "Wachtwoord onjuist",
@@ -88,7 +82,6 @@
 	},
 	"drawer": {
 		"notes": "Notities",
-		"settings": "Instellingen",
 		"categories": "Categorieën"
 	}
 }

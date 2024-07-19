@@ -3,9 +3,19 @@
 	"title": {
 		"categories": "Kategorien",
 		"yourCategories": "Deine Kategorien",
-		"note": "Notiz",
-		"language": "Sprache",
+		"updateCategory": "Kategorie aktualisieren",
+		"deleteNote": "Notiz beseitigen",
 		"about": "Über die App"
+	},
+	"header": {
+		"notes": "Notizen",
+		"addNote": "Notiz hinzufügen",
+		"editNote": "Notiz bearbeiten",
+		"viewNote": "Notiz sehen",
+		"categories": "Kategorien",
+		"settings": "Einstellungen",
+		"theme": "Farbthema",
+		"profile": "Profil"
 	},
 	"welcome": {
 		"tagline": "Der beste Weg, deine Notizen zu organisieren",
@@ -18,16 +28,17 @@
 		"email": "E-Mail",
 		"signOut": "Abmelden"
 	},
-	"editNote": {
+	"date": {
 		"created": "Kreiert:",
 		"updated": "Aktualisiert:"
 	},
 	"categories": {
 		"all": "Alle",
-		"add": "Hinzufügen",
-		"update": "Kategorie aktualisieren"
+		"add": "Hinzufügen"
 	},
 	"settings": {
+		"theme": "Farbthema",
+		"chooseTheme": "Wähle ein Farbthema für die App.",
 		"updates": "Software-Aktualisierung",
 		"version": "Version"
 	},
@@ -45,17 +56,6 @@
 		"remove": "Fingerabdruck beseitigen",
 		"auth": "Biometrische Authentifizierung"
 	},
-	"header": {
-		"notes": "Notizen",
-		"addNote": "Notiz hinzufügen",
-		"editNote": "Notiz bearbeiten",
-		"viewNote": "Notiz sehen",
-		"deleteNote": "Notiz beseitigen",
-		"categories": "Kategorien",
-		"password": "Passwort",
-		"settings": "Einstellungen",
-		"profile": "Profil"
-	},
 	"button": {
 		"addNote": "Notiz hinzufügen",
 		"save": "Speichern",
@@ -70,11 +70,8 @@
 		"loading": "Wird geladen...",
 		"noNotes": "Du hast noch keine Notizen",
 		"noCategories": "Du hast noch keine Kategorien",
-		"noteAdded": "Notiz hinzugefügt",
-		"noteUpdated": "Notiz aktualisiert",
 		"emptyTitle": "Titel darf nicht leer sein",
 		"emptyNote": "Die Notiz darf nicht leer sein",
-		"emptyCategory": "Der Kategoriename darf nicht leer sein",
 		"categoryAdded": "Kategorie hinzugefügt",
 		"categoryUpdated": "Kategorie aktualisiert",
 		"wrongPassword": "Falsches Passwort",
@@ -88,7 +85,6 @@
 	},
 	"drawer": {
 		"notes": "Notizen",
-		"settings": "Einstellungen",
 		"categories": "Kategorien"
 	}
 }
