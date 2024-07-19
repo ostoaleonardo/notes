@@ -5,7 +5,8 @@ import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import { Providers } from './providers'
 import { useLanguage, useStorage } from '@/hooks'
-import { STORAGE_KEYS } from '@/constants'
+import { ThemeProvider } from '@/context'
+import { STORAGE_KEYS, THEMES } from '@/constants'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -14,8 +15,7 @@ export default function MainLayout() {
     const { initLanguage } = useLanguage()
     const { getItem } = useStorage()
     const [initialTheme, setInitialTheme] = useState({})
-    const [isReady, setIsReady] = useState(false)
-    const [fontsLoaded, fontError] = useFonts({
+    const [loaded, error] = useFonts({
         'AzeretMono-Light': require('../assets/fonts/AzeretMono-Light.ttf'),
         'AzeretMono-Medium': require('../assets/fonts/AzeretMono-Medium.ttf')
     })
@@ -24,26 +24,30 @@ export default function MainLayout() {
         (async () => {
             const mode = await getItem(STORAGE_KEYS.THEME) || 'system'
             const name = mode !== 'system' ? mode : colorScheme
-            setInitialTheme({ mode, name })
+            const theme = THEMES[name]
+            setInitialTheme({ mode, name, theme })
 
             await initLanguage()
-            setIsReady(true)
         })()
     }, [])
 
     useEffect(() => {
-        if (isReady && initialTheme) {
-            SplashScreen.hideAsync()
+        if (loaded && initialTheme) {
+            setTimeout(() => (
+                SplashScreen.hideAsync()
+            ), 500)
         }
-    }, [isReady])
+    }, [loaded, initialTheme])
 
-    if (!fontsLoaded && !fontError) {
+    if (!loaded && !error) {
         return null
     }
 
     return (
-        <Providers initialTheme={initialTheme}>
-            <Slot />
-        </Providers>
+        <ThemeProvider initialTheme={initialTheme}>
+            <Providers>
+                <Slot />
+            </Providers>
+        </ThemeProvider>
     )
 }
