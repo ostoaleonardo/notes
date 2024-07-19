@@ -5,7 +5,7 @@ export { useStorage } from './useStorage'
 
 // UI
 export { useLanguage } from './useLanguage'
-export { useUserTheme } from './useUserTheme'
+export { useToggleMode } from './useToggleMode'
 export { useBottomSheet } from './useBottomSheet'
 
 // Utils
