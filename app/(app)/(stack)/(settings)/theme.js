@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { Typography } from '@/components'
-import { useUserTheme } from '@/hooks'
+import { useToggleMode } from '@/hooks'
 import { COLORS } from '@/constants'
 
 const THEMES = [
@@ -64,12 +64,11 @@ function ThemeOption({ color, backgroundColor, active, onPress, children }) {
 
 export default function Theme() {
     const { t } = useTranslation()
-    const { userTheme, toggleTheme } = useUserTheme()
+    const { mode, toggleMode } = useToggleMode()
 
     return (
         <View style={styles.container}>
             <Typography
-                opacity={0.5}
                 variant='caption'
             >
                 {t('settings.chooseTheme')}
@@ -81,8 +80,8 @@ export default function Theme() {
                         key={name}
                         color={color}
                         backgroundColor={background}
-                        active={userTheme === name}
-                        onPress={() => toggleTheme(name)}
+                        active={mode === name}
+                        onPress={() => toggleMode(name)}
                     >
                         {name}
                     </ThemeOption>
