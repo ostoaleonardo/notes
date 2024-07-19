@@ -4,12 +4,14 @@ import de from '@/translations/de.json'
 import en from '@/translations/en.json'
 import es from '@/translations/es.json'
 import nl from '@/translations/nl.json'
+import ru from '@/translations/ru.json'
 
 const languageResources = {
     de: { translation: de },
     en: { translation: en },
     es: { translation: es },
-    nl: { translation: nl }
+    nl: { translation: nl },
+    ru: { translation: ru }
 }
 
 i18next.use(initReactI18next).init({

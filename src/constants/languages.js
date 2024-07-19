@@ -14,5 +14,9 @@ export const LANGUAGES = [
     {
         code: 'nl',
         name: 'Nederlands'
+    },
+    {
+        code: 'ru',
+        name: 'Русский'
     }
 ]
