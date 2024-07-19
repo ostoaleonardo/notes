@@ -3,9 +3,20 @@
 	"title": {
 		"categories": "Categorías",
 		"yourCategories": "Tus categorías",
-		"note": "Nota",
-		"language": "Idioma",
+		"updateCategory": "Actualizar categoría",
+		"deleteNote": "Eliminar nota",
 		"about": "Acerca de la aplicación"
+	},
+	"header": {
+		"notes": "Notas",
+		"addNote": "Añadir nota",
+		"editNote": "Editar nota",
+		"viewNote": "Ver nota",
+		"categories": "Categorías",
+		"unlock": "Desbloquear",
+		"settings": "Ajustes",
+		"theme": "Tema de color",
+		"profile": "Perfil"
 	},
 	"welcome": {
 		"tagline": "La mejor forma de mantener tus notas organizadas",
@@ -18,20 +29,25 @@
 		"email": "Correo electrónico",
 		"signOut": "Cerrar sesión"
 	},
-	"editNote": {
+	"date": {
 		"created": "Creado:",
 		"updated": "Actualizado:"
 	},
 	"categories": {
 		"all": "Todo",
-		"add": "Añadir",
-		"update": "Actualizar categoría"
+		"add": "Añadir"
 	},
 	"settings": {
+		"language": "Idioma",
 		"theme": "Tema de color",
 		"chooseTheme": "Elige un tema de color para la aplicación.",
 		"updates": "Actualización de software",
 		"version": "Versión"
+	},
+	"theme": {
+		"light": "Claro",
+		"dark": "Oscuro",
+		"system": "Sistema"
 	},
 	"password": {
 		"add": "Añadir contraseña",
@@ -47,18 +63,6 @@
 		"remove": "Eliminar huella dactilar",
 		"auth": "Autenticación biométrica"
 	},
-	"header": {
-		"notes": "Notas",
-		"addNote": "Añadir nota",
-		"editNote": "Editar nota",
-		"viewNote": "Ver nota",
-		"deleteNote": "Eliminar nota",
-		"categories": "Categorías",
-		"password": "Contraseña",
-		"settings": "Ajustes",
-		"theme": "Tema de color",
-		"profile": "Perfil"
-	},
 	"button": {
 		"addNote": "Añadir Nota",
 		"save": "Guardar",
@@ -73,11 +77,8 @@
 		"loading": "Cargando...",
 		"noNotes": "Todavía no tienes notas",
 		"noCategories": "Todavía no tienes categorías",
-		"noteAdded": "Nota añadida",
-		"noteUpdated": "Nota actualizada",
 		"emptyTitle": "El título no puede estar vacío",
 		"emptyNote": "La nota no puede estar vacía",
-		"emptyCategory": "El nombre de la categoría no puede estar vacío",
 		"categoryAdded": "Categoría añadida",
 		"categoryUpdated": "Categoría actualizada",
 		"wrongPassword": "Contraseña incorrecta",
@@ -91,7 +92,6 @@
 	},
 	"drawer": {
 		"notes": "Notas",
-		"settings": "Ajustes",
 		"categories": "Categorías"
 	}
 }

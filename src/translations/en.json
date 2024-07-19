@@ -3,9 +3,20 @@
 	"title": {
 		"categories": "Categories",
 		"yourCategories": "Your categories",
-		"note": "Note",
-		"language": "Language",
+		"updateCategory": "Update category",
+		"deleteNote": "Delete note",
 		"about": "About the app"
+	},
+	"header": {
+		"notes": "Notes",
+		"addNote": "Add note",
+		"editNote": "Edit note",
+		"viewNote": "View note",
+		"categories": "Categories",
+		"unlock": "Unlock",
+		"settings": "Settings",
+		"theme": "Color theme",
+		"profile": "Profile"
 	},
 	"welcome": {
 		"tagline": "The best way to keep your notes organized",
@@ -18,20 +29,25 @@
 		"email": "Email",
 		"signOut": "Sign out"
 	},
-	"editNote": {
+	"date": {
 		"created": "Created:",
 		"updated": "Updated:"
 	},
 	"categories": {
 		"all": "All",
-		"add": "Add",
-		"update": "Update category"
+		"add": "Add"
 	},
 	"settings": {
+		"language": "Language",
 		"theme": "Color theme",
 		"chooseTheme": "Choose a color theme for the app.",
 		"updates": "Software update",
 		"version": "Version"
+	},
+	"theme": {
+		"light": "Light",
+		"dark": "Dark",
+		"system": "System"
 	},
 	"password": {
 		"add": "Add password",
@@ -47,18 +63,6 @@
 		"remove": "Remove fingerprint",
 		"auth": "Biometric authentication"
 	},
-	"header": {
-		"notes": "Notes",
-		"addNote": "Add note",
-		"editNote": "Edit note",
-		"viewNote": "View note",
-		"deleteNote": "Delete note",
-		"categories": "Categories",
-		"password": "Password",
-		"settings": "Settings",
-		"theme": "Color theme",
-		"profile": "Profile"
-	},
 	"button": {
 		"addNote": "Add Note",
 		"save": "Save",
@@ -73,11 +77,8 @@
 		"loading": "Loading...",
 		"noNotes": "You don't have any notes yet",
 		"noCategories": "You don't have any categories yet",
-		"noteAdded": "Note added",
-		"noteUpdated": "Note updated",
 		"emptyTitle": "Title can't be empty",
 		"emptyNote": "Note can't be empty",
-		"emptyCategory": "Category name can't be empty",
 		"categoryAdded": "Category added",
 		"categoryUpdated": "Category updated",
 		"wrongPassword": "Wrong password",
@@ -91,7 +92,6 @@
 	},
 	"drawer": {
 		"notes": "Notes",
-		"settings": "Settings",
 		"categories": "Categories"
 	}
 }
