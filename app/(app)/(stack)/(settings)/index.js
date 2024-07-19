@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 import { router } from 'expo-router'
 import { useTheme } from 'react-native-paper'
 import { AppVersionCard, Section, Option, Typography, Separator } from '@/components'
@@ -14,7 +14,7 @@ export default function Settings() {
     const { ref, onOpen, onClose } = useBottomSheet()
 
     return (
-        <View style={styles.container}>
+        <View style={{ flex: 1, gap: 24 }}>
             <Section>
                 <Option
                     onPress={onOpen}
@@ -28,7 +28,7 @@ export default function Settings() {
                         <Typography
                             uppercase
                         >
-                            {t('title.language')}
+                            {t('settings.language')}
                         </Typography>
                         <Typography
                             opacity={0.5}
@@ -70,11 +70,3 @@ export default function Settings() {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        gap: 24,
-        // paddingVertical: 24
-    }
-})

@@ -18,8 +18,8 @@ export function DateNote({ createdAt, updatedAt }) {
                 variant='caption'
             >
                 {updatedAt
-                    ? t('editNote.updated')
-                    : t('editNote.created')
+                    ? t('date.updated')
+                    : t('date.created')
                 } {date}
             </Typography>
         </View>

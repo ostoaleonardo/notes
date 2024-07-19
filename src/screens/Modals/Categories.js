@@ -44,7 +44,7 @@ export const Categories = forwardRef(({ selectedCategories, handleCategories, on
             ref={ref}
             onClose={onClose}
             snapPoints={['50%', '95%']}
-            title={t('categories.update')}
+            title={t('title.yourCategories')}
             contentContainerStyle={{
                 flex: 1,
                 paddingBottom: 24

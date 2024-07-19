@@ -116,7 +116,6 @@ export default function Note() {
                         </Section>
 
                         <Section
-                            title={t('title.note')}
                             contentStyle={{ paddingHorizontal: 24 }}
                         >
                             <TextArea

@@ -47,7 +47,7 @@ export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
     }
 
     const handleBiometrics = async () => {
-        const success = await authenticate(t('header.deleteNote'))
+        const success = await authenticate(t('title.deleteNote'))
 
         if (success) {
             deleteNote(id)
@@ -61,7 +61,7 @@ export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
             ref={ref}
             onClose={onClose}
             enableDynamicSizing
-            title={t('header.deleteNote')}
+            title={t('title.deleteNote')}
             contentContainerStyle={styles.container}
         >
             <View style={styles.inputContainer}>

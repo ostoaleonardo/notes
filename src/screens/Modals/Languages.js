@@ -20,7 +20,7 @@ export const Languages = forwardRef(({ onClose }, ref) => {
             ref={ref}
             onClose={onClose}
             snapPoints={['40%', '50%']}
-            title={t('title.language')}
+            title={t('settings.language')}
         >
             <FlatList
                 data={LANGUAGES}

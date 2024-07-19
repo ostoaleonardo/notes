@@ -83,7 +83,7 @@ export default function Theme() {
                         active={mode === name}
                         onPress={() => toggleMode(name)}
                     >
-                        {name}
+                        {t('theme.' + name)}
                     </ThemeOption>
                 ))}
             </View>

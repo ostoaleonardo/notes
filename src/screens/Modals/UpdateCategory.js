@@ -41,7 +41,7 @@ export const UpdateCategory = forwardRef(({ selectedCategory, setIsUpdatedCatego
             ref={ref}
             onClose={onClose}
             snapPoints={['50%']}
-            title={t('categories.update')}
+            title={t('title.updateCategory')}
             contentContainerStyle={{
                 paddingHorizontal: 24,
                 gap: 40

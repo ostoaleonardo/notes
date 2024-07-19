@@ -50,7 +50,7 @@ export default function NotesLayout() {
             <Stack.Screen
                 name='unlock/[slug]'
                 options={{
-                    title: t('header.password').toUpperCase()
+                    title: t('header.unlock').toUpperCase()
                 }}
             />
         </Stack>
