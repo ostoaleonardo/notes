@@ -3,6 +3,8 @@
 	"title": {
 		"categories": "Категории",
 		"yourCategories": "Ваши категории",
+		"updateCategory": "Обновить категорию",
+		"deleteNote": "Удалить записку",
 		"about": "О приложении"
 	},
 	"header": {
@@ -11,7 +13,9 @@
 		"editNote": "Изменить записку",
 		"viewNote": "Просмотр записки",
 		"categories": "Категории",
+		"unlock": "Разблокировать",
 		"settings": "Настройки",
+		"theme": "Тема",
 		"profile": "Профиль"
 	},
 	"welcome": {
@@ -25,13 +29,25 @@
 		"email": "Почта",
 		"signOut": "Выйти из аккаунта"
 	},
+	"date": {
+		"created": "Создано:",
+		"updated": "Изменено:"
+	},
 	"categories": {
 		"all": "Все",
 		"add": "Добавить"
 	},
 	"settings": {
-		"updates": "Обновление",
+		"language": "Язык",
+		"theme": "Тема",
+		"chooseTheme": "Выберите тему приложения.",
+		"updates": "Обновление программ",
 		"version": "Версия"
+	},
+	"theme": {
+		"light": "Светлая",
+		"dark": "Тёмная",
+		"system": "Системная"
 	},
 	"password": {
 		"add": "Добавить пароль",
