@@ -2,30 +2,27 @@ export default {
   name: 'Notes',
   slug: 'notes',
   scheme: 'notes',
-  version: '1.2.0',
+  version: '1.2.1',
   orientation: 'portrait',
   icon: './assets/icon.png',
   userInterfaceStyle: 'automatic',
-  splash: {
-    image: './assets/splash.png',
-    resizeMode: 'contain',
-    backgroundColor: '#d7d8d8'
-  },
   android: {
     splash: {
-      image: './assets/splash.png',
+      image: './assets/light-splash.png',
       resizeMode: 'contain',
       backgroundColor: '#d7d8d8',
       dark: {
+        image: './assets/dark-splash.png',
+        resizeMode: 'contain',
         backgroundColor: '#06080a'
       }
     },
     adaptiveIcon: {
       foregroundImage: './assets/adaptive-icon.png',
-      backgroundColor: '#07080a'
+      backgroundColor: '#ffffff'
     },
     package: 'com.monospace.notes',
-    versionCode: 5
+    versionCode: 6
   },
   plugins: [
     'expo-router',
