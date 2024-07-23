@@ -1,5 +1,4 @@
 export const ROUTES = {
-    SIGN_IN: '/signin',
     HOME: '/home',
     CATEGORIES: '/categories',
     ADD_NOTE: '(notes)',
@@ -7,6 +6,5 @@ export const ROUTES = {
     UNLOCK_NOTE: '/unlock/',
     EDIT_NOTE: '/edit/',
     SETTINGS: '(settings)',
-    THEME: '/theme',
-    PROFILE: '/profile'
+    THEME: '/theme'
 }
