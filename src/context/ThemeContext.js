@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from 'react'
 import { useColorScheme } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
+import { StatusBar } from 'expo-status-bar'
 import { THEMES } from '@/constants'
 
 export const ThemeContext = createContext()
@@ -37,6 +38,7 @@ export function ThemeProvider({ initialTheme, children }) {
             <PaperProvider theme={theme}>
                 {children}
             </PaperProvider>
+            <StatusBar style={name === 'light' ? 'dark' : 'light'} />
         </ThemeContext.Provider>
     )
 }
