@@ -1,9 +1,10 @@
-import { StyleSheet, View } from 'react-native'
-import Animated, { LinearTransition } from 'react-native-reanimated'
-import { ImagePreview, PickerImage, Scroll } from '@/components'
-import { COLORS } from '@/constants'
+import { ImagePreview, Scroll } from '@/components'
 
-export function ImageCarousel({ images, onAddImage, onOpenImage, onRemoveImage, readOnly }) {
+export function ImageCarousel({ images, setImages, onOpenImage, readOnly }) {
+    const onRemoveImage = (image) => {
+        setImages(images.filter((img) => img !== image))
+    }
+
     return (
         <Scroll
             horizontal
@@ -27,36 +28,6 @@ export function ImageCarousel({ images, onAddImage, onOpenImage, onRemoveImage, 
                     />
                 ))
             }
-
-            {!readOnly && (
-                <Animated.View
-                    layout={LinearTransition}
-                    style={styles.pickerContainer}
-                >
-                    <PickerImage
-                        pickCamera
-                        setImage={onAddImage}
-                    />
-                    <View style={styles.separator} />
-                    <PickerImage setImage={onAddImage} />
-                </Animated.View>
-            )}
         </Scroll>
     )
 }
-
-const styles = StyleSheet.create({
-    pickerContainer: {
-        borderRadius: 24,
-        overflow: 'hidden',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    separator: {
-        position: 'absolute',
-        width: '100%',
-        height: 1,
-        opacity: 0.5,
-        backgroundColor: COLORS.dark.background
-    }
-})
