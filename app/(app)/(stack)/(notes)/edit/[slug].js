@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
+import { randomUUID } from 'expo-crypto'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
 import { LargeInput, Scroll, Section, TextArea, Toast } from '@/components'
-import { AddPassword, Categories, CategoryCarousel, DateNote, ImageCarousel, NoteButtons, UpdatePassword } from '@/screens'
+import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, CheckBoxList, DateNote, ImageCarousel, NoteButtons, UpdatePassword } from '@/screens'
 import { useBottomSheet, useHaptics, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
 import { FEEDBACK_TYPES, ROUTES } from '@/constants'
@@ -20,6 +21,7 @@ export default function EditNote() {
     const [note, setNote] = useState('')
     const [categories, setCategories] = useState([])
     const [images, setImages] = useState([])
+    const [list, setList] = useState([])
     const [createdAt, setCreatedAt] = useState('')
     const [updatedAt, setUpdatedAt] = useState('')
 
@@ -52,10 +54,12 @@ export default function EditNote() {
 
     useEffect(() => {
         const note = getNote(slug)
+
         setTitle(note.title)
         setNote(note.note)
-        setImages(note.images)
         setCategories(note.categories)
+        setImages(note.images)
+        setList(note.list)
         setCreatedAt(note.createdAt)
         setUpdatedAt(note.updatedAt)
         setBiometrics(note.biometrics)
@@ -83,10 +87,11 @@ export default function EditNote() {
             id: slug,
             title: title.trim(),
             note: note.trim(),
+            categories,
             images,
+            list,
             password: newPassword || currentPassword,
             biometrics,
-            categories: categories,
             createdAt,
             updatedAt: getDate(),
         })
@@ -109,17 +114,25 @@ export default function EditNote() {
         }
     }
 
+    // Images
     const handleAddImage = (image) => {
         setImages([...images, image])
-    }
-
-    const handleRemoveImage = (image) => {
-        setImages(images.filter((img) => img !== image))
     }
 
     const handleOpenImage = (index) => {
         setIsGalleryVisible(true)
         setGalleryIndex(index)
+    }
+
+    // List
+    const handleAddItem = () => {
+        setList([
+            ...list, {
+                id: randomUUID(),
+                value: '',
+                checked: false
+            }
+        ])
     }
 
     return (
@@ -164,22 +177,38 @@ export default function EditNote() {
                                 placeholder={t('placeholder.note')}
                             />
                         </Section>
+
+                        {list && list.length > 0 && (
+                            <Section
+                                paddingVertical={24}
+                                paddingHorizontal={16}
+                            >
+                                <CheckBoxList
+                                    list={list}
+                                    setList={setList}
+                                    onAddItem={handleAddItem}
+                                />
+                            </Section>
+                        )}
                     </View>
 
-                    <ImageCarousel
-                        images={images}
-                        onAddImage={handleAddImage}
-                        onOpenImage={handleOpenImage}
-                        onRemoveImage={handleRemoveImage}
-                    />
+                    {images && images.length > 0 && (
+                        <ImageCarousel
+                            images={images}
+                            setImages={setImages}
+                            onOpenImage={handleOpenImage}
+                        />
+                    )}
                 </View>
-
-                <NoteButtons
-                    onSave={handleSave}
-                    hasPassword={!!currentPassword}
-                    onOpenModal={hasPassword ? onOpenUpdatePassword : onOpenPassword}
-                />
             </Scroll>
+
+            <BottomOptionsBar
+                onAddImage={handleAddImage}
+                onAddItemList={handleAddItem}
+                hasPassword={hasPassword}
+                onOpenPassword={onOpenPassword}
+                onSave={handleSave}
+            />
 
             <Categories
                 ref={categoriesBottomRef}
@@ -225,6 +254,7 @@ const styles = StyleSheet.create({
     topContainer: {
         flex: 1,
         gap: 40,
+        paddingBottom: 48,
         justifyContent: 'space-between'
     }
 })
