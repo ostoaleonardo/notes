@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { router } from 'expo-router'
-import * as Crypto from 'expo-crypto'
+import { randomUUID } from 'expo-crypto'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
 import { LargeInput, Scroll, Section, TextArea, Toast } from '@/components'
-import { AddPassword, Categories, CategoryCarousel, ImageCarousel, NoteButtons } from '@/screens'
+import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, CheckBoxList, ImageCarousel } from '@/screens'
 import { useBottomSheet, useHaptics, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
 import { DEFAULT_CATEGORIES, FEEDBACK_TYPES, ROUTES } from '@/constants'
@@ -19,6 +19,8 @@ export default function Note() {
     const [note, setNote] = useState('')
     const [categories, setCategories] = useState(DEFAULT_CATEGORIES.map(({ id }) => id))
     const [images, setImages] = useState([])
+    const [list, setList] = useState([])
+
     const [password, setPassword] = useState('')
     const [biometrics, setBiometrics] = useState(false)
 
@@ -52,14 +54,15 @@ export default function Note() {
         }
 
         saveNote({
-            id: Crypto.randomUUID(),
+            id: randomUUID(),
             title: title.trim(),
             note: note.trim(),
+            categories,
             images,
+            list,
             password,
             biometrics,
-            categories,
-            createdAt: getDate(),
+            createdAt: getDate()
         })
 
         vibrate(FEEDBACK_TYPES.SUCCESS)
@@ -74,17 +77,25 @@ export default function Note() {
         }
     }
 
+    // Images
     const handleAddImage = (image) => {
         setImages([...images, image])
-    }
-
-    const handleRemoveImage = (image) => {
-        setImages(images.filter((img) => img !== image))
     }
 
     const handleOpenImage = (index) => {
         setIsGalleryVisible(true)
         setGalleryIndex(index)
+    }
+
+    // List
+    const handleAddItem = () => {
+        setList([
+            ...list, {
+                id: randomUUID(),
+                value: '',
+                checked: false
+            }
+        ])
     }
 
     return (
@@ -116,7 +127,7 @@ export default function Note() {
                         </Section>
 
                         <Section
-                            contentStyle={{ paddingHorizontal: 24 }}
+                            paddingHorizontal={24}
                         >
                             <TextArea
                                 value={note}
@@ -124,22 +135,38 @@ export default function Note() {
                                 placeholder={t('placeholder.note')}
                             />
                         </Section>
+
+                        {list.length > 0 && (
+                            <Section
+                                paddingVertical={24}
+                                paddingHorizontal={16}
+                            >
+                                <CheckBoxList
+                                    list={list}
+                                    setList={setList}
+                                    onAddItem={handleAddItem}
+                                />
+                            </Section>
+                        )}
                     </View>
 
-                    <ImageCarousel
-                        images={images}
-                        onAddImage={handleAddImage}
-                        onOpenImage={handleOpenImage}
-                        onRemoveImage={handleRemoveImage}
-                    />
+                    {images.length > 0 && (
+                        <ImageCarousel
+                            images={images}
+                            setImages={setImages}
+                            onOpenImage={handleOpenImage}
+                        />
+                    )}
                 </View>
-
-                <NoteButtons
-                    onSave={handleSave}
-                    hasPassword={!!password}
-                    onOpenModal={onOpenPassword}
-                />
             </Scroll>
+
+            <BottomOptionsBar
+                onAddImage={handleAddImage}
+                onAddItemList={handleAddItem}
+                hasPassword={!!password}
+                onOpenPassword={onOpenPassword}
+                onSave={handleSave}
+            />
 
             <Categories
                 ref={categoriesBottomRef}
@@ -176,6 +203,7 @@ const styles = StyleSheet.create({
     topContainer: {
         flex: 1,
         gap: 40,
+        paddingBottom: 48,
         justifyContent: 'space-between'
     }
 })
