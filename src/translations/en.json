@@ -64,7 +64,8 @@
 		"auth": "Biometric authentication"
 	},
 	"button": {
-		"addNote": "Add Note",
+		"addNote": "Add note",
+		"addItem": "Add item",
 		"save": "Save",
 		"edit": "Edit",
 		"back": "Back",

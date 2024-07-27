@@ -64,7 +64,8 @@
 		"auth": "Autenticación biométrica"
 	},
 	"button": {
-		"addNote": "Añadir Nota",
+		"addNote": "Añadir nota",
+		"addItem": "Añadir elemento",
 		"save": "Guardar",
 		"edit": "Editar",
 		"back": "Volver",
