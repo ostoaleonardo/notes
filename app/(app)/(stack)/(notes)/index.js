@@ -4,7 +4,8 @@ import { randomUUID } from 'expo-crypto'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
-import { LargeInput, Scroll, Section, TextArea, Toast } from '@/components'
+import { NestableScrollContainer } from 'react-native-draggable-flatlist'
+import { LargeInput, Section, TextArea, Toast } from '@/components'
 import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, CheckBoxList, ImageCarousel } from '@/screens'
 import { useBottomSheet, useHaptics, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
@@ -77,7 +78,6 @@ export default function Note() {
         }
     }
 
-    // Images
     const handleAddImage = (image) => {
         setImages([...images, image])
     }
@@ -87,7 +87,6 @@ export default function Note() {
         setGalleryIndex(index)
     }
 
-    // List
     const handleAddItem = () => {
         setList([
             ...list, {
@@ -99,8 +98,11 @@ export default function Note() {
     }
 
     return (
-        <View style={{ flex: 1 }}>
-            <Scroll contentContainerStyle={styles.scrollContainer}>
+        <>
+            <NestableScrollContainer
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.scrollContainer}
+            >
                 <View style={styles.topContainer}>
                     <View>
                         <Section
@@ -139,7 +141,6 @@ export default function Note() {
                         {list.length > 0 && (
                             <Section
                                 paddingVertical={24}
-                                paddingHorizontal={16}
                             >
                                 <CheckBoxList
                                     list={list}
@@ -158,7 +159,7 @@ export default function Note() {
                         />
                     )}
                 </View>
-            </Scroll>
+            </NestableScrollContainer>
 
             <BottomOptionsBar
                 onAddImage={handleAddImage}
@@ -191,14 +192,14 @@ export default function Note() {
                 message={message}
                 setMessage={setMessage}
             />
-        </View>
+        </>
     )
 }
 
 const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1,
-        paddingVertical: 24
+        paddingVertical: 16
     },
     topContainer: {
         flex: 1,
