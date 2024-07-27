@@ -1,41 +1,25 @@
 import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import { Typography } from '../Text'
-import { IconButton } from '../Button'
-import { Cross } from '@/icons'
 
-export function ModalHeader({ title, onClose }) {
-    const { colors } = useTheme()
-
+export function ModalHeader({ title }) {
     return (
         <View style={styles.container}>
             <Typography
+                bold
+                uppercase
                 opacity={0.5}
+                variant='caption'
             >
                 {title}
             </Typography>
-            <IconButton
-                size='sm'
-                variant='light'
-                onPress={onClose}
-                icon={
-                    <Cross
-                        width={24}
-                        height={24}
-                        rotation={45}
-                        color={colors.onSurface}
-                    />
-                }
-            />
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        marginBottom: 16,
-        flexDirection: 'row',
+        marginVertical: 16,
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'center'
     }
 })
