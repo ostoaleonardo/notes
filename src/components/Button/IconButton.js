@@ -1,25 +1,24 @@
 import { Pressable, StyleSheet } from 'react-native'
+import { useTheme } from 'react-native-paper'
 import { COLORS } from '@/constants'
 
-const sizes = {
-    sm: 32,
-    md: 56,
-    lg: 64,
-}
-
-export function IconButton({ icon, disabled, variant = 'primary', size = 'sm', onPress }) {
+export function IconButton({ icon, disabled, variant = 'primary', ...props }) {
+    const { colors } = useTheme()
     const variantStyles = styles[variant]
-    const iconSize = sizes[size]
 
     return (
         <Pressable
+            {...props}
             disabled={disabled}
-            onPress={onPress}
             style={[
                 styles.container,
-                variantStyles,
-                { width: iconSize, height: iconSize }
+                variantStyles
             ]}
+            android_ripple={{
+                color: colors.onBackground + '1a',
+                borderless: true,
+                radius: 24
+            }}
         >
             {icon}
         </Pressable>
@@ -28,7 +27,8 @@ export function IconButton({ icon, disabled, variant = 'primary', size = 'sm', o
 
 const styles = StyleSheet.create({
     container: {
-        borderRadius: 16,
+        padding: 8,
+        borderRadius: 32,
         alignItems: 'center',
         justifyContent: 'center'
     },

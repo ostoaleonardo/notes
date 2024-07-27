@@ -1,7 +1,7 @@
+import { cloneElement } from 'react'
 import { ActivityIndicator, Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { Typography } from '../Text'
-import { cloneElement } from 'react'
 
 export function Button({ label, onPress, disabled, isLoading, startContent, variant = 'primary', ...props }) {
     const { colors } = useTheme()
