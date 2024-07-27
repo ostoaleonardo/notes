@@ -1,4 +1,5 @@
 import Animated, { CurvedTransition, FadeInUp, FadeOutUp } from 'react-native-reanimated'
+import { NestableDraggableFlatList } from 'react-native-draggable-flatlist'
 import { Button, CheckBoxItem } from '@/components'
 import { Cross } from '@/icons'
 
@@ -19,22 +20,28 @@ export function CheckBoxList({ list, setList, onAddItem }) {
 
     return (
         <>
-            {list.map((item) => (
-                <CheckBoxItem
-                    key={item.id}
-                    item={item}
-                    onChange={onListChange}
-                    onDelete={onDeleteItem}
-                />
-            ))}
+            <NestableDraggableFlatList
+                data={list}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item, isActive, drag }) => (
+                    <CheckBoxItem
+                        item={item}
+                        onDrag={drag}
+                        isActive={isActive}
+                        onChange={onListChange}
+                        onDelete={onDeleteItem}
+                    />
+                )}
+                onDragEnd={({ data }) => setList(data)}
+            />
 
             <Animated.View
-                layout={CurvedTransition}
                 entering={FadeInUp}
                 exiting={FadeOutUp}
+                layout={CurvedTransition}
                 style={{
                     paddingTop: 16,
-                    alignItems: 'flex-start'
+                    paddingHorizontal: 24
                 }}
             >
                 <Button
