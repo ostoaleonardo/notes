@@ -1,8 +1,9 @@
 import { ActivityIndicator, Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { Typography } from '../Text'
+import { cloneElement } from 'react'
 
-export function Button({ label, onPress, disabled, isLoading, variant = 'primary', ...props }) {
+export function Button({ label, onPress, disabled, isLoading, startContent, variant = 'primary', ...props }) {
     const { colors } = useTheme()
 
     const VARIANTS = {
@@ -33,7 +34,8 @@ export function Button({ label, onPress, disabled, isLoading, variant = 'primary
         }
     }
 
-    const { color, backgroundColor, borderColor } = VARIANTS[variant]
+    const variantStyles = VARIANTS[variant]
+    const { color } = variantStyles
 
     return (
         <Pressable
@@ -42,11 +44,12 @@ export function Button({ label, onPress, disabled, isLoading, variant = 'primary
             disabled={disabled || isLoading}
             style={[
                 styles.base,
-                disabled && { opacity: 0.5 },
-                { backgroundColor, borderColor }
+                variantStyles,
+                disabled && { opacity: 0.5 }
             ]}
         >
             {isLoading && <ActivityIndicator color={color} />}
+            {startContent && !isLoading && cloneElement(startContent, { color })}
 
             <Typography
                 uppercase
