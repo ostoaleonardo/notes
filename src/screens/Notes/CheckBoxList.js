@@ -1,9 +1,12 @@
+import { useTranslation } from 'react-i18next'
 import Animated, { CurvedTransition, FadeInUp, FadeOutUp } from 'react-native-reanimated'
 import { NestableDraggableFlatList } from 'react-native-draggable-flatlist'
 import { Button, CheckBoxItem } from '@/components'
 import { Cross } from '@/icons'
 
 export function CheckBoxList({ list, setList, onAddItem }) {
+    const { t } = useTranslation()
+
     const onListChange = (newItem) => {
         setList(list.map((item) => {
             if (item.id === newItem.id) {
@@ -46,7 +49,7 @@ export function CheckBoxList({ list, setList, onAddItem }) {
             >
                 <Button
                     variant='flat'
-                    label='Add item to list'
+                    label={t('button.addItem')}
                     onPress={onAddItem}
                     startContent={<Cross />}
                 />
