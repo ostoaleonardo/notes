@@ -1,23 +1,37 @@
 import { TextInput } from 'react-native'
-import { Checkbox, IconButton, useTheme } from 'react-native-paper'
-import Animated, { CurvedTransition, FadeInUp, FadeOutUp } from 'react-native-reanimated'
-import { COLORS, FONTS } from '@/constants'
+import { Checkbox, useTheme } from 'react-native-paper'
+import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
+import { IconButton } from '../Button'
+import { Cross, DragIndicator } from '@/icons'
+import { FONTS } from '@/constants'
 
-export function CheckBoxItem({ item, onChange, onDelete }) {
+export function CheckBoxItem({ item, onDrag, onChange, onDelete, isActive }) {
     const { id, value, checked } = item
     const { colors } = useTheme()
 
+    const iconProps = { color: colors.onBackground + '66' }
+
+    const animatedStyles = useAnimatedStyle(() => ({
+        backgroundColor: withTiming(isActive ? colors.surface : colors.background)
+    }))
+
     return (
         <Animated.View
-            entering={FadeInUp}
-            exiting={FadeOutUp}
-            layout={CurvedTransition}
-            style={{
-                gap: 4,
-                flexDirection: 'row',
-                alignItems: 'center'
-            }}
+            style={[
+                animatedStyles, {
+                    height: 48,
+                    gap: 4,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    paddingHorizontal: 16
+                }
+            ]}
         >
+            <IconButton
+                variant='light'
+                onLongPress={onDrag}
+                icon={<DragIndicator {...iconProps} />}
+            />
             <Checkbox
                 label={value}
                 color={colors.onBackground}
@@ -37,9 +51,16 @@ export function CheckBoxItem({ item, onChange, onDelete }) {
                 }}
             />
             <IconButton
-                icon='close'
-                iconColor={COLORS.common.white50}
+                variant='light'
                 onPress={() => onDelete(id)}
+                icon={
+                    <Cross
+                        width={24}
+                        height={24}
+                        rotation={45}
+                        {...iconProps}
+                    />
+                }
             />
         </Animated.View>
     )
