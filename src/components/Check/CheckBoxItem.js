@@ -47,8 +47,10 @@ export function CheckBoxItem({ item, onDrag, onChange, onDelete, isActive }) {
             <TextInput
                 value={value}
                 placeholder='...'
+                cursorColor={colors.onBackground}
+                selectionHandleColor={colors.tertiary}
+                selectionColor={colors.onBackground + '33'}
                 placeholderTextColor={colors.onBackground + '66'}
-                cursorColor={colors.tertiary}
                 onChangeText={(value) => onChange({ ...item, value })}
                 style={{
                     flex: 1,

@@ -17,8 +17,9 @@ export function TextArea({ value, onChangeText, placeholder, ...props }) {
                 ]}
                 placeholder={placeholder}
                 onChangeText={onChangeText}
-                cursorColor={colors.tertiary}
-                selectionColor={colors.tertiary}
+                cursorColor={colors.onBackground}
+                selectionHandleColor={colors.tertiary}
+                selectionColor={colors.onBackground + '33'}
                 placeholderTextColor={colors.onBackground + '66'}
             />
         </View>
@@ -27,8 +28,7 @@ export function TextArea({ value, onChangeText, placeholder, ...props }) {
 
 const styles = StyleSheet.create({
     inputContainer: {
-        width: '100%',
-        minHeight: 250
+        width: '100%'
     },
     input: {
         fontSize: 14,

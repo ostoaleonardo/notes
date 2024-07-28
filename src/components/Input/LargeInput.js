@@ -16,7 +16,9 @@ export function LargeInput({ value, onChangeText, bold, placeholder, ...props })
             ]}
             placeholder={placeholder}
             onChangeText={onChangeText}
-            cursorColor={colors.tertiary}
+            cursorColor={colors.onBackground}
+            selectionHandleColor={colors.tertiary}
+            selectionColor={colors.onBackground + '33'}
             placeholderTextColor={colors.onBackground + '66'}
         />
     )

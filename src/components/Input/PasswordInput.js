@@ -25,16 +25,14 @@ export function PasswordInput({ password, onChangeText, ...props }) {
                 secureTextEntry={!showPassword}
             />
             <IconButton
-                icon={
-                    <Eye
-                        width={24}
-                        height={24}
-                        color={showPassword ? colors.onBackground : colors.onBackground + '66'}
-                    />
-                }
-                size='md'
                 variant='light'
                 onPress={() => handlePassword(password)}
+                icon={
+                    <Eye
+                        color={colors.onBackground}
+                        opacity={showPassword ? 1 : 0.3}
+                    />
+                }
             />
         </View>
     )
