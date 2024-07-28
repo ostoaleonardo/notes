@@ -6,7 +6,7 @@ import { Cross, DragIndicator } from '@/icons'
 import { FONTS } from '@/constants'
 
 export function CheckBoxItem({ item, onDrag, onChange, onDelete, isActive }) {
-    const { id, value, checked } = item
+    const { id, value, status } = item
     const { colors } = useTheme()
 
     const iconProps = { color: colors.onBackground + '66' }
@@ -34,9 +34,15 @@ export function CheckBoxItem({ item, onDrag, onChange, onDelete, isActive }) {
             />
             <Checkbox
                 label={value}
+                status={status}
                 color={colors.onBackground}
-                status={checked ? 'checked' : 'unchecked'}
-                onPress={() => onChange({ ...item, checked: !checked })}
+                onPress={() => onChange({
+                    ...item,
+                    status:
+                        status === 'checked'
+                            ? 'unchecked'
+                            : 'checked'
+                })}
             />
             <TextInput
                 value={value}

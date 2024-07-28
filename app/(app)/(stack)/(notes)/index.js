@@ -92,7 +92,7 @@ export default function Note() {
             ...list, {
                 id: randomUUID(),
                 value: '',
-                checked: false
+                status: 'unchecked'
             }
         ])
     }
