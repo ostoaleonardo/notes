@@ -1,58 +1,34 @@
-import { useTranslation } from 'react-i18next'
-import { View } from 'react-native'
+import { Linking, View } from 'react-native'
 import { router } from 'expo-router'
 import { useTheme } from 'react-native-paper'
-import { AppVersionCard, Section, Option, Typography, Separator } from '@/components'
-import { ArrowForward } from '@/icons'
+import { useTranslation } from 'react-i18next'
+import { AppVersionCard, Section, Option, Separator } from '@/components'
+import { ArrowForward, OpenInNew } from '@/icons'
 import { Languages } from '@/screens'
 import { useBottomSheet } from '@/hooks'
-import { ROUTES } from '@/constants'
+import { LINKS, ROUTES } from '@/constants'
 
 export default function Settings() {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { ref, onOpen, onClose } = useBottomSheet()
 
+    const iconColor = colors.onBackground
+
     return (
         <View style={{ flex: 1, gap: 24 }}>
             <Section>
                 <Option
+                    title={t('settings.language')}
+                    description={t('language')}
+                    rightContent={<ArrowForward color={iconColor} />}
                     onPress={onOpen}
-                    rightContent={
-                        <ArrowForward
-                            color={colors.onBackground}
-                        />
-                    }
-                >
-                    <View style={{ gap: 4 }}>
-                        <Typography
-                            uppercase
-                        >
-                            {t('settings.language')}
-                        </Typography>
-                        <Typography
-                            opacity={0.5}
-                            variant='caption'
-                        >
-                            {t('language')}
-                        </Typography>
-                    </View>
-                </Option>
-
+                />
                 <Option
+                    title={t('settings.theme')}
+                    rightContent={<ArrowForward color={iconColor} />}
                     onPress={() => router.push(ROUTES.THEME)}
-                    rightContent={
-                        <ArrowForward
-                            color={colors.onBackground}
-                        />
-                    }
-                >
-                    <Typography
-                        uppercase
-                    >
-                        {t('settings.theme')}
-                    </Typography>
-                </Option>
+                />
             </Section>
 
             <Separator style={{ marginHorizontal: 24 }} />
@@ -60,6 +36,18 @@ export default function Settings() {
             <Section
                 title={t('title.about')}
             >
+                <Option
+                    title={t('settings.github')}
+                    description={t('settings.features')}
+                    rightContent={<OpenInNew color={iconColor} />}
+                    onPress={() => Linking.openURL(LINKS.GITHUB)}
+                />
+                <Option
+                    title={t('settings.contribute')}
+                    description={t('settings.translate')}
+                    rightContent={<OpenInNew color={iconColor} />}
+                    onPress={() => Linking.openURL(LINKS.TRANSLATIONS)}
+                />
                 <AppVersionCard />
             </Section>
 
