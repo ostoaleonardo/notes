@@ -1,8 +1,8 @@
 // Home screen components
 export {
+    HeaderRightContent,
     FilterCarousel,
-    NotesContainer,
-    HeaderRightContent
+    NotesContainer
 } from './Home'
 
 // Categories screen components
@@ -13,9 +13,10 @@ export {
 // Note screen components
 export {
     DateNote,
-    NoteButtons,
     ImageCarousel,
     CategoryCarousel,
+    BottomOptionsBar,
+    CheckBoxList
 } from './Notes'
 
 // Modals
