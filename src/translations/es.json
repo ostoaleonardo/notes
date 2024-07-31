@@ -37,6 +37,12 @@
 		"all": "Todo",
 		"add": "Añadir"
 	},
+	"list": {
+		"add": "Añadir elemento",
+		"bulleted": "Lista con viñetas",
+		"numbered": "Lista numerada",
+		"checklist": "Lista de verificación"
+	},
 	"settings": {
 		"language": "Idioma",
 		"theme": "Tema de color",
@@ -69,7 +75,6 @@
 	},
 	"button": {
 		"addNote": "Añadir nota",
-		"addItem": "Añadir elemento",
 		"save": "Guardar",
 		"edit": "Editar",
 		"back": "Volver",
