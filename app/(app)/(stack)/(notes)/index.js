@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
 import { NestableScrollContainer } from 'react-native-draggable-flatlist'
 import { LargeInput, Section, TextArea, Toast } from '@/components'
-import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, CheckBoxList, ImageCarousel } from '@/screens'
+import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, ImageCarousel, List } from '@/screens'
 import { useBottomSheet, useHaptics, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
 import { DEFAULT_CATEGORIES, FEEDBACK_TYPES, ROUTES } from '@/constants'
@@ -20,7 +20,7 @@ export default function Note() {
     const [note, setNote] = useState('')
     const [categories, setCategories] = useState(DEFAULT_CATEGORIES.map(({ id }) => id))
     const [images, setImages] = useState([])
-    const [list, setList] = useState([])
+    const [list, setList] = useState({ type: '', items: [] })
 
     const [password, setPassword] = useState('')
     const [biometrics, setBiometrics] = useState(false)
@@ -87,14 +87,25 @@ export default function Note() {
         setGalleryIndex(index)
     }
 
-    const handleAddItem = () => {
-        setList([
-            ...list, {
-                id: randomUUID(),
-                value: '',
-                status: 'unchecked'
-            }
-        ])
+    const handleListType = (type) => {
+        if (list.items.length > 0) {
+            setList((prev) => ({ ...prev, type }))
+        } else {
+            handleAddItem(type)
+        }
+    }
+
+    const handleAddItem = (type) => {
+        const item = {
+            id: randomUUID(),
+            value: '',
+            status: 'unchecked'
+        }
+
+        setList((prev) => {
+            const items = [...prev.items, item]
+            return { items, type }
+        })
     }
 
     return (
@@ -138,11 +149,11 @@ export default function Note() {
                             />
                         </Section>
 
-                        {list.length > 0 && (
+                        {list.items.length > 0 && (
                             <Section
                                 paddingVertical={24}
                             >
-                                <CheckBoxList
+                                <List
                                     list={list}
                                     setList={setList}
                                     onAddItem={handleAddItem}
@@ -163,7 +174,7 @@ export default function Note() {
 
             <BottomOptionsBar
                 onAddImage={handleAddImage}
-                onAddItemList={handleAddItem}
+                onListType={handleListType}
                 hasPassword={!!password}
                 onOpenPassword={onOpenPassword}
                 onSave={handleSave}

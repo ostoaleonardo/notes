@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
 import { NestableScrollContainer } from 'react-native-draggable-flatlist'
 import { LargeInput, Section, TextArea, Toast } from '@/components'
-import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, CheckBoxList, DateNote, ImageCarousel, UpdatePassword } from '@/screens'
+import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, List, DateNote, ImageCarousel, UpdatePassword } from '@/screens'
 import { useBottomSheet, useHaptics, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
 import { FEEDBACK_TYPES, ROUTES } from '@/constants'
@@ -22,7 +22,8 @@ export default function EditNote() {
     const [note, setNote] = useState('')
     const [categories, setCategories] = useState([])
     const [images, setImages] = useState([])
-    const [list, setList] = useState([])
+    const [list, setList] = useState({ type: '', items: [] })
+
     const [createdAt, setCreatedAt] = useState('')
     const [updatedAt, setUpdatedAt] = useState('')
 
@@ -94,7 +95,7 @@ export default function EditNote() {
             password: newPassword || currentPassword,
             biometrics,
             createdAt,
-            updatedAt: getDate(),
+            updatedAt: getDate()
         })
 
         vibrate(FEEDBACK_TYPES.SUCCESS)
@@ -124,14 +125,25 @@ export default function EditNote() {
         setGalleryIndex(index)
     }
 
-    const handleAddItem = () => {
-        setList([
-            ...list, {
-                id: randomUUID(),
-                value: '',
-                checked: false
-            }
-        ])
+    const handleListType = (type) => {
+        if (list.items.length > 0) {
+            setList((prev) => ({ ...prev, type }))
+        } else {
+            handleAddItem(type)
+        }
+    }
+
+    const handleAddItem = (type) => {
+        const item = {
+            id: randomUUID(),
+            value: '',
+            status: 'unchecked'
+        }
+
+        setList((prev) => {
+            const items = [...prev.items, item]
+            return { items, type }
+        })
     }
 
     return (
@@ -180,11 +192,11 @@ export default function EditNote() {
                             />
                         </Section>
 
-                        {list && list.length > 0 && (
+                        {list && list.items.length > 0 && (
                             <Section
                                 paddingVertical={24}
                             >
-                                <CheckBoxList
+                                <List
                                     list={list}
                                     setList={setList}
                                     onAddItem={handleAddItem}
@@ -205,7 +217,7 @@ export default function EditNote() {
 
             <BottomOptionsBar
                 onAddImage={handleAddImage}
-                onAddItemList={handleAddItem}
+                onListType={handleListType}
                 hasPassword={hasPassword}
                 onOpenPassword={
                     hasPassword
