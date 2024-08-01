@@ -68,7 +68,7 @@ export function List({ list, setList, onAddItem }) {
             >
                 <Button
                     variant='flat'
-                    label={t('button.addItem')}
+                    label={t('list.add')}
                     onPress={() => onAddItem(type)}
                     startContent={<Cross />}
                 />
