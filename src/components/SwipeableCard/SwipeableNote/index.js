@@ -3,7 +3,7 @@ import { Image, Pressable, StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { SwipeableCard } from '../SwipeableCard'
 import { Typography } from '../../Text'
-import { CheckBoxItemPreview } from './CheckBoxItemPreview'
+import { ListItemPreview } from './ListItemPreview'
 import { Skeleton } from './Skeleton'
 import { useLocalAuthentication } from '@/hooks'
 import { getDimensions } from '@/utils'
@@ -67,11 +67,13 @@ export function SwipeableNote({ data, isOpen, onOpen, onDelete }) {
                             {note}
                         </Typography>
 
-                        {list && list.length > 0 && (
+                        {list && list.items.length > 0 && (
                             <View>
-                                {list.map((item) => (
-                                    <CheckBoxItemPreview
+                                {list.items.map((item, index) => (
+                                    <ListItemPreview
                                         key={item.id}
+                                        type={list.type}
+                                        index={index + 1}
                                         value={item.value}
                                         status={item.status}
                                     />
