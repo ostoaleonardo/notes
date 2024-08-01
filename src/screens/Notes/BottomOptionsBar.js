@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Menu, useTheme } from 'react-native-paper'
 import { IconButton } from '@/components'
 import { openImagePicker } from '@/utils'
-import { BulletedList, Camera, Check, CheckList, Lock, NumberedList, Picture, Unlock } from '@/icons'
+import { BulletedList, Camera, CheckList, Lock, NumberedList, Picture, Unlock } from '@/icons'
 import { FONTS } from '@/constants'
 
 const menuItemStyle = {
@@ -13,7 +13,7 @@ const menuItemStyle = {
     fontFamily: FONTS.azeretLight
 }
 
-export function BottomOptionsBar({ onAddImage, onListType, hasPassword, onOpenPassword, onSave }) {
+export function BottomOptionsBar({ onAddImage, onListType, hasPassword, onOpenPassword }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const [menuVisible, setMenuVisible] = useState(false)
@@ -103,10 +103,6 @@ export function BottomOptionsBar({ onAddImage, onListType, hasPassword, onOpenPa
                             ? <Lock {...iconProps} />
                             : <Unlock {...iconProps} />
                     }
-                />
-                <IconButton
-                    onPress={onSave}
-                    icon={<Check color={colors.background} />}
                 />
             </View>
         </View>
