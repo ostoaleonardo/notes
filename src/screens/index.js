@@ -16,7 +16,7 @@ export {
     ImageCarousel,
     CategoryCarousel,
     BottomOptionsBar,
-    CheckBoxList
+    List
 } from './Notes'
 
 // Modals

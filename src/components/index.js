@@ -51,7 +51,13 @@ export { Typography } from './Text'
 
 // Checks
 export { Check } from './Check'
-export { CheckBoxItem } from './Check'
+
+// Lists
+export {
+    BulletedListItem,
+    NumberedListItem,
+    CheckListItem
+} from './List'
 
 // Scroll
 export { Scroll } from './Scroll'

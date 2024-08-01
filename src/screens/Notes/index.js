@@ -1,5 +1,5 @@
+export { List } from './List'
 export { DateNote } from './DateNote'
 export { ImageCarousel } from './ImageCarousel'
 export { CategoryCarousel } from './CategoryCarousel'
-export { CheckBoxList } from './CheckBoxList'
 export { BottomOptionsBar } from './BottomOptionsBar'
