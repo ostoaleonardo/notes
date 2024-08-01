@@ -36,12 +36,6 @@ export default function NotesLayout() {
                 }}
             />
             <Stack.Screen
-                name='view/[slug]'
-                options={{
-                    title: t('header.viewNote').toUpperCase()
-                }}
-            />
-            <Stack.Screen
                 name='edit/[slug]'
                 options={{
                     title: t('header.editNote').toUpperCase()
