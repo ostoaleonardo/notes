@@ -33,11 +33,7 @@ export function NumberedListItem({ index, item, onDrag, onChange, onDelete, isAc
                 onLongPress={onDrag}
                 icon={<DragIndicator {...iconProps} />}
             />
-            <Typography
-                bold
-            >
-                {index + 1 + '. '}
-            </Typography>
+            <Typography>{index}.</Typography>
             <TextInput
                 value={value}
                 placeholder='...'
