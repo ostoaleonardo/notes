@@ -18,14 +18,15 @@ export function SwipeableCard({ children, isOpen, onOpen, onDelete }) {
             entering={FadeInUp}
             exiting={SlideOutLeft}
             layout={CurvedTransition}
+            style={styles.container}
         >
             <Swipeable
                 ref={ref}
                 onSwipeableOpen={onOpen}
+                containerStyle={styles.swipeable}
                 renderRightActions={() =>
                     <DeleteAction onPress={onDelete} />
                 }
-                containerStyle={styles.container}
             >
                 {children}
             </Swipeable>
@@ -35,6 +36,9 @@ export function SwipeableCard({ children, isOpen, onOpen, onDelete }) {
 
 const styles = StyleSheet.create({
     container: {
+        width: '100%'
+    },
+    swipeable: {
         paddingHorizontal: 24
     }
 })
