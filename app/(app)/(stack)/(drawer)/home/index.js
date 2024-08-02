@@ -3,23 +3,29 @@ import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { FloatingButton } from '@/components'
 import { NotesContainer, FilterCarousel, DeleteNote } from '@/screens'
-import { useBottomSheet } from '@/hooks'
+import { useBottomSheet, useNotes } from '@/hooks'
 import { ROUTES } from '@/constants'
 
 export default function App() {
     const { t } = useTranslation()
+    const { notes, setNotes } = useNotes()
     const { ref, onOpen, onClose } = useBottomSheet()
     const [selectedNote, setSelectedNote] = useState(null)
-    const [filteredNotes, setFilteredNotes] = useState([])
+    const [selectedFilter, setSelectedFilter] = useState('all')
 
     return (
         <View style={{ flex: 1 }}>
-            <FilterCarousel setFilteredNotes={setFilteredNotes} />
+            <FilterCarousel
+                selectedFilter={selectedFilter}
+                setSelectedFilter={setSelectedFilter}
+            />
             <NotesContainer
-                onOpen={onOpen}
-                filteredNotes={filteredNotes}
+                notes={notes}
+                setNotes={setNotes}
                 selectedNote={selectedNote}
                 setSelectedNote={setSelectedNote}
+                selectedFilter={selectedFilter}
+                onOpen={onOpen}
             />
 
             <FloatingButton

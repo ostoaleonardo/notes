@@ -3,9 +3,13 @@ import { useTranslation } from 'react-i18next'
 import { Scroll, SwipeableNote, Typography } from '@/components'
 import { useNotes } from '@/hooks'
 
-export function NotesContainer({ onOpen, filteredNotes, selectedNote, setSelectedNote }) {
+export function NotesContainer({ notes, selectedNote, setSelectedNote, selectedFilter, onOpen }) {
     const { t } = useTranslation()
     const { loading, deleteNote } = useNotes()
+
+    const filteredNotes = notes.filter((note) => (
+        note.categories.includes(selectedFilter)
+    ))
 
     const handleDelete = (id, isLocked) => {
         if (isLocked) {

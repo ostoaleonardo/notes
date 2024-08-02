@@ -1,41 +1,24 @@
-import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Chip, Scroll } from '@/components'
-import { useCategories, useNotes } from '@/hooks'
+import { useCategories } from '@/hooks'
 
-export function FilterCarousel({ setFilteredNotes }) {
+export function FilterCarousel({ selectedFilter, setSelectedFilter }) {
     const { t } = useTranslation()
-    const { notes } = useNotes()
     const { categories } = useCategories()
-    const [selected, setSelected] = useState('all')
-
-    useEffect(() => {
-        if (selected === 'all') {
-            setFilteredNotes(notes)
-        } else {
-            const filtered = notes.filter(({ categories }) => categories.includes(selected))
-            setFilteredNotes(filtered)
-        }
-    }, [selected, notes])
 
     return (
         <View style={styles.container}>
             <Scroll
                 horizontal
                 overScrollMode='never'
-                contentContainerStyle={{
-                    flexGrow: 1,
-                    gap: 8,
-                    paddingVertical: 16,
-                    paddingHorizontal: 24
-                }}
+                contentContainerStyle={styles.scroll}
             >
                 {categories.map(({ id, name }) => (
                     <Chip
                         key={id}
-                        onPress={() => setSelected(id)}
-                        variant={id === selected ? 'primary' : 'bordered'}
+                        onPress={() => setSelectedFilter(id)}
+                        variant={id === selectedFilter ? 'primary' : 'bordered'}
                         label={id === 'all' ? t('categories.all') : name}
                     />
                 ))}
@@ -48,14 +31,10 @@ const styles = StyleSheet.create({
     container: {
         width: '100%'
     },
-    scrollContainer: {
-        width: '100%',
-        paddingVertical: 16
-    },
-    chipsContainer: {
+    scroll: {
+        flexGrow: 1,
         gap: 8,
-        flexDirection: 'row',
-        alignItems: 'center',
+        paddingVertical: 16,
         paddingHorizontal: 24
     }
 })
