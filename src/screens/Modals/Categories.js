@@ -75,6 +75,7 @@ export const Categories = forwardRef(({ selectedCategories, handleCategories, on
                     <View style={{ paddingTop: 64 }}>
                         <Typography
                             opacity={0.5}
+                            variant='caption'
                         >
                             {t('message.noCategories')}
                         </Typography>
