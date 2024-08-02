@@ -1,32 +1,25 @@
-import { forwardRef, useCallback, useEffect, useState } from 'react'
+import { forwardRef, useCallback, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { useTranslation } from 'react-i18next'
+import * as Crypto from 'expo-crypto'
 import { ModalSheet, Category, SmallInput, SquareButton, Typography, Separator } from '@/components'
 import { useCategories, useHaptics } from '@/hooks'
-import * as Crypto from 'expo-crypto'
 import { FEEDBACK_TYPES } from '@/constants'
 
 export const Categories = forwardRef(({ selectedCategories, handleCategories, onClose }, ref) => {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
     const { categories, addCategory } = useCategories()
-    const [newCategory, setNewCategory] = useState('')
-    const [isButtonDisabled, setIsButtonDisabled] = useState(true)
+    const [category, setCategory] = useState('')
 
-    useEffect(() => {
-        setIsButtonDisabled(!newCategory.trim())
-    }, [newCategory])
-
-    const handleSaveCategory = (category) => {
-        if (!category.trim()) return
-
+    const handleSaveCategory = () => {
         addCategory({
             id: Crypto.randomUUID(),
             name: category.trim()
         })
 
-        setNewCategory('')
+        setCategory('')
         vibrate(FEEDBACK_TYPES.SUCCESS)
     }
 
@@ -45,26 +38,21 @@ export const Categories = forwardRef(({ selectedCategories, handleCategories, on
             onClose={onClose}
             snapPoints={['50%', '95%']}
             title={t('title.yourCategories')}
-            contentContainerStyle={{
-                flex: 1,
-                paddingBottom: 24
-            }}
         >
             <View style={styles.inputContainer}>
                 <SmallInput
-                    value={newCategory}
-                    onChangeText={setNewCategory}
+                    value={category}
+                    onChangeText={setCategory}
                     placeholder={t('placeholder.category')}
                 />
                 <SquareButton
-                    disabled={isButtonDisabled}
+                    disabled={!category.trim()}
                     label={t('categories.add')}
-                    onPress={() => handleSaveCategory(newCategory)}
+                    onPress={handleSaveCategory}
                 />
             </View>
 
             <FlatList
-                horizontal={false}
                 alignItems='center'
                 data={categories.slice(1)}
                 keyExtractor={({ id }) => id}
@@ -75,7 +63,6 @@ export const Categories = forwardRef(({ selectedCategories, handleCategories, on
                     <View style={{ paddingTop: 64 }}>
                         <Typography
                             opacity={0.5}
-                            variant='caption'
                         >
                             {t('message.noCategories')}
                         </Typography>
@@ -89,14 +76,8 @@ export const Categories = forwardRef(({ selectedCategories, handleCategories, on
 const styles = StyleSheet.create({
     inputContainer: {
         gap: 16,
-        paddingBottom: 24,
-        paddingHorizontal: 24,
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    contentContainer: {
-        flexGrow: 1,
-        paddingBottom: 24,
-        alignItems: 'center'
+        padding: 24,
+        paddingTop: 0,
+        flexDirection: 'row'
     }
 })
