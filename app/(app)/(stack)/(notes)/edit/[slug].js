@@ -1,22 +1,23 @@
-import { useEffect, useState } from 'react'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useCallback, useEffect, useState } from 'react'
+import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 import { randomUUID } from 'expo-crypto'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
 import { NestableScrollContainer } from 'react-native-draggable-flatlist'
-import { LargeInput, Section, TextArea, Toast } from '@/components'
+import { LargeInput, Section, TextArea } from '@/components'
 import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, List, DateNote, ImageCarousel, UpdatePassword } from '@/screens'
 import { useBottomSheet, useHaptics, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
-import { FEEDBACK_TYPES, ROUTES } from '@/constants'
+import { FEEDBACK_TYPES } from '@/constants'
 
 export default function EditNote() {
-    const router = useRouter()
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
     const { slug } = useLocalSearchParams()
     const { getNote, updateNote } = useNotes()
+
+    const [firstRender, setFirstRender] = useState(true)
 
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
@@ -34,7 +35,6 @@ export default function EditNote() {
 
     const [galleryIndex, setGalleryIndex] = useState(0)
     const [isGalleryVisible, setIsGalleryVisible] = useState(false)
-    const [message, setMessage] = useState('')
 
     const {
         ref: categoriesBottomRef,
@@ -72,35 +72,47 @@ export default function EditNote() {
         }
     }, [slug])
 
-    const handleSave = () => {
-        if (!title.trim()) {
-            setMessage(t('message.emptyTitle'))
-            vibrate(FEEDBACK_TYPES.ERROR)
-            return
-        }
+    useFocusEffect(
+        useCallback(() => {
+            setFirstRender(false)
+        }, [])
+    )
 
-        if (!note.trim()) {
-            setMessage(t('message.emptyNote'))
-            vibrate(FEEDBACK_TYPES.ERROR)
-            return
-        }
+    useEffect(() => {
+        if (firstRender) return
 
-        updateNote({
-            id: slug,
-            title: title.trim(),
-            note: note.trim(),
-            categories,
-            images,
-            list,
-            password: newPassword || currentPassword,
-            biometrics,
-            createdAt,
-            updatedAt: getDate()
-        })
+        const timer = setTimeout(() => {
+            const newData = {
+                id: slug,
+                title: title.trim(),
+                note: note.trim(),
+                categories,
+                images,
+                list,
+                password: newPassword || currentPassword,
+                biometrics,
+                createdAt
+            }
 
-        vibrate(FEEDBACK_TYPES.SUCCESS)
-        router.navigate(ROUTES.HOME)
-    }
+            updateNote({
+                ...newData,
+                updatedAt: getDate()
+            })
+
+            vibrate(FEEDBACK_TYPES.SUCCESS)
+        }, 500)
+
+        return () => clearTimeout(timer)
+    }, [
+        title,
+        note,
+        categories,
+        images,
+        list,
+        currentPassword,
+        newPassword,
+        biometrics
+    ])
 
     const handleRemovePassword = () => {
         setHasPassword(false)
@@ -126,7 +138,9 @@ export default function EditNote() {
     }
 
     const handleListType = (type) => {
-        if (list.items.length > 0) {
+        if (list && list.type === type) return
+
+        if (list && list.items.length > 0) {
             setList((prev) => ({ ...prev, type }))
         } else {
             handleAddItem(type)
@@ -141,7 +155,7 @@ export default function EditNote() {
         }
 
         setList((prev) => {
-            const items = [...prev.items, item]
+            const items = prev ? [...prev.items, item] : [item]
             return { items, type }
         })
     }
@@ -152,7 +166,7 @@ export default function EditNote() {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.scrollContainer}
             >
-                <View style={styles.topContainer}>
+                <View style={styles.contentContainer}>
                     <View>
                         <Section
                             paddingHorizontal={24}
@@ -224,7 +238,6 @@ export default function EditNote() {
                         ? onOpenUpdatePassword
                         : onOpenPassword
                 }
-                onSave={handleSave}
             />
 
             <Categories
@@ -255,10 +268,6 @@ export default function EditNote() {
                 images={images.map((url) => ({ uri: url }))}
                 onRequestClose={() => setIsGalleryVisible(false)}
             />
-            <Toast
-                message={message}
-                setMessage={setMessage}
-            />
         </>
     )
 }
@@ -268,7 +277,7 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         paddingVertical: 16
     },
-    topContainer: {
+    contentContainer: {
         flex: 1,
         gap: 40,
         paddingBottom: 48,

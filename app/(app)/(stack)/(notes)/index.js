@@ -1,21 +1,25 @@
-import { useState } from 'react'
-import { router } from 'expo-router'
+import { useCallback, useEffect, useState } from 'react'
 import { randomUUID } from 'expo-crypto'
+import { useFocusEffect } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
 import { NestableScrollContainer } from 'react-native-draggable-flatlist'
-import { LargeInput, Section, TextArea, Toast } from '@/components'
+import { LargeInput, Section, TextArea } from '@/components'
 import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, ImageCarousel, List } from '@/screens'
 import { useBottomSheet, useHaptics, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
-import { DEFAULT_CATEGORIES, FEEDBACK_TYPES, ROUTES } from '@/constants'
+import { DEFAULT_CATEGORIES, FEEDBACK_TYPES } from '@/constants'
 
 export default function Note() {
     const { t } = useTranslation()
-    const { saveNote } = useNotes()
+    const { saveNote, updateNote } = useNotes()
     const { vibrate } = useHaptics()
 
+    const [isSaved, setIsSaved] = useState(false)
+    const [firstRender, setFirstRender] = useState(true)
+
+    const [id, setId] = useState(randomUUID())
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
     const [categories, setCategories] = useState(DEFAULT_CATEGORIES.map(({ id }) => id))
@@ -27,7 +31,6 @@ export default function Note() {
 
     const [galleryIndex, setGalleryIndex] = useState(0)
     const [isGalleryVisible, setIsGalleryVisible] = useState(false)
-    const [message, setMessage] = useState('')
 
     const {
         ref: categoriesBottomRef,
@@ -41,34 +44,54 @@ export default function Note() {
         onClose: onClosePassword
     } = useBottomSheet()
 
-    const handleSave = () => {
-        if (!title.trim()) {
-            setMessage(t('message.emptyTitle'))
-            vibrate(FEEDBACK_TYPES.ERROR)
-            return
-        }
+    useFocusEffect(
+        useCallback(() => {
+            setFirstRender(false)
+        }, [])
+    )
 
-        if (!note.trim()) {
-            setMessage(t('message.emptyNote'))
-            vibrate(FEEDBACK_TYPES.ERROR)
-            return
-        }
+    useEffect(() => {
+        if (firstRender) return
 
-        saveNote({
-            id: randomUUID(),
-            title: title.trim(),
-            note: note.trim(),
-            categories,
-            images,
-            list,
-            password,
-            biometrics,
-            createdAt: getDate()
-        })
+        const timer = setTimeout(() => {
+            const newData = {
+                id,
+                title: title.trim(),
+                note: note.trim(),
+                categories,
+                images,
+                list,
+                password,
+                biometrics
+            }
 
-        vibrate(FEEDBACK_TYPES.SUCCESS)
-        router.navigate(ROUTES.HOME)
-    }
+            if (!isSaved) {
+                saveNote({
+                    ...newData,
+                    createdAt: getDate()
+                })
+
+                setIsSaved(true)
+            } else {
+                updateNote({
+                    ...newData,
+                    updatedAt: getDate()
+                })
+            }
+
+            vibrate(FEEDBACK_TYPES.SUCCESS)
+        }, 500)
+
+        return () => clearTimeout(timer)
+    }, [
+        title,
+        note,
+        categories,
+        images,
+        list,
+        password,
+        biometrics
+    ])
 
     const handleCategories = (id) => {
         if (!categories.includes(id)) {
@@ -88,6 +111,8 @@ export default function Note() {
     }
 
     const handleListType = (type) => {
+        if (list && list.type === type) return
+
         if (list.items.length > 0) {
             setList((prev) => ({ ...prev, type }))
         } else {
@@ -114,7 +139,7 @@ export default function Note() {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.scrollContainer}
             >
-                <View style={styles.topContainer}>
+                <View style={styles.contentContainer}>
                     <View>
                         <Section
                             paddingHorizontal={24}
@@ -177,7 +202,6 @@ export default function Note() {
                 onListType={handleListType}
                 hasPassword={!!password}
                 onOpenPassword={onOpenPassword}
-                onSave={handleSave}
             />
 
             <Categories
@@ -199,10 +223,6 @@ export default function Note() {
                 images={images.map((url) => ({ uri: url }))}
                 onRequestClose={() => setIsGalleryVisible(false)}
             />
-            <Toast
-                message={message}
-                setMessage={setMessage}
-            />
         </>
     )
 }
@@ -212,7 +232,7 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         paddingVertical: 16
     },
-    topContainer: {
+    contentContainer: {
         flex: 1,
         gap: 40,
         paddingBottom: 48,
