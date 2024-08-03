@@ -14,8 +14,13 @@ export function SwipeableNote({ data, isOpen, onOpen, onDelete }) {
     const { colors } = useTheme()
     const { hasBiometrics } = useLocalAuthentication()
     const { id, title, note, images, list, password, biometrics } = data
-    const isLocked = password || (biometrics && hasBiometrics)
+
     const width = getDimensions(images.length)
+
+    const hasImages = images && images.length > 0
+    const hasList = list && list.items.length > 0
+    const isLocked = password || (biometrics && hasBiometrics)
+    const hasContent = title || note || hasList || isLocked
 
     const goToEdit = () => {
         if (isLocked) {
@@ -33,72 +38,80 @@ export function SwipeableNote({ data, isOpen, onOpen, onDelete }) {
         >
             <Pressable
                 onPress={goToEdit}
-                style={[
-                    styles.container,
-                    { backgroundColor: colors.surface }
-                ]}
+                style={[styles.container, {
+                    backgroundColor: colors.surface
+                }]}
             >
-                <View style={styles.headerContainer}>
-                    <View style={{ flex: 1 }}>
-                        <Typography
-                            bold
-                            uppercase
-                            variant='caption'
-                        >
-                            {title}
-                        </Typography>
-                    </View>
+                <View
+                    style={{
+                        gap: hasContent ? 16 : 0,
+                        padding: hasContent ? 20 : hasImages ? 0 : 20
+                    }}
+                >
+                    {(title || isLocked) && (
+                        <View style={styles.header}>
+                            <View style={{ flex: 1 }}>
+                                {title && (
+                                    <Typography
+                                        bold
+                                        uppercase
+                                        variant='caption'
+                                    >
+                                        {title}
+                                    </Typography>
+                                )}
+                            </View>
 
-                    {isLocked && (
-                        <Lock
-                            width={16}
-                            height={16}
-                            color={colors.onBackground}
-                        />
+                            {isLocked && (
+                                <Lock
+                                    width={16}
+                                    height={16}
+                                    color={colors.onBackground}
+                                />
+                            )}
+                        </View>
                     )}
-                </View>
 
-                {!isLocked && (
-                    <View style={{ width: '100%', gap: 12 }}>
+                    {!isLocked && note && (
                         <Typography
                             variant='caption'
                             numberOfLines={5}
                         >
                             {note}
                         </Typography>
+                    )}
 
-                        {list && list.items.length > 0 && (
-                            <View>
-                                {list.items.map((item, index) => (
-                                    <ListItemPreview
-                                        key={item.id}
-                                        type={list.type}
-                                        index={index + 1}
-                                        value={item.value}
-                                        status={item.status}
-                                    />
-                                ))}
-                            </View>
-                        )}
+                    {!isLocked && hasList && (
+                        <View style={{ width: '100%' }}>
+                            {list.items.map((item, index) => (
+                                <ListItemPreview
+                                    key={item.id}
+                                    type={list.type}
+                                    index={index + 1}
+                                    value={item.value}
+                                    status={item.status}
+                                />
+                            ))}
+                        </View>
+                    )}
 
-                        {images && images.length > 0 && (
-                            <View style={styles.imagesContainer}>
-                                {images.slice(0, 3).map((image, index) => (
-                                    <Image
-                                        key={index}
-                                        source={{ uri: image }}
-                                        style={[styles.image, {
-                                            width: width + '%',
-                                            height: width + '%'
-                                        }]}
-                                    />
-                                ))}
-                            </View>
-                        )}
+                    {isLocked && <Skeleton />}
+                </View>
+
+                {!isLocked && hasImages && (
+                    <View style={styles.images}>
+                        {images.slice(0, 3).map((image, index) => (
+                            <Image
+                                key={index}
+                                source={{ uri: image }}
+                                style={[styles.image, {
+                                    width: width + '%',
+                                    height: width + '%'
+                                }]}
+                            />
+                        ))}
                     </View>
                 )}
-
-                {isLocked && <Skeleton />}
             </Pressable>
         </SwipeableCard>
     )
@@ -106,24 +119,22 @@ export function SwipeableNote({ data, isOpen, onOpen, onDelete }) {
 
 const styles = StyleSheet.create({
     container: {
-        minWidth: '100%',
-        gap: 16,
-        padding: 20,
-        borderRadius: 16
+        borderRadius: 16,
+        overflow: 'hidden'
     },
-    headerContainer: {
+    header: {
+        width: '100%',
         gap: 16,
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
-    imagesContainer: {
+    images: {
         width: '100%',
-        gap: 8,
         flexWrap: 'wrap',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     image: {
-        aspectRatio: 1,
-        borderRadius: 16
+        aspectRatio: 1
     }
 })
