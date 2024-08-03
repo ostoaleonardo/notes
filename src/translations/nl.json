@@ -11,9 +11,10 @@
 		"notes": "Notities",
 		"addNote": "Notitie toevoegen",
 		"editNote": "Notitie bewerken",
-		"viewNote": "Notitie bekijken",
 		"categories": "Categorieën",
+		"unlock": "Ontgrendel",
 		"settings": "Instellingen",
+		"theme": "Thema",
 		"profile": "Profiel"
 	},
 	"welcome": {
@@ -36,8 +37,16 @@
 		"add": "Toevoegen"
 	},
 	"settings": {
+		"language": "Taal",
+		"theme": "Thema",
+		"chooseTheme": "Kies een thema voor de app.",
 		"updates": "Software bijwerken",
 		"version": "Versie"
+	},
+	"theme": {
+		"light": "Licht",
+		"dark": "Donker",
+		"system": "Systeem"
 	},
 	"password": {
 		"add": "Wachtwoord toevoegen",
@@ -67,8 +76,6 @@
 		"loading": "Laden...",
 		"noNotes": "Je hebt nog geen notities",
 		"noCategories": "Je hebt nog geen categorieën",
-		"emptyTitle": "Titel mag niet leeg zijn",
-		"emptyNote": "Notitie mag niet leeg zijn",
 		"categoryAdded": "Categorie toegevoegd",
 		"categoryUpdated": "Categorie bijgewerkt",
 		"wrongPassword": "Wachtwoord onjuist",

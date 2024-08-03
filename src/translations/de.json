@@ -11,8 +11,8 @@
 		"notes": "Notizen",
 		"addNote": "Notiz hinzufügen",
 		"editNote": "Notiz bearbeiten",
-		"viewNote": "Notiz sehen",
 		"categories": "Kategorien",
+		"unlock": "Entsperren",
 		"settings": "Einstellungen",
 		"theme": "Farbthema",
 		"profile": "Profil"
@@ -36,11 +36,27 @@
 		"all": "Alle",
 		"add": "Hinzufügen"
 	},
+	"list": {
+		"add": "Artikel Hinzufügen",
+		"bulleted": "Punkteliste",
+		"numbered": "Geordnete Liste",
+		"checklist": "Checkliste"
+	},
 	"settings": {
+		"language": "Sprache",
 		"theme": "Farbthema",
 		"chooseTheme": "Wähle ein Farbthema für die App.",
+		"github": "GitHub Repository",
+		"features": "Probleme melden, beitragen oder neue Funktionen anfordern.",
+		"contribute": "Zur Übersetzung beitragen",
+		"translate": "Uns helfen, die App in deine Sprache zu Übersetzen.",
 		"updates": "Software-Aktualisierung",
 		"version": "Version"
+	},
+	"theme": {
+		"light": "Licht",
+		"dark": "Dunkel",
+		"system": "System"
 	},
 	"password": {
 		"add": "Passwort hinzufügen",
@@ -70,8 +86,6 @@
 		"loading": "Wird geladen...",
 		"noNotes": "Du hast noch keine Notizen",
 		"noCategories": "Du hast noch keine Kategorien",
-		"emptyTitle": "Titel darf nicht leer sein",
-		"emptyNote": "Die Notiz darf nicht leer sein",
 		"categoryAdded": "Kategorie hinzugefügt",
 		"categoryUpdated": "Kategorie aktualisiert",
 		"wrongPassword": "Falsches Passwort",
