@@ -1,17 +1,11 @@
 import { useState } from 'react'
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Menu, useTheme } from 'react-native-paper'
 import { IconButton } from '@/components'
 import { openImagePicker } from '@/utils'
 import { BulletedList, Camera, CheckList, Lock, NumberedList, Picture, Unlock } from '@/icons'
 import { FONTS } from '@/constants'
-
-const menuItemStyle = {
-    fontSize: 12,
-    textTransform: 'uppercase',
-    fontFamily: FONTS.azeretLight
-}
 
 export function BottomOptionsBar({ onAddImage, onListType, hasPassword, onOpenPassword }) {
     const { t } = useTranslation()
@@ -33,18 +27,11 @@ export function BottomOptionsBar({ onAddImage, onListType, hasPassword, onOpenPa
 
     return (
         <View
-            style={{
-                position: 'absolute',
-                bottom: 0,
-                width: '100%',
-                padding: 8,
-                paddingHorizontal: 16,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
+            style={[styles.container, {
                 backgroundColor: colors.background
-            }}
+            }]}
         >
-            <View style={{ flexDirection: 'row', gap: 8 }}>
+            <View style={styles.section}>
                 <IconButton
                     variant='light'
                     onPress={() => handleImagePicker('camera')}
@@ -75,26 +62,26 @@ export function BottomOptionsBar({ onAddImage, onListType, hasPassword, onOpenPa
                 >
                     <Menu.Item
                         title={t('list.bulleted')}
-                        titleStyle={menuItemStyle}
+                        titleStyle={styles.title}
                         onPress={() => onListType('bulleted')}
                         leadingIcon={() => <BulletedList {...iconProps} />}
                     />
                     <Menu.Item
                         title={t('list.numbered')}
-                        titleStyle={menuItemStyle}
+                        titleStyle={styles.title}
                         onPress={() => onListType('numbered')}
                         leadingIcon={() => <NumberedList {...iconProps} />}
                     />
                     <Menu.Item
                         title={t('list.checklist')}
-                        titleStyle={menuItemStyle}
+                        titleStyle={styles.title}
                         onPress={() => onListType('checklist')}
                         leadingIcon={() => <CheckList {...iconProps} />}
                     />
                 </Menu>
             </View>
 
-            <View style={{ flexDirection: 'row', gap: 8 }}>
+            <View style={styles.section}>
                 <IconButton
                     variant='light'
                     onPress={onOpenPassword}
@@ -108,3 +95,24 @@ export function BottomOptionsBar({ onAddImage, onListType, hasPassword, onOpenPa
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+        padding: 8,
+        paddingHorizontal: 16,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    section: {
+        flexDirection: 'row',
+        gap: 8
+    },
+    title: {
+        fontSize: 12,
+        textTransform: 'uppercase',
+        fontFamily: FONTS.azeretLight
+    }
+})
