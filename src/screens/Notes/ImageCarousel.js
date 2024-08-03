@@ -1,6 +1,6 @@
 import { ImagePreview, Scroll } from '@/components'
 
-export function ImageCarousel({ images, setImages, onOpenImage, readOnly }) {
+export function ImageCarousel({ images, setImages, onOpenImage }) {
     const onRemoveImage = (image) => {
         setImages(images.filter((img) => img !== image))
     }
@@ -9,22 +9,22 @@ export function ImageCarousel({ images, setImages, onOpenImage, readOnly }) {
         <Scroll
             horizontal
             overScrollMode='never'
+            containerStyle={{
+                maxHeight: 100
+            }}
             contentContainerStyle={{
                 flexGrow: 1,
-                gap: 8,
                 paddingHorizontal: 24,
-            }}
-            containerStyle={{
-                maxHeight: 100,
+                gap: 8
             }}
         >
             {images.length > 0 &&
                 images.map((image, index) => (
                     <ImagePreview
-                        key={index}
+                        key={image}
                         image={image}
                         openImage={() => onOpenImage(index)}
-                        removeImage={!readOnly && (() => onRemoveImage(image))}
+                        removeImage={() => onRemoveImage(image)}
                     />
                 ))
             }
