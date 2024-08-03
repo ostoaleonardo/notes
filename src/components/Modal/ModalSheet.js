@@ -20,11 +20,16 @@ export const ModalSheet = forwardRef(({ title, children, onClose, contentContain
             onClose={onClose}
             enablePanDownToClose
             backdropComponent={renderBackdrop}
-            backgroundStyle={{ backgroundColor: colors.surface }}
-            handleIndicatorStyle={{ backgroundColor: colors.onBackground + '66' }}
+            backgroundStyle={{
+                backgroundColor: colors.surface,
+                borderRadius: 24
+            }}
+            handleIndicatorStyle={{
+                backgroundColor: colors.onBackground + '66'
+            }}
             {...prop}
         >
-            <BottomSheetView style={{ paddingHorizontal: 24 }}>
+            <BottomSheetView>
                 <ModalHeader title={title} />
             </BottomSheetView>
             <BottomSheetView style={contentContainerStyle}>
