@@ -1,0 +1,104 @@
+{
+	"language": "日本語",
+	"title": {
+		"categories": "カテゴリー",
+		"yourCategories": "カテゴリー",
+		"updateCategory": "カテゴリーを更新",
+		"deleteNote": "メモを削除",
+		"about": "このアプリについて"
+	},
+	"header": {
+		"notes": "メモ",
+		"addNote": "メモを追加",
+		"editNote": "メモを編集",
+		"categories": "カテゴリー",
+		"unlock": "ロック解除",
+		"settings": "設定",
+		"theme": "カラーテーマ",
+		"profile": "プロフィール"
+	},
+	"welcome": {
+		"tagline": "メモを整理する最良の方法",
+		"signIn": "Google アカウントでサインイン",
+		"signInError": "サインイン中にエラーが発生しました。再度お試しください。",
+		"noConnection": "インターネットに接続されていません"
+	},
+	"profile": {
+		"alias": "エイリアス",
+		"email": "メール",
+		"signOut": "サインアウト"
+	},
+	"date": {
+		"created": "作成日時:",
+		"updated": "更新日時:"
+	},
+	"categories": {
+		"all": "すべて",
+		"add": "追加"
+	},
+	"list": {
+		"add": "項目を追加",
+		"bulleted": "箇条書きリスト",
+		"numbered": "順序付きリスト",
+		"checklist": "チェックリスト"
+	},
+	"settings": {
+		"language": "言語",
+		"theme": "カラーテーマ",
+		"chooseTheme": "アプリのカラーテーマを選択してください。",
+		"github": "GitHub リポジトリ",
+		"features": "問題の報告、貢献または新しい機能の要望。",
+		"contribute": "翻訳に貢献する",
+		"translate": "アプリの翻訳に協力してくれませんか。",
+		"updates": "アプリをアップデート",
+		"version": "バージョン"
+	},
+	"theme": {
+		"light": "ライト",
+		"dark": "ダーク",
+		"system": "システム"
+	},
+	"password": {
+		"add": "パスワードを追加",
+		"update": "パスワードを更新",
+		"remove": "パスワードを削除",
+		"current": "現在のパスワード",
+		"new": "新しいパスワード"
+	},
+	"biometric": {
+		"use": "指紋認証を使用する",
+		"lock": "指紋認証でロック",
+		"unlock": "指紋認証でロック解除",
+		"remove": "指紋認証を削除",
+		"auth": "生体認証"
+	},
+	"button": {
+		"addNote": "メモを追加",
+		"save": "保存",
+		"edit": "編集",
+		"back": "戻る",
+		"cancel": "キャンセル",
+		"delete": "削除",
+		"update": "更新",
+		"enter": "入力"
+	},
+	"message": {
+		"loading": "読み込み中...",
+		"noNotes": "まだメモはありません",
+		"noCategories": "まだカテゴリーはありません",
+		"categoryAdded": "カテゴリーを追加しました",
+		"categoryUpdated": "カテゴリーを更新しました",
+		"wrongPassword": "パスワードが間違っています",
+		"samePassword": "パスワードを同じにすることはできません",
+		"lengthPassword": "パスワードは 4 文字以上でなければなりません"
+	},
+	"placeholder": {
+		"title": "タイトル...",
+		"note": "ここにメモを入力してください...",
+		"category": "新しいカテゴリー..."
+	},
+	"drawer": {
+		"notes": "メモ",
+		"categories": "カテゴリー"
+	}
+}

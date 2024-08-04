@@ -16,6 +16,10 @@ export const LANGUAGES = [
         name: 'Italiano'
     },
     {
+        code: 'ja',
+        name: '日本語'
+    },
+    {
         code: 'nl',
         name: 'Nederlands'
     },

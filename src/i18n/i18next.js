@@ -4,6 +4,7 @@ import de from '@/translations/de.json'
 import en from '@/translations/en.json'
 import es from '@/translations/es.json'
 import it from '@/translations/it.json'
+import ja from '@/translations/ja.json'
 import nl from '@/translations/nl.json'
 import ru from '@/translations/ru.json'
 
@@ -12,6 +13,7 @@ const languageResources = {
     en: { translation: en },
     es: { translation: es },
     it: { translation: it },
+    ja: { translation: ja },
     nl: { translation: nl },
     ru: { translation: ru }
 }
