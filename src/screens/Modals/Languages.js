@@ -1,26 +1,21 @@
-import { forwardRef, useState } from 'react'
-import { ModalSheet, ModalOption, Separator } from '@/components'
-import { FlatList } from 'react-native-gesture-handler'
+import { forwardRef } from 'react'
+import { FlatList } from 'react-native'
 import { useTranslation } from 'react-i18next'
+import { ModalSheet, ModalOption, Separator } from '@/components'
 import { useLanguage } from '@/hooks'
 import { LANGUAGES } from '@/constants'
 
 export const Languages = forwardRef(({ onClose }, ref) => {
     const { t } = useTranslation()
     const { currentLanguage, changeLanguage } = useLanguage()
-    const [isSelected, setIsSelected] = useState(currentLanguage)
-
-    const handleLanguage = (code) => {
-        changeLanguage(code)
-        setIsSelected(code)
-    }
 
     return (
         <ModalSheet
             ref={ref}
             onClose={onClose}
-            snapPoints={['40%', '50%']}
+            enableDynamicSizing
             title={t('settings.language')}
+            contentContainerStyle={{ paddingBottom: 80 }}
         >
             <FlatList
                 data={LANGUAGES}
@@ -29,8 +24,8 @@ export const Languages = forwardRef(({ onClose }, ref) => {
                 renderItem={({ item }) => (
                     <ModalOption
                         label={item.name}
-                        isSelected={isSelected === item.code}
-                        onPress={() => handleLanguage(item.code)}
+                        isSelected={currentLanguage === item.code}
+                        onPress={() => changeLanguage(item.code)}
                     />
                 )}
             />
