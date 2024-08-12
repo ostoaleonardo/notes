@@ -2,6 +2,7 @@
 export { useNotes } from './useNotes'
 export { useCategories } from './useCategories'
 export { useStorage } from './useStorage'
+export { useNativeModules } from './useNativeModules'
 
 // UI
 export { useLanguage } from './useLanguage'
