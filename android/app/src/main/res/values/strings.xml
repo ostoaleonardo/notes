@@ -1,6 +1,12 @@
 <resources>
-  <string name="app_name">Notes</string>
-  <string name="expo_splash_screen_resize_mode" translatable="false">contain</string>
-  <string name="expo_splash_screen_status_bar_translucent" translatable="false">false</string>
-  <string name="expo_system_ui_user_interface_style" translatable="false">automatic</string>
+    <string name="app_name">Notes</string>
+    <string name="expo_splash_screen_resize_mode" translatable="false">contain</string>
+    <string name="expo_splash_screen_status_bar_translucent" translatable="false">false</string>
+    <string name="expo_system_ui_user_interface_style" translatable="false">automatic</string>
+    <string name="note_widget_title">Grocery List</string>
+    <string name="note_widget_content">Buy milk, eggs, and bread</string>
+    <string name="note_widget_description">Show a specific note on the home screen</string>
+    <string name="note_widget_title_configure_activity">Notes</string>
+    <string name="note_widget_description_configure_activity">Select a note to display on the home screen.</string>
+    <string name="note_widget_empty_view_configure_activity">You don\'t have any notes yet</string>
 </resources>
