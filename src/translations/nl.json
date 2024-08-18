@@ -36,10 +36,20 @@
 		"all": "Alle",
 		"add": "Toevoegen"
 	},
+	"list": {
+		"add": "Item toevoegen",
+		"bulleted": "Puntenlijst",
+		"numbered": "Geordende lijst",
+		"checklist": "Controlelijst"
+	},
 	"settings": {
 		"language": "Taal",
 		"theme": "Thema",
 		"chooseTheme": "Kies een thema voor de app.",
+		"github": "GitHub repository",
+		"features": "Meld problemen, draag bij of stuur verzoeken voor nieuwe functies.",
+		"contribute": "Draag bij aan vertalingen",
+		"translate": "Help ons de app te vertalen naar jouw taal.",
 		"updates": "Software bijwerken",
 		"version": "Versie"
 	},
