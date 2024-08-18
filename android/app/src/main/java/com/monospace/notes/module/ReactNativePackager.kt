@@ -1,4 +1,4 @@
-package com.monospace.notes.storage
+package com.monospace.notes.module
 
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.NativeModule

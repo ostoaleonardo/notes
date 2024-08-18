@@ -1,4 +1,4 @@
-package com.monospace.notes.storage
+package com.monospace.notes.module
 
 import android.content.Context
 import com.facebook.react.bridge.ReactApplicationContext
