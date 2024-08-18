@@ -1,0 +1,104 @@
+{
+	"language": "Français",
+	"title": {
+		"categories": "Catégories",
+		"yourCategories": "Vos catégories",
+		"updateCategory": "Catégorie de mise à jour",
+		"deleteNote": "Supprimer la note",
+		"about": "À propos de l'app"
+	},
+	"header": {
+		"notes": "Notes",
+		"addNote": "Ajouter une note",
+		"editNote": "Modifier la note",
+		"categories": "Catégories",
+		"unlock": "Déverrouiller",
+		"settings": "Paramètres",
+		"theme": "Thème",
+		"profile": "Profile"
+	},
+	"welcome": {
+		"tagline": "Le meilleur moyen d'organiser vos notes",
+		"signIn": "Se connecter avec Google",
+		"signInError": "Erreur de connexion, réessayez",
+		"noConnection": "Vous n'êtes pas connecté à Internet"
+	},
+	"profile": {
+		"alias": "Alias",
+		"email": "Email",
+		"signOut": "Se déconnecter"
+	},
+	"date": {
+		"created": "Crée :",
+		"updated": "Mis à jour :"
+	},
+	"categories": {
+		"all": "Tous",
+		"add": "Ajouter"
+	},
+	"list": {
+		"add": "Ajouter un élément",
+		"bulleted": "Liste à puces",
+		"numbered": "Liste numérotée",
+		"checklist": "Liste de contrôle"
+	},
+	"settings": {
+		"language": "Langue",
+		"theme": "Thème",
+		"chooseTheme": "Choisissez un thème pour votre application.",
+		"github": "Répertoire GitHub",
+		"features": "Signalez des problèmes, contribuez ou demandez de nouvelles fonctionnalités.",
+		"contribute": "Contribuer à la traduction de l'application",
+		"translate": "Aidez-nous à traduire l'application dans votre langue.",
+		"updates": "Mise à jour de l'application",
+		"version": "Version"
+	},
+	"theme": {
+		"light": "Clair",
+		"dark": "Sombre",
+		"system": "Système"
+	},
+	"password": {
+		"add": "Ajouter un mot de passe",
+		"update": "Modifier votre mot de passe",
+		"remove": "Retirer votre mot de passe",
+		"current": "Mot de passe actuel",
+		"new": "Nouveau mot de passe"
+	},
+	"biometric": {
+		"use": "Utiliser l'empreinte digitale",
+		"lock": "Verrouillage avec empreinte digitale",
+		"unlock": "Déverrouiller avec l'empreinte digitale",
+		"remove": "Retirer l'empreinte digitale",
+		"auth": "Authentification biométrique"
+	},
+	"button": {
+		"addNote": "Ajouter une note",
+		"save": "Enregistrer",
+		"edit": "Éditer",
+		"back": "Retour",
+		"cancel": "Annuler",
+		"delete": "Supprimer",
+		"update": "Actualiser",
+		"enter": "Entrer"
+	},
+	"message": {
+		"loading": "Chargement...",
+		"noNotes": "Vous n'avez pas encore de notes",
+		"noCategories": "Vous n'avez pas encore de catégories",
+		"categoryAdded": "Catégorie ajoutée",
+		"categoryUpdated": "Catégorie réactualisée",
+		"wrongPassword": "Mauvais mot de passe",
+		"samePassword": "Le mot de passe ne peut pas être identique au précédent",
+		"lengthPassword": "Le mot de passe doit avoir au moins 4 caractères"
+	},
+	"placeholder": {
+		"title": "Votre titre...",
+		"note": "Tapez votre note ici...",
+		"category": "Nouvelle catégorie..."
+	},
+	"drawer": {
+		"notes": "Notes",
+		"categories": "Catégories"
+	}
+}
