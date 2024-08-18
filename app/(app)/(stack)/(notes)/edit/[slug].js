@@ -7,13 +7,11 @@ import ImageView from 'react-native-image-viewing'
 import { NestableScrollContainer } from 'react-native-draggable-flatlist'
 import { LargeInput, Section, TextArea } from '@/components'
 import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, List, DateNote, ImageCarousel, UpdatePassword } from '@/screens'
-import { useBottomSheet, useHaptics, useNotes } from '@/hooks'
+import { useBottomSheet, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
-import { FEEDBACK_TYPES } from '@/constants'
 
 export default function EditNote() {
     const { t } = useTranslation()
-    const { vibrate } = useHaptics()
     const { slug } = useLocalSearchParams()
     const { getNote, updateNote } = useNotes()
 
@@ -98,8 +96,6 @@ export default function EditNote() {
                 ...newData,
                 updatedAt: getDate()
             })
-
-            vibrate(FEEDBACK_TYPES.SUCCESS)
         }, 500)
 
         return () => clearTimeout(timer)
