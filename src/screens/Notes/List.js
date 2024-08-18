@@ -26,7 +26,10 @@ export function List({ list, setList, onAddItem }) {
         setList((prev) => {
             const items = prev.items.filter((item) => item.id !== id)
 
-            return { ...prev, items }
+            return {
+                items,
+                type: items.length > 0 ? prev.type : ''
+            }
         })
     }
 
