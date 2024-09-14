@@ -3,7 +3,7 @@ import { ActivityIndicator, Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { Typography } from '../Text'
 
-export function Button({ label, onPress, disabled, isLoading, startContent, variant = 'primary', ...props }) {
+export function Button({ label, onPress, disabled, isLoading, startContent, variant = 'primary', autoWidth = false, ...props }) {
     const { colors } = useTheme()
 
     const VARIANTS = {
@@ -45,7 +45,8 @@ export function Button({ label, onPress, disabled, isLoading, startContent, vari
             style={[
                 styles.base,
                 variantStyles,
-                disabled && { opacity: 0.5 }
+                disabled && { opacity: 0.5 },
+                autoWidth && { width: 'auto' }
             ]}
         >
             {isLoading && <ActivityIndicator color={color} />}
