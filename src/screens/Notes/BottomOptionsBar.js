@@ -1,28 +1,33 @@
 import { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { useTranslation } from 'react-i18next'
-import { Menu, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
+import { ListMenu, ReminderMenu } from '../Menus'
 import { IconButton } from '@/components'
+import { Camera, Lock, Notifications, Picture, Unlock } from '@/icons'
 import { openImagePicker } from '@/utils'
-import { BulletedList, Camera, CheckList, Lock, NumberedList, Picture, Unlock } from '@/icons'
 import { FONTS } from '@/constants'
 
-export function BottomOptionsBar({ onAddImage, onListType, hasPassword, onOpenPassword }) {
-    const { t } = useTranslation()
+export function BottomOptionsBar({ onAddImage, onListType, reminder, password }) {
     const { colors } = useTheme()
-    const [menuVisible, setMenuVisible] = useState(false)
-
     const iconProps = { color: colors.onBackground }
 
-    const onOpenMenu = () => setMenuVisible(true)
-    const onCloseMenu = () => setMenuVisible(false)
+    const [listVisible, setListVisible] = useState(false)
+    const [reminderVisible, setReminderVisible] = useState(false)
+
+    const {
+        hasReminder,
+        onOpenReminder,
+        onDeleteReminder
+    } = reminder
+
+    const {
+        hasPassword,
+        onOpenPassword
+    } = password
 
     const handleImagePicker = async (type) => {
         const assets = await openImagePicker(type)
-
-        if (assets) {
-            onAddImage(assets)
-        }
+        if (assets) onAddImage(assets)
     }
 
     return (
@@ -43,42 +48,28 @@ export function BottomOptionsBar({ onAddImage, onListType, hasPassword, onOpenPa
                     icon={<Picture {...iconProps} />}
                 />
 
-                <Menu
-                    elevation={0}
-                    visible={menuVisible}
-                    onDismiss={onCloseMenu}
-                    anchor={
-                        <IconButton
-                            variant='light'
-                            onPress={onOpenMenu}
-                            icon={<CheckList {...iconProps} />}
-                        />
-                    }
-                    contentStyle={{
-                        borderRadius: 24,
-                        overflow: 'hidden',
-                        backgroundColor: colors.surface
-                    }}
-                >
-                    <Menu.Item
-                        title={t('list.bulleted')}
-                        titleStyle={styles.title}
-                        onPress={() => onListType('bulleted')}
-                        leadingIcon={() => <BulletedList {...iconProps} />}
+                <ListMenu
+                    visible={listVisible}
+                    setVisible={setListVisible}
+                    onListType={onListType}
+                    iconProps={iconProps}
+                />
+
+                {hasReminder ? (
+                    <ReminderMenu
+                        visible={reminderVisible}
+                        setVisible={setReminderVisible}
+                        onOpenReminder={onOpenReminder}
+                        onDelete={onDeleteReminder}
+                        iconProps={iconProps}
                     />
-                    <Menu.Item
-                        title={t('list.numbered')}
-                        titleStyle={styles.title}
-                        onPress={() => onListType('numbered')}
-                        leadingIcon={() => <NumberedList {...iconProps} />}
+                ) : (
+                    <IconButton
+                        variant='light'
+                        onPress={onOpenReminder}
+                        icon={<Notifications {...iconProps} />}
                     />
-                    <Menu.Item
-                        title={t('list.checklist')}
-                        titleStyle={styles.title}
-                        onPress={() => onListType('checklist')}
-                        leadingIcon={() => <CheckList {...iconProps} />}
-                    />
-                </Menu>
+                )}
             </View>
 
             <View style={styles.section}>
