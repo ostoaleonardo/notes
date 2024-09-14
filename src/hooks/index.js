@@ -10,4 +10,5 @@ export { useBottomSheet } from './useBottomSheet'
 
 // Utils
 export { useHaptics } from './useHaptics'
+export { useNotifications } from './useNotifications'
 export { useLocalAuthentication } from './useLocalAuthentication'
