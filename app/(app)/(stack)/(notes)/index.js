@@ -6,14 +6,15 @@ import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
 import { NestableScrollContainer } from 'react-native-draggable-flatlist'
 import { LargeInput, Section, TextArea } from '@/components'
-import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, ImageCarousel, List } from '@/screens'
-import { useBottomSheet, useNotes } from '@/hooks'
+import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, ImageCarousel, List, Reminder } from '@/screens'
+import { useBottomSheet, useNotes, useNotifications } from '@/hooks'
 import { getDate } from '@/utils'
 import { DEFAULT_CATEGORIES } from '@/constants'
 
 export default function Note() {
     const { t } = useTranslation()
     const { saveNote, updateNote } = useNotes()
+    const { scheduleNotification } = useNotifications()
 
     const [isSaved, setIsSaved] = useState(false)
     const [firstRender, setFirstRender] = useState(true)
@@ -24,6 +25,7 @@ export default function Note() {
     const [categories, setCategories] = useState(DEFAULT_CATEGORIES.map(({ id }) => id))
     const [images, setImages] = useState([])
     const [list, setList] = useState({ type: '', items: [] })
+    const [reminder, setReminder] = useState({ date: null, repeat: 'never' })
 
     const [password, setPassword] = useState('')
     const [biometrics, setBiometrics] = useState(false)
@@ -42,6 +44,12 @@ export default function Note() {
         onOpen: onOpenPassword,
         onClose: onClosePassword
     } = useBottomSheet()
+
+    const [isReminderVisible, setIsReminderVisible] = useState(false)
+
+    const onOpenReminder = () => setIsReminderVisible(true)
+    const onCloseReminder = () => setIsReminderVisible(false)
+    const onDeleteReminder = () => setReminder({ date: null, repeat: 'never' })
 
     useFocusEffect(
         useCallback(() => {
@@ -86,6 +94,7 @@ export default function Note() {
         categories,
         images,
         list,
+        reminder,
         password,
         biometrics
     ])
@@ -197,8 +206,16 @@ export default function Note() {
             <BottomOptionsBar
                 onAddImage={handleAddImage}
                 onListType={handleListType}
-                hasPassword={!!password}
-                onOpenPassword={onOpenPassword}
+                password={{
+                    hasPassword: !!password,
+                    onOpenPassword
+                }}
+                reminder={{
+                    hasReminder: !!reminder,
+                    onOpenReminder,
+                    onCloseReminder,
+                    onDeleteReminder
+                }}
             />
 
             <Categories
@@ -213,6 +230,12 @@ export default function Note() {
                 setPassword={setPassword}
                 biometrics={biometrics}
                 setBiometrics={setBiometrics}
+            />
+            <Reminder
+                visible={isReminderVisible}
+                onClose={onCloseReminder}
+                reminder={reminder}
+                setReminder={setReminder}
             />
             <ImageView
                 imageIndex={galleryIndex}

@@ -26,5 +26,6 @@ export {
     UpdateCategory,
     Categories,
     AddPassword,
-    UpdatePassword
+    UpdatePassword,
+    Reminder
 } from './Modals'
