@@ -25,6 +25,8 @@ export default function Note() {
     const [images, setImages] = useState([])
     const [list, setList] = useState({ type: '', items: [] })
 
+    const [createdAt, setCreatedAt] = useState('')
+
     const [password, setPassword] = useState('')
     const [biometrics, setBiometrics] = useState(false)
 
@@ -61,15 +63,19 @@ export default function Note() {
                 images,
                 list,
                 password,
-                biometrics
+                biometrics,
+                createdAt
             }
 
             if (!isSaved) {
+                const createdAt = getDate()
+
                 saveNote({
                     ...newData,
-                    createdAt: getDate()
+                    createdAt
                 })
 
+                setCreatedAt(createdAt)
                 setIsSaved(true)
             } else {
                 updateNote({
