@@ -1,21 +1,19 @@
 import { StyleSheet } from 'react-native'
 import { Link } from 'expo-router'
-import { Typography } from '../Text'
+import { Plus } from '@/icons'
 import { COLORS } from '@/constants'
 
-export function FloatingButton({ label, href }) {
+export function FloatingButton({ href }) {
     return (
         <Link
             href={href}
             style={styles.container}
         >
-            <Typography
-                uppercase
-                variant='caption'
-                color={COLORS.common.white}
-            >
-                {label}
-            </Typography>
+            <Plus
+                width={24}
+                height={24}
+                color={COLORS.base.white}
+            />
         </Link>
     )
 }
@@ -25,9 +23,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 24,
         right: 24,
-        borderRadius: 48,
-        paddingVertical: 24,
-        paddingHorizontal: 32,
-        backgroundColor: COLORS.common.accent
+        padding: 24,
+        borderRadius: 24,
+        backgroundColor: COLORS.base.accent
     }
 })
