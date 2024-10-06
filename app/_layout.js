@@ -17,7 +17,8 @@ export default function MainLayout() {
     const [initialTheme, setInitialTheme] = useState({})
     const [loaded, error] = useFonts({
         'AzeretMono-Light': require('../assets/fonts/AzeretMono-Light.ttf'),
-        'AzeretMono-Medium': require('../assets/fonts/AzeretMono-Medium.ttf')
+        'AzeretMono-Medium': require('../assets/fonts/AzeretMono-Medium.ttf'),
+        'NType82-Headline': require('../assets/fonts/NType82-Headline.ttf')
     })
 
     useEffect(() => {
