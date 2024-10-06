@@ -1,42 +1,37 @@
 import { Pressable, StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
-import Animated, { FadeInLeft, FadeOutLeft, LinearTransition } from 'react-native-reanimated'
+import { AnimatedView } from '../AnimatedView'
 import { Typography } from '../Text'
+import { FONTS } from '@/constants'
 
-export function Chip({ label, onPress, variant = 'primary', endContent }) {
+export function Chip({ mode = 'flat', onPress, closeIcon, children }) {
     const { colors } = useTheme()
 
-    const VARIANTS = {
-        primary: {
+    const modes = {
+        flat: {
             color: colors.background,
             backgroundColor: colors.onBackground,
             borderColor: colors.onBackground
         },
-        bordered: {
+        outlined: {
             color: colors.onBackground,
             backgroundColor: colors.transparent,
             borderColor: colors.outline
         }
     }
 
-    const { color, backgroundColor, borderColor } = VARIANTS[variant]
+    const { color, backgroundColor, borderColor } = modes[mode]
 
     return (
-        <Animated.View
-            entering={FadeInLeft}
-            exiting={FadeOutLeft}
-            layout={LinearTransition}
-        >
+        <AnimatedView>
             <Pressable
                 onPress={onPress}
                 style={{
-                    borderWidth: 1,
-                    borderRadius: 32,
-                    paddingVertical: 8,
-                    borderColor,
+                    ...styles.pressable,
+                    paddingLeft: closeIcon ? 16 : 24,
+                    paddingRight: closeIcon ? 8 : 24,
                     backgroundColor,
-                    paddingLeft: endContent ? 16 : 24,
-                    paddingRight: endContent ? 8 : 24
+                    borderColor
                 }}
             >
                 <View style={styles.content}>
@@ -46,20 +41,30 @@ export function Chip({ label, onPress, variant = 'primary', endContent }) {
                         color={color}
                         variant='caption'
                     >
-                        {label}
+                        {children}
                     </Typography>
-                    {endContent}
+                    {closeIcon}
                 </View>
             </Pressable>
-        </Animated.View>
+        </AnimatedView>
     )
 }
 
 const styles = StyleSheet.create({
+    pressable: {
+        borderWidth: 1,
+        borderRadius: 32,
+        paddingVertical: 8
+    },
     content: {
         gap: 8,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    label: {
+        fontSize: 12,
+        textTransform: 'uppercase',
+        fontFamily: FONTS.azeretMedium
     }
 })

@@ -1,23 +1,22 @@
 import { Pressable, StyleSheet } from 'react-native'
-import { Cross } from '@/icons'
 import { useTheme } from 'react-native-paper'
+import { Close } from '@/icons'
 
-export function RemoveChipButton({ onPress }) {
+export function CloseChipButton({ onPress }) {
     const { colors } = useTheme()
+    const { background } = colors
 
     return (
         <Pressable
             onPress={onPress}
-            style={[
-                styles.container,
-                { backgroundColor: colors.background + '26' }
-            ]}
+            style={[styles.container, {
+                backgroundColor: colors.background + '26'
+            }]}
         >
-            <Cross
+            <Close
                 width={16}
                 height={16}
-                rotation={45}
-                color={colors.background}
+                color={background}
             />
         </Pressable>
     )
