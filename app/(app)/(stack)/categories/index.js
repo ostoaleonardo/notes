@@ -1,42 +1,48 @@
-import * as Crypto from 'expo-crypto'
+import { randomUUID } from 'expo-crypto'
 import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { SmallInput, SquareButton, Toast } from '@/components'
+import { SmallInput, SnackBar, SquareButton } from '@/components'
 import { CategoriesContainer, UpdateCategory } from '@/screens'
-import { useBottomSheet, useCategories, useHaptics } from '@/hooks'
+import { useCategories, useHaptics } from '@/hooks'
 import { FEEDBACK_TYPES } from '@/constants'
 
 export default function Categories() {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
     const { addCategory } = useCategories()
-    const { ref, onOpen, onClose } = useBottomSheet()
-    const [newCategory, setNewCategory] = useState('')
-    const [selectedCategory, setSelectedCategory] = useState('')
-    const [isUpdatedCategory, setIsUpdatedCategory] = useState(false)
+
+    const [category, setCategory] = useState('')
+    const [selectedId, setSelectedId] = useState('')
+
     const [message, setMessage] = useState('')
+    const [isUpdated, setIsUpdated] = useState(false)
+
+    const [visible, setVisible] = useState(false)
+
+    const showDialog = () => setVisible(true)
+    const hideDialog = () => setVisible(false)
 
     useEffect(() => {
-        if (isUpdatedCategory) {
-            setSelectedCategory('')
-            setIsUpdatedCategory(false)
+        if (isUpdated) {
+            setSelectedId('')
+            setIsUpdated(false)
             setMessage(t('message.categoryUpdated'))
         }
-    }, [isUpdatedCategory])
+    }, [isUpdated])
 
-    const handleModal = (id) => {
-        setSelectedCategory(id)
-        onOpen()
+    const onOpenDialog = (id) => {
+        showDialog()
+        setSelectedId(id)
     }
 
-    const handleAddCategory = (category) => {
+    const onSave = (category) => {
         addCategory({
-            id: Crypto.randomUUID(),
+            id: randomUUID(),
             name: category.trim()
         })
 
-        setNewCategory('')
+        setCategory('')
         vibrate(FEEDBACK_TYPES.SUCCESS)
         setMessage(t('message.categoryAdded'))
     }
@@ -45,27 +51,27 @@ export default function Categories() {
         <View style={styles.container}>
             <View style={styles.inputContainer}>
                 <SmallInput
-                    value={newCategory}
-                    onChangeText={setNewCategory}
+                    value={category}
+                    onChangeText={setCategory}
                     placeholder={t('placeholder.category')}
                 />
                 <SquareButton
                     label={t('categories.add')}
-                    disabled={!newCategory.trim()}
-                    onPress={() => handleAddCategory(newCategory)}
+                    disabled={!category.trim()}
+                    onPress={() => onSave(category)}
                 />
             </View>
             <CategoriesContainer
-                onPress={handleModal}
+                onPress={onOpenDialog}
             />
 
             <UpdateCategory
-                ref={ref}
-                onClose={onClose}
-                selectedCategory={selectedCategory}
-                setIsUpdatedCategory={setIsUpdatedCategory}
+                visible={visible}
+                onDismiss={hideDialog}
+                selectedId={selectedId}
+                setIsUpdated={setIsUpdated}
             />
-            <Toast
+            <SnackBar
                 message={message}
                 setMessage={setMessage}
             />
@@ -75,13 +81,14 @@ export default function Categories() {
 
 const styles = StyleSheet.create({
     container: {
-        flexGrow: 1
+        flexGrow: 1,
+        gap: 24
     },
     inputContainer: {
         gap: 16,
-        padding: 24,
         flexDirection: 'row',
         alignItems: 'center',
+        paddingHorizontal: 24,
         justifyContent: 'space-between'
     }
 })

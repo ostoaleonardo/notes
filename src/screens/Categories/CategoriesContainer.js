@@ -9,9 +9,10 @@ export function CategoriesContainer({ onPress }) {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
     const { categories, deleteCategory } = useCategories()
-    const [openCategory, setOpenCategory] = useState(null)
 
-    const handleDeleteCategory = (id) => {
+    const [isOpen, setIsOpen] = useState(null)
+
+    const onDelete = (id) => {
         deleteCategory(id)
         vibrate(FEEDBACK_TYPES.SUCCESS)
     }
@@ -34,10 +35,10 @@ export function CategoriesContainer({ onPress }) {
                         <SwipeableCategory
                             key={id}
                             category={name}
+                            isOpen={isOpen === id}
                             onPress={() => onPress(id)}
-                            isOpen={openCategory === id}
-                            onOpen={() => setOpenCategory(id)}
-                            onDelete={() => handleDeleteCategory(id)}
+                            onOpen={() => setIsOpen(id)}
+                            onDelete={() => onDelete(id)}
                         />
                     ))}
                 </Scroll>
