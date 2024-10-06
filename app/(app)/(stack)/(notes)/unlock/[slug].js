@@ -4,7 +4,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import * as Animatable from 'react-native-animatable'
-import { Button, PasswordInput, Toast } from '@/components'
+import { PasswordInput, Pressable, SnackBar } from '@/components'
 import { useHaptics, useLocalAuthentication, useNotes } from '@/hooks'
 import { getEncryptedPassword } from '@/utils'
 import { Fingerprint } from '@/icons'
@@ -73,7 +73,7 @@ export default function Password() {
 
     return (
         <View style={styles.container}>
-            <View style={styles.passwordContainer}>
+            <View style={styles.password}>
                 {password || !biometrics ? (
                     <Animatable.View
                         animation={isWrongPassword ? 'shake' : undefined}
@@ -93,29 +93,34 @@ export default function Password() {
                         fill={colors.onBackground}
                     />
                 )}
-                <View style={styles.buttonsContainer}>
+
+                <View style={styles.buttons}>
                     {password && (
-                        <Button
+                        <Pressable
+                            mode='contained'
                             onPress={handlePassword}
-                            label={t('button.enter')}
-                        />
+                        >
+                            {t('button.enter')}
+                        </Pressable>
                     )}
                     {biometrics && hasBiometrics && (
-                        <Button
-                            variant='flat'
+                        <Pressable
+                            mode='contained-tonal'
                             onPress={handleBiometrics}
-                            label={t('biometric.unlock')}
-                        />
+                        >
+                            {t('biometric.unlock')}
+                        </Pressable>
                     )}
-                    <Button
-                        variant='light'
-                        label={t('button.cancel')}
+                    <Pressable
+                        mode='text'
                         onPress={() => router.back()}
-                    />
+                    >
+                        {t('button.cancel')}
+                    </Pressable>
                 </View>
             </View>
 
-            <Toast
+            <SnackBar
                 message={message}
                 setMessage={setMessage}
             />
@@ -129,14 +134,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    passwordContainer: {
+    password: {
         width: '100%',
         alignItems: 'center',
         paddingHorizontal: 24
     },
-    buttonsContainer: {
+    buttons: {
         width: '100%',
-        gap: 16,
-        marginTop: 64
+        marginTop: 64,
+        gap: 8
     }
 })
