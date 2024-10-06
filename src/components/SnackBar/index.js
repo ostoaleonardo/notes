@@ -4,7 +4,7 @@ import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated'
 import { Typography } from '../Text'
 import { COLORS } from '@/constants'
 
-export function Toast({ message, setMessage, timeout = 3000, backgroundColor }) {
+export function SnackBar({ message, setMessage, timeout = 3000, backgroundColor }) {
     useEffect(() => {
         const timer = setTimeout(() => {
             setMessage('')
@@ -25,8 +25,10 @@ export function Toast({ message, setMessage, timeout = 3000, backgroundColor }) 
             ]}
         >
             <Typography
+                uppercase
+                variant='caption'
                 textAlign='center'
-                color={COLORS.common.white}
+                color={COLORS.base.white}
             >
                 {message}
             </Typography>
@@ -42,6 +44,6 @@ const styles = StyleSheet.create({
         padding: 16,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: COLORS.common.accent
+        backgroundColor: COLORS.base.accent
     }
 })
