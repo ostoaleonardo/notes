@@ -1,75 +1,30 @@
-import { TextInput } from 'react-native'
 import { Checkbox, useTheme } from 'react-native-paper'
-import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
-import { IconButton } from '../Button'
-import { Cross, DragIndicator } from '@/icons'
-import { FONTS } from '@/constants'
+import { ListContainer } from './ListContainer'
 
 export function CheckListItem({ item, onDrag, onChange, onDelete, isActive }) {
-    const { id, value, status } = item
+    const { value, status } = item
     const { colors } = useTheme()
+    const { onBackground } = colors
 
-    const iconProps = { color: colors.onBackground + '66' }
-
-    const animatedStyles = useAnimatedStyle(() => ({
-        backgroundColor: withTiming(isActive ? colors.surface : colors.background)
-    }))
+    const isChecked = status === 'checked'
 
     return (
-        <Animated.View
-            style={[
-                animatedStyles, {
-                    height: 48,
-                    gap: 4,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    paddingHorizontal: 16
-                }
-            ]}
+        <ListContainer
+            item={item}
+            onDrag={onDrag}
+            onChange={onChange}
+            onDelete={onDelete}
+            isActive={isActive}
         >
-            <IconButton
-                variant='light'
-                onLongPress={onDrag}
-                icon={<DragIndicator {...iconProps} />}
-            />
             <Checkbox
                 label={value}
                 status={status}
-                color={colors.onBackground}
+                color={onBackground}
                 onPress={() => onChange({
                     ...item,
-                    status:
-                        status === 'checked'
-                            ? 'unchecked'
-                            : 'checked'
+                    status: isChecked ? 'unchecked' : 'checked'
                 })}
             />
-            <TextInput
-                value={value}
-                placeholder='...'
-                cursorColor={colors.onBackground}
-                selectionHandleColor={colors.tertiary}
-                selectionColor={colors.onBackground + '33'}
-                placeholderTextColor={colors.onBackground + '66'}
-                onChangeText={(value) => onChange({ ...item, value })}
-                style={{
-                    flex: 1,
-                    color: colors.onBackground,
-                    fontFamily: FONTS.azeretLight
-                }}
-            />
-            <IconButton
-                variant='light'
-                onPress={() => onDelete(id)}
-                icon={
-                    <Cross
-                        width={24}
-                        height={24}
-                        rotation={45}
-                        {...iconProps}
-                    />
-                }
-            />
-        </Animated.View>
+        </ListContainer>
     )
 }
