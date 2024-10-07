@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as Animatable from 'react-native-animatable'
-import { ModalSheet, Button, PasswordInput, Typography } from '@/components'
+import { ModalSheet, PasswordInput, Typography, Pressable } from '@/components'
 import { useHaptics, useLocalAuthentication } from '@/hooks'
 import { getEncryptedPassword } from '@/utils'
 import { COLORS, FEEDBACK_TYPES } from '@/constants'
@@ -69,22 +69,25 @@ export const AddPassword = forwardRef(({ setPassword, biometrics, setBiometrics,
                 <Typography
                     variant='caption'
                     textAlign='center'
-                    color={COLORS.common.accent}
+                    color={COLORS.base.accent}
                 >
                     {isInvalidPassword && t('message.lengthPassword')}
                 </Typography>
             </View>
-            <View style={styles.buttonsContainer}>
-                <Button
+            <View style={styles.buttons}>
+                <Pressable
+                    mode='contained'
                     onPress={checkPassword}
-                    label={t('button.save')}
-                />
+                >
+                    {t('button.save')}
+                </Pressable>
                 {hasBiometrics && (
-                    <Button
-                        variant='outline'
+                    <Pressable
+                        mode='outlined'
                         onPress={handleBiometrics}
-                        label={biometrics ? t('biometric.remove') : t('biometric.lock')}
-                    />
+                    >
+                        {biometrics ? t('biometric.remove') : t('biometric.lock')}
+                    </Pressable>
                 )}
             </View>
         </ModalSheet>
@@ -104,8 +107,8 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center'
     },
-    buttonsContainer: {
+    buttons: {
         width: '100%',
-        gap: 16
+        gap: 8
     }
 })

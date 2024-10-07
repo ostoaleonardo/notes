@@ -3,11 +3,11 @@ import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import * as Animatable from 'react-native-animatable'
-import { ModalSheet, Button, PasswordInput, Typography } from '@/components'
+import { ModalSheet, PasswordInput, Pressable, Typography } from '@/components'
 import { useHaptics, useLocalAuthentication, useNotes } from '@/hooks'
 import { getEncryptedPassword } from '@/utils'
 import { Fingerprint } from '@/icons'
-import { COLORS, FEEDBACK_TYPES } from '@/constants'
+import { COLORS, FEEDBACK_TYPES, FONTS } from '@/constants'
 
 export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
     const { t } = useTranslation()
@@ -81,7 +81,7 @@ export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
                         <Typography
                             variant='caption'
                             textAlign='center'
-                            color={COLORS.common.accent}
+                            color={COLORS.base.accent}
                         >
                             {message && t('message.wrongPassword')}
                         </Typography>
@@ -94,19 +94,22 @@ export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
                     />
                 )}
             </View>
-            <View style={styles.buttonsContainer}>
+            <View style={styles.buttons}>
                 {password && (
-                    <Button
+                    <Pressable
+                        mode='contained'
                         onPress={handlePassword}
-                        label={t('button.delete')}
-                    />
+                    >
+                        {t('button.delete')}
+                    </Pressable>
                 )}
                 {biometrics && hasBiometrics && (
-                    <Button
-                        variant='outline'
+                    <Pressable
+                        mode='outlined'
                         onPress={handleBiometrics}
-                        label={t('biometric.use')}
-                    />
+                    >
+                        {t('biometric.use')}
+                    </Pressable>
                 )}
             </View>
         </ModalSheet>
@@ -126,8 +129,14 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center'
     },
-    buttonsContainer: {
+    buttons: {
         width: '100%',
-        gap: 16
+        gap: 8
+    },
+    label: {
+        fontSize: 12,
+        paddingHorizontal: 8,
+        textTransform: 'uppercase',
+        fontFamily: FONTS.azeretLight
     }
 })
