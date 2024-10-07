@@ -1,24 +1,30 @@
+import { useState } from 'react'
 import { StyleSheet, TextInput } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { FONTS } from '@/constants'
 
 export function SmallInput({ value, onChangeText, placeholder }) {
     const { colors } = useTheme()
+    const { tertiary, onBackground } = colors
+
+    const [alpha, setAlpha] = useState('1a')
 
     return (
         <TextInput
             value={value}
-            style={[
-                styles.base,
-                { color: colors.onBackground },
-                { borderBottomColor: colors.onBackground + '66' }
-            ]}
+            style={{
+                ...styles.base,
+                color: onBackground,
+                borderBottomColor: onBackground + alpha
+            }}
             placeholder={placeholder}
             onChangeText={onChangeText}
-            cursorColor={colors.onBackground}
-            selectionHandleColor={colors.tertiary}
-            selectionColor={colors.onBackground + '33'}
-            placeholderTextColor={colors.onBackground + '66'}
+            cursorColor={onBackground}
+            selectionHandleColor={tertiary}
+            selectionColor={onBackground + '33'}
+            placeholderTextColor={onBackground + '66'}
+            onFocus={() => setAlpha('ff')}
+            onBlur={() => setAlpha('1a')}
         />
     )
 }
