@@ -1,5 +1,4 @@
 export { Pressable } from './Pressable'
 export { FloatingButton } from './FloatingButton'
 export { SquareButton } from './SquareButton'
-export { PickerImage } from './PickerImage'
 export { ImagePreview } from './ImagePreview'

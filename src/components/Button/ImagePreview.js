@@ -1,7 +1,7 @@
 import { Image, Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import Animated, { FadeInDown, FadeOutDown, LinearTransition } from 'react-native-reanimated'
-import { Cross } from '@/icons'
+import { Close } from '@/icons'
 
 export function ImagePreview({ image, openImage, removeImage }) {
     const { colors } = useTheme()
@@ -24,17 +24,12 @@ export function ImagePreview({ image, openImage, removeImage }) {
                 {removeImage && (
                     <Pressable
                         onPress={removeImage}
-                        style={[
-                            styles.removeButton,
-                            { backgroundColor: colors.surface + 'bf' }
-                        ]}
+                        style={{
+                            ...styles.removeButton,
+                            backgroundColor: colors.surface + 'bf'
+                        }}
                     >
-                        <Cross
-                            width={24}
-                            height={24}
-                            rotation={45}
-                            color={colors.onSurface}
-                        />
+                        <Close color={colors.onSurface} />
                     </Pressable>
                 )}
             </Pressable>
