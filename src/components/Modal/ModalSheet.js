@@ -3,7 +3,7 @@ import { useTheme } from 'react-native-paper'
 import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet'
 import { ModalHeader } from './ModalHeader'
 
-export const ModalSheet = forwardRef(({ title, children, onClose, contentContainerStyle, ...prop }, ref) => {
+export const ModalSheet = forwardRef(({ title, children, onClose, contentContainerStyle, scrollable = false, ...prop }, ref) => {
     const { colors } = useTheme()
 
     const renderBackdrop = useCallback((props) => (
@@ -32,9 +32,11 @@ export const ModalSheet = forwardRef(({ title, children, onClose, contentContain
             <BottomSheetView>
                 <ModalHeader title={title} />
             </BottomSheetView>
-            <BottomSheetView style={contentContainerStyle}>
-                {children}
-            </BottomSheetView>
+            {scrollable ? children : (
+                <BottomSheetView style={contentContainerStyle}>
+                    {children}
+                </BottomSheetView>
+            )}
         </BottomSheetModal>
     )
 })
