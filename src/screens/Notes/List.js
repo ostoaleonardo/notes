@@ -1,11 +1,13 @@
 import { useTranslation } from 'react-i18next'
-import Animated, { CurvedTransition, FadeInUp, FadeOutUp } from 'react-native-reanimated'
+import { useTheme } from 'react-native-paper'
 import { NestableDraggableFlatList } from 'react-native-draggable-flatlist'
-import { BulletedListItem, Button, CheckListItem, NumberedListItem } from '@/components'
-import { Cross } from '@/icons'
+import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
+import { AnimatedView, BulletedListItem, CheckListItem, NumberedListItem, Pressable } from '@/components'
+import { Plus } from '@/icons'
 
 export function List({ list, setList, onAddItem }) {
     const { t } = useTranslation()
+    const { colors } = useTheme()
     const { items, type } = list
 
     const onListChange = (newItem) => {
@@ -60,22 +62,22 @@ export function List({ list, setList, onAddItem }) {
                 onDragEnd={({ data }) => setList({ ...list, items: data })}
             />
 
-            <Animated.View
+            <AnimatedView
                 entering={FadeInUp}
                 exiting={FadeOutUp}
-                layout={CurvedTransition}
                 style={{
                     paddingTop: 16,
                     paddingHorizontal: 24
                 }}
             >
-                <Button
-                    variant='flat'
-                    label={t('list.add')}
+                <Pressable
+                    mode='contained-tonal'
                     onPress={() => onAddItem(type)}
-                    startContent={<Cross />}
-                />
-            </Animated.View>
+                    icon={() => <Plus color={colors.onBackground} />}
+                >
+                    {t('list.add')}
+                </Pressable>
+            </AnimatedView>
         </>
     )
 }
