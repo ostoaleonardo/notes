@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native'
-import { Typography } from '../Text'
+import { Typography } from '../Typography'
 
 export function ModalHeader({ title }) {
     return (

@@ -1,5 +1,5 @@
 import { ListContainer } from './ListContainer'
-import { Typography } from '../Text'
+import { Typography } from '../Typography'
 
 export function NumberedListItem({ index, item, onDrag, onChange, onDelete, isActive }) {
     return (

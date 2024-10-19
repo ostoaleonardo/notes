@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { StyleSheet } from 'react-native'
 import Animated, { SlideInDown, SlideOutDown } from 'react-native-reanimated'
-import { Typography } from '../Text'
+import { Typography } from '../Typography'
 import { COLORS } from '@/constants'
 
 export function SnackBar({ message, setMessage, timeout = 3000, backgroundColor }) {

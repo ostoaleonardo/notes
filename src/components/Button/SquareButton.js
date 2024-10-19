@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet } from 'react-native'
-import { Typography } from '../Text'
+import { Typography } from '../Typography'
 import { COLORS } from '@/constants'
 
 export function SquareButton({ onPress, disabled, label }) {
