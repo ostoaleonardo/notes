@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
-import { AnimatedView } from '../AnimatedView'
-import { Typography } from '../Text'
+import { FadeInLeft, FadeOutLeft } from 'react-native-reanimated'
+import { AnimatedView } from '../Animated'
+import { Typography } from '../Typography'
 import { FONTS } from '@/constants'
 
 export function Chip({ mode = 'flat', onPress, closeIcon, children }) {
@@ -23,7 +24,10 @@ export function Chip({ mode = 'flat', onPress, closeIcon, children }) {
     const { color, backgroundColor, borderColor } = modes[mode]
 
     return (
-        <AnimatedView>
+        <AnimatedView
+            entering={FadeInLeft}
+            exiting={FadeOutLeft}
+        >
             <Pressable
                 onPress={onPress}
                 style={{
