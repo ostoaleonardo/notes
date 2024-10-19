@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Scroll, Section, SwipeableCategory, Typography } from '@/components'
+import { AnimatedList, Section, SwipeableCategory } from '@/components'
 import { useCategories, useHaptics } from '@/hooks'
 import { FEEDBACK_TYPES } from '@/constants'
 
@@ -19,43 +19,36 @@ export function CategoriesContainer({ onPress }) {
 
     return (
         <Section
-            title={t('title.yourCategories')}
-            containerStyle={styles.sectionContainer}
-            contentStyle={styles.sectionContainer}
+            containerStyle={styles.container}
+            contentStyle={styles.container}
         >
-            {categories.length === 1 ? (
-                <Typography
-                    opacity={0.5}
-                >
-                    {t('message.noCategories')}
-                </Typography>
-            ) : (
-                <Scroll contentContainerStyle={styles.categoryContainer}>
-                    {categories.slice(1).map(({ id, name }) => (
-                        <SwipeableCategory
-                            key={id}
-                            category={name}
-                            isOpen={isOpen === id}
-                            onPress={() => onPress(id)}
-                            onOpen={() => setIsOpen(id)}
-                            onDelete={() => onDelete(id)}
-                        />
-                    ))}
-                </Scroll>
-            )}
+            <AnimatedList
+                data={categories.slice(1)}
+                keyExtractor={({ id }) => id}
+                emptyLabel={t('message.noCategories')}
+                renderItem={({ item }) => (
+                    <SwipeableCategory
+                        category={item.name}
+                        isOpen={isOpen === item.id}
+                        onPress={() => onPress(item.id)}
+                        onOpen={() => setIsOpen(item.id)}
+                        onDelete={() => onDelete(item.id)}
+                    />
+                )}
+            />
         </Section>
     )
 }
 
 const styles = StyleSheet.create({
-    sectionContainer: {
+    container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center'
     },
-    categoryContainer: {
+    list: {
         flexGrow: 1,
-        gap: 16,
-        paddingBottom: 24
+        paddingBottom: 24,
+        gap: 16
     }
 })
