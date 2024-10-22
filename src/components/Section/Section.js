@@ -1,15 +1,18 @@
 import { StyleSheet, View } from 'react-native'
-import { Typography } from '../Text'
+import { Typography } from '../Typography'
 
-export function Section({ title, children, paddingVertical = 0, paddingHorizontal = 0, containerStyle, contentStyle }) {
+export function Section({ title, children, containerStyle, contentStyle, visible = true }) {
+    if (!visible) return null
+
     return (
-        <View style={[
-            styles.container,
-            { paddingVertical, paddingHorizontal },
-            containerStyle
-        ]}>
-            {title &&
-                <View style={styles.titleContainer}>
+        <View
+            style={{
+                ...styles.container,
+                ...containerStyle
+            }}
+        >
+            {title && (
+                <View style={styles.title}>
                     <Typography
                         bold
                         uppercase
@@ -19,12 +22,14 @@ export function Section({ title, children, paddingVertical = 0, paddingHorizonta
                         {title}
                     </Typography>
                 </View>
-            }
+            )}
 
-            <View style={[
-                styles.contentContainer,
-                contentStyle
-            ]}>
+            <View
+                style={{
+                    ...styles.content,
+                    ...contentStyle
+                }}
+            >
                 {children}
             </View>
         </View>
@@ -36,11 +41,11 @@ const styles = StyleSheet.create({
         width: '100%',
         gap: 16
     },
-    titleContainer: {
+    title: {
         width: '100%',
         paddingHorizontal: 24
     },
-    contentContainer: {
+    content: {
         width: '100%'
     }
 })
