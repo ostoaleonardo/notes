@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { FadeInUp } from 'react-native-reanimated'
-import { AnimatedView } from '../AnimatedView'
+import { AnimatedView } from '../Animated'
 
 export function DotSeparator() {
     const { colors } = useTheme()
