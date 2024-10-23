@@ -9,12 +9,17 @@ export function FilterCarousel({ filter, onFilter }) {
     const { categories } = useCategories()
     const { onBackground } = colors
 
+    const carousel = categories.filter(({ id }) => id !== 'all')
+
     return (
         <View style={styles.container}>
             <Scroll
                 horizontal
                 overScrollMode='never'
-                contentContainerStyle={styles.scroll}
+                contentContainerStyle={{
+                    ...styles.scroll,
+                    paddingBottom: carousel.length && 8
+                }}
             >
                 {filter.size > 0 && (
                     <AnimatedView>
@@ -27,18 +32,15 @@ export function FilterCarousel({ filter, onFilter }) {
                     </AnimatedView>
                 )}
 
-                {categories
-                    .filter(({ id }) => id !== 'all')
-                    .map(({ id, name }) => (
-                        <Chip
-                            key={id}
-                            onPress={() => onFilter(id)}
-                            mode={filter.has(id) ? 'flat' : 'outlined'}
-                        >
-                            {name}
-                        </Chip>
-                    ))
-                }
+                {carousel.map(({ id, name }) => (
+                    <Chip
+                        key={id}
+                        onPress={() => onFilter(id)}
+                        mode={filter.has(id) ? 'flat' : 'outlined'}
+                    >
+                        {name}
+                    </Chip>
+                ))}
             </Scroll>
         </View>
     )
@@ -46,13 +48,11 @@ export function FilterCarousel({ filter, onFilter }) {
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        height: 48
+        width: '100%'
     },
     scroll: {
         flexGrow: 1,
         gap: 4,
-        marginBottom: 8,
         alignItems: 'center',
         paddingHorizontal: 24
     }
