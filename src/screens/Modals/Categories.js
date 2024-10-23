@@ -3,17 +3,18 @@ import { StyleSheet, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { useTranslation } from 'react-i18next'
 import * as Crypto from 'expo-crypto'
-import { ModalSheet, Category, SmallInput, SquareButton, Typography, Separator } from '@/components'
+import { ModalSheet, SmallInput, SquareButton, Typography, Separator } from '@/components'
+import { CategoryOption } from '../Notes'
 import { useCategories, useHaptics } from '@/hooks'
 import { FEEDBACK_TYPES } from '@/constants'
 
-export const Categories = forwardRef(({ selectedCategories, handleCategories, onClose }, ref) => {
+export const Categories = forwardRef(({ selectedCategories, onCategories, onClose }, ref) => {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
     const { categories, addCategory } = useCategories()
     const [category, setCategory] = useState('')
 
-    const handleSaveCategory = () => {
+    const onSaveCategory = () => {
         addCategory({
             id: Crypto.randomUUID(),
             name: category.trim()
@@ -24,10 +25,10 @@ export const Categories = forwardRef(({ selectedCategories, handleCategories, on
     }
 
     const renderItems = useCallback(({ id, name }) => (
-        <Category
+        <CategoryOption
             key={id}
             category={name}
-            onPress={() => handleCategories(id)}
+            onPress={() => onCategories(id)}
             isSelected={selectedCategories.includes(id)}
         />
     ), [selectedCategories])
@@ -35,6 +36,7 @@ export const Categories = forwardRef(({ selectedCategories, handleCategories, on
     return (
         <ModalSheet
             ref={ref}
+            scrollable
             onClose={onClose}
             snapPoints={['50%', '95%']}
             title={t('title.yourCategories')}
@@ -48,7 +50,7 @@ export const Categories = forwardRef(({ selectedCategories, handleCategories, on
                 <SquareButton
                     disabled={!category.trim()}
                     label={t('categories.add')}
-                    onPress={handleSaveCategory}
+                    onPress={onSaveCategory}
                 />
             </View>
 
