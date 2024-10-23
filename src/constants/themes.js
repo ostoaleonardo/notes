@@ -1,13 +1,10 @@
 import { MD3DarkTheme, MD3LightTheme } from 'react-native-paper'
 
-const white = '#f0f2f1'
-
 export const COLORS = {
-    common: {
+    base: {
+        white: '#f0f2f1',
         accent: '#c8102e',
-        transparent: 'transparent',
-        white: white,
-        white15: `${white}26`
+        transparent: 'transparent'
     },
     light: {
         background: '#d7d8d8',
@@ -16,7 +13,7 @@ export const COLORS = {
     },
     dark: {
         background: '#06080a',
-        onBackground: '#f0f2f2',
+        onBackground: '#f0f2f1',
         foreground: '#121318'
     }
 }
@@ -25,22 +22,35 @@ const darkTheme = {
     ...MD3DarkTheme,
     colors: {
         ...MD3DarkTheme.colors,
-        ...COLORS.common,
+        ...COLORS.base,
 
-        primary: COLORS.dark.foreground,
-        onPrimary: COLORS.common.white,
+        primary: COLORS.dark.onBackground,
+        onPrimary: COLORS.dark.background,
+
+        primaryContainer: COLORS.dark.onBackground,
 
         secondary: COLORS.dark.foreground,
-        onSecondary: COLORS.common.white,
+        onSecondary: COLORS.base.white,
 
-        tertiary: COLORS.common.accent,
-        onTertiary: COLORS.common.white,
+        secondaryContainer: COLORS.dark.foreground,
+        onSecondaryContainer: COLORS.dark.onBackground,
+
+        tertiary: COLORS.base.accent,
+        onTertiary: COLORS.dark.onBackground,
 
         background: COLORS.dark.background,
         onBackground: COLORS.dark.onBackground,
 
-        outline: COLORS.common.white15,
-        surface: COLORS.dark.foreground
+        surface: COLORS.dark.foreground,
+        onSurface: COLORS.dark.onBackground,
+        onSurfaceVariant: COLORS.dark.onBackground,
+
+        outline: COLORS.base.white + '26',
+        backdrop: COLORS.dark.background + '80',
+
+        elevation: {
+            level3: COLORS.dark.foreground
+        }
     }
 }
 
@@ -48,22 +58,34 @@ const lightTheme = {
     ...MD3LightTheme,
     colors: {
         ...MD3LightTheme.colors,
-        ...COLORS.common,
+        ...COLORS.base,
 
         primary: COLORS.light.onBackground,
-        onPrimary: COLORS.light.background,
+        onPrimary: COLORS.base.white,
 
         secondary: COLORS.light.foreground,
-        onSecondary: COLORS.common.white,
+        onSecondary: COLORS.base.white,
 
-        tertiary: COLORS.common.accent,
-        onTertiary: COLORS.common.white,
+        secondaryContainer: COLORS.base.white,
+        onSecondaryContainer: COLORS.light.onBackground,
+
+        tertiary: COLORS.base.accent,
+        onTertiary: COLORS.base.white,
 
         background: COLORS.light.background,
         onBackground: COLORS.light.onBackground,
 
+        surface: COLORS.light.foreground,
+        onSurface: COLORS.light.onBackground,
+        onSurfaceVariant: COLORS.light.onBackground,
+
         outline: COLORS.light.onBackground,
-        surface: COLORS.light.foreground
+        outlineVariant: COLORS.light.onBackground,
+        backdrop: COLORS.light.onBackground + '80',
+
+        elevation: {
+            level3: COLORS.light.foreground
+        }
     }
 }
 
@@ -74,5 +96,6 @@ export const THEMES = {
 
 export const FONTS = {
     azeretLight: 'AzeretMono-Light',
-    azeretMedium: 'AzeretMono-Medium'
+    azeretMedium: 'AzeretMono-Medium',
+    nType82Headline: 'NType82-Headline'
 }
