@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { FONTS } from '@/constants'
+import { AppBar } from '@/components'
 
 export default function StackLayout() {
     const { t } = useTranslation()
@@ -10,19 +10,7 @@ export default function StackLayout() {
     return (
         <Stack
             screenOptions={{
-                headerTitleAlign: 'center',
-                headerShadowVisible: false,
-                headerTintColor: colors.onBackground,
-
-                headerStyle: {
-                    backgroundColor: colors.background
-                },
-
-                headerTitleStyle: {
-                    fontSize: 12,
-                    letterSpacing: 1,
-                    fontFamily: FONTS.azeretLight
-                },
+                header: (props) => <AppBar showBack {...props} />,
 
                 contentStyle: {
                     backgroundColor: colors.background
@@ -32,13 +20,13 @@ export default function StackLayout() {
             <Stack.Screen
                 name='index'
                 options={{
-                    title: t('header.settings').toUpperCase()
+                    title: t('header.settings')
                 }}
             />
             <Stack.Screen
                 name='theme'
                 options={{
-                    title: t('header.theme').toUpperCase()
+                    title: t('header.theme')
                 }}
             />
         </Stack>
