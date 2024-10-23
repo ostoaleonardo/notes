@@ -1,11 +1,14 @@
-import { useTranslation } from 'react-i18next'
-import { Chip, ChipContent, RemoveChipButton, Scroll } from '@/components'
+import { StyleSheet } from 'react-native'
+import { IconButton, useTheme } from 'react-native-paper'
+import { AnimatedView, Chip, CloseChipButton, Scroll } from '@/components'
 import { useCategories } from '@/hooks'
+import { Plus } from '@/icons'
 import { DEFAULT_CATEGORIES } from '@/constants'
 
-export function CategoryCarousel({ selectedCategories, onCategories, onCategoriesModal, disabled = false }) {
-    const { t } = useTranslation()
+export function CategoryCarousel({ selectedCategories, onCategories, onCategoriesModal }) {
+    const { colors } = useTheme()
     const { categories } = useCategories()
+    const { onBackground } = colors
 
     const filteredCategories =
         categories.filter(({ id }) => selectedCategories.includes(id) &&
@@ -15,34 +18,39 @@ export function CategoryCarousel({ selectedCategories, onCategories, onCategorie
         <Scroll
             horizontal
             overScrollMode='never'
-            contentContainerStyle={{
-                flexGrow: 1,
-                gap: 8,
-                paddingHorizontal: 24
-            }}
+            contentContainerStyle={styles.content}
         >
             {filteredCategories.map(({ id, name }) =>
                 <Chip
                     key={id}
                     label={name}
-                    endContent={
-                        !disabled && (
-                            <RemoveChipButton
-                                onPress={() => onCategories(id)}
-                            />
-                        )
+                    closeIcon={
+                        <CloseChipButton
+                            onPress={() => onCategories(id)}
+                        />
                     }
-                />
+                >
+                    {name}
+                </Chip>
             )}
 
-            {!disabled && categories.length && (
-                <Chip
-                    variant='bordered'
-                    label={t('categories.add')}
-                    endContent={<ChipContent />}
+            <AnimatedView>
+                <IconButton
+                    size={12}
+                    mode='outlined'
                     onPress={onCategoriesModal}
+                    icon={() => <Plus color={onBackground} />}
                 />
-            )}
+            </AnimatedView>
         </Scroll>
     )
 }
+
+const styles = StyleSheet.create({
+    content: {
+        flexGrow: 1,
+        gap: 8,
+        alignItems: 'center',
+        paddingHorizontal: 24
+    }
+})

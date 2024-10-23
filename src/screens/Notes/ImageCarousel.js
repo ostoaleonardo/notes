@@ -9,9 +9,7 @@ export function ImageCarousel({ images, setImages, onOpenImage }) {
         <Scroll
             horizontal
             overScrollMode='never'
-            containerStyle={{
-                maxHeight: 100
-            }}
+            style={{ maxHeight: 100 }}
             contentContainerStyle={{
                 flexGrow: 1,
                 paddingHorizontal: 24,
