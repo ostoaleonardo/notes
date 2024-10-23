@@ -96,7 +96,7 @@ export default function Note() {
         biometrics
     ])
 
-    const handleCategories = (id) => {
+    const onCategories = (id) => {
         if (!categories.includes(id)) {
             setCategories([...categories, id])
         } else {
@@ -145,7 +145,7 @@ export default function Note() {
                 <View style={styles.contentContainer}>
                     <View>
                         <Section
-                            paddingHorizontal={24}
+                            containerStyle={{ paddingHorizontal: 24 }}
                         >
                             <LargeInput
                                 bold
@@ -158,17 +158,17 @@ export default function Note() {
 
                         <Section
                             title={t('title.categories')}
-                            paddingVertical={24}
+                            containerStyle={{ paddingVertical: 24 }}
                         >
                             <CategoryCarousel
                                 selectedCategories={categories}
-                                onCategories={handleCategories}
+                                onCategories={onCategories}
                                 onCategoriesModal={onOpenCategories}
                             />
                         </Section>
 
                         <Section
-                            paddingHorizontal={24}
+                            containerStyle={{ paddingHorizontal: 24 }}
                         >
                             <TextArea
                                 value={note}
@@ -179,7 +179,7 @@ export default function Note() {
 
                         {list.items.length > 0 && (
                             <Section
-                                paddingVertical={24}
+                                containerStyle={{ paddingVertical: 24 }}
                             >
                                 <List
                                     list={list}
@@ -211,7 +211,7 @@ export default function Note() {
                 ref={categoriesBottomRef}
                 onClose={onCloseCategories}
                 selectedCategories={categories}
-                handleCategories={handleCategories}
+                onCategories={onCategories}
             />
             <AddPassword
                 ref={passwordBottomRef}

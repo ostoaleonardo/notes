@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { FONTS } from '@/constants'
+import { AppBar } from '@/components'
 
 export default function NotesLayout() {
     const { t } = useTranslation()
@@ -10,19 +10,7 @@ export default function NotesLayout() {
     return (
         <Stack
             screenOptions={{
-                headerTitleAlign: 'center',
-                headerShadowVisible: false,
-                headerTintColor: colors.onBackground,
-
-                headerStyle: {
-                    backgroundColor: colors.background
-                },
-
-                headerTitleStyle: {
-                    fontSize: 12,
-                    letterSpacing: 1,
-                    fontFamily: FONTS.azeretLight
-                },
+                header: (props) => <AppBar showBack {...props} />,
 
                 contentStyle: {
                     backgroundColor: colors.background
@@ -31,20 +19,14 @@ export default function NotesLayout() {
         >
             <Stack.Screen
                 name='index'
-                options={{
-                    title: t('header.addNote').toUpperCase()
-                }}
             />
             <Stack.Screen
                 name='edit/[slug]'
-                options={{
-                    title: t('header.editNote').toUpperCase()
-                }}
             />
             <Stack.Screen
                 name='unlock/[slug]'
                 options={{
-                    title: t('header.unlock').toUpperCase()
+                    title: t('header.unlock')
                 }}
             />
         </Stack>

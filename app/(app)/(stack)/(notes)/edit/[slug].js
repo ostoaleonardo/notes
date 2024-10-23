@@ -116,7 +116,7 @@ export default function EditNote() {
         onCloseUpdatePassword()
     }
 
-    const handleCategories = (id) => {
+    const onCategories = (id) => {
         if (!categories.includes(id)) {
             setCategories([...categories, id])
         } else {
@@ -165,7 +165,7 @@ export default function EditNote() {
                 <View style={styles.contentContainer}>
                     <View>
                         <Section
-                            paddingHorizontal={24}
+                            containerStyle={{ paddingHorizontal: 24 }}
                         >
                             <LargeInput
                                 bold
@@ -182,12 +182,12 @@ export default function EditNote() {
                         />
 
                         <Section
-                            paddingVertical={24}
                             title={t('title.categories')}
+                            containerStyle={{ paddingVertical: 24 }}
                         >
                             <CategoryCarousel
                                 selectedCategories={categories}
-                                onCategories={handleCategories}
+                                onCategories={onCategories}
                                 onCategoriesModal={onOpenCategories}
                             />
                         </Section>
@@ -204,7 +204,7 @@ export default function EditNote() {
 
                         {list && list.items.length > 0 && (
                             <Section
-                                paddingVertical={24}
+                                containerStyle={{ paddingVertical: 24 }}
                             >
                                 <List
                                     list={list}
@@ -240,7 +240,7 @@ export default function EditNote() {
                 ref={categoriesBottomRef}
                 onClose={onCloseCategories}
                 selectedCategories={categories}
-                handleCategories={handleCategories}
+                onCategories={onCategories}
             />
             <AddPassword
                 ref={passwordBottomRef}
