@@ -1,9 +1,8 @@
 import { Drawer } from 'expo-router/drawer'
-import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { DrawerItems } from '@/components'
-import { HeaderRightContent } from '@/screens'
-import { FONTS } from '@/constants'
+import { useTheme } from 'react-native-paper'
+import { AppBar, DrawerItems } from '@/components'
+import { SortAction } from '@/screens'
 
 export default function DrawerLayout() {
     const { t } = useTranslation()
@@ -12,20 +11,14 @@ export default function DrawerLayout() {
     return (
         <Drawer
             screenOptions={{
-                headerTitleAlign: 'center',
-                headerShadowVisible: false,
-                headerTintColor: colors.onBackground,
-
-                headerStyle: {
-                    backgroundColor: colors.background
-                },
-
-                headerTitleStyle: {
-                    fontSize: 12,
-                    letterSpacing: 1,
-                    textTransform: 'uppercase',
-                    fontFamily: FONTS.spaceMono
-                },
+                header: (props) => (
+                    <AppBar
+                        showMenu
+                        showSettings
+                        rightContent={<SortAction />}
+                        {...props}
+                    />
+                ),
 
                 drawerStyle: {
                     backgroundColor: colors.surface
@@ -33,13 +26,7 @@ export default function DrawerLayout() {
 
                 sceneContainerStyle: {
                     backgroundColor: colors.background
-                },
-
-                headerRightContainerStyle: {
-                    paddingRight: 16
-                },
-
-                headerRight: () => <HeaderRightContent />
+                }
             }}
 
             drawerContent={(props) => <DrawerItems {...props} />}
