@@ -1,15 +1,14 @@
-import { useContext } from 'react'
 import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { RadioButton, useTheme } from 'react-native-paper'
 import { MenuContainer } from './MenuContainer'
 import { RadioButtonItem } from '../RadioButtonItem'
-import { NoteContext } from '@/context'
+import { useUtils } from '@/hooks'
 
 export function SortMenu({ anchor, visible, onClose }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
-    const { sort, setSort } = useContext(NoteContext)
+    const { sort, updateSort } = useUtils()
     const { field, order } = sort
 
     const sortingOptions = [
@@ -23,7 +22,7 @@ export function SortMenu({ anchor, visible, onClose }) {
 
     const onValueChange = (value) => {
         const [field, order] = value.split('.')
-        setSort({ field, order })
+        updateSort({ field, order })
     }
 
     return (
