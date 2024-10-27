@@ -1,10 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
 import { useStorage } from './useStorage'
-import { NoteContext } from '@/context'
+import { NoteContext, UtilsContext } from '@/context'
 import { STORAGE_KEYS } from '@/constants'
 
 export function useNotes() {
     const { notes, setNotes } = useContext(NoteContext)
+    const { setPinned, setSort } = useContext(UtilsContext)
     const { setItem, getItem } = useStorage()
     const [loading, setLoading] = useState(true)
 
@@ -39,11 +40,12 @@ export function useNotes() {
     useEffect(() => {
         (async () => {
             const notes = await getItem(STORAGE_KEYS.NOTES)
+            const pinned = await getItem(STORAGE_KEYS.PINNED)
+            const sort = await getItem(STORAGE_KEYS.SORT)
 
-            if (notes) {
-                setNotes(JSON.parse(notes))
-            }
-
+            if (notes) setNotes(JSON.parse(notes))
+            if (pinned) setPinned(new Set(JSON.parse(pinned)))
+            if (sort) setSort(JSON.parse(sort))
             setLoading(false)
         })()
     }, [])
