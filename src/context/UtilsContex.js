@@ -6,6 +6,7 @@ export const UtilsContext = createContext()
 export function UtilsProvider({ children }) {
     const [pinned, setPinned] = useState(new Set())
     const [sort, setSort] = useState(DEFAULT_SORT)
+    const [markdown, setMarkdown] = useState(true)
 
     return (
         <UtilsContext.Provider
@@ -13,7 +14,9 @@ export function UtilsProvider({ children }) {
                 pinned,
                 setPinned,
                 sort,
-                setSort
+                setSort,
+                markdown,
+                setMarkdown
             }}
         >
             {children}
