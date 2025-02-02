@@ -5,15 +5,18 @@ import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
 import { NestableScrollContainer } from 'react-native-draggable-flatlist'
-import { LargeInput, Section, TextArea } from '@/components'
-import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, List, DateNote, ImageCarousel, UpdatePassword } from '@/screens'
-import { useBottomSheet, useNotes } from '@/hooks'
+import { LargeInput, MarkdownEditor, Section } from '@/components'
+import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, List, DateNote, ImageCarousel, UpdatePassword, MarkdownControls } from '@/screens'
+import { useBottomSheet, useMarkdown, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
+import { DEFAULT_LIST } from '@/constants'
 
 export default function EditNote() {
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
     const { getNote, updateNote } = useNotes()
+    const { markdown } = useMarkdown()
+    const { md } = useLocalSearchParams()
 
     const [firstRender, setFirstRender] = useState(true)
 
@@ -21,7 +24,7 @@ export default function EditNote() {
     const [note, setNote] = useState('')
     const [categories, setCategories] = useState([])
     const [images, setImages] = useState([])
-    const [list, setList] = useState({ type: '', items: [] })
+    const [list, setList] = useState(DEFAULT_LIST)
 
     const [createdAt, setCreatedAt] = useState('')
     const [updatedAt, setUpdatedAt] = useState('')
@@ -31,8 +34,16 @@ export default function EditNote() {
     const [hasPassword, setHasPassword] = useState(false)
     const [biometrics, setBiometrics] = useState(false)
 
+    const [isMarkdown, setIsMarkdown] = useState(markdown)
+    const [isEditing, setIsEditing] = useState(false)
+    const [markdownAction, setMarkdownAction] = useState('')
+
+    const onEditMarkdown = () => setIsEditing(!isEditing)
+    const onRunAction = (action) => setMarkdownAction(action)
+
     const [galleryIndex, setGalleryIndex] = useState(0)
     const [isGalleryVisible, setIsGalleryVisible] = useState(false)
+    const hasImages = images && images.length > 0
 
     const {
         ref: categoriesBottomRef,
@@ -53,20 +64,30 @@ export default function EditNote() {
     } = useBottomSheet()
 
     useEffect(() => {
-        const note = getNote(slug)
+        const {
+            title = '',
+            note: content = '',
+            categories = ['all'],
+            images = [],
+            list = DEFAULT_LIST,
+            createdAt = Date.now(),
+            updatedAt = '',
+            biometrics = false,
+            password = ''
+        } = getNote(slug)
 
-        setTitle(note.title)
-        setNote(note.note)
-        setCategories(note.categories)
-        setImages(note.images)
-        setList(note.list)
-        setCreatedAt(note.createdAt)
-        setUpdatedAt(note.updatedAt)
-        setBiometrics(note.biometrics)
+        setTitle(title)
+        setNote(content)
+        setCategories(categories)
+        setImages(images)
+        setList(list)
+        setCreatedAt(createdAt)
+        setUpdatedAt(updatedAt)
+        setBiometrics(biometrics)
 
-        if (note.password) {
+        if (password) {
             setHasPassword(true)
-            setCurrentPassword(note.password)
+            setCurrentPassword(password)
         }
     }, [slug])
 
@@ -109,6 +130,12 @@ export default function EditNote() {
         newPassword,
         biometrics
     ])
+
+    useEffect(() => {
+        if (md !== undefined) {
+            setIsMarkdown(md === 'true')
+        }
+    }, [md])
 
     const handleRemovePassword = () => {
         setHasPassword(false)
@@ -195,10 +222,13 @@ export default function EditNote() {
                         <Section
                             contentStyle={{ paddingHorizontal: 24 }}
                         >
-                            <TextArea
+                            <MarkdownEditor
                                 value={note}
-                                onChangeText={setNote}
-                                placeholder={t('placeholder.note')}
+                                setValue={setNote}
+                                isEditing={isEditing}
+                                isMarkdown={isMarkdown}
+                                action={markdownAction}
+                                setAction={setMarkdownAction}
                             />
                         </Section>
 
@@ -215,7 +245,7 @@ export default function EditNote() {
                         )}
                     </View>
 
-                    {images && images.length > 0 && (
+                    {hasImages && (
                         <ImageCarousel
                             images={images}
                             setImages={setImages}
@@ -225,6 +255,13 @@ export default function EditNote() {
                 </View>
             </NestableScrollContainer>
 
+            {isMarkdown && (
+                <MarkdownControls
+                    isEditing={isEditing}
+                    onRunAction={onRunAction}
+                    onEditMarkdown={onEditMarkdown}
+                />
+            )}
             <BottomOptionsBar
                 onAddImage={handleAddImage}
                 onListType={handleListType}
@@ -258,12 +295,15 @@ export default function EditNote() {
                 biometrics={biometrics}
                 setBiometrics={setBiometrics}
             />
-            <ImageView
-                imageIndex={galleryIndex}
-                visible={isGalleryVisible}
-                images={images.map((url) => ({ uri: url }))}
-                onRequestClose={() => setIsGalleryVisible(false)}
-            />
+
+            {hasImages && (
+                <ImageView
+                    imageIndex={galleryIndex}
+                    visible={isGalleryVisible}
+                    images={images.map((url) => ({ uri: url }))}
+                    onRequestClose={() => setIsGalleryVisible(false)}
+                />
+            )}
         </>
     )
 }
