@@ -5,6 +5,7 @@
 		"yourCategories": "Tus categorías",
 		"updateCategory": "Actualizar categoría",
 		"deleteNote": "Eliminar nota",
+		"backup": "Copia de seguridad",
 		"about": "Acerca de la aplicación"
 	},
 	"header": {
@@ -13,6 +14,7 @@
 		"editNote": "Editar nota",
 		"categories": "Categorías",
 		"unlock": "Desbloquear",
+		"sort": "Ordenar por",
 		"settings": "Ajustes",
 		"theme": "Tema de color",
 		"profile": "Perfil"
@@ -42,9 +44,50 @@
 		"numbered": "Lista numerada",
 		"checklist": "Lista de verificación"
 	},
+	"sort": {
+		"title": {
+			"asc": "Título A-Z",
+			"desc": "Título Z-A"
+		},
+		"created": {
+			"asc": "Más antiguo",
+			"desc": "Más reciente"
+		},
+		"updated": {
+			"asc": "Menos actualizado",
+			"desc": "Ultimo actualizado"
+		}
+	},
+	"backup": {
+		"import": {
+			"title": "Importar notas",
+			"description": "Desde un archivo JSON o TXT.",
+			"messages": {
+				"ok": "Se importo correctamente tus notas.",
+				"isNotArray": "El archivo no contiene un array de notas.",
+				"errorTitle": "Verifica que \"title\" tenga el siguiente formato:",
+				"errorNote": "Verifica que \"note\" tenga el siguiente formato:",
+				"errorCreatedAt": "Verifica que \"createdAt\" tenga el siguiente formato:",
+				"errorBiometrics": "Verifica que \"biometrics\" tenga el siguiente formato:",
+				"errorTypes": "El formato no es correcto.",
+				"error": "Error al importar tus notas, verifica el formato de tu copia de seguridad."
+			}
+		},
+		"export": {
+			"title": "Exportar notas",
+			"description": "A un archivo JSON o TXT.",
+			"format": "Selecciona el formato para exportar.",
+			"messages": {
+				"ok": "Se exporto correctamente tus notas.",
+				"error": "Error al exportar tus notas."
+			}
+		}
+	},
 	"settings": {
 		"language": "Idioma",
 		"theme": "Tema de color",
+		"markdown": "Usar Markdown en todas tus notas",
+		"mdOptions": "Personaliza tus notas con codigo Markdown.",
 		"chooseTheme": "Elige un tema de color para la aplicación.",
 		"github": "Repositorio de GitHub",
 		"features": "Reporta problemas, contribuye o solicita nuevas funciones.",
@@ -80,7 +123,8 @@
 		"cancel": "Cancelar",
 		"delete": "Borrar",
 		"update": "Actualizar",
-		"enter": "Entrar"
+		"enter": "Entrar",
+		"ok": "Aceptar"
 	},
 	"message": {
 		"loading": "Cargando...",

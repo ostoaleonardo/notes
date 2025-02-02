@@ -13,6 +13,7 @@
 		"editNote": "Edit note",
 		"categories": "Categories",
 		"unlock": "Unlock",
+		"sort": "Sorting by",
 		"settings": "Settings",
 		"theme": "Color theme",
 		"profile": "Profile"
@@ -41,6 +42,20 @@
 		"bulleted": "Bulleted list",
 		"numbered": "Numbered list",
 		"checklist": "Checklist"
+	},
+	"sort": {
+		"newest": "Newest",
+		"oldest": "Oldest",
+		"last": "Last updated",
+		"recently": "Recently updated",
+		"az": "Title A-Z",
+		"za": "Title Z-A"
+	},
+	"backup": {
+		"import": "Import notes",
+		"fromFile": "From a JSON or CSV file.",
+		"export": "Export notes",
+		"toFile": "To a JSON or CSV file."
 	},
 	"settings": {
 		"language": "Language",
