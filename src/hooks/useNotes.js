@@ -14,6 +14,11 @@ export function useNotes() {
         updateBackup(localNotes)
     }
 
+    const saveNotes = (items) => {
+        const localNotes = [...items, ...notes]
+        updateBackup(localNotes)
+    }
+
     const deleteNote = (id) => {
         const localNotes = notes.filter((note) => note.id !== id)
         updateBackup(localNotes)
@@ -54,6 +59,7 @@ export function useNotes() {
         notes,
         getNote,
         saveNote,
+        saveNotes,
         deleteNote,
         updateNote,
         loading
