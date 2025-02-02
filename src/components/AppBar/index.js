@@ -1,8 +1,8 @@
+import { StyleSheet } from 'react-native'
 import { Appbar, Tooltip, useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { Menu, Settings } from '@/icons'
 import { FONTS, ROUTES } from '@/constants'
-import { StyleSheet } from 'react-native'
 
 export function AppBar({ options, navigation, showMenu, showSettings, showBack, rightContent }) {
     const { colors } = useTheme()

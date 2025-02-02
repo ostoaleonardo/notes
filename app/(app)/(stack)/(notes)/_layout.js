@@ -2,6 +2,7 @@ import { Stack } from 'expo-router'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { AppBar } from '@/components'
+import { NoteAction } from '@/screens'
 
 export default function NotesLayout() {
     const { t } = useTranslation()
@@ -10,7 +11,13 @@ export default function NotesLayout() {
     return (
         <Stack
             screenOptions={{
-                header: (props) => <AppBar showBack {...props} />,
+                header: (props) => (
+                    <AppBar
+                        showBack
+                        rightContent={<NoteAction />}
+                        {...props}
+                    />
+                ),
 
                 contentStyle: {
                     backgroundColor: colors.background
