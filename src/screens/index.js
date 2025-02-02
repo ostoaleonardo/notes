@@ -1,6 +1,5 @@
 // Home screen components
 export {
-    HeaderRightContent,
     FilterCarousel,
     NotesContainer
 } from './Home'
@@ -16,15 +15,34 @@ export {
     ImageCarousel,
     CategoryCarousel,
     BottomOptionsBar,
-    List
+    List,
+    MarkdownControls
 } from './Notes'
 
 // Modals
 export {
     Languages,
     DeleteNote,
-    UpdateCategory,
     Categories,
     AddPassword,
     UpdatePassword
 } from './Modals'
+
+// Dialogs
+export {
+    UpdateCategory,
+    ImportBackup,
+    ExportBackup
+} from './Dialogs'
+
+export {
+    Option,
+    AppVersionCard,
+    ThemeOption
+} from './Settings'
+
+// AppBar actions
+export {
+    SortAction,
+    NoteAction
+} from './AppBarActions'

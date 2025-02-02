@@ -1,19 +1,21 @@
 import { useCallback, useEffect, useState } from 'react'
 import { randomUUID } from 'expo-crypto'
-import { useFocusEffect } from 'expo-router'
+import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
 import { NestableScrollContainer } from 'react-native-draggable-flatlist'
-import { LargeInput, Section, TextArea } from '@/components'
-import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, ImageCarousel, List } from '@/screens'
-import { useBottomSheet, useNotes } from '@/hooks'
+import { LargeInput, MarkdownEditor, Section } from '@/components'
+import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, ImageCarousel, List, MarkdownControls } from '@/screens'
+import { useBottomSheet, useMarkdown, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
-import { DEFAULT_CATEGORIES } from '@/constants'
+import { DEFAULT_LIST, DEFAULT_NOTE_CATEGORIES } from '@/constants'
 
 export default function Note() {
     const { t } = useTranslation()
     const { saveNote, updateNote } = useNotes()
+    const { markdown } = useMarkdown()
+    const { md } = useLocalSearchParams()
 
     const [isSaved, setIsSaved] = useState(false)
     const [firstRender, setFirstRender] = useState(true)
@@ -21,14 +23,18 @@ export default function Note() {
     const [id, setId] = useState(randomUUID())
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
-    const [categories, setCategories] = useState(DEFAULT_CATEGORIES.map(({ id }) => id))
+    const [categories, setCategories] = useState(DEFAULT_NOTE_CATEGORIES)
     const [images, setImages] = useState([])
-    const [list, setList] = useState({ type: '', items: [] })
+    const [list, setList] = useState(DEFAULT_LIST)
 
     const [createdAt, setCreatedAt] = useState('')
 
     const [password, setPassword] = useState('')
     const [biometrics, setBiometrics] = useState(false)
+
+    const [isMarkdown, setIsMarkdown] = useState(markdown)
+    const [isEditing, setIsEditing] = useState(true)
+    const onEditMarkdown = () => setIsEditing(!isEditing)
 
     const [galleryIndex, setGalleryIndex] = useState(0)
     const [isGalleryVisible, setIsGalleryVisible] = useState(false)
@@ -95,6 +101,12 @@ export default function Note() {
         password,
         biometrics
     ])
+
+    useEffect(() => {
+        if (md !== undefined) {
+            setIsMarkdown(md === 'true')
+        }
+    }, [md])
 
     const onCategories = (id) => {
         if (!categories.includes(id)) {
@@ -170,10 +182,11 @@ export default function Note() {
                         <Section
                             containerStyle={{ paddingHorizontal: 24 }}
                         >
-                            <TextArea
+                            <MarkdownEditor
                                 value={note}
                                 onChangeText={setNote}
-                                placeholder={t('placeholder.note')}
+                                isEditing={isEditing}
+                                isMarkdown={isMarkdown}
                             />
                         </Section>
 
@@ -200,11 +213,19 @@ export default function Note() {
                 </View>
             </NestableScrollContainer>
 
+            {isMarkdown && (
+                <MarkdownControls
+                    isEditing={isEditing}
+                    onToggle={onEditMarkdown}
+                />
+            )}
             <BottomOptionsBar
                 onAddImage={handleAddImage}
                 onListType={handleListType}
                 hasPassword={!!password}
                 onOpenPassword={onOpenPassword}
+                isEditing={isEditing}
+                onEditMarkdown={onEditMarkdown}
             />
 
             <Categories
