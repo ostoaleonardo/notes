@@ -1,12 +1,12 @@
 import { StyleSheet, View } from 'react-native'
 import { FAB, IconButton, useTheme } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
-import { AnimatedView } from '@/components'
-import { Edit, Eye, FormaQuote, FormatBold, FormatItalic, FormatStrikethrough } from '@/icons'
+import { AnimatedView, Scroll } from '@/components'
+import { Edit, Eye, FormaQuote, FormatBold, FormatH1, FormatH2, FormatH3, FormatH4, FormatItalic, FormatStrikethrough } from '@/icons'
 
 export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
     const { colors } = useTheme()
-    const { background, onBackground, surface } = colors
+    const { background, onBackground, surface, primary } = colors
 
     const iconDarkProps = { color: background }
     const iconLightProps = { color: onBackground }
@@ -17,7 +17,9 @@ export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
             exiting={FadeOutRight}
             style={styles.container}
         >
-            <View style={{ flex: 1 }} />
+            {!isEditing && (
+                <View style={{ flex: 1 }} />
+            )}
 
             {isEditing && (
                 <AnimatedView
@@ -28,28 +30,52 @@ export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
                         backgroundColor: surface
                     }}
                 >
-                    <IconButton
-                        onPress={() => onRunAction('bold')}
-                        icon={() => <FormatBold {...iconLightProps} />}
-                    />
-                    <IconButton
-                        onPress={() => onRunAction('italic')}
-                        icon={() => <FormatItalic {...iconLightProps} />}
-                    />
-                    <IconButton
-                        onPress={() => onRunAction('strikethrough')}
-                        icon={() => <FormatStrikethrough {...iconLightProps} />}
-                    />
-                    <IconButton
-                        onPress={() => onRunAction('quote')}
-                        icon={() => <FormaQuote {...iconLightProps} />}
-                    />
+                    <Scroll
+                        horizontal
+                        overScrollMode='never'
+                        style={styles.scroll}
+                    >
+                        <IconButton
+                            onPress={() => onRunAction('bold')}
+                            icon={() => <FormatBold {...iconLightProps} />}
+                        />
+                        <IconButton
+                            onPress={() => onRunAction('italic')}
+                            icon={() => <FormatItalic {...iconLightProps} />}
+                        />
+                        <IconButton
+                            onPress={() => onRunAction('strike')}
+                            icon={() => <FormatStrikethrough {...iconLightProps} />}
+                        />
+                        <IconButton
+                            onPress={() => onRunAction('quote')}
+                            icon={() => <FormaQuote {...iconLightProps} />}
+                        />
+                        <IconButton
+                            onPress={() => onRunAction('h1')}
+                            icon={() => <FormatH1 {...iconLightProps} />}
+                        />
+                        <IconButton
+                            onPress={() => onRunAction('h2')}
+                            icon={() => <FormatH2 {...iconLightProps} />}
+                        />
+                        <IconButton
+                            onPress={() => onRunAction('h3')}
+                            icon={() => <FormatH3 {...iconLightProps} />}
+                        />
+                        <IconButton
+                            onPress={() => onRunAction('h4')}
+                            icon={() => <FormatH4 {...iconLightProps} />}
+                        />
+                    </Scroll>
                 </AnimatedView>
             )}
 
             <FAB
                 mode='outlined'
+                animated={false}
                 onPress={onEditMarkdown}
+                style={{ backgroundColor: primary }}
                 icon={() => (
                     isEditing
                         ? <Eye {...iconDarkProps} />
@@ -63,17 +89,21 @@ export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
+        flex: 1,
         flexDirection: 'row',
+        justifyContent: 'space-between',
         gap: 16,
         left: 16,
         right: 16,
         bottom: 64
     },
+    scroll: {
+        flex: 1
+    },
     controls: {
         flexGrow: 1,
         borderRadius: 16,
         flexDirection: 'row',
-        paddingHorizontal: 8,
         alignItems: 'center',
         justifyContent: 'center',
     }
