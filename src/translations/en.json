@@ -44,12 +44,18 @@
 		"checklist": "Checklist"
 	},
 	"sort": {
-		"newest": "Newest",
-		"oldest": "Oldest",
-		"last": "Last updated",
-		"recently": "Recently updated",
-		"az": "Title A-Z",
-		"za": "Title Z-A"
+		"title": {
+			"asc": "Title A-Z",
+			"desc": "Title Z-A"
+		},
+		"created": {
+			"asc": "Oldest",
+			"desc": "Newest"
+		},
+		"updated": {
+			"asc": "Least updated",
+			"desc": "Most updated"
+		}
 	},
 	"backup": {
 		"import": "Import notes",
