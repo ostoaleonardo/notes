@@ -18,6 +18,7 @@ export default function MainLayout() {
     const [loaded, error] = useFonts({
         'AzeretMono-Light': require('../assets/fonts/AzeretMono-Light.ttf'),
         'AzeretMono-Medium': require('../assets/fonts/AzeretMono-Medium.ttf'),
+        'AzeretMono-Italic': require('../assets/fonts/AzeretMono-LightItalic.ttf'),
         'NType82-Headline': require('../assets/fonts/NType82-Headline.ttf')
     })
 
