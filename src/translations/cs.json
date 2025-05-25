@@ -1,0 +1,104 @@
+{
+	"language": "Čeština",
+	"title": {
+		"categories": "Kategorie",
+		"yourCategories": "Vaše kategorie",
+		"updateCategory": "Upravit kategorii",
+		"deleteNote": "Smazat poznámku",
+		"about": "O aplikaci"
+	},
+	"header": {
+		"notes": "Poznámky",
+		"addNote": "Nová poznámka",
+		"editNote": "Upravit poznámku",
+		"categories": "Kategorie",
+		"unlock": "Odemknout",
+		"settings": "Nastavení",
+		"theme": "Barevné schéma",
+		"profile": "Profil"
+	},
+	"welcome": {
+		"tagline": "Nejlepší možnost, jak organizovat své poznámky",
+		"signIn": "Přihlášení pomocí Google",
+		"signInError": "Chyba přihlášení, zkuste to znovu",
+		"noConnection": "Bez přístupu k internetu"
+	},
+	"profile": {
+		"alias": "Alias",
+		"email": "Email",
+		"signOut": "Odhlásit se"
+	},
+	"date": {
+		"created": "Vytvořeno:",
+		"updated": "Upraveno:"
+	},
+	"categories": {
+		"all": "Vše",
+		"add": "Přidat"
+	},
+	"list": {
+		"add": "Přidat položku",
+		"bulleted": "Odrážkový seznam",
+		"numbered": "Číselný seznam",
+		"checklist": "Odškrtávací seznam"
+	},
+	"settings": {
+		"language": "Jazyk",
+		"theme": "Barevné schéma",
+		"chooseTheme": "Vyberte barvu aplikace.",
+		"github": "GitHub repozitář",
+		"features": "Hlášení chyb, požadavek na nové funkce, přispění.",
+		"contribute": "Přispějte překladem",
+		"translate": "Pomozte nám přeložit aplikaci do vašeho jazyka.",
+		"updates": "Aktualiazce softwaru",
+		"version": "Verze"
+	},
+	"theme": {
+		"light": "Světlý",
+		"dark": "Tmavý",
+		"system": "Podle systému"
+	},
+	"password": {
+		"add": "Přidat heslo",
+		"update": "Upravit heslo",
+		"remove": "Odemknout",
+		"current": "Aktuální heslo",
+		"new": "Nové heslo"
+	},
+	"biometric": {
+		"use": "Použít biometriku",
+		"lock": "Uzamknout biometrikou",
+		"unlock": "Odemknout biometrikou",
+		"remove": "Odebrat biometriku",
+		"auth": "Odemykání biometrikou"
+	},
+	"button": {
+		"addNote": "Nová poznámka",
+		"save": "Uložit",
+		"edit": "Upravit",
+		"back": "Zpět",
+		"cancel": "Zrušit",
+		"delete": "Smazat",
+		"update": "Aktualizovat",
+		"enter": "Vložit"
+	},
+	"message": {
+		"loading": "Nahrávání...",
+		"noNotes": "Nejsou tu žádné poznámky",
+		"noCategories": "Nejsou tu žádné kategorie",
+		"categoryAdded": "Kategorie vytvořena",
+		"categoryUpdated": "Kategorie upravena",
+		"wrongPassword": "Nesprávné heslo",
+		"samePassword": "Heslo nemůže být stejné",
+		"lengthPassword": "Heslo musí mít minimálně 4 znaky"
+	},
+	"placeholder": {
+		"title": "Váš titul...",
+		"note": "Zde napište poznámku...",
+		"category": "Nová kategorie..."
+	},
+	"drawer": {
+		"notes": "Poznámky",
+		"categories": "Kategorie"
+	}
+}

@@ -1,0 +1,104 @@
+{
+	"language": "Türkçe",
+	"title": {
+		"categories": "Kategoriler",
+		"yourCategories": "Kategoriler",
+		"updateCategory": "Kategori güncelleme",
+		"deleteNote": "Notu sil",
+		"about": "Uygulama hakkında"
+	},
+	"header": {
+		"notes": "Notlar",
+		"addNote": "Not ekle",
+		"editNote": "Notu düzenle",
+		"categories": "Kategoriler",
+		"unlock": "Kilidi aç",
+		"settings": "Ayarlar",
+		"theme": "Renk teması",
+		"profile": "Profil"
+	},
+	"welcome": {
+		"tagline": "Notlarınızı düzenli tutmanın en iyi yolu",
+		"signIn": "Google ile giriş yapın",
+		"signInError": "Oturum açarken hata oluştu, tekrar deneyin",
+		"noConnection": "İnternet bağlantınız yok"
+	},
+	"profile": {
+		"alias": "Takma ad",
+		"email": "Eposta",
+		"signOut": "Çıkış yap"
+	},
+	"date": {
+		"created": "Oluşturuldu:",
+		"updated": "Güncellendi:"
+	},
+	"categories": {
+		"all": "Tümü",
+		"add": "Ekle"
+	},
+	"list": {
+		"add": "Öğe ekle",
+		"bulleted": "Madde işaretli liste",
+		"numbered": "Numaralı liste",
+		"checklist": "Kontrol listesi"
+	},
+	"settings": {
+		"language": "Dil",
+		"theme": "Renk teması",
+		"chooseTheme": "Uygulama için bir renk teması seçin.",
+		"github": "GitHub deposu",
+		"features": "Sorunları bildirin, katkıda bulunun veya yeni özellikler talep edin.",
+		"contribute": "Dil çevirisine katkıda bulunun",
+		"translate": "Uygulamayı kendi dilinize çevirmemize yardımcı olun.",
+		"updates": "Yazılım güncellemesi",
+		"version": "Versiyon"
+	},
+	"theme": {
+		"light": "Açık",
+		"dark": "Karanlık",
+		"system": "Sistem"
+	},
+	"password": {
+		"add": "Şifre ekle",
+		"update": "Şifreyi güncelle",
+		"remove": "Şifreyi kaldır",
+		"current": "Güncel şifre",
+		"new": "Yeni şifre"
+	},
+	"biometric": {
+		"use": "Parmak izi kullan",
+		"lock": "Parmak iziyle kitleme",
+		"unlock": "Parmak iziyle açma",
+		"remove": "Parmak izini kaldır",
+		"auth": "Biyometrik kimlik doğrulama"
+	},
+	"button": {
+		"addNote": "Not ekle",
+		"save": "Kaydet",
+		"edit": "Düzenle",
+		"back": "Geri",
+		"cancel": "İptal",
+		"delete": "Sil",
+		"update": "Güncelle",
+		"enter": "Enter"
+	},
+	"message": {
+		"loading": "Yükleniyor...",
+		"noNotes": "Henüz hiç notunuz yok",
+		"noCategories": "Henüz herhangi bir kategoriniz yok",
+		"categoryAdded": "Kategori eklendi",
+		"categoryUpdated": "Kategori güncellendi",
+		"wrongPassword": "Yanlış şifre",
+		"samePassword": "Şifre aynı olamaz",
+		"lengthPassword": "Şifre en az 4 karakterden oluşmalıdır"
+	},
+	"placeholder": {
+		"title": "Ünvanınız...",
+		"note": "Notunuzu buraya yazın...",
+		"category": "Yeni kategori..."
+	},
+	"drawer": {
+		"notes": "Notlar",
+		"categories": "Kategoriler"
+	}
+}

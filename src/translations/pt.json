@@ -1,0 +1,104 @@
+{
+	"language": "Português",
+	"title": {
+		"categories": "Categorias",
+		"yourCategories": "Suas categorias",
+		"updateCategory": "Atualizar categorias",
+		"deleteNote": "Excluir nota",
+		"about": "Sobre o aplicativo"
+	},
+	"header": {
+		"notes": "Notas",
+		"addNote": "Adicionar nota",
+		"editNote": "Editar nota",
+		"categories": "Categorias",
+		"unlock": "Desbloquear",
+		"settings": "Configurações",
+		"theme": "Cor do tema",
+		"profile": "Perfil"
+	},
+	"welcome": {
+		"tagline": "A melhor maneira de manter as suas notas organizadas",
+		"signIn": "Entre com Google",
+		"signInError": "Erro ao entrar, tente novamente",
+		"noConnection": "Você não possui uma conexão com a internet"
+	},
+	"profile": {
+		"alias": "Nome alternativo",
+		"email": "Email",
+		"signOut": "Sair"
+	},
+	"date": {
+		"created": "Criado:",
+		"updated": "Atualizado:"
+	},
+	"categories": {
+		"all": "Todos",
+		"add": "Adicionar"
+	},
+	"list": {
+		"add": "Adicionar item",
+		"bulleted": "Lista com marcadores",
+		"numbered": "Lista numerada",
+		"checklist": "Checklist"
+	},
+	"settings": {
+		"language": "Idioma",
+		"theme": "Cor do tema",
+		"chooseTheme": "Escolha uma cor para o tema do aplicativo.",
+		"github": "Repositório no GitHub",
+		"features": "Relatar problemas, contribuir ou solicitar novas funcionalidades.",
+		"contribute": "Contribua com a tradução",
+		"translate": "Nos ajude a traduzir o aplicativo para o seu idioma.",
+		"updates": "Atualizações",
+		"version": "Versão"
+	},
+	"theme": {
+		"light": "Claro",
+		"dark": "Escuro",
+		"system": "Sistema"
+	},
+	"password": {
+		"add": "Adicionar senha",
+		"update": "Atualizar senha",
+		"remove": "Remover senha",
+		"current": "Senha atual",
+		"new": "Nova senha"
+	},
+	"biometric": {
+		"use": "Usar impressão digital",
+		"lock": "Bloquear com impressão digital",
+		"unlock": "Desbloquear com impressão digital",
+		"remove": "Remover impressão digital",
+		"auth": "Autenticar biometria"
+	},
+	"button": {
+		"addNote": "Adicionar nota",
+		"save": "Salvar",
+		"edit": "Editar",
+		"back": "Voltar",
+		"cancel": "Cancelar",
+		"delete": "Excluir",
+		"update": "Atualizar",
+		"enter": "Entrar"
+	},
+	"message": {
+		"loading": "Carregando...",
+		"noNotes": "Nenhuma nota adicionada",
+		"noCategories": "Nenhuma categoria adicionada",
+		"categoryAdded": "Categoria adicionada",
+		"categoryUpdated": "Categoria atualizada",
+		"wrongPassword": "Senha errada",
+		"samePassword": "A senha não pode ser a mesma",
+		"lengthPassword": "A senha deve conter no mínimo 4 caracteres"
+	},
+	"placeholder": {
+		"title": "Seu título...",
+		"note": "Digite a sua nota aqui...",
+		"category": "Nova categoria..."
+	},
+	"drawer": {
+		"notes": "Notas",
+		"categories": "Categorias"
+	}
+}

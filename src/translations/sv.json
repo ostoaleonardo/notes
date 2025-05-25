@@ -1,0 +1,104 @@
+{
+	"language": "Svenska",
+	"title": {
+		"categories": "Kategorier",
+		"yourCategories": "Dina kategorier",
+		"updateCategory": "Uppdatera kategori",
+		"deleteNote": "Radera anteckning",
+		"about": "Om appen"
+	},
+	"header": {
+		"notes": "Anteckningar",
+		"addNote": "Ny anteckning",
+		"editNote": "Redigera anteckning",
+		"categories": "Kategorier",
+		"unlock": "Lås upp",
+		"settings": "Inställningar",
+		"theme": "Färgtema",
+		"profile": "Profil"
+	},
+	"welcome": {
+		"tagline": "Det bästa sättet att organisera dina anteckningar",
+		"signIn": "Logga in med Google",
+		"signInError": "Inloggningen misslyckades, försök igen",
+		"noConnection": "Du saknar internetuppkoppling"
+	},
+	"profile": {
+		"alias": "Användarnamn",
+		"email": "Email",
+		"signOut": "Logga ut"
+	},
+	"date": {
+		"created": "Skapad:",
+		"updated": "Uppdaterad:"
+	},
+	"categories": {
+		"all": "Alla",
+		"add": "Lägg till"
+	},
+	"list": {
+		"add": "Lägg till",
+		"bulleted": "Punktlista",
+		"numbered": "Numrerad lista",
+		"checklist": "Checklista"
+	},
+	"settings": {
+		"language": "Språk",
+		"theme": "Färgtema",
+		"chooseTheme": "Välj färgtema för appen.",
+		"github": "GitHub datakälla",
+		"features": "Anmäl problem, bidra eller önska nya funktioner.",
+		"contribute": "Bidra till översättning",
+		"translate": "Hjälp oss översätta appen till ditt språk.",
+		"updates": "Mjukvaruuppdatering",
+		"version": "Version"
+	},
+	"theme": {
+		"light": "Ljust",
+		"dark": "Mörkt",
+		"system": "System"
+	},
+	"password": {
+		"add": "Skapa lösenord",
+		"update": "Uppdatera lösenord",
+		"remove": "Ta bort lösenord",
+		"current": "Nuvarande lösenord",
+		"new": "Nytt lösenord"
+	},
+	"biometric": {
+		"use": "Använd fingeravtryck",
+		"lock": "Lås med fingeravtryck",
+		"unlock": "Lås upp med fingeravtryck",
+		"remove": "Ta bort fingeravtryck",
+		"auth": "Bakåt"
+	},
+	"button": {
+		"addNote": "Ny anteckning",
+		"save": "Spara",
+		"edit": "Redigera",
+		"back": "Bakåt",
+		"cancel": "Avbryt",
+		"delete": "Radera",
+		"update": "Uppdatera",
+		"enter": "Gå in"
+	},
+	"message": {
+		"loading": "Laddar...",
+		"noNotes": "Du har inte skapat någon anteckning än",
+		"noCategories": "Du har inte skapat kategorier än",
+		"categoryAdded": "Kategori skapad",
+		"categoryUpdated": "Kategori uppdaterad",
+		"wrongPassword": "Fel lösenord",
+		"samePassword": "Lösenordet kan inte vara samma",
+		"lengthPassword": "Lösenordet måste innehålla minst 4 karaktärer"
+	},
+	"placeholder": {
+		"title": "Titel...",
+		"note": "Skriv här...",
+		"category": "Ny kategori..."
+	},
+	"drawer": {
+		"notes": "Anteckningar",
+		"categories": "Kategorier"
+	}
+}
