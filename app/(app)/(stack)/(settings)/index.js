@@ -3,7 +3,7 @@ import { router } from 'expo-router'
 import { Switch, useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { Section, Separator, Scroll } from '@/components'
-import { AppVersionCard, Languages, Option } from '@/screens'
+import { AppVersionCard, Languages, MarkdownTutorial, Option } from '@/screens'
 import { useBottomSheet, useMarkdown } from '@/hooks'
 import { ArrowForward, OpenInNew } from '@/icons'
 import { LINKS, ROUTES } from '@/constants'
@@ -12,7 +12,18 @@ export default function Settings() {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { markdown, toggleMarkdown } = useMarkdown()
-    const { ref, onOpen, onClose } = useBottomSheet()
+
+    const {
+        ref: languagesBottomRef,
+        onOpen: onOpenLanguages,
+        onClose: onCloseLanguages
+    } = useBottomSheet()
+
+    const {
+        ref: markdownBottomRef,
+        onOpen: onOpenMarkdown,
+        onClose: onCloseMarkdown
+    } = useBottomSheet()
 
     const onToggleMarkdown = () => toggleMarkdown(!markdown)
 
@@ -33,16 +44,21 @@ export default function Settings() {
                         title={t('settings.language')}
                         description={t('language')}
                         rightContent={<ArrowForward {...iconProps} />}
-                        onPress={onOpen}
+                        onPress={onOpenLanguages}
                     />
                     <Option
                         title={t('settings.theme')}
                         rightContent={<ArrowForward {...iconProps} />}
                         onPress={() => router.push(ROUTES.THEME)}
                     />
+                </Section>
+
+                <Separator style={{ marginHorizontal: 24 }} />
+
+                <Section title='Markdown'>
                     <Option
-                        title={t('settings.markdown')}
-                        description={t('settings.mdOptions')}
+                        title={t('settings.markdown.title')}
+                        description={t('settings.markdown.description')}
                         rightContent={
                             <Switch
                                 value={markdown}
@@ -50,13 +66,16 @@ export default function Settings() {
                             />
                         }
                     />
+                    <Option
+                        title={t('settings.markdown.tutorial')}
+                        rightContent={<ArrowForward {...iconProps} />}
+                        onPress={onOpenMarkdown}
+                    />
                 </Section>
 
                 <Separator style={{ marginHorizontal: 24 }} />
 
-                <Section
-                    title={t('title.about')}
-                >
+                <Section title={t('title.about')}>
                     <Option
                         title={t('settings.github')}
                         description={t('settings.features')}
@@ -73,8 +92,12 @@ export default function Settings() {
                 </Section>
 
                 <Languages
-                    ref={ref}
-                    onClose={onClose}
+                    ref={languagesBottomRef}
+                    onClose={onCloseLanguages}
+                />
+                <MarkdownTutorial
+                    ref={markdownBottomRef}
+                    onClose={onCloseMarkdown}
                 />
             </Scroll>
         </>

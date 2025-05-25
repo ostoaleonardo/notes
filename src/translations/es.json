@@ -86,9 +86,12 @@
 	"settings": {
 		"language": "Idioma",
 		"theme": "Tema de color",
-		"markdown": "Usar Markdown en todas tus notas",
-		"mdOptions": "Personaliza tus notas con codigo Markdown.",
 		"chooseTheme": "Elige un tema de color para la aplicación.",
+		"markdown": {
+			"title": "Usa Markdown en todas tus notas",
+			"description": "Personaliza tus notas con código Markdown.",
+			"tutorial": "¿Cómo usar Markdown?"
+		},
 		"github": "Repositorio de GitHub",
 		"features": "Reporta problemas, contribuye o solicita nuevas funciones.",
 		"contribute": "Contribuir a la traducción",
