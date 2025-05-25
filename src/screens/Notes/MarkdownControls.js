@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native'
 import { FAB, IconButton, useTheme } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
 import { AnimatedView, Scroll } from '@/components'
-import { Edit, Eye, FormaQuote, FormatBold, FormatH1, FormatH2, FormatH3, FormatH4, FormatItalic, FormatStrikethrough } from '@/icons'
+import { Edit, Eye, FormaQuote, FormatBold, FormatH1, FormatH2, FormatH3, FormatH4, FormatItalic, FormatStrikethrough, HorizontalRule, Link, Picture, Table } from '@/icons'
 
 export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
     const { colors } = useTheme()
@@ -48,10 +48,6 @@ export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
                             icon={() => <FormatStrikethrough {...iconLightProps} />}
                         />
                         <IconButton
-                            onPress={() => onRunAction('quote')}
-                            icon={() => <FormaQuote {...iconLightProps} />}
-                        />
-                        <IconButton
                             onPress={() => onRunAction('h1')}
                             icon={() => <FormatH1 {...iconLightProps} />}
                         />
@@ -66,6 +62,26 @@ export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
                         <IconButton
                             onPress={() => onRunAction('h4')}
                             icon={() => <FormatH4 {...iconLightProps} />}
+                        />
+                        <IconButton
+                            onPress={() => onRunAction('quote')}
+                            icon={() => <FormaQuote {...iconLightProps} />}
+                        />
+                        <IconButton
+                            onPress={() => onRunAction('hrule')}
+                            icon={() => <HorizontalRule {...iconLightProps} />}
+                        />
+                        <IconButton
+                            onPress={() => onRunAction('image')}
+                            icon={() => <Picture {...iconLightProps} />}
+                        />
+                        <IconButton
+                            onPress={() => onRunAction('link')}
+                            icon={() => <Link {...iconLightProps} />}
+                        />
+                        <IconButton
+                            onPress={() => onRunAction('table')}
+                            icon={() => <Table {...iconLightProps} />}
                         />
                     </Scroll>
                 </AnimatedView>

@@ -16,6 +16,11 @@ export function MarkdownEditor({ value, setValue, isEditing, isMarkdown, action,
         onFormatH2,
         onFormatH3,
         onFormatH4,
+        onQuote,
+        onHorizontalRule,
+        onImage,
+        onLink,
+        onTable,
         onSelectionChange
     } = useMarkdownShortcuts(
         value, setValue,
@@ -29,7 +34,12 @@ export function MarkdownEditor({ value, setValue, isEditing, isMarkdown, action,
         h1: onFormatH1,
         h2: onFormatH2,
         h3: onFormatH3,
-        h4: onFormatH4
+        h4: onFormatH4,
+        quote: onQuote,
+        hrule: onHorizontalRule,
+        image: onImage,
+        link: onLink,
+        table: onTable
     }
 
     useEffect(() => {

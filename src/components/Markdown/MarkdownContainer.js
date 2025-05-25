@@ -1,19 +1,24 @@
-import { StyleSheet } from 'react-native'
+import { Linking, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import Markdown from 'react-native-markdown-display'
 import { FONTS } from '@/constants'
 
 export function MarkdownContainer({ children, size = 12 }) {
     const { colors } = useTheme()
-    const { background, onBackground } = colors
+    const { onBackground, surface, tertiary } = colors
 
     const fontProps = {
         color: onBackground
     }
 
     const headingProps = {
-        color: onBackground,
+        ...fontProps,
         fontFamily: FONTS.nType82Headline
+    }
+
+    const bodyProps = {
+        ...fontProps,
+        fontFamily: FONTS.azeretLight
     }
 
     const styles = StyleSheet.create({
@@ -44,58 +49,96 @@ export function MarkdownContainer({ children, size = 12 }) {
         },
 
         // Texts
-        body: {
-            ...fontProps
-        },
+        body: { ...bodyProps },
+
+        // Emphasis
         strong: {
-            fontWeight: 'bold',
-            ...fontProps
+            ...fontProps,
+            fontWeight: 'normal',
+            fontFamily: FONTS.azeretMedium
         },
         em: {
-            fontStyle: 'italic',
-            ...fontProps
+            ...fontProps,
+            fontStyle: 'normal',
+            fontFamily: FONTS.azeretItalic
         },
         s: {
-            textDecorationLine: 'line-through',
-            ...fontProps
+            ...fontProps,
+            textDecorationLine: 'line-through'
+        },
+
+        // Blockquotes
+        blockquote: {
+            marginLeft: 0,
+            borderLeftWidth: 2,
+            borderRadius: 0,
+            marginVertical: 8,
+            paddingHorizontal: 8,
+            borderTopEndRadius: 8,
+            borderBottomEndRadius: 8,
+            borderColor: tertiary,
+            backgroundColor: surface
         },
 
         // Table
         table: {
-            borderWidth: 1,
-            borderRadius: 0,
             borderColor: onBackground,
+            borderRadius: 0,
+            borderWidth: 1
         },
         tr: {
-            borderBottomWidth: 1,
-            flexDirection: 'row',
             borderColor: onBackground,
+            borderBottomWidth: 1,
+            flexDirection: 'row'
         },
         thead: {
-            ...headingProps,
             fontSize: 12
         },
         tbody: {
-            ...headingProps,
-            fontFamily: FONTS.azeretLight,
             fontSize: 12
         },
 
         // Code
         code_inline: {
-            backgroundColor: background,
+            backgroundColor: surface,
+            borderColor: surface,
             color: onBackground,
-            borderRadius: 8,
+            borderRadius: 8
         },
         code_block: {
-            backgroundColor: background,
+            backgroundColor: surface,
+            borderColor: surface,
             color: onBackground,
-            borderRadius: 8,
+            borderRadius: 8
+        },
+        fence: {
+            backgroundColor: surface,
+            borderColor: surface,
+            borderRadius: 4,
+            borderWidth: 1,
+            padding: 10
+        },
+
+        // Horizontal Rule
+        hr: {
+            backgroundColor: onBackground,
+            height: 1,
         },
     })
 
+    const onLinkPress = (url) => {
+        url = url.startsWith('http') ? url : 'https://' + url
+
+        Linking.openURL(url).catch((err) => {
+            console.error('Failed to open URL:', err)
+        })
+    }
+
     return (
-        <Markdown style={styles}>
+        <Markdown
+            style={styles}
+            onLinkPress={onLinkPress}
+        >
             {children}
         </Markdown>
     )

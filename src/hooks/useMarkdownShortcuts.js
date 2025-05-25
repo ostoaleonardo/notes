@@ -59,6 +59,91 @@ export const useMarkdownShortcuts = (value, setValue, selection, setSelection) =
         setValue(newText)
     }
 
+    const onQuote = () => {
+        // Gets the start of the current line
+        const { start } = selection
+        const lineStart = value.lastIndexOf('\n', start) + 1
+        const lineEnd = value.indexOf('\n', start)
+
+        // Gets the current line and replaces it with the new quote
+        const currentLine = value.slice(lineStart, lineEnd)
+        const newLine = '> ' + currentLine
+
+        // Replaces the current line with the new quote
+        const newText = `${value.slice(0, lineStart)}${newLine}${value.slice(lineStart + currentLine.length)}`
+        setValue(newText)
+    }
+
+    const onHorizontalRule = () => {
+        // Gets the start of the current line
+        const { start } = selection
+        const lineStart = value.lastIndexOf('\n', start) + 1
+
+        // Replaces the current line with the new horizontal
+        const lineEnd = value.indexOf('\n', start)
+        const currentLine = value.slice(lineStart, lineEnd)
+        const newLine = '___'
+
+        // If the current line is empty, add the horizontal rule
+        // Otherwise, add a new line with the horizontal rule
+        const newText = currentLine.trim() === ''
+            ? `${value.slice(0, lineStart)}${newLine}${value.slice(lineEnd)}`
+            : `${value.slice(0, lineEnd)}\n${newLine}${value.slice(lineEnd)}`
+
+        setValue(newText)
+    }
+
+    const onImage = () => {
+        // Gets the start of the current line
+        const { start } = selection
+        const lineStart = value.lastIndexOf('\n', start) + 1
+
+        // Replaces the current line with the new image
+        const lineEnd = value.indexOf('\n', start)
+        const currentLine = value.slice(lineStart, lineEnd)
+        const newLine = `![${currentLine}](url)`
+
+        // Replaces the current line with the new image
+        const newText = `${value.slice(0, lineStart)}${newLine}${value.slice(lineStart + currentLine.length)}`
+        setValue(newText)
+    }
+
+    const onLink = () => {
+        // Gets the start of the current line
+        const { start } = selection
+        const lineStart = value.lastIndexOf('\n', start) + 1
+
+        // Replaces the current line with the new link
+        const lineEnd = value.indexOf('\n', start)
+        const currentLine = value.slice(lineStart, lineEnd)
+        const newLine = `[${currentLine}](url)`
+
+        // Replaces the current line with the new link
+        const newText = `${value.slice(0, lineStart)}${newLine}${value.slice(lineStart + currentLine.length)}`
+        setValue(newText)
+    }
+
+    const onTable = () => {
+        // Constants
+        const tableHeaders = '| Option | Description |\n'
+        const tableSeparator = '| ------ | ----------- |\n'
+        const tableRow = '| data   |      x      |\n'
+
+        const table = `${tableHeaders}${tableSeparator}${tableRow}${tableRow}`
+
+        // Gets the start of the current line
+        const { start } = selection
+        const lineStart = value.lastIndexOf('\n', start) + 1
+
+        const lineEnd = value.indexOf('\n', start)
+        const currentLine = value.slice(lineStart, lineEnd)
+        const newLine = table
+
+        // Replaces the current line with the new table
+        const newText = `${value.slice(0, lineStart)}${newLine}${value.slice(lineStart + currentLine.length)}`
+        setValue(newText)
+    }
+
     const onFormatH1 = () => onHeading(1)
     const onFormatH2 = () => onHeading(2)
     const onFormatH3 = () => onHeading(3)
@@ -72,6 +157,11 @@ export const useMarkdownShortcuts = (value, setValue, selection, setSelection) =
         onFormatH1,
         onFormatH2,
         onFormatH3,
-        onFormatH4
+        onFormatH4,
+        onQuote,
+        onHorizontalRule,
+        onImage,
+        onLink,
+        onTable
     }
 }
