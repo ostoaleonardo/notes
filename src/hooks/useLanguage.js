@@ -18,11 +18,11 @@ export function useLanguage() {
 
     const changeLanguage = (lan) => {
         i18next.changeLanguage(lan)
-        setItem(STORAGE_KEYS.USER_LANGUAGE, lan)
+        setItem(STORAGE_KEYS.LANGUAGE, lan)
     }
 
     const initLanguage = async () => {
-        const userLanguage = await getItem(STORAGE_KEYS.USER_LANGUAGE)
+        const userLanguage = await getItem(STORAGE_KEYS.LANGUAGE)
         const defaultLanguage = getLanguage()
 
         changeLanguage(userLanguage || defaultLanguage)

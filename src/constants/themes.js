@@ -97,5 +97,6 @@ export const THEMES = {
 export const FONTS = {
     azeretLight: 'AzeretMono-Light',
     azeretMedium: 'AzeretMono-Medium',
+    azeretItalic: 'AzeretMono-Italic',
     nType82Headline: 'NType82-Headline'
 }

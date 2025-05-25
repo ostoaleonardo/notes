@@ -12,6 +12,5 @@ export { useToggleMode } from './useToggleMode'
 export { useBottomSheet } from './useBottomSheet'
 
 // Utils
-export { useFiles } from './useFiles'
 export { useHaptics } from './useHaptics'
 export { useLocalAuthentication } from './useLocalAuthentication'
