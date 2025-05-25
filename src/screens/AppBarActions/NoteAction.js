@@ -11,11 +11,11 @@ import { ROUTES } from '@/constants'
 export function NoteAction() {
     const { colors } = useTheme()
     const { t } = useTranslation()
-    const { replace, setParams } = useRouter()
+    const { replace } = useRouter()
     const { slug } = useLocalSearchParams()
 
-    const { markdown: active } = useMarkdown()
-    const [markdown, setMarkdown] = useState(active)
+    const { hasMarkdown, setHasMarkdown } = useMarkdown()
+    const toggleMarkdown = () => setHasMarkdown(!hasMarkdown)
 
     const { pinned, updatePinned } = useUtils()
     const [isPinned, setIsPinned] = useState(pinned.has(slug))
@@ -25,11 +25,6 @@ export function NoteAction() {
     const { ref, onOpen, onClose } = useBottomSheet()
 
     const goToHome = () => replace(ROUTES.HOME)
-
-    const toggleMarkdown = () => {
-        setParams({ md: !markdown })
-        setMarkdown(!markdown)
-    }
 
     const toggleKeep = () => {
         if (pinned.has(slug)) {
@@ -66,7 +61,7 @@ export function NoteAction() {
                         animated={false}
                         onPress={toggleMarkdown}
                         icon={() => (
-                            markdown
+                            hasMarkdown
                                 ? <MarkdownFilled {...iconProps} />
                                 : <Markdown {...iconProps} />
                         )}

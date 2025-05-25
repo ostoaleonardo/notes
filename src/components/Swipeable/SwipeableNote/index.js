@@ -3,19 +3,20 @@ import { Image, Pressable, StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { SwipeableCard } from '../SwipeableCard'
 import { Typography } from '../../Typography'
+import { MarkdownContainer } from '../../Markdown'
 import { ListItemPreview } from './ListItemPreview'
 import { PinAction } from '../Actions/PinAction'
 import { Skeleton } from './Skeleton'
-import { useLocalAuthentication } from '@/hooks'
+import { useLocalAuthentication, useMarkdown } from '@/hooks'
 import { getDimensions } from '@/utils'
 import { Lock } from '@/icons'
 import { ROUTES } from '@/constants'
-import { MarkdownContainer } from '@/components/Markdown'
 
 export function SwipeableNote({ data, isOpen, onOpen, onDelete, onPin }) {
     const { colors } = useTheme()
     const { hasBiometrics } = useLocalAuthentication()
-    const { id, title, note, images, list, password, biometrics } = data
+    const { markdown: enableMarkdown } = useMarkdown()
+    const { id, title, note, images, list, password, biometrics, markdown } = data
 
     const hasImages = images && images.length > 0
     const hasList = list && list.items && list.items.length > 0
@@ -76,10 +77,19 @@ export function SwipeableNote({ data, isOpen, onOpen, onDelete, onPin }) {
                     )}
 
                     {!isLocked && note && (
-                        <MarkdownContainer size={10}>
-                            {note}
-                        </MarkdownContainer>
+                        <>
+                            {enableMarkdown && markdown ? (
+                                <MarkdownContainer size={10}>
+                                    {note}
+                                </MarkdownContainer>
+                            ) : (
+                                <Typography>
+                                    {note}
+                                </Typography>
+                            )}
+                        </>
                     )}
+
 
                     {!isLocked && hasList && (
                         <View style={{ width: '100%' }}>

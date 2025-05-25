@@ -7,14 +7,15 @@ import ImageView from 'react-native-image-viewing'
 import { NestableScrollContainer } from 'react-native-draggable-flatlist'
 import { LargeInput, MarkdownEditor, Section } from '@/components'
 import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, ImageCarousel, List, MarkdownControls } from '@/screens'
-import { useBottomSheet, useMarkdown, useNotes } from '@/hooks'
+import { useBottomSheet, useMarkdown, useNotes, useUtils } from '@/hooks'
 import { getDate } from '@/utils'
 import { DEFAULT_LIST, DEFAULT_NOTE_CATEGORIES } from '@/constants'
 
 export default function Note() {
     const { t } = useTranslation()
     const { saveNote, updateNote } = useNotes()
-    const { markdown } = useMarkdown()
+    const { markdown, setHasMarkdown } = useMarkdown()
+    const { filter } = useUtils()
     const { md } = useLocalSearchParams()
 
     const [isSaved, setIsSaved] = useState(false)
@@ -23,7 +24,7 @@ export default function Note() {
     const [id, setId] = useState(randomUUID())
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
-    const [categories, setCategories] = useState(DEFAULT_NOTE_CATEGORIES)
+    const [categories, setCategories] = useState(filter ? Array.from(filter) : DEFAULT_NOTE_CATEGORIES)
     const [images, setImages] = useState([])
     const [list, setList] = useState(DEFAULT_LIST)
 
@@ -34,7 +35,10 @@ export default function Note() {
 
     const [isMarkdown, setIsMarkdown] = useState(markdown)
     const [isEditing, setIsEditing] = useState(true)
+    const [markdownAction, setMarkdownAction] = useState('')
+
     const onEditMarkdown = () => setIsEditing(!isEditing)
+    const onRunAction = (action) => setMarkdownAction(action)
 
     const [galleryIndex, setGalleryIndex] = useState(0)
     const [isGalleryVisible, setIsGalleryVisible] = useState(false)
@@ -58,6 +62,7 @@ export default function Note() {
     )
 
     useEffect(() => {
+        setHasMarkdown(markdown)
         if (firstRender) return
 
         const timer = setTimeout(() => {
@@ -68,6 +73,7 @@ export default function Note() {
                 categories,
                 images,
                 list,
+                markdown: isMarkdown,
                 password,
                 biometrics,
                 createdAt
@@ -98,6 +104,7 @@ export default function Note() {
         categories,
         images,
         list,
+        isMarkdown,
         password,
         biometrics
     ])
@@ -184,9 +191,12 @@ export default function Note() {
                         >
                             <MarkdownEditor
                                 value={note}
+                                setValue={setNote}
                                 onChangeText={setNote}
                                 isEditing={isEditing}
                                 isMarkdown={isMarkdown}
+                                action={markdownAction}
+                                setAction={setMarkdownAction}
                             />
                         </Section>
 
@@ -216,7 +226,8 @@ export default function Note() {
             {isMarkdown && (
                 <MarkdownControls
                     isEditing={isEditing}
-                    onToggle={onEditMarkdown}
+                    onRunAction={onRunAction}
+                    onEditMarkdown={onEditMarkdown}
                 />
             )}
             <BottomOptionsBar

@@ -4,13 +4,22 @@ import { useStorage } from './useStorage'
 import { STORAGE_KEYS } from '@/constants'
 
 export const useMarkdown = () => {
-    const { markdown, setMarkdown, hasMarkdown, setHasMarkdown } = useContext(UtilsContext)
+    const {
+        markdown, setMarkdown,
+        hasMarkdown, setHasMarkdown
+    } = useContext(UtilsContext)
+
     const { setItem } = useStorage()
 
-    const toggleMarkdown = async (md) => {
-        setMarkdown(md)
-        setItem(STORAGE_KEYS.MARKDOWN, JSON.stringify(md))
+    const toggleMarkdown = async (markdown) => {
+        setMarkdown(markdown)
+        setItem(STORAGE_KEYS.MARKDOWN, JSON.stringify(markdown))
     }
 
-    return { markdown, toggleMarkdown, hasMarkdown, setHasMarkdown }
+    return {
+        markdown,
+        toggleMarkdown,
+        hasMarkdown,
+        setHasMarkdown
+    }
 }

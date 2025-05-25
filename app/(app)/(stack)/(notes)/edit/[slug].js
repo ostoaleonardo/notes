@@ -15,8 +15,7 @@ export default function EditNote() {
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
     const { getNote, updateNote } = useNotes()
-    const { markdown } = useMarkdown()
-    const { md } = useLocalSearchParams()
+    const { hasMarkdown, setHasMarkdown } = useMarkdown()
 
     const [firstRender, setFirstRender] = useState(true)
 
@@ -34,7 +33,6 @@ export default function EditNote() {
     const [hasPassword, setHasPassword] = useState(false)
     const [biometrics, setBiometrics] = useState(false)
 
-    const [isMarkdown, setIsMarkdown] = useState(markdown)
     const [isEditing, setIsEditing] = useState(false)
     const [markdownAction, setMarkdownAction] = useState('')
 
@@ -70,6 +68,7 @@ export default function EditNote() {
             categories = ['all'],
             images = [],
             list = DEFAULT_LIST,
+            markdown = false,
             createdAt = Date.now(),
             updatedAt = '',
             biometrics = false,
@@ -81,6 +80,7 @@ export default function EditNote() {
         setCategories(categories)
         setImages(images)
         setList(list)
+        setHasMarkdown(markdown)
         setCreatedAt(createdAt)
         setUpdatedAt(updatedAt)
         setBiometrics(biometrics)
@@ -108,6 +108,7 @@ export default function EditNote() {
                 categories,
                 images,
                 list,
+                markdown: hasMarkdown,
                 password: newPassword || currentPassword,
                 biometrics,
                 createdAt
@@ -126,16 +127,11 @@ export default function EditNote() {
         categories,
         images,
         list,
+        hasMarkdown,
         currentPassword,
         newPassword,
         biometrics
     ])
-
-    useEffect(() => {
-        if (md !== undefined) {
-            setIsMarkdown(md === 'true')
-        }
-    }, [md])
 
     const handleRemovePassword = () => {
         setHasPassword(false)
@@ -226,7 +222,7 @@ export default function EditNote() {
                                 value={note}
                                 setValue={setNote}
                                 isEditing={isEditing}
-                                isMarkdown={isMarkdown}
+                                isMarkdown={hasMarkdown}
                                 action={markdownAction}
                                 setAction={setMarkdownAction}
                             />
@@ -255,7 +251,7 @@ export default function EditNote() {
                 </View>
             </NestableScrollContainer>
 
-            {isMarkdown && (
+            {hasMarkdown && (
                 <MarkdownControls
                     isEditing={isEditing}
                     onRunAction={onRunAction}
