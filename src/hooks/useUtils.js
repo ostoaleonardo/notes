@@ -4,7 +4,12 @@ import { useStorage } from './useStorage'
 import { STORAGE_KEYS } from '@/constants'
 
 export const useUtils = () => {
-    const { pinned, setPinned, sort, setSort } = useContext(UtilsContext)
+    const {
+        pinned, setPinned,
+        sort, setSort,
+        filter, setFilter
+    } = useContext(UtilsContext)
+
     const { setItem } = useStorage()
 
     const updatePinned = (pinned) => {
@@ -23,10 +28,27 @@ export const useUtils = () => {
         )
     }
 
+    const onFilter = (id) => {
+        if (id === 'all') {
+            setFilter(new Set())
+            return
+        }
+
+        if (filter.has(id)) {
+            filter.delete(id)
+        } else {
+            filter.add(id)
+        }
+
+        setFilter(new Set(filter))
+    }
+
     return {
         pinned,
         sort,
+        filter,
         updatePinned,
-        updateSort
+        updateSort,
+        onFilter
     }
 }
