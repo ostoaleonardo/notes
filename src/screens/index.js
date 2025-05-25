@@ -25,7 +25,8 @@ export {
     DeleteNote,
     Categories,
     AddPassword,
-    UpdatePassword
+    UpdatePassword,
+    MarkdownTutorial
 } from './Modals'
 
 // Dialogs

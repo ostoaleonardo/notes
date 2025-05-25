@@ -82,5 +82,6 @@ export { SnackBar } from './SnackBar'
 // Markdown
 export {
     MarkdownContainer,
-    MarkdownEditor
+    MarkdownEditor,
+    MarkdownPreview
 } from './Markdown'
