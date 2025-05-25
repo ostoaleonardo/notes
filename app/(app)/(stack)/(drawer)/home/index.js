@@ -1,41 +1,44 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { FloatingButton } from '@/components'
-import { NotesContainer, FilterCarousel, DeleteNote } from '@/screens'
-import { useBottomSheet, useNotes, useUtils } from '@/hooks'
-import { ROUTES } from '@/constants'
+import { NotesContainer, FilterCarousel, DeleteNote, MarkdownTutorial } from '@/screens'
+import { useBottomSheet, useNotes, useStorage, useUtils } from '@/hooks'
+import { ROUTES, STORAGE_KEYS } from '@/constants'
 
 export default function App() {
     const { t } = useTranslation()
     const { deleteNote } = useNotes()
-    const { pinned, updatePinned } = useUtils()
-    const { ref, onOpen, onClose } = useBottomSheet()
+    const { getItem, setItem } = useStorage()
+    const { filter, onFilter, pinned, updatePinned } = useUtils()
 
-    const [filter, setFilter] = useState(new Set())
     const [selectedNote, setSelectedNote] = useState(null)
 
-    const onFilter = (id) => {
-        if (id === 'all') {
-            setFilter(new Set())
-            return
-        }
+    const {
+        ref: deleteBottomRef,
+        onOpen: onOpenDelete,
+        onClose: onCloseDelete
+    } = useBottomSheet()
 
-        if (filter.has(id)) {
-            filter.delete(id)
-        } else {
-            filter.add(id)
-        }
+    const {
+        ref: markdownBottomRef,
+        onOpen: onOpenMarkdown,
+        onClose: onCloseMarkdown
+    } = useBottomSheet()
 
-        setFilter(new Set(filter))
-    }
+    useEffect(() => {
+        (async () => {
+            const markdown = await getItem(STORAGE_KEYS.MARKDOWN_TUTORIAL) || 'true'
+            if (markdown === 'true') onOpenMarkdown()
+        })()
+    }, [])
 
     const onPin = (id) => {
         if (pinned.has(id)) {
             pinned.delete(id)
         } else {
             pinned.add(id)
-            onClose()
+            onCloseDelete()
         }
 
         updatePinned(new Set(pinned))
@@ -44,10 +47,15 @@ export default function App() {
     const onDelete = (id, isLocked) => {
         if (isLocked) {
             setSelectedNote(id)
-            onOpen()
+            onOpenDelete()
         } else {
             deleteNote(id)
         }
+    }
+
+    const onCloseMarkDownSheet = async () => {
+        onCloseMarkdown()
+        await setItem(STORAGE_KEYS.MARKDOWN_TUTORIAL, 'false')
     }
 
     return (
@@ -71,12 +79,20 @@ export default function App() {
                 label={t('button.addNote')}
                 href={ROUTES.ADD_NOTE}
             />
+
             <DeleteNote
-                ref={ref}
+                ref={deleteBottomRef}
                 id={selectedNote}
                 onClose={() => {
                     setSelectedNote(null)
-                    onClose()
+                    onCloseDelete()
+                }}
+            />
+            <MarkdownTutorial
+                ref={markdownBottomRef}
+                onClose={async () => {
+                    onCloseMarkDownSheet()
+                    await setItem(STORAGE_KEYS.MARKDOWN_TUTORIAL, 'false')
                 }}
             />
         </View>
