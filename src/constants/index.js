@@ -13,3 +13,4 @@ export {
 export { FEEDBACK_TYPES } from './feedbackTypes'
 export { STORAGE_KEYS } from './storageKeys'
 export { LINKS } from './links'
+export { MARKDOWN } from './markdown'
