@@ -12,15 +12,12 @@ export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
     const iconLightProps = { color: onBackground }
 
     return (
-        <AnimatedView
-            entering={FadeInRight}
-            exiting={FadeOutRight}
-            style={styles.container}
+        <View
+            style={{
+                ...styles.container,
+                left: isEditing ? 16 : 'auto'
+            }}
         >
-            {!isEditing && (
-                <View style={{ flex: 1 }} />
-            )}
-
             {isEditing && (
                 <AnimatedView
                     entering={FadeInRight}
@@ -87,31 +84,34 @@ export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
                 </AnimatedView>
             )}
 
-            <FAB
-                mode='outlined'
-                animated={false}
-                onPress={onEditMarkdown}
-                style={{ backgroundColor: primary }}
-                icon={() => (
-                    isEditing
-                        ? <Eye {...iconDarkProps} />
-                        : <Edit {...iconDarkProps} />
-                )}
-            />
-        </AnimatedView>
+            <AnimatedView
+                entering={FadeInRight}
+                exiting={FadeOutRight}
+            >
+                <FAB
+                    mode='flat'
+                    animated={false}
+                    onPress={onEditMarkdown}
+                    style={{ backgroundColor: primary }}
+                    icon={() => (
+                        isEditing
+                            ? <Eye {...iconDarkProps} />
+                            : <Edit {...iconDarkProps} />
+                    )}
+                />
+            </AnimatedView>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
-        flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        gap: 16,
-        left: 16,
+        bottom: 64,
         right: 16,
-        bottom: 64
+        gap: 16
     },
     scroll: {
         flex: 1

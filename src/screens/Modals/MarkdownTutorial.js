@@ -4,7 +4,7 @@ import { FlatList } from 'react-native-gesture-handler'
 import { MarkdownContainer, MarkdownPreview, ModalSheet, Typography } from '@/components'
 import { MARKDOWN } from '@/constants'
 
-export const MarkdownTutorial = forwardRef(({ onClose }, ref) => {
+export const MarkdownTutorial = forwardRef(({ ...props }, ref) => {
 
     const renderItems = useCallback(({ descrption, example, height }) => (
         <View style={styles.item}>
@@ -21,9 +21,9 @@ export const MarkdownTutorial = forwardRef(({ onClose }, ref) => {
     return (
         <ModalSheet
             ref={ref}
-            onDismiss={onClose}
             snapPoints={['95%']}
             contentContainerStyle={styles.container}
+            {...props}
         >
             <MarkdownContainer>
                 ## How to use Markdown

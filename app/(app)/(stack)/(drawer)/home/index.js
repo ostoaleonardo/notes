@@ -90,9 +90,9 @@ export default function App() {
             />
             <MarkdownTutorial
                 ref={markdownBottomRef}
-                onClose={async () => {
-                    onCloseMarkDownSheet()
+                onDismiss={async () => {
                     await setItem(STORAGE_KEYS.MARKDOWN_TUTORIAL, 'false')
+                    onCloseMarkDownSheet()
                 }}
             />
         </View>
