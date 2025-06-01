@@ -6,6 +6,7 @@ export default {
   orientation: 'portrait',
   icon: './assets/icon.png',
   userInterfaceStyle: 'automatic',
+  newArchEnabled: true,
   android: {
     splash: {
       image: './assets/light-splash.png',
@@ -21,7 +22,8 @@ export default {
       foregroundImage: './assets/adaptive-icon.png',
       backgroundColor: '#ffffff'
     },
-    package: 'com.monospace.notes',
+    edgeToEdgeEnabled: true,
+    package: 'com.monospace.notes.dev',
     versionCode: 9
   },
   plugins: [
