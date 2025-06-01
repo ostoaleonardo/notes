@@ -24,7 +24,7 @@ export default function DrawerLayout() {
                     backgroundColor: colors.surface
                 },
 
-                sceneContainerStyle: {
+                sceneStyle: {
                     backgroundColor: colors.background
                 }
             }}
