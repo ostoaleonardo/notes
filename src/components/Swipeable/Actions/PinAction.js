@@ -1,5 +1,6 @@
-import { Pressable, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
+import { Pressable } from 'react-native-gesture-handler'
 import { Keep } from '@/icons'
 
 export function PinAction({ onPress }) {

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { StyleSheet } from 'react-native'
-import { Swipeable } from 'react-native-gesture-handler'
+import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { FadeInUp, SlideOutLeft } from 'react-native-reanimated'
 import { AnimatedView } from '../../Animated'
 import { DeleteAction } from '../Actions'
