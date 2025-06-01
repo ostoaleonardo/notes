@@ -25,6 +25,7 @@ export const Languages = forwardRef(({ onClose }, ref) => {
                 <FlatList
                     data={LANGUAGES}
                     keyExtractor={({ code }) => code}
+                    showsVerticalScrollIndicator={false}
                     ItemSeparatorComponent={<Separator style={{ marginHorizontal: 24 }} />}
                     ListFooterComponent={() => <View style={{ height: 64 }} />}
                     renderItem={({ item }) => (
