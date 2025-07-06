@@ -35,7 +35,7 @@
 		"i18next": "^23.15.1",
 		"react": "19.0.0",
 		"react-i18next": "^15.0.2",
-		"react-native": "0.79.2",
+		"react-native": "0.79.5",
 		"react-native-animatable": "^1.4.0",
 		"react-native-draggable-flatlist": "^4.0.1",
 		"react-native-gesture-handler": "~2.24.0",
