@@ -3,7 +3,7 @@ import { MarkdownTextInput, parseExpensiMark } from '@expensify/react-native-liv
 import { useTheme } from 'react-native-paper'
 import { FONTS } from '@/constants'
 
-export function MarkdownInput({ value, setValue, placeholder, readOnly, size = 13 }) {
+export function MarkdownInput({ value, setValue, size = 13, ...props }) {
     const { colors } = useTheme()
     const { background, onBackground, primary, tertiary } = colors
 
@@ -61,10 +61,9 @@ export function MarkdownInput({ value, setValue, placeholder, readOnly, size = 1
             onChangeText={setValue}
             parser={parseExpensiMark}
             markdownStyle={markdownStyle}
-            placeholder={placeholder}
             style={styles.markdown}
-            readOnly={readOnly}
             {...inputPros}
+            {...props}
         />
     )
 }

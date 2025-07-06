@@ -50,8 +50,6 @@ export function BottomOptionsBar({ onAddImage, onListType, hasPassword, onOpenPa
 
 const styles = StyleSheet.create({
     container: {
-        position: 'absolute',
-        bottom: 0,
         width: '100%',
         paddingHorizontal: 8,
         flexDirection: 'row',

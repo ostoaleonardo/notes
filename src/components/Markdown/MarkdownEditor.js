@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { MarkdownContainer } from './MarkdownContainer'
+import { MarkdownInput } from './MarkdownInput'
 import { TextArea } from '../Input'
 import { useMarkdownShortcuts } from '@/hooks'
 
@@ -12,15 +12,9 @@ export function MarkdownEditor({ value, setValue, isEditing, isMarkdown, action,
         onBold,
         onItalic,
         onStrikethrough,
+        onCode,
         onFormatH1,
-        onFormatH2,
-        onFormatH3,
-        onFormatH4,
         onQuote,
-        onHorizontalRule,
-        onImage,
-        onLink,
-        onTable,
         onSelectionChange
     } = useMarkdownShortcuts(
         value, setValue,
@@ -31,15 +25,9 @@ export function MarkdownEditor({ value, setValue, isEditing, isMarkdown, action,
         bold: onBold,
         italic: onItalic,
         strike: onStrikethrough,
+        code: onCode,
         h1: onFormatH1,
-        h2: onFormatH2,
-        h3: onFormatH3,
-        h4: onFormatH4,
-        quote: onQuote,
-        hrule: onHorizontalRule,
-        image: onImage,
-        link: onLink,
-        table: onTable
+        quote: onQuote
     }
 
     useEffect(() => {
@@ -50,17 +38,20 @@ export function MarkdownEditor({ value, setValue, isEditing, isMarkdown, action,
     }, [action])
 
     return (
-        !isMarkdown || isEditing ? (
+        isMarkdown ? (
+            <MarkdownInput
+                value={value}
+                setValue={setValue}
+                readOnly={!isEditing}
+                placeholder={t('placeholder.note')}
+                onSelectionChange={onSelectionChange}
+            />
+        ) : (
             <TextArea
                 value={value}
                 onChangeText={setValue}
-                onSelectionChange={onSelectionChange}
                 placeholder={t('placeholder.note')}
             />
-        ) : (
-            <MarkdownContainer>
-                {value}
-            </MarkdownContainer>
         )
     )
 }

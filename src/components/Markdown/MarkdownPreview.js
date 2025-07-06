@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { IconButton, useTheme } from 'react-native-paper'
-import { MarkdownContainer } from './MarkdownContainer'
+import { MarkdownInput } from './MarkdownInput'
 import { Typography } from '../Typography'
 import { Eye, Markdown } from '@/icons'
 
@@ -49,9 +49,9 @@ export function MarkdownPreview({ value, height }) {
                 />
             </View>
             {showMarkdown ? (
-                <MarkdownContainer>
+                <MarkdownInput>
                     {value}
-                </MarkdownContainer>
+                </MarkdownInput>
             ) : (
                 <Typography>
                     {value}

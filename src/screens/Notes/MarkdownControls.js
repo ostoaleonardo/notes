@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native'
 import { FAB, IconButton, useTheme } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
 import { AnimatedView, Scroll } from '@/components'
-import { Edit, Eye, FormaQuote, FormatBold, FormatH1, FormatH2, FormatH3, FormatH4, FormatItalic, FormatStrikethrough, HorizontalRule, Link, Picture, Table } from '@/icons'
+import { Code, Edit, Eye, FormaQuote, FormatBold, FormatH1, FormatItalic, FormatStrikethrough, Link } from '@/icons'
 
 export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
     const { colors } = useTheme()
@@ -12,12 +12,7 @@ export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
     const iconLightProps = { color: onBackground }
 
     return (
-        <View
-            style={{
-                ...styles.container,
-                left: isEditing ? 16 : 'auto'
-            }}
-        >
+        <View style={styles.container}>
             {isEditing && (
                 <AnimatedView
                     entering={FadeInRight}
@@ -49,36 +44,12 @@ export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
                             icon={() => <FormatH1 {...iconLightProps} />}
                         />
                         <IconButton
-                            onPress={() => onRunAction('h2')}
-                            icon={() => <FormatH2 {...iconLightProps} />}
-                        />
-                        <IconButton
-                            onPress={() => onRunAction('h3')}
-                            icon={() => <FormatH3 {...iconLightProps} />}
-                        />
-                        <IconButton
-                            onPress={() => onRunAction('h4')}
-                            icon={() => <FormatH4 {...iconLightProps} />}
-                        />
-                        <IconButton
                             onPress={() => onRunAction('quote')}
                             icon={() => <FormaQuote {...iconLightProps} />}
                         />
                         <IconButton
-                            onPress={() => onRunAction('hrule')}
-                            icon={() => <HorizontalRule {...iconLightProps} />}
-                        />
-                        <IconButton
-                            onPress={() => onRunAction('image')}
-                            icon={() => <Picture {...iconLightProps} />}
-                        />
-                        <IconButton
-                            onPress={() => onRunAction('link')}
-                            icon={() => <Link {...iconLightProps} />}
-                        />
-                        <IconButton
-                            onPress={() => onRunAction('table')}
-                            icon={() => <Table {...iconLightProps} />}
+                            onPress={() => onRunAction('code')}
+                            icon={() => <Code {...iconLightProps} />}
                         />
                     </Scroll>
                 </AnimatedView>
@@ -106,12 +77,10 @@ export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
 
 const styles = StyleSheet.create({
     container: {
-        position: 'absolute',
+        paddingHorizontal: 16,
+        gap: 16,
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        bottom: 64,
-        right: 16,
-        gap: 16
+        justifyContent: 'flex-end'
     },
     scroll: {
         flex: 1
@@ -121,6 +90,6 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     }
 })

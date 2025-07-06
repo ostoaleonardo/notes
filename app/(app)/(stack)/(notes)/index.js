@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { randomUUID } from 'expo-crypto'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router'
-import { StyleSheet, View } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
 import { NestableScrollContainer } from 'react-native-draggable-flatlist'
 import { LargeInput, MarkdownEditor, Section } from '@/components'
-import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, ImageCarousel, List, MarkdownControls } from '@/screens'
+import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, ContainerFooter, ImageCarousel, List, MarkdownControls } from '@/screens'
 import { useBottomSheet, useMarkdown, useNotes, useUtils } from '@/hooks'
 import { getDate } from '@/utils'
 import { DEFAULT_LIST, DEFAULT_NOTE_CATEGORIES } from '@/constants'
@@ -42,6 +42,7 @@ export default function Note() {
 
     const [galleryIndex, setGalleryIndex] = useState(0)
     const [isGalleryVisible, setIsGalleryVisible] = useState(false)
+    const hasImages = images && images.length > 0
 
     const {
         ref: categoriesBottomRef,
@@ -157,87 +158,92 @@ export default function Note() {
 
     return (
         <>
-            <NestableScrollContainer
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.scrollContainer}
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior='height'
             >
-                <View style={styles.contentContainer}>
-                    <View>
-                        <Section
-                            containerStyle={{ paddingHorizontal: 24 }}
-                        >
-                            <LargeInput
-                                bold
-                                multiline
-                                value={title}
-                                onChangeText={setTitle}
-                                placeholder={t('placeholder.title')}
-                            />
-                        </Section>
+                <NestableScrollContainer
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={styles.scrollContainer}
+                >
+                    <Section
+                        containerStyle={{ paddingHorizontal: 24 }}
+                    >
+                        <LargeInput
+                            bold
+                            multiline
+                            value={title}
+                            onChangeText={setTitle}
+                            placeholder={t('placeholder.title')}
+                        />
+                    </Section>
 
+                    <Section
+                        title={t('title.categories')}
+                        containerStyle={{ paddingVertical: 24 }}
+                    >
+                        <CategoryCarousel
+                            selectedCategories={categories}
+                            onCategories={onCategories}
+                            onCategoriesModal={onOpenCategories}
+                        />
+                    </Section>
+
+                    <Section
+                        containerStyle={{ paddingHorizontal: 24 }}
+                    >
+                        <MarkdownEditor
+                            value={note}
+                            setValue={setNote}
+                            onChangeText={setNote}
+                            isEditing={isEditing}
+                            isMarkdown={isMarkdown}
+                            action={markdownAction}
+                            setAction={setMarkdownAction}
+                        />
+                    </Section>
+
+                    {list.items.length > 0 && (
                         <Section
-                            title={t('title.categories')}
                             containerStyle={{ paddingVertical: 24 }}
                         >
-                            <CategoryCarousel
-                                selectedCategories={categories}
-                                onCategories={onCategories}
-                                onCategoriesModal={onOpenCategories}
+                            <List
+                                list={list}
+                                setList={setList}
+                                onAddItem={handleAddItem}
                             />
                         </Section>
-
-                        <Section
-                            containerStyle={{ paddingHorizontal: 24 }}
-                        >
-                            <MarkdownEditor
-                                value={note}
-                                setValue={setNote}
-                                onChangeText={setNote}
-                                isEditing={isEditing}
-                                isMarkdown={isMarkdown}
-                                action={markdownAction}
-                                setAction={setMarkdownAction}
-                            />
-                        </Section>
-
-                        {list.items.length > 0 && (
-                            <Section
-                                containerStyle={{ paddingVertical: 24 }}
-                            >
-                                <List
-                                    list={list}
-                                    setList={setList}
-                                    onAddItem={handleAddItem}
-                                />
-                            </Section>
-                        )}
-                    </View>
-
-                    {images.length > 0 && (
-                        <ImageCarousel
-                            images={images}
-                            setImages={setImages}
-                            onOpenImage={handleOpenImage}
-                        />
                     )}
-                </View>
-            </NestableScrollContainer>
+                </NestableScrollContainer>
+            </KeyboardAvoidingView>
 
-            {isMarkdown && (
-                <MarkdownControls
-                    isEditing={isEditing}
-                    onRunAction={onRunAction}
-                    onEditMarkdown={onEditMarkdown}
-                />
-            )}
-            <BottomOptionsBar
-                onAddImage={handleAddImage}
-                onListType={handleListType}
-                hasPassword={!!password}
-                onOpenPassword={onOpenPassword}
-                isEditing={isEditing}
-                onEditMarkdown={onEditMarkdown}
-            />
+            <ContainerFooter
+                footer={
+                    <BottomOptionsBar
+                        onAddImage={handleAddImage}
+                        onListType={handleListType}
+                        hasPassword={!!password}
+                        onOpenPassword={onOpenPassword}
+                        isEditing={isEditing}
+                        onEditMarkdown={onEditMarkdown}
+                    />
+                }
+            >
+                {hasImages > 0 && (
+                    <ImageCarousel
+                        images={images}
+                        setImages={setImages}
+                        onOpenImage={handleOpenImage}
+                    />
+                )}
+                {isMarkdown && (
+                    <MarkdownControls
+                        isEditing={isEditing}
+                        onRunAction={onRunAction}
+                        onEditMarkdown={onEditMarkdown}
+                    />
+                )}
+            </ContainerFooter>
 
             <Categories
                 ref={categoriesBottomRef}
@@ -252,12 +258,15 @@ export default function Note() {
                 biometrics={biometrics}
                 setBiometrics={setBiometrics}
             />
-            <ImageView
-                imageIndex={galleryIndex}
-                visible={isGalleryVisible}
-                images={images.map((url) => ({ uri: url }))}
-                onRequestClose={() => setIsGalleryVisible(false)}
-            />
+
+            {hasImages && (
+                <ImageView
+                    imageIndex={galleryIndex}
+                    visible={isGalleryVisible}
+                    images={images.map((url) => ({ uri: url }))}
+                    onRequestClose={() => setIsGalleryVisible(false)}
+                />
+            )}
         </>
     )
 }

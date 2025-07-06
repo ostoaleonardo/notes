@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 import { randomUUID } from 'expo-crypto'
-import { StyleSheet, View } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
 import { NestableScrollContainer } from 'react-native-draggable-flatlist'
 import { LargeInput, MarkdownEditor, Section } from '@/components'
-import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, List, DateNote, ImageCarousel, UpdatePassword, MarkdownControls } from '@/screens'
+import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, List, DateNote, ImageCarousel, UpdatePassword, MarkdownControls, ContainerFooter } from '@/screens'
 import { useBottomSheet, useMarkdown, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
 import { DEFAULT_LIST } from '@/constants'
@@ -181,93 +181,98 @@ export default function EditNote() {
 
     return (
         <>
-            <NestableScrollContainer
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.scrollContainer}
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior='height'
             >
-                <View style={styles.contentContainer}>
-                    <View>
-                        <Section
-                            containerStyle={{ paddingHorizontal: 24 }}
-                        >
-                            <LargeInput
-                                bold
-                                multiline
-                                value={title}
-                                onChangeText={setTitle}
-                                placeholder={t('placeholder.title')}
-                            />
-                        </Section>
-
-                        <DateNote
-                            createdAt={createdAt}
-                            updatedAt={updatedAt}
+                <NestableScrollContainer
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={styles.scrollContainer}
+                >
+                    <Section
+                        containerStyle={{ paddingHorizontal: 24 }}
+                    >
+                        <LargeInput
+                            bold
+                            multiline
+                            value={title}
+                            onChangeText={setTitle}
+                            placeholder={t('placeholder.title')}
                         />
+                    </Section>
 
+                    <DateNote
+                        createdAt={createdAt}
+                        updatedAt={updatedAt}
+                    />
+
+                    <Section
+                        title={t('title.categories')}
+                        containerStyle={{ paddingVertical: 24 }}
+                    >
+                        <CategoryCarousel
+                            selectedCategories={categories}
+                            onCategories={onCategories}
+                            onCategoriesModal={onOpenCategories}
+                        />
+                    </Section>
+
+                    <Section
+                        contentStyle={{ paddingHorizontal: 24 }}
+                    >
+                        <MarkdownEditor
+                            value={note}
+                            setValue={setNote}
+                            isEditing={isEditing}
+                            isMarkdown={hasMarkdown}
+                            action={markdownAction}
+                            setAction={setMarkdownAction}
+                        />
+                    </Section>
+
+                    {list && list.items.length > 0 && (
                         <Section
-                            title={t('title.categories')}
                             containerStyle={{ paddingVertical: 24 }}
                         >
-                            <CategoryCarousel
-                                selectedCategories={categories}
-                                onCategories={onCategories}
-                                onCategoriesModal={onOpenCategories}
+                            <List
+                                list={list}
+                                setList={setList}
+                                onAddItem={handleAddItem}
                             />
                         </Section>
-
-                        <Section
-                            contentStyle={{ paddingHorizontal: 24 }}
-                        >
-                            <MarkdownEditor
-                                value={note}
-                                setValue={setNote}
-                                isEditing={isEditing}
-                                isMarkdown={hasMarkdown}
-                                action={markdownAction}
-                                setAction={setMarkdownAction}
-                            />
-                        </Section>
-
-                        {list && list.items.length > 0 && (
-                            <Section
-                                containerStyle={{ paddingVertical: 24 }}
-                            >
-                                <List
-                                    list={list}
-                                    setList={setList}
-                                    onAddItem={handleAddItem}
-                                />
-                            </Section>
-                        )}
-                    </View>
-
-                    {hasImages && (
-                        <ImageCarousel
-                            images={images}
-                            setImages={setImages}
-                            onOpenImage={handleOpenImage}
-                        />
                     )}
-                </View>
-            </NestableScrollContainer>
+                </NestableScrollContainer>
+            </KeyboardAvoidingView>
 
-            {hasMarkdown && (
-                <MarkdownControls
-                    isEditing={isEditing}
-                    onRunAction={onRunAction}
-                    onEditMarkdown={onEditMarkdown}
-                />
-            )}
-            <BottomOptionsBar
-                onAddImage={handleAddImage}
-                onListType={handleListType}
-                hasPassword={hasPassword}
-                onOpenPassword={
-                    hasPassword
-                        ? onOpenUpdatePassword
-                        : onOpenPassword
+            <ContainerFooter
+                footer={
+                    <BottomOptionsBar
+                        onAddImage={handleAddImage}
+                        onListType={handleListType}
+                        hasPassword={hasPassword}
+                        onOpenPassword={
+                            hasPassword
+                                ? onOpenUpdatePassword
+                                : onOpenPassword
+                        }
+                    />
                 }
-            />
+            >
+                {hasImages && (
+                    <ImageCarousel
+                        images={images}
+                        setImages={setImages}
+                        onOpenImage={handleOpenImage}
+                    />
+                )}
+                {hasMarkdown && (
+                    <MarkdownControls
+                        isEditing={isEditing}
+                        onRunAction={onRunAction}
+                        onEditMarkdown={onEditMarkdown}
+                    />
+                )}
+            </ContainerFooter>
 
             <Categories
                 ref={categoriesBottomRef}
@@ -308,11 +313,5 @@ const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1,
         paddingVertical: 16
-    },
-    contentContainer: {
-        flex: 1,
-        gap: 40,
-        paddingBottom: 48,
-        justifyContent: 'space-between'
     }
 })

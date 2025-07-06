@@ -16,7 +16,8 @@ export {
     CategoryCarousel,
     BottomOptionsBar,
     List,
-    MarkdownControls
+    MarkdownControls,
+    ContainerFooter
 } from './Notes'
 
 // Modals

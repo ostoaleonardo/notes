@@ -1,3 +1,4 @@
+import { View } from 'react-native'
 import { ImagePreview, Scroll } from '@/components'
 
 export function ImageCarousel({ images, setImages, onOpenImage }) {
@@ -6,26 +7,28 @@ export function ImageCarousel({ images, setImages, onOpenImage }) {
     }
 
     return (
-        <Scroll
-            horizontal
-            overScrollMode='never'
-            style={{ maxHeight: 100 }}
-            contentContainerStyle={{
-                flexGrow: 1,
-                paddingHorizontal: 24,
-                gap: 8
-            }}
-        >
-            {images.length > 0 &&
-                images.map((image, index) => (
-                    <ImagePreview
-                        key={image}
-                        image={image}
-                        openImage={() => onOpenImage(index)}
-                        removeImage={() => onRemoveImage(image)}
-                    />
-                ))
-            }
-        </Scroll>
+        <View style={{ position: 'absolute', bottom: 0 }}>
+            <Scroll
+                horizontal
+                overScrollMode='never'
+                style={{ maxHeight: 100 }}
+                contentContainerStyle={{
+                    flexGrow: 1,
+                    paddingHorizontal: 16,
+                    gap: 4
+                }}
+            >
+                {images.length > 0 &&
+                    images.map((image, index) => (
+                        <ImagePreview
+                            key={image}
+                            image={image}
+                            openImage={() => onOpenImage(index)}
+                            removeImage={() => onRemoveImage(image)}
+                        />
+                    ))
+                }
+            </Scroll>
+        </View>
     )
 }

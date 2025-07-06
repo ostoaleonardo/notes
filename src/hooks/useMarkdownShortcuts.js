@@ -39,9 +39,10 @@ export const useMarkdownShortcuts = (value, setValue, selection, setSelection) =
         }
     }
 
-    const onBold = () => onFormat('**')
+    const onBold = () => onFormat('*')
     const onItalic = () => onFormat('_')
-    const onStrikethrough = () => onFormat('~~')
+    const onStrikethrough = () => onFormat('~')
+    const onCode = () => onFormat('`')
 
     const onHeading = (level) => {
         // Gets the start of the current line
@@ -154,14 +155,8 @@ export const useMarkdownShortcuts = (value, setValue, selection, setSelection) =
         onBold,
         onItalic,
         onStrikethrough,
+        onCode,
         onFormatH1,
-        onFormatH2,
-        onFormatH3,
-        onFormatH4,
-        onQuote,
-        onHorizontalRule,
-        onImage,
-        onLink,
-        onTable
+        onQuote
     }
 }
