@@ -4,6 +4,7 @@ import { FONTS } from '@/constants'
 
 export function TextArea({ value, onChangeText, placeholder, ...props }) {
     const { colors } = useTheme()
+    const { onBackground, tertiary } = colors
 
     return (
         <View style={styles.inputContainer}>
@@ -11,16 +12,16 @@ export function TextArea({ value, onChangeText, placeholder, ...props }) {
                 {...props}
                 multiline
                 value={value}
-                style={[
-                    styles.input,
-                    { color: colors.onBackground }
-                ]}
+                style={{
+                    ...styles.input,
+                    color: onBackground
+                }}
                 placeholder={placeholder}
                 onChangeText={onChangeText}
-                cursorColor={colors.onBackground}
-                selectionHandleColor={colors.tertiary}
-                selectionColor={colors.onBackground + '33'}
-                placeholderTextColor={colors.onBackground + '66'}
+                cursorColor={onBackground}
+                selectionHandleColor={tertiary}
+                selectionColor={onBackground + '33'}
+                placeholderTextColor={onBackground + '66'}
             />
         </View>
     )

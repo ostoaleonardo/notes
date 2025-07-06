@@ -3,7 +3,7 @@ import { Image, Pressable, StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { SwipeableCard } from '../SwipeableCard'
 import { Typography } from '../../Typography'
-import { MarkdownContainer } from '../../Markdown'
+import { MarkdownInput } from '../../Markdown'
 import { ListItemPreview } from './ListItemPreview'
 import { PinAction } from '../Actions/PinAction'
 import { Skeleton } from './Skeleton'
@@ -79,9 +79,10 @@ export function SwipeableNote({ data, isOpen, onOpen, onDelete, onPin }) {
                     {!isLocked && note && (
                         <>
                             {enableMarkdown && markdown ? (
-                                <MarkdownContainer size={10}>
-                                    {note}
-                                </MarkdownContainer>
+                                <MarkdownInput
+                                    readOnly
+                                    value={note}
+                                />
                             ) : (
                                 <Typography>
                                     {note}
