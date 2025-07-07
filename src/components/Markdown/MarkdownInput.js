@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { StyleSheet } from 'react-native'
 import { MarkdownTextInput, parseExpensiMark } from '@expensify/react-native-live-markdown'
 import { useTheme } from 'react-native-paper'
@@ -15,7 +16,7 @@ export function MarkdownInput({ value, setValue, size = 13, ...props }) {
         }
     })
 
-    const markdownStyle = {
+    const markdownStyle = useMemo(() => ({
         h1: {
             fontSize: size * 1.3,
             fontFamily: FONTS.nType82Headline
@@ -38,14 +39,14 @@ export function MarkdownInput({ value, setValue, size = 13, ...props }) {
             backgroundColor: background
         },
         mentionHere: {
-            color: onBackground,
+            color: background,
             backgroundColor: tertiary
         },
         mentionUser: {
             color: background,
             backgroundColor: primary
         },
-    }
+    }), [size, colors])
 
     const inputPros = {
         cursorColor: onBackground,

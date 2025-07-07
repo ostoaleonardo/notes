@@ -3,7 +3,7 @@ import { router } from 'expo-router'
 import { Switch, useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { Section, Separator, Scroll } from '@/components'
-import { AppVersionCard, Languages, MarkdownTutorial, Option } from '@/screens'
+import { AppVersionCard, Languages, Option } from '@/screens'
 import { useBottomSheet, useMarkdown } from '@/hooks'
 import { ArrowForward, OpenInNew } from '@/icons'
 import { LINKS, ROUTES } from '@/constants'
@@ -17,12 +17,6 @@ export default function Settings() {
         ref: languagesBottomRef,
         onOpen: onOpenLanguages,
         onClose: onCloseLanguages
-    } = useBottomSheet()
-
-    const {
-        ref: markdownBottomRef,
-        onOpen: onOpenMarkdown,
-        onClose: onCloseMarkdown
     } = useBottomSheet()
 
     const onToggleMarkdown = () => toggleMarkdown(!markdown)
@@ -66,11 +60,6 @@ export default function Settings() {
                             />
                         }
                     />
-                    <Option
-                        title={t('settings.markdown.tutorial')}
-                        rightContent={<ArrowForward {...iconProps} />}
-                        onPress={onOpenMarkdown}
-                    />
                 </Section>
 
                 <Separator style={{ marginHorizontal: 24 }} />
@@ -94,10 +83,6 @@ export default function Settings() {
                 <Languages
                     ref={languagesBottomRef}
                     onClose={onCloseLanguages}
-                />
-                <MarkdownTutorial
-                    ref={markdownBottomRef}
-                    onClose={onCloseMarkdown}
                 />
             </Scroll>
         </>
