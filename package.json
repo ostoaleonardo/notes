@@ -41,7 +41,7 @@
 		"react-i18next": "^15.0.2",
 		"react-native": "0.79.5",
 		"react-native-animatable": "^1.4.0",
-		"react-native-draggable-flatlist": "^4.0.1",
+		"react-native-draggable-flatlist": "^4.0.3",
 		"react-native-gesture-handler": "~2.24.0",
 		"react-native-image-viewing": "^0.2.2",
 		"react-native-paper": "^5.12.5",
