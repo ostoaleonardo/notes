@@ -8,16 +8,6 @@ export default {
   userInterfaceStyle: 'automatic',
   newArchEnabled: true,
   android: {
-    splash: {
-      image: './assets/light-splash.png',
-      resizeMode: 'contain',
-      backgroundColor: '#d7d8d8',
-      dark: {
-        image: './assets/dark-splash.png',
-        resizeMode: 'contain',
-        backgroundColor: '#06080a'
-      }
-    },
     adaptiveIcon: {
       foregroundImage: './assets/adaptive-icon.png',
       backgroundColor: '#ffffff'
@@ -28,6 +18,20 @@ export default {
   },
   plugins: [
     'expo-router',
+    [
+      'expo-splash-screen',
+      {
+        image: './assets/adaptive-icon.png',
+        backgroundColor: '#d7d8d8',
+        resizeMode: 'contain',
+        imageWidth: 270,
+        dark: {
+          image: './assets/dark-splash.png',
+          resizeMode: 'contain',
+          backgroundColor: '#06080a'
+        }
+      }
+    ],
     'expo-font',
     'expo-localization',
     'expo-local-authentication',
