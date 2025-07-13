@@ -61,6 +61,7 @@ export const AddPassword = forwardRef(({ setPassword, biometrics, setBiometrics,
             <View style={styles.inputContainer}>
                 <Animatable.View animation={isInvalidPassword ? 'shake' : undefined}>
                     <PasswordInput
+                        modal={true}
                         password={passwordInput}
                         onChangeText={setPasswordInput}
                         onChange={() => setIsInvalidPassword(false)}

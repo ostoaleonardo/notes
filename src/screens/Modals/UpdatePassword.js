@@ -96,6 +96,7 @@ export const UpdatePassword = forwardRef(({ currentPassword, tooglePassword, onD
                     </Typography>
                     <Animatable.View animation={isWrongPassword ? 'shake' : undefined}>
                         <PasswordInput
+                            modal={true}
                             password={oldPassword}
                             onChangeText={setOldPassword}
                             onChange={() => setIsWrongPassword(false)}
@@ -115,6 +116,7 @@ export const UpdatePassword = forwardRef(({ currentPassword, tooglePassword, onD
                     </Typography>
                     <Animatable.View animation={isInvalidPassword ? 'shake' : undefined}>
                         <PasswordInput
+                            modal={true}
                             password={newPassword}
                             onChangeText={setNewPassword}
                             onChange={() => setIsInvalidPassword(false)}

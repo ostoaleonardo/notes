@@ -72,6 +72,7 @@ export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
                             onAnimationEnd={() => setIsWrongPassword(false)}
                         >
                             <PasswordInput
+                                modal={true}
                                 value={passwordInput}
                                 onChangeText={setPasswordInput}
                                 onBlur={() => setMessage('')}
