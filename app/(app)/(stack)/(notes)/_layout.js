@@ -11,13 +11,15 @@ export default function NotesLayout() {
     return (
         <Stack
             screenOptions={{
-                header: (props) => (
-                    <AppBar
+                header: (props) => {
+                    const locked = props.route.name === 'unlock/[slug]'
+
+                    return <AppBar
                         showBack
-                        rightContent={<NoteAction />}
+                        rightContent={!locked && <NoteAction />}
                         {...props}
                     />
-                ),
+                },
 
                 contentStyle: {
                     backgroundColor: colors.background
