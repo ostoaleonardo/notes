@@ -39,7 +39,7 @@ export function MarkdownInput({ value, setValue, size = 13, ...props }) {
             backgroundColor: background
         },
         mentionHere: {
-            color: background,
+            color: onBackground,
             backgroundColor: tertiary
         },
         mentionUser: {
