@@ -59,6 +59,7 @@ export const Categories = forwardRef(({ selectedCategories, onCategories, onClos
                 data={categories.slice(1)}
                 keyExtractor={({ id }) => id}
                 showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: 16 }}
                 ItemSeparatorComponent={<Separator style={{ marginHorizontal: 24 }} />}
                 renderItem={({ item }) => renderItems(item)}
                 ListEmptyComponent={() => (

@@ -312,6 +312,7 @@ export default function EditNote() {
 const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1,
+        paddingBottom: 64,
         paddingVertical: 16
     }
 })

@@ -275,11 +275,5 @@ const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1,
         paddingVertical: 16
-    },
-    contentContainer: {
-        flex: 1,
-        gap: 40,
-        paddingBottom: 48,
-        justifyContent: 'space-between'
     }
 })
