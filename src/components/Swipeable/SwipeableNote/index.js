@@ -42,6 +42,7 @@ export function SwipeableNote({ data, isOpen, onOpen, onDelete, onPin }) {
         >
             <Pressable
                 onPress={goToEdit}
+                pointerEvents='box-only'
                 style={{
                     ...styles.container,
                     backgroundColor: colors.surface
