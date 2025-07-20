@@ -103,6 +103,7 @@ export default function Note() {
         categories,
         images,
         list,
+        hasMarkdown,
         password,
         biometrics
     ])
