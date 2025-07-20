@@ -26,6 +26,7 @@ export function FilterCarousel({ filter, onFilter }) {
                         <IconButton
                             size={12}
                             mode='outlined'
+                            style={{ marginVertical: 0 }}
                             onPress={() => onFilter('all')}
                             icon={() => <Close color={onBackground} />}
                         />

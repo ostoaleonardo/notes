@@ -7,7 +7,7 @@ import { MarkdownInput } from '../../Markdown'
 import { ListItemPreview } from './ListItemPreview'
 import { PinAction } from '../Actions/PinAction'
 import { Skeleton } from './Skeleton'
-import { useLocalAuthentication, useMarkdown } from '@/hooks'
+import { useLocalAuthentication } from '@/hooks'
 import { getDimensions } from '@/utils'
 import { Lock } from '@/icons'
 import { ROUTES } from '@/constants'
@@ -15,7 +15,6 @@ import { ROUTES } from '@/constants'
 export function SwipeableNote({ data, isOpen, onOpen, onDelete, onPin }) {
     const { colors } = useTheme()
     const { hasBiometrics } = useLocalAuthentication()
-    const { markdown: enableMarkdown } = useMarkdown()
     const { id, title, note, images, list, password, biometrics, markdown } = data
 
     const hasImages = images && images.length > 0
@@ -79,7 +78,7 @@ export function SwipeableNote({ data, isOpen, onOpen, onDelete, onPin }) {
 
                     {!isLocked && note && (
                         <>
-                            {enableMarkdown && markdown ? (
+                            {markdown ? (
                                 <MarkdownInput
                                     readOnly
                                     value={note}
