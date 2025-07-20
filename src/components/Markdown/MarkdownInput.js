@@ -36,7 +36,7 @@ export function MarkdownInput({ value, setValue, size = 13, ...props }) {
         code: {
             fontSize: size,
             color: onBackground,
-            backgroundColor: background
+            backgroundColor: onBackground + '1a'
         },
         mentionHere: {
             color: onBackground,
