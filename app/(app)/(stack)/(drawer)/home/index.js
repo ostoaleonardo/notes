@@ -3,13 +3,13 @@ import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { FloatingButton } from '@/components'
 import { NotesContainer, FilterCarousel, DeleteNote } from '@/screens'
-import { useBottomSheet, useNotes, useStorage, useUtils } from '@/hooks'
-import { ROUTES, STORAGE_KEYS } from '@/constants'
+import { useBottomSheet, useMarkdown, useNotes, useUtils } from '@/hooks'
+import { ROUTES } from '@/constants'
 
 export default function App() {
     const { t } = useTranslation()
     const { deleteNote } = useNotes()
-    const { getItem, setItem } = useStorage()
+    const { initMarkdown } = useMarkdown()
     const { filter, onFilter, pinned, updatePinned } = useUtils()
 
     const [selectedNote, setSelectedNote] = useState(null)
@@ -39,6 +39,8 @@ export default function App() {
             deleteNote(id)
         }
     }
+
+    useState(() => initMarkdown(), [])
 
     return (
         <View style={{ flex: 1 }}>

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 import { randomUUID } from 'expo-crypto'
-import { KeyboardAvoidingView, StyleSheet, View } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
 import { NestableScrollContainer } from 'react-native-draggable-flatlist'

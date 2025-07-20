@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { randomUUID } from 'expo-crypto'
-import { useFocusEffect, useLocalSearchParams } from 'expo-router'
-import { KeyboardAvoidingView, StyleSheet, View } from 'react-native'
+import { useFocusEffect } from 'expo-router'
+import { KeyboardAvoidingView, StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import ImageView from 'react-native-image-viewing'
 import { NestableScrollContainer } from 'react-native-draggable-flatlist'
@@ -14,9 +14,8 @@ import { DEFAULT_LIST, DEFAULT_NOTE_CATEGORIES } from '@/constants'
 export default function Note() {
     const { t } = useTranslation()
     const { saveNote, updateNote } = useNotes()
-    const { markdown, setHasMarkdown } = useMarkdown()
+    const { markdown, hasMarkdown, setHasMarkdown } = useMarkdown()
     const { filter } = useUtils()
-    const { md } = useLocalSearchParams()
 
     const [isSaved, setIsSaved] = useState(false)
     const [firstRender, setFirstRender] = useState(true)
@@ -33,7 +32,6 @@ export default function Note() {
     const [password, setPassword] = useState('')
     const [biometrics, setBiometrics] = useState(false)
 
-    const [isMarkdown, setIsMarkdown] = useState(markdown)
     const [isEditing, setIsEditing] = useState(true)
     const [markdownAction, setMarkdownAction] = useState('')
 
@@ -74,7 +72,7 @@ export default function Note() {
                 categories,
                 images,
                 list,
-                markdown: isMarkdown,
+                markdown: hasMarkdown,
                 password,
                 biometrics,
                 createdAt
@@ -105,16 +103,9 @@ export default function Note() {
         categories,
         images,
         list,
-        isMarkdown,
         password,
         biometrics
     ])
-
-    useEffect(() => {
-        if (md !== undefined) {
-            setIsMarkdown(md === 'true')
-        }
-    }, [md])
 
     const onCategories = (id) => {
         if (!categories.includes(id)) {
@@ -197,7 +188,7 @@ export default function Note() {
                             setValue={setNote}
                             onChangeText={setNote}
                             isEditing={isEditing}
-                            isMarkdown={isMarkdown}
+                            isMarkdown={hasMarkdown}
                             action={markdownAction}
                             setAction={setMarkdownAction}
                         />
@@ -236,7 +227,7 @@ export default function Note() {
                         onOpenImage={handleOpenImage}
                     />
                 )}
-                {isMarkdown && (
+                {hasMarkdown && (
                     <MarkdownControls
                         isEditing={isEditing}
                         onRunAction={onRunAction}
