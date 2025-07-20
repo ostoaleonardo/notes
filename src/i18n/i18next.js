@@ -14,6 +14,7 @@ import pt from '@/translations/pt.json'
 import ru from '@/translations/ru.json'
 import sv from '@/translations/sv.json'
 import tr from '@/translations/tr.json'
+import uk from '@/translations/uk.json'
 
 const languageResources = {
     ar: { translation: ar },
@@ -29,7 +30,8 @@ const languageResources = {
     pt: { translation: pt },
     ru: { translation: ru },
     sv: { translation: sv },
-    tr: { translation: tr }
+    tr: { translation: tr },
+    uk: { translation: uk }
 }
 
 i18next.use(initReactI18next).init({

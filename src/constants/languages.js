@@ -54,5 +54,9 @@ export const LANGUAGES = [
     {
         code: 'tr',
         name: 'Türkçe'
+    },
+    {
+        code: 'uk',
+        name: 'Українська'
     }
 ]

@@ -57,12 +57,6 @@
 			"desc": "Most updated"
 		}
 	},
-	"backup": {
-		"import": "Import notes",
-		"fromFile": "From a JSON or CSV file.",
-		"export": "Export notes",
-		"toFile": "To a JSON or CSV file."
-	},
 	"settings": {
 		"language": "Language",
 		"theme": "Color theme",
