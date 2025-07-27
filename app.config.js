@@ -2,7 +2,7 @@ export default {
   name: 'Notes',
   slug: 'notes',
   scheme: 'notes',
-  version: '1.4.1',
+  version: '1.4.2',
   orientation: 'portrait',
   icon: './assets/icon.png',
   userInterfaceStyle: 'automatic',
@@ -14,7 +14,7 @@ export default {
     },
     edgeToEdgeEnabled: true,
     package: 'com.monospace.notes',
-    versionCode: 11
+    versionCode: 12
   },
   plugins: [
     'expo-router',
