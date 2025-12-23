@@ -38,6 +38,7 @@
 		"html-entities": "2.5.3",
 		"i18next": "^23.15.1",
 		"react": "19.1.0",
+		"react-dom": "19.1.0",
 		"react-i18next": "^15.0.2",
 		"react-native": "0.81.5",
 		"react-native-draggable-flatlist": "^4.0.3",
@@ -50,6 +51,7 @@
 	},
 	"devDependencies": {
 		"@babel/core": "^7.24.0",
+		"babel-preset-expo": "^54.0.9",
 		"patch-package": "^8.0.0"
 	},
 	"private": true
