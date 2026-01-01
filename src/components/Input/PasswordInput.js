@@ -1,17 +1,22 @@
 import { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
+import Animated from 'react-native-reanimated'
 import { IconButton, useTheme } from 'react-native-paper'
+import { useAnimatedShake } from '@/hooks/useAnimatedShake'
 import { LargeInput } from './LargeInput'
 import { Eye } from '@/icons'
 
-export function PasswordInput({ password, onChangeText, ...props }) {
+export function PasswordInput({ password, onChangeText, isInvalid, ...props }) {
     const { colors } = useTheme()
+    const { shake, style } = useAnimatedShake()
     const [hidePassword, setHidePassword] = useState(true)
 
     const togglePassword = () => setHidePassword(!hidePassword)
 
+    if (isInvalid) { shake() }
+
     return (
-        <View style={styles.container}>
+        <Animated.View style={[styles.container, style]}>
             <LargeInput
                 {...props}
                 value={password}
@@ -32,7 +37,7 @@ export function PasswordInput({ password, onChangeText, ...props }) {
                 )}
                 onPress={togglePassword}
             />
-        </View>
+        </Animated.View>
     )
 }
 

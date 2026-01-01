@@ -1,7 +1,6 @@
 import { forwardRef, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import * as Animatable from 'react-native-animatable'
 import { ModalSheet, PasswordInput, Typography, Pressable } from '@/components'
 import { useHaptics, useLocalAuthentication } from '@/hooks'
 import { getEncryptedPassword } from '@/utils'
@@ -94,14 +93,13 @@ export const UpdatePassword = forwardRef(({ currentPassword, tooglePassword, onD
                     <Typography variant='caption'>
                         {t('password.current')}
                     </Typography>
-                    <Animatable.View animation={isWrongPassword ? 'shake' : undefined}>
-                        <PasswordInput
-                            modal={true}
-                            password={oldPassword}
-                            onChangeText={setOldPassword}
-                            onChange={() => setIsWrongPassword(false)}
-                        />
-                    </Animatable.View>
+                    <PasswordInput
+                        modal={true}
+                        password={oldPassword}
+                        isInvalid={isWrongPassword}
+                        onChangeText={setOldPassword}
+                        onChange={() => setIsWrongPassword(false)}
+                    />
                     <Typography
                         variant='caption'
                         textAlign='center'
@@ -114,14 +112,13 @@ export const UpdatePassword = forwardRef(({ currentPassword, tooglePassword, onD
                     <Typography variant='caption'>
                         {t('password.new')}
                     </Typography>
-                    <Animatable.View animation={isInvalidPassword ? 'shake' : undefined}>
-                        <PasswordInput
-                            modal={true}
-                            password={newPassword}
-                            onChangeText={setNewPassword}
-                            onChange={() => setIsInvalidPassword(false)}
-                        />
-                    </Animatable.View>
+                    <PasswordInput
+                        modal={true}
+                        password={newPassword}
+                        isInvalid={isInvalidPassword}
+                        onChangeText={setNewPassword}
+                        onChange={() => setIsInvalidPassword(false)}
+                    />
                     <Typography
                         variant='caption'
                         textAlign='center'
