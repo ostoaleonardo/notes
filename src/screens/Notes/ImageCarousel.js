@@ -1,34 +1,35 @@
 import { View } from 'react-native'
+import { Galeria } from '@nandorojo/galeria'
 import { ImagePreview, Scroll } from '@/components'
 
-export function ImageCarousel({ images, setImages, onOpenImage }) {
+export function ImageCarousel({ images, setImages }) {
     const onRemoveImage = (image) => {
         setImages(images.filter((img) => img !== image))
     }
 
     return (
         <View style={{ position: 'absolute', bottom: 0 }}>
-            <Scroll
-                horizontal
-                overScrollMode='never'
-                style={{ maxHeight: 100 }}
-                contentContainerStyle={{
-                    flexGrow: 1,
-                    paddingHorizontal: 16,
-                    gap: 4
-                }}
-            >
-                {images.length > 0 &&
-                    images.map((image, index) => (
+            <Galeria urls={images}>
+                <Scroll
+                    horizontal
+                    overScrollMode='never'
+                    style={{ maxHeight: 100 }}
+                    contentContainerStyle={{
+                        flexGrow: 1,
+                        paddingHorizontal: 16,
+                        gap: 8
+                    }}
+                >
+                    {images.length > 0 && images.map((url, index) => (
                         <ImagePreview
-                            key={image}
-                            image={image}
-                            openImage={() => onOpenImage(index)}
-                            removeImage={() => onRemoveImage(image)}
+                            key={url}
+                            index={index}
+                            url={url}
+                            onRemove={() => onRemoveImage(url)}
                         />
-                    ))
-                }
-            </Scroll>
+                    ))}
+                </Scroll>
+            </Galeria>
         </View>
     )
 }

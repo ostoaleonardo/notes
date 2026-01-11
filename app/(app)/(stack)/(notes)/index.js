@@ -3,7 +3,6 @@ import { randomUUID } from 'expo-crypto'
 import { useFocusEffect } from 'expo-router'
 import { KeyboardAvoidingView, StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import ImageView from 'react-native-image-viewing'
 import { NestableScrollContainer } from 'react-native-draggable-flatlist'
 import { LargeInput, MarkdownEditor, Section } from '@/components'
 import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, ContainerFooter, ImageCarousel, List, MarkdownControls } from '@/screens'
@@ -38,8 +37,6 @@ export default function Note() {
     const onEditMarkdown = () => setIsEditing(!isEditing)
     const onRunAction = (action) => setMarkdownAction(action)
 
-    const [galleryIndex, setGalleryIndex] = useState(0)
-    const [isGalleryVisible, setIsGalleryVisible] = useState(false)
     const hasImages = images && images.length > 0
 
     const {
@@ -225,7 +222,6 @@ export default function Note() {
                     <ImageCarousel
                         images={images}
                         setImages={setImages}
-                        onOpenImage={handleOpenImage}
                     />
                 )}
                 {hasMarkdown && (
@@ -250,15 +246,6 @@ export default function Note() {
                 biometrics={biometrics}
                 setBiometrics={setBiometrics}
             />
-
-            {hasImages && (
-                <ImageView
-                    imageIndex={galleryIndex}
-                    visible={isGalleryVisible}
-                    images={images.map((url) => ({ uri: url }))}
-                    onRequestClose={() => setIsGalleryVisible(false)}
-                />
-            )}
         </>
     )
 }

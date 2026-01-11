@@ -1,7 +1,7 @@
-import { launchCameraAsync, launchImageLibraryAsync, MediaTypeOptions } from 'expo-image-picker'
+import { launchCameraAsync, launchImageLibraryAsync } from 'expo-image-picker'
 
 const IMAGE_PICKER_OPTIONS = {
-    mediaTypes: MediaTypeOptions.Images,
+    mediaTypes: ['images'],
     allowsEditing: true,
     quality: 1
 }

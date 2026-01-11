@@ -1,9 +1,11 @@
-import { Image, Pressable, StyleSheet } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import Animated, { FadeInDown, FadeOutDown, LinearTransition } from 'react-native-reanimated'
+import { Galeria } from '@nandorojo/galeria'
+import { Image } from 'expo-image'
 import { Close } from '@/icons'
 
-export function ImagePreview({ image, openImage, removeImage }) {
+export function ImagePreview({ index, url, onRemove }) {
     const { colors } = useTheme()
 
     return (
@@ -12,27 +14,21 @@ export function ImagePreview({ image, openImage, removeImage }) {
             exiting={FadeOutDown}
             layout={LinearTransition}
         >
-            <Pressable
-                onPress={openImage}
-                style={styles.container}
-            >
-                <Image
-                    style={styles.image}
-                    source={{ uri: image }}
-                />
+            <Galeria.Image index={index} style={{ width: 100, height: 100 }}>
+                <Image source={url} recyclingKey={url + index} style={styles.image} />
+            </Galeria.Image>
 
-                {removeImage && (
-                    <Pressable
-                        onPress={removeImage}
-                        style={{
-                            ...styles.removeButton,
-                            backgroundColor: colors.surface + 'bf'
-                        }}
-                    >
-                        <Close color={colors.onSurface} />
-                    </Pressable>
-                )}
-            </Pressable>
+            {onRemove && (
+                <Pressable
+                    onPress={onRemove}
+                    style={{
+                        ...styles.removeButton,
+                        backgroundColor: colors.surface + 'bf'
+                    }}
+                >
+                    <Close color={colors.onSurface} />
+                </Pressable>
+            )}
         </Animated.View>
     )
 }
