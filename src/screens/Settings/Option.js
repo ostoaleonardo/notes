@@ -1,16 +1,22 @@
 import { Pressable, StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { Typography } from '@/components'
+import { COMMONS } from '@/constants'
 
-export function Option({ title, description, rightContent, onPress }) {
+export function Option({ title, description, rightContent, onPress, isFirst, isLast }) {
     const { colors } = useTheme()
-    const { onBackground } = colors
 
     return (
         <Pressable
             onPress={onPress}
-            style={styles.container}
-            android_ripple={{ color: onBackground + '1a' }}
+            style={{
+                ...styles.container,
+                backgroundColor: colors.surface,
+                borderTopLeftRadius: isFirst ? COMMONS.radius : 0,
+                borderTopRightRadius: isFirst ? COMMONS.radius : 0,
+                borderBottomLeftRadius: isLast ? COMMONS.radius : 0,
+                borderBottomRightRadius: isLast ? COMMONS.radius : 0
+            }}
         >
             <View style={styles.left}>
                 <Typography
@@ -35,8 +41,7 @@ export function Option({ title, description, rightContent, onPress }) {
 const styles = StyleSheet.create({
     container: {
         gap: 16,
-        paddingVertical: 16,
-        paddingHorizontal: 24,
+        padding: 16,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'

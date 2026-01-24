@@ -83,6 +83,7 @@
 		}
 	},
 	"settings": {
+		"general": "General",
 		"language": "Idioma",
 		"theme": "Tema de color",
 		"chooseTheme": "Elige un tema de color para la aplicación.",

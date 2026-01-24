@@ -2,10 +2,10 @@ import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { SwipeableCard } from '../SwipeableCard'
 import { Typography } from '../../Typography'
+import { COMMONS } from '@/constants'
 
 export function SwipeableCategory({ category, onPress, isOpen, onOpen, onDelete, isFirst, isLast }) {
     const { colors } = useTheme()
-    const radius = 16
 
     return (
         <SwipeableCard
@@ -18,10 +18,10 @@ export function SwipeableCategory({ category, onPress, isOpen, onOpen, onDelete,
                 style={{
                     ...styles.container,
                     backgroundColor: colors.surface,
-                    borderTopLeftRadius: isFirst ? radius : 0,
-                    borderTopRightRadius: isFirst ? radius : 0,
-                    borderBottomLeftRadius: isLast ? radius : 0,
-                    borderBottomRightRadius: isLast ? radius : 0
+                    borderTopLeftRadius: isFirst ? COMMONS.radius : 0,
+                    borderTopRightRadius: isFirst ? COMMONS.radius : 0,
+                    borderBottomLeftRadius: isLast ? COMMONS.radius : 0,
+                    borderBottomRightRadius: isLast ? COMMONS.radius : 0
                 }}
             >
                 <Typography>

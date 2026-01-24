@@ -58,6 +58,7 @@
 		}
 	},
 	"settings": {
+		"general": "General",
 		"language": "Language",
 		"theme": "Color theme",
 		"chooseTheme": "Choose a color theme for the app.",

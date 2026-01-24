@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     },
     title: {
         width: '100%',
-        paddingHorizontal: 24
+        paddingHorizontal: 16
     },
     content: {
         width: '100%'

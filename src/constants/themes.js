@@ -89,6 +89,10 @@ const lightTheme = {
     }
 }
 
+export const COMMONS = {
+    radius: 16
+}
+
 export const THEMES = {
     light: lightTheme,
     dark: darkTheme
