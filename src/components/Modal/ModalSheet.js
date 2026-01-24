@@ -29,14 +29,10 @@ export const ModalSheet = forwardRef(({ title, children, onClose, contentContain
             }}
             {...prop}
         >
-            <BottomSheetView>
-                <ModalHeader title={title} />
+            <ModalHeader title={title} />
+            <BottomSheetView style={{ paddingTop: 48, ...contentContainerStyle }}>
+                {children}
             </BottomSheetView>
-            {scrollable ? children : (
-                <BottomSheetView style={contentContainerStyle}>
-                    {children}
-                </BottomSheetView>
-            )}
         </BottomSheetModal>
     )
 })

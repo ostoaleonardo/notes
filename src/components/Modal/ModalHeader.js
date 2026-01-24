@@ -1,9 +1,10 @@
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
+import { BottomSheetView } from '@gorhom/bottom-sheet'
 import { Typography } from '../Typography'
 
 export function ModalHeader({ title }) {
     return (
-        <View style={styles.container}>
+        <BottomSheetView style={styles.container}>
             <Typography
                 bold
                 uppercase
@@ -12,13 +13,13 @@ export function ModalHeader({ title }) {
             >
                 {title}
             </Typography>
-        </View>
+        </BottomSheetView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        marginVertical: 16,
+        paddingVertical: 16,
         alignItems: 'center',
         justifyContent: 'center'
     }
