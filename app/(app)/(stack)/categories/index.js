@@ -2,7 +2,7 @@ import { randomUUID } from 'expo-crypto'
 import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { SmallInput, SnackBar, SquareButton } from '@/components'
+import { SmallInput, SquareButton } from '@/components'
 import { CategoriesContainer, UpdateCategory } from '@/screens'
 import { useCategories, useHaptics } from '@/hooks'
 import { FEEDBACK_TYPES } from '@/constants'
@@ -15,7 +15,6 @@ export default function Categories() {
     const [category, setCategory] = useState('')
     const [selectedId, setSelectedId] = useState('')
 
-    const [message, setMessage] = useState('')
     const [isUpdated, setIsUpdated] = useState(false)
 
     const [visible, setVisible] = useState(false)
@@ -27,7 +26,6 @@ export default function Categories() {
         if (isUpdated) {
             setSelectedId('')
             setIsUpdated(false)
-            setMessage(t('message.categoryUpdated'))
         }
     }, [isUpdated])
 
@@ -44,12 +42,11 @@ export default function Categories() {
 
         setCategory('')
         vibrate(FEEDBACK_TYPES.SUCCESS)
-        setMessage(t('message.categoryAdded'))
     }
 
     return (
-        <View style={styles.container}>
-            <View style={styles.inputContainer}>
+        <View style={{ flex: 1 }}>
+            <View style={styles.top}>
                 <SmallInput
                     value={category}
                     onChangeText={setCategory}
@@ -57,8 +54,8 @@ export default function Categories() {
                 />
                 <SquareButton
                     label={t('categories.add')}
-                    disabled={!category.trim()}
                     onPress={() => onSave(category)}
+                    disabled={category.trim().length === 0}
                 />
             </View>
             <CategoriesContainer
@@ -71,24 +68,18 @@ export default function Categories() {
                 selectedId={selectedId}
                 setIsUpdated={setIsUpdated}
             />
-            <SnackBar
-                message={message}
-                setMessage={setMessage}
-            />
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flexGrow: 1,
-        gap: 24
-    },
-    inputContainer: {
-        gap: 16,
+    top: {
+        width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: 24,
-        justifyContent: 'space-between'
+        justifyContent: 'center',
+        paddingHorizontal: 16,
+        paddingBottom: 16,
+        gap: 8
     }
 })

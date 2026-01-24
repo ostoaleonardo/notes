@@ -38,6 +38,6 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     swipeable: {
-        paddingHorizontal: 24
+        paddingHorizontal: 16
     }
 })

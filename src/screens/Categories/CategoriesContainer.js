@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { AnimatedList, Section, SwipeableCategory } from '@/components'
+import { AnimatedList, SwipeableCategory } from '@/components'
 import { useCategories, useHaptics } from '@/hooks'
 import { FEEDBACK_TYPES } from '@/constants'
 
@@ -18,37 +17,27 @@ export function CategoriesContainer({ onPress }) {
     }
 
     return (
-        <Section
-            containerStyle={styles.container}
-            contentStyle={styles.container}
-        >
-            <AnimatedList
-                data={categories.slice(1)}
-                keyExtractor={({ id }) => id}
-                emptyLabel={t('message.noCategories')}
-                renderItem={({ item }) => (
+        <AnimatedList
+            gap={2}
+            data={categories.slice(1)}
+            keyExtractor={({ id }) => id}
+            emptyLabel={t('message.noCategories')}
+            renderItem={({ item, index }) => {
+                const isFirst = index === 0
+                const isLast = index === categories.slice(1).length - 1
+
+                return (
                     <SwipeableCategory
                         category={item.name}
                         isOpen={isOpen === item.id}
                         onPress={() => onPress(item.id)}
                         onOpen={() => setIsOpen(item.id)}
                         onDelete={() => onDelete(item.id)}
+                        isFirst={isFirst}
+                        isLast={isLast}
                     />
-                )}
-            />
-        </Section>
+                )
+            }}
+        />
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    list: {
-        flexGrow: 1,
-        paddingBottom: 24,
-        gap: 16
-    }
-})
