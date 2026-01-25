@@ -1,9 +1,8 @@
 import { forwardRef } from 'react'
-import { View } from 'react-native'
-import { RadioButton } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
+import { RadioButton } from 'react-native-paper'
 import { FlatList } from 'react-native-gesture-handler'
-import { ModalSheet, RadioButtonItem, Separator } from '@/components'
+import { ModalSheet, RadioButtonItem } from '@/components'
 import { useLanguage } from '@/hooks'
 import { LANGUAGES } from '@/constants'
 
@@ -17,6 +16,7 @@ export const Languages = forwardRef(({ onClose }, ref) => {
             onClose={onClose}
             snapPoints={['50%', '95%']}
             title={t('settings.language')}
+            style={{ paddingHorizontal: 16 }}
         >
             <RadioButton.Group
                 value={currentLanguage}
@@ -25,15 +25,17 @@ export const Languages = forwardRef(({ onClose }, ref) => {
                 <FlatList
                     data={LANGUAGES}
                     keyExtractor={({ code }) => code}
+                    contentContainerStyle={{
+                        paddingBottom: 16, gap: 2
+                    }}
                     showsVerticalScrollIndicator={false}
-                    ItemSeparatorComponent={<Separator style={{ marginHorizontal: 24 }} />}
-                    ListFooterComponent={() => <View style={{ height: 64 }} />}
-                    renderItem={({ item }) => (
+                    renderItem={({ item, index }) => (
                         <RadioButtonItem
                             key={item.code}
                             value={item.code}
                             label={item.name}
-                            styles={{ padding: 8 }}
+                            isFirst={index === 0}
+                            isLast={index === LANGUAGES.length - 1}
                         />
                     )}
                 />
