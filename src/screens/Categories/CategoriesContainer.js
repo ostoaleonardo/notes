@@ -22,22 +22,17 @@ export function CategoriesContainer({ onPress }) {
             data={categories.slice(1)}
             keyExtractor={({ id }) => id}
             emptyLabel={t('message.noCategories')}
-            renderItem={({ item, index }) => {
-                const isFirst = index === 0
-                const isLast = index === categories.slice(1).length - 1
-
-                return (
-                    <SwipeableCategory
-                        category={item.name}
-                        isOpen={isOpen === item.id}
-                        onPress={() => onPress(item.id)}
-                        onOpen={() => setIsOpen(item.id)}
-                        onDelete={() => onDelete(item.id)}
-                        isFirst={isFirst}
-                        isLast={isLast}
-                    />
-                )
-            }}
+            renderItem={({ item, index }) => (
+                <SwipeableCategory
+                    category={item.name}
+                    isOpen={isOpen === item.id}
+                    onPress={() => onPress(item.id)}
+                    onOpen={() => setIsOpen(item.id)}
+                    onDelete={() => onDelete(item.id)}
+                    isFirst={index === 0}
+                    isLast={index === categories.slice(1).length - 1}
+                />
+            )}
         />
     )
 }
