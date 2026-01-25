@@ -8,7 +8,7 @@ import { ListItemPreview } from './ListItemPreview'
 import { PinAction } from '../Actions/PinAction'
 import { Skeleton } from './Skeleton'
 import { useLocalAuthentication } from '@/hooks'
-import { getDimensions } from '@/utils'
+import { getDimensions, getPreviewNote } from '@/utils'
 import { Lock } from '@/icons'
 import { ROUTES } from '@/constants'
 
@@ -23,6 +23,7 @@ export function SwipeableNote({ data, isOpen, onOpen, onDelete, onPin }) {
     const hasContent = title || note || hasList || isLocked
 
     const width = hasImages && getDimensions(images.length)
+    const preview = getPreviewNote(note)
 
     const goToEdit = () => {
         if (isLocked) {
@@ -77,18 +78,9 @@ export function SwipeableNote({ data, isOpen, onOpen, onDelete, onPin }) {
                     )}
 
                     {!isLocked && note && (
-                        <>
-                            {markdown ? (
-                                <MarkdownInput
-                                    readOnly
-                                    value={note}
-                                />
-                            ) : (
-                                <Typography>
-                                    {note}
-                                </Typography>
-                            )}
-                        </>
+                        markdown
+                            ? <MarkdownInput readOnly value={preview} />
+                            : <Typography variant='paragraph'>{preview}</Typography>
                     )}
 
 
