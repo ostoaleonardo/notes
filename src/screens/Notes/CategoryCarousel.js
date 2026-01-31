@@ -51,6 +51,6 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         gap: 8,
         alignItems: 'center',
-        paddingHorizontal: 24
+        paddingHorizontal: 16
     }
 })

@@ -187,7 +187,7 @@ export default function EditNote() {
                     contentContainerStyle={styles.scrollContainer}
                 >
                     <Section
-                        containerStyle={{ paddingHorizontal: 24 }}
+                        containerStyle={{ paddingHorizontal: 16 }}
                     >
                         <LargeInput
                             bold
@@ -205,7 +205,7 @@ export default function EditNote() {
 
                     <Section
                         title={t('title.categories')}
-                        containerStyle={{ paddingVertical: 24 }}
+                        containerStyle={{ paddingVertical: 16 }}
                     >
                         <CategoryCarousel
                             selectedCategories={categories}
@@ -215,7 +215,7 @@ export default function EditNote() {
                     </Section>
 
                     <Section
-                        contentStyle={{ paddingHorizontal: 24 }}
+                        contentStyle={{ paddingHorizontal: 16 }}
                     >
                         <MarkdownEditor
                             value={note}
@@ -229,7 +229,7 @@ export default function EditNote() {
 
                     {list && list.items.length > 0 && (
                         <Section
-                            containerStyle={{ paddingVertical: 24 }}
+                            containerStyle={{ paddingVertical: 16 }}
                         >
                             <List
                                 list={list}

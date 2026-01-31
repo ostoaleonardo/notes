@@ -156,7 +156,7 @@ export default function Note() {
                     contentContainerStyle={styles.scrollContainer}
                 >
                     <Section
-                        containerStyle={{ paddingHorizontal: 24 }}
+                        containerStyle={{ paddingHorizontal: 16 }}
                     >
                         <LargeInput
                             bold
@@ -169,7 +169,7 @@ export default function Note() {
 
                     <Section
                         title={t('title.categories')}
-                        containerStyle={{ paddingVertical: 24 }}
+                        containerStyle={{ paddingVertical: 16 }}
                     >
                         <CategoryCarousel
                             selectedCategories={categories}
@@ -179,7 +179,7 @@ export default function Note() {
                     </Section>
 
                     <Section
-                        containerStyle={{ paddingHorizontal: 24 }}
+                        containerStyle={{ paddingHorizontal: 16 }}
                     >
                         <MarkdownEditor
                             value={note}
@@ -194,7 +194,7 @@ export default function Note() {
 
                     {list.items.length > 0 && (
                         <Section
-                            containerStyle={{ paddingVertical: 24 }}
+                            containerStyle={{ paddingVertical: 16 }}
                         >
                             <List
                                 list={list}
