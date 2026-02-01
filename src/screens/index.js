@@ -23,18 +23,16 @@ export {
 // Modals
 export {
     Languages,
+    UnlockNote,
     DeleteNote,
     Categories,
     AddPassword,
-    UpdatePassword,
-    MarkdownTutorial
+    UpdatePassword
 } from './Modals'
 
 // Dialogs
 export {
-    UpdateCategory,
-    ImportBackup,
-    ExportBackup
+    UpdateCategory
 } from './Dialogs'
 
 export {

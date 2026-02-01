@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { FloatingButton } from '@/components'
-import { NotesContainer, FilterCarousel, DeleteNote } from '@/screens'
+import { NotesContainer, FilterCarousel, DeleteNote, UnlockNote } from '@/screens'
 import { useBottomSheet, useMarkdown, useNotes, useUtils } from '@/hooks'
 import { ROUTES } from '@/constants'
 
@@ -10,15 +10,31 @@ export default function App() {
     const { t } = useTranslation()
     const { deleteNote } = useNotes()
     const { initMarkdown } = useMarkdown()
-    const { filter, onFilter, pinned, updatePinned } = useUtils()
 
+    const [open, setOpen] = useState(null)
     const [selectedNote, setSelectedNote] = useState(null)
+
+    const {
+        filter, onFilter,
+        pinned, updatePinned
+    } = useUtils()
+
+    const {
+        ref: unlockBottomRef,
+        onOpen: onOpenUnlock,
+        onClose: onCloseUnlock
+    } = useBottomSheet()
 
     const {
         ref: deleteBottomRef,
         onOpen: onOpenDelete,
         onClose: onCloseDelete
     } = useBottomSheet()
+
+    const onUnlock = (id) => {
+        setOpen(id)
+        onOpenUnlock()
+    }
 
     const onPin = (id) => {
         if (pinned.has(id)) {
@@ -49,13 +65,14 @@ export default function App() {
                 onFilter={onFilter}
             />
             <NotesContainer
+                filter={filter}
                 pinned={pinned}
                 onPin={onPin}
 
-                filter={filter}
                 selectedNote={selectedNote}
                 setSelectedNote={setSelectedNote}
 
+                onUnlock={onUnlock}
                 onDelete={onDelete}
             />
 
@@ -64,6 +81,14 @@ export default function App() {
                 href={ROUTES.ADD_NOTE}
             />
 
+            <UnlockNote
+                ref={unlockBottomRef}
+                id={open}
+                onClose={() => {
+                    setOpen(null)
+                    onCloseUnlock()
+                }}
+            />
             <DeleteNote
                 ref={deleteBottomRef}
                 id={selectedNote}
