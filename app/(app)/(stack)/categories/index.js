@@ -53,7 +53,6 @@ export default function Categories() {
                     placeholder={t('placeholder.category')}
                 />
                 <SquareButton
-                    label={t('categories.add')}
                     onPress={() => onSave(category)}
                     disabled={category.trim().length === 0}
                 />

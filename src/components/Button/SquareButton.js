@@ -1,35 +1,30 @@
 import { Pressable, StyleSheet } from 'react-native'
-import { Typography } from '../Typography'
+import { useTheme } from 'react-native-paper'
+import { Plus } from '@/icons'
 import { COLORS } from '@/constants'
 
-export function SquareButton({ onPress, disabled, label }) {
+export function SquareButton({ onPress, disabled }) {
+    const { colors } = useTheme()
+    const alpha = disabled ? 'b3' : ''
+
     return (
         <Pressable
             onPress={onPress}
-            disabled={disabled}
-            style={[
-                styles.container,
-                disabled && { opacity: 0.5 }
-            ]}
+            style={{
+                ...styles.pressable,
+                backgroundColor: colors.tertiary + alpha
+            }}
         >
-            <Typography
-                uppercase
-                variant='caption'
-                color={COLORS.base.white}
-            >
-                {label}
-            </Typography>
+            <Plus color={COLORS.base.white + alpha} />
         </Pressable>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        width: 'auto',
-        minWidth: 72,
-        height: 72,
+    pressable: {
+        width: 64,
+        height: 64,
         borderRadius: 16,
-        paddingHorizontal: 8,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: COLORS.base.accent

@@ -52,7 +52,6 @@ export const Categories = forwardRef(({ selectedCategories, onCategories, onClos
                 />
                 <SquareButton
                     disabled={!category.trim()}
-                    label={t('categories.add')}
                     onPress={onSaveCategory}
                 />
             </View>
