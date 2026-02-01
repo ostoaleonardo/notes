@@ -1,36 +1,42 @@
 import { forwardRef, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { ModalSheet, PasswordInput, Typography, Pressable } from '@/components'
+import { ModalSheet, PasswordInput, Pressable } from '@/components'
 import { useHaptics, useLocalAuthentication } from '@/hooks'
 import { getEncryptedPassword } from '@/utils'
-import { COLORS, FEEDBACK_TYPES } from '@/constants'
+import { FEEDBACK_TYPES } from '@/constants'
 
 export const AddPassword = forwardRef(({ setPassword, biometrics, setBiometrics, onClose }, ref) => {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
     const { hasBiometrics, authenticate } = useLocalAuthentication()
+
     const [passwordInput, setPasswordInput] = useState('')
-    const [encryptedPassword, setEncryptedPassword] = useState('')
-    const [isInvalidPassword, setIsInvalidPassword] = useState(false)
+    const [encryptedInput, setEncryptedInput] = useState('')
+
+    const [isInvalid, setIsInvalid] = useState(false)
+    const [message, setMessage] = useState('')
 
     useEffect(() => {
-        (async () => {
+        const encryptedPassword = async () => {
             const digest = await getEncryptedPassword(passwordInput)
-            setEncryptedPassword(digest)
-        })()
+            setEncryptedInput(digest)
+        }
+
+        encryptedPassword()
     }, [passwordInput])
 
     const checkPassword = () => {
         if (passwordInput.length < 4) {
             vibrate(FEEDBACK_TYPES.ERROR)
-            setIsInvalidPassword(true)
+            setMessage(t('message.lengthPassword'))
+            setIsInvalid(true)
             setPassword('')
             return
         }
 
         vibrate(FEEDBACK_TYPES.SUCCESS)
-        setPassword(encryptedPassword)
+        setPassword(encryptedInput)
         onClose()
     }
 
@@ -57,22 +63,17 @@ export const AddPassword = forwardRef(({ setPassword, biometrics, setBiometrics,
             title={t('password.add')}
             contentContainerStyle={styles.container}
         >
-            <View style={styles.inputContainer}>
-                <PasswordInput
-                    modal={true}
-                    password={passwordInput}
-                    isInvalid={isInvalidPassword}
-                    onChangeText={setPasswordInput}
-                    onChange={() => setIsInvalidPassword(false)}
-                />
-                <Typography
-                    variant='caption'
-                    textAlign='center'
-                    color={COLORS.base.accent}
-                >
-                    {isInvalidPassword && t('message.lengthPassword')}
-                </Typography>
-            </View>
+            <PasswordInput
+                modal={true}
+                password={passwordInput}
+                onChangeText={setPasswordInput}
+
+                onChange={() => setMessage('')}
+
+                message={message}
+                isInvalid={isInvalid}
+                setIsInvalid={setIsInvalid}
+            />
             <View style={styles.buttons}>
                 <Pressable
                     mode='contained'
@@ -98,13 +99,8 @@ const styles = StyleSheet.create({
         width: '100%',
         gap: 40,
         padding: 24,
-        paddingBottom: 80,
         alignItems: 'center',
         justifyContent: 'center'
-    },
-    inputContainer: {
-        width: '100%',
-        alignItems: 'center'
     },
     buttons: {
         width: '100%',

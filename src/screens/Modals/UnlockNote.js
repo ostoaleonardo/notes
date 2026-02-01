@@ -5,8 +5,8 @@ import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { ModalSheet, PasswordInput, Pressable } from '@/components'
 import { useHaptics, useLocalAuthentication, useNotes } from '@/hooks'
-import { Fingerprint } from '@/icons'
 import { getEncryptedPassword } from '@/utils'
+import { Fingerprint } from '@/icons'
 import { FEEDBACK_TYPES, ROUTES } from '@/constants'
 
 export const UnlockNote = forwardRef(({ id, onClose }, ref) => {
@@ -18,26 +18,23 @@ export const UnlockNote = forwardRef(({ id, onClose }, ref) => {
 
     const [passwordInput, setPasswordInput] = useState('')
     const [encryptedInput, setEncryptedInput] = useState('')
-    const [encryptedPassword, setEncryptedPassword] = useState('')
 
     const [isInvalid, setIsInvalid] = useState(false)
     const [message, setMessage] = useState('')
 
     const { biometrics, password } = getNote(id)
-
     const hasBothLocks = (hasBiometrics && biometrics) && password
 
     useEffect(() => {
-        setEncryptedPassword(password)
-        setPasswordInput('')
         setEncryptedInput('')
+        setPasswordInput('')
         setIsInvalid(false)
         setMessage('')
 
         if (biometrics && hasBiometrics) {
             handleBiometrics()
         }
-    }, [id, password, biometrics])
+    }, [id, biometrics])
 
     useEffect(() => {
         const encryptedPassword = async () => {
@@ -49,9 +46,10 @@ export const UnlockNote = forwardRef(({ id, onClose }, ref) => {
     }, [passwordInput])
 
     const handlePassword = () => {
-        if (encryptedInput === encryptedPassword) {
+        if (encryptedInput === password) {
             vibrate(FEEDBACK_TYPES.SUCCESS)
             router.push(ROUTES.EDIT_NOTE + id)
+            onClose()
         } else {
             setIsInvalid(true)
             vibrate(FEEDBACK_TYPES.ERROR)

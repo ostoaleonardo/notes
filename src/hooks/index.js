@@ -10,6 +10,7 @@ export { useStorage } from './useStorage'
 export { useLanguage } from './useLanguage'
 export { useToggleMode } from './useToggleMode'
 export { useBottomSheet } from './useBottomSheet'
+export { useAnimatedShake } from './useAnimatedShake'
 
 // Utils
 export { useHaptics } from './useHaptics'
