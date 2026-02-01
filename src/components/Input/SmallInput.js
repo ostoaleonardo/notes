@@ -1,40 +1,44 @@
-import { useState } from 'react'
-import { StyleSheet, TextInput } from 'react-native'
+import { StyleSheet, TextInput, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { FONTS } from '@/constants'
 
-export function SmallInput({ value, onChangeText, placeholder }) {
+export function SmallInput({ background, ...props }) {
     const { colors } = useTheme()
-    const { tertiary, onBackground } = colors
-
-    const [alpha, setAlpha] = useState('1a')
+    const { tertiary, surface, onBackground } = colors
 
     return (
-        <TextInput
-            value={value}
+        <View
             style={{
-                ...styles.base,
-                color: onBackground,
-                borderBottomColor: onBackground + alpha
+                ...styles.container,
+                backgroundColor: background || surface
             }}
-            placeholder={placeholder}
-            onChangeText={onChangeText}
-            cursorColor={onBackground}
-            selectionHandleColor={tertiary}
-            selectionColor={onBackground + '33'}
-            placeholderTextColor={onBackground + '66'}
-            onFocus={() => setAlpha('ff')}
-            onBlur={() => setAlpha('1a')}
-        />
+        >
+            <TextInput
+                style={{
+                    ...styles.base,
+                    color: onBackground
+                }}
+                cursorColor={onBackground}
+                selectionHandleColor={tertiary}
+                selectionColor={onBackground + '33'}
+                placeholderTextColor={onBackground + '66'}
+                {...props}
+            />
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        width: '100%',
+        borderRadius: 16,
+        paddingVertical: 8,
+        paddingHorizontal: 16
+    },
     base: {
         flex: 1,
-        height: 72,
         fontSize: 14,
-        borderBottomWidth: 1,
         fontFamily: FONTS.azeretLight
     }
 })

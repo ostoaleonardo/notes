@@ -1,5 +1,6 @@
 import { forwardRef, useCallback, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
+import { useTheme } from 'react-native-paper'
 import { FlatList } from 'react-native-gesture-handler'
 import { useTranslation } from 'react-i18next'
 import * as Crypto from 'expo-crypto'
@@ -10,6 +11,7 @@ import { FEEDBACK_TYPES } from '@/constants'
 
 export const Categories = forwardRef(({ selectedCategories, onCategories, onClose }, ref) => {
     const { t } = useTranslation()
+    const { colors } = useTheme()
     const { vibrate } = useHaptics()
     const { categories, addCategory } = useCategories()
     const [category, setCategory] = useState('')
@@ -46,6 +48,7 @@ export const Categories = forwardRef(({ selectedCategories, onCategories, onClos
                     value={category}
                     onChangeText={setCategory}
                     placeholder={t('placeholder.category')}
+                    background={colors.surfaceVariant}
                 />
                 <SquareButton
                     disabled={!category.trim()}
@@ -79,7 +82,7 @@ export const Categories = forwardRef(({ selectedCategories, onCategories, onClos
 const styles = StyleSheet.create({
     inputContainer: {
         gap: 16,
-        padding: 24,
+        padding: 16,
         paddingTop: 0,
         flexDirection: 'row'
     }

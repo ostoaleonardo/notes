@@ -9,12 +9,14 @@ export const COLORS = {
     light: {
         background: '#d7d8d8',
         onBackground: '#06080a',
-        foreground: '#e7e9e9'
+        foreground: '#e7e9e9',
+        surfaceVariant: '#d7d8d8'
     },
     dark: {
         background: '#06080a',
         onBackground: '#f0f2f1',
-        foreground: '#121318'
+        foreground: '#121318',
+        surfaceVariant: '#1e2124'
     }
 }
 
@@ -42,6 +44,7 @@ const darkTheme = {
         onBackground: COLORS.dark.onBackground,
 
         surface: COLORS.dark.foreground,
+        surfaceVariant: COLORS.dark.surfaceVariant,
         onSurface: COLORS.dark.onBackground,
         onSurfaceVariant: COLORS.dark.onBackground,
 
@@ -76,6 +79,7 @@ const lightTheme = {
         onBackground: COLORS.light.onBackground,
 
         surface: COLORS.light.foreground,
+        surfaceVariant: COLORS.light.surfaceVariant,
         onSurface: COLORS.light.onBackground,
         onSurfaceVariant: COLORS.light.onBackground,
 

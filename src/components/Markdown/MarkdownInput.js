@@ -12,7 +12,9 @@ export function MarkdownInput({ value, setValue, size = 13, ...props }) {
         markdown: {
             fontSize: size,
             color: onBackground,
-            fontFamily: FONTS.azeretLight
+            fontFamily: FONTS.azeretLight,
+            paddingHorizontal: 0,
+            paddingBottom: 0
         }
     })
 
