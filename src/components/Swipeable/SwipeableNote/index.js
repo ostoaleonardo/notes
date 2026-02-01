@@ -12,9 +12,10 @@ import { getDimensions, getPreviewNote } from '@/utils'
 import { Lock } from '@/icons'
 import { ROUTES } from '@/constants'
 
-export function SwipeableNote({ data, isOpen, onOpen, onDelete, onPin }) {
+export function SwipeableNote({ data, onUnlock, isOpen, onOpen, onDelete, onPin }) {
     const { colors } = useTheme()
     const { hasBiometrics } = useLocalAuthentication()
+
     const { id, title, note, images, list, password, biometrics, markdown } = data
 
     const hasImages = images && images.length > 0
@@ -27,7 +28,7 @@ export function SwipeableNote({ data, isOpen, onOpen, onDelete, onPin }) {
 
     const goToEdit = () => {
         if (isLocked) {
-            router.push(ROUTES.UNLOCK_NOTE + id)
+            onUnlock(id)
         } else {
             router.push(ROUTES.EDIT_NOTE + id)
         }

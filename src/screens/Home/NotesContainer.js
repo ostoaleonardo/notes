@@ -1,10 +1,11 @@
+import { useCallback } from 'react'
 import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { DotSeparator, Scroll, Section, SwipeableNote, Typography } from '@/components'
 import { useNotes, useUtils } from '@/hooks'
 import { getSortedNotes } from '@/utils'
 
-export function NotesContainer({ selectedNote, setSelectedNote, filter, onDelete, pinned, onPin }) {
+export function NotesContainer({ onUnlock, selectedNote, setSelectedNote, filter, onDelete, pinned, onPin }) {
     const { t } = useTranslation()
     const { notes, loading } = useNotes()
     const { sort } = useUtils()
@@ -17,6 +18,20 @@ export function NotesContainer({ selectedNote, setSelectedNote, filter, onDelete
     const pinnedNotes = filteredNotes.filter((note) => pinned.has(note.id))
 
     const remainingNotes = filteredNotes.filter((note) => !pinned.has(note.id))
+
+    const renderNotes = useCallback((elements) => {
+        return elements.map((note) => (
+            <SwipeableNote
+                key={note.id}
+                data={note}
+                onUnlock={onUnlock}
+                isOpen={selectedNote === note.id}
+                onOpen={() => setSelectedNote(note.id)}
+                onDelete={onDelete}
+                onPin={onPin}
+            />
+        ))
+    }, [selectedNote, onUnlock, onDelete, onPin])
 
     return (
         <Scroll contentContainerStyle={styles.container}>
@@ -34,16 +49,7 @@ export function NotesContainer({ selectedNote, setSelectedNote, filter, onDelete
                 visible={pinnedNotes.length > 0}
                 contentStyle={{ gap: 8 }}
             >
-                {pinnedNotes.map((note) => (
-                    <SwipeableNote
-                        key={note.id}
-                        data={note}
-                        isOpen={selectedNote === note.id}
-                        onOpen={() => setSelectedNote(note.id)}
-                        onDelete={onDelete}
-                        onPin={onPin}
-                    />
-                ))}
+                {renderNotes(pinnedNotes)}
             </Section>
 
             {pinnedNotes.length > 0 && remainingNotes.length > 0 &&
@@ -54,19 +60,9 @@ export function NotesContainer({ selectedNote, setSelectedNote, filter, onDelete
                 visible={filteredNotes.length > 0}
                 contentStyle={{ gap: 8 }}
             >
-                {remainingNotes
-                    .sort((a, b) => getSortedNotes(a, b, sort))
-                    .map((note) => (
-                        <SwipeableNote
-                            key={note.id}
-                            data={note}
-                            isOpen={selectedNote === note.id}
-                            onOpen={() => setSelectedNote(note.id)}
-                            onDelete={onDelete}
-                            onPin={onPin}
-                        />
-                    ))
-                }
+                {renderNotes(remainingNotes.sort(
+                    (a, b) => getSortedNotes(a, b, sort)
+                ))}
             </Section>
 
             {filteredNotes.length === 0 && !loading && (
