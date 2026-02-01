@@ -32,12 +32,6 @@ export default function NotesLayout() {
             <Stack.Screen
                 name='edit/[slug]'
             />
-            <Stack.Screen
-                name='unlock/[slug]'
-                options={{
-                    title: t('header.unlock')
-                }}
-            />
         </Stack>
     )
 }
