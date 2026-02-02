@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MarkdownInput } from './MarkdownInput'
-import { TextArea } from '../Input'
 import { useMarkdownShortcuts } from '@/hooks'
 
 export function MarkdownEditor({ value, setValue, isEditing, action, setAction }) {

@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 export const useMarkdownShortcuts = (value, setValue, selection, setSelection) => {
 
     const onSelectionChange = ({ nativeEvent: { selection } }) => {
