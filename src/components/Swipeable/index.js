@@ -1,5 +1,6 @@
 export { SwipeableCard } from './SwipeableCard'
 export { SwipeableNote } from './SwipeableNote'
+export { SwipeableTrash } from './SwipeableTrash'
 export { SwipeableCategory } from './SwipeableCategory'
 export { DeleteAction } from './Actions'
 export { PinAction } from './Actions'

@@ -10,7 +10,7 @@ export default function StackLayout() {
     return (
         <Stack
             screenOptions={{
-                header: (props) => <AppBar showBack {...props} />,
+                header: (props) => <AppBar back={true} {...props} />,
 
                 contentStyle: {
                     backgroundColor: colors.background
@@ -33,6 +33,12 @@ export default function StackLayout() {
                 name='categories/index'
                 options={{
                     title: t('header.categories')
+                }}
+            />
+            <Stack.Screen
+                name='trash/index'
+                options={{
+                    title: t('header.trash')
                 }}
             />
             <Stack.Screen

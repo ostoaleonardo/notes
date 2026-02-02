@@ -1,12 +1,14 @@
 import { StyleSheet } from 'react-native'
 import { Appbar, Tooltip, useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { Menu, Settings } from '@/icons'
+import { useTrash } from '@/hooks'
+import { Delete, Menu, Settings } from '@/icons'
 import { FONTS, ROUTES } from '@/constants'
 
-export function AppBar({ options, navigation, showMenu, showSettings, showBack, rightContent }) {
+export function AppBar({ options, navigation, menu, settings, back, right }) {
     const { colors } = useTheme()
     const { t } = useTranslation()
+    const { clearAll } = useTrash()
 
     const { title, mode = 'small' } = options
     const { background, onBackground } = colors
@@ -29,13 +31,13 @@ export function AppBar({ options, navigation, showMenu, showSettings, showBack, 
                 backgroundColor: background
             }}
         >
-            {showBack && (
+            {back && (
                 <Appbar.BackAction
                     animated={false}
                     onPress={goBack}
                 />
             )}
-            {showMenu && !showBack && (
+            {menu && !back && (
                 <Appbar.Action
                     animated={false}
                     onPress={openDrawer}
@@ -48,14 +50,24 @@ export function AppBar({ options, navigation, showMenu, showSettings, showBack, 
                 titleStyle={styles.title}
             />
 
-            {rightContent}
+            {right}
 
-            {showSettings && (
+            {settings && (
                 <Tooltip title={t('header.settings')}>
                     <Appbar.Action
                         animated={false}
                         onPress={goSettings}
                         icon={() => <Settings {...iconProps} />}
+                    />
+                </Tooltip>
+            )}
+
+            {title === t('header.trash') && (
+                <Tooltip title={t('header.trash')}>
+                    <Appbar.Action
+                        animated={false}
+                        onPress={clearAll}
+                        icon={() => <Delete {...iconProps} />}
                     />
                 </Tooltip>
             )}

@@ -19,6 +19,7 @@ export {
 export {
     SwipeableCard,
     SwipeableNote,
+    SwipeableTrash,
     SwipeableCategory,
 } from './Swipeable'
 

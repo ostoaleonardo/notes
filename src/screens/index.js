@@ -1,7 +1,8 @@
 // Home screen components
 export {
     FilterCarousel,
-    NotesContainer
+    NotesContainer,
+    TrashContainer
 } from './Home'
 
 // Categories screen components

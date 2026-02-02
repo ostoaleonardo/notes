@@ -13,9 +13,9 @@ export default function DrawerLayout() {
             screenOptions={{
                 header: (props) => (
                     <AppBar
-                        showMenu
-                        showSettings
-                        rightContent={<SortAction />}
+                        menu={true}
+                        settings={true}
+                        right={<SortAction />}
                         {...props}
                     />
                 ),

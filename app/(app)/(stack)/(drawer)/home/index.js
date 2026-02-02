@@ -5,9 +5,11 @@ import { FloatingButton } from '@/components'
 import { NotesContainer, FilterCarousel, DeleteNote, UnlockNote } from '@/screens'
 import { useBottomSheet, useMarkdown, useNotes, useUtils } from '@/hooks'
 import { ROUTES } from '@/constants'
+import { useTrash } from '@/hooks/useTrash'
 
 export default function App() {
     const { t } = useTranslation()
+    const { addItem } = useTrash()
     const { deleteNote } = useNotes()
     const { initMarkdown } = useMarkdown()
 
@@ -47,12 +49,13 @@ export default function App() {
         updatePinned(new Set(pinned))
     }
 
-    const onDelete = (id, isLocked) => {
+    const onDelete = (note, isLocked) => {
         if (isLocked) {
             setSelectedNote(id)
             onOpenDelete()
         } else {
-            deleteNote(id)
+            deleteNote(note.id)
+            addItem(note)
         }
     }
 

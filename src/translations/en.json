@@ -13,6 +13,7 @@
 		"editNote": "Edit note",
 		"categories": "Categories",
 		"unlock": "Unlock",
+		"trash": "Trash",
 		"sort": "Sorting by",
 		"settings": "Settings",
 		"theme": "Color theme",
@@ -120,6 +121,7 @@
 	},
 	"drawer": {
 		"notes": "Notes",
-		"categories": "Categories"
+		"categories": "Categories",
+		"trash": "Trash"
 	}
 }

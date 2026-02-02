@@ -6,6 +6,7 @@ export const NoteContext = createContext()
 export function NoteProvider({ children }) {
     const [notes, setNotes] = useState([])
     const [categories, setCategories] = useState(DEFAULT_CATEGORIES)
+    const [trash, setTrash] = useState(new Set())
 
     return (
         <NoteContext.Provider
@@ -13,7 +14,9 @@ export function NoteProvider({ children }) {
                 notes,
                 setNotes,
                 categories,
-                setCategories
+                setCategories,
+                trash,
+                setTrash
             }}
         >
             {children}

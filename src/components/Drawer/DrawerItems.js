@@ -18,6 +18,10 @@ export function DrawerItems() {
                     path={ROUTES.CATEGORIES}
                     label={t('drawer.categories')}
                 />
+                <DrawerScreen
+                    path={ROUTES.TRASH}
+                    label={t('drawer.trash')}
+                />
             </View>
         </DrawerContentScrollView>
     )
