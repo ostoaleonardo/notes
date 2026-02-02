@@ -46,7 +46,7 @@ export function useNotes() {
     useEffect(() => {
         const getNotes = async () => {
             try {
-                if (!notes) {
+                if (notes.length === 0) {
                     const notes = await getItem(STORAGE_KEYS.NOTES)
                     const pinned = await getItem(STORAGE_KEYS.PINNED)
                     const sort = await getItem(STORAGE_KEYS.SORT)
@@ -54,7 +54,6 @@ export function useNotes() {
                     if (notes) setNotes(JSON.parse(notes))
                     if (pinned) setPinned(new Set(JSON.parse(pinned)))
                     if (sort) setSort(JSON.parse(sort))
-                    setLoading(false)
                 }
             } catch (error) {
                 console.error('Error loading notes:', error)
