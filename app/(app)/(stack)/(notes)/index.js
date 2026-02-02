@@ -6,14 +6,13 @@ import { useTranslation } from 'react-i18next'
 import { NestableScrollContainer } from 'react-native-draggable-flatlist'
 import { LargeInput, MarkdownEditor, Section } from '@/components'
 import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, ContainerFooter, ImageCarousel, List, MarkdownControls } from '@/screens'
-import { useBottomSheet, useMarkdown, useNotes, useUtils } from '@/hooks'
+import { useBottomSheet, useNotes, useUtils } from '@/hooks'
 import { getDate } from '@/utils'
 import { DEFAULT_LIST, DEFAULT_NOTE_CATEGORIES } from '@/constants'
 
 export default function Note() {
     const { t } = useTranslation()
     const { saveNote, updateNote } = useNotes()
-    const { markdown, hasMarkdown, setHasMarkdown } = useMarkdown()
     const { filter } = useUtils()
 
     const [isSaved, setIsSaved] = useState(false)
@@ -58,7 +57,6 @@ export default function Note() {
     )
 
     useEffect(() => {
-        setHasMarkdown(markdown)
         if (firstRender) return
 
         const timer = setTimeout(() => {
@@ -69,7 +67,6 @@ export default function Note() {
                 categories,
                 images,
                 list,
-                markdown: hasMarkdown,
                 password,
                 biometrics,
                 createdAt
@@ -100,7 +97,6 @@ export default function Note() {
         categories,
         images,
         list,
-        hasMarkdown,
         password,
         biometrics
     ])
@@ -115,11 +111,6 @@ export default function Note() {
 
     const handleAddImage = (image) => {
         setImages([...images, image])
-    }
-
-    const handleOpenImage = (index) => {
-        setIsGalleryVisible(true)
-        setGalleryIndex(index)
     }
 
     const handleListType = (type) => {
@@ -186,7 +177,6 @@ export default function Note() {
                             setValue={setNote}
                             onChangeText={setNote}
                             isEditing={isEditing}
-                            isMarkdown={hasMarkdown}
                             action={markdownAction}
                             setAction={setMarkdownAction}
                         />
@@ -224,13 +214,11 @@ export default function Note() {
                         setImages={setImages}
                     />
                 )}
-                {hasMarkdown && (
-                    <MarkdownControls
-                        isEditing={isEditing}
-                        onRunAction={onRunAction}
-                        onEditMarkdown={onEditMarkdown}
-                    />
-                )}
+                <MarkdownControls
+                    isEditing={isEditing}
+                    onRunAction={onRunAction}
+                    onEditMarkdown={onEditMarkdown}
+                />
             </ContainerFooter>
 
             <Categories

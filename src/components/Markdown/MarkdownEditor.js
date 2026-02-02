@@ -4,7 +4,7 @@ import { MarkdownInput } from './MarkdownInput'
 import { TextArea } from '../Input'
 import { useMarkdownShortcuts } from '@/hooks'
 
-export function MarkdownEditor({ value, setValue, isEditing, isMarkdown, action, setAction }) {
+export function MarkdownEditor({ value, setValue, isEditing, action, setAction }) {
     const { t } = useTranslation()
     const [selection, setSelection] = useState({ start: 0, end: 0 })
 
@@ -38,20 +38,12 @@ export function MarkdownEditor({ value, setValue, isEditing, isMarkdown, action,
     }, [action])
 
     return (
-        isMarkdown ? (
-            <MarkdownInput
-                value={value}
-                setValue={setValue}
-                readOnly={!isEditing}
-                placeholder={t('placeholder.note')}
-                onSelectionChange={onSelectionChange}
-            />
-        ) : (
-            <TextArea
-                value={value}
-                onChangeText={setValue}
-                placeholder={t('placeholder.note')}
-            />
-        )
+        <MarkdownInput
+            value={value}
+            setValue={setValue}
+            readOnly={!isEditing}
+            placeholder={t('placeholder.note')}
+            onSelectionChange={onSelectionChange}
+        />
     )
 }

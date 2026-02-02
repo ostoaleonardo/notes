@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { NestableScrollContainer } from 'react-native-draggable-flatlist'
 import { LargeInput, MarkdownEditor, Section } from '@/components'
 import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, List, DateNote, ImageCarousel, UpdatePassword, MarkdownControls, ContainerFooter } from '@/screens'
-import { useBottomSheet, useMarkdown, useNotes } from '@/hooks'
+import { useBottomSheet, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
 import { DEFAULT_LIST } from '@/constants'
 
@@ -14,7 +14,6 @@ export default function EditNote() {
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
     const { getNote, updateNote } = useNotes()
-    const { hasMarkdown, setHasMarkdown } = useMarkdown()
 
     const [firstRender, setFirstRender] = useState(true)
 
@@ -77,7 +76,6 @@ export default function EditNote() {
         setCategories(categories)
         setImages(images)
         setList(list)
-        setHasMarkdown(markdown)
         setCreatedAt(createdAt)
         setUpdatedAt(updatedAt)
         setBiometrics(biometrics)
@@ -105,7 +103,6 @@ export default function EditNote() {
                 categories,
                 images,
                 list,
-                markdown: hasMarkdown,
                 password: newPassword || currentPassword,
                 biometrics,
                 createdAt
@@ -124,7 +121,6 @@ export default function EditNote() {
         categories,
         images,
         list,
-        hasMarkdown,
         currentPassword,
         newPassword,
         biometrics
@@ -221,7 +217,6 @@ export default function EditNote() {
                             value={note}
                             setValue={setNote}
                             isEditing={isEditing}
-                            isMarkdown={hasMarkdown}
                             action={markdownAction}
                             setAction={setMarkdownAction}
                         />
@@ -261,13 +256,11 @@ export default function EditNote() {
                         setImages={setImages}
                     />
                 )}
-                {hasMarkdown && (
-                    <MarkdownControls
-                        isEditing={isEditing}
-                        onRunAction={onRunAction}
-                        onEditMarkdown={onEditMarkdown}
-                    />
-                )}
+                <MarkdownControls
+                    isEditing={isEditing}
+                    onRunAction={onRunAction}
+                    onEditMarkdown={onEditMarkdown}
+                />
             </ContainerFooter>
 
             <Categories

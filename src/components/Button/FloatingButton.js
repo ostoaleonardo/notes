@@ -21,8 +21,8 @@ export function FloatingButton({ href }) {
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
-        bottom: 24,
-        right: 24,
+        bottom: 16,
+        right: 16,
         padding: 24,
         borderRadius: 24,
         backgroundColor: COLORS.base.accent

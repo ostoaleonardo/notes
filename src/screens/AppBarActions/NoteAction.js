@@ -4,8 +4,8 @@ import { Appbar, Tooltip, useTheme } from 'react-native-paper'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { DeleteNote } from '../Modals'
-import { useBottomSheet, useLocalAuthentication, useMarkdown, useNotes, useUtils } from '@/hooks'
-import { Delete, Keep, KeepFilled, Markdown, MarkdownFilled } from '@/icons'
+import { useBottomSheet, useLocalAuthentication, useNotes, useUtils } from '@/hooks'
+import { Delete, Keep, KeepFilled } from '@/icons'
 import { ROUTES } from '@/constants'
 
 export function NoteAction() {
@@ -13,9 +13,6 @@ export function NoteAction() {
     const { t } = useTranslation()
     const { replace } = useRouter()
     const { slug } = useLocalSearchParams()
-
-    const { hasMarkdown, setHasMarkdown } = useMarkdown()
-    const toggleMarkdown = () => setHasMarkdown(!hasMarkdown)
 
     const { pinned, updatePinned } = useUtils()
     const [isPinned, setIsPinned] = useState(pinned.has(slug))
@@ -56,17 +53,6 @@ export function NoteAction() {
     return (
         <>
             <View style={styles.container}>
-                <Tooltip title={t('appbar.markdown')}>
-                    <Appbar.Action
-                        animated={false}
-                        onPress={toggleMarkdown}
-                        icon={() => (
-                            hasMarkdown
-                                ? <MarkdownFilled {...iconProps} />
-                                : <Markdown {...iconProps} />
-                        )}
-                    />
-                </Tooltip>
                 <Tooltip title={t('appbar.keep')}>
                     <Appbar.Action
                         animated={false}

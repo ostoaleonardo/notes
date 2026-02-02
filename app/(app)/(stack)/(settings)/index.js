@@ -1,25 +1,22 @@
 import { Linking, StyleSheet } from 'react-native'
 import { router } from 'expo-router'
-import { Switch, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { Section, Scroll } from '@/components'
 import { AppVersionCard, Languages, Option } from '@/screens'
-import { useBottomSheet, useMarkdown } from '@/hooks'
+import { useBottomSheet } from '@/hooks'
 import { ArrowForward, OpenInNew } from '@/icons'
 import { LINKS, ROUTES } from '@/constants'
 
 export default function Settings() {
     const { t } = useTranslation()
     const { colors } = useTheme()
-    const { markdown, toggleMarkdown } = useMarkdown()
 
     const {
         ref: languagesBottomRef,
         onOpen: onOpenLanguages,
         onClose: onCloseLanguages
     } = useBottomSheet()
-
-    const onToggleMarkdown = () => toggleMarkdown(!markdown)
 
     const iconProps = {
         color: colors.onBackground
@@ -43,25 +40,6 @@ export default function Settings() {
                     title={t('settings.theme')}
                     rightContent={<ArrowForward {...iconProps} />}
                     onPress={() => router.push(ROUTES.THEME)}
-                    isLast={true}
-                />
-            </Section>
-
-            <Section
-                title='Markdown'
-                containerStyle={styles.section}
-                contentStyle={styles.items}
-            >
-                <Option
-                    title={t('settings.markdown.title')}
-                    description={t('settings.markdown.description')}
-                    rightContent={
-                        <Switch
-                            value={markdown}
-                            onValueChange={onToggleMarkdown}
-                        />
-                    }
-                    isFirst={true}
                     isLast={true}
                 />
             </Section>
