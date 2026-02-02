@@ -16,8 +16,6 @@ export function useTrash() {
             updateTrash(items)
             return items
         })
-
-        updateTrash(trash)
     }
 
     const deleteItem = (item) => {

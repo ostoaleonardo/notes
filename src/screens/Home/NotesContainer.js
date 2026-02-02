@@ -5,7 +5,7 @@ import { DotSeparator, Scroll, Section, SwipeableNote, Typography } from '@/comp
 import { useNotes, useUtils } from '@/hooks'
 import { getSortedNotes } from '@/utils'
 
-export function NotesContainer({ onUnlock, selectedNote, setSelectedNote, filter, onDelete, pinned, onPin }) {
+export function NotesContainer({ selected, setSelected, filter, onUnlock, onDelete, pinned, onPin }) {
     const { t } = useTranslation()
     const { notes, loading } = useNotes()
     const { sort } = useUtils()
@@ -25,13 +25,13 @@ export function NotesContainer({ onUnlock, selectedNote, setSelectedNote, filter
                 key={note.id}
                 data={note}
                 onUnlock={onUnlock}
-                isOpen={selectedNote === note.id}
-                onOpen={() => setSelectedNote(note.id)}
+                isOpen={selected === note.id}
+                onOpen={() => setSelected(note.id)}
                 onDelete={onDelete}
                 onPin={onPin}
             />
         ))
-    }, [selectedNote, onUnlock, onDelete, onPin])
+    }, [selected, onUnlock, onDelete, onPin])
 
     return (
         <Scroll contentContainerStyle={styles.container}>

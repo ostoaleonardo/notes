@@ -14,7 +14,7 @@ export default function App() {
     const { initMarkdown } = useMarkdown()
 
     const [open, setOpen] = useState(null)
-    const [selectedNote, setSelectedNote] = useState(null)
+    const [selected, setSelected] = useState(null)
 
     const {
         filter, onFilter,
@@ -51,13 +51,15 @@ export default function App() {
 
     const onDelete = (note, isLocked) => {
         if (isLocked) {
-            setSelectedNote(id)
+            setSelected(note.id)
             onOpenDelete()
         } else {
             deleteNote(note.id)
             addItem(note)
         }
     }
+
+    console.log(selected)
 
     useState(() => initMarkdown(), [])
 
@@ -72,8 +74,8 @@ export default function App() {
                 pinned={pinned}
                 onPin={onPin}
 
-                selectedNote={selectedNote}
-                setSelectedNote={setSelectedNote}
+                selected={selected}
+                setSelected={setSelected}
 
                 onUnlock={onUnlock}
                 onDelete={onDelete}
@@ -94,9 +96,9 @@ export default function App() {
             />
             <DeleteNote
                 ref={deleteBottomRef}
-                id={selectedNote}
+                id={selected}
                 onClose={() => {
-                    setSelectedNote(null)
+                    setSelected(null)
                     onCloseDelete()
                 }}
             />
