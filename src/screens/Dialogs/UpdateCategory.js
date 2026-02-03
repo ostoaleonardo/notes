@@ -41,7 +41,7 @@ export function UpdateCategory({ visible, onDismiss, selectedId, setIsUpdated })
 
     return (
         <DialogModal
-            title={t('title.updateCategory')}
+            title={t('categories.update')}
             visible={visible}
             onDismiss={onDismiss}
             actions={

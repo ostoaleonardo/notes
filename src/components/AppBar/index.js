@@ -32,10 +32,12 @@ export function AppBar({ options, navigation, menu, settings, back, right }) {
             }}
         >
             {back && (
-                <Appbar.BackAction
-                    animated={false}
-                    onPress={goBack}
-                />
+                <Tooltip title={t('button.back')}>
+                    <Appbar.BackAction
+                        animated={false}
+                        onPress={goBack}
+                    />
+                </Tooltip>
             )}
             {menu && !back && (
                 <Appbar.Action
@@ -53,7 +55,7 @@ export function AppBar({ options, navigation, menu, settings, back, right }) {
             {right}
 
             {settings && (
-                <Tooltip title={t('header.settings')}>
+                <Tooltip title={t('title.settings')}>
                     <Appbar.Action
                         animated={false}
                         onPress={goSettings}

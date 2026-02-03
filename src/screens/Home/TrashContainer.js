@@ -37,7 +37,7 @@ export function TrashContainer({ notes, selected, setSelected, onDelete, onResto
                     opacity={0.5}
                     variant='caption'
                 >
-                    {t('message.noNotes')}
+                    {t('message.notes.empty')}
                 </Typography>
             )}
         </Scroll>

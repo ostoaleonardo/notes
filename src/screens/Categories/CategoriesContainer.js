@@ -21,7 +21,7 @@ export function CategoriesContainer({ onPress }) {
             gap={2}
             data={categories.slice(1)}
             keyExtractor={({ id }) => id}
-            emptyLabel={t('message.noCategories')}
+            emptyLabel={t('message.categories.empty')}
             renderItem={({ item, index }) => (
                 <SwipeableCategory
                     category={item.name}

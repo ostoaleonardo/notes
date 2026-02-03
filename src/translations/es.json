@@ -1,22 +1,24 @@
 {
 	"language": "Español",
-	"title": {
-		"categories": "Categorías",
-		"yourCategories": "Tus categorías",
-		"updateCategory": "Actualizar categoría",
-		"deleteNote": "Eliminar nota",
-		"about": "Acerca de la aplicación"
+	"notes": {
+		"add": "Añadir nota",
+		"edit": "Editar nota",
+		"delete": "liminar nota"
 	},
-	"header": {
+	"categories": {
+		"all": "All",
+		"update": "Update category"
+	},
+	"title": {
 		"notes": "Notas",
-		"addNote": "Añadir nota",
-		"editNote": "Editar nota",
 		"categories": "Categorías",
 		"unlock": "Desbloquear",
+		"trash": "Papelera",
 		"sort": "Ordenar por",
 		"settings": "Ajustes",
 		"theme": "Tema de color",
-		"profile": "Perfil"
+		"profile": "Perfil",
+		"about": "Acerca de la app"
 	},
 	"welcome": {
 		"tagline": "La mejor forma de mantener tus notas organizadas",
@@ -32,10 +34,6 @@
 	"date": {
 		"created": "Creado:",
 		"updated": "Actualizado:"
-	},
-	"categories": {
-		"all": "Todo",
-		"add": "Añadir"
 	},
 	"list": {
 		"add": "Añadir elemento",
@@ -57,41 +55,11 @@
 			"desc": "Ultimo actualizado"
 		}
 	},
-	"backup": {
-		"import": {
-			"title": "Importar notas",
-			"description": "Desde un archivo JSON o TXT.",
-			"messages": {
-				"ok": "Se importo correctamente tus notas.",
-				"isNotArray": "El archivo no contiene un array de notas.",
-				"errorTitle": "Verifica que \"title\" tenga el siguiente formato:",
-				"errorNote": "Verifica que \"note\" tenga el siguiente formato:",
-				"errorCreatedAt": "Verifica que \"createdAt\" tenga el siguiente formato:",
-				"errorBiometrics": "Verifica que \"biometrics\" tenga el siguiente formato:",
-				"errorTypes": "El formato no es correcto.",
-				"error": "Error al importar tus notas, verifica el formato de tu copia de seguridad."
-			}
-		},
-		"export": {
-			"title": "Exportar notas",
-			"description": "A un archivo JSON o TXT.",
-			"format": "Selecciona el formato para exportar.",
-			"messages": {
-				"ok": "Se exporto correctamente tus notas.",
-				"error": "Error al exportar tus notas."
-			}
-		}
-	},
 	"settings": {
 		"general": "General",
 		"language": "Idioma",
 		"theme": "Tema de color",
 		"chooseTheme": "Elige un tema de color para la aplicación.",
-		"markdown": {
-			"title": "Usa Markdown en todas tus notas",
-			"description": "Personaliza tus notas con código Markdown.",
-			"tutorial": "¿Cómo usar Markdown?"
-		},
 		"github": "Repositorio de GitHub",
 		"features": "Reporta problemas, contribuye o solicita nuevas funciones.",
 		"contribute": "Contribuir a la traducción",
@@ -119,25 +87,27 @@
 		"auth": "Autenticación biométrica"
 	},
 	"button": {
-		"addNote": "Añadir nota",
 		"save": "Guardar",
 		"edit": "Editar",
 		"back": "Volver",
-		"cancel": "Cancelar",
 		"delete": "Borrar",
 		"update": "Actualizar",
-		"enter": "Entrar",
-		"ok": "Aceptar"
+		"enter": "Entrar"
 	},
 	"message": {
 		"loading": "Cargando...",
-		"noNotes": "Todavía no tienes notas",
-		"noCategories": "Todavía no tienes categorías",
-		"categoryAdded": "Categoría añadida",
-		"categoryUpdated": "Categoría actualizada",
-		"wrongPassword": "Contraseña incorrecta",
-		"samePassword": "La contraseña no puede ser la misma",
-		"lengthPassword": "La contraseña debe tener al menos 4 caracteres"
+		"notes": {
+			"empty": "Todavía no tienes notas"
+		},
+		"categories": {
+			"updated": "Categoría añadida",
+			"empty": "Todavía no tienes categorías"
+		},
+		"password": {
+			"wrong": "Contraseña incorrecta",
+			"same": "La contraseña no puede ser la misma",
+			"length": "La contraseña debe tener al menos 4 caracteres"
+		}
 	},
 	"placeholder": {
 		"title": "Tu título...",
@@ -146,6 +116,7 @@
 	},
 	"drawer": {
 		"notes": "Notas",
-		"categories": "Categorías"
+		"categories": "Categorías",
+		"trash": "Papelera"
 	}
 }

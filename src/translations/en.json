@@ -1,23 +1,24 @@
 {
 	"language": "English",
-	"title": {
-		"categories": "Categories",
-		"yourCategories": "Your categories",
-		"updateCategory": "Update category",
-		"deleteNote": "Delete note",
-		"about": "About the app"
+	"notes": {
+		"add": "Add note",
+		"edit": "Edit note",
+		"delete": "Delete note"
 	},
-	"header": {
+	"categories": {
+		"all": "All",
+		"update": "Update category"
+	},
+	"title": {
 		"notes": "Notes",
-		"addNote": "Add note",
-		"editNote": "Edit note",
 		"categories": "Categories",
 		"unlock": "Unlock",
 		"trash": "Trash",
 		"sort": "Sorting by",
 		"settings": "Settings",
 		"theme": "Color theme",
-		"profile": "Profile"
+		"profile": "Profile",
+		"about": "About the app"
 	},
 	"welcome": {
 		"tagline": "The best way to keep your notes organized",
@@ -33,10 +34,6 @@
 	"date": {
 		"created": "Created:",
 		"updated": "Updated:"
-	},
-	"categories": {
-		"all": "All",
-		"add": "Add"
 	},
 	"list": {
 		"add": "Add item",
@@ -63,11 +60,6 @@
 		"language": "Language",
 		"theme": "Color theme",
 		"chooseTheme": "Choose a color theme for the app.",
-		"markdown": {
-			"title": "Use Markdown in all your notes",
-			"description": "Customize your notes with Markdown code.",
-			"tutorial": "How to use Markdown?"
-		},
 		"github": "GitHub repository",
 		"features": "Report issues, contribute or request new features.",
 		"contribute": "Contribute to the translation",
@@ -95,24 +87,27 @@
 		"auth": "Biometric authentication"
 	},
 	"button": {
-		"addNote": "Add note",
 		"save": "Save",
 		"edit": "Edit",
 		"back": "Back",
-		"cancel": "Cancel",
 		"delete": "Delete",
 		"update": "Update",
 		"enter": "Enter"
 	},
 	"message": {
 		"loading": "Loading...",
-		"noNotes": "You don't have any notes yet",
-		"noCategories": "You don't have any categories yet",
-		"categoryAdded": "Category added",
-		"categoryUpdated": "Category updated",
-		"wrongPassword": "Wrong password",
-		"samePassword": "The password can't be the same",
-		"lengthPassword": "The password must have at least 4 characters"
+		"notes": {
+			"empty": "You don't have any notes yet"
+		},
+		"categories": {
+			"updated": "Category added",
+			"empty": "You don't have any categories yet"
+		},
+		"password": {
+			"wrong": "Wrong password",
+			"same": "The password can't be the same",
+			"length": "The password must have at least 4 characters"
+		}
 	},
 	"placeholder": {
 		"title": "Your title...",

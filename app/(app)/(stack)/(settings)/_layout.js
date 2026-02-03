@@ -20,13 +20,13 @@ export default function StackLayout() {
             <Stack.Screen
                 name='index'
                 options={{
-                    title: t('header.settings')
+                    title: t('title.settings')
                 }}
             />
             <Stack.Screen
                 name='theme'
                 options={{
-                    title: t('header.theme')
+                    title: t('title.theme')
                 }}
             />
         </Stack>

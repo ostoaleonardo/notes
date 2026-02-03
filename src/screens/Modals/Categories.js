@@ -41,7 +41,7 @@ export const Categories = forwardRef(({ selectedCategories, onCategories, onClos
             scrollable
             onClose={onClose}
             snapPoints={['50%', '95%']}
-            title={t('title.yourCategories')}
+            title={t('title.categories')}
         >
             <View style={styles.inputContainer}>
                 <SmallInput
@@ -69,7 +69,7 @@ export const Categories = forwardRef(({ selectedCategories, onCategories, onClos
                         <Typography
                             opacity={0.5}
                         >
-                            {t('message.noCategories')}
+                            {t('message.categories.empty')}
                         </Typography>
                     </View>
                 )}

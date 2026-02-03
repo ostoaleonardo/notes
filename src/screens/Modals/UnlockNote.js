@@ -53,7 +53,7 @@ export const UnlockNote = forwardRef(({ id, onClose }, ref) => {
         } else {
             setIsInvalid(true)
             vibrate(FEEDBACK_TYPES.ERROR)
-            setMessage(t('message.wrongPassword'))
+            setMessage(t('message.password.wrong'))
         }
     }
 

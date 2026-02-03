@@ -34,7 +34,7 @@ export default function DrawerLayout() {
             <Drawer.Screen
                 name='home/index'
                 options={{
-                    title: t('header.notes')
+                    title: t('title.notes')
                 }}
             />
         </Drawer>

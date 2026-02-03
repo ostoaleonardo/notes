@@ -77,7 +77,6 @@ export default function App() {
             />
 
             <FloatingButton
-                label={t('button.addNote')}
                 href={ROUTES.ADD_NOTE}
             />
 

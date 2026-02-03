@@ -29,7 +29,7 @@ export const AddPassword = forwardRef(({ setPassword, biometrics, setBiometrics,
     const checkPassword = () => {
         if (passwordInput.length < 4) {
             vibrate(FEEDBACK_TYPES.ERROR)
-            setMessage(t('message.lengthPassword'))
+            setMessage(t('message.password.lenght'))
             setIsInvalid(true)
             setPassword('')
             return

@@ -49,11 +49,11 @@ export const UpdatePassword = forwardRef(({ currentPassword, tooglePassword, onD
             if (encryptedOldPassword === encryptedNewPassword) {
                 setIsInvalidPassword(true)
                 vibrate(FEEDBACK_TYPES.WARNING)
-                setMessage('message.samePassword')
+                setMessage('message.password.same')
             } else if (newPassword.length < 4) {
                 setIsInvalidPassword(true)
                 vibrate(FEEDBACK_TYPES.WARNING)
-                setMessage('message.lengthPassword')
+                setMessage('message.password.lenght')
             } else {
                 tooglePassword(encryptedNewPassword)
                 vibrate(FEEDBACK_TYPES.SUCCESS)
@@ -105,7 +105,7 @@ export const UpdatePassword = forwardRef(({ currentPassword, tooglePassword, onD
                         textAlign='center'
                         color={COLORS.base.accent}
                     >
-                        {isWrongPassword && t('message.wrongPassword')}
+                        {isWrongPassword && t('message.password.wrong')}
                     </Typography>
                 </View>
                 <View style={styles.inputContainer}>

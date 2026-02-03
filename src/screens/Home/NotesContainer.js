@@ -70,7 +70,7 @@ export function NotesContainer({ selected, setSelected, filter, onUnlock, onDele
                     opacity={0.5}
                     variant='caption'
                 >
-                    {t('message.noNotes')}
+                    {t('message.notes.empty')}
                 </Typography>
             )}
         </Scroll>

@@ -52,12 +52,12 @@ export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
         } else {
             setIsInvalid(true)
             vibrate(FEEDBACK_TYPES.ERROR)
-            setMessage(t('message.wrongPassword'))
+            setMessage(t('message.password.wrong'))
         }
     }
 
     const handleBiometrics = async () => {
-        const success = await authenticate(t('title.deleteNote'))
+        const success = await authenticate(t('notes.delete'))
 
         if (success) {
             onClose()
@@ -72,7 +72,7 @@ export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
             ref={ref}
             onClose={onClose}
             enableDynamicSizing
-            title={t('title.deleteNote')}
+            title={t('notes.delete')}
             contentContainerStyle={styles.container}
         >
             <View style={styles.security}>

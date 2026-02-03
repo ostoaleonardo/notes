@@ -32,13 +32,13 @@ export default function StackLayout() {
             <Stack.Screen
                 name='categories/index'
                 options={{
-                    title: t('header.categories')
+                    title: t('title.categories')
                 }}
             />
             <Stack.Screen
                 name='trash/index'
                 options={{
-                    title: t('header.trash')
+                    title: t('title.trash')
                 }}
             />
             <Stack.Screen

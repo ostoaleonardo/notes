@@ -17,7 +17,7 @@ export function SortAction() {
             visible={visible}
             onClose={onCloseMenu}
             anchor={
-                <Tooltip title={t('header.sort')}>
+                <Tooltip title={t('title.sort')}>
                     <Appbar.Action
                         animated={false}
                         onPress={onOpenMenu}
