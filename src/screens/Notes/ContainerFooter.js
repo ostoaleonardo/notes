@@ -1,12 +1,11 @@
 import { StyleSheet, View } from 'react-native'
 
-export function ContainerFooter({ children, footer }) {
+export function ContainerFooter({ children }) {
     return (
         <View style={styles.container}>
             <View style={{ position: 'relative' }}>
                 {children}
             </View>
-            {footer}
         </View>
     )
 }
@@ -15,6 +14,7 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         position: 'absolute',
+        zIndex: 10,
         bottom: 0
     }
 })

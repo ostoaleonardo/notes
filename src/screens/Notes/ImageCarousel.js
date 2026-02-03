@@ -8,7 +8,7 @@ export function ImageCarousel({ images, setImages }) {
     }
 
     return (
-        <View style={{ position: 'absolute', bottom: 0 }}>
+        <View style={{ position: 'absolute', bottom: 56, zIndex: 0 }}>
             <Galeria urls={images}>
                 <Scroll
                     horizontal

@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native'
 import { FAB, IconButton, useTheme } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
 import { AnimatedView, Scroll } from '@/components'
-import { Code, Edit, Eye, FormaQuote, FormatBold, FormatH1, FormatItalic, FormatStrikethrough, Link } from '@/icons'
+import { Code, Edit, Eye, FormaQuote, FormatBold, FormatH1, FormatItalic, FormatStrikethrough } from '@/icons'
 
 export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
     const { colors } = useTheme()
@@ -25,7 +25,7 @@ export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
                     <Scroll
                         horizontal
                         overScrollMode='never'
-                        style={styles.scroll}
+                        style={{ flex: 1 }}
                     >
                         <IconButton
                             onPress={() => onRunAction('bold')}
@@ -71,19 +71,17 @@ export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
                     )}
                 />
             </AnimatedView>
-        </View>
+        </View >
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        paddingHorizontal: 16,
-        gap: 16,
         flexDirection: 'row',
-        justifyContent: 'flex-end'
-    },
-    scroll: {
-        flex: 1
+        justifyContent: 'flex-end',
+        paddingHorizontal: 16,
+        marginBottom: 8,
+        gap: 16
     },
     controls: {
         flexGrow: 1,

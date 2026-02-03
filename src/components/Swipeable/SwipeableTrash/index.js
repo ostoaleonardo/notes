@@ -10,7 +10,7 @@ import { getDimensions, getPreviewNote } from '@/utils'
 export function SwipeableTrash({ data, isOpen, onOpen, onDelete, onRestore }) {
     const { colors } = useTheme()
 
-    const { title, note, images, list, markdown } = data
+    const { title, note, images, list } = data
 
     const hasImages = images && images.length > 0
     const hasList = list && list.items && list.items.length > 0
@@ -53,9 +53,7 @@ export function SwipeableTrash({ data, isOpen, onOpen, onDelete, onRestore }) {
                     </View>
 
                     {note && (
-                        markdown
-                            ? <MarkdownInput readOnly value={preview} />
-                            : <Typography variant='paragraph'>{preview}</Typography>
+                        <MarkdownInput readOnly value={preview} />
                     )}
 
 

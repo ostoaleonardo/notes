@@ -16,7 +16,7 @@ export function SwipeableNote({ data, onUnlock, isOpen, onOpen, onDelete, onPin 
     const { colors } = useTheme()
     const { hasBiometrics } = useLocalAuthentication()
 
-    const { id, title, note, images, list, password, biometrics, markdown } = data
+    const { id, title, note, images, list, password, biometrics } = data
 
     const hasImages = images && images.length > 0
     const hasList = list && list.items && list.items.length > 0
@@ -24,7 +24,7 @@ export function SwipeableNote({ data, onUnlock, isOpen, onOpen, onDelete, onPin 
     const hasContent = title || note || hasList || isLocked
 
     const width = hasImages && getDimensions(images.length)
-    const preview = getPreviewNote(note)
+    const value = getPreviewNote(note)
 
     const goToEdit = () => {
         if (isLocked) {
@@ -78,12 +78,7 @@ export function SwipeableNote({ data, onUnlock, isOpen, onOpen, onDelete, onPin 
                         </View>
                     )}
 
-                    {!isLocked && note && (
-                        markdown
-                            ? <MarkdownInput readOnly value={preview} />
-                            : <Typography variant='paragraph'>{preview}</Typography>
-                    )}
-
+                    {!isLocked && note && <MarkdownInput readOnly value={value} />}
 
                     {!isLocked && hasList && (
                         <View style={{ width: '100%' }}>

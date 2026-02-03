@@ -194,32 +194,30 @@ export default function Note() {
                         </Section>
                     )}
                 </NestableScrollContainer>
-            </KeyboardAvoidingView>
 
-            <ContainerFooter
-                footer={
-                    <BottomOptionsBar
-                        onAddImage={handleAddImage}
-                        onListType={handleListType}
-                        hasPassword={!!password}
-                        onOpenPassword={onOpenPassword}
+                <ContainerFooter>
+                    <MarkdownControls
                         isEditing={isEditing}
+                        onRunAction={onRunAction}
                         onEditMarkdown={onEditMarkdown}
                     />
-                }
-            >
-                {hasImages > 0 && (
-                    <ImageCarousel
-                        images={images}
-                        setImages={setImages}
-                    />
-                )}
-                <MarkdownControls
-                    isEditing={isEditing}
-                    onRunAction={onRunAction}
-                    onEditMarkdown={onEditMarkdown}
+                </ContainerFooter>
+            </KeyboardAvoidingView>
+
+            {hasImages && !isEditing && (
+                <ImageCarousel
+                    images={images}
+                    setImages={setImages}
                 />
-            </ContainerFooter>
+            )}
+            <BottomOptionsBar
+                onAddImage={handleAddImage}
+                onListType={handleListType}
+                hasPassword={!!password}
+                onOpenPassword={onOpenPassword}
+                isEditing={isEditing}
+                onEditMarkdown={onEditMarkdown}
+            />
 
             <Categories
                 ref={categoriesBottomRef}

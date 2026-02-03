@@ -51,6 +51,7 @@ export function BottomOptionsBar({ onAddImage, onListType, hasPassword, onOpenPa
 const styles = StyleSheet.create({
     container: {
         width: '100%',
+        bottom: 0,
         paddingHorizontal: 8,
         flexDirection: 'row',
         justifyContent: 'space-between'

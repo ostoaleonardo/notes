@@ -88,44 +88,36 @@ export const UpdatePassword = forwardRef(({ currentPassword, tooglePassword, onD
             title={t('password.update')}
             contentContainerStyle={styles.container}
         >
-            <View style={styles.passwordsContainer}>
-                <View style={styles.inputContainer}>
+            <View style={styles.passwords}>
+                <View style={styles.input}>
                     <Typography variant='caption'>
                         {t('password.current')}
                     </Typography>
                     <PasswordInput
                         modal={true}
                         password={oldPassword}
-                        isInvalid={isWrongPassword}
                         onChangeText={setOldPassword}
                         onChange={() => setIsWrongPassword(false)}
+
+                        isInvalid={isWrongPassword}
+                        setIsInvalid={setIsWrongPassword}
+                        message={isWrongPassword && t('message.password.wrong')}
                     />
-                    <Typography
-                        variant='caption'
-                        textAlign='center'
-                        color={COLORS.base.accent}
-                    >
-                        {isWrongPassword && t('message.password.wrong')}
-                    </Typography>
                 </View>
-                <View style={styles.inputContainer}>
+                <View style={styles.input}>
                     <Typography variant='caption'>
                         {t('password.new')}
                     </Typography>
                     <PasswordInput
                         modal={true}
                         password={newPassword}
-                        isInvalid={isInvalidPassword}
                         onChangeText={setNewPassword}
                         onChange={() => setIsInvalidPassword(false)}
+
+                        isInvalid={isInvalidPassword}
+                        setIsInvalid={setIsInvalidPassword}
+                        message={isInvalidPassword && t('message')}
                     />
-                    <Typography
-                        variant='caption'
-                        textAlign='center'
-                        color={COLORS.base.accent}
-                    >
-                        {isInvalidPassword && t(message)}
-                    </Typography>
                 </View>
             </View>
             <View style={styles.buttons}>
@@ -151,20 +143,19 @@ export const UpdatePassword = forwardRef(({ currentPassword, tooglePassword, onD
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        gap: 16,
+        gap: 40,
         padding: 24,
-        paddingBottom: 80,
         alignItems: 'center',
         justifyContent: 'center'
     },
-    passwordsContainer: {
+    passwords: {
         width: '100%',
         gap: 32,
         marginBottom: 32,
         alignItems: 'center',
         justifyContent: 'center'
     },
-    inputContainer: {
+    input: {
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center'

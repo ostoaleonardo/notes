@@ -234,34 +234,32 @@ export default function EditNote() {
                         </Section>
                     )}
                 </NestableScrollContainer>
+
+                <ContainerFooter>
+                    <MarkdownControls
+                        isEditing={isEditing}
+                        onRunAction={onRunAction}
+                        onEditMarkdown={onEditMarkdown}
+                    />
+                </ContainerFooter>
             </KeyboardAvoidingView>
 
-            <ContainerFooter
-                footer={
-                    <BottomOptionsBar
-                        onAddImage={handleAddImage}
-                        onListType={handleListType}
-                        hasPassword={hasPassword}
-                        onOpenPassword={
-                            hasPassword
-                                ? onOpenUpdatePassword
-                                : onOpenPassword
-                        }
-                    />
-                }
-            >
-                {hasImages && (
-                    <ImageCarousel
-                        images={images}
-                        setImages={setImages}
-                    />
-                )}
-                <MarkdownControls
-                    isEditing={isEditing}
-                    onRunAction={onRunAction}
-                    onEditMarkdown={onEditMarkdown}
+            {hasImages && !isEditing && (
+                <ImageCarousel
+                    images={images}
+                    setImages={setImages}
                 />
-            </ContainerFooter>
+            )}
+            <BottomOptionsBar
+                onAddImage={handleAddImage}
+                onListType={handleListType}
+                hasPassword={hasPassword}
+                onOpenPassword={
+                    hasPassword
+                        ? onOpenUpdatePassword
+                        : onOpenPassword
+                }
+            />
 
             <Categories
                 ref={categoriesBottomRef}
