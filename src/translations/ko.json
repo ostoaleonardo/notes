@@ -1,40 +1,22 @@
 {
 	"language": "한국어",
-	"title": {
-		"categories": "카테고리",
-		"yourCategories": "카테고리",
-		"updateCategory": "카테고리 업데이트",
-		"deleteNote": "노트 삭제",
-		"about": "이 앱에 대하여"
+	"notes": {
+		"delete": "노트 삭제"
 	},
-	"header": {
+	"categories": {
+		"update": "카테고리 업데이트"
+	},
+	"title": {
 		"notes": "노트",
-		"addNote": "노트 추가",
-		"editNote": "노트 수정",
 		"categories": "카테고리",
 		"unlock": "잠금해제",
 		"settings": "설정",
 		"theme": "테마 설정",
-		"profile": "프로필"
-	},
-	"welcome": {
-		"tagline": "최고 쉽고 편한 노트 관리",
-		"signIn": "구글 계정으로 로그인",
-		"signInError": "로그인 에러, 다시 시도하세요.",
-		"noConnection": "인터넷에 연결되어있지 않습니다."
-	},
-	"profile": {
-		"alias": "알리아스",
-		"email": "이메일",
-		"signOut": "로그아웃"
+		"about": "이 앱에 대하여"
 	},
 	"date": {
 		"created": "작성일자:",
 		"updated": "업데이트일자:"
-	},
-	"categories": {
-		"all": "전체",
-		"add": "추가"
 	},
 	"list": {
 		"add": "추가",
@@ -45,7 +27,6 @@
 	"settings": {
 		"language": "언어",
 		"theme": "테마 색상",
-		"chooseTheme": "테마 색상을 선택하세요.",
 		"github": "GitHub 리포지토리",
 		"features": "이슈 보고, 기여 또는 새로운 기능 요청하기",
 		"contribute": "번역 재능기부",
@@ -56,7 +37,8 @@
 	"theme": {
 		"light": "밝은 테마",
 		"dark": "어두운 테마",
-		"system": "시스템"
+		"system": "시스템",
+		"choose": "테마 색상을 선택하세요."
 	},
 	"password": {
 		"add": "패스워드 추가",
@@ -73,24 +55,26 @@
 		"auth": "생체 인증"
 	},
 	"button": {
-		"addNote": "노트 추가",
 		"save": "저장",
 		"edit": "수정",
 		"back": "뒤로 가기",
-		"cancel": "취소",
 		"delete": "삭제",
 		"update": "업데이트",
 		"enter": "입력"
 	},
 	"message": {
 		"loading": "로딩 중...",
-		"noNotes": "노트가 아직 없습니다.",
-		"noCategories": "카테고리가 아직 없습니다.",
-		"categoryAdded": "카테고리 추가 완료",
-		"categoryUpdated": "카테고리 업데이트 완료",
-		"wrongPassword": "잘못된 패스워드",
-		"samePassword": "패스워드는 동일하게 할 수 없습니다.",
-		"lengthPassword": "패스워드는 최소 네 글자를 포함해야 합니다."
+		"notes": {
+			"empty": "노트가 아직 없습니다."
+		},
+		"categories": {
+			"empty": "카테고리가 아직 없습니다."
+		},
+		"password": {
+			"wrong": "잘못된 패스워드",
+			"same": "패스워드는 동일하게 할 수 없습니다.",
+			"length": "패스워드는 최소 네 글자를 포함해야 합니다."
+		}
 	},
 	"placeholder": {
 		"title": "어떤 칭호로 불러드릴까요...",

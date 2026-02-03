@@ -1,13 +1,10 @@
 {
 	"language": "Español",
 	"notes": {
-		"add": "Añadir nota",
-		"edit": "Editar nota",
-		"delete": "liminar nota"
+		"delete": "Eliminar nota"
 	},
 	"categories": {
-		"all": "All",
-		"update": "Update category"
+		"update": "Actualizar categoría"
 	},
 	"title": {
 		"notes": "Notas",
@@ -17,19 +14,7 @@
 		"sort": "Ordenar por",
 		"settings": "Ajustes",
 		"theme": "Tema de color",
-		"profile": "Perfil",
 		"about": "Acerca de la app"
-	},
-	"welcome": {
-		"tagline": "La mejor forma de mantener tus notas organizadas",
-		"signIn": "Iniciar sesión con Google",
-		"signInError": "Error al iniciar sesión, inténtalo de nuevo",
-		"noConnection": "No tienes conexión a internet"
-	},
-	"profile": {
-		"alias": "Alias",
-		"email": "Correo electrónico",
-		"signOut": "Cerrar sesión"
 	},
 	"date": {
 		"created": "Creado:",
@@ -59,7 +44,6 @@
 		"general": "General",
 		"language": "Idioma",
 		"theme": "Tema de color",
-		"chooseTheme": "Elige un tema de color para la aplicación.",
 		"github": "Repositorio de GitHub",
 		"features": "Reporta problemas, contribuye o solicita nuevas funciones.",
 		"contribute": "Contribuir a la traducción",
@@ -70,7 +54,8 @@
 	"theme": {
 		"light": "Claro",
 		"dark": "Oscuro",
-		"system": "Sistema"
+		"system": "Sistema",
+		"choose": "Elige un tema de color para la aplicación."
 	},
 	"password": {
 		"add": "Añadir contraseña",
@@ -92,7 +77,8 @@
 		"back": "Volver",
 		"delete": "Borrar",
 		"update": "Actualizar",
-		"enter": "Entrar"
+		"enter": "Entrar",
+		"pin": "Fijar"
 	},
 	"message": {
 		"loading": "Cargando...",
@@ -100,7 +86,6 @@
 			"empty": "Todavía no tienes notas"
 		},
 		"categories": {
-			"updated": "Categoría añadida",
 			"empty": "Todavía no tienes categorías"
 		},
 		"password": {

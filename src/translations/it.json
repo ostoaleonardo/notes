@@ -1,40 +1,22 @@
 {
 	"language": "Italiano",
-	"title": {
-		"categories": "Categorie",
-		"yourCategories": "Le tue categorie",
-		"updateCategory": "Aggiorna categoria",
-		"deleteNote": "Elimina nota",
-		"about": "Informazioni sull'app"
+	"notes": {
+		"delete": "Elimina nota"
 	},
-	"header": {
+	"categories": {
+		"update": "Aggiorna categoria"
+	},
+	"title": {
 		"notes": "Note",
-		"addNote": "Aggiungi nota",
-		"editNote": "Modifica nota",
 		"categories": "Categorie",
 		"unlock": "Sblocca",
 		"settings": "Impostazioni",
 		"theme": "Tema colori",
-		"profile": "Profilo"
-	},
-	"welcome": {
-		"tagline": "Il miglior modo di tenere le tue note organizzate",
-		"signIn": "Accedi con Google",
-		"signInError": "Errore nell'accesso, riprova",
-		"noConnection": "Non hai una connessione internet"
-	},
-	"profile": {
-		"alias": "Alias",
-		"email": "Email",
-		"signOut": "Effettua il Log-Out"
+		"about": "Informazioni sull'app"
 	},
 	"date": {
 		"created": "Creato:",
 		"updated": "Aggiornato:"
-	},
-	"categories": {
-		"all": "Tutte",
-		"add": "Aggiungi"
 	},
 	"list": {
 		"add": "Aggiungi oggetto",
@@ -45,7 +27,6 @@
 	"settings": {
 		"language": "Lingua",
 		"theme": "Colore tema",
-		"chooseTheme": "Scegli un tema colore per l'app.",
 		"github": "Archivio GitHub",
 		"features": "Segnala problema, contribuisci o richiedi una nuova funzione.",
 		"contribute": "Contribuisci alla traduzione",
@@ -56,7 +37,8 @@
 	"theme": {
 		"light": "Chiaro",
 		"dark": "Scuro",
-		"system": "Sistema"
+		"system": "Sistema",
+		"choose": "Scegli un tema colore per l'app."
 	},
 	"password": {
 		"add": "Aggiungi password",
@@ -73,24 +55,26 @@
 		"auth": "Autenticazione biometrica"
 	},
 	"button": {
-		"addNote": "Aggiungi nota",
 		"save": "Salva",
 		"edit": "Aggiorna",
 		"back": "Indietro",
-		"cancel": "Cancella",
 		"delete": "Elimina",
 		"update": "Aggiorna",
 		"enter": "Invio"
 	},
 	"message": {
 		"loading": "Caricamento...",
-		"noNotes": "Non hai ancora nessuna nota",
-		"noCategories": "Non hai ancora nessuna categoria",
-		"categoryAdded": "Categoria aggiunta",
-		"categoryUpdated": "Categoria aggiornata",
-		"wrongPassword": "Password sbagliata",
-		"samePassword": "La password non può essere la stessa",
-		"lengthPassword": "La password deve avere almeno 4 caratteri"
+		"notes": {
+			"empty": "Non hai ancora nessuna nota"
+		},
+		"categories": {
+			"empty": "Non hai ancora nessuna categoria"
+		},
+		"password": {
+			"wrong": "Password sbagliata",
+			"same": "La password non può essere la stessa",
+			"length": "La password deve avere almeno 4 caratteri"
+		}
 	},
 	"placeholder": {
 		"title": "Il tuo titolo...",

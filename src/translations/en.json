@@ -1,12 +1,9 @@
 {
 	"language": "English",
 	"notes": {
-		"add": "Add note",
-		"edit": "Edit note",
 		"delete": "Delete note"
 	},
 	"categories": {
-		"all": "All",
 		"update": "Update category"
 	},
 	"title": {
@@ -17,19 +14,7 @@
 		"sort": "Sorting by",
 		"settings": "Settings",
 		"theme": "Color theme",
-		"profile": "Profile",
 		"about": "About the app"
-	},
-	"welcome": {
-		"tagline": "The best way to keep your notes organized",
-		"signIn": "Sign in with Google",
-		"signInError": "Error signing in, try again",
-		"noConnection": "You don't have an internet connection"
-	},
-	"profile": {
-		"alias": "Alias",
-		"email": "Email",
-		"signOut": "Sign out"
 	},
 	"date": {
 		"created": "Created:",
@@ -59,7 +44,6 @@
 		"general": "General",
 		"language": "Language",
 		"theme": "Color theme",
-		"chooseTheme": "Choose a color theme for the app.",
 		"github": "GitHub repository",
 		"features": "Report issues, contribute or request new features.",
 		"contribute": "Contribute to the translation",
@@ -70,7 +54,8 @@
 	"theme": {
 		"light": "Light",
 		"dark": "Dark",
-		"system": "System"
+		"system": "System",
+		"choose": "Choose a color theme for the app."
 	},
 	"password": {
 		"add": "Add password",
@@ -92,7 +77,8 @@
 		"back": "Back",
 		"delete": "Delete",
 		"update": "Update",
-		"enter": "Enter"
+		"enter": "Enter",
+		"pin": "Pin"
 	},
 	"message": {
 		"loading": "Loading...",
@@ -100,7 +86,6 @@
 			"empty": "You don't have any notes yet"
 		},
 		"categories": {
-			"updated": "Category added",
 			"empty": "You don't have any categories yet"
 		},
 		"password": {

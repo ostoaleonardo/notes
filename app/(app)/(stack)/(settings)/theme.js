@@ -15,7 +15,7 @@ export default function Theme() {
             <Typography
                 variant='caption'
             >
-                {t('settings.chooseTheme')}
+                {t('theme.choose')}
             </Typography>
 
             <View style={styles.themes}>

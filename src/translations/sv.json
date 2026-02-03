@@ -1,40 +1,22 @@
 {
 	"language": "Svenska",
-	"title": {
-		"categories": "Kategorier",
-		"yourCategories": "Dina kategorier",
-		"updateCategory": "Uppdatera kategori",
-		"deleteNote": "Radera anteckning",
-		"about": "Om appen"
+	"notes": {
+		"delete": "Radera anteckning"
 	},
-	"header": {
+	"categories": {
+		"update": "Uppdatera kategori"
+	},
+	"title": {
 		"notes": "Anteckningar",
-		"addNote": "Ny anteckning",
-		"editNote": "Redigera anteckning",
 		"categories": "Kategorier",
 		"unlock": "Lås upp",
 		"settings": "Inställningar",
 		"theme": "Färgtema",
-		"profile": "Profil"
-	},
-	"welcome": {
-		"tagline": "Det bästa sättet att organisera dina anteckningar",
-		"signIn": "Logga in med Google",
-		"signInError": "Inloggningen misslyckades, försök igen",
-		"noConnection": "Du saknar internetuppkoppling"
-	},
-	"profile": {
-		"alias": "Användarnamn",
-		"email": "Email",
-		"signOut": "Logga ut"
+		"about": "Om appen"
 	},
 	"date": {
 		"created": "Skapad:",
 		"updated": "Uppdaterad:"
-	},
-	"categories": {
-		"all": "Alla",
-		"add": "Lägg till"
 	},
 	"list": {
 		"add": "Lägg till",
@@ -45,7 +27,6 @@
 	"settings": {
 		"language": "Språk",
 		"theme": "Färgtema",
-		"chooseTheme": "Välj färgtema för appen.",
 		"github": "GitHub datakälla",
 		"features": "Anmäl problem, bidra eller önska nya funktioner.",
 		"contribute": "Bidra till översättning",
@@ -56,7 +37,8 @@
 	"theme": {
 		"light": "Ljust",
 		"dark": "Mörkt",
-		"system": "System"
+		"system": "System",
+		"choose": "Välj färgtema för appen."
 	},
 	"password": {
 		"add": "Skapa lösenord",
@@ -73,24 +55,26 @@
 		"auth": "Bakåt"
 	},
 	"button": {
-		"addNote": "Ny anteckning",
 		"save": "Spara",
 		"edit": "Redigera",
 		"back": "Bakåt",
-		"cancel": "Avbryt",
 		"delete": "Radera",
 		"update": "Uppdatera",
 		"enter": "Gå in"
 	},
 	"message": {
 		"loading": "Laddar...",
-		"noNotes": "Du har inte skapat någon anteckning än",
-		"noCategories": "Du har inte skapat kategorier än",
-		"categoryAdded": "Kategori skapad",
-		"categoryUpdated": "Kategori uppdaterad",
-		"wrongPassword": "Fel lösenord",
-		"samePassword": "Lösenordet kan inte vara samma",
-		"lengthPassword": "Lösenordet måste innehålla minst 4 karaktärer"
+		"notes": {
+			"empty": "Du har inte skapat någon anteckning än"
+		},
+		"categories": {
+			"empty": "Du har inte skapat kategorier än"
+		},
+		"password": {
+			"wrong": "Fel lösenord",
+			"same": "Lösenordet kan inte vara samma",
+			"length": "Lösenordet måste innehålla minst 4 karaktärer"
+		}
 	},
 	"placeholder": {
 		"title": "Titel...",

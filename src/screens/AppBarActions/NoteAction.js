@@ -53,7 +53,7 @@ export function NoteAction() {
     return (
         <>
             <View style={styles.container}>
-                <Tooltip title={t('appbar.keep')}>
+                <Tooltip title={t('button.pin')}>
                     <Appbar.Action
                         animated={false}
                         onPress={toggleKeep}
@@ -64,7 +64,7 @@ export function NoteAction() {
                         )}
                     />
                 </Tooltip>
-                <Tooltip title={t('appbar.delete')}>
+                <Tooltip title={t('button.delete')}>
                     <Appbar.Action
                         animated={false}
                         onPress={onDelete}

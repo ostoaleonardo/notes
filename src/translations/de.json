@@ -1,40 +1,22 @@
 {
 	"language": "Deutsch",
-	"title": {
-		"categories": "Kategorien",
-		"yourCategories": "Deine Kategorien",
-		"updateCategory": "Kategorie aktualisieren",
-		"deleteNote": "Notiz beseitigen",
-		"about": "Über die App"
+	"notes": {
+		"delete": "Notiz beseitigen"
 	},
-	"header": {
+	"categories": {
+		"update": "Kategorie aktualisieren"
+	},
+	"title": {
 		"notes": "Notizen",
-		"addNote": "Notiz hinzufügen",
-		"editNote": "Notiz bearbeiten",
 		"categories": "Kategorien",
 		"unlock": "Entsperren",
 		"settings": "Einstellungen",
 		"theme": "Farbthema",
-		"profile": "Profil"
-	},
-	"welcome": {
-		"tagline": "Der beste Weg, deine Notizen zu organisieren",
-		"signIn": "Mit Google anmelden",
-		"signInError": "Fehler bei der Anmeldung, versuch noch einmal",
-		"noConnection": "Du hast keine Internetverbindung"
-	},
-	"profile": {
-		"alias": "Alias",
-		"email": "E-Mail",
-		"signOut": "Abmelden"
+		"about": "Über die App"
 	},
 	"date": {
 		"created": "Kreiert:",
 		"updated": "Aktualisiert:"
-	},
-	"categories": {
-		"all": "Alle",
-		"add": "Hinzufügen"
 	},
 	"list": {
 		"add": "Artikel Hinzufügen",
@@ -42,10 +24,23 @@
 		"numbered": "Geordnete Liste",
 		"checklist": "Checkliste"
 	},
+	"sort": {
+		"title": {
+			"asc": "Titel A-Z",
+			"desc": "Titel Z-A"
+		},
+		"created": {
+			"asc": "Älteste",
+			"desc": "Neueste"
+		},
+		"updated": {
+			"asc": "Am häufigsten aktualisiert",
+			"desc": "Am seltensten aktualisiert"
+		}
+	},
 	"settings": {
 		"language": "Sprache",
 		"theme": "Farbthema",
-		"chooseTheme": "Wähle ein Farbthema für die App.",
 		"github": "GitHub Repository",
 		"features": "Probleme melden, beitragen oder neue Funktionen anfordern.",
 		"contribute": "Zur Übersetzung beitragen",
@@ -56,7 +51,8 @@
 	"theme": {
 		"light": "Licht",
 		"dark": "Dunkel",
-		"system": "System"
+		"system": "System",
+		"choose": "Wähle ein Farbthema für die App."
 	},
 	"password": {
 		"add": "Passwort hinzufügen",
@@ -73,24 +69,26 @@
 		"auth": "Biometrische Authentifizierung"
 	},
 	"button": {
-		"addNote": "Notiz hinzufügen",
 		"save": "Speichern",
 		"edit": "Bearbeiten",
 		"back": "Zurück",
-		"cancel": "Beenden",
 		"delete": "Beseitigen",
 		"update": "Aktualisieren",
 		"enter": "Eingeben"
 	},
 	"message": {
 		"loading": "Wird geladen...",
-		"noNotes": "Du hast noch keine Notizen",
-		"noCategories": "Du hast noch keine Kategorien",
-		"categoryAdded": "Kategorie hinzugefügt",
-		"categoryUpdated": "Kategorie aktualisiert",
-		"wrongPassword": "Falsches Passwort",
-		"samePassword": "Das Passwort darf nicht gleich sein",
-		"lengthPassword": "Das Passwort muss mindestens 4 Zeichen haben"
+		"notes": {
+			"empty": "Du hast noch keine Notizen"
+		},
+		"categories": {
+			"empty": "Du hast noch keine Kategorien"
+		},
+		"password": {
+			"wrong": "Falsches Passwort",
+			"same": "Das Passwort darf nicht gleich sein",
+			"length": "Das Passwort muss mindestens 4 Zeichen haben"
+		}
 	},
 	"placeholder": {
 		"title": "Dein Titel...",

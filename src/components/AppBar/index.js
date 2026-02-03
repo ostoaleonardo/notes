@@ -5,7 +5,7 @@ import { useTrash } from '@/hooks'
 import { Delete, Menu, Settings } from '@/icons'
 import { FONTS, ROUTES } from '@/constants'
 
-export function AppBar({ options, navigation, menu, settings, back, right }) {
+export function AppBar({ options, navigation, menu, settings, trash, back, right }) {
     const { colors } = useTheme()
     const { t } = useTranslation()
     const { clearAll } = useTrash()
@@ -64,7 +64,7 @@ export function AppBar({ options, navigation, menu, settings, back, right }) {
                 </Tooltip>
             )}
 
-            {title === t('header.trash') && (
+            {trash && (
                 <Tooltip title={t('header.trash')}>
                     <Appbar.Action
                         animated={false}

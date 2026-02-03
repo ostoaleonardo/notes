@@ -10,7 +10,10 @@ export default function StackLayout() {
     return (
         <Stack
             screenOptions={{
-                header: (props) => <AppBar back={true} {...props} />,
+                header: (props) => {
+                    const trash = props.route.name === 'trash/index'
+                    return <AppBar back={true} trash={trash} {...props} />
+                },
 
                 contentStyle: {
                     backgroundColor: colors.background

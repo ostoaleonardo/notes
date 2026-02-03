@@ -1,40 +1,22 @@
 {
 	"language": "Português",
-	"title": {
-		"categories": "Categorias",
-		"yourCategories": "Suas categorias",
-		"updateCategory": "Atualizar categorias",
-		"deleteNote": "Excluir nota",
-		"about": "Sobre o aplicativo"
+	"notes": {
+		"delete": "Excluir nota"
 	},
-	"header": {
+	"categories": {
+		"update": "Atualizar categorias"
+	},
+	"title": {
 		"notes": "Notas",
-		"addNote": "Adicionar nota",
-		"editNote": "Editar nota",
 		"categories": "Categorias",
 		"unlock": "Desbloquear",
 		"settings": "Configurações",
 		"theme": "Cor do tema",
-		"profile": "Perfil"
-	},
-	"welcome": {
-		"tagline": "A melhor maneira de manter as suas notas organizadas",
-		"signIn": "Entre com Google",
-		"signInError": "Erro ao entrar, tente novamente",
-		"noConnection": "Você não possui uma conexão com a internet"
-	},
-	"profile": {
-		"alias": "Nome alternativo",
-		"email": "Email",
-		"signOut": "Sair"
+		"about": "Sobre o aplicativo"
 	},
 	"date": {
 		"created": "Criado:",
 		"updated": "Atualizado:"
-	},
-	"categories": {
-		"all": "Todos",
-		"add": "Adicionar"
 	},
 	"list": {
 		"add": "Adicionar item",
@@ -45,7 +27,6 @@
 	"settings": {
 		"language": "Idioma",
 		"theme": "Cor do tema",
-		"chooseTheme": "Escolha uma cor para o tema do aplicativo.",
 		"github": "Repositório no GitHub",
 		"features": "Relatar problemas, contribuir ou solicitar novas funcionalidades.",
 		"contribute": "Contribua com a tradução",
@@ -56,7 +37,8 @@
 	"theme": {
 		"light": "Claro",
 		"dark": "Escuro",
-		"system": "Sistema"
+		"system": "Sistema",
+		"choose": "Escolha uma cor para o tema do aplicativo."
 	},
 	"password": {
 		"add": "Adicionar senha",
@@ -73,24 +55,26 @@
 		"auth": "Autenticar biometria"
 	},
 	"button": {
-		"addNote": "Adicionar nota",
 		"save": "Salvar",
 		"edit": "Editar",
 		"back": "Voltar",
-		"cancel": "Cancelar",
 		"delete": "Excluir",
 		"update": "Atualizar",
 		"enter": "Entrar"
 	},
 	"message": {
 		"loading": "Carregando...",
-		"noNotes": "Nenhuma nota adicionada",
-		"noCategories": "Nenhuma categoria adicionada",
-		"categoryAdded": "Categoria adicionada",
-		"categoryUpdated": "Categoria atualizada",
-		"wrongPassword": "Senha errada",
-		"samePassword": "A senha não pode ser a mesma",
-		"lengthPassword": "A senha deve conter no mínimo 4 caracteres"
+		"notes": {
+			"empty": "Nenhuma nota adicionada"
+		},
+		"categories": {
+			"empty": "Nenhuma categoria adicionada"
+		},
+		"password": {
+			"wrong": "Senha errada",
+			"same": "A senha não pode ser a mesma",
+			"length": "A senha deve conter no mínimo 4 caracteres"
+		}
 	},
 	"placeholder": {
 		"title": "Seu título...",

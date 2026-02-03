@@ -1,40 +1,22 @@
 {
 	"language": "Türkçe",
-	"title": {
-		"categories": "Kategoriler",
-		"yourCategories": "Kategoriler",
-		"updateCategory": "Kategori güncelleme",
-		"deleteNote": "Notu sil",
-		"about": "Uygulama hakkında"
+	"notes": {
+		"delete": "Notu sil"
 	},
-	"header": {
+	"categories": {
+		"update": "Kategori güncelleme"
+	},
+	"title": {
 		"notes": "Notlar",
-		"addNote": "Not ekle",
-		"editNote": "Notu düzenle",
 		"categories": "Kategoriler",
 		"unlock": "Kilidi aç",
 		"settings": "Ayarlar",
 		"theme": "Renk teması",
-		"profile": "Profil"
-	},
-	"welcome": {
-		"tagline": "Notlarınızı düzenli tutmanın en iyi yolu",
-		"signIn": "Google ile giriş yapın",
-		"signInError": "Oturum açarken hata oluştu, tekrar deneyin",
-		"noConnection": "İnternet bağlantınız yok"
-	},
-	"profile": {
-		"alias": "Takma ad",
-		"email": "Eposta",
-		"signOut": "Çıkış yap"
+		"about": "Uygulama hakkında"
 	},
 	"date": {
 		"created": "Oluşturuldu:",
 		"updated": "Güncellendi:"
-	},
-	"categories": {
-		"all": "Tümü",
-		"add": "Ekle"
 	},
 	"list": {
 		"add": "Öğe ekle",
@@ -45,7 +27,6 @@
 	"settings": {
 		"language": "Dil",
 		"theme": "Renk teması",
-		"chooseTheme": "Uygulama için bir renk teması seçin.",
 		"github": "GitHub deposu",
 		"features": "Sorunları bildirin, katkıda bulunun veya yeni özellikler talep edin.",
 		"contribute": "Dil çevirisine katkıda bulunun",
@@ -56,7 +37,8 @@
 	"theme": {
 		"light": "Açık",
 		"dark": "Karanlık",
-		"system": "Sistem"
+		"system": "Sistem",
+		"choose": "Uygulama için bir renk teması seçin."
 	},
 	"password": {
 		"add": "Şifre ekle",
@@ -73,24 +55,26 @@
 		"auth": "Biyometrik kimlik doğrulama"
 	},
 	"button": {
-		"addNote": "Not ekle",
 		"save": "Kaydet",
 		"edit": "Düzenle",
 		"back": "Geri",
-		"cancel": "İptal",
 		"delete": "Sil",
 		"update": "Güncelle",
 		"enter": "Enter"
 	},
 	"message": {
 		"loading": "Yükleniyor...",
-		"noNotes": "Henüz hiç notunuz yok",
-		"noCategories": "Henüz herhangi bir kategoriniz yok",
-		"categoryAdded": "Kategori eklendi",
-		"categoryUpdated": "Kategori güncellendi",
-		"wrongPassword": "Yanlış şifre",
-		"samePassword": "Şifre aynı olamaz",
-		"lengthPassword": "Şifre en az 4 karakterden oluşmalıdır"
+		"notes": {
+			"empty": "Henüz hiç notunuz yok"
+		},
+		"categories": {
+			"empty": "Henüz herhangi bir kategoriniz yok"
+		},
+		"password": {
+			"wrong": "Yanlış şifre",
+			"same": "Şifre aynı olamaz",
+			"length": "Şifre en az 4 karakterden oluşmalıdır"
+		}
 	},
 	"placeholder": {
 		"title": "Ünvanınız...",

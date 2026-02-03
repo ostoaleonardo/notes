@@ -1,40 +1,22 @@
 {
 	"language": "العربية",
-	"title": {
-		"categories": "فئات",
-		"yourCategories": "فئاتك",
-		"updateCategory": "تحديث الفئة",
-		"deleteNote": "حذف الملاحظة",
-		"about": "حول التطبيق"
+	"notes": {
+		"delete": "حذف الملاحظة"
 	},
-	"header": {
+	"categories": {
+		"update": "تحديث الفئة"
+	},
+	"title": {
 		"notes": "ملاحظات",
-		"addNote": "إضافة ملاحظة",
-		"editNote": "تعديل الملاحظة",
 		"categories": "فئات",
 		"unlock": "فك القُفْل",
 		"settings": "الإعدادات",
 		"theme": "ألوان النسق",
-		"profile": "الحساب الشخصي"
-	},
-	"welcome": {
-		"tagline": "أفضل طريقة لإبقاء ملاحظاتك مرتبة",
-		"signIn": "تسجيل الدخول باستخدام Google",
-		"signInError": "تعذر تسجيل الدخول، حاول مجدداً",
-		"noConnection": "لا يمكن الوصول للإنترنت"
-	},
-	"profile": {
-		"alias": "الاسم المستعار",
-		"email": "البريد الإلكتروني",
-		"signOut": "تسجيل الخروج"
+		"about": "حول التطبيق"
 	},
 	"date": {
 		"created": "تاريخ الإنشاء:",
 		"updated": "آخر تعديل:"
-	},
-	"categories": {
-		"all": "كل الفئات",
-		"add": "إضافة"
 	},
 	"list": {
 		"add": "إضافة عنصر",
@@ -45,7 +27,6 @@
 	"settings": {
 		"language": "اللغة",
 		"theme": "ألوان النسق",
-		"chooseTheme": "اختر تنسيقاً للتطبيق.",
 		"github": "مصدر البرنامَج على منصة GitHub",
 		"features": "الإبلاغ عن مشكلات، إضافة أو طلب خصائص جديدة.",
 		"contribute": "المساعدة في التَّرْجَمَةً",
@@ -56,7 +37,8 @@
 	"theme": {
 		"light": "الوضع النهاري",
 		"dark": "الوضع الليلي",
-		"system": "النظام"
+		"system": "النظام",
+		"choose": "اختر تنسيقاً للتطبيق."
 	},
 	"password": {
 		"add": "إضافة كلمة مرور",
@@ -73,24 +55,26 @@
 		"auth": "المصادقة الحيوية"
 	},
 	"button": {
-		"addNote": "إضافة ملاحظة",
 		"save": "حفظ",
 		"edit": "تعديل",
 		"back": "الرجوع",
-		"cancel": "إلغاء",
 		"delete": "حذف",
 		"update": "تحديث",
 		"enter": "إدخال"
 	},
 	"message": {
 		"loading": "جاري التحميل...",
-		"noNotes": "لا توجد ملاحظات",
-		"noCategories": "لا توجد فئات",
-		"categoryAdded": "تمت إضافة الفئة",
-		"categoryUpdated": "تم تحديث الفئة",
-		"wrongPassword": "كلمة المرور خاطئة",
-		"samePassword": "لا يمكن وضع نفس كلمة المرور",
-		"lengthPassword": "كلمة المرور يجب أن تحتوي في الأقل 4 أحرف"
+		"notes": {
+			"empty": "لا توجد ملاحظات"
+		},
+		"categories": {
+			"empty": "لا توجد فئات"
+		},
+		"password": {
+			"wrong": "كلمة المرور خاطئة",
+			"same": "لا يمكن وضع نفس كلمة المرور",
+			"length": "كلمة المرور يجب أن تحتوي في الأقل 4 أحرف"
+		}
 	},
 	"placeholder": {
 		"title": "عنوانك...",
