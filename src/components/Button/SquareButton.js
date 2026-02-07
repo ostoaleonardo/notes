@@ -10,6 +10,7 @@ export function SquareButton({ onPress, disabled }) {
     return (
         <Pressable
             onPress={onPress}
+            disabled={disabled}
             style={{
                 ...styles.pressable,
                 backgroundColor: colors.tertiary + alpha

@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
         height: 48,
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: 16
+        paddingHorizontal: 8
     },
     input: {
         flex: 1,

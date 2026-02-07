@@ -65,10 +65,7 @@ export function List({ list, setList, onAddItem }) {
             <AnimatedView
                 entering={FadeInUp}
                 exiting={FadeOutUp}
-                style={{
-                    paddingTop: 16,
-                    paddingHorizontal: 24
-                }}
+                style={{ paddingTop: 16, paddingHorizontal: 16 }}
             >
                 <Pressable
                     mode='contained-tonal'
