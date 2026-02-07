@@ -1,11 +1,12 @@
 import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { RadioButton, useTheme } from 'react-native-paper'
+import { Appbar, RadioButton, Tooltip, useTheme } from 'react-native-paper'
 import { MenuContainer } from './MenuContainer'
 import { RadioButtonItem } from '../RadioButtonItem'
 import { useUtils } from '@/hooks'
+import { Sort } from '@/icons'
 
-export function SortMenu({ anchor, visible, onClose }) {
+export function SortMenu({ visible, onOpen, onClose }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { sort, updateSort } = useUtils()
@@ -28,10 +29,18 @@ export function SortMenu({ anchor, visible, onClose }) {
     return (
         <MenuContainer
             mode='single'
-            anchor={anchor}
             visible={visible}
             onClose={onClose}
             position='bottom'
+            anchor={
+                <Tooltip title={t('title.sort')}>
+                    <Appbar.Action
+                        animated={false}
+                        onPress={onOpen}
+                        icon={() => <Sort color={colors.onBackground} />}
+                    />
+                </Tooltip>
+            }
         >
             <RadioButton.Group
                 value={field + '.' + order}

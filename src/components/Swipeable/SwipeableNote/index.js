@@ -68,13 +68,7 @@ export function SwipeableNote({ data, onUnlock, isOpen, onOpen, onDelete, onPin 
                                 )}
                             </View>
 
-                            {isLocked && (
-                                <Lock
-                                    width={16}
-                                    height={16}
-                                    color={colors.onBackground}
-                                />
-                            )}
+                            {isLocked && <Lock color={colors.onSurface} />}
                         </View>
                     )}
 

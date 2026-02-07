@@ -43,6 +43,7 @@ export function MarkdownEditor({ value, setValue, isEditing, action, setAction }
             readOnly={!isEditing}
             placeholder={t('placeholder.note')}
             onSelectionChange={onSelectionChange}
+            style={{ paddingBottom: 72 }}
         />
     )
 }
