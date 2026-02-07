@@ -144,11 +144,6 @@ export default function EditNote() {
         setImages([...images, image])
     }
 
-    const handleOpenImage = (index) => {
-        setIsGalleryVisible(true)
-        setGalleryIndex(index)
-    }
-
     const handleListType = (type) => {
         if (list && list.type === type) return
 
@@ -290,7 +285,7 @@ export default function EditNote() {
 const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1,
-        paddingBottom: 64,
+        paddingBottom: 128,
         paddingVertical: 16
     }
 })
