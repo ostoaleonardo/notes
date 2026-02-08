@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 import { randomUUID } from 'expo-crypto'
-import { KeyboardAvoidingView, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { NestableScrollContainer } from 'react-native-draggable-flatlist'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 import { LargeInput, MarkdownEditor, Section } from '@/components'
-import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, List, DateNote, ImageCarousel, UpdatePassword, MarkdownControls, ContainerFooter } from '@/screens'
+import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, List, DateNote, ImageCarousel, UpdatePassword, MarkdownControls } from '@/screens'
 import { useBottomSheet, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
 import { DEFAULT_LIST } from '@/constants'
@@ -31,7 +31,7 @@ export default function EditNote() {
     const [hasPassword, setHasPassword] = useState(false)
     const [biometrics, setBiometrics] = useState(false)
 
-    const [isEditing, setIsEditing] = useState(false)
+    const [isEditing, setIsEditing] = useState(true)
     const [markdownAction, setMarkdownAction] = useState('')
 
     const onEditMarkdown = () => setIsEditing(!isEditing)
@@ -64,7 +64,6 @@ export default function EditNote() {
             categories = ['all'],
             images = [],
             list = DEFAULT_LIST,
-            markdown = false,
             createdAt = Date.now(),
             updatedAt = '',
             biometrics = false,
@@ -169,82 +168,79 @@ export default function EditNote() {
 
     return (
         <>
-            <KeyboardAvoidingView
-                style={{ flex: 1 }}
-                behavior='height'
+            <KeyboardAwareScrollView
+                bottomOffset={32}
+                extraKeyboardSpace={32}
+                showsVerticalScrollIndicator={false}
             >
-                <NestableScrollContainer
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={styles.scrollContainer}
+                <Section
+                    containerStyle={{ paddingHorizontal: 16 }}
                 >
-                    <Section
-                        containerStyle={{ paddingHorizontal: 16 }}
-                    >
-                        <LargeInput
-                            bold
-                            multiline
-                            value={title}
-                            onChangeText={setTitle}
-                            placeholder={t('placeholder.title')}
-                        />
-                    </Section>
-
-                    <DateNote
-                        createdAt={createdAt}
-                        updatedAt={updatedAt}
+                    <LargeInput
+                        bold
+                        multiline
+                        value={title}
+                        onChangeText={setTitle}
+                        placeholder={t('placeholder.title')}
                     />
+                </Section>
 
-                    <Section
-                        title={t('title.categories')}
-                        containerStyle={{ paddingVertical: 16 }}
-                    >
-                        <CategoryCarousel
-                            selectedCategories={categories}
-                            onCategories={onCategories}
-                            onCategoriesModal={onOpenCategories}
-                        />
-                    </Section>
-
-                    <Section
-                        contentStyle={{ paddingHorizontal: 16 }}
-                    >
-                        <MarkdownEditor
-                            value={note}
-                            setValue={setNote}
-                            isEditing={isEditing}
-                            action={markdownAction}
-                            setAction={setMarkdownAction}
-                        />
-                    </Section>
-
-                    {list && list.items.length > 0 && (
-                        <Section
-                            containerStyle={{ paddingVertical: 16 }}
-                        >
-                            <List
-                                list={list}
-                                setList={setList}
-                                onAddItem={handleAddItem}
-                            />
-                        </Section>
-                    )}
-                </NestableScrollContainer>
-
-                <ContainerFooter>
-                    <MarkdownControls
-                        isEditing={isEditing}
-                        onRunAction={onRunAction}
-                        onEditMarkdown={onEditMarkdown}
-                    />
-                </ContainerFooter>
-            </KeyboardAvoidingView>
-
-            {hasImages && !isEditing && (
-                <ImageCarousel
-                    images={images}
-                    setImages={setImages}
+                <DateNote
+                    createdAt={createdAt}
+                    updatedAt={updatedAt}
                 />
-            )}
+
+                <Section
+                    title={t('title.categories')}
+                    containerStyle={{ paddingVertical: 16 }}
+                >
+                    <CategoryCarousel
+                        selectedCategories={categories}
+                        onCategories={onCategories}
+                        onCategoriesModal={onOpenCategories}
+                    />
+                </Section>
+
+                <Section
+                    contentStyle={{ paddingHorizontal: 16 }}
+                >
+                    <MarkdownEditor
+                        value={note}
+                        setValue={setNote}
+                        isEditing={isEditing}
+                        action={markdownAction}
+                        setAction={setMarkdownAction}
+                    />
+                </Section>
+
+                {list && list.items.length > 0 && (
+                    <Section
+                        containerStyle={{
+                            paddingVertical: 16,
+                            marginBottom: !hasImages ? 64 : 0
+                        }}
+                    >
+                        <List
+                            list={list}
+                            setList={setList}
+                            onAddItem={handleAddItem}
+                        />
+                    </Section>
+                )}
+
+                {hasImages && (
+                    <ImageCarousel
+                        images={images}
+                        setImages={setImages}
+                    />
+                )}
+            </KeyboardAwareScrollView>
+
+            <MarkdownControls
+                isEditing={isEditing}
+                onRunAction={onRunAction}
+                onEditMarkdown={onEditMarkdown}
+            />
             <BottomOptionsBar
                 onAddImage={handleAddImage}
                 onListType={handleListType}
@@ -283,9 +279,5 @@ export default function EditNote() {
 }
 
 const styles = StyleSheet.create({
-    scrollContainer: {
-        flexGrow: 1,
-        paddingBottom: 128,
-        paddingVertical: 16
-    }
+
 })

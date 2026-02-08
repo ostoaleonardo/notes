@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
-import { NestableDraggableFlatList } from 'react-native-draggable-flatlist'
 import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
+import { NestableDraggableFlatList, NestableScrollContainer } from 'react-native-draggable-flatlist'
 import { AnimatedView, BulletedListItem, CheckListItem, NumberedListItem, Pressable } from '@/components'
 import { Plus } from '@/icons'
 
@@ -36,7 +36,7 @@ export function List({ list, setList, onAddItem }) {
     }
 
     return (
-        <>
+        <NestableScrollContainer>
             <NestableDraggableFlatList
                 data={items}
                 keyExtractor={(item) => item.id}
@@ -75,6 +75,6 @@ export function List({ list, setList, onAddItem }) {
                     {t('list.add')}
                 </Pressable>
             </AnimatedView>
-        </>
+        </NestableScrollContainer>
     )
 }

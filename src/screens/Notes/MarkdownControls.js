@@ -71,16 +71,18 @@ export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
                     )}
                 />
             </AnimatedView>
-        </View >
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
+        width: '100%',
+        position: 'absolute',
         flexDirection: 'row',
         justifyContent: 'flex-end',
         paddingHorizontal: 16,
-        marginBottom: 8,
+        bottom: 56,
         gap: 16
     },
     controls: {
