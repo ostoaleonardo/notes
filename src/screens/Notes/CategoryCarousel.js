@@ -5,13 +5,12 @@ import { useCategories } from '@/hooks'
 import { Plus } from '@/icons'
 import { DEFAULT_CATEGORIES } from '@/constants'
 
-export function CategoryCarousel({ selectedCategories, onCategories, onCategoriesModal }) {
+export function CategoryCarousel({ categories, onCategories, onCategoriesModal }) {
     const { colors } = useTheme()
-    const { categories } = useCategories()
-    const { onBackground } = colors
+    const { categories: allCategories } = useCategories()
 
     const filteredCategories =
-        categories.filter(({ id }) => selectedCategories.includes(id) &&
+        allCategories.filter(({ id }) => categories.includes(id) &&
             !DEFAULT_CATEGORIES.map(({ id }) => id).includes(id))
 
     return (
@@ -24,11 +23,7 @@ export function CategoryCarousel({ selectedCategories, onCategories, onCategorie
                 <Chip
                     key={id}
                     label={name}
-                    closeIcon={
-                        <CloseChipButton
-                            onPress={() => onCategories(id)}
-                        />
-                    }
+                    closeIcon={<CloseChipButton onPress={() => onCategories(id)} />}
                 >
                     {name}
                 </Chip>
@@ -39,7 +34,7 @@ export function CategoryCarousel({ selectedCategories, onCategories, onCategorie
                     size={12}
                     mode='outlined'
                     onPress={onCategoriesModal}
-                    icon={() => <Plus color={onBackground} />}
+                    icon={() => <Plus color={colors.onBackground} />}
                 />
             </AnimatedView>
         </Scroll>

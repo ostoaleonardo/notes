@@ -1,5 +1,6 @@
 // Notes
 export { useNotes } from './useNotes'
+export { useList } from './useList'
 export { useTrash } from './useTrash'
 export { useUtils } from './useUtils'
 export { useCategories } from './useCategories'

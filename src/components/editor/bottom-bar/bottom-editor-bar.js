@@ -1,10 +1,9 @@
 import { StyleSheet, View } from 'react-native'
 import { IconButton, useTheme } from 'react-native-paper'
-import { ListMenu } from '@/components'
 import { openImagePicker } from '@/utils'
-import { Camera, Lock, Picture, Unlock } from '@/icons'
+import { Camera, CheckList, Lock, Picture, Unlock } from '@/icons'
 
-export function BottomOptionsBar({ onAddImage, onListType, hasPassword, onOpenPassword }) {
+export function BottomEditorBar({ onAddImage, onToggleEditor, hasPassword, onOpenPassword }) {
     const { colors } = useTheme()
     const { background, onBackground } = colors
 
@@ -22,7 +21,7 @@ export function BottomOptionsBar({ onAddImage, onListType, hasPassword, onOpenPa
                 backgroundColor: background
             }}
         >
-            <View style={styles.section}>
+            <View style={{ flexDirection: 'row' }}>
                 <IconButton
                     onPress={() => handleImagePicker('camera')}
                     icon={() => <Camera {...iconProps} />}
@@ -31,11 +30,13 @@ export function BottomOptionsBar({ onAddImage, onListType, hasPassword, onOpenPa
                     onPress={() => handleImagePicker('gallery')}
                     icon={() => <Picture {...iconProps} />}
                 />
-
-                <ListMenu onListType={onListType} />
+                <IconButton
+                    onPress={onToggleEditor}
+                    icon={() => <CheckList color={colors.onSurface} />}
+                />
             </View>
 
-            <View style={styles.section}>
+            <View style={{ flexDirection: 'row' }}>
                 <IconButton
                     onPress={onOpenPassword}
                     icon={() => hasPassword
@@ -54,8 +55,5 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
         flexDirection: 'row',
         justifyContent: 'space-between'
-    },
-    section: {
-        flexDirection: 'row'
     }
 })

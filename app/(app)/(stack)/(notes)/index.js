@@ -1,17 +1,17 @@
 import { useCallback, useEffect, useState } from 'react'
 import { randomUUID } from 'expo-crypto'
 import { useFocusEffect } from 'expo-router'
-import { KeyboardAvoidingView, StyleSheet } from 'react-native'
-import { useTranslation } from 'react-i18next'
-import { NestableScrollContainer } from 'react-native-draggable-flatlist'
-import { LargeInput, MarkdownEditor, Section } from '@/components'
-import { AddPassword, BottomOptionsBar, Categories, CategoryCarousel, ContainerFooter, ImageCarousel, List, MarkdownControls } from '@/screens'
+import { Wrapper } from '@/components/layout/wrapper'
+import { Header } from '@/components/editor/header'
+import { NoteEditor } from '@/components/editor/note-editor'
+import { ListEditor } from '@/components/editor/list-editor'
+import { BottomBar } from '@/components/editor/bottom-bar'
+import { AddPassword, Categories, MarkdownControls } from '@/screens'
 import { useBottomSheet, useNotes, useUtils } from '@/hooks'
 import { getDate } from '@/utils'
 import { DEFAULT_LIST, DEFAULT_NOTE_CATEGORIES } from '@/constants'
 
 export default function Note() {
-    const { t } = useTranslation()
     const { saveNote, updateNote } = useNotes()
     const { filter } = useUtils()
 
@@ -30,13 +30,12 @@ export default function Note() {
     const [password, setPassword] = useState('')
     const [biometrics, setBiometrics] = useState(false)
 
+    const [action, setAction] = useState('')
     const [isEditing, setIsEditing] = useState(true)
-    const [markdownAction, setMarkdownAction] = useState('')
+    const [showEditor, setShowEditor] = useState(true)
 
     const onEditMarkdown = () => setIsEditing(!isEditing)
-    const onRunAction = (action) => setMarkdownAction(action)
-
-    const hasImages = images && images.length > 0
+    const onRunAction = (action) => setAction(action)
 
     const {
         ref: categoriesBottomRef,
@@ -101,129 +100,59 @@ export default function Note() {
         biometrics
     ])
 
-    const onCategories = (id) => {
-        if (!categories.includes(id)) {
-            setCategories([...categories, id])
-        } else {
-            setCategories(categories.filter((categoryId) => categoryId !== id))
-        }
-    }
-
-    const handleAddImage = (image) => {
-        setImages([...images, image])
-    }
-
-    const handleListType = (type) => {
-        if (list && list.type === type) return
-
-        if (list.items.length > 0) {
-            setList((prev) => ({ ...prev, type }))
-        } else {
-            handleAddItem(type)
-        }
-    }
-
-    const handleAddItem = (type) => {
-        const item = {
-            id: randomUUID(),
-            value: '',
-            status: 'unchecked'
-        }
-
-        setList((prev) => {
-            const items = [...prev.items, item]
-            return { items, type }
-        })
-    }
-
     return (
         <>
-            <KeyboardAvoidingView
-                style={{ flex: 1 }}
-                behavior='height'
-            >
-                <NestableScrollContainer
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={styles.scrollContainer}
-                >
-                    <Section
-                        containerStyle={{ paddingHorizontal: 16 }}
-                    >
-                        <LargeInput
-                            bold
-                            multiline
-                            value={title}
-                            onChangeText={setTitle}
-                            placeholder={t('placeholder.title')}
-                        />
-                    </Section>
+            <Wrapper keyboard={showEditor}>
+                <Header
+                    title={title}
+                    setTitle={setTitle}
+                    categories={categories}
+                    setCategories={setCategories}
+                    onOpenCategories={onOpenCategories}
+                />
 
-                    <Section
-                        title={t('title.categories')}
-                        containerStyle={{ paddingVertical: 16 }}
-                    >
-                        <CategoryCarousel
-                            selectedCategories={categories}
-                            onCategories={onCategories}
-                            onCategoriesModal={onOpenCategories}
-                        />
-                    </Section>
-
-                    <Section
-                        containerStyle={{ paddingHorizontal: 16 }}
-                    >
-                        <MarkdownEditor
-                            value={note}
-                            setValue={setNote}
-                            onChangeText={setNote}
-                            isEditing={isEditing}
-                            action={markdownAction}
-                            setAction={setMarkdownAction}
-                        />
-                    </Section>
-
-                    {list.items.length > 0 && (
-                        <Section
-                            containerStyle={{ paddingVertical: 16 }}
-                        >
-                            <List
-                                list={list}
-                                setList={setList}
-                                onAddItem={handleAddItem}
-                            />
-                        </Section>
-                    )}
-                </NestableScrollContainer>
-
-                <ContainerFooter>
-                    <MarkdownControls
+                {showEditor ? (
+                    <NoteEditor
+                        value={note}
+                        setValue={setNote}
+                        action={action}
+                        setAction={setAction}
+                        images={images}
+                        setImages={setImages}
                         isEditing={isEditing}
-                        onRunAction={onRunAction}
-                        onEditMarkdown={onEditMarkdown}
                     />
-                </ContainerFooter>
-            </KeyboardAvoidingView>
+                ) : (
+                    <ListEditor
+                        list={list}
+                        setList={setList}
+                    />
+                )}
+            </Wrapper>
 
-            {hasImages && !isEditing && (
-                <ImageCarousel
-                    images={images}
-                    setImages={setImages}
+            {showEditor && (
+                <MarkdownControls
+                    isEditing={isEditing}
+                    onRunAction={onRunAction}
+                    onEditMarkdown={onEditMarkdown}
                 />
             )}
-            <BottomOptionsBar
-                onAddImage={handleAddImage}
-                onListType={handleListType}
-                hasPassword={!!password}
+
+            <BottomBar
+                list={list}
+                setList={setList}
+                images={images}
+                setImages={setImages}
+                password={password}
                 onOpenPassword={onOpenPassword}
-                isEditing={isEditing}
-                onEditMarkdown={onEditMarkdown}
+                showEditor={showEditor}
+                setShowEditor={setShowEditor}
             />
 
             <Categories
                 ref={categoriesBottomRef}
+                categories={categories}
+                setCategories={setCategories}
                 onClose={onCloseCategories}
-                selectedCategories={categories}
-                onCategories={onCategories}
             />
             <AddPassword
                 ref={passwordBottomRef}
@@ -235,10 +164,3 @@ export default function Note() {
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    scrollContainer: {
-        flexGrow: 1,
-        paddingVertical: 16
-    }
-})

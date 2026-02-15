@@ -50,10 +50,9 @@ export function ListContainer({ item, onDrag, onChange, onDelete, isActive, chil
 
 const styles = StyleSheet.create({
     container: {
-        height: 48,
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: 8
+        paddingRight: 8
     },
     input: {
         flex: 1,

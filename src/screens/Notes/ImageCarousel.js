@@ -29,8 +29,8 @@ export function ImageCarousel({ images, setImages }) {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 16,
         flexWrap: 'wrap',
+        marginVertical: 24,
         flexDirection: 'row',
         justifyContent: 'space-between'
     }

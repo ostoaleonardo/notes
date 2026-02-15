@@ -15,7 +15,6 @@ export {
     DateNote,
     ImageCarousel,
     CategoryCarousel,
-    BottomOptionsBar,
     List,
     MarkdownControls,
     ContainerFooter

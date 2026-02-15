@@ -1,9 +1,7 @@
 import { Pressable, StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
-import { FadeInLeft, FadeOutLeft } from 'react-native-reanimated'
 import { AnimatedView } from '../Animated'
 import { Typography } from '../Typography'
-import { FONTS } from '@/constants'
 
 export function Chip({ mode = 'flat', onPress, closeIcon, children }) {
     const { colors } = useTheme()
@@ -24,10 +22,7 @@ export function Chip({ mode = 'flat', onPress, closeIcon, children }) {
     const { color, backgroundColor, borderColor } = modes[mode]
 
     return (
-        <AnimatedView
-            entering={FadeInLeft}
-            exiting={FadeOutLeft}
-        >
+        <AnimatedView>
             <Pressable
                 onPress={onPress}
                 style={{
@@ -65,10 +60,5 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center'
-    },
-    label: {
-        fontSize: 12,
-        textTransform: 'uppercase',
-        fontFamily: FONTS.azeretMedium
     }
 })

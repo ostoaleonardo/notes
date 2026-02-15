@@ -1,42 +1,20 @@
-import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
+import { useTranslation } from 'react-i18next'
 import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
-import { NestableDraggableFlatList, NestableScrollContainer } from 'react-native-draggable-flatlist'
+import { NestableDraggableFlatList } from 'react-native-draggable-flatlist'
 import { AnimatedView, BulletedListItem, CheckListItem, NumberedListItem, Pressable } from '@/components'
 import { Plus } from '@/icons'
+import { useList } from '@/hooks/useList'
 
-export function List({ list, setList, onAddItem }) {
+export function List({ list, setList }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { items, type } = list
 
-    const onListChange = (newItem) => {
-        setList((prev) => {
-            const items = prev.items.map((item) => {
-                if (item.id === newItem.id) {
-                    return newItem
-                }
-
-                return item
-            })
-
-            return { ...prev, items }
-        })
-    }
-
-    const onDeleteItem = (id) => {
-        setList((prev) => {
-            const items = prev.items.filter((item) => item.id !== id)
-
-            return {
-                items,
-                type: items.length > 0 ? prev.type : ''
-            }
-        })
-    }
+    const { onAddItem, onDeleteItem, onListChange } = useList(list, setList)
 
     return (
-        <NestableScrollContainer>
+        <>
             <NestableDraggableFlatList
                 data={items}
                 keyExtractor={(item) => item.id}
@@ -46,7 +24,7 @@ export function List({ list, setList, onAddItem }) {
                         isActive,
                         onDrag: drag,
                         onChange: onListChange,
-                        onDelete: onDeleteItem,
+                        onDelete: () => onDeleteItem(item.id),
                         index: getIndex() + 1
                     }
 
@@ -75,6 +53,6 @@ export function List({ list, setList, onAddItem }) {
                     {t('list.add')}
                 </Pressable>
             </AnimatedView>
-        </NestableScrollContainer>
+        </>
     )
 }
