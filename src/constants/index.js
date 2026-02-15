@@ -7,6 +7,7 @@ export {
     DEFAULT_CATEGORIES,
     DEFAULT_NOTE_CATEGORIES,
     DEFAULT_LIST,
+    DEFAULT_ITEM_LIST,
     DEFAULT_SORT
 } from './defaultValues'
 
