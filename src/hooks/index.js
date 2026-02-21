@@ -6,6 +6,7 @@ export { useUtils } from './useUtils'
 export { useCategories } from './useCategories'
 export { useMarkdownShortcuts } from './useMarkdownShortcuts'
 export { useStorage } from './useStorage'
+export { useFiles } from './use-files'
 
 // UI
 export { useLanguage } from './useLanguage'

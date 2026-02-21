@@ -1,3 +1,5 @@
+import { getFormattedDate } from './getFormattedDate'
+
 export const getNotesAsJson = (notes) => {
     return notes.map((item) => ({
         title: item.title,
@@ -8,15 +10,12 @@ export const getNotesAsJson = (notes) => {
     }))
 }
 
-export const getNotesAsString = (notes) => {
+export const getNotesAsString = (notes, lan) => {
     return notes.map((item) => (
-        `title: ${item.title}\n`
-        + `note: ${item.note}\n`
-        + `categories: ${item.categories}\n`
-        + `createdAt: ${item.createdAt}\n`
-        + `updatedAt: ${item.updatedAt}\n`
-        + `biometrics: ${item.biometrics}\n`
-        + `password: ${item.password}\n`
+        `title: ${item.title}\n\n`
+        + `note:\n${item.note}\n\n`
+        + `createdAt: ${getFormattedDate(item.createdAt, lan)}\n`
+        + `updatedAt: ${getFormattedDate(item.updatedAt, lan)}\n`
     )).join('\n')
 }
 

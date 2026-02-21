@@ -1,19 +1,19 @@
 import { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Appbar, Tooltip, useTheme } from 'react-native-paper'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { DeleteNote } from '../Modals'
-import { useBottomSheet, useLocalAuthentication, useNotes, useUtils } from '@/hooks'
-import { Delete, Keep, KeepFilled } from '@/icons'
+import { useBottomSheet, useFiles, useLocalAuthentication, useNotes, useUtils } from '@/hooks'
+import { Delete, FileExport, Keep, KeepFilled } from '@/icons'
 import { ROUTES } from '@/constants'
 
 export function NoteAction() {
     const { colors } = useTheme()
     const { t } = useTranslation()
-    const { replace } = useRouter()
     const { slug } = useLocalSearchParams()
 
+    const { exportFile } = useFiles()
     const { pinned, updatePinned } = useUtils()
     const [isPinned, setIsPinned] = useState(pinned.has(slug))
 
@@ -21,7 +21,7 @@ export function NoteAction() {
     const { hasBiometrics } = useLocalAuthentication()
     const { ref, onOpen, onClose } = useBottomSheet()
 
-    const goToHome = () => replace(ROUTES.HOME)
+    const goToHome = () => router.replace(ROUTES.HOME)
 
     const toggleKeep = () => {
         if (pinned.has(slug)) {
@@ -53,6 +53,13 @@ export function NoteAction() {
     return (
         <>
             <View style={styles.container}>
+                <Tooltip title={t('button.export')}>
+                    <Appbar.Action
+                        animated={false}
+                        onPress={() => exportFile(slug)}
+                        icon={() => <FileExport {...iconProps} />}
+                    />
+                </Tooltip>
                 <Tooltip title={t('button.pin')}>
                     <Appbar.Action
                         animated={false}
