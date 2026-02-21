@@ -17,7 +17,6 @@ export const getNotesAsString = (notes, lan) => {
         if (item.list && Array.isArray(item.list.items)) {
             list = item.list.items
                 .map((it, index) => {
-                    console.log(index)
                     switch (item.list.type) {
                         case 'numbered':
                             return `${index + 1}. ${it.value}`

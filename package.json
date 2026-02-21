@@ -58,5 +58,12 @@
 		"babel-preset-expo": "^54.0.9",
 		"patch-package": "^8.0.0"
 	},
+	"expo": {
+		"install": {
+			"exclude": [
+				"react-native-worklets"
+			]
+		}
+	},
 	"private": true
 }
