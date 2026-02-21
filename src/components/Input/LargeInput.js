@@ -29,7 +29,7 @@ export function LargeInput({ value, onChangeText, placeholder, modal, ...props }
 
 const styles = StyleSheet.create({
     input: {
-        width: '100%',
+        flexGrow: 1,
         fontSize: 24,
         fontFamily: FONTS.nType82Headline
     }
