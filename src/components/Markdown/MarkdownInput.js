@@ -2,19 +2,19 @@ import { useMemo } from 'react'
 import { StyleSheet } from 'react-native'
 import { MarkdownTextInput, parseExpensiMark } from '@expensify/react-native-live-markdown'
 import { useTheme } from 'react-native-paper'
+import { TextArea } from '../Input'
 import { FONTS } from '@/constants'
 
-export function MarkdownInput({ size = 13, style, ...props }) {
+export function MarkdownInput({ isEditing = false, size = 13, ...props }) {
     const { colors } = useTheme()
     const { background, onBackground, primary, tertiary } = colors
 
     const styles = StyleSheet.create({
         markdown: {
+            padding: 0,
             fontSize: size,
             color: onBackground,
-            fontFamily: FONTS.azeretLight,
-            paddingHorizontal: 0,
-            ...style
+            fontFamily: FONTS.azeretLight
         }
     })
 
@@ -51,6 +51,8 @@ export function MarkdownInput({ size = 13, style, ...props }) {
     }), [size, colors])
 
     const inputPros = {
+        readOnly: !isEditing,
+        style: styles.markdown,
         cursorColor: onBackground,
         selectionHandleColor: tertiary,
         selectionColor: onBackground + '33',
@@ -58,13 +60,19 @@ export function MarkdownInput({ size = 13, style, ...props }) {
     }
 
     return (
-        <MarkdownTextInput
-            multiline
-            parser={parseExpensiMark}
-            markdownStyle={markdownStyle}
-            style={styles.markdown}
-            {...inputPros}
-            {...props}
-        />
+        isEditing ? (
+            <TextArea
+                {...props}
+                {...inputPros}
+            />
+        ) : (
+            <MarkdownTextInput
+                multiline
+                parser={parseExpensiMark}
+                markdownStyle={markdownStyle}
+                {...inputPros}
+                {...props}
+            />
+        )
     )
 }

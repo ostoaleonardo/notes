@@ -1,3 +1,4 @@
+import { View } from 'react-native'
 import { MarkdownEditor, Section } from '@/components'
 import { ImageCarousel } from '@/screens'
 
@@ -9,10 +10,8 @@ export function NoteEditor({
     const hasImages = images && images.length > 0
 
     return (
-        <>
-            <Section
-                containerStyle={{ paddingHorizontal: 16 }}
-            >
+        <View style={{ paddingBottom: 80 }}>
+            <Section containerStyle={{ paddingHorizontal: 16 }}>
                 <MarkdownEditor
                     value={value}
                     setValue={setValue}
@@ -28,6 +27,6 @@ export function NoteEditor({
                     setImages={setImages}
                 />
             )}
-        </>
+        </View>
     )
 }

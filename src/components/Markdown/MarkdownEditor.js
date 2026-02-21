@@ -40,7 +40,7 @@ export function MarkdownEditor({ value, setValue, action, setAction, isEditing }
         <MarkdownInput
             value={value}
             onChangeText={setValue}
-            readOnly={!isEditing}
+            isEditing={isEditing}
             placeholder={t('placeholder.note')}
             onSelectionChange={onSelectionChange}
         />
