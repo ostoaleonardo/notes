@@ -157,6 +157,7 @@ export default function Note() {
             <AddPassword
                 ref={passwordBottomRef}
                 onClose={onClosePassword}
+                password={password}
                 setPassword={setPassword}
                 biometrics={biometrics}
                 setBiometrics={setBiometrics}

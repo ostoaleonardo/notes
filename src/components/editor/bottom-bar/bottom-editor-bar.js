@@ -32,7 +32,7 @@ export function BottomEditorBar({ onAddImage, onToggleEditor, hasPassword, onOpe
                 />
                 <IconButton
                     onPress={onToggleEditor}
-                    icon={() => <CheckList color={colors.onSurface} />}
+                    icon={() => <CheckList {...iconProps} />}
                 />
             </View>
 

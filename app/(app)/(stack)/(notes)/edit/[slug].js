@@ -25,9 +25,7 @@ export default function EditNote() {
     const [createdAt, setCreatedAt] = useState('')
     const [updatedAt, setUpdatedAt] = useState('')
 
-    const [currentPassword, setCurrentPassword] = useState('')
-    const [newPassword, setNewPassword] = useState('')
-    const [hasPassword, setHasPassword] = useState(false)
+    const [password, setPassword] = useState('')
     const [biometrics, setBiometrics] = useState(false)
 
     const [action, setAction] = useState('')
@@ -76,11 +74,7 @@ export default function EditNote() {
         setCreatedAt(createdAt)
         setUpdatedAt(updatedAt)
         setBiometrics(biometrics)
-
-        if (password) {
-            setHasPassword(true)
-            setCurrentPassword(password)
-        }
+        setPassword(password)
     }, [slug])
 
     useFocusEffect(
@@ -100,7 +94,7 @@ export default function EditNote() {
                 categories,
                 images,
                 list,
-                password: newPassword || currentPassword,
+                password: password,
                 biometrics,
                 createdAt
             }
@@ -118,16 +112,9 @@ export default function EditNote() {
         categories,
         images,
         list,
-        currentPassword,
-        newPassword,
+        password,
         biometrics
     ])
-
-    const handleRemovePassword = () => {
-        setHasPassword(false)
-        setCurrentPassword('')
-        onCloseUpdatePassword()
-    }
 
     return (
         <>
@@ -175,8 +162,8 @@ export default function EditNote() {
                 setImages={setImages}
                 showEditor={showEditor}
                 setShowEditor={setShowEditor}
-                hasPassword={hasPassword}
-                onOpenPassword={hasPassword
+                hasPassword={password}
+                onOpenPassword={password
                     ? onOpenUpdatePassword
                     : onOpenPassword}
             />
@@ -190,16 +177,16 @@ export default function EditNote() {
             <AddPassword
                 ref={passwordBottomRef}
                 onClose={onClosePassword}
-                setPassword={setCurrentPassword}
+                password={password}
+                setPassword={setPassword}
                 biometrics={biometrics}
                 setBiometrics={setBiometrics}
             />
             <UpdatePassword
                 ref={updatePasswordBottomRef}
                 onClose={onCloseUpdatePassword}
-                currentPassword={currentPassword}
-                tooglePassword={setNewPassword}
-                onDelete={handleRemovePassword}
+                password={password}
+                setPassword={setPassword}
                 biometrics={biometrics}
                 setBiometrics={setBiometrics}
             />

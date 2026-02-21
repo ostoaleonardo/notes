@@ -6,7 +6,7 @@ import { useHaptics, useLocalAuthentication } from '@/hooks'
 import { getEncryptedPassword } from '@/utils'
 import { FEEDBACK_TYPES } from '@/constants'
 
-export const AddPassword = forwardRef(({ setPassword, biometrics, setBiometrics, onClose }, ref) => {
+export const AddPassword = forwardRef(({ password, setPassword, biometrics, setBiometrics, onClose }, ref) => {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
     const { hasBiometrics, authenticate } = useLocalAuthentication()
@@ -26,10 +26,10 @@ export const AddPassword = forwardRef(({ setPassword, biometrics, setBiometrics,
         encryptedPassword()
     }, [passwordInput])
 
-    const checkPassword = () => {
+    const onCheckPassword = () => {
         if (passwordInput.length < 4) {
             vibrate(FEEDBACK_TYPES.ERROR)
-            setMessage(t('message.password.lenght'))
+            setMessage(t('message.password.length'))
             setIsInvalid(true)
             setPassword('')
             return
@@ -37,6 +37,7 @@ export const AddPassword = forwardRef(({ setPassword, biometrics, setBiometrics,
 
         vibrate(FEEDBACK_TYPES.SUCCESS)
         setPassword(encryptedInput)
+        setPasswordInput('')
         onClose()
     }
 
@@ -53,6 +54,11 @@ export const AddPassword = forwardRef(({ setPassword, biometrics, setBiometrics,
             setBiometrics(true)
             vibrate(FEEDBACK_TYPES.SUCCESS)
         }
+    }
+
+    const onDelete = () => {
+        setPassword('')
+        onClose()
     }
 
     return (
@@ -77,9 +83,12 @@ export const AddPassword = forwardRef(({ setPassword, biometrics, setBiometrics,
             <View style={styles.buttons}>
                 <Pressable
                     mode='contained'
-                    onPress={checkPassword}
+                    onPress={password ? onDelete : onCheckPassword}
                 >
-                    {t('button.save')}
+                    {password && !passwordInput
+                        ? t('password.remove')
+                        : t('password.add')
+                    }
                 </Pressable>
                 {hasBiometrics && (
                     <Pressable
