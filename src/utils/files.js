@@ -11,12 +11,34 @@ export const getNotesAsJson = (notes) => {
 }
 
 export const getNotesAsString = (notes, lan) => {
-    return notes.map((item) => (
-        `title: ${item.title}\n\n`
-        + `note:\n${item.note}\n\n`
-        + `createdAt: ${getFormattedDate(item.createdAt, lan)}\n`
-        + `updatedAt: ${getFormattedDate(item.updatedAt, lan)}\n`
-    )).join('\n')
+    return notes.map((item) => {
+        let list = ''
+
+        if (item.list && Array.isArray(item.list.items)) {
+            list = item.list.items
+                .map((it, index) => {
+                    console.log(index)
+                    switch (item.list.type) {
+                        case 'numbered':
+                            return `${index + 1}. ${it.value}`
+                        case 'bulleted':
+                            return `- ${it.value}`
+                        case 'checklist':
+                            return `[${it.status === 'checked' ? '✅' : '❎'}] ${it.value}`
+                        default:
+                            return it
+                    }
+                }).join('\n')
+        }
+
+        return (
+            `[title]:\n${item.title}\n\n`
+            + `[note]:\n${item.note}\n\n`
+            + `[list]:\n${list}\n\n`
+            + `[createdAt]: ${getFormattedDate(item.createdAt, lan)}\n`
+            + `[updatedAt]: ${getFormattedDate(item.updatedAt, lan)}\n`
+        )
+    }).join('\n')
 }
 
 export const validateJson = (file) => {
