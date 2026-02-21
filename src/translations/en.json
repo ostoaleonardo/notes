@@ -8,6 +8,7 @@
 	},
 	"title": {
 		"notes": "Notes",
+		"list": "List",
 		"categories": "Categories",
 		"unlock": "Unlock",
 		"trash": "Trash",
@@ -78,15 +79,20 @@
 		"delete": "Delete",
 		"update": "Update",
 		"enter": "Enter",
-		"pin": "Pin"
+		"pin": "Pin",
+		"export": "Export"
 	},
 	"message": {
 		"loading": "Loading...",
 		"notes": {
-			"empty": "You don't have any notes yet"
+			"empty": "You don't have any notes yet",
+			"exported": "File exported successfully"
 		},
 		"categories": {
 			"empty": "You don't have any categories yet"
+		},
+		"list": {
+			"empty": "You don't have any item yet"
 		},
 		"password": {
 			"wrong": "Wrong password",

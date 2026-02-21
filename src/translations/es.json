@@ -8,6 +8,7 @@
 	},
 	"title": {
 		"notes": "Notas",
+		"list": "Lista",
 		"categories": "Categorías",
 		"unlock": "Desbloquear",
 		"trash": "Papelera",
@@ -78,12 +79,14 @@
 		"delete": "Borrar",
 		"update": "Actualizar",
 		"enter": "Entrar",
-		"pin": "Fijar"
+		"pin": "Fijar",
+		"export": "Exportar"
 	},
 	"message": {
 		"loading": "Cargando...",
 		"notes": {
-			"empty": "Todavía no tienes notas"
+			"empty": "Todavía no tienes notas",
+			"exported": "Archivo exportado exitosamente"
 		},
 		"categories": {
 			"empty": "Todavía no tienes categorías"
