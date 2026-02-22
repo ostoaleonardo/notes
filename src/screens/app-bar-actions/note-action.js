@@ -3,10 +3,8 @@ import { StyleSheet, View } from 'react-native'
 import { Appbar, Tooltip, useTheme } from 'react-native-paper'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import { DeleteNote } from '../modals'
-import { useBottomSheet, useFiles, useLocalAuthentication, useNotes, useTrash, useUtils } from '@/hooks'
+import { useFiles, useNotes, useTrash, useUtils } from '@/hooks'
 import { Delete, FileExport, Keep, KeepFilled } from '@/icons'
-import { ROUTES } from '@/constants'
 
 export function NoteAction() {
     const { colors } = useTheme()
@@ -18,11 +16,12 @@ export function NoteAction() {
     const [isPinned, setIsPinned] = useState(pinned.has(slug))
 
     const { addItem } = useTrash()
-    const { getNote, deleteNote, paramId } = useNotes()
-    const { hasBiometrics } = useLocalAuthentication()
-    const { ref, onOpen, onClose } = useBottomSheet()
+    const {
+        getNote, deleteNote,
+        paramId, setParamId
+    } = useNotes()
 
-    const goToHome = () => router.replace(ROUTES.HOME)
+    const goToHome = () => router.back()
 
     const toggleKeep = () => {
         if (pinned.has(slug)) {
@@ -44,6 +43,7 @@ export function NoteAction() {
             addItem(note)
         }
 
+        setParamId('')
         goToHome()
     }
 
@@ -51,8 +51,8 @@ export function NoteAction() {
     const iconProps = { color: onBackground }
 
     return (
-        <>
-            <View style={styles.container}>
+        <View style={styles.container}>
+            {slug && (
                 <Tooltip title={t('button.export')}>
                     <Appbar.Action
                         animated={false}
@@ -60,35 +60,26 @@ export function NoteAction() {
                         icon={() => <FileExport {...iconProps} />}
                     />
                 </Tooltip>
-                <Tooltip title={t('button.pin')}>
-                    <Appbar.Action
-                        animated={false}
-                        onPress={toggleKeep}
-                        icon={() => (
-                            isPinned
-                                ? <KeepFilled {...iconProps} />
-                                : <Keep {...iconProps} />
-                        )}
-                    />
-                </Tooltip>
-                <Tooltip title={t('button.delete')}>
-                    <Appbar.Action
-                        animated={false}
-                        onPress={onDelete}
-                        icon={() => <Delete {...iconProps} />}
-                    />
-                </Tooltip>
-            </View>
-
-            <DeleteNote
-                ref={ref}
-                id={slug}
-                onClose={() => {
-                    onClose()
-                    goToHome()
-                }}
-            />
-        </>
+            )}
+            <Tooltip title={t('button.pin')}>
+                <Appbar.Action
+                    animated={false}
+                    onPress={toggleKeep}
+                    icon={() => (
+                        isPinned
+                            ? <KeepFilled {...iconProps} />
+                            : <Keep {...iconProps} />
+                    )}
+                />
+            </Tooltip>
+            <Tooltip title={t('button.delete')}>
+                <Appbar.Action
+                    animated={false}
+                    onPress={onDelete}
+                    icon={() => <Delete {...iconProps} />}
+                />
+            </Tooltip>
+        </View>
     )
 }
 
