@@ -32,7 +32,17 @@ export default {
         }
       }
     ],
-    'expo-font',
+    [
+      'expo-font',
+      {
+        'fonts': [
+          './assets/fonts/AzeretMono-Light.ttf',
+          './assets/fonts/AzeretMono-Medium.ttf',
+          './assets/fonts/AzeretMono-Italic.ttf',
+          './assets/fonts/NType82-Headline.ttf'
+        ]
+      }
+    ],
     'expo-localization',
     'expo-local-authentication',
     [
