@@ -1,3 +1,3 @@
-export { BulletedListItem } from './BulletedListItem'
-export { NumberedListItem } from './NumberedListItem'
-export { CheckListItem } from './CheckListItem'
+export { BulletedItem } from './bulleted-item'
+export { NumberedItem } from './numbered-item'
+export { CheckListItem } from './checklist-item'

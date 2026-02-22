@@ -1,11 +1,11 @@
 // Contexts
-export { AuthContext } from './AuthContext'
-export { NoteContext } from './NoteContext'
-export { UtilsContext } from './UtilsContex'
-export { ThemeContext } from './ThemeContext'
+export { AuthContext } from './auth-context'
+export { NoteContext } from './note-context'
+export { UtilsContext } from './utils-contex'
+export { ThemeContext } from './theme-context'
 
 // Providers
-export { AuthProvider } from './AuthContext'
-export { NoteProvider } from './NoteContext'
-export { UtilsProvider } from './UtilsContex'
-export { ThemeProvider } from './ThemeContext'
+export { AuthProvider } from './auth-context'
+export { NoteProvider } from './note-context'
+export { UtilsProvider } from './utils-contex'
+export { ThemeProvider } from './theme-context'

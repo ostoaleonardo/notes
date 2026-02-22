@@ -5,7 +5,7 @@ import { useTheme } from 'react-native-paper'
 import { FlatList } from 'react-native-gesture-handler'
 import { useTranslation } from 'react-i18next'
 import { ModalSheet, SmallInput, SquareButton, Typography, Separator } from '@/components'
-import { CategoryOption } from '../Notes'
+import { CategoryOption } from '../notes'
 import { useCategories, useHaptics } from '@/hooks'
 import { FEEDBACK_TYPES } from '@/constants'
 

@@ -1,1 +1,1 @@
-export { DrawerItems } from './DrawerItems'
+export { DrawerItems } from './drawer-items'

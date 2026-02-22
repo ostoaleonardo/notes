@@ -1,8 +1,8 @@
 import { ToastAndroid } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Directory, File } from 'expo-file-system'
-import { useNotes } from './useNotes'
-import { useLanguage } from './useLanguage'
+import { useNotes } from './use-notes'
+import { useLanguage } from './use-language'
 import { getNotesAsJson, getNotesAsString } from '@/utils'
 
 export function useFiles() {

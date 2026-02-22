@@ -1,4 +1,4 @@
-import { getFormattedDate } from './getFormattedDate'
+import { getFormattedDate } from './formatted-date'
 
 export const getNotesAsJson = (notes) => {
     return notes.map((item) => ({

@@ -1,2 +1,2 @@
-export { ListMenu } from './ListMenu'
-export { SortMenu } from './SortMenu'
+export { ListMenu } from './list-menu'
+export { SortMenu } from './sort-menu'

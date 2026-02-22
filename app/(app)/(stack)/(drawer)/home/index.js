@@ -1,14 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { View } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import { FloatingButton } from '@/components'
 import { NotesContainer, FilterCarousel, DeleteNote, UnlockNote } from '@/screens'
-import { useBottomSheet, useNotes, useUtils } from '@/hooks'
+import { useBottomSheet, useNotes, useTrash, useUtils } from '@/hooks'
 import { ROUTES } from '@/constants'
-import { useTrash } from '@/hooks/useTrash'
 
 export default function App() {
-    const { t } = useTranslation()
     const { addItem } = useTrash()
     const { deleteNote } = useNotes()
 

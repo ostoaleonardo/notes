@@ -6,7 +6,6 @@ import { useNotes, useTrash } from '@/hooks'
 export default function Trash() {
     const { loading, trash, deleteItem } = useTrash()
     const { saveNote } = useNotes()
-
     const [selected, setSelected] = useState(null)
 
     const onRestore = (item) => {

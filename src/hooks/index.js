@@ -1,19 +1,19 @@
 // Notes
-export { useNotes } from './useNotes'
-export { useList } from './useList'
-export { useTrash } from './useTrash'
-export { useUtils } from './useUtils'
-export { useCategories } from './useCategories'
-export { useMarkdownShortcuts } from './useMarkdownShortcuts'
-export { useStorage } from './useStorage'
+export { useNotes } from './use-notes'
+export { useList } from './use-list'
+export { useTrash } from './use-trash'
+export { useUtils } from './use-utils'
+export { useCategories } from './use-categories'
+export { useMarkdownShortcuts } from './use-markdown-shortcuts'
+export { useStorage } from './use-storage'
 export { useFiles } from './use-files'
 
 // UI
-export { useLanguage } from './useLanguage'
-export { useToggleMode } from './useToggleMode'
-export { useBottomSheet } from './useBottomSheet'
-export { useAnimatedShake } from './useAnimatedShake'
+export { useLanguage } from './use-language'
+export { useToggleMode } from './use-toggle-mode'
+export { useBottomSheet } from './use-bottom-sheet'
+export { useAnimatedShake } from './use-animated-shake'
 
 // Utils
-export { useHaptics } from './useHaptics'
-export { useLocalAuthentication } from './useLocalAuthentication'
+export { useHaptics } from './use-haptics'
+export { useLocalAuthentication } from './use-local-authentication'

@@ -1,3 +1,3 @@
-export { Option } from './Option'
-export { AppVersionCard } from './AppVersionCard'
-export { ThemeOption } from './ThemeOption'
+export { Option } from './option'
+export { AppVersionCard } from './app-version-card'
+export { ThemeOption } from './theme-option'

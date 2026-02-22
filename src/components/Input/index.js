@@ -1,4 +1,4 @@
-export { LargeInput } from './LargeInput'
-export { SmallInput } from './SmallInput'
-export { TextArea } from './TextArea'
-export { PasswordInput } from './PasswordInput'
+export { LargeInput } from './large-input'
+export { SmallInput } from './small-input'
+export { TextArea } from './text-area'
+export { PasswordInput } from './password-input'

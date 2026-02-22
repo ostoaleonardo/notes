@@ -3,12 +3,12 @@ export {
     FilterCarousel,
     NotesContainer,
     TrashContainer
-} from './Home'
+} from './home'
 
 // Categories screen components
 export {
     CategoriesContainer
-} from './Categories'
+} from './home/categories-container'
 
 // Note screen components
 export {
@@ -18,7 +18,7 @@ export {
     List,
     MarkdownControls,
     ContainerFooter
-} from './Notes'
+} from './notes'
 
 // Modals
 export {
@@ -28,21 +28,21 @@ export {
     Categories,
     AddPassword,
     UpdatePassword
-} from './Modals'
+} from './modals'
 
 // Dialogs
 export {
     UpdateCategory
-} from './Dialogs'
+} from './modals/update-category'
 
 export {
     Option,
     AppVersionCard,
     ThemeOption
-} from './Settings'
+} from './settings'
 
 // AppBar actions
 export {
     SortAction,
     NoteAction
-} from './AppBarActions'
+} from './app-bar-actions'

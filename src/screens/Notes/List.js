@@ -2,9 +2,9 @@ import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 import { NestableDraggableFlatList } from 'react-native-draggable-flatlist'
-import { AnimatedView, BulletedListItem, CheckListItem, NumberedListItem, Pressable } from '@/components'
+import { AnimatedView, BulletedItem, CheckListItem, NumberedItem, Pressable } from '@/components'
 import { Plus } from '@/icons'
-import { useList } from '@/hooks/useList'
+import { useList } from '@/hooks/use-list'
 
 export function List({ list, setList }) {
     const { t } = useTranslation()
@@ -30,9 +30,9 @@ export function List({ list, setList }) {
 
                     switch (type) {
                         case 'bulleted':
-                            return <BulletedListItem {...props} />
+                            return <BulletedItem {...props} />
                         case 'numbered':
-                            return <NumberedListItem {...props} />
+                            return <NumberedItem {...props} />
                         default:
                             return <CheckListItem {...props} />
                     }

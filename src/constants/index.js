@@ -9,8 +9,8 @@ export {
     DEFAULT_LIST,
     DEFAULT_ITEM_LIST,
     DEFAULT_SORT
-} from './defaultValues'
+} from './default-values'
 
-export { FEEDBACK_TYPES } from './feedbackTypes'
-export { STORAGE_KEYS } from './storageKeys'
+export { FEEDBACK_TYPES } from './feedback-types'
+export { STORAGE_KEYS } from './storage-keys'
 export { LINKS } from './links'

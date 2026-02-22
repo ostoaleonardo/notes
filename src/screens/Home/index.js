@@ -1,3 +1,3 @@
-export { FilterCarousel } from './FilterCarousel'
-export { NotesContainer } from './NotesContainer'
-export { TrashContainer } from './TrashContainer'
+export { FilterCarousel } from './filter-carousel'
+export { NotesContainer } from './notes-container'
+export { TrashContainer } from './trash-container'

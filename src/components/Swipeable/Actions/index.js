@@ -1,2 +1,2 @@
-export { DeleteAction } from './DeleteAction'
-export { PinAction } from './PinAction'
+export { DeleteAction } from './delete-action'
+export { PinAction } from './pin-action'

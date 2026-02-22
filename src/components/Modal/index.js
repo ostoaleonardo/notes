@@ -1,2 +1,2 @@
-export { ModalSheet } from './ModalSheet'
-export { ModalHeader } from './ModalHeader'
+export { ModalSheet } from './modal-sheet'
+export { ModalHeader } from './modal-header'

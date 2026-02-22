@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { randomUUID } from 'expo-crypto'
-import { useFocusEffect } from 'expo-router'
+import { router, useFocusEffect } from 'expo-router'
 import { Wrapper } from '@/components/layout/wrapper'
 import { Header } from '@/components/editor/header'
 import { NoteEditor } from '@/components/editor/note-editor'
@@ -12,13 +12,13 @@ import { getDate } from '@/utils'
 import { DEFAULT_LIST, DEFAULT_NOTE_CATEGORIES } from '@/constants'
 
 export default function Note() {
-    const { saveNote, updateNote } = useNotes()
+    const { saveNote, updateNote, setParamId } = useNotes()
     const { filter } = useUtils()
 
     const [isSaved, setIsSaved] = useState(false)
     const [firstRender, setFirstRender] = useState(true)
 
-    const [id, setId] = useState(randomUUID())
+    const [id, setId] = useState('')
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
     const [categories, setCategories] = useState(filter ? Array.from(filter) : DEFAULT_NOTE_CATEGORIES)
@@ -51,7 +51,10 @@ export default function Note() {
 
     useFocusEffect(
         useCallback(() => {
+            const id = randomUUID()
             setFirstRender(false)
+            setParamId(id)
+            setId(id)
         }, [])
     )
 

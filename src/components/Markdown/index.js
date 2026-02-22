@@ -1,2 +1,2 @@
-export { MarkdownInput } from './MarkdownInput'
-export { MarkdownEditor } from './MarkdownEditor'
+export { MarkdownInput } from './markdown-input'
+export { MarkdownEditor } from './markdown-editor'

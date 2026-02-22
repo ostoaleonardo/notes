@@ -1,4 +1,4 @@
-export { Pressable } from './Pressable'
-export { FloatingButton } from './FloatingButton'
-export { SquareButton } from './SquareButton'
-export { ImagePreview } from './ImagePreview'
+export { Pressable } from './pressable'
+export { FloatingButton } from './floating-button'
+export { SquareButton } from './square-button'
+export { ImagePreview } from './image-preview'
