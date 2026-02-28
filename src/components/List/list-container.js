@@ -2,14 +2,14 @@ import { StyleSheet, TextInput } from 'react-native'
 import { IconButton, useTheme } from 'react-native-paper'
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { Close, DragIndicator } from '@/icons'
-import { FONTS } from '@/constants'
+import { FONTS, TRANSPARENT } from '@/constants'
 
 export function ListContainer({ item, onDrag, onChange, onDelete, isActive, children }) {
     const { colors } = useTheme()
     const { id, value } = item
 
     const { background, onBackground, tertiary, surface } = colors
-    const iconProps = { color: onBackground + '66' }
+    const iconProps = { color: onBackground + TRANSPARENT[40] }
 
     const animatedStyles = useAnimatedStyle(() => ({
         backgroundColor: withTiming(isActive ? surface : background)
@@ -32,8 +32,8 @@ export function ListContainer({ item, onDrag, onChange, onDelete, isActive, chil
                 placeholder='...'
                 cursorColor={onBackground}
                 selectionHandleColor={tertiary}
-                selectionColor={onBackground + '33'}
-                placeholderTextColor={onBackground + '66'}
+                selectionColor={onBackground + TRANSPARENT[20]}
+                placeholderTextColor={onBackground + TRANSPARENT[40]}
                 onChangeText={(value) => onChange({ ...item, value })}
                 style={{
                     ...styles.input,

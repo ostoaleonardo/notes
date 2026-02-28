@@ -7,18 +7,8 @@ export function Skeleton() {
 
     return (
         <View style={styles.container}>
-            <View
-                style={[
-                    styles.skeleton1,
-                    { backgroundColor }
-                ]}
-            />
-            <View
-                style={[
-                    styles.skeleton2,
-                    { backgroundColor }
-                ]}
-            />
+            <View style={{ ...styles.skeleton1, backgroundColor }} />
+            <View style={{ ...styles.skeleton2, backgroundColor }} />
         </View>
     )
 }

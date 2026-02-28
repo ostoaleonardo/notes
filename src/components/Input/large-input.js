@@ -1,7 +1,7 @@
 import { StyleSheet, TextInput } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet'
-import { FONTS } from '@/constants'
+import { FONTS, TRANSPARENT } from '@/constants'
 
 export function LargeInput({ value, onChangeText, placeholder, modal, ...props }) {
     const { colors } = useTheme()
@@ -21,8 +21,8 @@ export function LargeInput({ value, onChangeText, placeholder, modal, ...props }
             onChangeText={onChangeText}
             cursorColor={onBackground}
             selectionHandleColor={tertiary}
-            selectionColor={onBackground + '33'}
-            placeholderTextColor={onBackground + '66'}
+            selectionColor={onBackground + TRANSPARENT[20]}
+            placeholderTextColor={onBackground + TRANSPARENT[40]}
         />
     )
 }

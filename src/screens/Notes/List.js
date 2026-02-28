@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 import { NestableDraggableFlatList } from 'react-native-draggable-flatlist'
 import { AnimatedView, BulletedItem, CheckListItem, NumberedItem, Pressable } from '@/components'
+import { useList } from '@/hooks'
 import { Plus } from '@/icons'
-import { useList } from '@/hooks/use-list'
 
 export function List({ list, setList }) {
     const { t } = useTranslation()

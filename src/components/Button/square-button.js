@@ -1,11 +1,11 @@
 import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { Plus } from '@/icons'
-import { COLORS } from '@/constants'
+import { COLORS, TRANSPARENT } from '@/constants'
 
 export function SquareButton({ onPress, disabled }) {
     const { colors } = useTheme()
-    const alpha = disabled ? 'b3' : ''
+    const alpha = disabled ? TRANSPARENT[70] : ''
 
     return (
         <Pressable

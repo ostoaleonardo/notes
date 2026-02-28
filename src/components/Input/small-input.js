@@ -1,6 +1,6 @@
 import { StyleSheet, TextInput, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
-import { FONTS } from '@/constants'
+import { FONTS, TRANSPARENT } from '@/constants'
 
 export function SmallInput({ background, ...props }) {
     const { colors } = useTheme()
@@ -20,8 +20,8 @@ export function SmallInput({ background, ...props }) {
                 }}
                 cursorColor={onBackground}
                 selectionHandleColor={tertiary}
-                selectionColor={onBackground + '33'}
-                placeholderTextColor={onBackground + '66'}
+                selectionColor={onBackground + TRANSPARENT[20]}
+                placeholderTextColor={onBackground + TRANSPARENT[40]}
                 {...props}
             />
         </View>

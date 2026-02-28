@@ -1,11 +1,10 @@
-import { Image } from 'expo-image'
 import { Pressable, StyleSheet } from 'react-native'
+import { Image } from 'expo-image'
 import { useTheme } from 'react-native-paper'
 import Animated, { FadeInDown, FadeOutDown, LinearTransition } from 'react-native-reanimated'
-import { Galeria } from '@nandorojo/galeria'
 import { Close } from '@/icons'
 
-export function ImagePreview({ index, url, onRemove, width }) {
+export function ImagePreview({ index, url, onGallery, onRemove, width }) {
     const { colors } = useTheme()
 
     return (
@@ -15,13 +14,13 @@ export function ImagePreview({ index, url, onRemove, width }) {
             layout={LinearTransition}
             style={{ width: width + '%', aspectRatio: 1 }}
         >
-            <Galeria.Image index={index}>
+            <Pressable onPress={onGallery}>
                 <Image
                     source={url}
                     recyclingKey={url + index}
                     style={styles.image}
                 />
-            </Galeria.Image>
+            </Pressable>
 
             {onRemove && (
                 <Pressable

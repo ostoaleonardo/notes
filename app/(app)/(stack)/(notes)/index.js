@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
 import { randomUUID } from 'expo-crypto'
-import { router, useFocusEffect } from 'expo-router'
-import { Wrapper } from '@/components/layout/wrapper'
-import { Header } from '@/components/editor/header'
-import { NoteEditor } from '@/components/editor/note-editor'
-import { ListEditor } from '@/components/editor/list-editor'
-import { BottomBar } from '@/components/editor/bottom-bar'
-import { AddPassword, Categories, MarkdownControls } from '@/screens'
+import { useFocusEffect } from 'expo-router'
+import { Wrapper } from '@/components/layout'
+import { GalleryView } from '@/screens/gallery'
+import { MarkdownControls } from '@/screens/notes'
+import { AddPassword, Categories } from '@/screens/modals'
+import { BottomBar, Header, ListEditor, NoteEditor } from '@/screens/editor'
 import { useBottomSheet, useNotes, useUtils } from '@/hooks'
 import { getDate } from '@/utils'
 import { DEFAULT_LIST, DEFAULT_NOTE_CATEGORIES } from '@/constants'
@@ -33,6 +32,7 @@ export default function Note() {
     const [action, setAction] = useState('')
     const [isEditing, setIsEditing] = useState(true)
     const [showEditor, setShowEditor] = useState(true)
+    const [galleryIndex, setGalleryIndex] = useState('')
 
     const onEditMarkdown = () => setIsEditing(!isEditing)
     const onRunAction = (action) => setAction(action)
@@ -122,6 +122,7 @@ export default function Note() {
                         setAction={setAction}
                         images={images}
                         setImages={setImages}
+                        onGallery={setGalleryIndex}
                         isEditing={isEditing}
                     />
                 ) : (
@@ -164,6 +165,12 @@ export default function Note() {
                 setPassword={setPassword}
                 biometrics={biometrics}
                 setBiometrics={setBiometrics}
+            />
+            <GalleryView
+                images={images}
+                index={galleryIndex}
+                visible={galleryIndex !== ''}
+                onClose={() => setGalleryIndex('')}
             />
         </>
     )

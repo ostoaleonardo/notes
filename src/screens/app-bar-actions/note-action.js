@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
-import { Appbar, Tooltip, useTheme } from 'react-native-paper'
-import { router, useLocalSearchParams } from 'expo-router'
+import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
+import { router, useLocalSearchParams } from 'expo-router'
+import { Appbar, Tooltip, useTheme } from 'react-native-paper'
 import { useFiles, useNotes, useTrash, useUtils } from '@/hooks'
 import { Delete, FileExport, Keep, KeepFilled } from '@/icons'
 
@@ -51,7 +51,7 @@ export function NoteAction() {
     const iconProps = { color: onBackground }
 
     return (
-        <View style={styles.container}>
+        <View style={{ flexDirection: 'row' }}>
             {slug && (
                 <Tooltip title={t('button.export')}>
                     <Appbar.Action
@@ -82,9 +82,3 @@ export function NoteAction() {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row'
-    }
-})

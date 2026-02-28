@@ -1,11 +1,12 @@
 import { View } from 'react-native'
 import { MarkdownEditor, Section } from '@/components'
-import { ImageCarousel } from '@/screens'
+import { ImageCarousel } from '../notes'
 
 export function NoteEditor({
     value, setValue,
     action, setAction,
-    images, setImages, isEditing
+    images, setImages,
+    onGallery, isEditing
 }) {
     const hasImages = images && images.length > 0
 
@@ -25,6 +26,7 @@ export function NoteEditor({
                 <ImageCarousel
                     images={images}
                     setImages={setImages}
+                    onGallery={onGallery}
                 />
             )}
         </View>

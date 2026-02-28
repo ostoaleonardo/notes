@@ -2,6 +2,7 @@ import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { FadeInUp } from 'react-native-reanimated'
 import { AnimatedView, Checkbox, Typography } from '@/components'
+import { TRANSPARENT } from '@/constants'
 
 export function CategoryOption({ category, onPress, isSelected }) {
     const { colors } = useTheme()
@@ -14,7 +15,7 @@ export function CategoryOption({ category, onPress, isSelected }) {
             <Pressable
                 onPress={onPress}
                 style={styles.container}
-                android_ripple={{ color: onBackground + '1a' }}
+                android_ripple={{ color: onBackground + TRANSPARENT[10] }}
             >
                 <Typography>
                     {category}

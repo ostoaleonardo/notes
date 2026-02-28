@@ -20,6 +20,23 @@ export const COLORS = {
     }
 }
 
+export const TRANSPARENT = {
+    'color': 'transparent',
+    '0': '00',
+    '5': '0d',
+    '10': '1a',
+    '20': '33',
+    '30': '4d',
+    '40': '66',
+    '50': '80',
+    '60': '99',
+    '70': 'b3',
+    '80': 'cc',
+    '90': 'e6',
+    '95': 'f2',
+    '100': 'ff'
+}
+
 const darkTheme = {
     ...MD3DarkTheme,
     colors: {
@@ -48,8 +65,8 @@ const darkTheme = {
         onSurface: COLORS.dark.onBackground,
         onSurfaceVariant: COLORS.dark.onBackground,
 
-        outline: COLORS.base.white + '26',
-        backdrop: COLORS.dark.background + '80',
+        outline: COLORS.base.white + TRANSPARENT[10],
+        backdrop: COLORS.dark.background + TRANSPARENT[70],
 
         elevation: {
             level3: COLORS.dark.foreground
@@ -85,7 +102,7 @@ const lightTheme = {
 
         outline: COLORS.light.onBackground,
         outlineVariant: COLORS.light.onBackground,
-        backdrop: COLORS.light.onBackground + '80',
+        backdrop: COLORS.light.onBackground + TRANSPARENT[70],
 
         elevation: {
             level3: COLORS.light.foreground

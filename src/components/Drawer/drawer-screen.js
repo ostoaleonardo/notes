@@ -3,6 +3,7 @@ import { useTheme } from 'react-native-paper'
 import { router } from 'expo-router'
 import { Typography } from '../typography'
 import { ArrowForward } from '@/icons'
+import { TRANSPARENT } from '@/constants'
 
 export function DrawerScreen({ label, path }) {
     const { colors } = useTheme()
@@ -17,7 +18,7 @@ export function DrawerScreen({ label, path }) {
                 justifyContent: 'space-between'
             }}
             onPress={() => router.push(path)}
-            android_ripple={{ color: onBackground + '1a' }}
+            android_ripple={{ color: onBackground + TRANSPARENT[10] }}
         >
             <Typography
                 uppercase

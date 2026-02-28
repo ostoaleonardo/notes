@@ -1,6 +1,6 @@
 export { ROUTES } from './routes'
 export { THEMES } from './themes'
-export { COLORS, FONTS, COMMONS } from './themes'
+export { COLORS, FONTS, TRANSPARENT, COMMONS } from './themes'
 export { LANGUAGES } from './languages'
 
 export {

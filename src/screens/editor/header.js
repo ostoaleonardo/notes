@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { LargeInput, Section } from '@/components'
-import { CategoryCarousel, DateNote } from '@/screens'
+import { CategoryCarousel, DateNote } from '../notes'
 
 export function Header({
     title, setTitle,

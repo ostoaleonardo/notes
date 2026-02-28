@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { View } from 'react-native'
 import { FloatingButton } from '@/components'
-import { NotesContainer, FilterCarousel, DeleteNote, UnlockNote } from '@/screens'
+import { DeleteNote, UnlockNote } from '@/screens/modals'
+import { FilterCarousel, NotesContainer } from '@/screens/home'
 import { useBottomSheet, useNotes, useTrash, useUtils } from '@/hooks'
 import { ROUTES } from '@/constants'
 

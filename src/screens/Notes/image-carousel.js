@@ -1,9 +1,9 @@
 import { StyleSheet, View } from 'react-native'
-import { Galeria } from '@nandorojo/galeria'
 import { ImagePreview } from '@/components'
 import { getDimensions } from '@/utils'
 
-export function ImageCarousel({ images, setImages }) {
+export function ImageCarousel({ images, setImages, onGallery }) {
+
     const width = getDimensions(images.length)
 
     const onRemoveImage = (image) => {
@@ -12,17 +12,16 @@ export function ImageCarousel({ images, setImages }) {
 
     return (
         <View style={styles.container}>
-            <Galeria urls={images}>
-                {images.length > 0 && images.map((url, index) => (
-                    <ImagePreview
-                        key={url}
-                        index={index}
-                        url={url}
-                        width={width}
-                        onRemove={() => onRemoveImage(url)}
-                    />
-                ))}
-            </Galeria>
+            {images.length > 0 && images.map((url, index) => (
+                <ImagePreview
+                    key={url}
+                    index={index}
+                    url={url}
+                    width={width}
+                    onGallery={() => onGallery(index)}
+                    onRemove={() => onRemoveImage(url)}
+                />
+            ))}
         </View>
     )
 }

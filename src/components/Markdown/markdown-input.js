@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 import { MarkdownTextInput, parseExpensiMark } from '@expensify/react-native-live-markdown'
 import { useTheme } from 'react-native-paper'
 import { TextArea } from '../input'
-import { FONTS } from '@/constants'
+import { FONTS, TRANSPARENT } from '@/constants'
 
 export function MarkdownInput({ isEditing = false, size = 13, ...props }) {
     const { colors } = useTheme()
@@ -38,7 +38,7 @@ export function MarkdownInput({ isEditing = false, size = 13, ...props }) {
         code: {
             fontSize: size,
             color: onBackground,
-            backgroundColor: onBackground + '1a'
+            backgroundColor: onBackground + TRANSPARENT[10]
         },
         mentionHere: {
             color: onBackground,
@@ -55,8 +55,8 @@ export function MarkdownInput({ isEditing = false, size = 13, ...props }) {
         style: styles.markdown,
         cursorColor: onBackground,
         selectionHandleColor: tertiary,
-        selectionColor: onBackground + '33',
-        placeholderTextColor: onBackground + '66'
+        selectionColor: onBackground + TRANSPARENT[20],
+        placeholderTextColor: onBackground + TRANSPARENT[40]
     }
 
     return (

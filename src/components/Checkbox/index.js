@@ -1,13 +1,14 @@
 import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { Check } from '@/icons'
+import { TRANSPARENT } from '@/constants'
 
 export function Checkbox({ checked }) {
     const { colors } = useTheme()
     const { background, onBackground } = colors
 
-    const backgroundColor = checked ? onBackground : 'transparent'
-    const borderColor = checked ? onBackground : onBackground + '33'
+    const backgroundColor = checked ? onBackground : TRANSPARENT.color
+    const borderColor = checked ? onBackground : onBackground + TRANSPARENT[20]
 
     return (
         <View

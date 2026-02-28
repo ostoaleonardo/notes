@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { View } from 'react-native'
-import { TrashContainer } from '@/screens'
+import { TrashContainer } from '@/screens/home'
 import { useNotes, useTrash } from '@/hooks'
 
 export default function Trash() {

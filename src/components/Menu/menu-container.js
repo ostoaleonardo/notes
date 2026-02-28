@@ -1,3 +1,4 @@
+import { TRANSPARENT } from '@/constants'
 import { Menu, useTheme } from 'react-native-paper'
 
 export function MenuContainer({ anchor, visible, onClose, children, position = 'top' }) {
@@ -16,7 +17,7 @@ export function MenuContainer({ anchor, visible, onClose, children, position = '
                 overflow: 'hidden',
                 borderWidth: 1,
                 backgroundColor: background,
-                borderColor: onBackground + '0d'
+                borderColor: onBackground + TRANSPARENT[5]
             }}
         >
             {children}
