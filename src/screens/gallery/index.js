@@ -21,12 +21,15 @@ export const GalleryView = ({ index, images, visible, onClose }) => {
         return item + index
     }, [])
 
-    const backgroundColor = colors.backdrop
-
     return (
         visible && (
             <View style={styles.container}>
-                <View style={{ ...StyleSheet.absoluteFillObject, backgroundColor }} />
+                <View
+                    style={{
+                        ...StyleSheet.absoluteFillObject,
+                        backgroundColor: colors.backdrop
+                    }}
+                />
 
                 <AnimatedView
                     entering={FadeInUp}
@@ -40,7 +43,7 @@ export const GalleryView = ({ index, images, visible, onClose }) => {
                     <IconButton
                         onPress={onClose}
                         icon={() => <Close color={colors.onSurface} />}
-                        style={{ backgroundColor }}
+                        style={{ backgroundColor: colors.surface }}
                     />
                 </AnimatedView>
 
