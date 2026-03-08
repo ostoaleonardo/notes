@@ -2,7 +2,7 @@ export default {
   name: 'Notes',
   slug: 'notes',
   scheme: 'notes',
-  version: '1.5.2',
+  version: '1.5.3',
   orientation: 'portrait',
   icon: './assets/icon.png',
   userInterfaceStyle: 'automatic',
@@ -14,7 +14,7 @@ export default {
     },
     edgeToEdgeEnabled: true,
     package: 'com.monospace.notes',
-    versionCode: 15
+    versionCode: 16
   },
   plugins: [
     'expo-router',
@@ -49,7 +49,8 @@ export default {
       'expo-build-properties', {
         android: {
           enableProguardInReleaseBuilds: true,
-          enableShrinkResourcesInReleaseBuilds: true
+          enableShrinkResourcesInReleaseBuilds: true,
+          kotlinVersion: '2.2.0'
         }
       }
     ]

@@ -28,6 +28,7 @@
 		"expo-file-system": "~19.0.21",
 		"expo-font": "~14.0.10",
 		"expo-haptics": "~15.0.8",
+		"expo-iap": "^3.4.1-rc.1",
 		"expo-image": "~3.0.11",
 		"expo-image-picker": "~17.0.10",
 		"expo-linking": "~8.0.11",
