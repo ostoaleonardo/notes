@@ -1,5 +1,4 @@
 import { Linking, StyleSheet } from 'react-native'
-import { router } from 'expo-router'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { Scroll, Section } from '@/components'
@@ -7,7 +6,10 @@ import { Languages } from '@/screens/modals'
 import { AppVersionCard, Option } from '@/screens'
 import { useBottomSheet } from '@/hooks'
 import { ArrowForward, OpenInNew } from '@/icons'
-import { LINKS, ROUTES } from '@/constants'
+import { LINKS } from '@/constants'
+
+import { PremiumSection } from '@/screens/settings/premium-section'
+import { ThemeOptionLarge } from '@/screens/settings/theme-option-large'
 
 export default function Settings() {
     const { t } = useTranslation()
@@ -37,13 +39,10 @@ export default function Settings() {
                     onPress={onOpenLanguages}
                     isFirst={true}
                 />
-                <Option
-                    title={t('settings.theme')}
-                    rightContent={<ArrowForward {...iconProps} />}
-                    onPress={() => router.push(ROUTES.THEME)}
-                    isLast={true}
-                />
+                <ThemeOptionLarge />
             </Section>
+
+            <PremiumSection />
 
             <Section
                 title={t('title.about')}

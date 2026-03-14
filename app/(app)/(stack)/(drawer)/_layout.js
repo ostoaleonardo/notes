@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 import { AppBar, DrawerItems } from '@/components'
 import { SortAction } from '@/screens'
+import { usePremium } from '@/hooks/use-premium'
 
 export default function DrawerLayout() {
     const { t } = useTranslation()
     const { colors } = useTheme()
+    const { premium } = usePremium()
 
     return (
         <Drawer
@@ -34,7 +36,7 @@ export default function DrawerLayout() {
             <Drawer.Screen
                 name='home/index'
                 options={{
-                    title: t('title.notes')
+                    title: t('title.notes') + (premium ? ' (Pro)' : '')
                 }}
             />
         </Drawer>

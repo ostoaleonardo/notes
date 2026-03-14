@@ -6,5 +6,6 @@ export const STORAGE_KEYS = {
     SORT: 'sort',
     MARKDOWN: 'markdown',
     THEME: 'theme',
+    ACCENT: 'accent',
     LANGUAGE: 'user-language'
 }
