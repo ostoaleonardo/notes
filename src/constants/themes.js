@@ -119,6 +119,45 @@ export const THEMES = {
     dark: darkTheme
 }
 
+export const THEME_COLORS = {
+    light: {
+        color: COLORS.light.background,
+        background: COLORS.light.background,
+        borderColor: COLORS.light.background
+    },
+    dark: {
+        color: COLORS.dark.onBackground,
+        background: COLORS.dark.background,
+        borderColor: COLORS.base.white + TRANSPARENT[5]
+    },
+    system: {
+        color: COLORS.dark.onBackground,
+        background: COLORS.dark.foreground,
+        borderColor: COLORS.base.white + TRANSPARENT[5]
+    }
+}
+
+export const ACCENT_COLORS = {
+    red: {
+        background: COLORS.base.accent,
+        onBackground: COLORS.dark.onBackground,
+        borderColor: COLORS.base.accent
+    },
+    yellow: {
+        background: '#ffc700',
+        onBackground: COLORS.dark.background,
+        borderColor: '#ffc700'
+    },
+    blue: {
+        background: '#002f6c',
+        onBackground: COLORS.dark.onBackground,
+        borderColor: '#002f6c'
+    }
+}
+
+export const THEME_OPTIONS = ['light', 'dark', 'system']
+export const ACCENT_OPTIONS = ['red', 'yellow', 'blue']
+
 export const FONTS = {
     azeretLight: 'AzeretMono-Light',
     azeretMedium: 'AzeretMono-Medium',

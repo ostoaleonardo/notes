@@ -1,14 +1,19 @@
 import { Pressable, StyleSheet } from 'react-native'
+import { useTheme } from 'react-native-paper'
 import { Delete } from '@/icons'
-import { COLORS } from '@/constants'
 
 export function DeleteAction({ onPress }) {
+    const { colors } = useTheme()
+
     return (
         <Pressable
             onPress={onPress}
-            style={styles.container}
+            style={{
+                ...styles.container,
+                backgroundColor: colors.tertiary
+            }}
         >
-            <Delete color={COLORS.base.white} />
+            <Delete color={colors.onTertiary} />
         </Pressable>
     )
 }
@@ -19,7 +24,6 @@ const styles = StyleSheet.create({
         marginRight: 24,
         borderRadius: 16,
         alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: COLORS.base.accent
+        justifyContent: 'center'
     }
 })

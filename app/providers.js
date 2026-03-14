@@ -3,6 +3,7 @@ import { KeyboardProvider } from 'react-native-keyboard-controller'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { AuthProvider, NoteProvider, UtilsProvider } from '@/context'
+import { PremiumProvider } from '@/hooks/use-premium'
 
 export default function Providers({ children }) {
     const { bottom } = useSafeAreaInsets()
@@ -10,15 +11,17 @@ export default function Providers({ children }) {
     return (
         <GestureHandlerRootView style={{ flex: 1, paddingBottom: bottom }}>
             <AuthProvider>
-                <UtilsProvider>
-                    <NoteProvider>
-                        <KeyboardProvider>
-                            <BottomSheetModalProvider>
-                                {children}
-                            </BottomSheetModalProvider>
-                        </KeyboardProvider>
-                    </NoteProvider>
-                </UtilsProvider>
+                <PremiumProvider>
+                    <UtilsProvider>
+                        <NoteProvider>
+                            <KeyboardProvider>
+                                <BottomSheetModalProvider>
+                                    {children}
+                                </BottomSheetModalProvider>
+                            </KeyboardProvider>
+                        </NoteProvider>
+                    </UtilsProvider>
+                </PremiumProvider>
             </AuthProvider>
         </GestureHandlerRootView>
     )

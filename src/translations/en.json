@@ -44,12 +44,27 @@
 		"general": "General",
 		"language": "Language",
 		"theme": "Color theme",
+		"premium": "Upgrade to Pro",
 		"github": "GitHub repository",
 		"features": "Report issues, contribute or request new features.",
 		"contribute": "Contribute to the translation",
 		"translate": "Help us translate the app to your language.",
 		"updates": "Software update",
 		"version": "Version"
+	},
+	"premium": {
+		"get": "Get Version Pro",
+		"pro": "Version Pro",
+		"features": "Unlock all features and support the development of the app.",
+		"success": "Thank you for your purchase!",
+		"restore": "Restore purchase",
+		"purchased": "You have already purchased the Pro version.",
+		"messages": {
+			"success": "Purchase successful",
+			"available": "This item is not available for purchase",
+			"services": "Google Play services are unavailable",
+			"support": "Please contact support"
+		}
 	},
 	"theme": {
 		"light": "Light",

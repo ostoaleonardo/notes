@@ -4,7 +4,11 @@ import { ThemeContext } from '@/context'
 import { STORAGE_KEYS } from '@/constants'
 
 export function useToggleMode() {
-    const { mode, setMode } = useContext(ThemeContext)
+    const {
+        mode, setMode,
+        accent, setAccent
+    } = useContext(ThemeContext)
+
     const { setItem } = useStorage()
 
     const toggleMode = async (mode) => {
@@ -12,5 +16,13 @@ export function useToggleMode() {
         setMode(mode)
     }
 
-    return { mode, toggleMode }
+    const toggleAccent = async (accent) => {
+        await setItem(STORAGE_KEYS.ACCENT, accent)
+        setAccent(accent)
+    }
+
+    return {
+        mode, toggleMode,
+        accent, toggleAccent
+    }
 }

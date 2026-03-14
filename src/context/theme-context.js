@@ -3,26 +3,48 @@ import { useColorScheme } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { StatusBar } from 'expo-status-bar'
 import { THEMES } from '@/constants'
+import { ACCENT_COLORS } from '@/constants/themes'
 
 export const ThemeContext = createContext()
 
 export function ThemeProvider({ initialTheme, children }) {
+    const colorScheme = useColorScheme()
     const [mode, setMode] = useState('')
     const [name, setName] = useState('')
     const [theme, setTheme] = useState({})
-    const colorScheme = useColorScheme()
+    const [accent, setAccent] = useState('')
 
     useEffect(() => {
         setMode(initialTheme.mode)
         setName(initialTheme.name)
         setTheme(initialTheme.theme)
+        setAccent(initialTheme.accent || 'red')
     }, [initialTheme])
 
     useEffect(() => {
         const theme = mode !== 'system' ? mode : colorScheme
-        setTheme(THEMES[theme])
         setName(theme)
-    }, [mode, colorScheme])
+
+        if (accent && theme) {
+            setTheme(updateTheme(theme, accent))
+        } else {
+            THEMES[theme]
+        }
+
+    }, [mode, accent])
+
+    const updateTheme = (mode, accent) => {
+        const { background, onBackground } = ACCENT_COLORS[accent]
+
+        return {
+            ...THEMES[mode],
+            colors: {
+                ...THEMES[mode].colors,
+                tertiary: background,
+                onTertiary: onBackground
+            }
+        }
+    }
 
     return (
         <ThemeContext.Provider
@@ -32,7 +54,9 @@ export function ThemeProvider({ initialTheme, children }) {
                 name,
                 setName,
                 theme,
-                setTheme
+                setTheme,
+                accent,
+                setAccent
             }}
         >
             <PaperProvider theme={theme}>
