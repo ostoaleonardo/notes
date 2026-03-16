@@ -14,7 +14,8 @@ export default {
     },
     edgeToEdgeEnabled: true,
     package: 'com.monospace.notes',
-    versionCode: 16
+    versionCode: 16,
+    googleServicesFile: './google-services.json'
   },
   plugins: [
     'expo-router',
@@ -53,7 +54,8 @@ export default {
           kotlinVersion: '2.2.0'
         }
       }
-    ]
+    ],
+    '@react-native-google-signin/google-signin'
   ],
   extra: {
     router: {
