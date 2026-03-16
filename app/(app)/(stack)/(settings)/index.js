@@ -9,7 +9,8 @@ import { ArrowForward, OpenInNew } from '@/icons'
 import { LINKS } from '@/constants'
 
 import { PremiumSection } from '@/screens/settings/premium-section'
-import { ThemeOptionLarge } from '@/screens/settings/theme-option-large'
+import { ThemeOption } from '@/screens/settings/theme-option'
+import { SignInSection } from '@/screens/settings/sign-in-section'
 
 export default function Settings() {
     const { t } = useTranslation()
@@ -27,6 +28,8 @@ export default function Settings() {
 
     return (
         <Scroll contentContainerStyle={styles.scroll}>
+            <SignInSection />
+
             <Section
                 title={t('settings.general')}
                 containerStyle={styles.section}
@@ -39,7 +42,7 @@ export default function Settings() {
                     onPress={onOpenLanguages}
                     isFirst={true}
                 />
-                <ThemeOptionLarge />
+                <ThemeOption />
             </Section>
 
             <PremiumSection />

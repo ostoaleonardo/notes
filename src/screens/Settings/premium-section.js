@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { StyleSheet, ToastAndroid } from 'react-native'
+import { ToastAndroid } from 'react-native'
 import { ActivityIndicator, useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { Section } from '@/components'
@@ -145,38 +145,31 @@ export function PremiumSection() {
     return (
         <Section
             title={t('settings.premium')}
-            containerStyle={styles.section}
-            contentStyle={styles.items}
+            containerStyle={{ paddingHorizontal: 16 }}
+            contentStyle={{ gap: 3 }}
         >
             <Option
                 title={t(premium ? 'premium.pro' : 'premium.get')}
                 description={t(premium ? 'premium.success' : 'premium.features')}
-                rightContent={premium ? <Check {...iconProps} /> : <ArrowForward {...iconProps} />}
+                rightContent={
+                    premium ? <Check {...iconProps} />
+                        : <ArrowForward {...iconProps} />
+                }
                 onPress={premium ? null : purcharsePro}
                 isFirst={true}
                 isLast={premium}
             />
-            {!premium && (
-                <Option
-                    title={t('premium.restore')}
-                    description={t('premium.purchased')}
-                    rightContent={
-                        loading ? <ActivityIndicator size='small' color={colors.onBackground} />
-                            : <ArrowForward {...iconProps} />
-                    }
-                    onPress={restorePurchases}
-                    isLast={true}
-                />
-            )}
+            <Option
+                visible={!premium}
+                title={t('premium.restore')}
+                description={t('premium.purchased')}
+                rightContent={
+                    loading ? <ActivityIndicator size='small' {...iconProps} />
+                        : <ArrowForward {...iconProps} />
+                }
+                onPress={restorePurchases}
+                isLast={true}
+            />
         </Section>
     )
 }
-
-const styles = StyleSheet.create({
-    section: {
-        paddingHorizontal: 16
-    },
-    items: {
-        gap: 3
-    }
-})
