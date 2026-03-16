@@ -23,12 +23,6 @@ export default function StackLayout() {
                     title: t('title.settings')
                 }}
             />
-            <Stack.Screen
-                name='theme'
-                options={{
-                    title: t('title.theme')
-                }}
-            />
         </Stack>
     )
 }

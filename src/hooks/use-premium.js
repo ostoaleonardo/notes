@@ -1,9 +1,13 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 const PremiumContext = createContext()
 
-export function PremiumProvider({ children }) {
+export function PremiumProvider({ isPremium = false, children }) {
     const [premium, setPremium] = useState(false)
+
+    useEffect(() => {
+        setPremium(isPremium)
+    }, [isPremium])
 
     return (
         <PremiumContext.Provider
