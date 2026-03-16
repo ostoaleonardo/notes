@@ -7,13 +7,27 @@ import { ThemeProvider } from '@/context'
 import { STORAGE_KEYS, THEMES } from '@/constants'
 import Providers from './providers'
 
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { SCOPES } from '@/constants/google'
+import { PRO } from '@/constants/iap'
+import { PremiumProvider } from '@/hooks/use-premium'
+
+GoogleSignin.configure({ scopes: SCOPES })
+
 export default function MainLayout() {
     const colorScheme = useColorScheme()
     const { initLanguage } = useLanguage()
-    const { connected, getAvailablePurchases } = useIAP()
-    const { getItem } = useStorage()
+    const { setItem, getItem } = useStorage()
+
+    const {
+        connected,
+        availablePurchases,
+        getAvailablePurchases,
+        finishTransaction
+    } = useIAP()
 
     const [initialTheme, setInitialTheme] = useState({})
+    const [isPremium, setIsPremium] = useState(false)
 
     useEffect(() => {
         (async () => {
@@ -28,21 +42,37 @@ export default function MainLayout() {
     }, [])
 
     useEffect(() => {
-        const getAvailableProducts = async () => {
-            if (connected) {
-                console.log('Fetching products...')
-                // await getAvailablePurchases()
+        if (connected) {
+            getAvailablePurchases()
+        }
+    }, [connected])
+
+    useEffect(() => {
+        if (!availablePurchases?.length) return
+
+        const restore = async () => {
+            for (const product of availablePurchases) {
+                if (product.productId === PRO && product.purchaseState === 'purchased') {
+                    setIsPremium(true)
+                    await setItem(STORAGE_KEYS.PRO, product.transactionId)
+                    await finishTransaction({
+                        purchase: product,
+                        isConsumable: false
+                    })
+                }
             }
         }
 
-        getAvailableProducts()
-    }, [connected])
+        restore()
+    }, [availablePurchases, finishTransaction])
 
     return (
         <ThemeProvider initialTheme={initialTheme}>
-            <Providers>
-                <Slot />
-            </Providers>
+            <PremiumProvider isPremium={isPremium}>
+                <Providers>
+                    <Slot />
+                </Providers>
+            </PremiumProvider>
         </ThemeProvider>
     )
 }
