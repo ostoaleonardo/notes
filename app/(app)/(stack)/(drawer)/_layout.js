@@ -23,7 +23,7 @@ export default function DrawerLayout() {
                 ),
 
                 drawerStyle: {
-                    backgroundColor: colors.surface
+                    backgroundColor: colors.background
                 },
 
                 sceneStyle: {

@@ -3,8 +3,10 @@ import { useTheme } from 'react-native-paper'
 import { Typography } from '@/components'
 import { COMMONS } from '@/constants'
 
-export function Option({ title, description, rightContent, onPress, isFirst, isLast }) {
+export function Option({ title, description, rightContent, onPress, visible = true, isFirst, isLast }) {
     const { colors } = useTheme()
+
+    if (!visible) return null
 
     return (
         <Pressable
