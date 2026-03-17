@@ -9,11 +9,7 @@ export default function App() {
     const { signInSilently } = useAuth()
 
     useEffect(() => {
-        const signIn = async () => {
-            await signInSilently()
-        }
-
-        signIn()
+        signInSilently()
     }, [])
 
     return <Redirect href={ROUTES.HOME} />
