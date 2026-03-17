@@ -101,15 +101,9 @@ export function useAuth() {
     useEffect(() => {
         (async () => {
             if (!isSignedIn) return
-            setIsAuthenticating(true)
-
-            const currentUser = await getCurrentUser()
-            setUser(currentUser)
 
             const accessToken = await getAccessToken()
             setAccessToken(accessToken)
-
-            setIsAuthenticating(false)
         })()
     }, [])
 
