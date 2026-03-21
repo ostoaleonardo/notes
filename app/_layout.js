@@ -1,17 +1,16 @@
+import * as SplashScreen from 'expo-splash-screen'
+import { Slot } from 'expo-router'
+import { isDevice } from 'expo-device'
 import { useEffect, useState } from 'react'
 import { useColorScheme } from 'react-native'
-import { Slot } from 'expo-router'
-import { useIAP } from 'expo-iap'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { finishTransaction, getAvailablePurchases, initConnection } from 'expo-iap'
 import { useLanguage, useStorage } from '@/hooks'
-import { ThemeProvider } from '@/context'
-import { STORAGE_KEYS, THEMES } from '@/constants'
+import { PremiumProvider, ThemeProvider } from '@/context'
+import { PRO, SCOPES, STORAGE_KEYS, THEMES } from '@/constants'
 import Providers from './providers'
 
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
-import { SCOPES } from '@/constants/google'
-import { PRO } from '@/constants/iap'
-import { PremiumProvider } from '@/hooks/use-premium'
-
+SplashScreen.preventAutoHideAsync()
 GoogleSignin.configure({ scopes: SCOPES })
 
 export default function MainLayout() {
@@ -19,52 +18,59 @@ export default function MainLayout() {
     const { initLanguage } = useLanguage()
     const { setItem, getItem } = useStorage()
 
-    const {
-        connected,
-        availablePurchases,
-        getAvailablePurchases,
-        finishTransaction
-    } = useIAP()
-
+    const [isReady, setIsReady] = useState(false)
     const [initialTheme, setInitialTheme] = useState({})
     const [isPremium, setIsPremium] = useState(false)
 
     useEffect(() => {
-        (async () => {
-            const accent = await getItem(STORAGE_KEYS.ACCENT) || 'red'
-            const mode = await getItem(STORAGE_KEYS.THEME) || 'system'
-            const name = mode !== 'system' ? mode : colorScheme
-            const theme = THEMES[name]
-
-            setInitialTheme({ mode, name, theme, accent })
-            await initLanguage()
-        })()
+        try {
+            initTheme()
+            initPurchases()
+        } catch (error) {
+            console.debug('error loading app', error)
+        } finally {
+            setIsReady(true)
+        }
     }, [])
 
-    useEffect(() => {
-        if (connected) {
-            getAvailablePurchases()
-        }
-    }, [connected])
+    const initTheme = async () => {
+        const accent = await getItem(STORAGE_KEYS.ACCENT) || 'red'
+        const mode = await getItem(STORAGE_KEYS.THEME) || 'system'
+        const name = mode !== 'system' ? mode : colorScheme
+        const theme = THEMES[name]
 
-    useEffect(() => {
-        if (!availablePurchases?.length) return
+        setInitialTheme({ mode, name, theme, accent })
+        await initLanguage()
+    }
 
-        const restore = async () => {
-            for (const product of availablePurchases) {
-                if (product.productId === PRO && product.purchaseState === 'purchased') {
+    const initPurchases = () => {
+        if (!isDevice) return
+
+        initConnection().then(async () => {
+            const purchases = await getAvailablePurchases()
+
+            for (const purchase of purchases) {
+                if (purchase.productId === PRO && purchase.purchaseState === 'purchased') {
                     setIsPremium(true)
-                    await setItem(STORAGE_KEYS.PRO, product.transactionId)
+                    await setItem(STORAGE_KEYS.PRO, purchase.transactionId)
                     await finishTransaction({
-                        purchase: product,
+                        purchase: purchase,
                         isConsumable: false
                     })
                 }
             }
-        }
+        })
+    }
 
-        restore()
-    }, [availablePurchases, finishTransaction])
+    useEffect(() => {
+        if (isReady) {
+            SplashScreen.hide()
+        }
+    }, [isReady])
+
+    if (!isReady) {
+        return null
+    }
 
     return (
         <ThemeProvider initialTheme={initialTheme}>
