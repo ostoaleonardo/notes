@@ -14,3 +14,6 @@ export {
 export { FEEDBACK_TYPES } from './feedback-types'
 export { STORAGE_KEYS } from './storage-keys'
 export { LINKS } from './links'
+
+export { SCOPES } from './google'
+export { PRO } from './iap'
