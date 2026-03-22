@@ -18,7 +18,10 @@ export { LINKS } from './links'
 export { PRO } from './iap'
 export {
     CLOSE_DELIMITER,
+    CONTENT_TYPE,
     DELIMITER,
+    GOOGLE_APIS,
     MIME_TYPES,
-    SCOPES
+    SCOPES,
+    UPLOAD_TYPES
 } from './google'

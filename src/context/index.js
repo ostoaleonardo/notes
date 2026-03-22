@@ -9,3 +9,9 @@ export { AuthProvider } from './auth-context'
 export { NoteProvider } from './note-context'
 export { UtilsProvider } from './utils-contex'
 export { ThemeProvider } from './theme-context'
+
+// Premium
+export { PremiumContext } from './premium-context'
+export { PremiumProvider } from './premium-context'
+export { SyncContext } from './sync-context'
+export { SyncProvider } from './sync-context'

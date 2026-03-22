@@ -18,6 +18,7 @@ export const MIME_TYPES = {
     JSON: 'application/json',
 }
 
-const BOUNDARY = '\r\n--foo_bar_baz'
-export const DELIMITER = BOUNDARY + '\r\n'
-export const CLOSE_DELIMITER = BOUNDARY + '--'
+const BOUNDARY = 'foo_bar_baz'
+export const DELIMITER = '\r\n--' + BOUNDARY + '\r\n'
+export const CLOSE_DELIMITER = '\r\n--' + BOUNDARY + '--'
+export const CONTENT_TYPE = 'multipart/related; boundary=' + BOUNDARY

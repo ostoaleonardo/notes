@@ -8,6 +8,7 @@ export function useAuth() {
     const {
         user,
         setUser,
+        accessToken,
         setAccessToken,
         isSignedIn,
         setIsSignedIn,
@@ -19,7 +20,7 @@ export function useAuth() {
 
         try {
             await GoogleSignin.hasPlayServices()
-            const { data, type } = await GoogleSignin.signIn()
+            const { data } = await GoogleSignin.signIn()
             const { user } = data
 
             if (user) {
@@ -103,19 +104,23 @@ export function useAuth() {
             if (!isSignedIn) return
 
             const accessToken = await getAccessToken()
+
+            if (!accessToken) return
+            console.debug('new token', accessToken.split('.')[0])
             setAccessToken(accessToken)
         })()
-    }, [])
+    }, [isSignedIn])
 
     return {
         user,
         isSignedIn,
         setIsSignedIn,
+        accessToken,
+        getAccessToken,
         signIn,
         signOut,
         signInSilently,
         getIsSignedIn,
-        getAccessToken,
         getCurrentUser
     }
 }
