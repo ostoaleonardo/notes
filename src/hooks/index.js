@@ -17,3 +17,8 @@ export { useAnimatedShake } from './use-animated-shake'
 // Utils
 export { useHaptics } from './use-haptics'
 export { useLocalAuthentication } from './use-local-authentication'
+
+// Premium
+export { useAuth } from './use-auth'
+export { useSync } from './use-sync'
+export { usePremium } from './use-premium'
