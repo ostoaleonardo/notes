@@ -37,7 +37,6 @@ export {
     ModalHeader
 } from './modal'
 
-export { RadioButtonItem } from './radio-button-item'
 
 export { DialogModal } from './dialog'
 
@@ -50,11 +49,11 @@ export {
 // Drawer
 export { DrawerItems } from './drawer'
 
-// Text
-export { Typography } from './typography'
-
-// Checkbox
+// UI
+export { Avatar } from './avatar'
 export { Checkbox } from './checkbox'
+export { Typography } from './typography'
+export { RadioButtonItem } from './radio-button-item'
 
 // Lists
 export {

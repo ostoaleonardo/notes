@@ -9,7 +9,18 @@ const SIZE_VARIANTS = {
     caption: 12
 }
 
-export function Typography({ children, bold, uppercase, color, opacity, textAlign, fontSize, variant = 'paragraph', ...props }) {
+export function Typography({
+    children,
+    bold,
+    uppercase,
+    color,
+    opacity,
+    textAlign,
+    fontSize,
+    variant = 'paragraph',
+    styleProps,
+    ...props
+}) {
     const { colors } = useTheme()
     const fontVariant = fontSize || SIZE_VARIANTS[variant]
 
@@ -22,7 +33,8 @@ export function Typography({ children, bold, uppercase, color, opacity, textAlig
                 opacity && { opacity },
                 textAlign && { textAlign },
                 uppercase && styles.uppercase,
-                bold ? styles.bold : styles.regular
+                bold ? styles.bold : styles.regular,
+                styleProps
             ]}
             {...props}
         >

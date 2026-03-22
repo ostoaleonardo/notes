@@ -15,5 +15,10 @@ export { FEEDBACK_TYPES } from './feedback-types'
 export { STORAGE_KEYS } from './storage-keys'
 export { LINKS } from './links'
 
-export { SCOPES } from './google'
 export { PRO } from './iap'
+export {
+    CLOSE_DELIMITER,
+    DELIMITER,
+    MIME_TYPES,
+    SCOPES
+} from './google'
