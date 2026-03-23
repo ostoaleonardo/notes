@@ -1,30 +1,34 @@
 import { useEffect, useState } from 'react'
 import { ToastAndroid } from 'react-native'
-import { ActivityIndicator, useTheme } from 'react-native-paper'
+import { ErrorCode, useIAP } from 'expo-iap'
 import { useTranslation } from 'react-i18next'
+import { ActivityIndicator, useTheme } from 'react-native-paper'
 import { Section } from '@/components'
 import { Option } from '@/screens'
-import { useStorage } from '@/hooks'
+import { usePremium, useStorage } from '@/hooks'
 import { ArrowForward, Check } from '@/icons'
-import { ErrorCode, useIAP } from 'expo-iap'
-import { PRO, PRODUCT_ID } from '@/constants/iap'
-import { usePremium } from '@/hooks/use-premium'
+import { PRO, PRODUCT_ID, STORAGE_KEYS } from '@/constants'
 
 export function PremiumSection() {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { setItem } = useStorage()
     const { premium, setPremium } = usePremium()
-
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        if (connected) {
-            fetchProducts({
-                skus: PRODUCT_ID,
-                type: 'in-app'
-            })
+        const getPurchases = async () => {
+            if (connected) {
+                fetchProducts({
+                    skus: PRODUCT_ID,
+                    type: 'in-app'
+                })
+
+                await getAvailablePurchases()
+            }
         }
+
+        getPurchases()
     }, [connected])
 
     const {
@@ -35,11 +39,11 @@ export function PremiumSection() {
         getAvailablePurchases
     } = useIAP({
         onPurchaseSuccess: (purchase) => {
-            console.log('Purchase successful:', purchase)
+            console.debug('Purchase successful:', purchase.transactionId)
             onSuccessfulPurchase(purchase)
         },
         onPurchaseError: (error) => {
-            console.log('Purchase failed:', error)
+            console.debug('Purchase failed:', error)
             onErrorPurchase(error)
         }
     })
@@ -52,54 +56,18 @@ export function PremiumSection() {
         })
     }
 
-    const restorePurchases = async () => {
-        try {
-            setLoading(true)
-            const purchased = false
-            await getAvailablePurchases()
-
-            let attempts = 0
-            while (attempts < 20) {
-                console.log('Checking for available purchases...', availablePurchases.length)
-                if (availablePurchases.length > 0) {
-                    break
-                }
-
-                await new Promise(resolve => setTimeout(resolve, 1000))
-                attempts++
-            }
-
-            for (const purchase of availablePurchases) {
-                if (purchase.productId === PRO) {
-                    await setItem('premium', 'true')
-                    setPremium(true)
-                    purchased = true
-
-                    ToastAndroid.show(
-                        t('premium.messages.success'),
-                        ToastAndroid.SHORT
-                    )
-                }
-            }
-
-            if (!purchased) {
-                ToastAndroid.show(
-                    t('premium.messages.purchased'),
-                    ToastAndroid.SHORT
-                )
-            }
-        } catch (error) {
-            console.error('Failed to restore purchases:', error)
-        } finally {
-            setLoading(false)
-        }
-    }
-
     const onSuccessfulPurchase = async (purchase) => {
-        console.log(purchase.transactionId)
-        await setItem('premium', 'true')
-        setPremium(true)
+        await setItem(
+            STORAGE_KEYS.PRO,
+            purchase.transactionId
+        )
 
+        await finishTransaction({
+            purchase,
+            isConsumable: true
+        })
+
+        setPremium(true)
         ToastAndroid.show(
             t('premium.messages.success'),
             ToastAndroid.SHORT
@@ -133,6 +101,41 @@ export function PremiumSection() {
                     error.message,
                     ToastAndroid.SHORT
                 )
+        }
+    }
+
+    const restorePurchases = async () => {
+        try {
+            setLoading(true)
+            const purchased = false
+
+            for (const purchase of availablePurchases) {
+                if (purchase.productId === PRO && purchase.purchaseState === 'purchased') {
+                    setPremium(true)
+                    purchased = true
+
+                    await setItem(
+                        STORAGE_KEYS.PRO,
+                        purchase.transactionId
+                    )
+
+                    ToastAndroid.show(
+                        t('premium.messages.success'),
+                        ToastAndroid.SHORT
+                    )
+                }
+            }
+
+            if (!purchased) {
+                ToastAndroid.show(
+                    t('premium.messages.no.purchased'),
+                    ToastAndroid.SHORT
+                )
+            }
+        } catch (error) {
+            console.error('Failed to restore purchases:', error)
+        } finally {
+            setLoading(false)
         }
     }
 

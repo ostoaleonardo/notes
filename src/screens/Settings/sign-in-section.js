@@ -1,29 +1,58 @@
+import { useContext, useEffect, useRef } from 'react'
 import { ToastAndroid } from 'react-native'
 import { useTheme } from 'react-native-paper'
+import { useNetInfo } from '@react-native-community/netinfo'
 import { useTranslation } from 'react-i18next'
-import { Section } from '@/components'
+import { Avatar, Section } from '@/components'
 import { Option } from '@/screens'
-import { useStorage } from '@/hooks'
+import { useAuth, usePremium, useStorage, useSync } from '@/hooks'
+import { NoteContext } from '@/context'
 import { LogOut } from '@/icons'
-
-import { useAuth } from '@/hooks/use-auth'
-import { Avatar } from '@/components/avatar'
-import { usePremium } from '@/hooks/use-premium'
 
 export function SignInSection() {
     const { t } = useTranslation()
     const { colors } = useTheme()
-    const { clear } = useStorage()
+    const { restore } = useSync()
     const { premium } = usePremium()
-    const { user, isSignedIn, signIn, signOut } = useAuth()
+    const { clear: clearStorage } = useStorage()
+    const { isInternetReachable } = useNetInfo()
+    const { clear } = useContext(NoteContext)
+
+    const {
+        user,
+        isSignedIn,
+        accessToken,
+        signIn,
+        signOut
+    } = useAuth()
+
+    const shouldRestoreRef = useRef(false)
+
+    useEffect(() => {
+        if (!shouldRestoreRef.current) return
+        if (!isSignedIn || !accessToken) return
+
+        shouldRestoreRef.current = false
+        restore()
+    }, [accessToken, isSignedIn])
 
     const onSignIn = async () => {
+        if (!isInternetReachable) {
+            ToastAndroid.show(t('no.connection'), ToastAndroid.SHORT)
+            return
+        }
+
         await signIn()
+        shouldRestoreRef.current = true
     }
 
     const onSignOut = async () => {
         clear()
+        clearStorage()
         signOut()
+
+        shouldRestoreRef.current = false
+
         ToastAndroid.show(
             t('account.signout'),
             ToastAndroid.SHORT
