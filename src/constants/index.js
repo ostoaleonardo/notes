@@ -15,7 +15,11 @@ export { FEEDBACK_TYPES } from './feedback-types'
 export { STORAGE_KEYS } from './storage-keys'
 export { LINKS } from './links'
 
-export { PRO } from './iap'
+export {
+    PRO,
+    PRODUCT_ID
+} from './iap'
+
 export {
     CLOSE_DELIMITER,
     CONTENT_TYPE,

@@ -9,6 +9,12 @@ export function NoteProvider({ children }) {
     const [trash, setTrash] = useState(new Set())
     const [paramId, setParamId] = useState('')
 
+    const clear = () => {
+        setNotes([])
+        setTrash(new Set())
+        setCategories(DEFAULT_CATEGORIES)
+    }
+
     return (
         <NoteContext.Provider
             value={{
@@ -19,7 +25,8 @@ export function NoteProvider({ children }) {
                 trash,
                 setTrash,
                 paramId,
-                setParamId
+                setParamId,
+                clear
             }}
         >
             {children}

@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import { AuthContext } from '@/context'
 import { CONTENT_TYPE, GOOGLE_APIS, UPLOAD_TYPES } from '@/constants'
+import { getMultipartRequestBody } from '@/utils'
 
 export function useDrive() {
     const { accessToken } = useContext(AuthContext)
@@ -26,7 +27,6 @@ export function useDrive() {
             url.search = params.toString()
 
             const requestBody = getMultipartRequestBody(metadata, data)
-            console.debug('saving...')
 
             const { id } = await fetch(url, {
                 method: 'POST',
@@ -59,7 +59,6 @@ export function useDrive() {
             })
 
             url.search = params.toString()
-            console.debug('updating...')
 
             const { id } = await fetch(url, {
                 method: 'PATCH',
@@ -93,6 +92,7 @@ export function useDrive() {
             })
                 .then(response => response.ok)
 
+            console.debug('deleted', fileId)
             return success
         } catch (error) {
             getError(error)

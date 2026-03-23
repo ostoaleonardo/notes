@@ -1,16 +1,14 @@
+import { isDevice } from 'expo-device'
 import { Linking, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { Scroll, Section } from '@/components'
 import { Languages } from '@/screens/modals'
+import { PremiumSection, SignInSection, ThemeOption } from '@/screens/settings'
 import { AppVersionCard, Option } from '@/screens'
 import { useBottomSheet } from '@/hooks'
 import { ArrowForward, OpenInNew } from '@/icons'
 import { LINKS } from '@/constants'
-
-import { PremiumSection } from '@/screens/settings/premium-section'
-import { ThemeOption } from '@/screens/settings/theme-option'
-import { SignInSection } from '@/screens/settings/sign-in-section'
 
 export default function Settings() {
     const { t } = useTranslation()
@@ -45,7 +43,7 @@ export default function Settings() {
                 <ThemeOption />
             </Section>
 
-            <PremiumSection />
+            {isDevice && <PremiumSection />}
 
             <Section
                 title={t('title.about')}

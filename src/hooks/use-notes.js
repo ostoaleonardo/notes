@@ -1,28 +1,26 @@
 import { useContext, useEffect, useState } from 'react'
 import { useStorage } from './use-storage'
-import { NoteContext, UtilsContext } from '@/context'
+import { NoteContext, SyncUtilsContext, UtilsContext } from '@/context'
 import { STORAGE_KEYS } from '@/constants'
 
 export function useNotes() {
     const { notes, setNotes, paramId, setParamId } = useContext(NoteContext)
     const { setPinned, setSort } = useContext(UtilsContext)
+    const { schedule } = useContext(SyncUtilsContext)
 
-    const { setItem, getItem } = useStorage()
     const [loading, setLoading] = useState(true)
+    const { setItem, getItem } = useStorage()
 
     const saveNote = (note) => {
         const localNotes = [note, ...notes]
-        updateBackup(localNotes)
-    }
-
-    const saveNotes = (items) => {
-        const localNotes = [...items, ...notes]
-        updateBackup(localNotes)
+        saveLocal(localNotes)
+        schedule('create', note.id)
     }
 
     const deleteNote = (id) => {
         const localNotes = notes.filter((note) => note.id !== id)
-        updateBackup(localNotes)
+        saveLocal(localNotes)
+        schedule('delete', id)
     }
 
     const updateNote = (note) => {
@@ -31,14 +29,15 @@ export function useNotes() {
             return n
         })
 
-        updateBackup(localNotes)
+        saveLocal(localNotes)
+        schedule('update', note.id)
     }
 
     const getNote = (id) => {
         return notes.find((note) => note.id === id) || {}
     }
 
-    const updateBackup = async (localNotes) => {
+    const saveLocal = async (localNotes) => {
         setNotes(localNotes)
         await setItem(STORAGE_KEYS.NOTES, JSON.stringify(localNotes))
     }
@@ -69,11 +68,11 @@ export function useNotes() {
         notes,
         getNote,
         saveNote,
-        saveNotes,
         deleteNote,
         updateNote,
         paramId,
         setParamId,
-        loading
+        loading,
+        saveNotesDebug
     }
 }
