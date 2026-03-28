@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { ToastAndroid } from 'react-native'
 import { useDrive } from './use-drive'
 import { useStorage } from './use-storage'
-import { NoteContext } from '@/context'
+import { AuthContext, NoteContext } from '@/context'
 import { SyncContext } from '@/context/sync-context'
 import { DEFAULT_CATEGORIES, STORAGE_KEYS } from '@/constants'
 
@@ -11,12 +11,7 @@ export function useSync() {
     const { t } = useTranslation()
     const { setItem, getItem } = useStorage()
 
-    const {
-        listFiles,
-        getPageToken,
-        listChanges,
-        getFile
-    } = useDrive()
+    const { accessToken } = useContext(AuthContext)
 
     const {
         setIsSyncing,
@@ -29,6 +24,13 @@ export function useSync() {
         setNotes,
         setCategories
     } = useContext(NoteContext)
+
+    const {
+        listFiles,
+        getPageToken,
+        listChanges,
+        getFile
+    } = useDrive(accessToken)
 
     const restore = async () => {
         try {
