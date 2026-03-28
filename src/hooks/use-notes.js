@@ -1,15 +1,20 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { useStorage } from './use-storage'
-import { NoteContext, SyncUtilsContext, UtilsContext } from '@/context'
+import { NoteContext, SyncUtilsContext } from '@/context'
 import { STORAGE_KEYS } from '@/constants'
 
 export function useNotes() {
-    const { notes, setNotes, paramId, setParamId } = useContext(NoteContext)
-    const { setPinned, setSort } = useContext(UtilsContext)
-    const { schedule } = useContext(SyncUtilsContext)
+    const { setItem } = useStorage()
 
-    const [loading, setLoading] = useState(true)
-    const { setItem, getItem } = useStorage()
+    const {
+        notes,
+        setNotes,
+        paramId,
+        setParamId,
+        loading
+    } = useContext(NoteContext)
+
+    const { schedule } = useContext(SyncUtilsContext)
 
     const saveNote = (note) => {
         const localNotes = [note, ...notes]
@@ -42,28 +47,6 @@ export function useNotes() {
         await setItem(STORAGE_KEYS.NOTES, JSON.stringify(localNotes))
     }
 
-    useEffect(() => {
-        const getNotes = async () => {
-            try {
-                if (notes.length === 0) {
-                    const notes = await getItem(STORAGE_KEYS.NOTES)
-                    const pinned = await getItem(STORAGE_KEYS.PINNED)
-                    const sort = await getItem(STORAGE_KEYS.SORT)
-
-                    if (notes) setNotes(JSON.parse(notes))
-                    if (pinned) setPinned(new Set(JSON.parse(pinned)))
-                    if (sort) setSort(JSON.parse(sort))
-                }
-            } catch (error) {
-                console.error('Error loading notes:', error)
-            } finally {
-                setLoading(false)
-            }
-        }
-
-        getNotes()
-    }, [])
-
     return {
         notes,
         getNote,
@@ -72,7 +55,6 @@ export function useNotes() {
         updateNote,
         paramId,
         setParamId,
-        loading,
-        saveNotesDebug
+        loading
     }
 }
