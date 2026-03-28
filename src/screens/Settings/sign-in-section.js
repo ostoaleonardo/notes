@@ -4,8 +4,8 @@ import { useTheme } from 'react-native-paper'
 import { useNetInfo } from '@react-native-community/netinfo'
 import { useTranslation } from 'react-i18next'
 import { Avatar, Section } from '@/components'
-import { Option } from '@/screens'
-import { useAuth, usePremium, useStorage, useSync } from '@/hooks'
+import { Option } from './option'
+import { useAuth, useNotes, usePremium, useStorage, useSync } from '@/hooks'
 import { NoteContext } from '@/context'
 import { LogOut } from '@/icons'
 
@@ -17,6 +17,7 @@ export function SignInSection() {
     const { clear: clearStorage } = useStorage()
     const { isInternetReachable } = useNetInfo()
     const { clear } = useContext(NoteContext)
+    const { saveNotesDebug } = useNotes()
 
     const {
         user,
@@ -84,6 +85,7 @@ export function SignInSection() {
                 title={user?.name}
                 description={user?.email}
                 rightContent={<Avatar user={user} size={32} />}
+                onPress={() => saveNotesDebug(15)}
                 isFirst={isSignedIn}
             />
             <Option
