@@ -1,11 +1,11 @@
 import { useDrive } from './use-drive'
 
-export function useNotesBackup() {
+export function useNotesBackup(accessToken) {
     const {
         multipartUpload,
         updateFile,
         deleteFile
-    } = useDrive()
+    } = useDrive(accessToken)
 
     const backup = async (action, note, fileId) => {
         try {

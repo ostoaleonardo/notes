@@ -1,11 +1,7 @@
-import { useContext } from 'react'
-import { AuthContext } from '@/context'
-import { CONTENT_TYPE, GOOGLE_APIS, UPLOAD_TYPES } from '@/constants'
 import { getMultipartRequestBody } from '@/utils'
+import { CONTENT_TYPE, GOOGLE_APIS, UPLOAD_TYPES } from '@/constants'
 
-export function useDrive() {
-    const { accessToken } = useContext(AuthContext)
-
+export function useDrive(accessToken) {
     const multipartUpload = async (data, fileName) => {
         try {
             validate(data)
