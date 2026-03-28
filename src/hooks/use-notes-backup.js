@@ -1,93 +1,57 @@
-import { useContext } from 'react'
 import { useDrive } from './use-drive'
-import { useStorage } from './use-storage'
-import { STORAGE_KEYS } from '@/constants'
-import { SyncContext } from '@/context/sync-context'
 
 export function useNotesBackup() {
     const {
-        notesToSync,
-        setNotesToSync,
-        notesBackup,
-        setNotesBackup
-    } = useContext(SyncContext)
+        multipartUpload,
+        updateFile,
+        deleteFile
+    } = useDrive()
 
-    const { setItem } = useStorage()
-    const { multipartUpload, updateFile, deleteFile } = useDrive()
-
-    const backup = async (action, note) => {
+    const backup = async (action, note, fileId) => {
         try {
             switch (action) {
                 case 'create':
-                    await createBackup(note)
-                    break
+                    return await createBackup(note)
                 case 'update':
-                    await updateBackup(note)
+                    await updateBackup(note, fileId)
                     break
                 case 'delete':
-                    await deleteBackup(note.id)
+                    await deleteBackup(fileId)
                     break
                 default:
                     break
             }
         } catch (error) {
-            console.debug(error)
-            saveToSync(action, note)
+            throw error
         }
     }
 
     const createBackup = async (note) => {
-        const noteId = note.id
-        const fileName = 'note-' + noteId
-
         try {
-            const { success, id } = await multipartUpload(note, fileName)
-
-            if (success && id) {
-                const backup = {
-                    ...notesBackup,
-                    [noteId]: id
-                }
-
-                setNotesBackup(backup)
-                await setItem(STORAGE_KEYS.NOTES_BACKUP, JSON.stringify(backup))
-            }
+            const fileName = 'note-' + note.id
+            return await multipartUpload(note, fileName)
         } catch (error) {
-            console.log('error creating backup', error)
+            console.log('error creating backup')
+            throw error
         }
     }
 
-    const updateBackup = async (note) => {
-        const noteId = note.id
-        const id = notesBackup[noteId]
-
-        if (id) {
-            try {
-                await updateFile(note, id)
-            } catch (error) {
-                console.log('error updating backup', error)
-            }
-        } else {
-            await createBackup(note)
+    const updateBackup = async (note, fileId) => {
+        try {
+            await updateFile(note, fileId)
+        } catch (error) {
+            console.log('error updating backup')
+            throw error
         }
     }
 
-    const deleteBackup = async (noteId) => {
-        const id = notesBackup[noteId]
-
-        if (id) {
-            try {
-                await deleteFile(id)
-            } catch (error) {
-                console.log('error deleting backup', error)
-            }
+    const deleteBackup = async (fileId) => {
+        try {
+            await deleteFile(fileId)
+        } catch (error) {
+            console.log('error deleting backup')
+            throw error
         }
-    }
-
-    const saveToSync = async (action, note) => {
-        const sync = [...notesToSync, { action, note }]
-        await setItem(STORAGE_KEYS.NOTES_TO_SYNC, JSON.stringify(sync))
-        setNotesToSync(sync)
     }
 
     return { backup }

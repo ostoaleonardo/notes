@@ -3,18 +3,24 @@ import { useNetInfo } from '@react-native-community/netinfo'
 import { NoteContext } from './note-context'
 import { SyncContext } from './sync-context'
 import { useNotesBackup } from '@/hooks/use-notes-backup'
+import { useStorage } from '@/hooks'
+import { STORAGE_KEYS } from '@/constants'
 
 export const SyncUtilsContext = createContext()
 
 export function SyncUtilsProvider({ children }) {
-    const { backup } = useNotesBackup()
     const { isInternetReachable } = useNetInfo()
+    const { backup } = useNotesBackup()
+    const { setItem } = useStorage()
+
     const { notes } = useContext(NoteContext)
 
     const {
         setIsSyncing,
         notesToSync,
-        setNotesToSync
+        setNotesToSync,
+        notesBackup,
+        setNotesBackup
     } = useContext(SyncContext)
 
     const timer = useRef({})
@@ -81,12 +87,22 @@ export function SyncUtilsProvider({ children }) {
         const queue = [...notesToSync]
         const processed = new Set([])
         const failed = new Set([])
+        const backups = []
 
         for (const { action, id } of queue) {
             try {
                 const note = notes.find(note => note.id === id) || { id }
 
-                await backup(action, note)
+                // To update or delete file
+                const fileId = getFileId(action, id)
+
+                const response = await backup(action, note, fileId)
+
+                // Only save file id for created notes
+                if (response?.success && response?.id) {
+                    backups.push({ [note.id]: response.id })
+                }
+
                 processed.add(id)
             } catch (error) {
                 console.debug('sync error', error)
@@ -104,9 +120,41 @@ export function SyncUtilsProvider({ children }) {
             })
         })
 
+        // Save file id for saved notes
+        saveFilesId(backups)
+
         console.debug('sync finished...')
         syncing.current = false
         setIsSyncing(false)
+    }
+
+    const getFileId = (action, id) => {
+        let fileId = ''
+
+        if (action === 'update' || action === 'delete') {
+            fileId = notesBackup[id]
+        }
+
+        return fileId
+    }
+
+    const saveFilesId = async (backups) => {
+        if (!backups?.length) return
+
+        const files = backups.reduce((acc, backup) => {
+            return { ...acc, ...backup }
+        }, {})
+
+        const notesFilesId = {
+            ...notesBackup,
+            ...files
+        }
+
+        setNotesBackup(notesFilesId)
+        await setItem(
+            STORAGE_KEYS.NOTES_BACKUP,
+            JSON.stringify(notesFilesId)
+        )
     }
 
     useEffect(() => {
