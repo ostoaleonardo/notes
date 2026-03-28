@@ -2,18 +2,20 @@ import { createContext, useContext, useEffect, useRef } from 'react'
 import { useNetInfo } from '@react-native-community/netinfo'
 import { NoteContext } from './note-context'
 import { SyncContext } from './sync-context'
-import { useNotesBackup } from '@/hooks/use-notes-backup'
-import { useStorage } from '@/hooks'
+import { AuthContext } from './auth-context'
+import { useStorage } from '../hooks/use-storage'
+import { useNotesBackup } from '../hooks/use-notes-backup'
 import { STORAGE_KEYS } from '@/constants'
 
 export const SyncUtilsContext = createContext()
 
 export function SyncUtilsProvider({ children }) {
-    const { isInternetReachable } = useNetInfo()
-    const { backup } = useNotesBackup()
-    const { setItem } = useStorage()
-
+    const { accessToken } = useContext(AuthContext)
     const { notes } = useContext(NoteContext)
+
+    const { backup } = useNotesBackup(accessToken)
+    const { isInternetReachable } = useNetInfo()
+    const { setItem } = useStorage()
 
     const {
         setIsSyncing,
