@@ -5,10 +5,10 @@ import { useDrive } from './use-drive'
 import { SyncContext } from '@/context'
 import { STORAGE_KEYS } from '@/constants'
 
-export function useCategoriesBackup() {
+export function useCategoriesBackup(accessToken) {
     const { setItem } = useStorage()
     const { isInternetReachable } = useNetInfo()
-    const { multipartUpload, updateFile } = useDrive()
+    const { multipartUpload, updateFile } = useDrive(accessToken)
 
     const {
         setIsSyncing,
@@ -45,7 +45,8 @@ export function useCategoriesBackup() {
                 await setItem(STORAGE_KEYS.CATEGORIES_FILE_ID, id)
             }
         } catch (error) {
-            console.log('error creating backup', error)
+            console.log('error creating backup')
+            throw error
         }
     }
 
@@ -57,7 +58,8 @@ export function useCategoriesBackup() {
 
             await updateFile(categories, categoriesFile)
         } catch (error) {
-            console.log('error updating backup', error)
+            console.log('error updating backup')
+            throw error
         }
     }
 
