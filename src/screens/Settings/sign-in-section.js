@@ -1,11 +1,12 @@
 import { useContext, useEffect, useRef } from 'react'
 import { ToastAndroid } from 'react-native'
 import { useTheme } from 'react-native-paper'
-import { useNetInfo } from '@react-native-community/netinfo'
 import { useTranslation } from 'react-i18next'
+import { useNetInfo } from '@react-native-community/netinfo'
+import { statusCodes } from '@react-native-google-signin/google-signin'
+import { useAuth, usePremium, useStorage, useSync } from '@/hooks'
 import { Avatar, Section } from '@/components'
 import { Option } from './option'
-import { useAuth, useNotes, usePremium, useStorage, useSync } from '@/hooks'
 import { NoteContext } from '@/context'
 import { LogOut } from '@/icons'
 
@@ -17,34 +18,38 @@ export function SignInSection() {
     const { clear: clearStorage } = useStorage()
     const { isInternetReachable } = useNetInfo()
     const { clear } = useContext(NoteContext)
-    const { saveNotesDebug } = useNotes()
+
+    const shouldRestoreRef = useRef(false)
 
     const {
         user,
         isSignedIn,
-        accessToken,
         signIn,
         signOut
     } = useAuth()
 
-    const shouldRestoreRef = useRef(false)
-
     useEffect(() => {
+        if (!isSignedIn) return
         if (!shouldRestoreRef.current) return
-        if (!isSignedIn || !accessToken) return
 
         shouldRestoreRef.current = false
         restore()
-    }, [accessToken, isSignedIn])
+    }, [isSignedIn])
 
     const onSignIn = async () => {
-        if (!isInternetReachable) {
-            ToastAndroid.show(t('no.connection'), ToastAndroid.SHORT)
-            return
-        }
+        try {
+            if (!isInternetReachable) {
+                throw { code: 'NO_INTERNET' }
+            }
 
-        await signIn()
-        shouldRestoreRef.current = true
+            await signIn()
+            shouldRestoreRef.current = true
+        } catch (error) {
+            ToastAndroid.show(
+                getError(error),
+                ToastAndroid.SHORT
+            )
+        }
     }
 
     const onSignOut = async () => {
@@ -58,6 +63,21 @@ export function SignInSection() {
             t('account.signout'),
             ToastAndroid.SHORT
         )
+    }
+
+    const getError = (error) => {
+        switch (error.code) {
+            case 'NO_INTERNET':
+                return t('auth.connection')
+            case statusCodes.IN_PROGRESS:
+                return t('auth.signin.progress')
+            case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+                return t('auth.signin.services.unavailable')
+            case statusCodes.SIGN_IN_CANCELLED:
+                return t('auth.signin.cancelled')
+            default:
+                return t('auth.signin.failed')
+        }
     }
 
     const iconProps = {
@@ -85,7 +105,6 @@ export function SignInSection() {
                 title={user?.name}
                 description={user?.email}
                 rightContent={<Avatar user={user} size={32} />}
-                onPress={() => saveNotesDebug(15)}
                 isFirst={isSignedIn}
             />
             <Option

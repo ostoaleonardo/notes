@@ -1,6 +1,4 @@
-import { t } from 'i18next'
-import { useContext, useEffect } from 'react'
-import { ToastAndroid } from 'react-native'
+import { useContext } from 'react'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { AuthContext } from '@/context'
 
@@ -16,34 +14,21 @@ export function useAuth() {
     } = useContext(AuthContext)
 
     const signIn = async () => {
-        setIsAuthenticating(true)
-
         try {
+            setIsAuthenticating(true)
+
             await GoogleSignin.hasPlayServices()
-            const { data } = await GoogleSignin.signIn()
-            const { user } = data
+            const result = await GoogleSignin.signIn()
+            const user = result?.data?.user
 
             if (user) {
                 const accessToken = await getAccessToken()
-                setUser(user)
                 setAccessToken(accessToken)
                 setIsSignedIn(true)
+                setUser(user)
             }
-
-            return null
         } catch (error) {
-            switch (error.code) {
-                case statusCodes.IN_PROGRESS:
-                    break
-                case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
-                    ToastAndroid.show(
-                        t('play.services.available'),
-                        ToastAndroid.SHORT
-                    )
-                    break
-                default:
-                    break
-            }
+            throw error
         } finally {
             setIsAuthenticating(false)
         }
@@ -56,7 +41,7 @@ export function useAuth() {
             setAccessToken('')
             setIsSignedIn(false)
         } catch (error) {
-            // Handle error
+            throw error
         }
     }
 
@@ -69,7 +54,7 @@ export function useAuth() {
                 setIsSignedIn(true)
             }
         } catch (error) {
-            // handle errror
+            throw error
         }
     }
 
@@ -81,9 +66,9 @@ export function useAuth() {
         }
     }
 
-    const getCurrentUser = async () => {
+    const getCurrentUser = () => {
         try {
-            const { user } = await GoogleSignin.getCurrentUser()
+            const { user } = GoogleSignin.getCurrentUser()
             return user
         } catch (error) {
             return null
@@ -98,18 +83,6 @@ export function useAuth() {
             return null
         }
     }
-
-    useEffect(() => {
-        (async () => {
-            if (!isSignedIn) return
-
-            const accessToken = await getAccessToken()
-
-            if (!accessToken) return
-            console.debug('new token', accessToken.split('.')[0])
-            setAccessToken(accessToken)
-        })()
-    }, [isSignedIn])
 
     return {
         user,
