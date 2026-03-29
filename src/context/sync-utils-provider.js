@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useRef } from 'react'
+import { useSync } from '../hooks/use-sync'
 import { useNetInfo } from '@react-native-community/netinfo'
 import { NoteContext } from './note-context'
 import { SyncContext } from './sync-context'
@@ -9,13 +10,17 @@ import { STORAGE_KEYS } from '@/constants'
 
 export const SyncUtilsContext = createContext()
 
+const SYNC_INTERVAL = 1 * 60 * 1000
+
 export function SyncUtilsProvider({ children }) {
     const { accessToken } = useContext(AuthContext)
     const { notes } = useContext(NoteContext)
 
+    const syncIntervalRef = useRef()
     const { backup } = useNotesBackup(accessToken)
     const { isInternetReachable } = useNetInfo()
     const { setItem } = useStorage()
+    const { sync } = useSync()
 
     const {
         setIsSyncing,
@@ -82,7 +87,6 @@ export function SyncUtilsProvider({ children }) {
         if (syncing.current) return
         if (notesToSync.length === 0) return
 
-        console.debug('start syncing...')
         syncing.current = true
         setIsSyncing(true)
 
@@ -125,7 +129,6 @@ export function SyncUtilsProvider({ children }) {
         // Save file id for saved notes
         saveFilesId(backups)
 
-        console.debug('sync finished...')
         syncing.current = false
         setIsSyncing(false)
     }
@@ -165,6 +168,26 @@ export function SyncUtilsProvider({ children }) {
 
         processQueue()
     }, [notesToSync, isInternetReachable])
+
+    useEffect(() => {
+        if (!accessToken) return
+
+        if (syncIntervalRef.current) {
+            clearInterval(syncIntervalRef.current)
+        }
+
+        sync()
+
+        syncIntervalRef.current = setInterval(() => {
+            sync()
+        }, SYNC_INTERVAL)
+
+        return () => {
+            if (syncIntervalRef.current) {
+                clearInterval(syncIntervalRef.current)
+            }
+        }
+    }, [accessToken, isInternetReachable])
 
     return (
         <SyncUtilsContext.Provider

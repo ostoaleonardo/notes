@@ -1,15 +1,27 @@
 import { useEffect } from 'react'
 import { Redirect } from 'expo-router'
-import { useLocalAuthentication } from '@/hooks'
-import { useAuth } from '@/hooks/use-auth'
+import { useAuth, useLocalAuthentication } from '@/hooks'
 import { ROUTES } from '@/constants'
 
 export default function App() {
     useLocalAuthentication()
-    const { signInSilently } = useAuth()
+
+    const {
+        signInSilently,
+        getAccessToken
+    } = useAuth()
 
     useEffect(() => {
-        signInSilently()
+        const signIn = async () => {
+            try {
+                await signInSilently()
+                await getAccessToken()
+            } catch (error) {
+                console.error('Error during silent sign-in:', error)
+            }
+        }
+
+        signIn()
     }, [])
 
     return <Redirect href={ROUTES.HOME} />

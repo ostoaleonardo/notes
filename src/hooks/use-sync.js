@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ToastAndroid } from 'react-native'
 import { useDrive } from './use-drive'
@@ -100,72 +100,72 @@ export function useSync() {
 
     const sync = async () => {
         try {
-            console.debug('syncing...')
             const pageToken = await initPageToken()
+            console.debug('page token', pageToken)
 
             const { success, changes, newStartPageToken } = await listChanges(pageToken)
-            console.debug('changes', changes)
+            if (!success || !changes?.length) return
 
-            if (success && changes.length) {
-                let changesApplied = false
-                let newNotes = JSON.parse(await getItem(STORAGE_KEYS.NOTES))
-                let newCategories = JSON.parse(await getItem(STORAGE_KEYS.CATEGORIES))
-                let notesBackup = JSON.parse(await getItem(STORAGE_KEYS.NOTES_BACKUP))
+            console.debug('syncing...')
 
-                for (const change of changes) {
-                    const { fileId } = change
-                    const { name } = change.file || {}
+            let notesBackup = JSON.parse(await getItem(STORAGE_KEYS.NOTES_BACKUP)) || {}
+            let currentNotes = JSON.parse(await getItem(STORAGE_KEYS.NOTES)) || []
+            let notesMap = new Map(currentNotes.map(note => [note.id, note]))
+            let notesChanged = false
+            let categoriesChanged = false
+            let newCategories = null
 
-                    if (change.removed) {
-                        const noteId = Object.keys(notesBackup).find((key) => notesBackup[key] === fileId)
+            for (const change of changes) {
+                const fileId = change?.fileId
+                const name = change?.file?.name
 
-                        if (noteId) {
-                            newNotes = newNotes.filter((note) => note.id !== noteId)
-                            delete notesBackup[noteId]
-                            changesApplied = true
-                        }
-                    } else {
-                        if (name === 'categories.json') {
-                            newCategories = await getFile(fileId)
-                            changesApplied = true
-                        }
-
-                        if (name.includes('note')) {
-                            const note = await getFile(fileId)
-
-                            if (notesBackup[note.id]) {
-                                newNotes.forEach((n, i) => {
-                                    if (n.id === note.id) {
-                                        newNotes[i] = note
-                                    }
-                                })
-                            } else {
-                                newNotes.push(note)
-                                notesBackup[note.id] = fileId
-                            }
-
-                            changesApplied = true
-                        }
-
-                    }
+                if (name === 'categories.json') {
+                    newCategories = await getFile(fileId)
+                    categoriesChanged = true
+                    continue
                 }
 
-                if (changesApplied) {
-                    setNotes(newNotes)
-                    setCategories(newCategories)
-                    await setItem(STORAGE_KEYS.NOTES, JSON.stringify(newNotes))
-                    await setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(newCategories))
-                    await setItem(STORAGE_KEYS.PAGE_TOKEN, newStartPageToken)
+                if (change.removed) {
+                    const noteId = Object.keys(notesBackup).find((key) => notesBackup[key] === fileId)
+
+                    if (noteId) {
+                        notesMap.delete(noteId)
+                        delete notesBackup[noteId]
+                        notesChanged = true
+                    }
+                } else {
+                    const note = await getFile(fileId)
+
+                    if (notesBackup[note.id]) {
+                        notesMap.set(note.id, note)
+                    } else {
+                        notesMap.set(note.id, note)
+                        notesBackup[note.id] = fileId
+                    }
+
+                    notesChanged = true
                 }
             }
+
+            if (categoriesChanged && newCategories) {
+                setCategories(newCategories)
+                await setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(newCategories))
+            }
+
+            if (notesChanged) {
+                const mergedNotes = Array.from(notesMap.values())
+                setNotes(mergedNotes)
+                await setItem(STORAGE_KEYS.NOTES, JSON.stringify(mergedNotes))
+                await setItem(STORAGE_KEYS.NOTES_BACKUP, JSON.stringify(notesBackup))
+            }
+
+            if (categoriesChanged || notesChanged) {
+                await setItem(STORAGE_KEYS.PAGE_TOKEN, newStartPageToken)
+            }
         } catch (error) {
-            // Handle error
+            console.debug('sync error', error)
         }
     }
 
-    return {
-        sync,
-        restore,
-        schedule
-    }
+    return { sync, restore, schedule }
 }
