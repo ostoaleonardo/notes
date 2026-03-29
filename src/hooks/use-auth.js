@@ -78,9 +78,10 @@ export function useAuth() {
     const getAccessToken = async () => {
         try {
             const { accessToken } = await GoogleSignin.getTokens()
+            setAccessToken(accessToken)
             return accessToken
         } catch (error) {
-            return null
+            throw error
         }
     }
 
