@@ -27,5 +27,6 @@ export {
     GOOGLE_APIS,
     MIME_TYPES,
     SCOPES,
+    SYNC_INTERVAL,
     UPLOAD_TYPES
 } from './google'
