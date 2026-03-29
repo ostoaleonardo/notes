@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 import { AppBar, DrawerItems } from '@/components'
 import { SortAction } from '@/screens'
-import { usePremium } from '@/hooks/use-premium'
+import { usePremium } from '@/hooks'
 
 export default function DrawerLayout() {
     const { t } = useTranslation()

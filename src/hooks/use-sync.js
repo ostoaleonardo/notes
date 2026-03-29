@@ -1,10 +1,11 @@
-import { useContext, useEffect, useRef } from 'react'
+import { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ToastAndroid } from 'react-native'
 import { useDrive } from './use-drive'
 import { useStorage } from './use-storage'
-import { AuthContext, NoteContext } from '@/context'
-import { SyncContext } from '@/context/sync-context'
+import { AuthContext } from '../context/auth-context'
+import { NoteContext } from '../context/note-context'
+import { SyncContext } from '../context/sync-context-base'
 import { DEFAULT_CATEGORIES, STORAGE_KEYS } from '@/constants'
 
 export function useSync() {
@@ -37,7 +38,10 @@ export function useSync() {
             setIsSyncing(true)
             console.log('start restoring...')
 
-            const { success: categoriesSuccess, files: categoriesFiles } = await listFiles('name="categories.json"')
+            const {
+                success: categoriesSuccess,
+                files: categoriesFiles
+            } = await listFiles('name="categories.json"')
 
             if (categoriesSuccess && categoriesFiles.length) {
                 const categoriesFile = categoriesFiles[0].id
@@ -51,7 +55,10 @@ export function useSync() {
                 await setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(DEFAULT_CATEGORIES))
             }
 
-            const { success: notesSuccess, files: notesFiles } = await listFiles('name contains "note"')
+            const {
+                success: notesSuccess,
+                files: notesFiles
+            } = await listFiles('name contains "note"')
 
             const notes = []
             const backup = {}
@@ -100,6 +107,8 @@ export function useSync() {
 
     const sync = async () => {
         try {
+            setIsSyncing(true)
+
             const pageToken = await initPageToken()
             console.debug('page token', pageToken)
 
@@ -164,6 +173,8 @@ export function useSync() {
             }
         } catch (error) {
             console.debug('sync error', error)
+        } finally {
+            setIsSyncing(false)
         }
     }
 
