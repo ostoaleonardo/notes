@@ -1,8 +1,7 @@
-import { createContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { SyncContext } from './sync-context-base'
 import { useStorage } from '../hooks/use-storage'
 import { STORAGE_KEYS } from '@/constants'
-
-export const SyncContext = createContext()
 
 export function SyncProvider({ children }) {
     const [isSyncing, setIsSyncing] = useState(false)

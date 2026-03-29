@@ -1,16 +1,14 @@
 import { createContext, useContext, useEffect, useRef } from 'react'
-import { useSync } from '../hooks/use-sync'
 import { useNetInfo } from '@react-native-community/netinfo'
+import { SyncContext } from './sync-context-base'
 import { NoteContext } from './note-context'
-import { SyncContext } from './sync-context'
 import { AuthContext } from './auth-context'
+import { useSync } from '../hooks/use-sync'
 import { useStorage } from '../hooks/use-storage'
 import { useNotesBackup } from '../hooks/use-notes-backup'
-import { STORAGE_KEYS } from '@/constants'
+import { STORAGE_KEYS, SYNC_INTERVAL } from '@/constants'
 
 export const SyncUtilsContext = createContext()
-
-const SYNC_INTERVAL = 1 * 60 * 1000
 
 export function SyncUtilsProvider({ children }) {
     const { accessToken } = useContext(AuthContext)
