@@ -1,0 +1,35 @@
+import {
+    Code,
+    FormaQuote,
+    FormatBold,
+    FormatH1,
+    FormatH2,
+    FormatH3,
+    FormatH4,
+    FormatH5,
+    FormatH6,
+    FormatItalic,
+    FormatStrikethrough,
+    HorizontalRule,
+    Link,
+    Picture,
+    Table
+} from '@/icons'
+
+export const MARKDOWN_CONTROLS = [
+    { action: 'bold', Icon: FormatBold },
+    { action: 'italic', Icon: FormatItalic },
+    { action: 'strike', Icon: FormatStrikethrough },
+    { action: 'h1', Icon: FormatH1 },
+    { action: 'h2', Icon: FormatH2 },
+    { action: 'h3', Icon: FormatH3 },
+    { action: 'h4', Icon: FormatH4 },
+    { action: 'h5', Icon: FormatH5 },
+    { action: 'h6', Icon: FormatH6 },
+    { action: 'quote', Icon: FormaQuote },
+    { action: 'code', Icon: Code },
+    { action: 'hr', Icon: HorizontalRule },
+    { action: 'image', Icon: Picture },
+    { action: 'link', Icon: Link },
+    { action: 'table', Icon: Table }
+]
