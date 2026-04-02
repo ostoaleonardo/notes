@@ -3,10 +3,10 @@ import { Image, Pressable, StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { SwipeableCard } from '../swipeable-card'
 import { Typography } from '../../typography'
-import { MarkdownInput } from '../../markdown'
+import { MarkdownPreview } from '../../markdown'
 import { ListItemPreview } from '../preview/list-item-preview'
 import { PinAction } from '../actions/pin-action'
-import { Skeleton } from './Skeleton'
+import { Skeleton } from './skeleton'
 import { useLocalAuthentication } from '@/hooks'
 import { getDimensions, getPreviewNote } from '@/utils'
 import { Lock } from '@/icons'
@@ -72,7 +72,7 @@ export function SwipeableNote({ data, onUnlock, isOpen, onOpen, onDelete, onPin 
                         </View>
                     )}
 
-                    {!isLocked && note && <MarkdownInput readOnly value={value} />}
+                    {!isLocked && note && <MarkdownPreview value={value} />}
 
                     {!isLocked && hasList && (
                         <View style={{ width: '100%' }}>
