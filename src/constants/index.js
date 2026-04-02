@@ -11,6 +11,7 @@ export {
     DEFAULT_SORT
 } from './default-values'
 
+export { MARKDOWN_CONTROLS } from './markdown-controls'
 export { FEEDBACK_TYPES } from './feedback-types'
 export { STORAGE_KEYS } from './storage-keys'
 export { LINKS } from './links'

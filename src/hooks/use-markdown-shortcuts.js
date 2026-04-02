@@ -147,6 +147,8 @@ export const useMarkdownShortcuts = (value, setValue, selection, setSelection) =
     const onFormatH2 = () => onHeading(2)
     const onFormatH3 = () => onHeading(3)
     const onFormatH4 = () => onHeading(4)
+    const onFormatH5 = () => onHeading(5)
+    const onFormatH6 = () => onHeading(6)
 
     return {
         onSelectionChange,
@@ -155,6 +157,15 @@ export const useMarkdownShortcuts = (value, setValue, selection, setSelection) =
         onStrikethrough,
         onCode,
         onFormatH1,
-        onQuote
+        onFormatH2,
+        onFormatH3,
+        onFormatH4,
+        onFormatH5,
+        onFormatH6,
+        onQuote,
+        onHorizontalRule,
+        onImage,
+        onLink,
+        onTable
     }
 }

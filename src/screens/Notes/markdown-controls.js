@@ -2,7 +2,8 @@ import { StyleSheet, View } from 'react-native'
 import { FAB, IconButton, useTheme } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
 import { AnimatedView, Scroll } from '@/components'
-import { Code, Edit, Eye, FormaQuote, FormatBold, FormatH1, FormatItalic, FormatStrikethrough } from '@/icons'
+import { Edit, Eye } from '@/icons'
+import { MARKDOWN_CONTROLS } from '@/constants'
 
 export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
     const { colors } = useTheme()
@@ -27,30 +28,13 @@ export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
                         overScrollMode='never'
                         style={{ flex: 1 }}
                     >
-                        <IconButton
-                            onPress={() => onRunAction('bold')}
-                            icon={() => <FormatBold {...iconLightProps} />}
-                        />
-                        <IconButton
-                            onPress={() => onRunAction('italic')}
-                            icon={() => <FormatItalic {...iconLightProps} />}
-                        />
-                        <IconButton
-                            onPress={() => onRunAction('strike')}
-                            icon={() => <FormatStrikethrough {...iconLightProps} />}
-                        />
-                        <IconButton
-                            onPress={() => onRunAction('h1')}
-                            icon={() => <FormatH1 {...iconLightProps} />}
-                        />
-                        <IconButton
-                            onPress={() => onRunAction('quote')}
-                            icon={() => <FormaQuote {...iconLightProps} />}
-                        />
-                        <IconButton
-                            onPress={() => onRunAction('code')}
-                            icon={() => <Code {...iconLightProps} />}
-                        />
+                        {MARKDOWN_CONTROLS.map(({ action, Icon }) => (
+                            <IconButton
+                                key={action}
+                                onPress={() => onRunAction(action)}
+                                icon={() => <Icon {...iconLightProps} />}
+                            />
+                        ))}
                     </Scroll>
                 </AnimatedView>
             )}
