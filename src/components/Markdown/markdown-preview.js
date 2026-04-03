@@ -1,172 +1,114 @@
 import { useMemo } from 'react'
-import { Image } from 'react-native'
+import { Linking } from 'react-native'
 import { useTheme } from 'react-native-paper'
-import Markdown from 'react-native-markdown-renderer'
-import { Typography } from '../typography'
+import { EnrichedMarkdownText } from 'react-native-enriched-markdown'
 import { FONTS, TRANSPARENT } from '@/constants'
 
 export function MarkdownPreview({ value, size = 13 }) {
     const { colors } = useTheme()
-    const { onBackground, tertiary } = colors
+    const { background, onBackground, tertiary } = colors
 
-    const style = useMemo(() => ({
-        heading: {
-            fontFamily: FONTS.nType82Headline,
-            color: onBackground
-        },
-        headingContainer: {
-            marginBottom: 0,
-        },
-        heading1Container: {
-            borderBottomWidth: 0,
-            paddingBottom: 0
-        },
-        heading2Container: {
-            borderBottomWidth: 0,
-            paddingBottom: 0
-        },
-        heading1: {
+    const titleStyles = {
+        fontFamily: FONTS.nType82Headline,
+        color: onBackground,
+    }
+
+    const paragraphStyles = {
+        fontFamily: FONTS.azeretLight,
+        color: onBackground,
+        fontSize: size
+    }
+
+    const markdownStyle = useMemo(() => ({
+        h1: {
+            ...titleStyles,
             fontSize: size * 2
         },
-        heading2: {
-            fontSize: size * 1.8,
-            marginBottom: 2
+        h2: {
+            ...titleStyles,
+            fontSize: size * 1.8
         },
-        heading3: {
-            fontSize: size * 1.6,
-            marginBottom: 4
+        h3: {
+            ...titleStyles,
+            fontSize: size * 1.6
         },
-        heading4: {
-            fontSize: size * 1.5,
-            marginBottom: 6
+        h4: {
+            ...titleStyles,
+            fontSize: size * 1.5
         },
-        heading5: {
-            fontSize: size * 1.4,
-            marginBottom: 8
+        h5: {
+            ...titleStyles,
+            fontSize: size * 1.4
         },
-        heading6: {
-            fontSize: size * 1.2,
-            marginBottom: 10
+        h6: {
+            ...titleStyles,
+            fontSize: size * 1.2
         },
-        // Text
-        text: {
-            fontFamily: FONTS.azeretLight,
-            color: onBackground,
-            fontSize: size
+        paragraph: {
+            ...paragraphStyles
         },
         strong: {
-            fontFamily: FONTS.azeretMedium,
-            fontWeight: 'normal'
+            // Bold style
         },
         em: {
-            fontFamily: FONTS.azeretItalic,
-            fontStyle: 'normal'
+            // Italic style
         },
         strikethrough: {
-            textDecorationLine: 'line-through',
+            // Strikethrough style
         },
         link: {
             color: tertiary,
-            textDecorationLine: 'underline'
-        },
-        blocklink: {
-            borderBottomWidth: 1,
-            borderColor: tertiary,
+            underline: true
         },
         blockquote: {
-            borderLeftColor: tertiary,
-            borderLeftWidth: 4
+            ...paragraphStyles,
+            backgroundColor: background,
+            borderColor: tertiary,
+            borderWidth: 4
         },
-        // Code
+        code: {
+            ...paragraphStyles,
+            backgroundColor: onBackground + TRANSPARENT[10],
+            borderColor: TRANSPARENT.color
+        },
         codeBlock: {
+            ...paragraphStyles,
             backgroundColor: onBackground + TRANSPARENT[10],
-            fontFamily: FONTS.azeretMedium,
-            color: onBackground,
-            borderRadius: 8,
-            fontSize: size,
-            padding: 8,
+            borderColor: TRANSPARENT.color,
+            borderRadius: 8
         },
-        codeInline: {
-            backgroundColor: onBackground + TRANSPARENT[10],
-            fontFamily: FONTS.azeretMedium,
-            color: onBackground,
-            fontSize: size
-        },
-        // Lists
         list: {
-            marginBottom: 0
+            ...paragraphStyles
         },
-        listUnorderedItemIcon: {
-            color: onBackground,
-            fontFamily: FONTS.azeretMedium
-        },
-        listOrderedItemIcon: {
-            color: onBackground,
-            fontFamily: FONTS.azeretMedium
-        },
-        // Tables
         table: {
-            borderColor: tertiary + TRANSPARENT[10],
+            headerBackgroundColor: background,
+            headerFontFamily: FONTS.azeretLight,
+            headerTextColor: onBackground,
+            rowEvenBackgroundColor: background,
+            rowOddBackgroundColor: background,
+            borderColor: onBackground,
+            ...paragraphStyles,
         },
-        tableHeader: {
-            backgroundColor: tertiary + TRANSPARENT[10],
-        },
-        tableHeaderCell: {
-            color: onBackground,
-            borderColor: tertiary
-        },
-        tableRow: {
-            borderColor: tertiary + TRANSPARENT[20]
-        },
-        tableRowCell: {
-            color: onBackground,
-            borderColor: tertiary + TRANSPARENT[20],
-        },
-        // Images
         image: {
-            width: '100%',
-            aspectRatio: 1,
-            borderRadius: 8,
-            resizeMode: 'contain'
+            marginTop: 16,
+            marginBottom: 16,
+            borderRadius: 4
         },
-        // Separators
-        hr: {
+        thematicBreak: {
+            color: tertiary + TRANSPARENT[30],
             height: 1,
-            marginVertical: 0,
-            backgroundColor: tertiary + TRANSPARENT[30]
-        }
+            marginTop: 16,
+            marginBottom: 16,
+        },
     }), [size, colors])
 
-    const rules = {
-        image: (node, _, __, styles) => {
-            const src = node.attributes.src
-            const alt = node.attributes.alt || ''
-            const allowed = src && (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('data:image'))
-
-            if (!allowed) {
-                return <Typography>Unsupported image source</Typography>
-            }
-
-            return (
-                <Image
-                    alt={alt}
-                    key={node.key}
-                    style={styles.image}
-                    source={{ uri: src }}
-                    accessibilityLabel={alt}
-                />
-            )
-        }
-    }
-
     return (
-        <Markdown
-            style={style}
-            rules={rules}
-            allowedImageHandlers={['https://', 'http://', 'data:image']}
-            defaultImageHandler={null}
-        >
-            {value}
-        </Markdown>
+        <EnrichedMarkdownText
+            flavor='github'
+            markdown={value}
+            allowFontScaling={true}
+            markdownStyle={markdownStyle}
+            onLinkPress={({ url }) => Linking.openURL(url)}
+        />
     )
 }
