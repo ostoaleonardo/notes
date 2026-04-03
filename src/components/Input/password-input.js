@@ -8,7 +8,7 @@ import { LargeInput } from './large-input'
 import { Eye } from '@/icons'
 import { COLORS } from '@/constants'
 
-export function PasswordInput({ isInvalid, setIsInvalid, message, ...props }) {
+export function PasswordInput({ message, ...props }) {
     const { colors } = useTheme()
     const { shake, style } = useAnimatedShake()
 
@@ -16,11 +16,8 @@ export function PasswordInput({ isInvalid, setIsInvalid, message, ...props }) {
     const togglePassword = () => setHide(!hide)
 
     useEffect(() => {
-        if (isInvalid) {
-            shake()
-            setIsInvalid(false)
-        }
-    }, [isInvalid])
+        if (message) shake()
+    }, [message])
 
     return (
         <View style={styles.container}>

@@ -1,71 +1,43 @@
-import { forwardRef, useEffect, useState } from 'react'
+import { forwardRef, useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { ModalSheet, PasswordInput, Pressable } from '@/components'
-import { useHaptics, useLocalAuthentication, useNotes, useTrash } from '@/hooks'
-import { getEncryptedPassword } from '@/utils'
+import { useNoteAuthentication, useNotes, useTrash } from '@/hooks'
 import { Fingerprint } from '@/icons'
-import { FEEDBACK_TYPES } from '@/constants'
 
 export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
-    const { vibrate } = useHaptics()
     const { addItem } = useTrash()
     const { getNote, deleteNote } = useNotes()
-    const { hasBiometrics, authenticate } = useLocalAuthentication()
-
-    const [passwordInput, setPasswordInput] = useState('')
-    const [encryptedInput, setEncryptedInput] = useState('')
-
-    const [isInvalid, setIsInvalid] = useState(false)
-    const [message, setMessage] = useState('')
 
     const note = getNote(id)
-    const { password, biometrics } = note
+    const { password, biometrics } = note || {}
+
+    const {
+        passwordValue,
+        setPasswordValue,
+        hasBiometrics,
+        authenticated,
+        authBiometrics,
+        verifyPassword,
+        resetError,
+        message
+    } = useNoteAuthentication(id, password)
 
     const hasBothLocks = (hasBiometrics && biometrics) && password
 
     useEffect(() => {
-        setEncryptedInput('')
-        setPasswordInput('')
-        setIsInvalid(false)
-        setMessage('')
-    }, [id])
-
-    useEffect(() => {
-        const encryptedPassword = async () => {
-            const digest = await getEncryptedPassword(passwordInput)
-            setEncryptedInput(digest)
-        }
-
-        encryptedPassword()
-    }, [passwordInput])
-
-    const handlePassword = () => {
-        if (encryptedInput === password) {
-            vibrate(FEEDBACK_TYPES.SUCCESS)
-            addItem(note)
+        if (authenticated) {
+            const current = getNote(id)
+            addItem(current)
             deleteNote(id)
             onClose()
-        } else {
-            setIsInvalid(true)
-            vibrate(FEEDBACK_TYPES.ERROR)
-            setMessage(t('message.password.wrong'))
         }
-    }
+    }, [authenticated])
 
-    const handleBiometrics = async () => {
-        const success = await authenticate(t('notes.delete'))
-
-        if (success) {
-            onClose()
-            addItem(note)
-            deleteNote(id)
-            vibrate(FEEDBACK_TYPES.SUCCESS)
-        }
-    }
+    if (!note || !note.id) return null
 
     return (
         <ModalSheet
@@ -79,15 +51,14 @@ export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
                 {password || !biometrics ? (
                     <PasswordInput
                         modal={true}
-                        value={passwordInput}
-                        onChangeText={setPasswordInput}
+                        value={passwordValue}
+                        onChangeText={(text) => {
+                            if (message) resetError()
+                            setPasswordValue(text)
+                        }}
 
-                        onBlur={() => setMessage('')}
-                        onChange={() => setMessage('')}
-
-                        message={message}
-                        isInvalid={isInvalid}
-                        setIsInvalid={setIsInvalid}
+                        onBlur={resetError}
+                        message={t(message)}
                     />
                 ) : (
                     <Fingerprint
@@ -100,14 +71,14 @@ export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
                 {password && (
                     <Pressable
                         mode='contained'
-                        onPress={handlePassword}
+                        onPress={verifyPassword}
                     >
                         {t('button.delete')}
                     </Pressable>
                 )}
                 {biometrics && hasBiometrics && (
                     <Pressable
-                        onPress={handleBiometrics}
+                        onPress={() => authBiometrics(t('notes.delete'))}
                         mode={hasBothLocks ? 'outlined' : 'contained'}
                     >
                         {t('biometric.use')}

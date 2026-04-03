@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { DotSeparator, Scroll, Section, SwipeableNote, Typography } from '@/components'
@@ -10,14 +10,20 @@ export function NotesContainer({ selected, setSelected, filter, onUnlock, onDele
     const { notes, loading } = useNotes()
     const { sort } = useUtils()
 
-    const filteredNotes = notes.filter((note) => {
-        if (filter.size === 0) return true
-        return note.categories.some((category) => filter.has(category))
-    })
+    const filteredNotes = useMemo(() => {
+        return notes.filter((note) => {
+            if (filter.size === 0) return true
+            return note.categories.some((category) => filter.has(category))
+        })
+    }, [notes, filter])
 
-    const pinnedNotes = filteredNotes.filter((note) => pinned.has(note.id))
+    const pinnedNotes = useMemo(() => {
+        return filteredNotes.filter((note) => pinned.has(note.id))
+    }, [filteredNotes, pinned])
 
-    const remainingNotes = filteredNotes.filter((note) => !pinned.has(note.id))
+    const remainingNotes = useMemo(() => {
+        return filteredNotes.filter((note) => !pinned.has(note.id))
+    }, [filteredNotes, pinned])
 
     const renderNotes = useCallback((elements) => {
         return elements.map((note) => (
@@ -60,7 +66,7 @@ export function NotesContainer({ selected, setSelected, filter, onUnlock, onDele
                 visible={filteredNotes.length > 0}
                 contentStyle={{ gap: 8 }}
             >
-                {renderNotes(remainingNotes.sort(
+                {renderNotes([...remainingNotes].sort(
                     (a, b) => getSortedNotes(a, b, sort)
                 ))}
             </Section>

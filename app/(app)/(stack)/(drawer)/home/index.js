@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { View } from 'react-native'
 import { FloatingButton } from '@/components'
 import { DeleteNote, UnlockNote } from '@/screens/modals'
@@ -15,7 +15,7 @@ export default function App() {
 
     const {
         filter, onFilter,
-        pinned, updatePinned
+        pinned, onPinned
     } = useUtils()
 
     const {
@@ -30,23 +30,20 @@ export default function App() {
         onClose: onCloseDelete
     } = useBottomSheet()
 
-    const onUnlock = (id) => {
+    const onUnlock = useCallback((id) => {
         setOpen(id)
         onOpenUnlock()
-    }
+    }, [onOpenUnlock])
 
-    const onPin = (id) => {
-        if (pinned.has(id)) {
-            pinned.delete(id)
-        } else {
-            pinned.add(id)
+    const onPin = useCallback((id) => {
+        onPinned(id)
+
+        if (!pinned.has(id)) {
             onCloseDelete()
         }
+    }, [onPinned, pinned, onCloseDelete])
 
-        updatePinned(new Set(pinned))
-    }
-
-    const onDelete = (note, isLocked) => {
+    const onDelete = useCallback((note, isLocked) => {
         if (isLocked) {
             setSelected(note.id)
             onOpenDelete()
@@ -54,7 +51,7 @@ export default function App() {
             deleteNote(note.id)
             addItem(note)
         }
-    }
+    }, [deleteNote, addItem, onOpenDelete])
 
     return (
         <View style={{ flex: 1 }}>
