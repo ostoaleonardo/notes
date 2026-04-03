@@ -81,11 +81,11 @@ export function MarkdownPreview({ value, size = 13 }) {
             ...paragraphStyles
         },
         table: {
-            headerBackgroundColor: background,
+            headerBackgroundColor: TRANSPARENT.color,
             headerFontFamily: FONTS.azeretLight,
             headerTextColor: onBackground,
-            rowEvenBackgroundColor: background,
-            rowOddBackgroundColor: background,
+            rowEvenBackgroundColor: TRANSPARENT.color,
+            rowOddBackgroundColor: TRANSPARENT.color,
             borderColor: onBackground,
             ...paragraphStyles,
         },
