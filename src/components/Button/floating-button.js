@@ -9,7 +9,7 @@ import { useTheme } from 'react-native-paper'
 export function FloatingButton({ href }) {
     const { colors } = useTheme()
     const { accent } = useToggleMode()
-    const { background, onBackground } = ACCENT_COLORS[accent]
+    const { onBackground } = ACCENT_COLORS[accent]
 
     return (
         <Link

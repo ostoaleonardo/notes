@@ -17,6 +17,7 @@ export { useAnimatedShake } from './use-animated-shake'
 // Utils
 export { useHaptics } from './use-haptics'
 export { useLocalAuthentication } from './use-local-authentication'
+export { useNoteAuthentication } from './use-note-authentication'
 
 // Premium
 export { useAuth } from './use-auth'

@@ -28,19 +28,33 @@ export const useUtils = () => {
         )
     }
 
+    const onPinned = (id) => {
+        const next = new Set(pinned)
+
+        if (next.has(id)) {
+            next.delete(id)
+        } else {
+            next.add(id)
+        }
+
+        updatePinned(next)
+    }
+
     const onFilter = (id) => {
         if (id === 'all') {
             setFilter(new Set())
             return
         }
 
-        if (filter.has(id)) {
-            filter.delete(id)
+        const next = new Set(filter)
+
+        if (next.has(id)) {
+            next.delete(id)
         } else {
-            filter.add(id)
+            next.add(id)
         }
 
-        setFilter(new Set(filter))
+        setFilter(next)
     }
 
     return {
@@ -49,6 +63,7 @@ export const useUtils = () => {
         filter,
         updatePinned,
         updateSort,
-        onFilter
+        onFilter,
+        onPinned
     }
 }

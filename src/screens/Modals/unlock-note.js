@@ -1,71 +1,45 @@
-import { forwardRef, useEffect, useState } from 'react'
+import { forwardRef, useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { router } from 'expo-router'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { ModalSheet, PasswordInput, Pressable } from '@/components'
-import { useHaptics, useLocalAuthentication, useNotes } from '@/hooks'
-import { getEncryptedPassword } from '@/utils'
+import { useNoteAuthentication, useNotes } from '@/hooks'
 import { Fingerprint } from '@/icons'
-import { FEEDBACK_TYPES, ROUTES } from '@/constants'
+import { ROUTES } from '@/constants'
 
 export const UnlockNote = forwardRef(({ id, onClose }, ref) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { getNote } = useNotes()
-    const { vibrate } = useHaptics()
-    const { hasBiometrics, authenticate } = useLocalAuthentication()
 
-    const [passwordInput, setPasswordInput] = useState('')
-    const [encryptedInput, setEncryptedInput] = useState('')
+    const { biometrics, password } = getNote(id) || {}
 
-    const [isInvalid, setIsInvalid] = useState(false)
-    const [message, setMessage] = useState('')
+    const {
+        passwordValue,
+        setPasswordValue,
+        hasBiometrics,
+        authenticated,
+        authBiometrics,
+        verifyPassword,
+        resetError,
+        message
+    } = useNoteAuthentication(id, password)
 
-    const { biometrics, password } = getNote(id)
     const hasBothLocks = (hasBiometrics && biometrics) && password
 
     useEffect(() => {
-        setEncryptedInput('')
-        setPasswordInput('')
-        setIsInvalid(false)
-        setMessage('')
-
         if (biometrics && hasBiometrics) {
-            handleBiometrics()
+            authBiometrics(t('biometric.unlock'))
         }
-    }, [id, biometrics])
+    }, [id])
 
     useEffect(() => {
-        const encryptedPassword = async () => {
-            const digest = await getEncryptedPassword(passwordInput)
-            setEncryptedInput(digest)
-        }
-
-        encryptedPassword()
-    }, [passwordInput])
-
-    const handlePassword = () => {
-        if (encryptedInput === password) {
-            vibrate(FEEDBACK_TYPES.SUCCESS)
+        if (authenticated) {
             router.push(ROUTES.EDIT_NOTE + id)
             onClose()
-        } else {
-            setIsInvalid(true)
-            vibrate(FEEDBACK_TYPES.ERROR)
-            setMessage(t('message.password.wrong'))
         }
-    }
-
-    const handleBiometrics = async () => {
-        const success = await authenticate(t('biometric.unlock'))
-
-        if (success) {
-            onClose()
-            vibrate(FEEDBACK_TYPES.SUCCESS)
-            router.push(ROUTES.EDIT_NOTE + id)
-        }
-    }
+    }, [authenticated])
 
     return (
         <ModalSheet
@@ -79,15 +53,14 @@ export const UnlockNote = forwardRef(({ id, onClose }, ref) => {
                 {password || !biometrics ? (
                     <PasswordInput
                         modal={true}
-                        value={passwordInput}
-                        onChangeText={setPasswordInput}
+                        value={passwordValue}
+                        onChangeText={(text) => {
+                            if (message) resetError()
+                            setPasswordValue(text)
+                        }}
 
-                        onBlur={() => setMessage('')}
-                        onChange={() => setMessage('')}
-
-                        message={message}
-                        isInvalid={isInvalid}
-                        setIsInvalid={setIsInvalid}
+                        onBlur={resetError}
+                        message={t(message)}
                     />
                 ) : (
                     <Fingerprint
@@ -101,14 +74,14 @@ export const UnlockNote = forwardRef(({ id, onClose }, ref) => {
                 {password && (
                     <Pressable
                         mode='contained'
-                        onPress={handlePassword}
+                        onPress={verifyPassword}
                     >
                         {t('button.enter')}
                     </Pressable>
                 )}
                 {biometrics && hasBiometrics && (
                     <Pressable
-                        onPress={handleBiometrics}
+                        onPress={() => authBiometrics(t('biometric.unlock'))}
                         mode={hasBothLocks ? 'outlined' : 'contained'}
                     >
                         {t('biometric.unlock')}
