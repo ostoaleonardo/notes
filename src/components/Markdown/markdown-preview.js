@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
+import { Image } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import Markdown from 'react-native-markdown-renderer'
+import { Typography } from '../typography'
 import { FONTS, TRANSPARENT } from '@/constants'
 
 export function MarkdownPreview({ value, size = 13 }) {
@@ -122,12 +124,10 @@ export function MarkdownPreview({ value, size = 13 }) {
         },
         // Images
         image: {
-            flex: 1,
+            width: '100%',
+            aspectRatio: 1,
             borderRadius: 8,
-            marginVertical: 8,
-            resizeMode: 'contain',
-            borderWidth: 1,
-            borderColor: tertiary + TRANSPARENT[30],
+            resizeMode: 'contain'
         },
         // Separators
         hr: {
@@ -137,8 +137,35 @@ export function MarkdownPreview({ value, size = 13 }) {
         }
     }), [size, colors])
 
+    const rules = {
+        image: (node, _, __, styles) => {
+            const src = node.attributes.src
+            const alt = node.attributes.alt || ''
+            const allowed = src && (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('data:image'))
+
+            if (!allowed) {
+                return <Typography>Unsupported image source</Typography>
+            }
+
+            return (
+                <Image
+                    alt={alt}
+                    key={node.key}
+                    style={styles.image}
+                    source={{ uri: src }}
+                    accessibilityLabel={alt}
+                />
+            )
+        }
+    }
+
     return (
-        <Markdown style={style}>
+        <Markdown
+            style={style}
+            rules={rules}
+            allowedImageHandlers={['https://', 'http://', 'data:image']}
+            defaultImageHandler={null}
+        >
             {value}
         </Markdown>
     )
