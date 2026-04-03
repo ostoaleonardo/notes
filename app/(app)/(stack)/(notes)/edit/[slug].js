@@ -28,7 +28,7 @@ export default function EditNote() {
     const [biometrics, setBiometrics] = useState(false)
 
     const [action, setAction] = useState('')
-    const [isEditing, setIsEditing] = useState(true)
+    const [isEditing, setIsEditing] = useState(false)
     const [showEditor, setShowEditor] = useState(true)
     const [galleryIndex, setGalleryIndex] = useState('')
 
