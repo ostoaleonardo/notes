@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { FAB, IconButton, useTheme } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
@@ -5,12 +6,10 @@ import { AnimatedView, Scroll } from '@/components'
 import { Edit, Eye } from '@/icons'
 import { MARKDOWN_CONTROLS } from '@/constants'
 
-export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
+export const MarkdownControls = memo(function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
     const { colors } = useTheme()
-    const { background, onBackground, surface, primary } = colors
 
-    const iconDarkProps = { color: background }
-    const iconLightProps = { color: onBackground }
+    const iconDarkProps = { color: colors.background }
 
     return (
         <View style={styles.container}>
@@ -20,7 +19,7 @@ export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
                     exiting={FadeOutRight}
                     style={{
                         ...styles.controls,
-                        backgroundColor: surface
+                        backgroundColor: colors.surface
                     }}
                 >
                     <Scroll
@@ -32,7 +31,7 @@ export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
                             <IconButton
                                 key={action}
                                 onPress={() => onRunAction(action)}
-                                icon={() => <Icon {...iconLightProps} />}
+                                icon={() => <Icon color={colors.onSurface} />}
                             />
                         ))}
                     </Scroll>
@@ -47,7 +46,7 @@ export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
                     mode='flat'
                     animated={false}
                     onPress={onEditMarkdown}
-                    style={{ backgroundColor: primary }}
+                    style={{ backgroundColor: colors.primary }}
                     icon={() => (
                         isEditing
                             ? <Eye {...iconDarkProps} />
@@ -57,7 +56,7 @@ export function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
             </AnimatedView>
         </View>
     )
-}
+})
 
 const styles = StyleSheet.create({
     container: {
