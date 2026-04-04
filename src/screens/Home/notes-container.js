@@ -1,11 +1,19 @@
-import { useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { DotSeparator, Scroll, Section, SwipeableNote, Typography } from '@/components'
 import { useNotes, useUtils } from '@/hooks'
 import { getSortedNotes } from '@/utils'
 
-export function NotesContainer({ selected, setSelected, filter, onUnlock, onDelete, pinned, onPin }) {
+export function NotesContainer({
+    selected,
+    setSelected,
+    filter,
+    onUnlock,
+    onDelete,
+    pinned,
+    onPin
+}) {
     const { t } = useTranslation()
     const { notes, loading } = useNotes()
     const { sort } = useUtils()
@@ -13,7 +21,7 @@ export function NotesContainer({ selected, setSelected, filter, onUnlock, onDele
     const filteredNotes = useMemo(() => {
         return notes.filter((note) => {
             if (filter.size === 0) return true
-            return note.categories.some((category) => filter.has(category))
+            return note.categories?.some((category) => filter.has(category))
         })
     }, [notes, filter])
 
@@ -26,6 +34,8 @@ export function NotesContainer({ selected, setSelected, filter, onUnlock, onDele
     }, [filteredNotes, pinned])
 
     const renderNotes = useCallback((elements) => {
+        if (loading || elements.length === 0) return null
+
         return elements.map((note) => (
             <SwipeableNote
                 key={note.id}
@@ -37,7 +47,7 @@ export function NotesContainer({ selected, setSelected, filter, onUnlock, onDele
                 onPin={onPin}
             />
         ))
-    }, [selected, onUnlock, onDelete, onPin])
+    }, [loading, onUnlock, onDelete, onPin, selected, setSelected])
 
     return (
         <Scroll contentContainerStyle={styles.container}>
