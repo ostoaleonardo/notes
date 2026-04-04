@@ -1,3 +1,5 @@
+
+import { useCallback } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { IconButton, useTheme } from 'react-native-paper'
 import { openImagePicker } from '@/utils'
@@ -9,10 +11,13 @@ export function BottomEditorBar({ onAddImage, onToggleEditor, hasPassword, onOpe
 
     const iconProps = { color: onBackground }
 
-    const handleImagePicker = async (type) => {
+    const onImagePicker = useCallback(async (type) => {
         const assets = await openImagePicker(type)
         if (assets) onAddImage(assets)
-    }
+    }, [onAddImage])
+
+    const onCamera = useCallback(() => onImagePicker('camera'), [onImagePicker])
+    const onGallery = useCallback(() => onImagePicker('gallery'), [onImagePicker])
 
     return (
         <View
@@ -23,11 +28,11 @@ export function BottomEditorBar({ onAddImage, onToggleEditor, hasPassword, onOpe
         >
             <View style={{ flexDirection: 'row' }}>
                 <IconButton
-                    onPress={() => handleImagePicker('camera')}
+                    onPress={onCamera}
                     icon={() => <Camera {...iconProps} />}
                 />
                 <IconButton
-                    onPress={() => handleImagePicker('gallery')}
+                    onPress={onGallery}
                     icon={() => <Picture {...iconProps} />}
                 />
                 <IconButton

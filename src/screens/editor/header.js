@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LargeInput, Section } from '@/components'
 import { CategoryCarousel, DateNote } from '../notes'
@@ -10,13 +11,12 @@ export function Header({
 }) {
     const { t } = useTranslation()
 
-    const onCategories = (id) => {
-        if (!categories.includes(id)) {
-            setCategories([...categories, id])
-        } else {
-            setCategories(categories.filter((categoryId) => categoryId !== id))
-        }
-    }
+    const onCategories = useCallback((id) => {
+        setCategories(prev => prev.includes(id)
+            ? prev.filter((category) => category !== id)
+            : [...prev, id]
+        )
+    }, [setCategories])
 
     return (
         <>

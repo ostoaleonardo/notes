@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { randomUUID } from 'expo-crypto'
 import { useFocusEffect } from 'expo-router'
 import { Wrapper } from '@/components/layout'
@@ -14,8 +14,8 @@ export default function Note() {
     const { saveNote, updateNote, setParamId } = useNotes()
     const { filter } = useUtils()
 
-    const [isSaved, setIsSaved] = useState(false)
-    const [firstRender, setFirstRender] = useState(true)
+    const isSaved = useRef(false)
+    const firstRender = useRef(true)
 
     const [id, setId] = useState('')
     const [title, setTitle] = useState('')
@@ -34,8 +34,8 @@ export default function Note() {
     const [showEditor, setShowEditor] = useState(true)
     const [galleryIndex, setGalleryIndex] = useState('')
 
-    const onEditMarkdown = () => setIsEditing(!isEditing)
-    const onRunAction = (action) => setAction(action)
+    const onEditMarkdown = useCallback(() => setIsEditing(prev => !prev), [])
+    const onRunAction = useCallback((action) => setAction(action), [])
 
     const {
         ref: categoriesBottomRef,
@@ -52,14 +52,15 @@ export default function Note() {
     useFocusEffect(
         useCallback(() => {
             const id = randomUUID()
-            setFirstRender(false)
+            firstRender.current = false
             setParamId(id)
             setId(id)
         }, [])
     )
 
     useEffect(() => {
-        if (firstRender) return
+        if (firstRender.current) return
+        if (!title && !note && !images.length) return
 
         const timer = setTimeout(() => {
             const newData = {
@@ -74,7 +75,7 @@ export default function Note() {
                 createdAt
             }
 
-            if (!isSaved) {
+            if (!isSaved.current) {
                 const createdAt = getDate()
 
                 saveNote({
@@ -83,7 +84,7 @@ export default function Note() {
                 })
 
                 setCreatedAt(createdAt)
-                setIsSaved(true)
+                isSaved.current = true
             } else {
                 updateNote({
                     ...newData,
@@ -94,6 +95,7 @@ export default function Note() {
 
         return () => clearTimeout(timer)
     }, [
+        id,
         title,
         note,
         categories,
