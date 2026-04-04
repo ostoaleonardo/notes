@@ -49,7 +49,8 @@ export function SyncUtilsProvider({ children }) {
             const existing = prev.find(note => note.id === id)
 
             if (!existing) {
-                return [...prev, { id, action }]
+                const effectiveAction = getFileId(action, id) ? action : 'create'
+                return [...prev, { id, action: effectiveAction }]
             }
 
             let newAction = existing.action
@@ -93,42 +94,44 @@ export function SyncUtilsProvider({ children }) {
         const failed = new Set([])
         const backups = []
 
-        for (const { action, id } of queue) {
-            try {
-                const note = notes.find(note => note.id === id) || { id }
+        try {
+            for (const { action, id } of queue) {
+                try {
+                    const note = notes.find(note => note.id === id) || { id }
 
-                // To update or delete file
-                const fileId = getFileId(action, id)
+                    // To update or delete file
+                    const fileId = getFileId(action, id)
 
-                const response = await backup(action, note, fileId)
+                    const response = await backup(action, note, fileId)
 
-                // Only save file id for created notes
-                if (response?.success && response?.id) {
-                    backups.push({ [note.id]: response.id })
+                    // Only save file id for created notes
+                    if (response?.success && response?.id) {
+                        backups.push({ [note.id]: response.id })
+                    }
+
+                    processed.add(id)
+                } catch (error) {
+                    console.debug('sync error', error)
+                    failed.add(id)
                 }
-
-                processed.add(id)
-            } catch (error) {
-                console.debug('sync error', error)
-                failed.add(id)
             }
-        }
 
-        setNotesToSync(prev => {
-            if (!prev?.length) return []
+            setNotesToSync(prev => {
+                if (!prev?.length) return []
 
-            return prev.filter(item => {
-                if (failed.has(item.id)) return true
-                if (!processed.has(item.id)) return true
-                return false
+                return prev.filter(item => {
+                    if (failed.has(item.id)) return true
+                    if (!processed.has(item.id)) return true
+                    return false
+                })
             })
-        })
 
-        // Save file id for saved notes
-        saveFilesId(backups)
-
-        syncing.current = false
-        setIsSyncing(false)
+            // Save file id for saved notes
+            await saveFilesId(backups)
+        } finally {
+            syncing.current = false
+            setIsSyncing(false)
+        }
     }
 
     const getFileId = (action, id) => {

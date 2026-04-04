@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 import { Wrapper } from '@/components/layout'
 import { GalleryView } from '@/screens/gallery'
@@ -13,7 +13,7 @@ export default function EditNote() {
     const { slug } = useLocalSearchParams()
     const { getNote, updateNote } = useNotes()
 
-    const [firstRender, setFirstRender] = useState(true)
+    const firstRender = useRef(true)
 
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
@@ -32,8 +32,8 @@ export default function EditNote() {
     const [showEditor, setShowEditor] = useState(true)
     const [galleryIndex, setGalleryIndex] = useState('')
 
-    const onRunAction = (action) => setAction(action)
-    const onEditMarkdown = () => setIsEditing(!isEditing)
+    const onRunAction = useCallback((action) => setAction(action), [])
+    const onEditMarkdown = useCallback(() => setIsEditing(prev => !prev), [])
 
     const {
         ref: categoriesBottomRef,
@@ -79,12 +79,12 @@ export default function EditNote() {
 
     useFocusEffect(
         useCallback(() => {
-            setFirstRender(false)
+            firstRender.current = false
         }, [])
     )
 
     useEffect(() => {
-        if (firstRender) return
+        if (firstRender.current) return
 
         const timer = setTimeout(() => {
             const newData = {
@@ -94,7 +94,7 @@ export default function EditNote() {
                 categories,
                 images,
                 list,
-                password: password,
+                password,
                 biometrics,
                 createdAt
             }
