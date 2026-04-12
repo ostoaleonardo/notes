@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useFocusEffect, useLocalSearchParams } from 'expo-router'
+import { useLocalSearchParams } from 'expo-router'
 import { Wrapper } from '@/components/layout'
 import { GalleryView } from '@/screens/gallery'
 import { MarkdownControls } from '@/screens/notes'
@@ -13,7 +13,7 @@ export default function EditNote() {
     const { slug } = useLocalSearchParams()
     const { getNote, updateNote } = useNotes()
 
-    const firstRender = useRef(true)
+    const loading = useRef(true)
 
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
@@ -75,16 +75,14 @@ export default function EditNote() {
         setUpdatedAt(updatedAt)
         setBiometrics(biometrics)
         setPassword(password)
+
+        setTimeout(() => {
+            loading.current = false
+        }, 0)
     }, [slug])
 
-    useFocusEffect(
-        useCallback(() => {
-            firstRender.current = false
-        }, [])
-    )
-
     useEffect(() => {
-        if (firstRender.current) return
+        if (loading.current) return
 
         const timer = setTimeout(() => {
             const newData = {

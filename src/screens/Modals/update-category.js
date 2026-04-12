@@ -6,7 +6,7 @@ import { DialogModal, LargeInput } from '@/components'
 import { useCategories, useHaptics } from '@/hooks'
 import { FEEDBACK_TYPES, FONTS } from '@/constants'
 
-export function UpdateCategory({ visible, onDismiss, selectedId, setIsUpdated }) {
+export function UpdateCategory({ visible, onDismiss, selectedId }) {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
     const { getCategory, updateCategory } = useCategories()
@@ -35,7 +35,6 @@ export function UpdateCategory({ visible, onDismiss, selectedId, setIsUpdated })
         })
 
         onDismiss()
-        setIsUpdated(true)
         vibrate(FEEDBACK_TYPES.SUCCESS)
     }
 
