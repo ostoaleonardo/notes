@@ -45,9 +45,9 @@ export default function StackLayout() {
                 }}
             />
             <Stack.Screen
-                name='(settings)'
+                name='settings/index'
                 options={{
-                    headerShown: false
+                    title: t('title.settings')
                 }}
             />
         </Stack>

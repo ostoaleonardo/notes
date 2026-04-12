@@ -4,5 +4,5 @@ export const ROUTES = {
     TRASH: '/trash',
     ADD_NOTE: '(notes)',
     EDIT_NOTE: '/edit/',
-    SETTINGS: '(settings)'
+    SETTINGS: 'settings/index'
 }
