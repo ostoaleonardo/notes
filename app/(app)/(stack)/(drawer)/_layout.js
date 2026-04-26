@@ -2,7 +2,7 @@ import { Drawer } from 'expo-router/drawer'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 import { AppBar, DrawerItems } from '@/components'
-import { SortAction } from '@/screens'
+import { SortAction, SyncAction } from '@/screens'
 import { usePremium } from '@/hooks'
 
 export default function DrawerLayout() {
@@ -17,7 +17,12 @@ export default function DrawerLayout() {
                     <AppBar
                         menu={true}
                         settings={true}
-                        right={<SortAction />}
+                        right={
+                            <>
+                                <SyncAction />
+                                <SortAction />
+                            </>
+                        }
                         {...props}
                     />
                 ),

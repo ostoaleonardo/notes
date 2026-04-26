@@ -5,6 +5,7 @@ import { STORAGE_KEYS } from '@/constants'
 
 export function SyncProvider({ children }) {
     const [isSyncing, setIsSyncing] = useState(false)
+    const [syncType, setSyncType] = useState('')
     const [notesToSync, setNotesToSync] = useState([])
     const [notesBackup, setNotesBackup] = useState({})
     const [categoriesFile, setCategoriesFile] = useState('')
@@ -36,6 +37,8 @@ export function SyncProvider({ children }) {
             value={{
                 isSyncing,
                 setIsSyncing,
+                syncType,
+                setSyncType,
                 notesToSync,
                 setNotesToSync,
                 notesBackup,

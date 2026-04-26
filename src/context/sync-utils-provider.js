@@ -22,6 +22,7 @@ export function SyncUtilsProvider({ children }) {
 
     const {
         setIsSyncing,
+        setSyncType,
         notesToSync,
         setNotesToSync,
         notesBackup,
@@ -88,6 +89,7 @@ export function SyncUtilsProvider({ children }) {
 
         syncing.current = true
         setIsSyncing(true)
+        setSyncType('upload')
 
         const queue = [...notesToSync]
         const processed = new Set([])
@@ -131,6 +133,7 @@ export function SyncUtilsProvider({ children }) {
         } finally {
             syncing.current = false
             setIsSyncing(false)
+            setSyncType('')
         }
     }
 
