@@ -16,6 +16,7 @@ export function useSync() {
 
     const {
         setIsSyncing,
+        setSyncType,
         setNotesBackup,
         setCategoriesFile,
         schedule
@@ -36,6 +37,7 @@ export function useSync() {
     const restore = async () => {
         try {
             setIsSyncing(true)
+            setSyncType('download')
             console.log('start restoring...')
 
             const {
@@ -83,31 +85,14 @@ export function useSync() {
             ToastAndroid.show(t('sync.error'), ToastAndroid.SHORT)
         } finally {
             setIsSyncing(false)
+            setSyncType('')
         }
-    }
-
-    const initPageToken = async () => {
-        let pageToken = await getItem(STORAGE_KEYS.PAGE_TOKEN)
-
-        if (!pageToken) {
-            const { success, startPageToken } = await getPageToken()
-
-            if (success) {
-                pageToken = startPageToken
-                await setItem(STORAGE_KEYS.PAGE_TOKEN, startPageToken)
-            }
-        }
-
-        if (!pageToken) {
-            throw Error('No page token available')
-        }
-
-        return pageToken
     }
 
     const sync = async () => {
         try {
             setIsSyncing(true)
+            setSyncType('download')
 
             const pageToken = await initPageToken()
             console.debug('page token', pageToken)
@@ -175,7 +160,27 @@ export function useSync() {
             console.debug('sync error', error)
         } finally {
             setIsSyncing(false)
+            setSyncType('')
         }
+    }
+
+    const initPageToken = async () => {
+        let pageToken = await getItem(STORAGE_KEYS.PAGE_TOKEN)
+
+        if (!pageToken) {
+            const { success, startPageToken } = await getPageToken()
+
+            if (success) {
+                pageToken = startPageToken
+                await setItem(STORAGE_KEYS.PAGE_TOKEN, startPageToken)
+            }
+        }
+
+        if (!pageToken) {
+            throw Error('No page token available')
+        }
+
+        return pageToken
     }
 
     return { sync, restore, schedule }
