@@ -12,7 +12,6 @@ export default {
       foregroundImage: './assets/adaptive-icon.png',
       backgroundColor: '#ffffff'
     },
-    edgeToEdgeEnabled: true,
     package: 'com.monospace.notes',
     versionCode: 16,
     googleServicesFile: './google-services.json'
@@ -44,6 +43,8 @@ export default {
         ]
       }
     ],
+    'expo-image',
+    'expo-status-bar',
     'expo-localization',
     'expo-local-authentication',
     'react-native-enriched-markdown',

@@ -1,5 +1,5 @@
 import { View } from 'react-native'
-import { DrawerContentScrollView } from '@react-navigation/drawer'
+import { DrawerContentScrollView } from 'expo-router/drawer'
 import { useTranslation } from 'react-i18next'
 import { DrawerScreen } from './drawer-screen'
 import { ROUTES } from '@/constants'
