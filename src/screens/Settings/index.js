@@ -1,6 +1,5 @@
 export { Option } from './option'
 export { ThemeOption } from './theme-option'
 export { ColorOption } from './color-option'
-export { SignInSection } from './sign-in-section'
 export { PremiumSection } from './premium-section'
 export { AppVersionCard } from './app-version-card'

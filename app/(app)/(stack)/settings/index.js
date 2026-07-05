@@ -4,7 +4,7 @@ import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { Scroll, Section } from '@/components'
 import { Languages } from '@/screens/modals'
-import { PremiumSection, SignInSection, ThemeOption } from '@/screens/settings'
+import { PremiumSection, ThemeOption } from '@/screens/settings'
 import { AppVersionCard, Option } from '@/screens'
 import { useBottomSheet } from '@/hooks'
 import { ArrowForward, OpenInNew } from '@/icons'
@@ -26,8 +26,6 @@ export default function Settings() {
 
     return (
         <Scroll contentContainerStyle={styles.scroll}>
-            <SignInSection />
-
             <Section
                 title={t('settings.general')}
                 containerStyle={styles.section}

@@ -5,8 +5,6 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import {
     AuthProvider,
     NoteProvider,
-    SyncProvider,
-    SyncUtilsProvider,
     UtilsProvider
 } from '@/context'
 
@@ -18,15 +16,11 @@ export default function Providers({ children }) {
             <AuthProvider>
                 <UtilsProvider>
                     <NoteProvider>
-                        <SyncProvider>
-                            <SyncUtilsProvider>
-                                <KeyboardProvider>
-                                    <BottomSheetModalProvider>
-                                        {children}
-                                    </BottomSheetModalProvider>
-                                </KeyboardProvider>
-                            </SyncUtilsProvider>
-                        </SyncProvider>
+                        <KeyboardProvider>
+                            <BottomSheetModalProvider>
+                                {children}
+                            </BottomSheetModalProvider>
+                        </KeyboardProvider>
                     </NoteProvider>
                 </UtilsProvider>
             </AuthProvider>

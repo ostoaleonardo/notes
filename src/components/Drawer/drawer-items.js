@@ -2,7 +2,6 @@ import { View } from 'react-native'
 import { DrawerContentScrollView } from '@react-navigation/drawer'
 import { useTranslation } from 'react-i18next'
 import { DrawerScreen } from './drawer-screen'
-import { SignInHeader } from './sign-in-header'
 import { ROUTES } from '@/constants'
 import { useCategories, useNotes, useTrash } from '@/hooks'
 
@@ -15,7 +14,6 @@ export function DrawerItems() {
     return (
         <DrawerContentScrollView>
             <View style={{ paddingVertical: 16 }}>
-                <SignInHeader />
                 <DrawerScreen
                     path={ROUTES.HOME}
                     label={t('drawer.notes')}
