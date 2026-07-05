@@ -3,15 +3,13 @@ import { Slot } from 'expo-router'
 import { isDevice } from 'expo-device'
 import { useEffect, useState } from 'react'
 import { useColorScheme } from 'react-native'
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { finishTransaction, getAvailablePurchases, initConnection } from 'expo-iap'
 import { useLanguage, useStorage } from '@/hooks'
 import { PremiumProvider, ThemeProvider } from '@/context'
-import { PRO, SCOPES, STORAGE_KEYS, THEMES } from '@/constants'
+import { PRO, STORAGE_KEYS, THEMES } from '@/constants'
 import Providers from './providers'
 
 SplashScreen.preventAutoHideAsync()
-GoogleSignin.configure({ scopes: SCOPES })
 
 export default function MainLayout() {
     const colorScheme = useColorScheme()

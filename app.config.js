@@ -55,8 +55,7 @@ export default {
           kotlinVersion: '2.2.0'
         }
       }
-    ],
-    '@react-native-google-signin/google-signin'
+    ]
   ],
   extra: {
     router: {

@@ -20,14 +20,3 @@ export {
     PRO,
     PRODUCT_ID
 } from './iap'
-
-export {
-    CLOSE_DELIMITER,
-    CONTENT_TYPE,
-    DELIMITER,
-    GOOGLE_APIS,
-    MIME_TYPES,
-    SCOPES,
-    SYNC_INTERVAL,
-    UPLOAD_TYPES
-} from './google'

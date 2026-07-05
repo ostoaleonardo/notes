@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { useStorage } from './use-storage'
-import { NoteContext, SyncUtilsContext } from '@/context'
+import { NoteContext } from '@/context'
 import { STORAGE_KEYS } from '@/constants'
 
 export function useNotes() {
@@ -14,18 +14,14 @@ export function useNotes() {
         loading
     } = useContext(NoteContext)
 
-    const { schedule } = useContext(SyncUtilsContext)
-
     const saveNote = (note) => {
         const localNotes = [note, ...notes]
         saveLocal(localNotes)
-        schedule('create', note.id)
     }
 
     const deleteNote = (id) => {
         const localNotes = notes.filter((note) => note.id !== id)
         saveLocal(localNotes)
-        schedule('delete', id)
     }
 
     const updateNote = (note) => {
@@ -35,7 +31,6 @@ export function useNotes() {
         })
 
         saveLocal(localNotes)
-        schedule('update', note.id)
     }
 
     const getNote = (id) => {

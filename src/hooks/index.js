@@ -20,6 +20,4 @@ export { useLocalAuthentication } from './use-local-authentication'
 export { useNoteAuthentication } from './use-note-authentication'
 
 // Premium
-export { useAuth } from './use-auth'
-export { useSync } from './use-sync'
 export { usePremium } from './use-premium'
