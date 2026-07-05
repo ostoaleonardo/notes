@@ -35,10 +35,6 @@ export function BottomEditorBar({ onAddImage, onToggleEditor, hasPassword, onOpe
                     onPress={onGallery}
                     icon={() => <Picture {...iconProps} />}
                 />
-                <IconButton
-                    onPress={onToggleEditor}
-                    icon={() => <CheckList {...iconProps} />}
-                />
             </View>
 
             <View style={{ flexDirection: 'row' }}>

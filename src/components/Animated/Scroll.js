@@ -1,13 +1,14 @@
-import { ScrollView } from 'react-native'
+import { forwardRef } from 'react'
+import { ScrollView } from 'react-native-gesture-handler'
 
-export function Scroll({ children, ...props }) {
-    return (
-        <ScrollView
-            {...props}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-        >
-            {children}
-        </ScrollView>
-    )
-}
+
+export const Scroll = forwardRef(({ children, ...props }, ref) => (
+    <ScrollView
+        ref={ref}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        {...props}
+    >
+        {children}
+    </ScrollView>
+))

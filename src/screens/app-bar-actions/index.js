@@ -1,2 +1,2 @@
-export { SortAction } from './sort-action'
+export { HomeAction } from './home-actions'
 export { NoteAction } from './note-action'

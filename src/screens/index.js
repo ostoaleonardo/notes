@@ -6,7 +6,5 @@ export {
 
 // AppBar actions
 export {
-    SyncAction,
-    SortAction,
     NoteAction
 } from './app-bar-actions'
