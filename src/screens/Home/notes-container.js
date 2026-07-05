@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo, useRef } from 'react'
 import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { DotSeparator, Scroll, Section, SwipeableNote, Typography } from '@/components'
@@ -14,6 +14,8 @@ export function NotesContainer({
     pinned,
     onPin
 }) {
+    const scrollRef = useRef(null)
+
     const { t } = useTranslation()
     const { notes, loading } = useNotes()
     const { sort } = useUtils()
@@ -38,19 +40,20 @@ export function NotesContainer({
 
         return elements.map((note) => (
             <SwipeableNote
+                ref={scrollRef}
                 key={note.id}
                 data={note}
-                onUnlock={onUnlock}
                 isOpen={selected === note.id}
                 onOpen={() => setSelected(note.id)}
-                onDelete={onDelete}
-                onPin={onPin}
+                onDelete={(isLocked) => onDelete(note, isLocked)}
+                onUnlock={() => onUnlock(note.id)}
+                onPin={() => onPin(note.id)}
             />
         ))
     }, [loading, onUnlock, onDelete, onPin, selected, setSelected])
 
     return (
-        <Scroll contentContainerStyle={styles.container}>
+        <Scroll ref={scrollRef} contentContainerStyle={styles.container}>
             {loading && (
                 <Typography
                     opacity={0.5}

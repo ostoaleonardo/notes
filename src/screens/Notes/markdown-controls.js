@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         paddingHorizontal: 16,
-        bottom: 56,
+        bottom: 16,
         gap: 16
     },
     controls: {

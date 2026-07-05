@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { router, useLocalSearchParams } from 'expo-router'
 import { Appbar, Tooltip, useTheme } from 'react-native-paper'
 import { useFiles, useNotes, useTrash, useUtils } from '@/hooks'
-import { Delete, FileExport, Keep, KeepFilled } from '@/icons'
+import { Delete, FileExport, Keep, KeepFilled, Lock } from '@/icons'
 
 export function NoteAction() {
     const { colors } = useTheme()
@@ -70,6 +70,13 @@ export function NoteAction() {
                             ? <KeepFilled {...iconProps} />
                             : <Keep {...iconProps} />
                     )}
+                />
+            </Tooltip>
+            <Tooltip title={t('button.lock')}>
+                <Appbar.Action
+                    animated={false}
+                    onPress={toggleKeep}
+                    icon={() => <Lock {...iconProps} />}
                 />
             </Tooltip>
             <Tooltip title={t('button.delete')}>

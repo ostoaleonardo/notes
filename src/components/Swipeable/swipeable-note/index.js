@@ -4,7 +4,6 @@ import { useTheme } from 'react-native-paper'
 import { SwipeableCard } from '../swipeable-card'
 import { Typography } from '../../typography'
 import { MarkdownPreview } from '../../markdown'
-import { ListItemPreview } from '../preview/list-item-preview'
 import { PinAction } from '../actions/pin-action'
 import { Skeleton } from './skeleton'
 import { useLocalAuthentication } from '@/hooks'
@@ -12,23 +11,22 @@ import { getDimensions, getPreviewNote } from '@/utils'
 import { Lock } from '@/icons'
 import { ROUTES } from '@/constants'
 
-export function SwipeableNote({ data, onUnlock, isOpen, onOpen, onDelete, onPin }) {
+export function SwipeableNote({ ref, data, onUnlock, onDelete, onPin, onOpen, isOpen }) {
     const { colors } = useTheme()
     const { hasBiometrics } = useLocalAuthentication()
 
-    const { id, title, note, images, list, password, biometrics } = data
+    const { id, title, note, images, password, biometrics } = data
 
     const hasImages = images && images.length > 0
-    const hasList = list && list.items && list.items.length > 0
     const isLocked = password || (biometrics && hasBiometrics)
-    const hasContent = title || note || hasList || isLocked
+    const hasContent = title || note || isLocked
 
     const width = hasImages && getDimensions(images.length)
     const value = getPreviewNote(note)
 
     const goToEdit = () => {
         if (isLocked) {
-            onUnlock(id)
+            onUnlock()
         } else {
             router.push(ROUTES.EDIT_NOTE + id)
         }
@@ -38,8 +36,9 @@ export function SwipeableNote({ data, onUnlock, isOpen, onOpen, onDelete, onPin 
         <SwipeableCard
             isOpen={isOpen}
             onOpen={onOpen}
-            onDelete={() => onDelete(data, isLocked)}
-            renderLeftActions={() => <PinAction onPress={() => onPin(id)} />}
+            onDelete={() => onDelete(isLocked)}
+            renderLeftActions={() => <PinAction onPress={onPin} />}
+            simultaneousHandlers={ref}
         >
             <Pressable
                 onPress={goToEdit}
@@ -73,20 +72,6 @@ export function SwipeableNote({ data, onUnlock, isOpen, onOpen, onDelete, onPin 
                     )}
 
                     {!isLocked && note && <MarkdownPreview value={value} />}
-
-                    {!isLocked && hasList && (
-                        <View style={{ width: '100%' }}>
-                            {list.items.map((item, index) => (
-                                <ListItemPreview
-                                    key={item.id}
-                                    type={list.type}
-                                    index={index + 1}
-                                    value={item.value}
-                                    status={item.status}
-                                />
-                            ))}
-                        </View>
-                    )}
 
                     {isLocked && <Skeleton />}
                 </View>

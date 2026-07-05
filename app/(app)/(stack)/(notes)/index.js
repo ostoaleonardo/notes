@@ -5,7 +5,7 @@ import { Wrapper } from '@/components/layout'
 import { GalleryView } from '@/screens/gallery'
 import { MarkdownControls } from '@/screens/notes'
 import { AddPassword, Categories } from '@/screens/modals'
-import { BottomBar, Header, ListEditor, NoteEditor } from '@/screens/editor'
+import { Header, NoteEditor } from '@/screens/editor'
 import { useBottomSheet, useNotes, useUtils } from '@/hooks'
 import { getDate } from '@/utils'
 import { DEFAULT_LIST, DEFAULT_NOTE_CATEGORIES } from '@/constants'
@@ -116,23 +116,16 @@ export default function Note() {
                     onOpenCategories={onOpenCategories}
                 />
 
-                {showEditor ? (
-                    <NoteEditor
-                        value={note}
-                        setValue={setNote}
-                        action={action}
-                        setAction={setAction}
-                        images={images}
-                        setImages={setImages}
-                        onGallery={setGalleryIndex}
-                        isEditing={isEditing}
-                    />
-                ) : (
-                    <ListEditor
-                        list={list}
-                        setList={setList}
-                    />
-                )}
+                <NoteEditor
+                    value={note}
+                    setValue={setNote}
+                    action={action}
+                    setAction={setAction}
+                    images={images}
+                    setImages={setImages}
+                    onGallery={setGalleryIndex}
+                    isEditing={isEditing}
+                />
             </Wrapper>
 
             {showEditor && (
@@ -142,17 +135,6 @@ export default function Note() {
                     onEditMarkdown={onEditMarkdown}
                 />
             )}
-
-            <BottomBar
-                list={list}
-                setList={setList}
-                images={images}
-                setImages={setImages}
-                password={password}
-                onOpenPassword={onOpenPassword}
-                showEditor={showEditor}
-                setShowEditor={setShowEditor}
-            />
 
             <Categories
                 ref={categoriesBottomRef}

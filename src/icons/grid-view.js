@@ -1,0 +1,7 @@
+import { Path, Svg } from 'react-native-svg'
+
+export const GridView = (props) => (
+    <Svg width='24' height='24' viewBox='0 -960 960 960' fill='currentColor' {...props}>
+        <Path d='M160-520v-280h280v280H160Zm0 360v-280h280v280H160Zm360-360v-280h280v280H520Zm0 360v-280h280v280H520ZM200-560h200v-200H200v200Zm360 0h200v-200H560v200Zm0 360h200v-200H560v200Zm-360 0h200v-200H200v200Zm360-360Zm0 160Zm-160 0Zm0-160Z' />
+    </Svg>
+)
