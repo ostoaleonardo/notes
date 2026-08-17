@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { randomUUID } from 'expo-crypto'
-import { useFocusEffect } from 'expo-router'
+import { useFocusEffect, useNavigation } from 'expo-router'
 import { Wrapper } from '@/components/layout'
 import { GalleryView } from '@/screens/gallery'
 import { MarkdownControls } from '@/screens/notes'
@@ -13,6 +13,7 @@ import { DEFAULT_LIST, DEFAULT_NOTE_CATEGORIES } from '@/constants'
 export default function Note() {
     const { saveNote, updateNote, setParamId } = useNotes()
     const { filter } = useUtils()
+    const navigation = useNavigation()
 
     const isSaved = useRef(false)
     const firstRender = useRef(true)
@@ -48,6 +49,13 @@ export default function Note() {
         onOpen: onOpenPassword,
         onClose: onClosePassword
     } = useBottomSheet()
+
+    useEffect(() => {
+        navigation.setOptions({
+            hasPassword: password,
+            onOpenPassword
+        })
+    }, [password])
 
     useFocusEffect(
         useCallback(() => {

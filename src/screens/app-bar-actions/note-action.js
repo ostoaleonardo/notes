@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { router, useLocalSearchParams } from 'expo-router'
 import { Appbar, Tooltip, useTheme } from 'react-native-paper'
 import { useFiles, useNotes, useTrash, useUtils } from '@/hooks'
-import { Delete, FileExport, Keep, KeepFilled, Lock } from '@/icons'
+import { Delete, FileExport, Keep, KeepFilled, Lock, Unlock } from '@/icons'
 
-export function NoteAction() {
+export function NoteAction({ onOpenPassword, hasPassword }) {
     const { colors } = useTheme()
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
@@ -75,8 +75,10 @@ export function NoteAction() {
             <Tooltip title={t('button.lock')}>
                 <Appbar.Action
                     animated={false}
-                    onPress={toggleKeep}
-                    icon={() => <Lock {...iconProps} />}
+                    onPress={onOpenPassword}
+                    icon={() => hasPassword
+                        ? <Lock {...iconProps} />
+                        : <Unlock {...iconProps} />}
                 />
             </Tooltip>
             <Tooltip title={t('button.delete')}>
