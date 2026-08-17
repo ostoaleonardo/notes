@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { MarkdownInput } from './markdown-input'
 import { useMarkdownShortcuts } from '@/hooks'
 
-export function MarkdownEditor({ value, setValue, action, setAction, isEditing }) {
+export function MarkdownEditor({ value, setValue, action, setAction, isEditing, linkPayload }) {
     const { t } = useTranslation()
     const [selection, setSelection] = useState({ start: 0, end: 0 })
 
@@ -23,7 +23,8 @@ export function MarkdownEditor({ value, setValue, action, setAction, isEditing }
         onImage,
         onLink,
         onTable,
-        onSelectionChange
+        onSelectionChange,
+        insertLink
     } = useMarkdownShortcuts(
         value, setValue,
         selection, setSelection
@@ -44,7 +45,8 @@ export function MarkdownEditor({ value, setValue, action, setAction, isEditing }
         hr: onHorizontalRule,
         image: onImage,
         link: onLink,
-        table: onTable
+        table: onTable,
+        link_with_payload: () => insertLink(linkPayload?.title || '', linkPayload?.url || '')
     }
 
     useEffect(() => {
