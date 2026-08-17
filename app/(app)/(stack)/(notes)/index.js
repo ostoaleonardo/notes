@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { randomUUID } from 'expo-crypto'
 import { useFocusEffect, useNavigation } from 'expo-router'
-import { Wrapper } from '@/components/layout'
 import { GalleryView } from '@/screens/gallery'
 import { MarkdownControls } from '@/screens/notes'
 import { AddPassword, Categories } from '@/screens/modals'
@@ -9,6 +8,7 @@ import { Header, NoteEditor } from '@/screens/editor'
 import { useBottomSheet, useNotes, useUtils } from '@/hooks'
 import { getDate } from '@/utils'
 import { DEFAULT_LIST, DEFAULT_NOTE_CATEGORIES } from '@/constants'
+import { KeyboardStickyView } from 'react-native-keyboard-controller'
 
 export default function Note() {
     const { saveNote, updateNote, setParamId } = useNotes()
@@ -32,7 +32,6 @@ export default function Note() {
 
     const [action, setAction] = useState('')
     const [isEditing, setIsEditing] = useState(true)
-    const [showEditor, setShowEditor] = useState(true)
     const [galleryIndex, setGalleryIndex] = useState('')
 
     const onEditMarkdown = useCallback(() => setIsEditing(prev => !prev), [])
@@ -115,34 +114,32 @@ export default function Note() {
 
     return (
         <>
-            <Wrapper keyboard={showEditor}>
-                <Header
-                    title={title}
-                    setTitle={setTitle}
-                    categories={categories}
-                    setCategories={setCategories}
-                    onOpenCategories={onOpenCategories}
-                />
+            <Header
+                title={title}
+                setTitle={setTitle}
+                categories={categories}
+                setCategories={setCategories}
+                onOpenCategories={onOpenCategories}
+            />
 
-                <NoteEditor
-                    value={note}
-                    setValue={setNote}
-                    action={action}
-                    setAction={setAction}
-                    images={images}
-                    setImages={setImages}
-                    onGallery={setGalleryIndex}
-                    isEditing={isEditing}
-                />
-            </Wrapper>
+            <NoteEditor
+                value={note}
+                setValue={setNote}
+                action={action}
+                setAction={setAction}
+                images={images}
+                setImages={setImages}
+                onGallery={setGalleryIndex}
+                isEditing={isEditing}
+            />
 
-            {showEditor && (
+            <KeyboardStickyView style={{ position: 'absolute', bottom: 16 }}>
                 <MarkdownControls
                     isEditing={isEditing}
                     onRunAction={onRunAction}
                     onEditMarkdown={onEditMarkdown}
                 />
-            )}
+            </KeyboardStickyView>
 
             <Categories
                 ref={categoriesBottomRef}

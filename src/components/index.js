@@ -33,8 +33,7 @@ export {
 
 // Modals
 export {
-    ModalSheet,
-    ModalHeader
+    ModalSheet
 } from './modal'
 
 

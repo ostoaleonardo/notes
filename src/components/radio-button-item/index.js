@@ -7,8 +7,8 @@ export function RadioButtonItem({ isFirst, isLast, ...props }) {
 
     return (
         <RadioButton.Item
+            position='trailing'
             style={{
-                backgroundColor: colors.background,
                 borderTopLeftRadius: isFirst ? COMMONS.radius : 0,
                 borderTopRightRadius: isFirst ? COMMONS.radius : 0,
                 borderBottomLeftRadius: isLast ? COMMONS.radius : 0,
@@ -27,6 +27,7 @@ export function RadioButtonItem({ isFirst, isLast, ...props }) {
 const styles = StyleSheet.create({
     title: {
         fontSize: 14,
+        paddingHorizontal: 16,
         fontFamily: FONTS.azeretLight
     }
 })

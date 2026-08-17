@@ -126,7 +126,7 @@ export default function EditNote() {
 
     return (
         <>
-            <Wrapper keyboard={showEditor}>
+            <Wrapper>
                 <Header
                     title={title}
                     setTitle={setTitle}

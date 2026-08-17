@@ -1,13 +1,12 @@
 import { StyleSheet, TextInput } from 'react-native'
 import { useTheme } from 'react-native-paper'
-import { BottomSheetTextInput } from '@gorhom/bottom-sheet'
 import { FONTS, TRANSPARENT } from '@/constants'
 
 export function LargeInput({ value, onChangeText, placeholder, modal, ...props }) {
     const { colors } = useTheme()
     const { tertiary, onBackground } = colors
 
-    const InputComponent = modal ? BottomSheetTextInput : TextInput
+    const InputComponent = TextInput
 
     return (
         <InputComponent

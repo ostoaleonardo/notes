@@ -50,7 +50,6 @@ export const Categories = forwardRef(({ categories, setCategories, onClose }, re
             scrollable
             onClose={onClose}
             snapPoints={['50%', '95%']}
-            title={t('title.categories')}
         >
             <View style={styles.container}>
                 <SmallInput
