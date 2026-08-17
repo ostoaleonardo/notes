@@ -25,6 +25,7 @@ export const MarkdownControls = memo(function MarkdownControls({ isEditing, onRu
                     <Scroll
                         horizontal
                         overScrollMode='never'
+                        keyboardShouldPersistTaps='always'
                         style={{ flex: 1 }}
                     >
                         {MARKDOWN_CONTROLS.map(({ action, Icon }) => (
@@ -61,11 +62,9 @@ export const MarkdownControls = memo(function MarkdownControls({ isEditing, onRu
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        position: 'absolute',
         flexDirection: 'row',
         justifyContent: 'flex-end',
         paddingHorizontal: 16,
-        bottom: 16,
         gap: 16
     },
     controls: {

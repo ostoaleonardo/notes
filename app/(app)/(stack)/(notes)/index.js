@@ -3,7 +3,7 @@ import { randomUUID } from 'expo-crypto'
 import { useFocusEffect, useNavigation } from 'expo-router'
 import { GalleryView } from '@/screens/gallery'
 import { MarkdownControls } from '@/screens/notes'
-import { AddPassword, Categories } from '@/screens/modals'
+import { AddPassword, Categories, LinkModal } from '@/screens/modals'
 import { Header, NoteEditor } from '@/screens/editor'
 import { useBottomSheet, useNotes, useUtils } from '@/hooks'
 import { getDate } from '@/utils'
@@ -35,7 +35,22 @@ export default function Note() {
     const [galleryIndex, setGalleryIndex] = useState('')
 
     const onEditMarkdown = useCallback(() => setIsEditing(prev => !prev), [])
-    const onRunAction = useCallback((action) => setAction(action), [])
+    const {
+        ref: linkBottomRef,
+        onOpen: onOpenLink,
+        onClose: onCloseLink
+    } = useBottomSheet()
+
+    const [linkPayload, setLinkPayload] = useState(null)
+
+    const onRunAction = useCallback((action) => {
+        if (action === 'link') {
+            onOpenLink()
+            return
+        }
+
+        setAction(action)
+    }, [onOpenLink])
 
     const {
         ref: categoriesBottomRef,
@@ -127,6 +142,7 @@ export default function Note() {
                 setValue={setNote}
                 action={action}
                 setAction={setAction}
+                linkPayload={linkPayload}
                 images={images}
                 setImages={setImages}
                 onGallery={setGalleryIndex}
@@ -155,6 +171,16 @@ export default function Note() {
                 biometrics={biometrics}
                 setBiometrics={setBiometrics}
             />
+
+            <LinkModal
+                ref={linkBottomRef}
+                onClose={onCloseLink}
+                onInsert={({ title, url }) => {
+                    setLinkPayload({ title, url })
+                    setAction('link_with_payload')
+                }}
+            />
+
             <GalleryView
                 images={images}
                 index={galleryIndex}

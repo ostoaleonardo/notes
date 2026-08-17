@@ -31,7 +31,6 @@ export function SortMenu({ visible, onOpen, onClose }) {
             mode='single'
             visible={visible}
             onClose={onClose}
-            position='bottom'
             anchor={
                 <Tooltip title={t('title.sort')}>
                     <Appbar.Action

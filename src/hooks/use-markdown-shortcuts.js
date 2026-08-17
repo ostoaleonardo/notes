@@ -122,6 +122,20 @@ export const useMarkdownShortcuts = (value, setValue, selection, setSelection) =
         setValue(newText)
     }
 
+    const insertLink = (title, url) => {
+        const { start } = selection
+        const lineStart = value.lastIndexOf('\n', start) + 1
+
+        const lineEnd = value.indexOf('\n', start)
+        const currentLine = value.slice(lineStart, lineEnd)
+
+        const label = title && title.trim() !== '' ? title : currentLine
+        const newLine = `[${label}](${url})`
+
+        const newText = `${value.slice(0, lineStart)}${newLine}${value.slice(lineStart + currentLine.length)}`
+        setValue(newText)
+    }
+
     const onTable = () => {
         // Constants
         const tableHeaders = '| Option | Description |\n'
