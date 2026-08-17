@@ -1,13 +1,11 @@
 import { forwardRef } from 'react'
-import { useTranslation } from 'react-i18next'
 import { RadioButton } from 'react-native-paper'
-import { FlatList } from 'react-native-gesture-handler'
 import { ModalSheet, RadioButtonItem } from '@/components'
+import { FlatList } from 'react-native-gesture-handler'
 import { useLanguage } from '@/hooks'
 import { LANGUAGES } from '@/constants'
 
 export const Languages = forwardRef(({ onClose }, ref) => {
-    const { t } = useTranslation()
     const { currentLanguage, changeLanguage } = useLanguage()
 
     return (
@@ -15,8 +13,6 @@ export const Languages = forwardRef(({ onClose }, ref) => {
             ref={ref}
             onClose={onClose}
             snapPoints={['50%', '95%']}
-            title={t('settings.language')}
-            style={{ paddingHorizontal: 16 }}
         >
             <RadioButton.Group
                 value={currentLanguage}

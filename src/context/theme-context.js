@@ -4,6 +4,7 @@ import { PaperProvider } from 'react-native-paper'
 import { StatusBar } from 'expo-status-bar'
 import { THEMES } from '@/constants'
 import { ACCENT_COLORS } from '@/constants/themes'
+import { Host } from '@expo/ui'
 
 export const ThemeContext = createContext()
 
@@ -60,7 +61,9 @@ export function ThemeProvider({ initialTheme, children }) {
             }}
         >
             <PaperProvider theme={theme}>
-                {children}
+                <Host style={{ flex: 1 }}>
+                    {children}
+                </Host>
             </PaperProvider>
             <StatusBar style={name === 'light' ? 'dark' : 'light'} />
         </ThemeContext.Provider>

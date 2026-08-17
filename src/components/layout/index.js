@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 
-export function Wrapper({ keyboard = true, children }) {
+export function Wrapper({ children }) {
     return (
         <KeyboardAwareScrollView
             bottomOffset={32}
