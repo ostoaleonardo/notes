@@ -79,7 +79,16 @@
 		"update": "Actualizar",
 		"enter": "Entrar",
 		"pin": "Fijar",
-		"export": "Exportar"
+		"export": "Exportar",
+		"insert": "Insertar",
+		"cancel": "Cancelar"
+	},
+	"markdown": {
+		"link_title": "Título",
+		"link_url": "URL",
+		"image_alt": "Texto alternativo",
+		"image_alt_placeholder": "Descripción de la imagen",
+		"image_url": "URL"
 	},
 	"message": {
 		"loading": "Cargando...",

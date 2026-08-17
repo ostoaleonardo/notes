@@ -92,7 +92,7 @@ export const useMarkdownShortcuts = (value, setValue, selection, setSelection) =
         setValue(newText)
     }
 
-    const onImage = () => {
+    const onImage = (payload = {}) => {
         // Gets the start of the current line
         const { start } = selection
         const lineStart = value.lastIndexOf('\n', start) + 1
@@ -100,7 +100,9 @@ export const useMarkdownShortcuts = (value, setValue, selection, setSelection) =
         // Replaces the current line with the new image
         const lineEnd = value.indexOf('\n', start)
         const currentLine = value.slice(lineStart, lineEnd)
-        const newLine = `![${currentLine}](url)`
+        const { title, url } = payload
+        const label = title && title.trim() !== '' ? title : currentLine
+        const newLine = `![${label}](${url || 'url'})`
 
         // Replaces the current line with the new image
         const newText = `${value.slice(0, lineStart)}${newLine}${value.slice(lineStart + currentLine.length)}`
@@ -124,13 +126,21 @@ export const useMarkdownShortcuts = (value, setValue, selection, setSelection) =
         setValue(newText)
     }
 
-    const onTable = () => {
-        // Constants
-        const tableHeaders = '| Option | Description |\n'
-        const tableSeparator = '| ------ | ----------- |\n'
-        const tableRow = '| data   |      x      |\n'
+    const onTable = (payload = {}) => {
+        const { rows = 2, cols = 2 } = payload
 
-        const table = `${tableHeaders}${tableSeparator}${tableRow}${tableRow}`
+        // Builds a table with the chosen amount of columns and data rows,
+        // sizing the separator and empty cells to match each header's width
+        const labels = Array.from({ length: cols }, (_, i) => `Column ${i + 1}`)
+        const headerCells = labels.map((label) => ` ${label} `).join('|')
+        const separatorCells = labels.map((label) => '-'.repeat(label.length + 2)).join('|')
+        const rowCells = labels.map((label) => ' '.repeat(label.length + 2)).join('|')
+
+        const tableHeaders = `|${headerCells}|\n`
+        const tableSeparator = `|${separatorCells}|\n`
+        const tableRow = `|${rowCells}|\n`
+
+        const table = `${tableHeaders}${tableSeparator}${tableRow.repeat(rows)}`
 
         // Gets the start of the current line
         const { start } = selection

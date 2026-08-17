@@ -3,7 +3,7 @@ import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { Wrapper } from '@/components/layout'
 import { GalleryView } from '@/screens/gallery'
 import { MarkdownControls } from '@/screens/notes'
-import { AddPassword, Categories, UpdatePassword } from '@/screens/modals'
+import { AddPassword, Categories, ImageModal, TableModal, UpdatePassword } from '@/screens/modals'
 import { BottomBar, Header, ListEditor, NoteEditor } from '@/screens/editor'
 import { useBottomSheet, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
@@ -33,8 +33,37 @@ export default function EditNote() {
     const [showEditor, setShowEditor] = useState(true)
     const [galleryIndex, setGalleryIndex] = useState('')
 
-    const onRunAction = useCallback((action) => setAction(action), [])
     const onEditMarkdown = useCallback(() => setIsEditing(prev => !prev), [])
+
+    const {
+        ref: tableBottomRef,
+        onOpen: onOpenTable,
+        onClose: onCloseTable
+    } = useBottomSheet()
+
+    const [tablePayload, setTablePayload] = useState(null)
+
+    const {
+        ref: imageBottomRef,
+        onOpen: onOpenImage,
+        onClose: onCloseImage
+    } = useBottomSheet()
+
+    const [imagePayload, setImagePayload] = useState(null)
+
+    const onRunAction = useCallback((action) => {
+        if (action === 'table') {
+            onOpenTable()
+            return
+        }
+
+        if (action === 'image') {
+            onOpenImage()
+            return
+        }
+
+        setAction(action)
+    }, [onOpenTable, onOpenImage])
 
     const {
         ref: categoriesBottomRef,
@@ -143,6 +172,8 @@ export default function EditNote() {
                         setValue={setNote}
                         action={action}
                         setAction={setAction}
+                        tablePayload={tablePayload}
+                        imagePayload={imagePayload}
                         images={images}
                         setImages={setImages}
                         onGallery={setGalleryIndex}
@@ -198,6 +229,22 @@ export default function EditNote() {
                 setPassword={setPassword}
                 biometrics={biometrics}
                 setBiometrics={setBiometrics}
+            />
+            <TableModal
+                ref={tableBottomRef}
+                onClose={onCloseTable}
+                onInsert={({ rows, cols }) => {
+                    setTablePayload({ rows, cols })
+                    setAction('table')
+                }}
+            />
+            <ImageModal
+                ref={imageBottomRef}
+                onClose={onCloseImage}
+                onInsert={({ title, url }) => {
+                    setImagePayload({ title, url })
+                    setAction('image')
+                }}
             />
             <GalleryView
                 images={images}
