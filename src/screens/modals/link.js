@@ -1,40 +1,21 @@
-import { forwardRef } from 'react'
-import { StyleSheet } from 'react-native'
+import { forwardRef, useState } from 'react'
+import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { ModalSheet } from '@/components'
-import { Button, Column, Host, Row, Text, TextButton, useNativeState } from '@expo/ui/jetpack-compose'
-import { AndroidOutlinedTextField } from '@/ui/outlined-text-field'
+import { LargeInput, ModalSheet, Pressable, Section } from '@/components'
 
 export const LinkModal = forwardRef(({ onClose, onInsert }, ref) => {
     const { t } = useTranslation()
 
-    const title = useNativeState('')
-    const url = useNativeState('')
-
-    const read = (state) => {
-        try {
-            return state?.value ?? state ?? ''
-        } catch (e) {
-            return ''
-        }
-    }
-
-    const reset = (state) => {
-        try {
-            if (state && typeof state.setValue === 'function') state.setValue('')
-        } catch (e) { }
-    }
+    const [title, setTitle] = useState('')
+    const [url, setUrl] = useState('')
 
     const onAdd = () => {
-        const titleVal = read(title)
-        const urlVal = read(url)
+        if (!url.trim()) return
 
-        if (!urlVal || urlVal.trim() === '') return
+        onInsert({ title, url })
 
-        onInsert({ title: titleVal, url: urlVal })
-
-        reset(title)
-        reset(url)
+        setTitle('')
+        setUrl('')
         onClose()
     }
 
@@ -45,29 +26,41 @@ export const LinkModal = forwardRef(({ onClose, onInsert }, ref) => {
             enableDynamicSizing
             contentContainerStyle={styles.container}
         >
-            <Host matchContents>
-                <Column verticalArrangement={{ spacedBy: 16 }}>
-                    <AndroidOutlinedTextField
-                        value={title}
-                        label={t('markdown.link_title')}
-                        placeholder='YouTube'
-                    />
-                    <AndroidOutlinedTextField
-                        value={url}
-                        label={t('markdown.link_url')}
-                        placeholder='www.youtube.com'
-                    />
+            <Section
+                title={t('markdown.link_title')}
+                contentStyle={styles.field}
+            >
+                <LargeInput
+                    value={title}
+                    onChangeText={setTitle}
+                    placeholder='YouTube'
+                />
+            </Section>
+            <Section
+                title={t('markdown.link_url')}
+                contentStyle={styles.field}
+            >
+                <LargeInput
+                    value={url}
+                    onChangeText={setUrl}
+                    placeholder='www.youtube.com'
+                />
+            </Section>
 
-                    <Row horizontalArrangement='spaceEvenly'>
-                        <Button onClick={onAdd}>
-                            <Text>{t('insert')}</Text>
-                        </Button>
-                        <TextButton variant='text' onClick={onClose}>
-                            <Text>{t('cancel')}</Text>
-                        </TextButton>
-                    </Row>
-                </Column>
-            </Host>
+            <View style={styles.buttons}>
+                <Pressable
+                    mode='contained'
+                    onPress={onAdd}
+                >
+                    {t('button.insert')}
+                </Pressable>
+                <Pressable
+                    mode='outlined'
+                    onPress={onClose}
+                >
+                    {t('button.cancel')}
+                </Pressable>
+            </View>
         </ModalSheet>
     )
 })
@@ -75,7 +68,15 @@ export const LinkModal = forwardRef(({ onClose, onInsert }, ref) => {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        gap: 16,
-        padding: 24
+        gap: 24,
+        paddingVertical: 24
+    },
+    field: {
+        paddingHorizontal: 16
+    },
+    buttons: {
+        width: '100%',
+        gap: 8,
+        paddingHorizontal: 16
     }
 })

@@ -23,8 +23,7 @@ export function MarkdownEditor({ value, setValue, action, setAction, isEditing, 
         onImage,
         onLink,
         onTable,
-        onSelectionChange,
-        insertLink
+        onSelectionChange
     } = useMarkdownShortcuts(
         value, setValue,
         selection, setSelection
@@ -44,9 +43,8 @@ export function MarkdownEditor({ value, setValue, action, setAction, isEditing, 
         quote: onQuote,
         hr: onHorizontalRule,
         image: onImage,
-        link: onLink,
-        table: onTable,
-        link_with_payload: () => insertLink(linkPayload?.title || '', linkPayload?.url || '')
+        link: () => onLink(linkPayload),
+        table: onTable
     }
 
     useEffect(() => {

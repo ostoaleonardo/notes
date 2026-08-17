@@ -107,7 +107,7 @@ export const useMarkdownShortcuts = (value, setValue, selection, setSelection) =
         setValue(newText)
     }
 
-    const onLink = () => {
+    const onLink = (payload = {}) => {
         // Gets the start of the current line
         const { start } = selection
         const lineStart = value.lastIndexOf('\n', start) + 1
@@ -115,23 +115,11 @@ export const useMarkdownShortcuts = (value, setValue, selection, setSelection) =
         // Replaces the current line with the new link
         const lineEnd = value.indexOf('\n', start)
         const currentLine = value.slice(lineStart, lineEnd)
-        const newLine = `[${currentLine}](url)`
+        const { title, url } = payload
+        const label = title && title.trim() !== '' ? title : currentLine
+        const newLine = `[${label}](${url || 'url'})`
 
         // Replaces the current line with the new link
-        const newText = `${value.slice(0, lineStart)}${newLine}${value.slice(lineStart + currentLine.length)}`
-        setValue(newText)
-    }
-
-    const insertLink = (title, url) => {
-        const { start } = selection
-        const lineStart = value.lastIndexOf('\n', start) + 1
-
-        const lineEnd = value.indexOf('\n', start)
-        const currentLine = value.slice(lineStart, lineEnd)
-
-        const label = title && title.trim() !== '' ? title : currentLine
-        const newLine = `[${label}](${url})`
-
         const newText = `${value.slice(0, lineStart)}${newLine}${value.slice(lineStart + currentLine.length)}`
         setValue(newText)
     }

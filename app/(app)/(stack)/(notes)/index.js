@@ -177,7 +177,7 @@ export default function Note() {
                 onClose={onCloseLink}
                 onInsert={({ title, url }) => {
                     setLinkPayload({ title, url })
-                    setAction('link_with_payload')
+                    setAction('link')
                 }}
             />
 
