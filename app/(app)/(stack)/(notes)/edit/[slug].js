@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useLocalSearchParams } from 'expo-router'
+import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { Wrapper } from '@/components/layout'
 import { GalleryView } from '@/screens/gallery'
 import { MarkdownControls } from '@/screens/notes'
@@ -12,6 +12,7 @@ import { DEFAULT_LIST } from '@/constants'
 export default function EditNote() {
     const { slug } = useLocalSearchParams()
     const { getNote, updateNote } = useNotes()
+    const navigation = useNavigation()
 
     const loading = useRef(true)
 
@@ -52,6 +53,15 @@ export default function EditNote() {
         onOpen: onOpenUpdatePassword,
         onClose: onCloseUpdatePassword
     } = useBottomSheet()
+
+    useEffect(() => {
+        navigation.setOptions({
+            hasPassword: password,
+            onOpenPassword: password
+                ? onOpenUpdatePassword
+                : onOpenPassword
+        })
+    }, [password])
 
     useEffect(() => {
         const {
