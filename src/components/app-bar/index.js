@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native'
 import { Appbar, Tooltip, useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { useTrash } from '@/hooks'
-import { Delete, Menu, Settings } from '@/icons'
+import { ArrowBack, Delete, Menu, Settings } from '@/icons'
 import { FONTS, ROUTES } from '@/constants'
 
 export function AppBar({ options, navigation, menu, settings, trash, back, right }) {
@@ -33,9 +33,11 @@ export function AppBar({ options, navigation, menu, settings, trash, back, right
         >
             {back && (
                 <Tooltip title={t('button.back')}>
-                    <Appbar.BackAction
+                    <Appbar.Action
+                        isLeading
                         animated={false}
                         onPress={goBack}
+                        icon={() => <ArrowBack {...iconProps} />}
                     />
                 </Tooltip>
             )}
