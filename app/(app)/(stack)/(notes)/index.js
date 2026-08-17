@@ -3,7 +3,7 @@ import { randomUUID } from 'expo-crypto'
 import { useFocusEffect, useNavigation } from 'expo-router'
 import { GalleryView } from '@/screens/gallery'
 import { MarkdownControls } from '@/screens/notes'
-import { AddPassword, Categories, LinkModal } from '@/screens/modals'
+import { AddPassword, Categories, ImageModal, LinkModal, TableModal } from '@/screens/modals'
 import { Header, NoteEditor } from '@/screens/editor'
 import { useBottomSheet, useNotes, useUtils } from '@/hooks'
 import { getDate } from '@/utils'
@@ -43,14 +43,40 @@ export default function Note() {
 
     const [linkPayload, setLinkPayload] = useState(null)
 
+    const {
+        ref: tableBottomRef,
+        onOpen: onOpenTable,
+        onClose: onCloseTable
+    } = useBottomSheet()
+
+    const [tablePayload, setTablePayload] = useState(null)
+
+    const {
+        ref: imageBottomRef,
+        onOpen: onOpenImage,
+        onClose: onCloseImage
+    } = useBottomSheet()
+
+    const [imagePayload, setImagePayload] = useState(null)
+
     const onRunAction = useCallback((action) => {
         if (action === 'link') {
             onOpenLink()
             return
         }
 
+        if (action === 'table') {
+            onOpenTable()
+            return
+        }
+
+        if (action === 'image') {
+            onOpenImage()
+            return
+        }
+
         setAction(action)
-    }, [onOpenLink])
+    }, [onOpenLink, onOpenTable, onOpenImage])
 
     const {
         ref: categoriesBottomRef,
@@ -143,6 +169,8 @@ export default function Note() {
                 action={action}
                 setAction={setAction}
                 linkPayload={linkPayload}
+                tablePayload={tablePayload}
+                imagePayload={imagePayload}
                 images={images}
                 setImages={setImages}
                 onGallery={setGalleryIndex}
@@ -178,6 +206,24 @@ export default function Note() {
                 onInsert={({ title, url }) => {
                     setLinkPayload({ title, url })
                     setAction('link')
+                }}
+            />
+
+            <TableModal
+                ref={tableBottomRef}
+                onClose={onCloseTable}
+                onInsert={({ rows, cols }) => {
+                    setTablePayload({ rows, cols })
+                    setAction('table')
+                }}
+            />
+
+            <ImageModal
+                ref={imageBottomRef}
+                onClose={onCloseImage}
+                onInsert={({ title, url }) => {
+                    setImagePayload({ title, url })
+                    setAction('image')
                 }}
             />
 

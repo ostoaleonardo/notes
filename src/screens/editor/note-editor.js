@@ -5,7 +5,7 @@ import { ImageCarousel } from '../notes'
 export function NoteEditor({
     value, setValue,
     action, setAction,
-    linkPayload,
+    linkPayload, tablePayload, imagePayload,
     images, setImages,
     onGallery, isEditing
 }) {
@@ -20,6 +20,8 @@ export function NoteEditor({
                     action={action}
                     setAction={setAction}
                     linkPayload={linkPayload}
+                    tablePayload={tablePayload}
+                    imagePayload={imagePayload}
                     isEditing={isEditing}
                 />
             </Section>

@@ -94,7 +94,16 @@
 		"update": "Update",
 		"enter": "Enter",
 		"pin": "Pin",
-		"export": "Export"
+		"export": "Export",
+		"insert": "Insert",
+		"cancel": "Cancel"
+	},
+	"markdown": {
+		"link_title": "Title",
+		"link_url": "URL",
+		"image_alt": "Alt text",
+		"image_alt_placeholder": "Image description",
+		"image_url": "URL"
 	},
 	"message": {
 		"loading": "Loading...",
