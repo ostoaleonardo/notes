@@ -37,6 +37,10 @@ export function useNotes() {
         return notes.find((note) => note.id === id) || {}
     }
 
+    const deleteAll = () => {
+        saveLocal([])
+    }
+
     const saveLocal = async (localNotes) => {
         setNotes(localNotes)
         await setItem(STORAGE_KEYS.NOTES, JSON.stringify(localNotes))
@@ -47,6 +51,7 @@ export function useNotes() {
         getNote,
         saveNote,
         deleteNote,
+        deleteAll,
         updateNote,
         paramId,
         setParamId,

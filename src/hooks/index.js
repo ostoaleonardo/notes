@@ -6,6 +6,8 @@ export { useCategories } from './use-categories'
 export { useMarkdownShortcuts } from './use-markdown-shortcuts'
 export { useMarkdownAction } from './use-markdown-action'
 export { useNoteAutosave } from './use-note-autosave'
+export { useImportMarkdown } from './use-import-markdown'
+export { useDevMenu } from './use-dev-menu'
 export { useStorage } from './use-storage'
 export { useFiles } from './use-files'
 
