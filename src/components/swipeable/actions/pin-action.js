@@ -3,14 +3,14 @@ import { useTheme } from 'react-native-paper'
 import { Pressable } from 'react-native-gesture-handler'
 import { Keep } from '@/icons'
 
-export function PinAction({ onPress }) {
+export function PinAction({ onPress, style }) {
     const { colors } = useTheme()
     const { background, onBackground } = colors
 
     return (
         <Pressable
             onPress={onPress}
-            style={[styles.container, {
+            style={[styles.container, style, {
                 backgroundColor: onBackground
             }]}
         >
