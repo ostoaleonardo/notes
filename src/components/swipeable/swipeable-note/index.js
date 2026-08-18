@@ -5,6 +5,7 @@ import { SwipeableCard } from '../swipeable-card'
 import { Typography } from '../../typography'
 import { MarkdownPreview } from '../../markdown'
 import { PinAction } from '../actions/pin-action'
+import { DeleteAction } from '../actions/delete-action'
 import { Skeleton } from './skeleton'
 import { useLocalAuthentication } from '@/hooks'
 import { getDimensions, getPreviewNote } from '@/utils'
@@ -36,8 +37,8 @@ export function SwipeableNote({ ref, data, onUnlock, onDelete, onPin, onOpen, is
         <SwipeableCard
             isOpen={isOpen}
             onOpen={onOpen}
-            onDelete={() => onDelete(isLocked)}
-            renderLeftActions={() => <PinAction onPress={onPin} />}
+            renderLeftActions={() => <PinAction onPress={onPin} style={grid && styles.gridAction} />}
+            renderRightActions={() => <DeleteAction onPress={() => onDelete(isLocked)} style={grid && styles.gridAction} />}
             simultaneousHandlers={ref}
             {...(grid && { containerStyle: styles.gridSwipeable })}
         >
@@ -103,6 +104,10 @@ const styles = StyleSheet.create({
     },
     gridSwipeable: {
         paddingHorizontal: 0
+    },
+    gridAction: {
+        marginLeft: 0,
+        marginRight: 0
     },
     header: {
         width: '100%',

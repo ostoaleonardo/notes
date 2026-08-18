@@ -1,7 +1,7 @@
-import { memo, useCallback, useMemo, useRef } from 'react'
+import { useCallback, useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { DotSeparator, Scroll, Section, SwipeableNote, Typography } from '@/components'
+import { AnimatedList, DotSeparator, Scroll, Section, SwipeableNote, Typography } from '@/components'
 import { useNotes, useUtils } from '@/hooks'
 import { getSortedNotes } from '@/utils'
 
@@ -14,8 +14,6 @@ export function NotesContainer({
     pinned,
     onPin
 }) {
-    const scrollRef = useRef(null)
-
     const { t } = useTranslation()
     const { notes, loading } = useNotes()
     const { sort, view } = useUtils()
@@ -33,30 +31,29 @@ export function NotesContainer({
     }, [filteredNotes, pinned])
 
     const remainingNotes = useMemo(() => {
-        return filteredNotes.filter((note) => !pinned.has(note.id))
-    }, [filteredNotes, pinned])
+        return [...filteredNotes.filter((note) => !pinned.has(note.id))].sort(
+            (a, b) => getSortedNotes(a, b, sort)
+        )
+    }, [filteredNotes, pinned, sort])
 
-    const renderNotes = useCallback((elements) => {
+    const renderCard = useCallback((note) => (
+        <SwipeableNote
+            key={note.id}
+            data={note}
+            isOpen={selected === note.id}
+            onOpen={() => setSelected(note.id)}
+            onDelete={(isLocked) => onDelete(note, isLocked)}
+            onUnlock={() => onUnlock(note.id)}
+            onPin={() => onPin(note.id)}
+            grid={grid}
+        />
+    ), [selected, onUnlock, onDelete, onPin, setSelected, grid])
+
+    const renderColumns = useCallback((elements) => {
         if (loading || elements.length === 0) return null
 
-        const cards = elements.map((note) => (
-            <SwipeableNote
-                ref={scrollRef}
-                key={note.id}
-                data={note}
-                isOpen={selected === note.id}
-                onOpen={() => setSelected(note.id)}
-                onDelete={(isLocked) => onDelete(note, isLocked)}
-                onUnlock={() => onUnlock(note.id)}
-                onPin={() => onPin(note.id)}
-                grid={grid}
-            />
-        ))
-
-        if (!grid) return cards
-
         const columns = [[], []]
-        cards.forEach((card, index) => columns[index % 2].push(card))
+        elements.forEach((note, index) => columns[index % 2].push(renderCard(note)))
 
         return (
             <View style={styles.columns}>
@@ -67,61 +64,76 @@ export function NotesContainer({
                 ))}
             </View>
         )
-    }, [loading, onUnlock, onDelete, onPin, selected, setSelected, grid])
+    }, [loading, renderCard])
 
-    return (
-        <Scroll ref={scrollRef} contentContainerStyle={styles.container}>
+    const isEmpty = filteredNotes.length === 0 && !loading
+
+    const header = (
+        <View style={styles.header}>
             {loading && (
-                <Typography
-                    opacity={0.5}
-                    variant='caption'
-                >
+                <Typography opacity={0.5} variant='caption'>
                     {t('message.loading')}
+                </Typography>
+            )}
+
+            {isEmpty && (
+                <Typography opacity={0.5} variant='caption'>
+                    {t('message.notes.empty')}
                 </Typography>
             )}
 
             <Section
                 title={t('pinned')}
                 visible={pinnedNotes.length > 0}
-                contentStyle={styles.list}
+                containerStyle={{ paddingVertical: 16 }}
+                contentStyle={{ gap: 4 }}
             >
-                {renderNotes(pinnedNotes)}
+                {grid ? renderColumns(pinnedNotes) : pinnedNotes.map(renderCard)}
             </Section>
 
-            {pinnedNotes.length > 0 && remainingNotes.length > 0 &&
-                <DotSeparator />
-            }
-
-            <Section
-                visible={filteredNotes.length > 0}
-                contentStyle={styles.list}
-            >
-                {renderNotes([...remainingNotes].sort(
-                    (a, b) => getSortedNotes(a, b, sort)
-                ))}
-            </Section>
-
-            {filteredNotes.length === 0 && !loading && (
-                <Typography
-                    opacity={0.5}
-                    variant='caption'
-                >
-                    {t('message.notes.empty')}
-                </Typography>
+            {pinnedNotes.length > 0 && remainingNotes.length > 0 && (
+                <View style={{ paddingBottom: 8 }}>
+                    <DotSeparator />
+                </View>
             )}
-        </Scroll>
+        </View>
+    )
+
+    if (grid) {
+        return (
+            <Scroll contentContainerStyle={styles.container}>
+                {header}
+
+                <Section
+                    visible={remainingNotes.length > 0}
+                    containerStyle={{ paddingTop: 8 }}
+                >
+                    {renderColumns(remainingNotes)}
+                </Section>
+            </Scroll>
+        )
+    }
+
+    return (
+        <AnimatedList
+            gap={8}
+            data={loading ? [] : remainingNotes}
+            keyExtractor={(note) => note.id}
+            renderItem={({ item }) => renderCard(item)}
+            ListHeaderComponent={() => header}
+            emptyLabel={t('message.notes.empty')}
+        />
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        gap: 24,
-        paddingVertical: 24,
         alignItems: 'center'
     },
-    list: {
-        gap: 8
+    header: {
+        width: '100%',
+        alignItems: 'center'
     },
     columns: {
         width: '100%',

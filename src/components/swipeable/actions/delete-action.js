@@ -2,16 +2,15 @@ import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { Delete } from '@/icons'
 
-export function DeleteAction({ onPress }) {
+export function DeleteAction({ onPress, style }) {
     const { colors } = useTheme()
 
     return (
         <Pressable
             onPress={onPress}
-            style={{
-                ...styles.container,
+            style={[styles.container, style, {
                 backgroundColor: colors.tertiary
-            }}
+            }]}
         >
             <Delete color={colors.onTertiary} />
         </Pressable>

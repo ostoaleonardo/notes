@@ -5,7 +5,7 @@ import { FadeInUp, SlideOutLeft } from 'react-native-reanimated'
 import { AnimatedView } from '../../animated'
 import { DeleteAction } from '../actions'
 
-export function SwipeableCard({ children, isOpen, onOpen, onDelete, ...props }) {
+export function SwipeableCard({ children, isOpen, onOpen, onDelete, renderRightActions, ...props }) {
     const ref = useRef(null)
 
     useEffect(() => {
@@ -24,7 +24,7 @@ export function SwipeableCard({ children, isOpen, onOpen, onDelete, ...props }) 
                 ref={ref}
                 onSwipeableOpen={onOpen}
                 containerStyle={styles.swipeable}
-                renderRightActions={() => <DeleteAction onPress={onDelete} />}
+                renderRightActions={renderRightActions || (() => <DeleteAction onPress={onDelete} />)}
                 {...props}
             >
                 {children}
