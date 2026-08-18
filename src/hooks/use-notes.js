@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { useStorage } from './use-storage'
-import { NoteContext } from '@/context'
+import { NoteContext } from '../context/note-context'
 import { STORAGE_KEYS } from '@/constants'
 
 export function useNotes() {
