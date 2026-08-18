@@ -108,6 +108,10 @@
 		"image_alt_placeholder": "Image description",
 		"image_url": "URL"
 	},
+	"view": {
+		"grid": "Grid view",
+		"list": "List view"
+	},
 	"message": {
 		"loading": "Loading...",
 		"notes": {

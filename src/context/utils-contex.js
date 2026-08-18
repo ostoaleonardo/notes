@@ -8,6 +8,7 @@ export function UtilsProvider({ children }) {
     const [pinned, setPinned] = useState(new Set())
     const [sort, setSort] = useState(DEFAULT_SORT)
     const [filter, setFilter] = useState(new Set())
+    const [view, setView] = useState('list')
 
     const { getItem } = useStorage()
 
@@ -15,9 +16,11 @@ export function UtilsProvider({ children }) {
         const getUtils = async () => {
             const pinned = await getItem(STORAGE_KEYS.PINNED)
             const sort = await getItem(STORAGE_KEYS.SORT)
+            const view = await getItem(STORAGE_KEYS.VIEW)
 
             if (pinned) setPinned(new Set(JSON.parse(pinned)))
             if (sort) setSort(JSON.parse(sort))
+            if (view) setView(view)
         }
 
         getUtils()
@@ -31,7 +34,9 @@ export function UtilsProvider({ children }) {
                 sort,
                 setSort,
                 filter,
-                setFilter
+                setFilter,
+                view,
+                setView
             }}
         >
             {children}

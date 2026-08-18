@@ -93,6 +93,10 @@
 		"image_alt_placeholder": "Descripción de la imagen",
 		"image_url": "URL"
 	},
+	"view": {
+		"grid": "Vista de cuadrícula",
+		"list": "Vista de lista"
+	},
 	"message": {
 		"loading": "Cargando...",
 		"notes": {

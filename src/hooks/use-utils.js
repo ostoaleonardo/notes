@@ -7,7 +7,8 @@ export const useUtils = () => {
     const {
         pinned, setPinned,
         sort, setSort,
-        filter, setFilter
+        filter, setFilter,
+        view, setView
     } = useContext(UtilsContext)
 
     const { setItem } = useStorage()
@@ -26,6 +27,11 @@ export const useUtils = () => {
             STORAGE_KEYS.SORT,
             JSON.stringify(sort)
         )
+    }
+
+    const updateView = (view) => {
+        setView(view)
+        setItem(STORAGE_KEYS.VIEW, view)
     }
 
     const onPinned = (id) => {
@@ -61,8 +67,10 @@ export const useUtils = () => {
         pinned,
         sort,
         filter,
+        view,
         updatePinned,
         updateSort,
+        updateView,
         onFilter,
         onPinned
     }
