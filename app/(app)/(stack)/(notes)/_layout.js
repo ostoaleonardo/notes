@@ -15,7 +15,6 @@ export default function NotesLayout() {
 
                     return (
                         <AppBar
-                            back={true}
                             right={!locked && (
                                 <NoteAction
                                     onOpenPassword={onOpenPassword}
@@ -23,6 +22,7 @@ export default function NotesLayout() {
                                 />
                             )}
                             {...props}
+                            back={true}
                         />
                     )
                 },
