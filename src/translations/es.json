@@ -83,7 +83,8 @@
 		"pin": "Fijar",
 		"export": "Exportar",
 		"insert": "Insertar",
-		"cancel": "Cancelar"
+		"cancel": "Cancelar",
+		"more": "Más opciones"
 	},
 	"markdown": {
 		"link_title": "Título",

@@ -98,7 +98,8 @@
 		"pin": "Pin",
 		"export": "Export",
 		"insert": "Insert",
-		"cancel": "Cancel"
+		"cancel": "Cancel",
+		"more": "More"
 	},
 	"markdown": {
 		"link_title": "Title",

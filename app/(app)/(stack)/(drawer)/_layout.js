@@ -16,7 +16,6 @@ export default function DrawerLayout() {
                 header: (props) => (
                     <AppBar
                         menu={true}
-                        settings={true}
                         right={<HomeAction />}
                         {...props}
                     />

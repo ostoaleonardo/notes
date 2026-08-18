@@ -41,7 +41,8 @@ export { DialogModal } from './dialog'
 
 // Menus
 export {
-    SortMenu
+    SortMenu,
+    MoreMenu
 } from './menu'
 
 // Drawer

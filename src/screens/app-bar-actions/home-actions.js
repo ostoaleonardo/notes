@@ -1,13 +1,13 @@
-import { ImportAction } from './import-action'
+import { MoreAction } from './more-action'
 import { SortAction } from './sort-action'
 import { ViewAction } from './view-action'
 
 export function HomeAction() {
     return (
         <>
-            <ImportAction />
             <ViewAction />
             <SortAction />
+            <MoreAction />
         </>
     )
 }
