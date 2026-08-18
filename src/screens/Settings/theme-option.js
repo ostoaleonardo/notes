@@ -35,7 +35,7 @@ export function ThemeOption() {
                         onPress={() => toggleMode(color)}
                         options={THEME_COLORS}
                     >
-                        {color.charAt(0).toUpperCase() + color.slice(1)}
+                        {t(`theme.${color}`)}
                     </ColorOption>
                 ))}
             </Section>
@@ -52,7 +52,7 @@ export function ThemeOption() {
                         onPress={() => toggleAccent(color)}
                         options={ACCENT_COLORS}
                     >
-                        {color.charAt(0).toUpperCase() + color.slice(1)}
+                        {t(`accent.${color}`)}
                     </ColorOption>
                 ))}
             </Section>

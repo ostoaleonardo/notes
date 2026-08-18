@@ -38,6 +38,8 @@
 		"general": "General",
 		"language": "Idioma",
 		"theme": "Tema de color",
+		"themes": "Tema",
+		"accent": "Color de acento",
 		"github": "Repositorio de GitHub",
 		"features": "Reporta problemas, contribuye o solicita nuevas funciones.",
 		"contribute": "Contribuir a la traducción",
@@ -50,6 +52,11 @@
 		"dark": "Oscuro",
 		"system": "Sistema",
 		"choose": "Elige un tema de color para la aplicación."
+	},
+	"accent": {
+		"red": "Rojo",
+		"yellow": "Amarillo",
+		"blue": "Azul"
 	},
 	"password": {
 		"add": "Añadir contraseña",

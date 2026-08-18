@@ -38,6 +38,8 @@
 		"general": "General",
 		"language": "Language",
 		"theme": "Color theme",
+		"themes": "Theme",
+		"accent": "Accent color",
 		"premium": "Upgrade to Pro",
 		"github": "GitHub repository",
 		"features": "Report issues, contribute or request new features.",
@@ -65,6 +67,11 @@
 		"dark": "Dark",
 		"system": "System",
 		"choose": "Choose a color theme for the app."
+	},
+	"accent": {
+		"red": "Red",
+		"yellow": "Yellow",
+		"blue": "Blue"
 	},
 	"password": {
 		"add": "Add password",
