@@ -14,7 +14,8 @@
 		"sort": "Ordenar por",
 		"settings": "Ajustes",
 		"theme": "Tema de color",
-		"about": "Acerca de la app"
+		"about": "Acerca de la app",
+		"import": "Importar nota"
 	},
 	"date": {
 		"created": "Creado:",
