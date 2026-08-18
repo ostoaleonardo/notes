@@ -1,10 +1,10 @@
 import { useContext } from 'react'
 import { useStorage } from './use-storage'
 import { NoteContext } from '../context/note-context'
-import { STORAGE_KEYS } from '@/constants'
+import { getNoteKey, NOTE_KEY_PREFIX } from '@/utils'
 
 export function useNotes() {
-    const { setItem } = useStorage()
+    const { setItem, removeItem, getAllKeys, multiRemove } = useStorage()
 
     const {
         notes,
@@ -15,35 +15,34 @@ export function useNotes() {
     } = useContext(NoteContext)
 
     const saveNote = (note) => {
-        const localNotes = [note, ...notes]
-        saveLocal(localNotes)
+        setNotes([note, ...notes])
+        setItem(getNoteKey(note.id), JSON.stringify(note))
     }
 
     const deleteNote = (id) => {
-        const localNotes = notes.filter((note) => note.id !== id)
-        saveLocal(localNotes)
+        setNotes(notes.filter((note) => note.id !== id))
+        removeItem(getNoteKey(id))
     }
 
     const updateNote = (note) => {
-        const localNotes = notes.map((n) => {
+        setNotes(notes.map((n) => {
             if (n.id === note.id) return note
             return n
-        })
+        }))
 
-        saveLocal(localNotes)
+        setItem(getNoteKey(note.id), JSON.stringify(note))
     }
 
     const getNote = (id) => {
         return notes.find((note) => note.id === id) || {}
     }
 
-    const deleteAll = () => {
-        saveLocal([])
-    }
+    const deleteAll = async () => {
+        setNotes([])
 
-    const saveLocal = async (localNotes) => {
-        setNotes(localNotes)
-        await setItem(STORAGE_KEYS.NOTES, JSON.stringify(localNotes))
+        const keys = await getAllKeys()
+        const noteKeys = keys.filter((key) => key.startsWith(NOTE_KEY_PREFIX))
+        multiRemove(noteKeys)
     }
 
     return {
