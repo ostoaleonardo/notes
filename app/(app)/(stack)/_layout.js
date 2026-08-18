@@ -12,7 +12,7 @@ export default function StackLayout() {
             screenOptions={{
                 header: (props) => {
                     const trash = props.route.name === 'trash/index'
-                    return <AppBar back={true} trash={trash} {...props} />
+                    return <AppBar trash={trash} {...props} back={true} />
                 },
 
                 contentStyle: {
