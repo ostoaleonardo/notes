@@ -12,8 +12,8 @@ export const ImportContext = createContext()
 
 export function ImportProvider({ children }) {
     const router = useRouter()
-    const { saveNote, loading } = useNotes()
     const { premium } = usePremium()
+    const { saveNote, loading } = useNotes()
     const [importing, setImporting] = useState(false)
 
     const importFile = async (url, name) => {
@@ -37,7 +37,7 @@ export function ImportProvider({ children }) {
                 createdAt: getDate()
             })
 
-            router.push(ROUTES.EDIT_NOTE + id)
+            router.push(ROUTES.HOME)
         } catch (error) {
             console.debug('error importing markdown file', error)
         } finally {
