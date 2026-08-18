@@ -3,9 +3,9 @@ import { useCallback } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { IconButton, useTheme } from 'react-native-paper'
 import { openImagePicker } from '@/utils'
-import { Camera, CheckList, Lock, Picture, Unlock } from '@/icons'
+import { Camera, Lock, Picture, Unlock } from '@/icons'
 
-export function BottomEditorBar({ onAddImage, onToggleEditor, hasPassword, onOpenPassword }) {
+export function BottomEditorBar({ onAddImage, hasPassword, onOpenPassword }) {
     const { colors } = useTheme()
     const { background, onBackground } = colors
 

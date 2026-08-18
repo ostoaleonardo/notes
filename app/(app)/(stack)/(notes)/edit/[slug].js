@@ -4,10 +4,9 @@ import { Wrapper } from '@/components/layout'
 import { GalleryView } from '@/screens/gallery'
 import { MarkdownControls } from '@/screens/notes'
 import { AddPassword, Categories, ImageModal, TableModal, UpdatePassword } from '@/screens/modals'
-import { BottomBar, Header, ListEditor, NoteEditor } from '@/screens/editor'
-import { useBottomSheet, useNotes } from '@/hooks'
+import { BottomBar, Header, NoteEditor } from '@/screens/editor'
+import { useBottomSheet, useMarkdownAction, useNoteAutosave, useNotes } from '@/hooks'
 import { getDate } from '@/utils'
-import { DEFAULT_LIST } from '@/constants'
 
 export default function EditNote() {
     const { slug } = useLocalSearchParams()
@@ -20,7 +19,6 @@ export default function EditNote() {
     const [note, setNote] = useState('')
     const [categories, setCategories] = useState([])
     const [images, setImages] = useState([])
-    const [list, setList] = useState(DEFAULT_LIST)
 
     const [createdAt, setCreatedAt] = useState('')
     const [updatedAt, setUpdatedAt] = useState('')
@@ -28,12 +26,12 @@ export default function EditNote() {
     const [password, setPassword] = useState('')
     const [biometrics, setBiometrics] = useState(false)
 
-    const [action, setAction] = useState('')
     const [isEditing, setIsEditing] = useState(false)
-    const [showEditor, setShowEditor] = useState(true)
     const [galleryIndex, setGalleryIndex] = useState('')
 
     const onEditMarkdown = useCallback(() => setIsEditing(prev => !prev), [])
+
+    const markdownAction = useMarkdownAction()
 
     const {
         ref: tableBottomRef,
@@ -41,15 +39,11 @@ export default function EditNote() {
         onClose: onCloseTable
     } = useBottomSheet()
 
-    const [tablePayload, setTablePayload] = useState(null)
-
     const {
         ref: imageBottomRef,
         onOpen: onOpenImage,
         onClose: onCloseImage
     } = useBottomSheet()
-
-    const [imagePayload, setImagePayload] = useState(null)
 
     const onRunAction = useCallback((action) => {
         if (action === 'table') {
@@ -62,7 +56,7 @@ export default function EditNote() {
             return
         }
 
-        setAction(action)
+        markdownAction.run(action)
     }, [onOpenTable, onOpenImage])
 
     const {
@@ -98,7 +92,6 @@ export default function EditNote() {
             note: content = '',
             categories = ['all'],
             images = [],
-            list = DEFAULT_LIST,
             createdAt = Date.now(),
             updatedAt = '',
             biometrics = false,
@@ -109,7 +102,6 @@ export default function EditNote() {
         setNote(content)
         setCategories(categories)
         setImages(images)
-        setList(list)
         setCreatedAt(createdAt)
         setUpdatedAt(updatedAt)
         setBiometrics(biometrics)
@@ -120,38 +112,14 @@ export default function EditNote() {
         }, 0)
     }, [slug])
 
-    useEffect(() => {
-        if (loading.current) return
-
-        const timer = setTimeout(() => {
-            const newData = {
-                id: slug,
-                title: title.trim(),
-                note: note.trim(),
-                categories,
-                images,
-                list,
-                password,
-                biometrics,
-                createdAt
-            }
-
-            updateNote({
-                ...newData,
-                updatedAt: getDate()
-            })
-        }, 500)
-
-        return () => clearTimeout(timer)
-    }, [
-        title,
-        note,
-        categories,
-        images,
-        list,
-        password,
-        biometrics
-    ])
+    useNoteAutosave({
+        id: slug, title, note, categories, images, password, biometrics, createdAt,
+        skip: loading.current,
+        onSave: (newData) => updateNote({
+            ...newData,
+            updatedAt: getDate()
+        })
+    })
 
     return (
         <>
@@ -166,42 +134,26 @@ export default function EditNote() {
                     onOpenCategories={onOpenCategories}
                 />
 
-                {showEditor ? (
-                    <NoteEditor
-                        value={note}
-                        setValue={setNote}
-                        action={action}
-                        setAction={setAction}
-                        tablePayload={tablePayload}
-                        imagePayload={imagePayload}
-                        images={images}
-                        setImages={setImages}
-                        onGallery={setGalleryIndex}
-                        isEditing={isEditing}
-                    />
-                ) : (
-                    <ListEditor
-                        list={list}
-                        setList={setList}
-                    />
-                )}
+                <NoteEditor
+                    value={note}
+                    setValue={setNote}
+                    markdownAction={markdownAction}
+                    images={images}
+                    setImages={setImages}
+                    onGallery={setGalleryIndex}
+                    isEditing={isEditing}
+                />
             </Wrapper>
 
-            {showEditor && (
-                <MarkdownControls
-                    isEditing={isEditing}
-                    onRunAction={onRunAction}
-                    onEditMarkdown={onEditMarkdown}
-                />
-            )}
+            <MarkdownControls
+                isEditing={isEditing}
+                onRunAction={onRunAction}
+                onEditMarkdown={onEditMarkdown}
+            />
 
             <BottomBar
-                list={list}
-                setList={setList}
                 images={images}
                 setImages={setImages}
-                showEditor={showEditor}
-                setShowEditor={setShowEditor}
                 hasPassword={password}
                 onOpenPassword={password
                     ? onOpenUpdatePassword
@@ -233,18 +185,12 @@ export default function EditNote() {
             <TableModal
                 ref={tableBottomRef}
                 onClose={onCloseTable}
-                onInsert={({ rows, cols }) => {
-                    setTablePayload({ rows, cols })
-                    setAction('table')
-                }}
+                onInsert={(payload) => markdownAction.run('table', payload)}
             />
             <ImageModal
                 ref={imageBottomRef}
                 onClose={onCloseImage}
-                onInsert={({ title, url }) => {
-                    setImagePayload({ title, url })
-                    setAction('image')
-                }}
+                onInsert={(payload) => markdownAction.run('image', payload)}
             />
             <GalleryView
                 images={images}

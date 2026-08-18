@@ -20,12 +20,6 @@
 		"created": "Creado:",
 		"updated": "Actualizado:"
 	},
-	"list": {
-		"add": "Añadir elemento",
-		"bulleted": "Lista con viñetas",
-		"numbered": "Lista numerada",
-		"checklist": "Lista de verificación"
-	},
 	"sort": {
 		"title": {
 			"asc": "Título A-Z",

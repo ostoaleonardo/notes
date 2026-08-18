@@ -1,4 +1,3 @@
-export { List } from './list'
 export { DateNote } from './date-note'
 export { ImageCarousel } from './image-carousel'
 export { CategoryCarousel } from './category-carousel'

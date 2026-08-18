@@ -2,8 +2,7 @@ import { BottomEditorBar } from './bottom-bar/bottom-editor-bar'
 
 export function BottomBar({
     images, setImages,
-    hasPassword, onOpenPassword,
-    setShowEditor
+    hasPassword, onOpenPassword
 }) {
     const onAddImage = (image) => {
         setImages([...images, image])
@@ -14,7 +13,6 @@ export function BottomBar({
             onAddImage={onAddImage}
             hasPassword={hasPassword}
             onOpenPassword={onOpenPassword}
-            onToggleEditor={() => setShowEditor(false)}
         />
     )
 }
