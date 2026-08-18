@@ -11,7 +11,7 @@ import { getDimensions, getPreviewNote } from '@/utils'
 import { Lock } from '@/icons'
 import { ROUTES } from '@/constants'
 
-export function SwipeableNote({ ref, data, onUnlock, onDelete, onPin, onOpen, isOpen }) {
+export function SwipeableNote({ ref, data, onUnlock, onDelete, onPin, onOpen, isOpen, grid }) {
     const { colors } = useTheme()
     const { hasBiometrics } = useLocalAuthentication()
 
@@ -39,6 +39,7 @@ export function SwipeableNote({ ref, data, onUnlock, onDelete, onPin, onOpen, is
             onDelete={() => onDelete(isLocked)}
             renderLeftActions={() => <PinAction onPress={onPin} />}
             simultaneousHandlers={ref}
+            {...(grid && { containerStyle: styles.gridSwipeable })}
         >
             <Pressable
                 onPress={goToEdit}
@@ -99,6 +100,9 @@ const styles = StyleSheet.create({
     container: {
         borderRadius: 16,
         overflow: 'hidden'
+    },
+    gridSwipeable: {
+        paddingHorizontal: 0
     },
     header: {
         width: '100%',

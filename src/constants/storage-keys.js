@@ -4,6 +4,7 @@ export const STORAGE_KEYS = {
     CATEGORIES: 'categories',
     PINNED: 'pinned',
     SORT: 'sort',
+    VIEW: 'view',
     THEME: 'theme',
     ACCENT: 'accent',
     LANGUAGE: 'user-language',

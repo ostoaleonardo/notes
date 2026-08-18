@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo, useRef } from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { DotSeparator, Scroll, Section, SwipeableNote, Typography } from '@/components'
 import { useNotes, useUtils } from '@/hooks'
@@ -18,7 +18,8 @@ export function NotesContainer({
 
     const { t } = useTranslation()
     const { notes, loading } = useNotes()
-    const { sort } = useUtils()
+    const { sort, view } = useUtils()
+    const grid = view === 'grid'
 
     const filteredNotes = useMemo(() => {
         return notes.filter((note) => {
@@ -38,7 +39,7 @@ export function NotesContainer({
     const renderNotes = useCallback((elements) => {
         if (loading || elements.length === 0) return null
 
-        return elements.map((note) => (
+        const cards = elements.map((note) => (
             <SwipeableNote
                 ref={scrollRef}
                 key={note.id}
@@ -48,9 +49,25 @@ export function NotesContainer({
                 onDelete={(isLocked) => onDelete(note, isLocked)}
                 onUnlock={() => onUnlock(note.id)}
                 onPin={() => onPin(note.id)}
+                grid={grid}
             />
         ))
-    }, [loading, onUnlock, onDelete, onPin, selected, setSelected])
+
+        if (!grid) return cards
+
+        const columns = [[], []]
+        cards.forEach((card, index) => columns[index % 2].push(card))
+
+        return (
+            <View style={styles.columns}>
+                {columns.map((column, index) => (
+                    <View key={index} style={styles.column}>
+                        {column}
+                    </View>
+                ))}
+            </View>
+        )
+    }, [loading, onUnlock, onDelete, onPin, selected, setSelected, grid])
 
     return (
         <Scroll ref={scrollRef} contentContainerStyle={styles.container}>
@@ -66,7 +83,7 @@ export function NotesContainer({
             <Section
                 title={t('pinned')}
                 visible={pinnedNotes.length > 0}
-                contentStyle={{ gap: 8 }}
+                contentStyle={styles.list}
             >
                 {renderNotes(pinnedNotes)}
             </Section>
@@ -77,7 +94,7 @@ export function NotesContainer({
 
             <Section
                 visible={filteredNotes.length > 0}
-                contentStyle={{ gap: 8 }}
+                contentStyle={styles.list}
             >
                 {renderNotes([...remainingNotes].sort(
                     (a, b) => getSortedNotes(a, b, sort)
@@ -102,5 +119,18 @@ const styles = StyleSheet.create({
         gap: 24,
         paddingVertical: 24,
         alignItems: 'center'
+    },
+    list: {
+        gap: 8
+    },
+    columns: {
+        width: '100%',
+        flexDirection: 'row',
+        paddingHorizontal: 16,
+        gap: 8
+    },
+    column: {
+        flex: 1,
+        gap: 8
     }
 })
