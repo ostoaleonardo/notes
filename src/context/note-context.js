@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from 'react'
 import { useStorage } from '../hooks/use-storage'
 import { DEFAULT_CATEGORIES, STORAGE_KEYS } from '@/constants'
+import { getNoteKey, NOTE_KEY_PREFIX } from '@/utils'
 
 export const NoteContext = createContext()
 
@@ -11,16 +12,31 @@ export function NoteProvider({ children }) {
     const [paramId, setParamId] = useState('')
     const [loading, setLoading] = useState(true)
 
-    const { getItem } = useStorage()
+    const { getItem, removeItem, getAllKeys, multiGet, multiSet } = useStorage()
 
     useEffect(() => {
+        const migrateLegacyNotes = async () => {
+            const legacy = await getItem(STORAGE_KEYS.NOTES)
+            if (!legacy) return
+
+            const legacyNotes = JSON.parse(legacy)
+            await multiSet(legacyNotes.map((note) => [getNoteKey(note.id), JSON.stringify(note)]))
+            await removeItem(STORAGE_KEYS.NOTES)
+        }
+
         const getNotes = async () => {
             try {
-                const notes = await getItem(STORAGE_KEYS.NOTES)
+                await migrateLegacyNotes()
+
+                const keys = await getAllKeys()
+                const noteKeys = keys.filter((key) => key.startsWith(NOTE_KEY_PREFIX))
+                const entries = await multiGet(noteKeys)
+                const notes = entries.map(([, value]) => JSON.parse(value))
+
                 const categories = await getItem(STORAGE_KEYS.CATEGORIES)
                 const trash = await getItem(STORAGE_KEYS.TRASH)
 
-                if (notes) setNotes(JSON.parse(notes))
+                setNotes(notes)
                 if (categories) setCategories(JSON.parse(categories))
 
                 if (trash) {
