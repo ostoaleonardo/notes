@@ -2,10 +2,10 @@ import { StyleSheet } from 'react-native'
 import { Appbar, Tooltip, useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { useTrash } from '@/hooks'
-import { ArrowBack, Delete, Menu, Settings } from '@/icons'
-import { FONTS, ROUTES } from '@/constants'
+import { ArrowBack, Delete, Menu } from '@/icons'
+import { FONTS } from '@/constants'
 
-export function AppBar({ options, navigation, menu, settings, trash, back, right }) {
+export function AppBar({ options, navigation, menu, trash, back, right }) {
     const { colors } = useTheme()
     const { t } = useTranslation()
     const { clearAll } = useTrash()
@@ -15,7 +15,6 @@ export function AppBar({ options, navigation, menu, settings, trash, back, right
 
     const goBack = () => navigation.goBack()
     const openDrawer = () => navigation.openDrawer()
-    const goSettings = () => navigation.navigate(ROUTES.SETTINGS)
 
     const iconProps = {
         width: 24,
@@ -55,16 +54,6 @@ export function AppBar({ options, navigation, menu, settings, trash, back, right
             />
 
             {right}
-
-            {settings && (
-                <Tooltip title={t('title.settings')}>
-                    <Appbar.Action
-                        animated={false}
-                        onPress={goSettings}
-                        icon={() => <Settings {...iconProps} />}
-                    />
-                </Tooltip>
-            )}
 
             {trash && (
                 <Tooltip title={t('header.trash')}>
