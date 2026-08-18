@@ -5,11 +5,14 @@ import { useEffect, useState } from 'react'
 import { useColorScheme } from 'react-native'
 import { finishTransaction, getAvailablePurchases, initConnection } from 'expo-iap'
 import { useLanguage, useStorage } from '@/hooks'
+import { ErrorBoundary } from '@/components'
 import { PremiumProvider, ThemeProvider } from '@/context'
 import { PRO, STORAGE_KEYS, THEMES } from '@/constants'
 import Providers from './providers'
 
 SplashScreen.preventAutoHideAsync()
+
+export { ErrorBoundary }
 
 export default function MainLayout() {
     const colorScheme = useColorScheme()

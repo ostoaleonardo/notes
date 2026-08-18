@@ -1,6 +1,9 @@
 // AppBar
 export { AppBar } from './app-bar'
 
+// Error Boundary
+export { ErrorBoundary } from './error-boundary'
+
 // Buttons
 export {
     Pressable,
