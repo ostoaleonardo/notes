@@ -14,7 +14,8 @@
 		"sort": "Sorting by",
 		"settings": "Settings",
 		"theme": "Color theme",
-		"about": "About the app"
+		"about": "About the app",
+		"import": "Import note"
 	},
 	"date": {
 		"created": "Created:",

@@ -48,6 +48,7 @@ export default {
     'expo-localization',
     'expo-local-authentication',
     'react-native-enriched-markdown',
+    './plugins/with-markdown-intent',
     [
       'expo-build-properties', {
         android: {
