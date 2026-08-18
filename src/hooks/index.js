@@ -1,10 +1,11 @@
 // Notes
 export { useNotes } from './use-notes'
-export { useList } from './use-list'
 export { useTrash } from './use-trash'
 export { useUtils } from './use-utils'
 export { useCategories } from './use-categories'
 export { useMarkdownShortcuts } from './use-markdown-shortcuts'
+export { useMarkdownAction } from './use-markdown-action'
+export { useNoteAutosave } from './use-note-autosave'
 export { useStorage } from './use-storage'
 export { useFiles } from './use-files'
 

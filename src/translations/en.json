@@ -20,12 +20,6 @@
 		"created": "Created:",
 		"updated": "Updated:"
 	},
-	"list": {
-		"add": "Add item",
-		"bulleted": "Bulleted list",
-		"numbered": "Numbered list",
-		"checklist": "Checklist"
-	},
 	"sort": {
 		"title": {
 			"asc": "Title A-Z",
@@ -113,9 +107,6 @@
 		},
 		"categories": {
 			"empty": "You don't have any categories yet"
-		},
-		"list": {
-			"empty": "You don't have any item yet"
 		},
 		"password": {
 			"wrong": "Wrong password",

@@ -5,9 +5,9 @@ import { GalleryView } from '@/screens/gallery'
 import { MarkdownControls } from '@/screens/notes'
 import { AddPassword, Categories, ImageModal, LinkModal, TableModal } from '@/screens/modals'
 import { Header, NoteEditor } from '@/screens/editor'
-import { useBottomSheet, useNotes, useUtils } from '@/hooks'
+import { useBottomSheet, useMarkdownAction, useNoteAutosave, useNotes, useUtils } from '@/hooks'
 import { getDate } from '@/utils'
-import { DEFAULT_LIST, DEFAULT_NOTE_CATEGORIES } from '@/constants'
+import { DEFAULT_NOTE_CATEGORIES } from '@/constants'
 import { KeyboardStickyView } from 'react-native-keyboard-controller'
 
 export default function Note() {
@@ -23,25 +23,24 @@ export default function Note() {
     const [note, setNote] = useState('')
     const [categories, setCategories] = useState(filter ? Array.from(filter) : DEFAULT_NOTE_CATEGORIES)
     const [images, setImages] = useState([])
-    const [list, setList] = useState(DEFAULT_LIST)
 
     const [createdAt, setCreatedAt] = useState('')
 
     const [password, setPassword] = useState('')
     const [biometrics, setBiometrics] = useState(false)
 
-    const [action, setAction] = useState('')
     const [isEditing, setIsEditing] = useState(true)
     const [galleryIndex, setGalleryIndex] = useState('')
 
     const onEditMarkdown = useCallback(() => setIsEditing(prev => !prev), [])
+
+    const markdownAction = useMarkdownAction()
+
     const {
         ref: linkBottomRef,
         onOpen: onOpenLink,
         onClose: onCloseLink
     } = useBottomSheet()
-
-    const [linkPayload, setLinkPayload] = useState(null)
 
     const {
         ref: tableBottomRef,
@@ -49,15 +48,11 @@ export default function Note() {
         onClose: onCloseTable
     } = useBottomSheet()
 
-    const [tablePayload, setTablePayload] = useState(null)
-
     const {
         ref: imageBottomRef,
         onOpen: onOpenImage,
         onClose: onCloseImage
     } = useBottomSheet()
-
-    const [imagePayload, setImagePayload] = useState(null)
 
     const onRunAction = useCallback((action) => {
         if (action === 'link') {
@@ -75,7 +70,7 @@ export default function Note() {
             return
         }
 
-        setAction(action)
+        markdownAction.run(action)
     }, [onOpenLink, onOpenTable, onOpenImage])
 
     const {
@@ -106,23 +101,10 @@ export default function Note() {
         }, [])
     )
 
-    useEffect(() => {
-        if (firstRender.current) return
-        if (!title && !note && !images.length) return
-
-        const timer = setTimeout(() => {
-            const newData = {
-                id,
-                title: title.trim(),
-                note: note.trim(),
-                categories,
-                images,
-                list,
-                password,
-                biometrics,
-                createdAt
-            }
-
+    useNoteAutosave({
+        id, title, note, categories, images, password, biometrics, createdAt,
+        skip: firstRender.current || (!title && !note && !images.length),
+        onSave: (newData) => {
             if (!isSaved.current) {
                 const createdAt = getDate()
 
@@ -139,19 +121,8 @@ export default function Note() {
                     updatedAt: getDate()
                 })
             }
-        }, 500)
-
-        return () => clearTimeout(timer)
-    }, [
-        id,
-        title,
-        note,
-        categories,
-        images,
-        list,
-        password,
-        biometrics
-    ])
+        }
+    })
 
     return (
         <>
@@ -166,11 +137,7 @@ export default function Note() {
             <NoteEditor
                 value={note}
                 setValue={setNote}
-                action={action}
-                setAction={setAction}
-                linkPayload={linkPayload}
-                tablePayload={tablePayload}
-                imagePayload={imagePayload}
+                markdownAction={markdownAction}
                 images={images}
                 setImages={setImages}
                 onGallery={setGalleryIndex}
@@ -203,28 +170,19 @@ export default function Note() {
             <LinkModal
                 ref={linkBottomRef}
                 onClose={onCloseLink}
-                onInsert={({ title, url }) => {
-                    setLinkPayload({ title, url })
-                    setAction('link')
-                }}
+                onInsert={(payload) => markdownAction.run('link', payload)}
             />
 
             <TableModal
                 ref={tableBottomRef}
                 onClose={onCloseTable}
-                onInsert={({ rows, cols }) => {
-                    setTablePayload({ rows, cols })
-                    setAction('table')
-                }}
+                onInsert={(payload) => markdownAction.run('table', payload)}
             />
 
             <ImageModal
                 ref={imageBottomRef}
                 onClose={onCloseImage}
-                onInsert={({ title, url }) => {
-                    setImagePayload({ title, url })
-                    setAction('image')
-                }}
+                onInsert={(payload) => markdownAction.run('image', payload)}
             />
 
             <GalleryView
