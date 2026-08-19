@@ -7,9 +7,7 @@ export function Pressable({ children, ...props }) {
         <Button
             uppercase
             mode='contained'
-            style={styles.base}
             labelStyle={styles.label}
-            contentStyle={styles.content}
             {...props}
         >
             {children}
@@ -18,12 +16,6 @@ export function Pressable({ children, ...props }) {
 }
 
 const styles = StyleSheet.create({
-    base: {
-        borderRadius: 48
-    },
-    content: {
-        paddingVertical: 6
-    },
     label: {
         fontSize: 12,
         fontFamily: FONTS.azeretLight

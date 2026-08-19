@@ -1,30 +1,32 @@
-import { StyleSheet } from 'react-native'
+import React from 'react'
 import { Link } from 'expo-router'
-import { Plus } from '@/icons'
-import { COLORS } from '@/constants'
-import { useToggleMode } from '@/hooks'
-import { ACCENT_COLORS } from '@/constants/themes'
+import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
+import { useIconProps } from '@/hooks'
 
-export function FloatingButton({ href }) {
+export function FloatingButton({ icon, href, onPress }) {
     const { colors } = useTheme()
-    const { accent } = useToggleMode()
-    const { onBackground } = ACCENT_COLORS[accent]
+    const iconProps = useIconProps()
+
+    const style = {
+        ...styles.container,
+        backgroundColor: colors.tertiary
+    }
+
+    const content = icon && React.cloneElement(icon, iconProps)
+
+    if (href) {
+        return (
+            <Link href={href} style={style}>
+                {content}
+            </Link>
+        )
+    }
 
     return (
-        <Link
-            href={href}
-            style={{
-                ...styles.container,
-                backgroundColor: colors.tertiary
-            }}
-        >
-            <Plus
-                width={24}
-                height={24}
-                color={onBackground}
-            />
-        </Link>
+        <Pressable onPress={onPress} style={style}>
+            {content}
+        </Pressable>
     )
 }
 
@@ -34,7 +36,6 @@ const styles = StyleSheet.create({
         bottom: 16,
         right: 16,
         padding: 24,
-        borderRadius: 24,
-        backgroundColor: COLORS.base.accent
+        borderRadius: 24
     }
 })

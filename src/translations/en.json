@@ -6,11 +6,26 @@
 	"categories": {
 		"update": "Update category"
 	},
+	"repositories": {
+		"open": "Open",
+		"add": "Add repository",
+		"rename": "Rename repository",
+		"forget": "Forget repository",
+		"forget_message": "This will remove the repository from the list without deleting anything from your device.",
+		"delete": "Delete repository",
+		"delete_message": "This will permanently delete this repository and all its notes from your device.",
+		"choose_title": "Choose a repository",
+		"choose_message": "Select a folder on your device where your notes will be saved.",
+		"choose_button": "Choose folder",
+		"pro_required": "Available with Pro",
+		"already_added": "This repository has already been added"
+	},
 	"title": {
 		"notes": "Notes",
 		"categories": "Categories",
 		"unlock": "Unlock",
 		"trash": "Trash",
+		"repositories": "Repositories",
 		"sort": "Sorting by",
 		"settings": "Settings",
 		"theme": "Color theme",
@@ -99,7 +114,14 @@
 		"export": "Export",
 		"insert": "Insert",
 		"cancel": "Cancel",
-		"more": "More"
+		"more": "More",
+		"forget": "Forget"
+	},
+	"count": {
+		"notes": "{{count}} note",
+		"notes_plural": "{{count}} notes",
+		"categories": "{{count}} category",
+		"categories_plural": "{{count}} categories"
 	},
 	"markdown": {
 		"link_title": "Title",
@@ -133,7 +155,7 @@
 		"category": "New category..."
 	},
 	"drawer": {
-		"notes": "Notes",
+		"repositories": "Repositories",
 		"categories": "Categories",
 		"trash": "Trash"
 	}

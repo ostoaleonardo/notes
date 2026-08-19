@@ -6,11 +6,26 @@
 	"categories": {
 		"update": "Actualizar categoría"
 	},
+	"repositories": {
+		"open": "Abrir",
+		"add": "Añadir repositorio",
+		"rename": "Renombrar repositorio",
+		"forget": "Olvidar repositorio",
+		"forget_message": "Esto quitará el repositorio de la lista sin eliminar nada de tu dispositivo.",
+		"delete": "Eliminar repositorio",
+		"delete_message": "Esto eliminará permanentemente este repositorio y todas sus notas del dispositivo.",
+		"choose_title": "Elige un repositorio",
+		"choose_message": "Selecciona una carpeta en tu dispositivo donde se guardarán tus notas.",
+		"choose_button": "Elegir carpeta",
+		"pro_required": "Disponible con Pro",
+		"already_added": "Este repositorio ya fue agregado"
+	},
 	"title": {
 		"notes": "Notas",
 		"categories": "Categorías",
 		"unlock": "Desbloquear",
 		"trash": "Papelera",
+		"repositories": "Repositorios",
 		"sort": "Ordenar por",
 		"settings": "Ajustes",
 		"theme": "Tema de color",
@@ -84,7 +99,14 @@
 		"export": "Exportar",
 		"insert": "Insertar",
 		"cancel": "Cancelar",
-		"more": "Más opciones"
+		"more": "Más opciones",
+		"forget": "Olvidar"
+	},
+	"count": {
+		"notes": "{{count}} nota",
+		"notes_plural": "{{count}} notas",
+		"categories": "{{count}} categoría",
+		"categories_plural": "{{count}} categorías"
 	},
 	"markdown": {
 		"link_title": "Título",
@@ -118,7 +140,7 @@
 		"category": "Nueva categoría..."
 	},
 	"drawer": {
-		"notes": "Notas",
+		"repositories": "Repositorios",
 		"categories": "Categorías",
 		"trash": "Papelera"
 	}

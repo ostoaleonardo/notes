@@ -45,6 +45,12 @@ export default function StackLayout() {
                 }}
             />
             <Stack.Screen
+                name='repositories/index'
+                options={{
+                    title: t('title.repositories')
+                }}
+            />
+            <Stack.Screen
                 name='settings/index'
                 options={{
                     title: t('title.settings')
