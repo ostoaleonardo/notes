@@ -10,12 +10,15 @@ export { useImportMarkdown } from './use-import-markdown'
 export { useDevMenu } from './use-dev-menu'
 export { useStorage } from './use-storage'
 export { useFiles } from './use-files'
+export { useFileStorage } from './use-file-storage'
+export { useRepositories } from './use-repositories'
 
 // UI
 export { useLanguage } from './use-language'
 export { useToggleMode } from './use-toggle-mode'
 export { useBottomSheet } from './use-bottom-sheet'
 export { useAnimatedShake } from './use-animated-shake'
+export { useIconProps } from './use-icon-props'
 
 // Utils
 export { useHaptics } from './use-haptics'

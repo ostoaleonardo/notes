@@ -1,12 +1,12 @@
 import { useContext } from 'react'
-import { useStorage } from './use-storage'
+import { CATEGORIES_FILENAME, useFileStorage } from './use-file-storage'
+import { useRepositories } from './use-repositories'
 import { NoteContext } from '@/context'
-import { STORAGE_KEYS } from '@/constants'
 
 export function useCategories() {
     const { categories, setCategories } = useContext(NoteContext)
-
-    const { setItem } = useStorage()
+    const { writeJson } = useFileStorage()
+    const { activeRepository } = useRepositories()
 
     const addCategory = (category) => {
         if (category && !categories.includes(category)) {
@@ -33,9 +33,9 @@ export function useCategories() {
         return categories.find((category) => category.id === id) || {}
     }
 
-    const updateBackup = async (localCategories) => {
+    const updateBackup = (localCategories) => {
         setCategories(localCategories)
-        await setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(localCategories))
+        writeJson(activeRepository.uri, CATEGORIES_FILENAME, localCategories)
     }
 
     return {

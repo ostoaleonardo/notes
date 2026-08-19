@@ -1,11 +1,12 @@
 import { useContext } from 'react'
-import { useStorage } from './use-storage'
+import { TRASH_FILENAME, useFileStorage } from './use-file-storage'
+import { useRepositories } from './use-repositories'
 import { NoteContext } from '@/context'
-import { STORAGE_KEYS } from '@/constants'
 
 export function useTrash() {
     const { trash, setTrash } = useContext(NoteContext)
-    const { setItem } = useStorage()
+    const { writeJson } = useFileStorage()
+    const { activeRepository } = useRepositories()
 
     const addItem = (item) => {
         setTrash(prev => {
@@ -36,9 +37,9 @@ export function useTrash() {
         })
     }
 
-    const updateTrash = async (trash) => {
+    const updateTrash = (trash) => {
         const array = [...trash]
-        await setItem(STORAGE_KEYS.TRASH, JSON.stringify(array))
+        writeJson(activeRepository.uri, TRASH_FILENAME, array)
     }
 
     return {

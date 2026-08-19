@@ -8,5 +8,7 @@ export const STORAGE_KEYS = {
     THEME: 'theme',
     ACCENT: 'accent',
     LANGUAGE: 'user-language',
-    PRO: 'pro'
+    PRO: 'pro',
+    REPOSITORIES: 'folders',
+    ACTIVE_REPOSITORY: 'active-folder'
 }
