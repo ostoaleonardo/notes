@@ -1,28 +1,23 @@
 import { isDevice } from 'expo-device'
 import { Linking, StyleSheet } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { Scroll, Section } from '@/components'
 import { Languages } from '@/screens/modals'
 import { PremiumSection, ThemeOption } from '@/screens/settings'
 import { AppVersionCard, Option } from '@/screens'
-import { useBottomSheet } from '@/hooks'
+import { useBottomSheet, useIconProps } from '@/hooks'
 import { ArrowForward, OpenInNew } from '@/icons'
 import { LINKS } from '@/constants'
 
 export default function Settings() {
     const { t } = useTranslation()
-    const { colors } = useTheme()
+    const iconProps = useIconProps()
 
     const {
         ref: languagesBottomRef,
         onOpen: onOpenLanguages,
         onClose: onCloseLanguages
     } = useBottomSheet()
-
-    const iconProps = {
-        color: colors.onBackground
-    }
 
     return (
         <Scroll contentContainerStyle={styles.scroll}>
