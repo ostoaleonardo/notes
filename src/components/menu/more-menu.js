@@ -1,20 +1,18 @@
 import { useTranslation } from 'react-i18next'
 import { useNavigation } from 'expo-router'
-import { Appbar, Tooltip, useTheme } from 'react-native-paper'
+import { Appbar, Tooltip } from 'react-native-paper'
 import * as DocumentPicker from 'expo-document-picker'
 import { MenuContainer } from './menu-container'
 import { MenuItem } from './menu-item'
-import { useImportMarkdown } from '@/hooks'
+import { useIconProps, useImportMarkdown } from '@/hooks'
 import { MoreVert, Settings, UploadFile } from '@/icons'
 import { ROUTES } from '@/constants'
 
 export function MoreMenu({ visible, onOpen, onClose }) {
     const { t } = useTranslation()
-    const { colors } = useTheme()
+    const iconProps = useIconProps()
     const navigation = useNavigation()
     const { importFile } = useImportMarkdown()
-
-    const iconProps = { color: colors.onBackground }
 
     const onSettings = () => {
         onClose()

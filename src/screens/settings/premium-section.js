@@ -2,16 +2,16 @@ import { useEffect, useState } from 'react'
 import { ToastAndroid } from 'react-native'
 import { ErrorCode, useIAP } from 'expo-iap'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator, useTheme } from 'react-native-paper'
+import { ActivityIndicator } from 'react-native-paper'
 import { Section } from '@/components'
 import { Option } from './option'
-import { usePremium, useStorage } from '@/hooks'
+import { useIconProps, usePremium, useStorage } from '@/hooks'
 import { ArrowForward, Check } from '@/icons'
 import { PRO, PRODUCT_ID, STORAGE_KEYS } from '@/constants'
 
 export function PremiumSection() {
     const { t } = useTranslation()
-    const { colors } = useTheme()
+    const iconProps = useIconProps()
     const { setItem } = useStorage()
     const { premium, setPremium } = usePremium()
     const [loading, setLoading] = useState(false)
@@ -139,10 +139,6 @@ export function PremiumSection() {
         }
     }
 
-    const iconProps = {
-        color: colors.onBackground
-    }
-
     if (!connected) return null
 
     return (
@@ -167,7 +163,7 @@ export function PremiumSection() {
                 title={t('premium.restore')}
                 description={t('premium.purchased')}
                 rightContent={
-                    loading ? <ActivityIndicator size='small' {...iconProps} />
+                    loading ? <ActivityIndicator size='small' color={iconProps.color} />
                         : <ArrowForward {...iconProps} />
                 }
                 onPress={restorePurchases}

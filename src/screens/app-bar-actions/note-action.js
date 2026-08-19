@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { router, useLocalSearchParams } from 'expo-router'
-import { Appbar, Tooltip, useTheme } from 'react-native-paper'
-import { useFiles, useNotes, useTrash, useUtils } from '@/hooks'
+import { Appbar, Tooltip } from 'react-native-paper'
+import { useFiles, useIconProps, useNotes, useTrash, useUtils } from '@/hooks'
 import { Delete, FileExport, Keep, KeepFilled, Lock, Unlock } from '@/icons'
 
 export function NoteAction({ onOpenPassword, hasPassword }) {
-    const { colors } = useTheme()
+    const iconProps = useIconProps()
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
 
@@ -46,9 +46,6 @@ export function NoteAction({ onOpenPassword, hasPassword }) {
         setParamId('')
         goToHome()
     }
-
-    const { onBackground } = colors
-    const iconProps = { color: onBackground }
 
     return (
         <View style={{ flexDirection: 'row' }}>

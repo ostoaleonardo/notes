@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next'
 import { Appbar, RadioButton, Tooltip, useTheme } from 'react-native-paper'
 import { MenuContainer } from './menu-container'
 import { RadioButtonItem } from '../radio-button-item'
-import { useUtils } from '@/hooks'
+import { useIconProps, useUtils } from '@/hooks'
 import { Sort } from '@/icons'
 
 export function SortMenu({ visible, onOpen, onClose }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
+    const iconProps = useIconProps()
     const { sort, updateSort } = useUtils()
     const { field, order } = sort
 
@@ -36,7 +37,7 @@ export function SortMenu({ visible, onOpen, onClose }) {
                     <Appbar.Action
                         animated={false}
                         onPress={onOpen}
-                        icon={() => <Sort color={colors.onBackground} />}
+                        icon={() => <Sort {...iconProps} />}
                     />
                 </Tooltip>
             }

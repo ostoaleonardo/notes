@@ -1,15 +1,15 @@
 import { useMemo } from 'react'
 import { StyleSheet } from 'react-native'
-import { IconButton, useTheme } from 'react-native-paper'
+import { IconButton } from 'react-native-paper'
 import { AnimatedView, Chip, CloseChipButton, Scroll } from '@/components'
-import { useCategories } from '@/hooks'
+import { useCategories, useIconProps } from '@/hooks'
 import { Plus } from '@/icons'
 import { DEFAULT_CATEGORIES } from '@/constants'
 
 const DEFAULT_CATEGORY_IDS = DEFAULT_CATEGORIES.map(({ id }) => id)
 
 export function CategoryCarousel({ categories, onCategories, onCategoriesModal }) {
-    const { colors } = useTheme()
+    const iconProps = useIconProps()
     const { categories: allCategories } = useCategories()
 
     const filteredCategories = useMemo(() => allCategories.filter((item) =>
@@ -37,7 +37,7 @@ export function CategoryCarousel({ categories, onCategories, onCategoriesModal }
                     size={12}
                     mode='outlined'
                     onPress={onCategoriesModal}
-                    icon={() => <Plus color={colors.onBackground} />}
+                    icon={() => <Plus {...iconProps} />}
                 />
             </AnimatedView>
         </Scroll>
