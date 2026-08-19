@@ -4,6 +4,9 @@ export { AppBar } from './app-bar'
 // Error Boundary
 export { ErrorBoundary } from './error-boundary'
 
+// Repository Gate
+export { RepositoryGate } from './repository-gate'
+
 // Buttons
 export {
     Pressable,
@@ -47,6 +50,8 @@ export {
     SortMenu,
     MoreMenu
 } from './menu'
+export { MenuContainer } from './menu/menu-container'
+export { MenuItem } from './menu/menu-item'
 
 // Drawer
 export { DrawerItems } from './drawer'
