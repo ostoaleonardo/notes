@@ -1,10 +1,11 @@
 import { useContext } from 'react'
+import { randomUUID } from 'expo-crypto'
 import { useStorage } from './use-storage'
 import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
 import { NoteContext } from '../context/note-context'
-import { STORAGE_KEYS } from '@/constants'
-import { getUniqueFilename } from '@/utils'
+import { DEFAULT_NOTE_CATEGORIES, STORAGE_KEYS } from '@/constants'
+import { getDate, getUniqueFilename } from '@/utils'
 
 export function useNotes() {
     const {
@@ -12,12 +13,12 @@ export function useNotes() {
         writeNoteFile,
         renameNoteFile,
         deleteNoteFile,
-        clearFolder,
+        clearRepository,
         readMetadata,
         writeMetadata
     } = useFileStorage()
 
-    const { getItem } = useStorage()
+    const { getItem, setItem } = useStorage()
     const { activeRepository } = useRepositories()
 
     const {
@@ -101,7 +102,25 @@ export function useNotes() {
         const repositories = repositoriesJson ? JSON.parse(repositoriesJson) : []
         const repository = repositories.find((f) => f.id === activeRepositoryId)
 
-        if (repository) clearFolder(repository.uri)
+        if (repository) clearRepository(repository.uri)
+    }
+
+    const addLegacyNotes = async () => {
+        const legacy = await getItem(STORAGE_KEYS.NOTES)
+        const existing = legacy ? JSON.parse(legacy) : []
+
+        const seeded = [1, 2, 3].map((n) => ({
+            id: randomUUID(),
+            title: `Legacy note ${n}`,
+            note: `Legacy note content ${n}`,
+            categories: DEFAULT_NOTE_CATEGORIES,
+            images: [],
+            password: '',
+            biometrics: false,
+            createdAt: getDate()
+        }))
+
+        await setItem(STORAGE_KEYS.NOTES, JSON.stringify([...existing, ...seeded]))
     }
 
     return {
@@ -110,6 +129,7 @@ export function useNotes() {
         saveNote,
         deleteNote,
         deleteAll,
+        addLegacyNotes,
         updateNote,
         paramId,
         setParamId,

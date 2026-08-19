@@ -1,10 +1,12 @@
 import { useEffect } from 'react'
 import { registerDevMenuItems } from 'expo-dev-menu'
 import { useNotes } from './use-notes'
+import { useCategories } from './use-categories'
 import { usePremium } from './use-premium'
 
 export function useDevMenu() {
-    const { deleteAll } = useNotes()
+    const { deleteAll, addLegacyNotes } = useNotes()
+    const { deleteAllCategories } = useCategories()
     const { premium, setPremium } = usePremium()
 
     useEffect(() => {
@@ -14,6 +16,16 @@ export function useDevMenu() {
             {
                 name: 'Delete all notes',
                 callback: deleteAll,
+                shouldCollapse: true
+            },
+            {
+                name: 'Delete all categories',
+                callback: deleteAllCategories,
+                shouldCollapse: true
+            },
+            {
+                name: 'Add legacy notes',
+                callback: addLegacyNotes,
                 shouldCollapse: true
             },
             {
