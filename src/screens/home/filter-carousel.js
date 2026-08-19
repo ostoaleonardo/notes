@@ -1,14 +1,13 @@
 import { useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { IconButton, useTheme } from 'react-native-paper'
+import { IconButton } from 'react-native-paper'
 import { AnimatedView, Chip, Scroll } from '@/components'
-import { useCategories } from '@/hooks'
+import { useCategories, useIconProps } from '@/hooks'
 import { Close } from '@/icons'
 
 export function FilterCarousel({ filter, onFilter }) {
-    const { colors } = useTheme()
+    const iconProps = useIconProps()
     const { categories } = useCategories()
-    const { onBackground } = colors
 
     const carousel = useMemo(() => {
         return categories.filter((category) => category.id !== 'all')
@@ -31,7 +30,7 @@ export function FilterCarousel({ filter, onFilter }) {
                             mode='outlined'
                             style={{ marginVertical: 0 }}
                             onPress={() => onFilter('all')}
-                            icon={() => <Close color={onBackground} />}
+                            icon={() => <Close {...iconProps} />}
                         />
                     </AnimatedView>
                 )}

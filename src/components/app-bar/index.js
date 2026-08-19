@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
 import { Appbar, Tooltip, useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { useTrash } from '@/hooks'
+import { useIconProps, useTrash } from '@/hooks'
 import { ArrowBack, Delete, Menu } from '@/icons'
 import { FONTS } from '@/constants'
 
@@ -9,18 +9,13 @@ export function AppBar({ options, navigation, menu, trash, back, right }) {
     const { colors } = useTheme()
     const { t } = useTranslation()
     const { clearAll } = useTrash()
+    const iconProps = useIconProps()
 
     const { title, mode = 'small' } = options
-    const { background, onBackground } = colors
+    const { background } = colors
 
     const goBack = () => navigation.goBack()
     const openDrawer = () => navigation.openDrawer()
-
-    const iconProps = {
-        width: 24,
-        height: 24,
-        color: onBackground
-    }
 
     return (
         <Appbar.Header

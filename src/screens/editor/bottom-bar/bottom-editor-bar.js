@@ -2,14 +2,14 @@
 import { useCallback } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { IconButton, useTheme } from 'react-native-paper'
+import { useIconProps } from '@/hooks'
 import { openImagePicker } from '@/utils'
 import { Camera, Lock, Picture, Unlock } from '@/icons'
 
 export function BottomEditorBar({ onAddImage, hasPassword, onOpenPassword }) {
     const { colors } = useTheme()
-    const { background, onBackground } = colors
-
-    const iconProps = { color: onBackground }
+    const { background } = colors
+    const iconProps = useIconProps()
 
     const onImagePicker = useCallback(async (type) => {
         const assets = await openImagePicker(type)
