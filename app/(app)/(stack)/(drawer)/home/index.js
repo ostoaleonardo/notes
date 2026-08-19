@@ -5,6 +5,7 @@ import { DeleteNote, UnlockNote } from '@/screens/modals'
 import { FilterCarousel, NotesContainer } from '@/screens/home'
 import { useBottomSheet, useNotes, useTrash, useUtils } from '@/hooks'
 import { ROUTES } from '@/constants'
+import { Plus } from '@/icons'
 
 export default function App() {
     const { addItem } = useTrash()
@@ -72,6 +73,7 @@ export default function App() {
             />
 
             <FloatingButton
+                icon={<Plus />}
                 href={ROUTES.ADD_NOTE}
             />
 
