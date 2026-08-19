@@ -8,7 +8,7 @@ import { STORAGE_KEYS } from '@/constants'
 
 export function useRepositories() {
     const { setItem } = useStorage()
-    const { clearFolder } = useFileStorage()
+    const { clearRepository } = useFileStorage()
 
     const {
         repositories,
@@ -81,7 +81,7 @@ export function useRepositories() {
         const repository = repositories.find((r) => r.id === id)
         if (!repository) return
 
-        clearFolder(repository.uri)
+        clearRepository(repository.uri)
         await removeRepositoryFromList(id)
     }
 

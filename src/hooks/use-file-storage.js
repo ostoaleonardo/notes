@@ -46,7 +46,7 @@ export function useFileStorage() {
         if (file) file.delete()
     }
 
-    const clearFolder = (directoryUri) => {
+    const clearRepository = (directoryUri) => {
         listMarkdownFiles(directoryUri).forEach((file) => file.delete())
         SIDECAR_FILENAMES.forEach((filename) => deleteNoteFile(directoryUri, filename))
     }
@@ -74,7 +74,7 @@ export function useFileStorage() {
         writeNoteFile,
         renameNoteFile,
         deleteNoteFile,
-        clearFolder,
+        clearRepository,
         readMetadata,
         writeMetadata,
         readJson,
