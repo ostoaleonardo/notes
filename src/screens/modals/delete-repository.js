@@ -1,7 +1,8 @@
 import { StyleSheet, ToastAndroid } from 'react-native'
 import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { DialogModal, Typography } from '@/components'
+import { DialogModal } from '@/components/dialog'
+import { Typography } from '@/components/typography'
 import { useHaptics, useRepositories } from '@/hooks'
 import { FEEDBACK_TYPES, FONTS } from '@/constants'
 
