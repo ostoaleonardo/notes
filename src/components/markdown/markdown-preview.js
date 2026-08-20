@@ -6,7 +6,7 @@ import { FONTS, TRANSPARENT } from '@/constants'
 
 export function MarkdownPreview({ value, size = 13 }) {
     const { colors } = useTheme()
-    const { background, onBackground, tertiary } = colors
+    const { background, onBackground, tertiary, onTertiary } = colors
 
     const titleStyles = {
         fontFamily: FONTS.nType82Headline,
@@ -79,6 +79,13 @@ export function MarkdownPreview({ value, size = 13 }) {
         },
         list: {
             ...paragraphStyles
+        },
+        taskList: {
+            checkedColor: tertiary,
+            checkmarkColor: onTertiary,
+            borderColor: onBackground + TRANSPARENT[40],
+            checkedTextColor: onBackground + TRANSPARENT[60],
+            checkedStrikethrough: true
         },
         table: {
             headerBackgroundColor: TRANSPARENT.color,
