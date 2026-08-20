@@ -1,7 +1,9 @@
 import { randomUUID } from 'expo-crypto'
 import { CATEGORIES_FILENAME, TRASH_FILENAME } from '../hooks/use-file-storage'
-import { DEFAULT_CATEGORIES, DEFAULT_NOTE_CATEGORIES, STORAGE_KEYS } from '@/constants'
+import { DEFAULT_CATEGORIES, DEFAULT_NOTE_CATEGORIES, STORAGE_KEYS, TRASH_RETENTION_DAYS } from '@/constants'
 import { getNoteKey, getUniqueFilename, NOTE_KEY_PREFIX } from '@/utils'
+
+const TRASH_RETENTION_MS = TRASH_RETENTION_DAYS * 24 * 60 * 60 * 1000
 
 const getTitle = (filename) => filename.replace(/\.md$/i, '')
 
@@ -120,6 +122,26 @@ const loadSidecarList = async ({ repositoryUri, filename, legacyKey, defaultValu
     return value
 }
 
+// Backfills trashedAt on older entries (started counting from this load), then drops
+// anything older than TRASH_RETENTION_DAYS.
+const purgeExpiredTrash = (trash, repositoryUri, fileStorage) => {
+    const now = Date.now()
+    let changed = false
+
+    const stamped = trash.map((item) => {
+        if (item.trashedAt) return item
+        changed = true
+        return { ...item, trashedAt: now }
+    })
+
+    const kept = stamped.filter((item) => now - item.trashedAt < TRASH_RETENTION_MS)
+    if (kept.length !== stamped.length) changed = true
+
+    if (changed) fileStorage.writeJson(repositoryUri, TRASH_FILENAME, kept)
+
+    return kept
+}
+
 export const loadRepositoryData = async (repository, storage, fileStorage) => {
     const repositoryUri = repository.uri
 
@@ -137,7 +159,7 @@ export const loadRepositoryData = async (repository, storage, fileStorage) => {
         fileStorage
     })
 
-    const trash = await loadSidecarList({
+    const rawTrash = await loadSidecarList({
         repositoryUri,
         filename: TRASH_FILENAME,
         legacyKey: STORAGE_KEYS.TRASH,
@@ -146,6 +168,8 @@ export const loadRepositoryData = async (repository, storage, fileStorage) => {
         storage,
         fileStorage
     })
+
+    const trash = purgeExpiredTrash(rawTrash, repositoryUri, fileStorage)
 
     return { notes, categories, trash }
 }

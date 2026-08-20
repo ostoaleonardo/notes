@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import { TRASH_FILENAME, useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
 import { NoteContext } from '@/context'
+import { getDate } from '@/utils'
 
 export function useTrash() {
     const { trash, setTrash } = useContext(NoteContext)
@@ -9,9 +10,11 @@ export function useTrash() {
     const { activeRepository } = useRepositories()
 
     const addItem = (item) => {
+        const trashedItem = { ...item, trashedAt: getDate() }
+
         setTrash(prev => {
             const items = new Set(prev)
-            items.add(item)
+            items.add(trashedItem)
             updateTrash(items)
             return items
         })
