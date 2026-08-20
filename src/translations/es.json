@@ -18,7 +18,12 @@
 		"choose_message": "Selecciona una carpeta en tu dispositivo donde se guardarán tus notas.",
 		"choose_button": "Elegir carpeta",
 		"pro_required": "Disponible con Pro",
-		"already_added": "Este repositorio ya fue agregado"
+		"already_added": "Este repositorio ya fue agregado",
+		"add_subfolder": "Agregar subcarpeta",
+		"edit_folder": "Editar carpeta",
+		"no_folders": "Todavía no hay subcarpetas",
+		"delete_folder": "Eliminar carpeta",
+		"delete_folder_message": "Esto eliminará permanentemente esta carpeta y todas sus notas del dispositivo."
 	},
 	"title": {
 		"notes": "Notas",
@@ -26,6 +31,7 @@
 		"unlock": "Desbloquear",
 		"trash": "Papelera",
 		"repositories": "Repositorios",
+		"templates": "Plantillas",
 		"sort": "Ordenar por",
 		"settings": "Ajustes",
 		"theme": "Tema de color",
@@ -100,13 +106,19 @@
 		"insert": "Insertar",
 		"cancel": "Cancelar",
 		"more": "Más opciones",
-		"forget": "Olvidar"
+		"forget": "Olvidar",
+		"create": "Crear",
+		"lock": "Bloquear"
 	},
 	"count": {
 		"notes": "{{count}} nota",
 		"notes_plural": "{{count}} notas",
 		"categories": "{{count}} categoría",
-		"categories_plural": "{{count}} categorías"
+		"categories_plural": "{{count}} categorías",
+		"folders": "{{count}} carpeta",
+		"folders_plural": "{{count}} carpetas",
+		"templates": "{{count}} plantilla",
+		"templates_plural": "{{count}} plantillas"
 	},
 	"markdown": {
 		"link_title": "Título",
@@ -141,7 +153,44 @@
 	},
 	"drawer": {
 		"repositories": "Repositorios",
+		"templates": "Plantillas",
 		"categories": "Categorías",
 		"trash": "Papelera"
+	},
+	"templates": {
+		"journal": "Diario",
+		"journal_mood": "Cómo me siento hoy",
+		"journal_gratitude": "Agradecimientos",
+		"journal_highlight": "Lo más destacado de hoy",
+		"journal_reflection": "Reflexión",
+		"journal_tomorrow": "Plan de mañana",
+		"checklist": "Checklist",
+		"checklist_urgent": "Urgente",
+		"checklist_week": "Esta semana",
+		"checklist_someday": "Algún día",
+		"meeting": "Reunión",
+		"meeting_attendees": "Asistentes",
+		"meeting_objective": "Objetivo",
+		"meeting_agenda": "Agenda",
+		"meeting_notes": "Notas",
+		"meeting_decisions": "Decisiones",
+		"meeting_next_steps": "Próximos pasos",
+		"new": "Nueva plantilla",
+		"import": "Importar plantilla",
+		"insert": "Insertar plantilla",
+		"save_as_template": "Guardar como plantilla",
+		"saved": "Plantilla guardada",
+		"view_placeholders": "Ver variables disponibles",
+		"placeholders_title": "Variables disponibles",
+		"placeholder_date": "Fecha actual",
+		"placeholder_time": "Hora actual",
+		"placeholder_title": "Título de la nota",
+		"placeholder_example": "ej. {{value}}",
+		"placeholder_title_example": "Notas de la reunión"
+	},
+	"trash": {
+		"expires": "Expira en {{count}} día",
+		"expires_plural": "Expira en {{count}} días",
+		"expires_today": "Expira hoy"
 	}
 }

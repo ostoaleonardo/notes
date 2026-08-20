@@ -6,10 +6,12 @@ export { LANGUAGES } from './languages'
 export {
     DEFAULT_CATEGORIES,
     DEFAULT_NOTE_CATEGORIES,
-    DEFAULT_SORT
+    DEFAULT_SORT,
+    TRASH_RETENTION_DAYS
 } from './default-values'
 
 export { MARKDOWN_CONTROLS } from './markdown-controls'
+export { getDefaultTemplates } from './default-templates'
 export { MAX_TABLE_ROWS, MAX_TABLE_COLS } from './table'
 export { FEEDBACK_TYPES } from './feedback-types'
 export { STORAGE_KEYS } from './storage-keys'

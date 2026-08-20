@@ -12,6 +12,7 @@ export { useStorage } from './use-storage'
 export { useFiles } from './use-files'
 export { useFileStorage } from './use-file-storage'
 export { useRepositories } from './use-repositories'
+export { useTemplates } from './use-templates'
 
 // UI
 export { useLanguage } from './use-language'
