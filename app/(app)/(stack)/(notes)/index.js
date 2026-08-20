@@ -1,17 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { ToastAndroid } from 'react-native'
 import { randomUUID } from 'expo-crypto'
 import { useFocusEffect, useNavigation } from 'expo-router'
+import { useTranslation } from 'react-i18next'
+import { ModalSheet } from '@/components'
 import { GalleryView } from '@/screens/gallery'
-import { MarkdownControls } from '@/screens/notes'
+import { MarkdownControls, TemplateCarousel } from '@/screens/notes'
 import { AddPassword, Categories, ImageModal, LinkModal, TableModal } from '@/screens/modals'
 import { Header, NoteEditor } from '@/screens/editor'
-import { useBottomSheet, useMarkdownAction, useNoteAutosave, useNotes, useUtils } from '@/hooks'
+import { useBottomSheet, useMarkdownAction, useNoteAutosave, useNotes, useTemplates, useUtils } from '@/hooks'
 import { getDate } from '@/utils'
 import { DEFAULT_NOTE_CATEGORIES } from '@/constants'
 import { KeyboardStickyView } from 'react-native-keyboard-controller'
 
 export default function Note() {
+    const { t } = useTranslation()
     const { saveNote, updateNote, setParamId } = useNotes()
+    const { addTemplate } = useTemplates()
     const { filter } = useUtils()
     const navigation = useNavigation()
 
@@ -85,12 +90,30 @@ export default function Note() {
         onClose: onClosePassword
     } = useBottomSheet()
 
+    const {
+        ref: templatesBottomRef,
+        onOpen: onOpenTemplates,
+        onClose: onCloseTemplates
+    } = useBottomSheet()
+
+    const onSelectTemplate = useCallback((content) => {
+        setNote((prev) => (prev ? prev + '\n\n' + content : content))
+        onCloseTemplates()
+    }, [])
+
+    const onSaveAsTemplate = useCallback(async () => {
+        await addTemplate(title.trim() || t('placeholder.title'), note)
+        ToastAndroid.show(t('templates.saved'), ToastAndroid.SHORT)
+    }, [title, note])
+
     useEffect(() => {
         navigation.setOptions({
             hasPassword: password,
-            onOpenPassword
+            onOpenPassword,
+            onOpenTemplates,
+            onSaveAsTemplate
         })
-    }, [password])
+    }, [password, onSaveAsTemplate])
 
     useFocusEffect(
         useCallback(() => {
@@ -191,6 +214,17 @@ export default function Note() {
                 visible={galleryIndex !== ''}
                 onClose={() => setGalleryIndex('')}
             />
+
+            <ModalSheet
+                ref={templatesBottomRef}
+                onClose={onCloseTemplates}
+                contentContainerStyle={{ paddingVertical: 16 }}
+            >
+                <TemplateCarousel
+                    title={title}
+                    onSelect={onSelectTemplate}
+                />
+            </ModalSheet>
         </>
     )
 }

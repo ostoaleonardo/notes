@@ -19,12 +19,14 @@ export function DrawerScreen({ label, path, indicator, active, onPress }) {
                 >
                     {label}
                 </Typography>
-                <Typography
-                    variant='caption'
-                    opacity={active ? 0.8 : 0.5}
-                >
-                    {indicator}
-                </Typography>
+                {indicator && (
+                    <Typography
+                        variant='caption'
+                        opacity={active ? 0.8 : 0.5}
+                    >
+                        {indicator}
+                    </Typography>
+                )}
             </View>
 
             <ArrowForward

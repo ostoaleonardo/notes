@@ -21,6 +21,8 @@ export default function Repositories() {
         setActiveRepository
     } = useRepositories()
 
+    const rootRepositories = repositories.filter((repository) => !repository.parentId)
+
     const [counts, setCounts] = useState({})
     const [renameId, setRenameId] = useState('')
     const [forgetId, setForgetId] = useState('')
@@ -29,7 +31,7 @@ export default function Repositories() {
     useEffect(() => {
         const refreshCounts = () => {
             const next = {}
-            repositories.forEach((repository) => {
+            rootRepositories.forEach((repository) => {
                 next[repository.id] = listMarkdownFiles(repository.uri).length
             })
             setCounts(next)
@@ -44,7 +46,7 @@ export default function Repositories() {
         return () => subscription.remove()
     }, [repositories])
 
-    const canAddRepository = premium || repositories.length === 0
+    const canAddRepository = premium || rootRepositories.length === 0
 
     const onAddRepository = async () => {
         if (!canAddRepository) {
@@ -67,7 +69,7 @@ export default function Repositories() {
         <View style={{ flex: 1, paddingHorizontal: 16 }}>
             <AnimatedList
                 gap={2}
-                data={repositories}
+                data={rootRepositories}
                 keyExtractor={(repository) => repository.id}
                 emptyLabel={t('message.notes.empty')}
                 renderItem={({ item, index }) => (
@@ -80,7 +82,7 @@ export default function Repositories() {
                         onForget={() => setForgetId(item.id)}
                         onDelete={() => setDeleteId(item.id)}
                         isFirst={index === 0}
-                        isLast={index === repositories.length - 1}
+                        isLast={index === rootRepositories.length - 1}
                     />
                 )}
             />

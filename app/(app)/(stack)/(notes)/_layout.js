@@ -11,7 +11,7 @@ export default function NotesLayout() {
             screenOptions={{
                 header: (props) => {
                     const locked = props.route.name === 'unlock/[slug]'
-                    const { onOpenPassword, hasPassword } = props.options
+                    const { onOpenPassword, hasPassword, onOpenTemplates, onSaveAsTemplate } = props.options
 
                     return (
                         <AppBar
@@ -19,6 +19,8 @@ export default function NotesLayout() {
                                 <NoteAction
                                     onOpenPassword={onOpenPassword}
                                     hasPassword={hasPassword}
+                                    onOpenTemplates={onOpenTemplates}
+                                    onSaveAsTemplate={onSaveAsTemplate}
                                 />
                             )}
                             {...props}
