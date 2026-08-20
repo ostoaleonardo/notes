@@ -1,49 +1,88 @@
 import { useEffect, useState } from 'react'
-import { AppState, Pressable, StyleSheet, View } from 'react-native'
+import { AppState, Pressable, StyleSheet, ToastAndroid, View } from 'react-native'
 import { router } from 'expo-router'
 import { DrawerContentScrollView } from 'expo-router/drawer'
 import { useTranslation } from 'react-i18next'
 import { DrawerScreen } from './drawer-screen'
+import { DrawerRepositoryItem } from './drawer-repository-item'
 import { Separator } from '../separator'
 import { Typography } from '../typography'
+import { AddSubfolder, DeleteRepository, RenameRepository } from '@/screens/modals'
 import { ROUTES } from '@/constants'
-import { useCategories, useFileStorage, useIconProps, useRepositories, useTrash } from '@/hooks'
-import { ArrowForward } from '@/icons'
+import { useCategories, useFileStorage, useIconProps, usePremium, useRepositories, useTemplates, useTrash } from '@/hooks'
+import { Plus } from '@/icons'
+import { IconButton } from 'react-native-paper'
 
 export function DrawerItems() {
     const { t } = useTranslation()
-    const iconProps = useIconProps(16)
     const { trash } = useTrash()
+    const { premium } = usePremium()
     const { categories } = useCategories()
-    const { repositories, activeRepositoryId } = useRepositories()
+    const { listTemplates } = useTemplates()
     const { listMarkdownFiles } = useFileStorage()
+    const iconProps = useIconProps(16)
 
-    const [activeCount, setActiveCount] = useState(0)
+    const {
+        activeRepositoryTree,
+        activeRepository,
+        activeRepositoryId,
+        addRepository,
+        setActiveRepository
+    } = useRepositories()
 
-    const activeRepository = repositories.find((repository) => repository.id === activeRepositoryId)
+    const [counts, setCounts] = useState({})
+    const [templatesCount, setTemplatesCount] = useState(0)
+    const [editFolderId, setEditFolderId] = useState('')
+    const [subfolderParentId, setSubfolderParentId] = useState('')
+    const [deleteId, setDeleteId] = useState('')
 
     useEffect(() => {
-        const refreshCount = () => {
-            if (activeRepository) setActiveCount(listMarkdownFiles(activeRepository.uri).length)
+        const refreshCounts = () => {
+            const next = {}
+            activeRepositoryTree.forEach((repository) => {
+                next[repository.id] = listMarkdownFiles(repository.uri).length
+            })
+            setCounts(next)
         }
 
-        refreshCount()
+        refreshCounts()
 
         const subscription = AppState.addEventListener('change', (state) => {
-            if (state === 'active') refreshCount()
+            if (state === 'active') refreshCounts()
         })
 
         return () => subscription.remove()
-    }, [activeRepository])
+    }, [activeRepositoryTree])
+
+    useEffect(() => {
+        listTemplates().then((list) => setTemplatesCount(list.length))
+    }, [activeRepository?.id])
+
+    const onOpenRepository = (id) => {
+        setActiveRepository(id)
+        router.push(ROUTES.HOME)
+    }
+
+    const onAddRepository = async () => {
+        if (!premium && activeRepositoryTree.length > 0) {
+            ToastAndroid.show(t('repositories.pro_required'), ToastAndroid.SHORT)
+            return
+        }
+
+        const result = await addRepository()
+        if (result === 'duplicate') {
+            ToastAndroid.show(t('repositories.already_added'), ToastAndroid.SHORT)
+        }
+    }
 
     return (
         <DrawerContentScrollView>
             <View>
-                <Pressable
-                    onPress={() => router.push(ROUTES.REPOSITORIES)}
-                    style={styles.header}
-                >
-                    <View style={styles.headerTitleRow}>
+                <View style={styles.header}>
+                    <Pressable
+                        onPress={() => router.push(ROUTES.REPOSITORIES)}
+                        style={styles.headerTitleRow}
+                    >
                         <Typography
                             bold
                             uppercase
@@ -52,30 +91,35 @@ export function DrawerItems() {
                         >
                             {t('drawer.repositories')}
                         </Typography>
-                        <ArrowForward
-                            {...iconProps}
-                            opacity={0.6}
-                        />
-                    </View>
+                    </Pressable>
 
-                    {activeRepository && (
-                        <>
-                            <Typography uppercase>
-                                {activeRepository.alias}
-                            </Typography>
-                            <Typography
-                                variant='caption'
-                                opacity={0.5}
-                            >
-                                {t('count.notes', { count: activeCount })}
-                            </Typography>
-                        </>
-                    )}
-                </Pressable>
+                    <IconButton
+                        onPress={onAddRepository}
+                        icon={(props) => <Plus {...props} opacity={0.6} />}
+                    />
+                </View>
+
+                {activeRepositoryTree.map((repository) => (
+                    <DrawerRepositoryItem
+                        key={repository.id}
+                        repository={repository}
+                        count={t('count.notes', { count: counts[repository.id] || 0 })}
+                        active={repository.id === activeRepositoryId}
+                        onOpen={() => onOpenRepository(repository.id)}
+                        onAddSubfolder={() => setSubfolderParentId(repository.id)}
+                        onEditFolder={() => setEditFolderId(repository.id)}
+                        onDelete={() => setDeleteId(repository.id)}
+                    />
+                ))}
 
                 <Separator style={styles.separator} />
 
                 <View>
+                    <DrawerScreen
+                        path={ROUTES.TEMPLATES}
+                        label={t('drawer.templates')}
+                        indicator={t('count.templates', { count: templatesCount })}
+                    />
                     <DrawerScreen
                         path={ROUTES.CATEGORIES}
                         label={t('drawer.categories')}
@@ -88,22 +132,40 @@ export function DrawerItems() {
                     />
                 </View>
             </View>
+
+            <RenameRepository
+                visible={!!editFolderId}
+                repositoryId={editFolderId}
+                onDismiss={() => setEditFolderId('')}
+            />
+            <AddSubfolder
+                visible={!!subfolderParentId}
+                parentId={subfolderParentId}
+                onDismiss={() => setSubfolderParentId('')}
+            />
+            <DeleteRepository
+                visible={!!deleteId}
+                repositoryId={deleteId}
+                onDismiss={() => setDeleteId('')}
+            />
         </DrawerContentScrollView>
     )
 }
 
 const styles = StyleSheet.create({
     header: {
-        paddingHorizontal: 16,
-        paddingVertical: 16,
-        gap: 4
-    },
-    headerTitleRow: {
+        paddingLeft: 16,
+        paddingRight: 0,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
     },
+    headerTitleRow: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
     separator: {
-        marginHorizontal: 16
+        marginHorizontal: 16,
+        marginTop: 8
     }
 })

@@ -1,16 +1,21 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { ToastAndroid } from 'react-native'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
+import { useTranslation } from 'react-i18next'
+import { ModalSheet } from '@/components'
 import { Wrapper } from '@/components/layout'
 import { GalleryView } from '@/screens/gallery'
-import { MarkdownControls } from '@/screens/notes'
+import { MarkdownControls, TemplateCarousel } from '@/screens/notes'
 import { AddPassword, Categories, ImageModal, TableModal, UpdatePassword } from '@/screens/modals'
-import { BottomBar, Header, NoteEditor } from '@/screens/editor'
-import { useBottomSheet, useMarkdownAction, useNoteAutosave, useNotes } from '@/hooks'
+import { Header, NoteEditor } from '@/screens/editor'
+import { useBottomSheet, useMarkdownAction, useNoteAutosave, useNotes, useTemplates } from '@/hooks'
 import { getDate } from '@/utils'
 
 export default function EditNote() {
+    const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
     const { getNote, updateNote } = useNotes()
+    const { addTemplate } = useTemplates()
     const navigation = useNavigation()
 
     const loading = useRef(true)
@@ -77,14 +82,32 @@ export default function EditNote() {
         onClose: onCloseUpdatePassword
     } = useBottomSheet()
 
+    const {
+        ref: templatesBottomRef,
+        onOpen: onOpenTemplates,
+        onClose: onCloseTemplates
+    } = useBottomSheet()
+
+    const onSelectTemplate = useCallback((content) => {
+        setNote((prev) => (prev ? prev + '\n\n' + content : content))
+        onCloseTemplates()
+    }, [])
+
+    const onSaveAsTemplate = useCallback(async () => {
+        await addTemplate(title.trim() || t('placeholder.title'), note)
+        ToastAndroid.show(t('templates.saved'), ToastAndroid.SHORT)
+    }, [title, note])
+
     useEffect(() => {
         navigation.setOptions({
             hasPassword: password,
             onOpenPassword: password
                 ? onOpenUpdatePassword
-                : onOpenPassword
+                : onOpenPassword,
+            onOpenTemplates,
+            onSaveAsTemplate
         })
-    }, [password])
+    }, [password, onSaveAsTemplate])
 
     useEffect(() => {
         const {
@@ -151,15 +174,6 @@ export default function EditNote() {
                 onEditMarkdown={onEditMarkdown}
             />
 
-            <BottomBar
-                images={images}
-                setImages={setImages}
-                hasPassword={password}
-                onOpenPassword={password
-                    ? onOpenUpdatePassword
-                    : onOpenPassword}
-            />
-
             <Categories
                 ref={categoriesBottomRef}
                 categories={categories}
@@ -198,6 +212,17 @@ export default function EditNote() {
                 visible={galleryIndex !== ''}
                 onClose={() => setGalleryIndex('')}
             />
+
+            <ModalSheet
+                ref={templatesBottomRef}
+                onClose={onCloseTemplates}
+                contentContainerStyle={{ paddingVertical: 16 }}
+            >
+                <TemplateCarousel
+                    title={title}
+                    onSelect={onSelectTemplate}
+                />
+            </ModalSheet>
         </>
     )
 }

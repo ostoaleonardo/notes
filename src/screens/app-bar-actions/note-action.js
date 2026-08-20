@@ -3,13 +3,16 @@ import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { router, useLocalSearchParams } from 'expo-router'
 import { Appbar, Tooltip } from 'react-native-paper'
+import { MenuContainer, MenuItem } from '@/components'
 import { useFiles, useIconProps, useNotes, useTrash, useUtils } from '@/hooks'
-import { Delete, FileExport, Keep, KeepFilled, Lock, Unlock } from '@/icons'
+import { Delete, FileExport, Keep, KeepFilled, Lock, Shapes, Unlock } from '@/icons'
 
-export function NoteAction({ onOpenPassword, hasPassword }) {
+export function NoteAction({ onOpenPassword, hasPassword, onOpenTemplates, onSaveAsTemplate }) {
     const iconProps = useIconProps()
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
+
+    const [templatesMenuVisible, setTemplatesMenuVisible] = useState(false)
 
     const { exportFile } = useFiles()
     const { pinned, updatePinned } = useUtils()
@@ -58,6 +61,36 @@ export function NoteAction({ onOpenPassword, hasPassword }) {
                     />
                 </Tooltip>
             )}
+            <MenuContainer
+                visible={templatesMenuVisible}
+                onClose={() => setTemplatesMenuVisible(false)}
+                anchor={
+                    <Tooltip title={t('drawer.templates')}>
+                        <Appbar.Action
+                            animated={false}
+                            onPress={() => setTemplatesMenuVisible(true)}
+                            icon={() => <Shapes {...iconProps} />}
+                        />
+                    </Tooltip>
+                }
+            >
+                <MenuItem
+                    title={t('templates.insert')}
+                    leadingIcon={() => <Shapes {...iconProps} />}
+                    onPress={() => {
+                        setTemplatesMenuVisible(false)
+                        onOpenTemplates()
+                    }}
+                />
+                <MenuItem
+                    title={t('templates.save_as_template')}
+                    leadingIcon={() => <Shapes {...iconProps} />}
+                    onPress={() => {
+                        setTemplatesMenuVisible(false)
+                        onSaveAsTemplate()
+                    }}
+                />
+            </MenuContainer>
             <Tooltip title={t('button.pin')}>
                 <Appbar.Action
                     animated={false}
