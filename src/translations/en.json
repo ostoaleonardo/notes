@@ -18,7 +18,12 @@
 		"choose_message": "Select a folder on your device where your notes will be saved.",
 		"choose_button": "Choose folder",
 		"pro_required": "Available with Pro",
-		"already_added": "This repository has already been added"
+		"already_added": "This repository has already been added",
+		"add_subfolder": "Add subfolder",
+		"edit_folder": "Edit folder",
+		"no_folders": "No subfolders yet",
+		"delete_folder": "Delete folder",
+		"delete_folder_message": "This will permanently delete this folder and all its notes from your device."
 	},
 	"title": {
 		"notes": "Notes",
@@ -26,6 +31,7 @@
 		"unlock": "Unlock",
 		"trash": "Trash",
 		"repositories": "Repositories",
+		"templates": "Templates",
 		"sort": "Sorting by",
 		"settings": "Settings",
 		"theme": "Color theme",
@@ -115,13 +121,19 @@
 		"insert": "Insert",
 		"cancel": "Cancel",
 		"more": "More",
-		"forget": "Forget"
+		"forget": "Forget",
+		"create": "Create",
+		"lock": "Lock"
 	},
 	"count": {
 		"notes": "{{count}} note",
 		"notes_plural": "{{count}} notes",
 		"categories": "{{count}} category",
-		"categories_plural": "{{count}} categories"
+		"categories_plural": "{{count}} categories",
+		"folders": "{{count}} folder",
+		"folders_plural": "{{count}} folders",
+		"templates": "{{count}} template",
+		"templates_plural": "{{count}} templates"
 	},
 	"markdown": {
 		"link_title": "Title",
@@ -156,7 +168,44 @@
 	},
 	"drawer": {
 		"repositories": "Repositories",
+		"templates": "Templates",
 		"categories": "Categories",
 		"trash": "Trash"
+	},
+	"templates": {
+		"journal": "Journal",
+		"journal_mood": "How I'm feeling today",
+		"journal_gratitude": "Grateful for",
+		"journal_highlight": "Today's highlight",
+		"journal_reflection": "Reflection",
+		"journal_tomorrow": "Tomorrow's plan",
+		"checklist": "Checklist",
+		"checklist_urgent": "Urgent",
+		"checklist_week": "This week",
+		"checklist_someday": "Someday",
+		"meeting": "Meeting",
+		"meeting_attendees": "Attendees",
+		"meeting_objective": "Objective",
+		"meeting_agenda": "Agenda",
+		"meeting_notes": "Notes",
+		"meeting_decisions": "Decisions",
+		"meeting_next_steps": "Next steps",
+		"new": "New template",
+		"import": "Import template",
+		"insert": "Insert template",
+		"save_as_template": "Save as template",
+		"saved": "Template saved",
+		"view_placeholders": "View available variables",
+		"placeholders_title": "Available variables",
+		"placeholder_date": "Current date",
+		"placeholder_time": "Current time",
+		"placeholder_title": "Note title",
+		"placeholder_example": "e.g. {{value}}",
+		"placeholder_title_example": "Meeting notes"
+	},
+	"trash": {
+		"expires": "Expires in {{count}} day",
+		"expires_plural": "Expires in {{count}} days",
+		"expires_today": "Expires today"
 	}
 }

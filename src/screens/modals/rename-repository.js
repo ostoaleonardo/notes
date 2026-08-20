@@ -15,6 +15,8 @@ export function RenameRepository({ visible, onDismiss, repositoryId }) {
     const [placeholder, setPlaceholder] = useState('')
     const [isDisabled, setIsDisabled] = useState(true)
 
+    const isFolder = !!repositories.find((repository) => repository.id === repositoryId)?.parentId
+
     useEffect(() => {
         const repository = repositories.find((repository) => repository.id === repositoryId)
         const name = repository?.alias || ''
@@ -37,7 +39,7 @@ export function RenameRepository({ visible, onDismiss, repositoryId }) {
 
     return (
         <DialogModal
-            title={t('repositories.rename')}
+            title={t(isFolder ? 'repositories.edit_folder' : 'repositories.rename')}
             visible={visible}
             onDismiss={onDismiss}
             actions={

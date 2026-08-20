@@ -3,6 +3,7 @@ import { Directory, File } from 'expo-file-system'
 const METADATA_FILENAME = '.notes-meta.json'
 export const CATEGORIES_FILENAME = '.categories.json'
 export const TRASH_FILENAME = '.trash.json'
+export const TEMPLATES_FOLDER_NAME = 'templates'
 
 const SIDECAR_FILENAMES = [METADATA_FILENAME, CATEGORIES_FILENAME, TRASH_FILENAME]
 
@@ -13,6 +14,20 @@ export function useFileStorage() {
         listEntries(directoryUri).find((entry) => (
             entry instanceof File && entry.name === filename
         ))
+    )
+
+    const findDirectory = (directoryUri, name) => (
+        listEntries(directoryUri).find((entry) => (
+            entry instanceof Directory && entry.name === name
+        ))
+    )
+
+    const createSubdirectory = (directoryUri, name) => (
+        new Directory(directoryUri).createDirectory(name)
+    )
+
+    const getOrCreateTemplatesFolder = (directoryUri) => (
+        findDirectory(directoryUri, TEMPLATES_FOLDER_NAME) || createSubdirectory(directoryUri, TEMPLATES_FOLDER_NAME)
     )
 
     const listMarkdownFiles = (directoryUri) => (
@@ -70,6 +85,7 @@ export function useFileStorage() {
     const writeMetadata = (directoryUri, metadata) => writeJson(directoryUri, METADATA_FILENAME, metadata)
 
     return {
+        findFile,
         listMarkdownFiles,
         writeNoteFile,
         renameNoteFile,
@@ -78,6 +94,8 @@ export function useFileStorage() {
         readMetadata,
         writeMetadata,
         readJson,
-        writeJson
+        writeJson,
+        createSubdirectory,
+        getOrCreateTemplatesFolder
     }
 }

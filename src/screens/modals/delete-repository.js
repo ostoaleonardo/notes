@@ -8,7 +8,9 @@ import { FEEDBACK_TYPES, FONTS } from '@/constants'
 export function DeleteRepository({ visible, onDismiss, repositoryId }) {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
-    const { removeRepository } = useRepositories()
+    const { repositories, removeRepository } = useRepositories()
+
+    const isFolder = !!repositories.find((repository) => repository.id === repositoryId)?.parentId
 
     const onDelete = () => {
         removeRepository(repositoryId)
@@ -18,7 +20,7 @@ export function DeleteRepository({ visible, onDismiss, repositoryId }) {
 
     return (
         <DialogModal
-            title={t('repositories.delete')}
+            title={t(isFolder ? 'repositories.delete_folder' : 'repositories.delete')}
             visible={visible}
             onDismiss={onDismiss}
             actions={[
@@ -40,7 +42,7 @@ export function DeleteRepository({ visible, onDismiss, repositoryId }) {
             ]}
         >
             <Typography opacity={0.6}>
-                {t('repositories.delete_message')}
+                {t(isFolder ? 'repositories.delete_folder_message' : 'repositories.delete_message')}
             </Typography>
         </DialogModal>
     )

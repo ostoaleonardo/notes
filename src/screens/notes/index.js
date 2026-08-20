@@ -1,5 +1,6 @@
 export { DateNote } from './date-note'
 export { ImageCarousel } from './image-carousel'
 export { CategoryCarousel } from './category-carousel'
+export { TemplateCarousel } from './template-carousel'
 export { CategoryOption } from './category-option'
 export { MarkdownControls } from './markdown-controls'
