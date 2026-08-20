@@ -32,7 +32,7 @@ export function NoteProvider({ children }) {
                 setCategories(categories)
                 setTrash(new Set(trash))
             } catch (error) {
-                console.error('Error loading notes:', error)
+                console.debug('error loading notes', error)
             } finally {
                 if (showLoading) setLoading(false)
             }

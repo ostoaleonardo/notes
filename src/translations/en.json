@@ -24,7 +24,8 @@
 		"no_folders": "No subfolders yet",
 		"delete_folder": "Delete folder",
 		"delete_folder_message": "This will permanently delete this folder, its subfolders, and all their notes from your device.",
-		"cannot_delete_active": "Switch to another repository before deleting this one"
+		"cannot_delete_active": "Switch to another repository before deleting this one",
+		"rename_failed": "Couldn't rename this folder"
 	},
 	"title": {
 		"notes": "Notes",

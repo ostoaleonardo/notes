@@ -19,6 +19,8 @@ export function useRepositories() {
         writeNoteFile,
         createSubdirectory,
         deleteDirectory,
+        directoryExists,
+        renameDirectory,
         getOrCreateTemplatesFolder
     } = useFileStorage()
 
@@ -27,7 +29,8 @@ export function useRepositories() {
         setRepositories,
         activeRepositoryId,
         setActiveRepositoryId,
-        loading
+        loading,
+        busyRef
     } = useContext(RepositoryContext)
 
     const activeRepository = repositories.find((repository) => repository.id === activeRepositoryId) || null
@@ -76,6 +79,8 @@ export function useRepositories() {
     )
 
     const addRepository = async () => {
+        busyRef.current = true
+
         try {
             const directory = await Directory.pickDirectoryAsync()
 
@@ -93,6 +98,8 @@ export function useRepositories() {
         } catch (error) {
             console.debug('error picking repository', error)
             return null
+        } finally {
+            busyRef.current = false
         }
     }
 
@@ -113,11 +120,17 @@ export function useRepositories() {
         const parent = repositories.find((repository) => repository.id === parentId)
         if (!parent) return null
 
-        const directory = createSubdirectory(parent.uri, sanitizeFilename(name))
-        const repository = buildRepository(directory, parentId, false)
+        busyRef.current = true
 
-        await persistRepositories([...repositories, repository])
-        return repository
+        try {
+            const directory = createSubdirectory(parent.uri, sanitizeFilename(name))
+            const repository = buildRepository(directory, parentId, false)
+
+            await persistRepositories([...repositories, repository])
+            return repository
+        } finally {
+            busyRef.current = false
+        }
     }
 
     const getRootRepository = (repository) => {
@@ -136,20 +149,76 @@ export function useRepositories() {
         const root = getRootRepository(repository)
         if (root.templatesUri) return root.templatesUri
 
-        const templatesDirectory = getOrCreateTemplatesFolder(root.uri)
-        seedTemplates(templatesDirectory.uri)
+        busyRef.current = true
 
-        await persistRepositories(repositories.map((r) => (
-            r.id === root.id ? { ...r, templatesUri: templatesDirectory.uri } : r
-        )))
+        try {
+            const templatesDirectory = getOrCreateTemplatesFolder(root.uri)
+            seedTemplates(templatesDirectory.uri)
 
-        return templatesDirectory.uri
+            await persistRepositories(repositories.map((r) => (
+                r.id === root.id ? { ...r, templatesUri: templatesDirectory.uri } : r
+            )))
+
+            return templatesDirectory.uri
+        } finally {
+            busyRef.current = false
+        }
     }
 
-    const renameRepository = (id, alias) => {
-        persistRepositories(repositories.map((repository) => (
-            repository.id === id ? { ...repository, alias } : repository
-        )))
+    const relinkUris = (repository) => {
+        let diskChildren
+
+        try {
+            diskChildren = listSubdirectories(repository.uri)
+        } catch {
+            diskChildren = []
+        }
+
+        const trackedChildren = repositories.filter((r) => r.parentId === repository.id)
+        const diskByName = new Map(diskChildren.map((d) => [d.name, d]))
+
+        return trackedChildren.flatMap((child) => {
+            const disk = diskByName.get(child.alias)
+            if (!disk) return []
+
+            const relinkedChild = { ...child, uri: disk.uri }
+            return [relinkedChild, ...relinkUris(relinkedChild)]
+        })
+    }
+
+    const renameRepository = async (id, alias) => {
+        const repository = repositories.find((r) => r.id === id)
+        if (!repository) return null
+
+        if (!repository.parentId) {
+            await persistRepositories(repositories.map((r) => (r.id === id ? { ...r, alias } : r)))
+            return repository
+        }
+
+        busyRef.current = true
+
+        try {
+            const parent = repositories.find((r) => r.id === repository.parentId)
+            if (!parent) return 'error'
+
+            const sanitized = sanitizeFilename(alias)
+            const newUri = renameDirectory(repository.uri, parent.uri, sanitized)
+            const renamedRepository = { ...repository, uri: newUri, alias: sanitized }
+            const relinked = relinkUris(renamedRepository)
+            const relinkedById = new Map(relinked.map((r) => [r.id, r]))
+
+            await persistRepositories(repositories.map((r) => {
+                if (r.id === id) return renamedRepository
+                return relinkedById.get(r.id) || r
+            }))
+
+            return renamedRepository
+        } catch (error) {
+            console.debug('error renaming repository folder', error)
+            return 'error'
+        } finally {
+            busyRef.current = false
+        }
     }
 
     const isAncestorOf = (ancestorId, repository) => {
@@ -177,8 +246,14 @@ export function useRepositories() {
         const repository = repositories.find((r) => r.id === id)
         if (!repository) return
 
-        const descendantIds = getDescendants(id).map((d) => d.id)
-        await removeRepositoriesFromList([id, ...descendantIds])
+        busyRef.current = true
+
+        try {
+            const descendantIds = getDescendants(id).map((d) => d.id)
+            await removeRepositoriesFromList([id, ...descendantIds])
+        } finally {
+            busyRef.current = false
+        }
     }
 
     const removeRepository = async (id) => {
@@ -189,16 +264,65 @@ export function useRepositories() {
             return 'active'
         }
 
-        deleteDirectory(repository.uri)
+        busyRef.current = true
 
-        const descendantIds = getDescendants(id).map((d) => d.id)
-        await removeRepositoriesFromList([id, ...descendantIds])
+        try {
+            deleteDirectory(repository.uri)
 
-        return repository
+            const descendantIds = getDescendants(id).map((d) => d.id)
+            await removeRepositoriesFromList([id, ...descendantIds])
+
+            return repository
+        } finally {
+            busyRef.current = false
+        }
     }
 
     const setActiveRepository = (id) => {
         persistActiveRepository(id)
+    }
+
+    const reconcileTree = (repository) => {
+        if (!directoryExists(repository.uri)) return []
+
+        let diskSubdirectories
+
+        try {
+            diskSubdirectories = listSubdirectories(repository.uri)
+        } catch {
+            diskSubdirectories = []
+        }
+
+        const trackedChildren = repositories.filter((r) => r.parentId === repository.id)
+        const diskUris = new Set(diskSubdirectories.map((d) => d.uri))
+        const trackedUris = new Set(trackedChildren.map((r) => r.uri))
+
+        const survivingDescendants = trackedChildren
+            .filter((child) => diskUris.has(child.uri))
+            .flatMap(reconcileTree)
+
+        const newDescendants = diskSubdirectories
+            .filter((d) => !trackedUris.has(d.uri))
+            .flatMap((d) => {
+                const entry = buildRepository(d, repository.id, false)
+                return [entry, ...discoverSubfolders(d, entry.id)]
+            })
+
+        return [repository, ...survivingDescendants, ...newDescendants]
+    }
+
+    const reconcileRepositories = async () => {
+        if (busyRef.current) return
+
+        const roots = repositories.filter((r) => !r.parentId)
+        const reconciled = roots.flatMap(reconcileTree)
+
+        await persistRepositories(reconciled)
+
+        if (activeRepositoryId && !reconciled.some((r) => r.id === activeRepositoryId)) {
+            const remainingRoots = reconciled.filter((r) => !r.parentId)
+            await persistActiveRepository(remainingRoots[0]?.id || '')
+        }
     }
 
     const buildSubtree = (parentId, depth = 0) => (
@@ -228,6 +352,7 @@ export function useRepositories() {
         removeRepository,
         setActiveRepository,
         ensureTemplatesFolder,
-        getDescendants
+        getDescendants,
+        reconcileRepositories
     }
 }

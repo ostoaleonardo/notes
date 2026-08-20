@@ -48,6 +48,30 @@ export function useFileStorage() {
         new Directory(directoryUri).delete()
     }
 
+    const directoryExists = (directoryUri) => new Directory(directoryUri).exists
+
+    // SAF content URIs reject Directory.rename() directly, so renaming a folder means
+    // recreating its whole tree under the new name, then deleting the original.
+    const copyDirectoryContents = (source, destination) => {
+        source.list().forEach((entry) => {
+            if (entry instanceof Directory) {
+                copyDirectoryContents(entry, destination.createDirectory(entry.name))
+            } else {
+                destination.createFile(entry.name, entry.type || null).write(entry.bytesSync())
+            }
+        })
+    }
+
+    const renameDirectory = (directoryUri, parentUri, newName) => {
+        const directory = new Directory(directoryUri)
+        const newDirectory = new Directory(parentUri).createDirectory(newName)
+
+        copyDirectoryContents(directory, newDirectory)
+        directory.delete()
+
+        return newDirectory.uri
+    }
+
     const writeNoteFile = (directoryUri, filename, content, mimeType = 'text/markdown') => {
         const existing = findFile(directoryUri, filename)
         if (existing) existing.delete()
@@ -103,6 +127,8 @@ export function useFileStorage() {
         deleteNoteFile,
         clearRepository,
         deleteDirectory,
+        directoryExists,
+        renameDirectory,
         readMetadata,
         writeMetadata,
         readJson,

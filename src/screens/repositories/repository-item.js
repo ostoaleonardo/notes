@@ -90,22 +90,27 @@ export function RepositoryItem({
                             {t('repositories.no_folders')}
                         </Typography>
                     ) : (
-                        descendants.map((descendant) => (
-                            <View
-                                key={descendant.id}
-                                style={{ paddingLeft: descendant.depth * 16 }}
-                            >
-                                <Typography variant='caption'>
-                                    {descendant.alias}
-                                </Typography>
-                                <Typography
-                                    variant='caption'
-                                    opacity={0.4}
+                        descendants.map((descendant) => {
+                            const descendantFolderCount = getDescendants(descendant.id)
+                                .filter((d) => d.depth === 0).length
+
+                            return (
+                                <View
+                                    key={descendant.id}
+                                    style={{ paddingLeft: descendant.depth * 16 }}
                                 >
-                                    {t('count.notes', { count: listMarkdownFiles(descendant.uri).length })}
-                                </Typography>
-                            </View>
-                        ))
+                                    <Typography variant='caption'>
+                                        {descendant.alias}
+                                    </Typography>
+                                    <Typography
+                                        variant='caption'
+                                        opacity={0.4}
+                                    >
+                                        {t('count.notes', { count: listMarkdownFiles(descendant.uri).length })}, {t('count.folders', { count: descendantFolderCount })}
+                                    </Typography>
+                                </View>
+                            )
+                        })
                     )}
                 </View>
             )}

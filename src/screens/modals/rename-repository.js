@@ -1,8 +1,9 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, ToastAndroid } from 'react-native'
 import { useEffect, useState } from 'react'
 import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { DialogModal, LargeInput } from '@/components'
+import { DialogModal } from '@/components/dialog'
+import { LargeInput } from '@/components/input'
 import { useHaptics, useRepositories } from '@/hooks'
 import { FEEDBACK_TYPES, FONTS } from '@/constants'
 
@@ -29,11 +30,17 @@ export function RenameRepository({ visible, onDismiss, repositoryId }) {
         setIsDisabled(isDisabled)
     }, [alias])
 
-    const onUpdate = () => {
+    const onUpdate = async () => {
         if (isDisabled) return
 
-        renameRepository(repositoryId, alias.trim())
+        const result = await renameRepository(repositoryId, alias.trim())
         onDismiss()
+
+        if (result === 'error') {
+            ToastAndroid.show(t('repositories.rename_failed'), ToastAndroid.SHORT)
+            return
+        }
+
         vibrate(FEEDBACK_TYPES.SUCCESS)
     }
 
