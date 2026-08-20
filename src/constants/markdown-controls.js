@@ -1,4 +1,5 @@
 import {
+    CalendarToday,
     Code,
     FormaQuote,
     FormatBold,
@@ -13,7 +14,9 @@ import {
     HorizontalRule,
     Link,
     Picture,
-    Table
+    Schedule,
+    Table,
+    Title
 } from '@/icons'
 
 export const MARKDOWN_CONTROLS = [
@@ -31,5 +34,9 @@ export const MARKDOWN_CONTROLS = [
     { action: 'hr', Icon: HorizontalRule },
     { action: 'image', Icon: Picture },
     { action: 'link', Icon: Link },
-    { action: 'table', Icon: Table }
+    { action: 'table', Icon: Table },
+    { divider: true, scope: 'template' },
+    { action: 'insert-date', Icon: CalendarToday, scope: 'template' },
+    { action: 'insert-time', Icon: Schedule, scope: 'template' },
+    { action: 'insert-title', Icon: Title, scope: 'template' }
 ]
