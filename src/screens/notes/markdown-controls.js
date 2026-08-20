@@ -2,14 +2,15 @@ import { memo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { FAB, IconButton, useTheme } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
-import { AnimatedView, Scroll } from '@/components'
+import { AnimatedView, Scroll, Separator } from '@/components'
 import { Edit, Eye } from '@/icons'
 import { MARKDOWN_CONTROLS } from '@/constants'
 
-export const MarkdownControls = memo(function MarkdownControls({ isEditing, onRunAction, onEditMarkdown }) {
+export const MarkdownControls = memo(function MarkdownControls({ isEditing, onRunAction, onEditMarkdown, scope }) {
     const { colors } = useTheme()
 
     const iconDarkProps = { color: colors.background }
+    const controls = MARKDOWN_CONTROLS.filter((control) => !control.scope || control.scope === scope)
 
     return (
         <View style={styles.container}>
@@ -27,13 +28,21 @@ export const MarkdownControls = memo(function MarkdownControls({ isEditing, onRu
                         overScrollMode='never'
                         keyboardShouldPersistTaps='always'
                         style={{ flex: 1 }}
+                        contentContainerStyle={styles.scrollContent}
                     >
-                        {MARKDOWN_CONTROLS.map(({ action, Icon }) => (
-                            <IconButton
-                                key={action}
-                                onPress={() => onRunAction(action)}
-                                icon={() => <Icon color={colors.onSurface} />}
-                            />
+                        {controls.map(({ action, Icon, divider }, index) => (
+                            divider ? (
+                                <Separator
+                                    key={index}
+                                    style={styles.divider}
+                                />
+                            ) : (
+                                <IconButton
+                                    key={action}
+                                    onPress={() => onRunAction(action)}
+                                    icon={() => <Icon color={colors.onSurface} />}
+                                />
+                            )
                         ))}
                     </Scroll>
                 </AnimatedView>
@@ -73,5 +82,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    scrollContent: {
+        alignItems: 'center'
+    },
+    divider: {
+        width: 1,
+        height: 24,
+        marginHorizontal: 4
     }
 })

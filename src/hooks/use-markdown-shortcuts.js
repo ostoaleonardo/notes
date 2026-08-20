@@ -155,6 +155,19 @@ export const useMarkdownShortcuts = (value, setValue, selection, setSelection) =
         setValue(newText)
     }
 
+    const onInsertText = (text) => {
+        const { start, end } = selection
+        const newValue = value.slice(0, start) + text + value.slice(end)
+        setValue(newValue)
+
+        const cursor = start + text.length
+        setSelection({ start: cursor, end: cursor })
+    }
+
+    const onInsertDate = () => onInsertText('{{date}}')
+    const onInsertTime = () => onInsertText('{{time}}')
+    const onInsertTitle = () => onInsertText('{{title}}')
+
     const onFormatH1 = () => onHeading(1)
     const onFormatH2 = () => onHeading(2)
     const onFormatH3 = () => onHeading(3)
@@ -178,6 +191,9 @@ export const useMarkdownShortcuts = (value, setValue, selection, setSelection) =
         onHorizontalRule,
         onImage,
         onLink,
-        onTable
+        onTable,
+        onInsertDate,
+        onInsertTime,
+        onInsertTitle
     }
 }

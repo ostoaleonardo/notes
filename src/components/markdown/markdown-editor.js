@@ -24,6 +24,9 @@ export function MarkdownEditor({ value, setValue, isEditing, markdownAction }) {
         onImage,
         onLink,
         onTable,
+        onInsertDate,
+        onInsertTime,
+        onInsertTitle,
         onSelectionChange
     } = useMarkdownShortcuts(
         value, setValue,
@@ -45,7 +48,10 @@ export function MarkdownEditor({ value, setValue, isEditing, markdownAction }) {
         hr: onHorizontalRule,
         image: () => onImage(payload),
         link: () => onLink(payload),
-        table: () => onTable(payload)
+        table: () => onTable(payload),
+        'insert-date': onInsertDate,
+        'insert-time': onInsertTime,
+        'insert-title': onInsertTitle
     }
 
     useEffect(() => {
