@@ -1,13 +1,11 @@
 import { StyleSheet, View } from 'react-native'
 import { Stack } from 'expo-router'
 import { ActivityIndicator, useTheme } from 'react-native-paper'
-import { useDevMenu, useImportMarkdown } from '@/hooks'
+import { useImportMarkdown } from '@/hooks'
 
 export default function AppLayout() {
     const { colors } = useTheme()
     const { importing } = useImportMarkdown()
-
-    useDevMenu()
 
     return (
         <>
