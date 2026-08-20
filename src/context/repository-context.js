@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useRef, useState } from 'react'
 import { useStorage } from '../hooks/use-storage'
 import { STORAGE_KEYS } from '@/constants'
 
@@ -8,6 +8,10 @@ export function RepositoryProvider({ children }) {
     const [repositories, setRepositories] = useState([])
     const [activeRepositoryId, setActiveRepositoryId] = useState('')
     const [loading, setLoading] = useState(true)
+    // Shared across every useRepositories() caller: a folder picker backgrounds and
+    // re-foregrounds the app, which would otherwise let the foreground reconciliation
+    // race an in-flight mutation and clobber it with a stale repositories snapshot.
+    const busyRef = useRef(false)
 
     const { getItem } = useStorage()
 
@@ -36,7 +40,8 @@ export function RepositoryProvider({ children }) {
                 setRepositories,
                 activeRepositoryId,
                 setActiveRepositoryId,
-                loading
+                loading,
+                busyRef
             }}
         >
             {children}

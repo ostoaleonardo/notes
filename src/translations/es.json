@@ -24,7 +24,8 @@
 		"no_folders": "Todavía no hay subcarpetas",
 		"delete_folder": "Eliminar carpeta",
 		"delete_folder_message": "Esto eliminará permanentemente esta carpeta, sus subcarpetas y todas sus notas del dispositivo.",
-		"cannot_delete_active": "Cambia a otro repositorio antes de eliminar este"
+		"cannot_delete_active": "Cambia a otro repositorio antes de eliminar este",
+		"rename_failed": "No se pudo renombrar esta carpeta"
 	},
 	"title": {
 		"notes": "Notas",
