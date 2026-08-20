@@ -1,16 +1,21 @@
 import { Image, Pressable, StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
+import { useTranslation } from 'react-i18next'
 import { SwipeableCard } from '../swipeable-card'
 import { ListItemPreview } from '../preview/list-item-preview'
 import { Typography } from '../../typography'
 import { MarkdownInput } from '../../markdown'
 import { RestoreAction } from '../actions/restore-action'
 import { getDimensions, getPreviewNote } from '@/utils'
+import { TRASH_RETENTION_DAYS } from '@/constants'
+
+const DAY_MS = 24 * 60 * 60 * 1000
 
 export function SwipeableTrash({ data, isOpen, onOpen, onDelete, onRestore }) {
+    const { t } = useTranslation()
     const { colors } = useTheme()
 
-    const { title, note, images, list } = data
+    const { title, note, images, list, trashedAt } = data
 
     const hasImages = images && images.length > 0
     const hasList = list && list.items && list.items.length > 0
@@ -18,6 +23,10 @@ export function SwipeableTrash({ data, isOpen, onOpen, onDelete, onRestore }) {
 
     const width = hasImages && getDimensions(images.length)
     const preview = getPreviewNote(note)
+
+    const daysRemaining = trashedAt
+        ? Math.max(0, TRASH_RETENTION_DAYS - Math.floor((Date.now() - trashedAt) / DAY_MS))
+        : null
 
     return (
         <SwipeableCard
@@ -50,6 +59,17 @@ export function SwipeableTrash({ data, isOpen, onOpen, onDelete, onRestore }) {
                                 </Typography>
                             )}
                         </View>
+
+                        {daysRemaining !== null && (
+                            <Typography
+                                opacity={0.5}
+                                variant='caption'
+                            >
+                                {daysRemaining > 0
+                                    ? t('trash.expires', { count: daysRemaining })
+                                    : t('trash.expires_today')}
+                            </Typography>
+                        )}
                     </View>
 
                     {note && (
