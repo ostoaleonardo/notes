@@ -14,10 +14,11 @@ export function useRepositories() {
     const { setItem } = useStorage()
     const { premium } = usePremium()
     const {
-        clearRepository,
         listMarkdownFiles,
+        listSubdirectories,
         writeNoteFile,
         createSubdirectory,
+        deleteDirectory,
         getOrCreateTemplatesFolder
     } = useFileStorage()
 
@@ -67,6 +68,13 @@ export function useRepositories() {
         }
     }
 
+    const discoverSubfolders = (directory, parentId) => (
+        listSubdirectories(directory.uri).flatMap((subdirectory) => {
+            const entry = buildRepository(subdirectory, parentId, false)
+            return [entry, ...discoverSubfolders(subdirectory, entry.id)]
+        })
+    )
+
     const addRepository = async () => {
         try {
             const directory = await Directory.pickDirectoryAsync()
@@ -76,8 +84,9 @@ export function useRepositories() {
             }
 
             const repository = buildRepository(directory)
+            const discovered = discoverSubfolders(directory, repository.id)
 
-            await persistRepositories([...repositories, repository])
+            await persistRepositories([...repositories, repository, ...discovered])
             if (!activeRepositoryId) await persistActiveRepository(repository.id)
 
             return repository
@@ -143,11 +152,23 @@ export function useRepositories() {
         )))
     }
 
-    const removeRepositoryFromList = async (id) => {
-        const remaining = repositories.filter((r) => r.id !== id)
+    const isAncestorOf = (ancestorId, repository) => {
+        let current = repository
+
+        while (current) {
+            if (current.id === ancestorId) return true
+            current = repositories.find((r) => r.id === current.parentId)
+        }
+
+        return false
+    }
+
+    const removeRepositoriesFromList = async (ids) => {
+        const idSet = new Set(ids)
+        const remaining = repositories.filter((r) => !idSet.has(r.id))
         await persistRepositories(remaining)
 
-        if (activeRepositoryId === id) {
+        if (idSet.has(activeRepositoryId)) {
             await persistActiveRepository(remaining[0]?.id || '')
         }
     }
@@ -156,15 +177,24 @@ export function useRepositories() {
         const repository = repositories.find((r) => r.id === id)
         if (!repository) return
 
-        await removeRepositoryFromList(id)
+        const descendantIds = getDescendants(id).map((d) => d.id)
+        await removeRepositoriesFromList([id, ...descendantIds])
     }
 
     const removeRepository = async (id) => {
         const repository = repositories.find((r) => r.id === id)
-        if (!repository) return
+        if (!repository) return null
 
-        clearRepository(repository.uri)
-        await removeRepositoryFromList(id)
+        if (activeRepository && isAncestorOf(id, activeRepository)) {
+            return 'active'
+        }
+
+        deleteDirectory(repository.uri)
+
+        const descendantIds = getDescendants(id).map((d) => d.id)
+        await removeRepositoriesFromList([id, ...descendantIds])
+
+        return repository
     }
 
     const setActiveRepository = (id) => {

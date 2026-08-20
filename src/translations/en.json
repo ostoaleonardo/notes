@@ -13,7 +13,7 @@
 		"forget": "Forget repository",
 		"forget_message": "This will remove the repository from the list without deleting anything from your device.",
 		"delete": "Delete repository",
-		"delete_message": "This will permanently delete this repository and all its notes from your device.",
+		"delete_message": "This will permanently delete this repository, its subfolders, and all their notes from your device.",
 		"choose_title": "Choose a repository",
 		"choose_message": "Select a folder on your device where your notes will be saved.",
 		"choose_button": "Choose folder",
@@ -23,7 +23,8 @@
 		"edit_folder": "Edit folder",
 		"no_folders": "No subfolders yet",
 		"delete_folder": "Delete folder",
-		"delete_folder_message": "This will permanently delete this folder and all its notes from your device."
+		"delete_folder_message": "This will permanently delete this folder, its subfolders, and all their notes from your device.",
+		"cannot_delete_active": "Switch to another repository before deleting this one"
 	},
 	"title": {
 		"notes": "Notes",
