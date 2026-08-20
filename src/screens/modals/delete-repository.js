@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, ToastAndroid } from 'react-native'
 import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { DialogModal, Typography } from '@/components'
@@ -12,9 +12,15 @@ export function DeleteRepository({ visible, onDismiss, repositoryId }) {
 
     const isFolder = !!repositories.find((repository) => repository.id === repositoryId)?.parentId
 
-    const onDelete = () => {
-        removeRepository(repositoryId)
+    const onDelete = async () => {
+        const result = await removeRepository(repositoryId)
         onDismiss()
+
+        if (result === 'active') {
+            ToastAndroid.show(t('repositories.cannot_delete_active'), ToastAndroid.SHORT)
+            return
+        }
+
         vibrate(FEEDBACK_TYPES.SUCCESS)
     }
 

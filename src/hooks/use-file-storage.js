@@ -38,6 +38,16 @@ export function useFileStorage() {
         ))
     )
 
+    const listSubdirectories = (directoryUri) => (
+        listEntries(directoryUri).filter((entry) => (
+            entry instanceof Directory && entry.name !== TEMPLATES_FOLDER_NAME
+        ))
+    )
+
+    const deleteDirectory = (directoryUri) => {
+        new Directory(directoryUri).delete()
+    }
+
     const writeNoteFile = (directoryUri, filename, content, mimeType = 'text/markdown') => {
         const existing = findFile(directoryUri, filename)
         if (existing) existing.delete()
@@ -87,10 +97,12 @@ export function useFileStorage() {
     return {
         findFile,
         listMarkdownFiles,
+        listSubdirectories,
         writeNoteFile,
         renameNoteFile,
         deleteNoteFile,
         clearRepository,
+        deleteDirectory,
         readMetadata,
         writeMetadata,
         readJson,
