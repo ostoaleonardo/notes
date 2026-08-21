@@ -1,27 +1,21 @@
 import { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
 import { Image } from 'expo-image'
 import { randomUUID } from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
+import { StyleSheet, View } from 'react-native'
 import { IconButton, Tooltip, useTheme } from 'react-native-paper'
 import { LargeInput, Pressable, Section } from '@/components'
-import { Camera, Picture } from '@/icons'
 import { useFileStorage, useIconProps, useRepositories } from '@/hooks'
+import { Camera, Picture } from '@/icons'
 import { openImagePicker } from '@/utils'
+import { IMAGE_EXTENSION_BY_MIME_TYPE } from '@/constants'
 
-const EXTENSION_BY_MIME_TYPE = {
-    'image/jpeg': 'jpg',
-    'image/png': 'png',
-    'image/webp': 'webp',
-    'image/gif': 'gif'
-}
-
-export function ImageModal({ onClose, onInsert }) {
+export function ImageMarkdown({ onClose, onInsert }) {
     const { t } = useTranslation()
+    const { copyImageFile } = useFileStorage()
+    const { activeRepository, ensureImagesFolder } = useRepositories()
     const { colors } = useTheme()
     const iconProps = useIconProps()
-    const { activeRepository, ensureImagesFolder } = useRepositories()
-    const { copyImageFile } = useFileStorage()
 
     const [title, setTitle] = useState('')
     const [url, setUrl] = useState('')
@@ -34,7 +28,7 @@ export function ImageModal({ onClose, onInsert }) {
         if (!asset) return
 
         const imagesUri = ensureImagesFolder(activeRepository)
-        const extension = EXTENSION_BY_MIME_TYPE[asset.mimeType] || 'jpg'
+        const extension = IMAGE_EXTENSION_BY_MIME_TYPE[asset.mimeType] || 'jpg'
         const file = await copyImageFile(asset.uri, imagesUri, `${randomUUID()}.${extension}`)
 
         setUrl(file.uri)
@@ -68,7 +62,7 @@ export function ImageModal({ onClose, onInsert }) {
 
             {hasPreview && (
                 <View style={styles.field}>
-                    <View style={[styles.preview, { backgroundColor: colors.surfaceVariant }]}>
+                    <View style={{ ...styles.preview, backgroundColor: colors.surfaceVariant }}>
                         <Image
                             source={url}
                             style={styles.image}

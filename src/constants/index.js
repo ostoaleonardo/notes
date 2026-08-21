@@ -11,7 +11,8 @@ export {
 
 export { MARKDOWN_CONTROLS } from './markdown-controls'
 export { getDefaultTemplates } from './default-templates'
-export { MAX_TABLE_ROWS, MAX_TABLE_COLS } from './table'
+export { MAX_TABLE_ROWS, MAX_TABLE_COLS, TABLE_CELL_SIZE, TABLE_CELL_GAP } from './table'
+export { IMAGE_EXTENSION_BY_MIME_TYPE } from './image'
 export { FEEDBACK_TYPES } from './feedback-types'
 export { STORAGE_KEYS } from './storage-keys'
 export { LINKS } from './links'

@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
+import { StyleSheet, View } from 'react-native'
 import { LargeInput, Pressable, Section } from '@/components'
 
-export function LinkModal({ onClose, onInsert }) {
+export function LinkMarkdown({ onClose, onInsert }) {
     const { t } = useTranslation()
 
     const [title, setTitle] = useState('')

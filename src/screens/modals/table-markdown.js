@@ -1,14 +1,11 @@
 import { useRef, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
+import { useTranslation } from 'react-i18next'
+import { StyleSheet, View } from 'react-native'
 import { Pressable, Typography } from '@/components'
-import { MAX_TABLE_COLS, MAX_TABLE_ROWS } from '@/constants'
+import { MAX_TABLE_COLS, MAX_TABLE_ROWS, TABLE_CELL_SIZE, TABLE_CELL_GAP } from '@/constants'
 
-const CELL_SIZE = 32
-const CELL_GAP = 6
-
-export function TableModal({ onClose, onInsert }) {
+export function TableMarkdown({ onClose, onInsert }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
 
@@ -26,7 +23,7 @@ export function TableModal({ onClose, onInsert }) {
     const updateSelection = (pageX, pageY) => {
         const relativeX = pageX - origin.current.x
         const relativeY = pageY - origin.current.y
-        const step = CELL_SIZE + CELL_GAP
+        const step = TABLE_CELL_SIZE + TABLE_CELL_GAP
 
         setSelected({
             cols: Math.min(MAX_TABLE_COLS, Math.max(1, Math.ceil(relativeX / step))),
@@ -64,14 +61,12 @@ export function TableModal({ onClose, onInsert }) {
                         {Array.from({ length: MAX_TABLE_COLS }, (_, col) => (
                             <View
                                 key={col}
-                                style={[
-                                    styles.cell,
-                                    {
-                                        backgroundColor: row < selected.rows && col < selected.cols
-                                            ? colors.primary
-                                            : colors.surfaceVariant
-                                    }
-                                ]}
+                                style={{
+                                    ...styles.cell,
+                                    backgroundColor: row < selected.rows && col < selected.cols
+                                        ? colors.primary
+                                        : colors.surfaceVariant
+                                }}
                             />
                         ))}
                     </View>
@@ -98,12 +93,12 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
-        gap: CELL_GAP,
-        marginTop: CELL_GAP
+        gap: TABLE_CELL_GAP,
+        marginTop: TABLE_CELL_GAP
     },
     cell: {
-        width: CELL_SIZE,
-        height: CELL_SIZE,
+        width: TABLE_CELL_SIZE,
+        height: TABLE_CELL_SIZE,
         borderRadius: 4
     }
 })
