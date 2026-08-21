@@ -2,6 +2,7 @@ import { memo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { FAB, IconButton, useTheme } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
+import { KeyboardStickyView } from 'react-native-keyboard-controller'
 import { AnimatedView, Scroll, Separator } from '@/components'
 import { Edit, Eye } from '@/icons'
 import { MARKDOWN_CONTROLS } from '@/constants'
@@ -13,7 +14,7 @@ export const MarkdownControls = memo(function MarkdownControls({ isEditing, onRu
     const controls = MARKDOWN_CONTROLS.filter((control) => !control.scope || control.scope === scope)
 
     return (
-        <View style={styles.container}>
+        <KeyboardStickyView style={styles.container}>
             {isEditing && (
                 <AnimatedView
                     entering={FadeInRight}
@@ -64,16 +65,18 @@ export const MarkdownControls = memo(function MarkdownControls({ isEditing, onRu
                     )}
                 />
             </AnimatedView>
-        </View>
+        </KeyboardStickyView>
     )
 })
 
 const styles = StyleSheet.create({
     container: {
         width: '100%',
+        position: 'absolute',
         flexDirection: 'row',
         justifyContent: 'flex-end',
         paddingHorizontal: 16,
+        bottom: 16,
         gap: 16
     },
     controls: {
