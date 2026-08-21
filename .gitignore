@@ -35,3 +35,6 @@ google-services.json
 # typescript
 *.tsbuildinfo
 android
+
+# prod data samples, never committed
+legacy/
