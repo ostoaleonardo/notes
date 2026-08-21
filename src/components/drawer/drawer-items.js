@@ -125,7 +125,7 @@ export function DrawerItems() {
                     <DrawerScreen
                         path={ROUTES.CATEGORIES}
                         label={t('drawer.categories')}
-                        indicator={t('count.categories', { count: categories?.length - 1 || 0 })}
+                        indicator={t('count.categories', { count: categories?.length || 0 })}
                     />
                     <DrawerScreen
                         path={ROUTES.TRASH}

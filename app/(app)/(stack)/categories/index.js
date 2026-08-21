@@ -1,5 +1,5 @@
 import { randomUUID } from 'expo-crypto'
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { AnimatedList, SmallInput, SquareButton, SwipeableCategory } from '@/components'
@@ -45,8 +45,6 @@ export default function Categories() {
         vibrate(FEEDBACK_TYPES.SUCCESS)
     }, [deleteCategory, vibrate])
 
-    const userCategories = useMemo(() => categories.slice(1), [categories])
-
     return (
         <View style={styles.container}>
             <View style={styles.top}>
@@ -65,7 +63,7 @@ export default function Categories() {
 
             <AnimatedList
                 gap={2}
-                data={userCategories}
+                data={categories}
                 keyExtractor={({ id }) => id}
                 emptyLabel={t('message.categories.empty')}
                 renderItem={({ item, index }) => (
@@ -76,7 +74,7 @@ export default function Categories() {
                         onOpen={() => setIsOpen(item.id)}
                         onDelete={() => onDelete(item.id)}
                         isFirst={index === 0}
-                        isLast={index === userCategories.length - 1}
+                        isLast={index === categories.length - 1}
                     />
                 )}
             />
