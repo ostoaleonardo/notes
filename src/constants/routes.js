@@ -1,5 +1,6 @@
 export const ROUTES = {
     HOME: '/home',
+    REPOSITORY_GATE: '/repository-gate',
     TAGS: '/tags',
     TRASH: '/trash',
     REPOSITORIES: '/repositories',

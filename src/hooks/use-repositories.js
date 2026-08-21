@@ -5,8 +5,8 @@ import { useStorage } from './use-storage'
 import { useFileStorage } from './use-file-storage'
 import { usePremium } from './use-premium'
 import { RepositoryContext } from '../context/repository-context'
-import { STORAGE_KEYS, getDefaultTemplates } from '@/constants'
-import { sanitizeFilename } from '@/utils'
+import { STORAGE_KEYS } from '@/constants'
+import { sanitizeFilename, getDefaultTemplates } from '@/utils'
 
 const FREE_SUBFOLDERS_PER_REPOSITORY = 1
 
@@ -31,6 +31,8 @@ export function useRepositories() {
         activeRepositoryId,
         setActiveRepositoryId,
         loading,
+        reconciled,
+        setReconciled,
         busyRef
     } = useContext(RepositoryContext)
 
@@ -351,6 +353,8 @@ export function useRepositories() {
         activeRepository,
         activeRepositoryId,
         loading,
+        reconciled,
+        setReconciled,
         addRepository,
         addSubfolder,
         renameRepository,
@@ -360,6 +364,7 @@ export function useRepositories() {
         ensureTemplatesFolder,
         ensureImagesFolder,
         getDescendants,
+        buildRepository,
         reconcileRepositories
     }
 }

@@ -12,6 +12,8 @@ export { useStorage } from './use-storage'
 export { useFiles } from './use-files'
 export { useFileStorage } from './use-file-storage'
 export { useRepositories } from './use-repositories'
+export { useRepositoryReconciliation } from './use-repository-reconciliation'
+export { useRepositoryData } from './use-repository-data'
 export { useTemplates } from './use-templates'
 
 // UI

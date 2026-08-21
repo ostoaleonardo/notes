@@ -1,21 +1,25 @@
-import { StyleSheet } from 'react-native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
+import { StyleSheet, View } from 'react-native'
+import { ActivityIndicator, useTheme } from 'react-native-paper'
 
-export function Wrapper({ children }) {
+export function LoadingOverlay() {
+    const { colors } = useTheme()
+
     return (
-        <KeyboardAwareScrollView
-            bottomOffset={32}
-            extraKeyboardSpace={32}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.container}
+        <View
+            style={{
+                ...styles.overlay,
+                backgroundColor: colors.background
+            }}
         >
-            {children}
-        </KeyboardAwareScrollView>
+            <ActivityIndicator size='large' />
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flexGrow: 1
+    overlay: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })

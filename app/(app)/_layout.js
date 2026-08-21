@@ -1,11 +1,31 @@
-import { StyleSheet, View } from 'react-native'
 import { Stack } from 'expo-router'
-import { ActivityIndicator, useTheme } from 'react-native-paper'
-import { useImportMarkdown } from '@/hooks'
+import { useTheme } from 'react-native-paper'
+import { LoadingOverlay } from '@/components/layout'
+import {
+    useNotes,
+    useDevMenu,
+    useRepositories,
+    useRepositoryReconciliation,
+    useImportMarkdown
+} from '@/hooks'
 
 export default function AppLayout() {
     const { colors } = useTheme()
     const { importing } = useImportMarkdown()
+    const { loading: notesLoading } = useNotes()
+
+    const {
+        loading,
+        reconciled,
+        activeRepository
+    } = useRepositories()
+
+    useRepositoryReconciliation()
+    useDevMenu()
+
+    if (loading || !reconciled) return null
+
+    const isReady = !!activeRepository && !notesLoading
 
     return (
         <>
@@ -18,22 +38,16 @@ export default function AppLayout() {
                     }
                 }}
             >
-                <Stack.Screen name='(stack)' />
+                <Stack.Protected guard={isReady}>
+                    <Stack.Screen name='(stack)' />
+                </Stack.Protected>
+
+                <Stack.Protected guard={!isReady}>
+                    <Stack.Screen name='repository-gate' />
+                </Stack.Protected>
             </Stack>
 
-            {importing && (
-                <View style={[styles.overlay, { backgroundColor: colors.background }]}>
-                    <ActivityIndicator size='large' />
-                </View>
-            )}
+            {importing && <LoadingOverlay />}
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    overlay: {
-        ...StyleSheet.absoluteFillObject,
-        alignItems: 'center',
-        justifyContent: 'center'
-    }
-})

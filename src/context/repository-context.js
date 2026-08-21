@@ -8,9 +8,7 @@ export function RepositoryProvider({ children }) {
     const [repositories, setRepositories] = useState([])
     const [activeRepositoryId, setActiveRepositoryId] = useState('')
     const [loading, setLoading] = useState(true)
-    // Shared across every useRepositories() caller: a folder picker backgrounds and
-    // re-foregrounds the app, which would otherwise let the foreground reconciliation
-    // race an in-flight mutation and clobber it with a stale repositories snapshot.
+    const [reconciled, setReconciled] = useState(false)
     const busyRef = useRef(false)
 
     const { getItem } = useStorage()
@@ -41,6 +39,8 @@ export function RepositoryProvider({ children }) {
                 activeRepositoryId,
                 setActiveRepositoryId,
                 loading,
+                reconciled,
+                setReconciled,
                 busyRef
             }}
         >

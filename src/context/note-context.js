@@ -1,9 +1,7 @@
 import { createContext, useEffect, useState } from 'react'
 import { AppState } from 'react-native'
-import { useStorage } from '../hooks/use-storage'
-import { useFileStorage } from '../hooks/use-file-storage'
+import { useRepositoryData } from '../hooks/use-repository-data'
 import { useRepositories } from '../hooks/use-repositories'
-import { loadRepositoryData } from './load-repository-data'
 import { DEFAULT_TAGS } from '@/constants'
 
 export const NoteContext = createContext()
@@ -15,9 +13,12 @@ export function NoteProvider({ children }) {
     const [paramId, setParamId] = useState('')
     const [loading, setLoading] = useState(true)
 
-    const storage = useStorage()
-    const fileStorage = useFileStorage()
-    const { activeRepository, activeRepositoryTree } = useRepositories()
+    const loadRepositoryData = useRepositoryData()
+
+    const {
+        activeRepository,
+        activeRepositoryTree
+    } = useRepositories()
 
     useEffect(() => {
         if (!activeRepository) return
@@ -27,7 +28,7 @@ export function NoteProvider({ children }) {
 
             try {
                 const rootRepository = activeRepositoryTree[0] || activeRepository
-                const { notes, tags, trash } = await loadRepositoryData(activeRepository, rootRepository, storage, fileStorage)
+                const { notes, tags, trash } = await loadRepositoryData(activeRepository, rootRepository)
 
                 setNotes(notes)
                 setTags(tags)
