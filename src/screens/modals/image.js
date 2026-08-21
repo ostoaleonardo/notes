@@ -1,18 +1,45 @@
 import { forwardRef, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Image } from 'expo-image'
+import { randomUUID } from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
-import { useTheme } from 'react-native-paper'
+import { IconButton, Tooltip, useTheme } from 'react-native-paper'
 import { LargeInput, ModalSheet, Pressable, Section } from '@/components'
+import { Camera, Picture } from '@/icons'
+import { useFileStorage, useIconProps, useRepositories } from '@/hooks'
+import { openImagePicker } from '@/utils'
+
+const EXTENSION_BY_MIME_TYPE = {
+    'image/jpeg': 'jpg',
+    'image/png': 'png',
+    'image/webp': 'webp',
+    'image/gif': 'gif'
+}
 
 export const ImageModal = forwardRef(({ onClose, onInsert }, ref) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
+    const iconProps = useIconProps()
+    const { activeRepository, ensureImagesFolder } = useRepositories()
+    const { copyImageFile } = useFileStorage()
 
     const [title, setTitle] = useState('')
     const [url, setUrl] = useState('')
+    const [isDeviceImage, setIsDeviceImage] = useState(false)
 
     const hasPreview = url.trim() !== ''
+
+    const onPickImage = async (type) => {
+        const asset = await openImagePicker(type)
+        if (!asset) return
+
+        const imagesUri = ensureImagesFolder(activeRepository)
+        const extension = EXTENSION_BY_MIME_TYPE[asset.mimeType] || 'jpg'
+        const file = await copyImageFile(asset.uri, imagesUri, `${randomUUID()}.${extension}`)
+
+        setUrl(file.uri)
+        setIsDeviceImage(true)
+    }
 
     const onAdd = () => {
         if (!url.trim()) return
@@ -21,6 +48,7 @@ export const ImageModal = forwardRef(({ onClose, onInsert }, ref) => {
 
         setTitle('')
         setUrl('')
+        setIsDeviceImage(false)
         onClose()
     }
 
@@ -38,6 +66,7 @@ export const ImageModal = forwardRef(({ onClose, onInsert }, ref) => {
                 <LargeInput
                     value={url}
                     onChangeText={setUrl}
+                    editable={!isDeviceImage}
                     placeholder='https://example.com/image.png'
                 />
             </Section>
@@ -67,16 +96,34 @@ export const ImageModal = forwardRef(({ onClose, onInsert }, ref) => {
 
             <View style={styles.buttons}>
                 <Pressable
+                    mode='text'
+                    onPress={onClose}
+                >
+                    {t('button.cancel')}
+                </Pressable>
+
+                <View style={styles.pickerRow}>
+                    <Tooltip title={t('markdown.image_camera')}>
+                        <IconButton
+                            mode='outlined'
+                            onPress={() => onPickImage('camera')}
+                            icon={() => <Camera {...iconProps} />}
+                        />
+                    </Tooltip>
+                    <Tooltip title={t('markdown.image_gallery')}>
+                        <IconButton
+                            mode='outlined'
+                            onPress={() => onPickImage('gallery')}
+                            icon={() => <Picture {...iconProps} />}
+                        />
+                    </Tooltip>
+                </View>
+
+                <Pressable
                     mode='contained'
                     onPress={onAdd}
                 >
                     {t('button.insert')}
-                </Pressable>
-                <Pressable
-                    mode='outlined'
-                    onPress={onClose}
-                >
-                    {t('button.cancel')}
                 </Pressable>
             </View>
         </ModalSheet>
@@ -92,6 +139,9 @@ const styles = StyleSheet.create({
     field: {
         paddingHorizontal: 16
     },
+    pickerRow: {
+        flexDirection: 'row'
+    },
     preview: {
         width: '100%',
         height: 180,
@@ -104,7 +154,9 @@ const styles = StyleSheet.create({
     },
     buttons: {
         width: '100%',
-        gap: 8,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
         paddingHorizontal: 16
     }
 })

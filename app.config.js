@@ -47,7 +47,7 @@ export default {
     'expo-status-bar',
     'expo-localization',
     'expo-local-authentication',
-    'react-native-enriched-markdown',
+    'expo-image-picker',
     './plugins/with-markdown-intent',
     [
       'expo-build-properties', {

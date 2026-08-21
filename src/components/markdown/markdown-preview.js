@@ -97,9 +97,8 @@ export function MarkdownPreview({ value, size = 13 }) {
             ...paragraphStyles,
         },
         image: {
-            marginTop: 16,
-            marginBottom: 16,
-            borderRadius: 4
+            resizeMode: 'contain',
+            borderRadius: 8
         },
         thematicBreak: {
             color: tertiary + TRANSPARENT[30],
