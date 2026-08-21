@@ -1,8 +1,13 @@
-import { forwardRef } from 'react'
 import { useTheme } from 'react-native-paper'
 import { BottomSheetModal, BottomSheetView } from '@expo/ui/community/bottom-sheet'
 
-export const ModalSheet = forwardRef(({ children, onClose, contentContainerStyle, scrollable = false, ...prop }, ref) => {
+export const ModalSheet = ({
+    ref,
+    onClose,
+    children,
+    contentContainerStyle,
+    ...prop
+}) => {
     const { colors } = useTheme()
 
     return (
@@ -20,4 +25,4 @@ export const ModalSheet = forwardRef(({ children, onClose, contentContainerStyle
             </BottomSheetView>
         </BottomSheetModal>
     )
-})
+}
