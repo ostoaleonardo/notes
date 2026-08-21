@@ -6,7 +6,7 @@ import { useFocusEffect, useNavigation } from 'expo-router'
 import { ModalSheet } from '@/components'
 import { GalleryView } from '@/screens/gallery'
 import { MarkdownControls, TemplateCarousel } from '@/screens/notes'
-import { AddPassword, Categories, ImageModal, LinkModal, TableModal } from '@/screens/modals'
+import { AddPassword, Categories, ImageMarkdown, LinkMarkdown, TableMarkdown } from '@/screens/modals'
 import { Header, NoteEditor } from '@/screens/editor'
 import { useBottomSheet, useMarkdownAction, useNoteAutosave, useNotes, useTemplates, useUtils } from '@/hooks'
 import { getDate, getUniqueTitle } from '@/utils'
@@ -212,7 +212,7 @@ export default function Note() {
                 ref={linkBottomRef}
                 onClose={onCloseLink}
             >
-                <LinkModal
+                <LinkMarkdown
                     onClose={onCloseLink}
                     onInsert={(payload) => markdownAction.run('link', payload)}
                 />
@@ -224,7 +224,7 @@ export default function Note() {
                 onClose={onCloseTable}
                 enablePanDownToClose={false}
             >
-                <TableModal
+                <TableMarkdown
                     onClose={onCloseTable}
                     onInsert={(payload) => markdownAction.run('table', payload)}
                 />
@@ -235,7 +235,7 @@ export default function Note() {
                 ref={imageBottomRef}
                 onClose={onCloseImage}
             >
-                <ImageModal
+                <ImageMarkdown
                     onClose={onCloseImage}
                     onInsert={(payload) => markdownAction.run('image', payload)}
                 />
