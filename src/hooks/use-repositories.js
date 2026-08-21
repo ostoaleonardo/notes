@@ -21,7 +21,8 @@ export function useRepositories() {
         deleteDirectory,
         directoryExists,
         renameDirectory,
-        getOrCreateTemplatesFolder
+        getOrCreateTemplatesFolder,
+        getOrCreateImagesFolder
     } = useFileStorage()
 
     const {
@@ -163,6 +164,11 @@ export function useRepositories() {
         } finally {
             busyRef.current = false
         }
+    }
+
+    const ensureImagesFolder = (repository) => {
+        const root = getRootRepository(repository)
+        return getOrCreateImagesFolder(root.uri).uri
     }
 
     const relinkUris = (repository) => {
@@ -352,6 +358,7 @@ export function useRepositories() {
         removeRepository,
         setActiveRepository,
         ensureTemplatesFolder,
+        ensureImagesFolder,
         getDescendants,
         reconcileRepositories
     }

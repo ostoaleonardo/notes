@@ -4,7 +4,9 @@ const METADATA_FILENAME = '.notes-meta.json'
 export const CATEGORIES_FILENAME = '.categories.json'
 export const TRASH_FILENAME = '.trash.json'
 export const TEMPLATES_FOLDER_NAME = 'templates'
+export const IMAGES_FOLDER_NAME = 'images'
 
+const RESERVED_FOLDER_NAMES = [TEMPLATES_FOLDER_NAME, IMAGES_FOLDER_NAME]
 const SIDECAR_FILENAMES = [METADATA_FILENAME, CATEGORIES_FILENAME, TRASH_FILENAME]
 
 export function useFileStorage() {
@@ -30,6 +32,10 @@ export function useFileStorage() {
         findDirectory(directoryUri, TEMPLATES_FOLDER_NAME) || createSubdirectory(directoryUri, TEMPLATES_FOLDER_NAME)
     )
 
+    const getOrCreateImagesFolder = (directoryUri) => (
+        findDirectory(directoryUri, IMAGES_FOLDER_NAME) || createSubdirectory(directoryUri, IMAGES_FOLDER_NAME)
+    )
+
     const listMarkdownFiles = (directoryUri) => (
         listEntries(directoryUri).filter((entry) => (
             entry instanceof File &&
@@ -40,7 +46,7 @@ export function useFileStorage() {
 
     const listSubdirectories = (directoryUri) => (
         listEntries(directoryUri).filter((entry) => (
-            entry instanceof Directory && entry.name !== TEMPLATES_FOLDER_NAME
+            entry instanceof Directory && !RESERVED_FOLDER_NAMES.includes(entry.name)
         ))
     )
 
@@ -70,6 +76,14 @@ export function useFileStorage() {
         directory.delete()
 
         return newDirectory.uri
+    }
+
+    const copyImageFile = async (sourceUri, directoryUri, filename) => {
+        const source = new File(sourceUri)
+        const bytes = await source.bytes()
+        const file = new Directory(directoryUri).createFile(filename, source.type || 'image/jpeg')
+        file.write(bytes)
+        return file
     }
 
     const writeNoteFile = (directoryUri, filename, content, mimeType = 'text/markdown') => {
@@ -134,6 +148,8 @@ export function useFileStorage() {
         readJson,
         writeJson,
         createSubdirectory,
-        getOrCreateTemplatesFolder
+        getOrCreateTemplatesFolder,
+        getOrCreateImagesFolder,
+        copyImageFile
     }
 }

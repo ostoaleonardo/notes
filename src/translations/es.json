@@ -128,7 +128,9 @@
 		"link_url": "URL",
 		"image_alt": "Texto alternativo",
 		"image_alt_placeholder": "Descripción de la imagen",
-		"image_url": "URL"
+		"image_url": "URL",
+		"image_camera": "Tomar foto",
+		"image_gallery": "Elegir de la galería"
 	},
 	"view": {
 		"grid": "Vista de cuadrícula",

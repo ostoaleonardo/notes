@@ -143,7 +143,9 @@
 		"link_url": "URL",
 		"image_alt": "Alt text",
 		"image_alt_placeholder": "Image description",
-		"image_url": "URL"
+		"image_url": "URL",
+		"image_camera": "Take photo",
+		"image_gallery": "Choose from gallery"
 	},
 	"view": {
 		"grid": "Grid view",
