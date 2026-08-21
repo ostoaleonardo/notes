@@ -3,12 +3,12 @@
 	"notes": {
 		"delete": "حذف الملاحظة"
 	},
-	"categories": {
-		"update": "تحديث الفئة"
+	"tags": {
+		"update": "تحديث الوسم"
 	},
 	"title": {
 		"notes": "ملاحظات",
-		"categories": "فئات",
+		"tags": "الوسوم",
 		"unlock": "فك القُفْل",
 		"settings": "الإعدادات",
 		"theme": "ألوان النسق",
@@ -67,8 +67,8 @@
 		"notes": {
 			"empty": "لا توجد ملاحظات"
 		},
-		"categories": {
-			"empty": "لا توجد فئات"
+		"tags": {
+			"empty": "لا توجد وسوم"
 		},
 		"password": {
 			"wrong": "كلمة المرور خاطئة",
@@ -79,10 +79,10 @@
 	"placeholder": {
 		"title": "عنوانك...",
 		"note": "اكتب ملاحظتك هنا...",
-		"category": "فئة جديدة..."
+		"tag": "وسم جديد..."
 	},
 	"drawer": {
 		"notes": "ملاحظات",
-		"categories": "فئات"
+		"tags": "الوسوم"
 	}
 }

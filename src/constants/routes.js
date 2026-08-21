@@ -1,6 +1,6 @@
 export const ROUTES = {
     HOME: '/home',
-    CATEGORIES: '/categories',
+    TAGS: '/tags',
     TRASH: '/trash',
     REPOSITORIES: '/repositories',
     TEMPLATES: '/templates',

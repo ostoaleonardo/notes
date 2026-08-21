@@ -4,9 +4,9 @@ import { registerDevMenuItems } from 'expo-dev-menu'
 import { randomUUID } from 'expo-crypto'
 import { Directory } from 'expo-file-system'
 import { useStorage } from './use-storage'
-import { CATEGORIES_FILENAME, useFileStorage } from './use-file-storage'
+import { TAGS_FILENAME, useFileStorage } from './use-file-storage'
 import { usePremium } from './use-premium'
-import { DEFAULT_CATEGORIES, STORAGE_KEYS, getDefaultTemplates } from '@/constants'
+import { DEFAULT_TAGS, STORAGE_KEYS, getDefaultTemplates } from '@/constants'
 import { getDate } from '@/utils'
 
 const TREE_BRANCHING = 2
@@ -35,15 +35,26 @@ export function useDevMenu() {
         return repositories.find((repository) => repository.id === activeRepositoryId)
     }
 
+    const getActiveRootRepository = async () => {
+        const repositories = await getRepositories()
+        let repository = await getActiveRepository()
+
+        while (repository?.parentId) {
+            repository = repositories.find((r) => r.id === repository.parentId)
+        }
+
+        return repository
+    }
+
     const deleteAll = async () => {
         const repository = await getActiveRepository()
         if (repository) clearRepository(repository.uri)
         DevSettings.reload()
     }
 
-    const deleteAllCategories = async () => {
-        const repository = await getActiveRepository()
-        if (repository) writeJson(repository.uri, CATEGORIES_FILENAME, DEFAULT_CATEGORIES)
+    const deleteAllTags = async () => {
+        const repository = await getActiveRootRepository()
+        if (repository) writeJson(repository.uri, TAGS_FILENAME, DEFAULT_TAGS)
         DevSettings.reload()
     }
 
@@ -55,7 +66,7 @@ export function useDevMenu() {
             id: randomUUID(),
             title: `Legacy note ${n}`,
             note: `Legacy note content ${n}`,
-            categories: [],
+            tags: [],
             images: [],
             password: '',
             biometrics: false,
@@ -66,8 +77,8 @@ export function useDevMenu() {
         DevSettings.reload()
     }
 
-    const addLegacyCategories = async () => {
-        const legacy = await getItem(STORAGE_KEYS.CATEGORIES)
+    const addLegacyTags = async () => {
+        const legacy = await getItem(STORAGE_KEYS.TAGS)
         const existing = legacy ? JSON.parse(legacy) : []
 
         const seeded = ['Legacy work', 'Legacy personal', 'Legacy ideas'].map((name) => ({
@@ -75,7 +86,7 @@ export function useDevMenu() {
             name
         }))
 
-        await setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify([...existing, ...seeded]))
+        await setItem(STORAGE_KEYS.TAGS, JSON.stringify([...existing, ...seeded]))
         DevSettings.reload()
     }
 
@@ -151,8 +162,8 @@ export function useDevMenu() {
                 shouldCollapse: true
             },
             {
-                name: 'Delete all categories',
-                callback: deleteAllCategories,
+                name: 'Delete all tags',
+                callback: deleteAllTags,
                 shouldCollapse: true
             },
             {
@@ -161,8 +172,8 @@ export function useDevMenu() {
                 shouldCollapse: true
             },
             {
-                name: 'Add legacy categories',
-                callback: addLegacyCategories,
+                name: 'Add legacy tags',
+                callback: addLegacyTags,
                 shouldCollapse: true
             },
             {

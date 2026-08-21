@@ -31,7 +31,7 @@ export function useNotes() {
 
     const toMetadataEntry = (note, filename) => ({
         filename,
-        categories: note.categories,
+        tags: note.tags,
         password: note.password,
         biometrics: note.biometrics,
         createdAt: note.createdAt,
@@ -113,7 +113,7 @@ export function useNotes() {
             id: randomUUID(),
             title: `Legacy note ${n}`,
             note: `Legacy note content ${n}`,
-            categories: [],
+            tags: [],
             images: [],
             password: '',
             biometrics: false,

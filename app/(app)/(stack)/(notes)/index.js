@@ -6,7 +6,7 @@ import { useFocusEffect, useNavigation } from 'expo-router'
 import { ModalSheet } from '@/components'
 import { GalleryView } from '@/screens/gallery'
 import { MarkdownControls, TemplateCarousel } from '@/screens/notes'
-import { AddPassword, Categories, ImageMarkdown, LinkMarkdown, TableMarkdown } from '@/screens/modals'
+import { AddPassword, Tags, ImageMarkdown, LinkMarkdown, TableMarkdown } from '@/screens/modals'
 import { Header, NoteEditor } from '@/screens/editor'
 import { useBottomSheet, useMarkdownAction, useNoteAutosave, useNotes, useTemplates, useUtils } from '@/hooks'
 import { getDate, getUniqueTitle } from '@/utils'
@@ -26,7 +26,7 @@ export default function Note() {
     const [id, setId] = useState('')
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
-    const [categories, setCategories] = useState(filter ? Array.from(filter) : [])
+    const [tags, setTags] = useState(filter ? Array.from(filter) : [])
     const [images, setImages] = useState([])
 
     const [createdAt, setCreatedAt] = useState('')
@@ -83,9 +83,9 @@ export default function Note() {
     }, [onOpenLink, onOpenTable, onOpenImage])
 
     const {
-        ref: categoriesBottomRef,
-        onOpen: onOpenCategories,
-        onClose: onCloseCategories
+        ref: tagsBottomRef,
+        onOpen: onOpenTags,
+        onClose: onCloseTags
     } = useBottomSheet()
 
     const {
@@ -133,7 +133,7 @@ export default function Note() {
     )
 
     useNoteAutosave({
-        id, title, note, categories, images, password, biometrics, createdAt,
+        id, title, note, tags, images, password, biometrics, createdAt,
         skip: firstRender.current || (title === autoTitleRef.current && !note && !images.length),
         onSave: (newData) => {
             if (!isSaved.current) {
@@ -160,9 +160,9 @@ export default function Note() {
             <Header
                 title={title}
                 setTitle={setTitle}
-                categories={categories}
-                setCategories={setCategories}
-                onOpenCategories={onOpenCategories}
+                tags={tags}
+                setTags={setTags}
+                onOpenTags={onOpenTags}
             />
 
             <NoteEditor
@@ -182,13 +182,13 @@ export default function Note() {
             />
 
             <ModalSheet
-                ref={categoriesBottomRef}
-                onClose={onCloseCategories}
+                ref={tagsBottomRef}
+                onClose={onCloseTags}
                 snapPoints={['50%', '95%']}
             >
-                <Categories
-                    categories={categories}
-                    setCategories={setCategories}
+                <Tags
+                    tags={tags}
+                    setTags={setTags}
                 />
             </ModalSheet>
 

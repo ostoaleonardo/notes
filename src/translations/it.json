@@ -3,12 +3,12 @@
 	"notes": {
 		"delete": "Elimina nota"
 	},
-	"categories": {
-		"update": "Aggiorna categoria"
+	"tags": {
+		"update": "Aggiorna tag"
 	},
 	"title": {
 		"notes": "Note",
-		"categories": "Categorie",
+		"tags": "Tag",
 		"unlock": "Sblocca",
 		"settings": "Impostazioni",
 		"theme": "Tema colori",
@@ -67,8 +67,8 @@
 		"notes": {
 			"empty": "Non hai ancora nessuna nota"
 		},
-		"categories": {
-			"empty": "Non hai ancora nessuna categoria"
+		"tags": {
+			"empty": "Non hai ancora nessun tag"
 		},
 		"password": {
 			"wrong": "Password sbagliata",
@@ -79,10 +79,10 @@
 	"placeholder": {
 		"title": "Il tuo titolo...",
 		"note": "Scrivi la tua nota qui...",
-		"category": "Nuova categoria..."
+		"tag": "Nuovo tag..."
 	},
 	"drawer": {
 		"notes": "Note",
-		"categories": "Categorie"
+		"tags": "Tag"
 	}
 }

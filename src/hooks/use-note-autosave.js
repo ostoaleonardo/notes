@@ -4,7 +4,7 @@ export function useNoteAutosave({
     id,
     title,
     note,
-    categories,
+    tags,
     images,
     password,
     biometrics,
@@ -20,7 +20,7 @@ export function useNoteAutosave({
                 id,
                 title: title.trim(),
                 note: note.trim(),
-                categories,
+                tags,
                 images,
                 password,
                 biometrics,
@@ -29,5 +29,5 @@ export function useNoteAutosave({
         }, 500)
 
         return () => clearTimeout(timer)
-    }, [id, title, note, categories, images, password, biometrics, createdAt, skip])
+    }, [id, title, note, tags, images, password, biometrics, createdAt, skip])
 }

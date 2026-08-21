@@ -3,12 +3,12 @@
 	"notes": {
 		"delete": "Notitie verwijderen"
 	},
-	"categories": {
-		"update": "Categorie bewerken"
+	"tags": {
+		"update": "Label bewerken"
 	},
 	"title": {
 		"notes": "Notities",
-		"categories": "Categorieën",
+		"tags": "Labels",
 		"unlock": "Ontgrendel",
 		"settings": "Instellingen",
 		"theme": "Thema",
@@ -80,8 +80,8 @@
 		"notes": {
 			"empty": "Je hebt nog geen notities"
 		},
-		"categories": {
-			"empty": "Je hebt nog geen categorieën"
+		"tags": {
+			"empty": "Je hebt nog geen labels"
 		},
 		"password": {
 			"wrong": "Wachtwoord onjuist",
@@ -92,10 +92,10 @@
 	"placeholder": {
 		"title": "Je titel...",
 		"note": "Typ uw notitie hier...",
-		"category": "Nieuwe categorie..."
+		"tag": "Nieuw label..."
 	},
 	"drawer": {
 		"notes": "Notities",
-		"categories": "Categorieën"
+		"tags": "Labels"
 	}
 }

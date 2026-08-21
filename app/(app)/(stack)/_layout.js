@@ -67,9 +67,9 @@ export default function StackLayout() {
                 }}
             />
             <Stack.Screen
-                name='categories/index'
+                name='tags/index'
                 options={{
-                    title: t('title.categories')
+                    title: t('title.tags')
                 }}
             />
             <Stack.Screen

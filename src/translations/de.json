@@ -3,12 +3,12 @@
 	"notes": {
 		"delete": "Notiz beseitigen"
 	},
-	"categories": {
-		"update": "Kategorie aktualisieren"
+	"tags": {
+		"update": "Tag aktualisieren"
 	},
 	"title": {
 		"notes": "Notizen",
-		"categories": "Kategorien",
+		"tags": "Tags",
 		"unlock": "Entsperren",
 		"settings": "Einstellungen",
 		"theme": "Farbthema",
@@ -81,8 +81,8 @@
 		"notes": {
 			"empty": "Du hast noch keine Notizen"
 		},
-		"categories": {
-			"empty": "Du hast noch keine Kategorien"
+		"tags": {
+			"empty": "Du hast noch keine Tags"
 		},
 		"password": {
 			"wrong": "Falsches Passwort",
@@ -93,10 +93,10 @@
 	"placeholder": {
 		"title": "Dein Titel...",
 		"note": "Schreib deine Notiz hier...",
-		"category": "Neue Kategorie..."
+		"tag": "Neuer Tag..."
 	},
 	"drawer": {
 		"notes": "Notizen",
-		"categories": "Kategorien"
+		"tags": "Tags"
 	}
 }

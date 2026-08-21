@@ -3,12 +3,12 @@
 	"notes": {
 		"delete": "メモを削除"
 	},
-	"categories": {
-		"update": "カテゴリーを更新"
+	"tags": {
+		"update": "タグを更新"
 	},
 	"title": {
 		"notes": "メモ",
-		"categories": "カテゴリー",
+		"tags": "タグ",
 		"unlock": "ロック解除",
 		"settings": "設定",
 		"theme": "カラーテーマ",
@@ -81,8 +81,8 @@
 		"notes": {
 			"empty": "まだメモはありません"
 		},
-		"categories": {
-			"empty": "まだカテゴリーはありません"
+		"tags": {
+			"empty": "まだタグはありません"
 		},
 		"password": {
 			"wrong": "パスワードが間違っています",
@@ -93,10 +93,10 @@
 	"placeholder": {
 		"title": "タイトル...",
 		"note": "ここにメモを入力してください...",
-		"category": "新しいカテゴリー..."
+		"tag": "新しいタグ..."
 	},
 	"drawer": {
 		"notes": "メモ",
-		"categories": "カテゴリー"
+		"tags": "タグ"
 	}
 }

@@ -17,7 +17,7 @@
 ## <samp>Features<samp>
 
 -   <samp>Add notes with images.<samp>
--   <samp>Organized with categories.<samp>
+-   <samp>Organized with tags.<samp>
 -   <samp>Password and fingerprint security.<samp>
 -   <samp>Haptic feedback.<samp>
 -   <samp>Minimalist and easy to use UI.<samp>

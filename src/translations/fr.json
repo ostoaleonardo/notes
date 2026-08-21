@@ -3,12 +3,12 @@
 	"notes": {
 		"delete": "Supprimer la note"
 	},
-	"categories": {
-		"update": "Catégorie de mise à jour"
+	"tags": {
+		"update": "Modifier l'étiquette"
 	},
 	"title": {
 		"notes": "Notes",
-		"categories": "Catégories",
+		"tags": "Étiquettes",
 		"unlock": "Déverrouiller",
 		"settings": "Paramètres",
 		"theme": "Thème",
@@ -67,8 +67,8 @@
 		"notes": {
 			"empty": "Vous n'avez pas encore de notes"
 		},
-		"categories": {
-			"empty": "Vous n'avez pas encore de catégories"
+		"tags": {
+			"empty": "Vous n'avez pas encore d'étiquettes"
 		},
 		"password": {
 			"wrong": "Mauvais mot de passe",
@@ -79,10 +79,10 @@
 	"placeholder": {
 		"title": "Votre titre...",
 		"note": "Tapez votre note ici...",
-		"category": "Nouvelle catégorie..."
+		"tag": "Nouvelle étiquette..."
 	},
 	"drawer": {
 		"notes": "Notes",
-		"categories": "Catégories"
+		"tags": "Étiquettes"
 	}
 }

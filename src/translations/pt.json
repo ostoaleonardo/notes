@@ -3,12 +3,12 @@
 	"notes": {
 		"delete": "Excluir nota"
 	},
-	"categories": {
-		"update": "Atualizar categorias"
+	"tags": {
+		"update": "Atualizar etiqueta"
 	},
 	"title": {
 		"notes": "Notas",
-		"categories": "Categorias",
+		"tags": "Etiquetas",
 		"unlock": "Desbloquear",
 		"settings": "Configurações",
 		"theme": "Cor do tema",
@@ -67,8 +67,8 @@
 		"notes": {
 			"empty": "Nenhuma nota adicionada"
 		},
-		"categories": {
-			"empty": "Nenhuma categoria adicionada"
+		"tags": {
+			"empty": "Nenhuma etiqueta adicionada"
 		},
 		"password": {
 			"wrong": "Senha errada",
@@ -79,10 +79,10 @@
 	"placeholder": {
 		"title": "Seu título...",
 		"note": "Digite a sua nota aqui...",
-		"category": "Nova categoria..."
+		"tag": "Nova etiqueta..."
 	},
 	"drawer": {
 		"notes": "Notas",
-		"categories": "Categorias"
+		"tags": "Etiquetas"
 	}
 }

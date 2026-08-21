@@ -6,7 +6,7 @@ import { ModalSheet } from '@/components'
 import { Wrapper } from '@/components/layout'
 import { GalleryView } from '@/screens/gallery'
 import { MarkdownControls, TemplateCarousel } from '@/screens/notes'
-import { AddPassword, Categories, ImageMarkdown, TableMarkdown, UpdatePassword } from '@/screens/modals'
+import { AddPassword, Tags, ImageMarkdown, TableMarkdown, UpdatePassword } from '@/screens/modals'
 import { Header, NoteEditor } from '@/screens/editor'
 import { useBottomSheet, useMarkdownAction, useNoteAutosave, useNotes, useTemplates } from '@/hooks'
 import { getDate } from '@/utils'
@@ -22,7 +22,7 @@ export default function EditNote() {
 
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
-    const [categories, setCategories] = useState([])
+    const [tags, setTags] = useState([])
     const [images, setImages] = useState([])
 
     const [createdAt, setCreatedAt] = useState('')
@@ -65,9 +65,9 @@ export default function EditNote() {
     }, [onOpenTable, onOpenImage])
 
     const {
-        ref: categoriesBottomRef,
-        onOpen: onOpenCategories,
-        onClose: onCloseCategories
+        ref: tagsBottomRef,
+        onOpen: onOpenTags,
+        onClose: onCloseTags
     } = useBottomSheet()
 
     const {
@@ -113,7 +113,7 @@ export default function EditNote() {
         const {
             title = '',
             note: content = '',
-            categories = [],
+            tags = [],
             images = [],
             createdAt = Date.now(),
             updatedAt = '',
@@ -123,7 +123,7 @@ export default function EditNote() {
 
         setTitle(title || t('notes.untitled'))
         setNote(content)
-        setCategories(categories)
+        setTags(tags)
         setImages(images)
         setCreatedAt(createdAt)
         setUpdatedAt(updatedAt)
@@ -136,7 +136,7 @@ export default function EditNote() {
     }, [slug])
 
     useNoteAutosave({
-        id: slug, title, note, categories, images, password, biometrics, createdAt,
+        id: slug, title, note, tags, images, password, biometrics, createdAt,
         skip: loading.current,
         onSave: (newData) => updateNote({
             ...newData,
@@ -152,9 +152,9 @@ export default function EditNote() {
                     setTitle={setTitle}
                     createdAt={createdAt}
                     updatedAt={updatedAt}
-                    categories={categories}
-                    setCategories={setCategories}
-                    onOpenCategories={onOpenCategories}
+                    tags={tags}
+                    setTags={setTags}
+                    onOpenTags={onOpenTags}
                 />
 
                 <NoteEditor
@@ -175,13 +175,13 @@ export default function EditNote() {
             />
 
             <ModalSheet
-                ref={categoriesBottomRef}
-                onClose={onCloseCategories}
+                ref={tagsBottomRef}
+                onClose={onCloseTags}
                 snapPoints={['50%', '95%']}
             >
-                <Categories
-                    categories={categories}
-                    setCategories={setCategories}
+                <Tags
+                    tags={tags}
+                    setTags={setTags}
                 />
             </ModalSheet>
 

@@ -4,8 +4,8 @@
 		"delete": "Delete note",
 		"untitled": "Untitled"
 	},
-	"categories": {
-		"update": "Update category"
+	"tags": {
+		"update": "Update tag"
 	},
 	"repositories": {
 		"open": "Open",
@@ -30,7 +30,7 @@
 	},
 	"title": {
 		"notes": "Notes",
-		"categories": "Categories",
+		"tags": "Tags",
 		"unlock": "Unlock",
 		"trash": "Trash",
 		"repositories": "Repositories",
@@ -131,8 +131,8 @@
 	"count": {
 		"notes": "{{count}} note",
 		"notes_plural": "{{count}} notes",
-		"categories": "{{count}} category",
-		"categories_plural": "{{count}} categories",
+		"tags": "{{count}} tag",
+		"tags_plural": "{{count}} tags",
 		"folders": "{{count}} folder",
 		"folders_plural": "{{count}} folders",
 		"templates": "{{count}} template",
@@ -157,8 +157,8 @@
 			"empty": "You don't have any notes yet",
 			"exported": "File exported successfully"
 		},
-		"categories": {
-			"empty": "You don't have any categories yet"
+		"tags": {
+			"empty": "You don't have any tags yet"
 		},
 		"password": {
 			"wrong": "Wrong password",
@@ -169,12 +169,12 @@
 	"placeholder": {
 		"title": "Your title...",
 		"note": "Type your note here...",
-		"category": "New category..."
+		"tag": "New tag..."
 	},
 	"drawer": {
 		"repositories": "Repositories",
 		"templates": "Templates",
-		"categories": "Categories",
+		"tags": "Tags",
 		"trash": "Trash"
 	},
 	"templates": {

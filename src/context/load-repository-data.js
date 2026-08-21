@@ -1,6 +1,6 @@
 import { randomUUID } from 'expo-crypto'
-import { CATEGORIES_FILENAME, TRASH_FILENAME } from '../hooks/use-file-storage'
-import { DEFAULT_CATEGORIES, STORAGE_KEYS, TRASH_RETENTION_DAYS } from '@/constants'
+import { TAGS_FILENAME, TRASH_FILENAME } from '../hooks/use-file-storage'
+import { DEFAULT_TAGS, STORAGE_KEYS, TRASH_RETENTION_DAYS } from '@/constants'
 import { getNoteKey, getUniqueFilename, NOTE_KEY_PREFIX } from '@/utils'
 
 const TRASH_RETENTION_MS = TRASH_RETENTION_DAYS * 24 * 60 * 60 * 1000
@@ -36,7 +36,7 @@ const migrateStorageNotesToFiles = async (repositoryUri, storage, fileStorage) =
         fileStorage.writeNoteFile(repositoryUri, filename, note.note || '')
         metadata[note.id] = {
             filename,
-            categories: note.categories || [],
+            tags: note.tags || [],
             password: note.password || '',
             biometrics: note.biometrics || false,
             createdAt: note.createdAt || Date.now(),
@@ -76,7 +76,7 @@ const loadNotesFromFolder = async (repositoryUri, fileStorage) => {
             id = randomUUID()
             metadata[id] = {
                 filename: file.name,
-                categories: [],
+                tags: [],
                 password: '',
                 biometrics: false,
                 createdAt: Date.now(),
@@ -93,7 +93,7 @@ const loadNotesFromFolder = async (repositoryUri, fileStorage) => {
             id,
             title: getTitle(file.name),
             note: content,
-            categories: entry.categories,
+            tags: entry.tags || [],
             password: entry.password,
             biometrics: entry.biometrics,
             createdAt: entry.createdAt,
@@ -107,7 +107,7 @@ const loadNotesFromFolder = async (repositoryUri, fileStorage) => {
     return notes
 }
 
-// Reads a repository sidecar list (categories/trash), migrating a legacy global
+// Reads a repository sidecar list (tags/trash), migrating a legacy global
 // AsyncStorage value into it the first time the repository is loaded.
 const loadSidecarList = async ({ repositoryUri, filename, legacyKey, defaultValue, normalizeLegacy = (value) => value, storage, fileStorage }) => {
     const existing = await fileStorage.readJson(repositoryUri, filename, null)
@@ -122,10 +122,10 @@ const loadSidecarList = async ({ repositoryUri, filename, legacyKey, defaultValu
     return value
 }
 
-// Drops the legacy 'all' pseudo-category from older repositories.
-const purgeAllCategory = (categories, repositoryUri, fileStorage) => {
-    const filtered = categories.filter((category) => category.id !== 'all')
-    if (filtered.length !== categories.length) fileStorage.writeJson(repositoryUri, CATEGORIES_FILENAME, filtered)
+// Drops the legacy 'all' pseudo-tag from older repositories.
+const purgeAllTag = (tags, repositoryUri, fileStorage) => {
+    const filtered = tags.filter((tag) => tag.id !== 'all')
+    if (filtered.length !== tags.length) fileStorage.writeJson(repositoryUri, TAGS_FILENAME, filtered)
     return filtered
 }
 
@@ -149,24 +149,27 @@ const purgeExpiredTrash = (trash, repositoryUri, fileStorage) => {
     return kept
 }
 
-export const loadRepositoryData = async (repository, storage, fileStorage) => {
+// Tags are shared across a repository's whole tree, so they're always read from
+// the root, regardless of which folder is currently active.
+export const loadRepositoryData = async (repository, rootRepository, storage, fileStorage) => {
     const repositoryUri = repository.uri
+    const rootRepositoryUri = rootRepository.uri
 
     await migrateLegacyBlobNotes(storage)
     await migrateStorageNotesToFiles(repositoryUri, storage, fileStorage)
 
     const notes = await loadNotesFromFolder(repositoryUri, fileStorage)
 
-    const categories = purgeAllCategory(
+    const tags = purgeAllTag(
         await loadSidecarList({
-            repositoryUri,
-            filename: CATEGORIES_FILENAME,
-            legacyKey: STORAGE_KEYS.CATEGORIES,
-            defaultValue: DEFAULT_CATEGORIES,
+            repositoryUri: rootRepositoryUri,
+            filename: TAGS_FILENAME,
+            legacyKey: STORAGE_KEYS.TAGS,
+            defaultValue: DEFAULT_TAGS,
             storage,
             fileStorage
         }),
-        repositoryUri,
+        rootRepositoryUri,
         fileStorage
     )
 
@@ -182,5 +185,5 @@ export const loadRepositoryData = async (repository, storage, fileStorage) => {
 
     const trash = purgeExpiredTrash(rawTrash, repositoryUri, fileStorage)
 
-    return { notes, categories, trash }
+    return { notes, tags, trash }
 }

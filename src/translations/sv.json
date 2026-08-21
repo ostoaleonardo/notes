@@ -3,12 +3,12 @@
 	"notes": {
 		"delete": "Radera anteckning"
 	},
-	"categories": {
-		"update": "Uppdatera kategori"
+	"tags": {
+		"update": "Uppdatera tagg"
 	},
 	"title": {
 		"notes": "Anteckningar",
-		"categories": "Kategorier",
+		"tags": "Taggar",
 		"unlock": "Lås upp",
 		"settings": "Inställningar",
 		"theme": "Färgtema",
@@ -67,8 +67,8 @@
 		"notes": {
 			"empty": "Du har inte skapat någon anteckning än"
 		},
-		"categories": {
-			"empty": "Du har inte skapat kategorier än"
+		"tags": {
+			"empty": "Du har inte skapat några taggar än"
 		},
 		"password": {
 			"wrong": "Fel lösenord",
@@ -79,10 +79,10 @@
 	"placeholder": {
 		"title": "Titel...",
 		"note": "Skriv här...",
-		"category": "Ny kategori..."
+		"tag": "Ny tagg..."
 	},
 	"drawer": {
 		"notes": "Anteckningar",
-		"categories": "Kategorier"
+		"tags": "Taggar"
 	}
 }

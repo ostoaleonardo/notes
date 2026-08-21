@@ -30,7 +30,7 @@ export function ImportProvider({ children }) {
                 id,
                 title,
                 note,
-                categories: [],
+                tags: [],
                 images: [],
                 password: '',
                 biometrics: false,

@@ -4,8 +4,8 @@
 		"delete": "Eliminar nota",
 		"untitled": "Sin título"
 	},
-	"categories": {
-		"update": "Actualizar categoría"
+	"tags": {
+		"update": "Actualizar etiqueta"
 	},
 	"repositories": {
 		"open": "Abrir",
@@ -30,7 +30,7 @@
 	},
 	"title": {
 		"notes": "Notas",
-		"categories": "Categorías",
+		"tags": "Etiquetas",
 		"unlock": "Desbloquear",
 		"trash": "Papelera",
 		"repositories": "Repositorios",
@@ -116,8 +116,8 @@
 	"count": {
 		"notes": "{{count}} nota",
 		"notes_plural": "{{count}} notas",
-		"categories": "{{count}} categoría",
-		"categories_plural": "{{count}} categorías",
+		"tags": "{{count}} etiqueta",
+		"tags_plural": "{{count}} etiquetas",
 		"folders": "{{count}} carpeta",
 		"folders_plural": "{{count}} carpetas",
 		"templates": "{{count}} plantilla",
@@ -142,8 +142,8 @@
 			"empty": "Todavía no tienes notas",
 			"exported": "Archivo exportado exitosamente"
 		},
-		"categories": {
-			"empty": "Todavía no tienes categorías"
+		"tags": {
+			"empty": "Todavía no tienes etiquetas"
 		},
 		"password": {
 			"wrong": "Contraseña incorrecta",
@@ -154,12 +154,12 @@
 	"placeholder": {
 		"title": "Tu título...",
 		"note": "Escribe tu nota aquí...",
-		"category": "Nueva categoría..."
+		"tag": "Nueva etiqueta..."
 	},
 	"drawer": {
 		"repositories": "Repositorios",
 		"templates": "Plantillas",
-		"categories": "Categorías",
+		"tags": "Etiquetas",
 		"trash": "Papelera"
 	},
 	"templates": {

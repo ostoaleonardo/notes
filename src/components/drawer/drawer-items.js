@@ -11,7 +11,7 @@ import { AddSubfolder } from '@/screens/modals/add-subfolder'
 import { DeleteRepository } from '@/screens/modals/delete-repository'
 import { RenameRepository } from '@/screens/modals/rename-repository'
 import { ROUTES } from '@/constants'
-import { useCategories, useFileStorage, useIconProps, usePremium, useRepositories, useTemplates, useTrash } from '@/hooks'
+import { useTags, useFileStorage, useIconProps, usePremium, useRepositories, useTemplates, useTrash } from '@/hooks'
 import { Plus } from '@/icons'
 import { IconButton } from 'react-native-paper'
 
@@ -19,7 +19,7 @@ export function DrawerItems() {
     const { t } = useTranslation()
     const { trash } = useTrash()
     const { premium } = usePremium()
-    const { categories } = useCategories()
+    const { tags } = useTags()
     const { listTemplates } = useTemplates()
     const { listMarkdownFiles } = useFileStorage()
     const iconProps = useIconProps(16)
@@ -123,9 +123,9 @@ export function DrawerItems() {
                         indicator={t('count.templates', { count: templatesCount })}
                     />
                     <DrawerScreen
-                        path={ROUTES.CATEGORIES}
-                        label={t('drawer.categories')}
-                        indicator={t('count.categories', { count: categories?.length || 0 })}
+                        path={ROUTES.TAGS}
+                        label={t('drawer.tags')}
+                        indicator={t('count.tags', { count: tags?.length || 0 })}
                     />
                     <DrawerScreen
                         path={ROUTES.TRASH}

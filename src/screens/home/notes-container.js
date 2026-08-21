@@ -22,7 +22,7 @@ export function NotesContainer({
     const filteredNotes = useMemo(() => {
         return notes.filter((note) => {
             if (filter.size === 0) return true
-            return note.categories?.some((category) => filter.has(category))
+            return note.tags?.some((tag) => filter.has(tag))
         })
     }, [notes, filter])
 

@@ -26,7 +26,7 @@ export {
     SwipeableCard,
     SwipeableNote,
     SwipeableTrash,
-    SwipeableCategory,
+    SwipeableTag,
 } from './swipeable'
 
 // Inputs

@@ -3,35 +3,35 @@ import { useEffect, useState } from 'react'
 import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { DialogModal, LargeInput } from '@/components'
-import { useCategories, useHaptics } from '@/hooks'
+import { useTags, useHaptics } from '@/hooks'
 import { FEEDBACK_TYPES, FONTS } from '@/constants'
 
-export function UpdateCategory({ visible, onDismiss, selectedId }) {
+export function UpdateTag({ visible, onDismiss, selectedId }) {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
-    const { getCategory, updateCategory } = useCategories()
+    const { getTag, updateTag } = useTags()
 
-    const [category, setCategory] = useState('')
+    const [tag, setTag] = useState('')
     const [placeholder, setPlaceholder] = useState('')
     const [isDisabled, setIsDisabled] = useState(true)
 
     useEffect(() => {
-        const { name } = getCategory(selectedId)
-        setCategory(name)
+        const { name } = getTag(selectedId)
+        setTag(name)
         setPlaceholder(name)
     }, [selectedId])
 
     useEffect(() => {
-        const isDisabled = !category || !category.trim() || category.trim() === placeholder
+        const isDisabled = !tag || !tag.trim() || tag.trim() === placeholder
         setIsDisabled(isDisabled)
-    }, [category])
+    }, [tag])
 
     const onUpdate = () => {
         if (isDisabled) return
 
-        updateCategory({
+        updateTag({
             id: selectedId,
-            name: category.trim()
+            name: tag.trim()
         })
 
         onDismiss()
@@ -40,7 +40,7 @@ export function UpdateCategory({ visible, onDismiss, selectedId }) {
 
     return (
         <DialogModal
-            title={t('categories.update')}
+            title={t('tags.update')}
             visible={visible}
             onDismiss={onDismiss}
             actions={
@@ -56,9 +56,9 @@ export function UpdateCategory({ visible, onDismiss, selectedId }) {
         >
             <LargeInput
                 autoFocus
-                value={category}
+                value={tag}
                 placeholder={placeholder}
-                onChangeText={setCategory}
+                onChangeText={setTag}
             />
         </DialogModal>
     )

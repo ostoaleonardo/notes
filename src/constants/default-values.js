@@ -1,4 +1,4 @@
-export const DEFAULT_CATEGORIES = []
+export const DEFAULT_TAGS = []
 
 export const DEFAULT_SORT = {
     field: 'updated',

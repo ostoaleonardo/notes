@@ -1,13 +1,13 @@
 import { Directory, File } from 'expo-file-system'
 
 const METADATA_FILENAME = '.notes-meta.json'
-export const CATEGORIES_FILENAME = '.categories.json'
+export const TAGS_FILENAME = '.tags.json'
 export const TRASH_FILENAME = '.trash.json'
 export const TEMPLATES_FOLDER_NAME = 'templates'
 export const IMAGES_FOLDER_NAME = 'images'
 
 const RESERVED_FOLDER_NAMES = [TEMPLATES_FOLDER_NAME, IMAGES_FOLDER_NAME]
-const SIDECAR_FILENAMES = [METADATA_FILENAME, CATEGORIES_FILENAME, TRASH_FILENAME]
+const SIDECAR_FILENAMES = [METADATA_FILENAME, TAGS_FILENAME, TRASH_FILENAME]
 
 export function useFileStorage() {
     const listEntries = (directoryUri) => new Directory(directoryUri).list()
