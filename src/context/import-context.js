@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router'
 import { useNotes } from '../hooks/use-notes'
 import { usePremium } from '../hooks/use-premium'
 import { getDate } from '@/utils'
-import { DEFAULT_NOTE_CATEGORIES, ROUTES } from '@/constants'
+import { ROUTES } from '@/constants'
 
 export const ImportContext = createContext()
 
@@ -30,7 +30,7 @@ export function ImportProvider({ children }) {
                 id,
                 title,
                 note,
-                categories: DEFAULT_NOTE_CATEGORIES,
+                categories: [],
                 images: [],
                 password: '',
                 biometrics: false,
