@@ -113,7 +113,7 @@ export default function EditNote() {
         const {
             title = '',
             note: content = '',
-            categories = ['all'],
+            categories = [],
             images = [],
             createdAt = Date.now(),
             updatedAt = '',
@@ -121,7 +121,7 @@ export default function EditNote() {
             password = ''
         } = getNote(slug)
 
-        setTitle(title)
+        setTitle(title || t('notes.untitled'))
         setNote(content)
         setCategories(categories)
         setImages(images)

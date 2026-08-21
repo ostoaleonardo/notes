@@ -5,6 +5,19 @@ export const sanitizeFilename = (title) => {
     return clean || 'Untitled'
 }
 
+export const getUniqueTitle = (existingTitles, base) => {
+    const taken = new Set(existingTitles)
+    let title = base
+    let count = 2
+
+    while (taken.has(title)) {
+        title = `${base} (${count})`
+        count++
+    }
+
+    return title
+}
+
 export const getUniqueFilename = (existingNames, title, currentFilename) => {
     const base = sanitizeFilename(title)
     const taken = new Set(existingNames.filter((name) => name !== currentFilename))
