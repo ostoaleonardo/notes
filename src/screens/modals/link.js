@@ -1,9 +1,9 @@
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { LargeInput, ModalSheet, Pressable, Section } from '@/components'
+import { LargeInput, Pressable, Section } from '@/components'
 
-export const LinkModal = forwardRef(({ onClose, onInsert }, ref) => {
+export function LinkModal({ onClose, onInsert }) {
     const { t } = useTranslation()
 
     const [title, setTitle] = useState('')
@@ -20,12 +20,7 @@ export const LinkModal = forwardRef(({ onClose, onInsert }, ref) => {
     }
 
     return (
-        <ModalSheet
-            ref={ref}
-            onClose={onClose}
-            enableDynamicSizing
-            contentContainerStyle={styles.container}
-        >
+        <View style={styles.container}>
             <Section
                 title={t('markdown.link_title')}
                 contentStyle={styles.field}
@@ -61,9 +56,9 @@ export const LinkModal = forwardRef(({ onClose, onInsert }, ref) => {
                     {t('button.cancel')}
                 </Pressable>
             </View>
-        </ModalSheet>
+        </View>
     )
-})
+}
 
 const styles = StyleSheet.create({
     container: {

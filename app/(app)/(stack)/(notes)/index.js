@@ -3,7 +3,6 @@ import { ToastAndroid } from 'react-native'
 import { randomUUID } from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
 import { useFocusEffect, useNavigation } from 'expo-router'
-import { KeyboardStickyView } from 'react-native-keyboard-controller'
 import { ModalSheet } from '@/components'
 import { GalleryView } from '@/screens/gallery'
 import { MarkdownControls, TemplateCarousel } from '@/screens/notes'
@@ -176,53 +175,71 @@ export default function Note() {
                 isEditing={isEditing}
             />
 
-            <KeyboardStickyView style={{ position: 'absolute', bottom: 16 }}>
-                <MarkdownControls
-                    isEditing={isEditing}
-                    onRunAction={onRunAction}
-                    onEditMarkdown={onEditMarkdown}
-                />
-            </KeyboardStickyView>
-
-            <Categories
-                ref={categoriesBottomRef}
-                categories={categories}
-                setCategories={setCategories}
-                onClose={onCloseCategories}
+            <MarkdownControls
+                isEditing={isEditing}
+                onRunAction={onRunAction}
+                onEditMarkdown={onEditMarkdown}
             />
-            <AddPassword
+
+            <ModalSheet
+                ref={categoriesBottomRef}
+                onClose={onCloseCategories}
+                snapPoints={['50%', '95%']}
+            >
+                <Categories
+                    categories={categories}
+                    setCategories={setCategories}
+                />
+            </ModalSheet>
+
+            <ModalSheet
+                enableDynamicSizing
                 ref={passwordBottomRef}
                 onClose={onClosePassword}
-                password={password}
-                setPassword={setPassword}
-                biometrics={biometrics}
-                setBiometrics={setBiometrics}
-            />
+                title={t('password.add')}
+            >
+                <AddPassword
+                    onClose={onClosePassword}
+                    password={password}
+                    setPassword={setPassword}
+                    biometrics={biometrics}
+                    setBiometrics={setBiometrics}
+                />
+            </ModalSheet>
 
-            <LinkModal
+            <ModalSheet
+                enableDynamicSizing
                 ref={linkBottomRef}
                 onClose={onCloseLink}
-                onInsert={(payload) => markdownAction.run('link', payload)}
-            />
+            >
+                <LinkModal
+                    onClose={onCloseLink}
+                    onInsert={(payload) => markdownAction.run('link', payload)}
+                />
+            </ModalSheet>
 
-            <TableModal
+            <ModalSheet
+                enableDynamicSizing
                 ref={tableBottomRef}
                 onClose={onCloseTable}
-                onInsert={(payload) => markdownAction.run('table', payload)}
-            />
+                enablePanDownToClose={false}
+            >
+                <TableModal
+                    onClose={onCloseTable}
+                    onInsert={(payload) => markdownAction.run('table', payload)}
+                />
+            </ModalSheet>
 
-            <ImageModal
+            <ModalSheet
+                enableDynamicSizing
                 ref={imageBottomRef}
                 onClose={onCloseImage}
-                onInsert={(payload) => markdownAction.run('image', payload)}
-            />
-
-            <GalleryView
-                images={images}
-                index={galleryIndex}
-                visible={galleryIndex !== ''}
-                onClose={() => setGalleryIndex('')}
-            />
+            >
+                <ImageModal
+                    onClose={onCloseImage}
+                    onInsert={(payload) => markdownAction.run('image', payload)}
+                />
+            </ModalSheet>
 
             <ModalSheet
                 ref={templatesBottomRef}
@@ -234,6 +251,13 @@ export default function Note() {
                     onSelect={onSelectTemplate}
                 />
             </ModalSheet>
+
+            <GalleryView
+                images={images}
+                index={galleryIndex}
+                visible={galleryIndex !== ''}
+                onClose={() => setGalleryIndex('')}
+            />
         </>
     )
 }

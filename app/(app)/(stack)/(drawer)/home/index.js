@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import { View } from 'react-native'
-import { FloatingButton } from '@/components'
+import { useTranslation } from 'react-i18next'
+import { FloatingButton, ModalSheet } from '@/components'
 import { DeleteNote, UnlockNote } from '@/screens/modals'
 import { FilterCarousel, NotesContainer } from '@/screens/home'
 import { useBottomSheet, useNotes, useTrash, useUtils } from '@/hooks'
@@ -8,6 +9,7 @@ import { ROUTES } from '@/constants'
 import { Plus } from '@/icons'
 
 export default function App() {
+    const { t } = useTranslation()
     const { addItem } = useTrash()
     const { deleteNote } = useNotes()
 
@@ -54,6 +56,16 @@ export default function App() {
         }
     }, [deleteNote, addItem, onOpenDelete])
 
+    const onCloseUnlockNote = useCallback(() => {
+        setOpen(null)
+        onCloseUnlock()
+    }, [onCloseUnlock])
+
+    const onCloseDeleteNote = useCallback(() => {
+        setSelected(null)
+        onCloseDelete()
+    }, [onCloseDelete])
+
     return (
         <View style={{ flex: 1 }}>
             <FilterCarousel
@@ -77,22 +89,29 @@ export default function App() {
                 href={ROUTES.ADD_NOTE}
             />
 
-            <UnlockNote
+            <ModalSheet
+                enableDynamicSizing
                 ref={unlockBottomRef}
-                id={open}
-                onClose={() => {
-                    setOpen(null)
-                    onCloseUnlock()
-                }}
-            />
-            <DeleteNote
+                onClose={onCloseUnlockNote}
+                title={t('title.unlock')}
+            >
+                <UnlockNote
+                    id={open}
+                    onClose={onCloseUnlockNote}
+                />
+            </ModalSheet>
+
+            <ModalSheet
+                enableDynamicSizing
                 ref={deleteBottomRef}
-                id={selected}
-                onClose={() => {
-                    setSelected(null)
-                    onCloseDelete()
-                }}
-            />
+                onClose={onCloseDeleteNote}
+                title={t('notes.delete')}
+            >
+                <DeleteNote
+                    id={selected}
+                    onClose={onCloseDeleteNote}
+                />
+            </ModalSheet>
         </View>
     )
 }

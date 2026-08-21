@@ -1,14 +1,14 @@
-import { forwardRef, useEffect } from 'react'
+import { useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { router } from 'expo-router'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { ModalSheet, PasswordInput, Pressable } from '@/components'
+import { PasswordInput, Pressable } from '@/components'
 import { useNoteAuthentication, useNotes } from '@/hooks'
 import { Fingerprint } from '@/icons'
 import { ROUTES } from '@/constants'
 
-export const UnlockNote = forwardRef(({ id, onClose }, ref) => {
+export function UnlockNote({ id, onClose }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { getNote } = useNotes()
@@ -42,13 +42,7 @@ export const UnlockNote = forwardRef(({ id, onClose }, ref) => {
     }, [authenticated])
 
     return (
-        <ModalSheet
-            ref={ref}
-            onClose={onClose}
-            enableDynamicSizing
-            title={t('title.unlock')}
-            contentContainerStyle={styles.container}
-        >
+        <View style={styles.container}>
             <View style={styles.security}>
                 {password || !biometrics ? (
                     <PasswordInput
@@ -88,9 +82,9 @@ export const UnlockNote = forwardRef(({ id, onClose }, ref) => {
                     </Pressable>
                 )}
             </View>
-        </ModalSheet>
+        </View>
     )
-})
+}
 
 const styles = StyleSheet.create({
     container: {

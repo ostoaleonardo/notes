@@ -1,15 +1,15 @@
-import { forwardRef, useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { randomUUID } from 'expo-crypto'
 import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { FlatList } from 'react-native-gesture-handler'
 import { useTranslation } from 'react-i18next'
-import { ModalSheet, SmallInput, SquareButton, Typography, Separator } from '@/components'
+import { SmallInput, SquareButton, Typography, Separator } from '@/components'
 import { CategoryOption } from '../notes'
 import { useCategories, useHaptics } from '@/hooks'
 import { FEEDBACK_TYPES } from '@/constants'
 
-export const Categories = forwardRef(({ categories, setCategories, onClose }, ref) => {
+export function Categories({ categories, setCategories }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { vibrate } = useHaptics()
@@ -45,12 +45,7 @@ export const Categories = forwardRef(({ categories, setCategories, onClose }, re
     ), [categories])
 
     return (
-        <ModalSheet
-            ref={ref}
-            scrollable
-            onClose={onClose}
-            snapPoints={['50%', '95%']}
-        >
+        <>
             <View style={styles.container}>
                 <SmallInput
                     value={category}
@@ -66,7 +61,7 @@ export const Categories = forwardRef(({ categories, setCategories, onClose }, re
 
             <FlatList
                 alignItems='center'
-                data={allCategories.slice(1)}
+                data={allCategories}
                 keyExtractor={({ id }) => id}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: 16 }}
@@ -82,9 +77,9 @@ export const Categories = forwardRef(({ categories, setCategories, onClose }, re
                     </View>
                 )}
             />
-        </ModalSheet>
+        </>
     )
-})
+}
 
 const styles = StyleSheet.create({
     container: {
