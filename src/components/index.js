@@ -4,9 +4,6 @@ export { AppBar } from './app-bar'
 // Error Boundary
 export { ErrorBoundary } from './error-boundary'
 
-// Repository Gate
-export { RepositoryGate } from './repository-gate'
-
 // Buttons
 export {
     Pressable,

@@ -3,7 +3,6 @@ import { ToastAndroid } from 'react-native'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { ModalSheet } from '@/components'
-import { Wrapper } from '@/components/layout'
 import { GalleryView } from '@/screens/gallery'
 import { MarkdownControls, TemplateCarousel } from '@/screens/notes'
 import { AddPassword, Tags, ImageMarkdown, TableMarkdown, UpdatePassword } from '@/screens/modals'
@@ -146,27 +145,25 @@ export default function EditNote() {
 
     return (
         <>
-            <Wrapper>
-                <Header
-                    title={title}
-                    setTitle={setTitle}
-                    createdAt={createdAt}
-                    updatedAt={updatedAt}
-                    tags={tags}
-                    setTags={setTags}
-                    onOpenTags={onOpenTags}
-                />
+            <Header
+                title={title}
+                setTitle={setTitle}
+                createdAt={createdAt}
+                updatedAt={updatedAt}
+                tags={tags}
+                setTags={setTags}
+                onOpenTags={onOpenTags}
+            />
 
-                <NoteEditor
-                    value={note}
-                    setValue={setNote}
-                    markdownAction={markdownAction}
-                    images={images}
-                    setImages={setImages}
-                    onGallery={setGalleryIndex}
-                    isEditing={isEditing}
-                />
-            </Wrapper>
+            <NoteEditor
+                value={note}
+                setValue={setNote}
+                markdownAction={markdownAction}
+                images={images}
+                setImages={setImages}
+                onGallery={setGalleryIndex}
+                isEditing={isEditing}
+            />
 
             <MarkdownControls
                 isEditing={isEditing}

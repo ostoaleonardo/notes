@@ -1,93 +1,56 @@
 import { useEffect } from 'react'
 import { DevSettings } from 'react-native'
 import { registerDevMenuItems } from 'expo-dev-menu'
-import { randomUUID } from 'expo-crypto'
 import { Directory } from 'expo-file-system'
 import { useStorage } from './use-storage'
-import { TAGS_FILENAME, useFileStorage } from './use-file-storage'
 import { usePremium } from './use-premium'
-import { DEFAULT_TAGS, STORAGE_KEYS, getDefaultTemplates } from '@/constants'
-import { getDate } from '@/utils'
+import { useFileStorage } from './use-file-storage'
+import { useRepositories } from './use-repositories'
+import {
+    DEFAULT_TAGS,
+    STORAGE_KEYS,
+    TAGS_FILENAME,
+    TREE_BRANCHING,
+    NOTES_PER_FOLDER
+} from '@/constants'
 
-const TREE_BRANCHING = 2
-const NOTES_PER_FOLDER = 2
+import legacyNotes from '../../legacy/notes.json'
+import legacyTags from '../../legacy/categories.json'
 
 export function useDevMenu() {
-    const { getItem, setItem } = useStorage()
+    const { setItem } = useStorage()
     const { premium, setPremium } = usePremium()
 
     const {
-        clearRepository,
-        writeNoteFile,
         writeJson,
-        createSubdirectory,
-        getOrCreateTemplatesFolder
+        writeNoteFile,
+        clearRepository,
+        createSubdirectory
     } = useFileStorage()
 
-    const getRepositories = async () => {
-        const json = await getItem(STORAGE_KEYS.REPOSITORIES)
-        return json ? JSON.parse(json) : []
-    }
+    const {
+        repositories,
+        activeRepository,
+        activeRepositoryId,
+        activeRepositoryTree,
+        buildRepository
+    } = useRepositories()
 
-    const getActiveRepository = async () => {
-        const repositories = await getRepositories()
-        const activeRepositoryId = await getItem(STORAGE_KEYS.ACTIVE_REPOSITORY)
-        return repositories.find((repository) => repository.id === activeRepositoryId)
-    }
-
-    const getActiveRootRepository = async () => {
-        const repositories = await getRepositories()
-        let repository = await getActiveRepository()
-
-        while (repository?.parentId) {
-            repository = repositories.find((r) => r.id === repository.parentId)
-        }
-
-        return repository
-    }
-
-    const deleteAll = async () => {
-        const repository = await getActiveRepository()
-        if (repository) clearRepository(repository.uri)
+    const deleteAll = () => {
+        if (activeRepository) clearRepository(activeRepository.uri)
         DevSettings.reload()
     }
 
-    const deleteAllTags = async () => {
-        const repository = await getActiveRootRepository()
-        if (repository) writeJson(repository.uri, TAGS_FILENAME, DEFAULT_TAGS)
+    const deleteAllTags = () => {
+        const root = activeRepositoryTree[0]
+        if (root) writeJson(root.uri, TAGS_FILENAME, DEFAULT_TAGS)
         DevSettings.reload()
     }
 
-    const addLegacyNotes = async () => {
-        const legacy = await getItem(STORAGE_KEYS.NOTES)
-        const existing = legacy ? JSON.parse(legacy) : []
-
-        const seeded = [1, 2, 3].map((n) => ({
-            id: randomUUID(),
-            title: `Legacy note ${n}`,
-            note: `Legacy note content ${n}`,
-            tags: [],
-            images: [],
-            password: '',
-            biometrics: false,
-            createdAt: getDate()
-        }))
-
-        await setItem(STORAGE_KEYS.NOTES, JSON.stringify([...existing, ...seeded]))
-        DevSettings.reload()
-    }
-
-    const addLegacyTags = async () => {
-        const legacy = await getItem(STORAGE_KEYS.TAGS)
-        const existing = legacy ? JSON.parse(legacy) : []
-
-        const seeded = ['Legacy work', 'Legacy personal', 'Legacy ideas'].map((name) => ({
-            id: randomUUID(),
-            name
-        }))
-
-        await setItem(STORAGE_KEYS.TAGS, JSON.stringify([...existing, ...seeded]))
-        DevSettings.reload()
+    const seedLegacyDump = async () => {
+        await setItem(STORAGE_KEYS.NOTES, JSON.stringify(legacyNotes))
+        await setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(legacyTags))
+        console.debug('seeded legacy dump')
     }
 
     const seedFolderNotes = (uri, label) => {
@@ -96,54 +59,32 @@ export function useDevMenu() {
         }
     }
 
-    const buildRepositoryEntry = (directory, parentId, withTemplates) => {
-        const templatesUri = withTemplates
-            ? getOrCreateTemplatesFolder(directory.uri).uri
-            : null
-
-        if (withTemplates) {
-            getDefaultTemplates().forEach(({ filename, content }) => writeNoteFile(templatesUri, filename, content))
-        }
-
-        return {
-            id: randomUUID(),
-            uri: directory.uri,
-            alias: directory.name,
-            createdAt: Date.now(),
-            templatesUri,
-            parentId
-        }
-    }
-
     const generateRepositoryTree = async () => {
         try {
             const directory = await Directory.pickDirectoryAsync()
-            const repositories = await getRepositories()
 
             if (repositories.some((repository) => repository.uri === directory.uri)) return
 
-            const root = buildRepositoryEntry(directory, null, true)
+            const root = buildRepository(directory, null, true)
             seedFolderNotes(root.uri, root.alias)
 
             const generated = [root]
 
             for (let f = 1; f <= TREE_BRANCHING; f++) {
                 const folderDirectory = createSubdirectory(directory.uri, `Folder ${f}`)
-                const folder = buildRepositoryEntry(folderDirectory, root.id, false)
+                const folder = buildRepository(folderDirectory, root.id, false)
                 seedFolderNotes(folder.uri, folder.alias)
                 generated.push(folder)
 
                 for (let s = 1; s <= TREE_BRANCHING; s++) {
                     const subfolderDirectory = createSubdirectory(folderDirectory.uri, `Subfolder ${f}.${s}`)
-                    const subfolder = buildRepositoryEntry(subfolderDirectory, folder.id, false)
+                    const subfolder = buildRepository(subfolderDirectory, folder.id, false)
                     seedFolderNotes(subfolder.uri, subfolder.alias)
                     generated.push(subfolder)
                 }
             }
 
             await setItem(STORAGE_KEYS.REPOSITORIES, JSON.stringify([...repositories, ...generated]))
-
-            const activeRepositoryId = await getItem(STORAGE_KEYS.ACTIVE_REPOSITORY)
             if (!activeRepositoryId) await setItem(STORAGE_KEYS.ACTIVE_REPOSITORY, root.id)
 
             DevSettings.reload()
@@ -167,13 +108,8 @@ export function useDevMenu() {
                 shouldCollapse: true
             },
             {
-                name: 'Add legacy notes',
-                callback: addLegacyNotes,
-                shouldCollapse: true
-            },
-            {
-                name: 'Add legacy tags',
-                callback: addLegacyTags,
+                name: 'Seed legacy dump',
+                callback: seedLegacyDump,
                 shouldCollapse: true
             },
             {
@@ -187,5 +123,10 @@ export function useDevMenu() {
                 shouldCollapse: true
             }
         ])
-    }, [premium])
+    }, [
+        premium,
+        repositories,
+        activeRepository,
+        activeRepositoryId
+    ])
 }
