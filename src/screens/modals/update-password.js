@@ -1,12 +1,12 @@
-import { forwardRef, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { ModalSheet, PasswordInput, Pressable } from '@/components'
+import { PasswordInput, Pressable } from '@/components'
 import { useHaptics, useLocalAuthentication } from '@/hooks'
 import { getEncryptedPassword } from '@/utils'
 import { FEEDBACK_TYPES } from '@/constants'
 
-export const UpdatePassword = forwardRef(({ password, setPassword, biometrics, setBiometrics, onClose }, ref) => {
+export function UpdatePassword({ password, setPassword, biometrics, setBiometrics, onClose }) {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
     const { hasBiometrics, authenticate } = useLocalAuthentication()
@@ -62,13 +62,7 @@ export const UpdatePassword = forwardRef(({ password, setPassword, biometrics, s
     }
 
     return (
-        <ModalSheet
-            ref={ref}
-            onClose={onClose}
-            enableDynamicSizing
-            title={t('password.update')}
-            contentContainerStyle={styles.container}
-        >
+        <View style={styles.container}>
             <PasswordInput
                 modal={true}
                 password={passwordInput}
@@ -100,9 +94,9 @@ export const UpdatePassword = forwardRef(({ password, setPassword, biometrics, s
                     </Pressable>
                 )}
             </View>
-        </ModalSheet>
+        </View>
     )
-})
+}
 
 const styles = StyleSheet.create({
     container: {

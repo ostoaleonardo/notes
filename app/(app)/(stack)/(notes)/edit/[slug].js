@@ -174,44 +174,69 @@ export default function EditNote() {
                 onEditMarkdown={onEditMarkdown}
             />
 
-            <Categories
+            <ModalSheet
                 ref={categoriesBottomRef}
-                categories={categories}
-                setCategories={setCategories}
                 onClose={onCloseCategories}
-            />
-            <AddPassword
+                snapPoints={['50%', '95%']}
+            >
+                <Categories
+                    categories={categories}
+                    setCategories={setCategories}
+                />
+            </ModalSheet>
+
+            <ModalSheet
+                enableDynamicSizing
                 ref={passwordBottomRef}
                 onClose={onClosePassword}
-                password={password}
-                setPassword={setPassword}
-                biometrics={biometrics}
-                setBiometrics={setBiometrics}
-            />
-            <UpdatePassword
+                title={t('password.add')}
+            >
+                <AddPassword
+                    onClose={onClosePassword}
+                    password={password}
+                    setPassword={setPassword}
+                    biometrics={biometrics}
+                    setBiometrics={setBiometrics}
+                />
+            </ModalSheet>
+
+            <ModalSheet
+                enableDynamicSizing
                 ref={updatePasswordBottomRef}
                 onClose={onCloseUpdatePassword}
-                password={password}
-                setPassword={setPassword}
-                biometrics={biometrics}
-                setBiometrics={setBiometrics}
-            />
-            <TableModal
+                title={t('password.update')}
+            >
+                <UpdatePassword
+                    onClose={onCloseUpdatePassword}
+                    password={password}
+                    setPassword={setPassword}
+                    biometrics={biometrics}
+                    setBiometrics={setBiometrics}
+                />
+            </ModalSheet>
+
+            <ModalSheet
+                enableDynamicSizing
                 ref={tableBottomRef}
                 onClose={onCloseTable}
-                onInsert={(payload) => markdownAction.run('table', payload)}
-            />
-            <ImageModal
+                enablePanDownToClose={false}
+            >
+                <TableModal
+                    onClose={onCloseTable}
+                    onInsert={(payload) => markdownAction.run('table', payload)}
+                />
+            </ModalSheet>
+
+            <ModalSheet
+                enableDynamicSizing
                 ref={imageBottomRef}
                 onClose={onCloseImage}
-                onInsert={(payload) => markdownAction.run('image', payload)}
-            />
-            <GalleryView
-                images={images}
-                index={galleryIndex}
-                visible={galleryIndex !== ''}
-                onClose={() => setGalleryIndex('')}
-            />
+            >
+                <ImageModal
+                    onClose={onCloseImage}
+                    onInsert={(payload) => markdownAction.run('image', payload)}
+                />
+            </ModalSheet>
 
             <ModalSheet
                 ref={templatesBottomRef}
@@ -223,6 +248,13 @@ export default function EditNote() {
                     onSelect={onSelectTemplate}
                 />
             </ModalSheet>
+
+            <GalleryView
+                images={images}
+                index={galleryIndex}
+                visible={galleryIndex !== ''}
+                onClose={() => setGalleryIndex('')}
+            />
         </>
     )
 }

@@ -1,7 +1,7 @@
 import { isDevice } from 'expo-device'
 import { Linking, StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Scroll, Section } from '@/components'
+import { ModalSheet, Scroll, Section } from '@/components'
 import { Languages } from '@/screens/modals'
 import { PremiumSection, ThemeOption } from '@/screens/settings'
 import { AppVersionCard, Option } from '@/screens'
@@ -59,10 +59,13 @@ export default function Settings() {
                 <AppVersionCard />
             </Section>
 
-            <Languages
+            <ModalSheet
                 ref={languagesBottomRef}
                 onClose={onCloseLanguages}
-            />
+                snapPoints={['50%', '95%']}
+            >
+                <Languages />
+            </ModalSheet>
         </Scroll>
     )
 }

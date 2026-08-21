@@ -1,12 +1,12 @@
-import { forwardRef, useEffect } from 'react'
+import { useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { ModalSheet, PasswordInput, Pressable } from '@/components'
+import { PasswordInput, Pressable } from '@/components'
 import { useNoteAuthentication, useNotes, useTrash } from '@/hooks'
 import { Fingerprint } from '@/icons'
 
-export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
+export function DeleteNote({ id, onClose }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { addItem } = useTrash()
@@ -40,13 +40,7 @@ export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
     if (!note || !note.id) return null
 
     return (
-        <ModalSheet
-            ref={ref}
-            onClose={onClose}
-            enableDynamicSizing
-            title={t('notes.delete')}
-            contentContainerStyle={styles.container}
-        >
+        <View style={styles.container}>
             <View style={styles.security}>
                 {password || !biometrics ? (
                     <PasswordInput
@@ -85,9 +79,9 @@ export const DeleteNote = forwardRef(({ id, onClose }, ref) => {
                     </Pressable>
                 )}
             </View>
-        </ModalSheet>
+        </View>
     )
-})
+}
 
 const styles = StyleSheet.create({
     container: {

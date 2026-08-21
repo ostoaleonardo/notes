@@ -1,10 +1,10 @@
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Image } from 'expo-image'
 import { randomUUID } from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
 import { IconButton, Tooltip, useTheme } from 'react-native-paper'
-import { LargeInput, ModalSheet, Pressable, Section } from '@/components'
+import { LargeInput, Pressable, Section } from '@/components'
 import { Camera, Picture } from '@/icons'
 import { useFileStorage, useIconProps, useRepositories } from '@/hooks'
 import { openImagePicker } from '@/utils'
@@ -16,7 +16,7 @@ const EXTENSION_BY_MIME_TYPE = {
     'image/gif': 'gif'
 }
 
-export const ImageModal = forwardRef(({ onClose, onInsert }, ref) => {
+export function ImageModal({ onClose, onInsert }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const iconProps = useIconProps()
@@ -53,12 +53,7 @@ export const ImageModal = forwardRef(({ onClose, onInsert }, ref) => {
     }
 
     return (
-        <ModalSheet
-            ref={ref}
-            onClose={onClose}
-            enableDynamicSizing
-            contentContainerStyle={styles.container}
-        >
+        <View style={styles.container}>
             <Section
                 title={t('markdown.image_url')}
                 contentStyle={styles.field}
@@ -126,9 +121,9 @@ export const ImageModal = forwardRef(({ onClose, onInsert }, ref) => {
                     {t('button.insert')}
                 </Pressable>
             </View>
-        </ModalSheet>
+        </View>
     )
-})
+}
 
 const styles = StyleSheet.create({
     container: {

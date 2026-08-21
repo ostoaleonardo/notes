@@ -1,14 +1,14 @@
-import { forwardRef, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
-import { ModalSheet, Pressable, Typography } from '@/components'
+import { Pressable, Typography } from '@/components'
 import { MAX_TABLE_COLS, MAX_TABLE_ROWS } from '@/constants'
 
 const CELL_SIZE = 32
 const CELL_GAP = 6
 
-export const TableModal = forwardRef(({ onClose, onInsert }, ref) => {
+export function TableModal({ onClose, onInsert }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
 
@@ -18,7 +18,7 @@ export const TableModal = forwardRef(({ onClose, onInsert }, ref) => {
     const [selected, setSelected] = useState({ rows: 1, cols: 1 })
 
     const onLayout = () => {
-        gridRef.current?.measure((x, y, width, height, pageX, pageY) => {
+        gridRef.current?.measure((_x, _y, _width, _height, pageX, pageY) => {
             origin.current = { x: pageX, y: pageY }
         })
     }
@@ -41,13 +41,7 @@ export const TableModal = forwardRef(({ onClose, onInsert }, ref) => {
     }
 
     return (
-        <ModalSheet
-            ref={ref}
-            onClose={onClose}
-            enableDynamicSizing
-            enablePanDownToClose={false}
-            contentContainerStyle={styles.container}
-        >
+        <View style={styles.container}>
             <Typography
                 bold
                 variant='subtitle'
@@ -91,9 +85,9 @@ export const TableModal = forwardRef(({ onClose, onInsert }, ref) => {
             >
                 {t('button.cancel')}
             </Pressable>
-        </ModalSheet>
+        </View>
     )
-})
+}
 
 const styles = StyleSheet.create({
     container: {
