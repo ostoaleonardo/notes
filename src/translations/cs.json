@@ -3,12 +3,12 @@
 	"notes": {
 		"delete": "Smazat poznámku"
 	},
-	"categories": {
-		"update": "Upravit kategorii"
+	"tags": {
+		"update": "Upravit štítek"
 	},
 	"title": {
 		"notes": "Poznámky",
-		"categories": "Kategorie",
+		"tags": "Štítky",
 		"unlock": "Odemknout",
 		"settings": "Nastavení",
 		"theme": "Barevné schéma",
@@ -67,8 +67,8 @@
 		"notes": {
 			"empty": "Nejsou tu žádné poznámky"
 		},
-		"categories": {
-			"empty": "Nejsou tu žádné kategorie"
+		"tags": {
+			"empty": "Nejsou tu žádné štítky"
 		},
 		"password": {
 			"wrong": "Nesprávné heslo",
@@ -79,10 +79,10 @@
 	"placeholder": {
 		"title": "Váš titul...",
 		"note": "Zde napište poznámku...",
-		"category": "Nová kategorie..."
+		"tag": "Nový štítek..."
 	},
 	"drawer": {
 		"notes": "Poznámky",
-		"categories": "Kategorie"
+		"tags": "Štítky"
 	}
 }

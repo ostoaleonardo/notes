@@ -1,7 +1,7 @@
 export const STORAGE_KEYS = {
     NOTES: 'notes',
     TRASH: 'trash',
-    CATEGORIES: 'categories',
+    TAGS: 'categories',
     PINNED: 'pinned',
     SORT: 'sort',
     VIEW: 'view',

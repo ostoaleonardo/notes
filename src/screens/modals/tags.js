@@ -5,63 +5,63 @@ import { useTheme } from 'react-native-paper'
 import { FlatList } from 'react-native-gesture-handler'
 import { useTranslation } from 'react-i18next'
 import { SmallInput, SquareButton, Typography, Separator } from '@/components'
-import { CategoryOption } from '../notes'
-import { useCategories, useHaptics } from '@/hooks'
+import { TagOption } from '../notes'
+import { useTags, useHaptics } from '@/hooks'
 import { FEEDBACK_TYPES } from '@/constants'
 
-export function Categories({ categories, setCategories }) {
+export function Tags({ tags, setTags }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { vibrate } = useHaptics()
-    const { categories: allCategories, addCategory } = useCategories()
+    const { tags: allTags, addTag } = useTags()
 
-    const [category, setCategory] = useState('')
+    const [tag, setTag] = useState('')
 
-    const onSaveCategory = () => {
-        addCategory({
+    const onSaveTag = () => {
+        addTag({
             id: randomUUID(),
-            name: category.trim()
+            name: tag.trim()
         })
 
-        setCategory('')
+        setTag('')
         vibrate(FEEDBACK_TYPES.SUCCESS)
     }
 
-    const onCategories = (id) => {
-        if (!categories.includes(id)) {
-            setCategories([...categories, id])
+    const onTags = (id) => {
+        if (!tags.includes(id)) {
+            setTags([...tags, id])
         } else {
-            setCategories(categories.filter((categoryId) => categoryId !== id))
+            setTags(tags.filter((tagId) => tagId !== id))
         }
     }
 
     const renderItems = useCallback(({ id, name }) => (
-        <CategoryOption
+        <TagOption
             key={id}
-            category={name}
-            onPress={() => onCategories(id)}
-            isSelected={categories.includes(id)}
+            tag={name}
+            onPress={() => onTags(id)}
+            isSelected={tags.includes(id)}
         />
-    ), [categories])
+    ), [tags])
 
     return (
         <>
             <View style={styles.container}>
                 <SmallInput
-                    value={category}
-                    onChangeText={setCategory}
-                    placeholder={t('placeholder.category')}
+                    value={tag}
+                    onChangeText={setTag}
+                    placeholder={t('placeholder.tag')}
                     background={colors.surfaceVariant}
                 />
                 <SquareButton
-                    disabled={!category.trim()}
-                    onPress={onSaveCategory}
+                    disabled={!tag.trim()}
+                    onPress={onSaveTag}
                 />
             </View>
 
             <FlatList
                 alignItems='center'
-                data={allCategories}
+                data={allTags}
                 keyExtractor={({ id }) => id}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: 16 }}
@@ -72,7 +72,7 @@ export function Categories({ categories, setCategories }) {
                         <Typography
                             opacity={0.5}
                         >
-                            {t('message.categories.empty')}
+                            {t('message.tags.empty')}
                         </Typography>
                     </View>
                 )}

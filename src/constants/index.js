@@ -4,7 +4,7 @@ export { COLORS, FONTS, TRANSPARENT, COMMONS } from './themes'
 export { LANGUAGES } from './languages'
 
 export {
-    DEFAULT_CATEGORIES,
+    DEFAULT_TAGS,
     DEFAULT_SORT,
     TRASH_RETENTION_DAYS
 } from './default-values'

@@ -3,12 +3,12 @@
 	"notes": {
 		"delete": "노트 삭제"
 	},
-	"categories": {
-		"update": "카테고리 업데이트"
+	"tags": {
+		"update": "태그 업데이트"
 	},
 	"title": {
 		"notes": "노트",
-		"categories": "카테고리",
+		"tags": "태그",
 		"unlock": "잠금해제",
 		"settings": "설정",
 		"theme": "테마 설정",
@@ -67,8 +67,8 @@
 		"notes": {
 			"empty": "노트가 아직 없습니다."
 		},
-		"categories": {
-			"empty": "카테고리가 아직 없습니다."
+		"tags": {
+			"empty": "태그가 아직 없습니다."
 		},
 		"password": {
 			"wrong": "잘못된 패스워드",
@@ -79,10 +79,10 @@
 	"placeholder": {
 		"title": "어떤 칭호로 불러드릴까요...",
 		"note": "노트 내용을 입력하세요...",
-		"category": "새로운 카테고리..."
+		"tag": "새로운 태그..."
 	},
 	"drawer": {
 		"notes": "노트",
-		"categories": "카테고리"
+		"tags": "태그"
 	}
 }

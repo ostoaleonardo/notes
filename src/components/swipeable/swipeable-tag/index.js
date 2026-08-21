@@ -4,7 +4,7 @@ import { SwipeableCard } from '../swipeable-card'
 import { Typography } from '../../typography'
 import { getGroupedRadius } from '@/utils'
 
-export function SwipeableCategory({ category, onPress, isOpen, onOpen, onDelete, isFirst, isLast }) {
+export function SwipeableTag({ tag, onPress, isOpen, onOpen, onDelete, isFirst, isLast }) {
     const { colors } = useTheme()
 
     return (
@@ -22,7 +22,7 @@ export function SwipeableCategory({ category, onPress, isOpen, onOpen, onDelete,
                 }}
             >
                 <Typography>
-                    {category}
+                    {tag}
                 </Typography>
             </Pressable>
         </SwipeableCard>

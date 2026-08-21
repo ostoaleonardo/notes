@@ -4,20 +4,20 @@ import { useStorage } from '../hooks/use-storage'
 import { useFileStorage } from '../hooks/use-file-storage'
 import { useRepositories } from '../hooks/use-repositories'
 import { loadRepositoryData } from './load-repository-data'
-import { DEFAULT_CATEGORIES } from '@/constants'
+import { DEFAULT_TAGS } from '@/constants'
 
 export const NoteContext = createContext()
 
 export function NoteProvider({ children }) {
     const [notes, setNotes] = useState([])
-    const [categories, setCategories] = useState(DEFAULT_CATEGORIES)
+    const [tags, setTags] = useState(DEFAULT_TAGS)
     const [trash, setTrash] = useState(new Set())
     const [paramId, setParamId] = useState('')
     const [loading, setLoading] = useState(true)
 
     const storage = useStorage()
     const fileStorage = useFileStorage()
-    const { activeRepository } = useRepositories()
+    const { activeRepository, activeRepositoryTree } = useRepositories()
 
     useEffect(() => {
         if (!activeRepository) return
@@ -26,10 +26,11 @@ export function NoteProvider({ children }) {
             if (showLoading) setLoading(true)
 
             try {
-                const { notes, categories, trash } = await loadRepositoryData(activeRepository, storage, fileStorage)
+                const rootRepository = activeRepositoryTree[0] || activeRepository
+                const { notes, tags, trash } = await loadRepositoryData(activeRepository, rootRepository, storage, fileStorage)
 
                 setNotes(notes)
-                setCategories(categories)
+                setTags(tags)
                 setTrash(new Set(trash))
             } catch (error) {
                 console.debug('error loading notes', error)
@@ -50,7 +51,7 @@ export function NoteProvider({ children }) {
     const clear = () => {
         setNotes([])
         setTrash(new Set())
-        setCategories(DEFAULT_CATEGORIES)
+        setTags(DEFAULT_TAGS)
     }
 
     return (
@@ -58,8 +59,8 @@ export function NoteProvider({ children }) {
             value={{
                 notes,
                 setNotes,
-                categories,
-                setCategories,
+                tags,
+                setTags,
                 trash,
                 setTrash,
                 paramId,

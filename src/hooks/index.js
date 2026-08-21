@@ -2,7 +2,7 @@
 export { useNotes } from './use-notes'
 export { useTrash } from './use-trash'
 export { useUtils } from './use-utils'
-export { useCategories } from './use-categories'
+export { useTags } from './use-tags'
 export { useMarkdownShortcuts } from './use-markdown-shortcuts'
 export { useMarkdownAction } from './use-markdown-action'
 export { useNoteAutosave } from './use-note-autosave'

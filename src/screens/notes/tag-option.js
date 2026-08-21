@@ -4,7 +4,7 @@ import { FadeInUp } from 'react-native-reanimated'
 import { AnimatedView, Checkbox, Typography } from '@/components'
 import { TRANSPARENT } from '@/constants'
 
-export function CategoryOption({ category, onPress, isSelected }) {
+export function TagOption({ tag, onPress, isSelected }) {
     const { colors } = useTheme()
     const { onBackground } = colors
 
@@ -18,7 +18,7 @@ export function CategoryOption({ category, onPress, isSelected }) {
                 android_ripple={{ color: onBackground + TRANSPARENT[10] }}
             >
                 <Typography>
-                    {category}
+                    {tag}
                 </Typography>
                 <Checkbox checked={isSelected} />
             </Pressable>

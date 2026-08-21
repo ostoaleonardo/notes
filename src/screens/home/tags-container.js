@@ -1,36 +1,36 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AnimatedList, SwipeableCategory } from '@/components'
-import { useCategories, useHaptics } from '@/hooks'
+import { AnimatedList, SwipeableTag } from '@/components'
+import { useTags, useHaptics } from '@/hooks'
 import { FEEDBACK_TYPES } from '@/constants'
 
-export function CategoriesContainer({ onPress }) {
+export function TagsContainer({ onPress }) {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
-    const { categories, deleteCategory } = useCategories()
+    const { tags, deleteTag } = useTags()
 
     const [isOpen, setIsOpen] = useState(null)
 
     const onDelete = (id) => {
-        deleteCategory(id)
+        deleteTag(id)
         vibrate(FEEDBACK_TYPES.SUCCESS)
     }
 
     return (
         <AnimatedList
             gap={2}
-            data={categories}
+            data={tags}
             keyExtractor={({ id }) => id}
-            emptyLabel={t('message.categories.empty')}
+            emptyLabel={t('message.tags.empty')}
             renderItem={({ item, index }) => (
-                <SwipeableCategory
-                    category={item.name}
+                <SwipeableTag
+                    tag={item.name}
                     isOpen={isOpen === item.id}
                     onPress={() => onPress(item.id)}
                     onOpen={() => setIsOpen(item.id)}
                     onDelete={() => onDelete(item.id)}
                     isFirst={index === 0}
-                    isLast={index === categories.length - 1}
+                    isLast={index === tags.length - 1}
                 />
             )}
         />

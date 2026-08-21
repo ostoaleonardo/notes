@@ -1,12 +1,12 @@
 import { StyleSheet, View } from 'react-native'
 import { IconButton } from 'react-native-paper'
 import { AnimatedView, Chip, Scroll } from '@/components'
-import { useCategories, useIconProps } from '@/hooks'
+import { useTags, useIconProps } from '@/hooks'
 import { Close } from '@/icons'
 
 export function FilterCarousel({ filter, onFilter }) {
     const iconProps = useIconProps()
-    const { categories: carousel } = useCategories()
+    const { tags: carousel } = useTags()
 
     return (
         <View style={styles.container}>

@@ -1,22 +1,22 @@
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LargeInput, Section } from '@/components'
-import { CategoryCarousel, DateNote } from '../notes'
+import { TagCarousel, DateNote } from '../notes'
 
 export function Header({
     title, setTitle,
     createdAt, updatedAt,
-    categories, setCategories,
-    onOpenCategories
+    tags, setTags,
+    onOpenTags
 }) {
     const { t } = useTranslation()
 
-    const onCategories = useCallback((id) => {
-        setCategories(prev => prev.includes(id)
-            ? prev.filter((category) => category !== id)
+    const onTags = useCallback((id) => {
+        setTags(prev => prev.includes(id)
+            ? prev.filter((tag) => tag !== id)
             : [...prev, id]
         )
-    }, [setCategories])
+    }, [setTags])
 
     return (
         <>
@@ -40,13 +40,13 @@ export function Header({
             )}
 
             <Section
-                title={t('title.categories')}
+                title={t('title.tags')}
                 containerStyle={{ paddingVertical: 16 }}
             >
-                <CategoryCarousel
-                    categories={categories}
-                    onCategories={onCategories}
-                    onCategoriesModal={onOpenCategories}
+                <TagCarousel
+                    tags={tags}
+                    onTags={onTags}
+                    onTagsModal={onOpenTags}
                 />
             </Section>
         </>

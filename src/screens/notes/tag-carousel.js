@@ -2,16 +2,16 @@ import { useMemo } from 'react'
 import { StyleSheet } from 'react-native'
 import { IconButton } from 'react-native-paper'
 import { AnimatedView, Chip, CloseChipButton, Scroll } from '@/components'
-import { useCategories, useIconProps } from '@/hooks'
+import { useTags, useIconProps } from '@/hooks'
 import { Plus } from '@/icons'
 
-export function CategoryCarousel({ categories, onCategories, onCategoriesModal }) {
+export function TagCarousel({ tags, onTags, onTagsModal }) {
     const iconProps = useIconProps()
-    const { categories: allCategories } = useCategories()
+    const { tags: allTags } = useTags()
 
-    const filteredCategories = useMemo(() => allCategories.filter((item) =>
-        categories.includes(item.id)
-    ), [categories, allCategories])
+    const filteredTags = useMemo(() => allTags.filter((item) =>
+        tags.includes(item.id)
+    ), [tags, allTags])
 
     return (
         <Scroll
@@ -19,11 +19,11 @@ export function CategoryCarousel({ categories, onCategories, onCategoriesModal }
             overScrollMode='never'
             contentContainerStyle={styles.content}
         >
-            {filteredCategories.map(({ id, name }) =>
+            {filteredTags.map(({ id, name }) =>
                 <Chip
                     key={id}
                     label={name}
-                    closeIcon={<CloseChipButton onPress={() => onCategories(id)} />}
+                    closeIcon={<CloseChipButton onPress={() => onTags(id)} />}
                 >
                     {name}
                 </Chip>
@@ -33,7 +33,7 @@ export function CategoryCarousel({ categories, onCategories, onCategoriesModal }
                 <IconButton
                     size={12}
                     mode='outlined'
-                    onPress={onCategoriesModal}
+                    onPress={onTagsModal}
                     icon={() => <Plus {...iconProps} />}
                 />
             </AnimatedView>

@@ -3,12 +3,12 @@
 	"notes": {
 		"delete": "Notu sil"
 	},
-	"categories": {
-		"update": "Kategori güncelleme"
+	"tags": {
+		"update": "Etiketi güncelle"
 	},
 	"title": {
 		"notes": "Notlar",
-		"categories": "Kategoriler",
+		"tags": "Etiketler",
 		"unlock": "Kilidi aç",
 		"settings": "Ayarlar",
 		"theme": "Renk teması",
@@ -67,8 +67,8 @@
 		"notes": {
 			"empty": "Henüz hiç notunuz yok"
 		},
-		"categories": {
-			"empty": "Henüz herhangi bir kategoriniz yok"
+		"tags": {
+			"empty": "Henüz herhangi bir etiketiniz yok"
 		},
 		"password": {
 			"wrong": "Yanlış şifre",
@@ -79,10 +79,10 @@
 	"placeholder": {
 		"title": "Ünvanınız...",
 		"note": "Notunuzu buraya yazın...",
-		"category": "Yeni kategori..."
+		"tag": "Yeni etiket..."
 	},
 	"drawer": {
 		"notes": "Notlar",
-		"categories": "Kategoriler"
+		"tags": "Etiketler"
 	}
 }
