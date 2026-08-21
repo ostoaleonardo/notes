@@ -19,7 +19,7 @@ export function CategoriesContainer({ onPress }) {
     return (
         <AnimatedList
             gap={2}
-            data={categories.slice(1)}
+            data={categories}
             keyExtractor={({ id }) => id}
             emptyLabel={t('message.categories.empty')}
             renderItem={({ item, index }) => (
@@ -30,7 +30,7 @@ export function CategoriesContainer({ onPress }) {
                     onOpen={() => setIsOpen(item.id)}
                     onDelete={() => onDelete(item.id)}
                     isFirst={index === 0}
-                    isLast={index === categories.slice(1).length - 1}
+                    isLast={index === categories.length - 1}
                 />
             )}
         />
