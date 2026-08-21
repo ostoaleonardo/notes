@@ -76,7 +76,7 @@ export function NotesContainer({
                 </Typography>
             )}
 
-            {isEmpty && (
+            {grid && isEmpty && (
                 <Typography opacity={0.5} variant='caption'>
                     {t('message.notes.empty')}
                 </Typography>
