@@ -4,16 +4,13 @@ import { IconButton } from 'react-native-paper'
 import { AnimatedView, Chip, CloseChipButton, Scroll } from '@/components'
 import { useCategories, useIconProps } from '@/hooks'
 import { Plus } from '@/icons'
-import { DEFAULT_CATEGORIES } from '@/constants'
-
-const DEFAULT_CATEGORY_IDS = DEFAULT_CATEGORIES.map(({ id }) => id)
 
 export function CategoryCarousel({ categories, onCategories, onCategoriesModal }) {
     const iconProps = useIconProps()
     const { categories: allCategories } = useCategories()
 
     const filteredCategories = useMemo(() => allCategories.filter((item) =>
-        categories.includes(item.id) && !DEFAULT_CATEGORY_IDS.includes(item.id)
+        categories.includes(item.id)
     ), [categories, allCategories])
 
     return (

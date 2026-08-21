@@ -1,7 +1,8 @@
 {
 	"language": "Español",
 	"notes": {
-		"delete": "Eliminar nota"
+		"delete": "Eliminar nota",
+		"untitled": "Sin título"
 	},
 	"categories": {
 		"update": "Actualizar categoría"

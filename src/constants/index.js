@@ -5,7 +5,6 @@ export { LANGUAGES } from './languages'
 
 export {
     DEFAULT_CATEGORIES,
-    DEFAULT_NOTE_CATEGORIES,
     DEFAULT_SORT,
     TRASH_RETENTION_DAYS
 } from './default-values'

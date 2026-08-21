@@ -4,7 +4,7 @@ import { useStorage } from './use-storage'
 import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
 import { NoteContext } from '../context/note-context'
-import { DEFAULT_NOTE_CATEGORIES, STORAGE_KEYS } from '@/constants'
+import { STORAGE_KEYS } from '@/constants'
 import { getDate, getUniqueFilename } from '@/utils'
 
 export function useNotes() {
@@ -113,7 +113,7 @@ export function useNotes() {
             id: randomUUID(),
             title: `Legacy note ${n}`,
             note: `Legacy note content ${n}`,
-            categories: DEFAULT_NOTE_CATEGORIES,
+            categories: [],
             images: [],
             password: '',
             biometrics: false,

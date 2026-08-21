@@ -1,7 +1,8 @@
 {
 	"language": "English",
 	"notes": {
-		"delete": "Delete note"
+		"delete": "Delete note",
+		"untitled": "Untitled"
 	},
 	"categories": {
 		"update": "Update category"

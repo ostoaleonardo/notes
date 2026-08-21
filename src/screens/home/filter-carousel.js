@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { IconButton } from 'react-native-paper'
 import { AnimatedView, Chip, Scroll } from '@/components'
@@ -7,11 +6,7 @@ import { Close } from '@/icons'
 
 export function FilterCarousel({ filter, onFilter }) {
     const iconProps = useIconProps()
-    const { categories } = useCategories()
-
-    const carousel = useMemo(() => {
-        return categories.filter((category) => category.id !== 'all')
-    }, [categories])
+    const { categories: carousel } = useCategories()
 
     return (
         <View style={styles.container}>

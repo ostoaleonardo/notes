@@ -1,6 +1,6 @@
 import { randomUUID } from 'expo-crypto'
 import { CATEGORIES_FILENAME, TRASH_FILENAME } from '../hooks/use-file-storage'
-import { DEFAULT_CATEGORIES, DEFAULT_NOTE_CATEGORIES, STORAGE_KEYS, TRASH_RETENTION_DAYS } from '@/constants'
+import { DEFAULT_CATEGORIES, STORAGE_KEYS, TRASH_RETENTION_DAYS } from '@/constants'
 import { getNoteKey, getUniqueFilename, NOTE_KEY_PREFIX } from '@/utils'
 
 const TRASH_RETENTION_MS = TRASH_RETENTION_DAYS * 24 * 60 * 60 * 1000
@@ -36,7 +36,7 @@ const migrateStorageNotesToFiles = async (repositoryUri, storage, fileStorage) =
         fileStorage.writeNoteFile(repositoryUri, filename, note.note || '')
         metadata[note.id] = {
             filename,
-            categories: note.categories || DEFAULT_NOTE_CATEGORIES,
+            categories: note.categories || [],
             password: note.password || '',
             biometrics: note.biometrics || false,
             createdAt: note.createdAt || Date.now(),
@@ -76,7 +76,7 @@ const loadNotesFromFolder = async (repositoryUri, fileStorage) => {
             id = randomUUID()
             metadata[id] = {
                 filename: file.name,
-                categories: DEFAULT_NOTE_CATEGORIES,
+                categories: [],
                 password: '',
                 biometrics: false,
                 createdAt: Date.now(),
@@ -122,6 +122,13 @@ const loadSidecarList = async ({ repositoryUri, filename, legacyKey, defaultValu
     return value
 }
 
+// Drops the legacy 'all' pseudo-category from older repositories.
+const purgeAllCategory = (categories, repositoryUri, fileStorage) => {
+    const filtered = categories.filter((category) => category.id !== 'all')
+    if (filtered.length !== categories.length) fileStorage.writeJson(repositoryUri, CATEGORIES_FILENAME, filtered)
+    return filtered
+}
+
 // Backfills trashedAt on older entries (started counting from this load), then drops
 // anything older than TRASH_RETENTION_DAYS.
 const purgeExpiredTrash = (trash, repositoryUri, fileStorage) => {
@@ -150,14 +157,18 @@ export const loadRepositoryData = async (repository, storage, fileStorage) => {
 
     const notes = await loadNotesFromFolder(repositoryUri, fileStorage)
 
-    const categories = await loadSidecarList({
+    const categories = purgeAllCategory(
+        await loadSidecarList({
+            repositoryUri,
+            filename: CATEGORIES_FILENAME,
+            legacyKey: STORAGE_KEYS.CATEGORIES,
+            defaultValue: DEFAULT_CATEGORIES,
+            storage,
+            fileStorage
+        }),
         repositoryUri,
-        filename: CATEGORIES_FILENAME,
-        legacyKey: STORAGE_KEYS.CATEGORIES,
-        defaultValue: DEFAULT_CATEGORIES,
-        storage,
         fileStorage
-    })
+    )
 
     const rawTrash = await loadSidecarList({
         repositoryUri,

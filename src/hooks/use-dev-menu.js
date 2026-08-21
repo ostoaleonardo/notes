@@ -6,7 +6,7 @@ import { Directory } from 'expo-file-system'
 import { useStorage } from './use-storage'
 import { CATEGORIES_FILENAME, useFileStorage } from './use-file-storage'
 import { usePremium } from './use-premium'
-import { DEFAULT_CATEGORIES, DEFAULT_NOTE_CATEGORIES, STORAGE_KEYS, getDefaultTemplates } from '@/constants'
+import { DEFAULT_CATEGORIES, STORAGE_KEYS, getDefaultTemplates } from '@/constants'
 import { getDate } from '@/utils'
 
 const TREE_BRANCHING = 2
@@ -55,7 +55,7 @@ export function useDevMenu() {
             id: randomUUID(),
             title: `Legacy note ${n}`,
             note: `Legacy note content ${n}`,
-            categories: DEFAULT_NOTE_CATEGORIES,
+            categories: [],
             images: [],
             password: '',
             biometrics: false,
