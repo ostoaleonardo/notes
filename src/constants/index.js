@@ -35,7 +35,16 @@ export { FEEDBACK_TYPES } from './feedback-types'
 export { STORAGE_KEYS } from './storage-keys'
 export { NOTE_KEY_PREFIX } from './note-key'
 export { TEMPLATE_PLACEHOLDERS } from './template-placeholders'
+
+export {
+    NOTE_PREVIEW_MAX_LINES,
+    NOTE_PREVIEW_MAX_CHARS,
+    TEMPLATE_PREVIEW_MAX_LINES,
+    TEMPLATE_PREVIEW_MAX_CHARS
+} from './note-preview'
+
 export { LINKS } from './links'
+export { GRID_BREAKPOINT_WIDTH } from './layout'
 
 export {
     PRO,

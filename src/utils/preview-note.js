@@ -1,10 +1,12 @@
+import { NOTE_PREVIEW_MAX_LINES, NOTE_PREVIEW_MAX_CHARS } from '@/constants'
+
 const imageRegex = /!\[([^\]]*)\]\(([^\)]*)\)/g
 const linkRegex = /\[([^\]]*)\]\(([^\)]*)\)/g
 
-export const getPreviewNote = (note) => {
+export const getPreviewNote = (note, maxLines = NOTE_PREVIEW_MAX_LINES, maxChars = NOTE_PREVIEW_MAX_CHARS) => {
     if (!note) return ''
 
-    let preview = note.split('\n').slice(0, 5).join('\n')
+    let preview = note.split('\n').slice(0, maxLines).join('\n')
 
     let images = []
     let links = []
@@ -22,8 +24,8 @@ export const getPreviewNote = (note) => {
         return text
     })
 
-    // Limit to 150 characters only the visible text
-    let limited = temp.length > 150 ? temp.slice(0, 150) + '...' : temp
+    // Limit to maxChars characters only the visible text
+    let limited = temp.length > maxChars ? temp.slice(0, maxChars) + '...' : temp
 
     // Reinsert images and links into the limited text
     let rendered = limited
