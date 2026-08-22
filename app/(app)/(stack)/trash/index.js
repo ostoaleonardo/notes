@@ -1,12 +1,25 @@
 import { useState } from 'react'
 import { View } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import { AppBarAction } from '@/components'
 import { TrashContainer } from '@/screens/home'
-import { useNotes, useTrash } from '@/hooks'
+import { useAppBarTrailing, useNotes, useTrash } from '@/hooks'
+import { Delete } from '@/icons'
 
 export default function Trash() {
-    const { loading, trash, deleteItem } = useTrash()
+    const { t } = useTranslation()
+
     const { saveNote } = useNotes()
+    const { loading, trash, deleteItem, clearAll } = useTrash()
     const [selected, setSelected] = useState(null)
+
+    useAppBarTrailing((
+        <AppBarAction
+            tooltip={t('header.trash')}
+            onPress={clearAll}
+            icon={Delete}
+        />
+    ))
 
     const onRestore = (item) => {
         deleteItem(item)

@@ -1,5 +1,6 @@
 // AppBar
 export { AppBar } from './app-bar'
+export { AppBarAction } from './app-bar/app-bar-action'
 
 // Error Boundary
 export { ErrorBoundary } from './error-boundary'

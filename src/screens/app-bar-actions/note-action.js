@@ -2,8 +2,7 @@ import { useState } from 'react'
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { router, useLocalSearchParams } from 'expo-router'
-import { Appbar, Tooltip } from 'react-native-paper'
-import { MenuContainer, MenuItem } from '@/components'
+import { AppBarAction, MenuContainer, MenuItem } from '@/components'
 import { useFiles, useIconProps, useNotes, useTrash, useUtils } from '@/hooks'
 import { Delete, FileExport, Keep, KeepFilled, Lock, Shapes, Unlock } from '@/icons'
 
@@ -53,25 +52,22 @@ export function NoteAction({ onOpenPassword, hasPassword, onOpenTemplates, onSav
     return (
         <View style={{ flexDirection: 'row' }}>
             {slug && (
-                <Tooltip title={t('button.export')}>
-                    <Appbar.Action
-                        animated={false}
-                        onPress={() => exportFile(slug)}
-                        icon={() => <FileExport {...iconProps} />}
-                    />
-                </Tooltip>
+                <AppBarAction
+                    tooltip={t('button.export')}
+                    onPress={() => exportFile(slug)}
+                    icon={FileExport}
+                />
             )}
+
             <MenuContainer
                 visible={templatesMenuVisible}
                 onClose={() => setTemplatesMenuVisible(false)}
                 anchor={
-                    <Tooltip title={t('drawer.templates')}>
-                        <Appbar.Action
-                            animated={false}
-                            onPress={() => setTemplatesMenuVisible(true)}
-                            icon={() => <Shapes {...iconProps} />}
-                        />
-                    </Tooltip>
+                    <AppBarAction
+                        tooltip={t('drawer.templates')}
+                        onPress={() => setTemplatesMenuVisible(true)}
+                        icon={Shapes}
+                    />
                 }
             >
                 <MenuItem
@@ -91,33 +87,21 @@ export function NoteAction({ onOpenPassword, hasPassword, onOpenTemplates, onSav
                     }}
                 />
             </MenuContainer>
-            <Tooltip title={t('button.pin')}>
-                <Appbar.Action
-                    animated={false}
-                    onPress={toggleKeep}
-                    icon={() => (
-                        isPinned
-                            ? <KeepFilled {...iconProps} />
-                            : <Keep {...iconProps} />
-                    )}
-                />
-            </Tooltip>
-            <Tooltip title={t('button.lock')}>
-                <Appbar.Action
-                    animated={false}
-                    onPress={onOpenPassword}
-                    icon={() => hasPassword
-                        ? <Lock {...iconProps} />
-                        : <Unlock {...iconProps} />}
-                />
-            </Tooltip>
-            <Tooltip title={t('button.delete')}>
-                <Appbar.Action
-                    animated={false}
-                    onPress={onDelete}
-                    icon={() => <Delete {...iconProps} />}
-                />
-            </Tooltip>
+            <AppBarAction
+                tooltip={t('button.pin')}
+                onPress={toggleKeep}
+                icon={isPinned ? KeepFilled : Keep}
+            />
+            <AppBarAction
+                tooltip={t('button.lock')}
+                onPress={onOpenPassword}
+                icon={hasPassword ? Lock : Unlock}
+            />
+            <AppBarAction
+                tooltip={t('button.delete')}
+                onPress={onDelete}
+                icon={Delete}
+            />
         </View>
     )
 }

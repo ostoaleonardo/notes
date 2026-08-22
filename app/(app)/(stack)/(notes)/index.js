@@ -2,9 +2,10 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { ToastAndroid } from 'react-native'
 import { randomUUID } from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
-import { useFocusEffect, useNavigation } from 'expo-router'
+import { useFocusEffect } from 'expo-router'
 import { ModalSheet } from '@/components'
 import { GalleryView } from '@/screens/gallery'
+import { useNoteActionHeader } from '@/screens/app-bar-actions'
 import { MarkdownControls, TemplateCarousel } from '@/screens/notes'
 import { AddPassword, Tags, ImageMarkdown, LinkMarkdown, TableMarkdown } from '@/screens/modals'
 import { Header, NoteEditor } from '@/screens/editor'
@@ -16,7 +17,6 @@ export default function Note() {
     const { notes, saveNote, updateNote, setParamId } = useNotes()
     const { addTemplate } = useTemplates()
     const { filter } = useUtils()
-    const navigation = useNavigation()
 
     const isSaved = useRef(false)
     const firstRender = useRef(true)
@@ -110,14 +110,12 @@ export default function Note() {
         ToastAndroid.show(t('templates.saved'), ToastAndroid.SHORT)
     }, [title, note])
 
-    useEffect(() => {
-        navigation.setOptions({
-            hasPassword: password,
-            onOpenPassword,
-            onOpenTemplates,
-            onSaveAsTemplate
-        })
-    }, [password, onSaveAsTemplate])
+    useNoteActionHeader({
+        password,
+        onOpenPassword,
+        onOpenTemplates,
+        onSaveAsTemplate
+    })
 
     useFocusEffect(
         useCallback(() => {

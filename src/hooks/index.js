@@ -22,6 +22,7 @@ export { useToggleMode } from './use-toggle-mode'
 export { useBottomSheet } from './use-bottom-sheet'
 export { useAnimatedShake } from './use-animated-shake'
 export { useIconProps } from './use-icon-props'
+export { useAppBarTrailing } from './use-app-bar-trailing'
 
 // Utils
 export { useHaptics } from './use-haptics'
