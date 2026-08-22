@@ -76,12 +76,6 @@ export function NotesContainer({
                 </Typography>
             )}
 
-            {grid && isEmpty && (
-                <Typography opacity={0.5} variant='caption'>
-                    {t('message.notes.empty')}
-                </Typography>
-            )}
-
             <Section
                 title={t('pinned')}
                 visible={pinnedNotes.length > 0}
@@ -104,12 +98,24 @@ export function NotesContainer({
             <Scroll contentContainerStyle={styles.container}>
                 {header}
 
-                <Section
-                    visible={remainingNotes.length > 0}
-                    containerStyle={{ paddingTop: 8 }}
-                >
-                    {renderColumns(remainingNotes)}
-                </Section>
+                {isEmpty ? (
+                    <View style={styles.empty}>
+                        <Typography
+                            opacity={0.5}
+                            variant='caption'
+                            textAlign='center'
+                        >
+                            {t('message.notes.empty')}
+                        </Typography>
+                    </View>
+                ) : (
+                    <Section
+                        visible={remainingNotes.length > 0}
+                        containerStyle={{ paddingTop: 8 }}
+                    >
+                        {renderColumns(remainingNotes)}
+                    </Section>
+                )}
             </Scroll>
         )
     }
@@ -134,6 +140,11 @@ const styles = StyleSheet.create({
     header: {
         width: '100%',
         alignItems: 'center'
+    },
+    empty: {
+        flex: 1,
+        width: '100%',
+        justifyContent: 'center'
     },
     columns: {
         width: '100%',
