@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
-import { router, useLocalSearchParams, useNavigation } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import { LargeInput, MarkdownEditor, Section } from '@/components'
+import { AppBarAction, LargeInput, MarkdownEditor, Section } from '@/components'
 import { MarkdownControls } from '@/screens/notes'
 import { TemplatePlaceholders } from '@/screens/modals'
-import { useMarkdownAction, useTemplates } from '@/hooks'
+import { useAppBarTrailing, useMarkdownAction, useTemplates } from '@/hooks'
+import { Code, Delete } from '@/icons'
 import { KeyboardStickyView } from 'react-native-keyboard-controller'
 
 export default function EditTemplate() {
     const { t } = useTranslation()
     const { filename } = useLocalSearchParams()
-    const navigation = useNavigation()
     const { getTemplate, updateTemplate, deleteTemplate } = useTemplates()
 
     const loading = useRef(true)
@@ -40,9 +40,20 @@ export default function EditTemplate() {
 
     const onOpenPlaceholders = () => setPlaceholdersVisible(true)
 
-    useEffect(() => {
-        navigation.setOptions({ onDelete, onOpenPlaceholders })
-    }, [])
+    useAppBarTrailing((
+        <>
+            <AppBarAction
+                tooltip={t('templates.view_placeholders')}
+                onPress={onOpenPlaceholders}
+                icon={Code}
+            />
+            <AppBarAction
+                tooltip={t('button.delete')}
+                onPress={onDelete}
+                icon={Delete}
+            />
+        </>
+    ))
 
     useEffect(() => {
         getTemplate(filename).then((template) => {

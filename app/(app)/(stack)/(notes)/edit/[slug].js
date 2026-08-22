@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ToastAndroid } from 'react-native'
-import { useLocalSearchParams, useNavigation } from 'expo-router'
+import { useLocalSearchParams } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { ModalSheet } from '@/components'
 import { GalleryView } from '@/screens/gallery'
+import { useNoteActionHeader } from '@/screens/app-bar-actions'
 import { MarkdownControls, TemplateCarousel } from '@/screens/notes'
 import { AddPassword, Tags, ImageMarkdown, TableMarkdown, UpdatePassword } from '@/screens/modals'
 import { Header, NoteEditor } from '@/screens/editor'
@@ -15,7 +16,6 @@ export default function EditNote() {
     const { slug } = useLocalSearchParams()
     const { getNote, updateNote } = useNotes()
     const { addTemplate } = useTemplates()
-    const navigation = useNavigation()
 
     const loading = useRef(true)
 
@@ -97,16 +97,12 @@ export default function EditNote() {
         ToastAndroid.show(t('templates.saved'), ToastAndroid.SHORT)
     }, [title, note])
 
-    useEffect(() => {
-        navigation.setOptions({
-            hasPassword: password,
-            onOpenPassword: password
-                ? onOpenUpdatePassword
-                : onOpenPassword,
-            onOpenTemplates,
-            onSaveAsTemplate
-        })
-    }, [password, onSaveAsTemplate])
+    useNoteActionHeader({
+        password,
+        onOpenPassword: password ? onOpenUpdatePassword : onOpenPassword,
+        onOpenTemplates,
+        onSaveAsTemplate
+    })
 
     useEffect(() => {
         const {

@@ -1,18 +1,17 @@
 import { StyleSheet } from 'react-native'
 import { Appbar, Tooltip, useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { useIconProps, useTrash } from '@/hooks'
-import { ArrowBack, Delete, Menu } from '@/icons'
+import { useIconProps } from '@/hooks'
+import { ArrowBack, Menu } from '@/icons'
 import { FONTS } from '@/constants'
 
-export function AppBar({ options, navigation, menu, trash, back, right }) {
+export function AppBar({ props, leading, trailing }) {
     const { colors } = useTheme()
     const { t } = useTranslation()
-    const { clearAll } = useTrash()
     const iconProps = useIconProps()
 
+    const { navigation, options } = props
     const { title, mode = 'small' } = options
-    const { background } = colors
 
     const goBack = () => navigation.goBack()
     const openDrawer = () => navigation.openDrawer()
@@ -22,10 +21,10 @@ export function AppBar({ options, navigation, menu, trash, back, right }) {
             mode={mode}
             style={{
                 ...styles.header,
-                backgroundColor: background
+                backgroundColor: colors.background
             }}
         >
-            {back && (
+            {leading === 'back' && (
                 <Tooltip title={t('button.back')}>
                     <Appbar.Action
                         isLeading
@@ -35,7 +34,8 @@ export function AppBar({ options, navigation, menu, trash, back, right }) {
                     />
                 </Tooltip>
             )}
-            {menu && !back && (
+
+            {leading === 'menu' && (
                 <Appbar.Action
                     animated={false}
                     onPress={openDrawer}
@@ -48,17 +48,7 @@ export function AppBar({ options, navigation, menu, trash, back, right }) {
                 titleStyle={styles.title}
             />
 
-            {right}
-
-            {trash && (
-                <Tooltip title={t('header.trash')}>
-                    <Appbar.Action
-                        animated={false}
-                        onPress={clearAll}
-                        icon={() => <Delete {...iconProps} />}
-                    />
-                </Tooltip>
-            )}
+            {trailing ?? options.trailing}
         </Appbar.Header>
     )
 }
