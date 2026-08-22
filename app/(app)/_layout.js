@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import * as SplashScreen from 'expo-splash-screen'
 import { Stack } from 'expo-router'
 import { useTheme } from 'react-native-paper'
 import { LoadingOverlay } from '@/components/layout'
@@ -8,6 +10,7 @@ import {
     useRepositoryReconciliation,
     useImportMarkdown
 } from '@/hooks'
+import { getScreenContentStyle } from '@/utils'
 
 export default function AppLayout() {
     const { colors } = useTheme()
@@ -23,19 +26,24 @@ export default function AppLayout() {
     useRepositoryReconciliation()
     useDevMenu()
 
-    if (loading || !reconciled) return null
+    const repositorySettled = !loading && reconciled
+    const isReady = repositorySettled && !!activeRepository && !notesLoading
+    const shouldShowGate = repositorySettled && !activeRepository
 
-    const isReady = !!activeRepository && !notesLoading
+    useEffect(() => {
+        if (isReady || shouldShowGate) {
+            SplashScreen.hideAsync()
+        }
+    }, [isReady, shouldShowGate])
+
+    if (!isReady && !shouldShowGate) return null
 
     return (
         <>
             <Stack
                 screenOptions={{
                     headerShown: false,
-
-                    contentStyle: {
-                        backgroundColor: colors.background
-                    }
+                    contentStyle: getScreenContentStyle(colors)
                 }}
             >
                 <Stack.Protected guard={isReady}>
