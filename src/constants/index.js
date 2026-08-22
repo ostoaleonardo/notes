@@ -6,15 +6,35 @@ export { LANGUAGES } from './languages'
 export {
     DEFAULT_TAGS,
     DEFAULT_SORT,
-    TRASH_RETENTION_DAYS
+    TRASH_RETENTION_DAYS,
+    TRASH_RETENTION_MS
 } from './default-values'
 
+export { TREE_BRANCHING, NOTES_PER_FOLDER } from './dev-menu'
 export { MARKDOWN_CONTROLS } from './markdown-controls'
-export { getDefaultTemplates } from './default-templates'
-export { MAX_TABLE_ROWS, MAX_TABLE_COLS, TABLE_CELL_SIZE, TABLE_CELL_GAP } from './table'
 export { IMAGE_EXTENSION_BY_MIME_TYPE } from './image'
+
+export {
+    MAX_TABLE_ROWS,
+    MAX_TABLE_COLS,
+    TABLE_CELL_SIZE,
+    TABLE_CELL_GAP
+} from './table'
+
+export {
+    METADATA_FILENAME,
+    TAGS_FILENAME,
+    TRASH_FILENAME,
+    TEMPLATES_FOLDER_NAME,
+    IMAGES_FOLDER_NAME,
+    RESERVED_FOLDER_NAMES,
+    SIDECAR_FILENAMES
+} from './file-storage'
+
 export { FEEDBACK_TYPES } from './feedback-types'
 export { STORAGE_KEYS } from './storage-keys'
+export { NOTE_KEY_PREFIX } from './note-key'
+export { TEMPLATE_PLACEHOLDERS } from './template-placeholders'
 export { LINKS } from './links'
 
 export {

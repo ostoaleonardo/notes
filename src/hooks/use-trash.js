@@ -1,7 +1,8 @@
 import { useContext } from 'react'
-import { TRASH_FILENAME, useFileStorage } from './use-file-storage'
+import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
 import { NoteContext } from '@/context'
+import { TRASH_FILENAME } from '@/constants'
 import { getDate } from '@/utils'
 
 export function useTrash() {

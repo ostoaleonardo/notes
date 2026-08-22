@@ -1,3 +1,3 @@
-export const NOTE_KEY_PREFIX = 'note:'
+import { NOTE_KEY_PREFIX } from '@/constants'
 
 export const getNoteKey = (id) => NOTE_KEY_PREFIX + id

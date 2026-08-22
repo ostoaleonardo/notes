@@ -1,9 +1,9 @@
 import { useContext } from 'react'
 import { useStorage } from './use-storage'
-import { TAGS_FILENAME, useFileStorage } from './use-file-storage'
+import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
 import { NoteContext } from '@/context'
-import { DEFAULT_TAGS, STORAGE_KEYS } from '@/constants'
+import { DEFAULT_TAGS, STORAGE_KEYS, TAGS_FILENAME } from '@/constants'
 
 export function useTags() {
     const { tags, setTags } = useContext(NoteContext)
