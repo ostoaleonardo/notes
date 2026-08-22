@@ -40,8 +40,7 @@ export function Header({
             )}
 
             <Section
-                title={t('title.tags')}
-                containerStyle={{ paddingVertical: 16 }}
+                containerStyle={{ paddingTop: 8, paddingBottom: 24 }}
             >
                 <TagCarousel
                     tags={tags}
