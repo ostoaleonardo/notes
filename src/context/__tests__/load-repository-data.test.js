@@ -2,7 +2,12 @@ import fs from 'fs'
 import path from 'path'
 import { randomUUID } from 'expo-crypto'
 import { loadRepositoryData } from '../load-repository-data'
-import { STORAGE_KEYS } from '@/constants'
+import {
+    STORAGE_KEYS,
+    TRASH_FOLDER_NAME,
+    TRASH_METADATA_FILENAME,
+    TRASH_RETENTION_MS
+} from '@/constants'
 
 jest.mock('expo-crypto', () => ({ randomUUID: jest.fn() }))
 
@@ -19,7 +24,6 @@ const createFakeStorage = (seed = {}) => {
     }
 }
 
-// deviceCache: URIs "still on device"; anything else throws (cache already purged).
 const createFakeFileStorage = (deviceCache = new Map()) => {
     const files = new Map()
     const jsons = new Map()
@@ -34,6 +38,7 @@ const createFakeFileStorage = (deviceCache = new Map()) => {
             text: async () => content
         })),
         writeNoteFile: (uri, filename, content) => { filesFor(uri).set(filename, content) },
+        deleteNoteFile: (uri, filename) => { filesFor(uri).delete(filename) },
         readMetadata: async (uri) => metadatas.get(uri) || {},
         writeMetadata: (uri, metadata) => { metadatas.set(uri, { ...metadata }) },
         readJson: async (uri, filename, fallback) => {
@@ -42,6 +47,7 @@ const createFakeFileStorage = (deviceCache = new Map()) => {
         },
         writeJson: (uri, filename, value) => { jsonsFor(uri).set(filename, value) },
         getOrCreateImagesFolder: (uri) => ({ uri: `${uri}/images` }),
+        getOrCreateTrashFolder: (uri) => ({ uri: `${uri}/.trash` }),
         copyImageFile: async (sourceUri, directoryUri, filename) => {
             if (!deviceCache.has(sourceUri)) {
                 throw new Error('source no longer exists on device', sourceUri)
@@ -81,7 +87,8 @@ beforeEach(() => {
 
 // --- Tests ---
 
-describeLegacyFixtures('loadRepositoryData - legacy AsyncStorage migration', () => {
+// migration
+describeLegacyFixtures('legacy AsyncStorage migration', () => {
     test('migrates every legacy note into a .md file with matching content', async () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage()
@@ -141,7 +148,8 @@ describeLegacyFixtures('loadRepositoryData - legacy AsyncStorage migration', () 
     })
 })
 
-describeLegacyFixtures('loadRepositoryData - legacy image migration', () => {
+// images
+describeLegacyFixtures('legacy image migration', () => {
     test('copies a legacy cache-referenced image into the repository images/ folder', async () => {
         const legacyNoteWithImage = legacyNotes.find((note) => note.images.length > 0)
         expect(legacyNoteWithImage).toBeDefined()
@@ -194,7 +202,8 @@ describeLegacyFixtures('loadRepositoryData - legacy image migration', () => {
     })
 })
 
-describeLegacyFixtures('loadRepositoryData - tags shared across the repository tree', () => {
+// tags
+describeLegacyFixtures('tags shared across the repository tree', () => {
     test('reads/writes tags at the root repository even when the active node is a subfolder', async () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage()
@@ -214,7 +223,8 @@ describeLegacyFixtures('loadRepositoryData - tags shared across the repository t
     })
 })
 
-describe('loadRepositoryData - steady state (no legacy data)', () => {
+// steady state
+describe('steady state (no legacy data)', () => {
     test('adopts a foreign .md file with no metadata entry, using default values', async () => {
         const storage = createFakeStorage()
         const fileStorage = createFakeFileStorage()
@@ -240,5 +250,117 @@ describe('loadRepositoryData - steady state (no legacy data)', () => {
         expect(notes).toEqual([])
         const metadata = await fileStorage.readMetadata(REPO_URI)
         expect(metadata['ghost-id']).toBeUndefined()
+    })
+})
+
+// trash
+describe('trash folder', () => {
+    const TRASH_URI = `${REPO_URI}/${TRASH_FOLDER_NAME}`
+
+    test('returns an empty list when nothing has been trashed', async () => {
+        const storage = createFakeStorage()
+        const fileStorage = createFakeFileStorage()
+
+        const { trash } = await loadRepositoryData(repository, repository, storage, fileStorage)
+
+        expect(trash).toEqual([])
+    })
+
+    test('adopts a foreign .md file placed directly in the trash folder, using default values', async () => {
+        const storage = createFakeStorage()
+        const fileStorage = createFakeFileStorage()
+        fileStorage.writeNoteFile(TRASH_URI, 'Recovered.md', 'Recovered content')
+
+        const { trash } = await loadRepositoryData(repository, repository, storage, fileStorage)
+
+        expect(trash).toHaveLength(1)
+        expect(trash[0].title).toBe('Recovered')
+        expect(trash[0].note).toBe('Recovered content')
+        expect(trash[0].tags).toEqual([])
+        expect(typeof trash[0].trashedAt).toBe('number')
+    })
+
+    test('prunes trash metadata entries whose .md file was removed externally', async () => {
+        const storage = createFakeStorage()
+        const fileStorage = createFakeFileStorage()
+        fileStorage.writeJson(TRASH_URI, TRASH_METADATA_FILENAME, {
+            'ghost-id': { filename: 'Deleted externally.md', trashedAt: Date.now(), tags: [], password: '', biometrics: false, createdAt: 1, images: [] }
+        })
+
+        const { trash } = await loadRepositoryData(repository, repository, storage, fileStorage)
+
+        expect(trash).toEqual([])
+        const metadata = await fileStorage.readJson(TRASH_URI, TRASH_METADATA_FILENAME, {})
+        expect(metadata['ghost-id']).toBeUndefined()
+    })
+
+    test('keeps a trashed note within the retention window, preserving its metadata', async () => {
+        const storage = createFakeStorage()
+        const fileStorage = createFakeFileStorage()
+        const trashedAt = Date.now() - 1000
+
+        fileStorage.writeNoteFile(TRASH_URI, 'Old note.md', 'Old content')
+        fileStorage.writeJson(TRASH_URI, TRASH_METADATA_FILENAME, {
+            'note-id': {
+                filename: 'Old note.md',
+                trashedAt,
+                tags: ['work'],
+                password: 'secret',
+                biometrics: true,
+                createdAt: 1,
+                images: ['image.jpg']
+            }
+        })
+
+        const { trash } = await loadRepositoryData(repository, repository, storage, fileStorage)
+
+        expect(trash).toHaveLength(1)
+        expect(trash[0]).toMatchObject({
+            id: 'note-id',
+            title: 'Old note',
+            note: 'Old content',
+            tags: ['work'],
+            password: 'secret',
+            biometrics: true,
+            createdAt: 1,
+            trashedAt,
+            images: ['image.jpg']
+        })
+    })
+
+    test('purges a trashed note past the retention window, deleting both the file and its metadata', async () => {
+        const storage = createFakeStorage()
+        const fileStorage = createFakeFileStorage()
+        const expiredAt = Date.now() - TRASH_RETENTION_MS - 1000
+
+        fileStorage.writeNoteFile(TRASH_URI, 'Expired.md', 'Expired content')
+        fileStorage.writeJson(TRASH_URI, TRASH_METADATA_FILENAME, {
+            'expired-id': { filename: 'Expired.md', trashedAt: expiredAt, tags: [], password: '', biometrics: false, createdAt: expiredAt, images: [] }
+        })
+
+        const { trash } = await loadRepositoryData(repository, repository, storage, fileStorage)
+
+        expect(trash).toEqual([])
+        expect(fileStorage.listMarkdownFiles(TRASH_URI)).toHaveLength(0)
+        const metadata = await fileStorage.readJson(TRASH_URI, TRASH_METADATA_FILENAME, {})
+        expect(metadata['expired-id']).toBeUndefined()
+    })
+
+    test('backfills a missing trashedAt instead of purging the entry', async () => {
+        const storage = createFakeStorage()
+        const fileStorage = createFakeFileStorage()
+
+        fileStorage.writeNoteFile(TRASH_URI, 'No date.md', 'Content')
+        fileStorage.writeJson(TRASH_URI, TRASH_METADATA_FILENAME, {
+            'no-date-id': { filename: 'No date.md', tags: [], password: '', biometrics: false, createdAt: 1, images: [] }
+        })
+
+        const { trash } = await loadRepositoryData(repository, repository, storage, fileStorage)
+
+        expect(trash).toHaveLength(1)
+        expect(typeof trash[0].trashedAt).toBe('number')
+
+        const metadata = await fileStorage.readJson(TRASH_URI, TRASH_METADATA_FILENAME, {})
+        expect(metadata['no-date-id'].trashedAt).toBe(trash[0].trashedAt)
     })
 })
