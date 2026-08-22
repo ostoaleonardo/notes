@@ -6,7 +6,6 @@ import { MarkdownControls } from '@/screens/notes'
 import { TemplatePlaceholders } from '@/screens/modals'
 import { useAppBarTrailing, useMarkdownAction, useTemplates } from '@/hooks'
 import { Code, Delete } from '@/icons'
-import { KeyboardStickyView } from 'react-native-keyboard-controller'
 
 export default function EditTemplate() {
     const { t } = useTranslation()
@@ -15,6 +14,7 @@ export default function EditTemplate() {
 
     const loading = useRef(true)
     const currentFilename = useRef(filename)
+    const originalName = useRef('')
 
     const [name, setName] = useState('')
     const [content, setContent] = useState('')
@@ -59,8 +59,12 @@ export default function EditTemplate() {
         getTemplate(filename).then((template) => {
             if (!template) return
 
-            setName(template.name)
+            const displayName = t(`templates.${template.name}`, template.name)
+
+            setName(displayName)
             setContent(template.content)
+            originalName.current = displayName
+
             setTimeout(() => { loading.current = false }, 0)
         })
     }, [])
@@ -69,7 +73,12 @@ export default function EditTemplate() {
         if (loading.current || !name.trim()) return
 
         const timer = setTimeout(async () => {
-            currentFilename.current = await updateTemplate(currentFilename.current, name.trim(), content)
+            const trimmedName = name.trim()
+            const nextName = trimmedName === originalName.current
+                ? currentFilename.current.replace(/\.md$/i, '')
+                : trimmedName
+
+            currentFilename.current = await updateTemplate(currentFilename.current, nextName, content)
         }, 500)
 
         return () => clearTimeout(timer)
@@ -95,14 +104,12 @@ export default function EditTemplate() {
                 />
             </Section>
 
-            <KeyboardStickyView style={{ position: 'absolute', bottom: 16 }}>
-                <MarkdownControls
-                    isEditing={isEditing}
-                    onRunAction={onRunAction}
-                    onEditMarkdown={onEditMarkdown}
-                    scope='template'
-                />
-            </KeyboardStickyView>
+            <MarkdownControls
+                isEditing={isEditing}
+                onRunAction={onRunAction}
+                onEditMarkdown={onEditMarkdown}
+                scope='template'
+            />
 
             <TemplatePlaceholders
                 visible={placeholdersVisible}
