@@ -1,7 +1,6 @@
 export const STORAGE_KEYS = {
     // Legacy
     NOTES: 'notes',
-    TRASH: 'trash',
     CATEGORIES: 'categories',
 
     // Repositories

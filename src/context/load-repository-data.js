@@ -5,7 +5,7 @@ import {
     DEFAULT_TAGS,
     STORAGE_KEYS,
     TAGS_FILENAME,
-    TRASH_FILENAME,
+    TRASH_METADATA_FILENAME,
     TRASH_RETENTION_MS,
     NOTE_KEY_PREFIX
 } from '@/constants'
@@ -150,23 +150,69 @@ const purgeAllTag = (tags, repositoryUri, fileStorage) => {
     return filtered
 }
 
-// Backfills trashedAt on older entries, then drops anything past TRASH_RETENTION_DAYS.
-const purgeExpiredTrash = (trash, repositoryUri, fileStorage) => {
+// Reconciles .trash/ .md files against the trash metadata sidecar, backfills trashedAt on
+// older entries, and purges anything past TRASH_RETENTION_DAYS.
+const loadTrashFromFolder = async (repositoryUri, fileStorage) => {
+    const trashUri = fileStorage.getOrCreateTrashFolder(repositoryUri).uri
+    const files = fileStorage.listMarkdownFiles(trashUri)
+    const metadata = await fileStorage.readJson(trashUri, TRASH_METADATA_FILENAME, {})
+
+    const fileNames = new Set(files.map((file) => file.name))
+    let metadataChanged = false
+
+    for (const id of Object.keys(metadata)) {
+        if (!fileNames.has(metadata[id].filename)) {
+            delete metadata[id]
+            metadataChanged = true
+        }
+    }
+
+    const filenameToId = new Map(
+        Object.entries(metadata).map(([id, entry]) => [entry.filename, id])
+    )
+
     const now = Date.now()
-    let changed = false
+    const trash = []
 
-    const stamped = trash.map((item) => {
-        if (item.trashedAt) return item
-        changed = true
-        return { ...item, trashedAt: now }
-    })
+    for (const file of files) {
+        let id = filenameToId.get(file.name)
 
-    const kept = stamped.filter((item) => now - item.trashedAt < TRASH_RETENTION_MS)
-    if (kept.length !== stamped.length) changed = true
+        if (!id) {
+            id = randomUUID()
+            metadata[id] = { filename: file.name, trashedAt: now, tags: [], password: '', biometrics: false, createdAt: now, images: [] }
+            metadataChanged = true
+        }
 
-    if (changed) fileStorage.writeJson(repositoryUri, TRASH_FILENAME, kept)
+        const entry = metadata[id]
 
-    return kept
+        if (!entry.trashedAt) {
+            entry.trashedAt = now
+            metadataChanged = true
+        }
+
+        if (now - entry.trashedAt >= TRASH_RETENTION_MS) {
+            fileStorage.deleteNoteFile(trashUri, file.name)
+            delete metadata[id]
+            metadataChanged = true
+            continue
+        }
+
+        trash.push({
+            id,
+            title: getTitle(file.name),
+            note: await file.text(),
+            tags: entry.tags || [],
+            password: entry.password,
+            biometrics: entry.biometrics,
+            createdAt: entry.createdAt,
+            trashedAt: entry.trashedAt,
+            images: entry.images || []
+        })
+    }
+
+    if (metadataChanged) fileStorage.writeJson(trashUri, TRASH_METADATA_FILENAME, metadata)
+
+    return trash
 }
 
 // Tags are always read/written at the root, shared across the whole tree.
@@ -192,17 +238,7 @@ export const loadRepositoryData = async (repository, rootRepository, storage, fi
         fileStorage
     )
 
-    const rawTrash = await loadSidecarList({
-        repositoryUri,
-        filename: TRASH_FILENAME,
-        legacyKey: STORAGE_KEYS.TRASH,
-        defaultValue: [],
-        normalizeLegacy: (parsed) => (Array.isArray(parsed) ? parsed : Object.values(parsed)),
-        storage,
-        fileStorage
-    })
-
-    const trash = purgeExpiredTrash(rawTrash, repositoryUri, fileStorage)
+    const trash = await loadTrashFromFolder(repositoryUri, fileStorage)
 
     return { notes, tags, trash }
 }
