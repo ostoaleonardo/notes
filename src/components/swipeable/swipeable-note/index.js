@@ -62,7 +62,8 @@ export function SwipeableNote({ ref, data, onUnlock, onDelete, onPin, onOpen, is
                                 {title && (
                                     <Typography
                                         bold
-                                        variant='caption'
+                                        opacity={0.6}
+                                        fontSize={10}
                                     >
                                         {title}
                                     </Typography>
