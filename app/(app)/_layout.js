@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import * as SplashScreen from 'expo-splash-screen'
 import { Stack } from 'expo-router'
 import { useTheme } from 'react-native-paper'
@@ -28,15 +28,19 @@ export default function AppLayout() {
 
     const repositorySettled = !loading && reconciled
     const isReady = repositorySettled && !!activeRepository && !notesLoading
-    const shouldShowGate = repositorySettled && !activeRepository
+    const needsGate = repositorySettled && !activeRepository
+
+    const gateEntered = useRef(false)
+    if (needsGate) gateEntered.current = true
 
     useEffect(() => {
-        if (isReady || shouldShowGate) {
+        if (isReady || needsGate) {
             SplashScreen.hideAsync()
         }
-    }, [isReady, shouldShowGate])
+    }, [isReady, needsGate])
 
-    if (!isReady && !shouldShowGate) return null
+    if (!repositorySettled) return null
+    if (!isReady && !needsGate && !gateEntered.current) return null
 
     return (
         <>
