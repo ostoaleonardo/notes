@@ -38,13 +38,13 @@ export function useDevMenu() {
 
     const deleteAll = () => {
         if (activeRepository) clearRepository(activeRepository.uri)
-        DevSettings.reload()
+        console.debug('deleted all')
     }
 
     const deleteAllTags = () => {
         const root = activeRepositoryTree[0]
         if (root) writeJson(root.uri, TAGS_FILENAME, DEFAULT_TAGS)
-        DevSettings.reload()
+        console.debug('deleted all tags')
     }
 
     const seedLegacyDump = async () => {
@@ -98,7 +98,7 @@ export function useDevMenu() {
 
         registerDevMenuItems([
             {
-                name: 'Delete all notes',
+                name: 'Delete all',
                 callback: deleteAll,
                 shouldCollapse: true
             },
