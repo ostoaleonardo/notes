@@ -2,11 +2,11 @@ import { StyleSheet, View } from 'react-native'
 import Animated, { LinearTransition } from 'react-native-reanimated'
 import { Typography } from '../typography'
 
-export function AnimatedList({ emptyLabel, gap = 16, ...props }) {
+export function AnimatedList({ emptyLabel, gap = 16, contentContainerStyle, ...props }) {
     return (
         <Animated.FlatList
             style={styles.base}
-            contentContainerStyle={{ ...styles.list, gap }}
+            contentContainerStyle={{ ...styles.list, gap, ...contentContainerStyle }}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             itemLayoutAnimation={LinearTransition}

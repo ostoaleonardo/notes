@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { MarkdownInput, Scroll, Typography } from '@/components'
+import { MarkdownPreview, Scroll, Typography } from '@/components'
 import { useLanguage, useRepositories, useTemplates } from '@/hooks'
 import { getPreviewNote, renderTemplate } from '@/utils'
-import { COMMONS } from '@/constants'
+import { COMMONS, TEMPLATE_PREVIEW_MAX_CHARS, TEMPLATE_PREVIEW_MAX_LINES, TRANSPARENT } from '@/constants'
 
 export function TemplateCarousel({ title, onSelect }) {
     const { t } = useTranslation()
@@ -42,25 +42,30 @@ export function TemplateCarousel({ title, onSelect }) {
                 <Pressable
                     key={template.filename}
                     onPress={() => onPress(template)}
-                    style={[styles.card, { backgroundColor: colors.surface }]}
+                    style={{
+                        ...styles.card,
+                        backgroundColor: colors.surface,
+                        borderColor: colors.onSurface + TRANSPARENT[10]
+                    }}
                 >
                     <Typography
-                        bold
-                        variant='caption'
+                        bold={true}
+                        opacity={0.6}
+                        fontSize={10}
                         numberOfLines={1}
+                        uppercase={true}
                     >
                         {t(`templates.${template.name}`, template.name)}
                     </Typography>
 
-                    <View
-                        pointerEvents='none'
-                        style={styles.preview}
-                    >
-                        <MarkdownInput
-                            size={9}
-                            value={getPreviewNote(template.content)}
-                        />
-                    </View>
+                    <MarkdownPreview
+                        size={11}
+                        value={getPreviewNote(
+                            renderTemplate(template.content, { title, language: currentLanguage }),
+                            TEMPLATE_PREVIEW_MAX_LINES,
+                            TEMPLATE_PREVIEW_MAX_CHARS
+                        )}
+                    />
                 </Pressable>
             ))}
         </Scroll>
@@ -71,17 +76,14 @@ const styles = StyleSheet.create({
     content: {
         flexGrow: 1,
         gap: 8,
-        paddingHorizontal: 16
+        paddingHorizontal: 16,
+        alignItems: 'flex-start'
     },
     card: {
-        width: 140,
-        height: 120,
-        padding: 12,
+        width: 256,
         gap: 6,
+        padding: 12,
+        borderWidth: 1,
         borderRadius: COMMONS.radius
-    },
-    preview: {
-        flex: 1,
-        overflow: 'hidden'
     }
 })
