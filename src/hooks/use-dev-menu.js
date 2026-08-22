@@ -7,9 +7,7 @@ import { usePremium } from './use-premium'
 import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
 import {
-    DEFAULT_TAGS,
     STORAGE_KEYS,
-    TAGS_FILENAME,
     TREE_BRANCHING,
     NOTES_PER_FOLDER
 } from '@/constants'
@@ -22,29 +20,32 @@ export function useDevMenu() {
     const { premium, setPremium } = usePremium()
 
     const {
-        writeJson,
         writeNoteFile,
         clearRepository,
-        createSubdirectory
+        createSubdirectory,
+        getOrCreateTemplatesFolder,
+        getOrCreateTrashFolder,
+        deleteDirectory
     } = useFileStorage()
 
     const {
         repositories,
         activeRepository,
         activeRepositoryId,
-        activeRepositoryTree,
         buildRepository
     } = useRepositories()
 
-    const deleteAll = () => {
-        if (activeRepository) clearRepository(activeRepository.uri)
-        console.debug('deleted all')
-    }
+    const resetApp = async () => {
+        if (activeRepository) {
+            clearRepository(activeRepository.uri)
+            deleteDirectory(getOrCreateTemplatesFolder(activeRepository.uri).uri)
+            deleteDirectory(getOrCreateTrashFolder(activeRepository.uri).uri)
+        }
 
-    const deleteAllTags = () => {
-        const root = activeRepositoryTree[0]
-        if (root) writeJson(root.uri, TAGS_FILENAME, DEFAULT_TAGS)
-        console.debug('deleted all tags')
+        await setItem(STORAGE_KEYS.REPOSITORIES, JSON.stringify([]))
+        await setItem(STORAGE_KEYS.ACTIVE_REPOSITORY, '')
+
+        DevSettings.reload()
     }
 
     const seedLegacyDump = async () => {
@@ -98,13 +99,8 @@ export function useDevMenu() {
 
         registerDevMenuItems([
             {
-                name: 'Delete all',
-                callback: deleteAll,
-                shouldCollapse: true
-            },
-            {
-                name: 'Delete all tags',
-                callback: deleteAllTags,
+                name: 'Reset app (no repository selected)',
+                callback: resetApp,
                 shouldCollapse: true
             },
             {
