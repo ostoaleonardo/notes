@@ -3,7 +3,6 @@ import { ToastAndroid } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { ModalSheet } from '@/components'
-import { GalleryView } from '@/screens/gallery'
 import { useNoteActionHeader } from '@/screens/app-bar-actions'
 import { MarkdownControls, TemplateCarousel } from '@/screens/notes'
 import { AddPassword, Tags, ImageMarkdown, TableMarkdown, UpdatePassword } from '@/screens/modals'
@@ -31,7 +30,6 @@ export default function EditNote() {
     const [biometrics, setBiometrics] = useState(false)
 
     const [isEditing, setIsEditing] = useState(false)
-    const [galleryIndex, setGalleryIndex] = useState('')
 
     const onEditMarkdown = useCallback(() => setIsEditing(prev => !prev), [])
 
@@ -155,9 +153,6 @@ export default function EditNote() {
                 value={note}
                 setValue={setNote}
                 markdownAction={markdownAction}
-                images={images}
-                setImages={setImages}
-                onGallery={setGalleryIndex}
                 isEditing={isEditing}
             />
 
@@ -241,13 +236,6 @@ export default function EditNote() {
                     onSelect={onSelectTemplate}
                 />
             </ModalSheet>
-
-            <GalleryView
-                images={images}
-                index={galleryIndex}
-                visible={galleryIndex !== ''}
-                onClose={() => setGalleryIndex('')}
-            />
         </>
     )
 }

@@ -4,7 +4,6 @@ import { randomUUID } from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
 import { useFocusEffect } from 'expo-router'
 import { ModalSheet } from '@/components'
-import { GalleryView } from '@/screens/gallery'
 import { useNoteActionHeader } from '@/screens/app-bar-actions'
 import { MarkdownControls, TemplateCarousel } from '@/screens/notes'
 import { AddPassword, Tags, ImageMarkdown, LinkMarkdown, TableMarkdown } from '@/screens/modals'
@@ -27,7 +26,6 @@ export default function Note() {
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
     const [tags, setTags] = useState(filter ? Array.from(filter) : [])
-    const [images, setImages] = useState([])
 
     const [createdAt, setCreatedAt] = useState('')
 
@@ -35,7 +33,6 @@ export default function Note() {
     const [biometrics, setBiometrics] = useState(false)
 
     const [isEditing, setIsEditing] = useState(true)
-    const [galleryIndex, setGalleryIndex] = useState('')
 
     useEffect(() => {
         notesRef.current = notes
@@ -131,8 +128,8 @@ export default function Note() {
     )
 
     useNoteAutosave({
-        id, title, note, tags, images, password, biometrics, createdAt,
-        skip: firstRender.current || (title === autoTitleRef.current && !note && !images.length),
+        id, title, note, tags, password, biometrics, createdAt,
+        skip: firstRender.current || (title === autoTitleRef.current && !note),
         onSave: (newData) => {
             if (!isSaved.current) {
                 const createdAt = getDate()
@@ -167,9 +164,6 @@ export default function Note() {
                 value={note}
                 setValue={setNote}
                 markdownAction={markdownAction}
-                images={images}
-                setImages={setImages}
-                onGallery={setGalleryIndex}
                 isEditing={isEditing}
             />
 
@@ -249,13 +243,6 @@ export default function Note() {
                     onSelect={onSelectTemplate}
                 />
             </ModalSheet>
-
-            <GalleryView
-                images={images}
-                index={galleryIndex}
-                visible={galleryIndex !== ''}
-                onClose={() => setGalleryIndex('')}
-            />
         </>
     )
 }

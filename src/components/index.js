@@ -9,8 +9,7 @@ export { ErrorBoundary } from './error-boundary'
 export {
     Pressable,
     FloatingButton,
-    SquareButton,
-    ImagePreview
+    SquareButton
 } from './button'
 
 // Chips
