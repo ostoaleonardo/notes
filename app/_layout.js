@@ -63,12 +63,6 @@ export default function MainLayout() {
         })
     }
 
-    useEffect(() => {
-        if (isReady) {
-            SplashScreen.hide()
-        }
-    }, [isReady])
-
     if (!isReady) {
         return null
     }
