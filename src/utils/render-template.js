@@ -1,5 +1,3 @@
-export const TEMPLATE_PLACEHOLDERS = ['date', 'time', 'title']
-
 export const renderTemplate = (content, { title, language } = {}) => {
     const now = new Date()
 

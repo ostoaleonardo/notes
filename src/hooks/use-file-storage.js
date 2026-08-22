@@ -1,13 +1,11 @@
 import { Directory, File } from 'expo-file-system'
-
-const METADATA_FILENAME = '.notes-meta.json'
-export const TAGS_FILENAME = '.tags.json'
-export const TRASH_FILENAME = '.trash.json'
-export const TEMPLATES_FOLDER_NAME = 'templates'
-export const IMAGES_FOLDER_NAME = 'images'
-
-const RESERVED_FOLDER_NAMES = [TEMPLATES_FOLDER_NAME, IMAGES_FOLDER_NAME]
-const SIDECAR_FILENAMES = [METADATA_FILENAME, TAGS_FILENAME, TRASH_FILENAME]
+import {
+    METADATA_FILENAME,
+    TEMPLATES_FOLDER_NAME,
+    IMAGES_FOLDER_NAME,
+    RESERVED_FOLDER_NAMES,
+    SIDECAR_FILENAMES
+} from '@/constants'
 
 export function useFileStorage() {
     const listEntries = (directoryUri) => new Directory(directoryUri).list()
@@ -56,8 +54,6 @@ export function useFileStorage() {
 
     const directoryExists = (directoryUri) => new Directory(directoryUri).exists
 
-    // SAF content URIs reject Directory.rename() directly, so renaming a folder means
-    // recreating its whole tree under the new name, then deleting the original.
     const copyDirectoryContents = (source, destination) => {
         source.list().forEach((entry) => {
             if (entry instanceof Directory) {

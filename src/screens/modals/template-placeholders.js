@@ -2,8 +2,8 @@ import { StyleSheet, View } from 'react-native'
 import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { DialogModal, Typography } from '@/components'
-import { FONTS } from '@/constants'
-import { TEMPLATE_PLACEHOLDERS, renderTemplate } from '@/utils'
+import { FONTS, TEMPLATE_PLACEHOLDERS } from '@/constants'
+import { renderTemplate } from '@/utils'
 
 export function TemplatePlaceholders({ visible, onDismiss }) {
     const { t } = useTranslation()
