@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { ToastAndroid } from 'react-native'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { ModalSheet } from '@/components'
+import { LoadingOverlay } from '@/components/layout'
 import { MarkdownControls, TemplateCarousel } from '@/screens/notes'
 import { AddPassword, Tags, ImageMarkdown, TableMarkdown, UpdatePassword } from '@/screens/modals'
 import { Header, NoteEditor } from '@/screens/editor'
@@ -19,7 +20,7 @@ export default function EditNote() {
     const navigation = useNavigation()
     useCloseTabOnRemove(navigation, slug)
 
-    const loading = useRef(true)
+    const [loading, setLoading] = useState(true)
 
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
@@ -124,7 +125,7 @@ export default function EditNote() {
         setRepositoryId(repositoryId)
 
         setTimeout(() => {
-            loading.current = false
+            setLoading(false)
         }, 0)
 
         registerTab(slug)
@@ -132,7 +133,7 @@ export default function EditNote() {
 
     useNoteAutosave({
         id: slug, title, note, tags, images, password, biometrics, createdAt, repositoryId,
-        skip: loading.current,
+        skip: loading,
         onSave: (newData) => updateNote({
             ...newData,
             updatedAt: getDate()
@@ -142,6 +143,8 @@ export default function EditNote() {
     useTabBarActions({
         onOpenDrawer: () => navigation.dispatch({ type: 'OPEN_DRAWER' })
     }, [])
+
+    if (loading) return <LoadingOverlay />
 
     return (
         <>

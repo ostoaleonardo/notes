@@ -33,6 +33,11 @@ export default function AppLayout() {
     const gateEntered = useRef(false)
     if (needsGate) gateEntered.current = true
 
+    const wasReady = useRef(false)
+
+    if (isReady) wasReady.current = true
+    const showDrawer = !needsGate && wasReady.current
+
     useEffect(() => {
         if (isReady || needsGate) {
             SplashScreen.hideAsync()
@@ -40,7 +45,7 @@ export default function AppLayout() {
     }, [isReady, needsGate])
 
     if (!repositorySettled) return null
-    if (!isReady && !needsGate && !gateEntered.current) return null
+    if (!isReady && !needsGate && !gateEntered.current && !wasReady.current) return null
 
     return (
         <>
@@ -50,16 +55,16 @@ export default function AppLayout() {
                     contentStyle: getScreenContentStyle(colors)
                 }}
             >
-                <Stack.Protected guard={isReady}>
+                <Stack.Protected guard={showDrawer}>
                     <Stack.Screen name='(drawer)' />
                 </Stack.Protected>
 
-                <Stack.Protected guard={!isReady}>
+                <Stack.Protected guard={!showDrawer}>
                     <Stack.Screen name='repository-gate' />
                 </Stack.Protected>
             </Stack>
 
-            {importing && <LoadingOverlay />}
+            {(showDrawer && notesLoading || importing) && <LoadingOverlay />}
         </>
     )
 }
