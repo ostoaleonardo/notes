@@ -5,6 +5,7 @@
 		"untitled": "Untitled"
 	},
 	"tags": {
+		"add": "Add tag",
 		"update": "Update tag"
 	},
 	"repositories": {
@@ -103,7 +104,9 @@
 		"update": "Update password",
 		"remove": "Remove password",
 		"current": "Current password",
-		"new": "New password"
+		"new": "New password",
+		"show": "Show password",
+		"hide": "Hide password"
 	},
 	"biometric": {
 		"use": "Use fingerprint",
@@ -126,7 +129,10 @@
 		"more": "More",
 		"forget": "Forget",
 		"create": "Create",
-		"lock": "Lock"
+		"lock": "Lock",
+		"close": "Close",
+		"preview": "Preview",
+		"clear_filter": "Clear filter"
 	},
 	"count": {
 		"notes": "{{count}} note",
@@ -146,6 +152,26 @@
 		"image_url": "URL",
 		"image_camera": "Take photo",
 		"image_gallery": "Choose from gallery"
+	},
+	"markdown_action": {
+		"bold": "Bold",
+		"italic": "Italic",
+		"strike": "Strikethrough",
+		"h1": "Heading 1",
+		"h2": "Heading 2",
+		"h3": "Heading 3",
+		"h4": "Heading 4",
+		"h5": "Heading 5",
+		"h6": "Heading 6",
+		"quote": "Quote",
+		"code": "Code",
+		"hr": "Horizontal rule",
+		"image": "Insert image",
+		"link": "Insert link",
+		"table": "Insert table",
+		"insert-date": "Insert date",
+		"insert-time": "Insert time",
+		"insert-title": "Insert title"
 	},
 	"view": {
 		"grid": "Grid view",

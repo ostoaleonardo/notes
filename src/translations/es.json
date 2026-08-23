@@ -5,6 +5,7 @@
 		"untitled": "Sin título"
 	},
 	"tags": {
+		"add": "Añadir etiqueta",
 		"update": "Actualizar etiqueta"
 	},
 	"repositories": {
@@ -88,7 +89,9 @@
 		"update": "Actualizar contraseña",
 		"remove": "Eliminar contraseña",
 		"current": "Contraseña actual",
-		"new": "Nueva contraseña"
+		"new": "Nueva contraseña",
+		"show": "Mostrar contraseña",
+		"hide": "Ocultar contraseña"
 	},
 	"biometric": {
 		"use": "Usar huella dactilar",
@@ -111,7 +114,10 @@
 		"more": "Más opciones",
 		"forget": "Olvidar",
 		"create": "Crear",
-		"lock": "Bloquear"
+		"lock": "Bloquear",
+		"close": "Cerrar",
+		"preview": "Vista previa",
+		"clear_filter": "Quitar filtro"
 	},
 	"count": {
 		"notes": "{{count}} nota",
@@ -131,6 +137,26 @@
 		"image_url": "URL",
 		"image_camera": "Tomar foto",
 		"image_gallery": "Elegir de la galería"
+	},
+	"markdown_action": {
+		"bold": "Negrita",
+		"italic": "Cursiva",
+		"strike": "Tachado",
+		"h1": "Título 1",
+		"h2": "Título 2",
+		"h3": "Título 3",
+		"h4": "Título 4",
+		"h5": "Título 5",
+		"h6": "Título 6",
+		"quote": "Cita",
+		"code": "Código",
+		"hr": "Línea horizontal",
+		"image": "Insertar imagen",
+		"link": "Insertar enlace",
+		"table": "Insertar tabla",
+		"insert-date": "Insertar fecha",
+		"insert-time": "Insertar hora",
+		"insert-title": "Insertar título"
 	},
 	"view": {
 		"grid": "Vista de cuadrícula",

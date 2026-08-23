@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { IconButton, useTheme } from 'react-native-paper'
+import { useTranslation } from 'react-i18next'
 import { useAnimatedShake } from '@/hooks'
 import { Typography } from '../typography'
 import { LargeInput } from './large-input'
@@ -9,6 +10,7 @@ import { Eye } from '@/icons'
 import { COLORS } from '@/constants'
 
 export function PasswordInput({ message, ...props }) {
+    const { t } = useTranslation()
     const { colors } = useTheme()
     const { shake, style } = useAnimatedShake()
 
@@ -34,8 +36,9 @@ export function PasswordInput({ message, ...props }) {
                     secureTextEntry={hide}
                 />
                 <IconButton
-                    icon={() => <Eye color={colors.onSurface} opacity={hide ? 0.3 : 1} />}
                     onPress={togglePassword}
+                    icon={() => <Eye color={colors.onSurface} opacity={hide ? 0.3 : 1} />}
+                    accessibilityLabel={t(hide ? 'password.show' : 'password.hide')}
                 />
             </Animated.View>
             <Typography

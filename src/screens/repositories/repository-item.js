@@ -68,6 +68,7 @@ export function RepositoryItem({
                     <IconButton
                         onPress={onOpen}
                         icon={() => <OpenInNew {...iconProps} />}
+                        accessibilityLabel={t('repositories.open')}
                     />
                 </Tooltip>
 
