@@ -1,11 +1,10 @@
 import { useContext } from 'react'
-import { randomUUID } from 'expo-crypto'
 import { useStorage } from './use-storage'
 import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
 import { NoteContext } from '../context/note-context'
 import { STORAGE_KEYS } from '@/constants'
-import { getDate, getUniqueFilename } from '@/utils'
+import { getUniqueFilename } from '@/utils'
 
 export function useNotes() {
     const {
@@ -18,7 +17,7 @@ export function useNotes() {
         writeMetadata
     } = useFileStorage()
 
-    const { getItem, setItem } = useStorage()
+    const { getItem } = useStorage()
     const { activeRepository } = useRepositories()
 
     const {
@@ -105,31 +104,12 @@ export function useNotes() {
         if (repository) clearRepository(repository.uri)
     }
 
-    const addLegacyNotes = async () => {
-        const legacy = await getItem(STORAGE_KEYS.NOTES)
-        const existing = legacy ? JSON.parse(legacy) : []
-
-        const seeded = [1, 2, 3].map((n) => ({
-            id: randomUUID(),
-            title: `Legacy note ${n}`,
-            note: `Legacy note content ${n}`,
-            tags: [],
-            images: [],
-            password: '',
-            biometrics: false,
-            createdAt: getDate()
-        }))
-
-        await setItem(STORAGE_KEYS.NOTES, JSON.stringify([...existing, ...seeded]))
-    }
-
     return {
         notes,
         getNote,
         saveNote,
         deleteNote,
         deleteAll,
-        addLegacyNotes,
         updateNote,
         paramId,
         setParamId,

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Directory, File } from 'expo-file-system'
 import { useNotes } from './use-notes'
 import { useLanguage } from './use-language'
-import { getNotesAsJson, getNotesAsString } from '@/utils'
+import { getNotesAsString } from '@/utils'
 
 export function useFiles() {
     const { t } = useTranslation()
@@ -31,24 +31,10 @@ export function useFiles() {
         }
     }
 
-    const getFileBackup = (note, type = 'md') => {
-        const fileName = 'note-' + note.id.split('-')[0]
-
-        switch (type) {
-            case 'json':
-                return {
-                    fileName: fileName + '.json',
-                    fileContent: JSON.stringify(getNotesAsJson(note))
-                }
-            case 'md':
-                return {
-                    fileName: fileName + '.md',
-                    fileContent: getNotesAsString([note], currentLanguage)
-                }
-            default:
-                return null
-        }
-    }
+    const getFileBackup = (note) => ({
+        fileName: 'note-' + note.id.split('-')[0] + '.md',
+        fileContent: getNotesAsString([note], currentLanguage)
+    })
 
     return { exportFile }
 }
