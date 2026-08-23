@@ -97,6 +97,7 @@ export function ImageMarkdown({ onClose, onInsert }) {
                             mode='outlined'
                             onPress={() => onPickImage('camera')}
                             icon={() => <Camera {...iconProps} />}
+                            accessibilityLabel={t('markdown.image_camera')}
                         />
                     </Tooltip>
                     <Tooltip title={t('markdown.image_gallery')}>
@@ -104,6 +105,7 @@ export function ImageMarkdown({ onClose, onInsert }) {
                             mode='outlined'
                             onPress={() => onPickImage('gallery')}
                             icon={() => <Picture {...iconProps} />}
+                            accessibilityLabel={t('markdown.image_gallery')}
                         />
                     </Tooltip>
                 </View>

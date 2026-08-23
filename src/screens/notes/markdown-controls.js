@@ -3,11 +3,13 @@ import { StyleSheet, View } from 'react-native'
 import { FAB, IconButton, useTheme } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
 import { KeyboardStickyView } from 'react-native-keyboard-controller'
+import { useTranslation } from 'react-i18next'
 import { AnimatedView, Scroll, Separator } from '@/components'
 import { Edit, Eye } from '@/icons'
 import { MARKDOWN_CONTROLS } from '@/constants'
 
 export const MarkdownControls = memo(function MarkdownControls({ isEditing, onRunAction, onEditMarkdown, scope }) {
+    const { t } = useTranslation()
     const { colors } = useTheme()
 
     const iconDarkProps = { color: colors.background }
@@ -42,6 +44,7 @@ export const MarkdownControls = memo(function MarkdownControls({ isEditing, onRu
                                     key={action}
                                     onPress={() => onRunAction(action)}
                                     icon={() => <Icon color={colors.onSurface} />}
+                                    accessibilityLabel={t(`markdown_action.${action}`)}
                                 />
                             )
                         ))}
@@ -58,6 +61,7 @@ export const MarkdownControls = memo(function MarkdownControls({ isEditing, onRu
                     animated={false}
                     onPress={onEditMarkdown}
                     style={{ backgroundColor: colors.primary }}
+                    accessibilityLabel={t(isEditing ? 'button.preview' : 'button.edit')}
                     icon={() => (
                         isEditing
                             ? <Eye {...iconDarkProps} />

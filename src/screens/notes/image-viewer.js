@@ -2,10 +2,12 @@ import { Image } from 'expo-image'
 import { IconButton, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet, View, useWindowDimensions } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import { ResumableZoom, fitContainer, useImageResolution } from 'react-native-zoom-toolkit'
 import { Close } from '@/icons'
 
 export function ImageViewer({ url, onClose }) {
+    const { t } = useTranslation()
     const { colors } = useTheme()
     const { width, height } = useWindowDimensions()
     const insets = useSafeAreaInsets()
@@ -29,6 +31,7 @@ export function ImageViewer({ url, onClose }) {
                 onPress={onClose}
                 icon={(props) => <Close {...props} />}
                 containerColor={colors.surface}
+                accessibilityLabel={t('button.close')}
                 style={{
                     ...styles.close,
                     top: insets.top + 8,

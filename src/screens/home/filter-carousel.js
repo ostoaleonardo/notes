@@ -1,10 +1,12 @@
 import { StyleSheet, View } from 'react-native'
 import { IconButton } from 'react-native-paper'
+import { useTranslation } from 'react-i18next'
 import { AnimatedView, Chip, Scroll } from '@/components'
 import { useTags, useIconProps } from '@/hooks'
 import { Close } from '@/icons'
 
 export function FilterCarousel({ filter, onFilter }) {
+    const { t } = useTranslation()
     const iconProps = useIconProps()
     const { tags: carousel } = useTags()
 
@@ -26,6 +28,7 @@ export function FilterCarousel({ filter, onFilter }) {
                             style={{ marginVertical: 0 }}
                             onPress={() => onFilter('all')}
                             icon={() => <Close {...iconProps} />}
+                            accessibilityLabel={t('button.clear_filter')}
                         />
                     </AnimatedView>
                 )}

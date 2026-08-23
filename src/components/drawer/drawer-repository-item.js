@@ -60,6 +60,7 @@ export function DrawerRepositoryItem({
                     <IconButton
                         onPress={() => setMenuVisible(true)}
                         icon={() => <MoreVert {...iconProps} />}
+                        accessibilityLabel={t('button.more')}
                     />
                 }
             >

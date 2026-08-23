@@ -25,6 +25,7 @@ export function RepositoryMenu({ onRename, onForget, onDelete }) {
                     <IconButton
                         onPress={() => setVisible(true)}
                         icon={() => <MoreVert {...iconProps} />}
+                        accessibilityLabel={t('button.more')}
                     />
                 </Tooltip>
             }

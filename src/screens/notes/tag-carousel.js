@@ -1,11 +1,13 @@
 import { useMemo } from 'react'
 import { StyleSheet } from 'react-native'
 import { IconButton } from 'react-native-paper'
+import { useTranslation } from 'react-i18next'
 import { AnimatedView, Chip, CloseChipButton, Scroll } from '@/components'
 import { useTags, useIconProps } from '@/hooks'
 import { Plus } from '@/icons'
 
 export function TagCarousel({ tags, onTags, onTagsModal }) {
+    const { t } = useTranslation()
     const iconProps = useIconProps()
     const { tags: allTags } = useTags()
 
@@ -35,6 +37,7 @@ export function TagCarousel({ tags, onTags, onTagsModal }) {
                     mode='outlined'
                     onPress={onTagsModal}
                     icon={() => <Plus {...iconProps} />}
+                    accessibilityLabel={t('tags.add')}
                 />
             </AnimatedView>
         </Scroll>
