@@ -1,8 +1,9 @@
 import { useMemo } from 'react'
 import { Linking } from 'react-native'
+import { router } from 'expo-router'
 import { useTheme } from 'react-native-paper'
 import { EnrichedMarkdownText } from 'react-native-enriched-markdown'
-import { FONTS, TRANSPARENT } from '@/constants'
+import { FONTS, ROUTES, TRANSPARENT } from '@/constants'
 
 export function MarkdownPreview({ value, size = 13 }) {
     const { colors } = useTheme()
@@ -115,6 +116,10 @@ export function MarkdownPreview({ value, size = 13 }) {
             allowFontScaling={true}
             markdownStyle={markdownStyle}
             onLinkPress={({ url }) => Linking.openURL(url)}
+            onImagePress={({ url }) => router.push({
+                pathname: ROUTES.IMAGE_VIEWER,
+                params: { url: encodeURIComponent(url) }
+            })}
         />
     )
 }

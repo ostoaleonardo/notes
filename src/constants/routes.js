@@ -5,6 +5,7 @@ export const ROUTES = {
     TRASH: '/trash',
     REPOSITORIES: '/repositories',
     TEMPLATES: '/templates',
+    IMAGE_VIEWER: '/image-viewer',
     ADD_NOTE: '(notes)',
     EDIT_NOTE: '/edit/',
     EDIT_TEMPLATE: '/templates/edit/',
