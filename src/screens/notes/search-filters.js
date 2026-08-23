@@ -17,14 +17,12 @@ export function SearchFilters({ query, setQuery, parsed, tags }) {
                 contentContainerStyle={styles.scroll}
             >
                 <View style={styles.carousel}>
-                    {tags.length > 0 && (
-                        <Typography
-                            opacity={0.5}
-                            variant='caption'
-                        >
-                            {t('title.tags')}:
-                        </Typography>
-                    )}
+                    <Typography
+                        opacity={0.5}
+                        variant='caption'
+                    >
+                        {tags.length === 0 ? t('message.tags.empty') : t('title.tags') + ':'}
+                    </Typography>
 
                     <View style={styles.chips}>
                         {tags.map((tag) => (

@@ -87,14 +87,12 @@ export function NoteSearch() {
                             backgroundColor: colors.surface
                         }}
                     >
-                        {tags.length > 0 && (
-                            <SearchFilters
-                                query={query}
-                                setQuery={setQuery}
-                                parsed={parsed}
-                                tags={tags}
-                            />
-                        )}
+                        <SearchFilters
+                            query={query}
+                            setQuery={setQuery}
+                            parsed={parsed}
+                            tags={tags}
+                        />
 
                         {trimmedQuery ? (
                             <SearchResults
