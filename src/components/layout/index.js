@@ -11,7 +11,7 @@ export function LoadingOverlay() {
                 backgroundColor: colors.background
             }}
         >
-            <ActivityIndicator size='large' />
+            <ActivityIndicator size='small' />
         </View>
     )
 }
