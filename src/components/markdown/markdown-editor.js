@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { MarkdownInput } from './markdown-input'
 import { useMarkdownShortcuts } from '@/hooks'
 
-export function MarkdownEditor({ value, setValue, isEditing, markdownAction }) {
+export function MarkdownEditor({ value, setValue, isEditing, markdownAction, onFocus, onBlur }) {
     const { action, payload, clear } = markdownAction
     const { t } = useTranslation()
     const [selection, setSelection] = useState({ start: 0, end: 0 })
@@ -68,6 +68,8 @@ export function MarkdownEditor({ value, setValue, isEditing, markdownAction }) {
             isEditing={isEditing}
             placeholder={t('placeholder.note')}
             onSelectionChange={onSelectionChange}
+            onFocus={onFocus}
+            onBlur={onBlur}
         />
     )
 }

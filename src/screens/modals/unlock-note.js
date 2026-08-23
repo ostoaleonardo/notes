@@ -1,17 +1,17 @@
 import { useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { router } from 'expo-router'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { PasswordInput, Pressable } from '@/components'
-import { useNoteAuthentication, useNotes } from '@/hooks'
+import { PasswordInput } from '@/components/input'
+import { Pressable } from '@/components/button'
+import { useNoteAuthentication, useNotes, useTabs } from '@/hooks'
 import { Fingerprint } from '@/icons'
-import { ROUTES } from '@/constants'
 
-export function UnlockNote({ id, onClose }) {
+export function UnlockNote() {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { getNote } = useNotes()
+    const { pendingUnlockId: id, confirmUnlock } = useTabs()
 
     const { biometrics, password } = getNote(id) || {}
 
@@ -35,10 +35,7 @@ export function UnlockNote({ id, onClose }) {
     }, [id])
 
     useEffect(() => {
-        if (authenticated) {
-            router.push(ROUTES.EDIT_NOTE + id)
-            onClose()
-        }
+        if (authenticated) confirmUnlock()
     }, [authenticated])
 
     return (

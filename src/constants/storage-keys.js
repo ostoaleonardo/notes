@@ -14,5 +14,9 @@ export const STORAGE_KEYS = {
     VIEW: 'view',
     THEME: 'theme',
     ACCENT: 'accent',
-    LANGUAGE: 'language'
+    LANGUAGE: 'language',
+    COLLAPSED_FOLDERS: 'collapsed-folders',
+    OPEN_TABS: 'open-tabs',
+    ACTIVE_TAB: 'active-tab',
+    RECENT_SEARCHES: 'recent-searches'
 }

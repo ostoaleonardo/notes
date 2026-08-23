@@ -18,7 +18,7 @@ export function useNotes() {
     } = useFileStorage()
 
     const { getItem } = useStorage()
-    const { activeRepository } = useRepositories()
+    const { activeRepository, repositories } = useRepositories()
 
     const {
         notes,
@@ -27,6 +27,10 @@ export function useNotes() {
         setParamId,
         loading
     } = useContext(NoteContext)
+
+    const getRepositoryUri = (repositoryId) => (
+        repositories.find((repository) => repository.id === repositoryId)?.uri
+    )
 
     const toMetadataEntry = (note, filename) => ({
         filename,
@@ -38,10 +42,12 @@ export function useNotes() {
         images: note.images
     })
 
-    const saveNote = async (note) => {
-        setNotes([note, ...notes])
+    const saveNote = async (note, repositoryId = activeRepository.id) => {
+        const uri = getRepositoryUri(repositoryId)
+        const noteWithLocation = { ...note, repositoryId }
 
-        const { uri } = activeRepository
+        setNotes([noteWithLocation, ...notes])
+
         const existingNames = listMarkdownFiles(uri).map((file) => file.name)
         const filename = getUniqueFilename(existingNames, note.title, null)
 
@@ -58,7 +64,7 @@ export function useNotes() {
             return n
         }))
 
-        const { uri } = activeRepository
+        const uri = getRepositoryUri(note.repositoryId)
         const metadata = await readMetadata(uri)
         const entry = metadata[note.id]
         if (!entry) return
@@ -77,9 +83,11 @@ export function useNotes() {
     }
 
     const deleteNote = async (id) => {
-        setNotes(notes.filter((note) => note.id !== id))
+        const note = notes.find((n) => n.id === id)
+        setNotes(notes.filter((n) => n.id !== id))
+        if (!note) return
 
-        const { uri } = activeRepository
+        const uri = getRepositoryUri(note.repositoryId)
         const metadata = await readMetadata(uri)
         const entry = metadata[id]
         if (!entry) return

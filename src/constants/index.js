@@ -6,8 +6,7 @@ export { LANGUAGES } from './languages'
 export {
     DEFAULT_TAGS,
     DEFAULT_SORT,
-    TRASH_RETENTION_DAYS,
-    TRASH_RETENTION_MS
+    RECENT_SEARCHES_LIMIT
 } from './default-values'
 
 export { TREE_BRANCHING, NOTES_PER_FOLDER } from './dev-menu'
@@ -24,8 +23,6 @@ export {
 export {
     METADATA_FILENAME,
     TAGS_FILENAME,
-    TRASH_FOLDER_NAME,
-    TRASH_METADATA_FILENAME,
     TEMPLATES_FOLDER_NAME,
     IMAGES_FOLDER_NAME,
     RESERVED_FOLDER_NAMES,
@@ -45,7 +42,7 @@ export {
 } from './note-preview'
 
 export { LINKS } from './links'
-export { GRID_BREAKPOINT_WIDTH } from './layout'
+export { HOME_TAB_KEY, TAB_BAR_HIDDEN_ROUTES, TEMPLATE_TAB_PREFIX, TEMPLATES_SECTION_ID } from './tabs'
 
 export {
     PRO,

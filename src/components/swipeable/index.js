@@ -1,6 +1,3 @@
 export { SwipeableCard } from './swipeable-card'
-export { SwipeableNote } from './swipeable-note'
-export { SwipeableTrash } from './swipeable-trash'
 export { SwipeableTag } from './swipeable-tag'
 export { DeleteAction } from './actions'
-export { PinAction } from './actions'

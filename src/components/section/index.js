@@ -14,9 +14,8 @@ export function Section({ title, children, containerStyle, contentStyle, visible
             {title && (
                 <View style={styles.title}>
                     <Typography
-                        bold
-                        uppercase
                         opacity={0.6}
+                        uppercase={true}
                         variant='caption'
                     >
                         {title}

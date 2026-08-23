@@ -5,5 +5,5 @@ import { loadRepositoryData } from '../context/load-repository-data'
 export function useRepositoryData() {
     const fileStorage = useFileStorage()
 
-    return (repository, rootRepository) => loadRepositoryData(repository, rootRepository, storage, fileStorage)
+    return (tree, rootRepository) => loadRepositoryData(tree, rootRepository, storage, fileStorage)
 }

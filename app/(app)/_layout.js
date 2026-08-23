@@ -51,7 +51,7 @@ export default function AppLayout() {
                 }}
             >
                 <Stack.Protected guard={isReady}>
-                    <Stack.Screen name='(stack)' />
+                    <Stack.Screen name='(drawer)' />
                 </Stack.Protected>
 
                 <Stack.Protected guard={!isReady}>

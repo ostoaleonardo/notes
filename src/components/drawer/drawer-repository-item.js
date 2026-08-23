@@ -5,85 +5,135 @@ import { useTranslation } from 'react-i18next'
 import { Typography } from '../typography'
 import { MenuContainer } from '../menu/menu-container'
 import { MenuItem } from '../menu/menu-item'
-import { useIconProps } from '@/hooks'
-import { Delete, Edit, Folder, MoreVert } from '@/icons'
+import { DrawerNoteItem } from './drawer-note-item'
+import { useIconProps, useUtils } from '@/hooks'
+import { Delete, Edit, Folder, KeyboardArrowDown, KeyboardArrowUp, MoreVert, Plus } from '@/icons'
 
 export function DrawerRepositoryItem({
     repository,
-    count,
+    depth,
     active,
-    onOpen,
+    activeNoteId,
+    subfolders,
+    notes,
+    onOpenRoot,
+    onOpenNote,
     onAddSubfolder,
+    onCreateNote,
     onEditFolder,
     onDelete
 }) {
     const { t } = useTranslation()
-    const iconProps = useIconProps(16)
+    const { collapsedFolders, toggleFolder } = useUtils()
     const [menuVisible, setMenuVisible] = useState(false)
 
-    const isRoot = repository.depth === 0
+    const iconProps = useIconProps(16)
+    const chevronIconProps = useIconProps(16, 0.6)
+
+    const isRoot = depth === 0
+    const isCollapsed = collapsedFolders.has(repository.id)
 
     const runAction = (action) => {
         setMenuVisible(false)
         action()
     }
 
-    return (
-        <View
-            style={{
-                ...styles.container,
-                paddingLeft: 16 + repository.depth * 16
-            }}
-        >
-            <Pressable
-                onPress={onOpen}
-                style={styles.content}
-            >
-                <Typography
-                    bold={active}
-                    uppercase
-                >
-                    {repository.alias}
-                </Typography>
-                <Typography
-                    variant='caption'
-                    opacity={active ? 0.8 : 0.5}
-                >
-                    {count}
-                </Typography>
-            </Pressable>
+    const onPress = () => {
+        if (isRoot) onOpenRoot(repository.id)
+        toggleFolder(repository.id)
+    }
 
-            <MenuContainer
-                visible={menuVisible}
-                onClose={() => setMenuVisible(false)}
-                anchor={
-                    <IconButton
-                        onPress={() => setMenuVisible(true)}
-                        icon={() => <MoreVert {...iconProps} />}
-                        accessibilityLabel={t('button.more')}
-                    />
-                }
+    return (
+        <View>
+            <View
+                style={{
+                    ...styles.container,
+                    paddingLeft: 8 + depth * 16
+                }}
             >
-                <MenuItem
-                    title={t('repositories.add_subfolder')}
-                    leadingIcon={() => <Folder {...iconProps} />}
-                    onPress={() => runAction(onAddSubfolder)}
-                />
-                {!isRoot && (
+                <Pressable
+                    onPress={onPress}
+                    style={styles.content}
+                >
+                    {isCollapsed
+                        ? <KeyboardArrowUp {...chevronIconProps} />
+                        : <KeyboardArrowDown {...chevronIconProps} />}
+                    <Typography
+                        bold={isRoot && active}
+                        uppercase
+                        numberOfLines={1}
+                    >
+                        {repository.alias}
+                    </Typography>
+                </Pressable>
+
+                <MenuContainer
+                    visible={menuVisible}
+                    onClose={() => setMenuVisible(false)}
+                    anchor={
+                        <IconButton
+                            onPress={() => setMenuVisible(true)}
+                            icon={() => <MoreVert {...iconProps} />}
+                            accessibilityLabel={t('button.more')}
+                        />
+                    }
+                >
                     <MenuItem
-                        title={t('repositories.edit_folder')}
-                        leadingIcon={() => <Edit {...iconProps} />}
-                        onPress={() => runAction(onEditFolder)}
+                        title={t('repositories.create_note')}
+                        leadingIcon={() => <Plus {...iconProps} />}
+                        onPress={() => runAction(() => onCreateNote(repository.id))}
                     />
-                )}
-                {!isRoot && (
                     <MenuItem
-                        title={t('repositories.delete_folder')}
-                        leadingIcon={() => <Delete {...iconProps} />}
-                        onPress={() => runAction(onDelete)}
+                        title={t('repositories.add_subfolder')}
+                        leadingIcon={() => <Folder {...iconProps} />}
+                        onPress={() => runAction(onAddSubfolder)}
                     />
-                )}
-            </MenuContainer>
+                    {!isRoot && (
+                        <MenuItem
+                            title={t('repositories.edit_folder')}
+                            leadingIcon={() => <Edit {...iconProps} />}
+                            onPress={() => runAction(onEditFolder)}
+                        />
+                    )}
+                    {!isRoot && (
+                        <MenuItem
+                            title={t('repositories.delete_folder')}
+                            leadingIcon={() => <Delete {...iconProps} />}
+                            onPress={() => runAction(onDelete)}
+                        />
+                    )}
+                </MenuContainer>
+            </View>
+
+            {!isCollapsed && (
+                <>
+                    {notes.map((note) => (
+                        <DrawerNoteItem
+                            key={note.id}
+                            note={note}
+                            depth={depth + 1}
+                            active={note.id === activeNoteId}
+                            onPress={() => onOpenNote(note.id)}
+                        />
+                    ))}
+
+                    {subfolders.map((subfolder) => (
+                        <DrawerRepositoryItem
+                            key={subfolder.repository.id}
+                            {...subfolder}
+                            depth={depth + 1}
+                            active={active}
+                            activeNoteId={activeNoteId}
+                            onOpenRoot={onOpenRoot}
+                            onOpenNote={onOpenNote}
+                            onAddSubfolder={() => onAddSubfolder(subfolder.repository.id)}
+                            onCreateNote={onCreateNote}
+                            onEditFolder={() => onEditFolder(subfolder.repository.id)}
+                            onDelete={() => onDelete(subfolder.repository.id)}
+                        />
+                    ))}
+                </>
+            )}
         </View>
     )
 }
@@ -96,7 +146,9 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        paddingVertical: 12,
-        gap: 4
+        gap: 8,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 6
     }
 })

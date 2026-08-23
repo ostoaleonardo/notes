@@ -5,5 +5,4 @@ export const DEFAULT_SORT = {
     order: 'desc'
 }
 
-export const TRASH_RETENTION_DAYS = 30
-export const TRASH_RETENTION_MS = TRASH_RETENTION_DAYS * 24 * 60 * 60 * 1000
+export const RECENT_SEARCHES_LIMIT = 5

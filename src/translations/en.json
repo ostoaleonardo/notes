@@ -2,7 +2,10 @@
 	"language": "English",
 	"notes": {
 		"delete": "Delete note",
-		"untitled": "Untitled"
+		"untitled": "Untitled",
+		"create": "Create a note",
+		"intro_title": "No notes open",
+		"intro_subtitle": "Pick a note from the drawer, or start a new one at the top of your repository."
 	},
 	"tags": {
 		"add": "Add tag",
@@ -21,6 +24,7 @@
 		"choose_button": "Choose folder",
 		"pro_required": "Available with Pro",
 		"already_added": "This repository has already been added",
+		"create_note": "Create note here",
 		"add_subfolder": "Add subfolder",
 		"edit_folder": "Edit folder",
 		"no_folders": "No subfolders yet",
@@ -33,7 +37,6 @@
 		"notes": "Notes",
 		"tags": "Tags",
 		"unlock": "Unlock",
-		"trash": "Trash",
 		"repositories": "Repositories",
 		"templates": "Templates",
 		"sort": "Sorting by",
@@ -123,6 +126,7 @@
 		"update": "Update",
 		"enter": "Enter",
 		"pin": "Pin",
+		"unpin": "Unpin",
 		"export": "Export",
 		"insert": "Insert",
 		"cancel": "Cancel",
@@ -201,7 +205,10 @@
 		"repositories": "Repositories",
 		"templates": "Templates",
 		"tags": "Tags",
-		"trash": "Trash"
+		"search": "Search notes",
+		"collapse_all": "Collapse all",
+		"expand_all": "Expand all",
+		"open": "Open drawer"
 	},
 	"templates": {
 		"journal": "Journal",
@@ -245,9 +252,8 @@
 		"placeholder_example": "e.g. {{value}}",
 		"placeholder_title_example": "Meeting notes"
 	},
-	"trash": {
-		"expires": "Expires in {{count}} day",
-		"expires_plural": "Expires in {{count}} days",
-		"expires_today": "Expires today"
+	"search": {
+		"recent": "Recent",
+		"pinned": "Pinned"
 	}
 }

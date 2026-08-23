@@ -2,7 +2,10 @@
 	"language": "Español",
 	"notes": {
 		"delete": "Eliminar nota",
-		"untitled": "Sin título"
+		"untitled": "Sin título",
+		"create": "Crear una nota",
+		"intro_title": "No hay notas abiertas",
+		"intro_subtitle": "Elige una nota desde el menú lateral, o crea una nueva en la raíz de tu repositorio."
 	},
 	"tags": {
 		"add": "Añadir etiqueta",
@@ -21,6 +24,7 @@
 		"choose_button": "Elegir carpeta",
 		"pro_required": "Disponible con Pro",
 		"already_added": "Este repositorio ya fue agregado",
+		"create_note": "Crear nota aquí",
 		"add_subfolder": "Agregar subcarpeta",
 		"edit_folder": "Editar carpeta",
 		"no_folders": "Todavía no hay subcarpetas",
@@ -33,7 +37,6 @@
 		"notes": "Notas",
 		"tags": "Etiquetas",
 		"unlock": "Desbloquear",
-		"trash": "Papelera",
 		"repositories": "Repositorios",
 		"templates": "Plantillas",
 		"sort": "Ordenar por",
@@ -108,6 +111,7 @@
 		"update": "Actualizar",
 		"enter": "Entrar",
 		"pin": "Fijar",
+		"unpin": "Desfijar",
 		"export": "Exportar",
 		"insert": "Insertar",
 		"cancel": "Cancelar",
@@ -186,7 +190,10 @@
 		"repositories": "Repositorios",
 		"templates": "Plantillas",
 		"tags": "Etiquetas",
-		"trash": "Papelera"
+		"search": "Buscar notas",
+		"collapse_all": "Colapsar todo",
+		"expand_all": "Expandir todo",
+		"open": "Abrir menú"
 	},
 	"templates": {
 		"journal": "Diario",
@@ -230,9 +237,8 @@
 		"placeholder_example": "ej. {{value}}",
 		"placeholder_title_example": "Notas de la reunión"
 	},
-	"trash": {
-		"expires": "Expira en {{count}} día",
-		"expires_plural": "Expira en {{count}} días",
-		"expires_today": "Expira hoy"
+	"search": {
+		"recent": "Recientes",
+		"pinned": "Fijadas"
 	}
 }
