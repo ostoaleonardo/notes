@@ -14,6 +14,7 @@ export default function PagesLayout() {
         >
             <Stack.Screen name='settings/index' />
             <Stack.Screen name='tags/index' />
+            <Stack.Screen name='repositories/index' />
         </Stack>
     )
 }
