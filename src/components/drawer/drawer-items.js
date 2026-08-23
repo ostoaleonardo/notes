@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AppState, Pressable, StyleSheet, ToastAndroid, View } from 'react-native'
+import { AppState, Pressable, StyleSheet, View } from 'react-native'
 import { router } from 'expo-router'
 import { DrawerContentScrollView } from 'expo-router/drawer'
 import { useTranslation } from 'react-i18next'
@@ -11,14 +11,13 @@ import { AddSubfolder } from '@/screens/modals/add-subfolder'
 import { DeleteRepository } from '@/screens/modals/delete-repository'
 import { RenameRepository } from '@/screens/modals/rename-repository'
 import { ROUTES } from '@/constants'
-import { useTags, useFileStorage, useIconProps, usePremium, useRepositories, useTemplates, useTrash } from '@/hooks'
-import { Plus } from '@/icons'
+import { useTags, useFileStorage, useIconProps, useRepositories, useTemplates, useTrash } from '@/hooks'
+import { ArrowForward } from '@/icons'
 import { IconButton } from 'react-native-paper'
 
 export function DrawerItems() {
     const { t } = useTranslation()
     const { trash } = useTrash()
-    const { premium } = usePremium()
     const { tags } = useTags()
     const { listTemplates } = useTemplates()
     const { listMarkdownFiles } = useFileStorage()
@@ -28,7 +27,6 @@ export function DrawerItems() {
         activeRepositoryTree,
         activeRepository,
         activeRepositoryId,
-        addRepository,
         setActiveRepository
     } = useRepositories()
 
@@ -65,41 +63,29 @@ export function DrawerItems() {
         router.push(ROUTES.HOME)
     }
 
-    const onAddRepository = async () => {
-        if (!premium && activeRepositoryTree.length > 0) {
-            ToastAndroid.show(t('repositories.pro_required'), ToastAndroid.SHORT)
-            return
-        }
-
-        const result = await addRepository()
-        if (result === 'duplicate') {
-            ToastAndroid.show(t('repositories.already_added'), ToastAndroid.SHORT)
-        }
-    }
-
     return (
         <DrawerContentScrollView>
             <View>
-                <View style={styles.header}>
-                    <Pressable
-                        onPress={() => router.push(ROUTES.REPOSITORIES)}
-                        style={styles.headerTitleRow}
+                <Pressable
+                    style={styles.header}
+                    onPress={() => router.push(ROUTES.REPOSITORIES)}
+                    accessibilityLabel={t('drawer.repositories')}
+                >
+                    <Typography
+                        bold
+                        uppercase
+                        opacity={0.6}
+                        variant='caption'
                     >
-                        <Typography
-                            bold
-                            uppercase
-                            opacity={0.6}
-                            variant='caption'
-                        >
-                            {t('drawer.repositories')}
-                        </Typography>
-                    </Pressable>
+                        {t('drawer.repositories')}
+                    </Typography>
 
                     <IconButton
-                        onPress={onAddRepository}
-                        icon={(props) => <Plus {...props} opacity={0.6} />}
+                        pointerEvents='none'
+                        importantForAccessibility='no'
+                        icon={() => <ArrowForward {...iconProps} opacity={0.6} />}
                     />
-                </View>
+                </Pressable>
 
                 {activeRepositoryTree.map((repository) => (
                     <DrawerRepositoryItem
@@ -161,10 +147,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
-    },
-    headerTitleRow: {
-        flexDirection: 'row',
-        alignItems: 'center'
     },
     separator: {
         marginHorizontal: 16,
