@@ -8,7 +8,8 @@ export const useUtils = () => {
         pinned, setPinned,
         sort, setSort,
         filter, setFilter,
-        view, setView
+        view, setView,
+        collapsedFolders, setCollapsedFolders
     } = useContext(UtilsContext)
 
     const { setItem } = useStorage()
@@ -63,15 +64,42 @@ export const useUtils = () => {
         setFilter(next)
     }
 
+    const updateCollapsedFolders = (collapsedFolders) => {
+        setCollapsedFolders(collapsedFolders)
+        setItem(
+            STORAGE_KEYS.COLLAPSED_FOLDERS,
+            JSON.stringify(Array.from(collapsedFolders))
+        )
+    }
+
+    const toggleFolder = (id) => {
+        const next = new Set(collapsedFolders)
+
+        if (next.has(id)) {
+            next.delete(id)
+        } else {
+            next.add(id)
+        }
+
+        updateCollapsedFolders(next)
+    }
+
+    const collapseAll = (ids) => updateCollapsedFolders(new Set(ids))
+    const expandAll = () => updateCollapsedFolders(new Set())
+
     return {
         pinned,
         sort,
         filter,
         view,
+        collapsedFolders,
         updatePinned,
         updateSort,
         updateView,
         onFilter,
-        onPinned
+        onPinned,
+        toggleFolder,
+        collapseAll,
+        expandAll
     }
 }

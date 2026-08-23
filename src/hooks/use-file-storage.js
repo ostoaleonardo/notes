@@ -3,7 +3,6 @@ import {
     METADATA_FILENAME,
     TEMPLATES_FOLDER_NAME,
     IMAGES_FOLDER_NAME,
-    TRASH_FOLDER_NAME,
     RESERVED_FOLDER_NAMES,
     SIDECAR_FILENAMES
 } from '@/constants'
@@ -33,10 +32,6 @@ export function useFileStorage() {
 
     const getOrCreateImagesFolder = (directoryUri) => (
         findDirectory(directoryUri, IMAGES_FOLDER_NAME) || createSubdirectory(directoryUri, IMAGES_FOLDER_NAME)
-    )
-
-    const getOrCreateTrashFolder = (directoryUri) => (
-        findDirectory(directoryUri, TRASH_FOLDER_NAME) || createSubdirectory(directoryUri, TRASH_FOLDER_NAME)
     )
 
     const listMarkdownFiles = (directoryUri) => (
@@ -151,7 +146,6 @@ export function useFileStorage() {
         createSubdirectory,
         getOrCreateTemplatesFolder,
         getOrCreateImagesFolder,
-        getOrCreateTrashFolder,
         copyImageFile
     }
 }

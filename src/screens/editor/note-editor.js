@@ -4,7 +4,8 @@ import { MarkdownEditor, Section } from '@/components'
 export function NoteEditor({
     value, setValue,
     markdownAction,
-    isEditing
+    isEditing,
+    onFocus, onBlur
 }) {
     return (
         <View style={{ paddingBottom: 80 }}>
@@ -14,6 +15,8 @@ export function NoteEditor({
                     setValue={setValue}
                     markdownAction={markdownAction}
                     isEditing={isEditing}
+                    onFocus={onFocus}
+                    onBlur={onBlur}
                 />
             </Section>
         </View>

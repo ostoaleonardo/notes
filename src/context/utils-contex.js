@@ -9,6 +9,7 @@ export function UtilsProvider({ children }) {
     const [sort, setSort] = useState(DEFAULT_SORT)
     const [filter, setFilter] = useState(new Set())
     const [view, setView] = useState('list')
+    const [collapsedFolders, setCollapsedFolders] = useState(new Set())
 
     const { getItem } = useStorage()
 
@@ -17,10 +18,12 @@ export function UtilsProvider({ children }) {
             const pinned = await getItem(STORAGE_KEYS.PINNED)
             const sort = await getItem(STORAGE_KEYS.SORT)
             const view = await getItem(STORAGE_KEYS.VIEW)
+            const collapsedFolders = await getItem(STORAGE_KEYS.COLLAPSED_FOLDERS)
 
             if (pinned) setPinned(new Set(JSON.parse(pinned)))
             if (sort) setSort(JSON.parse(sort))
             if (view) setView(view)
+            if (collapsedFolders) setCollapsedFolders(new Set(JSON.parse(collapsedFolders)))
         }
 
         getUtils()
@@ -36,7 +39,9 @@ export function UtilsProvider({ children }) {
                 filter,
                 setFilter,
                 view,
-                setView
+                setView,
+                collapsedFolders,
+                setCollapsedFolders
             }}
         >
             {children}

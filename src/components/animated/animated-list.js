@@ -31,8 +31,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     list: {
-        flexGrow: 1,
-        paddingBottom: 24
+        flexGrow: 1
     },
     empty: {
         flex: 1,

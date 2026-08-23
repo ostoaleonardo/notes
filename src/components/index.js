@@ -1,6 +1,5 @@
 // AppBar
-export { AppBar } from './app-bar'
-export { AppBarAction } from './app-bar/app-bar-action'
+export { BackHeader } from './app-bar/back-header'
 
 // Error Boundary
 export { ErrorBoundary } from './error-boundary'
@@ -12,17 +11,9 @@ export {
     SquareButton
 } from './button'
 
-// Chips
-export {
-    Chip,
-    CloseChipButton
-} from './chip'
-
 // Cards
 export {
     SwipeableCard,
-    SwipeableNote,
-    SwipeableTrash,
     SwipeableTag,
 } from './swipeable'
 
@@ -30,6 +21,7 @@ export {
 export {
     LargeInput,
     SmallInput,
+    SearchInput,
     TextArea,
     PasswordInput
 } from './input'
@@ -43,15 +35,14 @@ export {
 export { DialogModal } from './dialog'
 
 // Menus
-export {
-    SortMenu,
-    MoreMenu
-} from './menu'
 export { MenuContainer } from './menu/menu-container'
 export { MenuItem } from './menu/menu-item'
 
 // Drawer
 export { DrawerItems } from './drawer'
+
+// Tabs
+export { TabBar, UnlockNoteGate } from './tabs'
 
 // UI
 export { Avatar } from './avatar'

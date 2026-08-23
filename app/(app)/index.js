@@ -1,13 +1,15 @@
 import { Redirect } from 'expo-router'
-import { useLocalAuthentication, useNotes, useRepositories } from '@/hooks'
+import { useLocalAuthentication, useNotes, useRepositories, useTabs } from '@/hooks'
 import { ROUTES } from '@/constants'
 
 export default function App() {
     useLocalAuthentication()
     const { loading } = useNotes()
     const { activeRepository } = useRepositories()
+    const { activeTabId } = useTabs()
 
     const isReady = !!activeRepository && !loading
+    const destination = activeTabId ? ROUTES.EDIT_NOTE + activeTabId : ROUTES.HOME
 
-    return <Redirect href={isReady ? ROUTES.HOME : ROUTES.REPOSITORY_GATE} />
+    return <Redirect href={isReady ? destination : ROUTES.REPOSITORY_GATE} />
 }

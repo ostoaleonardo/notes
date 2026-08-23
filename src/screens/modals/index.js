@@ -1,6 +1,5 @@
 export { Languages } from './languages'
 export { UnlockNote } from './unlock-note'
-export { DeleteNote } from './delete-note'
 export { Tags } from './tags'
 export { AddPassword } from './add-password'
 export { UpdatePassword } from './update-password'

@@ -5,8 +5,6 @@ import {
     DEFAULT_TAGS,
     STORAGE_KEYS,
     TAGS_FILENAME,
-    TRASH_METADATA_FILENAME,
-    TRASH_RETENTION_MS,
     NOTE_KEY_PREFIX
 } from '@/constants'
 
@@ -72,6 +70,16 @@ const migrateStorageNotesToFiles = async (repositoryUri, rootRepositoryUri, stor
     await storage.multiRemove(noteKeys)
 }
 
+// Loads every folder in the tree and stamps each note with the folder it lives in.
+const loadFromTree = async (tree, loadFolder, fileStorage) => {
+    const perFolder = await Promise.all(tree.map(async (repository) => {
+        const items = await loadFolder(repository.uri, fileStorage)
+        return items.map((item) => ({ ...item, repositoryId: repository.id }))
+    }))
+
+    return perFolder.flat()
+}
+
 // Reconciles .md files against the metadata sidecar.
 const loadNotesFromFolder = async (repositoryUri, fileStorage) => {
     const files = fileStorage.listMarkdownFiles(repositoryUri)
@@ -129,7 +137,7 @@ const loadNotesFromFolder = async (repositoryUri, fileStorage) => {
     return notes
 }
 
-// Reads a sidecar list (tags/trash), migrating its legacy AsyncStorage value once.
+// Reads a sidecar list (tags), migrating its legacy AsyncStorage value once.
 const loadSidecarList = async ({ repositoryUri, filename, legacyKey, defaultValue, normalizeLegacy = (value) => value, storage, fileStorage }) => {
     const existing = await fileStorage.readJson(repositoryUri, filename, null)
     if (existing) return existing
@@ -150,80 +158,14 @@ const purgeAllTag = (tags, repositoryUri, fileStorage) => {
     return filtered
 }
 
-// Reconciles .trash/ .md files against the trash metadata sidecar, backfills trashedAt on
-// older entries, and purges anything past TRASH_RETENTION_DAYS.
-const loadTrashFromFolder = async (repositoryUri, fileStorage) => {
-    const trashUri = fileStorage.getOrCreateTrashFolder(repositoryUri).uri
-    const files = fileStorage.listMarkdownFiles(trashUri)
-    const metadata = await fileStorage.readJson(trashUri, TRASH_METADATA_FILENAME, {})
-
-    const fileNames = new Set(files.map((file) => file.name))
-    let metadataChanged = false
-
-    for (const id of Object.keys(metadata)) {
-        if (!fileNames.has(metadata[id].filename)) {
-            delete metadata[id]
-            metadataChanged = true
-        }
-    }
-
-    const filenameToId = new Map(
-        Object.entries(metadata).map(([id, entry]) => [entry.filename, id])
-    )
-
-    const now = Date.now()
-    const trash = []
-
-    for (const file of files) {
-        let id = filenameToId.get(file.name)
-
-        if (!id) {
-            id = randomUUID()
-            metadata[id] = { filename: file.name, trashedAt: now, tags: [], password: '', biometrics: false, createdAt: now, images: [] }
-            metadataChanged = true
-        }
-
-        const entry = metadata[id]
-
-        if (!entry.trashedAt) {
-            entry.trashedAt = now
-            metadataChanged = true
-        }
-
-        if (now - entry.trashedAt >= TRASH_RETENTION_MS) {
-            fileStorage.deleteNoteFile(trashUri, file.name)
-            delete metadata[id]
-            metadataChanged = true
-            continue
-        }
-
-        trash.push({
-            id,
-            title: getTitle(file.name),
-            note: await file.text(),
-            tags: entry.tags || [],
-            password: entry.password,
-            biometrics: entry.biometrics,
-            createdAt: entry.createdAt,
-            trashedAt: entry.trashedAt,
-            images: entry.images || []
-        })
-    }
-
-    if (metadataChanged) fileStorage.writeJson(trashUri, TRASH_METADATA_FILENAME, metadata)
-
-    return trash
-}
-
 // Tags are always read/written at the root, shared across the whole tree.
-export const loadRepositoryData = async (repository, rootRepository, storage, fileStorage) => {
-    const repositoryUri = repository.uri
+export const loadRepositoryData = async (tree, rootRepository, storage, fileStorage) => {
     const rootRepositoryUri = rootRepository.uri
 
     await migrateLegacyBlobNotes(storage)
-    await migrateStorageNotesToFiles(repositoryUri, rootRepositoryUri, storage, fileStorage)
+    await migrateStorageNotesToFiles(rootRepositoryUri, rootRepositoryUri, storage, fileStorage)
 
-    const notes = await loadNotesFromFolder(repositoryUri, fileStorage)
+    const notes = await loadFromTree(tree, loadNotesFromFolder, fileStorage)
 
     const tags = purgeAllTag(
         await loadSidecarList({
@@ -238,7 +180,5 @@ export const loadRepositoryData = async (repository, rootRepository, storage, fi
         fileStorage
     )
 
-    const trash = await loadTrashFromFolder(repositoryUri, fileStorage)
-
-    return { notes, tags, trash }
+    return { notes, tags }
 }

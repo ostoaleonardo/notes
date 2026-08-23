@@ -2,12 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { randomUUID } from 'expo-crypto'
 import { loadRepositoryData } from '../load-repository-data'
-import {
-    STORAGE_KEYS,
-    TRASH_FOLDER_NAME,
-    TRASH_METADATA_FILENAME,
-    TRASH_RETENTION_MS
-} from '@/constants'
+import { STORAGE_KEYS } from '@/constants'
 
 jest.mock('expo-crypto', () => ({ randomUUID: jest.fn() }))
 
@@ -47,7 +42,6 @@ const createFakeFileStorage = (deviceCache = new Map()) => {
         },
         writeJson: (uri, filename, value) => { jsonsFor(uri).set(filename, value) },
         getOrCreateImagesFolder: (uri) => ({ uri: `${uri}/images` }),
-        getOrCreateTrashFolder: (uri) => ({ uri: `${uri}/.trash` }),
         copyImageFile: async (sourceUri, directoryUri, filename) => {
             if (!deviceCache.has(sourceUri)) {
                 throw new Error('source no longer exists on device', sourceUri)
@@ -93,7 +87,7 @@ describeLegacyFixtures('legacy AsyncStorage migration', () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage()
 
-        const { notes } = await loadRepositoryData(repository, repository, storage, fileStorage)
+        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
 
         expect(notes).toHaveLength(legacyNotes.length)
         for (const legacyNote of legacyNotes) {
@@ -106,7 +100,7 @@ describeLegacyFixtures('legacy AsyncStorage migration', () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage()
 
-        await loadRepositoryData(repository, repository, storage, fileStorage)
+        await loadRepositoryData([repository], repository, storage, fileStorage)
 
         expect(await storage.getItem(STORAGE_KEYS.NOTES)).toBeNull()
         expect(await storage.getAllKeys()).toHaveLength(0)
@@ -116,8 +110,8 @@ describeLegacyFixtures('legacy AsyncStorage migration', () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage()
 
-        await loadRepositoryData(repository, repository, storage, fileStorage)
-        const { notes: secondLoad } = await loadRepositoryData(repository, repository, storage, fileStorage)
+        await loadRepositoryData([repository], repository, storage, fileStorage)
+        const { notes: secondLoad } = await loadRepositoryData([repository], repository, storage, fileStorage)
 
         expect(secondLoad).toHaveLength(legacyNotes.length)
     })
@@ -129,7 +123,7 @@ describeLegacyFixtures('legacy AsyncStorage migration', () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage()
 
-        const { notes } = await loadRepositoryData(repository, repository, storage, fileStorage)
+        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
         const migrated = notes.find((note) => note.note === legacyNoteWithTags.note)
 
         expect(migrated.tags.sort()).toEqual([...legacyNoteWithTags.categories].sort())
@@ -139,7 +133,7 @@ describeLegacyFixtures('legacy AsyncStorage migration', () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage()
 
-        const { tags } = await loadRepositoryData(repository, repository, storage, fileStorage)
+        const { tags } = await loadRepositoryData([repository], repository, storage, fileStorage)
 
         expect(tags.some((tag) => tag.id === 'all')).toBe(false)
         expect(tags.map((tag) => tag.name).sort()).toEqual(
@@ -159,7 +153,7 @@ describeLegacyFixtures('legacy image migration', () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage(deviceCache)
 
-        const { notes } = await loadRepositoryData(repository, repository, storage, fileStorage)
+        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
         const migrated = notes.find((note) => note.note === legacyNoteWithImage.note)
 
         expect(migrated.images).toHaveLength(1)
@@ -174,7 +168,7 @@ describeLegacyFixtures('legacy image migration', () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage(new Map()) // nothing "survived" on device
 
-        const { notes } = await loadRepositoryData(repository, repository, storage, fileStorage)
+        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
 
         const migrated = notes.find((note) => note.note === legacyNoteWithImage.note)
         expect(migrated.images).toEqual([])
@@ -189,7 +183,7 @@ describeLegacyFixtures('legacy image migration', () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage(deviceCache)
 
-        const { notes } = await loadRepositoryData(repository, repository, storage, fileStorage)
+        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
 
         for (const legacyNote of notesWithImages) {
             const migrated = notes.find((note) => note.note === legacyNote.note)
@@ -211,7 +205,7 @@ describeLegacyFixtures('tags shared across the repository tree', () => {
         const root = { uri: 'content://fake/root' }
         const subfolder = { uri: 'content://fake/root/sub' }
 
-        const { tags } = await loadRepositoryData(subfolder, root, storage, fileStorage)
+        const { tags } = await loadRepositoryData([subfolder], root, storage, fileStorage)
 
         const expectedNames = legacyTags.filter((tag) => tag.id !== 'all').map((tag) => tag.name).sort()
         expect(tags.map((tag) => tag.name).sort()).toEqual(expectedNames)
@@ -230,7 +224,7 @@ describe('steady state (no legacy data)', () => {
         const fileStorage = createFakeFileStorage()
         fileStorage.writeNoteFile(REPO_URI, 'External note.md', 'Added from outside the app.')
 
-        const { notes } = await loadRepositoryData(repository, repository, storage, fileStorage)
+        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
 
         expect(notes).toHaveLength(1)
         expect(notes[0].title).toBe('External note')
@@ -245,7 +239,7 @@ describe('steady state (no legacy data)', () => {
             'ghost-id': { filename: 'Deleted externally.md', tags: [], password: '', biometrics: false, createdAt: 1, updatedAt: '', images: [] }
         })
 
-        const { notes } = await loadRepositoryData(repository, repository, storage, fileStorage)
+        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
 
         expect(notes).toEqual([])
         const metadata = await fileStorage.readMetadata(REPO_URI)
@@ -253,114 +247,26 @@ describe('steady state (no legacy data)', () => {
     })
 })
 
-// trash
-describe('trash folder', () => {
-    const TRASH_URI = `${REPO_URI}/${TRASH_FOLDER_NAME}`
-
-    test('returns an empty list when nothing has been trashed', async () => {
+// tree-wide loading
+describe('tree-wide loading', () => {
+    test('merges notes from every folder in the tree, each stamped with its own repositoryId', async () => {
         const storage = createFakeStorage()
         const fileStorage = createFakeFileStorage()
 
-        const { trash } = await loadRepositoryData(repository, repository, storage, fileStorage)
+        const root = { id: 'root-id', uri: 'content://fake/tree-root' }
+        const subfolder = { id: 'sub-id', uri: 'content://fake/tree-root/sub' }
 
-        expect(trash).toEqual([])
-    })
+        fileStorage.writeNoteFile(root.uri, 'Root note.md', 'in root')
+        fileStorage.writeNoteFile(subfolder.uri, 'Sub note.md', 'in subfolder')
 
-    test('adopts a foreign .md file placed directly in the trash folder, using default values', async () => {
-        const storage = createFakeStorage()
-        const fileStorage = createFakeFileStorage()
-        fileStorage.writeNoteFile(TRASH_URI, 'Recovered.md', 'Recovered content')
+        const { notes } = await loadRepositoryData([root, subfolder], root, storage, fileStorage)
 
-        const { trash } = await loadRepositoryData(repository, repository, storage, fileStorage)
+        expect(notes).toHaveLength(2)
 
-        expect(trash).toHaveLength(1)
-        expect(trash[0].title).toBe('Recovered')
-        expect(trash[0].note).toBe('Recovered content')
-        expect(trash[0].tags).toEqual([])
-        expect(typeof trash[0].trashedAt).toBe('number')
-    })
+        const rootNote = notes.find((note) => note.title === 'Root note')
+        const subNote = notes.find((note) => note.title === 'Sub note')
 
-    test('prunes trash metadata entries whose .md file was removed externally', async () => {
-        const storage = createFakeStorage()
-        const fileStorage = createFakeFileStorage()
-        fileStorage.writeJson(TRASH_URI, TRASH_METADATA_FILENAME, {
-            'ghost-id': { filename: 'Deleted externally.md', trashedAt: Date.now(), tags: [], password: '', biometrics: false, createdAt: 1, images: [] }
-        })
-
-        const { trash } = await loadRepositoryData(repository, repository, storage, fileStorage)
-
-        expect(trash).toEqual([])
-        const metadata = await fileStorage.readJson(TRASH_URI, TRASH_METADATA_FILENAME, {})
-        expect(metadata['ghost-id']).toBeUndefined()
-    })
-
-    test('keeps a trashed note within the retention window, preserving its metadata', async () => {
-        const storage = createFakeStorage()
-        const fileStorage = createFakeFileStorage()
-        const trashedAt = Date.now() - 1000
-
-        fileStorage.writeNoteFile(TRASH_URI, 'Old note.md', 'Old content')
-        fileStorage.writeJson(TRASH_URI, TRASH_METADATA_FILENAME, {
-            'note-id': {
-                filename: 'Old note.md',
-                trashedAt,
-                tags: ['work'],
-                password: 'secret',
-                biometrics: true,
-                createdAt: 1,
-                images: ['image.jpg']
-            }
-        })
-
-        const { trash } = await loadRepositoryData(repository, repository, storage, fileStorage)
-
-        expect(trash).toHaveLength(1)
-        expect(trash[0]).toMatchObject({
-            id: 'note-id',
-            title: 'Old note',
-            note: 'Old content',
-            tags: ['work'],
-            password: 'secret',
-            biometrics: true,
-            createdAt: 1,
-            trashedAt,
-            images: ['image.jpg']
-        })
-    })
-
-    test('purges a trashed note past the retention window, deleting both the file and its metadata', async () => {
-        const storage = createFakeStorage()
-        const fileStorage = createFakeFileStorage()
-        const expiredAt = Date.now() - TRASH_RETENTION_MS - 1000
-
-        fileStorage.writeNoteFile(TRASH_URI, 'Expired.md', 'Expired content')
-        fileStorage.writeJson(TRASH_URI, TRASH_METADATA_FILENAME, {
-            'expired-id': { filename: 'Expired.md', trashedAt: expiredAt, tags: [], password: '', biometrics: false, createdAt: expiredAt, images: [] }
-        })
-
-        const { trash } = await loadRepositoryData(repository, repository, storage, fileStorage)
-
-        expect(trash).toEqual([])
-        expect(fileStorage.listMarkdownFiles(TRASH_URI)).toHaveLength(0)
-        const metadata = await fileStorage.readJson(TRASH_URI, TRASH_METADATA_FILENAME, {})
-        expect(metadata['expired-id']).toBeUndefined()
-    })
-
-    test('backfills a missing trashedAt instead of purging the entry', async () => {
-        const storage = createFakeStorage()
-        const fileStorage = createFakeFileStorage()
-
-        fileStorage.writeNoteFile(TRASH_URI, 'No date.md', 'Content')
-        fileStorage.writeJson(TRASH_URI, TRASH_METADATA_FILENAME, {
-            'no-date-id': { filename: 'No date.md', tags: [], password: '', biometrics: false, createdAt: 1, images: [] }
-        })
-
-        const { trash } = await loadRepositoryData(repository, repository, storage, fileStorage)
-
-        expect(trash).toHaveLength(1)
-        expect(typeof trash[0].trashedAt).toBe('number')
-
-        const metadata = await fileStorage.readJson(TRASH_URI, TRASH_METADATA_FILENAME, {})
-        expect(metadata['no-date-id'].trashedAt).toBe(trash[0].trashedAt)
+        expect(rootNote.repositoryId).toBe('root-id')
+        expect(subNote.repositoryId).toBe('sub-id')
     })
 })

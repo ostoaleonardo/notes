@@ -9,6 +9,7 @@ export function useNoteAutosave({
     password,
     biometrics,
     createdAt,
+    repositoryId,
     skip,
     onSave
 }) {
@@ -24,10 +25,22 @@ export function useNoteAutosave({
                 images,
                 password,
                 biometrics,
-                createdAt
+                createdAt,
+                repositoryId
             })
         }, 500)
 
         return () => clearTimeout(timer)
-    }, [id, title, note, tags, images, password, biometrics, createdAt, skip])
+    }, [
+        id,
+        title,
+        note,
+        tags,
+        images,
+        password,
+        biometrics,
+        createdAt,
+        repositoryId,
+        skip
+    ])
 }

@@ -13,6 +13,7 @@ export function MarkdownInput({ isEditing = false, size = 13, ...props }) {
             padding: 0,
             fontSize: size,
             color: onBackground,
+            lineHeight: size * 2,
             fontFamily: FONTS.azeretLight
         }
     })

@@ -3,12 +3,14 @@ export { AuthContext } from './auth-context'
 export { NoteContext } from './note-context'
 export { UtilsContext } from './utils-contex'
 export { ThemeContext } from './theme-context'
+export { TabsContext } from './tabs-context'
 
 // Providers
 export { AuthProvider } from './auth-context'
 export { NoteProvider } from './note-context'
 export { UtilsProvider } from './utils-contex'
 export { ThemeProvider } from './theme-context'
+export { TabsProvider } from './tabs-context'
 
 // Premium
 export { PremiumContext } from './premium-context'

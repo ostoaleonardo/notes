@@ -12,7 +12,6 @@ export function DateNote({ createdAt, updatedAt }) {
     return (
         <View style={styles.container}>
             <Typography
-                bold
                 uppercase
                 opacity={0.5}
                 variant='caption'
@@ -30,6 +29,7 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         marginTop: 8,
+        marginBottom: 16,
         paddingHorizontal: 16
     }
 })

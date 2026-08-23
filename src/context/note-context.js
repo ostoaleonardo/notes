@@ -9,7 +9,6 @@ export const NoteContext = createContext()
 export function NoteProvider({ children }) {
     const [notes, setNotes] = useState([])
     const [tags, setTags] = useState(DEFAULT_TAGS)
-    const [trash, setTrash] = useState(new Set())
     const [paramId, setParamId] = useState('')
     const [loading, setLoading] = useState(true)
 
@@ -20,6 +19,8 @@ export function NoteProvider({ children }) {
         activeRepositoryTree
     } = useRepositories()
 
+    const treeKey = activeRepositoryTree.map((repository) => repository.uri).join('|')
+
     useEffect(() => {
         if (!activeRepository) return
 
@@ -28,11 +29,10 @@ export function NoteProvider({ children }) {
 
             try {
                 const rootRepository = activeRepositoryTree[0] || activeRepository
-                const { notes, tags, trash } = await loadRepositoryData(activeRepository, rootRepository)
+                const { notes, tags } = await loadRepositoryData(activeRepositoryTree, rootRepository)
 
                 setNotes(notes)
                 setTags(tags)
-                setTrash(new Set(trash))
             } catch (error) {
                 console.debug('error loading notes', error)
             } finally {
@@ -47,11 +47,10 @@ export function NoteProvider({ children }) {
         })
 
         return () => subscription.remove()
-    }, [activeRepository?.uri])
+    }, [treeKey])
 
     const clear = () => {
         setNotes([])
-        setTrash(new Set())
         setTags(DEFAULT_TAGS)
     }
 
@@ -62,8 +61,6 @@ export function NoteProvider({ children }) {
                 setNotes,
                 tags,
                 setTags,
-                trash,
-                setTrash,
                 paramId,
                 setParamId,
                 loading,

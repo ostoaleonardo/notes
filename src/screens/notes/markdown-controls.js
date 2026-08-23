@@ -1,37 +1,41 @@
 import { memo } from 'react'
-import { StyleSheet, View } from 'react-native'
-import { FAB, IconButton, useTheme } from 'react-native-paper'
+import { StyleSheet } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import { IconButton, useTheme } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
 import { KeyboardStickyView } from 'react-native-keyboard-controller'
-import { useTranslation } from 'react-i18next'
 import { AnimatedView, Scroll, Separator } from '@/components'
+import { NoteActions } from './note-actions'
 import { Edit, Eye } from '@/icons'
 import { MARKDOWN_CONTROLS } from '@/constants'
 
-export const MarkdownControls = memo(function MarkdownControls({ isEditing, onRunAction, onEditMarkdown, scope }) {
+export const MarkdownControls = memo(function MarkdownControls({ isEditing, isFocused, onRunAction, onEditMarkdown, scope, actions }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
 
-    const iconDarkProps = { color: colors.background }
     const controls = MARKDOWN_CONTROLS.filter((control) => !control.scope || control.scope === scope)
+    const showControls = scope === 'template' ? isEditing : isEditing && isFocused
+    const showActions = scope !== 'template' && !showControls && actions
 
     return (
-        <KeyboardStickyView style={styles.container}>
-            {isEditing && (
-                <AnimatedView
-                    entering={FadeInRight}
-                    exiting={FadeOutRight}
-                    style={{
-                        ...styles.controls,
-                        backgroundColor: colors.surface
-                    }}
-                >
-                    <Scroll
-                        horizontal
-                        overScrollMode='never'
-                        keyboardShouldPersistTaps='always'
-                        style={{ flex: 1 }}
-                        contentContainerStyle={styles.scrollContent}
+        <KeyboardStickyView
+            style={{
+                ...styles.container,
+                borderTopColor: colors.outline
+            }}
+        >
+            <Scroll
+                horizontal
+                overScrollMode='never'
+                keyboardShouldPersistTaps='always'
+                style={styles.scroll}
+                contentContainerStyle={styles.scrollContent}
+            >
+                {showControls && (
+                    <AnimatedView
+                        entering={FadeInRight}
+                        exiting={FadeOutRight}
+                        style={styles.row}
                     >
                         {controls.map(({ action, Icon, divider }, index) => (
                             divider ? (
@@ -43,55 +47,58 @@ export const MarkdownControls = memo(function MarkdownControls({ isEditing, onRu
                                 <IconButton
                                     key={action}
                                     onPress={() => onRunAction(action)}
-                                    icon={() => <Icon color={colors.onSurface} />}
+                                    icon={() => <Icon color={colors.onBackground} />}
                                     accessibilityLabel={t(`markdown_action.${action}`)}
                                 />
                             )
                         ))}
-                    </Scroll>
-                </AnimatedView>
-            )}
+                    </AnimatedView>
+                )}
 
-            <AnimatedView
-                entering={FadeInRight}
-                exiting={FadeOutRight}
-            >
-                <FAB
-                    mode='flat'
-                    animated={false}
-                    onPress={onEditMarkdown}
-                    style={{ backgroundColor: colors.primary }}
-                    accessibilityLabel={t(isEditing ? 'button.preview' : 'button.edit')}
-                    icon={() => (
-                        isEditing
-                            ? <Eye {...iconDarkProps} />
-                            : <Edit {...iconDarkProps} />
-                    )}
-                />
-            </AnimatedView>
+                {showActions && (
+                    <AnimatedView
+                        entering={FadeInRight}
+                        exiting={FadeOutRight}
+                        style={styles.row}
+                    >
+                        <NoteActions {...actions} />
+                    </AnimatedView>
+                )}
+            </Scroll>
+
+            <IconButton
+                onPress={onEditMarkdown}
+                accessibilityLabel={t(isEditing ? 'button.preview' : 'button.edit')}
+                icon={() => (
+                    isEditing
+                        ? <Eye color={colors.onBackground} />
+                        : <Edit color={colors.onBackground} />
+                )}
+            />
         </KeyboardStickyView>
     )
 })
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
         position: 'absolute',
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        paddingHorizontal: 16,
-        bottom: 16,
-        gap: 16
-    },
-    controls: {
-        flexGrow: 1,
-        borderRadius: 16,
+        left: 0,
+        right: 0,
+        bottom: 0,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
+        borderTopWidth: 1
+    },
+    scroll: {
+        flex: 1
+    },
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     scrollContent: {
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingHorizontal: 4
     },
     divider: {
         width: 1,

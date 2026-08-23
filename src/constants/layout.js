@@ -1,1 +1,0 @@
-export const GRID_BREAKPOINT_WIDTH = 500

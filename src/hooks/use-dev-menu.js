@@ -24,7 +24,6 @@ export function useDevMenu() {
         clearRepository,
         createSubdirectory,
         getOrCreateTemplatesFolder,
-        getOrCreateTrashFolder,
         deleteDirectory
     } = useFileStorage()
 
@@ -39,7 +38,6 @@ export function useDevMenu() {
         if (activeRepository) {
             clearRepository(activeRepository.uri)
             deleteDirectory(getOrCreateTemplatesFolder(activeRepository.uri).uri)
-            deleteDirectory(getOrCreateTrashFolder(activeRepository.uri).uri)
         }
 
         await setItem(STORAGE_KEYS.REPOSITORIES, JSON.stringify([]))
