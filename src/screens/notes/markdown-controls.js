@@ -21,7 +21,8 @@ export const MarkdownControls = memo(function MarkdownControls({ isEditing, isFo
         <KeyboardStickyView
             style={{
                 ...styles.container,
-                borderTopColor: colors.outline
+                borderTopColor: colors.outline,
+                backgroundColor: colors.background
             }}
         >
             <Scroll
