@@ -1,18 +1,16 @@
-import { Pressable, StyleSheet, View } from 'react-native'
 import { router } from 'expo-router'
+import { Pressable, StyleSheet, View } from 'react-native'
 import { Typography } from '../typography'
-import { useIconProps } from '@/hooks'
+import { DrawerIconButton } from './drawer-icon-button'
 import { ArrowForward } from '@/icons'
 
 export function DrawerScreen({ label, path, indicator, active, onPress }) {
-    const iconProps = useIconProps(16)
-
     return (
         <Pressable
             style={styles.container}
             onPress={onPress || (() => router.push(path))}
         >
-            <View style={styles.content}>
+            <View>
                 <Typography
                     bold={active}
                     uppercase
@@ -29,9 +27,10 @@ export function DrawerScreen({ label, path, indicator, active, onPress }) {
                 )}
             </View>
 
-            <ArrowForward
-                {...iconProps}
-                opacity={0.6}
+            <DrawerIconButton
+                pointerEvents='none'
+                importantForAccessibility='no'
+                icon={ArrowForward}
             />
         </Pressable>
     )
@@ -39,13 +38,16 @@ export function DrawerScreen({ label, path, indicator, active, onPress }) {
 
 const styles = StyleSheet.create({
     container: {
-        paddingVertical: 16,
-        paddingHorizontal: 16,
+        paddingLeft: 8,
+        paddingVertical: 9,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
     },
-    content: {
-        gap: 4
+    row: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
     }
 })
