@@ -2,7 +2,6 @@ import { Image, Pressable, StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { SwipeableCard } from '../swipeable-card'
-import { ListItemPreview } from '../preview/list-item-preview'
 import { Typography } from '../../typography'
 import { MarkdownInput } from '../../markdown'
 import { RestoreAction } from '../actions/restore-action'
@@ -15,11 +14,10 @@ export function SwipeableTrash({ data, isOpen, onOpen, onDelete, onRestore }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
 
-    const { title, note, images, list, trashedAt } = data
+    const { title, note, images, trashedAt } = data
 
     const hasImages = images && images.length > 0
-    const hasList = list && list.items && list.items.length > 0
-    const hasContent = title || note || hasList
+    const hasContent = title || note
 
     const width = hasImages && getDimensions(images.length)
     const preview = getPreviewNote(note)
@@ -74,21 +72,6 @@ export function SwipeableTrash({ data, isOpen, onOpen, onDelete, onRestore }) {
 
                     {note && (
                         <MarkdownInput readOnly value={preview} />
-                    )}
-
-
-                    {hasList && (
-                        <View style={{ width: '100%' }}>
-                            {list.items.map((item, index) => (
-                                <ListItemPreview
-                                    key={item.id}
-                                    type={list.type}
-                                    index={index + 1}
-                                    value={item.value}
-                                    status={item.status}
-                                />
-                            ))}
-                        </View>
                     )}
                 </View>
 
