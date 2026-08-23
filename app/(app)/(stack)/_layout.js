@@ -69,6 +69,14 @@ export default function StackLayout() {
                     title: t('title.settings')
                 }}
             />
+            <Stack.Screen
+                name='image-viewer'
+                options={{
+                    headerShown: false,
+                    presentation: 'transparentModal',
+                    animation: 'fade'
+                }}
+            />
         </Stack>
     )
 }
