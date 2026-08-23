@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
-import { InteractionManager, StyleSheet, View } from 'react-native'
 import { router } from 'expo-router'
+import { useEffect, useMemo, useState } from 'react'
 import { DrawerContentScrollView } from 'expo-router/drawer'
+import { InteractionManager, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { DrawerHeader } from './drawer-header'
 import { DrawerScreen } from './drawer-screen'
@@ -64,9 +64,7 @@ export function DrawerItems({ navigation }) {
     )
 
     const closeDrawer = () => {
-        InteractionManager.runAfterInteractions(() => {
-            navigation.dispatch({ type: 'CLOSE_DRAWER' })
-        })
+        navigation.dispatch({ type: 'CLOSE_DRAWER' })
     }
 
     const onOpenRoot = (id) => {

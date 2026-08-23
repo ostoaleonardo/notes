@@ -1,15 +1,13 @@
 import { Pressable, StyleSheet, View } from 'react-native'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import { IconButton } from 'react-native-paper'
+import { DrawerIconButton } from './drawer-icon-button'
 import { Typography } from '../typography'
-import { useIconProps } from '@/hooks'
 import { ArrowForward, CollapseAll, ExpandAll } from '@/icons'
 import { ROUTES } from '@/constants'
 
 export function DrawerHeader({ collapsed, onToggleCollapseAll }) {
     const { t } = useTranslation()
-    const iconProps = useIconProps(16, 0.6)
 
     return (
         <Pressable
@@ -18,28 +16,23 @@ export function DrawerHeader({ collapsed, onToggleCollapseAll }) {
             accessibilityLabel={t('drawer.repositories')}
         >
             <Typography
-                bold
-                uppercase
                 opacity={0.6}
+                uppercase={true}
                 variant='caption'
             >
                 {t('drawer.repositories')}
             </Typography>
 
             <View style={styles.actions}>
-                <IconButton
+                <DrawerIconButton
                     onPress={onToggleCollapseAll}
-                    icon={() => (
-                        collapsed
-                            ? <ExpandAll {...iconProps} />
-                            : <CollapseAll {...iconProps} />
-                    )}
+                    icon={collapsed ? ExpandAll : CollapseAll}
                     accessibilityLabel={t(collapsed ? 'drawer.expand_all' : 'drawer.collapse_all')}
                 />
-                <IconButton
+                <DrawerIconButton
                     pointerEvents='none'
                     importantForAccessibility='no'
-                    icon={() => <ArrowForward {...iconProps} />}
+                    icon={ArrowForward}
                 />
             </View>
         </Pressable>
@@ -48,8 +41,7 @@ export function DrawerHeader({ collapsed, onToggleCollapseAll }) {
 
 const styles = StyleSheet.create({
     container: {
-        paddingLeft: 16,
-        paddingRight: 0,
+        paddingLeft: 8,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
