@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { LargeInput, MarkdownEditor, Section } from '@/components'
+import { LoadingOverlay } from '@/components/layout'
 import { TemplateAction } from '@/screens/app-bar-actions'
 import { MarkdownControls } from '@/screens/notes'
 import { TemplatePlaceholders } from '@/screens/modals'
@@ -19,7 +20,7 @@ export default function EditTemplate() {
 
     useCloseTabOnRemove(navigation, tabId)
 
-    const loading = useRef(true)
+    const [loading, setLoading] = useState(true)
     const currentFilename = useRef(filename)
     const originalName = useRef('')
 
@@ -57,7 +58,9 @@ export default function EditTemplate() {
             setContent(template.content)
             originalName.current = displayName
 
-            setTimeout(() => { loading.current = false }, 0)
+            setTimeout(() => {
+                setLoading(false)
+            }, 0)
         })
 
         registerTab(tabId)
@@ -68,7 +71,7 @@ export default function EditTemplate() {
     }, [name])
 
     useEffect(() => {
-        if (loading.current || !name.trim()) return
+        if (loading || !name.trim()) return
 
         const timer = setTimeout(async () => {
             const trimmedName = name.trim()
@@ -80,7 +83,7 @@ export default function EditTemplate() {
         }, 500)
 
         return () => clearTimeout(timer)
-    }, [name, content])
+    }, [name, content, loading])
 
     useTabBarActions({
         onOpenDrawer: () => navigation.dispatch({ type: 'OPEN_DRAWER' }),
@@ -91,6 +94,8 @@ export default function EditTemplate() {
             />
         )
     }, [])
+
+    if (loading) return <LoadingOverlay />
 
     return (
         <>

@@ -19,8 +19,7 @@ export default function WorkspaceLayout() {
             >
                 <Stack.Screen name='home/index' />
                 <Stack.Screen name='(notes)' />
-                <Stack.Screen name='repositories/index' />
-                <Stack.Screen name='templates/edit/[filename]' />
+                <Stack.Screen name='templates/[filename]' />
                 <Stack.Screen
                     name='image-viewer'
                     options={{

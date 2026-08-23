@@ -8,7 +8,7 @@ import { Scroll } from '../animated'
 import { TabItem } from './tab-item'
 import { useIconProps, useNotes, useTabs, useUtils } from '@/hooks'
 import { Home, Menu } from '@/icons'
-import { HOME_TAB_KEY, ROUTES, TAB_BAR_HIDDEN_ROUTES } from '@/constants'
+import { HOME_TAB_KEY, ROUTES } from '@/constants'
 
 export function TabBar() {
     const { t } = useTranslation()
@@ -54,8 +54,6 @@ export function TabBar() {
         if (!isHome && id === activeTabId) return
         setActiveTab(id)
     }
-
-    if (TAB_BAR_HIDDEN_ROUTES.includes(pathname)) return null
 
     return (
         <View

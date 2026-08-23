@@ -42,7 +42,7 @@ export {
 } from './note-preview'
 
 export { LINKS } from './links'
-export { HOME_TAB_KEY, TAB_BAR_HIDDEN_ROUTES, TEMPLATE_TAB_PREFIX, TEMPLATES_SECTION_ID } from './tabs'
+export { HOME_TAB_KEY, TEMPLATE_TAB_PREFIX, TEMPLATES_SECTION_ID } from './tabs'
 
 export {
     PRO,

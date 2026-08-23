@@ -6,6 +6,6 @@ export const ROUTES = {
     IMAGE_VIEWER: '/image-viewer',
     ADD_NOTE: '(notes)',
     EDIT_NOTE: '/edit/',
-    EDIT_TEMPLATE: '/templates/edit/',
+    EDIT_TEMPLATE: '/templates/',
     SETTINGS: '/settings'
 }
