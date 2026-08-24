@@ -1,7 +1,7 @@
-import { StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
-import { TextArea } from '../input'
+import { StyleSheet, TextInput } from 'react-native'
 import { MarkdownPreview } from './markdown-preview'
+import { Scroll } from '../animated/scroll'
 import { FONTS, TRANSPARENT } from '@/constants'
 
 export function MarkdownInput({ isEditing = false, size = 13, ...props }) {
@@ -29,15 +29,22 @@ export function MarkdownInput({ isEditing = false, size = 13, ...props }) {
 
     return (
         isEditing ? (
-            <TextArea
+            <TextInput
+                multiline
+                textAlignVertical='top'
                 {...props}
                 {...inputPros}
             />
         ) : (
-            <MarkdownPreview
-                size={size}
-                value={props.value}
-            />
+            <Scroll
+                style={{ flex: 1 }}
+                contentContainerStyle={{ flexGrow: 1 }}
+            >
+                <MarkdownPreview
+                    size={size}
+                    value={props.value}
+                />
+            </Scroll>
         )
     )
 }

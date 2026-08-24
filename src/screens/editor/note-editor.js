@@ -8,8 +8,8 @@ export function NoteEditor({
     onFocus, onBlur
 }) {
     return (
-        <View style={{ paddingBottom: 80 }}>
-            <Section containerStyle={{ paddingHorizontal: 16 }}>
+        <View style={{ flex: 1, paddingBottom: 80 }}>
+            <Section containerStyle={{ flex: 1, paddingHorizontal: 16 }} contentStyle={{ flex: 1 }}>
                 <MarkdownEditor
                     value={value}
                     setValue={setValue}
