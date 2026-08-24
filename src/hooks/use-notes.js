@@ -38,8 +38,7 @@ export function useNotes() {
         password: note.password,
         biometrics: note.biometrics,
         createdAt: note.createdAt,
-        updatedAt: note.updatedAt || '',
-        images: note.images
+        updatedAt: note.updatedAt || ''
     })
 
     const saveNote = async (note, repositoryId = activeRepository.id) => {
