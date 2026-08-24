@@ -62,10 +62,10 @@ export function DrawerRepositoryItem({
                             activeNoteId={activeNoteId}
                             onOpenRoot={onOpenRoot}
                             onOpenNote={onOpenNote}
-                            onAddSubfolder={() => onAddSubfolder(subfolder.repository.id)}
+                            onAddSubfolder={(id = subfolder.repository.id) => onAddSubfolder(id)}
                             onCreateNote={onCreateNote}
-                            onEditFolder={() => onEditFolder(subfolder.repository.id)}
-                            onDelete={() => onDelete(subfolder.repository.id)}
+                            onEditFolder={(id = subfolder.repository.id) => onEditFolder(id)}
+                            onDelete={(id = subfolder.repository.id) => onDelete(id)}
                         />
                     ))}
                 </>
