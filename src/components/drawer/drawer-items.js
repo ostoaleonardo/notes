@@ -114,10 +114,10 @@ export function DrawerItems({ navigation }) {
                         activeNoteId={activeTabId}
                         onOpenRoot={onOpenRoot}
                         onOpenNote={onOpenNote}
-                        onAddSubfolder={() => setSubfolderParentId(node.repository.id)}
+                        onAddSubfolder={(id = node.repository.id) => setSubfolderParentId(id)}
                         onCreateNote={onCreateNote}
-                        onEditFolder={() => setEditFolderId(node.repository.id)}
-                        onDelete={() => setDeleteId(node.repository.id)}
+                        onEditFolder={(id = node.repository.id) => setEditFolderId(id)}
+                        onDelete={(id = node.repository.id) => setDeleteId(id)}
                     />
                 ))}
 
