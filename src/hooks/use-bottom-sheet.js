@@ -1,10 +1,10 @@
-import { useRef } from 'react'
+import { useCallback, useRef } from 'react'
 
 export function useBottomSheet() {
     const ref = useRef(null)
 
-    const onOpen = () => ref.current?.present()
-    const onClose = () => ref.current?.close()
+    const onOpen = useCallback(() => ref.current?.present(), [])
+    const onClose = useCallback(() => ref.current?.close(), [])
 
     return { ref, onOpen, onClose }
 }
