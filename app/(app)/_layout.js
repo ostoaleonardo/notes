@@ -57,6 +57,13 @@ export default function AppLayout() {
             >
                 <Stack.Protected guard={showDrawer}>
                     <Stack.Screen name='(drawer)' />
+                    <Stack.Screen
+                        name='image-viewer'
+                        options={{
+                            presentation: 'transparentModal',
+                            animation: 'fade'
+                        }}
+                    />
                 </Stack.Protected>
 
                 <Stack.Protected guard={!showDrawer}>
