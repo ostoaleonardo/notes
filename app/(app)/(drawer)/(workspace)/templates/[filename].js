@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
-import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import { LargeInput, MarkdownEditor, Section } from '@/components'
+import { useEffect, useRef, useState } from 'react'
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller'
+import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import { LoadingOverlay } from '@/components/layout'
 import { TemplateAction } from '@/screens/app-bar-actions'
 import { MarkdownControls } from '@/screens/notes'
+import { TemplateEditorForm } from '@/screens/templates'
 import { TemplatePlaceholders } from '@/screens/modals'
 import { useCloseTabOnRemove, useMarkdownAction, useTabBarActions, useTabs, useTemplates } from '@/hooks'
 import { TEMPLATE_TAB_PREFIX } from '@/constants'
@@ -99,23 +100,19 @@ export default function EditTemplate() {
 
     return (
         <>
-            <Section containerStyle={{ paddingHorizontal: 16 }}>
-                <LargeInput
-                    bold
-                    value={name}
-                    onChangeText={setName}
-                    placeholder={t('placeholder.title')}
-                />
-            </Section>
-
-            <Section containerStyle={{ paddingHorizontal: 16 }}>
-                <MarkdownEditor
-                    value={content}
-                    setValue={setContent}
+            <KeyboardAvoidingView
+                behavior='height'
+                style={{ flex: 1 }}
+            >
+                <TemplateEditorForm
+                    name={name}
+                    setName={setName}
+                    content={content}
+                    setContent={setContent}
                     markdownAction={markdownAction}
                     isEditing={isEditing}
                 />
-            </Section>
+            </KeyboardAvoidingView>
 
             <MarkdownControls
                 isEditing={isEditing}
