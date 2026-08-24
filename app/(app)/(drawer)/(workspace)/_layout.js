@@ -20,13 +20,6 @@ export default function WorkspaceLayout() {
                 <Stack.Screen name='home/index' />
                 <Stack.Screen name='(notes)' />
                 <Stack.Screen name='templates/[filename]' />
-                <Stack.Screen
-                    name='image-viewer'
-                    options={{
-                        presentation: 'transparentModal',
-                        animation: 'fade'
-                    }}
-                />
             </Stack>
         </View>
     )
