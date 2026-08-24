@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { LargeInput, Section } from '@/components'
-import { DateNote } from '../notes'
+import { DateNote } from '../notes/date-note'
 
 export function Header({ title, setTitle, createdAt, updatedAt }) {
     const { t } = useTranslation()
