@@ -6,7 +6,7 @@ const SIZE_VARIANTS = {
     title: 24,
     subtitle: 16,
     paragraph: 14,
-    caption: 12
+    caption: 9
 }
 
 export function Typography({
