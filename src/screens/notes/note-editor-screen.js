@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
-import { ToastAndroid } from 'react-native'
+import { ToastAndroid, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller'
 import { ModalSheet } from '@/components'
@@ -97,34 +97,36 @@ export function NoteEditorScreen({
 
     return (
         <>
-            <KeyboardAvoidingView
-                behavior='height'
-                style={{ flex: 1 }}
-            >
-                <Header
-                    title={title}
-                    setTitle={setTitle}
-                    createdAt={createdAt}
-                    updatedAt={updatedAt}
-                />
+            <View style={{ flex: 1 }}>
+                <KeyboardAvoidingView
+                    behavior='height'
+                    style={{ flex: 1 }}
+                >
+                    <Header
+                        title={title}
+                        setTitle={setTitle}
+                        createdAt={createdAt}
+                        updatedAt={updatedAt}
+                    />
 
-                <NoteEditor
-                    value={note}
-                    setValue={setNote}
-                    markdownAction={markdownAction}
+                    <NoteEditor
+                        value={note}
+                        setValue={setNote}
+                        markdownAction={markdownAction}
+                        isEditing={isEditing}
+                        onFocus={() => setIsFocused(true)}
+                        onBlur={() => setIsFocused(false)}
+                    />
+                </KeyboardAvoidingView>
+
+                <MarkdownControls
                     isEditing={isEditing}
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
+                    isFocused={isFocused}
+                    onRunAction={onRunAction}
+                    onEditMarkdown={onEditMarkdown}
+                    actions={actions}
                 />
-            </KeyboardAvoidingView>
-
-            <MarkdownControls
-                isEditing={isEditing}
-                isFocused={isFocused}
-                onRunAction={onRunAction}
-                onEditMarkdown={onEditMarkdown}
-                actions={actions}
-            />
+            </View>
 
             <ModalSheet
                 ref={tagsSheet.ref}
