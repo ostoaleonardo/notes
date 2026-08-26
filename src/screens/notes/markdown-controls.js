@@ -82,10 +82,6 @@ export const MarkdownControls = memo(function MarkdownControls({ isEditing, isFo
 
 const styles = StyleSheet.create({
     container: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        bottom: 0,
         flexDirection: 'row',
         alignItems: 'center',
         borderTopWidth: 1

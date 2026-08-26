@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { useEffect, useRef, useState } from 'react'
+import { View } from 'react-native'
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller'
 import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import { LoadingOverlay } from '@/components/layout'
@@ -100,26 +101,28 @@ export default function EditTemplate() {
 
     return (
         <>
-            <KeyboardAvoidingView
-                behavior='height'
-                style={{ flex: 1 }}
-            >
-                <TemplateEditorForm
-                    name={name}
-                    setName={setName}
-                    content={content}
-                    setContent={setContent}
-                    markdownAction={markdownAction}
-                    isEditing={isEditing}
-                />
-            </KeyboardAvoidingView>
+            <View style={{ flex: 1 }}>
+                <KeyboardAvoidingView
+                    behavior='height'
+                    style={{ flex: 1 }}
+                >
+                    <TemplateEditorForm
+                        name={name}
+                        setName={setName}
+                        content={content}
+                        setContent={setContent}
+                        markdownAction={markdownAction}
+                        isEditing={isEditing}
+                    />
+                </KeyboardAvoidingView>
 
-            <MarkdownControls
-                isEditing={isEditing}
-                onRunAction={onRunAction}
-                onEditMarkdown={onEditMarkdown}
-                scope='template'
-            />
+                <MarkdownControls
+                    isEditing={isEditing}
+                    onRunAction={onRunAction}
+                    onEditMarkdown={onEditMarkdown}
+                    scope='template'
+                />
+            </View>
 
             <TemplatePlaceholders
                 visible={placeholdersVisible}

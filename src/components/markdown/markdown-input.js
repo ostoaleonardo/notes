@@ -10,6 +10,7 @@ export function MarkdownInput({ isEditing = false, size = 13, ...props }) {
 
     const styles = StyleSheet.create({
         markdown: {
+            flex: 1,
             padding: 0,
             fontSize: size,
             color: onBackground,
