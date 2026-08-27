@@ -1,4 +1,3 @@
-// Builds a nested folder/note tree from the flat repository list, for the drawer's recursive rendering.
 export const buildRepositoryTree = (flatList, notesByRepository, parentId = null) => (
     flatList
         .filter((repository) => (repository.parentId || null) === parentId)
