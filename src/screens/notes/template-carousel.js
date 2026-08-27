@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { MarkdownPreview, Scroll, Typography } from '@/components'
+import { Scroll, Typography } from '@/components'
 import { useLanguage, useRepositories, useTemplates } from '@/hooks'
 import { getPreviewNote, renderTemplate } from '@/utils'
 import { COMMONS, TEMPLATE_PREVIEW_MAX_CHARS, TEMPLATE_PREVIEW_MAX_LINES, TRANSPARENT } from '@/constants'
@@ -58,14 +58,17 @@ export function TemplateCarousel({ title, onSelect }) {
                         {t(`templates.${template.name}`, template.name)}
                     </Typography>
 
-                    <MarkdownPreview
-                        size={11}
-                        value={getPreviewNote(
+                    <Typography
+                        opacity={0.6}
+                        fontSize={11}
+                        numberOfLines={TEMPLATE_PREVIEW_MAX_LINES}
+                    >
+                        {getPreviewNote(
                             renderTemplate(template.content, { title, language: currentLanguage }),
                             TEMPLATE_PREVIEW_MAX_LINES,
                             TEMPLATE_PREVIEW_MAX_CHARS
                         )}
-                    />
+                    </Typography>
                 </Pressable>
             ))}
         </Scroll>

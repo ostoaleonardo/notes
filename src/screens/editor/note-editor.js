@@ -5,10 +5,13 @@ export function NoteEditor({
     value, setValue,
     markdownAction,
     isEditing,
-    onFocus, onBlur
+    onFocus, onBlur,
+    title, setTitle,
+    titlePlaceholder,
+    dateLabel
 }) {
     return (
-        <View style={{ flex: 1, paddingHorizontal: 16 }}>
+        <View style={{ flex: 1 }}>
             <MarkdownEditor
                 value={value}
                 setValue={setValue}
@@ -16,6 +19,10 @@ export function NoteEditor({
                 isEditing={isEditing}
                 onFocus={onFocus}
                 onBlur={onBlur}
+                title={title}
+                setTitle={setTitle}
+                titlePlaceholder={titlePlaceholder}
+                dateLabel={dateLabel}
             />
         </View>
     )

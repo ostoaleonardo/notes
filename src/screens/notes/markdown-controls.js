@@ -1,9 +1,8 @@
 import { memo } from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { IconButton, useTheme } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
-import { KeyboardStickyView } from 'react-native-keyboard-controller'
 import { AnimatedView, Scroll, Separator } from '@/components'
 import { NoteActions } from './note-actions'
 import { Edit, Eye } from '@/icons'
@@ -18,7 +17,7 @@ export const MarkdownControls = memo(function MarkdownControls({ isEditing, isFo
     const showActions = scope !== 'template' && !showControls && actions
 
     return (
-        <KeyboardStickyView
+        <View
             style={{
                 ...styles.container,
                 borderTopColor: colors.outline,
@@ -76,7 +75,7 @@ export const MarkdownControls = memo(function MarkdownControls({ isEditing, isFo
                         : <Edit color={colors.onBackground} />
                 )}
             />
-        </KeyboardStickyView>
+        </View>
     )
 })
 
