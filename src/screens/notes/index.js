@@ -1,4 +1,3 @@
-export { DateNote } from './date-note'
 export { ImageViewer } from './image-viewer'
 export { TemplateCarousel } from './template-carousel'
 export { TagOption } from './tag-option'

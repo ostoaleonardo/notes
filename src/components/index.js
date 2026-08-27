@@ -67,6 +67,5 @@ export {
 // Markdown
 export {
     MarkdownInput,
-    MarkdownEditor,
-    MarkdownPreview
+    MarkdownEditor
 } from './markdown'

@@ -16,7 +16,7 @@ export function TemplateEditorForm({ name, setName, content, setContent, markdow
             </Section>
 
             <Section
-                containerStyle={{ flex: 1, paddingHorizontal: 16 }}
+                containerStyle={{ flex: 1 }}
                 contentStyle={{ flex: 1 }}
             >
                 <MarkdownEditor

@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
-import { ToastAndroid, View } from 'react-native'
+import { ToastAndroid } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller'
 import { ModalSheet } from '@/components'
@@ -11,8 +11,9 @@ import { TableMarkdown } from '@/screens/modals/table-markdown'
 import { ImageMarkdown } from '@/screens/modals/image-markdown'
 import { AddPassword } from '@/screens/modals/add-password'
 import { UpdatePassword } from '@/screens/modals/update-password'
-import { Header, NoteEditor } from '@/screens/editor'
-import { useBottomSheet, useMarkdownAction, useTabBarActions, useTemplates } from '@/hooks'
+import { NoteEditor } from '@/screens/editor'
+import { useAllowLandscape, useBottomSheet, useLanguage, useMarkdownAction, useTabBarActions, useTemplates } from '@/hooks'
+import { getFormattedDate } from '@/utils'
 
 export function NoteEditorScreen({
     navigation,
@@ -26,6 +27,13 @@ export function NoteEditorScreen({
 }) {
     const { t } = useTranslation()
     const { addTemplate } = useTemplates()
+    const { currentLanguage } = useLanguage()
+
+    useAllowLandscape()
+
+    const dateLabel = (createdAt || updatedAt)
+        ? `${updatedAt ? t('date.updated') : t('date.created')} ${getFormattedDate(updatedAt || createdAt, currentLanguage)}`
+        : ''
 
     const [isEditing, setIsEditing] = useState(initialEditing)
     const [isFocused, setIsFocused] = useState(false)
@@ -97,27 +105,22 @@ export function NoteEditorScreen({
 
     return (
         <>
-            <View style={{ flex: 1 }}>
-                <KeyboardAvoidingView
-                    behavior='height'
-                    style={{ flex: 1 }}
-                >
-                    <Header
-                        title={title}
-                        setTitle={setTitle}
-                        createdAt={createdAt}
-                        updatedAt={updatedAt}
-                    />
-
-                    <NoteEditor
-                        value={note}
-                        setValue={setNote}
-                        markdownAction={markdownAction}
-                        isEditing={isEditing}
-                        onFocus={() => setIsFocused(true)}
-                        onBlur={() => setIsFocused(false)}
-                    />
-                </KeyboardAvoidingView>
+            <KeyboardAvoidingView
+                behavior='padding'
+                style={{ flex: 1 }}
+            >
+                <NoteEditor
+                    value={note}
+                    setValue={setNote}
+                    markdownAction={markdownAction}
+                    isEditing={isEditing}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
+                    title={title}
+                    setTitle={setTitle}
+                    titlePlaceholder={t('placeholder.title')}
+                    dateLabel={dateLabel}
+                />
 
                 <MarkdownControls
                     isEditing={isEditing}
@@ -126,7 +129,7 @@ export function NoteEditorScreen({
                     onEditMarkdown={onEditMarkdown}
                     actions={actions}
                 />
-            </View>
+            </KeyboardAvoidingView>
 
             <ModalSheet
                 ref={tagsSheet.ref}

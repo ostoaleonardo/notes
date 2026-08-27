@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next'
 import { useEffect, useRef, useState } from 'react'
-import { View } from 'react-native'
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller'
 import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import { LoadingOverlay } from '@/components/layout'
@@ -8,7 +7,7 @@ import { TemplateAction } from '@/screens/app-bar-actions'
 import { MarkdownControls } from '@/screens/notes'
 import { TemplateEditorForm } from '@/screens/templates'
 import { TemplatePlaceholders } from '@/screens/modals'
-import { useCloseTabOnRemove, useMarkdownAction, useTabBarActions, useTabs, useTemplates } from '@/hooks'
+import { useAllowLandscape, useCloseTabOnRemove, useMarkdownAction, useTabBarActions, useTabs, useTemplates } from '@/hooks'
 import { TEMPLATE_TAB_PREFIX } from '@/constants'
 
 export default function EditTemplate() {
@@ -17,6 +16,8 @@ export default function EditTemplate() {
     const navigation = useNavigation()
     const { getTemplate, updateTemplate, deleteTemplate } = useTemplates()
     const { registerTab, setTemplateTitle } = useTabs()
+
+    useAllowLandscape()
 
     const tabId = TEMPLATE_TAB_PREFIX + filename
 
@@ -101,20 +102,18 @@ export default function EditTemplate() {
 
     return (
         <>
-            <View style={{ flex: 1 }}>
-                <KeyboardAvoidingView
-                    behavior='height'
-                    style={{ flex: 1 }}
-                >
-                    <TemplateEditorForm
-                        name={name}
-                        setName={setName}
-                        content={content}
-                        setContent={setContent}
-                        markdownAction={markdownAction}
-                        isEditing={isEditing}
-                    />
-                </KeyboardAvoidingView>
+            <KeyboardAvoidingView
+                behavior='padding'
+                style={{ flex: 1 }}
+            >
+                <TemplateEditorForm
+                    name={name}
+                    setName={setName}
+                    content={content}
+                    setContent={setContent}
+                    markdownAction={markdownAction}
+                    isEditing={isEditing}
+                />
 
                 <MarkdownControls
                     isEditing={isEditing}
@@ -122,7 +121,7 @@ export default function EditTemplate() {
                     onEditMarkdown={onEditMarkdown}
                     scope='template'
                 />
-            </View>
+            </KeyboardAvoidingView>
 
             <TemplatePlaceholders
                 visible={placeholdersVisible}
