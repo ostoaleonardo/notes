@@ -1,4 +1,3 @@
-// GitHub-style search qualifiers: `tag:<name>` and `is:pinned`, everything else matches the title.
 export const parseSearchQuery = (query) => {
     let text = query
     let tag = null
@@ -17,7 +16,6 @@ export const parseSearchQuery = (query) => {
     return { text: text.trim().toLowerCase(), tag, pinned }
 }
 
-// Toggles a `tag:<name>` qualifier in the query string, replacing any existing one (single-select).
 export const toggleTagQualifier = (query, tagName) => {
     const current = parseSearchQuery(query).tag
     const withoutTag = query.replace(/\btag:"([^"]+)"|\btag:(\S+)/i, '').trim()
@@ -28,7 +26,6 @@ export const toggleTagQualifier = (query, tagName) => {
     return withoutTag ? `${withoutTag} ${qualifier}` : qualifier
 }
 
-// Toggles the `is:pinned` qualifier in the query string.
 export const togglePinnedQualifier = (query) => {
     if (/\bis:pinned\b/i.test(query)) {
         return query.replace(/\bis:pinned\b/i, '').trim()
