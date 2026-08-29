@@ -90,7 +90,7 @@ export default function Note() {
             setPassword={setPassword}
             biometrics={biometrics}
             setBiometrics={setBiometrics}
-            initialEditing={true}
+            initialMode='live'
         />
     )
 }

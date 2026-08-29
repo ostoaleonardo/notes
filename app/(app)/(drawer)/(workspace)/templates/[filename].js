@@ -29,11 +29,10 @@ export default function EditTemplate() {
 
     const [name, setName] = useState('')
     const [content, setContent] = useState('')
-    const [isEditing, setIsEditing] = useState(true)
+    const [mode, setMode] = useState('live')
     const [placeholdersVisible, setPlaceholdersVisible] = useState(false)
 
     const markdownAction = useMarkdownAction()
-    const onEditMarkdown = () => setIsEditing((prev) => !prev)
 
     const onRunAction = (action) => {
         if (action === 'table' || action === 'link' || action === 'image') {
@@ -112,13 +111,13 @@ export default function EditTemplate() {
                     content={content}
                     setContent={setContent}
                     markdownAction={markdownAction}
-                    isEditing={isEditing}
+                    mode={mode}
                 />
 
                 <MarkdownControls
-                    isEditing={isEditing}
+                    mode={mode}
                     onRunAction={onRunAction}
-                    onEditMarkdown={onEditMarkdown}
+                    onSetMode={setMode}
                     scope='template'
                 />
             </KeyboardAvoidingView>

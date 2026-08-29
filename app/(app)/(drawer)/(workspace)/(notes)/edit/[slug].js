@@ -82,7 +82,7 @@ export default function EditNote() {
             setBiometrics={setBiometrics}
             createdAt={createdAt}
             updatedAt={updatedAt}
-            initialEditing={false}
+            initialMode='read'
         />
     )
 }

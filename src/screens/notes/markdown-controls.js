@@ -5,16 +5,18 @@ import { IconButton, useTheme } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
 import { AnimatedView, Scroll, Separator } from '@/components'
 import { NoteActions } from './note-actions'
-import { Edit, Eye } from '@/icons'
+import { Code, Edit, Eye } from '@/icons'
 import { MARKDOWN_CONTROLS } from '@/constants'
 
-export const MarkdownControls = memo(function MarkdownControls({ isEditing, isFocused, onRunAction, onEditMarkdown, scope, actions }) {
+export const MarkdownControls = memo(function MarkdownControls({ mode, isFocused, onRunAction, onSetMode, scope, actions }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
 
     const controls = MARKDOWN_CONTROLS.filter((control) => !control.scope || control.scope === scope)
-    const showControls = scope === 'template' ? isEditing : isEditing && isFocused
+    const showControls = scope === 'template' ? mode !== 'read' : mode !== 'read' && isFocused
     const showActions = scope !== 'template' && !showControls && actions
+
+    const modeColor = (targetMode) => (mode === targetMode ? colors.primary : colors.onBackground)
 
     return (
         <View
@@ -66,15 +68,23 @@ export const MarkdownControls = memo(function MarkdownControls({ isEditing, isFo
                 )}
             </Scroll>
 
-            <IconButton
-                onPress={onEditMarkdown}
-                accessibilityLabel={t(isEditing ? 'button.preview' : 'button.edit')}
-                icon={() => (
-                    isEditing
-                        ? <Eye color={colors.onBackground} />
-                        : <Edit color={colors.onBackground} />
-                )}
-            />
+            <View style={styles.row}>
+                <IconButton
+                    onPress={() => onSetMode('code')}
+                    accessibilityLabel={t('button.code')}
+                    icon={() => <Code color={modeColor('code')} />}
+                />
+                <IconButton
+                    onPress={() => onSetMode('live')}
+                    accessibilityLabel={t('button.edit')}
+                    icon={() => <Edit color={modeColor('live')} />}
+                />
+                <IconButton
+                    onPress={() => onSetMode('read')}
+                    accessibilityLabel={t('button.preview')}
+                    icon={() => <Eye color={modeColor('read')} />}
+                />
+            </View>
         </View>
     )
 })

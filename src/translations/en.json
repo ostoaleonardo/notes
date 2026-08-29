@@ -121,6 +121,7 @@
 	"button": {
 		"save": "Save",
 		"edit": "Edit",
+		"code": "Code",
 		"back": "Back",
 		"delete": "Delete",
 		"update": "Update",

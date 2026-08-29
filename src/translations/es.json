@@ -106,6 +106,7 @@
 	"button": {
 		"save": "Guardar",
 		"edit": "Editar",
+		"code": "Código",
 		"back": "Volver",
 		"delete": "Borrar",
 		"update": "Actualizar",
