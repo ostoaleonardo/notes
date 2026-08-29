@@ -1,12 +1,14 @@
 import { useEffect } from 'react'
 import * as ScreenOrientation from 'expo-screen-orientation'
 
+const ignoreRejection = (promise) => promise.catch(() => {})
+
 export const useAllowLandscape = () => {
     useEffect(() => {
-        ScreenOrientation.unlockAsync()
+        ignoreRejection(ScreenOrientation.unlockAsync())
 
         return () => {
-            ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP)
+            ignoreRejection(ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP))
         }
     }, [])
 }
