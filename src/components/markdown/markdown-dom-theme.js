@@ -1,5 +1,5 @@
 import { EditorView } from '@codemirror/view'
-import { liveFormattingTheme } from './markdown-dom-live-formatting'
+import { buildLiveFormattingTheme } from './markdown-dom-live-formatting'
 import { FONT_FAMILY_NAMES } from './markdown-dom-fonts'
 
 export const buildTitleSectionStyle = () => ({
@@ -40,7 +40,9 @@ export const buildEditorTheme = ({
     textColor,
     cursorColor,
     selectionColor,
-    placeholderColor
+    placeholderColor,
+    linkColor,
+    codeBackgroundColor
 }) => EditorView.theme({
     '&': { height: '100%', fontSize: `${fontSize}px`, backgroundColor: 'transparent' },
     '.cm-content': {
@@ -57,7 +59,7 @@ export const buildEditorTheme = ({
     '.cm-gutters': { display: 'none' },
     '&.cm-focused': { outline: 'none' },
     '.cm-placeholder': { color: placeholderColor },
-    ...liveFormattingTheme
+    ...buildLiveFormattingTheme({ linkColor, codeBackgroundColor })
 })
 
 export const buildPreviewCss = ({
