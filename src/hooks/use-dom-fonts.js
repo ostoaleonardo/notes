@@ -6,6 +6,7 @@ import { bytesToBase64 } from '@/utils'
 const FONT_MODULES = {
     body: require('../../assets/fonts/AzeretMono-Light.ttf'),
     bodyBold: require('../../assets/fonts/AzeretMono-Medium.ttf'),
+    bodyItalic: require('../../assets/fonts/AzeretMono-Italic.ttf'),
     heading: require('../../assets/fonts/NType82-Headline.ttf')
 }
 
@@ -24,9 +25,10 @@ export const useDomFonts = () => {
         Promise.all([
             resolveFontDataUrl(FONT_MODULES.body),
             resolveFontDataUrl(FONT_MODULES.bodyBold),
+            resolveFontDataUrl(FONT_MODULES.bodyItalic),
             resolveFontDataUrl(FONT_MODULES.heading)
-        ]).then(([body, bodyBold, heading]) => {
-            if (!cancelled) setFonts({ body, bodyBold, heading })
+        ]).then(([body, bodyBold, bodyItalic, heading]) => {
+            if (!cancelled) setFonts({ body, bodyBold, bodyItalic, heading })
         })
 
         return () => { cancelled = true }

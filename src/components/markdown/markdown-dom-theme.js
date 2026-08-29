@@ -1,6 +1,6 @@
 import { EditorView } from '@codemirror/view'
-import { buildLiveFormattingTheme } from './markdown-dom-live-formatting'
-import { FONT_FAMILY_NAMES } from './markdown-dom-fonts'
+import { buildLiveFormattingTheme } from './live-formatting'
+import { FONT_FAMILY_NAMES } from '@/constants/markdown-fonts'
 
 export const buildTitleSectionStyle = () => ({
     paddingLeft: '16px',
@@ -42,7 +42,8 @@ export const buildEditorTheme = ({
     selectionColor,
     placeholderColor,
     linkColor,
-    codeBackgroundColor
+    codeBackgroundColor,
+    thematicBreakColor
 }) => EditorView.theme({
     '&': { height: '100%', fontSize: `${fontSize}px`, backgroundColor: 'transparent' },
     '.cm-content': {
@@ -59,7 +60,7 @@ export const buildEditorTheme = ({
     '.cm-gutters': { display: 'none' },
     '&.cm-focused': { outline: 'none' },
     '.cm-placeholder': { color: placeholderColor },
-    ...buildLiveFormattingTheme({ linkColor, codeBackgroundColor })
+    ...buildLiveFormattingTheme({ linkColor, codeBackgroundColor, thematicBreakColor })
 })
 
 export const buildPreviewCss = ({
@@ -105,4 +106,10 @@ export const buildPreviewCss = ({
     .markdown-preview input[type="checkbox"] { accent-color: ${linkColor}; margin-right: 0.4em; }
     .markdown-preview img { max-width: 100%; object-fit: contain; border-radius: 8px; }
     .markdown-preview hr { border: none; border-top: 1px solid ${thematicBreakColor}; margin: 16px 0; }
+    .markdown-preview table { border-collapse: collapse; width: 100%; margin: 0.4em 0; overflow-x: auto; display: block; }
+    .markdown-preview th, .markdown-preview td { border: 1px solid ${codeBackgroundColor}; padding: 4px 8px; }
+    .markdown-preview .katex-display { overflow-x: auto; margin: 0.6em 0; }
+    .markdown-preview .footnote-ref a, .markdown-preview .footnote-backref { color: ${linkColor}; }
+    .markdown-preview .footnotes-sep { border: none; border-top: 1px solid ${thematicBreakColor}; margin: 16px 0; }
+    .markdown-preview .footnotes { font-size: 0.85em; opacity: 0.85; }
 `

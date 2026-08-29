@@ -12,6 +12,25 @@ export {
 export { TREE_BRANCHING, NOTES_PER_FOLDER } from './dev-menu'
 export { MARKDOWN_CONTROLS } from './markdown-controls'
 export { IMAGE_EXTENSION_BY_MIME_TYPE } from './image'
+export { FONT_FAMILY_NAMES } from './markdown-fonts'
+export { KATEX_FONT_FACES } from './markdown-katex'
+
+export {
+    INLINE_MARK_NODE_TYPES,
+    ATX_HEADING_LEVELS,
+    SETEXT_HEADING_LEVELS,
+    LINK_NODE_NAMES,
+    IMAGE_NODE_NAMES,
+    LIST_NODE_NAMES,
+    BLOCKQUOTE_NODE_NAMES,
+    CODE_BLOCK_NODE_NAMES,
+    HORIZONTAL_RULE_NODE_NAMES,
+    HTML_BLOCK_NODE_NAMES,
+    HTML_NODE_NAMES,
+    CODE_RANGE_NODE_NAMES,
+    BLOCK_MATH_PATTERN,
+    INLINE_MATH_PATTERN
+} from './markdown-live-formatting'
 
 export {
     MAX_TABLE_ROWS,
