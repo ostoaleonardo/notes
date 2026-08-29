@@ -1,0 +1,22 @@
+export const KATEX_FONT_FACES = [
+    { family: 'KaTeX_AMS', style: 'normal', weight: 400, file: 'KaTeX_AMS-Regular' },
+    { family: 'KaTeX_Caligraphic', style: 'normal', weight: 700, file: 'KaTeX_Caligraphic-Bold' },
+    { family: 'KaTeX_Caligraphic', style: 'normal', weight: 400, file: 'KaTeX_Caligraphic-Regular' },
+    { family: 'KaTeX_Fraktur', style: 'normal', weight: 700, file: 'KaTeX_Fraktur-Bold' },
+    { family: 'KaTeX_Fraktur', style: 'normal', weight: 400, file: 'KaTeX_Fraktur-Regular' },
+    { family: 'KaTeX_Main', style: 'normal', weight: 700, file: 'KaTeX_Main-Bold' },
+    { family: 'KaTeX_Main', style: 'italic', weight: 700, file: 'KaTeX_Main-BoldItalic' },
+    { family: 'KaTeX_Main', style: 'italic', weight: 400, file: 'KaTeX_Main-Italic' },
+    { family: 'KaTeX_Main', style: 'normal', weight: 400, file: 'KaTeX_Main-Regular' },
+    { family: 'KaTeX_Math', style: 'italic', weight: 700, file: 'KaTeX_Math-BoldItalic' },
+    { family: 'KaTeX_Math', style: 'italic', weight: 400, file: 'KaTeX_Math-Italic' },
+    { family: 'KaTeX_SansSerif', style: 'normal', weight: 700, file: 'KaTeX_SansSerif-Bold' },
+    { family: 'KaTeX_SansSerif', style: 'italic', weight: 400, file: 'KaTeX_SansSerif-Italic' },
+    { family: 'KaTeX_SansSerif', style: 'normal', weight: 400, file: 'KaTeX_SansSerif-Regular' },
+    { family: 'KaTeX_Script', style: 'normal', weight: 400, file: 'KaTeX_Script-Regular' },
+    { family: 'KaTeX_Size1', style: 'normal', weight: 400, file: 'KaTeX_Size1-Regular' },
+    { family: 'KaTeX_Size2', style: 'normal', weight: 400, file: 'KaTeX_Size2-Regular' },
+    { family: 'KaTeX_Size3', style: 'normal', weight: 400, file: 'KaTeX_Size3-Regular' },
+    { family: 'KaTeX_Size4', style: 'normal', weight: 400, file: 'KaTeX_Size4-Regular' },
+    { family: 'KaTeX_Typewriter', style: 'normal', weight: 400, file: 'KaTeX_Typewriter-Regular' }
+]

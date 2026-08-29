@@ -7,9 +7,11 @@ import { defaultKeymap, history, historyKeymap } from '@codemirror/commands'
 import { markdown } from '@codemirror/lang-markdown'
 import { GFM } from '@lezer/markdown'
 import { fontFacesCss } from './markdown-dom-fonts'
+import { katexFontFacesCss } from './markdown-dom-katex-fonts'
+import { katexCss } from './markdown-dom-katex-css'
 import { TitleSection } from './markdown-dom-widgets'
 import { buildEditorTheme, buildPreviewCss } from './markdown-dom-theme'
-import { liveFormatting } from './markdown-dom-live-formatting'
+import { liveFormatting, mediaMapFacet } from './live-formatting'
 import { renderMarkdownHtml } from './markdown-dom-render-html'
 import { runAction } from './markdown-dom-commands'
 
@@ -17,6 +19,7 @@ const MarkdownDomEditor = ({
     mode,
     value,
     previewValue,
+    mediaMap,
     onChange,
     action,
     payload,
@@ -36,6 +39,7 @@ const MarkdownDomEditor = ({
     fontFamily,
     headingFontFamily,
     fonts,
+    katexFonts,
     fontSize = 13,
     placeholder = '',
     title,
@@ -49,13 +53,15 @@ const MarkdownDomEditor = ({
     const onChangeRef = useRef(onChange)
     onChangeRef.current = onChange
     const [liveFormattingCompartment] = useState(() => new Compartment())
+    const [mediaMapCompartment] = useState(() => new Compartment())
+    const mediaMapValue = useMemo(() => new Map(mediaMap || []), [mediaMap])
 
     useEffect(() => {
         document.documentElement.style.height = '100%'
         document.body.style.height = '100%'
         document.body.style.margin = '0'
 
-        const theme = buildEditorTheme({ fontSize, fontFamily, textColor, cursorColor, selectionColor, placeholderColor, linkColor, codeBackgroundColor })
+        const theme = buildEditorTheme({ fontSize, fontFamily, textColor, cursorColor, selectionColor, placeholderColor, linkColor, codeBackgroundColor, thematicBreakColor })
 
         const state = EditorState.create({
             doc: value || '',
@@ -63,6 +69,7 @@ const MarkdownDomEditor = ({
                 history(),
                 keymap.of([...defaultKeymap, ...historyKeymap]),
                 markdown({ extensions: GFM }),
+                mediaMapCompartment.of(mediaMapFacet.of(mediaMapValue)),
                 liveFormattingCompartment.of(mode === 'live' ? [liveFormatting] : []),
                 EditorView.lineWrapping,
                 placeholderExtension(placeholder),
@@ -106,6 +113,14 @@ const MarkdownDomEditor = ({
             effects: liveFormattingCompartment.reconfigure(mode === 'live' ? [liveFormatting] : [])
         })
     }, [mode])
+
+    useEffect(() => {
+        const view = viewRef.current
+        if (!view) return
+        view.dispatch({
+            effects: mediaMapCompartment.reconfigure(mediaMapFacet.of(mediaMapValue))
+        })
+    }, [mediaMapValue])
 
     useEffect(() => {
         const view = viewRef.current
@@ -164,6 +179,8 @@ const MarkdownDomEditor = ({
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflowX: 'hidden' }}>
             <style>
                 {fontFacesCss(fonts)}
+                {katexFontFacesCss(katexFonts)}
+                {katexCss}
                 {previewCss}
             </style>
 

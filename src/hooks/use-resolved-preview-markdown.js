@@ -16,12 +16,14 @@ const extractLocalUrls = (value) => {
 
 export const useResolvedPreviewMarkdown = (value) => {
     const [resolved, setResolved] = useState(value)
+    const [mediaMap, setMediaMap] = useState(new Map())
 
     useEffect(() => {
         const urls = extractLocalUrls(value)
 
         if (urls.length === 0) {
             setResolved(value)
+            setMediaMap(new Map())
             return
         }
 
@@ -40,6 +42,7 @@ export const useResolvedPreviewMarkdown = (value) => {
             if (cancelled) return
 
             const resolvedUrls = new Map(pairs)
+            setMediaMap(resolvedUrls)
 
             const withMarkdownResolved = value.replace(
                 MARKDOWN_IMAGE_PATTERN,
@@ -55,5 +58,5 @@ export const useResolvedPreviewMarkdown = (value) => {
         return () => { cancelled = true }
     }, [value])
 
-    return resolved
+    return { value: resolved, mediaMap }
 }
