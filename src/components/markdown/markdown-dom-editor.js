@@ -1,29 +1,38 @@
 'use dom'
 
-import { useEffect, useRef } from 'react'
-import { EditorState } from '@codemirror/state'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Compartment, EditorState } from '@codemirror/state'
 import { EditorView, keymap, placeholder as placeholderExtension } from '@codemirror/view'
 import { defaultKeymap, history, historyKeymap } from '@codemirror/commands'
 import { markdown } from '@codemirror/lang-markdown'
-import { Strikethrough } from '@lezer/markdown'
+import { GFM } from '@lezer/markdown'
 import { fontFacesCss } from './markdown-dom-fonts'
 import { TitleSection } from './markdown-dom-widgets'
-import { buildEditorTheme } from './markdown-dom-theme'
+import { buildEditorTheme, buildPreviewCss } from './markdown-dom-theme'
 import { liveFormatting } from './markdown-dom-live-formatting'
+import { renderMarkdownHtml } from './markdown-dom-render-html'
 import { runAction } from './markdown-dom-commands'
 
 const MarkdownDomEditor = ({
+    mode,
     value,
+    previewValue,
     onChange,
     action,
     payload,
     onActionHandled,
     onFocus,
     onBlur,
+    onLinkPress,
+    onImagePress,
     textColor,
     cursorColor,
     selectionColor,
     placeholderColor,
+    linkColor,
+    quoteBackgroundColor,
+    codeBackgroundColor,
+    thematicBreakColor,
     fontFamily,
     headingFontFamily,
     fonts,
@@ -35,24 +44,26 @@ const MarkdownDomEditor = ({
     dateLabel
 }) => {
     const containerRef = useRef(null)
+    const previewRef = useRef(null)
     const viewRef = useRef(null)
     const onChangeRef = useRef(onChange)
     onChangeRef.current = onChange
+    const [liveFormattingCompartment] = useState(() => new Compartment())
 
     useEffect(() => {
         document.documentElement.style.height = '100%'
         document.body.style.height = '100%'
         document.body.style.margin = '0'
 
-        const theme = buildEditorTheme({ fontSize, fontFamily, textColor, cursorColor, selectionColor, placeholderColor })
+        const theme = buildEditorTheme({ fontSize, fontFamily, textColor, cursorColor, selectionColor, placeholderColor, linkColor, codeBackgroundColor })
 
         const state = EditorState.create({
             doc: value || '',
             extensions: [
                 history(),
                 keymap.of([...defaultKeymap, ...historyKeymap]),
-                markdown({ extensions: [Strikethrough] }),
-                liveFormatting,
+                markdown({ extensions: GFM }),
+                liveFormattingCompartment.of(mode === 'live' ? [liveFormatting] : []),
                 EditorView.lineWrapping,
                 placeholderExtension(placeholder),
                 theme,
@@ -90,15 +101,71 @@ const MarkdownDomEditor = ({
 
     useEffect(() => {
         const view = viewRef.current
+        if (!view) return
+        view.dispatch({
+            effects: liveFormattingCompartment.reconfigure(mode === 'live' ? [liveFormatting] : [])
+        })
+    }, [mode])
+
+    useEffect(() => {
+        const view = viewRef.current
         if (!view || !action) return
         runAction(view, action, payload)
         onActionHandled?.()
         requestAnimationFrame(() => view.focus())
     }, [action, payload])
 
+    useEffect(() => {
+        const container = previewRef.current
+        if (!container) return
+
+        const onClick = (event) => {
+            const link = event.target.closest('a')
+            if (link) {
+                event.preventDefault()
+                onLinkPress?.(link.getAttribute('href'))
+                return
+            }
+
+            const image = event.target.closest('img')
+            if (image) onImagePress?.(image.getAttribute('src'))
+        }
+
+        container.addEventListener('click', onClick)
+        return () => container.removeEventListener('click', onClick)
+    }, [onLinkPress, onImagePress])
+
+    const html = useMemo(
+        () => (mode === 'read' ? renderMarkdownHtml(previewValue) : ''),
+        [mode, previewValue]
+    )
+
+    const previewCss = useMemo(() => buildPreviewCss({
+        fontFamily,
+        headingFontFamily,
+        textColor,
+        linkColor,
+        quoteBackgroundColor,
+        codeBackgroundColor,
+        thematicBreakColor,
+        fontSize
+    }), [
+        fontFamily,
+        headingFontFamily,
+        textColor,
+        linkColor,
+        quoteBackgroundColor,
+        codeBackgroundColor,
+        thematicBreakColor,
+        fontSize
+    ])
+
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflowX: 'hidden' }}>
-            <style>{fontFacesCss(fonts)}</style>
+            <style>
+                {fontFacesCss(fonts)}
+                {previewCss}
+            </style>
 
             <TitleSection
                 title={title}
@@ -109,7 +176,17 @@ const MarkdownDomEditor = ({
                 textColor={textColor}
             />
 
-            <div ref={containerRef} style={{ flex: 1, minHeight: 0 }} />
+            <div
+                ref={containerRef}
+                style={{ flex: 1, minHeight: 0, display: mode === 'read' ? 'none' : 'flex' }}
+            />
+
+            <div
+                ref={previewRef}
+                className='markdown-preview'
+                style={{ display: mode === 'read' ? 'block' : 'none' }}
+                dangerouslySetInnerHTML={{ __html: html }}
+            />
         </div>
     )
 }

@@ -4,7 +4,7 @@ import { MarkdownInput } from './markdown-input'
 export const MarkdownEditor = ({
     value,
     setValue,
-    isEditing,
+    mode,
     markdownAction,
     onFocus,
     onBlur,
@@ -20,7 +20,7 @@ export const MarkdownEditor = ({
         <MarkdownInput
             value={value}
             onChangeText={setValue}
-            isEditing={isEditing}
+            mode={mode}
             placeholder={t('placeholder.note')}
             action={action}
             payload={payload}
