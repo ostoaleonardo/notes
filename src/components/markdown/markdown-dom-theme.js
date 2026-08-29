@@ -101,7 +101,7 @@ export const buildPreviewCss = ({
     }
     .markdown-preview pre { background-color: ${codeBackgroundColor}; border-radius: 8px; padding: 0.8em; overflow-x: auto; max-width: 100%; }
     .markdown-preview pre code { background-color: transparent; padding: 0; }
-    .markdown-preview ul, .markdown-preview ol { padding-left: 1.4em; margin: 0.4em 0; }
+    .markdown-preview ul, .markdown-preview ol { padding-left: 1.4em; margin: 0.4em 0; list-style-position: inside; }
     .markdown-preview li.task-list-item { list-style: none; margin-left: -1.4em; }
     .markdown-preview input[type="checkbox"] { accent-color: ${linkColor}; margin-right: 0.4em; }
     .markdown-preview img { max-width: 100%; object-fit: contain; border-radius: 8px; }
