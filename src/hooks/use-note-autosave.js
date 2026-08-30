@@ -5,8 +5,6 @@ export function useNoteAutosave({
     title,
     note,
     tags,
-    password,
-    biometrics,
     createdAt,
     repositoryId,
     skip,
@@ -21,8 +19,6 @@ export function useNoteAutosave({
                 title: title.trim(),
                 note: note.trim(),
                 tags,
-                password,
-                biometrics,
                 createdAt,
                 repositoryId
             })
@@ -34,8 +30,6 @@ export function useNoteAutosave({
         title,
         note,
         tags,
-        password,
-        biometrics,
         createdAt,
         repositoryId,
         skip

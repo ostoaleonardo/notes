@@ -35,8 +35,6 @@ export function useNotes() {
     const toMetadataEntry = (note, filename) => ({
         filename,
         tags: note.tags,
-        password: note.password,
-        biometrics: note.biometrics,
         createdAt: note.createdAt,
         updatedAt: note.updatedAt || ''
     })

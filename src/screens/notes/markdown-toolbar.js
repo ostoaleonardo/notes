@@ -67,8 +67,6 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
                 onSetMode={onSetMode}
                 onOpenTags={actions?.onOpenTags}
                 onOpenTemplates={actions?.onOpenTemplates}
-                onOpenPassword={actions?.onOpenPassword}
-                hasPassword={actions?.hasPassword}
             />
         </View>
     )

@@ -47,7 +47,6 @@ export default {
     'expo-image',
     'expo-status-bar',
     'expo-localization',
-    'expo-local-authentication',
     'expo-image-picker',
     './plugins/with-markdown-intent',
     [

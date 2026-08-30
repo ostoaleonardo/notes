@@ -3,21 +3,18 @@ import { router } from 'expo-router'
 import { TabsContext } from '@/context'
 import { useStorage } from './use-storage'
 import { useUtils } from './use-utils'
-import { useNotes } from './use-notes'
 import { ROUTES, STORAGE_KEYS, TEMPLATE_TAB_PREFIX } from '@/constants'
 
 export function useTabs() {
     const {
         openTabs, setOpenTabs,
         activeTabId, setActiveTabId,
-        pendingUnlockId, setPendingUnlockId,
         tabBarActions, setTabBarActions,
         templateTitles, setTemplateTitles
     } = useContext(TabsContext)
 
     const { setItem } = useStorage()
     const { pinned } = useUtils()
-    const { notes } = useNotes()
 
     const persistTabs = (tabs) => {
         setOpenTabs(tabs)
@@ -44,27 +41,6 @@ export function useTabs() {
         }
     }
 
-    const isLocked = (id) => {
-        const note = notes.find((n) => n.id === id)
-        return !!(note && (note.password || note.biometrics))
-    }
-
-    const openTab = (id) => {
-        if (isLocked(id)) {
-            setPendingUnlockId(id)
-        } else {
-            navigateToTab(id)
-        }
-    }
-
-    const confirmUnlock = () => {
-        if (!pendingUnlockId) return
-        navigateToTab(pendingUnlockId)
-        setPendingUnlockId('')
-    }
-
-    const cancelUnlock = () => setPendingUnlockId('')
-
     const setTemplateTitle = (id, title) => {
         setTemplateTitles((prev) => ({ ...prev, [id]: title }))
     }
@@ -80,7 +56,7 @@ export function useTabs() {
         const remainingTabs = Array.from(new Set([...remainingOpenTabs, ...pinned]))
 
         if (remainingTabs.length > 0) {
-            openTab(remainingTabs[remainingTabs.length - 1])
+            navigateToTab(remainingTabs[remainingTabs.length - 1])
         } else {
             persistActiveTab('')
             router.replace(ROUTES.HOME)
@@ -90,16 +66,13 @@ export function useTabs() {
     return {
         tabs: Array.from(new Set([...openTabs, ...pinned])),
         activeTabId,
-        pendingUnlockId,
         tabBarActions,
         setTabBarActions,
         templateTitles,
         setTemplateTitle,
         registerTab,
-        openTab,
-        setActiveTab: openTab,
-        closeTab,
-        confirmUnlock,
-        cancelUnlock
+        openTab: navigateToTab,
+        setActiveTab: navigateToTab,
+        closeTab
     }
 }

@@ -9,7 +9,6 @@
 	"title": {
 		"notes": "Poznámky",
 		"tags": "Štítky",
-		"unlock": "Odemknout",
 		"settings": "Nastavení",
 		"theme": "Barevné schéma",
 		"about": "O aplikaci"
@@ -40,20 +39,6 @@
 		"system": "Podle systému",
 		"choose": "Vyberte barvu aplikace."
 	},
-	"password": {
-		"add": "Přidat heslo",
-		"update": "Upravit heslo",
-		"remove": "Odemknout",
-		"current": "Aktuální heslo",
-		"new": "Nové heslo"
-	},
-	"biometric": {
-		"use": "Použít biometriku",
-		"lock": "Uzamknout biometrikou",
-		"unlock": "Odemknout biometrikou",
-		"remove": "Odebrat biometriku",
-		"auth": "Odemykání biometrikou"
-	},
 	"button": {
 		"save": "Uložit",
 		"edit": "Upravit",
@@ -69,11 +54,6 @@
 		},
 		"tags": {
 			"empty": "Nejsou tu žádné štítky"
-		},
-		"password": {
-			"wrong": "Nesprávné heslo",
-			"same": "Heslo nemůže být stejné",
-			"length": "Heslo musí mít minimálně 4 znaky"
 		}
 	},
 	"placeholder": {

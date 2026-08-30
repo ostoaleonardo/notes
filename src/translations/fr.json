@@ -9,7 +9,6 @@
 	"title": {
 		"notes": "Notes",
 		"tags": "Étiquettes",
-		"unlock": "Déverrouiller",
 		"settings": "Paramètres",
 		"theme": "Thème",
 		"about": "À propos de l'app"
@@ -40,20 +39,6 @@
 		"system": "Système",
 		"choose": "Choisissez un thème pour votre application."
 	},
-	"password": {
-		"add": "Ajouter un mot de passe",
-		"update": "Modifier votre mot de passe",
-		"remove": "Retirer votre mot de passe",
-		"current": "Mot de passe actuel",
-		"new": "Nouveau mot de passe"
-	},
-	"biometric": {
-		"use": "Utiliser l'empreinte digitale",
-		"lock": "Verrouillage avec empreinte digitale",
-		"unlock": "Déverrouiller avec l'empreinte digitale",
-		"remove": "Retirer l'empreinte digitale",
-		"auth": "Authentification biométrique"
-	},
 	"button": {
 		"save": "Enregistrer",
 		"edit": "Éditer",
@@ -69,11 +54,6 @@
 		},
 		"tags": {
 			"empty": "Vous n'avez pas encore d'étiquettes"
-		},
-		"password": {
-			"wrong": "Mauvais mot de passe",
-			"same": "Le mot de passe ne peut pas être identique au précédent",
-			"length": "Le mot de passe doit avoir au moins 4 caractères"
 		}
 	},
 	"placeholder": {

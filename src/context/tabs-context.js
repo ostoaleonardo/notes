@@ -7,7 +7,6 @@ export const TabsContext = createContext()
 export function TabsProvider({ children }) {
     const [openTabs, setOpenTabs] = useState([])
     const [activeTabId, setActiveTabId] = useState('')
-    const [pendingUnlockId, setPendingUnlockId] = useState('')
     const [tabBarActions, setTabBarActions] = useState(null)
     const [templateTitles, setTemplateTitles] = useState({})
 
@@ -32,8 +31,6 @@ export function TabsProvider({ children }) {
                 setOpenTabs,
                 activeTabId,
                 setActiveTabId,
-                pendingUnlockId,
-                setPendingUnlockId,
                 tabBarActions,
                 setTabBarActions,
                 templateTitles,

@@ -1,9 +1,8 @@
 import { Redirect } from 'expo-router'
-import { useLocalAuthentication, useNotes, useRepositories, useTabs } from '@/hooks'
+import { useNotes, useRepositories, useTabs } from '@/hooks'
 import { ROUTES } from '@/constants'
 
 export default function App() {
-    useLocalAuthentication()
     const { loading } = useNotes()
     const { activeRepository } = useRepositories()
     const { activeTabId } = useTabs()

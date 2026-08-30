@@ -9,7 +9,6 @@
 	"title": {
 		"notes": "Note",
 		"tags": "Tag",
-		"unlock": "Sblocca",
 		"settings": "Impostazioni",
 		"theme": "Tema colori",
 		"about": "Informazioni sull'app"
@@ -40,20 +39,6 @@
 		"system": "Sistema",
 		"choose": "Scegli un tema colore per l'app."
 	},
-	"password": {
-		"add": "Aggiungi password",
-		"update": "Aggiorna password",
-		"remove": "Rimuovi password",
-		"current": "Password attuale",
-		"new": "Nuova password"
-	},
-	"biometric": {
-		"use": "Usa impronta digitale",
-		"lock": "Blocca con l'impronta digitale",
-		"unlock": "Sblocca con l'impronta digitale",
-		"remove": "Rimuovi l'impronta digitale",
-		"auth": "Autenticazione biometrica"
-	},
 	"button": {
 		"save": "Salva",
 		"edit": "Aggiorna",
@@ -69,11 +54,6 @@
 		},
 		"tags": {
 			"empty": "Non hai ancora nessun tag"
-		},
-		"password": {
-			"wrong": "Password sbagliata",
-			"same": "La password non può essere la stessa",
-			"length": "La password deve avere almeno 4 caratteri"
 		}
 	},
 	"placeholder": {

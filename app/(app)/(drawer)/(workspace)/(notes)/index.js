@@ -31,9 +31,6 @@ export default function Note() {
     const [createdAt, setCreatedAt] = useState('')
     const [repositoryId, setRepositoryId] = useState('')
 
-    const [password, setPassword] = useState('')
-    const [biometrics, setBiometrics] = useState(false)
-
     useEffect(() => {
         notesRef.current = notes
     }, [notes])
@@ -55,7 +52,7 @@ export default function Note() {
     )
 
     useNoteAutosave({
-        id, title, note, tags, password, biometrics, createdAt, repositoryId,
+        id, title, note, tags, createdAt, repositoryId,
         skip: firstRender.current || (title === autoTitleRef.current && !note),
         onSave: (newData) => {
             if (!isSaved.current) {
@@ -86,10 +83,6 @@ export default function Note() {
             setNote={setNote}
             tags={tags}
             setTags={setTags}
-            password={password}
-            setPassword={setPassword}
-            biometrics={biometrics}
-            setBiometrics={setBiometrics}
             initialMode='live'
         />
     )

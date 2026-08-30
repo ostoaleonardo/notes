@@ -9,7 +9,6 @@
 	"title": {
 		"notes": "Notas",
 		"tags": "Etiquetas",
-		"unlock": "Desbloquear",
 		"settings": "Configurações",
 		"theme": "Cor do tema",
 		"about": "Sobre o aplicativo"
@@ -40,20 +39,6 @@
 		"system": "Sistema",
 		"choose": "Escolha uma cor para o tema do aplicativo."
 	},
-	"password": {
-		"add": "Adicionar senha",
-		"update": "Atualizar senha",
-		"remove": "Remover senha",
-		"current": "Senha atual",
-		"new": "Nova senha"
-	},
-	"biometric": {
-		"use": "Usar impressão digital",
-		"lock": "Bloquear com impressão digital",
-		"unlock": "Desbloquear com impressão digital",
-		"remove": "Remover impressão digital",
-		"auth": "Autenticar biometria"
-	},
 	"button": {
 		"save": "Salvar",
 		"edit": "Editar",
@@ -69,11 +54,6 @@
 		},
 		"tags": {
 			"empty": "Nenhuma etiqueta adicionada"
-		},
-		"password": {
-			"wrong": "Senha errada",
-			"same": "A senha não pode ser a mesma",
-			"length": "A senha deve conter no mínimo 4 caracteres"
 		}
 	},
 	"placeholder": {

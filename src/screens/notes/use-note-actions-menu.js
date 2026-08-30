@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { router, useLocalSearchParams } from 'expo-router'
 import { MenuItem } from '@/components'
 import { useFiles, useIconProps, useNotes, useUtils } from '@/hooks'
-import { Code, Delete, FileExport, Keep, KeepFilled, Lock, Shapes, Tag, Unlock } from '@/icons'
+import { Code, Delete, FileExport, Keep, KeepFilled, Shapes, Tag } from '@/icons'
 
-export const useNoteActionsMenu = ({ onClose, onSetMode, onOpenTags, onOpenTemplates, onOpenPassword, hasPassword }) => {
+export const useNoteActionsMenu = ({ onClose, onSetMode, onOpenTags, onOpenTemplates }) => {
     const iconProps = useIconProps()
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
@@ -67,11 +67,6 @@ export const useNoteActionsMenu = ({ onClose, onSetMode, onOpenTags, onOpenTempl
                     onPress={runAndClose(() => exportFile(slug))}
                 />
             )}
-            <MenuItem
-                title={hasPassword ? t('password.remove') : t('button.lock')}
-                leadingIcon={() => (hasPassword ? <Lock {...iconProps} /> : <Unlock {...iconProps} />)}
-                onPress={runAndClose(onOpenPassword)}
-            />
             <MenuItem
                 title={isPinned ? t('button.unpin') : t('button.pin')}
                 leadingIcon={() => (isPinned ? <KeepFilled {...iconProps} /> : <Keep {...iconProps} />)}

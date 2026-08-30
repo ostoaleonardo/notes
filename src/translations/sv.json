@@ -9,7 +9,6 @@
 	"title": {
 		"notes": "Anteckningar",
 		"tags": "Taggar",
-		"unlock": "Lås upp",
 		"settings": "Inställningar",
 		"theme": "Färgtema",
 		"about": "Om appen"
@@ -40,20 +39,6 @@
 		"system": "System",
 		"choose": "Välj färgtema för appen."
 	},
-	"password": {
-		"add": "Skapa lösenord",
-		"update": "Uppdatera lösenord",
-		"remove": "Ta bort lösenord",
-		"current": "Nuvarande lösenord",
-		"new": "Nytt lösenord"
-	},
-	"biometric": {
-		"use": "Använd fingeravtryck",
-		"lock": "Lås med fingeravtryck",
-		"unlock": "Lås upp med fingeravtryck",
-		"remove": "Ta bort fingeravtryck",
-		"auth": "Bakåt"
-	},
 	"button": {
 		"save": "Spara",
 		"edit": "Redigera",
@@ -69,11 +54,6 @@
 		},
 		"tags": {
 			"empty": "Du har inte skapat några taggar än"
-		},
-		"password": {
-			"wrong": "Fel lösenord",
-			"same": "Lösenordet kan inte vara samma",
-			"length": "Lösenordet måste innehålla minst 4 karaktärer"
 		}
 	},
 	"placeholder": {

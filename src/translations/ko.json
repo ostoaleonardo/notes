@@ -9,7 +9,6 @@
 	"title": {
 		"notes": "노트",
 		"tags": "태그",
-		"unlock": "잠금해제",
 		"settings": "설정",
 		"theme": "테마 설정",
 		"about": "이 앱에 대하여"
@@ -40,20 +39,6 @@
 		"system": "시스템",
 		"choose": "테마 색상을 선택하세요."
 	},
-	"password": {
-		"add": "패스워드 추가",
-		"update": "패스워드 업데이트",
-		"remove": "패스워드 삭제",
-		"current": "현재 패스워드",
-		"new": "신규 패스워드"
-	},
-	"biometric": {
-		"use": "지문 사용",
-		"lock": "지문으로 잠금",
-		"unlock": "지문으로 잠금 해제",
-		"remove": "지문 삭제",
-		"auth": "생체 인증"
-	},
 	"button": {
 		"save": "저장",
 		"edit": "수정",
@@ -69,11 +54,6 @@
 		},
 		"tags": {
 			"empty": "태그가 아직 없습니다."
-		},
-		"password": {
-			"wrong": "잘못된 패스워드",
-			"same": "패스워드는 동일하게 할 수 없습니다.",
-			"length": "패스워드는 최소 네 글자를 포함해야 합니다."
 		}
 	},
 	"placeholder": {

@@ -12,9 +12,7 @@ export const MarkdownModeToggle = ({
     mode,
     onSetMode, scope,
     onOpenTags,
-    onOpenTemplates,
-    onOpenPassword,
-    hasPassword
+    onOpenTemplates
 }) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
@@ -43,9 +41,7 @@ export const MarkdownModeToggle = ({
         onClose: closeMenu,
         onSetMode,
         onOpenTags,
-        onOpenTemplates,
-        onOpenPassword,
-        hasPassword
+        onOpenTemplates
     })
 
     return (

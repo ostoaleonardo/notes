@@ -9,7 +9,6 @@
 	"title": {
 		"notes": "Notities",
 		"tags": "Labels",
-		"unlock": "Ontgrendel",
 		"settings": "Instellingen",
 		"theme": "Thema",
 		"about": "Over de app"
@@ -53,20 +52,6 @@
 		"system": "Systeem",
 		"chooseTheme": "Kies een thema voor de app."
 	},
-	"password": {
-		"add": "Wachtwoord toevoegen",
-		"update": "Wachtwoord wijzigen",
-		"remove": "Wachtwoord verwijderen",
-		"current": "Huidig wachtwoord",
-		"new": "Nieuw wachtwoord"
-	},
-	"biometric": {
-		"use": "Vingerafdruk gebruiken",
-		"lock": "Vergrendel met vingerafdruk",
-		"unlock": "Ontgrendel met vingerafdruk",
-		"remove": "Vingerafdruk verwijderen",
-		"auth": "Biometrische authenticatie"
-	},
 	"button": {
 		"save": "Opslaan",
 		"edit": "Bewerken",
@@ -82,11 +67,6 @@
 		},
 		"tags": {
 			"empty": "Je hebt nog geen labels"
-		},
-		"password": {
-			"wrong": "Wachtwoord onjuist",
-			"same": "Het wachtwoord mag niet hetzelfde zijn",
-			"length": "Het wachtwoord moet uit minstens 4 tekens bestaan"
 		}
 	},
 	"placeholder": {
