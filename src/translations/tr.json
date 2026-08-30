@@ -9,7 +9,6 @@
 	"title": {
 		"notes": "Notlar",
 		"tags": "Etiketler",
-		"unlock": "Kilidi aç",
 		"settings": "Ayarlar",
 		"theme": "Renk teması",
 		"about": "Uygulama hakkında"
@@ -40,20 +39,6 @@
 		"system": "Sistem",
 		"choose": "Uygulama için bir renk teması seçin."
 	},
-	"password": {
-		"add": "Şifre ekle",
-		"update": "Şifreyi güncelle",
-		"remove": "Şifreyi kaldır",
-		"current": "Güncel şifre",
-		"new": "Yeni şifre"
-	},
-	"biometric": {
-		"use": "Parmak izi kullan",
-		"lock": "Parmak iziyle kitleme",
-		"unlock": "Parmak iziyle açma",
-		"remove": "Parmak izini kaldır",
-		"auth": "Biyometrik kimlik doğrulama"
-	},
 	"button": {
 		"save": "Kaydet",
 		"edit": "Düzenle",
@@ -69,11 +54,6 @@
 		},
 		"tags": {
 			"empty": "Henüz herhangi bir etiketiniz yok"
-		},
-		"password": {
-			"wrong": "Yanlış şifre",
-			"same": "Şifre aynı olamaz",
-			"length": "Şifre en az 4 karakterden oluşmalıdır"
 		}
 	},
 	"placeholder": {

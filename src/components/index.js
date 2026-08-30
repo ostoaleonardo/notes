@@ -20,8 +20,7 @@ export {
 export {
     LargeInput,
     SmallInput,
-    SearchInput,
-    PasswordInput
+    SearchInput
 } from './input'
 
 // Modals
@@ -40,7 +39,7 @@ export { MenuItem } from './menu/menu-item'
 export { DrawerItems } from './drawer'
 
 // Tabs
-export { TabBar, UnlockNoteGate } from './tabs'
+export { TabBar } from './tabs'
 
 // UI
 export { Checkbox } from './checkbox'

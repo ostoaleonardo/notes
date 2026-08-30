@@ -229,14 +229,13 @@ describe('steady state (no legacy data)', () => {
         expect(notes).toHaveLength(1)
         expect(notes[0].title).toBe('External note')
         expect(notes[0].tags).toEqual([])
-        expect(notes[0].password).toBe('')
     })
 
     test('prunes metadata entries whose .md file was removed externally', async () => {
         const storage = createFakeStorage()
         const fileStorage = createFakeFileStorage()
         fileStorage.writeMetadata(REPO_URI, {
-            'ghost-id': { filename: 'Deleted externally.md', tags: [], password: '', biometrics: false, createdAt: 1, updatedAt: '', images: [] }
+            'ghost-id': { filename: 'Deleted externally.md', tags: [], createdAt: 1, updatedAt: '', images: [] }
         })
 
         const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)

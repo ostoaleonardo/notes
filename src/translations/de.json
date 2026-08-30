@@ -9,7 +9,6 @@
 	"title": {
 		"notes": "Notizen",
 		"tags": "Tags",
-		"unlock": "Entsperren",
 		"settings": "Einstellungen",
 		"theme": "Farbthema",
 		"about": "Über die App"
@@ -54,20 +53,6 @@
 		"system": "System",
 		"choose": "Wähle ein Farbthema für die App."
 	},
-	"password": {
-		"add": "Passwort hinzufügen",
-		"update": "Passwort aktualisieren",
-		"remove": "Passwort beseitigen",
-		"current": "Aktuelles Passwort",
-		"new": "Neues Passwort"
-	},
-	"biometric": {
-		"use": "Fingerabdruck verwenden",
-		"lock": "Mit Fingerabdruck sperren",
-		"unlock": "Mit Fingerabdruck entsperren",
-		"remove": "Fingerabdruck beseitigen",
-		"auth": "Biometrische Authentifizierung"
-	},
 	"button": {
 		"save": "Speichern",
 		"edit": "Bearbeiten",
@@ -83,11 +68,6 @@
 		},
 		"tags": {
 			"empty": "Du hast noch keine Tags"
-		},
-		"password": {
-			"wrong": "Falsches Passwort",
-			"same": "Das Passwort darf nicht gleich sein",
-			"length": "Das Passwort muss mindestens 4 Zeichen haben"
 		}
 	},
 	"placeholder": {

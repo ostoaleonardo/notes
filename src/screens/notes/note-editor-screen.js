@@ -8,8 +8,6 @@ import { Tags } from '@/screens/modals/tags'
 import { LinkMarkdown } from '@/screens/modals/link-markdown'
 import { TableMarkdown } from '@/screens/modals/table-markdown'
 import { ImageMarkdown } from '@/screens/modals/image-markdown'
-import { AddPassword } from '@/screens/modals/add-password'
-import { UpdatePassword } from '@/screens/modals/update-password'
 import { useAllowLandscape, useBottomSheet, useLanguage, useMarkdownAction, useTabBarActions, useTemplates } from '@/hooks'
 import { getFormattedDate } from '@/utils'
 
@@ -18,8 +16,6 @@ export const NoteEditorScreen = ({
     title, setTitle,
     note, setNote,
     tags, setTags,
-    password, setPassword,
-    biometrics, setBiometrics,
     createdAt, updatedAt,
     initialMode = 'read'
 }) => {
@@ -42,7 +38,6 @@ export const NoteEditorScreen = ({
     const tableSheet = useBottomSheet()
     const imageSheet = useBottomSheet()
     const tagsSheet = useBottomSheet()
-    const passwordSheet = useBottomSheet()
     const templatesSheet = useBottomSheet()
 
     const onRunAction = useCallback((action) => {
@@ -83,14 +78,10 @@ export const NoteEditorScreen = ({
     }, [])
 
     const actions = useMemo(() => ({
-        hasPassword: !!password,
-        onOpenPassword: passwordSheet.onOpen,
         onOpenTags: tagsSheet.onOpen,
         onOpenTemplates: templatesSheet.onOpen,
         onSaveAsTemplate
     }), [
-        password,
-        passwordSheet.onOpen,
         tagsSheet.onOpen,
         templatesSheet.onOpen,
         onSaveAsTemplate
@@ -177,33 +168,6 @@ export const NoteEditorScreen = ({
                     title={title}
                     onSelect={onSelectTemplate}
                 />
-            </ModalSheet>
-
-            <ModalSheet
-                enableDynamicSizing
-                ref={passwordSheet.ref}
-                onClose={passwordSheet.onClose}
-                title={t(password ? 'password.update' : 'password.add')}
-            >
-                {password
-                    ? (
-                        <UpdatePassword
-                            onClose={passwordSheet.onClose}
-                            password={password}
-                            setPassword={setPassword}
-                            biometrics={biometrics}
-                            setBiometrics={setBiometrics}
-                        />
-                    )
-                    : (
-                        <AddPassword
-                            onClose={passwordSheet.onClose}
-                            password={password}
-                            setPassword={setPassword}
-                            biometrics={biometrics}
-                            setBiometrics={setBiometrics}
-                        />
-                    )}
             </ModalSheet>
         </>
     )

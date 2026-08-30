@@ -25,9 +25,6 @@ export default function EditNote() {
     const [updatedAt, setUpdatedAt] = useState('')
     const [repositoryId, setRepositoryId] = useState('')
 
-    const [password, setPassword] = useState('')
-    const [biometrics, setBiometrics] = useState(false)
-
     useEffect(() => {
         const {
             title = '',
@@ -35,8 +32,6 @@ export default function EditNote() {
             tags = [],
             createdAt = Date.now(),
             updatedAt = '',
-            biometrics = false,
-            password = '',
             repositoryId = ''
         } = getNote(slug)
 
@@ -45,8 +40,6 @@ export default function EditNote() {
         setTags(tags)
         setCreatedAt(createdAt)
         setUpdatedAt(updatedAt)
-        setBiometrics(biometrics)
-        setPassword(password)
         setRepositoryId(repositoryId)
 
         setTimeout(() => {
@@ -57,7 +50,7 @@ export default function EditNote() {
     }, [slug])
 
     useNoteAutosave({
-        id: slug, title, note, tags, password, biometrics, createdAt, repositoryId,
+        id: slug, title, note, tags, createdAt, repositoryId,
         skip: loading,
         onSave: (newData) => updateNote({
             ...newData,
@@ -76,10 +69,6 @@ export default function EditNote() {
             setNote={setNote}
             tags={tags}
             setTags={setTags}
-            password={password}
-            setPassword={setPassword}
-            biometrics={biometrics}
-            setBiometrics={setBiometrics}
             createdAt={createdAt}
             updatedAt={updatedAt}
             initialMode='read'

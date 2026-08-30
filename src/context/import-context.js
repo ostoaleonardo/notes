@@ -32,8 +32,6 @@ export function ImportProvider({ children }) {
                 note,
                 tags: [],
                 images: [],
-                password: '',
-                biometrics: false,
                 createdAt: getDate()
             })
 

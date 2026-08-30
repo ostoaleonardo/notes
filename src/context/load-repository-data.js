@@ -58,8 +58,6 @@ const migrateStorageNotesToFiles = async (repositoryUri, rootRepositoryUri, stor
         metadata[note.id] = {
             filename,
             tags: note.tags || note.categories || [],
-            password: note.password || '',
-            biometrics: note.biometrics || false,
             createdAt: note.createdAt || Date.now(),
             updatedAt: note.updatedAt || '',
             images: await migrateLegacyImages(note.images || [], imagesUri, fileStorage)
@@ -107,8 +105,6 @@ const loadNotesFromFolder = async (repositoryUri, fileStorage) => {
             metadata[id] = {
                 filename: file.name,
                 tags: [],
-                password: '',
-                biometrics: false,
                 createdAt: Date.now(),
                 updatedAt: '',
                 images: []
@@ -124,8 +120,6 @@ const loadNotesFromFolder = async (repositoryUri, fileStorage) => {
             title: getTitle(file.name),
             note: content,
             tags: entry.tags || [],
-            password: entry.password,
-            biometrics: entry.biometrics,
             createdAt: entry.createdAt,
             updatedAt: entry.updatedAt,
             images: entry.images || []

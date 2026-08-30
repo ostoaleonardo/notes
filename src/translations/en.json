@@ -36,7 +36,6 @@
 	"title": {
 		"notes": "Notes",
 		"tags": "Tags",
-		"unlock": "Unlock",
 		"repositories": "Repositories",
 		"templates": "Templates",
 		"sort": "Sorting by",
@@ -102,22 +101,6 @@
 		"yellow": "Yellow",
 		"blue": "Blue"
 	},
-	"password": {
-		"add": "Add password",
-		"update": "Update password",
-		"remove": "Remove password",
-		"current": "Current password",
-		"new": "New password",
-		"show": "Show password",
-		"hide": "Hide password"
-	},
-	"biometric": {
-		"use": "Use fingerprint",
-		"lock": "Lock with fingerprint",
-		"unlock": "Unlock with fingerprint",
-		"remove": "Remove fingerprint",
-		"auth": "Biometric authentication"
-	},
 	"button": {
 		"save": "Save",
 		"edit": "Edit",
@@ -134,7 +117,6 @@
 		"more": "More",
 		"forget": "Forget",
 		"create": "Create",
-		"lock": "Lock",
 		"close": "Close",
 		"preview": "Read",
 		"clear_filter": "Clear filter"
@@ -190,11 +172,6 @@
 		},
 		"tags": {
 			"empty": "You don't have any tags yet"
-		},
-		"password": {
-			"wrong": "Wrong password",
-			"same": "The password can't be the same",
-			"length": "The password must have at least 4 characters"
 		}
 	},
 	"placeholder": {

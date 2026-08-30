@@ -25,13 +25,10 @@ export { useTabBarActions } from './use-tab-bar-actions'
 export { useLanguage } from './use-language'
 export { useToggleMode } from './use-toggle-mode'
 export { useBottomSheet } from './use-bottom-sheet'
-export { useAnimatedShake } from './use-animated-shake'
 export { useIconProps } from './use-icon-props'
 
 // Utils
 export { useHaptics } from './use-haptics'
-export { useLocalAuthentication } from './use-local-authentication'
-export { useNoteAuthentication } from './use-note-authentication'
 
 // Premium
 export { usePremium } from './use-premium'

@@ -1,8 +1,5 @@
 export { Languages } from './languages'
-export { UnlockNote } from './unlock-note'
 export { Tags } from './tags'
-export { AddPassword } from './add-password'
-export { UpdatePassword } from './update-password'
 export { UpdateTag } from './update-tag'
 export { RenameRepository } from './rename-repository'
 export { DeleteRepository } from './delete-repository'

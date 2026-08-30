@@ -36,7 +36,6 @@
 	"title": {
 		"notes": "Notas",
 		"tags": "Etiquetas",
-		"unlock": "Desbloquear",
 		"repositories": "Repositorios",
 		"templates": "Plantillas",
 		"sort": "Ordenar por",
@@ -87,22 +86,6 @@
 		"yellow": "Amarillo",
 		"blue": "Azul"
 	},
-	"password": {
-		"add": "Añadir contraseña",
-		"update": "Actualizar contraseña",
-		"remove": "Eliminar contraseña",
-		"current": "Contraseña actual",
-		"new": "Nueva contraseña",
-		"show": "Mostrar contraseña",
-		"hide": "Ocultar contraseña"
-	},
-	"biometric": {
-		"use": "Usar huella dactilar",
-		"lock": "Bloquear con huella dactilar",
-		"unlock": "Desbloquear con huella dactilar",
-		"remove": "Eliminar huella dactilar",
-		"auth": "Autenticación biométrica"
-	},
 	"button": {
 		"save": "Guardar",
 		"edit": "Editar",
@@ -119,7 +102,6 @@
 		"more": "Más opciones",
 		"forget": "Olvidar",
 		"create": "Crear",
-		"lock": "Bloquear",
 		"close": "Cerrar",
 		"preview": "Lectura",
 		"clear_filter": "Quitar filtro"
@@ -175,11 +157,6 @@
 		},
 		"tags": {
 			"empty": "Todavía no tienes etiquetas"
-		},
-		"password": {
-			"wrong": "Contraseña incorrecta",
-			"same": "La contraseña no puede ser la misma",
-			"length": "La contraseña debe tener al menos 4 caracteres"
 		}
 	},
 	"placeholder": {
