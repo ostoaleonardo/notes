@@ -1,10 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import { useEffect, useRef, useState } from 'react'
-import { KeyboardAvoidingView } from 'react-native-keyboard-controller'
 import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import { LoadingOverlay } from '@/components/layout'
 import { TemplateAction } from '@/screens/app-bar-actions'
-import { MarkdownControls } from '@/screens/notes'
+import { MarkdownEditorLayout } from '@/screens/notes'
 import { TemplateEditorForm } from '@/screens/templates'
 import { TemplatePlaceholders } from '@/screens/modals'
 import { useAllowLandscape, useCloseTabOnRemove, useMarkdownAction, useTabBarActions, useTabs, useTemplates } from '@/hooks'
@@ -101,9 +100,11 @@ export default function EditTemplate() {
 
     return (
         <>
-            <KeyboardAvoidingView
-                behavior='padding'
-                style={{ flex: 1 }}
+            <MarkdownEditorLayout
+                mode={mode}
+                onRunAction={onRunAction}
+                onSetMode={setMode}
+                scope='template'
             >
                 <TemplateEditorForm
                     name={name}
@@ -113,14 +114,7 @@ export default function EditTemplate() {
                     markdownAction={markdownAction}
                     mode={mode}
                 />
-
-                <MarkdownControls
-                    mode={mode}
-                    onRunAction={onRunAction}
-                    onSetMode={setMode}
-                    scope='template'
-                />
-            </KeyboardAvoidingView>
+            </MarkdownEditorLayout>
 
             <TemplatePlaceholders
                 visible={placeholdersVisible}
