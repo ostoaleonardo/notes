@@ -2,7 +2,7 @@ import { randomUUID } from 'expo-crypto'
 import { useState, useCallback } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { AnimatedList, BackHeader, SmallInput, SquareButton, SwipeableTag } from '@/components'
+import { AnimatedList, SmallInput, SquareButton, SwipeableTag } from '@/components'
 import { UpdateTag } from '@/screens/modals'
 import { useTags, useHaptics } from '@/hooks'
 import { FEEDBACK_TYPES } from '@/constants'
@@ -47,8 +47,6 @@ export default function Tags() {
 
     return (
         <View style={styles.container}>
-            <BackHeader title={t('title.tags')} />
-
             <View style={styles.top}>
                 <SmallInput
                     value={tag}

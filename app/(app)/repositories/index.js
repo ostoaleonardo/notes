@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { AppState, ToastAndroid, View } from 'react-native'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import { AnimatedList, BackHeader, FloatingButton } from '@/components'
+import { AnimatedList, FloatingButton } from '@/components'
 import { RepositoryItem } from '@/screens/repositories'
 import { DeleteRepository, ForgetRepository, RenameRepository } from '@/screens/modals'
 import { useFileStorage, usePremium, useRepositories } from '@/hooks'
@@ -62,13 +62,11 @@ export default function Repositories() {
 
     const onOpen = (id) => {
         setActiveRepository(id)
-        router.push(ROUTES.HOME)
+        router.replace(ROUTES.HOME)
     }
 
     return (
         <View style={{ flex: 1 }}>
-            <BackHeader title={t('title.repositories')} />
-
             <AnimatedList
                 contentContainerStyle={{ paddingHorizontal: 16 }}
                 gap={2}

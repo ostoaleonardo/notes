@@ -1,15 +1,14 @@
 import { randomUUID } from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useFocusEffect, useLocalSearchParams, useNavigation } from 'expo-router'
+import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 import { NoteEditorScreen } from '@/screens/notes'
-import { useCloseTabOnRemove, useNoteAutosave, useNotes, useRepositories, useTabs, useUtils } from '@/hooks'
+import { useNoteAutosave, useNotes, useRegisterCurrent, useRepositories, useUtils } from '@/hooks'
 import { getDate, getUniqueTitle } from '@/utils'
 
 export default function Note() {
     const { t } = useTranslation()
     const { filter } = useUtils()
-    const { registerTab } = useTabs()
     const { activeRepository } = useRepositories()
     const { notes, saveNote, updateNote, setParamId } = useNotes()
     const { repositoryId: targetRepositoryId } = useLocalSearchParams()
@@ -19,10 +18,8 @@ export default function Note() {
     const autoTitleRef = useRef('')
     const notesRef = useRef(notes)
 
-    const navigation = useNavigation()
-
     const [id, setId] = useState('')
-    useCloseTabOnRemove(navigation, id)
+    useRegisterCurrent(id)
 
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
@@ -42,7 +39,6 @@ export default function Note() {
 
             setId(id)
             setParamId(id)
-            registerTab(id)
             setRepositoryId(targetRepositoryId || activeRepository.id)
 
             const autoTitle = getUniqueTitle(notesRef.current.map((n) => n.title), t('notes.untitled'))
@@ -76,7 +72,6 @@ export default function Note() {
 
     return (
         <NoteEditorScreen
-            navigation={navigation}
             title={title}
             setTitle={setTitle}
             note={note}

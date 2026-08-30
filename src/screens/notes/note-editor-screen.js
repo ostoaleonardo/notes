@@ -1,18 +1,18 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { ToastAndroid } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { MarkdownEditor, ModalSheet } from '@/components'
+import { AppBar, MarkdownEditor, ModalSheet, RecentsButton } from '@/components'
 import { MarkdownEditorLayout } from './markdown-editor-layout'
 import { TemplateCarousel } from './template-carousel'
+import { RecentNotes } from './recent-notes'
 import { Tags } from '@/screens/modals/tags'
 import { LinkMarkdown } from '@/screens/modals/link-markdown'
 import { TableMarkdown } from '@/screens/modals/table-markdown'
 import { ImageMarkdown } from '@/screens/modals/image-markdown'
-import { useAllowLandscape, useBottomSheet, useLanguage, useMarkdownAction, useTabBarActions, useTemplates } from '@/hooks'
+import { useAllowLandscape, useBottomSheet, useLanguage, useMarkdownAction, useTemplates } from '@/hooks'
 import { getFormattedDate } from '@/utils'
 
 export const NoteEditorScreen = ({
-    navigation,
     title, setTitle,
     note, setNote,
     tags, setTags,
@@ -39,6 +39,7 @@ export const NoteEditorScreen = ({
     const imageSheet = useBottomSheet()
     const tagsSheet = useBottomSheet()
     const templatesSheet = useBottomSheet()
+    const recentsSheet = useBottomSheet()
 
     const onRunAction = useCallback((action) => {
         if (action === 'link') {
@@ -87,12 +88,12 @@ export const NoteEditorScreen = ({
         onSaveAsTemplate
     ])
 
-    useTabBarActions({
-        onOpenDrawer: () => navigation.dispatch({ type: 'OPEN_DRAWER' })
-    }, [])
-
     return (
         <>
+            <AppBar
+                trailing={<RecentsButton onPress={recentsSheet.onOpen} />}
+            />
+
             <MarkdownEditorLayout
                 mode={mode}
                 isFocused={isFocused}
@@ -168,6 +169,14 @@ export const NoteEditorScreen = ({
                     title={title}
                     onSelect={onSelectTemplate}
                 />
+            </ModalSheet>
+
+            <ModalSheet
+                ref={recentsSheet.ref}
+                onClose={recentsSheet.onClose}
+                title={t('search.recent')}
+            >
+                <RecentNotes onClose={recentsSheet.onClose} />
             </ModalSheet>
         </>
     )

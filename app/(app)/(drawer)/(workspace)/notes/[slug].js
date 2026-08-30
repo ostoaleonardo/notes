@@ -1,19 +1,17 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocalSearchParams, useNavigation } from 'expo-router'
+import { useLocalSearchParams } from 'expo-router'
 import { LoadingOverlay } from '@/components/layout'
 import { NoteEditorScreen } from '@/screens/notes'
-import { useCloseTabOnRemove, useNoteAutosave, useNotes, useTabs } from '@/hooks'
+import { useNoteAutosave, useNotes, useRegisterCurrent } from '@/hooks'
 import { getDate } from '@/utils'
 
 export default function EditNote() {
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
     const { getNote, updateNote } = useNotes()
-    const { registerTab } = useTabs()
 
-    const navigation = useNavigation()
-    useCloseTabOnRemove(navigation, slug)
+    useRegisterCurrent(slug)
 
     const [loading, setLoading] = useState(true)
 
@@ -45,8 +43,6 @@ export default function EditNote() {
         setTimeout(() => {
             setLoading(false)
         }, 0)
-
-        registerTab(slug)
     }, [slug])
 
     useNoteAutosave({
@@ -62,7 +58,6 @@ export default function EditNote() {
 
     return (
         <NoteEditorScreen
-            navigation={navigation}
             title={title}
             setTitle={setTitle}
             note={note}

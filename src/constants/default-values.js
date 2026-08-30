@@ -6,3 +6,5 @@ export const DEFAULT_SORT = {
 }
 
 export const RECENT_SEARCHES_LIMIT = 5
+
+export const RECENT_NOTES_LIMIT = 10

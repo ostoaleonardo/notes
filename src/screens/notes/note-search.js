@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { router } from 'expo-router'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { Keyboard, Pressable, StyleSheet } from 'react-native'
@@ -7,8 +8,8 @@ import { AnimatedView, SearchInput } from '@/components'
 import { SearchFilters } from './search-filters'
 import { SearchResults } from './search-results'
 import { RecentSearches } from './recent-searches'
-import { useNotes, useRepositories, useStorage, useTabs, useTags, useUtils } from '@/hooks'
-import { filterNotes, parseSearchQuery } from '@/utils'
+import { useNotes, useRepositories, useStorage, useTags, useUtils } from '@/hooks'
+import { filterNotes, getEditorPath, parseSearchQuery } from '@/utils'
 import { COMMONS, RECENT_SEARCHES_LIMIT, STORAGE_KEYS } from '@/constants'
 
 export function NoteSearch() {
@@ -18,7 +19,6 @@ export function NoteSearch() {
     const { notes } = useNotes()
     const { tags } = useTags()
     const { pinned } = useUtils()
-    const { openTab } = useTabs()
     const { getItem, setItem } = useStorage()
 
     const [query, setQuery] = useState('')
@@ -52,7 +52,7 @@ export function NoteSearch() {
 
     const onOpenResult = (id) => {
         saveRecent(trimmedQuery)
-        openTab(id)
+        router.push(getEditorPath(id))
     }
 
     const collapse = () => setExpanded(false)

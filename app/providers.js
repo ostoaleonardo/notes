@@ -3,10 +3,10 @@ import { KeyboardProvider } from 'react-native-keyboard-controller'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import {
+    CurrentNoteProvider,
     ImportProvider,
     NoteProvider,
     RepositoryProvider,
-    TabsProvider,
     UtilsProvider
 } from '@/context'
 
@@ -18,7 +18,7 @@ export default function Providers({ children }) {
             <UtilsProvider>
                 <RepositoryProvider>
                     <NoteProvider>
-                        <TabsProvider>
+                        <CurrentNoteProvider>
                             <ImportProvider>
                                 <KeyboardProvider>
                                     <BottomSheetModalProvider>
@@ -26,7 +26,7 @@ export default function Providers({ children }) {
                                     </BottomSheetModalProvider>
                                 </KeyboardProvider>
                             </ImportProvider>
-                        </TabsProvider>
+                        </CurrentNoteProvider>
                     </NoteProvider>
                 </RepositoryProvider>
             </UtilsProvider>
