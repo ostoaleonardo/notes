@@ -19,11 +19,11 @@ const AutoGrowTitle = ({
 
     return (
         <textarea
+            rows={1}
             ref={ref}
             value={value || ''}
             onChange={(event) => onChange?.(event.target.value)}
             placeholder={placeholder}
-            rows={1}
             style={buildTitleTextareaStyle({ fontFamily, textColor })}
         />
     )
