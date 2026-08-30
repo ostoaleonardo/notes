@@ -13,7 +13,6 @@ export {
 
 // Cards
 export {
-    SwipeableCard,
     SwipeableTag,
 } from './swipeable'
 
@@ -22,7 +21,6 @@ export {
     LargeInput,
     SmallInput,
     SearchInput,
-    TextArea,
     PasswordInput
 } from './input'
 
@@ -45,7 +43,6 @@ export { DrawerItems } from './drawer'
 export { TabBar, UnlockNoteGate } from './tabs'
 
 // UI
-export { Avatar } from './avatar'
 export { Checkbox } from './checkbox'
 export { Typography } from './typography'
 export { RadioButtonItem } from './radio-button-item'
@@ -60,12 +57,10 @@ export {
 export { Section } from './section'
 
 export {
-    Separator,
-    DotSeparator
+    Separator
 } from './separator'
 
 // Markdown
 export {
-    MarkdownInput,
     MarkdownEditor
 } from './markdown'
