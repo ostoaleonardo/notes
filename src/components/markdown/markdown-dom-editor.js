@@ -61,7 +61,18 @@ const MarkdownDomEditor = ({
         document.body.style.height = '100%'
         document.body.style.margin = '0'
 
-        const theme = buildEditorTheme({ fontSize, fontFamily, textColor, cursorColor, selectionColor, placeholderColor, linkColor, codeBackgroundColor, thematicBreakColor })
+        const theme = buildEditorTheme({
+            fontSize,
+            fontFamily,
+            headingFontFamily,
+            textColor,
+            cursorColor,
+            selectionColor,
+            placeholderColor,
+            linkColor,
+            codeBackgroundColor,
+            thematicBreakColor
+        })
 
         const state = EditorState.create({
             doc: value || '',

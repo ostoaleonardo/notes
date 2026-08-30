@@ -2,7 +2,10 @@ import { Decoration } from '@codemirror/view'
 import { ATX_HEADING_LEVELS, SETEXT_HEADING_LEVELS } from '@/constants/markdown-live-formatting'
 import { isRangeSelected } from './utils'
 
-export const headingNodeNames = [...Object.keys(ATX_HEADING_LEVELS), ...Object.keys(SETEXT_HEADING_LEVELS)]
+export const headingNodeNames = [
+    ...Object.keys(ATX_HEADING_LEVELS),
+    ...Object.keys(SETEXT_HEADING_LEVELS)
+]
 
 export const decorateHeading = (node, { doc, selection, ranges }) => {
     if (isRangeSelected(selection, node.from, node.to)) return true
@@ -30,11 +33,11 @@ export const decorateHeading = (node, { doc, selection, ranges }) => {
     return true
 }
 
-export const headingsTheme = () => ({
-    '.cm-live-h1': { fontWeight: 'bold', fontSize: '1.8em' },
-    '.cm-live-h2': { fontWeight: 'bold', fontSize: '1.6em' },
-    '.cm-live-h3': { fontWeight: 'bold', fontSize: '1.4em' },
-    '.cm-live-h4': { fontWeight: 'bold', fontSize: '1.25em' },
-    '.cm-live-h5': { fontWeight: 'bold', fontSize: '1.1em' },
-    '.cm-live-h6': { fontWeight: 'bold', fontSize: '1em' }
+export const headingsTheme = ({ fontFamily }) => ({
+    '.cm-live-h1': { fontWeight: 'bold', fontSize: '1.8em', fontFamily },
+    '.cm-live-h2': { fontWeight: 'bold', fontSize: '1.6em', fontFamily },
+    '.cm-live-h3': { fontWeight: 'bold', fontSize: '1.4em', fontFamily },
+    '.cm-live-h4': { fontWeight: 'bold', fontSize: '1.25em', fontFamily },
+    '.cm-live-h5': { fontWeight: 'bold', fontSize: '1.1em', fontFamily },
+    '.cm-live-h6': { fontWeight: 'bold', fontSize: '1em', fontFamily }
 })

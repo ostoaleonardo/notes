@@ -23,7 +23,7 @@ export const MarkdownInput = ({
     dateLabel
 }) => {
     const { colors } = useTheme()
-    const { background, onBackground, primary, tertiary } = colors
+    const { background, onBackground, tertiary } = colors
     const fonts = useDomFonts()
     const katexFonts = useKatexFonts()
 
@@ -61,8 +61,8 @@ export const MarkdownInput = ({
             fonts={fonts}
             katexFonts={katexFonts}
             textColor={onBackground}
-            cursorColor={primary}
-            selectionColor={primary + TRANSPARENT[20]}
+            cursorColor={tertiary}
+            selectionColor={tertiary + TRANSPARENT[20]}
             placeholderColor={onBackground + TRANSPARENT[40]}
             linkColor={tertiary}
             quoteBackgroundColor={background}
@@ -72,6 +72,7 @@ export const MarkdownInput = ({
                 scrollEnabled: mode === 'read',
                 showsVerticalScrollIndicator: false,
                 showsHorizontalScrollIndicator: false,
+                androidLayerType: 'software',
                 style: { flex: 1 }
             }}
         />

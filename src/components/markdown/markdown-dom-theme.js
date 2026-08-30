@@ -37,6 +37,7 @@ export const buildDateLabelStyle = ({ textColor }) => ({
 export const buildEditorTheme = ({
     fontSize,
     fontFamily,
+    headingFontFamily,
     textColor,
     cursorColor,
     selectionColor,
@@ -60,7 +61,7 @@ export const buildEditorTheme = ({
     '.cm-gutters': { display: 'none' },
     '&.cm-focused': { outline: 'none' },
     '.cm-placeholder': { color: placeholderColor },
-    ...buildLiveFormattingTheme({ linkColor, codeBackgroundColor, thematicBreakColor })
+    ...buildLiveFormattingTheme({ linkColor, codeBackgroundColor, thematicBreakColor, headingFontFamily })
 })
 
 export const buildPreviewCss = ({
@@ -77,7 +78,7 @@ export const buildPreviewCss = ({
     ::-webkit-scrollbar { display: none; }
     .markdown-preview {
         font-family: ${fontFamily}; color: ${textColor}; font-size: ${fontSize}px; line-height: 1.6;
-        overflow-wrap: anywhere; padding: 8px 16px 16px;
+        overflow-wrap: anywhere; padding-top: 8px; padding-right: 16px; padding-bottom: 16px; padding-left: 16px;
     }
     .markdown-preview h1, .markdown-preview h2, .markdown-preview h3,
     .markdown-preview h4, .markdown-preview h5, .markdown-preview h6 {
