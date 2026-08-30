@@ -45,12 +45,14 @@
 		"back": "Bakåt",
 		"delete": "Radera",
 		"update": "Uppdatera",
-		"enter": "Gå in"
+		"enter": "Gå in",
+		"clear_all": "Rensa alla"
 	},
 	"message": {
 		"loading": "Laddar...",
 		"notes": {
-			"empty": "Du har inte skapat någon anteckning än"
+			"empty": "Du har inte skapat någon anteckning än",
+			"no_recent": "Inga senaste anteckningar"
 		},
 		"tags": {
 			"empty": "Du har inte skapat några taggar än"

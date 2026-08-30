@@ -104,7 +104,8 @@
 		"create": "Crear",
 		"close": "Cerrar",
 		"preview": "Lectura",
-		"clear_filter": "Quitar filtro"
+		"clear_filter": "Quitar filtro",
+		"clear_all": "Quitar todas"
 	},
 	"count": {
 		"notes": "{{count}} nota",
@@ -153,7 +154,8 @@
 		"loading": "Cargando...",
 		"notes": {
 			"empty": "Todavía no tienes notas",
-			"exported": "Archivo exportado exitosamente"
+			"exported": "Archivo exportado exitosamente",
+			"no_recent": "Sin notas recientes"
 		},
 		"tags": {
 			"empty": "Todavía no tienes etiquetas"
