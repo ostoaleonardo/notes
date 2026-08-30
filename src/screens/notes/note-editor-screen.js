@@ -1,9 +1,8 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
-import { ToastAndroid, View } from 'react-native'
+import { ToastAndroid } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { KeyboardAvoidingView } from 'react-native-keyboard-controller'
 import { MarkdownEditor, ModalSheet } from '@/components'
-import { MarkdownControls } from './markdown-controls'
+import { MarkdownEditorLayout } from './markdown-editor-layout'
 import { TemplateCarousel } from './template-carousel'
 import { Tags } from '@/screens/modals/tags'
 import { LinkMarkdown } from '@/screens/modals/link-markdown'
@@ -103,33 +102,26 @@ export const NoteEditorScreen = ({
 
     return (
         <>
-            <KeyboardAvoidingView
-                behavior='padding'
-                style={{ flex: 1 }}
+            <MarkdownEditorLayout
+                mode={mode}
+                isFocused={isFocused}
+                onRunAction={onRunAction}
+                onSetMode={setMode}
+                actions={actions}
             >
-                <View style={{ flex: 1 }}>
-                    <MarkdownEditor
-                        value={note}
-                        setValue={setNote}
-                        markdownAction={markdownAction}
-                        mode={mode}
-                        onFocus={() => setIsFocused(true)}
-                        onBlur={() => setIsFocused(false)}
-                        title={title}
-                        setTitle={setTitle}
-                        titlePlaceholder={t('placeholder.title')}
-                        dateLabel={dateLabel}
-                    />
-                </View>
-
-                <MarkdownControls
+                <MarkdownEditor
                     mode={mode}
-                    isFocused={isFocused}
-                    onRunAction={onRunAction}
-                    onSetMode={setMode}
-                    actions={actions}
+                    title={title}
+                    setTitle={setTitle}
+                    titlePlaceholder={t('placeholder.title')}
+                    dateLabel={dateLabel}
+                    value={note}
+                    setValue={setNote}
+                    onBlur={() => setIsFocused(false)}
+                    onFocus={() => setIsFocused(true)}
+                    markdownAction={markdownAction}
                 />
-            </KeyboardAvoidingView>
+            </MarkdownEditorLayout>
 
             <ModalSheet
                 ref={tagsSheet.ref}

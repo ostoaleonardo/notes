@@ -1,6 +1,7 @@
 export { ImageViewer } from './image-viewer'
 export { TemplateCarousel } from './template-carousel'
 export { TagOption } from './tag-option'
-export { MarkdownControls } from './markdown-controls'
+export { MarkdownToolbar } from './markdown-toolbar'
+export { MarkdownEditorLayout } from './markdown-editor-layout'
 export { NoteEditorScreen } from './note-editor-screen'
 export { Intro } from './intro'

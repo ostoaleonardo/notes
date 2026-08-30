@@ -4,19 +4,22 @@ import { useTranslation } from 'react-i18next'
 import { IconButton, useTheme } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
 import { AnimatedView, Scroll, Separator } from '@/components'
-import { NoteActions } from './note-actions'
-import { Code, Edit, Eye } from '@/icons'
+import { MarkdownModeToggle } from './markdown-mode-toggle'
 import { MARKDOWN_CONTROLS } from '@/constants'
 
-export const MarkdownControls = memo(function MarkdownControls({ mode, isFocused, onRunAction, onSetMode, scope, actions }) {
+export const MarkdownToolbar = memo(function MarkdownToolbar({
+    mode,
+    isFocused,
+    scope,
+    onSetMode,
+    onRunAction,
+    actions
+}) {
     const { t } = useTranslation()
     const { colors } = useTheme()
 
     const controls = MARKDOWN_CONTROLS.filter((control) => !control.scope || control.scope === scope)
     const showControls = scope === 'template' ? mode !== 'read' : mode !== 'read' && isFocused
-    const showActions = scope !== 'template' && !showControls && actions
-
-    const modeColor = (targetMode) => (mode === targetMode ? colors.primary : colors.onBackground)
 
     return (
         <View
@@ -56,41 +59,25 @@ export const MarkdownControls = memo(function MarkdownControls({ mode, isFocused
                         ))}
                     </AnimatedView>
                 )}
-
-                {showActions && (
-                    <AnimatedView
-                        entering={FadeInRight}
-                        exiting={FadeOutRight}
-                        style={styles.row}
-                    >
-                        <NoteActions {...actions} />
-                    </AnimatedView>
-                )}
             </Scroll>
 
-            <View style={styles.row}>
-                <IconButton
-                    onPress={() => onSetMode('code')}
-                    accessibilityLabel={t('button.code')}
-                    icon={() => <Code color={modeColor('code')} />}
-                />
-                <IconButton
-                    onPress={() => onSetMode('live')}
-                    accessibilityLabel={t('button.edit')}
-                    icon={() => <Edit color={modeColor('live')} />}
-                />
-                <IconButton
-                    onPress={() => onSetMode('read')}
-                    accessibilityLabel={t('button.preview')}
-                    icon={() => <Eye color={modeColor('read')} />}
-                />
-            </View>
+            <MarkdownModeToggle
+                mode={mode}
+                scope={scope}
+                onSetMode={onSetMode}
+                onOpenTags={actions?.onOpenTags}
+                onOpenTemplates={actions?.onOpenTemplates}
+                onOpenPassword={actions?.onOpenPassword}
+                hasPassword={actions?.hasPassword}
+            />
         </View>
     )
 })
 
 const styles = StyleSheet.create({
     container: {
+        paddingVertical: 3,
+        paddingHorizontal: 4,
         flexDirection: 'row',
         alignItems: 'center',
         borderTopWidth: 1
