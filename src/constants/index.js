@@ -6,7 +6,8 @@ export { LANGUAGES } from './languages'
 export {
     DEFAULT_TAGS,
     DEFAULT_SORT,
-    RECENT_SEARCHES_LIMIT
+    RECENT_SEARCHES_LIMIT,
+    RECENT_NOTES_LIMIT
 } from './default-values'
 
 export { TREE_BRANCHING, NOTES_PER_FOLDER } from './dev-menu'
@@ -61,7 +62,7 @@ export {
 } from './note-preview'
 
 export { LINKS } from './links'
-export { HOME_TAB_KEY, TEMPLATE_TAB_PREFIX, TEMPLATES_SECTION_ID } from './tabs'
+export { TEMPLATE_TAB_PREFIX, TEMPLATES_SECTION_ID } from './tabs'
 
 export {
     PRO,

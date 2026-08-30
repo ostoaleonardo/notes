@@ -13,15 +13,15 @@ import { AddTemplate } from '@/screens/modals/add-template'
 import { DeleteRepository } from '@/screens/modals/delete-repository'
 import { RenameRepository } from '@/screens/modals/rename-repository'
 import { ROUTES, TEMPLATE_TAB_PREFIX, TEMPLATES_SECTION_ID } from '@/constants'
-import { useNotes, useRepositories, useTabs, useTags, useTemplates, useUtils } from '@/hooks'
-import { buildRepositoryTree } from '@/utils'
+import { useCurrentNote, useNotes, useRepositories, useTags, useTemplates, useUtils } from '@/hooks'
+import { buildRepositoryTree, getEditorPath } from '@/utils'
 
 export function DrawerItems({ navigation }) {
     const { t } = useTranslation()
     const { tags } = useTags()
     const { notes } = useNotes()
     const { listTemplates } = useTemplates()
-    const { activeTabId, openTab } = useTabs()
+    const { currentId } = useCurrentNote()
 
     const {
         collapsedFolders,
@@ -72,7 +72,7 @@ export function DrawerItems({ navigation }) {
     }
 
     const onOpenNote = (id) => {
-        openTab(id)
+        router.push(getEditorPath(id))
         closeDrawer()
     }
 
@@ -85,7 +85,7 @@ export function DrawerItems({ navigation }) {
     }
 
     const onOpenTemplate = (filename) => {
-        openTab(TEMPLATE_TAB_PREFIX + filename)
+        router.push(getEditorPath(TEMPLATE_TAB_PREFIX + filename))
         closeDrawer()
     }
 
@@ -111,7 +111,7 @@ export function DrawerItems({ navigation }) {
                         {...node}
                         depth={0}
                         active={node.repository.id === activeRepositoryId}
-                        activeNoteId={activeTabId}
+                        activeNoteId={currentId}
                         onOpenRoot={onOpenRoot}
                         onOpenNote={onOpenNote}
                         onAddSubfolder={(id = node.repository.id) => setSubfolderParentId(id)}
@@ -125,7 +125,7 @@ export function DrawerItems({ navigation }) {
 
                 <DrawerTemplatesSection
                     templates={templates}
-                    activeFilename={activeTabId.startsWith(TEMPLATE_TAB_PREFIX) ? activeTabId.slice(TEMPLATE_TAB_PREFIX.length) : ''}
+                    activeFilename={currentId.startsWith(TEMPLATE_TAB_PREFIX) ? currentId.slice(TEMPLATE_TAB_PREFIX.length) : ''}
                     collapsed={collapsedFolders.has(TEMPLATES_SECTION_ID)}
                     onToggleCollapse={() => toggleFolder(TEMPLATES_SECTION_ID)}
                     onOpenTemplate={onOpenTemplate}

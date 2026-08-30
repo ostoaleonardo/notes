@@ -2,13 +2,13 @@
 export { NoteContext } from './note-context'
 export { UtilsContext } from './utils-contex'
 export { ThemeContext } from './theme-context'
-export { TabsContext } from './tabs-context'
+export { CurrentNoteContext } from './current-note-context'
 
 // Providers
 export { NoteProvider } from './note-context'
 export { UtilsProvider } from './utils-contex'
 export { ThemeProvider } from './theme-context'
-export { TabsProvider } from './tabs-context'
+export { CurrentNoteProvider } from './current-note-context'
 
 // Premium
 export { PremiumContext } from './premium-context'

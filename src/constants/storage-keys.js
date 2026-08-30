@@ -16,7 +16,7 @@ export const STORAGE_KEYS = {
     ACCENT: 'accent',
     LANGUAGE: 'language',
     COLLAPSED_FOLDERS: 'collapsed-folders',
-    OPEN_TABS: 'open-tabs',
-    ACTIVE_TAB: 'active-tab',
+    CURRENT_NOTE: 'current-note',
+    RECENT_NOTES: 'recent-notes',
     RECENT_SEARCHES: 'recent-searches'
 }

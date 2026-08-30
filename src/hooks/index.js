@@ -17,9 +17,8 @@ export { useRepositories } from './use-repositories'
 export { useRepositoryReconciliation } from './use-repository-reconciliation'
 export { useRepositoryData } from './use-repository-data'
 export { useTemplates } from './use-templates'
-export { useTabs } from './use-tabs'
-export { useCloseTabOnRemove } from './use-close-tab-on-remove'
-export { useTabBarActions } from './use-tab-bar-actions'
+export { useCurrentNote, useRegisterCurrent } from './use-current-note'
+export { useRecentNotes } from './use-recent-notes'
 
 // UI
 export { useLanguage } from './use-language'

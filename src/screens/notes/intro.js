@@ -1,54 +1,42 @@
-import { router } from 'expo-router'
-import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import * as DocumentPicker from 'expo-document-picker'
+import { useTranslation } from 'react-i18next'
+import { AnimatedView, Pressable, Typography } from '@/components'
+import { FONTS } from '@/constants'
 
-import { Pressable } from '@/components'
-import { IntroWelcome } from './intro-welcome'
-import { NoteSearch } from './note-search'
-import { useImportMarkdown, useRepositories } from '@/hooks'
-import { ROUTES } from '@/constants'
-
-export function Intro() {
+export function Intro({ onCreateNote }) {
     const { t } = useTranslation()
-    const { activeRepositoryTree } = useRepositories()
-    const { importFile } = useImportMarkdown()
-    const rootId = activeRepositoryTree[0]?.id
-
-    const onCreateNote = () => {
-        router.push({
-            pathname: ROUTES.ADD_NOTE,
-            params: { repositoryId: rootId }
-        })
-    }
-
-    const onImportNote = async () => {
-        const result = await DocumentPicker.getDocumentAsync({ type: '*/*' })
-        if (result.canceled) return
-
-        importFile(result.assets[0].uri, result.assets[0].name)
-    }
 
     return (
-        <View style={styles.container}>
-            <NoteSearch />
+        <AnimatedView style={styles.container}>
+            <View style={{ gap: 16 }}>
+                <Typography
+                    fontSize={32}
+                    textAlign='center'
+                    styleProps={{ fontFamily: FONTS.nType82Headline }}
+                >
+                    {t('notes.intro_title')}
+                </Typography>
+                <Typography
+                    opacity={0.6}
+                    textAlign='center'
+                >
+                    {t('notes.intro_subtitle')}
+                </Typography>
+            </View>
 
-            <IntroWelcome onCreateNote={onCreateNote} />
-
-            <Pressable
-                mode='text'
-                onPress={onImportNote}
-            >
-                {t('title.import')}
+            <Pressable onPress={onCreateNote}>
+                {t('notes.create')}
             </Pressable>
-        </View>
+        </AnimatedView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingBottom: 24,
-        alignItems: 'center'
+        gap: 32,
+        padding: 24,
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })

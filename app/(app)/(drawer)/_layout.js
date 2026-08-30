@@ -17,7 +17,6 @@ export default function DrawerLayout() {
             drawerContent={(props) => <DrawerItems {...props} />}
         >
             <Drawer.Screen name='(workspace)' />
-            <Drawer.Screen name='(pages)' />
         </Drawer>
     )
 }

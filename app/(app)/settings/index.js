@@ -1,7 +1,7 @@
 import { isDevice } from 'expo-device'
 import { Linking, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { BackHeader, ModalSheet, Scroll, Section } from '@/components'
+import { ModalSheet, Scroll, Section } from '@/components'
 import { Languages } from '@/screens/modals'
 import { PremiumSection, ThemeOption } from '@/screens/settings'
 import { AppVersionCard, Option } from '@/screens'
@@ -21,8 +21,6 @@ export default function Settings() {
 
     return (
         <View style={{ flex: 1 }}>
-            <BackHeader title={t('title.settings')} />
-
             <Scroll contentContainerStyle={styles.scroll}>
                 <Section
                     title={t('settings.general')}
@@ -77,7 +75,7 @@ export default function Settings() {
 const styles = StyleSheet.create({
     scroll: {
         paddingBottom: 24,
-        paddingTop: 16,
+        paddingTop: 8,
         gap: 40
     },
     section: {

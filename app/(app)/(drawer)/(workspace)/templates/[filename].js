@@ -1,26 +1,24 @@
 import { useTranslation } from 'react-i18next'
 import { useEffect, useRef, useState } from 'react'
-import { router, useLocalSearchParams, useNavigation } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import { LoadingOverlay } from '@/components/layout'
+import { AppBar } from '@/components'
 import { TemplateAction } from '@/screens/app-bar-actions'
 import { MarkdownEditorLayout } from '@/screens/notes'
 import { TemplateEditorForm } from '@/screens/templates'
 import { TemplatePlaceholders } from '@/screens/modals'
-import { useAllowLandscape, useCloseTabOnRemove, useMarkdownAction, useTabBarActions, useTabs, useTemplates } from '@/hooks'
+import { useAllowLandscape, useMarkdownAction, useRegisterCurrent, useTemplates } from '@/hooks'
 import { TEMPLATE_TAB_PREFIX } from '@/constants'
 
 export default function EditTemplate() {
     const { t } = useTranslation()
     const { filename } = useLocalSearchParams()
-    const navigation = useNavigation()
     const { getTemplate, updateTemplate, deleteTemplate } = useTemplates()
-    const { registerTab, setTemplateTitle } = useTabs()
 
     useAllowLandscape()
 
     const tabId = TEMPLATE_TAB_PREFIX + filename
-
-    useCloseTabOnRemove(navigation, tabId)
+    useRegisterCurrent(tabId)
 
     const [loading, setLoading] = useState(true)
     const currentFilename = useRef(filename)
@@ -63,13 +61,7 @@ export default function EditTemplate() {
                 setLoading(false)
             }, 0)
         })
-
-        registerTab(tabId)
     }, [filename])
-
-    useEffect(() => {
-        if (name) setTemplateTitle(tabId, name)
-    }, [name])
 
     useEffect(() => {
         if (loading || !name.trim()) return
@@ -86,20 +78,19 @@ export default function EditTemplate() {
         return () => clearTimeout(timer)
     }, [name, content, loading])
 
-    useTabBarActions({
-        onOpenDrawer: () => navigation.dispatch({ type: 'OPEN_DRAWER' }),
-        menu: (
-            <TemplateAction
-                onOpenPlaceholders={onOpenPlaceholders}
-                onDelete={onDelete}
-            />
-        )
-    }, [])
-
     if (loading) return <LoadingOverlay />
 
     return (
         <>
+            <AppBar
+                trailing={(
+                    <TemplateAction
+                        onOpenPlaceholders={onOpenPlaceholders}
+                        onDelete={onDelete}
+                    />
+                )}
+            />
+
             <MarkdownEditorLayout
                 mode={mode}
                 onRunAction={onRunAction}

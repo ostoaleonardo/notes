@@ -1,5 +1,6 @@
 // AppBar
-export { BackHeader } from './app-bar/back-header'
+export { AppBar } from './app-bar'
+export { RecentsButton } from './app-bar/recents-button'
 
 // Error Boundary
 export { ErrorBoundary } from './error-boundary'
@@ -37,9 +38,6 @@ export { MenuItem } from './menu/menu-item'
 
 // Drawer
 export { DrawerItems } from './drawer'
-
-// Tabs
-export { TabBar } from './tabs'
 
 // UI
 export { Checkbox } from './checkbox'
