@@ -45,12 +45,14 @@
 		"back": "Retour",
 		"delete": "Supprimer",
 		"update": "Actualiser",
-		"enter": "Entrer"
+		"enter": "Entrer",
+		"clear_all": "Tout effacer"
 	},
 	"message": {
 		"loading": "Chargement...",
 		"notes": {
-			"empty": "Vous n'avez pas encore de notes"
+			"empty": "Vous n'avez pas encore de notes",
+			"no_recent": "Aucune note récente"
 		},
 		"tags": {
 			"empty": "Vous n'avez pas encore d'étiquettes"

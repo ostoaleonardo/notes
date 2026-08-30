@@ -45,12 +45,14 @@
 		"back": "Indietro",
 		"delete": "Elimina",
 		"update": "Aggiorna",
-		"enter": "Invio"
+		"enter": "Invio",
+		"clear_all": "Cancella tutto"
 	},
 	"message": {
 		"loading": "Caricamento...",
 		"notes": {
-			"empty": "Non hai ancora nessuna nota"
+			"empty": "Non hai ancora nessuna nota",
+			"no_recent": "Nessuna nota recente"
 		},
 		"tags": {
 			"empty": "Non hai ancora nessun tag"

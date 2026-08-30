@@ -45,12 +45,14 @@
 		"back": "뒤로 가기",
 		"delete": "삭제",
 		"update": "업데이트",
-		"enter": "입력"
+		"enter": "입력",
+		"clear_all": "모두 지우기"
 	},
 	"message": {
 		"loading": "로딩 중...",
 		"notes": {
-			"empty": "노트가 아직 없습니다."
+			"empty": "노트가 아직 없습니다.",
+			"no_recent": "최근 메모가 없습니다"
 		},
 		"tags": {
 			"empty": "태그가 아직 없습니다."

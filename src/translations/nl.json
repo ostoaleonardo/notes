@@ -58,12 +58,14 @@
 		"back": "Terug",
 		"delete": "Verwijderen",
 		"update": "Bijwerken",
-		"enter": "Invoeren"
+		"enter": "Invoeren",
+		"clear_all": "Alles wissen"
 	},
 	"message": {
 		"loading": "Laden...",
 		"notes": {
-			"empty": "Je hebt nog geen notities"
+			"empty": "Je hebt nog geen notities",
+			"no_recent": "Geen recente notities"
 		},
 		"tags": {
 			"empty": "Je hebt nog geen labels"

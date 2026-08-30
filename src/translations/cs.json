@@ -45,12 +45,14 @@
 		"back": "Zpět",
 		"delete": "Smazat",
 		"update": "Aktualizovat",
-		"enter": "Vložit"
+		"enter": "Vložit",
+		"clear_all": "Vymazat vše"
 	},
 	"message": {
 		"loading": "Nahrávání...",
 		"notes": {
-			"empty": "Nejsou tu žádné poznámky"
+			"empty": "Nejsou tu žádné poznámky",
+			"no_recent": "Žádné nedávné poznámky"
 		},
 		"tags": {
 			"empty": "Nejsou tu žádné štítky"

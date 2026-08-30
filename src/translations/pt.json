@@ -45,12 +45,14 @@
 		"back": "Voltar",
 		"delete": "Excluir",
 		"update": "Atualizar",
-		"enter": "Entrar"
+		"enter": "Entrar",
+		"clear_all": "Limpar tudo"
 	},
 	"message": {
 		"loading": "Carregando...",
 		"notes": {
-			"empty": "Nenhuma nota adicionada"
+			"empty": "Nenhuma nota adicionada",
+			"no_recent": "Nenhuma nota recente"
 		},
 		"tags": {
 			"empty": "Nenhuma etiqueta adicionada"

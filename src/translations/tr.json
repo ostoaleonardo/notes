@@ -45,12 +45,14 @@
 		"back": "Geri",
 		"delete": "Sil",
 		"update": "Güncelle",
-		"enter": "Enter"
+		"enter": "Enter",
+		"clear_all": "Tümünü temizle"
 	},
 	"message": {
 		"loading": "Yükleniyor...",
 		"notes": {
-			"empty": "Henüz hiç notunuz yok"
+			"empty": "Henüz hiç notunuz yok",
+			"no_recent": "Son not yok"
 		},
 		"tags": {
 			"empty": "Henüz herhangi bir etiketiniz yok"

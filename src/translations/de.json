@@ -59,12 +59,14 @@
 		"back": "Zurück",
 		"delete": "Beseitigen",
 		"update": "Aktualisieren",
-		"enter": "Eingeben"
+		"enter": "Eingeben",
+		"clear_all": "Alle löschen"
 	},
 	"message": {
 		"loading": "Wird geladen...",
 		"notes": {
-			"empty": "Du hast noch keine Notizen"
+			"empty": "Du hast noch keine Notizen",
+			"no_recent": "Keine kürzlichen Notizen"
 		},
 		"tags": {
 			"empty": "Du hast noch keine Tags"
