@@ -51,7 +51,7 @@ export const buildEditorTheme = ({
         fontFamily, color: textColor, caretColor: cursorColor, overflowWrap: 'anywhere',
         paddingLeft: '16px', paddingRight: '16px', paddingTop: '8px'
     },
-    '.cm-line': { overflowWrap: 'anywhere', wordBreak: 'break-word' },
+    '.cm-line': { overflowWrap: 'anywhere', wordBreak: 'break-word', padding: 0 },
     '.cm-scroller': {
         overflowY: 'auto', overflowX: 'hidden', fontFamily,
         WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none'
