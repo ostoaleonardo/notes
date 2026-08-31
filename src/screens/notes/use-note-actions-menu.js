@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { router, useLocalSearchParams } from 'expo-router'
 import { MenuItem } from '@/components'
 import { useFiles, useIconProps, useNotes, useUtils } from '@/hooks'
-import { Code, Delete, FileExport, Keep, KeepFilled, Shapes, Tag } from '@/icons'
+import { Code, Delete, FileExport, Keep, KeepFilled, NoteStack, Shapes } from '@/icons'
 
-export const useNoteActionsMenu = ({ onClose, onSetMode, onOpenTags, onOpenTemplates }) => {
+export const useNoteActionsMenu = ({ onClose, onSetMode, onOpenTemplates, onOpenRecents }) => {
     const iconProps = useIconProps()
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
@@ -51,9 +51,9 @@ export const useNoteActionsMenu = ({ onClose, onSetMode, onOpenTags, onOpenTempl
                 onPress={runAndClose(onOpenTemplates)}
             />
             <MenuItem
-                title={t('title.tags')}
-                leadingIcon={() => <Tag {...iconProps} />}
-                onPress={runAndClose(onOpenTags)}
+                title={t('search.recent')}
+                leadingIcon={() => <NoteStack {...iconProps} />}
+                onPress={runAndClose(onOpenRecents)}
             />
             <MenuItem
                 title={t('button.delete')}

@@ -9,7 +9,8 @@ export { ErrorBoundary } from './error-boundary'
 export {
     Pressable,
     FloatingButton,
-    SquareButton
+    SquareButton,
+    SplitButton
 } from './button'
 
 // Cards
