@@ -1,3 +1,4 @@
+import { AnimatedView } from '../animated'
 import { DrawerNoteItem } from './drawer-note-item'
 import { DrawerRepositoryRow } from './drawer-repository-row'
 import { useUtils } from '@/hooks'
@@ -27,7 +28,7 @@ export function DrawerRepositoryItem({
     }
 
     return (
-        <>
+        <AnimatedView>
             <DrawerRepositoryRow
                 alias={repository.alias}
                 isRoot={isRoot}
@@ -70,6 +71,6 @@ export function DrawerRepositoryItem({
                     ))}
                 </>
             )}
-        </>
+        </AnimatedView>
     )
 }
