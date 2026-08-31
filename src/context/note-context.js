@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useRef, useState } from 'react'
 import { AppState } from 'react-native'
 import { useRepositoryData } from '../hooks/use-repository-data'
 import { useRepositories } from '../hooks/use-repositories'
@@ -20,9 +20,13 @@ export function NoteProvider({ children }) {
     } = useRepositories()
 
     const treeKey = activeRepositoryTree.map((repository) => repository.uri).join('|')
+    const previousRepositoryIdRef = useRef(null)
 
     useEffect(() => {
         if (!activeRepository) return
+
+        const isRepositorySwitch = previousRepositoryIdRef.current !== activeRepository.id
+        previousRepositoryIdRef.current = activeRepository.id
 
         const getNotes = async (showLoading = true) => {
             if (showLoading) setLoading(true)
@@ -40,7 +44,7 @@ export function NoteProvider({ children }) {
             }
         }
 
-        getNotes()
+        getNotes(isRepositorySwitch)
 
         const subscription = AppState.addEventListener('change', (state) => {
             if (state === 'active') getNotes(false)
