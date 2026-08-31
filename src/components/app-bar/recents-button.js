@@ -1,12 +1,11 @@
 import { View } from 'react-native'
-import { Badge, IconButton, Tooltip } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { useIconProps } from '@/hooks'
+import { Badge, IconButton, Tooltip, useTheme } from 'react-native-paper'
 import { NoteStack } from '@/icons'
 
 export function RecentsButton({ onPress, count = 0 }) {
     const { t } = useTranslation()
-    const iconProps = useIconProps()
+    const { colors } = useTheme()
     const label = t('search.recent')
 
     return (
@@ -14,14 +13,18 @@ export function RecentsButton({ onPress, count = 0 }) {
             <View>
                 <IconButton
                     onPress={onPress}
-                    icon={() => <NoteStack {...iconProps} />}
+                    icon={(props) => <NoteStack {...props} />}
                     accessibilityLabel={label}
                 />
 
                 {count > 0 && (
                     <Badge
                         size={16}
-                        style={{ position: 'absolute', top: 6, right: 6 }}
+                        style={{
+                            position: 'absolute',
+                            backgroundColor: colors.primary,
+                            top: 6
+                        }}
                     >
                         {count}
                     </Badge>
