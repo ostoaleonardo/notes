@@ -44,7 +44,9 @@ export function useFileStorage() {
 
     const listSubdirectories = (directoryUri) => (
         listEntries(directoryUri).filter((entry) => (
-            entry instanceof Directory && !RESERVED_FOLDER_NAMES.includes(entry.name)
+            entry instanceof Directory &&
+            !entry.name.startsWith('.') &&
+            !RESERVED_FOLDER_NAMES.includes(entry.name)
         ))
     )
 
