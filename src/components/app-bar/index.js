@@ -3,7 +3,7 @@ import { Appbar, Tooltip, useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { useIconProps } from '@/hooks'
 import { ArrowBack, Menu } from '@/icons'
-import { FONTS } from '@/constants'
+import { FONTS, ROUTES } from '@/constants'
 
 export function AppBar({ title, trailing, mode = 'back' }) {
     const { t } = useTranslation()
@@ -11,7 +11,7 @@ export function AppBar({ title, trailing, mode = 'back' }) {
     const navigation = useNavigation()
     const iconProps = useIconProps()
 
-    const goBack = () => router.back()
+    const goBack = () => (router.canGoBack() ? router.back() : router.replace(ROUTES.HOME))
     const openDrawer = () => navigation.dispatch({ type: 'OPEN_DRAWER' })
 
     return (
