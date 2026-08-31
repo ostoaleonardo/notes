@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next'
-import { Pressable, StyleSheet, View } from 'react-native'
-import { AnimatedList, Typography } from '@/components'
+import { StyleSheet, View } from 'react-native'
 import { Divider, TouchableRipple } from 'react-native-paper'
+import { AnimatedList, AnimatedView, Typography } from '@/components'
+import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 
 export function SearchResults({ results, aliasById, onOpenResult }) {
     const { t } = useTranslation()
@@ -17,26 +18,31 @@ export function SearchResults({ results, aliasById, onOpenResult }) {
                 emptyLabel={t('message.notes.empty')}
                 keyboardShouldPersistTaps='always'
                 renderItem={({ item }) => (
-                    <TouchableRipple
-                        onPress={() => onOpenResult(item.id)}
+                    <AnimatedView
+                        entering={FadeInUp}
+                        exiting={FadeOutUp}
                     >
-                        <View style={styles.item}>
-                            <Typography
-                                bold
-                                numberOfLines={1}
-                            >
-                                {item.title || t('notes.untitled')}
-                            </Typography>
-                            {aliasById.has(item.repositoryId) && (
+                        <TouchableRipple
+                            onPress={() => onOpenResult(item.id)}
+                        >
+                            <View style={styles.item}>
                                 <Typography
-                                    opacity={0.5}
-                                    variant='caption'
+                                    bold={true}
+                                    numberOfLines={1}
                                 >
-                                    {aliasById.get(item.repositoryId)}
+                                    {item.title || t('notes.untitled')}
                                 </Typography>
-                            )}
-                        </View>
-                    </TouchableRipple>
+                                {aliasById.has(item.repositoryId) && (
+                                    <Typography
+                                        opacity={0.5}
+                                        variant='caption'
+                                    >
+                                        {aliasById.get(item.repositoryId)}
+                                    </Typography>
+                                )}
+                            </View>
+                        </TouchableRipple>
+                    </AnimatedView>
                 )}
             />
         </View>
