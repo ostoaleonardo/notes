@@ -1,9 +1,9 @@
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { AnimatedView, Pressable, Typography } from '@/components'
+import { AnimatedView, Typography } from '@/components'
 import { FONTS } from '@/constants'
 
-export function Intro({ onCreateNote }) {
+export function Intro() {
     const { t } = useTranslation()
 
     return (
@@ -23,10 +23,6 @@ export function Intro({ onCreateNote }) {
                     {t('notes.intro_subtitle')}
                 </Typography>
             </View>
-
-            <Pressable onPress={onCreateNote}>
-                {t('notes.create')}
-            </Pressable>
         </AnimatedView>
     )
 }
