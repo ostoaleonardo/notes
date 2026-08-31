@@ -16,3 +16,4 @@ export { parseSearchQuery, filterNotes, toggleTagQualifier, togglePinnedQualifie
 export { buildRepositoryTree } from './drawer-tree'
 export { bytesToBase64 } from './base64'
 export { getEditorPath } from './editor-path'
+export { getRecentIds } from './recent-ids'

@@ -7,7 +7,7 @@ import { Scroll, Typography } from '@/components'
 import { useIconProps, useRecentNotes, useRepositories, useNotes, useTemplates, useUtils } from '@/hooks'
 import { Close, Plus } from '@/icons'
 import { COMMONS, ROUTES, TEMPLATE_TAB_PREFIX, TRANSPARENT } from '@/constants'
-import { getEditorPath, getPreviewNote } from '@/utils'
+import { getEditorPath, getPreviewNote, getRecentIds } from '@/utils'
 
 const CARDS_HEIGHT = 220
 
@@ -27,13 +27,12 @@ export function RecentNotes({ onClose }) {
     }, [])
 
     const cards = useMemo(() => {
-        const ids = [...pinned, ...recent.filter((id) => !pinned.has(id))]
+        const ids = getRecentIds(pinned, recent, notes, templates)
 
         return ids.map((id) => {
             if (id.startsWith(TEMPLATE_TAB_PREFIX)) {
                 const filename = id.slice(TEMPLATE_TAB_PREFIX.length)
                 const template = templates.find((entry) => entry.filename === filename)
-                if (!template) return null
 
                 return {
                     id,
@@ -44,7 +43,6 @@ export function RecentNotes({ onClose }) {
             }
 
             const note = notes.find((entry) => entry.id === id)
-            if (!note) return null
 
             return {
                 id,
@@ -52,7 +50,7 @@ export function RecentNotes({ onClose }) {
                 preview: getPreviewNote(note.note),
                 pinned: pinned.has(id)
             }
-        }).filter(Boolean)
+        })
     }, [pinned, recent, notes, templates])
 
     const onCreateNote = () => {
@@ -151,6 +149,7 @@ export function RecentNotes({ onClose }) {
                 {cards.length > 0 && (
                     <Tooltip title={t('button.clear_all')}>
                         <IconButton
+                            mode='contained'
                             onPress={onClearAll}
                             icon={(props) => <Close {...props} />}
                             accessibilityLabel={t('button.clear_all')}
