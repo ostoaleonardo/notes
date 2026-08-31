@@ -22,7 +22,8 @@ export function RecentsButton({ onPress, count = 0 }) {
                         size={16}
                         style={{
                             position: 'absolute',
-                            backgroundColor: colors.primary,
+                            color: colors.onTertiary,
+                            backgroundColor: colors.tertiary,
                             top: 6
                         }}
                     >
