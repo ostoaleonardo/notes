@@ -16,7 +16,7 @@ export function SquareButton({ onPress, disabled }) {
                 backgroundColor: colors.tertiary + alpha
             }}
         >
-            <Plus color={COLORS.base.white + alpha} />
+            <Plus color={colors.onTertiary + alpha} />
         </Pressable>
     )
 }

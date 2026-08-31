@@ -1,10 +1,9 @@
 import React from 'react'
-import { Link } from 'expo-router'
 import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { useIconProps } from '@/hooks'
 
-export function FloatingButton({ icon, href, onPress }) {
+export function FloatingButton({ icon, onPress }) {
     const { colors } = useTheme()
     const iconProps = useIconProps()
 
@@ -13,15 +12,9 @@ export function FloatingButton({ icon, href, onPress }) {
         backgroundColor: colors.tertiary
     }
 
-    const content = icon && React.cloneElement(icon, iconProps)
-
-    if (href) {
-        return (
-            <Link href={href} style={style}>
-                {content}
-            </Link>
-        )
-    }
+    const content = icon && React.cloneElement(icon, {
+        ...iconProps, color: colors.onTertiary
+    })
 
     return (
         <Pressable onPress={onPress} style={style}>
