@@ -11,6 +11,7 @@ export const MarkdownInput = ({
     size = 13,
     value,
     onChangeText,
+    onHistoryChange,
     action,
     payload,
     onActionHandled,
@@ -40,6 +41,7 @@ export const MarkdownInput = ({
             previewValue={previewValue}
             mediaMap={mediaMapEntries}
             onChange={onChangeText}
+            onHistoryChange={onHistoryChange}
             action={action}
             payload={payload}
             onActionHandled={onActionHandled}

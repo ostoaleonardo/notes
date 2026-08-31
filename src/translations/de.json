@@ -11,7 +11,8 @@
 		"tags": "Tags",
 		"settings": "Einstellungen",
 		"theme": "Farbthema",
-		"about": "Über die App"
+		"about": "Über die App",
+		"version_history": "Versionsverlauf"
 	},
 	"date": {
 		"created": "Kreiert:",
@@ -60,7 +61,9 @@
 		"delete": "Beseitigen",
 		"update": "Aktualisieren",
 		"enter": "Eingeben",
-		"clear_all": "Alle löschen"
+		"clear_all": "Alle löschen",
+		"undo": "Rückgängig",
+		"redo": "Wiederholen"
 	},
 	"message": {
 		"loading": "Wird geladen...",
@@ -70,6 +73,9 @@
 		},
 		"tags": {
 			"empty": "Du hast noch keine Tags"
+		},
+		"version_history": {
+			"empty": "Noch keine Versionen gespeichert"
 		}
 	},
 	"placeholder": {

@@ -11,7 +11,8 @@
 		"tags": "Labels",
 		"settings": "Instellingen",
 		"theme": "Thema",
-		"about": "Over de app"
+		"about": "Over de app",
+		"version_history": "Versiegeschiedenis"
 	},
 	"date": {
 		"created": "Gemaakt op:",
@@ -59,7 +60,9 @@
 		"delete": "Verwijderen",
 		"update": "Bijwerken",
 		"enter": "Invoeren",
-		"clear_all": "Alles wissen"
+		"clear_all": "Alles wissen",
+		"undo": "Ongedaan maken",
+		"redo": "Opnieuw"
 	},
 	"message": {
 		"loading": "Laden...",
@@ -69,6 +72,9 @@
 		},
 		"tags": {
 			"empty": "Je hebt nog geen labels"
+		},
+		"version_history": {
+			"empty": "Nog geen versies opgeslagen"
 		}
 	},
 	"placeholder": {

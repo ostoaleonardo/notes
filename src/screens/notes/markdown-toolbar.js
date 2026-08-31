@@ -4,22 +4,24 @@ import { useTranslation } from 'react-i18next'
 import { IconButton, useTheme } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
 import { AnimatedView, Scroll, Separator } from '@/components'
-import { MarkdownModeToggle } from './markdown-mode-toggle'
+import { Commit, Redo, Tag, Undo } from '@/icons'
 import { MARKDOWN_CONTROLS } from '@/constants'
 
 export const MarkdownToolbar = memo(function MarkdownToolbar({
     mode,
     isFocused,
     scope,
-    onSetMode,
     onRunAction,
-    actions
+    actions,
+    canUndo,
+    canRedo
 }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
 
     const controls = MARKDOWN_CONTROLS.filter((control) => !control.scope || control.scope === scope)
-    const showControls = scope === 'template' ? mode !== 'read' : mode !== 'read' && isFocused
+    const showFormatting = mode !== 'read' && isFocused
+    const showIdle = !showFormatting
 
     return (
         <View
@@ -33,10 +35,9 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
                 horizontal
                 overScrollMode='never'
                 keyboardShouldPersistTaps='always'
-                style={styles.scroll}
                 contentContainerStyle={styles.scrollContent}
             >
-                {showControls && (
+                {showFormatting && (
                     <AnimatedView
                         entering={FadeInRight}
                         exiting={FadeOutRight}
@@ -59,15 +60,42 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
                         ))}
                     </AnimatedView>
                 )}
-            </Scroll>
 
-            <MarkdownModeToggle
-                mode={mode}
-                scope={scope}
-                onSetMode={onSetMode}
-                onOpenTags={actions?.onOpenTags}
-                onOpenTemplates={actions?.onOpenTemplates}
-            />
+                {showIdle && (
+                    <AnimatedView
+                        entering={FadeInRight}
+                        exiting={FadeOutRight}
+                        style={styles.row}
+                    >
+                        <IconButton
+                            disabled={!canUndo}
+                            onPress={() => onRunAction('undo')}
+                            icon={(props) => <Undo {...props} />}
+                            accessibilityLabel={t('button.undo')}
+                        />
+                        <IconButton
+                            disabled={!canRedo}
+                            onPress={() => onRunAction('redo')}
+                            icon={(props) => <Redo {...props} />}
+                            accessibilityLabel={t('button.redo')}
+                        />
+
+                        {scope !== 'template' && (
+                            <IconButton
+                                onPress={actions?.onOpenTags}
+                                icon={(props) => <Tag {...props} />}
+                                accessibilityLabel={t('title.tags')}
+                            />
+                        )}
+
+                        <IconButton
+                            onPress={actions?.onOpenVersionHistory}
+                            icon={(props) => <Commit {...props} />}
+                            accessibilityLabel={t('title.version_history')}
+                        />
+                    </AnimatedView>
+                )}
+            </Scroll>
         </View>
     )
 })
@@ -76,19 +104,16 @@ const styles = StyleSheet.create({
     container: {
         paddingVertical: 3,
         paddingHorizontal: 4,
-        flexDirection: 'row',
-        alignItems: 'center',
         borderTopWidth: 1
-    },
-    scroll: {
-        flex: 1
     },
     row: {
         flexDirection: 'row',
         alignItems: 'center'
     },
     scrollContent: {
+        flexGrow: 1,
         alignItems: 'center',
+        justifyContent: 'center',
         paddingHorizontal: 4
     },
     divider: {

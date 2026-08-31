@@ -11,7 +11,8 @@
 		"tags": "Etiketler",
 		"settings": "Ayarlar",
 		"theme": "Renk teması",
-		"about": "Uygulama hakkında"
+		"about": "Uygulama hakkında",
+		"version_history": "Sürüm geçmişi"
 	},
 	"date": {
 		"created": "Oluşturuldu:",
@@ -46,7 +47,9 @@
 		"delete": "Sil",
 		"update": "Güncelle",
 		"enter": "Enter",
-		"clear_all": "Tümünü temizle"
+		"clear_all": "Tümünü temizle",
+		"undo": "Geri al",
+		"redo": "Yinele"
 	},
 	"message": {
 		"loading": "Yükleniyor...",
@@ -56,6 +59,9 @@
 		},
 		"tags": {
 			"empty": "Henüz herhangi bir etiketiniz yok"
+		},
+		"version_history": {
+			"empty": "Henüz kaydedilmiş sürüm yok"
 		}
 	},
 	"placeholder": {

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { LargeInput, MarkdownEditor, Section } from '@/components'
 
-export const TemplateEditorForm = ({ name, setName, content, setContent, markdownAction, mode }) => {
+export const TemplateEditorForm = ({ name, setName, content, setContent, markdownAction, mode, onFocus, onBlur, onHistoryChange }) => {
     const { t } = useTranslation()
 
     return (
@@ -24,6 +24,9 @@ export const TemplateEditorForm = ({ name, setName, content, setContent, markdow
                     setValue={setContent}
                     markdownAction={markdownAction}
                     mode={mode}
+                    onFocus={onFocus}
+                    onBlur={onBlur}
+                    onHistoryChange={onHistoryChange}
                 />
             </Section>
         </>

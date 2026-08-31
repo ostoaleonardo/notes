@@ -11,7 +11,8 @@
 		"tags": "태그",
 		"settings": "설정",
 		"theme": "테마 설정",
-		"about": "이 앱에 대하여"
+		"about": "이 앱에 대하여",
+		"version_history": "버전 기록"
 	},
 	"date": {
 		"created": "작성일자:",
@@ -46,7 +47,9 @@
 		"delete": "삭제",
 		"update": "업데이트",
 		"enter": "입력",
-		"clear_all": "모두 지우기"
+		"clear_all": "모두 지우기",
+		"undo": "실행 취소",
+		"redo": "다시 실행"
 	},
 	"message": {
 		"loading": "로딩 중...",
@@ -56,6 +59,9 @@
 		},
 		"tags": {
 			"empty": "태그가 아직 없습니다."
+		},
+		"version_history": {
+			"empty": "저장된 버전이 없습니다"
 		}
 	},
 	"placeholder": {

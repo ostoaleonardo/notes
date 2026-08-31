@@ -11,7 +11,8 @@
 		"tags": "الوسوم",
 		"settings": "الإعدادات",
 		"theme": "ألوان النسق",
-		"about": "حول التطبيق"
+		"about": "حول التطبيق",
+		"version_history": "سجل الإصدارات"
 	},
 	"date": {
 		"created": "تاريخ الإنشاء:",
@@ -46,7 +47,9 @@
 		"delete": "حذف",
 		"update": "تحديث",
 		"enter": "إدخال",
-		"clear_all": "مسح الكل"
+		"clear_all": "مسح الكل",
+		"undo": "تراجع",
+		"redo": "إعادة"
 	},
 	"message": {
 		"loading": "جاري التحميل...",
@@ -56,6 +59,9 @@
 		},
 		"tags": {
 			"empty": "لا توجد وسوم"
+		},
+		"version_history": {
+			"empty": "لا توجد إصدارات محفوظة بعد"
 		}
 	},
 	"placeholder": {

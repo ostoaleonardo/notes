@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Compartment, EditorState } from '@codemirror/state'
 import { EditorView, keymap, placeholder as placeholderExtension } from '@codemirror/view'
-import { defaultKeymap, history, historyKeymap } from '@codemirror/commands'
+import { defaultKeymap, history, historyKeymap, redoDepth, undoDepth } from '@codemirror/commands'
 import { markdown } from '@codemirror/lang-markdown'
 import { GFM } from '@lezer/markdown'
 import { fontFacesCss } from './markdown-dom-fonts'
@@ -21,6 +21,7 @@ const MarkdownDomEditor = ({
     previewValue,
     mediaMap,
     onChange,
+    onHistoryChange,
     action,
     payload,
     onActionHandled,
@@ -52,6 +53,11 @@ const MarkdownDomEditor = ({
     const viewRef = useRef(null)
     const onChangeRef = useRef(onChange)
     onChangeRef.current = onChange
+    const onHistoryChangeRef = useRef(onHistoryChange)
+    onHistoryChangeRef.current = onHistoryChange
+    const historyRef = useRef({ canUndo: false, canRedo: false })
+    const lastEmittedValueRef = useRef(value)
+    const hasFocusRef = useRef(false)
     const [liveFormattingCompartment] = useState(() => new Compartment())
     const [mediaMapCompartment] = useState(() => new Compartment())
     const mediaMapValue = useMemo(() => new Map(mediaMap || []), [mediaMap])
@@ -86,15 +92,33 @@ const MarkdownDomEditor = ({
                 placeholderExtension(placeholder),
                 theme,
                 EditorView.updateListener.of((update) => {
-                    if (update.docChanged) onChangeRef.current(update.state.doc.toString())
+                    if (update.docChanged) {
+                        const newValue = update.state.doc.toString()
+                        lastEmittedValueRef.current = newValue
+                        onChangeRef.current(newValue)
+                    }
+
+                    const canUndo = undoDepth(update.state) > 0
+                    const canRedo = redoDepth(update.state) > 0
+
+                    if (canUndo !== historyRef.current.canUndo || canRedo !== historyRef.current.canRedo) {
+                        historyRef.current = { canUndo, canRedo }
+                        onHistoryChangeRef.current?.(historyRef.current)
+                    }
                 })
             ]
         })
 
         const view = new EditorView({ state, parent: containerRef.current })
 
-        const handleFocus = () => onFocus?.()
-        const handleBlur = () => onBlur?.()
+        const handleFocus = () => {
+            hasFocusRef.current = true
+            onFocus?.()
+        }
+        const handleBlur = () => {
+            hasFocusRef.current = false
+            onBlur?.()
+        }
         view.dom.addEventListener('focus', handleFocus, true)
         view.dom.addEventListener('blur', handleBlur, true)
 
@@ -110,7 +134,10 @@ const MarkdownDomEditor = ({
     useEffect(() => {
         const view = viewRef.current
         if (!view) return
+        if (hasFocusRef.current) return
+        if (value === lastEmittedValueRef.current) return
         if (value !== view.state.doc.toString()) {
+            lastEmittedValueRef.current = value
             view.dispatch({
                 changes: { from: 0, to: view.state.doc.length, insert: value || '' }
             })

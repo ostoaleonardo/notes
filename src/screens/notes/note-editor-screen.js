@@ -1,15 +1,17 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { ToastAndroid } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { AppBar, MarkdownEditor, ModalSheet, RecentsButton } from '@/components'
+import { AppBar, MarkdownEditor, ModalSheet, Typography } from '@/components'
 import { MarkdownEditorLayout } from './markdown-editor-layout'
+import { MarkdownModeToggle } from './markdown-mode-toggle'
 import { TemplateCarousel } from './template-carousel'
 import { RecentNotes } from './recent-notes'
+import { VersionHistoryPanel } from './version-history-panel'
 import { Tags } from '@/screens/modals/tags'
 import { LinkMarkdown } from '@/screens/modals/link-markdown'
 import { TableMarkdown } from '@/screens/modals/table-markdown'
 import { ImageMarkdown } from '@/screens/modals/image-markdown'
-import { useAllowLandscape, useBottomSheet, useLanguage, useMarkdownAction, useTemplates } from '@/hooks'
+import { useAllowLandscape, useBottomSheet, useLanguage, useMarkdownAction, usePremium, useTemplates } from '@/hooks'
 import { getFormattedDate } from '@/utils'
 
 export const NoteEditorScreen = ({
@@ -22,6 +24,7 @@ export const NoteEditorScreen = ({
     const { t } = useTranslation()
     const { addTemplate } = useTemplates()
     const { currentLanguage } = useLanguage()
+    const { premium } = usePremium()
 
     useAllowLandscape()
 
@@ -31,6 +34,9 @@ export const NoteEditorScreen = ({
 
     const [mode, setMode] = useState(initialMode)
     const [isFocused, setIsFocused] = useState(false)
+    const [versionHistoryVisible, setVersionHistoryVisible] = useState(false)
+    const [canUndo, setCanUndo] = useState(false)
+    const [canRedo, setCanRedo] = useState(false)
 
     const markdownAction = useMarkdownAction()
 
@@ -40,6 +46,20 @@ export const NoteEditorScreen = ({
     const tagsSheet = useBottomSheet()
     const templatesSheet = useBottomSheet()
     const recentsSheet = useBottomSheet()
+
+    const onHistoryChange = useCallback(({ canUndo, canRedo }) => {
+        setCanUndo(canUndo)
+        setCanRedo(canRedo)
+    }, [])
+
+    const onOpenVersionHistory = useCallback(() => {
+        if (!premium) {
+            ToastAndroid.show(t('repositories.pro_required'), ToastAndroid.SHORT)
+            return
+        }
+
+        setVersionHistoryVisible(true)
+    }, [premium])
 
     const onRunAction = useCallback((action) => {
         if (action === 'link') {
@@ -78,28 +98,50 @@ export const NoteEditorScreen = ({
         ToastAndroid.show(t('templates.saved'), ToastAndroid.SHORT)
     }, [])
 
+    const onCloseVersionHistory = useCallback(() => setVersionHistoryVisible(false), [])
+
+    const versionHistoryPanelContent = useMemo(() => (
+        <Typography opacity={0.5}>
+            {t('message.version_history.empty')}
+        </Typography>
+    ), [t])
+
     const actions = useMemo(() => ({
         onOpenTags: tagsSheet.onOpen,
-        onOpenTemplates: templatesSheet.onOpen,
+        onOpenVersionHistory,
         onSaveAsTemplate
     }), [
         tagsSheet.onOpen,
-        templatesSheet.onOpen,
+        onOpenVersionHistory,
         onSaveAsTemplate
     ])
 
     return (
-        <>
+        <VersionHistoryPanel
+            visible={versionHistoryVisible}
+            onOpen={onOpenVersionHistory}
+            onClose={onCloseVersionHistory}
+            swipeEnabled={premium}
+            panelContent={versionHistoryPanelContent}
+        >
             <AppBar
-                trailing={<RecentsButton onPress={recentsSheet.onOpen} />}
+                trailing={(
+                    <MarkdownModeToggle
+                        mode={mode}
+                        onSetMode={setMode}
+                        onOpenTemplates={templatesSheet.onOpen}
+                        onOpenRecents={recentsSheet.onOpen}
+                    />
+                )}
             />
 
             <MarkdownEditorLayout
                 mode={mode}
                 isFocused={isFocused}
                 onRunAction={onRunAction}
-                onSetMode={setMode}
                 actions={actions}
+                canUndo={canUndo}
+                canRedo={canRedo}
             >
                 <MarkdownEditor
                     mode={mode}
@@ -109,6 +151,7 @@ export const NoteEditorScreen = ({
                     dateLabel={dateLabel}
                     value={note}
                     setValue={setNote}
+                    onHistoryChange={onHistoryChange}
                     onBlur={() => setIsFocused(false)}
                     onFocus={() => setIsFocused(true)}
                     markdownAction={markdownAction}
@@ -178,6 +221,6 @@ export const NoteEditorScreen = ({
             >
                 <RecentNotes onClose={recentsSheet.onClose} />
             </ModalSheet>
-        </>
+        </VersionHistoryPanel>
     )
 }

@@ -1,4 +1,5 @@
 import { EditorSelection } from '@codemirror/state'
+import { redo, undo } from '@codemirror/commands'
 
 const currentLine = (view) => view.state.doc.lineAt(view.state.selection.main.head)
 
@@ -128,6 +129,8 @@ export const runAction = (view, action, payload) => {
         case 'insert-date': return insertAtCursor(view, '{{date}}')
         case 'insert-time': return insertAtCursor(view, '{{time}}')
         case 'insert-title': return insertAtCursor(view, '{{title}}')
+        case 'undo': return undo(view)
+        case 'redo': return redo(view)
         case 'table': return
         default: return
     }

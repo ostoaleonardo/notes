@@ -42,7 +42,8 @@
 		"settings": "Ajustes",
 		"theme": "Tema de color",
 		"about": "Acerca de la app",
-		"import": "Importar nota"
+		"import": "Importar nota",
+		"version_history": "Historial de versiones"
 	},
 	"date": {
 		"created": "Creado:",
@@ -105,7 +106,9 @@
 		"close": "Cerrar",
 		"preview": "Lectura",
 		"clear_filter": "Quitar filtro",
-		"clear_all": "Quitar todas"
+		"clear_all": "Quitar todas",
+		"undo": "Deshacer",
+		"redo": "Rehacer"
 	},
 	"count": {
 		"notes": "{{count}} nota",
@@ -159,6 +162,9 @@
 		},
 		"tags": {
 			"empty": "Todavía no tienes etiquetas"
+		},
+		"version_history": {
+			"empty": "Aún no hay versiones guardadas"
 		}
 	},
 	"placeholder": {

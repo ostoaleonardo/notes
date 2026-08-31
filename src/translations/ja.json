@@ -11,7 +11,8 @@
 		"tags": "タグ",
 		"settings": "設定",
 		"theme": "カラーテーマ",
-		"about": "このアプリについて"
+		"about": "このアプリについて",
+		"version_history": "バージョン履歴"
 	},
 	"date": {
 		"created": "作成日時:",
@@ -60,7 +61,9 @@
 		"delete": "削除",
 		"update": "更新",
 		"enter": "入力",
-		"clear_all": "すべてクリア"
+		"clear_all": "すべてクリア",
+		"undo": "元に戻す",
+		"redo": "やり直す"
 	},
 	"message": {
 		"loading": "読み込み中...",
@@ -70,6 +73,9 @@
 		},
 		"tags": {
 			"empty": "まだタグはありません"
+		},
+		"version_history": {
+			"empty": "まだバージョンが保存されていません"
 		}
 	},
 	"placeholder": {

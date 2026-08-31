@@ -1,19 +1,20 @@
 import { useTranslation } from 'react-i18next'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { ToastAndroid } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 import { LoadingOverlay } from '@/components/layout'
-import { AppBar } from '@/components'
-import { TemplateAction } from '@/screens/app-bar-actions'
-import { MarkdownEditorLayout } from '@/screens/notes'
+import { AppBar, ModalSheet, Typography } from '@/components'
+import { MarkdownEditorLayout, MarkdownModeToggle, RecentNotes, VersionHistoryPanel } from '@/screens/notes'
 import { TemplateEditorForm } from '@/screens/templates'
 import { TemplatePlaceholders } from '@/screens/modals'
-import { useAllowLandscape, useMarkdownAction, useRegisterCurrent, useTemplates } from '@/hooks'
+import { useAllowLandscape, useBottomSheet, useMarkdownAction, usePremium, useRegisterCurrent, useTemplates } from '@/hooks'
 import { TEMPLATE_TAB_PREFIX } from '@/constants'
 
 export default function EditTemplate() {
     const { t } = useTranslation()
     const { filename } = useLocalSearchParams()
     const { getTemplate, updateTemplate, deleteTemplate } = useTemplates()
+    const { premium } = usePremium()
 
     useAllowLandscape()
 
@@ -27,9 +28,38 @@ export default function EditTemplate() {
     const [name, setName] = useState('')
     const [content, setContent] = useState('')
     const [mode, setMode] = useState('live')
+    const [isFocused, setIsFocused] = useState(false)
     const [placeholdersVisible, setPlaceholdersVisible] = useState(false)
+    const [versionHistoryVisible, setVersionHistoryVisible] = useState(false)
+    const [canUndo, setCanUndo] = useState(false)
+    const [canRedo, setCanRedo] = useState(false)
 
+    const recentsSheet = useBottomSheet()
     const markdownAction = useMarkdownAction()
+
+    const onHistoryChange = useCallback(({ canUndo, canRedo }) => {
+        setCanUndo(canUndo)
+        setCanRedo(canRedo)
+    }, [])
+
+    const onOpenVersionHistory = useCallback(() => {
+        if (!premium) {
+            ToastAndroid.show(t('repositories.pro_required'), ToastAndroid.SHORT)
+            return
+        }
+
+        setVersionHistoryVisible(true)
+    }, [premium, t])
+
+    const onCloseVersionHistory = useCallback(() => setVersionHistoryVisible(false), [])
+
+    const versionHistoryPanelContent = useMemo(() => (
+        <Typography opacity={0.5}>
+            {t('message.version_history.empty')}
+        </Typography>
+    ), [t])
+
+    const editorActions = useMemo(() => ({ onOpenVersionHistory }), [onOpenVersionHistory])
 
     const onRunAction = (action) => {
         if (action === 'table' || action === 'link' || action === 'image') {
@@ -81,11 +111,21 @@ export default function EditTemplate() {
     if (loading) return <LoadingOverlay />
 
     return (
-        <>
+        <VersionHistoryPanel
+            visible={versionHistoryVisible}
+            onOpen={onOpenVersionHistory}
+            onClose={onCloseVersionHistory}
+            swipeEnabled={premium}
+            panelContent={versionHistoryPanelContent}
+        >
             <AppBar
                 trailing={(
-                    <TemplateAction
+                    <MarkdownModeToggle
+                        mode={mode}
+                        onSetMode={setMode}
+                        scope='template'
                         onOpenPlaceholders={onOpenPlaceholders}
+                        onOpenRecents={recentsSheet.onOpen}
                         onDelete={onDelete}
                     />
                 )}
@@ -93,9 +133,12 @@ export default function EditTemplate() {
 
             <MarkdownEditorLayout
                 mode={mode}
+                isFocused={isFocused}
                 onRunAction={onRunAction}
-                onSetMode={setMode}
                 scope='template'
+                actions={editorActions}
+                canUndo={canUndo}
+                canRedo={canRedo}
             >
                 <TemplateEditorForm
                     name={name}
@@ -104,6 +147,9 @@ export default function EditTemplate() {
                     setContent={setContent}
                     markdownAction={markdownAction}
                     mode={mode}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
+                    onHistoryChange={onHistoryChange}
                 />
             </MarkdownEditorLayout>
 
@@ -111,6 +157,14 @@ export default function EditTemplate() {
                 visible={placeholdersVisible}
                 onDismiss={() => setPlaceholdersVisible(false)}
             />
-        </>
+
+            <ModalSheet
+                ref={recentsSheet.ref}
+                onClose={recentsSheet.onClose}
+                title={t('search.recent')}
+            >
+                <RecentNotes onClose={recentsSheet.onClose} />
+            </ModalSheet>
+        </VersionHistoryPanel>
     )
 }
