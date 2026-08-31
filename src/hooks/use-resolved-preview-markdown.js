@@ -4,6 +4,7 @@ import { bytesToBase64 } from '@/utils'
 
 const MARKDOWN_IMAGE_PATTERN = /!\[([^\]]*)\]\(((?:file|content):\/\/[^)]+)\)/g
 const HTML_IMAGE_PATTERN = /(<img[^>]*\bsrc=["'])((?:file|content):\/\/[^"']+)(["'])/g
+const EMPTY_MEDIA_MAP = new Map()
 
 const extractLocalUrls = (value) => {
     const urls = new Set()
@@ -16,14 +17,14 @@ const extractLocalUrls = (value) => {
 
 export const useResolvedPreviewMarkdown = (value) => {
     const [resolved, setResolved] = useState(value)
-    const [mediaMap, setMediaMap] = useState(new Map())
+    const [mediaMap, setMediaMap] = useState(EMPTY_MEDIA_MAP)
 
     useEffect(() => {
         const urls = extractLocalUrls(value)
 
         if (urls.length === 0) {
             setResolved(value)
-            setMediaMap(new Map())
+            setMediaMap(EMPTY_MEDIA_MAP)
             return
         }
 
