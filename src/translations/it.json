@@ -11,7 +11,8 @@
 		"tags": "Tag",
 		"settings": "Impostazioni",
 		"theme": "Tema colori",
-		"about": "Informazioni sull'app"
+		"about": "Informazioni sull'app",
+		"version_history": "Cronologia versioni"
 	},
 	"date": {
 		"created": "Creato:",
@@ -46,7 +47,9 @@
 		"delete": "Elimina",
 		"update": "Aggiorna",
 		"enter": "Invio",
-		"clear_all": "Cancella tutto"
+		"clear_all": "Cancella tutto",
+		"undo": "Annulla",
+		"redo": "Ripeti"
 	},
 	"message": {
 		"loading": "Caricamento...",
@@ -56,6 +59,9 @@
 		},
 		"tags": {
 			"empty": "Non hai ancora nessun tag"
+		},
+		"version_history": {
+			"empty": "Nessuna versione salvata"
 		}
 	},
 	"placeholder": {

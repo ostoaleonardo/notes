@@ -53,6 +53,7 @@
     "react-dom": "19.2.3",
     "react-i18next": "^15.0.2",
     "react-native": "0.86.3",
+    "react-native-drawer-layout": "^4.2.10",
     "react-native-gesture-handler": "~2.32.0",
     "react-native-keyboard-controller": "1.21.9",
     "react-native-paper": "^5.15.3",

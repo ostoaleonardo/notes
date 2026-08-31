@@ -8,6 +8,7 @@ export const MarkdownEditor = ({
     markdownAction,
     onFocus,
     onBlur,
+    onHistoryChange,
     title,
     setTitle,
     titlePlaceholder,
@@ -20,6 +21,7 @@ export const MarkdownEditor = ({
         <MarkdownInput
             value={value}
             onChangeText={setValue}
+            onHistoryChange={onHistoryChange}
             mode={mode}
             placeholder={t('placeholder.note')}
             action={action}

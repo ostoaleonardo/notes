@@ -11,7 +11,8 @@
 		"tags": "Étiquettes",
 		"settings": "Paramètres",
 		"theme": "Thème",
-		"about": "À propos de l'app"
+		"about": "À propos de l'app",
+		"version_history": "Historique des versions"
 	},
 	"date": {
 		"created": "Crée :",
@@ -46,7 +47,9 @@
 		"delete": "Supprimer",
 		"update": "Actualiser",
 		"enter": "Entrer",
-		"clear_all": "Tout effacer"
+		"clear_all": "Tout effacer",
+		"undo": "Annuler",
+		"redo": "Rétablir"
 	},
 	"message": {
 		"loading": "Chargement...",
@@ -56,6 +59,9 @@
 		},
 		"tags": {
 			"empty": "Vous n'avez pas encore d'étiquettes"
+		},
+		"version_history": {
+			"empty": "Aucune version enregistrée"
 		}
 	},
 	"placeholder": {

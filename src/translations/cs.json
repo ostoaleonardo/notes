@@ -11,7 +11,8 @@
 		"tags": "Štítky",
 		"settings": "Nastavení",
 		"theme": "Barevné schéma",
-		"about": "O aplikaci"
+		"about": "O aplikaci",
+		"version_history": "Historie verzí"
 	},
 	"date": {
 		"created": "Vytvořeno:",
@@ -46,7 +47,9 @@
 		"delete": "Smazat",
 		"update": "Aktualizovat",
 		"enter": "Vložit",
-		"clear_all": "Vymazat vše"
+		"clear_all": "Vymazat vše",
+		"undo": "Zpět",
+		"redo": "Znovu"
 	},
 	"message": {
 		"loading": "Nahrávání...",
@@ -56,6 +59,9 @@
 		},
 		"tags": {
 			"empty": "Nejsou tu žádné štítky"
+		},
+		"version_history": {
+			"empty": "Zatím žádné uložené verze"
 		}
 	},
 	"placeholder": {

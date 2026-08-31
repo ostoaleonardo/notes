@@ -42,7 +42,8 @@
 		"settings": "Settings",
 		"theme": "Color theme",
 		"about": "About the app",
-		"import": "Import note"
+		"import": "Import note",
+		"version_history": "Version history"
 	},
 	"date": {
 		"created": "Created:",
@@ -120,7 +121,9 @@
 		"close": "Close",
 		"preview": "Read",
 		"clear_filter": "Clear filter",
-		"clear_all": "Clear all"
+		"clear_all": "Clear all",
+		"undo": "Undo",
+		"redo": "Redo"
 	},
 	"count": {
 		"notes": "{{count}} note",
@@ -174,6 +177,9 @@
 		},
 		"tags": {
 			"empty": "You don't have any tags yet"
+		},
+		"version_history": {
+			"empty": "No versions saved yet"
 		}
 	},
 	"placeholder": {

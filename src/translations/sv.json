@@ -11,7 +11,8 @@
 		"tags": "Taggar",
 		"settings": "Inställningar",
 		"theme": "Färgtema",
-		"about": "Om appen"
+		"about": "Om appen",
+		"version_history": "Versionshistorik"
 	},
 	"date": {
 		"created": "Skapad:",
@@ -46,7 +47,9 @@
 		"delete": "Radera",
 		"update": "Uppdatera",
 		"enter": "Gå in",
-		"clear_all": "Rensa alla"
+		"clear_all": "Rensa alla",
+		"undo": "Ångra",
+		"redo": "Gör om"
 	},
 	"message": {
 		"loading": "Laddar...",
@@ -56,6 +59,9 @@
 		},
 		"tags": {
 			"empty": "Du har inte skapat några taggar än"
+		},
+		"version_history": {
+			"empty": "Inga versioner sparade än"
 		}
 	},
 	"placeholder": {

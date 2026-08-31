@@ -11,7 +11,8 @@
 		"tags": "Etiquetas",
 		"settings": "Configurações",
 		"theme": "Cor do tema",
-		"about": "Sobre o aplicativo"
+		"about": "Sobre o aplicativo",
+		"version_history": "Histórico de versões"
 	},
 	"date": {
 		"created": "Criado:",
@@ -46,7 +47,9 @@
 		"delete": "Excluir",
 		"update": "Atualizar",
 		"enter": "Entrar",
-		"clear_all": "Limpar tudo"
+		"clear_all": "Limpar tudo",
+		"undo": "Desfazer",
+		"redo": "Refazer"
 	},
 	"message": {
 		"loading": "Carregando...",
@@ -56,6 +59,9 @@
 		},
 		"tags": {
 			"empty": "Nenhuma etiqueta adicionada"
+		},
+		"version_history": {
+			"empty": "Nenhuma versão salva ainda"
 		}
 	},
 	"placeholder": {
