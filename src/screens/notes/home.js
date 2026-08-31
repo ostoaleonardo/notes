@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { router, useFocusEffect } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
@@ -12,25 +12,38 @@ import {
     useBottomSheet,
     useCurrentNote,
     useImportMarkdown,
+    useNotes,
     useRecentNotes,
-    useRepositories
+    useRepositories,
+    useTemplates,
+    useUtils
 } from '@/hooks'
 import { ROUTES } from '@/constants'
+import { getRecentIds } from '@/utils'
 
 export function Home() {
     const { t } = useTranslation()
     const { activeRepositoryTree } = useRepositories()
     const { importFile } = useImportMarkdown()
     const { registerCurrent } = useCurrentNote()
+    const { notes } = useNotes()
     const { recent } = useRecentNotes()
+    const { pinned } = useUtils()
+    const { listTemplates } = useTemplates()
+    const [templates, setTemplates] = useState([])
     const rootId = activeRepositoryTree[0]?.id
     const recentsSheet = useBottomSheet()
+    const recentCount = getRecentIds(pinned, recent, notes, templates).length
 
     useFocusEffect(
         useCallback(() => {
             registerCurrent('')
         }, [])
     )
+
+    useEffect(() => {
+        listTemplates().then(setTemplates)
+    }, [])
 
     const onCreateNote = () => {
         router.push({
@@ -63,7 +76,7 @@ export function Home() {
                 onCreateNote={onCreateNote}
                 onImportNote={onImportNote}
                 onOpenRecents={recentsSheet.onOpen}
-                recentCount={recent.length}
+                recentCount={recentCount}
             />
 
             <ModalSheet
