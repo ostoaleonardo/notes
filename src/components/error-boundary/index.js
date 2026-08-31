@@ -1,13 +1,38 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { COLORS } from '@/constants'
+import { StyleSheet, View, useColorScheme } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import { Pressable, Typography } from '@/components'
+import { COLORS, FONTS } from '@/constants'
 
-export function ErrorBoundary({ error, retry }) {
+export function ErrorBoundary({ retry }) {
+    const { t } = useTranslation()
+    const colors = COLORS[useColorScheme() === 'light' ? 'light' : 'dark']
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Something went wrong</Text>
-            <Text style={styles.message}>{error?.message}</Text>
-            <Pressable onPress={retry} style={styles.button}>
-                <Text style={styles.buttonText}>Try again</Text>
+        <View style={{ ...styles.container, backgroundColor: colors.background }}>
+            <View style={{ gap: 16 }}>
+                <Typography
+                    fontSize={32}
+                    textAlign='center'
+                    color={colors.onBackground}
+                    styleProps={{ fontFamily: FONTS.nType82Headline }}
+                >
+                    {t('error_boundary.title')}
+                </Typography>
+                <Typography
+                    opacity={0.6}
+                    textAlign='center'
+                    color={colors.onBackground}
+                >
+                    {t('error_boundary.message')}
+                </Typography>
+            </View>
+
+            <Pressable
+                onPress={retry}
+                buttonColor={colors.onBackground}
+                textColor={colors.background}
+            >
+                {t('button.try_again')}
             </Pressable>
         </View>
     )
@@ -16,31 +41,9 @@ export function ErrorBoundary({ error, retry }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 16,
+        gap: 32,
         padding: 24,
-        backgroundColor: COLORS.dark.background
-    },
-    title: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: COLORS.dark.onBackground
-    },
-    message: {
-        fontSize: 14,
-        textAlign: 'center',
-        color: COLORS.dark.onBackground,
-        opacity: 0.6
-    },
-    button: {
-        marginTop: 8,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderRadius: 16,
-        backgroundColor: COLORS.dark.surfaceVariant
-    },
-    buttonText: {
-        color: COLORS.dark.onBackground
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })

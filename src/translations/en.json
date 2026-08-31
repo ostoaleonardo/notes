@@ -123,7 +123,8 @@
 		"clear_filter": "Clear filter",
 		"clear_all": "Clear all",
 		"undo": "Undo",
-		"redo": "Redo"
+		"redo": "Redo",
+		"try_again": "Try again"
 	},
 	"count": {
 		"notes": "{{count}} note",
@@ -241,5 +242,9 @@
 	"search": {
 		"recent": "Recent",
 		"pinned": "Pinned"
+	},
+	"error_boundary": {
+		"title": "Something went wrong",
+		"message": "We ran into an unexpected problem. Please try again."
 	}
 }

@@ -108,7 +108,8 @@
 		"clear_filter": "Quitar filtro",
 		"clear_all": "Quitar todas",
 		"undo": "Deshacer",
-		"redo": "Rehacer"
+		"redo": "Rehacer",
+		"try_again": "Reintentar"
 	},
 	"count": {
 		"notes": "{{count}} nota",
@@ -226,5 +227,9 @@
 	"search": {
 		"recent": "Recientes",
 		"pinned": "Fijadas"
+	},
+	"error_boundary": {
+		"title": "Algo salió mal",
+		"message": "Ocurrió un problema inesperado. Inténtalo de nuevo."
 	}
 }
