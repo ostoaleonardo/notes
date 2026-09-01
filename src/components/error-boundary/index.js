@@ -1,6 +1,7 @@
-import { StyleSheet, View, useColorScheme } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Pressable, Typography } from '@/components'
+import { StyleSheet, View, useColorScheme } from 'react-native'
+import { Typography } from '../typography'
+import { Pressable } from '../button'
 import { COLORS, FONTS } from '@/constants'
 
 export function ErrorBoundary({ retry }) {
