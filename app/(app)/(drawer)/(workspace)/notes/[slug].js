@@ -58,6 +58,8 @@ export default function EditNote() {
 
     return (
         <NoteEditorScreen
+            id={slug}
+            repositoryId={repositoryId}
             title={title}
             setTitle={setTitle}
             note={note}

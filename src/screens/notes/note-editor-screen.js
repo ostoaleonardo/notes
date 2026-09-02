@@ -1,20 +1,32 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ToastAndroid } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { AppBar, MarkdownEditor, ModalSheet, Typography } from '@/components'
+import { AppBar, MarkdownEditor, ModalSheet } from '@/components'
 import { MarkdownEditorLayout } from './markdown-editor-layout'
 import { MarkdownModeToggle } from './markdown-mode-toggle'
 import { TemplateCarousel } from './template-carousel'
 import { RecentNotes } from './recent-notes'
 import { VersionHistoryPanel } from './version-history-panel'
+import { VersionHistoryContent } from './version-history-content'
 import { Tags } from '@/screens/modals/tags'
 import { LinkMarkdown } from '@/screens/modals/link-markdown'
 import { TableMarkdown } from '@/screens/modals/table-markdown'
 import { ImageMarkdown } from '@/screens/modals/image-markdown'
-import { useAllowLandscape, useBottomSheet, useLanguage, useMarkdownAction, usePremium, useTemplates } from '@/hooks'
+import {
+    useAllowLandscape,
+    useBottomSheet,
+    useLanguage,
+    useMarkdownAction,
+    useNoteVersions,
+    usePremium,
+    useRepositories,
+    useTemplates
+} from '@/hooks'
 import { getFormattedDate } from '@/utils'
 
 export const NoteEditorScreen = ({
+    id,
+    repositoryId,
     title, setTitle,
     note, setNote,
     tags, setTags,
@@ -25,6 +37,10 @@ export const NoteEditorScreen = ({
     const { addTemplate } = useTemplates()
     const { currentLanguage } = useLanguage()
     const { premium } = usePremium()
+    const { repositories } = useRepositories()
+    const { commitVersion } = useNoteVersions()
+
+    const directoryUri = repositories.find((repository) => repository.id === repositoryId)?.uri
 
     useAllowLandscape()
 
@@ -100,19 +116,40 @@ export const NoteEditorScreen = ({
 
     const onCloseVersionHistory = useCallback(() => setVersionHistoryVisible(false), [])
 
+    const onRestoreVersion = useCallback((version) => {
+        setTitle(version.title)
+        setNote(version.content)
+        setVersionHistoryVisible(false)
+    }, [])
+
+    useEffect(() => {
+        if (!directoryUri || !id) return
+
+        return () => {
+            const { title, note } = latestContent.current
+            commitVersion(directoryUri, id, title, note)
+        }
+    }, [directoryUri, id])
+
     const versionHistoryPanelContent = useMemo(() => (
-        <Typography opacity={0.5}>
-            {t('message.version_history.empty')}
-        </Typography>
-    ), [t])
+        <VersionHistoryContent
+            directoryUri={directoryUri}
+            noteId={id}
+            currentContent={note}
+            premium={premium}
+            onRestore={onRestoreVersion}
+        />
+    ), [directoryUri, id, note, premium, onRestoreVersion])
 
     const actions = useMemo(() => ({
         onOpenTags: tagsSheet.onOpen,
-        onOpenVersionHistory,
+        onOpenTemplates: templatesSheet.onOpen,
+        onOpenRecents: recentsSheet.onOpen,
         onSaveAsTemplate
     }), [
         tagsSheet.onOpen,
-        onOpenVersionHistory,
+        templatesSheet.onOpen,
+        recentsSheet.onOpen,
         onSaveAsTemplate
     ])
 
@@ -129,8 +166,7 @@ export const NoteEditorScreen = ({
                     <MarkdownModeToggle
                         mode={mode}
                         onSetMode={setMode}
-                        onOpenTemplates={templatesSheet.onOpen}
-                        onOpenRecents={recentsSheet.onOpen}
+                        onOpenVersionHistory={onOpenVersionHistory}
                     />
                 )}
             />
