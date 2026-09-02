@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { IconButton, useTheme } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
 import { AnimatedView, Scroll, Separator } from '@/components'
-import { Commit, Redo, Tag, Undo } from '@/icons'
+import { NoteStack, Redo, Shapes, Tag, Undo } from '@/icons'
 import { MARKDOWN_CONTROLS } from '@/constants'
 
 export const MarkdownToolbar = memo(function MarkdownToolbar({
@@ -80,6 +80,12 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
                             accessibilityLabel={t('button.redo')}
                         />
 
+                        <IconButton
+                            onPress={actions?.onOpenRecents}
+                            icon={(props) => <NoteStack {...props} />}
+                            accessibilityLabel={t('search.recent')}
+                        />
+
                         {scope !== 'template' && (
                             <IconButton
                                 onPress={actions?.onOpenTags}
@@ -88,11 +94,13 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
                             />
                         )}
 
-                        <IconButton
-                            onPress={actions?.onOpenVersionHistory}
-                            icon={(props) => <Commit {...props} />}
-                            accessibilityLabel={t('title.version_history')}
-                        />
+                        {scope !== 'template' && (
+                            <IconButton
+                                onPress={actions?.onOpenTemplates}
+                                icon={(props) => <Shapes {...props} />}
+                                accessibilityLabel={t('title.templates')}
+                            />
+                        )}
                     </AnimatedView>
                 )}
             </Scroll>
