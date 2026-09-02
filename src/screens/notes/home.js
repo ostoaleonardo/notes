@@ -84,7 +84,10 @@ export function Home() {
                 onClose={recentsSheet.onClose}
                 title={t('search.recent')}
             >
-                <RecentNotes onClose={recentsSheet.onClose} />
+                <RecentNotes
+                    isHome
+                    onClose={recentsSheet.onClose}
+                />
             </ModalSheet>
         </>
     )

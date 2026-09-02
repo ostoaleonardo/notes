@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 import { IconButton, Tooltip } from 'react-native-paper'
 import { useRecentNotes, useRepositories, useNotes, useTemplates, useUtils } from '@/hooks'
-import { Close, Plus } from '@/icons'
+import { Close, NoteStack, Plus } from '@/icons'
 import { ROUTES, TEMPLATE_TAB_PREFIX } from '@/constants'
 import { getEditorPath, getPreviewNote, getRecentIds } from '@/utils'
 import { RecentNotesGrid } from './recent-notes-grid'
 
-export function RecentNotes({ onClose }) {
+export function RecentNotes({ onClose, isHome = false }) {
     const { t } = useTranslation()
     const { notes } = useNotes()
     const { pinned, updatePinned } = useUtils()
@@ -76,6 +76,11 @@ export function RecentNotes({ onClose }) {
         clearRecent()
     }
 
+    const onGoHome = () => {
+        onClose()
+        router.push(ROUTES.HOME)
+    }
+
     return (
         <View style={styles.container}>
             <RecentNotesGrid
@@ -93,6 +98,17 @@ export function RecentNotes({ onClose }) {
                         accessibilityLabel={t('notes.create')}
                     />
                 </Tooltip>
+
+                {!isHome && (
+                    <Tooltip title={t('title.notes')}>
+                        <IconButton
+                            mode='contained'
+                            onPress={onGoHome}
+                            icon={(props) => <NoteStack {...props} />}
+                            accessibilityLabel={t('title.notes')}
+                        />
+                    </Tooltip>
+                )}
 
                 {recent.length > 0 && (
                     <Tooltip title={t('button.close_all')}>
@@ -115,10 +131,9 @@ const styles = StyleSheet.create({
         gap: 8
     },
     actions: {
-        paddingHorizontal: 16,
-        paddingTop: 8,
+        width: '100%',
+        padding: 16,
         flexDirection: 'row',
-        alignItems: 'center',
         justifyContent: 'space-between'
     }
 })
