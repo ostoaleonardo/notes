@@ -1,12 +1,9 @@
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import { FadeInUp } from 'react-native-reanimated'
 import { AnimatedView, Scroll, Typography } from '@/components'
-import { useIconProps } from '@/hooks'
 import { RecentNoteCard, CARDS_HEIGHT } from './recent-note-card'
-import { TRANSPARENT } from '@/constants'
 
 const CARD_MIN_WIDTH = 160
 const GRID_GAP = 8
@@ -14,8 +11,6 @@ const GRID_PADDING = 16
 
 export function RecentNotesGrid({ cards, onOpen, onRemove }) {
     const { t } = useTranslation()
-    const { colors } = useTheme()
-    const iconProps = useIconProps(14, 0.6)
     const [containerWidth, setContainerWidth] = useState(0)
 
     const cellStyle = useMemo(() => {
@@ -23,13 +18,6 @@ export function RecentNotesGrid({ cards, onOpen, onRemove }) {
 
         return { width: `${100 / columns}%`, padding: GRID_GAP / 2 }
     }, [containerWidth])
-
-    const cardStyle = {
-        backgroundColor: colors.surface,
-        borderColor: colors.onSurface + TRANSPARENT[10]
-    }
-
-    const iconBackgroundColor = colors.background + TRANSPARENT[70]
 
     return (
         <View
@@ -58,9 +46,6 @@ export function RecentNotesGrid({ cards, onOpen, onRemove }) {
                             key={card.id}
                             card={card}
                             cellStyle={cellStyle}
-                            cardStyle={cardStyle}
-                            iconProps={iconProps}
-                            iconBackgroundColor={iconBackgroundColor}
                             onPress={() => onOpen(card)}
                             onRemove={() => onRemove(card)}
                         />
