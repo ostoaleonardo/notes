@@ -162,6 +162,7 @@ export const NoteEditorScreen = ({
             panelContent={versionHistoryPanelContent}
         >
             <AppBar
+                mode='menu'
                 trailing={(
                     <MarkdownModeToggle
                         mode={mode}
