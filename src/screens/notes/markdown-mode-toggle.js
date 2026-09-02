@@ -2,16 +2,15 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MenuItem, SplitButton } from '@/components'
 import { useNoteActionsMenu } from './use-note-actions-menu'
-import { Book, Code, Delete, EditNote, NoteStack, Shapes } from '@/icons'
+import { Book, Code, Commit, Delete, EditNote, Shapes } from '@/icons'
 import { useIconProps } from '@/hooks'
 
 export const MarkdownModeToggle = ({
     mode,
     onSetMode,
     scope,
-    onOpenTemplates,
     onOpenPlaceholders,
-    onOpenRecents,
+    onOpenVersionHistory,
     onDelete
 }) => {
     const { t } = useTranslation()
@@ -24,8 +23,7 @@ export const MarkdownModeToggle = ({
     const noteActionsMenu = useNoteActionsMenu({
         onClose: closeMenu,
         onSetMode,
-        onOpenTemplates,
-        onOpenRecents
+        onOpenVersionHistory
     })
 
     const runAndClose = (action) => () => {
@@ -55,9 +53,9 @@ export const MarkdownModeToggle = ({
                         onPress={runAndClose(onOpenPlaceholders)}
                     />
                     <MenuItem
-                        title={t('search.recent')}
-                        leadingIcon={() => <NoteStack {...iconProps} />}
-                        onPress={runAndClose(onOpenRecents)}
+                        title={t('title.version_history')}
+                        leadingIcon={() => <Commit {...iconProps} />}
+                        onPress={runAndClose(onOpenVersionHistory)}
                     />
                     <MenuItem
                         title={t('button.delete')}

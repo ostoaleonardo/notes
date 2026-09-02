@@ -59,7 +59,9 @@ export default function EditTemplate() {
         </Typography>
     ), [t])
 
-    const editorActions = useMemo(() => ({ onOpenVersionHistory }), [onOpenVersionHistory])
+    const editorActions = useMemo(() => ({
+        onOpenRecents: recentsSheet.onOpen
+    }), [recentsSheet.onOpen])
 
     const onRunAction = (action) => {
         if (action === 'table' || action === 'link' || action === 'image') {
@@ -125,7 +127,7 @@ export default function EditTemplate() {
                         onSetMode={setMode}
                         scope='template'
                         onOpenPlaceholders={onOpenPlaceholders}
-                        onOpenRecents={recentsSheet.onOpen}
+                        onOpenVersionHistory={onOpenVersionHistory}
                         onDelete={onDelete}
                     />
                 )}

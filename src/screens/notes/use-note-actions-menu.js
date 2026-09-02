@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { router, useLocalSearchParams } from 'expo-router'
 import { MenuItem } from '@/components'
 import { useFiles, useIconProps, useNotes, useUtils } from '@/hooks'
-import { Code, Delete, FileExport, Keep, KeepFilled, NoteStack, Shapes } from '@/icons'
+import { Code, Commit, Delete, FileExport, Keep, KeepFilled } from '@/icons'
 
-export const useNoteActionsMenu = ({ onClose, onSetMode, onOpenTemplates, onOpenRecents }) => {
+export const useNoteActionsMenu = ({ onClose, onSetMode, onOpenVersionHistory }) => {
     const iconProps = useIconProps()
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
@@ -46,19 +46,9 @@ export const useNoteActionsMenu = ({ onClose, onSetMode, onOpenTemplates, onOpen
                 onPress={runAndClose(() => onSetMode('code'))}
             />
             <MenuItem
-                title={t('title.templates')}
-                leadingIcon={() => <Shapes {...iconProps} />}
-                onPress={runAndClose(onOpenTemplates)}
-            />
-            <MenuItem
-                title={t('search.recent')}
-                leadingIcon={() => <NoteStack {...iconProps} />}
-                onPress={runAndClose(onOpenRecents)}
-            />
-            <MenuItem
-                title={t('button.delete')}
-                leadingIcon={() => <Delete {...iconProps} />}
-                onPress={onDelete}
+                title={isPinned ? t('button.unpin') : t('button.pin')}
+                leadingIcon={() => (isPinned ? <KeepFilled {...iconProps} /> : <Keep {...iconProps} />)}
+                onPress={toggleKeep}
             />
             {slug && (
                 <MenuItem
@@ -68,9 +58,14 @@ export const useNoteActionsMenu = ({ onClose, onSetMode, onOpenTemplates, onOpen
                 />
             )}
             <MenuItem
-                title={isPinned ? t('button.unpin') : t('button.pin')}
-                leadingIcon={() => (isPinned ? <KeepFilled {...iconProps} /> : <Keep {...iconProps} />)}
-                onPress={toggleKeep}
+                title={t('title.version_history')}
+                leadingIcon={() => <Commit {...iconProps} />}
+                onPress={runAndClose(onOpenVersionHistory)}
+            />
+            <MenuItem
+                title={t('button.delete')}
+                leadingIcon={() => <Delete {...iconProps} />}
+                onPress={onDelete}
             />
         </>
     )
