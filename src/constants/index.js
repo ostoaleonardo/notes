@@ -1,4 +1,5 @@
 export { ROUTES } from './routes'
+export { DIFF_ADDED_COLOR, DIFF_REMOVED_COLOR } from './diff'
 export { THEMES } from './themes'
 export { COLORS, FONTS, TRANSPARENT, COMMONS } from './themes'
 export { LANGUAGES } from './languages'
@@ -7,7 +8,8 @@ export {
     DEFAULT_TAGS,
     DEFAULT_SORT,
     RECENT_SEARCHES_LIMIT,
-    RECENT_NOTES_LIMIT
+    RECENT_NOTES_LIMIT,
+    FREE_VERSION_HISTORY_LIMIT
 } from './default-values'
 
 export { TREE_BRANCHING, NOTES_PER_FOLDER } from './dev-menu'
@@ -43,6 +45,7 @@ export {
 export {
     METADATA_FILENAME,
     TAGS_FILENAME,
+    VERSIONS_FILENAME_SUFFIX,
     TEMPLATES_FOLDER_NAME,
     IMAGES_FOLDER_NAME,
     RESERVED_FOLDER_NAMES,

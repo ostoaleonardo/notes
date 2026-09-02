@@ -1,6 +1,7 @@
 import { Directory, File } from 'expo-file-system'
 import {
     METADATA_FILENAME,
+    VERSIONS_FILENAME_SUFFIX,
     TEMPLATES_FOLDER_NAME,
     IMAGES_FOLDER_NAME,
     RESERVED_FOLDER_NAMES,
@@ -130,6 +131,9 @@ export function useFileStorage() {
     const readMetadata = (directoryUri) => readJson(directoryUri, METADATA_FILENAME, {})
     const writeMetadata = (directoryUri, metadata) => writeJson(directoryUri, METADATA_FILENAME, metadata)
 
+    const readVersions = (directoryUri, noteId) => readJson(directoryUri, noteId + VERSIONS_FILENAME_SUFFIX, [])
+    const writeVersions = (directoryUri, noteId, versions) => writeJson(directoryUri, noteId + VERSIONS_FILENAME_SUFFIX, versions)
+
     return {
         findFile,
         listMarkdownFiles,
@@ -143,6 +147,8 @@ export function useFileStorage() {
         renameDirectory,
         readMetadata,
         writeMetadata,
+        readVersions,
+        writeVersions,
         readJson,
         writeJson,
         createSubdirectory,

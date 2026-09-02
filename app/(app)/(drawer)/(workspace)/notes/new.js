@@ -72,6 +72,8 @@ export default function Note() {
 
     return (
         <NoteEditorScreen
+            id={id}
+            repositoryId={repositoryId}
             title={title}
             setTitle={setTitle}
             note={note}
