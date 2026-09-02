@@ -47,15 +47,16 @@
 		"delete": "Sil",
 		"update": "Güncelle",
 		"enter": "Enter",
-		"clear_all": "Tümünü temizle",
+		"close_all": "Kapat",
 		"undo": "Geri al",
-		"redo": "Yinele"
+		"redo": "Yinele",
+		"restore": "Geri yükle"
 	},
 	"message": {
 		"loading": "Yükleniyor...",
 		"notes": {
 			"empty": "Henüz hiç notunuz yok",
-			"no_recent": "Son not yok"
+			"no_recent": "Son kullanılan veya sabitlenmiş not yok"
 		},
 		"tags": {
 			"empty": "Henüz herhangi bir etiketiniz yok"

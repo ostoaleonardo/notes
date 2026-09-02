@@ -61,15 +61,16 @@
 		"delete": "Beseitigen",
 		"update": "Aktualisieren",
 		"enter": "Eingeben",
-		"clear_all": "Alle löschen",
+		"close_all": "Schließen",
 		"undo": "Rückgängig",
-		"redo": "Wiederholen"
+		"redo": "Wiederholen",
+		"restore": "Wiederherstellen"
 	},
 	"message": {
 		"loading": "Wird geladen...",
 		"notes": {
 			"empty": "Du hast noch keine Notizen",
-			"no_recent": "Keine kürzlichen Notizen"
+			"no_recent": "Keine kürzlichen oder angehefteten Notizen"
 		},
 		"tags": {
 			"empty": "Du hast noch keine Tags"

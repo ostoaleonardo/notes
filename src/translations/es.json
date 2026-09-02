@@ -106,10 +106,11 @@
 		"close": "Cerrar",
 		"preview": "Lectura",
 		"clear_filter": "Quitar filtro",
-		"clear_all": "Quitar todas",
+		"close_all": "Cerrar",
 		"undo": "Deshacer",
 		"redo": "Rehacer",
-		"try_again": "Reintentar"
+		"try_again": "Reintentar",
+		"restore": "Restaurar"
 	},
 	"count": {
 		"notes": "{{count}} nota",
@@ -159,7 +160,7 @@
 		"notes": {
 			"empty": "Todavía no tienes notas",
 			"exported": "Archivo exportado exitosamente",
-			"no_recent": "Sin notas recientes"
+			"no_recent": "Sin notas recientes ni fijadas"
 		},
 		"tags": {
 			"empty": "Todavía no tienes etiquetas"

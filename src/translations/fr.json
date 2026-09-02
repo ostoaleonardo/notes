@@ -47,15 +47,16 @@
 		"delete": "Supprimer",
 		"update": "Actualiser",
 		"enter": "Entrer",
-		"clear_all": "Tout effacer",
+		"close_all": "Fermer",
 		"undo": "Annuler",
-		"redo": "Rétablir"
+		"redo": "Rétablir",
+		"restore": "Restaurer"
 	},
 	"message": {
 		"loading": "Chargement...",
 		"notes": {
 			"empty": "Vous n'avez pas encore de notes",
-			"no_recent": "Aucune note récente"
+			"no_recent": "Aucune note récente ou épinglée"
 		},
 		"tags": {
 			"empty": "Vous n'avez pas encore d'étiquettes"

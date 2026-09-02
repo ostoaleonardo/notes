@@ -47,15 +47,16 @@
 		"delete": "Excluir",
 		"update": "Atualizar",
 		"enter": "Entrar",
-		"clear_all": "Limpar tudo",
+		"close_all": "Fechar",
 		"undo": "Desfazer",
-		"redo": "Refazer"
+		"redo": "Refazer",
+		"restore": "Restaurar"
 	},
 	"message": {
 		"loading": "Carregando...",
 		"notes": {
 			"empty": "Nenhuma nota adicionada",
-			"no_recent": "Nenhuma nota recente"
+			"no_recent": "Nenhuma nota recente ou fixada"
 		},
 		"tags": {
 			"empty": "Nenhuma etiqueta adicionada"
