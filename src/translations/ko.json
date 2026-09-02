@@ -47,15 +47,16 @@
 		"delete": "삭제",
 		"update": "업데이트",
 		"enter": "입력",
-		"clear_all": "모두 지우기",
+		"close_all": "닫기",
 		"undo": "실행 취소",
-		"redo": "다시 실행"
+		"redo": "다시 실행",
+		"restore": "복원"
 	},
 	"message": {
 		"loading": "로딩 중...",
 		"notes": {
 			"empty": "노트가 아직 없습니다.",
-			"no_recent": "최근 메모가 없습니다"
+			"no_recent": "최근 또는 고정된 노트가 없습니다"
 		},
 		"tags": {
 			"empty": "태그가 아직 없습니다."

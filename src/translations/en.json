@@ -121,10 +121,11 @@
 		"close": "Close",
 		"preview": "Read",
 		"clear_filter": "Clear filter",
-		"clear_all": "Clear all",
+		"close_all": "Close",
 		"undo": "Undo",
 		"redo": "Redo",
-		"try_again": "Try again"
+		"try_again": "Try again",
+		"restore": "Restore"
 	},
 	"count": {
 		"notes": "{{count}} note",
@@ -174,7 +175,7 @@
 		"notes": {
 			"empty": "You don't have any notes yet",
 			"exported": "File exported successfully",
-			"no_recent": "No recent notes"
+			"no_recent": "No recent or pinned notes"
 		},
 		"tags": {
 			"empty": "You don't have any tags yet"

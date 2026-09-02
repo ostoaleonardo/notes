@@ -47,15 +47,16 @@
 		"delete": "Elimina",
 		"update": "Aggiorna",
 		"enter": "Invio",
-		"clear_all": "Cancella tutto",
+		"close_all": "Chiudi",
 		"undo": "Annulla",
-		"redo": "Ripeti"
+		"redo": "Ripeti",
+		"restore": "Ripristina"
 	},
 	"message": {
 		"loading": "Caricamento...",
 		"notes": {
 			"empty": "Non hai ancora nessuna nota",
-			"no_recent": "Nessuna nota recente"
+			"no_recent": "Nessuna nota recente o fissata"
 		},
 		"tags": {
 			"empty": "Non hai ancora nessun tag"

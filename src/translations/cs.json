@@ -47,15 +47,16 @@
 		"delete": "Smazat",
 		"update": "Aktualizovat",
 		"enter": "Vložit",
-		"clear_all": "Vymazat vše",
+		"close_all": "Zavřít",
 		"undo": "Zpět",
-		"redo": "Znovu"
+		"redo": "Znovu",
+		"restore": "Obnovit"
 	},
 	"message": {
 		"loading": "Nahrávání...",
 		"notes": {
 			"empty": "Nejsou tu žádné poznámky",
-			"no_recent": "Žádné nedávné poznámky"
+			"no_recent": "Žádné nedávné ani připnuté poznámky"
 		},
 		"tags": {
 			"empty": "Nejsou tu žádné štítky"

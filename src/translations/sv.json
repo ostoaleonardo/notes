@@ -47,15 +47,16 @@
 		"delete": "Radera",
 		"update": "Uppdatera",
 		"enter": "Gå in",
-		"clear_all": "Rensa alla",
+		"close_all": "Stäng",
 		"undo": "Ångra",
-		"redo": "Gör om"
+		"redo": "Gör om",
+		"restore": "Återställ"
 	},
 	"message": {
 		"loading": "Laddar...",
 		"notes": {
 			"empty": "Du har inte skapat någon anteckning än",
-			"no_recent": "Inga senaste anteckningar"
+			"no_recent": "Inga senaste eller fästa anteckningar"
 		},
 		"tags": {
 			"empty": "Du har inte skapat några taggar än"

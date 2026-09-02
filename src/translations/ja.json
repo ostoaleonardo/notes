@@ -61,15 +61,16 @@
 		"delete": "削除",
 		"update": "更新",
 		"enter": "入力",
-		"clear_all": "すべてクリア",
+		"close_all": "閉じる",
 		"undo": "元に戻す",
-		"redo": "やり直す"
+		"redo": "やり直す",
+		"restore": "復元"
 	},
 	"message": {
 		"loading": "読み込み中...",
 		"notes": {
 			"empty": "まだメモはありません",
-			"no_recent": "最近のメモはありません"
+			"no_recent": "最近使ったノートもピン留めもありません"
 		},
 		"tags": {
 			"empty": "まだタグはありません"

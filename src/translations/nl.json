@@ -60,15 +60,16 @@
 		"delete": "Verwijderen",
 		"update": "Bijwerken",
 		"enter": "Invoeren",
-		"clear_all": "Alles wissen",
+		"close_all": "Sluiten",
 		"undo": "Ongedaan maken",
-		"redo": "Opnieuw"
+		"redo": "Opnieuw",
+		"restore": "Herstellen"
 	},
 	"message": {
 		"loading": "Laden...",
 		"notes": {
 			"empty": "Je hebt nog geen notities",
-			"no_recent": "Geen recente notities"
+			"no_recent": "Geen recente of vastgezette notities"
 		},
 		"tags": {
 			"empty": "Je hebt nog geen labels"
