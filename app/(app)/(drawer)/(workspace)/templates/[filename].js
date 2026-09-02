@@ -121,6 +121,7 @@ export default function EditTemplate() {
             panelContent={versionHistoryPanelContent}
         >
             <AppBar
+                mode='menu'
                 trailing={(
                     <MarkdownModeToggle
                         mode={mode}
