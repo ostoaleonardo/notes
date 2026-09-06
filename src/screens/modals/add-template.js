@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { router } from 'expo-router'
+import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import * as DocumentPicker from 'expo-document-picker'
-import { DialogButton, DialogModal } from '@/components/dialog'
+import { DialogModal } from '@/components/dialog'
 import { LargeInput } from '@/components/input'
 import { useHaptics, useTemplates } from '@/hooks'
-import { FEEDBACK_TYPES, ROUTES } from '@/constants'
+import { DIALOG_BUTTON_LABEL_STYLE, FEEDBACK_TYPES, ROUTES } from '@/constants'
 
 export function AddTemplate({ visible, onDismiss }) {
     const { t } = useTranslation()
@@ -43,20 +44,22 @@ export function AddTemplate({ visible, onDismiss }) {
             visible={visible}
             onDismiss={onDismiss}
             actions={[
-                <DialogButton
+                <Button
                     key='import'
                     onPress={onImport}
+                    labelStyle={DIALOG_BUTTON_LABEL_STYLE}
                 >
                     {t('templates.import')}
-                </DialogButton>,
-                <DialogButton
+                </Button>,
+                <Button
                     key='create'
                     mode='contained'
                     onPress={onCreate}
                     disabled={isDisabled}
+                    labelStyle={DIALOG_BUTTON_LABEL_STYLE}
                 >
                     {t('button.create')}
-                </DialogButton>
+                </Button>
             ]}
         >
             <LargeInput

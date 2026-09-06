@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, View } from 'react-native'
-import { Tooltip, useTheme } from 'react-native-paper'
-import { AnimatedView, IconActionButton, Separator, Typography } from '@/components'
+import { IconButton, Tooltip, useTheme } from 'react-native-paper'
+import { AnimatedView, Separator, Typography } from '@/components'
 import { RepositoryMenu } from './repository-menu'
 import { OpenInNew } from '@/icons'
 import { useFileStorage, useRepositories } from '@/hooks'
@@ -64,10 +64,9 @@ export function RepositoryItem({
                 </Pressable>
 
                 <Tooltip title={t('repositories.open')}>
-                    <IconActionButton
-                        icon={OpenInNew}
-                        iconSize={16}
+                    <IconButton
                         onPress={onOpen}
+                        icon={(props) => <OpenInNew {...props} />}
                         accessibilityLabel={t('repositories.open')}
                     />
                 </Tooltip>

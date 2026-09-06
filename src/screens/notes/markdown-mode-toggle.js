@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { MenuItem, SplitButton } from '@/components'
 import { useNoteActionsMenu } from './use-note-actions-menu'
 import { Book, Code, Commit, Delete, EditNote, Shapes } from '@/icons'
-import { useIconProps } from '@/hooks'
 
 export const MarkdownModeToggle = ({
     mode,
@@ -14,7 +13,6 @@ export const MarkdownModeToggle = ({
     onDelete
 }) => {
     const { t } = useTranslation()
-    const iconProps = useIconProps()
     const read = mode === 'read'
 
     const [menuVisible, setMenuVisible] = useState(false)
@@ -44,22 +42,22 @@ export const MarkdownModeToggle = ({
                 <>
                     <MenuItem
                         title={t('button.code')}
-                        leadingIcon={() => <Code {...iconProps} />}
+                        leadingIcon={(props) => <Code {...props} />}
                         onPress={runAndClose(() => onSetMode('code'))}
                     />
                     <MenuItem
                         title={t('templates.view_placeholders')}
-                        leadingIcon={() => <Shapes {...iconProps} />}
+                        leadingIcon={(props) => <Shapes {...props} />}
                         onPress={runAndClose(onOpenPlaceholders)}
                     />
                     <MenuItem
                         title={t('title.version_history')}
-                        leadingIcon={() => <Commit {...iconProps} />}
+                        leadingIcon={(props) => <Commit {...props} />}
                         onPress={runAndClose(onOpenVersionHistory)}
                     />
                     <MenuItem
                         title={t('button.delete')}
-                        leadingIcon={() => <Delete {...iconProps} />}
+                        leadingIcon={(props) => <Delete {...props} />}
                         onPress={runAndClose(onDelete)}
                     />
                 </>

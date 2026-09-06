@@ -1,14 +1,13 @@
 import { useState } from 'react'
-import { Tooltip, useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { IconActionButton, MenuContainer, MenuItem } from '@/components'
+import { IconButton, Tooltip, useTheme } from 'react-native-paper'
+import { MenuContainer, MenuItem } from '@/components'
 import { Close, Delete, Edit, MoreVert } from '@/icons'
-import { useIconProps } from '@/hooks'
 
 export function RepositoryMenu({ onRename, onForget, onDelete }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
-    const iconProps = useIconProps(16)
+
     const [visible, setVisible] = useState(false)
 
     const runAction = (action) => {
@@ -22,9 +21,8 @@ export function RepositoryMenu({ onRename, onForget, onDelete }) {
             onClose={() => setVisible(false)}
             anchor={
                 <Tooltip title={t('button.more')}>
-                    <IconActionButton
-                        icon={MoreVert}
-                        iconSize={16}
+                    <IconButton
+                        icon={(props) => <MoreVert {...props} />}
                         onPress={() => setVisible(true)}
                         accessibilityLabel={t('button.more')}
                     />
@@ -33,17 +31,17 @@ export function RepositoryMenu({ onRename, onForget, onDelete }) {
         >
             <MenuItem
                 title={t('repositories.rename')}
-                leadingIcon={() => <Edit {...iconProps} />}
+                leadingIcon={(props) => <Edit {...props} />}
                 onPress={() => runAction(onRename)}
             />
             <MenuItem
                 title={t('repositories.forget')}
-                leadingIcon={() => <Close {...iconProps} />}
+                leadingIcon={(props) => <Close {...props} />}
                 onPress={() => runAction(onForget)}
             />
             <MenuItem
                 title={t('repositories.delete')}
-                leadingIcon={() => <Delete {...iconProps} color={colors.error} />}
+                leadingIcon={(props) => <Delete {...props} color={colors.error} />}
                 onPress={() => runAction(onDelete)}
             />
         </MenuContainer>

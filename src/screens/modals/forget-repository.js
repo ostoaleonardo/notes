@@ -1,7 +1,8 @@
+import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { DialogButton, DialogModal, Typography } from '@/components'
+import { DialogModal, Typography } from '@/components'
 import { useHaptics, useRepositories } from '@/hooks'
-import { FEEDBACK_TYPES } from '@/constants'
+import { DIALOG_BUTTON_LABEL_STYLE, FEEDBACK_TYPES } from '@/constants'
 
 export function ForgetRepository({ visible, onDismiss, repositoryId }) {
     const { t } = useTranslation()
@@ -20,19 +21,21 @@ export function ForgetRepository({ visible, onDismiss, repositoryId }) {
             visible={visible}
             onDismiss={onDismiss}
             actions={[
-                <DialogButton
+                <Button
                     key='cancel'
                     onPress={onDismiss}
+                    labelStyle={DIALOG_BUTTON_LABEL_STYLE}
                 >
                     {t('button.cancel')}
-                </DialogButton>,
-                <DialogButton
+                </Button>,
+                <Button
                     key='forget'
                     mode='contained'
                     onPress={onForget}
+                    labelStyle={DIALOG_BUTTON_LABEL_STYLE}
                 >
                     {t('button.forget')}
-                </DialogButton>
+                </Button>
             ]}
         >
             <Typography opacity={0.6}>

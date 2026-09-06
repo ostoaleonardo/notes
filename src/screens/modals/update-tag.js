@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
+import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { DialogButton, DialogModal, LargeInput } from '@/components'
+import { DialogModal, LargeInput } from '@/components'
 import { useTags, useHaptics } from '@/hooks'
-import { FEEDBACK_TYPES } from '@/constants'
+import { DIALOG_BUTTON_LABEL_STYLE, FEEDBACK_TYPES } from '@/constants'
 
 export function UpdateTag({ visible, onDismiss, selectedId }) {
     const { t } = useTranslation()
@@ -42,13 +43,14 @@ export function UpdateTag({ visible, onDismiss, selectedId }) {
             visible={visible}
             onDismiss={onDismiss}
             actions={
-                <DialogButton
+                <Button
                     mode='contained'
                     onPress={onUpdate}
                     disabled={isDisabled}
+                    labelStyle={DIALOG_BUTTON_LABEL_STYLE}
                 >
                     {t('button.update')}
-                </DialogButton>
+                </Button>
             }
         >
             <LargeInput

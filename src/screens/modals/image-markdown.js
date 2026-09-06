@@ -3,8 +3,8 @@ import { Image } from 'expo-image'
 import { randomUUID } from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { Tooltip, useTheme } from 'react-native-paper'
-import { IconActionButton, LargeInput, Pressable, Section } from '@/components'
+import { IconButton, Tooltip, useTheme } from 'react-native-paper'
+import { LargeInput, Pressable, Section } from '@/components'
 import { useFileStorage, useRepositories } from '@/hooks'
 import { Camera, Picture } from '@/icons'
 import { openImagePicker } from '@/utils'
@@ -92,17 +92,17 @@ export function ImageMarkdown({ onClose, onInsert }) {
 
                 <View style={styles.pickerRow}>
                     <Tooltip title={t('markdown.image_camera')}>
-                        <IconActionButton
+                        <IconButton
                             mode='outlined'
-                            icon={Camera}
+                            icon={(props) => <Camera {...props} />}
                             onPress={() => onPickImage('camera')}
                             accessibilityLabel={t('markdown.image_camera')}
                         />
                     </Tooltip>
                     <Tooltip title={t('markdown.image_gallery')}>
-                        <IconActionButton
+                        <IconButton
                             mode='outlined'
-                            icon={Picture}
+                            icon={(props) => <Picture {...props} />}
                             onPress={() => onPickImage('gallery')}
                             accessibilityLabel={t('markdown.image_gallery')}
                         />

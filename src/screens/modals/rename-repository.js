@@ -1,10 +1,11 @@
 import { ToastAndroid } from 'react-native'
 import { useEffect, useState } from 'react'
+import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { DialogButton, DialogModal } from '@/components/dialog'
+import { DialogModal } from '@/components/dialog'
 import { LargeInput } from '@/components/input'
 import { useHaptics, useRepositories } from '@/hooks'
-import { FEEDBACK_TYPES } from '@/constants'
+import { DIALOG_BUTTON_LABEL_STYLE, FEEDBACK_TYPES } from '@/constants'
 
 export function RenameRepository({ visible, onDismiss, repositoryId }) {
     const { t } = useTranslation()
@@ -49,13 +50,14 @@ export function RenameRepository({ visible, onDismiss, repositoryId }) {
             visible={visible}
             onDismiss={onDismiss}
             actions={
-                <DialogButton
+                <Button
                     mode='contained'
                     onPress={onUpdate}
                     disabled={isDisabled}
+                    labelStyle={DIALOG_BUTTON_LABEL_STYLE}
                 >
                     {t('button.update')}
-                </DialogButton>
+                </Button>
             }
         >
             <LargeInput
