@@ -8,7 +8,7 @@ import { COMMONS } from '@/constants'
 
 export const CARDS_HEIGHT = 220
 
-export function RecentNoteCard({
+export function CardGridItem({
     card,
     cellStyle,
     onPress,
@@ -30,22 +30,24 @@ export function RecentNoteCard({
                     backgroundColor: colors.surface
                 }}
             >
-                <IconButton
-                    size={4}
-                    mode='contained'
-                    onPress={onRemove}
-                    style={{
-                        alignSelf: 'flex-end'
-                    }}
-                    icon={(props) => (
-                        card.pinned
-                            ? <KeepFilled {...props} />
-                            : <Close {...props} />
-                    )}
-                    accessibilityLabel={
-                        t(card.pinned ? 'button.unpin' : 'button.close')
-                    }
-                />
+                {onRemove && (
+                    <IconButton
+                        size={4}
+                        mode='contained'
+                        onPress={onRemove}
+                        style={{
+                            alignSelf: 'flex-end'
+                        }}
+                        icon={(props) => (
+                            card.pinned
+                                ? <KeepFilled {...props} />
+                                : <Close {...props} />
+                        )}
+                        accessibilityLabel={
+                            t(card.pinned ? 'button.unpin' : 'button.close')
+                        }
+                    />
+                )}
 
                 <Typography
                     opacity={0.6}

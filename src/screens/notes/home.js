@@ -3,10 +3,10 @@ import { router, useFocusEffect } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 import * as DocumentPicker from 'expo-document-picker'
-import { AppBar, ModalSheet } from '@/components'
+import { AppBar } from '@/components'
 import { Intro } from './intro'
 import { NoteSearch } from './note-search'
-import { RecentNotes } from './recent-notes'
+import { RecentNotesSheet } from './recent-notes-sheet'
 import { HomeToolbar } from './home-toolbar'
 import {
     useBottomSheet,
@@ -32,8 +32,9 @@ export function Home() {
     const { listTemplates } = useTemplates()
     const [templates, setTemplates] = useState([])
     const rootId = activeRepositoryTree[0]?.id
-    const recentsSheet = useBottomSheet()
     const recentCount = getRecentIds(pinned, recent, notes, templates).length
+
+    const recentsSheet = useBottomSheet()
 
     useFocusEffect(
         useCallback(() => {
@@ -68,7 +69,6 @@ export function Home() {
 
             <View style={styles.container}>
                 <NoteSearch />
-
                 <Intro />
             </View>
 
@@ -79,16 +79,10 @@ export function Home() {
                 recentCount={recentCount}
             />
 
-            <ModalSheet
-                ref={recentsSheet.ref}
-                onClose={recentsSheet.onClose}
-                title={t('search.recent')}
-            >
-                <RecentNotes
-                    isHome
-                    onClose={recentsSheet.onClose}
-                />
-            </ModalSheet>
+            <RecentNotesSheet
+                home={true}
+                sheet={recentsSheet}
+            />
         </>
     )
 }
