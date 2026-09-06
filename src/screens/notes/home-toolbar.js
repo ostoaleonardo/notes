@@ -40,7 +40,6 @@ export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, recentC
 
 const styles = StyleSheet.create({
     toolbar: {
-        paddingVertical: 3,
         paddingHorizontal: 4,
         flexDirection: 'row',
         alignItems: 'center',
