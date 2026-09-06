@@ -7,17 +7,19 @@ import { MarkdownEditorLayout } from '@/screens/notes/markdown-editor-layout'
 import { MarkdownModeToggle } from '@/screens/notes/markdown-mode-toggle'
 import { RecentNotesSheet } from '@/screens/notes/recent-notes-sheet'
 import { VersionHistoryPanel } from '@/screens/notes/version-history-panel'
+import { VersionHistoryContent } from '@/screens/notes/version-history-content'
 import { TemplateEditorForm } from '@/screens/templates/template-editor-form'
 import { TemplatePlaceholders } from '@/screens/modals/template-placeholders'
 import { LoadingOverlay } from '@/components/layout'
 import { AppBar } from '@/components/app-bar/app-bar'
-import { Typography } from '@/components/typography'
 
 import { useAllowLandscape } from '@/hooks/use-allow-landscape'
 import { useBottomSheet } from '@/hooks/use-bottom-sheet'
 import { useMarkdownAction } from '@/hooks/use-markdown-action'
+import { useNoteVersions } from '@/hooks/use-note-versions'
 import { usePremium } from '@/hooks/use-premium'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
+import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
 
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
@@ -27,6 +29,8 @@ export default function EditTemplate() {
     const { filename } = useLocalSearchParams()
     const { getTemplate, updateTemplate, deleteTemplate } = useTemplates()
     const { premium } = usePremium()
+    const { activeRepository, ensureTemplatesFolder } = useRepositories()
+    const { commitVersion } = useNoteVersions()
 
     useAllowLandscape()
 
@@ -45,9 +49,13 @@ export default function EditTemplate() {
     const [versionHistoryVisible, setVersionHistoryVisible] = useState(false)
     const [canUndo, setCanUndo] = useState(false)
     const [canRedo, setCanRedo] = useState(false)
+    const [templatesUri, setTemplatesUri] = useState('')
 
     const recentsSheet = useBottomSheet()
     const markdownAction = useMarkdownAction()
+
+    const latestContent = useRef({ name, content })
+    latestContent.current = { name, content }
 
     const onHistoryChange = useCallback(({ canUndo, canRedo }) => {
         setCanUndo(canUndo)
@@ -65,24 +73,34 @@ export default function EditTemplate() {
 
     const onCloseVersionHistory = useCallback(() => setVersionHistoryVisible(false), [])
 
+    const onRestoreVersion = useCallback((version) => {
+        setName(version.title)
+        setContent(version.content)
+        setVersionHistoryVisible(false)
+    }, [])
+
     const versionHistoryPanelContent = useMemo(() => (
-        <Typography opacity={0.5}>
-            {t('message.version_history.empty')}
-        </Typography>
-    ), [t])
+        <VersionHistoryContent
+            directoryUri={templatesUri}
+            noteId={currentFilename.current}
+            currentContent={content}
+            premium={premium}
+            onRestore={onRestoreVersion}
+        />
+    ), [templatesUri, content, premium, onRestoreVersion, currentFilename.current])
 
     const editorActions = useMemo(() => ({
         onOpenRecents: recentsSheet.onOpen
     }), [recentsSheet.onOpen])
 
-    const onRunAction = (action) => {
+    const onRunAction = useCallback((action) => {
         if (action === 'table' || action === 'link' || action === 'image') {
             markdownAction.run(action, {})
             return
         }
 
         markdownAction.run(action)
-    }
+    }, [])
 
     const onDelete = async () => {
         await deleteTemplate(currentFilename.current)
@@ -121,6 +139,21 @@ export default function EditTemplate() {
 
         return () => clearTimeout(timer)
     }, [name, content, loading])
+
+    useEffect(() => {
+        if (!activeRepository) return
+
+        ensureTemplatesFolder(activeRepository).then(setTemplatesUri)
+    }, [activeRepository])
+
+    useEffect(() => {
+        if (!templatesUri) return
+
+        return () => {
+            const { name, content } = latestContent.current
+            commitVersion(templatesUri, currentFilename.current, name, content)
+        }
+    }, [templatesUri])
 
     if (loading) return <LoadingOverlay />
 

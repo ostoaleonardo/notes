@@ -33,6 +33,7 @@ export default function Note() {
     const [tags, setTags] = useState(filter ? Array.from(filter) : [])
 
     const [createdAt, setCreatedAt] = useState('')
+    const [updatedAt, setUpdatedAt] = useState('')
     const [repositoryId, setRepositoryId] = useState('')
 
     useEffect(() => {
@@ -69,10 +70,9 @@ export default function Note() {
                 setCreatedAt(createdAt)
                 isSaved.current = true
             } else {
-                updateNote({
-                    ...newData,
-                    updatedAt: getDate()
-                })
+                const updatedAt = getDate()
+                updateNote({ ...newData, updatedAt })
+                setUpdatedAt(updatedAt)
             }
         }
     })
@@ -87,6 +87,8 @@ export default function Note() {
             setNote={setNote}
             tags={tags}
             setTags={setTags}
+            createdAt={createdAt}
+            updatedAt={updatedAt}
             initialMode='live'
         />
     )

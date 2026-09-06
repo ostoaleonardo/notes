@@ -52,10 +52,11 @@ export default function EditNote() {
     useNoteAutosave({
         id: slug, title, note, tags, createdAt, repositoryId,
         skip: loading,
-        onSave: (newData) => updateNote({
-            ...newData,
-            updatedAt: getDate()
-        })
+        onSave: (newData) => {
+            const updatedAt = getDate()
+            updateNote({ ...newData, updatedAt })
+            setUpdatedAt(updatedAt)
+        }
     })
 
     if (loading) return <LoadingOverlay />
