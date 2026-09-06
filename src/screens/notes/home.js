@@ -14,6 +14,7 @@ import { useBottomSheet } from '@/hooks/use-bottom-sheet'
 import { useCurrentNote } from '@/hooks/use-current-note'
 import { useImportMarkdown } from '@/hooks/use-import-markdown'
 import { useNotes } from '@/hooks/use-notes'
+import { usePremium } from '@/hooks/use-premium'
 import { useRecentNotes } from '@/hooks/use-recent-notes'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
@@ -24,15 +25,18 @@ import { ROUTES } from '@/constants/routes'
 
 export function Home() {
     const { t } = useTranslation()
-    const { activeRepositoryTree } = useRepositories()
+    const { notes } = useNotes()
+    const { pinned } = useUtils()
+    const { premium } = usePremium()
+    const { recent } = useRecentNotes()
+    const { listTemplates } = useTemplates()
     const { importFile } = useImportMarkdown()
     const { registerCurrent } = useCurrentNote()
-    const { notes } = useNotes()
-    const { recent } = useRecentNotes()
-    const { pinned } = useUtils()
-    const { listTemplates } = useTemplates()
+    const { activeRepositoryTree } = useRepositories()
+
     const [templates, setTemplates] = useState([])
     const rootId = activeRepositoryTree[0]?.id
+
     const recentCount = getRecentIds(pinned, recent, notes, templates).length
 
     const recentsSheet = useBottomSheet()
@@ -65,7 +69,7 @@ export function Home() {
         <>
             <AppBar
                 mode='menu'
-                title={t('title.notes')}
+                title={t('title.notes') + (premium ? ' (Pro)' : '')}
             />
 
             <View style={styles.container}>
