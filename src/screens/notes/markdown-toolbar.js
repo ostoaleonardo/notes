@@ -119,7 +119,6 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
 
 const styles = StyleSheet.create({
     container: {
-        paddingHorizontal: 4,
         borderTopWidth: 1
     },
     row: {
