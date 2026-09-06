@@ -29,11 +29,12 @@ export const CardGridItem = memo(function CardGridItem({
             style={{ ...cellStyle, gap: 8 }}
         >
             <Pressable
+                disabled={card.active}
                 onPress={() => onOpen(card)}
                 style={{
                     ...styles.card,
                     borderColor: colors.outline,
-                    backgroundColor: colors.surface
+                    backgroundColor: card.active ? colors.onBackground : colors.surface
                 }}
             >
                 {onRemove && (
@@ -41,9 +42,7 @@ export const CardGridItem = memo(function CardGridItem({
                         size={4}
                         mode='contained'
                         onPress={() => onRemove(card)}
-                        style={{
-                            alignSelf: 'flex-end'
-                        }}
+                        style={styles.removeButton}
                         icon={(props) => (
                             card.pinned
                                 ? <KeepFilled {...props} />
@@ -59,6 +58,7 @@ export const CardGridItem = memo(function CardGridItem({
                     opacity={0.6}
                     fontSize={11}
                     numberOfLines={8}
+                    color={card.active ? colors.background : undefined}
                     styleProps={{
                         paddingHorizontal: 12
                     }}
@@ -86,5 +86,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         flexDirection: 'column',
         borderRadius: COMMONS.radius
+    },
+    removeButton: {
+        alignSelf: 'flex-end'
     }
 })

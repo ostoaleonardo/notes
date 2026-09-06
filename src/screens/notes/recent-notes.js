@@ -6,6 +6,7 @@ import { IconButton, Tooltip } from 'react-native-paper'
 
 import { CardGrid } from './card-grid'
 
+import { useCurrentNote } from '@/hooks/use-current-note'
 import { useRecentNotes } from '@/hooks/use-recent-notes'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useNotes } from '@/hooks/use-notes'
@@ -25,6 +26,7 @@ import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 export function RecentNotes({ onClose, home = false }) {
     const { t } = useTranslation()
     const { notes } = useNotes()
+    const { currentId } = useCurrentNote()
     const { pinned, updatePinned } = useUtils()
     const { activeRepositoryTree } = useRepositories()
     const { listTemplates } = useTemplates()
@@ -47,7 +49,8 @@ export function RecentNotes({ onClose, home = false }) {
                     id,
                     title: t(`templates.${template.name}`, template.name),
                     preview: getPreviewNote(template.content),
-                    pinned: pinned.has(id)
+                    pinned: pinned.has(id),
+                    active: id === currentId
                 }
             }
 
@@ -57,10 +60,11 @@ export function RecentNotes({ onClose, home = false }) {
                 id,
                 title: note.title || t('notes.untitled'),
                 preview: getPreviewNote(note.note),
-                pinned: pinned.has(id)
+                pinned: pinned.has(id),
+                active: id === currentId
             }
         })
-    }, [pinned, recent, notes, templates])
+    }, [pinned, recent, notes, templates, currentId])
 
     const onCreateNote = () => {
         onClose()
@@ -71,9 +75,17 @@ export function RecentNotes({ onClose, home = false }) {
     }
 
     const onOpen = useCallback((card) => {
+        if (card.active) return
+
         onClose()
-        router.push(getEditorPath(card.id))
-    }, [onClose])
+
+        const path = getEditorPath(card.id)
+        if (home) {
+            router.push(path)
+        } else {
+            router.replace(path)
+        }
+    }, [onClose, home])
 
     const onRemove = useCallback((card) => {
         if (card.pinned) {
