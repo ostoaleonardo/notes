@@ -100,8 +100,7 @@ const lightTheme = {
         onSurface: COLORS.light.onBackground,
         onSurfaceVariant: COLORS.light.onBackground,
 
-        outline: COLORS.light.onBackground,
-        outlineVariant: COLORS.light.onBackground,
+        outline: COLORS.light.onBackground + TRANSPARENT[10],
         backdrop: COLORS.light.onBackground + TRANSPARENT[70],
 
         elevation: {
