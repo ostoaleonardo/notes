@@ -7,9 +7,9 @@ import { useRecentNotes, useRepositories, useNotes, useTemplates, useUtils } fro
 import { Close, NoteStack, Plus } from '@/icons'
 import { ROUTES, TEMPLATE_TAB_PREFIX } from '@/constants'
 import { getEditorPath, getPreviewNote, getRecentIds } from '@/utils'
-import { RecentNotesGrid } from './recent-notes-grid'
+import { CardGrid } from './card-grid'
 
-export function RecentNotes({ onClose, isHome = false }) {
+export function RecentNotes({ onClose, home = false }) {
     const { t } = useTranslation()
     const { notes } = useNotes()
     const { pinned, updatePinned } = useUtils()
@@ -83,10 +83,11 @@ export function RecentNotes({ onClose, isHome = false }) {
 
     return (
         <View style={styles.container}>
-            <RecentNotesGrid
+            <CardGrid
                 cards={cards}
                 onOpen={onOpen}
                 onRemove={onRemove}
+                emptyMessage={t('message.notes.no_recent')}
             />
 
             <View style={styles.actions}>
@@ -99,7 +100,7 @@ export function RecentNotes({ onClose, isHome = false }) {
                     />
                 </Tooltip>
 
-                {!isHome && (
+                {!home && (
                     <Tooltip title={t('title.notes')}>
                         <IconButton
                             mode='contained'
@@ -127,12 +128,12 @@ export function RecentNotes({ onClose, isHome = false }) {
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        gap: 8
+        justifyContent: 'space-between'
     },
     actions: {
         width: '100%',
-        padding: 16,
+        paddingTop: 8,
+        paddingHorizontal: 16,
         flexDirection: 'row',
         justifyContent: 'space-between'
     }

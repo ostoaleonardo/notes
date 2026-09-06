@@ -1,29 +1,32 @@
-import { useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { StyleSheet, View } from 'react-native'
+import { useMemo } from 'react'
+import { StyleSheet, useWindowDimensions, View } from 'react-native'
 import { FadeInUp } from 'react-native-reanimated'
 import { AnimatedView, Scroll, Typography } from '@/components'
-import { RecentNoteCard, CARDS_HEIGHT } from './recent-note-card'
+import { CardGridItem, CARDS_HEIGHT } from './card-grid-item'
 
 const CARD_MIN_WIDTH = 160
-const GRID_GAP = 8
+const GRID_GAP = 24
+const GRID_GAP_HORIZONTAL = 16
 const GRID_PADDING = 16
 
-export function RecentNotesGrid({ cards, onOpen, onRemove }) {
-    const { t } = useTranslation()
-    const [containerWidth, setContainerWidth] = useState(0)
+export function CardGrid({ cards, onOpen, onRemove, emptyMessage }) {
+    const { width: windowWidth } = useWindowDimensions()
 
     const cellStyle = useMemo(() => {
-        const columns = containerWidth ? Math.max(1, Math.floor(containerWidth / CARD_MIN_WIDTH)) : 2
+        const containerWidth = windowWidth - (GRID_PADDING - GRID_GAP_HORIZONTAL / 2) * 2
+        const columns = Math.max(1, Math.floor(containerWidth / CARD_MIN_WIDTH))
 
-        return { width: `${100 / columns}%`, padding: GRID_GAP / 2 }
-    }, [containerWidth])
+        return {
+            width: `${100 / columns}%`,
+            paddingHorizontal: GRID_GAP_HORIZONTAL / 2,
+            paddingVertical: GRID_GAP / 2
+        }
+    }, [windowWidth])
+
+    if (cards.length === 0 && !emptyMessage) return null
 
     return (
-        <View
-            style={styles.container}
-            onLayout={(event) => setContainerWidth(event.nativeEvent.layout.width)}
-        >
+        <View style={[styles.container, { width: windowWidth }]}>
             {cards.length === 0 ? (
                 <AnimatedView
                     entering={FadeInUp}
@@ -33,7 +36,7 @@ export function RecentNotesGrid({ cards, onOpen, onRemove }) {
                         opacity={0.5}
                         textAlign='center'
                     >
-                        {t('message.notes.no_recent')}
+                        {emptyMessage}
                     </Typography>
                 </AnimatedView>
             ) : (
@@ -42,12 +45,12 @@ export function RecentNotesGrid({ cards, onOpen, onRemove }) {
                     contentContainerStyle={styles.grid}
                 >
                     {cards.map((card) => (
-                        <RecentNoteCard
+                        <CardGridItem
                             key={card.id}
                             card={card}
                             cellStyle={cellStyle}
                             onPress={() => onOpen(card)}
-                            onRemove={() => onRemove(card)}
+                            onRemove={onRemove && (() => onRemove(card))}
                         />
                     ))}
                 </Scroll>
@@ -58,7 +61,7 @@ export function RecentNotesGrid({ cards, onOpen, onRemove }) {
 
 const styles = StyleSheet.create({
     container: {
-        maxHeight: CARDS_HEIGHT * 2 + 32
+        maxHeight: CARDS_HEIGHT * 2 + 48
     },
     empty: {
         minHeight: CARDS_HEIGHT,
@@ -67,7 +70,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     grid: {
-        paddingHorizontal: GRID_PADDING - GRID_GAP / 2,
+        paddingHorizontal: GRID_PADDING - GRID_GAP_HORIZONTAL / 2,
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center'
