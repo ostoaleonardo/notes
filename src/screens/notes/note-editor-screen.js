@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { AppBar, MarkdownEditor, ModalSheet } from '@/components'
 import { MarkdownEditorLayout } from './markdown-editor-layout'
 import { MarkdownModeToggle } from './markdown-mode-toggle'
-import { TemplateCarousel } from './template-carousel'
-import { RecentNotes } from './recent-notes'
+import { TemplatePickerSheet } from './template-picker-sheet'
+import { RecentNotesSheet } from './recent-notes-sheet'
 import { VersionHistoryPanel } from './version-history-panel'
 import { VersionHistoryContent } from './version-history-content'
 import { Tags } from '@/screens/modals/tags'
@@ -34,7 +34,7 @@ export const NoteEditorScreen = ({
     initialMode = 'read'
 }) => {
     const { t } = useTranslation()
-    const { addTemplate } = useTemplates()
+    const { addTemplate, listTemplates } = useTemplates()
     const { currentLanguage } = useLanguage()
     const { premium } = usePremium()
     const { repositories } = useRepositories()
@@ -53,6 +53,7 @@ export const NoteEditorScreen = ({
     const [versionHistoryVisible, setVersionHistoryVisible] = useState(false)
     const [canUndo, setCanUndo] = useState(false)
     const [canRedo, setCanRedo] = useState(false)
+    const [templates, setTemplates] = useState([])
 
     const markdownAction = useMarkdownAction()
 
@@ -120,6 +121,10 @@ export const NoteEditorScreen = ({
         setTitle(version.title)
         setNote(version.content)
         setVersionHistoryVisible(false)
+    }, [])
+
+    useEffect(() => {
+        listTemplates().then(setTemplates)
     }, [])
 
     useEffect(() => {
@@ -240,24 +245,14 @@ export const NoteEditorScreen = ({
                 />
             </ModalSheet>
 
-            <ModalSheet
-                ref={templatesSheet.ref}
-                onClose={templatesSheet.onClose}
-                contentContainerStyle={{ paddingVertical: 16 }}
-            >
-                <TemplateCarousel
-                    title={title}
-                    onSelect={onSelectTemplate}
-                />
-            </ModalSheet>
+            <TemplatePickerSheet
+                sheet={templatesSheet}
+                title={title}
+                templates={templates}
+                onSelect={onSelectTemplate}
+            />
 
-            <ModalSheet
-                ref={recentsSheet.ref}
-                onClose={recentsSheet.onClose}
-                title={t('search.recent')}
-            >
-                <RecentNotes onClose={recentsSheet.onClose} />
-            </ModalSheet>
+            <RecentNotesSheet sheet={recentsSheet} />
         </VersionHistoryPanel>
     )
 }

@@ -3,8 +3,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ToastAndroid } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 import { LoadingOverlay } from '@/components/layout'
-import { AppBar, ModalSheet, Typography } from '@/components'
-import { MarkdownEditorLayout, MarkdownModeToggle, RecentNotes, VersionHistoryPanel } from '@/screens/notes'
+import { AppBar, Typography } from '@/components'
+import { MarkdownEditorLayout, MarkdownModeToggle, RecentNotesSheet, VersionHistoryPanel } from '@/screens/notes'
 import { TemplateEditorForm } from '@/screens/templates'
 import { TemplatePlaceholders } from '@/screens/modals'
 import { useAllowLandscape, useBottomSheet, useMarkdownAction, usePremium, useRegisterCurrent, useTemplates } from '@/hooks'
@@ -161,13 +161,7 @@ export default function EditTemplate() {
                 onDismiss={() => setPlaceholdersVisible(false)}
             />
 
-            <ModalSheet
-                ref={recentsSheet.ref}
-                onClose={recentsSheet.onClose}
-                title={t('search.recent')}
-            >
-                <RecentNotes onClose={recentsSheet.onClose} />
-            </ModalSheet>
+            <RecentNotesSheet sheet={recentsSheet} />
         </VersionHistoryPanel>
     )
 }
