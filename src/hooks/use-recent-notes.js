@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
+
 import { useStorage } from './use-storage'
-import { STORAGE_KEYS } from '@/constants'
+
+import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export function useRecentNotes() {
     const { getItem, setItem } = useStorage()

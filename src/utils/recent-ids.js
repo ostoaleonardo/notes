@@ -1,4 +1,4 @@
-import { TEMPLATE_TAB_PREFIX } from '@/constants'
+import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 
 export const getRecentIds = (pinned, recent, notes, templates) => {
     const ids = [...pinned, ...recent.filter((id) => !pinned.has(id))]

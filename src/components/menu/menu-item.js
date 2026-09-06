@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native'
 import { Menu } from 'react-native-paper'
-import { FONTS } from '@/constants'
+
+import { FONTS } from '@/constants/themes'
 
 export function MenuItem({ ...props }) {
     return (

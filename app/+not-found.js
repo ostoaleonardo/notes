@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'expo-router'
-import { ROUTES } from '@/constants'
+
+import { ROUTES } from '@/constants/routes'
 
 export default function NotFound() {
     const router = useRouter()

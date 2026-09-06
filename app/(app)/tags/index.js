@@ -2,10 +2,17 @@ import { randomUUID } from 'expo-crypto'
 import { useState, useCallback } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { AnimatedList, SmallInput, SquareButton, SwipeableTag } from '@/components'
-import { UpdateTag } from '@/screens/modals'
-import { useTags, useHaptics } from '@/hooks'
-import { FEEDBACK_TYPES } from '@/constants'
+
+import { UpdateTag } from '@/screens/modals/update-tag'
+import { AnimatedList } from '@/components/animated/animated-list'
+import { SmallInput } from '@/components/input/small-input'
+import { SquareButton } from '@/components/button/square-button'
+import { SwipeableTag } from '@/components/swipeable/swipeable-tag'
+
+import { useTags } from '@/hooks/use-tags'
+import { useHaptics } from '@/hooks/use-haptics'
+
+import { FEEDBACK_TYPES } from '@/constants/feedback-types'
 
 export default function Tags() {
     const { t } = useTranslation()

@@ -1,8 +1,16 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { MenuItem, SplitButton } from '@/components'
+
 import { useNoteActionsMenu } from './use-note-actions-menu'
-import { Book, Code, Commit, Delete, EditNote, Shapes } from '@/icons'
+import { MenuItem } from '@/components/menu/menu-item'
+import { SplitButton } from '@/components/button/split-button'
+
+import { Book } from '@/icons/book'
+import { Code } from '@/icons/code'
+import { Commit } from '@/icons/commit'
+import { Delete } from '@/icons/delete'
+import { EditNote } from '@/icons/edit-note'
+import { Shapes } from '@/icons/shapes'
 
 export const MarkdownModeToggle = ({
     mode,

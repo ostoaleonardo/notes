@@ -3,11 +3,19 @@ import { ToastAndroid } from 'react-native'
 import { ErrorCode, useIAP } from 'expo-iap'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator } from 'react-native-paper'
-import { Section } from '@/components'
+
 import { Option } from './option'
-import { useIconProps, usePremium, useStorage } from '@/hooks'
-import { ArrowForward, Check } from '@/icons'
-import { PRO, PRODUCT_ID, STORAGE_KEYS } from '@/constants'
+import { Section } from '@/components/section'
+
+import { useIconProps } from '@/hooks/use-icon-props'
+import { usePremium } from '@/hooks/use-premium'
+import { useStorage } from '@/hooks/use-storage'
+
+import { ArrowForward } from '@/icons/arrow-forward'
+import { Check } from '@/icons/check'
+
+import { PRO, PRODUCT_ID } from '@/constants/iap'
+import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export function PremiumSection() {
     const { t } = useTranslation()

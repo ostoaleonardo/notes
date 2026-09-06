@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocalSearchParams } from 'expo-router'
+
+import { NoteEditorScreen } from '@/screens/notes/note-editor-screen'
 import { LoadingOverlay } from '@/components/layout'
-import { NoteEditorScreen } from '@/screens/notes'
-import { useNoteAutosave, useNotes, useRegisterCurrent } from '@/hooks'
-import { getDate } from '@/utils'
+
+import { useNoteAutosave } from '@/hooks/use-note-autosave'
+import { useNotes } from '@/hooks/use-notes'
+import { useRegisterCurrent } from '@/hooks/use-current-note'
+import { getDate } from '@/utils/date'
 
 export default function EditNote() {
     const { t } = useTranslation()

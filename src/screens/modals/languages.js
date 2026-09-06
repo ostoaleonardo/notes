@@ -1,8 +1,11 @@
 import { RadioButton } from 'react-native-paper'
 import { FlatList } from 'react-native-gesture-handler'
-import { RadioButtonItem } from '@/components'
-import { useLanguage } from '@/hooks'
-import { LANGUAGES } from '@/constants'
+
+import { RadioButtonItem } from '@/components/radio-button-item'
+
+import { useLanguage } from '@/hooks/use-language'
+
+import { LANGUAGES } from '@/constants/languages'
 
 export function Languages() {
     const { currentLanguage, changeLanguage } = useLanguage()

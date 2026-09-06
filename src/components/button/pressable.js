@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native'
 import { Button } from 'react-native-paper'
-import { FONTS } from '@/constants'
+
+import { FONTS } from '@/constants/themes'
 
 export function Pressable({ children, ...props }) {
     return (

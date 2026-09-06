@@ -1,5 +1,7 @@
 import { getEditorPath } from '../editor-path'
-import { ROUTES, TEMPLATE_TAB_PREFIX } from '@/constants'
+
+import { ROUTES } from '@/constants/routes'
+import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 
 describe('get editor path', () => {
     test('builds a note editor path for a plain id', () => {

@@ -1,7 +1,8 @@
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Badge, IconButton, Tooltip, useTheme } from 'react-native-paper'
-import { NoteStack } from '@/icons'
+
+import { NoteStack } from '@/icons/note-stack'
 
 export function RecentsButton({ onPress, count = 0 }) {
     const { t } = useTranslation()

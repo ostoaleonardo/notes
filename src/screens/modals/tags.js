@@ -4,10 +4,17 @@ import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { FlatList } from 'react-native-gesture-handler'
 import { useTranslation } from 'react-i18next'
-import { SmallInput, SquareButton, Typography, Separator } from '@/components'
+
 import { TagOption } from '../notes/tag-option'
-import { useTags, useHaptics } from '@/hooks'
-import { FEEDBACK_TYPES } from '@/constants'
+import { SmallInput } from '@/components/input/small-input'
+import { SquareButton } from '@/components/button/square-button'
+import { Typography } from '@/components/typography'
+import { Separator } from '@/components/separator/separator'
+
+import { useTags } from '@/hooks/use-tags'
+import { useHaptics } from '@/hooks/use-haptics'
+
+import { FEEDBACK_TYPES } from '@/constants/feedback-types'
 
 export function Tags({ tags, setTags }) {
     const { t } = useTranslation()

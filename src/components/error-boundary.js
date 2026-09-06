@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View, useColorScheme } from 'react-native'
-import { Typography } from '../typography'
-import { Pressable } from '../button'
-import { COLORS, FONTS } from '@/constants'
+
+import { Typography } from './typography'
+import { Pressable } from '@/components/button/pressable'
+
+import { COLORS, FONTS } from '@/constants/themes'
 
 export function ErrorBoundary({ retry }) {
     const { t } = useTranslation()

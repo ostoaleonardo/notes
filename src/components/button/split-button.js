@@ -2,9 +2,13 @@ import { useEffect, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { TouchableRipple, useTheme } from 'react-native-paper'
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
+
 import { MenuContainer } from '../menu/menu-container'
-import { KeyboardArrowDown, KeyboardArrowUp } from '@/icons'
-import { FONTS } from '@/constants'
+
+import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
+import { KeyboardArrowUp } from '@/icons/keyboard-arrow-up'
+
+import { FONTS } from '@/constants/themes'
 
 export const SplitButton = ({
     icon: Icon,

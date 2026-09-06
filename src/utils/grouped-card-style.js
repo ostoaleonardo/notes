@@ -1,4 +1,4 @@
-import { COMMONS } from '@/constants'
+import { COMMONS } from '@/constants/themes'
 
 export const getGroupedRadius = (isFirst, isLast) => ({
     borderTopLeftRadius: isFirst ? COMMONS.radius : 0,

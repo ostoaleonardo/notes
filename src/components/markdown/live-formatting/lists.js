@@ -1,7 +1,9 @@
 import { Decoration } from '@codemirror/view'
-import { LIST_NODE_NAMES } from '@/constants/markdown-live-formatting'
+
 import { isRangeSelected } from './utils'
 import { CheckboxWidget } from './widgets'
+
+import { LIST_NODE_NAMES } from '@/constants/markdown-live-formatting'
 
 export const listNodeNames = LIST_NODE_NAMES
 

@@ -1,8 +1,13 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AnimatedList, SwipeableTag } from '@/components'
-import { useTags, useHaptics } from '@/hooks'
-import { FEEDBACK_TYPES } from '@/constants'
+
+import { AnimatedList } from '@/components/animated/animated-list'
+import { SwipeableTag } from '@/components/swipeable/swipeable-tag'
+
+import { useTags } from '@/hooks/use-tags'
+import { useHaptics } from '@/hooks/use-haptics'
+
+import { FEEDBACK_TYPES } from '@/constants/feedback-types'
 
 export function TagsContainer({ onPress }) {
     const { t } = useTranslation()

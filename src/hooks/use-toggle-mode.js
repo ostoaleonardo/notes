@@ -1,7 +1,9 @@
 import { useContext } from 'react'
+
 import { useStorage } from './use-storage'
-import { ThemeContext } from '@/context'
-import { STORAGE_KEYS } from '@/constants'
+import { ThemeContext } from '@/context/theme-context'
+
+import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export function useToggleMode() {
     const {

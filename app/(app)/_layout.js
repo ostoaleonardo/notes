@@ -3,16 +3,16 @@ import * as SplashScreen from 'expo-splash-screen'
 import { Stack } from 'expo-router'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
+
 import { LoadingOverlay } from '@/components/layout'
-import { AppBar } from '@/components'
-import {
-    useNotes,
-    useDevMenu,
-    useRepositories,
-    useRepositoryReconciliation,
-    useImportMarkdown
-} from '@/hooks'
-import { getScreenContentStyle } from '@/utils'
+import { AppBar } from '@/components/app-bar/app-bar'
+
+import { useNotes } from '@/hooks/use-notes'
+import { useDevMenu } from '@/hooks/use-dev-menu'
+import { useRepositories } from '@/hooks/use-repositories'
+import { useRepositoryReconciliation } from '@/hooks/use-repository-reconciliation'
+import { useImportMarkdown } from '@/hooks/use-import-markdown'
+import { getScreenContentStyle } from '@/utils/screen-content-style'
 
 export default function AppLayout() {
     const { t } = useTranslation()

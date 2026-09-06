@@ -1,10 +1,14 @@
 import { Linking } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import * as Application from 'expo-application'
+
 import { Option } from './option'
-import { useIconProps } from '@/hooks'
-import { OpenInNew } from '@/icons'
-import { LINKS } from '@/constants'
+
+import { useIconProps } from '@/hooks/use-icon-props'
+
+import { OpenInNew } from '@/icons/open-in-new'
+
+import { LINKS } from '@/constants/links'
 
 export function AppVersionCard() {
     const { t } = useTranslation()

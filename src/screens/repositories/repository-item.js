@@ -2,11 +2,18 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { IconButton, Tooltip, useTheme } from 'react-native-paper'
-import { AnimatedView, Separator, Typography } from '@/components'
+
 import { RepositoryMenu } from './repository-menu'
-import { OpenInNew } from '@/icons'
-import { useFileStorage, useRepositories } from '@/hooks'
-import { getGroupedRadius, getRepositoryPath } from '@/utils'
+import { AnimatedView } from '@/components/animated/animated-view'
+import { Separator } from '@/components/separator/separator'
+import { Typography } from '@/components/typography'
+
+import { useFileStorage } from '@/hooks/use-file-storage'
+import { useRepositories } from '@/hooks/use-repositories'
+import { getGroupedRadius } from '@/utils/grouped-card-style'
+import { getRepositoryPath } from '@/utils/repository-path'
+
+import { OpenInNew } from '@/icons/open-in-new'
 
 export function RepositoryItem({
     repository,

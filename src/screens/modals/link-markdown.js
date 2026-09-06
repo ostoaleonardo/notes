@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { LargeInput, Pressable, Section } from '@/components'
+
+import { LargeInput } from '@/components/input/large-input'
+import { Pressable } from '@/components/button/pressable'
+import { Section } from '@/components/section'
 
 export function LinkMarkdown({ onClose, onInsert }) {
     const { t } = useTranslation()

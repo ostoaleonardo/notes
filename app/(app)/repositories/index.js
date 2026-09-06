@@ -2,12 +2,21 @@ import { useEffect, useState } from 'react'
 import { AppState, ToastAndroid, View } from 'react-native'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import { AnimatedList, FloatingButton } from '@/components'
-import { RepositoryItem } from '@/screens/repositories'
-import { DeleteRepository, ForgetRepository, RenameRepository } from '@/screens/modals'
-import { useFileStorage, usePremium, useRepositories } from '@/hooks'
-import { ROUTES } from '@/constants'
-import { Folder } from '@/icons'
+
+import { RepositoryItem } from '@/screens/repositories/repository-item'
+import { DeleteRepository } from '@/screens/modals/delete-repository'
+import { ForgetRepository } from '@/screens/modals/forget-repository'
+import { RenameRepository } from '@/screens/modals/rename-repository'
+import { AnimatedList } from '@/components/animated/animated-list'
+import { FloatingButton } from '@/components/button/floating-button'
+
+import { useFileStorage } from '@/hooks/use-file-storage'
+import { usePremium } from '@/hooks/use-premium'
+import { useRepositories } from '@/hooks/use-repositories'
+
+import { Folder } from '@/icons/folder'
+
+import { ROUTES } from '@/constants/routes'
 
 export default function Repositories() {
     const { t } = useTranslation()

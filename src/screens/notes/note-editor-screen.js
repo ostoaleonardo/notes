@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ToastAndroid } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { AppBar, MarkdownEditor, ModalSheet } from '@/components'
+
 import { MarkdownEditorLayout } from './markdown-editor-layout'
 import { MarkdownModeToggle } from './markdown-mode-toggle'
 import { TemplatePickerSheet } from './template-picker-sheet'
@@ -12,17 +12,19 @@ import { Tags } from '@/screens/modals/tags'
 import { LinkMarkdown } from '@/screens/modals/link-markdown'
 import { TableMarkdown } from '@/screens/modals/table-markdown'
 import { ImageMarkdown } from '@/screens/modals/image-markdown'
-import {
-    useAllowLandscape,
-    useBottomSheet,
-    useLanguage,
-    useMarkdownAction,
-    useNoteVersions,
-    usePremium,
-    useRepositories,
-    useTemplates
-} from '@/hooks'
-import { getFormattedDate } from '@/utils'
+import { AppBar } from '@/components/app-bar/app-bar'
+import { MarkdownEditor } from '@/components/markdown/markdown-editor'
+import { ModalSheet } from '@/components/modal/modal-sheet'
+
+import { useAllowLandscape } from '@/hooks/use-allow-landscape'
+import { useBottomSheet } from '@/hooks/use-bottom-sheet'
+import { useLanguage } from '@/hooks/use-language'
+import { useMarkdownAction } from '@/hooks/use-markdown-action'
+import { useNoteVersions } from '@/hooks/use-note-versions'
+import { usePremium } from '@/hooks/use-premium'
+import { useRepositories } from '@/hooks/use-repositories'
+import { useTemplates } from '@/hooks/use-templates'
+import { getFormattedDate } from '@/utils/formatted-date'
 
 export const NoteEditorScreen = ({
     id,

@@ -1,7 +1,9 @@
 import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
-import { Check } from '@/icons'
-import { TRANSPARENT } from '@/constants'
+
+import { Check } from '@/icons/check'
+
+import { TRANSPARENT } from '@/constants/themes'
 
 export function Checkbox({ checked }) {
     const { colors } = useTheme()

@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import Animated, { LinearTransition } from 'react-native-reanimated'
+
 import { Typography } from '../typography'
 
 export function AnimatedList({ emptyLabel, gap = 16, contentContainerStyle, ...props }) {

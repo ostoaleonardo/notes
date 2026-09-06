@@ -1,8 +1,12 @@
 import { router, useNavigation } from 'expo-router'
 import { Appbar, Tooltip, useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { ArrowBack, Menu } from '@/icons'
-import { FONTS, ROUTES } from '@/constants'
+
+import { ArrowBack } from '@/icons/arrow-back'
+import { Menu } from '@/icons/menu'
+
+import { FONTS } from '@/constants/themes'
+import { ROUTES } from '@/constants/routes'
 
 export function AppBar({ title, trailing, mode = 'back' }) {
     const { t } = useTranslation()

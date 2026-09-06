@@ -1,4 +1,5 @@
 import { Decoration } from '@codemirror/view'
+
 import { BLOCKQUOTE_NODE_NAMES } from '@/constants/markdown-live-formatting'
 
 export const blockquoteNodeNames = BLOCKQUOTE_NODE_NAMES

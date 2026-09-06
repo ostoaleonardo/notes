@@ -1,7 +1,9 @@
 import { Decoration } from '@codemirror/view'
-import { IMAGE_NODE_NAMES } from '@/constants/markdown-live-formatting'
+
 import { collectMarks, isRangeSelected } from './utils'
 import { ImageWidget } from './widgets'
+
+import { IMAGE_NODE_NAMES } from '@/constants/markdown-live-formatting'
 
 export const imageNodeNames = IMAGE_NODE_NAMES
 

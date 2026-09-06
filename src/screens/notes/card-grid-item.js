@@ -2,9 +2,14 @@ import { useTranslation } from 'react-i18next'
 import { FadeOutUp } from 'react-native-reanimated'
 import { Pressable, StyleSheet } from 'react-native'
 import { IconButton, useTheme } from 'react-native-paper'
-import { AnimatedView, Typography } from '@/components'
-import { Close, KeepFilled } from '@/icons'
-import { COMMONS } from '@/constants'
+
+import { AnimatedView } from '@/components/animated/animated-view'
+import { Typography } from '@/components/typography'
+
+import { Close } from '@/icons/close'
+import { KeepFilled } from '@/icons/keep-filled'
+
+import { COMMONS } from '@/constants/themes'
 
 export const CARDS_HEIGHT = 220
 

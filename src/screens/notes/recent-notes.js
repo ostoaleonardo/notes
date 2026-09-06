@@ -3,11 +3,24 @@ import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 import { IconButton, Tooltip } from 'react-native-paper'
-import { useRecentNotes, useRepositories, useNotes, useTemplates, useUtils } from '@/hooks'
-import { Close, NoteStack, Plus } from '@/icons'
-import { ROUTES, TEMPLATE_TAB_PREFIX } from '@/constants'
-import { getEditorPath, getPreviewNote, getRecentIds } from '@/utils'
+
 import { CardGrid } from './card-grid'
+
+import { useRecentNotes } from '@/hooks/use-recent-notes'
+import { useRepositories } from '@/hooks/use-repositories'
+import { useNotes } from '@/hooks/use-notes'
+import { useTemplates } from '@/hooks/use-templates'
+import { useUtils } from '@/hooks/use-utils'
+import { getEditorPath } from '@/utils/editor-path'
+import { getPreviewNote } from '@/utils/preview-note'
+import { getRecentIds } from '@/utils/recent-ids'
+
+import { Close } from '@/icons/close'
+import { NoteStack } from '@/icons/note-stack'
+import { Plus } from '@/icons/plus'
+
+import { ROUTES } from '@/constants/routes'
+import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 
 export function RecentNotes({ onClose, home = false }) {
     const { t } = useTranslation()

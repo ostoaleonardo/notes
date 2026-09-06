@@ -1,4 +1,5 @@
-import { ROUTES, TEMPLATE_TAB_PREFIX } from '@/constants'
+import { ROUTES } from '@/constants/routes'
+import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 
 export const getEditorPath = (id) => (
     id.startsWith(TEMPLATE_TAB_PREFIX)

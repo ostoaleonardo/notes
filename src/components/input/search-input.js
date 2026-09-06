@@ -1,8 +1,11 @@
 import { StyleSheet, View } from 'react-native'
 import { IconButton, useTheme } from 'react-native-paper'
+
 import { SmallInput } from './small-input'
-import { Search } from '@/icons'
-import { COMMONS } from '@/constants'
+
+import { Search } from '@/icons/search'
+
+import { COMMONS } from '@/constants/themes'
 
 export function SearchInput({
     value,

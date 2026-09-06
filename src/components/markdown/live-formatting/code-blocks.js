@@ -1,4 +1,5 @@
 import { Decoration } from '@codemirror/view'
+
 import { CODE_BLOCK_NODE_NAMES } from '@/constants/markdown-live-formatting'
 
 export const codeBlockNodeNames = CODE_BLOCK_NODE_NAMES

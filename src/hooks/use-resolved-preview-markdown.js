@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { File } from 'expo-file-system'
-import { bytesToBase64 } from '@/utils'
+
+import { bytesToBase64 } from '@/utils/base64'
 
 const MARKDOWN_IMAGE_PATTERN = /!\[([^\]]*)\]\(((?:file|content):\/\/[^)]+)\)/g
 const HTML_IMAGE_PATTERN = /(<img[^>]*\bsrc=["'])((?:file|content):\/\/[^"']+)(["'])/g

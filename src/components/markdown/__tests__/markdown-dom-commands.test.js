@@ -4,6 +4,7 @@
 import { EditorState } from '@codemirror/state'
 import { EditorView, keymap } from '@codemirror/view'
 import { defaultKeymap, historyKeymap, history, redoDepth, undoDepth } from '@codemirror/commands'
+
 import { runAction } from '../markdown-dom-commands'
 
 const createView = (doc, cursor = doc.length) => {

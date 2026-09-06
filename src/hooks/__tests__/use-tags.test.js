@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { act, renderHook } from '@testing-library/react-native'
+
 import { useTags } from '../use-tags'
-import { NoteContext } from '@/context/note-context'
-import { DEFAULT_TAGS } from '@/constants'
 import { MOCK_ROOT_URI } from '../__fixtures__/constants'
 import { MOCK_PERSONAL_TAG, MOCK_WORK_TAG } from '../__fixtures__/tags'
+import { NoteContext } from '@/context/note-context'
+
+import { DEFAULT_TAGS } from '@/constants/default-values'
 
 const mockFileStorage = { writeJson: jest.fn() }
 

@@ -2,10 +2,15 @@ import { ToastAndroid } from 'react-native'
 import { useEffect, useState } from 'react'
 import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
+
 import { DialogModal } from '@/components/dialog'
-import { LargeInput } from '@/components/input'
-import { useHaptics, useRepositories } from '@/hooks'
-import { DIALOG_BUTTON_LABEL_STYLE, FEEDBACK_TYPES } from '@/constants'
+import { LargeInput } from '@/components/input/large-input'
+
+import { useHaptics } from '@/hooks/use-haptics'
+import { useRepositories } from '@/hooks/use-repositories'
+
+import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/dialog'
+import { FEEDBACK_TYPES } from '@/constants/feedback-types'
 
 export function AddSubfolder({ visible, onDismiss, parentId }) {
     const { t } = useTranslation()

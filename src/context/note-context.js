@@ -1,8 +1,10 @@
 import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AppState } from 'react-native'
+
 import { useRepositoryData } from '../hooks/use-repository-data'
 import { useRepositories } from '../hooks/use-repositories'
-import { DEFAULT_TAGS } from '@/constants'
+
+import { DEFAULT_TAGS } from '@/constants/default-values'
 
 export const NoteContext = createContext()
 

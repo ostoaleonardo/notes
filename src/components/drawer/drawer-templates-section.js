@@ -1,9 +1,13 @@
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, View } from 'react-native'
+
 import { Typography } from '../typography'
 import { DrawerNoteItem } from './drawer-note-item'
 import { DrawerIconButton } from './drawer-icon-button'
-import { CollapseAll, ExpandAll, Plus } from '@/icons'
+
+import { CollapseAll } from '@/icons/collapse-all'
+import { ExpandAll } from '@/icons/expand-all'
+import { Plus } from '@/icons/plus'
 
 export function DrawerTemplatesSection({ templates, activeFilename, collapsed, onToggleCollapse, onOpenTemplate, onAddTemplate }) {
     const { t } = useTranslation()

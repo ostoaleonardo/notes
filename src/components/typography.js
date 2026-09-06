@@ -1,6 +1,7 @@
 import { StyleSheet, Text } from 'react-native'
 import { useTheme } from 'react-native-paper'
-import { FONTS } from '@/constants'
+
+import { FONTS } from '@/constants/themes'
 
 const SIZE_VARIANTS = {
     title: 24,

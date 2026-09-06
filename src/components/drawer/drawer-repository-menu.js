@@ -1,6 +1,11 @@
 import { useTranslation } from 'react-i18next'
+
 import { MenuItem } from '../menu/menu-item'
-import { Delete, Edit, Folder, Plus } from '@/icons'
+
+import { Delete } from '@/icons/delete'
+import { Edit } from '@/icons/edit'
+import { Folder } from '@/icons/folder'
+import { Plus } from '@/icons/plus'
 
 export function DrawerRepositoryMenu({ isRoot, onCreateNote, onAddSubfolder, onEditFolder, onDelete }) {
     const { t } = useTranslation()

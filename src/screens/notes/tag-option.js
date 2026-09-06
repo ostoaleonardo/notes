@@ -1,8 +1,12 @@
 import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { FadeInUp } from 'react-native-reanimated'
-import { AnimatedView, Checkbox, Typography } from '@/components'
-import { TRANSPARENT } from '@/constants'
+
+import { AnimatedView } from '@/components/animated/animated-view'
+import { Checkbox } from '@/components/checkbox'
+import { Typography } from '@/components/typography'
+
+import { TRANSPARENT } from '@/constants/themes'
 
 export function TagOption({ tag, onPress, isSelected }) {
     const { colors } = useTheme()

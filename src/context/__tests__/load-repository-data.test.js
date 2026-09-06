@@ -1,8 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 import { randomUUID } from 'expo-crypto'
+
 import { loadRepositoryData } from '../load-repository-data'
-import { STORAGE_KEYS } from '@/constants'
+
+import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 jest.mock('expo-crypto', () => ({ randomUUID: jest.fn() }))
 

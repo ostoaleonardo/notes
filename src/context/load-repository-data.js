@@ -1,12 +1,12 @@
 import { randomUUID } from 'expo-crypto'
+
 import { getNoteKey } from '@/utils/note-key'
 import { getUniqueFilename } from '@/utils/note-filename'
-import {
-    DEFAULT_TAGS,
-    STORAGE_KEYS,
-    TAGS_FILENAME,
-    NOTE_KEY_PREFIX
-} from '@/constants'
+
+import { DEFAULT_TAGS } from '@/constants/default-values'
+import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { TAGS_FILENAME } from '@/constants/file-storage'
+import { NOTE_KEY_PREFIX } from '@/constants/note-key'
 
 const getTitle = (filename) => filename.replace(/\.md$/i, '')
 

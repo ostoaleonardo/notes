@@ -2,13 +2,25 @@ import { useTranslation } from 'react-i18next'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ToastAndroid } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
+
+import { MarkdownEditorLayout } from '@/screens/notes/markdown-editor-layout'
+import { MarkdownModeToggle } from '@/screens/notes/markdown-mode-toggle'
+import { RecentNotesSheet } from '@/screens/notes/recent-notes-sheet'
+import { VersionHistoryPanel } from '@/screens/notes/version-history-panel'
+import { TemplateEditorForm } from '@/screens/templates/template-editor-form'
+import { TemplatePlaceholders } from '@/screens/modals/template-placeholders'
 import { LoadingOverlay } from '@/components/layout'
-import { AppBar, Typography } from '@/components'
-import { MarkdownEditorLayout, MarkdownModeToggle, RecentNotesSheet, VersionHistoryPanel } from '@/screens/notes'
-import { TemplateEditorForm } from '@/screens/templates'
-import { TemplatePlaceholders } from '@/screens/modals'
-import { useAllowLandscape, useBottomSheet, useMarkdownAction, usePremium, useRegisterCurrent, useTemplates } from '@/hooks'
-import { TEMPLATE_TAB_PREFIX } from '@/constants'
+import { AppBar } from '@/components/app-bar/app-bar'
+import { Typography } from '@/components/typography'
+
+import { useAllowLandscape } from '@/hooks/use-allow-landscape'
+import { useBottomSheet } from '@/hooks/use-bottom-sheet'
+import { useMarkdownAction } from '@/hooks/use-markdown-action'
+import { usePremium } from '@/hooks/use-premium'
+import { useRegisterCurrent } from '@/hooks/use-current-note'
+import { useTemplates } from '@/hooks/use-templates'
+
+import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 
 export default function EditTemplate() {
     const { t } = useTranslation()

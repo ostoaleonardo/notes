@@ -2,9 +2,15 @@ import { useMemo } from 'react'
 import { Linking } from 'react-native'
 import { router } from 'expo-router'
 import { useTheme } from 'react-native-paper'
+
 import MarkdownDomEditor from './markdown-dom-editor'
-import { useDomFonts, useKatexFonts, useResolvedPreviewMarkdown } from '@/hooks'
-import { FONTS, ROUTES, TRANSPARENT } from '@/constants'
+
+import { useDomFonts } from '@/hooks/use-dom-fonts'
+import { useKatexFonts } from '@/hooks/use-katex-fonts'
+import { useResolvedPreviewMarkdown } from '@/hooks/use-resolved-preview-markdown'
+
+import { FONTS, TRANSPARENT } from '@/constants/themes'
+import { ROUTES } from '@/constants/routes'
 
 export const MarkdownInput = ({
     mode = 'live',

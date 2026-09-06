@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet } from 'react-native'
-import { AnimatedView } from '../animated'
+
+import { AnimatedView } from '@/components/animated/animated-view'
 import { Typography } from '../typography'
 
 export function DrawerNoteItem({ note, depth, active, onPress }) {

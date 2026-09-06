@@ -2,8 +2,11 @@ import { useRef, useState } from 'react'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { Pressable, Typography } from '@/components'
-import { MAX_TABLE_COLS, MAX_TABLE_ROWS, TABLE_CELL_SIZE, TABLE_CELL_GAP } from '@/constants'
+
+import { Pressable } from '@/components/button/pressable'
+import { Typography } from '@/components/typography'
+
+import { MAX_TABLE_COLS, MAX_TABLE_ROWS, TABLE_CELL_SIZE, TABLE_CELL_GAP } from '@/constants/table'
 
 export function TableMarkdown({ onClose, onInsert }) {
     const { t } = useTranslation()

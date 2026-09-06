@@ -1,6 +1,7 @@
 import { View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useKeyboardState } from 'react-native-keyboard-controller'
+
 import { MarkdownToolbar } from './markdown-toolbar'
 
 export const MarkdownEditorLayout = ({ children, ...controlsProps }) => {

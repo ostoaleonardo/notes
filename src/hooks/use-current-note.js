@@ -1,8 +1,11 @@
 import { useCallback, useContext } from 'react'
 import { useFocusEffect } from 'expo-router'
-import { CurrentNoteContext } from '@/context'
+
 import { useStorage } from './use-storage'
-import { STORAGE_KEYS, RECENT_NOTES_LIMIT } from '@/constants'
+import { CurrentNoteContext } from '@/context/current-note-context'
+
+import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { RECENT_NOTES_LIMIT } from '@/constants/default-values'
 
 export function useCurrentNote() {
     const { currentId, setCurrentId } = useContext(CurrentNoteContext)

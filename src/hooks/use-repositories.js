@@ -1,12 +1,15 @@
 import { useContext, useMemo } from 'react'
 import { randomUUID } from 'expo-crypto'
 import { Directory } from 'expo-file-system'
+
 import { useStorage } from './use-storage'
 import { useFileStorage } from './use-file-storage'
 import { usePremium } from './use-premium'
 import { RepositoryContext } from '../context/repository-context'
-import { STORAGE_KEYS } from '@/constants'
-import { sanitizeFilename, getDefaultTemplates } from '@/utils'
+import { sanitizeFilename } from '@/utils/note-filename'
+import { getDefaultTemplates } from '@/utils/default-templates'
+
+import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 const FREE_SUBFOLDERS_PER_REPOSITORY = 1
 

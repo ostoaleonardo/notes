@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native'
 import { RadioButton, useTheme } from 'react-native-paper'
-import { COMMONS, FONTS } from '@/constants'
+
+import { COMMONS, FONTS } from '@/constants/themes'
 
 export function RadioButtonItem({ isFirst, isLast, ...props }) {
     const { colors } = useTheme()

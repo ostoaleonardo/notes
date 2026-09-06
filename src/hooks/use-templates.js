@@ -1,7 +1,8 @@
 import { File } from 'expo-file-system'
+
 import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
-import { getUniqueFilename } from '@/utils'
+import { getUniqueFilename } from '@/utils/note-filename'
 
 export function useTemplates() {
     const { activeRepository, ensureTemplatesFolder } = useRepositories()

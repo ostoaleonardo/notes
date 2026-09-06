@@ -2,17 +2,21 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { IconButton, TouchableRipple, useTheme } from 'react-native-paper'
-import { AnimatedView, Pressable, Typography } from '@/components'
-import { useLanguage, useNoteVersions } from '@/hooks'
-import { ArrowBack } from '@/icons'
-import {
-    DIFF_ADDED_COLOR,
-    DIFF_REMOVED_COLOR,
-    FONTS,
-    FREE_VERSION_HISTORY_LIMIT,
-    TRANSPARENT
-} from '@/constants'
-import { diffLines, getFormattedDate } from '@/utils'
+
+import { AnimatedView } from '@/components/animated/animated-view'
+import { Pressable } from '@/components/button/pressable'
+import { Typography } from '@/components/typography'
+
+import { useLanguage } from '@/hooks/use-language'
+import { useNoteVersions } from '@/hooks/use-note-versions'
+import { diffLines } from '@/utils/diff-lines'
+import { getFormattedDate } from '@/utils/formatted-date'
+
+import { ArrowBack } from '@/icons/arrow-back'
+
+import { DIFF_ADDED_COLOR, DIFF_REMOVED_COLOR } from '@/constants/diff'
+import { FONTS, TRANSPARENT } from '@/constants/themes'
+import { FREE_VERSION_HISTORY_LIMIT } from '@/constants/default-values'
 
 const getDiffColor = (type) => (type === 'added' ? DIFF_ADDED_COLOR : DIFF_REMOVED_COLOR)
 

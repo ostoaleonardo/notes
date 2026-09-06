@@ -1,6 +1,11 @@
 import { Decoration } from '@codemirror/view'
-import { FOOTNOTE_DEFINITION_PATTERN, FOOTNOTE_REFERENCE_PATTERN } from '@/constants/markdown-live-formatting'
+
 import { overlapsAny } from './utils'
+
+import {
+    FOOTNOTE_DEFINITION_PATTERN,
+    FOOTNOTE_REFERENCE_PATTERN
+} from '@/constants/markdown-live-formatting'
 
 export const decorateFootnotes = ({ text, ranges, codeRanges }) => {
     const definitionRanges = []

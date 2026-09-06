@@ -4,13 +4,24 @@ import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { Keyboard, Pressable, StyleSheet } from 'react-native'
 import { FadeInDown, FadeOutUp } from 'react-native-reanimated'
-import { AnimatedView, SearchInput } from '@/components'
+
 import { SearchFilters } from './search-filters'
 import { SearchResults } from './search-results'
 import { RecentSearches } from './recent-searches'
-import { useNotes, useRepositories, useStorage, useTags, useUtils } from '@/hooks'
-import { filterNotes, getEditorPath, parseSearchQuery } from '@/utils'
-import { COMMONS, RECENT_SEARCHES_LIMIT, STORAGE_KEYS } from '@/constants'
+import { AnimatedView } from '@/components/animated/animated-view'
+import { SearchInput } from '@/components/input/search-input'
+
+import { useNotes } from '@/hooks/use-notes'
+import { useRepositories } from '@/hooks/use-repositories'
+import { useStorage } from '@/hooks/use-storage'
+import { useTags } from '@/hooks/use-tags'
+import { useUtils } from '@/hooks/use-utils'
+import { filterNotes, parseSearchQuery } from '@/utils/search-query'
+import { getEditorPath } from '@/utils/editor-path'
+
+import { COMMONS } from '@/constants/themes'
+import { RECENT_SEARCHES_LIMIT } from '@/constants/default-values'
+import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export function NoteSearch() {
     const { t } = useTranslation()

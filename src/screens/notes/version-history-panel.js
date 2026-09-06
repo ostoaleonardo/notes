@@ -3,8 +3,10 @@ import { StyleSheet, View } from 'react-native'
 import { IconButton, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
-import { Typography } from '@/components'
-import { Close } from '@/icons'
+
+import { Typography } from '@/components/typography'
+
+import { Close } from '@/icons/close'
 
 export function VersionHistoryPanel({ visible, onOpen, onClose, swipeEnabled, panelContent, children }) {
     const { t } = useTranslation()

@@ -1,13 +1,23 @@
 import { isDevice } from 'expo-device'
 import { Linking, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { ModalSheet, Scroll, Section } from '@/components'
-import { Languages } from '@/screens/modals'
-import { PremiumSection, ThemeOption } from '@/screens/settings'
-import { AppVersionCard, Option } from '@/screens'
-import { useBottomSheet, useIconProps } from '@/hooks'
-import { ArrowForward, OpenInNew } from '@/icons'
-import { LINKS } from '@/constants'
+
+import { Languages } from '@/screens/modals/languages'
+import { PremiumSection } from '@/screens/settings/premium-section'
+import { ThemeOption } from '@/screens/settings/theme-option'
+import { AppVersionCard } from '@/screens/settings/app-version-card'
+import { Option } from '@/screens/settings/option'
+import { ModalSheet } from '@/components/modal/modal-sheet'
+import { Scroll } from '@/components/animated/scroll'
+import { Section } from '@/components/section'
+
+import { useBottomSheet } from '@/hooks/use-bottom-sheet'
+import { useIconProps } from '@/hooks/use-icon-props'
+
+import { ArrowForward } from '@/icons/arrow-forward'
+import { OpenInNew } from '@/icons/open-in-new'
+
+import { LINKS } from '@/constants/links'
 
 export default function Settings() {
     const { t } = useTranslation()

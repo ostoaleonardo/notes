@@ -3,23 +3,24 @@ import { router, useFocusEffect } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 import * as DocumentPicker from 'expo-document-picker'
-import { AppBar } from '@/components'
+
 import { Intro } from './intro'
 import { NoteSearch } from './note-search'
 import { RecentNotesSheet } from './recent-notes-sheet'
 import { HomeToolbar } from './home-toolbar'
-import {
-    useBottomSheet,
-    useCurrentNote,
-    useImportMarkdown,
-    useNotes,
-    useRecentNotes,
-    useRepositories,
-    useTemplates,
-    useUtils
-} from '@/hooks'
-import { ROUTES } from '@/constants'
-import { getRecentIds } from '@/utils'
+import { AppBar } from '@/components/app-bar/app-bar'
+
+import { useBottomSheet } from '@/hooks/use-bottom-sheet'
+import { useCurrentNote } from '@/hooks/use-current-note'
+import { useImportMarkdown } from '@/hooks/use-import-markdown'
+import { useNotes } from '@/hooks/use-notes'
+import { useRecentNotes } from '@/hooks/use-recent-notes'
+import { useRepositories } from '@/hooks/use-repositories'
+import { useTemplates } from '@/hooks/use-templates'
+import { useUtils } from '@/hooks/use-utils'
+import { getRecentIds } from '@/utils/recent-ids'
+
+import { ROUTES } from '@/constants/routes'
 
 export function Home() {
     const { t } = useTranslation()

@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, View } from 'react-native'
-import { Typography } from '@/components'
+
+import { Typography } from '@/components/typography'
 
 export const ColorOption = ({ name, active, onPress, children, options }) => {
     const { background, borderColor } = options[name]

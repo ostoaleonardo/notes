@@ -1,5 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router'
-import { ImageViewer } from '@/screens/notes'
+
+import { ImageViewer } from '@/screens/notes/image-viewer'
 
 export default function ImageViewerScreen() {
     const { url } = useLocalSearchParams()

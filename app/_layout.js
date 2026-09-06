@@ -4,11 +4,18 @@ import { isDevice } from 'expo-device'
 import { useEffect, useState } from 'react'
 import { useColorScheme } from 'react-native'
 import { finishTransaction, getAvailablePurchases, initConnection } from 'expo-iap'
-import { useLanguage, useStorage } from '@/hooks'
-import { ErrorBoundary } from '@/components'
-import { PremiumProvider, ThemeProvider } from '@/context'
-import { PRO, STORAGE_KEYS, THEMES } from '@/constants'
+
+import { ErrorBoundary } from '@/components/error-boundary'
+
+import { useLanguage } from '@/hooks/use-language'
+import { useStorage } from '@/hooks/use-storage'
+import { PremiumProvider } from '@/context/premium-context'
+import { ThemeProvider } from '@/context/theme-context'
 import Providers from './providers'
+
+import { PRO } from '@/constants/iap'
+import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { THEMES } from '@/constants/themes'
 
 SplashScreen.preventAutoHideAsync()
 

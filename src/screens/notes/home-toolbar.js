@@ -1,8 +1,11 @@
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 import { IconButton, useTheme } from 'react-native-paper'
-import { RecentsButton } from '@/components'
-import { Plus, UploadFile } from '@/icons'
+
+import { RecentsButton } from '@/components/app-bar/recents-button'
+
+import { Plus } from '@/icons/plus'
+import { UploadFile } from '@/icons/upload-file'
 
 export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, recentCount }) {
     const { t } = useTranslation()

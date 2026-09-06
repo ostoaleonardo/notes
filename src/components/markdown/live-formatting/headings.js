@@ -1,6 +1,8 @@
 import { Decoration } from '@codemirror/view'
-import { ATX_HEADING_LEVELS, SETEXT_HEADING_LEVELS } from '@/constants/markdown-live-formatting'
+
 import { isRangeSelected } from './utils'
+
+import { ATX_HEADING_LEVELS, SETEXT_HEADING_LEVELS } from '@/constants/markdown-live-formatting'
 
 export const headingNodeNames = [
     ...Object.keys(ATX_HEADING_LEVELS),

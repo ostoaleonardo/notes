@@ -1,8 +1,10 @@
 import { useMemo } from 'react'
 import { FlatList, StyleSheet, useWindowDimensions } from 'react-native'
 import { FadeInUp } from 'react-native-reanimated'
-import { AnimatedView, Typography } from '@/components'
+
 import { CardGridItem, CARDS_HEIGHT } from './card-grid-item'
+import { AnimatedView } from '@/components/animated/animated-view'
+import { Typography } from '@/components/typography'
 
 const CARD_MIN_WIDTH = 160
 const GRID_GAP = 24

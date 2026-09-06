@@ -1,5 +1,5 @@
-import { ModalSheet } from '@/components'
 import { RecentNotes } from './recent-notes'
+import { ModalSheet } from '@/components/modal/modal-sheet'
 
 export function RecentNotesSheet({ sheet, home = false }) {
     return (

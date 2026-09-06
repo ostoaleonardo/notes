@@ -1,7 +1,9 @@
 import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
-import { Plus } from '@/icons'
-import { COLORS, TRANSPARENT } from '@/constants'
+
+import { Plus } from '@/icons/plus'
+
+import { COLORS, TRANSPARENT } from '@/constants/themes'
 
 export function SquareButton({ onPress, disabled }) {
     const { colors } = useTheme()

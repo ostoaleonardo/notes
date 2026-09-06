@@ -1,6 +1,8 @@
 import { Decoration } from '@codemirror/view'
-import { INLINE_MARK_NODE_TYPES } from '@/constants/markdown-live-formatting'
+
 import { collectMarks, isRangeSelected } from './utils'
+
+import { INLINE_MARK_NODE_TYPES } from '@/constants/markdown-live-formatting'
 
 export const inlineMarkNodeNames = Object.keys(INLINE_MARK_NODE_TYPES)
 
