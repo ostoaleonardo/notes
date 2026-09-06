@@ -1,9 +1,18 @@
-import { Pressable, StyleSheet, View } from 'react-native'
+import Animated from 'react-native-reanimated'
+import { Pressable, StyleSheet } from 'react-native'
 
 import { Typography } from '@/components/typography'
 
+import { useAnimatedBorderRadius } from '@/hooks/use-animated-border-radius'
+
+import { COMMONS } from '@/constants/themes'
+
 export const ColorOption = ({ name, active, onPress, children, options }) => {
-    const { background, borderColor } = options[name]
+    const colors = options[name]
+
+    const animatedStyle = useAnimatedBorderRadius(
+        active, { from: 32, to: COMMONS.radius }
+    )
 
     return (
         <Pressable
@@ -14,13 +23,14 @@ export const ColorOption = ({ name, active, onPress, children, options }) => {
                 gap: 4
             }}
         >
-            <View
-                style={{
-                    ...styles.color,
-                    borderColor: borderColor,
-                    borderRadius: active ? 16 : '100%',
-                    backgroundColor: background
-                }}
+            <Animated.View
+                style={[
+                    styles.color,
+                    animatedStyle, {
+                        borderColor: colors.borderColor,
+                        backgroundColor: colors.background
+                    }
+                ]}
             />
             <Typography
                 bold={active}
@@ -36,7 +46,6 @@ const styles = StyleSheet.create({
     color: {
         width: 64,
         height: 64,
-        borderWidth: 2,
-        borderRadius: 64
+        borderWidth: 2
     }
 })
