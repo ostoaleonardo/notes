@@ -1,14 +1,13 @@
-import { IconButton } from 'react-native-paper'
-import { useIconProps } from '@/hooks'
+import { IconActionButton } from '../button'
 
-export function DrawerIconButton({ icon: Icon, ...props }) {
-    const iconProps = useIconProps(16, 0.6)
-
+export function DrawerIconButton({ icon, ...props }) {
     return (
-        <IconButton
+        <IconActionButton
             {...props}
+            icon={icon}
+            iconSize={16}
+            iconOpacity={0.6}
             size={10}
-            icon={() => <Icon {...iconProps} />}
         />
     )
 }

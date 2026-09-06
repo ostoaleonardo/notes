@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { IconButton, Tooltip, useTheme } from 'react-native-paper'
+import { Tooltip, useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { MenuContainer, MenuItem } from '@/components'
+import { IconActionButton, MenuContainer, MenuItem } from '@/components'
 import { Close, Delete, Edit, MoreVert } from '@/icons'
 import { useIconProps } from '@/hooks'
 
@@ -22,9 +22,10 @@ export function RepositoryMenu({ onRename, onForget, onDelete }) {
             onClose={() => setVisible(false)}
             anchor={
                 <Tooltip title={t('button.more')}>
-                    <IconButton
+                    <IconActionButton
+                        icon={MoreVert}
+                        iconSize={16}
                         onPress={() => setVisible(true)}
-                        icon={() => <MoreVert {...iconProps} />}
                         accessibilityLabel={t('button.more')}
                     />
                 </Tooltip>

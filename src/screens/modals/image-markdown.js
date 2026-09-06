@@ -3,9 +3,9 @@ import { Image } from 'expo-image'
 import { randomUUID } from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { IconButton, Tooltip, useTheme } from 'react-native-paper'
-import { LargeInput, Pressable, Section } from '@/components'
-import { useFileStorage, useIconProps, useRepositories } from '@/hooks'
+import { Tooltip, useTheme } from 'react-native-paper'
+import { IconActionButton, LargeInput, Pressable, Section } from '@/components'
+import { useFileStorage, useRepositories } from '@/hooks'
 import { Camera, Picture } from '@/icons'
 import { openImagePicker } from '@/utils'
 import { IMAGE_EXTENSION_BY_MIME_TYPE } from '@/constants'
@@ -15,7 +15,6 @@ export function ImageMarkdown({ onClose, onInsert }) {
     const { copyImageFile } = useFileStorage()
     const { activeRepository, ensureImagesFolder } = useRepositories()
     const { colors } = useTheme()
-    const iconProps = useIconProps()
 
     const [title, setTitle] = useState('')
     const [url, setUrl] = useState('')
@@ -93,18 +92,18 @@ export function ImageMarkdown({ onClose, onInsert }) {
 
                 <View style={styles.pickerRow}>
                     <Tooltip title={t('markdown.image_camera')}>
-                        <IconButton
+                        <IconActionButton
                             mode='outlined'
+                            icon={Camera}
                             onPress={() => onPickImage('camera')}
-                            icon={() => <Camera {...iconProps} />}
                             accessibilityLabel={t('markdown.image_camera')}
                         />
                     </Tooltip>
                     <Tooltip title={t('markdown.image_gallery')}>
-                        <IconButton
+                        <IconActionButton
                             mode='outlined'
+                            icon={Picture}
                             onPress={() => onPickImage('gallery')}
-                            icon={() => <Picture {...iconProps} />}
                             accessibilityLabel={t('markdown.image_gallery')}
                         />
                     </Tooltip>

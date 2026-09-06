@@ -1,16 +1,14 @@
 import { router, useNavigation } from 'expo-router'
 import { Appbar, Tooltip, useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { useIconProps } from '@/hooks'
 import { ArrowBack, Menu } from '@/icons'
 import { FONTS, ROUTES } from '@/constants'
 
 export function AppBar({ title, trailing, mode = 'back' }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
-    const navigation = useNavigation()
-    const iconProps = useIconProps()
 
+    const navigation = useNavigation()
     const goBack = () => (router.canGoBack() ? router.back() : router.replace(ROUTES.HOME))
     const openDrawer = () => navigation.dispatch({ type: 'OPEN_DRAWER' })
 
@@ -21,7 +19,7 @@ export function AppBar({ title, trailing, mode = 'back' }) {
                     <Appbar.Action
                         animated={false}
                         onPress={goBack}
-                        icon={() => <ArrowBack {...iconProps} />}
+                        icon={(props) => <ArrowBack {...props} />}
                         accessibilityLabel={t('button.back')}
                     />
                 </Tooltip>
@@ -32,7 +30,7 @@ export function AppBar({ title, trailing, mode = 'back' }) {
                     <Appbar.Action
                         animated={false}
                         onPress={openDrawer}
-                        icon={() => <Menu {...iconProps} />}
+                        icon={(props) => <Menu {...props} />}
                         accessibilityLabel={t('drawer.open')}
                     />
                 </Tooltip>
