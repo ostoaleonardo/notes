@@ -3,10 +3,12 @@ import * as Linking from 'expo-linking'
 import { File } from 'expo-file-system'
 import { randomUUID } from 'expo-crypto'
 import { useRouter } from 'expo-router'
+
 import { useNotes } from '../hooks/use-notes'
 import { usePremium } from '../hooks/use-premium'
-import { getDate } from '@/utils'
-import { ROUTES } from '@/constants'
+import { getDate } from '@/utils/date'
+
+import { ROUTES } from '@/constants/routes'
 
 export const ImportContext = createContext()
 

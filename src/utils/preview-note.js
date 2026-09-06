@@ -1,4 +1,4 @@
-import { NOTE_PREVIEW_MAX_LINES, NOTE_PREVIEW_MAX_CHARS } from '@/constants'
+import { NOTE_PREVIEW_MAX_LINES, NOTE_PREVIEW_MAX_CHARS } from '@/constants/note-preview'
 
 const imageRegex = /!\[([^\]]*)\]\(([^\)]*)\)/g
 const linkRegex = /\[([^\]]*)\]\(([^\)]*)\)/g

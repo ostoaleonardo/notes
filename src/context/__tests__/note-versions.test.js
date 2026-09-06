@@ -1,4 +1,5 @@
 import { randomUUID } from 'expo-crypto'
+
 import { commitNoteVersion, loadNoteVersions } from '../note-versions'
 
 jest.mock('expo-crypto', () => ({ randomUUID: jest.fn() }))

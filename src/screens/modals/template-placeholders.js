@@ -1,9 +1,14 @@
 import { StyleSheet, View } from 'react-native'
 import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { DialogModal, Typography } from '@/components'
-import { DIALOG_BUTTON_LABEL_STYLE, TEMPLATE_PLACEHOLDERS } from '@/constants'
-import { renderTemplate } from '@/utils'
+
+import { DialogModal } from '@/components/dialog'
+import { Typography } from '@/components/typography'
+
+import { renderTemplate } from '@/utils/render-template'
+
+import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/dialog'
+import { TEMPLATE_PLACEHOLDERS } from '@/constants/template-placeholders'
 
 export function TemplatePlaceholders({ visible, onDismiss }) {
     const { t } = useTranslation()

@@ -1,5 +1,10 @@
 import { useEffect, useRef } from 'react'
-import { buildDateLabelStyle, buildTitleSectionStyle, buildTitleTextareaStyle } from './markdown-dom-theme'
+
+import {
+    buildDateLabelStyle,
+    buildTitleSectionStyle,
+    buildTitleTextareaStyle
+} from './markdown-dom-theme'
 
 const AutoGrowTitle = ({
     value,

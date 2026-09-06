@@ -1,5 +1,7 @@
 import { EditorView } from '@codemirror/view'
-import { buildLiveFormattingTheme } from './live-formatting'
+
+import { buildLiveFormattingTheme } from './live-formatting/live-formatting'
+
 import { FONT_FAMILY_NAMES } from '@/constants/markdown-fonts'
 
 export const buildTitleSectionStyle = () => ({

@@ -1,10 +1,12 @@
 import { useContext } from 'react'
+
 import { useStorage } from './use-storage'
 import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
 import { NoteContext } from '../context/note-context'
-import { STORAGE_KEYS } from '@/constants'
-import { getUniqueFilename } from '@/utils'
+import { getUniqueFilename } from '@/utils/note-filename'
+
+import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export function useNotes() {
     const {

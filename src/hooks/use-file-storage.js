@@ -1,4 +1,5 @@
 import { Directory, File } from 'expo-file-system'
+
 import {
     METADATA_FILENAME,
     VERSIONS_FILENAME_SUFFIX,
@@ -6,7 +7,7 @@ import {
     IMAGES_FOLDER_NAME,
     RESERVED_FOLDER_NAMES,
     SIDECAR_FILENAMES
-} from '@/constants'
+} from '@/constants/file-storage'
 
 export function useFileStorage() {
     const listEntries = (directoryUri) => new Directory(directoryUri).list()

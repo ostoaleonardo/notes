@@ -4,7 +4,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet, View, useWindowDimensions } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { ResumableZoom, fitContainer, useImageResolution } from 'react-native-zoom-toolkit'
-import { Close } from '@/icons'
+
+import { Close } from '@/icons/close'
 
 export function ImageViewer({ url, onClose }) {
     const { t } = useTranslation()

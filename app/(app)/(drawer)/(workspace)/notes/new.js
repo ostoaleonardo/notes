@@ -2,9 +2,16 @@ import { randomUUID } from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router'
-import { NoteEditorScreen } from '@/screens/notes'
-import { useNoteAutosave, useNotes, useRegisterCurrent, useRepositories, useUtils } from '@/hooks'
-import { getDate, getUniqueTitle } from '@/utils'
+
+import { NoteEditorScreen } from '@/screens/notes/note-editor-screen'
+
+import { useNoteAutosave } from '@/hooks/use-note-autosave'
+import { useNotes } from '@/hooks/use-notes'
+import { useRegisterCurrent } from '@/hooks/use-current-note'
+import { useRepositories } from '@/hooks/use-repositories'
+import { useUtils } from '@/hooks/use-utils'
+import { getDate } from '@/utils/date'
+import { getUniqueTitle } from '@/utils/note-filename'
 
 export default function Note() {
     const { t } = useTranslation()

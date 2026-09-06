@@ -1,9 +1,19 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { router, useLocalSearchParams } from 'expo-router'
-import { MenuItem } from '@/components'
-import { useFiles, useNotes, useUtils } from '@/hooks'
-import { Code, Commit, Delete, FileExport, Keep, KeepFilled } from '@/icons'
+
+import { MenuItem } from '@/components/menu/menu-item'
+
+import { useFiles } from '@/hooks/use-files'
+import { useNotes } from '@/hooks/use-notes'
+import { useUtils } from '@/hooks/use-utils'
+
+import { Code } from '@/icons/code'
+import { Commit } from '@/icons/commit'
+import { Delete } from '@/icons/delete'
+import { FileExport } from '@/icons/file-export'
+import { Keep } from '@/icons/keep'
+import { KeepFilled } from '@/icons/keep-filled'
 
 export const useNoteActionsMenu = ({ onClose, onSetMode, onOpenVersionHistory }) => {
     const { t } = useTranslation()

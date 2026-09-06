@@ -2,9 +2,9 @@ import { createContext, useEffect, useMemo, useState } from 'react'
 import { useColorScheme } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { StatusBar } from 'expo-status-bar'
-import { THEMES } from '@/constants'
-import { ACCENT_COLORS } from '@/constants/themes'
 import { Host } from '@expo/ui'
+
+import { THEMES, ACCENT_COLORS } from '@/constants/themes'
 
 export const ThemeContext = createContext()
 

@@ -1,7 +1,7 @@
 import { StateField } from '@codemirror/state'
 import { syntaxTree } from '@codemirror/language'
 import { Decoration, EditorView } from '@codemirror/view'
-import { CODE_RANGE_NODE_NAMES } from '@/constants/markdown-live-formatting'
+
 import { mediaMapFacet } from './media-map'
 import { inlineMarkNodeNames, decorateInlineMark, inlineMarksTheme } from './inline-marks'
 import { headingNodeNames, decorateHeading, headingsTheme } from './headings'
@@ -10,10 +10,16 @@ import { imageNodeNames, decorateImage, imagesTheme } from './images'
 import { listNodeNames, decorateList, listsTheme } from './lists'
 import { blockquoteNodeNames, decorateBlockquote, blockquoteTheme } from './blockquote'
 import { codeBlockNodeNames, decorateCodeBlock, codeBlocksTheme } from './code-blocks'
-import { horizontalRuleNodeNames, decorateHorizontalRule, horizontalRuleTheme } from './horizontal-rule'
+import {
+    horizontalRuleNodeNames,
+    decorateHorizontalRule,
+    horizontalRuleTheme
+} from './horizontal-rule'
 import { htmlNodeNames, decorateHtml, htmlTheme } from './html'
 import { decorateMath, mathTheme } from './math'
 import { decorateFootnotes, footnotesTheme } from './footnotes'
+
+import { CODE_RANGE_NODE_NAMES } from '@/constants/markdown-live-formatting'
 
 const codeRangeNodeNames = new Set(CODE_RANGE_NODE_NAMES)
 

@@ -1,7 +1,8 @@
 import React from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
-import { useIconProps } from '@/hooks'
+
+import { useIconProps } from '@/hooks/use-icon-props'
 
 export function FloatingButton({ icon, onPress }) {
     const { colors } = useTheme()

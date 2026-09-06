@@ -1,6 +1,8 @@
 import { Decoration } from '@codemirror/view'
-import { LINK_NODE_NAMES } from '@/constants/markdown-live-formatting'
+
 import { collectMarks, isRangeSelected } from './utils'
+
+import { LINK_NODE_NAMES } from '@/constants/markdown-live-formatting'
 
 export const linkNodeNames = LINK_NODE_NAMES
 

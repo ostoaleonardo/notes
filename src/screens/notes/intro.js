@@ -1,7 +1,10 @@
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { AnimatedView, Typography } from '@/components'
-import { FONTS } from '@/constants'
+
+import { AnimatedView } from '@/components/animated/animated-view'
+import { Typography } from '@/components/typography'
+
+import { FONTS } from '@/constants/themes'
 
 export function Intro() {
     const { t } = useTranslation()

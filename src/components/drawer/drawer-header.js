@@ -1,10 +1,15 @@
 import { Pressable, StyleSheet, View } from 'react-native'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
+
 import { DrawerIconButton } from './drawer-icon-button'
 import { Typography } from '../typography'
-import { ArrowForward, CollapseAll, ExpandAll } from '@/icons'
-import { ROUTES } from '@/constants'
+
+import { ArrowForward } from '@/icons/arrow-forward'
+import { CollapseAll } from '@/icons/collapse-all'
+import { ExpandAll } from '@/icons/expand-all'
+
+import { ROUTES } from '@/constants/routes'
 
 export function DrawerHeader({ collapsed, onToggleCollapseAll }) {
     const { t } = useTranslation()

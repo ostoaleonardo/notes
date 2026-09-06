@@ -1,9 +1,13 @@
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 import { Divider, TouchableRipple } from 'react-native-paper'
-import { Section, Typography } from '@/components'
-import { useIconProps } from '@/hooks'
-import { History } from '@/icons'
+
+import { Section } from '@/components/section'
+import { Typography } from '@/components/typography'
+
+import { useIconProps } from '@/hooks/use-icon-props'
+
+import { History } from '@/icons/history'
 
 export function RecentSearches({ recent, onSelect }) {
     const { t } = useTranslation()

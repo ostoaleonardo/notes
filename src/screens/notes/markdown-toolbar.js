@@ -3,9 +3,18 @@ import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { IconButton, useTheme } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
-import { AnimatedView, Scroll, Separator } from '@/components'
-import { NoteStack, Redo, Shapes, Tag, Undo } from '@/icons'
-import { MARKDOWN_CONTROLS } from '@/constants'
+
+import { AnimatedView } from '@/components/animated/animated-view'
+import { Scroll } from '@/components/animated/scroll'
+import { Separator } from '@/components/separator/separator'
+
+import { NoteStack } from '@/icons/note-stack'
+import { Redo } from '@/icons/redo'
+import { Shapes } from '@/icons/shapes'
+import { Tag } from '@/icons/tag'
+import { Undo } from '@/icons/undo'
+
+import { MARKDOWN_CONTROLS } from '@/constants/markdown-controls'
 
 export const MarkdownToolbar = memo(function MarkdownToolbar({
     mode,

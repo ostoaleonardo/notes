@@ -1,6 +1,9 @@
 import { createContext, useEffect, useMemo, useState } from 'react'
+
 import { useStorage } from '../hooks/use-storage'
-import { DEFAULT_SORT, STORAGE_KEYS } from '@/constants'
+
+import { DEFAULT_SORT } from '@/constants/default-values'
+import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export const UtilsContext = createContext()
 

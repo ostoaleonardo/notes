@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router'
 import { useTheme } from 'react-native-paper'
-import { getScreenContentStyle } from '@/utils'
+
+import { getScreenContentStyle } from '@/utils/screen-content-style'
 
 export default function WorkspaceLayout() {
     const { colors } = useTheme()

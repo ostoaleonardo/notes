@@ -1,10 +1,13 @@
 import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Section } from '@/components'
+
 import { OptionLarge } from './option-large'
 import { ColorOption } from './color-option'
-import { useToggleMode } from '@/hooks'
+import { Section } from '@/components/section'
+
+import { useToggleMode } from '@/hooks/use-toggle-mode'
 import { usePremium } from '@/hooks/use-premium'
+
 import { ACCENT_COLORS, ACCENT_OPTIONS, THEME_COLORS, THEME_OPTIONS } from '@/constants/themes'
 
 export function ThemeOption() {

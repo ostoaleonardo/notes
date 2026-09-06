@@ -1,9 +1,14 @@
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Chip, IconButton } from 'react-native-paper'
-import { Scroll, Typography } from '@/components'
-import { toggleTagQualifier, togglePinnedQualifier } from '@/utils'
-import { Keep, KeepFilled } from '@/icons'
+
+import { Scroll } from '@/components/animated/scroll'
+import { Typography } from '@/components/typography'
+
+import { toggleTagQualifier, togglePinnedQualifier } from '@/utils/search-query'
+
+import { Keep } from '@/icons/keep'
+import { KeepFilled } from '@/icons/keep-filled'
 
 export function SearchFilters({ query, setQuery, parsed, tags }) {
     const { t } = useTranslation()

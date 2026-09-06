@@ -1,5 +1,6 @@
 import * as Haptics from 'expo-haptics'
-import { FEEDBACK_TYPES } from '@/constants'
+
+import { FEEDBACK_TYPES } from '@/constants/feedback-types'
 
 const VIBRATION_TYPES = {
     success: Haptics.NotificationFeedbackType.Success,

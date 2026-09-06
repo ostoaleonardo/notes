@@ -2,18 +2,16 @@ import { useEffect } from 'react'
 import { DevSettings } from 'react-native'
 import { registerDevMenuItems } from 'expo-dev-menu'
 import { Directory } from 'expo-file-system'
+import legacyNotes from '../../legacy/notes.json'
+import legacyTags from '../../legacy/categories.json'
+
 import { useStorage } from './use-storage'
 import { usePremium } from './use-premium'
 import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
-import {
-    STORAGE_KEYS,
-    TREE_BRANCHING,
-    NOTES_PER_FOLDER
-} from '@/constants'
 
-import legacyNotes from '../../legacy/notes.json'
-import legacyTags from '../../legacy/categories.json'
+import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { TREE_BRANCHING, NOTES_PER_FOLDER } from '@/constants/dev-menu'
 
 export function useDevMenu() {
     const { setItem } = useStorage()

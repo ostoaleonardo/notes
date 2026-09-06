@@ -1,5 +1,6 @@
-import { TRANSPARENT } from '@/constants'
 import { Menu, useTheme } from 'react-native-paper'
+
+import { TRANSPARENT } from '@/constants/themes'
 
 export function MenuContainer({ anchor, visible, onClose, children, position = 'top' }) {
     const { colors } = useTheme()

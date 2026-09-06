@@ -1,4 +1,5 @@
 import { act, renderHook } from '@testing-library/react-native'
+
 import { useTemplates } from '../use-templates'
 import { MOCK_REPO_URI, MOCK_TEMPLATES_URI } from '../__fixtures__/constants'
 

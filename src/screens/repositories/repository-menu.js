@@ -1,8 +1,14 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconButton, Tooltip, useTheme } from 'react-native-paper'
-import { MenuContainer, MenuItem } from '@/components'
-import { Close, Delete, Edit, MoreVert } from '@/icons'
+
+import { MenuContainer } from '@/components/menu/menu-container'
+import { MenuItem } from '@/components/menu/menu-item'
+
+import { Close } from '@/icons/close'
+import { Delete } from '@/icons/delete'
+import { Edit } from '@/icons/edit'
+import { MoreVert } from '@/icons/more-vert'
 
 export function RepositoryMenu({ onRename, onForget, onDelete }) {
     const { t } = useTranslation()

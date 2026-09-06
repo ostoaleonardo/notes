@@ -1,8 +1,10 @@
 import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
-import { SwipeableCard } from '../swipeable-card'
-import { Typography } from '../../typography'
-import { getGroupedRadius } from '@/utils'
+
+import { SwipeableCard } from './swipeable-card'
+import { Typography } from '../typography'
+
+import { getGroupedRadius } from '@/utils/grouped-card-style'
 
 export function SwipeableTag({ tag, onPress, isOpen, onOpen, onDelete, isFirst, isLast }) {
     const { colors } = useTheme()

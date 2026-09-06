@@ -1,7 +1,9 @@
 import { Pressable, StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
-import { Typography } from '@/components'
-import { COMMONS } from '@/constants'
+
+import { Typography } from '@/components/typography'
+
+import { COMMONS } from '@/constants/themes'
 
 export function Option({ title, description, rightContent, onPress, visible = true, isFirst, isLast }) {
     const { colors } = useTheme()

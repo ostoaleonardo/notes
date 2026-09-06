@@ -1,11 +1,15 @@
 import { useState } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
+
 import { Typography } from '../typography'
 import { MenuContainer } from '../menu/menu-container'
 import { DrawerIconButton } from './drawer-icon-button'
 import { DrawerRepositoryMenu } from './drawer-repository-menu'
-import { KeyboardArrowDown, KeyboardArrowUp, MoreVert } from '@/icons'
+
+import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
+import { KeyboardArrowUp } from '@/icons/keyboard-arrow-up'
+import { MoreVert } from '@/icons/more-vert'
 
 export function DrawerRepositoryRow({
     alias,

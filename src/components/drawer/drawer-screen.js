@@ -1,8 +1,10 @@
 import { router } from 'expo-router'
 import { Pressable, StyleSheet, View } from 'react-native'
+
 import { Typography } from '../typography'
 import { DrawerIconButton } from './drawer-icon-button'
-import { ArrowForward } from '@/icons'
+
+import { ArrowForward } from '@/icons/arrow-forward'
 
 export function DrawerScreen({ label, path, indicator, active, onPress }) {
     return (

@@ -4,11 +4,19 @@ import { randomUUID } from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 import { IconButton, Tooltip, useTheme } from 'react-native-paper'
-import { LargeInput, Pressable, Section } from '@/components'
-import { useFileStorage, useRepositories } from '@/hooks'
-import { Camera, Picture } from '@/icons'
-import { openImagePicker } from '@/utils'
-import { IMAGE_EXTENSION_BY_MIME_TYPE } from '@/constants'
+
+import { LargeInput } from '@/components/input/large-input'
+import { Pressable } from '@/components/button/pressable'
+import { Section } from '@/components/section'
+
+import { useFileStorage } from '@/hooks/use-file-storage'
+import { useRepositories } from '@/hooks/use-repositories'
+import { openImagePicker } from '@/utils/image-picker'
+
+import { Camera } from '@/icons/camera'
+import { Picture } from '@/icons/picture'
+
+import { IMAGE_EXTENSION_BY_MIME_TYPE } from '@/constants/image'
 
 export function ImageMarkdown({ onClose, onInsert }) {
     const { t } = useTranslation()

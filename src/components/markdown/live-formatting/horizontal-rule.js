@@ -1,6 +1,8 @@
 import { Decoration } from '@codemirror/view'
-import { HORIZONTAL_RULE_NODE_NAMES } from '@/constants/markdown-live-formatting'
+
 import { isRangeSelected } from './utils'
+
+import { HORIZONTAL_RULE_NODE_NAMES } from '@/constants/markdown-live-formatting'
 
 export const horizontalRuleNodeNames = HORIZONTAL_RULE_NODE_NAMES
 

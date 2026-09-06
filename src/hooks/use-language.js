@@ -1,7 +1,10 @@
-import i18next from '@/i18n/i18next'
 import { getLocales } from 'expo-localization'
+
 import { useStorage } from './use-storage'
-import { LANGUAGES, STORAGE_KEYS } from '@/constants'
+import i18next from '@/i18n/i18next'
+
+import { LANGUAGES } from '@/constants/languages'
+import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 const SUPPORTED_LANGUAGES = LANGUAGES.map(({ code }) => code)
 

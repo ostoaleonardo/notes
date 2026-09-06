@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
-import { Delete } from '@/icons'
+
+import { Delete } from '@/icons/delete'
 
 export function DeleteAction({ onPress, style }) {
     const { colors } = useTheme()

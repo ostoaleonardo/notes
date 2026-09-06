@@ -1,4 +1,9 @@
-import { filterNotes, parseSearchQuery, toggleTagQualifier, togglePinnedQualifier } from '../search-query'
+import {
+    filterNotes,
+    parseSearchQuery,
+    toggleTagQualifier,
+    togglePinnedQualifier
+} from '../search-query'
 import { MOCK_SEARCH_NOTES, MOCK_SEARCH_TAGS } from '../__fixtures__/search-query'
 
 describe('parse search query', () => {

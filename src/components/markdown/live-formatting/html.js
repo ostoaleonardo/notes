@@ -1,8 +1,10 @@
 import { Decoration } from '@codemirror/view'
-import { HTML_BLOCK_NODE_NAMES, HTML_NODE_NAMES } from '@/constants/markdown-live-formatting'
+
 import { isRangeSelected } from './utils'
 import { HtmlWidget } from './widgets'
 import { renderMarkdownHtml } from '../markdown-dom-render-html'
+
+import { HTML_BLOCK_NODE_NAMES, HTML_NODE_NAMES } from '@/constants/markdown-live-formatting'
 
 const BLOCK_NODE_NAMES = new Set(HTML_BLOCK_NODE_NAMES)
 

@@ -1,5 +1,5 @@
-import { ModalSheet } from '@/components'
 import { TemplatePicker } from './template-picker'
+import { ModalSheet } from '@/components/modal/modal-sheet'
 
 export function TemplatePickerSheet({ sheet, title, templates, onSelect }) {
     return (

@@ -1,9 +1,10 @@
 import { ToastAndroid } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Directory, File } from 'expo-file-system'
+
 import { useNotes } from './use-notes'
 import { useLanguage } from './use-language'
-import { getNotesAsString } from '@/utils'
+import { getNotesAsString } from '@/utils/files'
 
 export function useFiles() {
     const { t } = useTranslation()

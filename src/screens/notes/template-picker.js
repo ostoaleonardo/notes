@@ -1,9 +1,13 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLanguage } from '@/hooks'
-import { getPreviewNote, renderTemplate } from '@/utils'
-import { TEMPLATE_PREVIEW_MAX_CHARS, TEMPLATE_PREVIEW_MAX_LINES } from '@/constants'
+
 import { CardGrid } from './card-grid'
+
+import { useLanguage } from '@/hooks/use-language'
+import { getPreviewNote } from '@/utils/preview-note'
+import { renderTemplate } from '@/utils/render-template'
+
+import { TEMPLATE_PREVIEW_MAX_CHARS, TEMPLATE_PREVIEW_MAX_LINES } from '@/constants/note-preview'
 
 export function TemplatePicker({ title, templates, onSelect }) {
     const { t } = useTranslation()

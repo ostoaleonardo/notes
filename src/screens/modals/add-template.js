@@ -3,10 +3,16 @@ import { router } from 'expo-router'
 import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import * as DocumentPicker from 'expo-document-picker'
+
 import { DialogModal } from '@/components/dialog'
-import { LargeInput } from '@/components/input'
-import { useHaptics, useTemplates } from '@/hooks'
-import { DIALOG_BUTTON_LABEL_STYLE, FEEDBACK_TYPES, ROUTES } from '@/constants'
+import { LargeInput } from '@/components/input/large-input'
+
+import { useHaptics } from '@/hooks/use-haptics'
+import { useTemplates } from '@/hooks/use-templates'
+
+import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/dialog'
+import { FEEDBACK_TYPES } from '@/constants/feedback-types'
+import { ROUTES } from '@/constants/routes'
 
 export function AddTemplate({ visible, onDismiss }) {
     const { t } = useTranslation()

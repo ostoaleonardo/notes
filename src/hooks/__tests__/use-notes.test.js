@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { act, renderHook } from '@testing-library/react-native'
+
 import { useNotes } from '../use-notes'
-import { NoteContext } from '@/context/note-context'
 import { MOCK_REPO_URI } from '../__fixtures__/constants'
 import {
     MOCK_DUPLICATE_TITLE_DRAFT,
@@ -13,6 +13,7 @@ import {
     MOCK_OLD_TITLE_METADATA,
     MOCK_OLD_TITLE_NOTE
 } from '../__fixtures__/notes'
+import { NoteContext } from '@/context/note-context'
 
 const mockFileStorage = {
     listMarkdownFiles: jest.fn(),

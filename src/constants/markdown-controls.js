@@ -1,23 +1,21 @@
-import {
-    CalendarToday,
-    Code,
-    FormaQuote,
-    FormatBold,
-    FormatH1,
-    FormatH2,
-    FormatH3,
-    FormatH4,
-    FormatH5,
-    FormatH6,
-    FormatItalic,
-    FormatStrikethrough,
-    HorizontalRule,
-    Link,
-    Picture,
-    Schedule,
-    Table,
-    Title
-} from '@/icons'
+import { CalendarToday } from '@/icons/calendar-today'
+import { Code } from '@/icons/code'
+import { FormaQuote } from '@/icons/forma-quote'
+import { FormatBold } from '@/icons/format-bold'
+import { FormatH1 } from '@/icons/format-h1'
+import { FormatH2 } from '@/icons/format-h2'
+import { FormatH3 } from '@/icons/format-h3'
+import { FormatH4 } from '@/icons/format-h4'
+import { FormatH5 } from '@/icons/format-h5'
+import { FormatH6 } from '@/icons/format-h6'
+import { FormatItalic } from '@/icons/format-italic'
+import { FormatStrikethrough } from '@/icons/format-strikethrough'
+import { HorizontalRule } from '@/icons/horizontal-rule'
+import { Link } from '@/icons/link'
+import { Picture } from '@/icons/picture'
+import { Schedule } from '@/icons/schedule'
+import { Table } from '@/icons/table'
+import { Title } from '@/icons/title'
 
 export const MARKDOWN_CONTROLS = [
     { action: 'bold', Icon: FormatBold },

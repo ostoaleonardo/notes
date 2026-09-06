@@ -1,5 +1,8 @@
 import { useTranslation } from 'react-i18next'
-import { LargeInput, MarkdownEditor, Section } from '@/components'
+
+import { LargeInput } from '@/components/input/large-input'
+import { MarkdownEditor } from '@/components/markdown/markdown-editor'
+import { Section } from '@/components/section'
 
 export const TemplateEditorForm = ({ name, setName, content, setContent, markdownAction, mode, onFocus, onBlur, onHistoryChange }) => {
     const { t } = useTranslation()

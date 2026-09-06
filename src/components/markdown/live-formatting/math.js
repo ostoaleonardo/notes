@@ -1,9 +1,11 @@
 import katex from 'katex'
 import DOMPurify from 'dompurify'
 import { Decoration } from '@codemirror/view'
-import { BLOCK_MATH_PATTERN, INLINE_MATH_PATTERN } from '@/constants/markdown-live-formatting'
+
 import { isRangeSelected, overlapsAny } from './utils'
 import { HtmlWidget } from './widgets'
+
+import { BLOCK_MATH_PATTERN, INLINE_MATH_PATTERN } from '@/constants/markdown-live-formatting'
 
 const renderKatex = (tex, displayMode) => {
     try {

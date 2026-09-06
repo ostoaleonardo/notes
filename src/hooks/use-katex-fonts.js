@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Asset } from 'expo-asset'
 import { File } from 'expo-file-system'
-import { bytesToBase64 } from '@/utils'
+
+import { bytesToBase64 } from '@/utils/base64'
 
 const KATEX_FONT_MODULES = {
     'KaTeX_AMS-Regular': require('katex/dist/fonts/KaTeX_AMS-Regular.woff2'),

@@ -1,8 +1,13 @@
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Pressable, Typography } from '@/components'
-import { useNotes, useRepositories } from '@/hooks'
-import { FONTS } from '@/constants'
+
+import { Pressable } from '@/components/button/pressable'
+import { Typography } from '@/components/typography'
+
+import { useNotes } from '@/hooks/use-notes'
+import { useRepositories } from '@/hooks/use-repositories'
+
+import { FONTS } from '@/constants/themes'
 
 export default function RepositoryGate() {
     const { t } = useTranslation()

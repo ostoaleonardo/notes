@@ -1,8 +1,11 @@
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 import { Divider, TouchableRipple } from 'react-native-paper'
-import { AnimatedList, AnimatedView, Typography } from '@/components'
 import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
+
+import { AnimatedList } from '@/components/animated/animated-list'
+import { AnimatedView } from '@/components/animated/animated-view'
+import { Typography } from '@/components/typography'
 
 export function SearchResults({ results, aliasById, onOpenResult }) {
     const { t } = useTranslation()

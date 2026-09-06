@@ -3,34 +3,29 @@ import { useEffect, useMemo, useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
+
+import { AddSubfolder } from '@/screens/modals/add-subfolder'
+import { AddTemplate } from '@/screens/modals/add-template'
+import { DeleteRepository } from '@/screens/modals/delete-repository'
+import { RenameRepository } from '@/screens/modals/rename-repository'
 import { DrawerHeader } from './drawer-header'
 import { DrawerScreen } from './drawer-screen'
 import { DrawerNoteItem } from './drawer-note-item'
 import { DrawerRepositoryItem } from './drawer-repository-item'
 import { DrawerTemplatesSection } from './drawer-templates-section'
-import { Separator } from '../separator'
-import { AddSubfolder } from '@/screens/modals/add-subfolder'
-import { AddTemplate } from '@/screens/modals/add-template'
-import { DeleteRepository } from '@/screens/modals/delete-repository'
-import { RenameRepository } from '@/screens/modals/rename-repository'
-import {
-    useCurrentNote,
-    useNotes,
-    useRepositories,
-    useTags,
-    useTemplates,
-    useUtils
-} from '@/hooks'
-import {
-    buildRepositoryTree,
-    flattenDrawerTree,
-    getEditorPath
-} from '@/utils'
-import {
-    ROUTES,
-    TEMPLATE_TAB_PREFIX,
-    TEMPLATES_SECTION_ID
-} from '@/constants'
+import { Separator } from '@/components/separator/separator'
+
+import { useCurrentNote } from '@/hooks/use-current-note'
+import { useNotes } from '@/hooks/use-notes'
+import { useRepositories } from '@/hooks/use-repositories'
+import { useTags } from '@/hooks/use-tags'
+import { useTemplates } from '@/hooks/use-templates'
+import { useUtils } from '@/hooks/use-utils'
+import { buildRepositoryTree, flattenDrawerTree } from '@/utils/drawer-tree'
+import { getEditorPath } from '@/utils/editor-path'
+
+import { ROUTES } from '@/constants/routes'
+import { TEMPLATE_TAB_PREFIX, TEMPLATES_SECTION_ID } from '@/constants/tabs'
 
 const DRAWER_SPACING = 12
 

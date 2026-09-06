@@ -1,6 +1,7 @@
-import { AnimatedView } from '../animated'
+import { AnimatedView } from '@/components/animated/animated-view'
 import { DrawerRepositoryRow } from './drawer-repository-row'
-import { useUtils } from '@/hooks'
+
+import { useUtils } from '@/hooks/use-utils'
 
 export function DrawerRepositoryItem({
     repository,

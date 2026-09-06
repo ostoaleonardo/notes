@@ -1,6 +1,8 @@
 import { createContext, useEffect, useMemo, useRef, useState } from 'react'
+
 import { useStorage } from '../hooks/use-storage'
-import { STORAGE_KEYS } from '@/constants'
+
+import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export const RepositoryContext = createContext()
 

@@ -2,8 +2,9 @@ import { useEffect, useRef } from 'react'
 import { StyleSheet } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { FadeInUp, SlideOutLeft } from 'react-native-reanimated'
-import { AnimatedView } from '../../animated'
-import { DeleteAction } from '../actions'
+
+import { AnimatedView } from '@/components/animated/animated-view'
+import { DeleteAction } from '@/components/swipeable/actions/delete-action'
 
 export function SwipeableCard({ children, isOpen, onOpen, onDelete, renderRightActions, ...props }) {
     const ref = useRef(null)

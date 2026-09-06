@@ -1,7 +1,11 @@
 import { Redirect } from 'expo-router'
-import { useCurrentNote, useNotes, useRepositories } from '@/hooks'
-import { ROUTES } from '@/constants'
-import { getEditorPath } from '@/utils'
+
+import { useCurrentNote } from '@/hooks/use-current-note'
+import { useNotes } from '@/hooks/use-notes'
+import { useRepositories } from '@/hooks/use-repositories'
+import { getEditorPath } from '@/utils/editor-path'
+
+import { ROUTES } from '@/constants/routes'
 
 export default function App() {
     const { loading } = useNotes()

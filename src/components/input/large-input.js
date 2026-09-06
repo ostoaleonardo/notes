@@ -1,6 +1,7 @@
 import { StyleSheet, TextInput } from 'react-native'
 import { useTheme } from 'react-native-paper'
-import { FONTS, TRANSPARENT } from '@/constants'
+
+import { FONTS, TRANSPARENT } from '@/constants/themes'
 
 export function LargeInput({ value, onChangeText, placeholder, modal, ...props }) {
     const { colors } = useTheme()

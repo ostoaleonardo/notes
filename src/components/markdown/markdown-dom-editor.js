@@ -6,14 +6,15 @@ import { EditorView, keymap, placeholder as placeholderExtension } from '@codemi
 import { defaultKeymap, history, historyKeymap, redoDepth, undoDepth } from '@codemirror/commands'
 import { markdown } from '@codemirror/lang-markdown'
 import { GFM } from '@lezer/markdown'
+
 import { fontFacesCss } from './markdown-dom-fonts'
 import { katexFontFacesCss } from './markdown-dom-katex-fonts'
 import { katexCss } from './markdown-dom-katex-css'
 import { TitleSection } from './markdown-dom-widgets'
 import { buildEditorTheme, buildPreviewCss } from './markdown-dom-theme'
-import { liveFormatting, mediaMapFacet } from './live-formatting'
 import { renderMarkdownHtml } from './markdown-dom-render-html'
 import { runAction } from './markdown-dom-commands'
+import { liveFormatting, mediaMapFacet } from './live-formatting/live-formatting'
 
 const MarkdownDomEditor = ({
     mode,

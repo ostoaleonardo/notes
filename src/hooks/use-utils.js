@@ -1,7 +1,9 @@
 import { useContext } from 'react'
-import { UtilsContext } from '@/context'
+
 import { useStorage } from './use-storage'
-import { STORAGE_KEYS } from '@/constants'
+import { UtilsContext } from '@/context/utils-contex'
+
+import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export const useUtils = () => {
     const {
