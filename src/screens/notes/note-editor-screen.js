@@ -78,7 +78,7 @@ export const NoteEditorScreen = ({
         }
 
         setVersionHistoryVisible(true)
-    }, [premium])
+    }, [premium, t])
 
     const onRunAction = useCallback((action) => {
         if (action === 'link') {
@@ -114,8 +114,9 @@ export const NoteEditorScreen = ({
     const onSaveAsTemplate = useCallback(async () => {
         const { title, note } = latestContent.current
         await addTemplate(title.trim() || t('placeholder.title'), note)
+        listTemplates().then(setTemplates)
         ToastAndroid.show(t('templates.saved'), ToastAndroid.SHORT)
-    }, [])
+    }, [addTemplate, listTemplates, t])
 
     const onCloseVersionHistory = useCallback(() => setVersionHistoryVisible(false), [])
 
