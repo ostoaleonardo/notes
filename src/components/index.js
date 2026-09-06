@@ -10,8 +10,7 @@ export {
     Pressable,
     FloatingButton,
     SquareButton,
-    SplitButton,
-    IconActionButton
+    SplitButton
 } from './button'
 
 // Cards
@@ -32,7 +31,7 @@ export {
 } from './modal'
 
 
-export { DialogModal, DialogButton } from './dialog'
+export { DialogModal } from './dialog'
 
 // Menus
 export { MenuContainer } from './menu/menu-container'

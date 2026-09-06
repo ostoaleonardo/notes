@@ -1,9 +1,9 @@
 import { Drawer } from 'react-native-drawer-layout'
 import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
+import { IconButton, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
-import { IconActionButton, Typography } from '@/components'
+import { Typography } from '@/components'
 import { Close } from '@/icons'
 
 export function VersionHistoryPanel({ visible, onOpen, onClose, swipeEnabled, panelContent, children }) {
@@ -25,9 +25,9 @@ export function VersionHistoryPanel({ visible, onOpen, onClose, swipeEnabled, pa
                         <Typography bold variant='title'>
                             {t('title.version_history')}
                         </Typography>
-                        <IconActionButton
-                            icon={Close}
+                        <IconButton
                             onPress={onClose}
+                            icon={(props) => <Close {...props} />}
                             accessibilityLabel={t('button.close')}
                         />
                     </View>

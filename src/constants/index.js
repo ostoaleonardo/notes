@@ -2,6 +2,7 @@ export { ROUTES } from './routes'
 export { DIFF_ADDED_COLOR, DIFF_REMOVED_COLOR } from './diff'
 export { THEMES } from './themes'
 export { COLORS, FONTS, TRANSPARENT, COMMONS } from './themes'
+export { DIALOG_BUTTON_LABEL_STYLE } from './dialog'
 export { LANGUAGES } from './languages'
 
 export {

@@ -3,8 +3,6 @@ import { Keyboard } from 'react-native'
 import { Dialog, Portal } from 'react-native-paper'
 import { FONTS } from '@/constants'
 
-export { DialogButton } from './dialog-button'
-
 export function DialogModal({ title, visible, onDismiss, children, actions }) {
     const [bottom, setBottom] = useState(0)
 

@@ -2,11 +2,10 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { router, useLocalSearchParams } from 'expo-router'
 import { MenuItem } from '@/components'
-import { useFiles, useIconProps, useNotes, useUtils } from '@/hooks'
+import { useFiles, useNotes, useUtils } from '@/hooks'
 import { Code, Commit, Delete, FileExport, Keep, KeepFilled } from '@/icons'
 
 export const useNoteActionsMenu = ({ onClose, onSetMode, onOpenVersionHistory }) => {
-    const iconProps = useIconProps()
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
 
@@ -42,29 +41,29 @@ export const useNoteActionsMenu = ({ onClose, onSetMode, onOpenVersionHistory })
         <>
             <MenuItem
                 title={t('button.code')}
-                leadingIcon={() => <Code {...iconProps} />}
+                leadingIcon={(props) => <Code {...props} />}
                 onPress={runAndClose(() => onSetMode('code'))}
             />
             <MenuItem
                 title={isPinned ? t('button.unpin') : t('button.pin')}
-                leadingIcon={() => (isPinned ? <KeepFilled {...iconProps} /> : <Keep {...iconProps} />)}
+                leadingIcon={(props) => (isPinned ? <KeepFilled {...props} /> : <Keep {...props} />)}
                 onPress={toggleKeep}
             />
             {slug && (
                 <MenuItem
                     title={t('button.export')}
-                    leadingIcon={() => <FileExport {...iconProps} />}
+                    leadingIcon={(props) => <FileExport {...props} />}
                     onPress={runAndClose(() => exportFile(slug))}
                 />
             )}
             <MenuItem
                 title={t('title.version_history')}
-                leadingIcon={() => <Commit {...iconProps} />}
+                leadingIcon={(props) => <Commit {...props} />}
                 onPress={runAndClose(onOpenVersionHistory)}
             />
             <MenuItem
                 title={t('button.delete')}
-                leadingIcon={() => <Delete {...iconProps} />}
+                leadingIcon={(props) => <Delete {...props} />}
                 onPress={onDelete}
             />
         </>

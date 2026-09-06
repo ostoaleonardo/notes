@@ -1,10 +1,11 @@
 import { ToastAndroid } from 'react-native'
 import { useEffect, useState } from 'react'
+import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { DialogButton, DialogModal } from '@/components/dialog'
+import { DialogModal } from '@/components/dialog'
 import { LargeInput } from '@/components/input'
 import { useHaptics, useRepositories } from '@/hooks'
-import { FEEDBACK_TYPES } from '@/constants'
+import { DIALOG_BUTTON_LABEL_STYLE, FEEDBACK_TYPES } from '@/constants'
 
 export function AddSubfolder({ visible, onDismiss, parentId }) {
     const { t } = useTranslation()
@@ -39,13 +40,14 @@ export function AddSubfolder({ visible, onDismiss, parentId }) {
             visible={visible}
             onDismiss={onDismiss}
             actions={
-                <DialogButton
+                <Button
                     mode='contained'
                     onPress={onCreate}
                     disabled={isDisabled}
+                    labelStyle={DIALOG_BUTTON_LABEL_STYLE}
                 >
                     {t('button.create')}
-                </DialogButton>
+                </Button>
             }
         >
             <LargeInput

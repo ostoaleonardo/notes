@@ -1,7 +1,7 @@
-import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { IconActionButton, RecentsButton } from '@/components'
+import { StyleSheet, View } from 'react-native'
+import { IconButton, useTheme } from 'react-native-paper'
+import { RecentsButton } from '@/components'
 import { Plus, UploadFile } from '@/icons'
 
 export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, recentCount }) {
@@ -16,8 +16,8 @@ export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, recentC
                 backgroundColor: colors.background
             }}
         >
-            <IconActionButton
-                icon={Plus}
+            <IconButton
+                icon={(props) => <Plus {...props} />}
                 onPress={onCreateNote}
                 accessibilityLabel={t('notes.create')}
             />
@@ -27,9 +27,9 @@ export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, recentC
                 count={recentCount}
             />
 
-            <IconActionButton
-                icon={UploadFile}
+            <IconButton
                 onPress={onImportNote}
+                icon={(props) => <UploadFile {...props} />}
                 accessibilityLabel={t('title.import')}
             />
         </View>
