@@ -103,10 +103,10 @@ export function DrawerItems({ navigation }) {
         closeDrawer()
     }, [closeDrawer])
 
-    const onOpenTemplate = (filename) => {
+    const onOpenTemplate = useCallback((filename) => {
         router.push(getEditorPath(TEMPLATE_TAB_PREFIX + filename))
         closeDrawer()
-    }
+    }, [closeDrawer])
 
     const onToggleCollapseAll = () => {
         if (collapsedFolders.size > 0) {
