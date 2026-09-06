@@ -24,6 +24,10 @@ export function DialogModal({ title, visible, onDismiss, children, actions }) {
         return () => subscriptions.forEach((subscription) => subscription.remove())
     }, [])
 
+    useEffect(() => {
+        if (!visible) Keyboard.dismiss()
+    }, [visible])
+
     return (
         <Portal>
             <Dialog
