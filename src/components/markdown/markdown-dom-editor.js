@@ -194,6 +194,8 @@ const MarkdownDomEditor = ({
         [mode, previewValue]
     )
 
+    const fontsReady = !!fonts && !!katexFonts
+
     const previewCss = useMemo(() => buildPreviewCss({
         fontFamily,
         headingFontFamily,
@@ -215,7 +217,16 @@ const MarkdownDomEditor = ({
     ])
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflowX: 'hidden' }}>
+        <div
+            style={{
+                height: '100%',
+                display: 'flex',
+                overflowX: 'hidden',
+                flexDirection: 'column',
+                opacity: fontsReady ? 1 : 0,
+                transition: 'opacity 120ms ease'
+            }}
+        >
             <style>
                 {fontFacesCss(fonts)}
                 {katexFontFacesCss(katexFonts)}
