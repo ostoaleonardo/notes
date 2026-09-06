@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, View } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
 import { IconButton, TouchableRipple, useTheme } from 'react-native-paper'
-import { AnimatedView, Pressable, Scroll, Typography } from '@/components'
+import { AnimatedView, Pressable, Typography } from '@/components'
 import { useIconProps, useLanguage, useNoteVersions } from '@/hooks'
 import { ArrowBack } from '@/icons'
 import {
@@ -52,7 +52,7 @@ export function VersionHistoryContent({
         const diff = diffLines(selected.content, currentContent)
 
         return (
-            <Scroll>
+            <View style={styles.diffContainer}>
                 <View style={styles.diffHeader}>
                     <IconButton
                         onPress={() => setSelected(null)}
@@ -64,8 +64,12 @@ export function VersionHistoryContent({
                     </Typography>
                 </View>
 
-                <View style={styles.diff}>
-                    {diff.map((entry, index) => {
+                <FlatList
+                    data={diff}
+                    keyExtractor={(_, index) => String(index)}
+                    showsVerticalScrollIndicator={false}
+                    style={styles.diff}
+                    renderItem={({ item: entry }) => {
                         const isChanged = entry.type !== 'unchanged'
                         const prefix = entry.type === 'added' ? '+ ' : entry.type === 'removed' ? '- ' : '  '
                         const background = isChanged
@@ -73,10 +77,7 @@ export function VersionHistoryContent({
                             : 'transparent'
 
                         return (
-                            <View
-                                key={index}
-                                style={{ ...styles.diffLine, backgroundColor: background }}
-                            >
+                            <View style={{ ...styles.diffLine, backgroundColor: background }}>
                                 <Typography
                                     color={isChanged ? getDiffColor(entry.type) : colors.onBackground}
                                     styleProps={styles.diffText}
@@ -85,13 +86,13 @@ export function VersionHistoryContent({
                                 </Typography>
                             </View>
                         )
-                    })}
-                </View>
+                    }}
+                />
 
                 <Pressable onPress={() => onRestore(selected)}>
                     {t('button.restore')}
                 </Pressable>
-            </Scroll>
+            </View>
         )
     }
 
@@ -104,9 +105,12 @@ export function VersionHistoryContent({
     }
 
     return (
-        <Scroll>
-            {ordered.map((version) => (
-                <AnimatedView key={version.id}>
+        <FlatList
+            data={ordered}
+            keyExtractor={(version) => version.id}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item: version }) => (
+                <AnimatedView>
                     <TouchableRipple onPress={() => setSelected(version)}>
                         <View style={styles.item}>
                             <Typography bold numberOfLines={1}>
@@ -118,8 +122,8 @@ export function VersionHistoryContent({
                         </View>
                     </TouchableRipple>
                 </AnimatedView>
-            ))}
-        </Scroll>
+            )}
+        />
     )
 }
 
@@ -127,12 +131,16 @@ const styles = StyleSheet.create({
     item: {
         paddingVertical: 10
     },
+    diffContainer: {
+        flex: 1
+    },
     diffHeader: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 8
     },
     diff: {
+        flex: 1,
         borderRadius: 8,
         overflow: 'hidden',
         marginBottom: 16
