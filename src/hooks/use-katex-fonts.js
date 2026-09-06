@@ -33,19 +33,28 @@ const resolveFontDataUrl = async (module) => {
     return `data:font/woff2;base64,${bytesToBase64(bytes)}`
 }
 
+let fontsPromise = null
+
+const loadFonts = () => {
+    if (!fontsPromise) {
+        const entries = Object.entries(KATEX_FONT_MODULES)
+
+        fontsPromise = Promise.all(entries.map(([, module]) => resolveFontDataUrl(module)))
+            .then((urls) => Object.fromEntries(entries.map(([name], index) => [name, urls[index]])))
+    }
+
+    return fontsPromise
+}
+
 export const useKatexFonts = () => {
     const [fonts, setFonts] = useState(null)
 
     useEffect(() => {
         let cancelled = false
-        const entries = Object.entries(KATEX_FONT_MODULES)
 
-        Promise.all(entries.map(([name, module]) => resolveFontDataUrl(module)))
-            .then((urls) => {
-                if (cancelled) return
-                const map = Object.fromEntries(entries.map(([name], index) => [name, urls[index]]))
-                setFonts(map)
-            })
+        loadFonts().then((resolvedFonts) => {
+            if (!cancelled) setFonts(resolvedFonts)
+        })
 
         return () => { cancelled = true }
     }, [])

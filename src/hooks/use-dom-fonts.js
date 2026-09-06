@@ -17,19 +17,29 @@ const resolveFontDataUrl = async (module) => {
     return `data:font/ttf;base64,${bytesToBase64(bytes)}`
 }
 
+let fontsPromise = null
+
+const loadFonts = () => {
+    if (!fontsPromise) {
+        fontsPromise = Promise.all([
+            resolveFontDataUrl(FONT_MODULES.body),
+            resolveFontDataUrl(FONT_MODULES.bodyBold),
+            resolveFontDataUrl(FONT_MODULES.bodyItalic),
+            resolveFontDataUrl(FONT_MODULES.heading)
+        ]).then(([body, bodyBold, bodyItalic, heading]) => ({ body, bodyBold, bodyItalic, heading }))
+    }
+
+    return fontsPromise
+}
+
 export const useDomFonts = () => {
     const [fonts, setFonts] = useState(null)
 
     useEffect(() => {
         let cancelled = false
 
-        Promise.all([
-            resolveFontDataUrl(FONT_MODULES.body),
-            resolveFontDataUrl(FONT_MODULES.bodyBold),
-            resolveFontDataUrl(FONT_MODULES.bodyItalic),
-            resolveFontDataUrl(FONT_MODULES.heading)
-        ]).then(([body, bodyBold, bodyItalic, heading]) => {
-            if (!cancelled) setFonts({ body, bodyBold, bodyItalic, heading })
+        loadFonts().then((resolvedFonts) => {
+            if (!cancelled) setFonts(resolvedFonts)
         })
 
         return () => { cancelled = true }
