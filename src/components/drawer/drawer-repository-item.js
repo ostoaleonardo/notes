@@ -1,9 +1,11 @@
+import { memo } from 'react'
+
 import { AnimatedView } from '@/components/animated/animated-view'
 import { DrawerRepositoryRow } from './drawer-repository-row'
 
 import { useUtils } from '@/hooks/use-utils'
 
-export function DrawerRepositoryItem({
+export const DrawerRepositoryItem = memo(function DrawerRepositoryItem({
     repository,
     depth,
     active,
@@ -39,4 +41,4 @@ export function DrawerRepositoryItem({
             />
         </AnimatedView>
     )
-}
+})

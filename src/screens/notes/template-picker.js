@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CardGrid } from './card-grid'
@@ -23,10 +23,10 @@ export function TemplatePicker({ title, templates, onSelect }) {
         )
     })), [templates, title, currentLanguage, t])
 
-    const onOpen = (card) => {
+    const onOpen = useCallback((card) => {
         const template = templates.find((entry) => entry.filename === card.id)
         onSelect(renderTemplate(template.content, { title, language: currentLanguage }))
-    }
+    }, [templates, title, currentLanguage, onSelect])
 
     return (
         <CardGrid

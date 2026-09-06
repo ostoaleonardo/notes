@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import Animated from 'react-native-reanimated'
 import { Pressable, StyleSheet } from 'react-native'
 
@@ -7,7 +8,7 @@ import { useAnimatedBorderRadius } from '@/hooks/use-animated-border-radius'
 
 import { COMMONS } from '@/constants/themes'
 
-export const ColorOption = ({ name, active, onPress, children, options }) => {
+export const ColorOption = memo(function ColorOption({ name, active, onPress, children, options }) {
     const colors = options[name]
 
     const animatedStyle = useAnimatedBorderRadius(
@@ -40,7 +41,7 @@ export const ColorOption = ({ name, active, onPress, children, options }) => {
             </Typography>
         </Pressable>
     )
-}
+})
 
 const styles = StyleSheet.create({
     color: {

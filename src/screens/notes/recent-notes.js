@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
@@ -70,12 +70,12 @@ export function RecentNotes({ onClose, home = false }) {
         })
     }
 
-    const onOpen = (card) => {
+    const onOpen = useCallback((card) => {
         onClose()
         router.push(getEditorPath(card.id))
-    }
+    }, [onClose])
 
-    const onRemove = (card) => {
+    const onRemove = useCallback((card) => {
         if (card.pinned) {
             const next = new Set(pinned)
             next.delete(card.id)
@@ -83,7 +83,7 @@ export function RecentNotes({ onClose, home = false }) {
         } else {
             removeRecent(card.id)
         }
-    }
+    }, [pinned, updatePinned, removeRecent])
 
     const onClearAll = () => {
         clearRecent()
