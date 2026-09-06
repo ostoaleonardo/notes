@@ -8,3 +8,17 @@ export const buildRepositoryTree = (flatList, notesByRepository, parentId = null
             subfolders: buildRepositoryTree(flatList, notesByRepository, repository.id)
         }))
 )
+
+export const flattenDrawerTree = (tree, collapsedFolders, depth = 0) => (
+    tree.flatMap(({ repository, notes, subfolders }) => {
+        const isCollapsed = collapsedFolders.has(repository.id)
+        const row = { type: 'repository', id: 'repository:' + repository.id, repository, depth, isCollapsed }
+
+        if (isCollapsed) return [row]
+
+        const noteRows = notes.map((note) => ({ type: 'note', id: 'note:' + note.id, note, depth: depth + 1 }))
+        const subfolderRows = flattenDrawerTree(subfolders, collapsedFolders, depth + 1)
+
+        return [row, ...noteRows, ...subfolderRows]
+    })
+)
