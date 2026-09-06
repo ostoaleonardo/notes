@@ -1,4 +1,4 @@
-import { createContext, useEffect, useRef, useState } from 'react'
+import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AppState } from 'react-native'
 import { useRepositoryData } from '../hooks/use-repository-data'
 import { useRepositories } from '../hooks/use-repositories'
@@ -53,24 +53,24 @@ export function NoteProvider({ children }) {
         return () => subscription.remove()
     }, [treeKey])
 
-    const clear = () => {
+    const clear = useCallback(() => {
         setNotes([])
         setTags(DEFAULT_TAGS)
-    }
+    }, [])
+
+    const value = useMemo(() => ({
+        notes,
+        setNotes,
+        tags,
+        setTags,
+        paramId,
+        setParamId,
+        loading,
+        clear
+    }), [notes, tags, paramId, loading, clear])
 
     return (
-        <NoteContext.Provider
-            value={{
-                notes,
-                setNotes,
-                tags,
-                setTags,
-                paramId,
-                setParamId,
-                loading,
-                clear
-            }}
-        >
+        <NoteContext.Provider value={value}>
             {children}
         </NoteContext.Provider>
     )

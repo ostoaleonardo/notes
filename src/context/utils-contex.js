@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useMemo, useState } from 'react'
 import { useStorage } from '../hooks/use-storage'
 import { DEFAULT_SORT, STORAGE_KEYS } from '@/constants'
 
@@ -29,21 +29,21 @@ export function UtilsProvider({ children }) {
         getUtils()
     }, [])
 
+    const value = useMemo(() => ({
+        pinned,
+        setPinned,
+        sort,
+        setSort,
+        filter,
+        setFilter,
+        view,
+        setView,
+        collapsedFolders,
+        setCollapsedFolders
+    }), [pinned, sort, filter, view, collapsedFolders])
+
     return (
-        <UtilsContext.Provider
-            value={{
-                pinned,
-                setPinned,
-                sort,
-                setSort,
-                filter,
-                setFilter,
-                view,
-                setView,
-                collapsedFolders,
-                setCollapsedFolders
-            }}
-        >
+        <UtilsContext.Provider value={value}>
             {children}
         </UtilsContext.Provider>
     )

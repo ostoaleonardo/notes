@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useMemo, useState } from 'react'
 import { useColorScheme } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { StatusBar } from 'expo-status-bar'
@@ -47,19 +47,19 @@ export function ThemeProvider({ initialTheme, children }) {
         }
     }
 
+    const value = useMemo(() => ({
+        mode,
+        setMode,
+        name,
+        setName,
+        theme,
+        setTheme,
+        accent,
+        setAccent
+    }), [mode, name, theme, accent])
+
     return (
-        <ThemeContext.Provider
-            value={{
-                mode,
-                setMode,
-                name,
-                setName,
-                theme,
-                setTheme,
-                accent,
-                setAccent
-            }}
-        >
+        <ThemeContext.Provider value={value}>
             <PaperProvider theme={theme}>
                 <Host style={{ flex: 1 }}>
                     {children}

@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useCallback, useEffect, useMemo, useState } from 'react'
 import * as Linking from 'expo-linking'
 import { File } from 'expo-file-system'
 import { randomUUID } from 'expo-crypto'
@@ -16,7 +16,7 @@ export function ImportProvider({ children }) {
     const { saveNote, loading } = useNotes()
     const [importing, setImporting] = useState(false)
 
-    const importFile = async (url, name) => {
+    const importFile = useCallback(async (url, name) => {
         try {
             setImporting(true)
 
@@ -41,7 +41,7 @@ export function ImportProvider({ children }) {
         } finally {
             setImporting(false)
         }
-    }
+    }, [router, saveNote])
 
     useEffect(() => {
         const handleUrl = (url) => {
@@ -58,8 +58,10 @@ export function ImportProvider({ children }) {
         return () => subscription.remove()
     }, [loading, premium])
 
+    const value = useMemo(() => ({ importing, importFile, premium }), [importing, importFile, premium])
+
     return (
-        <ImportContext.Provider value={{ importing, importFile, premium }}>
+        <ImportContext.Provider value={value}>
             {children}
         </ImportContext.Provider>
     )
