@@ -1,4 +1,4 @@
-import { createContext, useEffect, useRef, useState } from 'react'
+import { createContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useStorage } from '../hooks/use-storage'
 import { STORAGE_KEYS } from '@/constants'
 
@@ -31,19 +31,19 @@ export function RepositoryProvider({ children }) {
         getRepositories()
     }, [])
 
+    const value = useMemo(() => ({
+        repositories,
+        setRepositories,
+        activeRepositoryId,
+        setActiveRepositoryId,
+        loading,
+        reconciled,
+        setReconciled,
+        busyRef
+    }), [repositories, activeRepositoryId, loading, reconciled])
+
     return (
-        <RepositoryContext.Provider
-            value={{
-                repositories,
-                setRepositories,
-                activeRepositoryId,
-                setActiveRepositoryId,
-                loading,
-                reconciled,
-                setReconciled,
-                busyRef
-            }}
-        >
+        <RepositoryContext.Provider value={value}>
             {children}
         </RepositoryContext.Provider>
     )
