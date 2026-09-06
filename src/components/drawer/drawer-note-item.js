@@ -1,13 +1,14 @@
+import { memo } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 
 import { AnimatedView } from '@/components/animated/animated-view'
 import { Typography } from '../typography'
 
-export function DrawerNoteItem({ note, depth, active, onPress }) {
+export const DrawerNoteItem = memo(function DrawerNoteItem({ note, depth, active, onOpenNote }) {
     return (
         <AnimatedView>
             <Pressable
-                onPress={onPress}
+                onPress={() => onOpenNote(note.id)}
                 style={{
                     ...styles.container,
                     paddingLeft: 16 + depth * 16
@@ -22,7 +23,7 @@ export function DrawerNoteItem({ note, depth, active, onPress }) {
             </Pressable>
         </AnimatedView>
     )
-}
+})
 
 const styles = StyleSheet.create({
     container: {

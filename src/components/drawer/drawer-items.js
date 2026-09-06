@@ -1,5 +1,5 @@
 import { router } from 'expo-router'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
@@ -82,26 +82,26 @@ export function DrawerItems({ navigation }) {
         [tree, collapsedFolders]
     )
 
-    const closeDrawer = () => {
+    const closeDrawer = useCallback(() => {
         navigation.dispatch({ type: 'CLOSE_DRAWER' })
-    }
+    }, [navigation])
 
-    const onOpenRoot = (id) => {
+    const onOpenRoot = useCallback((id) => {
         if (id !== activeRepositoryId) setActiveRepository(id)
-    }
+    }, [activeRepositoryId, setActiveRepository])
 
-    const onOpenNote = (id) => {
+    const onOpenNote = useCallback((id) => {
         router.push(getEditorPath(id))
         closeDrawer()
-    }
+    }, [closeDrawer])
 
-    const onCreateNote = (repositoryId) => {
+    const onCreateNote = useCallback((repositoryId) => {
         router.push({
             pathname: ROUTES.ADD_NOTE,
             params: { repositoryId }
         })
         closeDrawer()
-    }
+    }, [closeDrawer])
 
     const onOpenTemplate = (filename) => {
         router.push(getEditorPath(TEMPLATE_TAB_PREFIX + filename))
@@ -116,14 +116,14 @@ export function DrawerItems({ navigation }) {
         }
     }
 
-    const renderItem = ({ item }) => {
+    const renderItem = useCallback(({ item }) => {
         if (item.type === 'note') {
             return (
                 <DrawerNoteItem
                     note={item.note}
                     depth={item.depth}
                     active={item.note.id === currentId}
-                    onPress={() => onOpenNote(item.note.id)}
+                    onOpenNote={onOpenNote}
                 />
             )
         }
@@ -141,7 +141,7 @@ export function DrawerItems({ navigation }) {
                 onDelete={setDeleteId}
             />
         )
-    }
+    }, [currentId, activeRepositoryId, onOpenNote, onOpenRoot, onCreateNote])
 
     return (
         <>

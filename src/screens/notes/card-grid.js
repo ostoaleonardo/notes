@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { FlatList, StyleSheet, useWindowDimensions } from 'react-native'
 import { FadeInUp } from 'react-native-reanimated'
 
@@ -24,6 +24,15 @@ export function CardGrid({ cards, onOpen, onRemove, emptyMessage }) {
         paddingHorizontal: GRID_GAP_HORIZONTAL / 2,
         paddingVertical: GRID_GAP / 2
     }), [columns])
+
+    const renderItem = useCallback(({ item: card }) => (
+        <CardGridItem
+            card={card}
+            cellStyle={cellStyle}
+            onOpen={onOpen}
+            onRemove={onRemove}
+        />
+    ), [cellStyle, onOpen, onRemove])
 
     if (cards.length === 0 && !emptyMessage) return null
 
@@ -54,14 +63,7 @@ export function CardGrid({ cards, onOpen, onRemove, emptyMessage }) {
             style={[styles.container, { width: windowWidth }]}
             contentContainerStyle={styles.grid}
             columnWrapperStyle={columns > 1 ? styles.row : undefined}
-            renderItem={({ item: card }) => (
-                <CardGridItem
-                    card={card}
-                    cellStyle={cellStyle}
-                    onPress={() => onOpen(card)}
-                    onRemove={onRemove && (() => onRemove(card))}
-                />
-            )}
+            renderItem={renderItem}
         />
     )
 }

@@ -34,22 +34,20 @@ export function Tags({ tags, setTags }) {
         vibrate(FEEDBACK_TYPES.SUCCESS)
     }
 
-    const onTags = (id) => {
-        if (!tags.includes(id)) {
-            setTags([...tags, id])
-        } else {
-            setTags(tags.filter((tagId) => tagId !== id))
-        }
-    }
+    const onToggleTag = useCallback((id) => {
+        setTags((previousTags) => previousTags.includes(id)
+            ? previousTags.filter((tagId) => tagId !== id)
+            : [...previousTags, id])
+    }, [setTags])
 
-    const renderItems = useCallback(({ id, name }) => (
+    const renderItem = useCallback(({ item: { id, name } }) => (
         <TagOption
-            key={id}
+            id={id}
             tag={name}
-            onPress={() => onTags(id)}
+            onToggle={onToggleTag}
             isSelected={tags.includes(id)}
         />
-    ), [tags])
+    ), [tags, onToggleTag])
 
     return (
         <>
@@ -73,7 +71,7 @@ export function Tags({ tags, setTags }) {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: 16 }}
                 ItemSeparatorComponent={<Separator style={{ marginHorizontal: 24 }} />}
-                renderItem={({ item }) => renderItems(item)}
+                renderItem={renderItem}
                 ListEmptyComponent={() => (
                     <View style={{ paddingTop: 64 }}>
                         <Typography

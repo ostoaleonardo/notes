@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { FadeInUp } from 'react-native-reanimated'
@@ -8,7 +9,7 @@ import { Typography } from '@/components/typography'
 
 import { TRANSPARENT } from '@/constants/themes'
 
-export function TagOption({ tag, onPress, isSelected }) {
+export const TagOption = memo(function TagOption({ id, tag, onToggle, isSelected }) {
     const { colors } = useTheme()
     const { onBackground } = colors
 
@@ -17,7 +18,7 @@ export function TagOption({ tag, onPress, isSelected }) {
             entering={FadeInUp}
         >
             <Pressable
-                onPress={onPress}
+                onPress={() => onToggle(id)}
                 style={styles.container}
                 android_ripple={{ color: onBackground + TRANSPARENT[10] }}
             >
@@ -28,7 +29,7 @@ export function TagOption({ tag, onPress, isSelected }) {
             </Pressable>
         </AnimatedView>
     )
-}
+})
 
 const styles = StyleSheet.create({
     container: {

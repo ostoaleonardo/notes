@@ -3,6 +3,8 @@ import { useTheme } from 'react-native-paper'
 
 import { Delete } from '@/icons/delete'
 
+import { COMMONS } from '@/constants/themes'
+
 export function DeleteAction({ onPress, style }) {
     const { colors } = useTheme()
 
@@ -22,7 +24,7 @@ const styles = StyleSheet.create({
     container: {
         width: 100,
         marginRight: 24,
-        borderRadius: 16,
+        borderRadius: COMMONS.radius,
         alignItems: 'center',
         justifyContent: 'center'
     }

@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FadeOutUp } from 'react-native-reanimated'
 import { Pressable, StyleSheet } from 'react-native'
@@ -13,10 +14,10 @@ import { COMMONS } from '@/constants/themes'
 
 export const CARDS_HEIGHT = 220
 
-export function CardGridItem({
+export const CardGridItem = memo(function CardGridItem({
     card,
     cellStyle,
-    onPress,
+    onOpen,
     onRemove
 }) {
     const { t } = useTranslation()
@@ -28,7 +29,7 @@ export function CardGridItem({
             style={{ ...cellStyle, gap: 8 }}
         >
             <Pressable
-                onPress={onPress}
+                onPress={() => onOpen(card)}
                 style={{
                     ...styles.card,
                     borderColor: colors.outline,
@@ -39,7 +40,7 @@ export function CardGridItem({
                     <IconButton
                         size={4}
                         mode='contained'
-                        onPress={onRemove}
+                        onPress={() => onRemove(card)}
                         style={{
                             alignSelf: 'flex-end'
                         }}
@@ -75,7 +76,7 @@ export function CardGridItem({
             </Typography>
         </AnimatedView>
     )
-}
+})
 
 const styles = StyleSheet.create({
     card: {

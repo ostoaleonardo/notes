@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { TouchableRipple, useTheme } from 'react-native-paper'
-import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
+import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
 
 import { MenuContainer } from '../menu/menu-container'
+
+import { useAnimatedProgress } from '@/hooks/use-animated-progress'
 
 import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
 import { KeyboardArrowUp } from '@/icons/keyboard-arrow-up'
@@ -20,16 +22,13 @@ export const SplitButton = ({
     onClose: controlledOnClose
 }) => {
     const { colors } = useTheme()
-    const openProgress = useSharedValue(0)
 
     const [uncontrolledVisible, setUncontrolledVisible] = useState(false)
     const menuVisible = controlledVisible ?? uncontrolledVisible
     const openMenu = controlledOnOpen ?? (() => setUncontrolledVisible(true))
     const closeMenu = controlledOnClose ?? (() => setUncontrolledVisible(false))
 
-    useEffect(() => {
-        openProgress.value = withTiming(menuVisible ? 1 : 0, { duration: 200 })
-    }, [menuVisible])
+    const openProgress = useAnimatedProgress(menuVisible)
 
     const secondaryAnimatedStyle = useAnimatedStyle(() => ({
         borderTopLeftRadius: interpolate(openProgress.value, [0, 1], [4, 24]),

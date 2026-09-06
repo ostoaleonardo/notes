@@ -3,7 +3,7 @@ import { useTheme } from 'react-native-paper'
 
 import { Plus } from '@/icons/plus'
 
-import { COLORS, TRANSPARENT } from '@/constants/themes'
+import { COLORS, COMMONS, TRANSPARENT } from '@/constants/themes'
 
 export function SquareButton({ onPress, disabled }) {
     const { colors } = useTheme()
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     pressable: {
         width: 64,
         height: 64,
-        borderRadius: 16,
+        borderRadius: COMMONS.radius,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: COLORS.base.accent
