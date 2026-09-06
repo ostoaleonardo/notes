@@ -1,13 +1,11 @@
-import { StyleSheet } from 'react-native'
 import { useEffect, useState } from 'react'
-import { Button } from 'react-native-paper'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import * as DocumentPicker from 'expo-document-picker'
-import { DialogModal } from '@/components/dialog'
+import { DialogButton, DialogModal } from '@/components/dialog'
 import { LargeInput } from '@/components/input'
 import { useHaptics, useTemplates } from '@/hooks'
-import { FEEDBACK_TYPES, FONTS, ROUTES } from '@/constants'
+import { FEEDBACK_TYPES, ROUTES } from '@/constants'
 
 export function AddTemplate({ visible, onDismiss }) {
     const { t } = useTranslation()
@@ -45,22 +43,20 @@ export function AddTemplate({ visible, onDismiss }) {
             visible={visible}
             onDismiss={onDismiss}
             actions={[
-                <Button
+                <DialogButton
                     key='import'
                     onPress={onImport}
-                    labelStyle={styles.label}
                 >
                     {t('templates.import')}
-                </Button>,
-                <Button
+                </DialogButton>,
+                <DialogButton
                     key='create'
                     mode='contained'
                     onPress={onCreate}
                     disabled={isDisabled}
-                    labelStyle={styles.label}
                 >
                     {t('button.create')}
-                </Button>
+                </DialogButton>
             ]}
         >
             <LargeInput
@@ -72,12 +68,3 @@ export function AddTemplate({ visible, onDismiss }) {
         </DialogModal>
     )
 }
-
-const styles = StyleSheet.create({
-    label: {
-        fontSize: 12,
-        paddingHorizontal: 8,
-        textTransform: 'uppercase',
-        fontFamily: FONTS.azeretLight
-    }
-})

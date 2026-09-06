@@ -1,10 +1,8 @@
-import { StyleSheet } from 'react-native'
 import { useEffect, useState } from 'react'
-import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { DialogModal, LargeInput } from '@/components'
+import { DialogButton, DialogModal, LargeInput } from '@/components'
 import { useTags, useHaptics } from '@/hooks'
-import { FEEDBACK_TYPES, FONTS } from '@/constants'
+import { FEEDBACK_TYPES } from '@/constants'
 
 export function UpdateTag({ visible, onDismiss, selectedId }) {
     const { t } = useTranslation()
@@ -44,14 +42,13 @@ export function UpdateTag({ visible, onDismiss, selectedId }) {
             visible={visible}
             onDismiss={onDismiss}
             actions={
-                <Button
+                <DialogButton
                     mode='contained'
                     onPress={onUpdate}
                     disabled={isDisabled}
-                    labelStyle={styles.label}
                 >
                     {t('button.update')}
-                </Button>
+                </DialogButton>
             }
         >
             <LargeInput
@@ -63,12 +60,3 @@ export function UpdateTag({ visible, onDismiss, selectedId }) {
         </DialogModal>
     )
 }
-
-const styles = StyleSheet.create({
-    label: {
-        fontSize: 12,
-        paddingHorizontal: 8,
-        textTransform: 'uppercase',
-        fontFamily: FONTS.azeretLight
-    }
-})

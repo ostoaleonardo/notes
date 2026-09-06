@@ -1,8 +1,7 @@
 import { StyleSheet, View } from 'react-native'
-import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
-import { DialogModal, Typography } from '@/components'
-import { FONTS, TEMPLATE_PLACEHOLDERS } from '@/constants'
+import { DialogButton, DialogModal, Typography } from '@/components'
+import { TEMPLATE_PLACEHOLDERS } from '@/constants'
 import { renderTemplate } from '@/utils'
 
 export function TemplatePlaceholders({ visible, onDismiss }) {
@@ -20,12 +19,9 @@ export function TemplatePlaceholders({ visible, onDismiss }) {
             visible={visible}
             onDismiss={onDismiss}
             actions={
-                <Button
-                    onPress={onDismiss}
-                    labelStyle={styles.label}
-                >
+                <DialogButton onPress={onDismiss}>
                     {t('button.back')}
-                </Button>
+                </DialogButton>
             }
         >
             <View style={styles.list}>
@@ -56,11 +52,5 @@ export function TemplatePlaceholders({ visible, onDismiss }) {
 const styles = StyleSheet.create({
     list: {
         gap: 12
-    },
-    label: {
-        fontSize: 12,
-        paddingHorizontal: 8,
-        textTransform: 'uppercase',
-        fontFamily: FONTS.azeretLight
     }
 })

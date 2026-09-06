@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, View } from 'react-native'
-import { IconButton, Tooltip, useTheme } from 'react-native-paper'
-import { AnimatedView, Separator, Typography } from '@/components'
+import { Tooltip, useTheme } from 'react-native-paper'
+import { AnimatedView, IconActionButton, Separator, Typography } from '@/components'
 import { RepositoryMenu } from './repository-menu'
 import { OpenInNew } from '@/icons'
-import { useFileStorage, useIconProps, useRepositories } from '@/hooks'
+import { useFileStorage, useRepositories } from '@/hooks'
 import { getGroupedRadius, getRepositoryPath } from '@/utils'
 
 export function RepositoryItem({
@@ -23,7 +23,6 @@ export function RepositoryItem({
     const { colors } = useTheme()
     const { getDescendants } = useRepositories()
     const { listMarkdownFiles } = useFileStorage()
-    const iconProps = useIconProps(16)
 
     const [expanded, setExpanded] = useState(false)
 
@@ -65,9 +64,10 @@ export function RepositoryItem({
                 </Pressable>
 
                 <Tooltip title={t('repositories.open')}>
-                    <IconButton
+                    <IconActionButton
+                        icon={OpenInNew}
+                        iconSize={16}
                         onPress={onOpen}
-                        icon={() => <OpenInNew {...iconProps} />}
                         accessibilityLabel={t('repositories.open')}
                     />
                 </Tooltip>

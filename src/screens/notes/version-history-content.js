@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FlatList, StyleSheet, View } from 'react-native'
-import { IconButton, TouchableRipple, useTheme } from 'react-native-paper'
-import { AnimatedView, Pressable, Typography } from '@/components'
-import { useIconProps, useLanguage, useNoteVersions } from '@/hooks'
+import { TouchableRipple, useTheme } from 'react-native-paper'
+import { AnimatedView, IconActionButton, Pressable, Typography } from '@/components'
+import { useLanguage, useNoteVersions } from '@/hooks'
 import { ArrowBack } from '@/icons'
 import {
     DIFF_ADDED_COLOR,
@@ -27,7 +27,6 @@ export function VersionHistoryContent({
     const { colors } = useTheme()
     const { currentLanguage } = useLanguage()
     const { getVersions } = useNoteVersions()
-    const iconProps = useIconProps()
 
     const [versions, setVersions] = useState([])
     const [loading, setLoading] = useState(true)
@@ -54,9 +53,9 @@ export function VersionHistoryContent({
         return (
             <View style={styles.diffContainer}>
                 <View style={styles.diffHeader}>
-                    <IconButton
+                    <IconActionButton
+                        icon={ArrowBack}
                         onPress={() => setSelected(null)}
-                        icon={() => <ArrowBack {...iconProps} />}
                         accessibilityLabel={t('button.back')}
                     />
                     <Typography opacity={0.6} variant='caption'>
