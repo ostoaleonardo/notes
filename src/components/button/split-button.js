@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { TouchableRipple, useTheme } from 'react-native-paper'
 import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
 
+import { AnimatedView } from '../animated/animated-view'
 import { MenuContainer } from '../menu/menu-container'
 
 import { useAnimatedProgress } from '@/hooks/use-animated-progress'
@@ -43,7 +44,7 @@ export const SplitButton = ({
 
     return (
         <View style={styles.container}>
-            <View style={{ ...styles.primary, backgroundColor: colors.onBackground }}>
+            <AnimatedView style={{ ...styles.primary, backgroundColor: colors.onBackground }}>
                 <TouchableRipple
                     onPress={onPress}
                     style={styles.touchable}
@@ -57,7 +58,7 @@ export const SplitButton = ({
                         )}
                     </View>
                 </TouchableRipple>
-            </View>
+            </AnimatedView>
 
             <MenuContainer
                 visible={menuVisible}
