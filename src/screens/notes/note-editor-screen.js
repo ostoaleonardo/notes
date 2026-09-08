@@ -21,7 +21,7 @@ import { useBottomSheet } from '@/hooks/use-bottom-sheet'
 import { useLanguage } from '@/hooks/use-language'
 import { useMarkdownAction } from '@/hooks/use-markdown-action'
 import { useNoteVersions } from '@/hooks/use-note-versions'
-import { usePremium } from '@/hooks/use-premium'
+import { usePro } from '@/hooks/use-pro'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
 import { getFormattedDate } from '@/utils/formatted-date'
@@ -38,7 +38,7 @@ export const NoteEditorScreen = ({
     const { t } = useTranslation()
     const { addTemplate, listTemplates } = useTemplates()
     const { currentLanguage } = useLanguage()
-    const { premium } = usePremium()
+    const { pro } = usePro()
     const { repositories } = useRepositories()
     const { commitVersion } = useNoteVersions()
 
@@ -72,13 +72,13 @@ export const NoteEditorScreen = ({
     }, [])
 
     const onOpenVersionHistory = useCallback(() => {
-        if (!premium) {
+        if (!pro) {
             ToastAndroid.show(t('repositories.pro_required'), ToastAndroid.SHORT)
             return
         }
 
         setVersionHistoryVisible(true)
-    }, [premium, t])
+    }, [pro, t])
 
     const onRunAction = useCallback((action) => {
         if (action === 'link') {
@@ -144,10 +144,10 @@ export const NoteEditorScreen = ({
             directoryUri={directoryUri}
             noteId={id}
             currentContent={note}
-            premium={premium}
+            pro={pro}
             onRestore={onRestoreVersion}
         />
-    ), [directoryUri, id, note, premium, onRestoreVersion])
+    ), [directoryUri, id, note, pro, onRestoreVersion])
 
     const actions = useMemo(() => ({
         onOpenTags: tagsSheet.onOpen,
@@ -166,7 +166,7 @@ export const NoteEditorScreen = ({
             visible={versionHistoryVisible}
             onOpen={onOpenVersionHistory}
             onClose={onCloseVersionHistory}
-            swipeEnabled={premium}
+            swipeEnabled={pro}
             panelContent={versionHistoryPanelContent}
         >
             <AppBar

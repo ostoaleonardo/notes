@@ -17,7 +17,7 @@ import { useAllowLandscape } from '@/hooks/use-allow-landscape'
 import { useBottomSheet } from '@/hooks/use-bottom-sheet'
 import { useMarkdownAction } from '@/hooks/use-markdown-action'
 import { useNoteVersions } from '@/hooks/use-note-versions'
-import { usePremium } from '@/hooks/use-premium'
+import { usePro } from '@/hooks/use-pro'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
@@ -28,7 +28,7 @@ export default function EditTemplate() {
     const { t } = useTranslation()
     const { filename } = useLocalSearchParams()
     const { getTemplate, updateTemplate, deleteTemplate } = useTemplates()
-    const { premium } = usePremium()
+    const { pro } = usePro()
     const { activeRepository, ensureTemplatesFolder } = useRepositories()
     const { commitVersion } = useNoteVersions()
 
@@ -63,13 +63,13 @@ export default function EditTemplate() {
     }, [])
 
     const onOpenVersionHistory = useCallback(() => {
-        if (!premium) {
+        if (!pro) {
             ToastAndroid.show(t('repositories.pro_required'), ToastAndroid.SHORT)
             return
         }
 
         setVersionHistoryVisible(true)
-    }, [premium, t])
+    }, [pro, t])
 
     const onCloseVersionHistory = useCallback(() => setVersionHistoryVisible(false), [])
 
@@ -84,10 +84,10 @@ export default function EditTemplate() {
             directoryUri={templatesUri}
             noteId={currentFilename.current}
             currentContent={content}
-            premium={premium}
+            pro={pro}
             onRestore={onRestoreVersion}
         />
-    ), [templatesUri, content, premium, onRestoreVersion, currentFilename.current])
+    ), [templatesUri, content, pro, onRestoreVersion, currentFilename.current])
 
     const editorActions = useMemo(() => ({
         onOpenRecents: recentsSheet.onOpen
@@ -162,7 +162,7 @@ export default function EditTemplate() {
             visible={versionHistoryVisible}
             onOpen={onOpenVersionHistory}
             onClose={onCloseVersionHistory}
-            swipeEnabled={premium}
+            swipeEnabled={pro}
             panelContent={versionHistoryPanelContent}
         >
             <AppBar

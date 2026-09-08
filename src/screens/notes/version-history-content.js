@@ -24,7 +24,7 @@ export function VersionHistoryContent({
     directoryUri,
     noteId,
     currentContent,
-    premium,
+    pro,
     onRestore
 }) {
     const { t } = useTranslation()
@@ -48,7 +48,7 @@ export function VersionHistoryContent({
 
     if (loading) return null
 
-    const visibleVersions = premium ? versions : versions.slice(-FREE_VERSION_HISTORY_LIMIT)
+    const visibleVersions = pro ? versions : versions.slice(-FREE_VERSION_HISTORY_LIMIT)
     const ordered = [...visibleVersions].reverse()
 
     if (selected) {

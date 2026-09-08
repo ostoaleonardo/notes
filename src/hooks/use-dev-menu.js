@@ -6,7 +6,7 @@ import legacyNotes from '../../legacy/notes.json'
 import legacyTags from '../../legacy/categories.json'
 
 import { useStorage } from './use-storage'
-import { usePremium } from './use-premium'
+import { usePro } from './use-pro'
 import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
 
@@ -15,7 +15,7 @@ import { TREE_BRANCHING, NOTES_PER_FOLDER } from '@/constants/dev-menu'
 
 export function useDevMenu() {
     const { setItem } = useStorage()
-    const { premium, setPremium } = usePremium()
+    const { pro, setPro } = usePro()
 
     const {
         writeNoteFile,
@@ -110,13 +110,13 @@ export function useDevMenu() {
                 shouldCollapse: true
             },
             {
-                name: premium ? 'Disable (Pro)' : 'Enable (Pro)',
-                callback: () => setPremium(!premium),
+                name: pro ? 'Disable (Pro)' : 'Enable (Pro)',
+                callback: () => setPro(!pro),
                 shouldCollapse: true
             }
         ])
     }, [
-        premium,
+        pro,
         repositories,
         activeRepository,
         activeRepositoryId

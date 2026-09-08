@@ -5,7 +5,7 @@ import { randomUUID } from 'expo-crypto'
 import { useRouter } from 'expo-router'
 
 import { useNotes } from '../hooks/use-notes'
-import { usePremium } from '../hooks/use-premium'
+import { usePro } from '../hooks/use-pro'
 import { getDate } from '@/utils/date'
 
 import { ROUTES } from '@/constants/routes'
@@ -14,7 +14,7 @@ export const ImportContext = createContext()
 
 export function ImportProvider({ children }) {
     const router = useRouter()
-    const { premium } = usePremium()
+    const { pro } = usePro()
     const { saveNote, loading } = useNotes()
     const [importing, setImporting] = useState(false)
 
@@ -47,7 +47,7 @@ export function ImportProvider({ children }) {
 
     useEffect(() => {
         const handleUrl = (url) => {
-            if (loading || !premium) return
+            if (loading || !pro) return
             if (!url) return
             if (!url.startsWith('content://') && !url.startsWith('file://')) return
 
@@ -58,9 +58,9 @@ export function ImportProvider({ children }) {
         const subscription = Linking.addEventListener('url', ({ url }) => handleUrl(url))
 
         return () => subscription.remove()
-    }, [loading, premium])
+    }, [loading, pro])
 
-    const value = useMemo(() => ({ importing, importFile, premium }), [importing, importFile, premium])
+    const value = useMemo(() => ({ importing, importFile, pro }), [importing, importFile, pro])
 
     return (
         <ImportContext.Provider value={value}>
