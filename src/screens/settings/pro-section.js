@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ToastAndroid } from 'react-native'
-import { ErrorCode, useIAP } from 'expo-iap'
+import { ErrorCode, finishTransaction, useIAP } from 'expo-iap'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator } from 'react-native-paper'
 
@@ -8,20 +8,21 @@ import { Option } from './option'
 import { Section } from '@/components/section'
 
 import { useIconProps } from '@/hooks/use-icon-props'
-import { usePremium } from '@/hooks/use-premium'
+import { usePro } from '@/hooks/use-pro'
 import { useStorage } from '@/hooks/use-storage'
+import { findProPurchase } from '@/utils/iap'
 
 import { ArrowForward } from '@/icons/arrow-forward'
 import { Check } from '@/icons/check'
 
-import { PRO, PRODUCT_ID } from '@/constants/iap'
+import { PRODUCT_ID } from '@/constants/iap'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
-export function PremiumSection() {
+export function ProSection() {
     const { t } = useTranslation()
     const iconProps = useIconProps()
     const { setItem } = useStorage()
-    const { premium, setPremium } = usePremium()
+    const { pro, setPro } = usePro()
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
@@ -72,12 +73,12 @@ export function PremiumSection() {
 
         await finishTransaction({
             purchase,
-            isConsumable: true
+            isConsumable: false
         })
 
-        setPremium(true)
+        setPro(true)
         ToastAndroid.show(
-            t('premium.messages.success'),
+            t('pro.messages.success'),
             ToastAndroid.SHORT
         )
     }
@@ -88,19 +89,19 @@ export function PremiumSection() {
                 break
             case ErrorCode.ItemUnavailable:
                 ToastAndroid.show(
-                    t('premium.messages.available'),
+                    t('pro.messages.available'),
                     ToastAndroid.SHORT
                 )
                 break
             case ErrorCode.ServiceError:
                 ToastAndroid.show(
-                    t('premium.messages.services'),
+                    t('pro.messages.services'),
                     ToastAndroid.SHORT
                 )
                 break
             case ErrorCode.DeveloperError:
                 ToastAndroid.show(
-                    t('premium.messages.support'),
+                    t('pro.messages.support'),
                     ToastAndroid.SHORT
                 )
                 break
@@ -115,30 +116,15 @@ export function PremiumSection() {
     const restorePurchases = async () => {
         try {
             setLoading(true)
-            const purchased = false
 
-            for (const purchase of availablePurchases) {
-                if (purchase.productId === PRO && purchase.purchaseState === 'purchased') {
-                    setPremium(true)
-                    purchased = true
+            const proPurchase = findProPurchase(availablePurchases)
 
-                    await setItem(
-                        STORAGE_KEYS.PRO,
-                        purchase.transactionId
-                    )
-
-                    ToastAndroid.show(
-                        t('premium.messages.success'),
-                        ToastAndroid.SHORT
-                    )
-                }
-            }
-
-            if (!purchased) {
-                ToastAndroid.show(
-                    t('premium.messages.no.purchased'),
-                    ToastAndroid.SHORT
-                )
+            if (proPurchase) {
+                setPro(true)
+                await setItem(STORAGE_KEYS.PRO, proPurchase.transactionId)
+                ToastAndroid.show(t('pro.messages.success'), ToastAndroid.SHORT)
+            } else {
+                ToastAndroid.show(t('pro.messages.no_purchased'), ToastAndroid.SHORT)
             }
         } catch (error) {
             console.error('Failed to restore purchases:', error)
@@ -151,25 +137,25 @@ export function PremiumSection() {
 
     return (
         <Section
-            title={t('settings.premium')}
+            title={t('settings.pro')}
             containerStyle={{ paddingHorizontal: 16 }}
             contentStyle={{ gap: 3 }}
         >
             <Option
-                title={t(premium ? 'premium.pro' : 'premium.get')}
-                description={t(premium ? 'premium.success' : 'premium.features')}
+                title={t(pro ? 'pro.pro' : 'pro.get')}
+                description={t(pro ? 'pro.success' : 'pro.features')}
                 rightContent={
-                    premium ? <Check {...iconProps} />
+                    pro ? <Check {...iconProps} />
                         : <ArrowForward {...iconProps} />
                 }
-                onPress={premium ? null : purcharsePro}
+                onPress={pro ? null : purcharsePro}
                 isFirst={true}
-                isLast={premium}
+                isLast={pro}
             />
             <Option
-                visible={!premium}
-                title={t('premium.restore')}
-                description={t('premium.purchased')}
+                visible={!pro}
+                title={t('pro.restore')}
+                description={t('pro.purchased')}
                 rightContent={
                     loading ? <ActivityIndicator size='small' color={iconProps.color} />
                         : <ArrowForward {...iconProps} />

@@ -137,6 +137,11 @@ export const THEME_COLORS = {
 }
 
 export const ACCENT_COLORS = {
+    white: {
+        background: COLORS.dark.onBackground,
+        onBackground: COLORS.dark.background,
+        borderColor: COLORS.dark.onBackground
+    },
     red: {
         background: COLORS.base.accent,
         onBackground: COLORS.dark.onBackground,
@@ -156,6 +161,7 @@ export const ACCENT_COLORS = {
 
 export const THEME_OPTIONS = ['light', 'dark', 'system']
 export const ACCENT_OPTIONS = ['red', 'yellow', 'blue']
+export const FREE_ACCENT = 'white'
 
 export const FONTS = {
     azeretLight: 'AzeretMono-Light',

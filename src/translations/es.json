@@ -74,7 +74,23 @@
 		"contribute": "Contribuir a la traducción",
 		"translate": "Ayúdanos a traducir la aplicación a tu idioma.",
 		"updates": "Actualización de software",
-		"version": "Versión"
+		"version": "Versión",
+		"pro": "Actualizar a Pro"
+	},
+	"pro": {
+		"get": "Obtener versión Pro",
+		"pro": "Versión Pro",
+		"features": "Desbloquea todas las funciones y apoya el desarrollo de la aplicación.",
+		"success": "¡Gracias por tu compra!",
+		"restore": "Restaurar compra",
+		"purchased": "Ya has comprado la versión Pro.",
+		"messages": {
+			"success": "Compra exitosa",
+			"available": "Este artículo no está disponible para su compra",
+			"services": "Los servicios de Google Play no están disponibles",
+			"support": "Por favor contacta a soporte",
+			"no_purchased": "No se encontró ninguna compra anterior"
+		}
 	},
 	"theme": {
 		"light": "Claro",

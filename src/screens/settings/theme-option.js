@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, ToastAndroid } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { OptionLarge } from './option-large'
@@ -6,18 +6,28 @@ import { ColorOption } from './color-option'
 import { Section } from '@/components/section'
 
 import { useToggleMode } from '@/hooks/use-toggle-mode'
-import { usePremium } from '@/hooks/use-premium'
+import { usePro } from '@/hooks/use-pro'
+import { isAccentAllowed, toggleAccentSelection } from '@/utils/accent'
 
 import { ACCENT_COLORS, ACCENT_OPTIONS, THEME_COLORS, THEME_OPTIONS } from '@/constants/themes'
 
 export function ThemeOption() {
     const { t } = useTranslation()
-    const { premium } = usePremium()
+    const { pro } = usePro()
 
     const {
         mode, toggleMode,
         accent, toggleAccent
     } = useToggleMode()
+
+    const onToggleAccent = (color) => {
+        if (!isAccentAllowed(color, pro)) {
+            ToastAndroid.show(t('repositories.pro_required'), ToastAndroid.SHORT)
+            return
+        }
+
+        toggleAccent(toggleAccentSelection(color, accent))
+    }
 
     return (
         <OptionLarge
@@ -43,7 +53,6 @@ export function ThemeOption() {
                 ))}
             </Section>
             <Section
-                visible={premium}
                 title={t('settings.accent')}
                 contentStyle={styles.container}
             >
@@ -52,7 +61,7 @@ export function ThemeOption() {
                         key={color}
                         name={color}
                         active={accent === color}
-                        onPress={() => toggleAccent(color)}
+                        onPress={() => onToggleAccent(color)}
                         options={ACCENT_COLORS}
                     >
                         {t(`accent.${color}`)}
