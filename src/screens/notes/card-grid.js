@@ -40,7 +40,7 @@ export function CardGrid({ cards, onOpen, onRemove, emptyMessage }) {
         return (
             <AnimatedView
                 entering={FadeInUp}
-                style={styles.empty}
+                style={[styles.empty, { width: windowWidth }]}
             >
                 <Typography
                     opacity={0.5}
