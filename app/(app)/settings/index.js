@@ -3,7 +3,7 @@ import { Linking, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { Languages } from '@/screens/modals/languages'
-import { PremiumSection } from '@/screens/settings/premium-section'
+import { ProSection } from '@/screens/settings/pro-section'
 import { ThemeOption } from '@/screens/settings/theme-option'
 import { AppVersionCard } from '@/screens/settings/app-version-card'
 import { Option } from '@/screens/settings/option'
@@ -47,7 +47,7 @@ export default function Settings() {
                     <ThemeOption />
                 </Section>
 
-                {isDevice && <PremiumSection />}
+                {isDevice && <ProSection />}
 
                 <Section
                     title={t('title.about')}

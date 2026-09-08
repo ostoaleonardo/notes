@@ -11,7 +11,7 @@ import { AnimatedList } from '@/components/animated/animated-list'
 import { FloatingButton } from '@/components/button/floating-button'
 
 import { useFileStorage } from '@/hooks/use-file-storage'
-import { usePremium } from '@/hooks/use-premium'
+import { usePro } from '@/hooks/use-pro'
 import { useRepositories } from '@/hooks/use-repositories'
 
 import { Folder } from '@/icons/folder'
@@ -20,7 +20,7 @@ import { ROUTES } from '@/constants/routes'
 
 export default function Repositories() {
     const { t } = useTranslation()
-    const { premium } = usePremium()
+    const { pro } = usePro()
     const { listMarkdownFiles } = useFileStorage()
 
     const {
@@ -55,7 +55,7 @@ export default function Repositories() {
         return () => subscription.remove()
     }, [repositories])
 
-    const canAddRepository = premium || rootRepositories.length === 0
+    const canAddRepository = pro || rootRepositories.length === 0
 
     const onAddRepository = async () => {
         if (!canAddRepository) {

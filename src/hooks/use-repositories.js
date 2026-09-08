@@ -4,7 +4,7 @@ import { Directory } from 'expo-file-system'
 
 import { useStorage } from './use-storage'
 import { useFileStorage } from './use-file-storage'
-import { usePremium } from './use-premium'
+import { usePro } from './use-pro'
 import { RepositoryContext } from '../context/repository-context'
 import { sanitizeFilename } from '@/utils/note-filename'
 import { getDefaultTemplates } from '@/utils/default-templates'
@@ -15,7 +15,7 @@ const FREE_SUBFOLDERS_PER_REPOSITORY = 1
 
 export function useRepositories() {
     const { setItem } = useStorage()
-    const { premium } = usePremium()
+    const { pro } = usePro()
     const {
         listMarkdownFiles,
         listSubdirectories,
@@ -110,7 +110,7 @@ export function useRepositories() {
     }
 
     const canAddSubfolder = (parentId) => {
-        if (premium) return true
+        if (pro) return true
 
         const parent = repositories.find((repository) => repository.id === parentId)
         if (!parent) return false

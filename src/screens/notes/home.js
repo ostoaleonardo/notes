@@ -14,7 +14,7 @@ import { useBottomSheet } from '@/hooks/use-bottom-sheet'
 import { useCurrentNote } from '@/hooks/use-current-note'
 import { useImportMarkdown } from '@/hooks/use-import-markdown'
 import { useNotes } from '@/hooks/use-notes'
-import { usePremium } from '@/hooks/use-premium'
+import { usePro } from '@/hooks/use-pro'
 import { useRecentNotes } from '@/hooks/use-recent-notes'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
@@ -27,7 +27,7 @@ export function Home() {
     const { t } = useTranslation()
     const { notes } = useNotes()
     const { pinned } = useUtils()
-    const { premium } = usePremium()
+    const { pro } = usePro()
     const { recent } = useRecentNotes()
     const { listTemplates } = useTemplates()
     const { importFile } = useImportMarkdown()
@@ -69,7 +69,7 @@ export function Home() {
         <>
             <AppBar
                 mode='menu'
-                title={t('title.notes') + (premium ? ' (Pro)' : '')}
+                title={t('title.notes') + (pro ? ' (Pro)' : '')}
             />
 
             <View style={styles.container}>
