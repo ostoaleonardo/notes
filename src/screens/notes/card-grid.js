@@ -11,7 +11,7 @@ const GRID_GAP = 24
 const GRID_GAP_HORIZONTAL = 16
 const GRID_PADDING = 16
 
-export function CardGrid({ cards, onOpen, onRemove, emptyMessage }) {
+export function CardGrid({ cards, emptyMessage, ...itemProps }) {
     const { width: windowWidth } = useWindowDimensions()
 
     const columns = useMemo(() => {
@@ -29,10 +29,9 @@ export function CardGrid({ cards, onOpen, onRemove, emptyMessage }) {
         <CardGridItem
             card={card}
             cellStyle={cellStyle}
-            onOpen={onOpen}
-            onRemove={onRemove}
+            {...itemProps}
         />
-    ), [cellStyle, onOpen, onRemove])
+    ), [cellStyle, itemProps])
 
     if (cards.length === 0 && !emptyMessage) return null
 

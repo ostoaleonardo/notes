@@ -7,8 +7,6 @@ import { useLanguage } from '@/hooks/use-language'
 import { getPreviewNote } from '@/utils/preview-note'
 import { renderTemplate } from '@/utils/render-template'
 
-import { TEMPLATE_PREVIEW_MAX_CHARS, TEMPLATE_PREVIEW_MAX_LINES } from '@/constants/note-preview'
-
 export function TemplatePicker({ title, templates, onSelect }) {
     const { t } = useTranslation()
     const { currentLanguage } = useLanguage()
@@ -16,11 +14,7 @@ export function TemplatePicker({ title, templates, onSelect }) {
     const cards = useMemo(() => templates.map((template) => ({
         id: template.filename,
         title: t(`templates.${template.name}`, template.name),
-        preview: getPreviewNote(
-            renderTemplate(template.content, { title, language: currentLanguage }),
-            TEMPLATE_PREVIEW_MAX_LINES,
-            TEMPLATE_PREVIEW_MAX_CHARS
-        )
+        preview: getPreviewNote(renderTemplate(template.content, { title, language: currentLanguage }))
     })), [templates, title, currentLanguage, t])
 
     const onOpen = useCallback((card) => {
@@ -32,6 +26,7 @@ export function TemplatePicker({ title, templates, onSelect }) {
         <CardGrid
             cards={cards}
             onOpen={onOpen}
+            previewLines={14}
         />
     )
 }
