@@ -1,17 +1,12 @@
+import { useTheme } from 'react-native-paper'
 import { Drawer } from 'react-native-drawer-layout'
-import { StyleSheet, View } from 'react-native'
-import { IconButton, useTheme } from 'react-native-paper'
+import { StyleSheet, useWindowDimensions, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useTranslation } from 'react-i18next'
-
-import { Typography } from '@/components/typography'
-
-import { Close } from '@/icons/close'
 
 export function VersionHistoryPanel({ visible, onOpen, onClose, swipeEnabled, panelContent, children }) {
-    const { t } = useTranslation()
     const { colors } = useTheme()
     const { top } = useSafeAreaInsets()
+    const { width } = useWindowDimensions()
 
     return (
         <Drawer
@@ -20,20 +15,9 @@ export function VersionHistoryPanel({ visible, onOpen, onClose, swipeEnabled, pa
             onClose={onClose}
             swipeEnabled={swipeEnabled}
             drawerPosition='right'
-            drawerStyle={{ backgroundColor: colors.background }}
+            drawerStyle={{ width, backgroundColor: colors.background }}
             renderDrawerContent={() => (
-                <View style={{ ...styles.panel, paddingTop: top + 16 }}>
-                    <View style={styles.header}>
-                        <Typography bold variant='title'>
-                            {t('title.version_history')}
-                        </Typography>
-                        <IconButton
-                            onPress={onClose}
-                            icon={(props) => <Close {...props} />}
-                            accessibilityLabel={t('button.close')}
-                        />
-                    </View>
-
+                <View style={{ ...styles.panel, paddingTop: top }}>
                     {panelContent}
                 </View>
             )}
@@ -45,13 +29,6 @@ export function VersionHistoryPanel({ visible, onOpen, onClose, swipeEnabled, pa
 
 const styles = StyleSheet.create({
     panel: {
-        flex: 1,
-        paddingHorizontal: 16
-    },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 16
+        flex: 1
     }
 })
