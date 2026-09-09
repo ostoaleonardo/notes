@@ -1,9 +1,9 @@
-import { NOTE_PREVIEW_MAX_LINES, NOTE_PREVIEW_MAX_CHARS } from '@/constants/note-preview'
+import { PREVIEW_MAX_LINES, PREVIEW_MAX_CHARS } from '@/constants/note-preview'
 
 const imageRegex = /!\[([^\]]*)\]\(([^\)]*)\)/g
 const linkRegex = /\[([^\]]*)\]\(([^\)]*)\)/g
 
-export const getPreviewNote = (note, maxLines = NOTE_PREVIEW_MAX_LINES, maxChars = NOTE_PREVIEW_MAX_CHARS) => {
+export const getPreviewNote = (note, maxLines = PREVIEW_MAX_LINES, maxChars = PREVIEW_MAX_CHARS) => {
     if (!note) return ''
 
     let preview = note.split('\n').slice(0, maxLines).join('\n')

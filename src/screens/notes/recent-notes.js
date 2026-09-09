@@ -17,6 +17,7 @@ import { getPreviewNote } from '@/utils/preview-note'
 import { getRecentIds } from '@/utils/recent-ids'
 
 import { Close } from '@/icons/close'
+import { KeepFilled } from '@/icons/keep-filled'
 import { NoteStack } from '@/icons/note-stack'
 import { Plus } from '@/icons/plus'
 
@@ -97,6 +98,23 @@ export function RecentNotes({ onClose, home = false }) {
         }
     }, [pinned, updatePinned, removeRecent])
 
+    const renderCardHeader = useCallback((card) => (
+        <IconButton
+            size={4}
+            mode='contained'
+            onPress={() => onRemove(card)}
+            style={styles.removeButton}
+            icon={(props) => (
+                card.pinned
+                    ? <KeepFilled {...props} />
+                    : <Close {...props} />
+            )}
+            accessibilityLabel={
+                t(card.pinned ? 'button.unpin' : 'button.close')
+            }
+        />
+    ), [onRemove, t])
+
     const onClearAll = () => {
         clearRecent()
     }
@@ -111,7 +129,7 @@ export function RecentNotes({ onClose, home = false }) {
             <CardGrid
                 cards={cards}
                 onOpen={onOpen}
-                onRemove={onRemove}
+                renderHeader={renderCardHeader}
                 emptyMessage={t('message.notes.no_recent')}
             />
 
@@ -161,5 +179,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         flexDirection: 'row',
         justifyContent: 'space-between'
+    },
+    removeButton: {
+        alignSelf: 'flex-end'
     }
 })

@@ -1,5 +1,2 @@
-export const NOTE_PREVIEW_MAX_LINES = 5
-export const NOTE_PREVIEW_MAX_CHARS = 150
-
-export const TEMPLATE_PREVIEW_MAX_LINES = 12
-export const TEMPLATE_PREVIEW_MAX_CHARS = 400
+export const PREVIEW_MAX_LINES = 12
+export const PREVIEW_MAX_CHARS = 400
