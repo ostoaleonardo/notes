@@ -146,8 +146,9 @@ export const NoteEditorScreen = ({
             currentContent={note}
             pro={pro}
             onRestore={onRestoreVersion}
+            onClose={onCloseVersionHistory}
         />
-    ), [directoryUri, id, note, pro, onRestoreVersion])
+    ), [directoryUri, id, note, pro, onRestoreVersion, onCloseVersionHistory])
 
     const actions = useMemo(() => ({
         onOpenTags: tagsSheet.onOpen,

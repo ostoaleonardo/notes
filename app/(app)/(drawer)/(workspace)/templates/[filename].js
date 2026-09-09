@@ -86,8 +86,9 @@ export default function EditTemplate() {
             currentContent={content}
             pro={pro}
             onRestore={onRestoreVersion}
+            onClose={onCloseVersionHistory}
         />
-    ), [templatesUri, content, pro, onRestoreVersion, currentFilename.current])
+    ), [templatesUri, content, pro, onRestoreVersion, onCloseVersionHistory, currentFilename.current])
 
     const editorActions = useMemo(() => ({
         onOpenRecents: recentsSheet.onOpen
