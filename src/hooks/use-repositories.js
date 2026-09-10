@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react'
+import { useCallback, useContext, useMemo } from 'react'
 import { randomUUID } from 'expo-crypto'
 import { Directory } from 'expo-file-system'
 
@@ -336,19 +336,19 @@ export function useRepositories() {
         }
     }
 
-    const buildSubtree = (parentId, depth = 0) => (
+    const buildSubtree = useCallback((parentId, depth = 0) => (
         repositories
             .filter((repository) => (repository.parentId || null) === parentId)
             .flatMap((repository) => [{ ...repository, depth }, ...buildSubtree(repository.id, depth + 1)])
-    )
+    ), [repositories])
 
     const activeRepositoryTree = useMemo(() => {
         if (!activeRepository) return []
         const root = getRootRepository(activeRepository)
         return [{ ...root, depth: 0 }, ...buildSubtree(root.id, 1)]
-    }, [repositories, activeRepository])
+    }, [repositories, activeRepository, buildSubtree])
 
-    const getDescendants = (rootId) => buildSubtree(rootId, 0)
+    const getDescendants = useCallback((rootId) => buildSubtree(rootId, 0), [buildSubtree])
 
     return {
         repositories,

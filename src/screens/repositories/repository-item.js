@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { IconButton, Tooltip, useTheme } from 'react-native-paper'
@@ -33,7 +33,10 @@ export function RepositoryItem({
 
     const [expanded, setExpanded] = useState(false)
 
-    const descendants = getDescendants(repository.id)
+    const descendants = useMemo(
+        () => getDescendants(repository.id),
+        [getDescendants, repository.id]
+    )
     const folderCount = descendants.filter((descendant) => descendant.depth === 0).length
 
     return (
@@ -98,8 +101,8 @@ export function RepositoryItem({
                         </Typography>
                     ) : (
                         descendants.map((descendant) => {
-                            const descendantFolderCount = getDescendants(descendant.id)
-                                .filter((d) => d.depth === 0).length
+                            const descendantFolderCount = descendants
+                                .filter((d) => d.parentId === descendant.id).length
 
                             return (
                                 <View
