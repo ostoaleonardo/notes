@@ -25,21 +25,6 @@ export function ProSection() {
     const { pro, setPro } = usePro()
     const [loading, setLoading] = useState(false)
 
-    useEffect(() => {
-        const getPurchases = async () => {
-            if (connected) {
-                fetchProducts({
-                    skus: PRODUCT_ID,
-                    type: 'in-app'
-                })
-
-                await getAvailablePurchases()
-            }
-        }
-
-        getPurchases()
-    }, [connected])
-
     const {
         connected,
         fetchProducts,
@@ -56,6 +41,21 @@ export function ProSection() {
             onErrorPurchase(error)
         }
     })
+
+    useEffect(() => {
+        const getPurchases = async () => {
+            if (connected) {
+                fetchProducts({
+                    skus: PRODUCT_ID,
+                    type: 'in-app'
+                })
+
+                await getAvailablePurchases()
+            }
+        }
+
+        getPurchases()
+    }, [connected])
 
     const purcharsePro = async () => {
         await requestPurchase({

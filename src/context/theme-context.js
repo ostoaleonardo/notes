@@ -49,7 +49,7 @@ export function ThemeProvider({ initialTheme, children }) {
         if (accent && theme) {
             setTheme(updateTheme(theme, accent))
         } else {
-            THEMES[theme]
+            setTheme(THEMES[theme])
         }
 
     }, [mode, accent])
