@@ -9,6 +9,7 @@
 	},
 	"tags": {
 		"add": "Añadir etiqueta",
+		"already_added": "Esta etiqueta ya existe",
 		"update": "Actualizar etiqueta"
 	},
 	"repositories": {
