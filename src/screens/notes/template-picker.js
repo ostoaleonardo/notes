@@ -7,6 +7,8 @@ import { useLanguage } from '@/hooks/use-language'
 import { getPreviewNote } from '@/utils/preview-note'
 import { renderTemplate } from '@/utils/render-template'
 
+import { TEMPLATE_CARD_PREVIEW_LINES } from '@/constants/note-preview'
+
 export function TemplatePicker({ title, templates, onSelect }) {
     const { t } = useTranslation()
     const { currentLanguage } = useLanguage()
@@ -26,7 +28,7 @@ export function TemplatePicker({ title, templates, onSelect }) {
         <CardGrid
             cards={cards}
             onOpen={onOpen}
-            previewLines={14}
+            previewLines={TEMPLATE_CARD_PREVIEW_LINES}
         />
     )
 }

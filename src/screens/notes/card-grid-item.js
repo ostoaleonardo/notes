@@ -7,6 +7,7 @@ import { AnimatedView } from '@/components/animated/animated-view'
 import { Typography } from '@/components/typography'
 
 import { COMMONS } from '@/constants/themes'
+import { CARD_PREVIEW_LINES } from '@/constants/note-preview'
 
 export const CARDS_HEIGHT = 220
 
@@ -15,7 +16,7 @@ export const CardGridItem = memo(function CardGridItem({
     cellStyle,
     onOpen,
     renderHeader,
-    previewLines = 12
+    previewLines = CARD_PREVIEW_LINES
 }) {
     const { colors } = useTheme()
 

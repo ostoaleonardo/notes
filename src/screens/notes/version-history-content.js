@@ -83,9 +83,11 @@ export function VersionHistoryContent({
                             exiting={FadeOut}
                         >
                             <Typography
-                                bold
                                 variant='title'
-                                styleProps={{ fontFamily: FONTS.nType82Headline }}
+                                styleProps={{
+                                    paddingLeft: 8,
+                                    fontFamily: FONTS.nType82Headline
+                                }}
                             >
                                 {t('title.version_history')}
                             </Typography>
