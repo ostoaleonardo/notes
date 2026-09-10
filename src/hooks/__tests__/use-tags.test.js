@@ -72,13 +72,15 @@ describe('add tag', () => {
         )
     })
 
-    test('does not duplicate a tag that already exists', async () => {
+    test('does not duplicate a tag with the same name, even as a new object', async () => {
         const { result } = await renderTagsHook([MOCK_WORK_TAG])
 
+        let addResult
         await act(() => {
-            result.current.addTag(MOCK_WORK_TAG)
+            addResult = result.current.addTag({ id: 'tag-new', name: MOCK_WORK_TAG.name })
         })
 
+        expect(addResult).toBe('duplicate')
         expect(result.current.tags).toHaveLength(1)
     })
 })

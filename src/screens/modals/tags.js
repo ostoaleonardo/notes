@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { randomUUID } from 'expo-crypto'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, ToastAndroid, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { FlatList } from 'react-native-gesture-handler'
 import { useTranslation } from 'react-i18next'
@@ -25,10 +25,15 @@ export function Tags({ tags, setTags }) {
     const [tag, setTag] = useState('')
 
     const onSaveTag = () => {
-        addTag({
+        const result = addTag({
             id: randomUUID(),
             name: tag.trim()
         })
+
+        if (result === 'duplicate') {
+            ToastAndroid.show(t('tags.already_added'), ToastAndroid.SHORT)
+            return
+        }
 
         setTag('')
         vibrate(FEEDBACK_TYPES.SUCCESS)

@@ -1,6 +1,6 @@
 import { randomUUID } from 'expo-crypto'
 import { useState, useCallback } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, ToastAndroid, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { UpdateTag } from '@/screens/modals/update-tag'
@@ -38,14 +38,19 @@ export default function Tags() {
     }, [showDialog])
 
     const onSave = useCallback((tag) => {
-        addTag({
+        const result = addTag({
             id: randomUUID(),
             name: tag.trim()
         })
 
+        if (result === 'duplicate') {
+            ToastAndroid.show(t('tags.already_added'), ToastAndroid.SHORT)
+            return
+        }
+
         setTag('')
         vibrate(FEEDBACK_TYPES.SUCCESS)
-    }, [addTag, vibrate])
+    }, [addTag, vibrate, t])
 
     const onDelete = useCallback((id) => {
         deleteTag(id)

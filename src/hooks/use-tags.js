@@ -18,10 +18,11 @@ export function useTags() {
     const rootRepositoryUri = activeRepositoryTree[0]?.uri
 
     const addTag = (tag) => {
-        if (tag && !tags.includes(tag)) {
-            const localTags = [...tags, tag]
-            updateBackup(localTags)
-        }
+        const exists = tags.some((existing) => existing.name === tag.name)
+        if (exists) return 'duplicate'
+
+        const localTags = [...tags, tag]
+        updateBackup(localTags)
     }
 
     const deleteTag = (id) => {
