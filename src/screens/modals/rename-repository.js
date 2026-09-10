@@ -1,11 +1,11 @@
 import { ToastAndroid } from 'react-native'
-import { useEffect, useState } from 'react'
 import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
 import { DialogModal } from '@/components/dialog'
 import { LargeInput } from '@/components/input/large-input'
 
+import { useEditDialogInput } from '@/hooks/use-dialog-input'
 import { useHaptics } from '@/hooks/use-haptics'
 import { useRepositories } from '@/hooks/use-repositories'
 
@@ -17,26 +17,13 @@ export function RenameRepository({ visible, onDismiss, repositoryId }) {
     const { vibrate } = useHaptics()
     const { repositories, renameRepository } = useRepositories()
 
-    const [alias, setAlias] = useState('')
-    const [placeholder, setPlaceholder] = useState('')
-    const [isDisabled, setIsDisabled] = useState(true)
-
     const isFolder = !!repositories.find((repository) => repository.id === repositoryId)?.parentId
 
-    useEffect(() => {
-        const repository = repositories.find((repository) => repository.id === repositoryId)
-        const name = repository?.alias || ''
-        setAlias(name)
-        setPlaceholder(name)
-    }, [repositoryId])
-
-    useEffect(() => {
-        const isDisabled = !alias || !alias.trim() || alias.trim() === placeholder
-        setIsDisabled(isDisabled)
-    }, [alias])
+    const getInitialAlias = (id) => repositories.find((repository) => repository.id === id)?.alias || ''
+    const [alias, setAlias, placeholder, disabled] = useEditDialogInput(repositoryId, getInitialAlias)
 
     const onUpdate = async () => {
-        if (isDisabled) return
+        if (disabled) return
 
         const result = await renameRepository(repositoryId, alias.trim())
         onDismiss()
@@ -58,7 +45,7 @@ export function RenameRepository({ visible, onDismiss, repositoryId }) {
                 <Button
                     mode='contained'
                     onPress={onUpdate}
-                    disabled={isDisabled}
+                    disabled={disabled}
                     labelStyle={DIALOG_BUTTON_LABEL_STYLE}
                 >
                     {t('button.update')}

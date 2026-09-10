@@ -1,11 +1,11 @@
 import { ToastAndroid } from 'react-native'
-import { useEffect, useState } from 'react'
 import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
 import { DialogModal } from '@/components/dialog'
 import { LargeInput } from '@/components/input/large-input'
 
+import { useCreateDialogInput } from '@/hooks/use-dialog-input'
 import { useHaptics } from '@/hooks/use-haptics'
 import { useRepositories } from '@/hooks/use-repositories'
 
@@ -17,15 +17,10 @@ export function AddSubfolder({ visible, onDismiss, parentId }) {
     const { vibrate } = useHaptics()
     const { addSubfolder } = useRepositories()
 
-    const [name, setName] = useState('')
-    const isDisabled = !name || !name.trim()
-
-    useEffect(() => {
-        if (visible) setName('')
-    }, [visible])
+    const [name, setName, disabled] = useCreateDialogInput(visible)
 
     const onCreate = async () => {
-        if (isDisabled) return
+        if (disabled) return
 
         const result = await addSubfolder(parentId, name.trim())
 
@@ -48,7 +43,7 @@ export function AddSubfolder({ visible, onDismiss, parentId }) {
                 <Button
                     mode='contained'
                     onPress={onCreate}
-                    disabled={isDisabled}
+                    disabled={disabled}
                     labelStyle={DIALOG_BUTTON_LABEL_STYLE}
                 >
                     {t('button.create')}

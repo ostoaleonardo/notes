@@ -1,9 +1,10 @@
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconButton, Tooltip, useTheme } from 'react-native-paper'
 
 import { MenuContainer } from '@/components/menu/menu-container'
 import { MenuItem } from '@/components/menu/menu-item'
+
+import { useMenuAction } from '@/hooks/use-menu-action'
 
 import { Close } from '@/icons/close'
 import { Delete } from '@/icons/delete'
@@ -14,22 +15,17 @@ export function RepositoryMenu({ onRename, onForget, onDelete }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
 
-    const [visible, setVisible] = useState(false)
-
-    const runAction = (action) => {
-        setVisible(false)
-        action()
-    }
+    const { visible, onOpen, onClose, trigger } = useMenuAction()
 
     return (
         <MenuContainer
             visible={visible}
-            onClose={() => setVisible(false)}
+            onClose={onClose}
             anchor={
                 <Tooltip title={t('button.more')}>
                     <IconButton
                         icon={(props) => <MoreVert {...props} />}
-                        onPress={() => setVisible(true)}
+                        onPress={onOpen}
                         accessibilityLabel={t('button.more')}
                     />
                 </Tooltip>
@@ -38,17 +34,17 @@ export function RepositoryMenu({ onRename, onForget, onDelete }) {
             <MenuItem
                 title={t('repositories.rename')}
                 leadingIcon={(props) => <Edit {...props} />}
-                onPress={() => runAction(onRename)}
+                onPress={() => trigger(onRename)}
             />
             <MenuItem
                 title={t('repositories.forget')}
                 leadingIcon={(props) => <Close {...props} />}
-                onPress={() => runAction(onForget)}
+                onPress={() => trigger(onForget)}
             />
             <MenuItem
                 title={t('repositories.delete')}
                 leadingIcon={(props) => <Delete {...props} color={colors.error} />}
-                onPress={() => runAction(onDelete)}
+                onPress={() => trigger(onDelete)}
             />
         </MenuContainer>
     )

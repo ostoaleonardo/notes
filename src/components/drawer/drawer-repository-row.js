@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
@@ -6,6 +5,8 @@ import { Typography } from '../typography'
 import { MenuContainer } from '../menu/menu-container'
 import { DrawerIconButton } from './drawer-icon-button'
 import { DrawerRepositoryMenu } from './drawer-repository-menu'
+
+import { useMenuAction } from '@/hooks/use-menu-action'
 
 import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
 import { KeyboardArrowUp } from '@/icons/keyboard-arrow-up'
@@ -24,12 +25,7 @@ export function DrawerRepositoryRow({
     onDelete
 }) {
     const { t } = useTranslation()
-    const [menuVisible, setMenuVisible] = useState(false)
-
-    const runAction = (action) => {
-        setMenuVisible(false)
-        action()
-    }
+    const { visible, onOpen, onClose, trigger } = useMenuAction()
 
     return (
         <View
@@ -57,11 +53,11 @@ export function DrawerRepositoryRow({
             </Pressable>
 
             <MenuContainer
-                visible={menuVisible}
-                onClose={() => setMenuVisible(false)}
+                visible={visible}
+                onClose={onClose}
                 anchor={
                     <DrawerIconButton
-                        onPress={() => setMenuVisible(true)}
+                        onPress={onOpen}
                         icon={MoreVert}
                         accessibilityLabel={t('button.more')}
                     />
@@ -69,10 +65,10 @@ export function DrawerRepositoryRow({
             >
                 <DrawerRepositoryMenu
                     isRoot={isRoot}
-                    onCreateNote={() => runAction(onCreateNote)}
-                    onAddSubfolder={() => runAction(onAddSubfolder)}
-                    onEditFolder={() => runAction(onEditFolder)}
-                    onDelete={() => runAction(onDelete)}
+                    onCreateNote={() => trigger(onCreateNote)}
+                    onAddSubfolder={() => trigger(onAddSubfolder)}
+                    onEditFolder={() => trigger(onEditFolder)}
+                    onDelete={() => trigger(onDelete)}
                 />
             </MenuContainer>
         </View>

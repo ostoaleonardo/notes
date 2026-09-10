@@ -15,7 +15,7 @@ import { FileExport } from '@/icons/file-export'
 import { Keep } from '@/icons/keep'
 import { KeepFilled } from '@/icons/keep-filled'
 
-export const useNoteActionsMenu = ({ onClose, onSetMode, onOpenVersionHistory }) => {
+export const useNoteActionsMenu = ({ onTrigger, onSetMode, onOpenVersionHistory }) => {
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
 
@@ -25,12 +25,7 @@ export const useNoteActionsMenu = ({ onClose, onSetMode, onOpenVersionHistory })
 
     const { deleteNote, paramId, setParamId } = useNotes()
 
-    const runAndClose = (action) => () => {
-        onClose?.()
-        action?.()
-    }
-
-    const toggleKeep = runAndClose(() => {
+    const toggleKeep = () => onTrigger(() => {
         if (pinned.has(slug)) {
             pinned.delete(slug)
         } else {
@@ -41,7 +36,7 @@ export const useNoteActionsMenu = ({ onClose, onSetMode, onOpenVersionHistory })
         updatePinned(new Set(pinned))
     })
 
-    const onDelete = runAndClose(() => {
+    const onDelete = () => onTrigger(() => {
         deleteNote(paramId || slug)
         setParamId('')
         router.back()
@@ -52,7 +47,7 @@ export const useNoteActionsMenu = ({ onClose, onSetMode, onOpenVersionHistory })
             <MenuItem
                 title={t('button.code')}
                 leadingIcon={(props) => <Code {...props} />}
-                onPress={runAndClose(() => onSetMode('code'))}
+                onPress={() => onTrigger(() => onSetMode('code'))}
             />
             <MenuItem
                 title={isPinned ? t('button.unpin') : t('button.pin')}
@@ -63,13 +58,13 @@ export const useNoteActionsMenu = ({ onClose, onSetMode, onOpenVersionHistory })
                 <MenuItem
                     title={t('button.export')}
                     leadingIcon={(props) => <FileExport {...props} />}
-                    onPress={runAndClose(() => exportFile(slug))}
+                    onPress={() => onTrigger(() => exportFile(slug))}
                 />
             )}
             <MenuItem
                 title={t('title.version_history')}
                 leadingIcon={(props) => <Commit {...props} />}
-                onPress={runAndClose(onOpenVersionHistory)}
+                onPress={() => onTrigger(onOpenVersionHistory)}
             />
             <MenuItem
                 title={t('button.delete')}
