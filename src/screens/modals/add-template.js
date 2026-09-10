@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { router } from 'expo-router'
 import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
@@ -7,6 +6,7 @@ import * as DocumentPicker from 'expo-document-picker'
 import { DialogModal } from '@/components/dialog'
 import { LargeInput } from '@/components/input/large-input'
 
+import { useCreateDialogInput } from '@/hooks/use-dialog-input'
 import { useHaptics } from '@/hooks/use-haptics'
 import { useTemplates } from '@/hooks/use-templates'
 
@@ -19,15 +19,10 @@ export function AddTemplate({ visible, onDismiss }) {
     const { vibrate } = useHaptics()
     const { addTemplate, importTemplate } = useTemplates()
 
-    const [name, setName] = useState('')
-    const isDisabled = !name || !name.trim()
-
-    useEffect(() => {
-        if (visible) setName('')
-    }, [visible])
+    const [name, setName, disabled] = useCreateDialogInput(visible)
 
     const onCreate = async () => {
-        if (isDisabled) return
+        if (disabled) return
 
         const filename = await addTemplate(name.trim())
         onDismiss()
@@ -61,7 +56,7 @@ export function AddTemplate({ visible, onDismiss }) {
                     key='create'
                     mode='contained'
                     onPress={onCreate}
-                    disabled={isDisabled}
+                    disabled={disabled}
                     labelStyle={DIALOG_BUTTON_LABEL_STYLE}
                 >
                     {t('button.create')}

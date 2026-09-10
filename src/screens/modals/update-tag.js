@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
 import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
 import { DialogModal } from '@/components/dialog'
 import { LargeInput } from '@/components/input/large-input'
 
+import { useEditDialogInput } from '@/hooks/use-dialog-input'
 import { useTags } from '@/hooks/use-tags'
 import { useHaptics } from '@/hooks/use-haptics'
 
@@ -16,23 +16,11 @@ export function UpdateTag({ visible, onDismiss, selectedId }) {
     const { vibrate } = useHaptics()
     const { getTag, updateTag } = useTags()
 
-    const [tag, setTag] = useState('')
-    const [placeholder, setPlaceholder] = useState('')
-    const [isDisabled, setIsDisabled] = useState(true)
-
-    useEffect(() => {
-        const { name } = getTag(selectedId)
-        setTag(name)
-        setPlaceholder(name)
-    }, [selectedId])
-
-    useEffect(() => {
-        const isDisabled = !tag || !tag.trim() || tag.trim() === placeholder
-        setIsDisabled(isDisabled)
-    }, [tag])
+    const getInitialName = (id) => getTag(id).name
+    const [tag, setTag, placeholder, disabled] = useEditDialogInput(selectedId, getInitialName)
 
     const onUpdate = () => {
-        if (isDisabled) return
+        if (disabled) return
 
         updateTag({
             id: selectedId,
@@ -52,7 +40,7 @@ export function UpdateTag({ visible, onDismiss, selectedId }) {
                 <Button
                     mode='contained'
                     onPress={onUpdate}
-                    disabled={isDisabled}
+                    disabled={disabled}
                     labelStyle={DIALOG_BUTTON_LABEL_STYLE}
                 >
                     {t('button.update')}
