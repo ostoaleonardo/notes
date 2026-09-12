@@ -5,7 +5,8 @@
 		"untitled": "Sin título",
 		"create": "Crear una nota",
 		"intro_title": "No hay notas abiertas",
-		"intro_subtitle": "Elige una nota desde el menú lateral, o crea una nueva en la raíz de tu repositorio."
+		"intro_subtitle": "Elige una nota desde el menú lateral, o crea una nueva en la raíz de tu repositorio.",
+		"copy_suffix": "(copia)"
 	},
 	"tags": {
 		"add": "Añadir etiqueta",
@@ -115,6 +116,8 @@
 		"pin": "Fijar",
 		"unpin": "Desfijar",
 		"export": "Exportar",
+		"share": "Compartir",
+		"duplicate": "Duplicar",
 		"insert": "Insertar",
 		"cancel": "Cancelar",
 		"more": "Más opciones",
@@ -244,7 +247,11 @@
 	},
 	"search": {
 		"recent": "Recientes",
-		"pinned": "Fijadas"
+		"saved": "Guardadas",
+		"pinned": "Fijadas",
+		"has_image": "Imágenes",
+		"save": "Guardar",
+		"unsave": "Quitar"
 	},
 	"error_boundary": {
 		"title": "Algo salió mal",
