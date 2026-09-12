@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { IconButton, TouchableRipple, useTheme } from 'react-native-paper'
@@ -50,8 +50,11 @@ export function VersionHistoryContent({
         })
     }, [directoryUri, noteId])
 
-    const visibleVersions = pro ? versions : versions.slice(-FREE_VERSION_HISTORY_LIMIT)
-    const ordered = [...visibleVersions].reverse()
+    const visibleVersions = useMemo(() => (
+        pro ? versions : versions.slice(-FREE_VERSION_HISTORY_LIMIT)
+    ), [versions, pro])
+
+    const ordered = useMemo(() => [...visibleVersions].reverse(), [visibleVersions])
     const diff = selected ? diffLines(selected.content, currentContent) : []
 
     return (
