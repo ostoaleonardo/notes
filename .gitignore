@@ -35,6 +35,3 @@ google-services.json
 # typescript
 *.tsbuildinfo
 android
-
-# data samples
-legacy/

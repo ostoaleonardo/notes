@@ -14,7 +14,7 @@ export default {
     },
     package: 'com.monospace.notes',
     versionCode: 16,
-    googleServicesFile: './google-services.json'
+    googleServicesFile: process.env.GOOGLE_SERVICES_JSON
   },
   plugins: [
     'expo-router',
