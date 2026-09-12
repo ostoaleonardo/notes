@@ -1,0 +1,18 @@
+[
+	{
+		"id": "all",
+		"name": "All"
+	},
+	{
+		"id": "category-1",
+		"name": "Personal"
+	},
+	{
+		"id": "category-2",
+		"name": "Work"
+	},
+	{
+		"id": "category-3",
+		"name": "Ideas"
+	}
+]

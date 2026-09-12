@@ -1,0 +1,47 @@
+[
+	{
+		"id": "note-1",
+		"title": "Sample note with an image",
+		"note": "This is an example note that includes an attached image.",
+		"categories": [],
+		"images": ["file:///data/user/0/com.example.app/cache/ImagePicker/example.png"],
+		"list": {
+			"type": "",
+			"items": []
+		},
+		"password": "",
+		"biometrics": false,
+		"createdAt": 1700000000000,
+		"updatedAt": 1700000100000
+	},
+	{
+		"id": "note-2",
+		"title": "Sample note for migration testing",
+		"note": "This note is used to test migrating notes into folders.",
+		"categories": ["Personal"],
+		"images": [],
+		"list": {
+			"type": "",
+			"items": []
+		},
+		"password": "",
+		"biometrics": false,
+		"createdAt": 1700000200000,
+		"updatedAt": 1700000300000
+	},
+	{
+		"id": "note-3",
+		"title": "Example note",
+		"note": "This is an example note used for testing purposes.",
+		"categories": [],
+		"images": [],
+		"list": {
+			"type": "",
+			"items": []
+		},
+		"password": "",
+		"biometrics": false,
+		"createdAt": 1700000400000,
+		"updatedAt": 1700000500000
+	}
+]
