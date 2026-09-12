@@ -45,6 +45,7 @@ export default {
       }
     ],
     'expo-image',
+    'expo-sharing',
     'expo-status-bar',
     'expo-localization',
     'expo-image-picker',
