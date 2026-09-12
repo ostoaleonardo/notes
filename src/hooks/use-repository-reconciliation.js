@@ -1,10 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { AppState } from 'react-native'
 
 import { useRepositories } from './use-repositories'
 
 export function useRepositoryReconciliation() {
-    const { loading, repositories, reconcileRepositories, setReconciled } = useRepositories()
+    const { loading, reconcileRepositories, setReconciled } = useRepositories()
+
+    const reconcileRef = useRef(reconcileRepositories)
+    reconcileRef.current = reconcileRepositories
 
     useEffect(() => {
         if (loading) return
@@ -15,9 +18,9 @@ export function useRepositoryReconciliation() {
         if (loading) return
 
         const subscription = AppState.addEventListener('change', (state) => {
-            if (state === 'active') reconcileRepositories()
+            if (state === 'active') reconcileRef.current()
         })
 
         return () => subscription.remove()
-    }, [loading, repositories])
+    }, [loading])
 }

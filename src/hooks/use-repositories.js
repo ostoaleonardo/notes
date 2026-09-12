@@ -41,22 +41,22 @@ export function useRepositories() {
 
     const activeRepository = repositories.find((repository) => repository.id === activeRepositoryId) || null
 
-    const persistRepositories = async (localRepositories) => {
+    const persistRepositories = useCallback(async (localRepositories) => {
         setRepositories(localRepositories)
         await setItem(STORAGE_KEYS.REPOSITORIES, JSON.stringify(localRepositories))
-    }
+    }, [setRepositories, setItem])
 
-    const persistActiveRepository = async (id) => {
+    const persistActiveRepository = useCallback(async (id) => {
         setActiveRepositoryId(id)
         await setItem(STORAGE_KEYS.ACTIVE_REPOSITORY, id)
-    }
+    }, [setActiveRepositoryId, setItem])
 
-    const seedTemplates = (templatesUri) => {
+    const seedTemplates = useCallback((templatesUri) => {
         const existingNames = new Set(listMarkdownFiles(templatesUri).map((file) => file.name))
         getDefaultTemplates().forEach(({ filename, content }) => {
             if (!existingNames.has(filename)) writeNoteFile(templatesUri, filename, content)
         })
-    }
+    }, [listMarkdownFiles, writeNoteFile])
 
     const buildRepository = (directory, parentId = null, seedTemplatesFolder = true) => {
         let templatesUri = null
@@ -139,7 +139,7 @@ export function useRepositories() {
         }
     }
 
-    const getRootRepository = (repository) => {
+    const getRootRepository = useCallback((repository) => {
         let current = repository
 
         while (current.parentId) {
@@ -149,9 +149,9 @@ export function useRepositories() {
         }
 
         return current
-    }
+    }, [repositories])
 
-    const ensureTemplatesFolder = async (repository) => {
+    const ensureTemplatesFolder = useCallback(async (repository) => {
         const root = getRootRepository(repository)
         if (root.templatesUri) return root.templatesUri
 
@@ -169,7 +169,7 @@ export function useRepositories() {
         } finally {
             busyRef.current = false
         }
-    }
+    }, [getRootRepository, getOrCreateTemplatesFolder, seedTemplates, persistRepositories, repositories, busyRef])
 
     const ensureImagesFolder = (repository) => {
         const root = getRootRepository(repository)

@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Directory, File } from 'expo-file-system'
 
 import {
@@ -135,7 +136,7 @@ export function useFileStorage() {
     const readVersions = (directoryUri, noteId) => readJson(directoryUri, noteId + VERSIONS_FILENAME_SUFFIX, [])
     const writeVersions = (directoryUri, noteId, versions) => writeJson(directoryUri, noteId + VERSIONS_FILENAME_SUFFIX, versions)
 
-    return {
+    return useMemo(() => ({
         findFile,
         listMarkdownFiles,
         listSubdirectories,
@@ -156,5 +157,5 @@ export function useFileStorage() {
         getOrCreateTemplatesFolder,
         getOrCreateImagesFolder,
         copyImageFile
-    }
+    }), [])
 }

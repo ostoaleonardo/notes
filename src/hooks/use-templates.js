@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { File } from 'expo-file-system'
 
 import { useFileStorage } from './use-file-storage'
@@ -14,12 +15,12 @@ export function useTemplates() {
         deleteNoteFile
     } = useFileStorage()
 
-    const getTemplatesUri = async () => {
+    const getTemplatesUri = useCallback(async () => {
         if (!activeRepository) return null
         return await ensureTemplatesFolder(activeRepository)
-    }
+    }, [activeRepository, ensureTemplatesFolder])
 
-    const listTemplates = async () => {
+    const listTemplates = useCallback(async () => {
         const uri = await getTemplatesUri()
         if (!uri) return []
 
@@ -30,9 +31,9 @@ export function useTemplates() {
             name: file.name.replace(/\.md$/i, ''),
             content: await file.text()
         })))
-    }
+    }, [getTemplatesUri, listMarkdownFiles])
 
-    const getTemplate = async (filename) => {
+    const getTemplate = useCallback(async (filename) => {
         const uri = await getTemplatesUri()
         if (!uri) return null
 
@@ -40,9 +41,9 @@ export function useTemplates() {
         if (!file) return null
 
         return { filename, name: filename.replace(/\.md$/i, ''), content: await file.text() }
-    }
+    }, [getTemplatesUri, findFile])
 
-    const updateTemplate = async (currentFilename, name, content) => {
+    const updateTemplate = useCallback(async (currentFilename, name, content) => {
         const uri = await getTemplatesUri()
         const existingNames = listMarkdownFiles(uri).map((file) => file.name)
         const filename = getUniqueFilename(existingNames, name, currentFilename)
@@ -53,29 +54,29 @@ export function useTemplates() {
 
         writeNoteFile(uri, filename, content)
         return filename
-    }
+    }, [getTemplatesUri, listMarkdownFiles, renameNoteFile, writeNoteFile])
 
-    const deleteTemplate = async (filename) => {
+    const deleteTemplate = useCallback(async (filename) => {
         const uri = await getTemplatesUri()
         deleteNoteFile(uri, filename)
-    }
+    }, [getTemplatesUri, deleteNoteFile])
 
-    const addTemplate = async (name, content = '') => {
+    const addTemplate = useCallback(async (name, content = '') => {
         const uri = await getTemplatesUri()
         const existingNames = listMarkdownFiles(uri).map((file) => file.name)
         const filename = getUniqueFilename(existingNames, name, null)
 
         writeNoteFile(uri, filename, content)
         return filename
-    }
+    }, [getTemplatesUri, listMarkdownFiles, writeNoteFile])
 
-    const importTemplate = async (fileUri, name) => {
+    const importTemplate = useCallback(async (fileUri, name) => {
         const file = new File(fileUri)
         const content = await file.text()
         const title = (name || file.name).replace(/\.(md|markdown|txt)$/i, '')
 
         return addTemplate(title, content)
-    }
+    }, [addTemplate])
 
     return {
         listTemplates,
