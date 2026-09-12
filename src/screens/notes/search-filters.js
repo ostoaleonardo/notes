@@ -1,17 +1,21 @@
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Chip, IconButton } from 'react-native-paper'
+import { Chip, useTheme } from 'react-native-paper'
 
 import { Scroll } from '@/components/animated/scroll'
 import { Typography } from '@/components/typography'
+import { SearchFilterToggles } from './search-filter-toggles'
 
-import { toggleTagQualifier, togglePinnedQualifier } from '@/utils/search-query'
+import { parseSearchQuery, toggleTagQualifier } from '@/utils/search-query'
 
-import { Keep } from '@/icons/keep'
-import { KeepFilled } from '@/icons/keep-filled'
-
-export function SearchFilters({ query, setQuery, parsed, tags }) {
+export function SearchFilters({ query, setQuery, tags, saved, onToggleSave }) {
     const { t } = useTranslation()
+    const { colors } = useTheme()
+
+    const trimmedQuery = query.trim()
+    const parsed = parseSearchQuery(query)
+    const canSave = !!trimmedQuery
+    const isSaved = saved.some((entry) => entry.query === trimmedQuery)
 
     return (
         <View style={styles.container}>
@@ -30,31 +34,35 @@ export function SearchFilters({ query, setQuery, parsed, tags }) {
                     </Typography>
 
                     <View style={styles.chips}>
-                        {tags.map((tag) => (
-                            <Chip
-                                key={tag.name}
-                                style={{ borderRadius: 24 }}
-                                mode={parsed.tag === tag.name.toLowerCase() ? 'outlined' : 'flat'}
-                                onPress={() => setQuery(toggleTagQualifier(query, tag.name))}
-                            >
-                                {tag.name}
-                            </Chip>
-                        ))}
+                        {tags.map((tag) => {
+                            const selected = parsed.tags.includes(tag.name.toLowerCase())
+
+                            return (
+                                <Chip
+                                    key={tag.name}
+                                    mode={selected ? 'flat' : 'outlined'}
+                                    style={{
+                                        borderRadius: 24,
+                                        ...(selected && { backgroundColor: colors.onBackground })
+                                    }}
+                                    textStyle={selected ? { color: colors.background } : undefined}
+                                    onPress={() => setQuery(toggleTagQualifier(query, tag.name))}
+                                >
+                                    {tag.name}
+                                </Chip>
+                            )
+                        })}
                     </View>
                 </View>
             </Scroll>
 
-            <IconButton
-                size={12}
-                mode='outlined'
-                selected={parsed.pinned}
-                accessibilityLabel={t('search.pinned')}
-                onPress={() => setQuery(togglePinnedQualifier(query))}
-                icon={(props) => (
-                    parsed.pinned
-                        ? <KeepFilled {...props} />
-                        : <Keep {...props} />
-                )}
+            <SearchFilterToggles
+                query={query}
+                setQuery={setQuery}
+                parsed={parsed}
+                isSaved={isSaved}
+                canSave={canSave}
+                onToggleSave={onToggleSave}
             />
         </View>
     )
@@ -62,9 +70,7 @@ export function SearchFilters({ query, setQuery, parsed, tags }) {
 
 const styles = StyleSheet.create({
     container: {
-        paddingRight: 8,
-        flexDirection: 'row',
-        justifyContent: 'space-between'
+        gap: 12
     },
     scroll: {
         paddingHorizontal: 16,
@@ -75,7 +81,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     chips: {
-        gap: 2,
+        gap: 3,
         flexDirection: 'row'
     }
 })
