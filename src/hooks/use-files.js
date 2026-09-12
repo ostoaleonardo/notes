@@ -1,6 +1,7 @@
 import { ToastAndroid } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Directory, File } from 'expo-file-system'
+import { Directory, File, Paths } from 'expo-file-system'
+import * as Sharing from 'expo-sharing'
 
 import { useNotes } from './use-notes'
 import { useLanguage } from './use-language'
@@ -32,10 +33,27 @@ export function useFiles() {
         }
     }
 
+    const shareFile = async (id) => {
+        const note = getNote(id)
+        const { fileName, fileContent } = getFileBackup(note)
+
+        try {
+            let file = new File(Paths.cache, fileName)
+            if (file.exists) file.create({ overwrite: true })
+
+            file = Paths.cache.createFile(fileName, 'text/markdown')
+            file.write(fileContent)
+
+            await Sharing.shareAsync(file.uri, { mimeType: 'text/markdown' })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const getFileBackup = (note) => ({
         fileName: 'note-' + note.id.split('-')[0] + '.md',
         fileContent: getNotesAsString([note], currentLanguage)
     })
 
-    return { exportFile }
+    return { exportFile, shareFile }
 }
