@@ -7,7 +7,7 @@ import { Typography } from '@/components/typography'
 
 import { useIconProps } from '@/hooks/use-icon-props'
 
-import { Delete } from '@/icons/delete'
+import { Close } from '@/icons/close'
 import { Search } from '@/icons/search'
 
 export function SavedSearches({ saved, onSelect, onDelete }) {
@@ -34,7 +34,7 @@ export function SavedSearches({ saved, onSelect, onDelete }) {
                             <IconButton
                                 size={16}
                                 onPress={() => onDelete(entry.id)}
-                                icon={(props) => <Delete {...props} />}
+                                icon={(props) => <Close {...props} />}
                             />
                         </View>
                     </TouchableRipple>
