@@ -4,9 +4,15 @@ import { Chip, useTheme } from 'react-native-paper'
 
 import { Scroll } from '@/components/animated/scroll'
 import { Typography } from '@/components/typography'
-import { SearchFilterToggles } from './search-filter-toggles'
+import { FilterToggleGroup } from '@/components/button/filter-toggle-group'
 
-import { parseSearchQuery, toggleTagQualifier } from '@/utils/search-query'
+import { parseSearchQuery, toggleTagQualifier, togglePinnedQualifier, toggleImageQualifier } from '@/utils/search-query'
+
+import { Check } from '@/icons/check'
+import { Keep } from '@/icons/keep'
+import { KeepFilled } from '@/icons/keep-filled'
+import { Picture } from '@/icons/picture'
+import { Plus } from '@/icons/plus'
 
 export function SearchFilters({ query, setQuery, tags, saved, onToggleSave }) {
     const { t } = useTranslation()
@@ -56,13 +62,28 @@ export function SearchFilters({ query, setQuery, tags, saved, onToggleSave }) {
                 </View>
             </Scroll>
 
-            <SearchFilterToggles
-                query={query}
-                setQuery={setQuery}
-                parsed={parsed}
-                isSaved={isSaved}
-                canSave={canSave}
-                onToggleSave={onToggleSave}
+            <FilterToggleGroup
+                buttons={[
+                    {
+                        icon: Picture,
+                        label: t('search.has_image'),
+                        selected: parsed.hasImage,
+                        onPress: () => setQuery(toggleImageQualifier(query))
+                    },
+                    {
+                        icon: parsed.pinned ? KeepFilled : Keep,
+                        label: t('search.pinned'),
+                        selected: parsed.pinned,
+                        onPress: () => setQuery(togglePinnedQualifier(query))
+                    },
+                    {
+                        icon: isSaved ? Check : Plus,
+                        label: t(isSaved ? 'search.unsave' : 'search.save'),
+                        selected: isSaved,
+                        disabled: !canSave,
+                        onPress: onToggleSave
+                    }
+                ]}
             />
         </View>
     )
