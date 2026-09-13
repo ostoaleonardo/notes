@@ -8,12 +8,14 @@ import { LoadingOverlay } from '@/components/layout'
 import { useNoteAutosave } from '@/hooks/use-note-autosave'
 import { useNotes } from '@/hooks/use-notes'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
+import { useRepositories } from '@/hooks/use-repositories'
 import { getDate } from '@/utils/date'
 
 export default function EditNote() {
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
-    const { getNote, updateNote } = useNotes()
+    const { getNote, updateNote, loading: notesLoading } = useNotes()
+    const { loading: repositoriesLoading } = useRepositories()
 
     useRegisterCurrent(slug)
 
@@ -28,6 +30,8 @@ export default function EditNote() {
     const [repositoryId, setRepositoryId] = useState('')
 
     useEffect(() => {
+        if (notesLoading || repositoriesLoading) return
+
         const {
             title = '',
             note: content = '',
@@ -43,11 +47,8 @@ export default function EditNote() {
         setCreatedAt(createdAt)
         setUpdatedAt(updatedAt)
         setRepositoryId(repositoryId)
-
-        setTimeout(() => {
-            setLoading(false)
-        }, 0)
-    }, [slug])
+        setLoading(false)
+    }, [slug, notesLoading, repositoriesLoading])
 
     useNoteAutosave({
         id: slug, title, note, tags, createdAt, repositoryId,
