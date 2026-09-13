@@ -3,6 +3,8 @@ import * as Linking from 'expo-linking'
 import { File } from 'expo-file-system'
 import { randomUUID } from 'expo-crypto'
 import { useRouter } from 'expo-router'
+import { ToastAndroid } from 'react-native'
+import { useTranslation } from 'react-i18next'
 
 import { useNotes } from '../hooks/use-notes'
 import { usePro } from '../hooks/use-pro'
@@ -14,8 +16,10 @@ export const ImportContext = createContext()
 
 export function ImportProvider({ children }) {
     const router = useRouter()
-    const { pro } = usePro()
+    const { t } = useTranslation()
     const { saveNote, loading } = useNotes()
+    const { pro } = usePro()
+
     const [importing, setImporting] = useState(false)
 
     const importFile = useCallback(async (url, name) => {
@@ -47,9 +51,14 @@ export function ImportProvider({ children }) {
 
     useEffect(() => {
         const handleUrl = (url) => {
-            if (loading || !pro) return
+            if (loading) return
             if (!url) return
             if (!url.startsWith('content://') && !url.startsWith('file://')) return
+
+            if (!pro) {
+                ToastAndroid.show(t('repositories.pro_required'), ToastAndroid.SHORT)
+                return
+            }
 
             importFile(url)
         }
@@ -58,7 +67,7 @@ export function ImportProvider({ children }) {
         const subscription = Linking.addEventListener('url', ({ url }) => handleUrl(url))
 
         return () => subscription.remove()
-    }, [loading, pro])
+    }, [loading, pro, t, importFile])
 
     const value = useMemo(() => ({ importing, importFile, pro }), [importing, importFile, pro])
 
