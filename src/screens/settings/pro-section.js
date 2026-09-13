@@ -2,12 +2,11 @@ import { useEffect, useState } from 'react'
 import { ToastAndroid } from 'react-native'
 import { ErrorCode, finishTransaction, useIAP } from 'expo-iap'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator } from 'react-native-paper'
+import { ActivityIndicator, useTheme } from 'react-native-paper'
 
 import { Option } from './option'
 import { Section } from '@/components/section'
 
-import { useIconProps } from '@/hooks/use-icon-props'
 import { usePro } from '@/hooks/use-pro'
 import { useStorage } from '@/hooks/use-storage'
 import { findProPurchase } from '@/utils/iap'
@@ -20,7 +19,7 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export function ProSection() {
     const { t } = useTranslation()
-    const iconProps = useIconProps()
+    const { colors } = useTheme()
     const { setItem } = useStorage()
     const { pro, setPro } = usePro()
     const [loading, setLoading] = useState(false)
@@ -145,8 +144,8 @@ export function ProSection() {
                 title={t(pro ? 'pro.pro' : 'pro.get')}
                 description={t(pro ? 'pro.success' : 'pro.features')}
                 rightContent={
-                    pro ? <Check {...iconProps} />
-                        : <ArrowForward {...iconProps} />
+                    pro ? <Check color={colors.onBackground} />
+                        : <ArrowForward color={colors.onBackground} />
                 }
                 onPress={pro ? null : purcharsePro}
                 isFirst={true}
@@ -157,8 +156,8 @@ export function ProSection() {
                 title={t('pro.restore')}
                 description={t('pro.purchased')}
                 rightContent={
-                    loading ? <ActivityIndicator size='small' color={iconProps.color} />
-                        : <ArrowForward {...iconProps} />
+                    loading ? <ActivityIndicator size='small' color={colors.onBackground} />
+                        : <ArrowForward color={colors.onBackground} />
                 }
                 onPress={restorePurchases}
                 isLast={true}
