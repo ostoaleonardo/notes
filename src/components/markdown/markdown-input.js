@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Linking } from 'react-native'
 import { router } from 'expo-router'
 import { useTheme } from 'react-native-paper'
@@ -40,6 +40,21 @@ export const MarkdownInput = ({
     const { value: previewValue, mediaMap } = useResolvedPreviewMarkdown(value)
     const mediaMapEntries = useMemo(() => [...mediaMap], [mediaMap])
 
+    const onLinkPress = useCallback((url) => Linking.openURL(url), [])
+
+    const onImagePress = useCallback((url) => router.push({
+        pathname: ROUTES.IMAGE_VIEWER,
+        params: { url: encodeURIComponent(url) }
+    }), [])
+
+    const dom = useMemo(() => ({
+        scrollEnabled: mode === 'read',
+        showsVerticalScrollIndicator: false,
+        showsHorizontalScrollIndicator: false,
+        androidLayerType: 'software',
+        style: { flex: 1 }
+    }), [mode])
+
     return (
         <MarkdownDomEditor
             mode={mode}
@@ -53,11 +68,8 @@ export const MarkdownInput = ({
             onActionHandled={onActionHandled}
             onFocus={onFocus}
             onBlur={onBlur}
-            onLinkPress={(url) => Linking.openURL(url)}
-            onImagePress={(url) => router.push({
-                pathname: ROUTES.IMAGE_VIEWER,
-                params: { url: encodeURIComponent(url) }
-            })}
+            onLinkPress={onLinkPress}
+            onImagePress={onImagePress}
             placeholder={placeholder}
             title={title}
             onTitleChange={setTitle}
@@ -76,13 +88,7 @@ export const MarkdownInput = ({
             quoteBackgroundColor={background}
             codeBackgroundColor={onBackground + TRANSPARENT[10]}
             thematicBreakColor={tertiary + TRANSPARENT[30]}
-            dom={{
-                scrollEnabled: mode === 'read',
-                showsVerticalScrollIndicator: false,
-                showsHorizontalScrollIndicator: false,
-                androidLayerType: 'software',
-                style: { flex: 1 }
-            }}
+            dom={dom}
         />
     )
 }
