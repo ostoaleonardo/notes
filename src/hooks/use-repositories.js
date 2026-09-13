@@ -58,7 +58,11 @@ export function useRepositories() {
         })
     }, [listMarkdownFiles, writeNoteFile])
 
-    const buildRepository = (directory, parentId = null, seedTemplatesFolder = true) => {
+    const buildRepository = useCallback((
+        directory,
+        parentId = null,
+        seedTemplatesFolder = true
+    ) => {
         let templatesUri = null
 
         if (seedTemplatesFolder) {
@@ -75,16 +79,16 @@ export function useRepositories() {
             templatesUri,
             parentId
         }
-    }
+    }, [getOrCreateTemplatesFolder, seedTemplates])
 
-    const discoverSubfolders = (directory, parentId) => (
+    const discoverSubfolders = useCallback((directory, parentId) => (
         listSubdirectories(directory.uri).flatMap((subdirectory) => {
             const entry = buildRepository(subdirectory, parentId, false)
             return [entry, ...discoverSubfolders(subdirectory, entry.id)]
         })
-    )
+    ), [listSubdirectories, buildRepository])
 
-    const addRepository = async () => {
+    const addRepository = useCallback(async () => {
         busyRef.current = true
 
         try {
@@ -107,9 +111,17 @@ export function useRepositories() {
         } finally {
             busyRef.current = false
         }
-    }
+    }, [
+        repositories,
+        activeRepositoryId,
+        buildRepository,
+        discoverSubfolders,
+        persistRepositories,
+        persistActiveRepository,
+        busyRef
+    ])
 
-    const canAddSubfolder = (parentId) => {
+    const canAddSubfolder = useCallback((parentId) => {
         if (pro) return true
 
         const parent = repositories.find((repository) => repository.id === parentId)
@@ -118,9 +130,9 @@ export function useRepositories() {
 
         const siblingCount = repositories.filter((repository) => repository.parentId === parentId).length
         return siblingCount < FREE_SUBFOLDERS_PER_REPOSITORY
-    }
+    }, [pro, repositories])
 
-    const addSubfolder = async (parentId, name) => {
+    const addSubfolder = useCallback(async (parentId, name) => {
         if (!canAddSubfolder(parentId)) return 'pro_required'
 
         const parent = repositories.find((repository) => repository.id === parentId)
@@ -137,7 +149,14 @@ export function useRepositories() {
         } finally {
             busyRef.current = false
         }
-    }
+    }, [
+        repositories,
+        buildRepository,
+        canAddSubfolder,
+        createSubdirectory,
+        persistRepositories,
+        busyRef
+    ])
 
     const getRootRepository = useCallback((repository) => {
         let current = repository
@@ -171,12 +190,12 @@ export function useRepositories() {
         }
     }, [getRootRepository, getOrCreateTemplatesFolder, seedTemplates, persistRepositories, repositories, busyRef])
 
-    const ensureImagesFolder = (repository) => {
+    const ensureImagesFolder = useCallback((repository) => {
         const root = getRootRepository(repository)
         return getOrCreateImagesFolder(root.uri).uri
-    }
+    }, [getRootRepository, getOrCreateImagesFolder])
 
-    const relinkUris = (repository) => {
+    const relinkUris = useCallback((repository) => {
         let diskChildren
 
         try {
@@ -195,9 +214,9 @@ export function useRepositories() {
             const relinkedChild = { ...child, uri: disk.uri }
             return [relinkedChild, ...relinkUris(relinkedChild)]
         })
-    }
+    }, [listSubdirectories, repositories])
 
-    const renameRepository = async (id, alias) => {
+    const renameRepository = useCallback(async (id, alias) => {
         const repository = repositories.find((r) => r.id === id)
         if (!repository) return null
 
@@ -230,9 +249,15 @@ export function useRepositories() {
         } finally {
             busyRef.current = false
         }
-    }
+    }, [
+        repositories,
+        persistRepositories,
+        renameDirectory,
+        relinkUris,
+        busyRef
+    ])
 
-    const isAncestorOf = (ancestorId, repository) => {
+    const isAncestorOf = useCallback((ancestorId, repository) => {
         let current = repository
 
         while (current) {
@@ -241,9 +266,9 @@ export function useRepositories() {
         }
 
         return false
-    }
+    }, [repositories])
 
-    const removeRepositoriesFromList = async (ids) => {
+    const removeRepositoriesFromList = useCallback(async (ids) => {
         const idSet = new Set(ids)
         const remaining = repositories.filter((r) => !idSet.has(r.id))
         await persistRepositories(remaining)
@@ -251,9 +276,17 @@ export function useRepositories() {
         if (idSet.has(activeRepositoryId)) {
             await persistActiveRepository(remaining[0]?.id || '')
         }
-    }
+    }, [repositories, persistRepositories, activeRepositoryId, persistActiveRepository])
 
-    const forgetRepository = async (id) => {
+    const buildSubtree = useCallback((parentId, depth = 0) => (
+        repositories
+            .filter((repository) => (repository.parentId || null) === parentId)
+            .flatMap((repository) => [{ ...repository, depth }, ...buildSubtree(repository.id, depth + 1)])
+    ), [repositories])
+
+    const getDescendants = useCallback((rootId) => buildSubtree(rootId, 0), [buildSubtree])
+
+    const forgetRepository = useCallback(async (id) => {
         const repository = repositories.find((r) => r.id === id)
         if (!repository) return
 
@@ -265,9 +298,14 @@ export function useRepositories() {
         } finally {
             busyRef.current = false
         }
-    }
+    }, [
+        repositories,
+        getDescendants,
+        removeRepositoriesFromList,
+        busyRef
+    ])
 
-    const removeRepository = async (id) => {
+    const removeRepository = useCallback(async (id) => {
         const repository = repositories.find((r) => r.id === id)
         if (!repository) return null
 
@@ -287,13 +325,21 @@ export function useRepositories() {
         } finally {
             busyRef.current = false
         }
-    }
+    }, [
+        repositories,
+        activeRepository,
+        isAncestorOf,
+        deleteDirectory,
+        getDescendants,
+        removeRepositoriesFromList,
+        busyRef
+    ])
 
-    const setActiveRepository = (id) => {
+    const setActiveRepository = useCallback((id) => {
         persistActiveRepository(id)
-    }
+    }, [persistActiveRepository])
 
-    const reconcileTree = (repository) => {
+    const reconcileTree = useCallback((repository) => {
         if (!directoryExists(repository.uri)) return []
 
         let diskSubdirectories
@@ -320,9 +366,15 @@ export function useRepositories() {
             })
 
         return [repository, ...survivingDescendants, ...newDescendants]
-    }
+    }, [
+        repositories,
+        buildRepository,
+        directoryExists,
+        listSubdirectories,
+        discoverSubfolders
+    ])
 
-    const reconcileRepositories = async () => {
+    const reconcileRepositories = useCallback(async () => {
         if (busyRef.current) return
 
         const roots = repositories.filter((r) => !r.parentId)
@@ -334,21 +386,25 @@ export function useRepositories() {
             const remainingRoots = reconciled.filter((r) => !r.parentId)
             await persistActiveRepository(remainingRoots[0]?.id || '')
         }
-    }
-
-    const buildSubtree = useCallback((parentId, depth = 0) => (
-        repositories
-            .filter((repository) => (repository.parentId || null) === parentId)
-            .flatMap((repository) => [{ ...repository, depth }, ...buildSubtree(repository.id, depth + 1)])
-    ), [repositories])
+    }, [
+        repositories,
+        activeRepositoryId,
+        reconcileTree,
+        persistRepositories,
+        persistActiveRepository,
+        busyRef
+    ])
 
     const activeRepositoryTree = useMemo(() => {
         if (!activeRepository) return []
         const root = getRootRepository(activeRepository)
         return [{ ...root, depth: 0 }, ...buildSubtree(root.id, 1)]
-    }, [repositories, activeRepository, buildSubtree])
-
-    const getDescendants = useCallback((rootId) => buildSubtree(rootId, 0), [buildSubtree])
+    }, [
+        repositories,
+        activeRepository,
+        getRootRepository,
+        buildSubtree
+    ])
 
     return {
         repositories,
