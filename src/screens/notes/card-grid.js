@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { FlatList, StyleSheet, useWindowDimensions } from 'react-native'
-import { FadeInUp } from 'react-native-reanimated'
+import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 
 import { CardGridItem, CARDS_HEIGHT } from './card-grid-item'
 import { AnimatedView } from '@/components/animated/animated-view'
@@ -41,6 +41,7 @@ export function CardGrid({ cards, onOpen, renderHeader, previewLines, emptyMessa
         return (
             <AnimatedView
                 entering={FadeInUp}
+                exiting={FadeOutUp}
                 style={[styles.empty, { width: windowWidth }]}
             >
                 <Typography

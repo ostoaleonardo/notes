@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { FadeOutUp } from 'react-native-reanimated'
+import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
@@ -22,6 +22,7 @@ export const CardGridItem = memo(function CardGridItem({
 
     return (
         <AnimatedView
+            entering={FadeInUp}
             exiting={FadeOutUp}
             style={{ ...cellStyle, gap: 8 }}
         >
