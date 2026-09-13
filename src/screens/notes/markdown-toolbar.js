@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { IconButton, useTheme } from 'react-native-paper'
+import { IconButton, Tooltip, useTheme } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
 
 import { AnimatedView } from '@/components/animated/animated-view'
@@ -59,12 +59,13 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
                                     style={styles.divider}
                                 />
                             ) : (
-                                <IconButton
-                                    key={action}
-                                    onPress={() => onRunAction(action)}
-                                    icon={() => <Icon color={colors.onBackground} />}
-                                    accessibilityLabel={t(`markdown_action.${action}`)}
-                                />
+                                <Tooltip key={action} title={t(`markdown_action.${action}`)}>
+                                    <IconButton
+                                        onPress={() => onRunAction(action)}
+                                        icon={(props) => <Icon {...props} />}
+                                        accessibilityLabel={t(`markdown_action.${action}`)}
+                                    />
+                                </Tooltip>
                             )
                         ))}
                     </AnimatedView>
@@ -76,39 +77,49 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
                         exiting={FadeOutRight}
                         style={styles.row}
                     >
-                        <IconButton
-                            disabled={!canUndo}
-                            onPress={() => onRunAction('undo')}
-                            icon={(props) => <Undo {...props} />}
-                            accessibilityLabel={t('button.undo')}
-                        />
-                        <IconButton
-                            disabled={!canRedo}
-                            onPress={() => onRunAction('redo')}
-                            icon={(props) => <Redo {...props} />}
-                            accessibilityLabel={t('button.redo')}
-                        />
+                        <Tooltip title={t('button.undo')}>
+                            <IconButton
+                                disabled={!canUndo}
+                                onPress={() => onRunAction('undo')}
+                                icon={(props) => <Undo {...props} />}
+                                accessibilityLabel={t('button.undo')}
+                            />
+                        </Tooltip>
+                        <Tooltip title={t('button.redo')}>
+                            <IconButton
+                                disabled={!canRedo}
+                                onPress={() => onRunAction('redo')}
+                                icon={(props) => <Redo {...props} />}
+                                accessibilityLabel={t('button.redo')}
+                            />
+                        </Tooltip>
 
-                        <IconButton
-                            onPress={actions?.onOpenRecents}
-                            icon={(props) => <NoteStack {...props} />}
-                            accessibilityLabel={t('search.recent')}
-                        />
+                        <Tooltip title={t('search.recent')}>
+                            <IconButton
+                                onPress={actions?.onOpenRecents}
+                                icon={(props) => <NoteStack {...props} />}
+                                accessibilityLabel={t('search.recent')}
+                            />
+                        </Tooltip>
 
                         {scope !== 'template' && (
-                            <IconButton
-                                onPress={actions?.onOpenTags}
-                                icon={(props) => <Tag {...props} />}
-                                accessibilityLabel={t('title.tags')}
-                            />
+                            <Tooltip title={t('title.tags')}>
+                                <IconButton
+                                    onPress={actions?.onOpenTags}
+                                    icon={(props) => <Tag {...props} />}
+                                    accessibilityLabel={t('title.tags')}
+                                />
+                            </Tooltip>
                         )}
 
                         {scope !== 'template' && (
-                            <IconButton
-                                onPress={actions?.onOpenTemplates}
-                                icon={(props) => <Shapes {...props} />}
-                                accessibilityLabel={t('title.templates')}
-                            />
+                            <Tooltip title={t('title.templates')}>
+                                <IconButton
+                                    onPress={actions?.onOpenTemplates}
+                                    icon={(props) => <Shapes {...props} />}
+                                    accessibilityLabel={t('title.templates')}
+                                />
+                            </Tooltip>
                         )}
                     </AnimatedView>
                 )}

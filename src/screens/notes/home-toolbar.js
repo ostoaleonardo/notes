@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { IconButton, useTheme } from 'react-native-paper'
+import { IconButton, Tooltip, useTheme } from 'react-native-paper'
 
 import { RecentsButton } from '@/components/app-bar/recents-button'
 
@@ -19,22 +19,26 @@ export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, recentC
                 backgroundColor: colors.background
             }}
         >
-            <IconButton
-                icon={(props) => <Plus {...props} />}
-                onPress={onCreateNote}
-                accessibilityLabel={t('notes.create')}
-            />
+            <Tooltip title={t('notes.create')}>
+                <IconButton
+                    icon={(props) => <Plus {...props} />}
+                    onPress={onCreateNote}
+                    accessibilityLabel={t('notes.create')}
+                />
+            </Tooltip>
 
             <RecentsButton
                 onPress={onOpenRecents}
                 count={recentCount}
             />
 
-            <IconButton
-                onPress={onImportNote}
-                icon={(props) => <UploadFile {...props} />}
-                accessibilityLabel={t('title.import')}
-            />
+            <Tooltip title={t('title.import')}>
+                <IconButton
+                    onPress={onImportNote}
+                    icon={(props) => <UploadFile {...props} />}
+                    accessibilityLabel={t('title.import')}
+                />
+            </Tooltip>
         </View>
     )
 }
