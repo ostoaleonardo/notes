@@ -8,7 +8,7 @@ export const MarkdownEditorLayout = ({ children, ...controlsProps }) => {
     const { isVisible, height } = useKeyboardState()
     const { bottom } = useSafeAreaInsets()
 
-    const keyboardPadding = isVisible ? Math.max(0, height - bottom) : 0
+    const keyboardPadding = isVisible && controlsProps.isFocused ? Math.max(0, height - bottom) : 0
 
     return (
         <View style={{ flex: 1, paddingBottom: keyboardPadding }}>
