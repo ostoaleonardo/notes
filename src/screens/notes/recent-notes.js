@@ -122,6 +122,11 @@ export function RecentNotes({ onClose, home = false }) {
 
     const onClearAll = () => {
         clearRecent()
+
+        if (currentId) {
+            onClose()
+            router.push(ROUTES.HOME)
+        }
     }
 
     const onGoHome = () => {
@@ -141,12 +146,13 @@ export function RecentNotes({ onClose, home = false }) {
             disabled: home,
             onPress: onGoHome
         },
-        recent.length > 0 && {
+        {
             icon: Close,
             label: t('button.close_all'),
+            disabled: recent.length === 0,
             onPress: onClearAll
         }
-    ].filter(Boolean)
+    ]
 
     return (
         <View style={styles.container}>
