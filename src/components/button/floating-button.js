@@ -2,11 +2,8 @@ import React from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
-import { useIconProps } from '@/hooks/use-icon-props'
-
 export function FloatingButton({ icon, onPress }) {
     const { colors } = useTheme()
-    const iconProps = useIconProps()
 
     const style = {
         ...styles.container,
@@ -14,7 +11,7 @@ export function FloatingButton({ icon, onPress }) {
     }
 
     const content = icon && React.cloneElement(icon, {
-        ...iconProps, color: colors.onTertiary
+        color: colors.onTertiary
     })
 
     return (

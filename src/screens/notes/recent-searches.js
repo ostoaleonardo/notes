@@ -1,17 +1,15 @@
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { Divider, TouchableRipple } from 'react-native-paper'
+import { Divider, TouchableRipple, useTheme } from 'react-native-paper'
 
 import { Section } from '@/components/section'
 import { Typography } from '@/components/typography'
-
-import { useIconProps } from '@/hooks/use-icon-props'
 
 import { History } from '@/icons/history'
 
 export function RecentSearches({ recent, onSelect }) {
     const { t } = useTranslation()
-    const iconProps = useIconProps(16, 0.5)
+    const { colors } = useTheme()
 
     if (recent.length === 0) return null
 
@@ -26,7 +24,12 @@ export function RecentSearches({ recent, onSelect }) {
                         onPress={() => onSelect(term)}
                     >
                         <View style={styles.item}>
-                            <History {...iconProps} />
+                            <History
+                                width={16}
+                                height={16}
+                                color={colors.onBackground}
+                                opacity={0.5}
+                            />
                             <Typography numberOfLines={1}>
                                 {term}
                             </Typography>
