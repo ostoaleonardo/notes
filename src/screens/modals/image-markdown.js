@@ -3,10 +3,10 @@ import { Image } from 'expo-image'
 import { randomUUID } from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { IconButton, Tooltip, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 
 import { LargeInput } from '@/components/input/large-input'
-import { Pressable } from '@/components/button/pressable'
+import { IconToggleGroup } from '@/components/button/icon-toggle-group'
 import { Section } from '@/components/section'
 
 import { useFileStorage } from '@/hooks/use-file-storage'
@@ -28,6 +28,7 @@ export function ImageMarkdown({ onClose, onInsert }) {
     const [title, setTitle] = useState('')
     const [url, setUrl] = useState('')
     const [isDeviceImage, setIsDeviceImage] = useState(false)
+    const [imageSize, setImageSize] = useState(null)
 
     const hasPreview = url.trim() !== ''
 
@@ -41,6 +42,7 @@ export function ImageMarkdown({ onClose, onInsert }) {
 
         setUrl(file.uri)
         setIsDeviceImage(true)
+        setImageSize(null)
     }
 
     const onAdd = () => {
@@ -51,30 +53,39 @@ export function ImageMarkdown({ onClose, onInsert }) {
         setTitle('')
         setUrl('')
         setIsDeviceImage(false)
+        setImageSize(null)
         onClose()
     }
 
     return (
         <View style={styles.container}>
-            <Section
-                title={t('markdown.image_url')}
-                contentStyle={styles.field}
-            >
-                <LargeInput
-                    value={url}
-                    onChangeText={setUrl}
-                    editable={!isDeviceImage}
-                    placeholder='https://example.com/image.png'
-                />
-            </Section>
+            {!isDeviceImage && (
+                <Section
+                    title={t('markdown.image_url')}
+                    contentStyle={styles.field}
+                >
+                    <LargeInput
+                        value={url}
+                        onChangeText={setUrl}
+                        placeholder='https://example.com/image.png'
+                    />
+                </Section>
+            )}
 
             {hasPreview && (
                 <View style={styles.field}>
-                    <View style={{ ...styles.preview, backgroundColor: colors.surfaceVariant }}>
+                    <View
+                        style={{
+                            ...styles.preview,
+                            backgroundColor: colors.surfaceVariant,
+                            aspectRatio: imageSize ? imageSize.width / imageSize.height : 1
+                        }}
+                    >
                         <Image
                             source={url}
                             style={styles.image}
-                            contentFit='cover'
+                            contentFit='contain'
+                            onLoad={(event) => setImageSize(event.source)}
                         />
                     </View>
                 </View>
@@ -92,38 +103,25 @@ export function ImageMarkdown({ onClose, onInsert }) {
             </Section>
 
             <View style={styles.buttons}>
-                <Pressable
-                    mode='text'
-                    onPress={onClose}
-                >
-                    {t('button.cancel')}
-                </Pressable>
-
-                <View style={styles.pickerRow}>
-                    <Tooltip title={t('markdown.image_camera')}>
-                        <IconButton
-                            mode='outlined'
-                            icon={(props) => <Camera {...props} />}
-                            onPress={() => onPickImage('camera')}
-                            accessibilityLabel={t('markdown.image_camera')}
-                        />
-                    </Tooltip>
-                    <Tooltip title={t('markdown.image_gallery')}>
-                        <IconButton
-                            mode='outlined'
-                            icon={(props) => <Picture {...props} />}
-                            onPress={() => onPickImage('gallery')}
-                            accessibilityLabel={t('markdown.image_gallery')}
-                        />
-                    </Tooltip>
-                </View>
-
-                <Pressable
-                    mode='contained'
-                    onPress={onAdd}
-                >
-                    {t('button.insert')}
-                </Pressable>
+                <IconToggleGroup
+                    buttons={[
+                        {
+                            icon: Camera,
+                            label: t('markdown.image_camera'),
+                            onPress: () => onPickImage('camera')
+                        },
+                        {
+                            icon: Picture,
+                            label: t('markdown.image_gallery'),
+                            onPress: () => onPickImage('gallery')
+                        },
+                        {
+                            showLabel: true,
+                            label: t('button.insert'),
+                            onPress: onAdd
+                        }
+                    ]}
+                />
             </View>
         </View>
     )
@@ -138,12 +136,8 @@ const styles = StyleSheet.create({
     field: {
         paddingHorizontal: 16
     },
-    pickerRow: {
-        flexDirection: 'row'
-    },
     preview: {
         width: '100%',
-        height: 180,
         borderRadius: COMMONS.radius,
         overflow: 'hidden'
     },
@@ -155,7 +149,7 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         paddingHorizontal: 16
     }
 })
