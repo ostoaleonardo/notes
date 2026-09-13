@@ -41,6 +41,15 @@ export const MOCK_GHOST_NOTE = {
     createdAt: 1
 }
 
+export const MOCK_ORPHANED_NOTE = {
+    id: 'note-1',
+    title: 'Orphaned',
+    note: 'x',
+    tags: [],
+    repositoryId: 'missing-repo',
+    createdAt: 1
+}
+
 export const MOCK_MINIMAL_NOTE = { id: 'note-1', title: 'Groceries' }
 
 export const MOCK_GROCERIES_METADATA = {

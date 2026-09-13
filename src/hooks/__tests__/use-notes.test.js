@@ -11,7 +11,8 @@ import {
     MOCK_GROCERIES_NOTE,
     MOCK_MINIMAL_NOTE,
     MOCK_OLD_TITLE_METADATA,
-    MOCK_OLD_TITLE_NOTE
+    MOCK_OLD_TITLE_NOTE,
+    MOCK_ORPHANED_NOTE
 } from '../__fixtures__/notes'
 import { NoteContext } from '@/context/note-context'
 
@@ -123,6 +124,18 @@ describe('save note', () => {
         expect(files.get('Groceries (2).md')).toBe('new content')
         expect(metadata['note-2'].filename).toBe('Groceries (2).md')
     })
+
+    test('adds the note to state but does not touch the filesystem when the repository cannot be resolved', async () => {
+        const { result } = await renderNotesHook()
+
+        await act(async () => {
+            await result.current.saveNote(MOCK_GROCERIES_DRAFT, 'missing-repo')
+        })
+
+        expect(result.current.notes).toHaveLength(1)
+        expect(mockFileStorage.listMarkdownFiles).not.toHaveBeenCalled()
+        expect(mockFileStorage.writeNoteFile).not.toHaveBeenCalled()
+    })
 })
 
 describe('update note', () => {
@@ -166,6 +179,17 @@ describe('update note', () => {
 
         expect(mockFileStorage.writeNoteFile).not.toHaveBeenCalled()
     })
+
+    test('does nothing when the note repository cannot be resolved', async () => {
+        const { result } = await renderNotesHook([MOCK_ORPHANED_NOTE])
+
+        await act(async () => {
+            await result.current.updateNote({ ...MOCK_ORPHANED_NOTE, note: 'y' })
+        })
+
+        expect(mockFileStorage.readMetadata).not.toHaveBeenCalled()
+        expect(mockFileStorage.writeNoteFile).not.toHaveBeenCalled()
+    })
 })
 
 describe('delete note', () => {
@@ -190,6 +214,18 @@ describe('delete note', () => {
             await result.current.deleteNote('missing')
         })
 
+        expect(mockFileStorage.deleteNoteFile).not.toHaveBeenCalled()
+    })
+
+    test('removes the note from state but does not touch the filesystem when the repository cannot be resolved', async () => {
+        const { result } = await renderNotesHook([MOCK_ORPHANED_NOTE])
+
+        await act(async () => {
+            await result.current.deleteNote('note-1')
+        })
+
+        expect(result.current.notes).toEqual([])
+        expect(mockFileStorage.readMetadata).not.toHaveBeenCalled()
         expect(mockFileStorage.deleteNoteFile).not.toHaveBeenCalled()
     })
 })
