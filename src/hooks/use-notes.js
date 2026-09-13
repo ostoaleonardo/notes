@@ -41,11 +41,12 @@ export function useNotes() {
         updatedAt: note.updatedAt || ''
     })
 
-    const saveNote = async (note, repositoryId = activeRepository.id) => {
+    const saveNote = async (note, repositoryId = activeRepository?.id) => {
         const uri = getRepositoryUri(repositoryId)
         const noteWithLocation = { ...note, repositoryId }
 
         setNotes([noteWithLocation, ...notes])
+        if (!uri) return
 
         const existingNames = listMarkdownFiles(uri).map((file) => file.name)
         const filename = getUniqueFilename(existingNames, note.title, null)
@@ -64,6 +65,8 @@ export function useNotes() {
         }))
 
         const uri = getRepositoryUri(note.repositoryId)
+        if (!uri) return
+
         const metadata = await readMetadata(uri)
         const entry = metadata[note.id]
         if (!entry) return
@@ -87,6 +90,8 @@ export function useNotes() {
         if (!note) return
 
         const uri = getRepositoryUri(note.repositoryId)
+        if (!uri) return
+
         const metadata = await readMetadata(uri)
         const entry = metadata[id]
         if (!entry) return
