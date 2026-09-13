@@ -2,9 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { IconButton, Tooltip } from 'react-native-paper'
+import { IconButton } from 'react-native-paper'
 
 import { CardGrid } from './card-grid'
+import { IconToggleGroup } from '@/components/button/icon-toggle-group'
 
 import { useCurrentNote } from '@/hooks/use-current-note'
 import { useRecentNotes } from '@/hooks/use-recent-notes'
@@ -18,7 +19,6 @@ import { getRecentIds } from '@/utils/recent-ids'
 
 import { Close } from '@/icons/close'
 import { KeepFilled } from '@/icons/keep-filled'
-import { NoteStack } from '@/icons/note-stack'
 import { Plus } from '@/icons/plus'
 
 import { ROUTES } from '@/constants/routes'
@@ -129,6 +129,25 @@ export function RecentNotes({ onClose, home = false }) {
         router.push(ROUTES.HOME)
     }
 
+    const actionButtons = [
+        {
+            icon: Plus,
+            label: t('notes.create'),
+            onPress: onCreateNote
+        },
+        {
+            showLabel: true,
+            label: t('notes.go_home'),
+            disabled: home,
+            onPress: onGoHome
+        },
+        recent.length > 0 && {
+            icon: Close,
+            label: t('button.close_all'),
+            onPress: onClearAll
+        }
+    ].filter(Boolean)
+
     return (
         <View style={styles.container}>
             <CardGrid
@@ -139,36 +158,7 @@ export function RecentNotes({ onClose, home = false }) {
             />
 
             <View style={styles.actions}>
-                <Tooltip title={t('notes.create')}>
-                    <IconButton
-                        mode='contained'
-                        onPress={onCreateNote}
-                        icon={(props) => <Plus {...props} />}
-                        accessibilityLabel={t('notes.create')}
-                    />
-                </Tooltip>
-
-                {!home && (
-                    <Tooltip title={t('title.notes')}>
-                        <IconButton
-                            mode='contained'
-                            onPress={onGoHome}
-                            icon={(props) => <NoteStack {...props} />}
-                            accessibilityLabel={t('title.notes')}
-                        />
-                    </Tooltip>
-                )}
-
-                {recent.length > 0 && (
-                    <Tooltip title={t('button.close_all')}>
-                        <IconButton
-                            mode='contained'
-                            onPress={onClearAll}
-                            icon={(props) => <Close {...props} />}
-                            accessibilityLabel={t('button.close_all')}
-                        />
-                    </Tooltip>
-                )}
+                <IconToggleGroup buttons={actionButtons} />
             </View>
         </View>
     )
@@ -180,10 +170,10 @@ const styles = StyleSheet.create({
     },
     actions: {
         width: '100%',
-        paddingTop: 8,
+        paddingVertical: 24,
         paddingHorizontal: 16,
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'center'
     },
     removeButton: {
         alignSelf: 'flex-end'
