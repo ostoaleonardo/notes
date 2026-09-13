@@ -1,0 +1,36 @@
+diff --git a/node_modules/expo/src/dom/webview-wrapper.tsx b/node_modules/expo/src/dom/webview-wrapper.tsx
+index c9d79a4..9a41752 100644
+--- a/node_modules/expo/src/dom/webview-wrapper.tsx
++++ b/node_modules/expo/src/dom/webview-wrapper.tsx
+@@ -54,9 +54,14 @@ const RawWebView = React.forwardRef<object, Props>((props, ref) => {
+           if (domImperativeHandlePropsRef.current?.includes(propName)) {
+             return function (...args: any[]) {
+               const serializedArgs = args.map((arg) => JSON.stringify(arg)).join(',');
+-              webviewRef.current?.injectJavaScript(
+-                `window._domRefProxy.${propName}(${serializedArgs})`
+-              );
++              try {
++                const result: any = webviewRef.current?.injectJavaScript(
++                  `window._domRefProxy.${propName}(${serializedArgs})`
++                );
++                if (result && typeof result.catch === 'function') {
++                  result.catch(() => {});
++                }
++              } catch {}
+             };
+           }
+           if (typeof webviewRef.current?.[propName] === 'function') {
+@@ -81,7 +86,12 @@ const RawWebView = React.forwardRef<object, Props>((props, ref) => {
+ 
+   const emit = React.useCallback(
+     (detail: BridgeMessage<any>) => {
+-      webviewRef.current?.injectJavaScript(getInjectEventScript(detail));
++      try {
++        const result: any = webviewRef.current?.injectJavaScript(getInjectEventScript(detail));
++        if (result && typeof result.catch === 'function') {
++          result.catch(() => {});
++        }
++      } catch {}
+     },
+     [webviewRef]
+   );
