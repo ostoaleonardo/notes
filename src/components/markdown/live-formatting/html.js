@@ -23,11 +23,14 @@ export const decorateHtml = (node, { doc, selection, ranges }) => {
     return true
 }
 
-export const htmlTheme = ({ linkColor, codeBackgroundColor }) => ({
+export const htmlTheme = ({ linkColor, codeBackgroundColor, headingFontFamily }) => ({
     '.cm-live-block': { display: 'block', margin: '0.4em 0', overflowX: 'auto' },
     '.cm-live-block table': { borderCollapse: 'collapse', width: '100%' },
     '.cm-live-block th, .cm-live-block td': { border: `1px solid ${codeBackgroundColor}`, padding: '4px 8px' },
     '.cm-live-block img': { maxWidth: '100%', borderRadius: '8px' },
     '.cm-live-block a': { color: linkColor },
+    '.cm-live-block h1, .cm-live-block h2, .cm-live-block h3, .cm-live-block h4, .cm-live-block h5, .cm-live-block h6': {
+        fontWeight: 'bold', fontFamily: headingFontFamily
+    },
     '.cm-live-inline-html': { fontFamily: 'ui-monospace, monospace', opacity: 0.6 }
 })
