@@ -50,6 +50,15 @@ export const MOCK_ORPHANED_NOTE = {
     createdAt: 1
 }
 
+export const MOCK_UNSAVED_NOTE = {
+    id: 'note-unsaved',
+    title: 'Untitled',
+    note: 'quick note content',
+    tags: [],
+    repositoryId: 'repo-1',
+    createdAt: 1
+}
+
 export const MOCK_MINIMAL_NOTE = { id: 'note-1', title: 'Groceries' }
 
 export const MOCK_GROCERIES_METADATA = {
