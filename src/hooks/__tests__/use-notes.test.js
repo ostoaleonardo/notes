@@ -12,7 +12,8 @@ import {
     MOCK_MINIMAL_NOTE,
     MOCK_OLD_TITLE_METADATA,
     MOCK_OLD_TITLE_NOTE,
-    MOCK_ORPHANED_NOTE
+    MOCK_ORPHANED_NOTE,
+    MOCK_UNSAVED_NOTE
 } from '../__fixtures__/notes'
 import { NoteContext } from '@/context/note-context'
 
@@ -189,6 +190,19 @@ describe('update note', () => {
 
         expect(mockFileStorage.readMetadata).not.toHaveBeenCalled()
         expect(mockFileStorage.writeNoteFile).not.toHaveBeenCalled()
+    })
+
+    test('creates the note instead of silently discarding the edit when it is not in state yet', async () => {
+        const { result } = await renderNotesHook([])
+
+        await act(async () => {
+            await result.current.updateNote(MOCK_UNSAVED_NOTE)
+        })
+
+        expect(result.current.notes).toHaveLength(1)
+        expect(result.current.notes[0].id).toBe('note-unsaved')
+        expect(files.get('Untitled.md')).toBe('quick note content')
+        expect(metadata['note-unsaved'].filename).toBe('Untitled.md')
     })
 })
 

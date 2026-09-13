@@ -59,6 +59,10 @@ export function useNotes() {
     }
 
     const updateNote = async (note) => {
+        if (!notes.some((n) => n.id === note.id)) {
+            return saveNote(note, note.repositoryId)
+        }
+
         setNotes(notes.map((n) => {
             if (n.id === note.id) return note
             return n
