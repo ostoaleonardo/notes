@@ -1,4 +1,5 @@
 import { WidgetType } from '@codemirror/view'
+import DOMPurify from 'dompurify'
 
 export class HtmlWidget extends WidgetType {
     constructor(html, className) {
@@ -14,7 +15,7 @@ export class HtmlWidget extends WidgetType {
     toDOM(view) {
         const container = document.createElement('div')
         container.className = this.className
-        container.innerHTML = this.html
+        container.innerHTML = DOMPurify.sanitize(this.html)
 
         container.addEventListener('mousedown', (event) => {
             event.preventDefault()
