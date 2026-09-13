@@ -9,6 +9,7 @@
 		"go_home": "Inicio"
 	},
 	"tags": {
+		"add": "Añadir etiqueta",
 		"already_added": "Esta etiqueta ya existe",
 		"update": "Actualizar etiqueta"
 	},

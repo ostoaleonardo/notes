@@ -69,7 +69,7 @@ export default function Tags() {
                 <SquareButton
                     onPress={() => onSave(tag)}
                     disabled={tag.trim().length === 0}
-                    accessibilityLabel={t('action.add')}
+                    accessibilityLabel={t('tags.add')}
                 />
             </View>
 

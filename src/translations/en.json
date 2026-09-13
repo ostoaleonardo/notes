@@ -9,6 +9,7 @@
 		"go_home": "Home"
 	},
 	"tags": {
+		"add": "Add tag",
 		"already_added": "This tag already exists",
 		"update": "Update tag"
 	},
