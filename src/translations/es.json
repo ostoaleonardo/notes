@@ -1,7 +1,6 @@
 {
 	"language": "Español",
 	"notes": {
-		"delete": "Eliminar nota",
 		"untitled": "Sin título",
 		"create": "Crear una nota",
 		"intro_title": "No hay notas abiertas",
@@ -10,7 +9,6 @@
 		"go_home": "Inicio"
 	},
 	"tags": {
-		"add": "Añadir etiqueta",
 		"already_added": "Esta etiqueta ya existe",
 		"update": "Actualizar etiqueta"
 	},
@@ -41,9 +39,7 @@
 		"tags": "Etiquetas",
 		"repositories": "Repositorios",
 		"templates": "Plantillas",
-		"sort": "Ordenar por",
 		"settings": "Ajustes",
-		"theme": "Tema de color",
 		"about": "Acerca de la app",
 		"import": "Importar nota",
 		"version_history": "Historial de versiones"
@@ -51,20 +47,6 @@
 	"date": {
 		"created": "Creado:",
 		"updated": "Actualizado:"
-	},
-	"sort": {
-		"title": {
-			"asc": "Título A-Z",
-			"desc": "Título Z-A"
-		},
-		"created": {
-			"asc": "Más antiguo",
-			"desc": "Más reciente"
-		},
-		"updated": {
-			"asc": "Menos actualizado",
-			"desc": "Ultimo actualizado"
-		}
 	},
 	"settings": {
 		"general": "General",
@@ -107,13 +89,11 @@
 		"blue": "Azul"
 	},
 	"button": {
-		"save": "Guardar",
 		"edit": "Editar",
 		"code": "Código",
 		"back": "Volver",
 		"delete": "Borrar",
 		"update": "Actualizar",
-		"enter": "Entrar",
 		"pin": "Fijar",
 		"unpin": "Desfijar",
 		"export": "Exportar",
@@ -126,7 +106,6 @@
 		"create": "Crear",
 		"close": "Cerrar",
 		"preview": "Lectura",
-		"clear_filter": "Quitar filtro",
 		"close_all": "Cerrar",
 		"undo": "Deshacer",
 		"redo": "Rehacer",
@@ -172,12 +151,7 @@
 		"insert-time": "Insertar hora",
 		"insert-title": "Insertar título"
 	},
-	"view": {
-		"grid": "Vista de cuadrícula",
-		"list": "Vista de lista"
-	},
 	"message": {
-		"loading": "Cargando...",
 		"notes": {
 			"empty": "Todavía no tienes notas",
 			"exported": "Archivo exportado exitosamente",
@@ -235,8 +209,6 @@
 		"goals_deadline": "Plazo",
 		"new": "Nueva plantilla",
 		"import": "Importar plantilla",
-		"insert": "Insertar plantilla",
-		"save_as_template": "Guardar como plantilla",
 		"saved": "Plantilla guardada",
 		"view_placeholders": "Ver variables disponibles",
 		"placeholders_title": "Variables disponibles",

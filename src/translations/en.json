@@ -1,7 +1,6 @@
 {
 	"language": "English",
 	"notes": {
-		"delete": "Delete note",
 		"untitled": "Untitled",
 		"create": "Create a note",
 		"intro_title": "No notes open",
@@ -10,7 +9,6 @@
 		"go_home": "Home"
 	},
 	"tags": {
-		"add": "Add tag",
 		"already_added": "This tag already exists",
 		"update": "Update tag"
 	},
@@ -41,9 +39,7 @@
 		"tags": "Tags",
 		"repositories": "Repositories",
 		"templates": "Templates",
-		"sort": "Sorting by",
 		"settings": "Settings",
-		"theme": "Color theme",
 		"about": "About the app",
 		"import": "Import note",
 		"version_history": "Version history"
@@ -51,20 +47,6 @@
 	"date": {
 		"created": "Created:",
 		"updated": "Updated:"
-	},
-	"sort": {
-		"title": {
-			"asc": "Title A-Z",
-			"desc": "Title Z-A"
-		},
-		"created": {
-			"asc": "Oldest",
-			"desc": "Newest"
-		},
-		"updated": {
-			"asc": "Least updated",
-			"desc": "Most updated"
-		}
 	},
 	"settings": {
 		"general": "General",
@@ -107,13 +89,11 @@
 		"blue": "Blue"
 	},
 	"button": {
-		"save": "Save",
 		"edit": "Edit",
 		"code": "Code",
 		"back": "Back",
 		"delete": "Delete",
 		"update": "Update",
-		"enter": "Enter",
 		"pin": "Pin",
 		"unpin": "Unpin",
 		"export": "Export",
@@ -126,7 +106,6 @@
 		"create": "Create",
 		"close": "Close",
 		"preview": "Read",
-		"clear_filter": "Clear filter",
 		"close_all": "Close",
 		"undo": "Undo",
 		"redo": "Redo",
@@ -172,12 +151,7 @@
 		"insert-time": "Insert time",
 		"insert-title": "Insert title"
 	},
-	"view": {
-		"grid": "Grid view",
-		"list": "List view"
-	},
 	"message": {
-		"loading": "Loading...",
 		"notes": {
 			"empty": "You don't have any notes yet",
 			"exported": "File exported successfully",
@@ -235,8 +209,6 @@
 		"goals_deadline": "Deadline",
 		"new": "New template",
 		"import": "Import template",
-		"insert": "Insert template",
-		"save_as_template": "Save as template",
 		"saved": "Template saved",
 		"view_placeholders": "View available variables",
 		"placeholders_title": "Available variables",

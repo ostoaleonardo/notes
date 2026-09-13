@@ -1,8 +1,5 @@
 {
 	"language": "Svenska",
-	"notes": {
-		"delete": "Radera anteckning"
-	},
 	"tags": {
 		"update": "Uppdatera tagg"
 	},
@@ -10,7 +7,6 @@
 		"notes": "Anteckningar",
 		"tags": "Taggar",
 		"settings": "Inställningar",
-		"theme": "Färgtema",
 		"about": "Om appen",
 		"version_history": "Versionshistorik"
 	},
@@ -41,19 +37,16 @@
 		"choose": "Välj färgtema för appen."
 	},
 	"button": {
-		"save": "Spara",
 		"edit": "Redigera",
 		"back": "Bakåt",
 		"delete": "Radera",
 		"update": "Uppdatera",
-		"enter": "Gå in",
 		"close_all": "Stäng",
 		"undo": "Ångra",
 		"redo": "Gör om",
 		"restore": "Återställ"
 	},
 	"message": {
-		"loading": "Laddar...",
 		"notes": {
 			"empty": "Du har inte skapat någon anteckning än",
 			"no_recent": "Inga senaste eller fästa anteckningar"

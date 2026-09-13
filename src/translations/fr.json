@@ -1,8 +1,5 @@
 {
 	"language": "Français",
-	"notes": {
-		"delete": "Supprimer la note"
-	},
 	"tags": {
 		"update": "Modifier l'étiquette"
 	},
@@ -10,7 +7,6 @@
 		"notes": "Notes",
 		"tags": "Étiquettes",
 		"settings": "Paramètres",
-		"theme": "Thème",
 		"about": "À propos de l'app",
 		"version_history": "Historique des versions"
 	},
@@ -41,19 +37,16 @@
 		"choose": "Choisissez un thème pour votre application."
 	},
 	"button": {
-		"save": "Enregistrer",
 		"edit": "Éditer",
 		"back": "Retour",
 		"delete": "Supprimer",
 		"update": "Actualiser",
-		"enter": "Entrer",
 		"close_all": "Fermer",
 		"undo": "Annuler",
 		"redo": "Rétablir",
 		"restore": "Restaurer"
 	},
 	"message": {
-		"loading": "Chargement...",
 		"notes": {
 			"empty": "Vous n'avez pas encore de notes",
 			"no_recent": "Aucune note récente ou épinglée"

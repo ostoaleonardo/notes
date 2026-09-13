@@ -1,8 +1,5 @@
 {
 	"language": "Nederlands",
-	"notes": {
-		"delete": "Notitie verwijderen"
-	},
 	"tags": {
 		"update": "Label bewerken"
 	},
@@ -10,7 +7,6 @@
 		"notes": "Notities",
 		"tags": "Labels",
 		"settings": "Instellingen",
-		"theme": "Thema",
 		"about": "Over de app",
 		"version_history": "Versiegeschiedenis"
 	},
@@ -23,19 +19,6 @@
 		"bulleted": "Puntenlijst",
 		"numbered": "Geordende lijst",
 		"checklist": "Controlelijst"
-	},
-	"sort": {
-		"title": {
-			"asc": "Titel A-Z",
-			"desc": "Titel Z-A"
-		},
-		"created": {
-			"asc": "Oudste",
-			"desc": "Nieuwste"
-		},
-		"updated": {
-			"asc": "Laatste gewijzigd"
-		}
 	},
 	"settings": {
 		"language": "Taal",
@@ -54,19 +37,16 @@
 		"chooseTheme": "Kies een thema voor de app."
 	},
 	"button": {
-		"save": "Opslaan",
 		"edit": "Bewerken",
 		"back": "Terug",
 		"delete": "Verwijderen",
 		"update": "Bijwerken",
-		"enter": "Invoeren",
 		"close_all": "Sluiten",
 		"undo": "Ongedaan maken",
 		"redo": "Opnieuw",
 		"restore": "Herstellen"
 	},
 	"message": {
-		"loading": "Laden...",
 		"notes": {
 			"empty": "Je hebt nog geen notities",
 			"no_recent": "Geen recente of vastgezette notities"

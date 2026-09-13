@@ -1,8 +1,5 @@
 {
 	"language": "Italiano",
-	"notes": {
-		"delete": "Elimina nota"
-	},
 	"tags": {
 		"update": "Aggiorna tag"
 	},
@@ -10,7 +7,6 @@
 		"notes": "Note",
 		"tags": "Tag",
 		"settings": "Impostazioni",
-		"theme": "Tema colori",
 		"about": "Informazioni sull'app",
 		"version_history": "Cronologia versioni"
 	},
@@ -41,19 +37,16 @@
 		"choose": "Scegli un tema colore per l'app."
 	},
 	"button": {
-		"save": "Salva",
 		"edit": "Aggiorna",
 		"back": "Indietro",
 		"delete": "Elimina",
 		"update": "Aggiorna",
-		"enter": "Invio",
 		"close_all": "Chiudi",
 		"undo": "Annulla",
 		"redo": "Ripeti",
 		"restore": "Ripristina"
 	},
 	"message": {
-		"loading": "Caricamento...",
 		"notes": {
 			"empty": "Non hai ancora nessuna nota",
 			"no_recent": "Nessuna nota recente o fissata"
