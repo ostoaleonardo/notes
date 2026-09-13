@@ -81,12 +81,12 @@ export function RecentNotes({ onClose, home = false }) {
         onClose()
 
         const path = getEditorPath(card.id)
-        if (home) {
-            router.push(path)
-        } else {
+        if (currentId) {
             router.replace(path)
+        } else {
+            router.push(path)
         }
-    }, [onClose, home])
+    }, [onClose, currentId])
 
     const onRemove = useCallback((card) => {
         if (card.pinned) {
@@ -96,7 +96,12 @@ export function RecentNotes({ onClose, home = false }) {
         } else {
             removeRecent(card.id)
         }
-    }, [pinned, updatePinned, removeRecent])
+
+        if (card.active) {
+            onClose()
+            router.back()
+        }
+    }, [pinned, updatePinned, removeRecent, onClose])
 
     const renderCardHeader = useCallback((card) => (
         <IconButton
