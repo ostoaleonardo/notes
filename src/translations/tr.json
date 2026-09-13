@@ -1,8 +1,5 @@
 {
 	"language": "Türkçe",
-	"notes": {
-		"delete": "Notu sil"
-	},
 	"tags": {
 		"update": "Etiketi güncelle"
 	},
@@ -10,7 +7,6 @@
 		"notes": "Notlar",
 		"tags": "Etiketler",
 		"settings": "Ayarlar",
-		"theme": "Renk teması",
 		"about": "Uygulama hakkında",
 		"version_history": "Sürüm geçmişi"
 	},
@@ -41,19 +37,16 @@
 		"choose": "Uygulama için bir renk teması seçin."
 	},
 	"button": {
-		"save": "Kaydet",
 		"edit": "Düzenle",
 		"back": "Geri",
 		"delete": "Sil",
 		"update": "Güncelle",
-		"enter": "Enter",
 		"close_all": "Kapat",
 		"undo": "Geri al",
 		"redo": "Yinele",
 		"restore": "Geri yükle"
 	},
 	"message": {
-		"loading": "Yükleniyor...",
 		"notes": {
 			"empty": "Henüz hiç notunuz yok",
 			"no_recent": "Son kullanılan veya sabitlenmiş not yok"

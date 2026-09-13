@@ -1,8 +1,5 @@
 {
 	"language": "Português",
-	"notes": {
-		"delete": "Excluir nota"
-	},
 	"tags": {
 		"update": "Atualizar etiqueta"
 	},
@@ -10,7 +7,6 @@
 		"notes": "Notas",
 		"tags": "Etiquetas",
 		"settings": "Configurações",
-		"theme": "Cor do tema",
 		"about": "Sobre o aplicativo",
 		"version_history": "Histórico de versões"
 	},
@@ -41,19 +37,16 @@
 		"choose": "Escolha uma cor para o tema do aplicativo."
 	},
 	"button": {
-		"save": "Salvar",
 		"edit": "Editar",
 		"back": "Voltar",
 		"delete": "Excluir",
 		"update": "Atualizar",
-		"enter": "Entrar",
 		"close_all": "Fechar",
 		"undo": "Desfazer",
 		"redo": "Refazer",
 		"restore": "Restaurar"
 	},
 	"message": {
-		"loading": "Carregando...",
 		"notes": {
 			"empty": "Nenhuma nota adicionada",
 			"no_recent": "Nenhuma nota recente ou fixada"

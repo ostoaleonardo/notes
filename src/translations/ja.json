@@ -1,8 +1,5 @@
 {
 	"language": "日本語",
-	"notes": {
-		"delete": "メモを削除"
-	},
 	"tags": {
 		"update": "タグを更新"
 	},
@@ -10,7 +7,6 @@
 		"notes": "メモ",
 		"tags": "タグ",
 		"settings": "設定",
-		"theme": "カラーテーマ",
 		"about": "このアプリについて",
 		"version_history": "バージョン履歴"
 	},
@@ -23,20 +19,6 @@
 		"bulleted": "箇条書きリスト",
 		"numbered": "順序付きリスト",
 		"checklist": "チェックリスト"
-	},
-	"sort": {
-		"title": {
-			"asc": "タイトル A-Z",
-			"desc": "タイトル Z-A"
-		},
-		"created": {
-			"asc": "古い順",
-			"desc": "新しい順"
-		},
-		"updated": {
-			"asc": "更新の少ない順",
-			"desc": "更新の多い順"
-		}
 	},
 	"settings": {
 		"language": "言語",
@@ -55,19 +37,16 @@
 		"choose": "アプリのカラーテーマを選択してください。"
 	},
 	"button": {
-		"save": "保存",
 		"edit": "編集",
 		"back": "戻る",
 		"delete": "削除",
 		"update": "更新",
-		"enter": "入力",
 		"close_all": "閉じる",
 		"undo": "元に戻す",
 		"redo": "やり直す",
 		"restore": "復元"
 	},
 	"message": {
-		"loading": "読み込み中...",
 		"notes": {
 			"empty": "まだメモはありません",
 			"no_recent": "最近使ったノートもピン留めもありません"

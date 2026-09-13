@@ -1,8 +1,5 @@
 {
 	"language": "Deutsch",
-	"notes": {
-		"delete": "Notiz beseitigen"
-	},
 	"tags": {
 		"update": "Tag aktualisieren"
 	},
@@ -10,7 +7,6 @@
 		"notes": "Notizen",
 		"tags": "Tags",
 		"settings": "Einstellungen",
-		"theme": "Farbthema",
 		"about": "Über die App",
 		"version_history": "Versionsverlauf"
 	},
@@ -23,20 +19,6 @@
 		"bulleted": "Punkteliste",
 		"numbered": "Geordnete Liste",
 		"checklist": "Checkliste"
-	},
-	"sort": {
-		"title": {
-			"asc": "Titel A-Z",
-			"desc": "Titel Z-A"
-		},
-		"created": {
-			"asc": "Älteste",
-			"desc": "Neueste"
-		},
-		"updated": {
-			"asc": "Am häufigsten aktualisiert",
-			"desc": "Am seltensten aktualisiert"
-		}
 	},
 	"settings": {
 		"language": "Sprache",
@@ -55,19 +37,16 @@
 		"choose": "Wähle ein Farbthema für die App."
 	},
 	"button": {
-		"save": "Speichern",
 		"edit": "Bearbeiten",
 		"back": "Zurück",
 		"delete": "Beseitigen",
 		"update": "Aktualisieren",
-		"enter": "Eingeben",
 		"close_all": "Schließen",
 		"undo": "Rückgängig",
 		"redo": "Wiederholen",
 		"restore": "Wiederherstellen"
 	},
 	"message": {
-		"loading": "Wird geladen...",
 		"notes": {
 			"empty": "Du hast noch keine Notizen",
 			"no_recent": "Keine kürzlichen oder angehefteten Notizen"

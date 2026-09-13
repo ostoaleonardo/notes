@@ -1,8 +1,5 @@
 {
 	"language": "한국어",
-	"notes": {
-		"delete": "노트 삭제"
-	},
 	"tags": {
 		"update": "태그 업데이트"
 	},
@@ -10,7 +7,6 @@
 		"notes": "노트",
 		"tags": "태그",
 		"settings": "설정",
-		"theme": "테마 설정",
 		"about": "이 앱에 대하여",
 		"version_history": "버전 기록"
 	},
@@ -41,19 +37,16 @@
 		"choose": "테마 색상을 선택하세요."
 	},
 	"button": {
-		"save": "저장",
 		"edit": "수정",
 		"back": "뒤로 가기",
 		"delete": "삭제",
 		"update": "업데이트",
-		"enter": "입력",
 		"close_all": "닫기",
 		"undo": "실행 취소",
 		"redo": "다시 실행",
 		"restore": "복원"
 	},
 	"message": {
-		"loading": "로딩 중...",
 		"notes": {
 			"empty": "노트가 아직 없습니다.",
 			"no_recent": "최근 또는 고정된 노트가 없습니다"

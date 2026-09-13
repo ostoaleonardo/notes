@@ -1,8 +1,5 @@
 {
 	"language": "Čeština",
-	"notes": {
-		"delete": "Smazat poznámku"
-	},
 	"tags": {
 		"update": "Upravit štítek"
 	},
@@ -10,7 +7,6 @@
 		"notes": "Poznámky",
 		"tags": "Štítky",
 		"settings": "Nastavení",
-		"theme": "Barevné schéma",
 		"about": "O aplikaci",
 		"version_history": "Historie verzí"
 	},
@@ -41,19 +37,16 @@
 		"choose": "Vyberte barvu aplikace."
 	},
 	"button": {
-		"save": "Uložit",
 		"edit": "Upravit",
 		"back": "Zpět",
 		"delete": "Smazat",
 		"update": "Aktualizovat",
-		"enter": "Vložit",
 		"close_all": "Zavřít",
 		"undo": "Zpět",
 		"redo": "Znovu",
 		"restore": "Obnovit"
 	},
 	"message": {
-		"loading": "Nahrávání...",
 		"notes": {
 			"empty": "Nejsou tu žádné poznámky",
 			"no_recent": "Žádné nedávné ani připnuté poznámky"
