@@ -52,13 +52,23 @@ const MarkdownDomEditor = ({
     const containerRef = useRef(null)
     const previewRef = useRef(null)
     const viewRef = useRef(null)
+
     const onChangeRef = useRef(onChange)
     onChangeRef.current = onChange
+
     const onHistoryChangeRef = useRef(onHistoryChange)
     onHistoryChangeRef.current = onHistoryChange
+
+    const onFocusRef = useRef(onFocus)
+    onFocusRef.current = onFocus
+
+    const onBlurRef = useRef(onBlur)
+    onBlurRef.current = onBlur
+
     const historyRef = useRef({ canUndo: false, canRedo: false })
     const lastEmittedValueRef = useRef(value)
     const hasFocusRef = useRef(false)
+
     const [liveFormattingCompartment] = useState(() => new Compartment())
     const [mediaMapCompartment] = useState(() => new Compartment())
     const mediaMapValue = useMemo(() => new Map(mediaMap || []), [mediaMap])
@@ -114,11 +124,11 @@ const MarkdownDomEditor = ({
 
         const handleFocus = () => {
             hasFocusRef.current = true
-            onFocus?.()
+            onFocusRef.current?.()
         }
         const handleBlur = () => {
             hasFocusRef.current = false
-            onBlur?.()
+            onBlurRef.current?.()
         }
         view.dom.addEventListener('focus', handleFocus, true)
         view.dom.addEventListener('blur', handleBlur, true)
