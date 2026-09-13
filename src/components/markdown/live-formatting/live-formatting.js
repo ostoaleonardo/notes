@@ -79,7 +79,7 @@ export const buildLiveFormattingTheme = ({ linkColor, codeBackgroundColor, thema
     ...blockquoteTheme({ linkColor }),
     ...codeBlocksTheme({ codeBackgroundColor }),
     ...horizontalRuleTheme({ thematicBreakColor }),
-    ...htmlTheme({ linkColor, codeBackgroundColor }),
+    ...htmlTheme({ linkColor, codeBackgroundColor, headingFontFamily }),
     ...mathTheme(),
     ...footnotesTheme({ linkColor })
 })
