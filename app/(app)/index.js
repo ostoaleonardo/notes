@@ -1,4 +1,5 @@
-import { Redirect } from 'expo-router'
+import { useEffect } from 'react'
+import { Redirect, router } from 'expo-router'
 
 import { useCurrentNote } from '@/hooks/use-current-note'
 import { useNotes } from '@/hooks/use-notes'
@@ -13,7 +14,16 @@ export default function App() {
     const { activeRepository } = useRepositories()
 
     const isReady = !!activeRepository && !loading
-    const destination = currentId ? getEditorPath(currentId) : ROUTES.HOME
 
-    return <Redirect href={isReady ? destination : ROUTES.REPOSITORY_GATE} />
+    useEffect(() => {
+        if (!isReady || !currentId) return
+
+        router.replace(ROUTES.HOME)
+        router.push(getEditorPath(currentId))
+    }, [isReady])
+
+    if (!isReady) return <Redirect href={ROUTES.REPOSITORY_GATE} />
+    if (!currentId) return <Redirect href={ROUTES.HOME} />
+
+    return null
 }

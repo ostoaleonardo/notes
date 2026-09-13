@@ -91,9 +91,16 @@ export function DrawerItems({ navigation }) {
     }, [activeRepositoryId, setActiveRepository])
 
     const onOpenNote = useCallback((id) => {
-        router.push(getEditorPath(id))
         closeDrawer()
-    }, [closeDrawer])
+        if (id === currentId) return
+
+        const path = getEditorPath(id)
+        if (currentId) {
+            router.replace(path)
+        } else {
+            router.push(path)
+        }
+    }, [closeDrawer, currentId])
 
     const onCreateNote = useCallback((repositoryId) => {
         router.push({
@@ -104,9 +111,14 @@ export function DrawerItems({ navigation }) {
     }, [closeDrawer])
 
     const onOpenTemplate = useCallback((filename) => {
-        router.push(getEditorPath(TEMPLATE_TAB_PREFIX + filename))
+        const path = getEditorPath(TEMPLATE_TAB_PREFIX + filename)
+        if (currentId) {
+            router.replace(path)
+        } else {
+            router.push(path)
+        }
         closeDrawer()
-    }, [closeDrawer])
+    }, [closeDrawer, currentId])
 
     const onToggleCollapseAll = () => {
         if (collapsedFolders.size > 0) {
