@@ -21,7 +21,8 @@ export function IconToggle({
     position = 'middle',
     showLabel = false,
     background,
-    color
+    color,
+    disabled = false
 }) {
     const { colors } = useTheme()
     const { left, right } = GROUP_CORNERS[position]
@@ -44,10 +45,11 @@ export function IconToggle({
                 style={[
                     styles.container,
                     animatedStyle,
-                    { backgroundColor }
+                    { backgroundColor, opacity: disabled ? 0.4 : 1 }
                 ]}
             >
                 <TouchableRipple
+                    disabled={disabled}
                     onPress={onPress}
                     onPressIn={() => setPressed(true)}
                     onPressOut={() => setPressed(false)}

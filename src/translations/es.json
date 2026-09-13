@@ -6,7 +6,8 @@
 		"create": "Crear una nota",
 		"intro_title": "No hay notas abiertas",
 		"intro_subtitle": "Elige una nota desde el menú lateral, o crea una nueva en la raíz de tu repositorio.",
-		"copy_suffix": "(copia)"
+		"copy_suffix": "(copia)",
+		"go_home": "Inicio"
 	},
 	"tags": {
 		"add": "Añadir etiqueta",
