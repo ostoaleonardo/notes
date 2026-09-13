@@ -29,8 +29,7 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
     const { colors } = useTheme()
 
     const controls = MARKDOWN_CONTROLS.filter((control) => !control.scope || control.scope === scope)
-    const showFormatting = mode !== 'read' && isFocused
-    const showIdle = !showFormatting
+    const formatting = mode !== 'read' && isFocused
 
     return (
         <View
@@ -41,12 +40,13 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
             }}
         >
             <Scroll
+                key={formatting ? 'formatting' : 'idle'}
                 horizontal
                 overScrollMode='never'
                 keyboardShouldPersistTaps='always'
                 contentContainerStyle={styles.scrollContent}
             >
-                {showFormatting && (
+                {formatting && (
                     <AnimatedView
                         entering={FadeInRight}
                         exiting={FadeOutRight}
@@ -71,7 +71,7 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
                     </AnimatedView>
                 )}
 
-                {showIdle && (
+                {!formatting && (
                     <AnimatedView
                         entering={FadeInRight}
                         exiting={FadeOutRight}
