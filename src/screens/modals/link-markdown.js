@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
+import { useTheme } from 'react-native-paper'
 
 import { LargeInput } from '@/components/input/large-input'
 import { Pressable } from '@/components/button/pressable'
@@ -8,6 +9,7 @@ import { Section } from '@/components/section'
 
 export function LinkMarkdown({ onClose, onInsert }) {
     const { t } = useTranslation()
+    const { colors } = useTheme()
 
     const [title, setTitle] = useState('')
     const [url, setUrl] = useState('')
@@ -48,15 +50,11 @@ export function LinkMarkdown({ onClose, onInsert }) {
             <View style={styles.buttons}>
                 <Pressable
                     mode='contained'
+                    buttonColor={colors.surfaceVariant}
+                    textColor={colors.onBackground}
                     onPress={onAdd}
                 >
                     {t('button.insert')}
-                </Pressable>
-                <Pressable
-                    mode='outlined'
-                    onPress={onClose}
-                >
-                    {t('button.cancel')}
                 </Pressable>
             </View>
         </View>
@@ -74,7 +72,7 @@ const styles = StyleSheet.create({
     },
     buttons: {
         width: '100%',
-        gap: 8,
-        paddingHorizontal: 16
+        flexDirection: 'row',
+        justifyContent: 'center'
     }
 })

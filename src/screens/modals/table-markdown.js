@@ -77,8 +77,9 @@ export function TableMarkdown({ onClose, onInsert }) {
             </View>
 
             <Pressable
-                compact
-                mode='outlined'
+                mode='contained'
+                buttonColor={colors.surfaceVariant}
+                textColor={colors.onBackground}
                 onPress={onClose}
             >
                 {t('button.cancel')}
