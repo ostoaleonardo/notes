@@ -3,7 +3,7 @@ import { useTheme } from 'react-native-paper'
 
 import { Typography } from '@/components/typography'
 
-import { RADIUS } from '@/constants/themes'
+import { getGroupedRadius } from '@/utils/grouped-card-style'
 
 export function Option({ title, description, rightContent, onPress, visible = true, isFirst, isLast }) {
     const { colors } = useTheme()
@@ -16,10 +16,7 @@ export function Option({ title, description, rightContent, onPress, visible = tr
             style={{
                 ...styles.container,
                 backgroundColor: colors.surface,
-                borderTopLeftRadius: isFirst ? RADIUS.outer : 0,
-                borderTopRightRadius: isFirst ? RADIUS.outer : 0,
-                borderBottomLeftRadius: isLast ? RADIUS.outer : 0,
-                borderBottomRightRadius: isLast ? RADIUS.outer : 0
+                ...getGroupedRadius(isFirst, isLast)
             }}
         >
             <View style={styles.left}>

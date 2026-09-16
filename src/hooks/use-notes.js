@@ -1,12 +1,9 @@
 import { useContext } from 'react'
 
-import { useStorage } from './use-storage'
 import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
 import { NoteContext } from '../context/note-context'
 import { getUniqueFilename } from '@/utils/note-filename'
-
-import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export function useNotes() {
     const {
@@ -19,7 +16,6 @@ export function useNotes() {
         writeMetadata
     } = useFileStorage()
 
-    const { getItem } = useStorage()
     const { activeRepository, repositories } = useRepositories()
 
     const {
@@ -109,15 +105,9 @@ export function useNotes() {
         return notes.find((note) => note.id === id) || {}
     }
 
-    const deleteAll = async () => {
+    const deleteAll = () => {
         setNotes([])
-
-        const repositoriesJson = await getItem(STORAGE_KEYS.REPOSITORIES)
-        const activeRepositoryId = await getItem(STORAGE_KEYS.ACTIVE_REPOSITORY)
-        const repositories = repositoriesJson ? JSON.parse(repositoriesJson) : []
-        const repository = repositories.find((f) => f.id === activeRepositoryId)
-
-        if (repository) clearRepository(repository.uri)
+        if (activeRepository) clearRepository(activeRepository.uri)
     }
 
     return {
