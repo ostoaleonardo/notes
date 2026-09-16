@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { IconButton, Tooltip, useTheme } from 'react-native-paper'
@@ -32,6 +32,11 @@ export function RepositoryItem({
     const { listMarkdownFiles } = useFileStorage()
 
     const [expanded, setExpanded] = useState(false)
+    const noteCountCache = useRef(new Map())
+
+    useEffect(() => {
+        if (!expanded) noteCountCache.current.clear()
+    }, [expanded])
 
     const descendants = useMemo(
         () => getDescendants(repository.id),
@@ -42,11 +47,18 @@ export function RepositoryItem({
     const descendantsWithCounts = useMemo(
         () => (
             expanded
-                ? descendants.map((descendant) => ({
-                    ...descendant,
-                    noteCount: listMarkdownFiles(descendant.uri).length,
-                    folderCount: descendants.filter((d) => d.parentId === descendant.id).length
-                }))
+                ? descendants.map((descendant) => {
+                    const cache = noteCountCache.current
+                    if (!cache.has(descendant.id)) {
+                        cache.set(descendant.id, listMarkdownFiles(descendant.uri).length)
+                    }
+
+                    return {
+                        ...descendant,
+                        noteCount: cache.get(descendant.id),
+                        folderCount: descendants.filter((d) => d.parentId === descendant.id).length
+                    }
+                })
                 : []
         ),
         [expanded, descendants, listMarkdownFiles]
