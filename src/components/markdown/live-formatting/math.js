@@ -5,14 +5,25 @@ import { Decoration } from '@codemirror/view'
 import { isRangeSelected, overlapsAny } from './utils'
 import { HtmlWidget } from './widgets'
 
-import { BLOCK_MATH_PATTERN, INLINE_MATH_PATTERN } from '@/constants/markdown-live-formatting'
+import { BLOCK_MATH_PATTERN, INLINE_MATH_PATTERN, KATEX_RENDER_CACHE_LIMIT } from '@/constants/markdown-live-formatting'
+
+const katexCache = new Map()
 
 const renderKatex = (tex, displayMode) => {
+    const key = `${displayMode}:${tex}`
+    if (katexCache.has(key)) return katexCache.get(key)
+
+    let html
     try {
-        return DOMPurify.sanitize(katex.renderToString(tex, { throwOnError: false, displayMode }))
+        html = DOMPurify.sanitize(katex.renderToString(tex, { throwOnError: false, displayMode }))
     } catch {
-        return null
+        html = null
     }
+
+    if (katexCache.size >= KATEX_RENDER_CACHE_LIMIT) katexCache.delete(katexCache.keys().next().value)
+    katexCache.set(key, html)
+
+    return html
 }
 
 export const decorateMath = ({ text, selection, ranges, codeRanges }) => {

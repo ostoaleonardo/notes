@@ -39,6 +39,19 @@ export function RepositoryItem({
     )
     const folderCount = descendants.filter((descendant) => descendant.depth === 0).length
 
+    const descendantsWithCounts = useMemo(
+        () => (
+            expanded
+                ? descendants.map((descendant) => ({
+                    ...descendant,
+                    noteCount: listMarkdownFiles(descendant.uri).length,
+                    folderCount: descendants.filter((d) => d.parentId === descendant.id).length
+                }))
+                : []
+        ),
+        [expanded, descendants, listMarkdownFiles]
+    )
+
     return (
         <AnimatedView
             style={{
@@ -92,7 +105,7 @@ export function RepositoryItem({
 
             {expanded && (
                 <View style={styles.structure}>
-                    {descendants.length === 0 ? (
+                    {descendantsWithCounts.length === 0 ? (
                         <Typography
                             variant='caption'
                             opacity={0.4}
@@ -100,27 +113,22 @@ export function RepositoryItem({
                             {t('repositories.no_folders')}
                         </Typography>
                     ) : (
-                        descendants.map((descendant) => {
-                            const descendantFolderCount = descendants
-                                .filter((d) => d.parentId === descendant.id).length
-
-                            return (
-                                <View
-                                    key={descendant.id}
-                                    style={{ paddingLeft: descendant.depth * 16 }}
+                        descendantsWithCounts.map((descendant) => (
+                            <View
+                                key={descendant.id}
+                                style={{ paddingLeft: descendant.depth * 16 }}
+                            >
+                                <Typography variant='caption'>
+                                    {descendant.alias}
+                                </Typography>
+                                <Typography
+                                    variant='caption'
+                                    opacity={0.4}
                                 >
-                                    <Typography variant='caption'>
-                                        {descendant.alias}
-                                    </Typography>
-                                    <Typography
-                                        variant='caption'
-                                        opacity={0.4}
-                                    >
-                                        {t('count.notes', { count: listMarkdownFiles(descendant.uri).length })}, {t('count.folders', { count: descendantFolderCount })}
-                                    </Typography>
-                                </View>
-                            )
-                        })
+                                    {t('count.notes', { count: descendant.noteCount })}, {t('count.folders', { count: descendant.folderCount })}
+                                </Typography>
+                            </View>
+                        ))
                     )}
                 </View>
             )}

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { IconButton, TouchableRipple, useTheme } from 'react-native-paper'
@@ -55,7 +55,54 @@ export function VersionHistoryContent({
     ), [versions, pro])
 
     const ordered = useMemo(() => [...visibleVersions].reverse(), [visibleVersions])
-    const diff = selected ? diffLines(selected.content, currentContent) : []
+    const diff = useMemo(() => (
+        selected ? diffLines(selected.content, currentContent) : []
+    ), [selected, currentContent])
+
+    const onCloseHistory = useCallback(() => {
+        setSelected(null)
+        onClose()
+    }, [onClose])
+
+    const renderDiffItem = useCallback(({ item: entry }) => {
+        const isChanged = entry.type !== 'unchanged'
+        const prefix = entry.type === 'added' ? '+ ' : entry.type === 'removed' ? '- ' : '  '
+        const background = isChanged
+            ? getDiffColor(entry.type) + TRANSPARENT[20]
+            : 'transparent'
+
+        return (
+            <View style={{ ...styles.diffLine, backgroundColor: background }}>
+                <Typography
+                    color={isChanged ? getDiffColor(entry.type) : colors.onBackground}
+                    styleProps={styles.diffText}
+                >
+                    {prefix + entry.line}
+                </Typography>
+            </View>
+        )
+    }, [colors.onBackground])
+
+    const renderVersionItem = useCallback(({ item: version, index }) => (
+        <AnimatedView>
+            <TouchableRipple onPress={() => setSelected(version)}>
+                <View
+                    style={{
+                        ...styles.item,
+                        backgroundColor: colors.surface,
+                        ...getGroupedRadius(index === 0, index === ordered.length - 1)
+                    }}
+                >
+                    <Typography bold numberOfLines={1}>
+                        {version.title}
+                    </Typography>
+                    <Typography opacity={0.5} variant='caption'>
+                        {getFormattedDate(version.createdAt, currentLanguage)}
+                    </Typography>
+                </View>
+            </TouchableRipple>
+        </AnimatedView>
+    ), [colors.surface, ordered.length, currentLanguage])
 
     return (
         <View style={styles.container}>
@@ -115,7 +162,7 @@ export function VersionHistoryContent({
                     )}
 
                     <IconButton
-                        onPress={onClose}
+                        onPress={onCloseHistory}
                         icon={(props) => <Close {...props} />}
                         accessibilityLabel={t('button.close')}
                     />
@@ -128,24 +175,7 @@ export function VersionHistoryContent({
                     keyExtractor={(_, index) => String(index)}
                     showsVerticalScrollIndicator={false}
                     style={styles.diff}
-                    renderItem={({ item: entry }) => {
-                        const isChanged = entry.type !== 'unchanged'
-                        const prefix = entry.type === 'added' ? '+ ' : entry.type === 'removed' ? '- ' : '  '
-                        const background = isChanged
-                            ? getDiffColor(entry.type) + TRANSPARENT[20]
-                            : 'transparent'
-
-                        return (
-                            <View style={{ ...styles.diffLine, backgroundColor: background }}>
-                                <Typography
-                                    color={isChanged ? getDiffColor(entry.type) : colors.onBackground}
-                                    styleProps={styles.diffText}
-                                >
-                                    {prefix + entry.line}
-                                </Typography>
-                            </View>
-                        )
-                    }}
+                    renderItem={renderDiffItem}
                 />
             ) : (
                 <>
@@ -161,26 +191,7 @@ export function VersionHistoryContent({
                             keyExtractor={(version) => version.id}
                             showsVerticalScrollIndicator={false}
                             contentContainerStyle={styles.list}
-                            renderItem={({ item: version, index }) => (
-                                <AnimatedView>
-                                    <TouchableRipple onPress={() => setSelected(version)}>
-                                        <View
-                                            style={{
-                                                ...styles.item,
-                                                backgroundColor: colors.surface,
-                                                ...getGroupedRadius(index === 0, index === ordered.length - 1)
-                                            }}
-                                        >
-                                            <Typography bold numberOfLines={1}>
-                                                {version.title}
-                                            </Typography>
-                                            <Typography opacity={0.5} variant='caption'>
-                                                {getFormattedDate(version.createdAt, currentLanguage)}
-                                            </Typography>
-                                        </View>
-                                    </TouchableRipple>
-                                </AnimatedView>
-                            )}
+                            renderItem={renderVersionItem}
                         />
                     )}
                 </>

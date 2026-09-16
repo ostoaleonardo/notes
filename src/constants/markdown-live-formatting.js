@@ -34,3 +34,6 @@ export const INLINE_MATH_PATTERN = /(?<![\w$])\$(?!\s)([^$\n]+?)(?<!\s)\$(?!\w)/
 
 export const FOOTNOTE_DEFINITION_PATTERN = /^ {0,3}\[\^([^\]\n]+)\]:/gm
 export const FOOTNOTE_REFERENCE_PATTERN = /\[\^([^\]\n]+)\]/g
+
+export const KATEX_RENDER_CACHE_LIMIT = 200
+export const HTML_RENDER_CACHE_LIMIT = 100
