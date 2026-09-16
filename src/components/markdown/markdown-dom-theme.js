@@ -26,7 +26,7 @@ export const buildTitleTextareaStyle = ({ fontFamily, textColor }) => ({
     margin: 0
 })
 
-export const buildDateLabelStyle = ({ textColor }) => ({
+export const buildMetaLabelStyle = ({ textColor }) => ({
     marginTop: 8,
     marginBottom: 16,
     fontSize: '9px',
@@ -63,6 +63,8 @@ export const buildEditorTheme = ({
     '.cm-gutters': { display: 'none' },
     '&.cm-focused': { outline: 'none' },
     '.cm-placeholder': { color: placeholderColor },
+    '.cm-searchMatch': { backgroundColor: `${linkColor}40 !important` },
+    '.cm-searchMatch-selected': { backgroundColor: `${linkColor}80 !important` },
     ...buildLiveFormattingTheme({ linkColor, codeBackgroundColor, thematicBreakColor, headingFontFamily })
 })
 

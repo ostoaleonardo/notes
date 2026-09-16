@@ -27,7 +27,9 @@ export const MarkdownInput = ({
     title,
     setTitle,
     titlePlaceholder,
-    dateLabel
+    metaLabel,
+    searchQuery,
+    replaceText
 }) => {
     const { colors } = useTheme()
     const { background, onBackground, tertiary } = colors
@@ -74,7 +76,9 @@ export const MarkdownInput = ({
             title={title}
             onTitleChange={setTitle}
             titlePlaceholder={titlePlaceholder}
-            dateLabel={dateLabel}
+            metaLabel={metaLabel}
+            searchQuery={searchQuery}
+            replaceText={replaceText}
             fontSize={size}
             fontFamily={bodyFontFamily}
             headingFontFamily={headingFontFamily}
