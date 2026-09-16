@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { router, useFocusEffect } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
@@ -37,7 +37,10 @@ export function Home() {
     const [templates, setTemplates] = useState([])
     const rootId = activeRepositoryTree[0]?.id
 
-    const recentCount = getRecentIds(pinned, recent, notes, templates).length
+    const recentCount = useMemo(
+        () => getRecentIds(pinned, recent, notes, templates).length,
+        [pinned, recent, notes, templates]
+    )
 
     const recentsSheet = useBottomSheet()
 

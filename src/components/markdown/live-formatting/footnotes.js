@@ -7,7 +7,16 @@ import {
     FOOTNOTE_REFERENCE_PATTERN
 } from '@/constants/markdown-live-formatting'
 
+let lastText = null
+let lastRanges = []
+
 export const decorateFootnotes = ({ text, ranges, codeRanges }) => {
+    if (text === lastText) {
+        ranges.push(...lastRanges)
+        return
+    }
+
+    const localRanges = []
     const definitionRanges = []
 
     for (const match of text.matchAll(FOOTNOTE_DEFINITION_PATTERN)) {
@@ -16,7 +25,7 @@ export const decorateFootnotes = ({ text, ranges, codeRanges }) => {
         definitionRanges.push({ from, to })
 
         if (overlapsAny(from, to, codeRanges)) continue
-        ranges.push(Decoration.mark({ class: 'cm-live-footnote-marker' }).range(from, to))
+        localRanges.push(Decoration.mark({ class: 'cm-live-footnote-marker' }).range(from, to))
     }
 
     for (const match of text.matchAll(FOOTNOTE_REFERENCE_PATTERN)) {
@@ -24,8 +33,12 @@ export const decorateFootnotes = ({ text, ranges, codeRanges }) => {
         const to = from + match[0].length
 
         if (overlapsAny(from, to, codeRanges) || overlapsAny(from, to, definitionRanges)) continue
-        ranges.push(Decoration.mark({ class: 'cm-live-footnote-ref' }).range(from, to))
+        localRanges.push(Decoration.mark({ class: 'cm-live-footnote-ref' }).range(from, to))
     }
+
+    lastText = text
+    lastRanges = localRanges
+    ranges.push(...localRanges)
 }
 
 export const footnotesTheme = ({ linkColor }) => ({

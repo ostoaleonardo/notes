@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { File } from 'expo-file-system'
 
 import { bytesToBase64 } from '@/utils/base64'
@@ -16,9 +16,21 @@ const extractLocalUrls = (value) => {
     return [...urls]
 }
 
+const resolveUrl = async (url) => {
+    try {
+        const file = new File(url)
+        const bytes = await file.bytes()
+        const mime = file.type || 'image/jpeg'
+        return `data:${mime};base64,${bytesToBase64(bytes)}`
+    } catch {
+        return url
+    }
+}
+
 export const useResolvedPreviewMarkdown = (value) => {
     const [resolved, setResolved] = useState(value)
     const [mediaMap, setMediaMap] = useState(EMPTY_MEDIA_MAP)
+    const cacheRef = useRef(new Map())
 
     useEffect(() => {
         const urls = extractLocalUrls(value)
@@ -30,20 +42,15 @@ export const useResolvedPreviewMarkdown = (value) => {
         }
 
         let cancelled = false
+        const cache = cacheRef.current
 
-        Promise.all(urls.map(async (url) => {
-            try {
-                const file = new File(url)
-                const bytes = await file.bytes()
-                const mime = file.type || 'image/jpeg'
-                return [url, `data:${mime};base64,${bytesToBase64(bytes)}`]
-            } catch {
-                return [url, url]
-            }
-        })).then((pairs) => {
+        Promise.all(urls.map(async (url) => (
+            [url, cache.has(url) ? cache.get(url) : await resolveUrl(url)]
+        ))).then((pairs) => {
             if (cancelled) return
 
             const resolvedUrls = new Map(pairs)
+            resolvedUrls.forEach((dataUrl, url) => cache.set(url, dataUrl))
             setMediaMap(resolvedUrls)
 
             const withMarkdownResolved = value.replace(
