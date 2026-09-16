@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { ToastAndroid } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { MarkdownEditorLayout } from './markdown-editor-layout'
 import { MarkdownModeToggle } from './markdown-mode-toggle'
+import { MarkdownSearchBar } from './markdown-search-bar'
 import { TemplatePickerSheet } from './template-picker-sheet'
 import { RecentNotesSheet } from './recent-notes-sheet'
 import { VersionHistoryPanel } from './version-history-panel'
@@ -15,6 +15,7 @@ import { ImageMarkdown } from '@/screens/modals/image-markdown'
 import { AppBar } from '@/components/app-bar/app-bar'
 import { MarkdownEditor } from '@/components/markdown/markdown-editor'
 import { ModalSheet } from '@/components/modal/modal-sheet'
+import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useAllowLandscape } from '@/hooks/use-allow-landscape'
 import { useBottomSheet } from '@/hooks/use-bottom-sheet'
@@ -25,6 +26,7 @@ import { usePro } from '@/hooks/use-pro'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
 import { getFormattedDate } from '@/utils/formatted-date'
+import { countWords } from '@/utils/word-count'
 
 export const NoteEditorScreen = ({
     id,
@@ -46,16 +48,34 @@ export const NoteEditorScreen = ({
 
     useAllowLandscape()
 
-    const dateLabel = (createdAt || updatedAt)
-        ? `${updatedAt ? t('date.updated') : t('date.created')} ${getFormattedDate(updatedAt || createdAt, currentLanguage)}`
-        : ''
-
     const [mode, setMode] = useState(initialMode)
     const [isFocused, setIsFocused] = useState(false)
+    const [searchVisible, setSearchVisible] = useState(false)
+    const [replaceVisible, setReplaceVisible] = useState(false)
+    const [searchQuery, setSearchQuery] = useState('')
+    const [replaceText, setReplaceText] = useState('')
     const [versionHistoryVisible, setVersionHistoryVisible] = useState(false)
     const [canUndo, setCanUndo] = useState(false)
     const [canRedo, setCanRedo] = useState(false)
     const [templates, setTemplates] = useState([])
+
+    const metaLabel = useMemo(() => (
+        mode === 'read'
+            ? ((createdAt || updatedAt)
+                ? `${updatedAt ? t('date.updated') : t('date.created')} ${getFormattedDate(updatedAt || createdAt, currentLanguage)}`
+                : '')
+            : (() => {
+                const { words, characters } = countWords(note)
+                return words > 0 ? `${t('count.words', { count: words })} · ${t('count.characters', { count: characters })}` : ''
+            })()
+    ), [
+        t,
+        mode,
+        note,
+        createdAt,
+        updatedAt,
+        currentLanguage
+    ])
 
     const markdownAction = useMarkdownAction()
 
@@ -73,7 +93,7 @@ export const NoteEditorScreen = ({
 
     const onOpenVersionHistory = useCallback(() => {
         if (!pro) {
-            ToastAndroid.show(t('repositories.pro_required'), ToastAndroid.SHORT)
+            showSnackbar(t('repositories.pro_required'))
             return
         }
 
@@ -103,6 +123,23 @@ export const NoteEditorScreen = ({
         imageSheet.onOpen
     ])
 
+    const onOpenSearch = useCallback(() => {
+        setSearchVisible(true)
+        setReplaceVisible(false)
+    }, [])
+
+    const onOpenReplace = useCallback(() => {
+        setSearchVisible(true)
+        setReplaceVisible(true)
+    }, [])
+
+    const onCloseSearch = useCallback(() => {
+        setSearchVisible(false)
+        setReplaceVisible(false)
+        setSearchQuery('')
+        setReplaceText('')
+    }, [])
+
     const onSelectTemplate = useCallback((content) => {
         setNote((prev) => (prev ? prev + '\n\n' + content : content))
         templatesSheet.onClose()
@@ -115,7 +152,7 @@ export const NoteEditorScreen = ({
         const { title, note } = latestContent.current
         await addTemplate(title.trim() || t('placeholder.title'), note)
         listTemplates().then(setTemplates)
-        ToastAndroid.show(t('templates.saved'), ToastAndroid.SHORT)
+        showSnackbar(t('templates.saved'))
     }, [addTemplate, listTemplates, t])
 
     const onCloseVersionHistory = useCallback(() => setVersionHistoryVisible(false), [])
@@ -176,9 +213,26 @@ export const NoteEditorScreen = ({
                     <MarkdownModeToggle
                         mode={mode}
                         onSetMode={setMode}
+                        isFocused={isFocused}
+                        onOpenSearch={onOpenSearch}
+                        onOpenReplace={onOpenReplace}
                         onOpenVersionHistory={onOpenVersionHistory}
                     />
                 )}
+            />
+
+            <MarkdownSearchBar
+                visible={searchVisible}
+                replaceVisible={replaceVisible}
+                query={searchQuery}
+                onQueryChange={setSearchQuery}
+                replacement={replaceText}
+                onReplacementChange={setReplaceText}
+                onPrevious={() => markdownAction.run('search-previous')}
+                onNext={() => markdownAction.run('search-next')}
+                onReplaceOne={() => markdownAction.run('search-replace')}
+                onReplaceAll={() => markdownAction.run('search-replace-all')}
+                onClose={onCloseSearch}
             />
 
             <MarkdownEditorLayout
@@ -194,7 +248,9 @@ export const NoteEditorScreen = ({
                     title={title}
                     setTitle={setTitle}
                     titlePlaceholder={t('placeholder.title')}
-                    dateLabel={dateLabel}
+                    metaLabel={metaLabel}
+                    searchQuery={searchVisible ? searchQuery : ''}
+                    replaceText={replaceText}
                     value={note}
                     setValue={setNote}
                     onHistoryChange={onHistoryChange}

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 import {
-    buildDateLabelStyle,
+    buildMetaLabelStyle,
     buildTitleSectionStyle,
     buildTitleTextareaStyle
 } from './markdown-dom-theme'
@@ -34,11 +34,11 @@ const AutoGrowTitle = ({
     )
 }
 
-const DateLabel = ({ label, textColor }) => {
+const MetaLabel = ({ label, textColor }) => {
     if (!label) return null
 
     return (
-        <div style={buildDateLabelStyle({ textColor })}>
+        <div style={buildMetaLabelStyle({ textColor })}>
             {label}
         </div>
     )
@@ -48,7 +48,7 @@ export const TitleSection = ({
     title,
     onTitleChange,
     titlePlaceholder,
-    dateLabel,
+    metaLabel,
     headingFontFamily,
     textColor
 }) => {
@@ -63,7 +63,7 @@ export const TitleSection = ({
                 fontFamily={headingFontFamily}
                 textColor={textColor}
             />
-            <DateLabel label={dateLabel} textColor={textColor} />
+            <MetaLabel label={metaLabel} textColor={textColor} />
         </div>
     )
 }
