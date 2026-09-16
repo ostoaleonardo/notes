@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AppState, ToastAndroid, View } from 'react-native'
+import { AppState, View } from 'react-native'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 
@@ -9,6 +9,7 @@ import { ForgetRepository } from '@/screens/modals/forget-repository'
 import { RenameRepository } from '@/screens/modals/rename-repository'
 import { AnimatedList } from '@/components/animated/animated-list'
 import { FloatingButton } from '@/components/button/floating-button'
+import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useFileStorage } from '@/hooks/use-file-storage'
 import { usePro } from '@/hooks/use-pro'
@@ -59,13 +60,13 @@ export default function Repositories() {
 
     const onAddRepository = async () => {
         if (!canAddRepository) {
-            ToastAndroid.show(t('repositories.pro_required'), ToastAndroid.SHORT)
+            showSnackbar(t('repositories.pro_required'))
             return
         }
 
         const result = await addRepository()
         if (result === 'duplicate') {
-            ToastAndroid.show(t('repositories.already_added'), ToastAndroid.SHORT)
+            showSnackbar(t('repositories.already_added'))
         }
     }
 

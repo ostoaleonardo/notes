@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { ToastAndroid } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 
 import { MarkdownEditorLayout } from '@/screens/notes/markdown-editor-layout'
@@ -12,6 +11,7 @@ import { TemplateEditorForm } from '@/screens/templates/template-editor-form'
 import { TemplatePlaceholders } from '@/screens/modals/template-placeholders'
 import { LoadingOverlay } from '@/components/layout'
 import { AppBar } from '@/components/app-bar/app-bar'
+import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useAllowLandscape } from '@/hooks/use-allow-landscape'
 import { useBottomSheet } from '@/hooks/use-bottom-sheet'
@@ -64,7 +64,7 @@ export default function EditTemplate() {
 
     const onOpenVersionHistory = useCallback(() => {
         if (!pro) {
-            ToastAndroid.show(t('repositories.pro_required'), ToastAndroid.SHORT)
+            showSnackbar(t('repositories.pro_required'))
             return
         }
 

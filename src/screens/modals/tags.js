@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react'
-import { randomUUID } from 'expo-crypto'
 import { StyleSheet, ToastAndroid, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { FlatList } from 'react-native-gesture-handler'
@@ -12,31 +11,17 @@ import { Typography } from '@/components/typography'
 import { Separator } from '@/components/separator/separator'
 
 import { useTags } from '@/hooks/use-tags'
-import { useHaptics } from '@/hooks/use-haptics'
-
-import { FEEDBACK_TYPES } from '@/constants/feedback-types'
 
 export function Tags({ tags, setTags }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
-    const { vibrate } = useHaptics()
-    const { tags: allTags, addTag } = useTags()
+    const { tags: allTags, saveTag } = useTags()
 
     const [tag, setTag] = useState('')
 
     const onSaveTag = () => {
-        const result = addTag({
-            id: randomUUID(),
-            name: tag.trim()
-        })
-
-        if (result === 'duplicate') {
-            ToastAndroid.show(t('tags.already_added'), ToastAndroid.SHORT)
-            return
-        }
-
-        setTag('')
-        vibrate(FEEDBACK_TYPES.SUCCESS)
+        const notify = (message) => ToastAndroid.show(message, ToastAndroid.SHORT)
+        if (saveTag(tag, notify) === 'success') setTag('')
     }
 
     const onToggleTag = useCallback((id) => {
