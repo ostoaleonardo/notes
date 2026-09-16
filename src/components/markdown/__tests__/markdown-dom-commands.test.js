@@ -4,6 +4,7 @@
 import { EditorState } from '@codemirror/state'
 import { EditorView, keymap } from '@codemirror/view'
 import { defaultKeymap, historyKeymap, history, redoDepth, undoDepth } from '@codemirror/commands'
+import { search, searchKeymap, setSearchQuery, SearchQuery } from '@codemirror/search'
 
 import { runAction } from '../markdown-dom-commands'
 
@@ -11,8 +12,8 @@ const createView = (doc, cursor = doc.length) => {
     const state = EditorState.create({
         doc,
         selection: { anchor: cursor },
-        extensions: [history(), keymap.of([
-            ...defaultKeymap, ...historyKeymap
+        extensions: [history(), search(), keymap.of([
+            ...defaultKeymap, ...historyKeymap, ...searchKeymap
         ])]
     })
 
@@ -92,6 +93,50 @@ describe('formatting commands', () => {
         runAction(view, 'not-a-real-action')
 
         expect(view.state.doc.toString()).toBe('unchanged')
+    })
+})
+
+describe('search', () => {
+    const setQuery = (view, search, replace = '') => {
+        view.dispatch({ effects: setSearchQuery.of(new SearchQuery({ search, replace })) })
+    }
+
+    test('search-next selects the next match', () => {
+        const view = createView('foo bar foo', 0)
+        setQuery(view, 'foo')
+
+        runAction(view, 'search-next')
+
+        expect(view.state.selection.main.from).toBe(0)
+        expect(view.state.selection.main.to).toBe(3)
+    })
+
+    test('search-previous selects the previous match', () => {
+        const view = createView('foo bar foo')
+        setQuery(view, 'foo')
+
+        runAction(view, 'search-previous')
+
+        expect(view.state.doc.sliceString(view.state.selection.main.from, view.state.selection.main.to)).toBe('foo')
+    })
+
+    test('search-replace replaces only the next match', () => {
+        const view = createView('foo bar foo', 0)
+        setQuery(view, 'foo', 'baz')
+
+        runAction(view, 'search-next')
+        runAction(view, 'search-replace')
+
+        expect(view.state.doc.toString()).toBe('baz bar foo')
+    })
+
+    test('search-replace-all replaces every match', () => {
+        const view = createView('foo bar foo', 0)
+        setQuery(view, 'foo', 'baz')
+
+        runAction(view, 'search-replace-all')
+
+        expect(view.state.doc.toString()).toBe('baz bar baz')
     })
 })
 

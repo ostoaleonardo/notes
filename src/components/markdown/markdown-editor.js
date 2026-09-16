@@ -13,7 +13,9 @@ export const MarkdownEditor = ({
     title,
     setTitle,
     titlePlaceholder,
-    dateLabel
+    metaLabel,
+    searchQuery,
+    replaceText
 }) => {
     const { t } = useTranslation()
     const { action, payload, clear } = markdownAction
@@ -33,7 +35,9 @@ export const MarkdownEditor = ({
             title={title}
             setTitle={setTitle}
             titlePlaceholder={titlePlaceholder}
-            dateLabel={dateLabel}
+            metaLabel={metaLabel}
+            searchQuery={searchQuery}
+            replaceText={replaceText}
         />
     )
 }

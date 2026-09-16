@@ -1,5 +1,6 @@
 import { EditorSelection } from '@codemirror/state'
 import { redo, undo } from '@codemirror/commands'
+import { findNext, findPrevious, replaceAll, replaceNext } from '@codemirror/search'
 
 const currentLine = (view) => view.state.doc.lineAt(view.state.selection.main.head)
 
@@ -131,6 +132,10 @@ export const runAction = (view, action, payload) => {
         case 'insert-title': return insertAtCursor(view, '{{title}}')
         case 'undo': return undo(view)
         case 'redo': return redo(view)
+        case 'search-next': return findNext(view)
+        case 'search-previous': return findPrevious(view)
+        case 'search-replace': return replaceNext(view)
+        case 'search-replace-all': return replaceAll(view)
         case 'table': return
         default: return
     }

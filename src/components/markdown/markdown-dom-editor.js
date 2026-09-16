@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Compartment, EditorState } from '@codemirror/state'
 import { EditorView, keymap, placeholder as placeholderExtension } from '@codemirror/view'
 import { defaultKeymap, history, historyKeymap, redoDepth, undoDepth } from '@codemirror/commands'
+import { closeSearchPanel, openSearchPanel, search, searchKeymap, setSearchQuery, SearchQuery } from '@codemirror/search'
 import { markdown } from '@codemirror/lang-markdown'
 import { GFM } from '@lezer/markdown'
 
@@ -15,6 +16,12 @@ import { buildEditorTheme, buildPreviewCss } from './markdown-dom-theme'
 import { renderMarkdownHtml } from './markdown-dom-render-html'
 import { runAction } from './markdown-dom-commands'
 import { liveFormatting, mediaMapFacet } from './live-formatting/live-formatting'
+
+const createHiddenSearchPanel = () => {
+    const dom = document.createElement('div')
+    dom.style.display = 'none'
+    return { dom }
+}
 
 const MarkdownDomEditor = ({
     mode,
@@ -47,7 +54,9 @@ const MarkdownDomEditor = ({
     title,
     onTitleChange,
     titlePlaceholder,
-    dateLabel
+    metaLabel,
+    searchQuery,
+    replaceText
 }) => {
     const containerRef = useRef(null)
     const previewRef = useRef(null)
@@ -95,7 +104,8 @@ const MarkdownDomEditor = ({
             doc: value || '',
             extensions: [
                 history(),
-                keymap.of([...defaultKeymap, ...historyKeymap]),
+                search({ createPanel: createHiddenSearchPanel }),
+                keymap.of([...defaultKeymap, ...historyKeymap, ...searchKeymap]),
                 markdown({ extensions: GFM }),
                 mediaMapCompartment.of(mediaMapFacet.of(mediaMapValue)),
                 liveFormattingCompartment.of(mode === 'live' ? [liveFormatting] : []),
@@ -180,6 +190,21 @@ const MarkdownDomEditor = ({
     }, [action, payload])
 
     useEffect(() => {
+        const view = viewRef.current
+        if (!view) return
+
+        if (searchQuery) {
+            openSearchPanel(view)
+        } else {
+            closeSearchPanel(view)
+        }
+
+        view.dispatch({
+            effects: setSearchQuery.of(new SearchQuery({ search: searchQuery || '', replace: replaceText || '' }))
+        })
+    }, [searchQuery, replaceText])
+
+    useEffect(() => {
         const container = previewRef.current
         if (!container) return
 
@@ -248,7 +273,7 @@ const MarkdownDomEditor = ({
                 title={title}
                 onTitleChange={onTitleChange}
                 titlePlaceholder={titlePlaceholder}
-                dateLabel={dateLabel}
+                metaLabel={metaLabel}
                 headingFontFamily={headingFontFamily}
                 textColor={textColor}
             />
