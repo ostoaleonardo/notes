@@ -108,6 +108,11 @@
 		"close": "Cerrar",
 		"preview": "Lectura",
 		"close_all": "Cerrar",
+		"find": "Buscar",
+		"replace": "Reemplazar",
+		"replace_all": "Reemplazar todo",
+		"previous": "Coincidencia anterior",
+		"next": "Siguiente coincidencia",
 		"undo": "Deshacer",
 		"redo": "Rehacer",
 		"try_again": "Reintentar",
@@ -121,7 +126,11 @@
 		"folders": "{{count}} carpeta",
 		"folders_plural": "{{count}} carpetas",
 		"templates": "{{count}} plantilla",
-		"templates_plural": "{{count}} plantillas"
+		"templates_plural": "{{count}} plantillas",
+		"words": "{{count}} palabra",
+		"words_plural": "{{count}} palabras",
+		"characters": "{{count}} carácter",
+		"characters_plural": "{{count}} caracteres"
 	},
 	"markdown": {
 		"link_title": "Título",
@@ -230,5 +239,21 @@
 	"error_boundary": {
 		"title": "Algo salió mal",
 		"message": "Ocurrió un problema inesperado. Inténtalo de nuevo."
+	},
+	"welcome": {
+		"title": "Bienvenido a Notes",
+		"intro": "Esta es tu primera nota. Aquí tienes un repaso rápido de las funciones nuevas para que le saques el máximo provecho a la app.",
+		"search_heading": "Buscar y reemplazar texto",
+		"search_body": "Dentro de cualquier nota, toca la flecha junto al botón de modo y elige \"Buscar\" para encontrar una palabra. Si estás en modo edición, también puedes elegir \"Reemplazar\" para cambiar el texto encontrado por otro, uno a la vez o todos de golpe.",
+		"menu_heading": "Un menú más ordenado",
+		"menu_body": "Ese mismo menú ahora agrupa las opciones por tipo: la búsqueda arriba, las acciones generales en el medio y borrar la nota, aislado, al final para evitar toques accidentales.",
+		"counter_heading": "Cuántas palabras llevas",
+		"counter_body": "Mientras escribes, justo debajo del título verás cuántas palabras y caracteres tiene tu nota. Al pasar a modo lectura, ese mismo espacio muestra la fecha en la que la actualizaste por última vez.",
+		"pro_heading": "Saca más provecho con Pro",
+		"pro_intro": "Si más adelante quieres ir más allá, la versión Pro te da:",
+		"pro_versions": "Historial de versiones completo, sin límite, para volver a cualquier punto de tu nota.",
+		"pro_subfolders": "Todas las subcarpetas que necesites para organizar tus repositorios.",
+		"pro_accents": "Colores de acento personalizados para darle tu toque a la app.",
+		"pro_cta": "Puedes probarlo cuando quieras desde Ajustes."
 	}
 }
