@@ -14,6 +14,8 @@ import { KeepFilled } from '@/icons/keep-filled'
 import { Picture } from '@/icons/picture'
 import { Plus } from '@/icons/plus'
 
+import { FONTS } from '@/constants/themes'
+
 export function SearchFilters({ query, setQuery, tags, saved, onToggleSave }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
@@ -51,7 +53,10 @@ export function SearchFilters({ query, setQuery, tags, saved, onToggleSave }) {
                                         borderRadius: 24,
                                         ...(selected && { backgroundColor: colors.onBackground })
                                     }}
-                                    textStyle={selected ? { color: colors.background } : undefined}
+                                    textStyle={{
+                                        fontFamily: selected ? FONTS.azeretMedium : FONTS.azeretLight,
+                                        ...(selected && { color: colors.background })
+                                    }}
                                     onPress={() => setQuery(toggleTagQualifier(query, tag.name))}
                                 >
                                     {tag.name}
