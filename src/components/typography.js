@@ -1,14 +1,7 @@
 import { StyleSheet, Text } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
-import { FONTS } from '@/constants/themes'
-
-const SIZE_VARIANTS = {
-    title: 24,
-    subtitle: 16,
-    paragraph: 14,
-    caption: 12
-}
+import { FONTS, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/themes'
 
 export function Typography({
     children,
@@ -23,7 +16,7 @@ export function Typography({
     ...props
 }) {
     const { colors } = useTheme()
-    const fontVariant = fontSize || SIZE_VARIANTS[variant]
+    const fontVariant = fontSize || TYPOGRAPHY_SIZE_VARIANTS[variant]
 
     return (
         <Text

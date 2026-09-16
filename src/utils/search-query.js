@@ -1,6 +1,12 @@
-const DATE_QUALIFIER_REGEX = /\b(modified|created):(\d{4}-\d{2}-\d{2})\b/i
-const TAG_QUALIFIER_REGEX = /\btag:"([^"]+)"|\btag:(\S+)/gi
-const MARKDOWN_IMAGE_REGEX = /!\[[^\]]*\]\([^)]+\)/
+import {
+    DATE_QUALIFIER_REGEX,
+    TAG_QUALIFIER_REGEX,
+    MARKDOWN_IMAGE_REGEX,
+    PINNED_QUALIFIER_REGEX,
+    IMAGE_QUALIFIER_REGEX,
+    PINNED_QUALIFIER,
+    IMAGE_QUALIFIER
+} from '@/constants/search-query'
 
 export const parseSearchQuery = (query) => {
     let text = query
@@ -10,12 +16,12 @@ export const parseSearchQuery = (query) => {
     let modified = null
     let created = null
 
-    text = text.replace(/\bis:pinned\b/i, () => {
+    text = text.replace(PINNED_QUALIFIER_REGEX, () => {
         pinned = true
         return ''
     })
 
-    text = text.replace(/\bhas:image\b/i, () => {
+    text = text.replace(IMAGE_QUALIFIER_REGEX, () => {
         hasImage = true
         return ''
     })
@@ -61,19 +67,19 @@ export const toggleTagQualifier = (query, tagName) => {
 }
 
 export const togglePinnedQualifier = (query) => {
-    if (/\bis:pinned\b/i.test(query)) {
-        return query.replace(/\bis:pinned\b/i, '').trim()
+    if (PINNED_QUALIFIER_REGEX.test(query)) {
+        return query.replace(PINNED_QUALIFIER_REGEX, '').trim()
     }
 
-    return query ? `${query} is:pinned` : 'is:pinned'
+    return query ? `${query} ${PINNED_QUALIFIER}` : PINNED_QUALIFIER
 }
 
 export const toggleImageQualifier = (query) => {
-    if (/\bhas:image\b/i.test(query)) {
-        return query.replace(/\bhas:image\b/i, '').trim()
+    if (IMAGE_QUALIFIER_REGEX.test(query)) {
+        return query.replace(IMAGE_QUALIFIER_REGEX, '').trim()
     }
 
-    return query ? `${query} has:image` : 'has:image'
+    return query ? `${query} ${IMAGE_QUALIFIER}` : IMAGE_QUALIFIER
 }
 
 export const filterNotes = (notes, query, { tags, pinned }) => {
