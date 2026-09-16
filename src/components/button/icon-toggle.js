@@ -1,18 +1,11 @@
 import { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Tooltip, TouchableRipple, useTheme } from 'react-native-paper'
-import { interpolate, useAnimatedStyle } from 'react-native-reanimated'
 
 import { AnimatedView } from '../animated/animated-view'
 import { Typography } from '../typography'
 
-import { useAnimatedProgress } from '@/hooks/use-animated-progress'
-
-const GROUP_CORNERS = {
-    first: { left: 24, right: 6 },
-    middle: { left: 6, right: 6 },
-    last: { left: 6, right: 24 }
-}
+import { useSegmentedCornerStyle } from '@/hooks/use-segmented-corner-style'
 
 export function IconToggle({
     icon: Icon,
@@ -25,19 +18,11 @@ export function IconToggle({
     disabled = false
 }) {
     const { colors } = useTheme()
-    const { left, right } = GROUP_CORNERS[position]
     const backgroundColor = background ?? colors.surfaceVariant
     const contentColor = color ?? colors.onBackground
 
     const [pressed, setPressed] = useState(false)
-    const progress = useAnimatedProgress(pressed)
-
-    const animatedStyle = useAnimatedStyle(() => ({
-        borderTopLeftRadius: interpolate(progress.value, [0, 1], [left, 24]),
-        borderBottomLeftRadius: interpolate(progress.value, [0, 1], [left, 24]),
-        borderTopRightRadius: interpolate(progress.value, [0, 1], [right, 24]),
-        borderBottomRightRadius: interpolate(progress.value, [0, 1], [right, 24])
-    }))
+    const animatedStyle = useSegmentedCornerStyle(position, pressed)
 
     return (
         <Tooltip title={label}>

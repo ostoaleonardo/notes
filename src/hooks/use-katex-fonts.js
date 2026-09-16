@@ -1,8 +1,4 @@
-import { useEffect, useState } from 'react'
-import { Asset } from 'expo-asset'
-import { File } from 'expo-file-system'
-
-import { bytesToBase64 } from '@/utils/base64'
+import { createAssetFontsHook } from './use-asset-fonts'
 
 const KATEX_FONT_MODULES = {
     'KaTeX_AMS-Regular': require('katex/dist/fonts/KaTeX_AMS-Regular.woff2'),
@@ -27,37 +23,4 @@ const KATEX_FONT_MODULES = {
     'KaTeX_Typewriter-Regular': require('katex/dist/fonts/KaTeX_Typewriter-Regular.woff2')
 }
 
-const resolveFontDataUrl = async (module) => {
-    const asset = await Asset.fromModule(module).downloadAsync()
-    const bytes = await new File(asset.localUri).bytes()
-    return `data:font/woff2;base64,${bytesToBase64(bytes)}`
-}
-
-let fontsPromise = null
-
-const loadFonts = () => {
-    if (!fontsPromise) {
-        const entries = Object.entries(KATEX_FONT_MODULES)
-
-        fontsPromise = Promise.all(entries.map(([, module]) => resolveFontDataUrl(module)))
-            .then((urls) => Object.fromEntries(entries.map(([name], index) => [name, urls[index]])))
-    }
-
-    return fontsPromise
-}
-
-export const useKatexFonts = () => {
-    const [fonts, setFonts] = useState(null)
-
-    useEffect(() => {
-        let cancelled = false
-
-        loadFonts().then((resolvedFonts) => {
-            if (!cancelled) setFonts(resolvedFonts)
-        })
-
-        return () => { cancelled = true }
-    }, [])
-
-    return fonts
-}
+export const useKatexFonts = createAssetFontsHook(KATEX_FONT_MODULES, 'font/woff2')

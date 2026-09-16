@@ -11,8 +11,7 @@ import { sanitizeFilename } from '@/utils/note-filename'
 import { getDefaultTemplates } from '@/utils/default-templates'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-
-const FREE_SUBFOLDERS_PER_REPOSITORY = 1
+import { FREE_SUBFOLDERS_PER_REPOSITORY } from '@/constants/default-values'
 
 export function useRepositories() {
     const { setItem } = useStorage()

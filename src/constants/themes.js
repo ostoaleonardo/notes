@@ -114,6 +114,19 @@ export const RADIUS = {
     inner: 8
 }
 
+export const GROUP_CORNERS = {
+    first: { left: 24, right: 6 },
+    middle: { left: 6, right: 6 },
+    last: { left: 6, right: 24 }
+}
+
+export const TYPOGRAPHY_SIZE_VARIANTS = {
+    title: 24,
+    subtitle: 16,
+    paragraph: 14,
+    caption: 12
+}
+
 export const THEMES = {
     light: lightTheme,
     dark: darkTheme
