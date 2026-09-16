@@ -5,7 +5,7 @@ import { SmallInput } from './small-input'
 
 import { Search } from '@/icons/search'
 
-import { COMMONS } from '@/constants/themes'
+import { RADIUS } from '@/constants/themes'
 
 export function SearchInput({
     value,
@@ -42,6 +42,6 @@ const styles = StyleSheet.create({
     container: {
         margin: 16,
         flexDirection: 'row',
-        borderRadius: COMMONS.radius
+        borderRadius: RADIUS.outer
     }
 })

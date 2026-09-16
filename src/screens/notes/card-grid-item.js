@@ -6,7 +6,7 @@ import { useTheme } from 'react-native-paper'
 import { AnimatedView } from '@/components/animated/animated-view'
 import { Typography } from '@/components/typography'
 
-import { COMMONS } from '@/constants/themes'
+import { RADIUS } from '@/constants/themes'
 import { CARD_PREVIEW_LINES } from '@/constants/note-preview'
 
 export const CARDS_HEIGHT = 220
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         height: CARDS_HEIGHT,
         borderWidth: 1,
         flexDirection: 'column',
-        borderRadius: COMMONS.radius,
+        borderRadius: RADIUS.outer,
         overflow: 'hidden'
     }
 })

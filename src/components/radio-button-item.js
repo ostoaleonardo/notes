@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
 import { RadioButton, useTheme } from 'react-native-paper'
 
-import { COMMONS, FONTS } from '@/constants/themes'
+import { FONTS, RADIUS } from '@/constants/themes'
 
 export function RadioButtonItem({ isFirst, isLast, ...props }) {
     const { colors } = useTheme()
@@ -10,10 +10,10 @@ export function RadioButtonItem({ isFirst, isLast, ...props }) {
         <RadioButton.Item
             position='trailing'
             style={{
-                borderTopLeftRadius: isFirst ? COMMONS.radius : 0,
-                borderTopRightRadius: isFirst ? COMMONS.radius : 0,
-                borderBottomLeftRadius: isLast ? COMMONS.radius : 0,
-                borderBottomRightRadius: isLast ? COMMONS.radius : 0
+                borderTopLeftRadius: isFirst ? RADIUS.outer : 0,
+                borderTopRightRadius: isFirst ? RADIUS.outer : 0,
+                borderBottomLeftRadius: isLast ? RADIUS.outer : 0,
+                borderBottomRightRadius: isLast ? RADIUS.outer : 0
             }}
             labelStyle={{
                 ...styles.title,

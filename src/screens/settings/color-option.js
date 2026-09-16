@@ -6,13 +6,13 @@ import { Typography } from '@/components/typography'
 
 import { useAnimatedBorderRadius } from '@/hooks/use-animated-border-radius'
 
-import { COMMONS } from '@/constants/themes'
+import { RADIUS } from '@/constants/themes'
 
 export const ColorOption = memo(function ColorOption({ name, active, onPress, children, options }) {
     const colors = options[name]
 
     const animatedStyle = useAnimatedBorderRadius(
-        active, { from: 32, to: COMMONS.radius }
+        active, { from: 32, to: RADIUS.outer }
     )
 
     return (
