@@ -22,7 +22,7 @@ import { filterNotes } from '@/utils/search-query'
 import { getEditorPath } from '@/utils/editor-path'
 import { toggleSavedSearch, removeSavedSearch } from '@/utils/saved-searches'
 
-import { COMMONS } from '@/constants/themes'
+import { RADIUS } from '@/constants/themes'
 import { RECENT_SEARCHES_LIMIT } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
@@ -160,12 +160,12 @@ const styles = StyleSheet.create({
     },
     search: {
         width: '100%',
-        borderRadius: COMMONS.radius
+        borderRadius: RADIUS.outer
     },
     actions: {
         gap: 16,
         paddingVertical: 16,
         marginHorizontal: 16,
-        borderRadius: COMMONS.radius
+        borderRadius: RADIUS.outer
     }
 })

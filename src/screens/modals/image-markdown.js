@@ -16,7 +16,7 @@ import { openImagePicker } from '@/utils/image-picker'
 import { Camera } from '@/icons/camera'
 import { Picture } from '@/icons/picture'
 
-import { COMMONS } from '@/constants/themes'
+import { RADIUS } from '@/constants/themes'
 import { IMAGE_EXTENSION_BY_MIME_TYPE } from '@/constants/image'
 
 export function ImageMarkdown({ onClose, onInsert }) {
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     },
     preview: {
         width: '100%',
-        borderRadius: COMMONS.radius,
+        borderRadius: RADIUS.outer,
         overflow: 'hidden'
     },
     image: {

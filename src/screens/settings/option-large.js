@@ -3,7 +3,7 @@ import { useTheme } from 'react-native-paper'
 
 import { Typography } from '@/components/typography'
 
-import { COMMONS } from '@/constants/themes'
+import { RADIUS } from '@/constants/themes'
 
 export function OptionLarge({ title, description, children, onPress, isFirst, isLast }) {
     const { colors } = useTheme()
@@ -14,10 +14,10 @@ export function OptionLarge({ title, description, children, onPress, isFirst, is
             style={{
                 ...styles.container,
                 backgroundColor: colors.surface,
-                borderTopLeftRadius: isFirst ? COMMONS.radius : 0,
-                borderTopRightRadius: isFirst ? COMMONS.radius : 0,
-                borderBottomLeftRadius: isLast ? COMMONS.radius : 0,
-                borderBottomRightRadius: isLast ? COMMONS.radius : 0
+                borderTopLeftRadius: isFirst ? RADIUS.outer : 0,
+                borderTopRightRadius: isFirst ? RADIUS.outer : 0,
+                borderBottomLeftRadius: isLast ? RADIUS.outer : 0,
+                borderBottomRightRadius: isLast ? RADIUS.outer : 0
             }}
         >
             <View style={styles.left}>

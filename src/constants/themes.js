@@ -109,8 +109,9 @@ const lightTheme = {
     }
 }
 
-export const COMMONS = {
-    radius: 16
+export const RADIUS = {
+    outer: 16,
+    inner: 8
 }
 
 export const THEMES = {

@@ -61,49 +61,58 @@ export const useNoteActionsMenu = ({ onTrigger, onSetMode, onOpenVersionHistory 
         router.push(getEditorPath(duplicate.id))
     })
 
-    return (
-        <>
+    return [
+        [
             <MenuItem
+                key='code'
                 title={t('button.code')}
                 leadingIcon={(props) => <Code {...props} />}
                 onPress={() => onTrigger(() => onSetMode('code'))}
-            />
+            />,
             <MenuItem
+                key='pin'
                 title={isPinned ? t('button.unpin') : t('button.pin')}
                 leadingIcon={(props) => (isPinned ? <KeepFilled {...props} /> : <Keep {...props} />)}
                 onPress={toggleKeep}
-            />
-            {slug && (
+            />,
+            slug && (
                 <MenuItem
+                    key='export'
                     title={t('button.export')}
                     leadingIcon={(props) => <FileExport {...props} />}
                     onPress={() => onTrigger(() => exportFile(slug))}
                 />
-            )}
-            {slug && (
+            ),
+            slug && (
                 <MenuItem
+                    key='share'
                     title={t('button.share')}
                     leadingIcon={(props) => <ShareIcon {...props} />}
                     onPress={() => onTrigger(() => shareFile(slug))}
                 />
-            )}
-            {slug && (
+            ),
+            slug && (
                 <MenuItem
+                    key='duplicate'
                     title={t('button.duplicate')}
                     leadingIcon={(props) => <NoteStack {...props} />}
                     onPress={onDuplicate}
                 />
-            )}
+            ),
             <MenuItem
+                key='version-history'
                 title={t('title.version_history')}
                 leadingIcon={(props) => <Commit {...props} />}
                 onPress={() => onTrigger(onOpenVersionHistory)}
             />
+        ].filter(Boolean),
+        [
             <MenuItem
+                key='delete'
                 title={t('button.delete')}
                 leadingIcon={(props) => <Delete {...props} />}
                 onPress={onDelete}
             />
-        </>
-    )
+        ]
+    ]
 }
