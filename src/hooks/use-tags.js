@@ -1,15 +1,22 @@
 import { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
+import { randomUUID } from 'expo-crypto'
 
 import { useStorage } from './use-storage'
 import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
+import { useHaptics } from './use-haptics'
 import { NoteContext } from '@/context/note-context'
+import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { DEFAULT_TAGS } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { TAGS_FILENAME } from '@/constants/file-storage'
+import { FEEDBACK_TYPES } from '@/constants/feedback-types'
 
 export function useTags() {
+    const { t } = useTranslation()
+    const { vibrate } = useHaptics()
     const { tags, setTags } = useContext(NoteContext)
     const { writeJson } = useFileStorage()
     const { getItem } = useStorage()
@@ -23,6 +30,21 @@ export function useTags() {
 
         const localTags = [...tags, tag]
         updateBackup(localTags)
+    }
+
+    const saveTag = (name, notify = showSnackbar) => {
+        const result = addTag({
+            id: randomUUID(),
+            name: name.trim()
+        })
+
+        if (result === 'duplicate') {
+            notify(t('tags.already_added'))
+            return 'duplicate'
+        }
+
+        vibrate(FEEDBACK_TYPES.SUCCESS)
+        return 'success'
     }
 
     const deleteTag = (id) => {
@@ -67,6 +89,7 @@ export function useTags() {
         tags,
         getTag,
         addTag,
+        saveTag,
         deleteTag,
         updateTag,
         deleteAllTags

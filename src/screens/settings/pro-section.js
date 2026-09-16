@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import { ToastAndroid } from 'react-native'
 import { ErrorCode, finishTransaction, useIAP } from 'expo-iap'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, useTheme } from 'react-native-paper'
 
 import { Option } from './option'
 import { Section } from '@/components/section'
+import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { usePro } from '@/hooks/use-pro'
 import { useStorage } from '@/hooks/use-storage'
@@ -76,10 +76,7 @@ export function ProSection() {
         })
 
         setPro(true)
-        ToastAndroid.show(
-            t('pro.messages.success'),
-            ToastAndroid.SHORT
-        )
+        showSnackbar(t('pro.messages.success'))
     }
 
     const onErrorPurchase = (error) => {
@@ -87,28 +84,16 @@ export function ProSection() {
             case ErrorCode.UserCancelled:
                 break
             case ErrorCode.ItemUnavailable:
-                ToastAndroid.show(
-                    t('pro.messages.available'),
-                    ToastAndroid.SHORT
-                )
+                showSnackbar(t('pro.messages.available'))
                 break
             case ErrorCode.ServiceError:
-                ToastAndroid.show(
-                    t('pro.messages.services'),
-                    ToastAndroid.SHORT
-                )
+                showSnackbar(t('pro.messages.services'))
                 break
             case ErrorCode.DeveloperError:
-                ToastAndroid.show(
-                    t('pro.messages.support'),
-                    ToastAndroid.SHORT
-                )
+                showSnackbar(t('pro.messages.support'))
                 break
             default:
-                ToastAndroid.show(
-                    error.message,
-                    ToastAndroid.SHORT
-                )
+                showSnackbar(error.message)
         }
     }
 
@@ -121,9 +106,9 @@ export function ProSection() {
             if (proPurchase) {
                 setPro(true)
                 await setItem(STORAGE_KEYS.PRO, proPurchase.transactionId)
-                ToastAndroid.show(t('pro.messages.success'), ToastAndroid.SHORT)
+                showSnackbar(t('pro.messages.success'))
             } else {
-                ToastAndroid.show(t('pro.messages.no_purchased'), ToastAndroid.SHORT)
+                showSnackbar(t('pro.messages.no_purchased'))
             }
         } catch (error) {
             console.error('Failed to restore purchases:', error)

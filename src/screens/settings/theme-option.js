@@ -1,9 +1,10 @@
-import { StyleSheet, ToastAndroid } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { OptionLarge } from './option-large'
 import { ColorOption } from './color-option'
 import { Section } from '@/components/section'
+import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useToggleMode } from '@/hooks/use-toggle-mode'
 import { usePro } from '@/hooks/use-pro'
@@ -22,7 +23,7 @@ export function ThemeOption() {
 
     const onToggleAccent = (color) => {
         if (!isAccentAllowed(color, pro)) {
-            ToastAndroid.show(t('repositories.pro_required'), ToastAndroid.SHORT)
+            showSnackbar(t('repositories.pro_required'))
             return
         }
 

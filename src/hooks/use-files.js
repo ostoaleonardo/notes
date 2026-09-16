@@ -1,10 +1,10 @@
-import { ToastAndroid } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Directory, File, Paths } from 'expo-file-system'
 import * as Sharing from 'expo-sharing'
 
 import { useNotes } from './use-notes'
 import { useLanguage } from './use-language'
+import { showSnackbar } from '@/components/snackbar/snackbar-host'
 import { getNotesAsString } from '@/utils/files'
 
 export function useFiles() {
@@ -27,7 +27,7 @@ export function useFiles() {
             file = directory.createFile(fileName, 'text/markdown')
             file.write(fileContent)
 
-            ToastAndroid.show(t('message.notes.exported'), ToastAndroid.SHORT)
+            showSnackbar(t('message.notes.exported'))
         } catch (error) {
             console.log(error)
         }

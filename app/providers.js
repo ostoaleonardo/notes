@@ -8,6 +8,7 @@ import { ImportProvider } from '@/context/import-context'
 import { NoteProvider } from '@/context/note-context'
 import { RepositoryProvider } from '@/context/repository-context'
 import { UtilsProvider } from '@/context/utils-contex'
+import { GlobalSnackbarHost } from '@/components/snackbar/snackbar-host'
 
 export default function Providers({ children }) {
     const { bottom } = useSafeAreaInsets()
@@ -29,6 +30,7 @@ export default function Providers({ children }) {
                     </NoteProvider>
                 </RepositoryProvider>
             </UtilsProvider>
+            <GlobalSnackbarHost />
         </GestureHandlerRootView>
     )
 }

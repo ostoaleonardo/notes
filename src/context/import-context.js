@@ -3,11 +3,11 @@ import * as Linking from 'expo-linking'
 import { File } from 'expo-file-system'
 import { randomUUID } from 'expo-crypto'
 import { useRouter } from 'expo-router'
-import { ToastAndroid } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { useNotes } from '../hooks/use-notes'
 import { usePro } from '../hooks/use-pro'
+import { showSnackbar } from '@/components/snackbar/snackbar-host'
 import { getDate } from '@/utils/date'
 
 import { ROUTES } from '@/constants/routes'
@@ -56,7 +56,7 @@ export function ImportProvider({ children }) {
             if (!url.startsWith('content://') && !url.startsWith('file://')) return
 
             if (!pro) {
-                ToastAndroid.show(t('repositories.pro_required'), ToastAndroid.SHORT)
+                showSnackbar(t('repositories.pro_required'))
                 return
             }
 
