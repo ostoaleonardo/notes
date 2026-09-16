@@ -20,6 +20,7 @@ export const STORAGE_KEYS = {
     // Notes
     CURRENT_NOTE: 'current-note',
     RECENT_NOTES: 'recent-notes',
+    WELCOME_NOTE_CREATED: 'welcome-note-created',
 
     // Search
     RECENT_SEARCHES: 'recent-searches',

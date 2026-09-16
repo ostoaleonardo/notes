@@ -108,6 +108,11 @@
 		"close": "Close",
 		"preview": "Read",
 		"close_all": "Close",
+		"find": "Find",
+		"replace": "Replace",
+		"replace_all": "Replace all",
+		"previous": "Previous match",
+		"next": "Next match",
 		"undo": "Undo",
 		"redo": "Redo",
 		"try_again": "Try again",
@@ -121,7 +126,11 @@
 		"folders": "{{count}} folder",
 		"folders_plural": "{{count}} folders",
 		"templates": "{{count}} template",
-		"templates_plural": "{{count}} templates"
+		"templates_plural": "{{count}} templates",
+		"words": "{{count}} word",
+		"words_plural": "{{count}} words",
+		"characters": "{{count}} character",
+		"characters_plural": "{{count}} characters"
 	},
 	"markdown": {
 		"link_title": "Title",
@@ -230,5 +239,21 @@
 	"error_boundary": {
 		"title": "Something went wrong",
 		"message": "We ran into an unexpected problem. Please try again."
+	},
+	"welcome": {
+		"title": "Welcome to Notes",
+		"intro": "This is your first note. Here's a quick rundown of the newest features so you can get the most out of the app.",
+		"search_heading": "Find and replace text",
+		"search_body": "Inside any note, tap the arrow next to the mode button and choose \"Find\" to locate a word. If you're in edit mode, you can also choose \"Replace\" to swap the text you found for something else, one at a time or all at once.",
+		"menu_heading": "A tidier menu",
+		"menu_body": "That same menu now groups its options by type: search at the top, general actions in the middle, and deleting the note kept on its own at the bottom to avoid accidental taps.",
+		"counter_heading": "How many words you've written",
+		"counter_body": "While you type, right below the title you'll see how many words and characters your note has. Switch to reading mode and that same spot shows the date you last updated it instead.",
+		"pro_heading": "Get more out of Pro",
+		"pro_intro": "If you ever want to go further, the Pro version gives you:",
+		"pro_versions": "Full, unlimited version history, so you can go back to any point in your note.",
+		"pro_subfolders": "As many subfolders as you need to organize your repositories.",
+		"pro_accents": "Custom accent colors to make the app feel like yours.",
+		"pro_cta": "You can try it anytime from Settings."
 	}
 }

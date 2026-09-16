@@ -5,6 +5,7 @@ import { Directory } from 'expo-file-system'
 import { useStorage } from './use-storage'
 import { useFileStorage } from './use-file-storage'
 import { usePro } from './use-pro'
+import { useWelcomeNote } from './use-welcome-note'
 import { RepositoryContext } from '../context/repository-context'
 import { sanitizeFilename } from '@/utils/note-filename'
 import { getDefaultTemplates } from '@/utils/default-templates'
@@ -16,6 +17,8 @@ const FREE_SUBFOLDERS_PER_REPOSITORY = 1
 export function useRepositories() {
     const { setItem } = useStorage()
     const { pro } = usePro()
+    const { seedWelcomeNote } = useWelcomeNote()
+
     const {
         listMarkdownFiles,
         listSubdirectories,
@@ -100,11 +103,12 @@ export function useRepositories() {
 
             const repository = buildRepository(directory)
             const discovered = discoverSubfolders(directory, repository.id)
+            const welcomeNoteId = await seedWelcomeNote(directory.uri)
 
             await persistRepositories([...repositories, repository, ...discovered])
             if (!activeRepositoryId) await persistActiveRepository(repository.id)
 
-            return repository
+            return { ...repository, welcomeNoteId }
         } catch (error) {
             console.debug('error picking repository', error)
             return null
@@ -116,6 +120,7 @@ export function useRepositories() {
         activeRepositoryId,
         buildRepository,
         discoverSubfolders,
+        seedWelcomeNote,
         persistRepositories,
         persistActiveRepository,
         busyRef
