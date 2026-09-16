@@ -1,10 +1,6 @@
 import { launchCameraAsync, launchImageLibraryAsync } from 'expo-image-picker'
 
-const IMAGE_PICKER_OPTIONS = {
-    mediaTypes: ['images'],
-    allowsEditing: true,
-    quality: 1
-}
+import { IMAGE_PICKER_OPTIONS } from '@/constants/image'
 
 export const openImagePicker = async (type) => {
     let result = null
