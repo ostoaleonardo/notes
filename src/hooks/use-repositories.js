@@ -38,6 +38,8 @@ export function useRepositories() {
         loading,
         reconciled,
         setReconciled,
+        pendingWelcomeNoteId,
+        setPendingWelcomeNoteId,
         busyRef
     } = useContext(RepositoryContext)
 
@@ -103,6 +105,7 @@ export function useRepositories() {
             const repository = buildRepository(directory)
             const discovered = discoverSubfolders(directory, repository.id)
             const welcomeNoteId = await seedWelcomeNote(directory.uri)
+            if (welcomeNoteId) setPendingWelcomeNoteId(welcomeNoteId)
 
             await persistRepositories([...repositories, repository, ...discovered])
             if (!activeRepositoryId) await persistActiveRepository(repository.id)
@@ -120,10 +123,15 @@ export function useRepositories() {
         buildRepository,
         discoverSubfolders,
         seedWelcomeNote,
+        setPendingWelcomeNoteId,
         persistRepositories,
         persistActiveRepository,
         busyRef
     ])
+
+    const clearPendingWelcomeNote = useCallback(() => {
+        setPendingWelcomeNoteId(null)
+    }, [setPendingWelcomeNoteId])
 
     const canAddSubfolder = useCallback((parentId) => {
         if (pro) return true
@@ -418,6 +426,8 @@ export function useRepositories() {
         loading,
         reconciled,
         setReconciled,
+        pendingWelcomeNoteId,
+        clearPendingWelcomeNote,
         addRepository,
         addSubfolder,
         renameRepository,
