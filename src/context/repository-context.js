@@ -7,12 +7,13 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 export const RepositoryContext = createContext()
 
 export function RepositoryProvider({ children }) {
-    const [repositories, setRepositories] = useState([])
-    const [activeRepositoryId, setActiveRepositoryId] = useState('')
     const [loading, setLoading] = useState(true)
     const [reconciled, setReconciled] = useState(false)
-    const busyRef = useRef(false)
+    const [repositories, setRepositories] = useState([])
+    const [activeRepositoryId, setActiveRepositoryId] = useState('')
+    const [pendingWelcomeNoteId, setPendingWelcomeNoteId] = useState(null)
 
+    const busyRef = useRef(false)
     const { getItem } = useStorage()
 
     useEffect(() => {
@@ -41,8 +42,16 @@ export function RepositoryProvider({ children }) {
         loading,
         reconciled,
         setReconciled,
+        pendingWelcomeNoteId,
+        setPendingWelcomeNoteId,
         busyRef
-    }), [repositories, activeRepositoryId, loading, reconciled])
+    }), [
+        loading,
+        reconciled,
+        repositories,
+        activeRepositoryId,
+        pendingWelcomeNoteId
+    ])
 
     return (
         <RepositoryContext.Provider value={value}>

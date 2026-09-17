@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import * as SplashScreen from 'expo-splash-screen'
-import { Stack } from 'expo-router'
+import { Stack, router } from 'expo-router'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
@@ -13,6 +13,7 @@ import { useRepositories } from '@/hooks/use-repositories'
 import { useRepositoryReconciliation } from '@/hooks/use-repository-reconciliation'
 import { useImportMarkdown } from '@/hooks/use-import-markdown'
 import { getScreenContentStyle } from '@/utils/screen-content-style'
+import { getEditorPath } from '@/utils/editor-path'
 
 export default function AppLayout() {
     const { t } = useTranslation()
@@ -23,7 +24,9 @@ export default function AppLayout() {
     const {
         loading,
         reconciled,
-        activeRepository
+        activeRepository,
+        pendingWelcomeNoteId,
+        clearPendingWelcomeNote
     } = useRepositories()
 
     useRepositoryReconciliation()
@@ -46,6 +49,13 @@ export default function AppLayout() {
             SplashScreen.hideAsync()
         }
     }, [isReady, needsGate])
+
+    useEffect(() => {
+        if (showDrawer && pendingWelcomeNoteId) {
+            router.push(getEditorPath(pendingWelcomeNoteId))
+            clearPendingWelcomeNote()
+        }
+    }, [showDrawer, pendingWelcomeNoteId, clearPendingWelcomeNote])
 
     if (!repositorySettled) return null
     if (!isReady && !needsGate && !gateEntered.current && !wasReady.current) return null
