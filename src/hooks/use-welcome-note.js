@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import { randomUUID } from 'expo-crypto'
+import { useTheme } from 'react-native-paper'
 
 import { useStorage } from './use-storage'
 import { useFileStorage } from './use-file-storage'
@@ -13,6 +14,7 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 export function useWelcomeNote() {
     const { getItem, setItem } = useStorage()
     const { listMarkdownFiles, writeNoteFile, readMetadata, writeMetadata } = useFileStorage()
+    const { colors } = useTheme()
 
     const seedWelcomeNote = useCallback(async (uri) => {
         const alreadyCreated = await getItem(STORAGE_KEYS.WELCOME_NOTE_CREATED)
@@ -20,7 +22,7 @@ export function useWelcomeNote() {
 
         await setItem(STORAGE_KEYS.WELCOME_NOTE_CREATED, 'true')
 
-        const { title, content } = getWelcomeNote()
+        const { title, content } = getWelcomeNote(colors)
         const id = randomUUID()
         const existingNames = listMarkdownFiles(uri).map((file) => file.name)
         const filename = getUniqueFilename(existingNames, title, null)
@@ -38,7 +40,8 @@ export function useWelcomeNote() {
         readMetadata,
         writeMetadata,
         writeNoteFile,
-        listMarkdownFiles
+        listMarkdownFiles,
+        colors
     ])
 
     return { seedWelcomeNote }
