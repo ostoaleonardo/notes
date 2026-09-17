@@ -45,6 +45,7 @@ export const buildEditorTheme = ({
     selectionColor,
     placeholderColor,
     linkColor,
+    quoteBackgroundColor,
     codeBackgroundColor,
     thematicBreakColor
 }) => EditorView.theme({
@@ -53,7 +54,7 @@ export const buildEditorTheme = ({
         fontFamily, color: textColor, caretColor: cursorColor, overflowWrap: 'anywhere',
         paddingLeft: '16px', paddingRight: '16px', paddingTop: '8px'
     },
-    '.cm-line': { overflowWrap: 'anywhere', wordBreak: 'break-word', padding: 0 },
+    '.cm-line': { overflowWrap: 'anywhere', padding: 0 },
     '.cm-scroller': {
         overflowY: 'auto', overflowX: 'hidden', fontFamily,
         WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none'
@@ -65,7 +66,7 @@ export const buildEditorTheme = ({
     '.cm-placeholder': { color: placeholderColor },
     '.cm-searchMatch': { backgroundColor: `${linkColor}40 !important` },
     '.cm-searchMatch-selected': { backgroundColor: `${linkColor}80 !important` },
-    ...buildLiveFormattingTheme({ linkColor, codeBackgroundColor, thematicBreakColor, headingFontFamily })
+    ...buildLiveFormattingTheme({ linkColor, quoteBackgroundColor, codeBackgroundColor, thematicBreakColor, headingFontFamily })
 })
 
 export const buildPreviewCss = ({
@@ -84,6 +85,7 @@ export const buildPreviewCss = ({
         font-family: ${fontFamily}; color: ${textColor}; font-size: ${fontSize}px; line-height: 1.6;
         overflow-wrap: anywhere; padding-top: 8px; padding-right: 16px; padding-bottom: 16px; padding-left: 16px;
     }
+    .markdown-preview > *:first-child { margin-top: 0; }
     .markdown-preview h1, .markdown-preview h2, .markdown-preview h3,
     .markdown-preview h4, .markdown-preview h5, .markdown-preview h6 {
         font-family: ${headingFontFamily}; color: ${textColor}; margin: 0.6em 0 0.3em; font-weight: bold;
@@ -111,7 +113,7 @@ export const buildPreviewCss = ({
     .markdown-preview input[type="checkbox"] { accent-color: ${linkColor}; margin-right: 0.4em; }
     .markdown-preview img { max-width: 100%; object-fit: contain; border-radius: 8px; }
     .markdown-preview hr { border: none; border-top: 1px solid ${thematicBreakColor}; margin: 16px 0; }
-    .markdown-preview table { border-collapse: collapse; width: 100%; margin: 0.4em 0; overflow-x: auto; display: block; }
+    .markdown-preview table { border-collapse: collapse; margin: 0.4em 0; overflow-x: auto; display: block; }
     .markdown-preview th, .markdown-preview td { border: 1px solid ${codeBackgroundColor}; padding: 4px 8px; }
     .markdown-preview .katex-display { overflow-x: auto; margin: 0.6em 0; }
     .markdown-preview .footnote-ref a, .markdown-preview .footnote-backref { color: ${linkColor}; }

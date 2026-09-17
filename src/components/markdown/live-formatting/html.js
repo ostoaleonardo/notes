@@ -35,10 +35,15 @@ export const decorateHtml = (node, { doc, selection, ranges }) => {
     return true
 }
 
-export const htmlTheme = ({ linkColor, codeBackgroundColor, headingFontFamily }) => ({
-    '.cm-live-block': { display: 'block', margin: '0.4em 0', overflowX: 'auto' },
-    '.cm-live-block table': { borderCollapse: 'collapse', width: '100%' },
+export const htmlTheme = ({
+    linkColor,
+    codeBackgroundColor,
+    headingFontFamily
+}) => ({
+    '.cm-live-block': { display: 'block', overflowX: 'auto' },
+    '.cm-live-block table': { borderCollapse: 'collapse' },
     '.cm-live-block th, .cm-live-block td': { border: `1px solid ${codeBackgroundColor}`, padding: '4px 8px' },
+    '.cm-live-block code': { backgroundColor: codeBackgroundColor, borderRadius: '4px', padding: '0.1em 0.3em', fontFamily: 'monospace' },
     '.cm-live-block img': { maxWidth: '100%', borderRadius: '8px' },
     '.cm-live-block a': { color: linkColor },
     '.cm-live-block h1, .cm-live-block h2, .cm-live-block h3, .cm-live-block h4, .cm-live-block h5, .cm-live-block h6': {

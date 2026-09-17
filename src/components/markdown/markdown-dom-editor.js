@@ -96,6 +96,7 @@ const MarkdownDomEditor = ({
             selectionColor,
             placeholderColor,
             linkColor,
+            quoteBackgroundColor,
             codeBackgroundColor,
             thematicBreakColor
         })

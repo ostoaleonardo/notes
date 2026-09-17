@@ -14,7 +14,13 @@ export const decorateBlockquote = (node, { ranges }) => {
     return false
 }
 
-export const blockquoteTheme = ({ linkColor }) => ({
-    '.cm-live-quote': { fontStyle: 'italic', opacity: 0.85 },
+export const blockquoteTheme = ({ linkColor, quoteBackgroundColor }) => ({
+    '.cm-live-quote': {
+        fontStyle: 'italic',
+        opacity: 0.85,
+        backgroundColor: quoteBackgroundColor,
+        borderLeft: `4px solid ${linkColor}`,
+        paddingLeft: '0.6em'
+    },
     '.cm-live-accent-mark': { color: linkColor, fontWeight: 'bold' }
 })

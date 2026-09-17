@@ -36,10 +36,10 @@ export const decorateHeading = (node, { doc, selection, ranges }) => {
 }
 
 export const headingsTheme = ({ fontFamily }) => ({
-    '.cm-live-h1': { fontWeight: 'bold', fontSize: '1.8em', fontFamily },
-    '.cm-live-h2': { fontWeight: 'bold', fontSize: '1.6em', fontFamily },
-    '.cm-live-h3': { fontWeight: 'bold', fontSize: '1.4em', fontFamily },
-    '.cm-live-h4': { fontWeight: 'bold', fontSize: '1.25em', fontFamily },
-    '.cm-live-h5': { fontWeight: 'bold', fontSize: '1.1em', fontFamily },
-    '.cm-live-h6': { fontWeight: 'bold', fontSize: '1em', fontFamily }
+    '.cm-live-h1': { fontWeight: 'bold', fontSize: '2em', fontFamily },
+    '.cm-live-h2': { fontWeight: 'bold', fontSize: '1.8em', fontFamily },
+    '.cm-live-h3': { fontWeight: 'bold', fontSize: '1.6em', fontFamily },
+    '.cm-live-h4': { fontWeight: 'bold', fontSize: '1.5em', fontFamily },
+    '.cm-live-h5': { fontWeight: 'bold', fontSize: '1.4em', fontFamily },
+    '.cm-live-h6': { fontWeight: 'bold', fontSize: '1.2em', fontFamily }
 })

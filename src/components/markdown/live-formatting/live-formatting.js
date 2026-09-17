@@ -70,13 +70,19 @@ export const liveFormatting = StateField.define({
     provide: (field) => EditorView.decorations.from(field)
 })
 
-export const buildLiveFormattingTheme = ({ linkColor, codeBackgroundColor, thematicBreakColor, headingFontFamily }) => ({
+export const buildLiveFormattingTheme = ({
+    linkColor,
+    quoteBackgroundColor,
+    codeBackgroundColor,
+    thematicBreakColor,
+    headingFontFamily
+}) => ({
     ...inlineMarksTheme({ codeBackgroundColor }),
     ...headingsTheme({ fontFamily: headingFontFamily }),
     ...linksTheme({ linkColor }),
     ...imagesTheme(),
     ...listsTheme({ linkColor }),
-    ...blockquoteTheme({ linkColor }),
+    ...blockquoteTheme({ linkColor, quoteBackgroundColor }),
     ...codeBlocksTheme({ codeBackgroundColor }),
     ...horizontalRuleTheme({ thematicBreakColor }),
     ...htmlTheme({ linkColor, codeBackgroundColor, headingFontFamily }),
