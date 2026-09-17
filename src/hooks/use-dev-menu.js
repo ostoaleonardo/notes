@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 import { DevSettings } from 'react-native'
 import { registerDevMenuItems } from 'expo-dev-menu'
 import { Directory } from 'expo-file-system'
+import { randomUUID } from 'expo-crypto'
+import { useTheme } from 'react-native-paper'
 import legacyNotes from '../../legacy/notes.json'
 import legacyTags from '../../legacy/categories.json'
 
@@ -10,19 +12,26 @@ import { usePro } from './use-pro'
 import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
 
+import { getWelcomeNote } from '@/utils/welcome-note'
+import { sanitizeFilename } from '@/utils/note-filename'
+import { getDate } from '@/utils/date'
+
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { TREE_BRANCHING, NOTES_PER_FOLDER } from '@/constants/dev-menu'
 
 export function useDevMenu() {
     const { setItem } = useStorage()
     const { pro, setPro } = usePro()
+    const { colors } = useTheme()
 
     const {
         writeNoteFile,
         clearRepository,
         createSubdirectory,
         getOrCreateTemplatesFolder,
-        deleteDirectory
+        deleteDirectory,
+        readMetadata,
+        writeMetadata
     } = useFileStorage()
 
     const {
@@ -90,6 +99,30 @@ export function useDevMenu() {
         }
     }
 
+    const createWelcomeNote = async () => {
+        if (!activeRepository) return
+
+        const uri = activeRepository.uri
+        const { title, content } = getWelcomeNote(colors)
+        const filename = `${sanitizeFilename(title)}.md`
+
+        const metadata = await readMetadata(uri)
+        const existingId = Object.keys(metadata).find((id) => metadata[id].filename === filename)
+
+        writeNoteFile(uri, filename, content)
+
+        const id = existingId || randomUUID()
+        metadata[id] = {
+            filename,
+            tags: metadata[id]?.tags || [],
+            createdAt: metadata[id]?.createdAt || getDate(),
+            updatedAt: existingId ? getDate() : ''
+        }
+        writeMetadata(uri, metadata)
+
+        DevSettings.reload()
+    }
+
     useEffect(() => {
         if (!__DEV__) return
 
@@ -110,6 +143,11 @@ export function useDevMenu() {
                 shouldCollapse: true
             },
             {
+                name: 'Create/replace welcome note',
+                callback: createWelcomeNote,
+                shouldCollapse: true
+            },
+            {
                 name: pro ? 'Disable (Pro)' : 'Enable (Pro)',
                 callback: () => setPro(!pro),
                 shouldCollapse: true
@@ -117,6 +155,7 @@ export function useDevMenu() {
         ])
     }, [
         pro,
+        colors,
         repositories,
         activeRepository,
         activeRepositoryId
