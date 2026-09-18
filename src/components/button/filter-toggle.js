@@ -6,11 +6,28 @@ import { Typography } from '../typography'
 
 import { useSegmentedCornerStyle } from '@/hooks/use-segmented-corner-style'
 
-export function FilterToggle({ icon: Icon, label, selected, onPress, position = 'middle', disabled = false }) {
+export function FilterToggle({
+    icon: Icon,
+    label,
+    selected,
+    onPress,
+    position = 'middle',
+    pill = false,
+    minWidth,
+    disabled = false
+}) {
     const { colors } = useTheme()
     const animatedStyle = useSegmentedCornerStyle(position, selected)
 
     const contentColor = selected ? colors.background : colors.onBackground
+
+    const colorStyle = pill ? {
+        backgroundColor: selected ? colors.onBackground : colors.surfaceVariant
+    } : {
+        borderWidth: 1,
+        borderColor: colors.outline,
+        backgroundColor: selected ? colors.onBackground : 'transparent'
+    }
 
     return (
         <Tooltip title={label}>
@@ -18,20 +35,19 @@ export function FilterToggle({ icon: Icon, label, selected, onPress, position = 
                 style={[
                     styles.container,
                     animatedStyle,
-                    disabled && styles.disabled, {
-                        borderColor: colors.outline,
-                        backgroundColor: selected ? colors.onBackground : 'transparent'
-                    }
+                    colorStyle,
+                    disabled && styles.disabled,
+                    minWidth && { minWidth }
                 ]}
             >
                 <TouchableRipple
                     disabled={disabled}
                     onPress={onPress}
-                    style={styles.touchable}
+                    style={[styles.touchable, pill && styles.touchablePill]}
                     accessibilityLabel={label}
                 >
                     <View style={styles.content}>
-                        <Icon color={contentColor} width={16} height={16} />
+                        {Icon && <Icon color={contentColor} width={16} height={16} />}
                         <Typography variant='caption' color={contentColor}>
                             {label}
                         </Typography>
@@ -44,7 +60,6 @@ export function FilterToggle({ icon: Icon, label, selected, onPress, position = 
 
 const styles = StyleSheet.create({
     container: {
-        borderWidth: 1,
         overflow: 'hidden'
     },
     disabled: {
@@ -54,9 +69,16 @@ const styles = StyleSheet.create({
         paddingVertical: 6,
         paddingHorizontal: 12
     },
+    touchablePill: {
+        height: 44,
+        paddingVertical: 0,
+        paddingHorizontal: 16,
+        justifyContent: 'center'
+    },
     content: {
         gap: 6,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })
