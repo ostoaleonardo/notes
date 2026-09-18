@@ -18,6 +18,7 @@ import { useRepositories } from '@/hooks/use-repositories'
 import { Folder } from '@/icons/folder'
 
 import { ROUTES } from '@/constants/routes'
+import { FREE_REPOSITORIES_LIMIT } from '@/constants/default-values'
 
 export default function Repositories() {
     const { t } = useTranslation()
@@ -56,7 +57,7 @@ export default function Repositories() {
         return () => subscription.remove()
     }, [repositories])
 
-    const canAddRepository = pro || rootRepositories.length === 0
+    const canAddRepository = pro || rootRepositories.length < FREE_REPOSITORIES_LIMIT
 
     const onAddRepository = async () => {
         if (!canAddRepository) {
