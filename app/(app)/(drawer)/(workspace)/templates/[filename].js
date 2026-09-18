@@ -11,7 +11,6 @@ import { TemplateEditorForm } from '@/screens/templates/template-editor-form'
 import { TemplatePlaceholders } from '@/screens/modals/template-placeholders'
 import { LoadingOverlay } from '@/components/layout'
 import { AppBar } from '@/components/app-bar/app-bar'
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useAllowLandscape } from '@/hooks/use-allow-landscape'
 import { useBottomSheet } from '@/hooks/use-bottom-sheet'
@@ -63,13 +62,8 @@ export default function EditTemplate() {
     }, [])
 
     const onOpenVersionHistory = useCallback(() => {
-        if (!pro) {
-            showSnackbar(t('repositories.pro_required'))
-            return
-        }
-
         setVersionHistoryVisible(true)
-    }, [pro, t])
+    }, [])
 
     const onCloseVersionHistory = useCallback(() => setVersionHistoryVisible(false), [])
 
