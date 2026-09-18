@@ -92,13 +92,8 @@ export const NoteEditorScreen = ({
     }, [])
 
     const onOpenVersionHistory = useCallback(() => {
-        if (!pro) {
-            showSnackbar(t('repositories.pro_required'))
-            return
-        }
-
         setVersionHistoryVisible(true)
-    }, [pro, t])
+    }, [])
 
     const onRunAction = useCallback((action) => {
         if (action === 'link') {
