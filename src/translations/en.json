@@ -240,6 +240,14 @@
 		"title": "Something went wrong",
 		"message": "We ran into an unexpected problem. Please try again."
 	},
+	"export": {
+		"export_title": "Export as",
+		"share_title": "Share as",
+		"markdown": "Markdown",
+		"html": "HTML",
+		"pdf": "PDF",
+		"generate": "Generate"
+	},
 	"welcome": {
 		"title": "Welcome",
 		"intro": "This is your first note. A quick tour of what's new, section by section.",

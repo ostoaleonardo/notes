@@ -10,4 +10,6 @@ const md = new MarkdownIt({ html: true, linkify: true })
     .use(texmath, { engine: katex, delimiters: 'dollars' })
     .use(footnote)
 
-export const renderMarkdownHtml = (text) => DOMPurify.sanitize(md.render(text || ''))
+export const renderMarkdownRaw = (text) => md.render(text || '')
+
+export const renderMarkdownHtml = (text) => DOMPurify.sanitize(renderMarkdownRaw(text))
