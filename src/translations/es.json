@@ -240,6 +240,14 @@
 		"title": "Algo salió mal",
 		"message": "Ocurrió un problema inesperado. Inténtalo de nuevo."
 	},
+	"export": {
+		"export_title": "Exportar como",
+		"share_title": "Compartir como",
+		"markdown": "Markdown",
+		"html": "HTML",
+		"pdf": "PDF",
+		"generate": "Generar"
+	},
 	"welcome": {
 		"title": "Bienvenida",
 		"intro": "Esta es tu primera nota. Un repaso corto de lo nuevo, sección por sección.",

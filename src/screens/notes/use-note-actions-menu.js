@@ -5,7 +5,6 @@ import { randomUUID } from 'expo-crypto'
 
 import { MenuItem } from '@/components/menu/menu-item'
 
-import { useFiles } from '@/hooks/use-files'
 import { useNotes } from '@/hooks/use-notes'
 import { useUtils } from '@/hooks/use-utils'
 import { getDate } from '@/utils/date'
@@ -21,11 +20,16 @@ import { KeepFilled } from '@/icons/keep-filled'
 import { NoteStack } from '@/icons/note-stack'
 import { Share as ShareIcon } from '@/icons/share'
 
-export const useNoteActionsMenu = ({ onTrigger, onSetMode, onOpenVersionHistory }) => {
+export const useNoteActionsMenu = ({
+    onTrigger,
+    onSetMode,
+    onOpenVersionHistory,
+    onOpenExportDialog,
+    onOpenShareDialog
+}) => {
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
 
-    const { exportFile, shareFile } = useFiles()
     const { pinned, updatePinned } = useUtils()
     const [isPinned, setIsPinned] = useState(pinned.has(slug))
 
@@ -80,7 +84,7 @@ export const useNoteActionsMenu = ({ onTrigger, onSetMode, onOpenVersionHistory 
                     key='export'
                     title={t('button.export')}
                     leadingIcon={(props) => <FileExport {...props} />}
-                    onPress={() => onTrigger(() => exportFile(slug))}
+                    onPress={() => onTrigger(onOpenExportDialog)}
                 />
             ),
             slug && (
@@ -88,7 +92,7 @@ export const useNoteActionsMenu = ({ onTrigger, onSetMode, onOpenVersionHistory 
                     key='share'
                     title={t('button.share')}
                     leadingIcon={(props) => <ShareIcon {...props} />}
-                    onPress={() => onTrigger(() => shareFile(slug))}
+                    onPress={() => onTrigger(onOpenShareDialog)}
                 />
             ),
             slug && (

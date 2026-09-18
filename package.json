@@ -39,6 +39,7 @@
     "expo-image-picker": "~57.0.18",
     "expo-linking": "~57.0.10",
     "expo-localization": "~57.0.2",
+    "expo-print": "~57.0.2",
     "expo-router": "~57.0.21",
     "expo-screen-orientation": "~57.0.2",
     "expo-sharing": "~57.0.20",

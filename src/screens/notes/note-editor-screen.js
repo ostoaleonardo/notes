@@ -12,6 +12,7 @@ import { Tags } from '@/screens/modals/tags'
 import { LinkMarkdown } from '@/screens/modals/link-markdown'
 import { TableMarkdown } from '@/screens/modals/table-markdown'
 import { ImageMarkdown } from '@/screens/modals/image-markdown'
+import { ExportFormat } from '@/screens/modals/export-format'
 import { AppBar } from '@/components/app-bar/app-bar'
 import { MarkdownEditor } from '@/components/markdown/markdown-editor'
 import { ModalSheet } from '@/components/modal/modal-sheet'
@@ -19,6 +20,7 @@ import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useAllowLandscape } from '@/hooks/use-allow-landscape'
 import { useBottomSheet } from '@/hooks/use-bottom-sheet'
+import { useFiles } from '@/hooks/use-files'
 import { useLanguage } from '@/hooks/use-language'
 import { useMarkdownAction } from '@/hooks/use-markdown-action'
 import { useNoteVersions } from '@/hooks/use-note-versions'
@@ -39,6 +41,7 @@ export const NoteEditorScreen = ({
 }) => {
     const { t } = useTranslation()
     const { addTemplate, listTemplates } = useTemplates()
+    const { exportFile, shareFile } = useFiles()
     const { currentLanguage } = useLanguage()
     const { pro } = usePro()
     const { repositories } = useRepositories()
@@ -55,6 +58,8 @@ export const NoteEditorScreen = ({
     const [searchQuery, setSearchQuery] = useState('')
     const [replaceText, setReplaceText] = useState('')
     const [versionHistoryVisible, setVersionHistoryVisible] = useState(false)
+    const [exportDialogVisible, setExportDialogVisible] = useState(false)
+    const [shareDialogVisible, setShareDialogVisible] = useState(false)
     const [canUndo, setCanUndo] = useState(false)
     const [canRedo, setCanRedo] = useState(false)
     const [templates, setTemplates] = useState([])
@@ -152,6 +157,14 @@ export const NoteEditorScreen = ({
 
     const onCloseVersionHistory = useCallback(() => setVersionHistoryVisible(false), [])
 
+    const onOpenExportDialog = useCallback(() => setExportDialogVisible(true), [])
+    const onCloseExportDialog = useCallback(() => setExportDialogVisible(false), [])
+    const onConfirmExport = useCallback((format) => exportFile(id, format), [exportFile, id])
+
+    const onOpenShareDialog = useCallback(() => setShareDialogVisible(true), [])
+    const onCloseShareDialog = useCallback(() => setShareDialogVisible(false), [])
+    const onConfirmShare = useCallback((format) => shareFile(id, format), [shareFile, id])
+
     const onRestoreVersion = useCallback((version) => {
         setTitle(version.title)
         setNote(version.content)
@@ -180,7 +193,14 @@ export const NoteEditorScreen = ({
             onRestore={onRestoreVersion}
             onClose={onCloseVersionHistory}
         />
-    ), [directoryUri, id, note, pro, onRestoreVersion, onCloseVersionHistory])
+    ), [
+        id,
+        note,
+        pro,
+        directoryUri,
+        onRestoreVersion,
+        onCloseVersionHistory
+    ])
 
     const actions = useMemo(() => ({
         onOpenTags: tagsSheet.onOpen,
@@ -212,6 +232,8 @@ export const NoteEditorScreen = ({
                         onOpenSearch={onOpenSearch}
                         onOpenReplace={onOpenReplace}
                         onOpenVersionHistory={onOpenVersionHistory}
+                        onOpenExportDialog={onOpenExportDialog}
+                        onOpenShareDialog={onOpenShareDialog}
                     />
                 )}
             />
@@ -308,6 +330,20 @@ export const NoteEditorScreen = ({
             />
 
             <RecentNotesSheet sheet={recentsSheet} />
+
+            <ExportFormat
+                title={t('export.export_title')}
+                visible={exportDialogVisible}
+                onDismiss={onCloseExportDialog}
+                onConfirm={onConfirmExport}
+            />
+
+            <ExportFormat
+                title={t('export.share_title')}
+                visible={shareDialogVisible}
+                onDismiss={onCloseShareDialog}
+                onConfirm={onConfirmShare}
+            />
         </VersionHistoryPanel>
     )
 }

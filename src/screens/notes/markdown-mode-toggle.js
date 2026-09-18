@@ -22,6 +22,8 @@ export const MarkdownModeToggle = ({
     onOpenReplace,
     onOpenPlaceholders,
     onOpenVersionHistory,
+    onOpenExportDialog,
+    onOpenShareDialog,
     onDelete
 }) => {
     const { t } = useTranslation()
@@ -32,7 +34,9 @@ export const MarkdownModeToggle = ({
     const noteActionsGroups = useNoteActionsMenu({
         onTrigger: trigger,
         onSetMode,
-        onOpenVersionHistory
+        onOpenVersionHistory,
+        onOpenExportDialog,
+        onOpenShareDialog
     })
 
     const templateActionsGroups = useTemplateActionsMenu({
