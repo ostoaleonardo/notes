@@ -120,6 +120,8 @@ export const GROUP_CORNERS = {
     last: { left: 6, right: 24 }
 }
 
+export const GROUP_PILL_RADIUS = 24
+
 export const TYPOGRAPHY_SIZE_VARIANTS = {
     title: 24,
     subtitle: 16,
