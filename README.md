@@ -16,11 +16,29 @@
 
 ## <samp>Features<samp>
 
--   <samp>Add notes with images.<samp>
--   <samp>Organized with tags.<samp>
--   <samp>Password and fingerprint security.<samp>
+-   <samp>Markdown notes with a live formatting preview.<samp>
+-   <samp>Math formulas (LaTeX) and footnotes.<samp>
+-   <samp>Find and replace text inside a note.<samp>
+-   <samp>Organize notes with tags.<samp>
+-   <samp>Templates with placeholders to start new notes quickly.<samp>
+-   <samp>Search with filters (tags, pinned, images, dates) and saved searches.<samp>
+-   <samp>Pin, duplicate, export and share notes.<samp>
+-   <samp>Multiple repositories (folders on your device) with subfolders.<samp>
+-   <samp>Version history to restore previous edits.<samp>
+-   <samp>Import existing Markdown notes.<samp>
+-   <samp>Light and dark themes with accent colors.<samp>
 -   <samp>Haptic feedback.<samp>
+-   <samp>Available in 15 languages.<samp>
 -   <samp>Minimalist and easy to use UI.<samp>
+
+## <samp>Free vs Pro<samp>
+
+| <samp>Feature<samp> | <samp>Free<samp> | <samp>Pro<samp> |
+| --- | --- | --- |
+| <samp>Repositories<samp> | <samp>1<samp> | <samp>Unlimited<samp> |
+| <samp>Subfolders per repository<samp> | <samp>1<samp> | <samp>Unlimited<samp> |
+| <samp>Version history<samp> | <samp>Last 5 versions<samp> | <samp>Full, unlimited<samp> |
+| <samp>Accent colors<samp> | <samp>White only<samp> | <samp>All colors<samp> |
 
 ## <samp>Download<samp>
 
