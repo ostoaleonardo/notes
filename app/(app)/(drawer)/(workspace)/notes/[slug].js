@@ -5,7 +5,7 @@ import { useLocalSearchParams } from 'expo-router'
 import { NoteEditorScreen } from '@/screens/notes/note-editor-screen'
 import { LoadingOverlay } from '@/components/layout'
 
-import { useNoteAutosave } from '@/hooks/use-note-autosave'
+import { useAutosave } from '@/hooks/use-autosave'
 import { useNotes } from '@/hooks/use-notes'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
@@ -50,15 +50,21 @@ export default function EditNote() {
         setLoading(false)
     }, [slug, notesLoading, repositoriesLoading])
 
-    useNoteAutosave({
-        id: slug, title, note, tags, createdAt, repositoryId,
-        skip: loading,
-        onSave: (newData) => {
-            const updatedAt = getDate()
-            updateNote({ ...newData, updatedAt })
-            setUpdatedAt(updatedAt)
-        }
-    })
+    const { flush } = useAutosave(() => {
+        const updatedAt = getDate()
+
+        updateNote({
+            id: slug,
+            title: title.trim(),
+            note: note.trim(),
+            tags,
+            createdAt,
+            repositoryId,
+            updatedAt
+        })
+
+        setUpdatedAt(updatedAt)
+    }, [slug, title, note, tags, createdAt, repositoryId], { skip: loading })
 
     if (loading) return <LoadingOverlay />
 
@@ -66,6 +72,7 @@ export default function EditNote() {
         <NoteEditorScreen
             id={slug}
             repositoryId={repositoryId}
+            flush={flush}
             title={title}
             setTitle={setTitle}
             note={note}
