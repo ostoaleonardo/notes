@@ -3,6 +3,7 @@ import { syntaxTree } from '@codemirror/language'
 import { Decoration, EditorView } from '@codemirror/view'
 
 import { mediaMapFacet } from './media-map'
+import { overlapsAny } from './utils'
 import { inlineMarkNodeNames, decorateInlineMark, inlineMarksTheme } from './inline-marks'
 import { headingNodeNames, decorateHeading, headingsTheme } from './headings'
 import { linkNodeNames, decorateLink, linksTheme } from './links'
@@ -18,6 +19,8 @@ import {
 import { htmlNodeNames, decorateHtml, htmlTheme } from './html'
 import { decorateMath, mathTheme } from './math'
 import { decorateFootnotes, footnotesTheme } from './footnotes'
+import { findWikiLinkRanges, decorateWikiLinks, wikiLinksTheme } from './wiki-links'
+import { noteTitlesFacet } from '../wiki-link-completion'
 
 import { CODE_RANGE_NODE_NAMES } from '@/constants/markdown-live-formatting'
 
@@ -40,11 +43,16 @@ const buildDecorations = (state) => {
     const selection = state.selection.main
     const doc = state.doc
     const mediaMap = state.facet(mediaMapFacet)
+    const noteTitles = state.facet(noteTitlesFacet)
     const codeRanges = []
+    const text = doc.toString()
+    const wikiLinkRanges = findWikiLinkRanges(text)
 
     syntaxTree(state).iterate({
         enter: (node) => {
             if (codeRangeNodeNames.has(node.name)) codeRanges.push({ from: node.from, to: node.to })
+
+            if (linkNodeNames.includes(node.name) && overlapsAny(node.from, node.to, wikiLinkRanges)) return
 
             const handler = NODE_HANDLERS.get(node.name)
             if (!handler) return
@@ -53,9 +61,9 @@ const buildDecorations = (state) => {
         }
     })
 
-    const text = doc.toString()
     decorateMath({ text, selection, ranges, codeRanges })
     decorateFootnotes({ text, ranges, codeRanges })
+    decorateWikiLinks({ text, ranges, codeRanges, wikiLinkRanges, noteTitles })
 
     return Decoration.set(ranges, true)
 }
@@ -75,6 +83,7 @@ export const buildLiveFormattingTheme = ({
     quoteBackgroundColor,
     codeBackgroundColor,
     thematicBreakColor,
+    onBackgroundColor,
     headingFontFamily
 }) => ({
     ...inlineMarksTheme({ codeBackgroundColor }),
@@ -87,5 +96,6 @@ export const buildLiveFormattingTheme = ({
     ...horizontalRuleTheme({ thematicBreakColor }),
     ...htmlTheme({ linkColor, codeBackgroundColor, headingFontFamily }),
     ...mathTheme(),
-    ...footnotesTheme({ linkColor })
+    ...footnotesTheme({ linkColor }),
+    ...wikiLinksTheme({ linkColor, onBackgroundColor })
 })

@@ -1,5 +1,6 @@
 import { CalendarToday } from '@/icons/calendar-today'
 import { Code } from '@/icons/code'
+import { DataArray } from '@/icons/data-array'
 import { FormaQuote } from '@/icons/forma-quote'
 import { FormatBold } from '@/icons/format-bold'
 import { FormatH1 } from '@/icons/format-h1'
@@ -18,6 +19,8 @@ import { Table } from '@/icons/table'
 import { Title } from '@/icons/title'
 
 export const MARKDOWN_CONTROLS = [
+    { action: 'wiki-link', Icon: DataArray },
+    { divider: true },
     { action: 'bold', Icon: FormatBold },
     { action: 'italic', Icon: FormatItalic },
     { action: 'strike', Icon: FormatStrikethrough },

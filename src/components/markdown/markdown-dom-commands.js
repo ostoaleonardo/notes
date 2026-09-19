@@ -1,6 +1,9 @@
 import { EditorSelection } from '@codemirror/state'
 import { redo, undo } from '@codemirror/commands'
 import { findNext, findPrevious, replaceAll, replaceNext } from '@codemirror/search'
+import { snippet } from '@codemirror/autocomplete'
+
+const insertWikiLinkSnippet = snippet('[[${}]]')
 
 const currentLine = (view) => view.state.doc.lineAt(view.state.selection.main.head)
 
@@ -111,6 +114,13 @@ const insertAtCursor = (view, text) => {
     view.focus()
 }
 
+const insertWikiLink = (view) => {
+    const { from, to } = view.state.selection.main
+
+    insertWikiLinkSnippet(view, null, from, to)
+    view.focus()
+}
+
 export const runAction = (view, action, payload) => {
     switch (action) {
         case 'bold': return toggleWrap(view, '*')
@@ -127,6 +137,7 @@ export const runAction = (view, action, payload) => {
         case 'hr': return insertHorizontalRule(view)
         case 'image': return insertLineLink(view, payload, (label, url) => `![${label}](${url})`)
         case 'link': return insertLineLink(view, payload, (label, url) => `[${label}](${url})`)
+        case 'wiki-link': return insertWikiLink(view)
         case 'insert-date': return insertAtCursor(view, '{{date}}')
         case 'insert-time': return insertAtCursor(view, '{{time}}')
         case 'insert-title': return insertAtCursor(view, '{{title}}')

@@ -163,6 +163,7 @@
 		"hr": "Horizontal rule",
 		"image": "Insert image",
 		"link": "Insert link",
+		"wiki-link": "Insert note link",
 		"table": "Insert table",
 		"insert-date": "Insert date",
 		"insert-time": "Insert time",
