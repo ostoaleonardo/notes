@@ -37,12 +37,12 @@ export const buildMetaLabelStyle = ({ textColor }) => ({
 })
 
 export const buildEditorTheme = ({ fontSize, fontFamily, headingFontFamily, colors }) => {
-    const { text, cursor, selection, placeholder, link, quoteBackground, codeBackground, thematicBreak } = colors
+    const { onBackground, tertiary, selection, placeholder, background, codeBackground, thematicBreak, surface } = colors
 
     return EditorView.theme({
         '&': { height: '100%', fontSize: `${fontSize}px`, backgroundColor: 'transparent' },
         '.cm-content': {
-            fontFamily, color: text, caretColor: cursor, overflowWrap: 'anywhere',
+            fontFamily, color: onBackground, caretColor: tertiary, overflowWrap: 'anywhere',
             paddingLeft: '16px', paddingRight: '16px', paddingTop: '8px'
         },
         '.cm-line': { overflowWrap: 'anywhere', padding: 0 },
@@ -55,20 +55,27 @@ export const buildEditorTheme = ({ fontSize, fontFamily, headingFontFamily, colo
         '.cm-gutters': { display: 'none' },
         '&.cm-focused': { outline: 'none' },
         '.cm-placeholder': { color: placeholder },
-        '.cm-searchMatch': { backgroundColor: `${link}40 !important` },
-        '.cm-searchMatch-selected': { backgroundColor: `${link}80 !important` },
+        '.cm-searchMatch': { backgroundColor: `${tertiary}40 !important` },
+        '.cm-searchMatch-selected': { backgroundColor: `${tertiary}80 !important` },
+        '.cm-tooltip.cm-tooltip-autocomplete': {
+            backgroundColor: surface, border: 'none', borderRadius: '8px', overflow: 'hidden'
+        },
+        '.cm-tooltip-autocomplete ul': { fontFamily, color: onBackground },
+        '.cm-tooltip-autocomplete ul li': { padding: '8px 0 !important' },
+        '.cm-tooltip-autocomplete ul li[aria-selected]': { backgroundColor: `${tertiary}30`, color: onBackground },
         ...buildLiveFormattingTheme({
-            linkColor: link,
-            quoteBackgroundColor: quoteBackground,
+            linkColor: tertiary,
+            quoteBackgroundColor: background,
             codeBackgroundColor: codeBackground,
             thematicBreakColor: thematicBreak,
+            onBackgroundColor: onBackground,
             headingFontFamily
         })
     })
 }
 
 export const buildPreviewCss = ({ fontFamily, headingFontFamily, colors, fontSize }) => {
-    const { text: textColor, link: linkColor, quoteBackground: quoteBackgroundColor, codeBackground: codeBackgroundColor, thematicBreak: thematicBreakColor } = colors
+    const { onBackground: textColor, tertiary: linkColor, background: quoteBackgroundColor, codeBackground: codeBackgroundColor, thematicBreak: thematicBreakColor } = colors
 
     return `
     html, body { margin: 0; overflow-x: hidden; scrollbar-width: none; }
@@ -90,6 +97,8 @@ export const buildPreviewCss = ({ fontFamily, headingFontFamily, colors, fontSiz
     .markdown-preview h6 { font-size: ${fontSize * 1.2}px; }
     .markdown-preview p { margin: 0.4em 0; }
     .markdown-preview a { color: ${linkColor}; text-decoration: underline; }
+    .markdown-preview .wiki-link { color: ${linkColor}; text-decoration: underline; font-weight: bold; }
+    .markdown-preview .wiki-link-broken { color: ${textColor}; opacity: 0.5; text-decoration: underline dashed; }
     .markdown-preview blockquote {
         margin: 0.4em 0; padding: 0.2em 0.8em;
         background-color: ${quoteBackgroundColor}; border-left: 4px solid ${linkColor};

@@ -1,8 +1,9 @@
 'use dom'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { Compartment, EditorState } from '@codemirror/state'
+import { useEffect, useMemo, useRef } from 'react'
+import { EditorState } from '@codemirror/state'
 import { EditorView, keymap, placeholder as placeholderExtension } from '@codemirror/view'
+import { autocompletion } from '@codemirror/autocomplete'
 import { defaultKeymap, history, historyKeymap, redoDepth, undoDepth } from '@codemirror/commands'
 import { closeSearchPanel, openSearchPanel, search, searchKeymap, setSearchQuery, SearchQuery } from '@codemirror/search'
 import { markdown } from '@codemirror/lang-markdown'
@@ -16,6 +17,8 @@ import { buildEditorTheme, buildPreviewCss } from './markdown-dom-theme'
 import { renderMarkdownHtml } from './markdown-dom-render-html'
 import { runAction } from './markdown-dom-commands'
 import { liveFormatting, mediaMapFacet } from './live-formatting/live-formatting'
+import { noteTitlesFacet, wikiLinkCompletionSource } from './wiki-link-completion'
+import { useCompartment } from './use-compartment'
 
 const createHiddenSearchPanel = () => {
     const dom = document.createElement('div')
@@ -28,6 +31,7 @@ const MarkdownDomEditor = ({
     value,
     previewValue,
     mediaMap,
+    noteTitles,
     onChange,
     onHistoryChange,
     action,
@@ -71,9 +75,11 @@ const MarkdownDomEditor = ({
     const lastEmittedValueRef = useRef(value)
     const hasFocusRef = useRef(false)
 
-    const [liveFormattingCompartment] = useState(() => new Compartment())
-    const [mediaMapCompartment] = useState(() => new Compartment())
     const mediaMapValue = useMemo(() => new Map(mediaMap || []), [mediaMap])
+
+    const mediaMapExtension = useCompartment(viewRef, () => mediaMapFacet.of(mediaMapValue), [mediaMapValue])
+    const noteTitlesExtension = useCompartment(viewRef, () => noteTitlesFacet.of(noteTitles || []), [noteTitles])
+    const liveFormattingExtension = useCompartment(viewRef, () => (mode === 'live' ? [liveFormatting] : []), [mode])
 
     useEffect(() => {
         document.documentElement.style.height = '100%'
@@ -89,8 +95,10 @@ const MarkdownDomEditor = ({
                 search({ createPanel: createHiddenSearchPanel }),
                 keymap.of([...defaultKeymap, ...historyKeymap, ...searchKeymap]),
                 markdown({ extensions: GFM }),
-                mediaMapCompartment.of(mediaMapFacet.of(mediaMapValue)),
-                liveFormattingCompartment.of(mode === 'live' ? [liveFormatting] : []),
+                mediaMapExtension,
+                noteTitlesExtension,
+                autocompletion({ override: [wikiLinkCompletionSource] }),
+                liveFormattingExtension,
                 EditorView.lineWrapping,
                 placeholderExtension(placeholder),
                 theme,
@@ -146,22 +154,6 @@ const MarkdownDomEditor = ({
             })
         }
     }, [value])
-
-    useEffect(() => {
-        const view = viewRef.current
-        if (!view) return
-        view.dispatch({
-            effects: liveFormattingCompartment.reconfigure(mode === 'live' ? [liveFormatting] : [])
-        })
-    }, [mode])
-
-    useEffect(() => {
-        const view = viewRef.current
-        if (!view) return
-        view.dispatch({
-            effects: mediaMapCompartment.reconfigure(mediaMapFacet.of(mediaMapValue))
-        })
-    }, [mediaMapValue])
 
     useEffect(() => {
         const view = viewRef.current
@@ -244,7 +236,7 @@ const MarkdownDomEditor = ({
                 titlePlaceholder={titlePlaceholder}
                 metaLabel={metaLabel}
                 headingFontFamily={headingFontFamily}
-                textColor={colors.text}
+                textColor={colors.onBackground}
             />
 
             <div

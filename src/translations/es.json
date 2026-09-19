@@ -163,6 +163,7 @@
 		"hr": "Línea horizontal",
 		"image": "Insertar imagen",
 		"link": "Insertar enlace",
+		"wiki-link": "Insertar enlace a nota",
 		"table": "Insertar tabla",
 		"insert-date": "Insertar fecha",
 		"insert-time": "Insertar hora",

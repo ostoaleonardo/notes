@@ -7,10 +7,14 @@ import MarkdownDomEditor from './markdown-dom-editor'
 
 import { useDomFonts } from '@/hooks/use-dom-fonts'
 import { useKatexFonts } from '@/hooks/use-katex-fonts'
+import { useNotes } from '@/hooks/use-notes'
 import { useResolvedPreviewMarkdown } from '@/hooks/use-resolved-preview-markdown'
+import { useResolvedWikiLinks } from '@/hooks/use-resolved-wiki-links'
 
 import { FONTS, TRANSPARENT } from '@/constants/themes'
 import { ROUTES } from '@/constants/routes'
+import { WIKI_LINK_SCHEME } from '@/constants/wiki-links'
+import { getEditorPath } from '@/utils/editor-path'
 
 export const MarkdownInput = ({
     mode = 'live',
@@ -32,17 +36,30 @@ export const MarkdownInput = ({
     replaceText
 }) => {
     const { colors } = useTheme()
-    const { background, onBackground, tertiary } = colors
+    const { background, onBackground, tertiary, surface } = colors
     const fonts = useDomFonts()
     const katexFonts = useKatexFonts()
 
     const bodyFontFamily = `${FONTS.azeretLight}, ui-monospace, monospace`
     const headingFontFamily = `${FONTS.nType82Headline}, system-ui, sans-serif`
 
-    const { value: previewValue, mediaMap } = useResolvedPreviewMarkdown(value)
+    const { notes } = useNotes()
+    const noteTitles = useMemo(() => notes.map((note) => note.title).filter(Boolean), [notes])
+
+    const valueWithWikiLinks = useResolvedWikiLinks(value)
+    const { value: previewValue, mediaMap } = useResolvedPreviewMarkdown(valueWithWikiLinks)
     const mediaMapEntries = useMemo(() => [...mediaMap], [mediaMap])
 
-    const onLinkPress = useCallback((url) => Linking.openURL(url), [])
+    const onLinkPress = useCallback((url) => {
+        if (!url) return
+
+        if (url.startsWith(WIKI_LINK_SCHEME)) {
+            router.push(getEditorPath(url.slice(WIKI_LINK_SCHEME.length)))
+            return
+        }
+
+        Linking.openURL(url)
+    }, [])
 
     const onImagePress = useCallback((url) => router.push({
         pathname: ROUTES.IMAGE_VIEWER,
@@ -58,15 +75,15 @@ export const MarkdownInput = ({
     }), [mode])
 
     const editorColors = useMemo(() => ({
-        text: onBackground,
-        cursor: tertiary,
+        onBackground,
+        tertiary,
+        background,
+        surface,
         selection: tertiary + TRANSPARENT[20],
         placeholder: onBackground + TRANSPARENT[40],
-        link: tertiary,
-        quoteBackground: background,
         codeBackground: onBackground + TRANSPARENT[10],
         thematicBreak: tertiary + TRANSPARENT[30]
-    }), [background, onBackground, tertiary])
+    }), [background, onBackground, tertiary, surface])
 
     const typography = useMemo(() => ({
         fontSize: size,
@@ -80,6 +97,7 @@ export const MarkdownInput = ({
             value={value}
             previewValue={previewValue}
             mediaMap={mediaMapEntries}
+            noteTitles={noteTitles}
             onChange={onChangeText}
             onHistoryChange={onHistoryChange}
             action={action}
