@@ -1,14 +1,11 @@
 import { ToastAndroid } from 'react-native'
-import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
-import { DialogModal } from '@/components/dialog'
-import { Typography } from '@/components/typography'
+import { ConfirmDialog } from '@/components/confirm-dialog'
 
 import { useHaptics } from '@/hooks/use-haptics'
 import { useRepositories } from '@/hooks/use-repositories'
 
-import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/dialog'
 import { FEEDBACK_TYPES } from '@/constants/feedback-types'
 
 export function DeleteRepository({ visible, onDismiss, repositoryId }) {
@@ -20,7 +17,6 @@ export function DeleteRepository({ visible, onDismiss, repositoryId }) {
 
     const onDelete = async () => {
         const result = await removeRepository(repositoryId)
-        onDismiss()
 
         if (result === 'active') {
             ToastAndroid.show(t('repositories.cannot_delete_active'), ToastAndroid.SHORT)
@@ -31,31 +27,13 @@ export function DeleteRepository({ visible, onDismiss, repositoryId }) {
     }
 
     return (
-        <DialogModal
+        <ConfirmDialog
             title={t(isFolder ? 'repositories.delete_folder' : 'repositories.delete')}
+            message={t(isFolder ? 'repositories.delete_folder_message' : 'repositories.delete_message')}
+            confirmLabel={t('button.delete')}
             visible={visible}
             onDismiss={onDismiss}
-            actions={[
-                <Button
-                    key='cancel'
-                    onPress={onDismiss}
-                    labelStyle={DIALOG_BUTTON_LABEL_STYLE}
-                >
-                    {t('button.cancel')}
-                </Button>,
-                <Button
-                    key='delete'
-                    mode='contained'
-                    onPress={onDelete}
-                    labelStyle={DIALOG_BUTTON_LABEL_STYLE}
-                >
-                    {t('button.delete')}
-                </Button>
-            ]}
-        >
-            <Typography opacity={0.6}>
-                {t(isFolder ? 'repositories.delete_folder_message' : 'repositories.delete_message')}
-            </Typography>
-        </DialogModal>
+            onConfirm={onDelete}
+        />
     )
 }
