@@ -211,6 +211,7 @@ export const NoteEditorScreen = ({
                 canRedo={canRedo}
             >
                 <MarkdownEditor
+                    id={id}
                     mode={mode}
                     title={title}
                     setTitle={setTitle}

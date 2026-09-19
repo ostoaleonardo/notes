@@ -4,6 +4,7 @@ import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
 import { NoteContext } from '../context/note-context'
 import { getUniqueFilename } from '@/utils/note-filename'
+import { renameWikiLinks } from '@/utils/wiki-links'
 
 export function useNotes() {
     const {
@@ -55,33 +56,67 @@ export function useNotes() {
     }
 
     const updateNote = async (note) => {
-        if (!notes.some((n) => n.id === note.id)) {
+        const previous = notes.find((n) => n.id === note.id)
+        if (!previous) {
             return saveNote(note, note.repositoryId)
         }
 
-        setNotes(notes.map((n) => {
+        const titleChanged = previous.title !== note.title
+
+        const nextNotes = notes.map((n) => {
             if (n.id === note.id) return note
-            return n
-        }))
+            if (!titleChanged) return n
+
+            const renamed = renameWikiLinks(n.note, previous.title, note.title)
+            return renamed === n.note ? n : { ...n, note: renamed }
+        })
+
+        setNotes(nextNotes)
 
         const uri = getRepositoryUri(note.repositoryId)
-        if (!uri) return
+        if (uri) {
+            const metadata = await readMetadata(uri)
+            const entry = metadata[note.id]
 
-        const metadata = await readMetadata(uri)
-        const entry = metadata[note.id]
-        if (!entry) return
+            if (entry) {
+                const existingNames = listMarkdownFiles(uri).map((file) => file.name)
+                const filename = getUniqueFilename(existingNames, note.title, entry.filename)
 
-        const existingNames = listMarkdownFiles(uri).map((file) => file.name)
-        const filename = getUniqueFilename(existingNames, note.title, entry.filename)
+                if (filename !== entry.filename) {
+                    await renameNoteFile(uri, entry.filename, filename)
+                }
 
-        if (filename !== entry.filename) {
-            await renameNoteFile(uri, entry.filename, filename)
+                writeNoteFile(uri, filename, note.note)
+
+                metadata[note.id] = toMetadataEntry(note, filename)
+                writeMetadata(uri, metadata)
+            }
         }
 
-        writeNoteFile(uri, filename, note.note)
+        if (!titleChanged) return
 
-        metadata[note.id] = toMetadataEntry(note, filename)
-        writeMetadata(uri, metadata)
+        const changedByRepository = new Map()
+        nextNotes.forEach((n, index) => {
+            if (n.id === note.id || n.note === notes[index].note) return
+
+            const group = changedByRepository.get(n.repositoryId) || []
+            group.push(n)
+            changedByRepository.set(n.repositoryId, group)
+        })
+
+        for (const [repositoryId, changedNotes] of changedByRepository) {
+            const otherUri = getRepositoryUri(repositoryId)
+            if (!otherUri) continue
+
+            const otherMetadata = await readMetadata(otherUri)
+
+            for (const changedNote of changedNotes) {
+                const entry = otherMetadata[changedNote.id]
+                if (!entry) continue
+
+                writeNoteFile(otherUri, entry.filename, changedNote.note)
+            }
+        }
     }
 
     const deleteNote = async (id) => {

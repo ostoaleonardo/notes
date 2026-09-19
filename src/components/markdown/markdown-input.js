@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react'
 import { Linking } from 'react-native'
 import { router } from 'expo-router'
 import { useTheme } from 'react-native-paper'
+import { useTranslation } from 'react-i18next'
 
 import MarkdownDomEditor from './markdown-dom-editor'
 
@@ -15,8 +16,10 @@ import { FONTS, TRANSPARENT } from '@/constants/themes'
 import { ROUTES } from '@/constants/routes'
 import { WIKI_LINK_SCHEME } from '@/constants/wiki-links'
 import { getEditorPath } from '@/utils/editor-path'
+import { findBacklinks, buildBacklinksHtml } from '@/utils/wiki-links'
 
 export const MarkdownInput = ({
+    id,
     mode = 'live',
     size = 13,
     value,
@@ -37,6 +40,7 @@ export const MarkdownInput = ({
 }) => {
     const { colors } = useTheme()
     const { background, onBackground, tertiary, surface } = colors
+    const { t } = useTranslation()
     const fonts = useDomFonts()
     const katexFonts = useKatexFonts()
 
@@ -45,6 +49,11 @@ export const MarkdownInput = ({
 
     const { notes } = useNotes()
     const noteTitles = useMemo(() => notes.map((note) => note.title).filter(Boolean), [notes])
+
+    const backlinksHtml = useMemo(() => {
+        const backlinks = findBacklinks(title, notes, id)
+        return buildBacklinksHtml(backlinks, t('title.backlinks'))
+    }, [title, notes, id, t])
 
     const valueWithWikiLinks = useResolvedWikiLinks(value)
     const { value: previewValue, mediaMap } = useResolvedPreviewMarkdown(valueWithWikiLinks)
@@ -98,6 +107,7 @@ export const MarkdownInput = ({
             previewValue={previewValue}
             mediaMap={mediaMapEntries}
             noteTitles={noteTitles}
+            backlinksHtml={backlinksHtml}
             onChange={onChangeText}
             onHistoryChange={onHistoryChange}
             action={action}

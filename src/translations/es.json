@@ -45,7 +45,8 @@
 		"settings": "Ajustes",
 		"about": "Acerca de la app",
 		"import": "Importar nota",
-		"version_history": "Historial de versiones"
+		"version_history": "Historial de versiones",
+		"backlinks": "Enlaces entrantes"
 	},
 	"date": {
 		"created": "Creado:",

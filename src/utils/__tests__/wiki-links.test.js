@@ -1,4 +1,4 @@
-import { resolveWikiLinks } from '../wiki-links'
+import { resolveWikiLinks, findBacklinks, renameWikiLinks, buildBacklinksHtml } from '../wiki-links'
 
 const notes = [
     { id: 'note-1', title: 'Meeting Notes' },
@@ -46,5 +46,85 @@ describe('plain text', () => {
         const result = resolveWikiLinks('Just a regular paragraph.', notes)
 
         expect(result).toBe('Just a regular paragraph.')
+    })
+})
+
+describe('findBacklinks', () => {
+    const linkingNotes = [
+        { id: 'a', title: 'Recipe', note: 'See [[Grocery List]] for what to buy.' },
+        { id: 'b', title: 'Other', note: 'No links here.' },
+        { id: 'c', title: 'Grocery List', note: 'Mentions [[grocery list|itself]] via alias.' }
+    ]
+
+    test('finds notes whose content links to the given title', () => {
+        const result = findBacklinks('Grocery List', linkingNotes)
+
+        expect(result.map((note) => note.id)).toEqual(['a', 'c'])
+    })
+
+    test('matches case-insensitively and through aliases', () => {
+        const result = findBacklinks('grocery list', linkingNotes)
+
+        expect(result.map((note) => note.id)).toContain('c')
+    })
+
+    test('excludes a note id when provided', () => {
+        const result = findBacklinks('Grocery List', linkingNotes, 'c')
+
+        expect(result.map((note) => note.id)).toEqual(['a'])
+    })
+
+    test('returns an empty array when nothing links to the title', () => {
+        const result = findBacklinks('Unlinked', linkingNotes)
+
+        expect(result).toEqual([])
+    })
+})
+
+describe('renameWikiLinks', () => {
+    test('renames a matching wiki link', () => {
+        const result = renameWikiLinks('See [[Grocery List]] for details', 'Grocery List', 'Shopping List')
+
+        expect(result).toBe('See [[Shopping List]] for details')
+    })
+
+    test('preserves the alias when renaming', () => {
+        const result = renameWikiLinks('See [[Grocery List|the list]] for details', 'Grocery List', 'Shopping List')
+
+        expect(result).toBe('See [[Shopping List|the list]] for details')
+    })
+
+    test('matches case-insensitively', () => {
+        const result = renameWikiLinks('[[grocery list]]', 'Grocery List', 'Shopping List')
+
+        expect(result).toBe('[[Shopping List]]')
+    })
+
+    test('leaves links to other titles unchanged', () => {
+        const result = renameWikiLinks('[[Meeting Notes]]', 'Grocery List', 'Shopping List')
+
+        expect(result).toBe('[[Meeting Notes]]')
+    })
+})
+
+describe('buildBacklinksHtml', () => {
+    test('returns an empty string when there are no backlinks', () => {
+        expect(buildBacklinksHtml([], 'Backlinks')).toBe('')
+    })
+
+    test('renders a link per backlink using the note id and title', () => {
+        const result = buildBacklinksHtml([{ id: 'note-1', title: 'Recipe' }], 'Backlinks')
+
+        expect(result).toContain('href="wikilink://note-1"')
+        expect(result).toContain('>Recipe<')
+        expect(result).toContain('>Backlinks<')
+    })
+
+    test('escapes html characters in titles and the label', () => {
+        const result = buildBacklinksHtml([{ id: 'note-1', title: '<b>Bold</b>' }], '<i>Label</i>')
+
+        expect(result).not.toContain('<b>Bold</b>')
+        expect(result).toContain('&lt;b&gt;Bold&lt;/b&gt;')
+        expect(result).toContain('&lt;i&gt;Label&lt;/i&gt;')
     })
 })
