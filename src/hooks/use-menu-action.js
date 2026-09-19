@@ -8,7 +8,8 @@ export function useMenuAction() {
 
     const trigger = useCallback((action) => {
         setVisible(false)
-        action()
+
+        if (typeof action === 'function') action()
     }, [])
 
     return { visible, onOpen, onClose, trigger }
