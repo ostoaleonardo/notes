@@ -48,7 +48,10 @@ export function useFiles() {
 
             showSnackbar(t('message.notes.exported'))
         } catch (error) {
+            if (error.code === 'ERR_PICKER_CANCELLED') return
+
             console.log(error)
+            showSnackbar(t('message.notes.export_failed'))
         }
     }
 
@@ -67,6 +70,7 @@ export function useFiles() {
             await Sharing.shareAsync(file.uri, { mimeType: EXPORT_MIME_TYPES[format] })
         } catch (error) {
             console.log(error)
+            showSnackbar(t('message.notes.share_failed'))
         }
     }
 
