@@ -5,7 +5,7 @@ import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 
 import { NoteEditorScreen } from '@/screens/notes/note-editor-screen'
 
-import { useNoteAutosave } from '@/hooks/use-note-autosave'
+import { useAutosave } from '@/hooks/use-autosave'
 import { useNotes } from '@/hooks/use-notes'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
@@ -55,32 +55,37 @@ export default function Note() {
         }, [])
     )
 
-    useNoteAutosave({
-        id, title, note, tags, createdAt, repositoryId,
-        skip: firstRender.current || (title === autoTitleRef.current && !note),
-        onSave: (newData) => {
-            if (!isSaved.current) {
-                const createdAt = getDate()
-
-                saveNote({
-                    ...newData,
-                    createdAt
-                }, repositoryId)
-
-                setCreatedAt(createdAt)
-                isSaved.current = true
-            } else {
-                const updatedAt = getDate()
-                updateNote({ ...newData, updatedAt })
-                setUpdatedAt(updatedAt)
-            }
+    const { flush } = useAutosave(() => {
+        const newData = {
+            id,
+            title: title.trim(),
+            note: note.trim(),
+            tags,
+            createdAt,
+            repositoryId
         }
+
+        if (!isSaved.current) {
+            const createdAt = getDate()
+
+            saveNote({ ...newData, createdAt }, repositoryId)
+
+            setCreatedAt(createdAt)
+            isSaved.current = true
+        } else {
+            const updatedAt = getDate()
+            updateNote({ ...newData, updatedAt })
+            setUpdatedAt(updatedAt)
+        }
+    }, [id, title, note, tags, createdAt, repositoryId], {
+        skip: firstRender.current || (title === autoTitleRef.current && !note)
     })
 
     return (
         <NoteEditorScreen
             id={id}
             repositoryId={repositoryId}
+            flush={flush}
             title={title}
             setTitle={setTitle}
             note={note}
