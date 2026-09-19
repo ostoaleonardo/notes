@@ -1,6 +1,14 @@
-import { launchCameraAsync, launchImageLibraryAsync } from 'expo-image-picker'
+import {
+    getCameraPermissionsAsync,
+    launchCameraAsync,
+    launchImageLibraryAsync,
+    requestCameraPermissionsAsync
+} from 'expo-image-picker'
 
 import { IMAGE_PICKER_OPTIONS } from '@/constants/image'
+
+export const getCameraPermission = () => getCameraPermissionsAsync()
+export const requestCameraPermission = () => requestCameraPermissionsAsync()
 
 export const openImagePicker = async (type) => {
     let result = null
