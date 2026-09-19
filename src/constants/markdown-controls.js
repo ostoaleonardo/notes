@@ -1,8 +1,12 @@
 import { CalendarToday } from '@/icons/calendar-today'
+import { Checklist } from '@/icons/checklist'
+import { CollapseContent } from '@/icons/collapse-content'
 import { Code } from '@/icons/code'
 import { DataArray } from '@/icons/data-array'
 import { FormaQuote } from '@/icons/forma-quote'
 import { FormatBold } from '@/icons/format-bold'
+import { FormatListBulleted } from '@/icons/format-list-bulleted'
+import { FormatListNumbered } from '@/icons/format-list-numbered'
 import { FormatH1 } from '@/icons/format-h1'
 import { FormatH2 } from '@/icons/format-h2'
 import { FormatH3 } from '@/icons/format-h3'
@@ -20,6 +24,7 @@ import { Title } from '@/icons/title'
 
 export const MARKDOWN_CONTROLS = [
     { action: 'wiki-link', Icon: DataArray },
+    { action: 'fold', Icon: CollapseContent },
     { divider: true },
     { action: 'bold', Icon: FormatBold },
     { action: 'italic', Icon: FormatItalic },
@@ -30,6 +35,11 @@ export const MARKDOWN_CONTROLS = [
     { action: 'h4', Icon: FormatH4 },
     { action: 'h5', Icon: FormatH5 },
     { action: 'h6', Icon: FormatH6 },
+    { divider: true },
+    { action: 'list-bullet', Icon: FormatListBulleted },
+    { action: 'list-ordered', Icon: FormatListNumbered },
+    { action: 'list-checklist', Icon: Checklist },
+    { divider: true },
     { action: 'quote', Icon: FormaQuote },
     { action: 'code', Icon: Code },
     { action: 'hr', Icon: HorizontalRule },

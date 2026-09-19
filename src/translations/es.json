@@ -165,6 +165,10 @@
 		"link": "Insertar enlace",
 		"wiki-link": "Insertar enlace a nota",
 		"table": "Insertar tabla",
+		"list-bullet": "Lista con viñetas",
+		"list-ordered": "Lista numerada",
+		"list-checklist": "Lista de tareas",
+		"fold": "Colapsar sección",
 		"insert-date": "Insertar fecha",
 		"insert-time": "Insertar hora",
 		"insert-title": "Insertar título"

@@ -165,6 +165,10 @@
 		"link": "Insert link",
 		"wiki-link": "Insert note link",
 		"table": "Insert table",
+		"list-bullet": "Bulleted list",
+		"list-ordered": "Numbered list",
+		"list-checklist": "Checklist",
+		"fold": "Collapse section",
 		"insert-date": "Insert date",
 		"insert-time": "Insert time",
 		"insert-title": "Insert title"

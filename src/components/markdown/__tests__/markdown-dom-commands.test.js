@@ -5,8 +5,13 @@ import { EditorState } from '@codemirror/state'
 import { EditorView, keymap } from '@codemirror/view'
 import { defaultKeymap, historyKeymap, history, redoDepth, undoDepth } from '@codemirror/commands'
 import { search, searchKeymap, setSearchQuery, SearchQuery } from '@codemirror/search'
+import { codeFolding } from '@codemirror/language'
+import { markdown } from '@codemirror/lang-markdown'
+import { GFM } from '@lezer/markdown'
 
 import { runAction } from '../markdown-dom-commands'
+import { listKeymap } from '../markdown-dom-list-keymap'
+import { headingFoldService } from '../markdown-dom-fold'
 
 const createView = (doc, cursor = doc.length) => {
     const state = EditorState.create({
@@ -15,6 +20,21 @@ const createView = (doc, cursor = doc.length) => {
         extensions: [history(), search(), keymap.of([
             ...defaultKeymap, ...historyKeymap, ...searchKeymap
         ])]
+    })
+
+    return new EditorView({ state })
+}
+
+const createMarkdownView = (doc, cursor = doc.length) => {
+    const state = EditorState.create({
+        doc,
+        selection: { anchor: cursor },
+        extensions: [
+            markdown({ extensions: GFM }),
+            codeFolding(),
+            headingFoldService,
+            keymap.of([...listKeymap, ...defaultKeymap, ...historyKeymap, ...searchKeymap])
+        ]
     })
 
     return new EditorView({ state })
@@ -93,6 +113,131 @@ describe('formatting commands', () => {
         runAction(view, 'not-a-real-action')
 
         expect(view.state.doc.toString()).toBe('unchanged')
+    })
+
+    test('table inserts a 2x1 skeleton when no payload is given', () => {
+        const view = createView('')
+
+        runAction(view, 'table')
+
+        expect(view.state.doc.toString()).toBe(
+            '| Column 1 | Column 2 |\n| --- | --- |\n| Cell 1 | Cell 2 |'
+        )
+    })
+
+    test('table honors the requested column and row count', () => {
+        const view = createView('')
+
+        runAction(view, 'table', { cols: 3, rows: 2 })
+
+        expect(view.state.doc.toString()).toBe(
+            '| Column 1 | Column 2 | Column 3 |\n'
+            + '| --- | --- | --- |\n'
+            + '| Cell 1 | Cell 2 | Cell 3 |\n'
+            + '| Cell 4 | Cell 5 | Cell 6 |'
+        )
+    })
+})
+
+describe('list commands', () => {
+    test('list-bullet prefixes the current line', () => {
+        const view = createView('Milk')
+
+        runAction(view, 'list-bullet')
+
+        expect(view.state.doc.toString()).toBe('- Milk')
+    })
+
+    test('list-bullet toggles off an existing bullet', () => {
+        const view = createView('- Milk')
+
+        runAction(view, 'list-bullet')
+
+        expect(view.state.doc.toString()).toBe('Milk')
+    })
+
+    test('list-ordered replaces an existing bullet marker', () => {
+        const view = createView('- Milk')
+
+        runAction(view, 'list-ordered')
+
+        expect(view.state.doc.toString()).toBe('1. Milk')
+    })
+
+    test('list-checklist replaces an existing ordered marker', () => {
+        const view = createView('1. Milk')
+
+        runAction(view, 'list-checklist')
+
+        expect(view.state.doc.toString()).toBe('- [ ] Milk')
+    })
+
+    test('list-checklist toggles off an existing checklist item', () => {
+        const view = createView('- [x] Milk')
+
+        runAction(view, 'list-checklist')
+
+        expect(view.state.doc.toString()).toBe('Milk')
+    })
+})
+
+describe('list continuation on enter', () => {
+    const pressEnter = (view) => {
+        const binding = listKeymap.find((entry) => entry.key === 'Enter')
+        return binding.run(view)
+    }
+
+    test('continues a bullet list with the same marker', () => {
+        const view = createMarkdownView('- Milk')
+
+        const handled = pressEnter(view)
+
+        expect(handled).toBe(true)
+        expect(view.state.doc.toString()).toBe('- Milk\n- ')
+    })
+
+    test('increments the marker for an ordered list', () => {
+        const view = createMarkdownView('1. Milk')
+
+        pressEnter(view)
+
+        expect(view.state.doc.toString()).toBe('1. Milk\n2. ')
+    })
+
+    test('continues a checklist item as unchecked', () => {
+        const view = createMarkdownView('- [x] Milk')
+
+        pressEnter(view)
+
+        expect(view.state.doc.toString()).toBe('- [x] Milk\n- [ ] ')
+    })
+
+    test('exits the list when the current item is empty', () => {
+        const view = createMarkdownView('- Milk\n- ')
+
+        pressEnter(view)
+
+        expect(view.state.doc.toString()).toBe('- Milk\n')
+    })
+
+    test('does not intercept enter outside a list', () => {
+        const view = createMarkdownView('Plain text')
+
+        const handled = pressEnter(view)
+
+        expect(handled).toBe(false)
+        expect(view.state.doc.toString()).toBe('Plain text')
+    })
+})
+
+describe('fold', () => {
+    test('folds the section under a heading', () => {
+        const doc = '# Title\nbody line\n# Next'
+        const view = createMarkdownView(doc, 3)
+
+        const handled = runAction(view, 'fold')
+
+        expect(handled).toBe(true)
     })
 })
 

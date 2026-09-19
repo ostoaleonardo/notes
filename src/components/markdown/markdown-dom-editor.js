@@ -3,9 +3,10 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { EditorState } from '@codemirror/state'
 import { EditorView, keymap, placeholder as placeholderExtension } from '@codemirror/view'
-import { autocompletion } from '@codemirror/autocomplete'
-import { defaultKeymap, history, historyKeymap, redoDepth, undoDepth } from '@codemirror/commands'
+import { autocompletion, closeBrackets } from '@codemirror/autocomplete'
+import { defaultKeymap, history, historyKeymap, indentWithTab, redoDepth, undoDepth } from '@codemirror/commands'
 import { closeSearchPanel, openSearchPanel, search, searchKeymap, setSearchQuery, SearchQuery } from '@codemirror/search'
+import { codeFolding } from '@codemirror/language'
 import { markdown } from '@codemirror/lang-markdown'
 import { GFM } from '@lezer/markdown'
 
@@ -19,6 +20,9 @@ import { runAction } from './markdown-dom-commands'
 import { liveFormatting, mediaMapFacet } from './live-formatting/live-formatting'
 import { noteTitlesFacet, wikiLinkCompletionSource } from './wiki-link-completion'
 import { useCompartment } from './use-compartment'
+import { listKeymap } from './markdown-dom-list-keymap'
+import { headingFoldService } from './markdown-dom-fold'
+import { pasteUrlOverSelection } from './markdown-dom-paste'
 
 const createHiddenSearchPanel = () => {
     const dom = document.createElement('div')
@@ -93,11 +97,21 @@ const MarkdownDomEditor = ({
             extensions: [
                 history(),
                 search({ createPanel: createHiddenSearchPanel }),
-                keymap.of([...defaultKeymap, ...historyKeymap, ...searchKeymap]),
+                keymap.of([
+                    indentWithTab,
+                    ...listKeymap,
+                    ...defaultKeymap,
+                    ...historyKeymap,
+                    ...searchKeymap
+                ]),
                 markdown({ extensions: GFM }),
                 mediaMapExtension,
                 noteTitlesExtension,
                 autocompletion({ override: [wikiLinkCompletionSource] }),
+                closeBrackets(),
+                codeFolding(),
+                headingFoldService,
+                pasteUrlOverSelection,
                 liveFormattingExtension,
                 EditorView.lineWrapping,
                 placeholderExtension(placeholder),
@@ -241,7 +255,11 @@ const MarkdownDomEditor = ({
 
             <div
                 ref={containerRef}
-                style={{ flex: 1, minHeight: 0, display: mode === 'read' ? 'none' : 'flex' }}
+                style={{
+                    flex: 1,
+                    minHeight: 0,
+                    display: mode === 'read' ? 'none' : 'flex'
+                }}
             />
 
             <div
