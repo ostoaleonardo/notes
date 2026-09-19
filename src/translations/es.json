@@ -6,7 +6,9 @@
 		"intro_title": "No hay notas abiertas",
 		"intro_subtitle": "Elige una nota desde el menú lateral, o crea una nueva en la raíz de tu repositorio.",
 		"copy_suffix": "(copia)",
-		"go_home": "Inicio"
+		"go_home": "Inicio",
+		"delete_title": "Borrar nota",
+		"delete_message": "Esto eliminará permanentemente esta nota del dispositivo."
 	},
 	"tags": {
 		"add": "Añadir etiqueta",
@@ -139,7 +141,12 @@
 		"image_alt_placeholder": "Descripción de la imagen",
 		"image_url": "URL",
 		"image_camera": "Tomar foto",
-		"image_gallery": "Elegir de la galería"
+		"image_gallery": "Elegir de la galería",
+		"camera_permission_title": "Permiso de cámara",
+		"camera_permission_message": "Actívalo para tomar fotos desde la app.",
+		"camera_permission_grant": "Activar",
+		"camera_permission_settings": "Abrir ajustes",
+		"camera_permission_denied": "Activa el permiso de cámara en los ajustes del sistema para tomar fotos."
 	},
 	"markdown_action": {
 		"bold": "Negrita",
@@ -165,13 +172,17 @@
 		"notes": {
 			"empty": "Todavía no tienes notas",
 			"exported": "Archivo exportado exitosamente",
-			"no_recent": "Sin notas recientes ni fijadas"
+			"no_recent": "Sin notas recientes ni fijadas",
+			"export_failed": "No se pudo exportar el archivo",
+			"share_failed": "No se pudo compartir el archivo"
 		},
 		"tags": {
 			"empty": "Todavía no tienes etiquetas"
 		},
 		"version_history": {
-			"empty": "Aún no hay versiones guardadas"
+			"empty": "Aún no hay versiones guardadas",
+			"restore_title": "Restaurar versión",
+			"restore_message": "Esto reemplazará el contenido actual por el de esta versión. Los cambios sin guardar se perderán."
 		}
 	},
 	"placeholder": {
@@ -220,13 +231,16 @@
 		"new": "Nueva plantilla",
 		"import": "Importar plantilla",
 		"saved": "Plantilla guardada",
+			"save_failed": "No se pudo guardar la plantilla",
 		"view_placeholders": "Ver variables disponibles",
 		"placeholders_title": "Variables disponibles",
 		"placeholder_date": "Fecha actual",
 		"placeholder_time": "Hora actual",
 		"placeholder_title": "Título de la nota",
 		"placeholder_example": "ej. {{value}}",
-		"placeholder_title_example": "Notas de la reunión"
+		"placeholder_title_example": "Notas de la reunión",
+		"delete_title": "Borrar plantilla",
+		"delete_message": "Esto eliminará permanentemente esta plantilla del dispositivo."
 	},
 	"search": {
 		"recent": "Recientes",

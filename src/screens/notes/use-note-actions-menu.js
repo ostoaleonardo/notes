@@ -25,7 +25,8 @@ export const useNoteActionsMenu = ({
     onSetMode,
     onOpenVersionHistory,
     onOpenExportDialog,
-    onOpenShareDialog
+    onOpenShareDialog,
+    onOpenDeleteDialog
 }) => {
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
@@ -33,7 +34,7 @@ export const useNoteActionsMenu = ({
     const { pinned, updatePinned } = useUtils()
     const [isPinned, setIsPinned] = useState(pinned.has(slug))
 
-    const { deleteNote, getNote, saveNote, paramId, setParamId } = useNotes()
+    const { getNote, saveNote, paramId } = useNotes()
 
     const toggleKeep = () => onTrigger(() => {
         if (pinned.has(slug)) {
@@ -44,12 +45,6 @@ export const useNoteActionsMenu = ({
 
         setIsPinned(pinned.has(slug))
         updatePinned(new Set(pinned))
-    })
-
-    const onDelete = () => onTrigger(() => {
-        deleteNote(paramId || slug)
-        setParamId('')
-        router.back()
     })
 
     const onDuplicate = () => onTrigger(() => {
@@ -115,7 +110,7 @@ export const useNoteActionsMenu = ({
                 key='delete'
                 title={t('button.delete')}
                 leadingIcon={(props) => <Delete {...props} />}
-                onPress={onDelete}
+                onPress={() => onTrigger(onOpenDeleteDialog)}
             />
         ]
     ]
