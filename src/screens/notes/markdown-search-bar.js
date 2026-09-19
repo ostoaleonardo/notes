@@ -1,6 +1,6 @@
+import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { IconButton, useTheme } from 'react-native-paper'
 
 import { SmallInput } from '@/components/input/small-input'
 import { IconToggleGroup } from '@/components/button/icon-toggle-group'
@@ -52,26 +52,25 @@ export function MarkdownSearchBar({
                     onChangeText={onQueryChange}
                     placeholder={t('button.find')}
                 />
-                <View style={{ flexDirection: 'row' }}>
-                    <IconButton
-                        size={18}
-                        onPress={onPrevious}
-                        icon={(props) => <KeyboardArrowUp {...props} />}
-                        accessibilityLabel={t('button.previous')}
-                    />
-                    <IconButton
-                        size={18}
-                        onPress={onNext}
-                        icon={(props) => <KeyboardArrowDown {...props} />}
-                        accessibilityLabel={t('button.next')}
-                    />
-                    <IconButton
-                        size={18}
-                        onPress={onClose}
-                        icon={(props) => <Close {...props} />}
-                        accessibilityLabel={t('button.close')}
-                    />
-                </View>
+                <IconToggleGroup
+                    buttons={[
+                        {
+                            icon: KeyboardArrowUp,
+                            label: t('button.previous'),
+                            onPress: onPrevious
+                        },
+                        {
+                            icon: KeyboardArrowDown,
+                            label: t('button.next'),
+                            onPress: onNext
+                        },
+                        {
+                            icon: Close,
+                            label: t('button.close'),
+                            onPress: onClose
+                        }
+                    ]}
+                />
             </View>
 
             {replaceVisible && (
@@ -93,8 +92,16 @@ export function MarkdownSearchBar({
                     />
                     <IconToggleGroup
                         buttons={[
-                            { icon: FindReplace, label: t('button.replace'), onPress: onReplaceOne },
-                            { icon: DoneAll, label: t('button.replace_all'), onPress: onReplaceAll }
+                            {
+                                icon: FindReplace,
+                                label: t('button.replace'),
+                                onPress: onReplaceOne
+                            },
+                            {
+                                icon: DoneAll,
+                                label: t('button.replace_all'),
+                                onPress: onReplaceAll
+                            }
                         ]}
                     />
                 </View>
@@ -107,7 +114,7 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         paddingHorizontal: 16,
-        paddingTop: 8,
+        paddingBottom: 8,
         gap: 2
     },
     row: {
