@@ -63,6 +63,10 @@ export const buildEditorTheme = ({ fontSize, fontFamily, headingFontFamily, colo
         '.cm-tooltip-autocomplete ul': { fontFamily, color: onBackground },
         '.cm-tooltip-autocomplete ul li': { padding: '8px 0 !important' },
         '.cm-tooltip-autocomplete ul li[aria-selected]': { backgroundColor: `${tertiary}30`, color: onBackground },
+        '.cm-foldPlaceholder': {
+            backgroundColor: `${surface} !important`, border: 'none !important',
+            color: `${tertiary} !important`, borderRadius: '4px', padding: '0 6px', fontFamily
+        },
         ...buildLiveFormattingTheme({
             linkColor: tertiary,
             quoteBackgroundColor: background,
@@ -120,5 +124,9 @@ export const buildPreviewCss = ({ fontFamily, headingFontFamily, colors, fontSiz
     .markdown-preview .footnote-ref a, .markdown-preview .footnote-backref { color: ${linkColor}; }
     .markdown-preview .footnotes-sep { border: none; border-top: 1px solid ${thematicBreakColor}; margin: 16px 0; }
     .markdown-preview .footnotes { font-size: 0.85em; opacity: 0.85; }
+    .markdown-preview .backlinks { margin-top: 24px; padding-top: 16px; border-top: 1px solid ${thematicBreakColor}; }
+    .markdown-preview .backlinks-title { font-size: 0.75em; text-transform: uppercase; opacity: 0.6; margin-bottom: 8px; }
+    .markdown-preview .backlinks ul { list-style: none; padding: 0; margin: 0; }
+    .markdown-preview .backlinks li { margin: 4px 0; }
 `
 }

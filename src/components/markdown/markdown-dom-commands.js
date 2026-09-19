@@ -1,9 +1,26 @@
 import { EditorSelection } from '@codemirror/state'
 import { redo, undo } from '@codemirror/commands'
 import { findNext, findPrevious, replaceAll, replaceNext } from '@codemirror/search'
+import { toggleFold } from '@codemirror/language'
 import { snippet } from '@codemirror/autocomplete'
 
 const insertWikiLinkSnippet = snippet('[[${}]]')
+
+const buildTableTemplate = (cols, rows) => {
+    const header = Array.from({ length: cols }, (_, c) => `\${Column ${c + 1}}`).join(' | ')
+    const separator = Array(cols).fill('---').join(' | ')
+    const bodyLines = Array.from({ length: rows }, (_, r) => (
+        Array.from({ length: cols }, (_, c) => `\${Cell ${r * cols + c + 1}}`).join(' | ')
+    ))
+
+    return [`| ${header} |`, `| ${separator} |`, ...bodyLines.map((line) => `| ${line} |`)].join('\n')
+}
+
+const LIST_MARKERS = {
+    checklist: /^(\s*)-\s+\[[ xX]\]\s+/,
+    ordered: /^(\s*)\d+\.\s+/,
+    bullet: /^(\s*)[-*+]\s+/
+}
 
 const currentLine = (view) => view.state.doc.lineAt(view.state.selection.main.head)
 
@@ -121,6 +138,41 @@ const insertWikiLink = (view) => {
     view.focus()
 }
 
+const insertTable = (view, payload) => {
+    const { cols = 2, rows = 1 } = payload || {}
+    const { from, to } = view.state.selection.main
+
+    snippet(buildTableTemplate(cols, rows))(view, null, from, to)
+    view.focus()
+}
+
+const stripListMarker = (text) => text
+    .replace(LIST_MARKERS.checklist, '$1')
+    .replace(LIST_MARKERS.ordered, '$1')
+    .replace(LIST_MARKERS.bullet, '$1')
+
+const toggleListMarker = (view, type) => {
+    replaceLine(view, (text) => {
+        const isChecklist = LIST_MARKERS.checklist.test(text)
+        const isOrdered = !isChecklist && LIST_MARKERS.ordered.test(text)
+        const isBullet = !isChecklist && !isOrdered && LIST_MARKERS.bullet.test(text)
+
+        const alreadyActive = (type === 'checklist' && isChecklist)
+            || (type === 'ordered' && isOrdered)
+            || (type === 'bullet' && isBullet)
+
+        const stripped = stripListMarker(text)
+        if (alreadyActive) return stripped
+
+        const indent = stripped.match(/^\s*/)[0]
+        const content = stripped.slice(indent.length)
+
+        if (type === 'checklist') return `${indent}- [ ] ${content}`
+        if (type === 'ordered') return `${indent}1. ${content}`
+        return `${indent}- ${content}`
+    })
+}
+
 export const runAction = (view, action, payload) => {
     switch (action) {
         case 'bold': return toggleWrap(view, '*')
@@ -138,6 +190,10 @@ export const runAction = (view, action, payload) => {
         case 'image': return insertLineLink(view, payload, (label, url) => `![${label}](${url})`)
         case 'link': return insertLineLink(view, payload, (label, url) => `[${label}](${url})`)
         case 'wiki-link': return insertWikiLink(view)
+        case 'list-bullet': return toggleListMarker(view, 'bullet')
+        case 'list-ordered': return toggleListMarker(view, 'ordered')
+        case 'list-checklist': return toggleListMarker(view, 'checklist')
+        case 'fold': return toggleFold(view)
         case 'insert-date': return insertAtCursor(view, '{{date}}')
         case 'insert-time': return insertAtCursor(view, '{{time}}')
         case 'insert-title': return insertAtCursor(view, '{{title}}')
@@ -147,7 +203,7 @@ export const runAction = (view, action, payload) => {
         case 'search-previous': return findPrevious(view)
         case 'search-replace': return replaceNext(view)
         case 'search-replace-all': return replaceAll(view)
-        case 'table': return
+        case 'table': return insertTable(view, payload)
         default: return
     }
 }
