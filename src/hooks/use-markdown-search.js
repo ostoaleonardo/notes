@@ -3,8 +3,8 @@ import { useCallback, useState } from 'react'
 export function useMarkdownSearch() {
     const [visible, setVisible] = useState(false)
     const [replaceVisible, setReplaceVisible] = useState(false)
-    const [query, setQuery] = useState('')
-    const [replacement, setReplacement] = useState('')
+    const [searchQuery, setSearchQuery] = useState('')
+    const [replaceText, setReplaceText] = useState('')
 
     const onOpenSearch = useCallback(() => {
         setVisible(true)
@@ -19,17 +19,17 @@ export function useMarkdownSearch() {
     const onClose = useCallback(() => {
         setVisible(false)
         setReplaceVisible(false)
-        setQuery('')
-        setReplacement('')
+        setSearchQuery('')
+        setReplaceText('')
     }, [])
 
     return {
         visible,
         replaceVisible,
-        query,
-        setQuery,
-        replacement,
-        setReplacement,
+        searchQuery,
+        setSearchQuery,
+        replaceText,
+        setReplaceText,
         onOpenSearch,
         onOpenReplace,
         onClose

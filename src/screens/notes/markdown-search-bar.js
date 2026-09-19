@@ -14,20 +14,16 @@ import { KeyboardArrowUp } from '@/icons/keyboard-arrow-up'
 import { RADIUS } from '@/constants/themes'
 
 export function MarkdownSearchBar({
-    visible,
-    replaceVisible,
-    query,
-    onQueryChange,
-    replacement,
-    onReplacementChange,
+    search,
     onPrevious,
     onNext,
     onReplaceOne,
-    onReplaceAll,
-    onClose
+    onReplaceAll
 }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
+
+    const { visible, replaceVisible, searchQuery, setSearchQuery, replaceText, setReplaceText, onClose } = search
 
     if (!visible) return null
 
@@ -48,8 +44,8 @@ export function MarkdownSearchBar({
                 <SmallInput
                     autoFocus
                     background={colors.surface}
-                    value={query}
-                    onChangeText={onQueryChange}
+                    value={searchQuery}
+                    onChangeText={setSearchQuery}
                     placeholder={t('button.find')}
                 />
                 <IconToggleGroup
@@ -85,9 +81,9 @@ export function MarkdownSearchBar({
                     }}
                 >
                     <SmallInput
-                        value={replacement}
+                        value={replaceText}
                         background={colors.surface}
-                        onChangeText={onReplacementChange}
+                        onChangeText={setReplaceText}
                         placeholder={t('button.replace')}
                     />
                     <IconToggleGroup
