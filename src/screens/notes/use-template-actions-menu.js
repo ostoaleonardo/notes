@@ -7,7 +7,7 @@ import { Commit } from '@/icons/commit'
 import { Delete } from '@/icons/delete'
 import { Shapes } from '@/icons/shapes'
 
-export const useTemplateActionsMenu = ({ onTrigger, onSetMode, onOpenPlaceholders, onOpenVersionHistory, onDelete }) => {
+export const useTemplateActionsMenu = ({ onTrigger, onSetMode, onOpenPlaceholders, onOpenVersionHistory, onOpenDeleteDialog }) => {
     const { t } = useTranslation()
 
     return [
@@ -36,7 +36,7 @@ export const useTemplateActionsMenu = ({ onTrigger, onSetMode, onOpenPlaceholder
                 key='delete'
                 title={t('button.delete')}
                 leadingIcon={(props) => <Delete {...props} />}
-                onPress={() => onTrigger(onDelete)}
+                onPress={() => onTrigger(onOpenDeleteDialog)}
             />
         ]
     ]

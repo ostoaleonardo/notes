@@ -18,13 +18,12 @@ export const MarkdownModeToggle = ({
     onSetMode,
     scope,
     isFocused,
-    onOpenSearch,
-    onOpenReplace,
+    search,
     onOpenPlaceholders,
     onOpenVersionHistory,
     onOpenExportDialog,
     onOpenShareDialog,
-    onDelete
+    onOpenDeleteDialog
 }) => {
     const { t } = useTranslation()
     const read = mode === 'read'
@@ -36,7 +35,8 @@ export const MarkdownModeToggle = ({
         onSetMode,
         onOpenVersionHistory,
         onOpenExportDialog,
-        onOpenShareDialog
+        onOpenShareDialog,
+        onOpenDeleteDialog
     })
 
     const templateActionsGroups = useTemplateActionsMenu({
@@ -44,7 +44,7 @@ export const MarkdownModeToggle = ({
         onSetMode,
         onOpenPlaceholders,
         onOpenVersionHistory,
-        onDelete
+        onOpenDeleteDialog
     })
 
     const actionGroups = scope === 'template' ? templateActionsGroups : noteActionsGroups
@@ -54,14 +54,14 @@ export const MarkdownModeToggle = ({
             key='find'
             title={t('button.find')}
             leadingIcon={(props) => <Search {...props} />}
-            onPress={() => trigger(onOpenSearch)}
+            onPress={() => trigger(search.onOpenSearch)}
         />,
         mode !== 'read' && (
             <MenuItem
                 key='replace'
                 title={t('button.replace')}
                 leadingIcon={(props) => <Edit {...props} />}
-                onPress={() => trigger(onOpenReplace)}
+                onPress={() => trigger(search.onOpenReplace)}
             />
         )
     ].filter(Boolean)

@@ -6,7 +6,9 @@
 		"intro_title": "No notes open",
 		"intro_subtitle": "Pick a note from the drawer, or start a new one at the top of your repository.",
 		"copy_suffix": "(copy)",
-		"go_home": "Home"
+		"go_home": "Home",
+		"delete_title": "Delete note",
+		"delete_message": "This will permanently delete this note from your device."
 	},
 	"tags": {
 		"add": "Add tag",
@@ -139,7 +141,12 @@
 		"image_alt_placeholder": "Image description",
 		"image_url": "URL",
 		"image_camera": "Take photo",
-		"image_gallery": "Choose from gallery"
+		"image_gallery": "Choose from gallery",
+		"camera_permission_title": "Camera permission",
+		"camera_permission_message": "Turn it on to take photos from the app.",
+		"camera_permission_grant": "Enable",
+		"camera_permission_settings": "Open settings",
+		"camera_permission_denied": "Enable camera access in system settings to take photos."
 	},
 	"markdown_action": {
 		"bold": "Bold",
@@ -165,13 +172,17 @@
 		"notes": {
 			"empty": "You don't have any notes yet",
 			"exported": "File exported successfully",
-			"no_recent": "No recent or pinned notes"
+			"no_recent": "No recent or pinned notes",
+			"export_failed": "Couldn't export the file",
+			"share_failed": "Couldn't share the file"
 		},
 		"tags": {
 			"empty": "You don't have any tags yet"
 		},
 		"version_history": {
-			"empty": "No versions saved yet"
+			"empty": "No versions saved yet",
+			"restore_title": "Restore version",
+			"restore_message": "This will replace the current content with this version. Unsaved changes will be lost."
 		}
 	},
 	"placeholder": {
@@ -220,13 +231,16 @@
 		"new": "New template",
 		"import": "Import template",
 		"saved": "Template saved",
+			"save_failed": "Couldn't save the template",
 		"view_placeholders": "View available variables",
 		"placeholders_title": "Available variables",
 		"placeholder_date": "Current date",
 		"placeholder_time": "Current time",
 		"placeholder_title": "Note title",
 		"placeholder_example": "e.g. {{value}}",
-		"placeholder_title_example": "Meeting notes"
+		"placeholder_title_example": "Meeting notes",
+		"delete_title": "Delete template",
+		"delete_message": "This will permanently delete this template from your device."
 	},
 	"search": {
 		"recent": "Recent",

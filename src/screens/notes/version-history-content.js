@@ -7,6 +7,7 @@ import { FadeIn, FadeInRight, FadeOut, FadeOutRight } from 'react-native-reanima
 import { AnimatedView } from '@/components/animated/animated-view'
 import { Pressable } from '@/components/button/pressable'
 import { Typography } from '@/components/typography'
+import { ConfirmDialog } from '@/components/confirm-dialog'
 
 import { useLanguage } from '@/hooks/use-language'
 import { useNoteVersions } from '@/hooks/use-note-versions'
@@ -39,6 +40,7 @@ export function VersionHistoryContent({
     const [versions, setVersions] = useState([])
     const [loading, setLoading] = useState(true)
     const [selected, setSelected] = useState(null)
+    const [restoreDialogVisible, setRestoreDialogVisible] = useState(false)
 
     useEffect(() => {
         if (!directoryUri || !noteId) return
@@ -154,7 +156,7 @@ export function VersionHistoryContent({
                             <Pressable
                                 compact={true}
                                 mode='contained'
-                                onPress={() => onRestore(selected)}
+                                onPress={() => setRestoreDialogVisible(true)}
                             >
                                 {t('button.restore')}
                             </Pressable>
@@ -196,6 +198,15 @@ export function VersionHistoryContent({
                     )}
                 </>
             )}
+
+            <ConfirmDialog
+                visible={restoreDialogVisible}
+                title={t('message.version_history.restore_title')}
+                message={t('message.version_history.restore_message')}
+                confirmLabel={t('button.restore')}
+                onDismiss={() => setRestoreDialogVisible(false)}
+                onConfirm={() => onRestore(selected)}
+            />
         </View>
     )
 }

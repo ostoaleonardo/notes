@@ -1,19 +1,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { router } from 'expo-router'
 
 import { MarkdownEditorLayout } from './markdown-editor-layout'
 import { MarkdownModeToggle } from './markdown-mode-toggle'
 import { MarkdownSearchBar } from './markdown-search-bar'
+import { MarkdownInsertSheets } from './markdown-insert-sheets'
 import { TemplatePickerSheet } from './template-picker-sheet'
 import { RecentNotesSheet } from './recent-notes-sheet'
 import { VersionHistoryPanel } from './version-history-panel'
-import { VersionHistoryContent } from './version-history-content'
+import { VersionHistoryPanelContent } from './version-history-panel-content'
 import { Tags } from '@/screens/modals/tags'
-import { LinkMarkdown } from '@/screens/modals/link-markdown'
-import { TableMarkdown } from '@/screens/modals/table-markdown'
-import { ImageMarkdown } from '@/screens/modals/image-markdown'
 import { ExportFormat } from '@/screens/modals/export-format'
 import { AppBar } from '@/components/app-bar/app-bar'
+import { ConfirmDialog } from '@/components/confirm-dialog'
 import { MarkdownEditor } from '@/components/markdown/markdown-editor'
 import { ModalSheet } from '@/components/modal/modal-sheet'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
@@ -23,7 +23,9 @@ import { useBottomSheet } from '@/hooks/use-bottom-sheet'
 import { useFiles } from '@/hooks/use-files'
 import { useLanguage } from '@/hooks/use-language'
 import { useMarkdownAction } from '@/hooks/use-markdown-action'
+import { useMarkdownInsertSheets } from '@/hooks/use-markdown-insert-sheets'
 import { useMarkdownSearch } from '@/hooks/use-markdown-search'
+import { useNotes } from '@/hooks/use-notes'
 import { usePro } from '@/hooks/use-pro'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
@@ -38,12 +40,14 @@ export const NoteEditorScreen = ({
     note, setNote,
     tags, setTags,
     createdAt, updatedAt,
-    initialMode = 'read'
+    initialMode = 'read',
+    flush
 }) => {
     const { t } = useTranslation()
     const { addTemplate, listTemplates } = useTemplates()
     const { exportFile, shareFile } = useFiles()
     const { currentLanguage } = useLanguage()
+    const { deleteNote, setParamId } = useNotes()
     const { pro } = usePro()
     const { repositories } = useRepositories()
 
@@ -55,6 +59,7 @@ export const NoteEditorScreen = ({
     const [isFocused, setIsFocused] = useState(false)
     const [exportDialogVisible, setExportDialogVisible] = useState(false)
     const [shareDialogVisible, setShareDialogVisible] = useState(false)
+    const [deleteDialogVisible, setDeleteDialogVisible] = useState(false)
     const [canUndo, setCanUndo] = useState(false)
     const [canRedo, setCanRedo] = useState(false)
     const [templates, setTemplates] = useState([])
@@ -84,10 +89,8 @@ export const NoteEditorScreen = ({
     latestContent.current = { noteId: id, title, content: note }
 
     const versionHistory = useVersionHistory({ directoryUri, latestContent })
+    const { onRunAction, linkSheet, tableSheet, imageSheet } = useMarkdownInsertSheets(markdownAction)
 
-    const linkSheet = useBottomSheet()
-    const tableSheet = useBottomSheet()
-    const imageSheet = useBottomSheet()
     const tagsSheet = useBottomSheet()
     const templatesSheet = useBottomSheet()
     const recentsSheet = useBottomSheet()
@@ -97,29 +100,6 @@ export const NoteEditorScreen = ({
         setCanRedo(canRedo)
     }, [])
 
-    const onRunAction = useCallback((action) => {
-        if (action === 'link') {
-            linkSheet.onOpen()
-            return
-        }
-
-        if (action === 'table') {
-            tableSheet.onOpen()
-            return
-        }
-
-        if (action === 'image') {
-            imageSheet.onOpen()
-            return
-        }
-
-        markdownAction.run(action)
-    }, [
-        linkSheet.onOpen,
-        tableSheet.onOpen,
-        imageSheet.onOpen
-    ])
-
     const onSelectTemplate = useCallback((content) => {
         setNote((prev) => (prev ? prev + '\n\n' + content : content))
         templatesSheet.onClose()
@@ -127,46 +107,47 @@ export const NoteEditorScreen = ({
 
     const onSaveAsTemplate = useCallback(async () => {
         const { title, content } = latestContent.current
-        await addTemplate(title.trim() || t('placeholder.title'), content)
-        listTemplates().then(setTemplates)
-        showSnackbar(t('templates.saved'))
+
+        try {
+            await addTemplate(title.trim() || t('placeholder.title'), content)
+            listTemplates().then(setTemplates)
+            showSnackbar(t('templates.saved'))
+        } catch (error) {
+            console.log(error)
+            showSnackbar(t('templates.save_failed'))
+        }
     }, [addTemplate, listTemplates, t])
 
     const onOpenExportDialog = useCallback(() => setExportDialogVisible(true), [])
     const onCloseExportDialog = useCallback(() => setExportDialogVisible(false), [])
-    const onConfirmExport = useCallback((format) => exportFile(id, format), [exportFile, id])
+    const onConfirmExport = useCallback(async (format) => {
+        await flush()
+        exportFile(id, format)
+    }, [flush, exportFile, id])
 
     const onOpenShareDialog = useCallback(() => setShareDialogVisible(true), [])
     const onCloseShareDialog = useCallback(() => setShareDialogVisible(false), [])
-    const onConfirmShare = useCallback((format) => shareFile(id, format), [shareFile, id])
+    const onConfirmShare = useCallback(async (format) => {
+        await flush()
+        shareFile(id, format)
+    }, [flush, shareFile, id])
+
+    const onOpenDeleteDialog = useCallback(() => setDeleteDialogVisible(true), [])
+    const onCloseDeleteDialog = useCallback(() => setDeleteDialogVisible(false), [])
+    const onConfirmDelete = useCallback(async () => {
+        await deleteNote(id)
+        setParamId('')
+        router.back()
+    }, [deleteNote, setParamId, id])
 
     const onRestoreVersion = useCallback((version) => {
         setTitle(version.title)
         setNote(version.content)
-        versionHistory.onClose()
-    }, [versionHistory.onClose])
+    }, [])
 
     useEffect(() => {
         listTemplates().then(setTemplates)
     }, [])
-
-    const versionHistoryPanelContent = useMemo(() => (
-        <VersionHistoryContent
-            directoryUri={directoryUri}
-            noteId={id}
-            currentContent={note}
-            pro={pro}
-            onRestore={onRestoreVersion}
-            onClose={versionHistory.onClose}
-        />
-    ), [
-        id,
-        note,
-        pro,
-        directoryUri,
-        onRestoreVersion,
-        versionHistory.onClose
-    ])
 
     const actions = useMemo(() => ({
         onOpenTags: tagsSheet.onOpen,
@@ -186,7 +167,16 @@ export const NoteEditorScreen = ({
             onOpen={versionHistory.onOpen}
             onClose={versionHistory.onClose}
             swipeEnabled={pro}
-            panelContent={versionHistoryPanelContent}
+            panelContent={(
+                <VersionHistoryPanelContent
+                    directoryUri={directoryUri}
+                    noteId={id}
+                    currentContent={note}
+                    pro={pro}
+                    onRestore={onRestoreVersion}
+                    onClose={versionHistory.onClose}
+                />
+            )}
         >
             <AppBar
                 mode='menu'
@@ -195,27 +185,21 @@ export const NoteEditorScreen = ({
                         mode={mode}
                         onSetMode={setMode}
                         isFocused={isFocused}
-                        onOpenSearch={search.onOpenSearch}
-                        onOpenReplace={search.onOpenReplace}
+                        search={search}
                         onOpenVersionHistory={versionHistory.onOpen}
                         onOpenExportDialog={onOpenExportDialog}
                         onOpenShareDialog={onOpenShareDialog}
+                        onOpenDeleteDialog={onOpenDeleteDialog}
                     />
                 )}
             />
 
             <MarkdownSearchBar
-                visible={search.visible}
-                replaceVisible={search.replaceVisible}
-                query={search.query}
-                onQueryChange={search.setQuery}
-                replacement={search.replacement}
-                onReplacementChange={search.setReplacement}
+                search={search}
                 onPrevious={() => markdownAction.run('search-previous')}
                 onNext={() => markdownAction.run('search-next')}
                 onReplaceOne={() => markdownAction.run('search-replace')}
                 onReplaceAll={() => markdownAction.run('search-replace-all')}
-                onClose={search.onClose}
             />
 
             <MarkdownEditorLayout
@@ -232,8 +216,8 @@ export const NoteEditorScreen = ({
                     setTitle={setTitle}
                     titlePlaceholder={t('placeholder.title')}
                     metaLabel={metaLabel}
-                    searchQuery={search.visible ? search.query : ''}
-                    replaceText={search.replacement}
+                    searchQuery={search.searchQuery}
+                    replaceText={search.replaceText}
                     value={note}
                     setValue={setNote}
                     onHistoryChange={onHistoryChange}
@@ -254,39 +238,12 @@ export const NoteEditorScreen = ({
                 />
             </ModalSheet>
 
-            <ModalSheet
-                enableDynamicSizing
-                ref={linkSheet.ref}
-                onClose={linkSheet.onClose}
-            >
-                <LinkMarkdown
-                    onClose={linkSheet.onClose}
-                    onInsert={(payload) => markdownAction.run('link', payload)}
-                />
-            </ModalSheet>
-
-            <ModalSheet
-                enableDynamicSizing
-                ref={tableSheet.ref}
-                onClose={tableSheet.onClose}
-                enablePanDownToClose={false}
-            >
-                <TableMarkdown
-                    onClose={tableSheet.onClose}
-                    onInsert={(payload) => markdownAction.run('table', payload)}
-                />
-            </ModalSheet>
-
-            <ModalSheet
-                enableDynamicSizing
-                ref={imageSheet.ref}
-                onClose={imageSheet.onClose}
-            >
-                <ImageMarkdown
-                    onClose={imageSheet.onClose}
-                    onInsert={(payload) => markdownAction.run('image', payload)}
-                />
-            </ModalSheet>
+            <MarkdownInsertSheets
+                linkSheet={linkSheet}
+                tableSheet={tableSheet}
+                imageSheet={imageSheet}
+                markdownAction={markdownAction}
+            />
 
             <TemplatePickerSheet
                 sheet={templatesSheet}
@@ -309,6 +266,15 @@ export const NoteEditorScreen = ({
                 visible={shareDialogVisible}
                 onDismiss={onCloseShareDialog}
                 onConfirm={onConfirmShare}
+            />
+
+            <ConfirmDialog
+                visible={deleteDialogVisible}
+                title={t('notes.delete_title')}
+                message={t('notes.delete_message')}
+                confirmLabel={t('button.delete')}
+                onDismiss={onCloseDeleteDialog}
+                onConfirm={onConfirmDelete}
             />
         </VersionHistoryPanel>
     )
