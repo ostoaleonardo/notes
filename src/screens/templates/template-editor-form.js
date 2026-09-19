@@ -4,7 +4,19 @@ import { LargeInput } from '@/components/input/large-input'
 import { MarkdownEditor } from '@/components/markdown/markdown-editor'
 import { Section } from '@/components/section'
 
-export const TemplateEditorForm = ({ name, setName, content, setContent, markdownAction, mode, onFocus, onBlur, onHistoryChange }) => {
+export const TemplateEditorForm = ({
+    name,
+    setName,
+    content,
+    setContent,
+    markdownAction,
+    mode,
+    onFocus,
+    onBlur,
+    onHistoryChange,
+    searchQuery,
+    replaceText
+}) => {
     const { t } = useTranslation()
 
     return (
@@ -30,6 +42,8 @@ export const TemplateEditorForm = ({ name, setName, content, setContent, markdow
                     onFocus={onFocus}
                     onBlur={onBlur}
                     onHistoryChange={onHistoryChange}
+                    searchQuery={searchQuery}
+                    replaceText={replaceText}
                 />
             </Section>
         </>

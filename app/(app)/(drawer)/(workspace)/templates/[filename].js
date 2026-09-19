@@ -4,6 +4,7 @@ import { router, useLocalSearchParams } from 'expo-router'
 
 import { MarkdownEditorLayout } from '@/screens/notes/markdown-editor-layout'
 import { MarkdownModeToggle } from '@/screens/notes/markdown-mode-toggle'
+import { MarkdownSearchBar } from '@/screens/notes/markdown-search-bar'
 import { RecentNotesSheet } from '@/screens/notes/recent-notes-sheet'
 import { VersionHistoryPanel } from '@/screens/notes/version-history-panel'
 import { VersionHistoryContent } from '@/screens/notes/version-history-content'
@@ -15,11 +16,12 @@ import { AppBar } from '@/components/app-bar/app-bar'
 import { useAllowLandscape } from '@/hooks/use-allow-landscape'
 import { useBottomSheet } from '@/hooks/use-bottom-sheet'
 import { useMarkdownAction } from '@/hooks/use-markdown-action'
-import { useNoteVersions } from '@/hooks/use-note-versions'
+import { useMarkdownSearch } from '@/hooks/use-markdown-search'
 import { usePro } from '@/hooks/use-pro'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
+import { useVersionHistory } from '@/hooks/use-version-history'
 
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 
@@ -29,7 +31,6 @@ export default function EditTemplate() {
     const { getTemplate, updateTemplate, deleteTemplate } = useTemplates()
     const { pro } = usePro()
     const { activeRepository, ensureTemplatesFolder } = useRepositories()
-    const { commitVersion } = useNoteVersions()
 
     useAllowLandscape()
 
@@ -45,33 +46,29 @@ export default function EditTemplate() {
     const [mode, setMode] = useState('live')
     const [isFocused, setIsFocused] = useState(false)
     const [placeholdersVisible, setPlaceholdersVisible] = useState(false)
-    const [versionHistoryVisible, setVersionHistoryVisible] = useState(false)
     const [canUndo, setCanUndo] = useState(false)
     const [canRedo, setCanRedo] = useState(false)
     const [templatesUri, setTemplatesUri] = useState('')
 
     const recentsSheet = useBottomSheet()
     const markdownAction = useMarkdownAction()
+    const search = useMarkdownSearch()
 
-    const latestContent = useRef({ name, content })
-    latestContent.current = { name, content }
+    const latestContent = useRef({ noteId: currentFilename.current, title: name, content })
+    latestContent.current = { noteId: currentFilename.current, title: name, content }
+
+    const versionHistory = useVersionHistory({ directoryUri: templatesUri, latestContent })
 
     const onHistoryChange = useCallback(({ canUndo, canRedo }) => {
         setCanUndo(canUndo)
         setCanRedo(canRedo)
     }, [])
 
-    const onOpenVersionHistory = useCallback(() => {
-        setVersionHistoryVisible(true)
-    }, [])
-
-    const onCloseVersionHistory = useCallback(() => setVersionHistoryVisible(false), [])
-
     const onRestoreVersion = useCallback((version) => {
         setName(version.title)
         setContent(version.content)
-        setVersionHistoryVisible(false)
-    }, [])
+        versionHistory.onClose()
+    }, [versionHistory.onClose])
 
     const versionHistoryPanelContent = useMemo(() => (
         <VersionHistoryContent
@@ -80,9 +77,9 @@ export default function EditTemplate() {
             currentContent={content}
             pro={pro}
             onRestore={onRestoreVersion}
-            onClose={onCloseVersionHistory}
+            onClose={versionHistory.onClose}
         />
-    ), [templatesUri, content, pro, onRestoreVersion, onCloseVersionHistory, currentFilename.current])
+    ), [templatesUri, content, pro, onRestoreVersion, versionHistory.onClose, currentFilename.current])
 
     const editorActions = useMemo(() => ({
         onOpenRecents: recentsSheet.onOpen
@@ -141,22 +138,13 @@ export default function EditTemplate() {
         ensureTemplatesFolder(activeRepository).then(setTemplatesUri)
     }, [activeRepository])
 
-    useEffect(() => {
-        if (!templatesUri) return
-
-        return () => {
-            const { name, content } = latestContent.current
-            commitVersion(templatesUri, currentFilename.current, name, content)
-        }
-    }, [templatesUri])
-
     if (loading) return <LoadingOverlay />
 
     return (
         <VersionHistoryPanel
-            visible={versionHistoryVisible}
-            onOpen={onOpenVersionHistory}
-            onClose={onCloseVersionHistory}
+            visible={versionHistory.visible}
+            onOpen={versionHistory.onOpen}
+            onClose={versionHistory.onClose}
             swipeEnabled={pro}
             panelContent={versionHistoryPanelContent}
         >
@@ -167,11 +155,28 @@ export default function EditTemplate() {
                         mode={mode}
                         onSetMode={setMode}
                         scope='template'
+                        isFocused={isFocused}
+                        onOpenSearch={search.onOpenSearch}
+                        onOpenReplace={search.onOpenReplace}
                         onOpenPlaceholders={onOpenPlaceholders}
-                        onOpenVersionHistory={onOpenVersionHistory}
+                        onOpenVersionHistory={versionHistory.onOpen}
                         onDelete={onDelete}
                     />
                 )}
+            />
+
+            <MarkdownSearchBar
+                visible={search.visible}
+                replaceVisible={search.replaceVisible}
+                query={search.query}
+                onQueryChange={search.setQuery}
+                replacement={search.replacement}
+                onReplacementChange={search.setReplacement}
+                onPrevious={() => markdownAction.run('search-previous')}
+                onNext={() => markdownAction.run('search-next')}
+                onReplaceOne={() => markdownAction.run('search-replace')}
+                onReplaceAll={() => markdownAction.run('search-replace-all')}
+                onClose={search.onClose}
             />
 
             <MarkdownEditorLayout
@@ -193,6 +198,8 @@ export default function EditTemplate() {
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
                     onHistoryChange={onHistoryChange}
+                    searchQuery={search.visible ? search.query : ''}
+                    replaceText={search.replacement}
                 />
             </MarkdownEditorLayout>
 

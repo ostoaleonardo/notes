@@ -23,10 +23,11 @@ import { useBottomSheet } from '@/hooks/use-bottom-sheet'
 import { useFiles } from '@/hooks/use-files'
 import { useLanguage } from '@/hooks/use-language'
 import { useMarkdownAction } from '@/hooks/use-markdown-action'
-import { useNoteVersions } from '@/hooks/use-note-versions'
+import { useMarkdownSearch } from '@/hooks/use-markdown-search'
 import { usePro } from '@/hooks/use-pro'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
+import { useVersionHistory } from '@/hooks/use-version-history'
 import { getFormattedDate } from '@/utils/formatted-date'
 import { countWords } from '@/utils/word-count'
 
@@ -45,7 +46,6 @@ export const NoteEditorScreen = ({
     const { currentLanguage } = useLanguage()
     const { pro } = usePro()
     const { repositories } = useRepositories()
-    const { commitVersion } = useNoteVersions()
 
     const directoryUri = repositories.find((repository) => repository.id === repositoryId)?.uri
 
@@ -53,11 +53,6 @@ export const NoteEditorScreen = ({
 
     const [mode, setMode] = useState(initialMode)
     const [isFocused, setIsFocused] = useState(false)
-    const [searchVisible, setSearchVisible] = useState(false)
-    const [replaceVisible, setReplaceVisible] = useState(false)
-    const [searchQuery, setSearchQuery] = useState('')
-    const [replaceText, setReplaceText] = useState('')
-    const [versionHistoryVisible, setVersionHistoryVisible] = useState(false)
     const [exportDialogVisible, setExportDialogVisible] = useState(false)
     const [shareDialogVisible, setShareDialogVisible] = useState(false)
     const [canUndo, setCanUndo] = useState(false)
@@ -83,6 +78,12 @@ export const NoteEditorScreen = ({
     ])
 
     const markdownAction = useMarkdownAction()
+    const search = useMarkdownSearch()
+
+    const latestContent = useRef({ noteId: id, title, content: note })
+    latestContent.current = { noteId: id, title, content: note }
+
+    const versionHistory = useVersionHistory({ directoryUri, latestContent })
 
     const linkSheet = useBottomSheet()
     const tableSheet = useBottomSheet()
@@ -94,10 +95,6 @@ export const NoteEditorScreen = ({
     const onHistoryChange = useCallback(({ canUndo, canRedo }) => {
         setCanUndo(canUndo)
         setCanRedo(canRedo)
-    }, [])
-
-    const onOpenVersionHistory = useCallback(() => {
-        setVersionHistoryVisible(true)
     }, [])
 
     const onRunAction = useCallback((action) => {
@@ -123,39 +120,17 @@ export const NoteEditorScreen = ({
         imageSheet.onOpen
     ])
 
-    const onOpenSearch = useCallback(() => {
-        setSearchVisible(true)
-        setReplaceVisible(false)
-    }, [])
-
-    const onOpenReplace = useCallback(() => {
-        setSearchVisible(true)
-        setReplaceVisible(true)
-    }, [])
-
-    const onCloseSearch = useCallback(() => {
-        setSearchVisible(false)
-        setReplaceVisible(false)
-        setSearchQuery('')
-        setReplaceText('')
-    }, [])
-
     const onSelectTemplate = useCallback((content) => {
         setNote((prev) => (prev ? prev + '\n\n' + content : content))
         templatesSheet.onClose()
     }, [])
 
-    const latestContent = useRef({ title, note })
-    latestContent.current = { title, note }
-
     const onSaveAsTemplate = useCallback(async () => {
-        const { title, note } = latestContent.current
-        await addTemplate(title.trim() || t('placeholder.title'), note)
+        const { title, content } = latestContent.current
+        await addTemplate(title.trim() || t('placeholder.title'), content)
         listTemplates().then(setTemplates)
         showSnackbar(t('templates.saved'))
     }, [addTemplate, listTemplates, t])
-
-    const onCloseVersionHistory = useCallback(() => setVersionHistoryVisible(false), [])
 
     const onOpenExportDialog = useCallback(() => setExportDialogVisible(true), [])
     const onCloseExportDialog = useCallback(() => setExportDialogVisible(false), [])
@@ -168,21 +143,12 @@ export const NoteEditorScreen = ({
     const onRestoreVersion = useCallback((version) => {
         setTitle(version.title)
         setNote(version.content)
-        setVersionHistoryVisible(false)
-    }, [])
+        versionHistory.onClose()
+    }, [versionHistory.onClose])
 
     useEffect(() => {
         listTemplates().then(setTemplates)
     }, [])
-
-    useEffect(() => {
-        if (!directoryUri || !id) return
-
-        return () => {
-            const { title, note } = latestContent.current
-            commitVersion(directoryUri, id, title, note)
-        }
-    }, [directoryUri, id])
 
     const versionHistoryPanelContent = useMemo(() => (
         <VersionHistoryContent
@@ -191,7 +157,7 @@ export const NoteEditorScreen = ({
             currentContent={note}
             pro={pro}
             onRestore={onRestoreVersion}
-            onClose={onCloseVersionHistory}
+            onClose={versionHistory.onClose}
         />
     ), [
         id,
@@ -199,7 +165,7 @@ export const NoteEditorScreen = ({
         pro,
         directoryUri,
         onRestoreVersion,
-        onCloseVersionHistory
+        versionHistory.onClose
     ])
 
     const actions = useMemo(() => ({
@@ -216,9 +182,9 @@ export const NoteEditorScreen = ({
 
     return (
         <VersionHistoryPanel
-            visible={versionHistoryVisible}
-            onOpen={onOpenVersionHistory}
-            onClose={onCloseVersionHistory}
+            visible={versionHistory.visible}
+            onOpen={versionHistory.onOpen}
+            onClose={versionHistory.onClose}
             swipeEnabled={pro}
             panelContent={versionHistoryPanelContent}
         >
@@ -229,9 +195,9 @@ export const NoteEditorScreen = ({
                         mode={mode}
                         onSetMode={setMode}
                         isFocused={isFocused}
-                        onOpenSearch={onOpenSearch}
-                        onOpenReplace={onOpenReplace}
-                        onOpenVersionHistory={onOpenVersionHistory}
+                        onOpenSearch={search.onOpenSearch}
+                        onOpenReplace={search.onOpenReplace}
+                        onOpenVersionHistory={versionHistory.onOpen}
                         onOpenExportDialog={onOpenExportDialog}
                         onOpenShareDialog={onOpenShareDialog}
                     />
@@ -239,17 +205,17 @@ export const NoteEditorScreen = ({
             />
 
             <MarkdownSearchBar
-                visible={searchVisible}
-                replaceVisible={replaceVisible}
-                query={searchQuery}
-                onQueryChange={setSearchQuery}
-                replacement={replaceText}
-                onReplacementChange={setReplaceText}
+                visible={search.visible}
+                replaceVisible={search.replaceVisible}
+                query={search.query}
+                onQueryChange={search.setQuery}
+                replacement={search.replacement}
+                onReplacementChange={search.setReplacement}
                 onPrevious={() => markdownAction.run('search-previous')}
                 onNext={() => markdownAction.run('search-next')}
                 onReplaceOne={() => markdownAction.run('search-replace')}
                 onReplaceAll={() => markdownAction.run('search-replace-all')}
-                onClose={onCloseSearch}
+                onClose={search.onClose}
             />
 
             <MarkdownEditorLayout
@@ -266,8 +232,8 @@ export const NoteEditorScreen = ({
                     setTitle={setTitle}
                     titlePlaceholder={t('placeholder.title')}
                     metaLabel={metaLabel}
-                    searchQuery={searchVisible ? searchQuery : ''}
-                    replaceText={replaceText}
+                    searchQuery={search.visible ? search.query : ''}
+                    replaceText={search.replacement}
                     value={note}
                     setValue={setNote}
                     onHistoryChange={onHistoryChange}
