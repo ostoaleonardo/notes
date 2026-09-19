@@ -36,6 +36,7 @@ const MarkdownDomEditor = ({
     previewValue,
     mediaMap,
     noteTitles,
+    backlinksHtml,
     onChange,
     onHistoryChange,
     action,
@@ -213,8 +214,8 @@ const MarkdownDomEditor = ({
     }, [onLinkPress, onImagePress])
 
     const html = useMemo(
-        () => (mode === 'read' ? renderMarkdownHtml(previewValue) : ''),
-        [mode, previewValue]
+        () => (mode === 'read' ? renderMarkdownHtml(previewValue) + (backlinksHtml || '') : ''),
+        [mode, previewValue, backlinksHtml]
     )
 
     const fontsReady = !!fonts && !!katexFonts

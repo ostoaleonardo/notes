@@ -45,7 +45,8 @@
 		"settings": "Settings",
 		"about": "About the app",
 		"import": "Import note",
-		"version_history": "Version history"
+		"version_history": "Version history",
+		"backlinks": "Backlinks"
 	},
 	"date": {
 		"created": "Created:",

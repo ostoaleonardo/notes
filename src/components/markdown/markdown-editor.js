@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { MarkdownInput } from './markdown-input'
 
 export const MarkdownEditor = ({
+    id,
     value,
     setValue,
     mode,
@@ -22,6 +23,7 @@ export const MarkdownEditor = ({
 
     return (
         <MarkdownInput
+            id={id}
             value={value}
             onChangeText={setValue}
             onHistoryChange={onHistoryChange}
