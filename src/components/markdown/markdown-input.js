@@ -57,6 +57,23 @@ export const MarkdownInput = ({
         style: { flex: 1 }
     }), [mode])
 
+    const editorColors = useMemo(() => ({
+        text: onBackground,
+        cursor: tertiary,
+        selection: tertiary + TRANSPARENT[20],
+        placeholder: onBackground + TRANSPARENT[40],
+        link: tertiary,
+        quoteBackground: background,
+        codeBackground: onBackground + TRANSPARENT[10],
+        thematicBreak: tertiary + TRANSPARENT[30]
+    }), [background, onBackground, tertiary])
+
+    const typography = useMemo(() => ({
+        fontSize: size,
+        fontFamily: bodyFontFamily,
+        headingFontFamily
+    }), [size, bodyFontFamily, headingFontFamily])
+
     return (
         <MarkdownDomEditor
             mode={mode}
@@ -79,19 +96,10 @@ export const MarkdownInput = ({
             metaLabel={metaLabel}
             searchQuery={searchQuery}
             replaceText={replaceText}
-            fontSize={size}
-            fontFamily={bodyFontFamily}
-            headingFontFamily={headingFontFamily}
+            typography={typography}
             fonts={fonts}
             katexFonts={katexFonts}
-            textColor={onBackground}
-            cursorColor={tertiary}
-            selectionColor={tertiary + TRANSPARENT[20]}
-            placeholderColor={onBackground + TRANSPARENT[40]}
-            linkColor={tertiary}
-            quoteBackgroundColor={background}
-            codeBackgroundColor={onBackground + TRANSPARENT[10]}
-            thematicBreakColor={tertiary + TRANSPARENT[30]}
+            colors={editorColors}
             dom={dom}
         />
     )

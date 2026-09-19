@@ -37,19 +37,10 @@ const MarkdownDomEditor = ({
     onBlur,
     onLinkPress,
     onImagePress,
-    textColor,
-    cursorColor,
-    selectionColor,
-    placeholderColor,
-    linkColor,
-    quoteBackgroundColor,
-    codeBackgroundColor,
-    thematicBreakColor,
-    fontFamily,
-    headingFontFamily,
+    colors,
+    typography,
     fonts,
     katexFonts,
-    fontSize = 13,
     placeholder = '',
     title,
     onTitleChange,
@@ -58,6 +49,8 @@ const MarkdownDomEditor = ({
     searchQuery,
     replaceText
 }) => {
+    const { fontSize = 13, fontFamily, headingFontFamily } = typography
+
     const containerRef = useRef(null)
     const previewRef = useRef(null)
     const viewRef = useRef(null)
@@ -87,19 +80,7 @@ const MarkdownDomEditor = ({
         document.body.style.height = '100%'
         document.body.style.margin = '0'
 
-        const theme = buildEditorTheme({
-            fontSize,
-            fontFamily,
-            headingFontFamily,
-            textColor,
-            cursorColor,
-            selectionColor,
-            placeholderColor,
-            linkColor,
-            quoteBackgroundColor,
-            codeBackgroundColor,
-            thematicBreakColor
-        })
+        const theme = buildEditorTheme({ fontSize, fontFamily, headingFontFamily, colors })
 
         const state = EditorState.create({
             doc: value || '',
@@ -235,22 +216,9 @@ const MarkdownDomEditor = ({
     const previewCss = useMemo(() => buildPreviewCss({
         fontFamily,
         headingFontFamily,
-        textColor,
-        linkColor,
-        quoteBackgroundColor,
-        codeBackgroundColor,
-        thematicBreakColor,
+        colors,
         fontSize
-    }), [
-        fontFamily,
-        headingFontFamily,
-        textColor,
-        linkColor,
-        quoteBackgroundColor,
-        codeBackgroundColor,
-        thematicBreakColor,
-        fontSize
-    ])
+    }), [fontFamily, headingFontFamily, colors, fontSize])
 
     return (
         <div
@@ -276,7 +244,7 @@ const MarkdownDomEditor = ({
                 titlePlaceholder={titlePlaceholder}
                 metaLabel={metaLabel}
                 headingFontFamily={headingFontFamily}
-                textColor={textColor}
+                textColor={colors.text}
             />
 
             <div

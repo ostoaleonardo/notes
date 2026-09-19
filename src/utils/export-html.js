@@ -8,11 +8,13 @@ export const getNoteAsHtml = (note) => {
     const css = buildPreviewCss({
         fontFamily: FONTS.azeretLight,
         headingFontFamily: `${FONTS.nType82Headline}, system-ui, sans-serif`,
-        textColor: COLORS.light.onBackground,
-        linkColor: COLORS.base.accent,
-        quoteBackgroundColor: COLORS.light.background,
-        codeBackgroundColor: COLORS.light.onBackground + TRANSPARENT[10],
-        thematicBreakColor: COLORS.base.accent + TRANSPARENT[30],
+        colors: {
+            text: COLORS.light.onBackground,
+            link: COLORS.base.accent,
+            quoteBackground: COLORS.light.background,
+            codeBackground: COLORS.light.onBackground + TRANSPARENT[10],
+            thematicBreak: COLORS.base.accent + TRANSPARENT[30]
+        },
         fontSize: EXPORT_FONT_SIZE
     })
 

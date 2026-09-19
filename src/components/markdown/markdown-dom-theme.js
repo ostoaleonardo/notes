@@ -36,49 +36,41 @@ export const buildMetaLabelStyle = ({ textColor }) => ({
     fontFamily: `'${FONT_FAMILY_NAMES.body}', ui-monospace, monospace`
 })
 
-export const buildEditorTheme = ({
-    fontSize,
-    fontFamily,
-    headingFontFamily,
-    textColor,
-    cursorColor,
-    selectionColor,
-    placeholderColor,
-    linkColor,
-    quoteBackgroundColor,
-    codeBackgroundColor,
-    thematicBreakColor
-}) => EditorView.theme({
-    '&': { height: '100%', fontSize: `${fontSize}px`, backgroundColor: 'transparent' },
-    '.cm-content': {
-        fontFamily, color: textColor, caretColor: cursorColor, overflowWrap: 'anywhere',
-        paddingLeft: '16px', paddingRight: '16px', paddingTop: '8px'
-    },
-    '.cm-line': { overflowWrap: 'anywhere', padding: 0 },
-    '.cm-scroller': {
-        overflowY: 'auto', overflowX: 'hidden', fontFamily,
-        WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none'
-    },
-    '.cm-scroller::-webkit-scrollbar': { display: 'none' },
-    '.cm-selectionBackground': { backgroundColor: `${selectionColor} !important` },
-    '.cm-gutters': { display: 'none' },
-    '&.cm-focused': { outline: 'none' },
-    '.cm-placeholder': { color: placeholderColor },
-    '.cm-searchMatch': { backgroundColor: `${linkColor}40 !important` },
-    '.cm-searchMatch-selected': { backgroundColor: `${linkColor}80 !important` },
-    ...buildLiveFormattingTheme({ linkColor, quoteBackgroundColor, codeBackgroundColor, thematicBreakColor, headingFontFamily })
-})
+export const buildEditorTheme = ({ fontSize, fontFamily, headingFontFamily, colors }) => {
+    const { text, cursor, selection, placeholder, link, quoteBackground, codeBackground, thematicBreak } = colors
 
-export const buildPreviewCss = ({
-    fontFamily,
-    headingFontFamily,
-    textColor,
-    linkColor,
-    quoteBackgroundColor,
-    codeBackgroundColor,
-    thematicBreakColor,
-    fontSize
-}) => `
+    return EditorView.theme({
+        '&': { height: '100%', fontSize: `${fontSize}px`, backgroundColor: 'transparent' },
+        '.cm-content': {
+            fontFamily, color: text, caretColor: cursor, overflowWrap: 'anywhere',
+            paddingLeft: '16px', paddingRight: '16px', paddingTop: '8px'
+        },
+        '.cm-line': { overflowWrap: 'anywhere', padding: 0 },
+        '.cm-scroller': {
+            overflowY: 'auto', overflowX: 'hidden', fontFamily,
+            WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none'
+        },
+        '.cm-scroller::-webkit-scrollbar': { display: 'none' },
+        '.cm-selectionBackground': { backgroundColor: `${selection} !important` },
+        '.cm-gutters': { display: 'none' },
+        '&.cm-focused': { outline: 'none' },
+        '.cm-placeholder': { color: placeholder },
+        '.cm-searchMatch': { backgroundColor: `${link}40 !important` },
+        '.cm-searchMatch-selected': { backgroundColor: `${link}80 !important` },
+        ...buildLiveFormattingTheme({
+            linkColor: link,
+            quoteBackgroundColor: quoteBackground,
+            codeBackgroundColor: codeBackground,
+            thematicBreakColor: thematicBreak,
+            headingFontFamily
+        })
+    })
+}
+
+export const buildPreviewCss = ({ fontFamily, headingFontFamily, colors, fontSize }) => {
+    const { text: textColor, link: linkColor, quoteBackground: quoteBackgroundColor, codeBackground: codeBackgroundColor, thematicBreak: thematicBreakColor } = colors
+
+    return `
     html, body { margin: 0; overflow-x: hidden; scrollbar-width: none; }
     ::-webkit-scrollbar { display: none; }
     .markdown-preview {
@@ -120,3 +112,4 @@ export const buildPreviewCss = ({
     .markdown-preview .footnotes-sep { border: none; border-top: 1px solid ${thematicBreakColor}; margin: 16px 0; }
     .markdown-preview .footnotes { font-size: 0.85em; opacity: 0.85; }
 `
+}
