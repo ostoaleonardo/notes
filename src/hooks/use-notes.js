@@ -4,7 +4,7 @@ import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
 import { NoteContext } from '../context/note-context'
 import { getUniqueFilename } from '@/utils/note-filename'
-import { renameWikiLinks } from '@/utils/wiki-links'
+import { renameWikiLinksForNote } from '@/utils/wiki-links'
 
 export function useNotes() {
     const {
@@ -55,49 +55,21 @@ export function useNotes() {
         writeMetadata(uri, metadata)
     }
 
-    const updateNote = async (note) => {
-        const previous = notes.find((n) => n.id === note.id)
-        if (!previous) {
-            return saveNote(note, note.repositoryId)
-        }
-
-        const titleChanged = previous.title !== note.title
-
+    // `notesSnapshot`/`notePaths` must reflect the note as it was BEFORE the rename, so links
+    // using its old title (bare or path-qualified) still resolve to `targetId` during the rewrite.
+    const propagateWikiLinkRename = async (targetId, newTitle, notesSnapshot, notePaths) => {
         const nextNotes = notes.map((n) => {
-            if (n.id === note.id) return note
-            if (!titleChanged) return n
+            if (n.id === targetId) return n
 
-            const renamed = renameWikiLinks(n.note, previous.title, note.title)
+            const renamed = renameWikiLinksForNote(n.note, targetId, newTitle, notesSnapshot, notePaths)
             return renamed === n.note ? n : { ...n, note: renamed }
         })
 
         setNotes(nextNotes)
 
-        const uri = getRepositoryUri(note.repositoryId)
-        if (uri) {
-            const metadata = await readMetadata(uri)
-            const entry = metadata[note.id]
-
-            if (entry) {
-                const existingNames = listMarkdownFiles(uri).map((file) => file.name)
-                const filename = getUniqueFilename(existingNames, note.title, entry.filename)
-
-                if (filename !== entry.filename) {
-                    await renameNoteFile(uri, entry.filename, filename)
-                }
-
-                writeNoteFile(uri, filename, note.note)
-
-                metadata[note.id] = toMetadataEntry(note, filename)
-                writeMetadata(uri, metadata)
-            }
-        }
-
-        if (!titleChanged) return
-
         const changedByRepository = new Map()
         nextNotes.forEach((n, index) => {
-            if (n.id === note.id || n.note === notes[index].note) return
+            if (n.id === targetId || n.note === notes[index].note) return
 
             const group = changedByRepository.get(n.repositoryId) || []
             group.push(n)
@@ -117,6 +89,34 @@ export function useNotes() {
                 writeNoteFile(otherUri, entry.filename, changedNote.note)
             }
         }
+    }
+
+    const updateNote = async (note) => {
+        const previous = notes.find((n) => n.id === note.id)
+        if (!previous) {
+            return saveNote(note, note.repositoryId)
+        }
+
+        setNotes(notes.map((n) => (n.id === note.id ? note : n)))
+
+        const uri = getRepositoryUri(note.repositoryId)
+        if (!uri) return
+
+        const metadata = await readMetadata(uri)
+        const entry = metadata[note.id]
+        if (!entry) return
+
+        const existingNames = listMarkdownFiles(uri).map((file) => file.name)
+        const filename = getUniqueFilename(existingNames, note.title, entry.filename)
+
+        if (filename !== entry.filename) {
+            await renameNoteFile(uri, entry.filename, filename)
+        }
+
+        writeNoteFile(uri, filename, note.note)
+
+        metadata[note.id] = toMetadataEntry(note, filename)
+        writeMetadata(uri, metadata)
     }
 
     const deleteNote = async (id) => {
@@ -152,6 +152,7 @@ export function useNotes() {
         deleteNote,
         deleteAll,
         updateNote,
+        propagateWikiLinkRename,
         paramId,
         setParamId,
         loading

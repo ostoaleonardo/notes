@@ -18,6 +18,16 @@ const ALLOWED_URI_REGEXP = new RegExp(
     'i'
 )
 
+const defaultLinkOpen = md.renderer.rules.link_open
+    || ((tokens, idx, options, env, self) => self.renderToken(tokens, idx, options))
+
+md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
+    const href = tokens[idx].attrGet('href')
+    if (href && href.startsWith(WIKI_LINK_SCHEME)) tokens[idx].attrSet('class', 'wiki-link')
+
+    return defaultLinkOpen(tokens, idx, options, env, self)
+}
+
 export const renderMarkdownRaw = (text) => md.render(text || '')
 
 export const renderMarkdownHtml = (text) => DOMPurify.sanitize(renderMarkdownRaw(text), { ALLOWED_URI_REGEXP })

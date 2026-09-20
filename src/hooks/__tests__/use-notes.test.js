@@ -171,7 +171,7 @@ describe('update note', () => {
         expect(metadata['note-1'].filename).toBe('New title.md')
     })
 
-    test('propagates a title rename to wiki-links in other notes', async () => {
+    test('never touches wiki-links in other notes on its own, even when the title changes', async () => {
         const linkingNote = {
             id: 'note-2',
             title: 'Linker',
@@ -192,6 +192,43 @@ describe('update note', () => {
 
         await act(async () => {
             await result.current.updateNote({ ...MOCK_OLD_TITLE_NOTE, title: 'New title' })
+        })
+
+        expect(files.get('Linker.md')).toBe('See [[Old title]] for details')
+        expect(result.current.notes.find((n) => n.id === 'note-2').note).toBe('See [[Old title]] for details')
+        expect(metadata['note-1'].filename).toBe('New title.md')
+    })
+
+    test('updates other notes independently of updateNote', async () => {
+        const linkingNote = {
+            id: 'note-2',
+            title: 'Linker',
+            note: 'See [[Old title]] for details',
+            tags: [],
+            repositoryId: 'repo-1',
+            createdAt: 1
+        }
+
+        files.set('Old title.md', 'content')
+        files.set('Linker.md', linkingNote.note)
+        metadata = {
+            ...MOCK_OLD_TITLE_METADATA,
+            'note-2': { filename: 'Linker.md', tags: [], createdAt: 1, updatedAt: '' }
+        }
+
+        const { result } = await renderNotesHook([MOCK_OLD_TITLE_NOTE, linkingNote])
+
+        await act(async () => {
+            await result.current.updateNote({ ...MOCK_OLD_TITLE_NOTE, title: 'New title' })
+        })
+
+        await act(async () => {
+            await result.current.propagateWikiLinkRename(
+                'note-1',
+                'New title',
+                [MOCK_OLD_TITLE_NOTE, linkingNote],
+                new Map()
+            )
         })
 
         expect(files.get('Linker.md')).toBe('See [[New title]] for details')

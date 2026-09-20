@@ -17,6 +17,7 @@ import { Delete } from '@/icons/delete'
 import { FileExport } from '@/icons/file-export'
 import { Keep } from '@/icons/keep'
 import { KeepFilled } from '@/icons/keep-filled'
+import { Link } from '@/icons/link'
 import { NoteStack } from '@/icons/note-stack'
 import { Share as ShareIcon } from '@/icons/share'
 
@@ -26,7 +27,9 @@ export const useNoteActionsMenu = ({
     onOpenVersionHistory,
     onOpenExportDialog,
     onOpenShareDialog,
-    onOpenDeleteDialog
+    onOpenDeleteDialog,
+    showBacklinks,
+    onToggleShowBacklinks
 }) => {
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
@@ -74,6 +77,14 @@ export const useNoteActionsMenu = ({
                 leadingIcon={(props) => (isPinned ? <KeepFilled {...props} /> : <Keep {...props} />)}
                 onPress={toggleKeep}
             />,
+            slug && (
+                <MenuItem
+                    key='backlinks'
+                    title={showBacklinks ? t('button.hide_backlinks') : t('button.show_backlinks')}
+                    leadingIcon={(props) => <Link {...props} />}
+                    onPress={() => onTrigger(onToggleShowBacklinks)}
+                />
+            ),
             slug && (
                 <MenuItem
                     key='export'

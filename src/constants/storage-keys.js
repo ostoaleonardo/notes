@@ -16,6 +16,10 @@ export const STORAGE_KEYS = {
     ACCENT: 'accent',
     LANGUAGE: 'language',
     COLLAPSED_FOLDERS: 'collapsed-folders',
+    ALWAYS_UPDATE_WIKI_LINKS: 'always-update-wiki-links',
+    LINK_FORMAT: 'link-format',
+    STARTUP_BEHAVIOR: 'startup-behavior',
+    DAILY_NOTE_FOLDER: 'daily-note-folder',
 
     // Notes
     CURRENT_NOTE: 'current-note',

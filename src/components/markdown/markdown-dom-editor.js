@@ -18,7 +18,7 @@ import { buildEditorTheme, buildPreviewCss } from './markdown-dom-theme'
 import { renderMarkdownHtml } from './markdown-dom-render-html'
 import { runAction } from './markdown-dom-commands'
 import { liveFormatting, mediaMapFacet } from './live-formatting/live-formatting'
-import { noteTitlesFacet, wikiLinkCompletionSource } from './wiki-link-completion'
+import { noteEntriesFacet, wikiLinkFormatFacet, wikiLinkCompletionSource } from './wiki-link-completion'
 import { useCompartment } from './use-compartment'
 import { listKeymap } from './markdown-dom-list-keymap'
 import { headingFoldService } from './markdown-dom-fold'
@@ -35,7 +35,8 @@ const MarkdownDomEditor = ({
     value,
     previewValue,
     mediaMap,
-    noteTitles,
+    noteEntries,
+    linkFormat,
     backlinksHtml,
     onChange,
     onHistoryChange,
@@ -53,6 +54,7 @@ const MarkdownDomEditor = ({
     placeholder = '',
     title,
     onTitleChange,
+    onTitleBlur,
     titlePlaceholder,
     metaLabel,
     searchQuery,
@@ -83,7 +85,8 @@ const MarkdownDomEditor = ({
     const mediaMapValue = useMemo(() => new Map(mediaMap || []), [mediaMap])
 
     const mediaMapExtension = useCompartment(viewRef, () => mediaMapFacet.of(mediaMapValue), [mediaMapValue])
-    const noteTitlesExtension = useCompartment(viewRef, () => noteTitlesFacet.of(noteTitles || []), [noteTitles])
+    const noteEntriesExtension = useCompartment(viewRef, () => noteEntriesFacet.of(noteEntries || []), [noteEntries])
+    const linkFormatExtension = useCompartment(viewRef, () => wikiLinkFormatFacet.of(linkFormat), [linkFormat])
     const liveFormattingExtension = useCompartment(viewRef, () => (mode === 'live' ? [liveFormatting] : []), [mode])
 
     useEffect(() => {
@@ -107,7 +110,8 @@ const MarkdownDomEditor = ({
                 ]),
                 markdown({ extensions: GFM }),
                 mediaMapExtension,
-                noteTitlesExtension,
+                noteEntriesExtension,
+                linkFormatExtension,
                 autocompletion({ override: [wikiLinkCompletionSource] }),
                 closeBrackets(),
                 codeFolding(),
@@ -248,6 +252,7 @@ const MarkdownDomEditor = ({
             <TitleSection
                 title={title}
                 onTitleChange={onTitleChange}
+                onTitleBlur={onTitleBlur}
                 titlePlaceholder={titlePlaceholder}
                 metaLabel={metaLabel}
                 headingFontFamily={headingFontFamily}

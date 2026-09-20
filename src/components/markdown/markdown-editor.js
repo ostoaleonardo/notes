@@ -13,10 +13,12 @@ export const MarkdownEditor = ({
     onHistoryChange,
     title,
     setTitle,
+    onTitleBlur,
     titlePlaceholder,
     metaLabel,
     searchQuery,
-    replaceText
+    replaceText,
+    showBacklinks
 }) => {
     const { t } = useTranslation()
     const { action, payload, clear } = markdownAction
@@ -36,10 +38,12 @@ export const MarkdownEditor = ({
             onBlur={onBlur}
             title={title}
             setTitle={setTitle}
+            onTitleBlur={onTitleBlur}
             titlePlaceholder={titlePlaceholder}
             metaLabel={metaLabel}
             searchQuery={searchQuery}
             replaceText={replaceText}
+            showBacklinks={showBacklinks}
         />
     )
 }

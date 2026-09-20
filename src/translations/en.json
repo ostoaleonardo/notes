@@ -64,7 +64,20 @@
 		"contribute": "Contribute to the translation",
 		"translate": "Help us translate the app to your language.",
 		"updates": "Software update",
-		"version": "Version"
+		"version": "Version",
+		"notes": "Notes",
+		"startup_behavior": "Open on startup",
+		"startup_behavior_last": "Last note opened",
+		"startup_behavior_new": "New note",
+		"startup_behavior_home": "Home",
+		"startup_behavior_daily": "Daily note",
+		"daily_note_folder": "Daily note location",
+		"daily_note_folder_root": "Vault root",
+		"files_links": "Links",
+		"use_wikilinks": "Use [[Wikilinks]]",
+		"use_wikilinks_description": "Turn off to generate Markdown links instead when linking notes.",
+		"auto_update_links": "Automatically update internal links",
+		"auto_update_links_description": "Turn off to be asked before updating links after renaming a note."
 	},
 	"pro": {
 		"get": "Get Version Pro",
@@ -100,6 +113,8 @@
 		"update": "Update",
 		"pin": "Pin",
 		"unpin": "Unpin",
+		"show_backlinks": "Show backlinks",
+		"hide_backlinks": "Hide backlinks",
 		"export": "Export",
 		"share": "Share",
 		"duplicate": "Duplicate",
@@ -119,7 +134,10 @@
 		"undo": "Undo",
 		"redo": "Redo",
 		"try_again": "Try again",
-		"restore": "Restore"
+		"restore": "Restore",
+		"dont_update": "Don't update",
+		"update_once": "Update once",
+		"update_always": "Always update"
 	},
 	"count": {
 		"notes": "{{count}} note",
@@ -189,6 +207,13 @@
 			"empty": "No versions saved yet",
 			"restore_title": "Restore version",
 			"restore_message": "This will replace the current content with this version. Unsaved changes will be lost."
+		},
+		"wiki_links": {
+			"rename_title": "Update links",
+			"rename_message": "Do you want to update the internal link pointing to this note?",
+			"rename_message_plural": "Do you want to update the {{count}} internal links pointing to this note?",
+			"missing_title": "Note not found",
+			"missing_message": "There's no note titled \"{{title}}\". Do you want to create it?"
 		}
 	},
 	"placeholder": {

@@ -63,6 +63,9 @@ export const buildEditorTheme = ({ fontSize, fontFamily, headingFontFamily, colo
         '.cm-tooltip-autocomplete ul': { fontFamily, color: onBackground },
         '.cm-tooltip-autocomplete ul li': { padding: '8px 0 !important' },
         '.cm-tooltip-autocomplete ul li[aria-selected]': { backgroundColor: `${tertiary}30`, color: onBackground },
+        '.cm-completionDetail': {
+            display: 'block', fontStyle: 'normal', opacity: 0.5, fontSize: '0.85em', marginTop: '2px'
+        },
         '.cm-foldPlaceholder': {
             backgroundColor: `${surface} !important`, border: 'none !important',
             color: `${tertiary} !important`, borderRadius: '4px', padding: '0 6px', fontFamily

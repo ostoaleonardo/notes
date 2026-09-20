@@ -20,7 +20,7 @@ import { htmlNodeNames, decorateHtml, htmlTheme } from './html'
 import { decorateMath, mathTheme } from './math'
 import { decorateFootnotes, footnotesTheme } from './footnotes'
 import { findWikiLinkRanges, decorateWikiLinks, wikiLinksTheme } from './wiki-links'
-import { noteTitlesFacet } from '../wiki-link-completion'
+import { noteEntriesFacet } from '../wiki-link-completion'
 
 import { CODE_RANGE_NODE_NAMES } from '@/constants/markdown-live-formatting'
 
@@ -43,7 +43,7 @@ const buildDecorations = (state) => {
     const selection = state.selection.main
     const doc = state.doc
     const mediaMap = state.facet(mediaMapFacet)
-    const noteTitles = state.facet(noteTitlesFacet)
+    const noteEntries = state.facet(noteEntriesFacet)
     const codeRanges = []
     const text = doc.toString()
     const wikiLinkRanges = findWikiLinkRanges(text)
@@ -63,7 +63,7 @@ const buildDecorations = (state) => {
 
     decorateMath({ text, selection, ranges, codeRanges })
     decorateFootnotes({ text, ranges, codeRanges })
-    decorateWikiLinks({ text, ranges, codeRanges, wikiLinkRanges, noteTitles })
+    decorateWikiLinks({ text, ranges, codeRanges, wikiLinkRanges, noteEntries, selection })
 
     return Decoration.set(ranges, true)
 }
