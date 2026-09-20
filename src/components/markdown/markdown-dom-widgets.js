@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import {
     buildMetaLabelStyle,
@@ -9,25 +9,41 @@ import {
 const AutoGrowTitle = ({
     value,
     onChange,
+    onBlur,
     placeholder,
     fontFamily,
     textColor
 }) => {
     const ref = useRef(null)
+    const hasFocusRef = useRef(false)
+    const [localValue, setLocalValue] = useState(value || '')
+
+    useEffect(() => {
+        if (hasFocusRef.current) return
+        setLocalValue(value || '')
+    }, [value])
 
     useEffect(() => {
         const el = ref.current
         if (!el) return
         el.style.height = 'auto'
         el.style.height = `${el.scrollHeight}px`
-    }, [value])
+    }, [localValue])
 
     return (
         <textarea
             rows={1}
             ref={ref}
-            value={value || ''}
-            onChange={(event) => onChange?.(event.target.value)}
+            value={localValue}
+            onFocus={() => { hasFocusRef.current = true }}
+            onBlur={() => {
+                hasFocusRef.current = false
+                onBlur?.()
+            }}
+            onChange={(event) => {
+                setLocalValue(event.target.value)
+                onChange?.(event.target.value)
+            }}
             placeholder={placeholder}
             style={buildTitleTextareaStyle({ fontFamily, textColor })}
         />
@@ -47,6 +63,7 @@ const MetaLabel = ({ label, textColor }) => {
 export const TitleSection = ({
     title,
     onTitleChange,
+    onTitleBlur,
     titlePlaceholder,
     metaLabel,
     headingFontFamily,
@@ -59,6 +76,7 @@ export const TitleSection = ({
             <AutoGrowTitle
                 value={title}
                 onChange={onTitleChange}
+                onBlur={onTitleBlur}
                 placeholder={titlePlaceholder}
                 fontFamily={headingFontFamily}
                 textColor={textColor}

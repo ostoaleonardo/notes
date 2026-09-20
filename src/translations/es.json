@@ -64,7 +64,20 @@
 		"translate": "Ayúdanos a traducir la aplicación a tu idioma.",
 		"updates": "Actualización de software",
 		"version": "Versión",
-		"pro": "Actualizar a Pro"
+		"pro": "Actualizar a Pro",
+		"notes": "Notas",
+		"startup_behavior": "Abrir al iniciar",
+		"startup_behavior_last": "Última nota abierta",
+		"startup_behavior_new": "Nueva nota",
+		"startup_behavior_home": "Inicio",
+		"startup_behavior_daily": "Nota diaria",
+		"daily_note_folder": "Ubicación de la nota diaria",
+		"daily_note_folder_root": "Raíz del repositorio",
+		"files_links": "Enlaces",
+		"use_wikilinks": "Usar [[Wikilinks]]",
+		"use_wikilinks_description": "Desactívalo para generar enlaces de Markdown en su lugar al enlazar notas.",
+		"auto_update_links": "Actualizar enlaces internos automáticamente",
+		"auto_update_links_description": "Desactívalo para que se te pregunte antes de actualizar los enlaces al renombrar una nota."
 	},
 	"pro": {
 		"get": "Obtener versión Pro",
@@ -100,6 +113,8 @@
 		"update": "Actualizar",
 		"pin": "Fijar",
 		"unpin": "Desfijar",
+		"show_backlinks": "Mostrar enlaces entrantes",
+		"hide_backlinks": "Ocultar enlaces entrantes",
 		"export": "Exportar",
 		"share": "Compartir",
 		"duplicate": "Duplicar",
@@ -119,7 +134,10 @@
 		"undo": "Deshacer",
 		"redo": "Rehacer",
 		"try_again": "Reintentar",
-		"restore": "Restaurar"
+		"restore": "Restaurar",
+		"dont_update": "No actualizar",
+		"update_once": "Solo una vez",
+		"update_always": "Siempre actualizar"
 	},
 	"count": {
 		"notes": "{{count}} nota",
@@ -189,6 +207,13 @@
 			"empty": "Aún no hay versiones guardadas",
 			"restore_title": "Restaurar versión",
 			"restore_message": "Esto reemplazará el contenido actual por el de esta versión. Los cambios sin guardar se perderán."
+		},
+		"wiki_links": {
+			"rename_title": "Actualizar enlaces",
+			"rename_message": "¿Quiere actualizar el enlace interno que apunta a esta nota?",
+			"rename_message_plural": "¿Quiere actualizar los {{count}} enlaces internos que apuntan a esta nota?",
+			"missing_title": "Nota no encontrada",
+			"missing_message": "No existe una nota titulada \"{{title}}\". ¿Quiere crearla?"
 		}
 	},
 	"placeholder": {

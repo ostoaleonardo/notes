@@ -37,6 +37,7 @@ export const NoteEditorScreen = ({
     id,
     repositoryId,
     title, setTitle,
+    onTitleBlur,
     note, setNote,
     tags, setTags,
     createdAt, updatedAt,
@@ -57,6 +58,7 @@ export const NoteEditorScreen = ({
 
     const [mode, setMode] = useState(initialMode)
     const [isFocused, setIsFocused] = useState(false)
+    const [showBacklinks, setShowBacklinks] = useState(true)
     const [exportDialogVisible, setExportDialogVisible] = useState(false)
     const [shareDialogVisible, setShareDialogVisible] = useState(false)
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false)
@@ -133,6 +135,7 @@ export const NoteEditorScreen = ({
     }, [flush, shareFile, id])
 
     const onOpenDeleteDialog = useCallback(() => setDeleteDialogVisible(true), [])
+    const onToggleShowBacklinks = useCallback(() => setShowBacklinks((prev) => !prev), [])
     const onCloseDeleteDialog = useCallback(() => setDeleteDialogVisible(false), [])
     const onConfirmDelete = useCallback(async () => {
         await deleteNote(id)
@@ -190,6 +193,8 @@ export const NoteEditorScreen = ({
                         onOpenExportDialog={onOpenExportDialog}
                         onOpenShareDialog={onOpenShareDialog}
                         onOpenDeleteDialog={onOpenDeleteDialog}
+                        showBacklinks={showBacklinks}
+                        onToggleShowBacklinks={onToggleShowBacklinks}
                     />
                 )}
             />
@@ -215,6 +220,7 @@ export const NoteEditorScreen = ({
                     mode={mode}
                     title={title}
                     setTitle={setTitle}
+                    onTitleBlur={onTitleBlur}
                     titlePlaceholder={t('placeholder.title')}
                     metaLabel={metaLabel}
                     searchQuery={search.searchQuery}
@@ -225,6 +231,7 @@ export const NoteEditorScreen = ({
                     onBlur={() => setIsFocused(false)}
                     onFocus={() => setIsFocused(true)}
                     markdownAction={markdownAction}
+                    showBacklinks={showBacklinks}
                 />
             </MarkdownEditorLayout>
 

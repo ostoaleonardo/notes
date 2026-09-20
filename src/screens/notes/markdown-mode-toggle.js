@@ -23,7 +23,9 @@ export const MarkdownModeToggle = ({
     onOpenVersionHistory,
     onOpenExportDialog,
     onOpenShareDialog,
-    onOpenDeleteDialog
+    onOpenDeleteDialog,
+    showBacklinks,
+    onToggleShowBacklinks
 }) => {
     const { t } = useTranslation()
     const read = mode === 'read'
@@ -36,7 +38,9 @@ export const MarkdownModeToggle = ({
         onOpenVersionHistory,
         onOpenExportDialog,
         onOpenShareDialog,
-        onOpenDeleteDialog
+        onOpenDeleteDialog,
+        showBacklinks,
+        onToggleShowBacklinks
     })
 
     const templateActionsGroups = useTemplateActionsMenu({
