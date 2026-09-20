@@ -8,6 +8,8 @@ import { ProSection } from '@/screens/settings/pro-section'
 import { ThemeOption } from '@/screens/settings/theme-option'
 import { AppVersionCard } from '@/screens/settings/app-version-card'
 import { Option } from '@/screens/settings/option'
+import { WikiLinksOption } from '@/screens/settings/wiki-links-option'
+import { StartupOption } from '@/screens/settings/startup-option'
 import { ModalSheet } from '@/components/modal/modal-sheet'
 import { Scroll } from '@/components/animated/scroll'
 import { Section } from '@/components/section'
@@ -45,6 +47,22 @@ export default function Settings() {
                         isFirst={true}
                     />
                     <ThemeOption />
+                </Section>
+
+                <Section
+                    title={t('settings.notes')}
+                    containerStyle={styles.section}
+                    contentStyle={styles.items}
+                >
+                    <StartupOption />
+                </Section>
+
+                <Section
+                    title={t('settings.files_links')}
+                    containerStyle={styles.section}
+                    contentStyle={styles.items}
+                >
+                    <WikiLinksOption />
                 </Section>
 
                 {isDevice && <ProSection />}
