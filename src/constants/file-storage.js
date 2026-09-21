@@ -1,4 +1,5 @@
 // Files
+export const NOTE_FILE_EXTENSION = '.md'
 export const METADATA_FILENAME = '.notes-meta.json'
 export const TAGS_FILENAME = '.tags.json'
 export const VERSIONS_FILENAME_SUFFIX = '.versions.json'
