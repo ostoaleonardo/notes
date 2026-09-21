@@ -14,7 +14,7 @@ import { Tags } from '@/screens/modals/tags'
 import { ExportFormat } from '@/screens/modals/export-format'
 import { AppBar } from '@/components/app-bar/app-bar'
 import { ConfirmDialog } from '@/components/confirm-dialog'
-import { MarkdownEditor } from '@/components/markdown/markdown-editor'
+import { MarkdownInput } from '@/components/markdown/markdown-input'
 import { ModalSheet } from '@/components/modal/modal-sheet'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
@@ -215,7 +215,7 @@ export const NoteEditorScreen = ({
                 canUndo={canUndo}
                 canRedo={canRedo}
             >
-                <MarkdownEditor
+                <MarkdownInput
                     id={id}
                     mode={mode}
                     title={title}
@@ -226,11 +226,14 @@ export const NoteEditorScreen = ({
                     searchQuery={search.searchQuery}
                     replaceText={search.replaceText}
                     value={note}
-                    setValue={setNote}
+                    onChangeText={setNote}
                     onHistoryChange={onHistoryChange}
                     onBlur={() => setIsFocused(false)}
                     onFocus={() => setIsFocused(true)}
-                    markdownAction={markdownAction}
+                    placeholder={t('placeholder.note')}
+                    action={markdownAction.action}
+                    payload={markdownAction.payload}
+                    onActionHandled={markdownAction.clear}
                     showBacklinks={showBacklinks}
                 />
             </MarkdownEditorLayout>

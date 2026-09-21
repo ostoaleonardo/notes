@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
 import { LargeInput } from '@/components/input/large-input'
-import { MarkdownEditor } from '@/components/markdown/markdown-editor'
+import { MarkdownInput } from '@/components/markdown/markdown-input'
 import { Section } from '@/components/section'
 
 export const TemplateEditorForm = ({
@@ -34,16 +34,19 @@ export const TemplateEditorForm = ({
                 containerStyle={{ flex: 1 }}
                 contentStyle={{ flex: 1 }}
             >
-                <MarkdownEditor
+                <MarkdownInput
                     value={content}
-                    setValue={setContent}
-                    markdownAction={markdownAction}
+                    onChangeText={setContent}
+                    action={markdownAction.action}
+                    payload={markdownAction.payload}
+                    onActionHandled={markdownAction.clear}
                     mode={mode}
                     onFocus={onFocus}
                     onBlur={onBlur}
                     onHistoryChange={onHistoryChange}
                     searchQuery={searchQuery}
                     replaceText={replaceText}
+                    placeholder={t('placeholder.note')}
                 />
             </Section>
         </>
