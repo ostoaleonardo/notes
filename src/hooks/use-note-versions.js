@@ -1,5 +1,5 @@
 import { useFileStorage } from './use-file-storage'
-import { commitNoteVersion, loadNoteVersions } from '../context/note-versions'
+import { commitNoteVersion, loadNoteVersions } from '../utils/note-versions'
 
 export function useNoteVersions() {
     const fileStorage = useFileStorage()
