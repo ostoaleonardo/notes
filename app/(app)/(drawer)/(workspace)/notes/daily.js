@@ -4,7 +4,7 @@ import { router } from 'expo-router'
 
 import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'
-import { useStorage } from '@/hooks/use-storage'
+import { useStorageEffect } from '@/hooks/use-storage-effect'
 import { getDate } from '@/utils/date'
 import { getDailyNoteTitle } from '@/utils/daily-note'
 import { getEditorPath } from '@/utils/editor-path'
@@ -14,22 +14,12 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 export default function DailyNote() {
     const { notes, saveNote } = useNotes()
     const { activeRepository, repositories } = useRepositories()
-    const { getItem } = useStorage()
 
     const [folderId, setFolderId] = useState(null)
     const handled = useRef(false)
 
-    useEffect(() => {
-        if (!activeRepository) return
-
-        let cancelled = false
-
-        getItem(`${STORAGE_KEYS.DAILY_NOTE_FOLDER}:${activeRepository.id}`).then((value) => {
-            if (!cancelled) setFolderId(value || '')
-        })
-
-        return () => { cancelled = true }
-    }, [activeRepository])
+    const folderStorageKey = activeRepository ? `${STORAGE_KEYS.DAILY_NOTE_FOLDER}:${activeRepository.id}` : null
+    useStorageEffect(folderStorageKey, (value) => setFolderId(value || ''))
 
     useEffect(() => {
         if (handled.current || !activeRepository || folderId === null) return

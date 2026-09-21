@@ -1,32 +1,23 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Option } from './option'
 import { Switch } from '@/components/button/switch'
 
 import { useStorage } from '@/hooks/use-storage'
+import { useStorageEffect } from '@/hooks/use-storage-effect'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { WIKI_LINK_FORMATS } from '@/constants/wiki-links'
 
 export function WikiLinksOption() {
     const { t } = useTranslation()
-    const { getItem, setItem } = useStorage()
+    const { setItem } = useStorage()
 
     const [autoUpdateLinks, setAutoUpdateLinks] = useState(false)
     const [useWikilinks, setUseWikilinks] = useState(true)
 
-    useEffect(() => {
-        let cancelled = false
-
-        getItem(STORAGE_KEYS.ALWAYS_UPDATE_WIKI_LINKS).then((value) => {
-            if (!cancelled) setAutoUpdateLinks(value === 'true')
-        })
-        getItem(STORAGE_KEYS.LINK_FORMAT).then((value) => {
-            if (!cancelled) setUseWikilinks(value !== WIKI_LINK_FORMATS.MARKDOWN)
-        })
-
-        return () => { cancelled = true }
-    }, [])
+    useStorageEffect(STORAGE_KEYS.ALWAYS_UPDATE_WIKI_LINKS, (value) => setAutoUpdateLinks(value === 'true'))
+    useStorageEffect(STORAGE_KEYS.LINK_FORMAT, (value) => setUseWikilinks(value !== WIKI_LINK_FORMATS.MARKDOWN))
 
     const onToggleAutoUpdate = (value) => {
         setAutoUpdateLinks(value)

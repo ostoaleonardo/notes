@@ -9,6 +9,7 @@ import { MenuItem } from '@/components/menu/menu-item'
 
 import { useMenuAction } from '@/hooks/use-menu-action'
 import { useStorage } from '@/hooks/use-storage'
+import { useStorageEffect } from '@/hooks/use-storage-effect'
 import { useRepositories } from '@/hooks/use-repositories'
 
 import { ArrowForward } from '@/icons/arrow-forward'
@@ -16,10 +17,9 @@ import { Check } from '@/icons/check'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { STARTUP_BEHAVIORS } from '@/constants/startup-behavior'
-import { TRANSPARENT } from '@/constants/themes'
+import { MENU_ITEM_INDENT, SCROLLABLE_MENU_MAX_HEIGHT, TRANSPARENT } from '@/constants/themes'
 
 const OPTIONS = Object.values(STARTUP_BEHAVIORS)
-const FOLDER_MENU_MAX_HEIGHT = 280
 
 const useMenuAnchor = () => {
     const rowRef = useRef(null)
@@ -39,7 +39,7 @@ const useMenuAnchor = () => {
 export function StartupOption() {
     const { t } = useTranslation()
     const { colors } = useTheme()
-    const { getItem, setItem } = useStorage()
+    const { setItem } = useStorage()
     const { activeRepository, getDescendants } = useRepositories()
 
     const behaviorMenu = useMenuAnchor()
@@ -50,28 +50,14 @@ export function StartupOption() {
 
     const folderStorageKey = activeRepository ? `${STORAGE_KEYS.DAILY_NOTE_FOLDER}:${activeRepository.id}` : null
 
-    useEffect(() => {
-        let cancelled = false
+    useStorageEffect(STORAGE_KEYS.STARTUP_BEHAVIOR, (value) => {
+        if (value) setBehavior(value)
+    })
 
-        getItem(STORAGE_KEYS.STARTUP_BEHAVIOR).then((value) => {
-            if (!cancelled && value) setBehavior(value)
-        })
-
-        return () => { cancelled = true }
-    }, [])
-
-    useEffect(() => {
-        if (!folderStorageKey) return
-
-        let cancelled = false
-
-        setDailyFolder('')
-        getItem(folderStorageKey).then((value) => {
-            if (!cancelled && value) setDailyFolder(value)
-        })
-
-        return () => { cancelled = true }
-    }, [folderStorageKey])
+    useEffect(() => setDailyFolder(''), [folderStorageKey])
+    useStorageEffect(folderStorageKey, (value) => {
+        if (value) setDailyFolder(value)
+    })
 
     const onSelectBehavior = (value) => {
         setBehavior(value)
@@ -158,7 +144,7 @@ export function StartupOption() {
                         return (
                             <MenuItem
                                 key={repository.id}
-                                contentStyle={[styles.item, { paddingLeft: repository.depth * 16 }]}
+                                contentStyle={[styles.item, { paddingLeft: repository.depth * MENU_ITEM_INDENT }]}
                                 title={repository.alias}
                                 trailingIcon={selected ? (props) => <Check {...props} color={colors.tertiary} /> : undefined}
                                 style={selected && { backgroundColor: colors.tertiary + TRANSPARENT[10] }}
@@ -181,6 +167,6 @@ const styles = StyleSheet.create({
         marginRight: 12
     },
     folderMenuScroll: {
-        maxHeight: FOLDER_MENU_MAX_HEIGHT
+        maxHeight: SCROLLABLE_MENU_MAX_HEIGHT
     }
 })
