@@ -38,6 +38,10 @@ export function useNotes() {
         updatedAt: note.updatedAt || ''
     })
 
+    const resolveFilename = (uri, title, currentFilename) => (
+        getUniqueFilename(listMarkdownFiles(uri).map((file) => file.name), title, currentFilename)
+    )
+
     const saveNote = async (note, repositoryId = activeRepository?.id) => {
         const uri = getRepositoryUri(repositoryId)
         const noteWithLocation = { ...note, repositoryId }
@@ -45,8 +49,7 @@ export function useNotes() {
         setNotes([noteWithLocation, ...notes])
         if (!uri) return
 
-        const existingNames = listMarkdownFiles(uri).map((file) => file.name)
-        const filename = getUniqueFilename(existingNames, note.title, null)
+        const filename = resolveFilename(uri, note.title, null)
 
         writeNoteFile(uri, filename, note.note)
 
@@ -106,8 +109,7 @@ export function useNotes() {
         const entry = metadata[note.id]
         if (!entry) return
 
-        const existingNames = listMarkdownFiles(uri).map((file) => file.name)
-        const filename = getUniqueFilename(existingNames, note.title, entry.filename)
+        const filename = resolveFilename(uri, note.title, entry.filename)
 
         if (filename !== entry.filename) {
             await renameNoteFile(uri, entry.filename, filename)
