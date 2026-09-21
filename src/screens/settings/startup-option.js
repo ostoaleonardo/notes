@@ -104,7 +104,7 @@ export function StartupOption() {
     const showFolderOption = behavior === STARTUP_BEHAVIORS.DAILY_NOTE
 
     return (
-        <>
+        <View>
             <View style={styles.group}>
                 <View ref={behaviorMenu.rowRef} collapsable={false}>
                     <Option
@@ -223,7 +223,7 @@ export function StartupOption() {
                     })}
                 </ScrollView>
             </MenuContainer>
-        </>
+        </View>
     )
 }
 
