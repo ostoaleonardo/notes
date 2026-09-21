@@ -8,9 +8,6 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 export const useUtils = () => {
     const {
         pinned, setPinned,
-        sort, setSort,
-        filter, setFilter,
-        view, setView,
         collapsedFolders, setCollapsedFolders
     } = useContext(UtilsContext)
 
@@ -24,19 +21,6 @@ export const useUtils = () => {
         )
     }
 
-    const updateSort = (sort) => {
-        setSort(sort)
-        setItem(
-            STORAGE_KEYS.SORT,
-            JSON.stringify(sort)
-        )
-    }
-
-    const updateView = (view) => {
-        setView(view)
-        setItem(STORAGE_KEYS.VIEW, view)
-    }
-
     const onPinned = (id) => {
         const next = new Set(pinned)
 
@@ -47,23 +31,6 @@ export const useUtils = () => {
         }
 
         updatePinned(next)
-    }
-
-    const onFilter = (id) => {
-        if (id === 'all') {
-            setFilter(new Set())
-            return
-        }
-
-        const next = new Set(filter)
-
-        if (next.has(id)) {
-            next.delete(id)
-        } else {
-            next.add(id)
-        }
-
-        setFilter(next)
     }
 
     const updateCollapsedFolders = (collapsedFolders) => {
@@ -91,14 +58,8 @@ export const useUtils = () => {
 
     return {
         pinned,
-        sort,
-        filter,
-        view,
         collapsedFolders,
         updatePinned,
-        updateSort,
-        updateView,
-        onFilter,
         onPinned,
         toggleFolder,
         collapseAll,
