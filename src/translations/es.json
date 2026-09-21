@@ -73,6 +73,8 @@
 		"startup_behavior_daily": "Nota diaria",
 		"daily_note_folder": "Ubicación de la nota diaria",
 		"daily_note_folder_root": "Raíz del repositorio",
+		"daily_note_template": "Plantilla de la nota diaria",
+		"daily_note_template_none": "Ninguna",
 		"files_links": "Enlaces",
 		"use_wikilinks": "Usar [[Wikilinks]]",
 		"use_wikilinks_description": "Desactívalo para generar enlaces de Markdown en su lugar al enlazar notas.",

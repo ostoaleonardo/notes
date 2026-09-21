@@ -11,6 +11,7 @@ import { useMenuAction } from '@/hooks/use-menu-action'
 import { useStorage } from '@/hooks/use-storage'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
 import { useRepositories } from '@/hooks/use-repositories'
+import { useTemplates } from '@/hooks/use-templates'
 
 import { ArrowForward } from '@/icons/arrow-forward'
 import { Check } from '@/icons/check'
@@ -41,14 +42,19 @@ export function StartupOption() {
     const { colors } = useTheme()
     const { setItem } = useStorage()
     const { activeRepository, getDescendants } = useRepositories()
+    const { listTemplates } = useTemplates()
 
     const behaviorMenu = useMenuAnchor()
     const folderMenu = useMenuAnchor()
+    const templateMenu = useMenuAnchor()
 
     const [behavior, setBehavior] = useState(STARTUP_BEHAVIORS.LAST_OPENED)
     const [dailyFolder, setDailyFolder] = useState('')
+    const [dailyTemplate, setDailyTemplate] = useState('')
+    const [templates, setTemplates] = useState([])
 
     const folderStorageKey = activeRepository ? `${STORAGE_KEYS.DAILY_NOTE_FOLDER}:${activeRepository.id}` : null
+    const templateStorageKey = activeRepository ? `${STORAGE_KEYS.DAILY_NOTE_TEMPLATE}:${activeRepository.id}` : null
 
     useStorageEffect(STORAGE_KEYS.STARTUP_BEHAVIOR, (value) => {
         if (value) setBehavior(value)
@@ -58,6 +64,20 @@ export function StartupOption() {
     useStorageEffect(folderStorageKey, (value) => {
         if (value) setDailyFolder(value)
     })
+
+    useEffect(() => setDailyTemplate(''), [templateStorageKey])
+    useStorageEffect(templateStorageKey, (value) => {
+        if (value) setDailyTemplate(value)
+    })
+
+    useEffect(() => {
+        if (!activeRepository) return
+
+        let cancelled = false
+        listTemplates().then((value) => { if (!cancelled) setTemplates(value) })
+
+        return () => { cancelled = true }
+    }, [activeRepository, listTemplates])
 
     const onSelectBehavior = (value) => {
         setBehavior(value)
@@ -69,11 +89,17 @@ export function StartupOption() {
         if (folderStorageKey) setItem(folderStorageKey, id)
     }
 
+    const onSelectTemplate = (filename) => {
+        setDailyTemplate(filename)
+        if (templateStorageKey) setItem(templateStorageKey, filename)
+    }
+
     const descendants = useMemo(() => (
         activeRepository ? getDescendants(activeRepository.id) : []
     ), [activeRepository, getDescendants])
 
     const selectedRepository = descendants.find((repository) => repository.id === dailyFolder)
+    const selectedTemplate = templates.find((template) => template.filename === dailyTemplate)
 
     const showFolderOption = behavior === STARTUP_BEHAVIORS.DAILY_NOTE
 
@@ -98,6 +124,19 @@ export function StartupOption() {
                             description={selectedRepository ? selectedRepository.alias : t('settings.daily_note_folder_root')}
                             rightContent={<ArrowForward color={colors.onBackground} />}
                             onPress={folderMenu.onPressRow}
+                        />
+                    </View>
+                )}
+
+                {showFolderOption && (
+                    <View ref={templateMenu.rowRef} collapsable={false}>
+                        <Option
+                            title={t('settings.daily_note_template')}
+                            description={selectedTemplate
+                                ? t(`templates.${selectedTemplate.name}`, selectedTemplate.name)
+                                : t('settings.daily_note_template_none')}
+                            rightContent={<ArrowForward color={colors.onBackground} />}
+                            onPress={templateMenu.onPressRow}
                             isLast={true}
                         />
                     </View>
@@ -149,6 +188,36 @@ export function StartupOption() {
                                 trailingIcon={selected ? (props) => <Check {...props} color={colors.tertiary} /> : undefined}
                                 style={selected && { backgroundColor: colors.tertiary + TRANSPARENT[10] }}
                                 onPress={() => folderMenu.trigger(() => onSelectFolder(repository.id))}
+                            />
+                        )
+                    })}
+                </ScrollView>
+            </MenuContainer>
+
+            <MenuContainer
+                visible={templateMenu.visible}
+                onClose={templateMenu.onClose}
+                anchor={templateMenu.anchor}
+            >
+                <ScrollView style={styles.folderMenuScroll}>
+                    <MenuItem
+                        contentStyle={styles.item}
+                        title={t('settings.daily_note_template_none')}
+                        trailingIcon={!dailyTemplate ? (props) => <Check {...props} color={colors.tertiary} /> : undefined}
+                        style={!dailyTemplate && { backgroundColor: colors.tertiary + TRANSPARENT[10] }}
+                        onPress={() => templateMenu.trigger(() => onSelectTemplate(''))}
+                    />
+                    {templates.map((template) => {
+                        const selected = template.filename === dailyTemplate
+
+                        return (
+                            <MenuItem
+                                key={template.filename}
+                                contentStyle={styles.item}
+                                title={t(`templates.${template.name}`, template.name)}
+                                trailingIcon={selected ? (props) => <Check {...props} color={colors.tertiary} /> : undefined}
+                                style={selected && { backgroundColor: colors.tertiary + TRANSPARENT[10] }}
+                                onPress={() => templateMenu.trigger(() => onSelectTemplate(template.filename))}
                             />
                         )
                     })}
