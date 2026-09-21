@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Directory, File } from 'expo-file-system'
 
 import {
+    NOTE_FILE_EXTENSION,
     METADATA_FILENAME,
     VERSIONS_FILENAME_SUFFIX,
     TEMPLATES_FOLDER_NAME,
@@ -41,7 +42,7 @@ export function useFileStorage() {
         listEntries(directoryUri).filter((entry) => (
             entry instanceof File &&
             !SIDECAR_FILENAMES.includes(entry.name) &&
-            entry.name.toLowerCase().endsWith('.md')
+            entry.name.toLowerCase().endsWith(NOTE_FILE_EXTENSION)
         ))
     )
 

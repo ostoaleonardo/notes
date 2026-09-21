@@ -1,3 +1,5 @@
+import { NOTE_FILE_EXTENSION } from '@/constants/file-storage'
+
 const ILLEGAL_CHARS = /[/\\:*?"<>|\x00-\x1F]/g
 
 export const sanitizeFilename = (title) => {
@@ -22,11 +24,11 @@ export const getUniqueFilename = (existingNames, title, currentFilename) => {
     const base = sanitizeFilename(title)
     const taken = new Set(existingNames.filter((name) => name !== currentFilename))
 
-    let filename = base + '.md'
+    let filename = base + NOTE_FILE_EXTENSION
     let count = 2
 
     while (taken.has(filename)) {
-        filename = `${base} (${count}).md`
+        filename = `${base} (${count})${NOTE_FILE_EXTENSION}`
         count++
     }
 
