@@ -2,16 +2,12 @@ import { createContext, useEffect, useMemo, useState } from 'react'
 
 import { useStorage } from '../hooks/use-storage'
 
-import { DEFAULT_SORT } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export const UtilsContext = createContext()
 
 export function UtilsProvider({ children }) {
     const [pinned, setPinned] = useState(new Set())
-    const [sort, setSort] = useState(DEFAULT_SORT)
-    const [filter, setFilter] = useState(new Set())
-    const [view, setView] = useState('list')
     const [collapsedFolders, setCollapsedFolders] = useState(new Set())
 
     const { getItem } = useStorage()
@@ -19,13 +15,9 @@ export function UtilsProvider({ children }) {
     useEffect(() => {
         const getUtils = async () => {
             const pinned = await getItem(STORAGE_KEYS.PINNED)
-            const sort = await getItem(STORAGE_KEYS.SORT)
-            const view = await getItem(STORAGE_KEYS.VIEW)
             const collapsedFolders = await getItem(STORAGE_KEYS.COLLAPSED_FOLDERS)
 
             if (pinned) setPinned(new Set(JSON.parse(pinned)))
-            if (sort) setSort(JSON.parse(sort))
-            if (view) setView(view)
             if (collapsedFolders) setCollapsedFolders(new Set(JSON.parse(collapsedFolders)))
         }
 
@@ -35,15 +27,9 @@ export function UtilsProvider({ children }) {
     const value = useMemo(() => ({
         pinned,
         setPinned,
-        sort,
-        setSort,
-        filter,
-        setFilter,
-        view,
-        setView,
         collapsedFolders,
         setCollapsedFolders
-    }), [pinned, sort, filter, view, collapsedFolders])
+    }), [pinned, collapsedFolders])
 
     return (
         <UtilsContext.Provider value={value}>

@@ -10,8 +10,6 @@ export const STORAGE_KEYS = {
     // Settings
     PINNED: 'pinned',
     PRO: 'pro',
-    SORT: 'sort',
-    VIEW: 'view',
     THEME: 'theme',
     ACCENT: 'accent',
     LANGUAGE: 'language',
