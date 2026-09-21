@@ -73,6 +73,8 @@
 		"startup_behavior_daily": "Daily note",
 		"daily_note_folder": "Daily note location",
 		"daily_note_folder_root": "Vault root",
+		"daily_note_template": "Daily note template",
+		"daily_note_template_none": "None",
 		"files_links": "Links",
 		"use_wikilinks": "Use [[Wikilinks]]",
 		"use_wikilinks_description": "Turn off to generate Markdown links instead when linking notes.",

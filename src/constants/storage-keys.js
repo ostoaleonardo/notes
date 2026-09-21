@@ -20,6 +20,7 @@ export const STORAGE_KEYS = {
     LINK_FORMAT: 'link-format',
     STARTUP_BEHAVIOR: 'startup-behavior',
     DAILY_NOTE_FOLDER: 'daily-note-folder',
+    DAILY_NOTE_TEMPLATE: 'daily-note-template',
 
     // Notes
     CURRENT_NOTE: 'current-note',
