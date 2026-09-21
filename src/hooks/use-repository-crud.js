@@ -1,9 +1,7 @@
 import { useCallback } from 'react'
-import { randomUUID } from 'expo-crypto'
 import { Directory } from 'expo-file-system'
 
 import { sanitizeFilename } from '@/utils/note-filename'
-import { getDefaultTemplates } from '@/utils/default-templates'
 import { FREE_SUBFOLDERS_PER_REPOSITORY } from '@/constants/default-values'
 
 export function useRepositoryCrud({
@@ -19,55 +17,19 @@ export function useRepositoryCrud({
     persistActiveRepository,
     getRootRepository,
     getDescendants,
-    isAncestorOf
+    isAncestorOf,
+    seedTemplates,
+    buildRepository,
+    discoverSubfolders,
+    relinkUris
 }) {
     const {
-        listMarkdownFiles,
-        listSubdirectories,
-        writeNoteFile,
         createSubdirectory,
         deleteDirectory,
         renameDirectory,
         getOrCreateTemplatesFolder,
         getOrCreateImagesFolder
     } = fileStorage
-
-    const seedTemplates = useCallback((templatesUri) => {
-        const existingNames = new Set(listMarkdownFiles(templatesUri).map((file) => file.name))
-        getDefaultTemplates().forEach(({ filename, content }) => {
-            if (!existingNames.has(filename)) writeNoteFile(templatesUri, filename, content)
-        })
-    }, [listMarkdownFiles, writeNoteFile])
-
-    const buildRepository = useCallback((
-        directory,
-        parentId = null,
-        seedTemplatesFolder = true
-    ) => {
-        let templatesUri = null
-
-        if (seedTemplatesFolder) {
-            const templatesDirectory = getOrCreateTemplatesFolder(directory.uri)
-            seedTemplates(templatesDirectory.uri)
-            templatesUri = templatesDirectory.uri
-        }
-
-        return {
-            id: randomUUID(),
-            uri: directory.uri,
-            alias: directory.name,
-            createdAt: Date.now(),
-            templatesUri,
-            parentId
-        }
-    }, [getOrCreateTemplatesFolder, seedTemplates])
-
-    const discoverSubfolders = useCallback((directory, parentId) => (
-        listSubdirectories(directory.uri).flatMap((subdirectory) => {
-            const entry = buildRepository(subdirectory, parentId, false)
-            return [entry, ...discoverSubfolders(subdirectory, entry.id)]
-        })
-    ), [listSubdirectories, buildRepository])
 
     const addRepository = useCallback(async () => {
         busyRef.current = true
@@ -171,27 +133,6 @@ export function useRepositoryCrud({
         const root = getRootRepository(repository)
         return getOrCreateImagesFolder(root.uri).uri
     }, [getRootRepository, getOrCreateImagesFolder])
-
-    const relinkUris = useCallback((repository) => {
-        let diskChildren
-
-        try {
-            diskChildren = listSubdirectories(repository.uri)
-        } catch {
-            diskChildren = []
-        }
-
-        const trackedChildren = repositories.filter((r) => r.parentId === repository.id)
-        const diskByName = new Map(diskChildren.map((d) => [d.name, d]))
-
-        return trackedChildren.flatMap((child) => {
-            const disk = diskByName.get(child.alias)
-            if (!disk) return []
-
-            const relinkedChild = { ...child, uri: disk.uri }
-            return [relinkedChild, ...relinkUris(relinkedChild)]
-        })
-    }, [listSubdirectories, repositories])
 
     const renameRepository = useCallback(async (id, alias) => {
         const repository = repositories.find((r) => r.id === id)
@@ -298,8 +239,6 @@ export function useRepositoryCrud({
     }, [persistActiveRepository])
 
     return {
-        buildRepository,
-        discoverSubfolders,
         addRepository,
         clearPendingWelcomeNote,
         addSubfolder,
