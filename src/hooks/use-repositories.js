@@ -5,6 +5,7 @@ import { useFileStorage } from './use-file-storage'
 import { usePro } from './use-pro'
 import { useWelcomeNote } from './use-welcome-note'
 import { useRepositoryTree } from './use-repository-tree'
+import { useRepositoryTreeOps } from './use-repository-tree-ops'
 import { useRepositoryCrud } from './use-repository-crud'
 import { useRepositorySync } from './use-repository-sync'
 import { RepositoryContext } from '../context/repository-context'
@@ -43,6 +44,7 @@ export function useRepositories() {
     }, [setActiveRepositoryId, setItem])
 
     const tree = useRepositoryTree({ repositories, activeRepository })
+    const treeOps = useRepositoryTreeOps({ repositories, fileStorage })
 
     const crud = useRepositoryCrud({
         repositories,
@@ -57,7 +59,11 @@ export function useRepositories() {
         persistActiveRepository,
         getRootRepository: tree.getRootRepository,
         getDescendants: tree.getDescendants,
-        isAncestorOf: tree.isAncestorOf
+        isAncestorOf: tree.isAncestorOf,
+        seedTemplates: treeOps.seedTemplates,
+        buildRepository: treeOps.buildRepository,
+        discoverSubfolders: treeOps.discoverSubfolders,
+        relinkUris: treeOps.relinkUris
     })
 
     const { reconcileRepositories } = useRepositorySync({
@@ -66,8 +72,8 @@ export function useRepositories() {
         busyRef,
         directoryExists: fileStorage.directoryExists,
         listSubdirectories: fileStorage.listSubdirectories,
-        buildRepository: crud.buildRepository,
-        discoverSubfolders: crud.discoverSubfolders,
+        buildRepository: treeOps.buildRepository,
+        discoverSubfolders: treeOps.discoverSubfolders,
         persistRepositories,
         persistActiveRepository
     })
@@ -91,7 +97,7 @@ export function useRepositories() {
         ensureTemplatesFolder: crud.ensureTemplatesFolder,
         ensureImagesFolder: crud.ensureImagesFolder,
         getDescendants: tree.getDescendants,
-        buildRepository: crud.buildRepository,
+        buildRepository: treeOps.buildRepository,
         reconcileRepositories
     }
 }
