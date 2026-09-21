@@ -122,6 +122,20 @@ export const GROUP_CORNERS = {
 
 export const GROUP_PILL_RADIUS = 24
 
+export const SWITCH_TRACK = {
+    width: 52,
+    height: 32,
+    borderWidth: 2
+}
+
+export const SWITCH_THUMB = {
+    off: 16,
+    on: 24
+}
+
+export const SCROLLABLE_MENU_MAX_HEIGHT = 280
+export const MENU_ITEM_INDENT = 16
+
 export const TYPOGRAPHY_SIZE_VARIANTS = {
     title: 24,
     subtitle: 16,

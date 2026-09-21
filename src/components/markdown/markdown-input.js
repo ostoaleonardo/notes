@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Linking } from 'react-native'
 import { router } from 'expo-router'
 import { randomUUID } from 'expo-crypto'
@@ -15,7 +15,7 @@ import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useResolvedPreviewMarkdown } from '@/hooks/use-resolved-preview-markdown'
 import { useResolvedWikiLinks } from '@/hooks/use-resolved-wiki-links'
-import { useStorage } from '@/hooks/use-storage'
+import { useStorageEffect } from '@/hooks/use-storage-effect'
 
 import { getEditorPath } from '@/utils/editor-path'
 import { getDate } from '@/utils/date'
@@ -60,19 +60,12 @@ export const MarkdownInput = ({
 
     const { notes, saveNote } = useNotes()
     const { repositories } = useRepositories()
-    const { getItem } = useStorage()
 
     const [linkFormat, setLinkFormat] = useState(WIKI_LINK_FORMATS.WIKILINK)
 
-    useEffect(() => {
-        let cancelled = false
-
-        getItem(STORAGE_KEYS.LINK_FORMAT).then((value) => {
-            if (!cancelled && value === WIKI_LINK_FORMATS.MARKDOWN) setLinkFormat(WIKI_LINK_FORMATS.MARKDOWN)
-        })
-
-        return () => { cancelled = true }
-    }, [])
+    useStorageEffect(STORAGE_KEYS.LINK_FORMAT, (value) => {
+        if (value === WIKI_LINK_FORMATS.MARKDOWN) setLinkFormat(WIKI_LINK_FORMATS.MARKDOWN)
+    })
 
     const notePaths = useMemo(() => getNotePaths(notes, repositories), [notes, repositories])
 

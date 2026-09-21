@@ -4,9 +4,6 @@ import { isRangeSelected, overlapsAny } from './utils'
 
 import { WIKI_LINK_PATTERN } from '@/constants/wiki-links'
 
-let lastKey = null
-let lastRanges = []
-
 export const findWikiLinkRanges = (text) => {
     const ranges = []
 
@@ -30,18 +27,7 @@ export const findWikiLinkRanges = (text) => {
     return ranges
 }
 
-export const decorateWikiLinks = ({ text, ranges, codeRanges, wikiLinkRanges, noteEntries, selection }) => {
-    const cacheKey = (
-        `${text}|${selection.from}|${selection.to}|`
-        + noteEntries.map((entry) => `${entry.title}|${entry.path}`).join(' ')
-    )
-    if (cacheKey === lastKey) {
-        ranges.push(...lastRanges)
-        return
-    }
-
-    const localRanges = []
-
+export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntries, selection }) => {
     for (const { from, to, title, path, labelFrom, labelTo } of wikiLinkRanges) {
         if (overlapsAny(from, to, codeRanges)) continue
 
@@ -55,18 +41,14 @@ export const decorateWikiLinks = ({ text, ranges, codeRanges, wikiLinkRanges, no
         const className = resolved ? 'cm-live-wikilink' : 'cm-live-wikilink-broken'
 
         if (isRangeSelected(selection, from, to)) {
-            localRanges.push(Decoration.mark({ class: className }).range(from, to))
+            ranges.push(Decoration.mark({ class: className }).range(from, to))
             continue
         }
 
-        if (from < labelFrom) localRanges.push(Decoration.replace({}).range(from, labelFrom))
-        if (labelFrom < labelTo) localRanges.push(Decoration.mark({ class: className }).range(labelFrom, labelTo))
-        if (labelTo < to) localRanges.push(Decoration.replace({}).range(labelTo, to))
+        if (from < labelFrom) ranges.push(Decoration.replace({}).range(from, labelFrom))
+        if (labelFrom < labelTo) ranges.push(Decoration.mark({ class: className }).range(labelFrom, labelTo))
+        if (labelTo < to) ranges.push(Decoration.replace({}).range(labelTo, to))
     }
-
-    lastKey = cacheKey
-    lastRanges = localRanges
-    ranges.push(...localRanges)
 }
 
 export const wikiLinksTheme = ({ linkColor, onBackgroundColor }) => ({
