@@ -19,8 +19,8 @@ import { useStorageEffect } from '@/hooks/use-storage-effect'
 
 import { getEditorPath } from '@/utils/editor-path'
 import { getDate } from '@/utils/date'
-import { findBacklinks, buildBacklinksHtml } from '@/utils/wiki-links'
-import { getNotePaths } from '@/utils/note-path'
+import { findBacklinks, buildBacklinksHtml, parseMissingWikiLinkTarget } from '@/utils/wiki-links'
+import { getNotePaths, buildRepositoryPaths } from '@/utils/note-path'
 
 import { ROUTES } from '@/constants/routes'
 import { FONTS, TRANSPARENT } from '@/constants/themes'
@@ -75,13 +75,15 @@ export const MarkdownInput = ({
             .map((note) => ({ id: note.id, title: note.title, path: notePaths.get(note.id) || '' }))
     ), [notes, notePaths])
 
-    const [missingTitle, setMissingTitle] = useState(null)
+    const [missingLink, setMissingLink] = useState(null)
+
+    const repositoryPaths = useMemo(() => buildRepositoryPaths(repositories), [repositories])
 
     const backlinksHtml = useMemo(() => {
         if (mode !== 'read' || !showBacklinks) return ''
 
         const backlinks = findBacklinks(id, notes, notePaths)
-        return buildBacklinksHtml(backlinks, t('title.backlinks'))
+        return buildBacklinksHtml(backlinks, t('title.backlinks'), notePaths)
     }, [mode, showBacklinks, id, notes, notePaths, t])
 
     const valueWithWikiLinks = useResolvedWikiLinks(value)
@@ -95,7 +97,7 @@ export const MarkdownInput = ({
             const target = url.slice(WIKI_LINK_SCHEME.length)
 
             if (target.startsWith(WIKI_LINK_MISSING_PREFIX)) {
-                setMissingTitle(decodeURIComponent(target.slice(WIKI_LINK_MISSING_PREFIX.length)))
+                setMissingLink(parseMissingWikiLinkTarget(target.slice(WIKI_LINK_MISSING_PREFIX.length)))
                 return
             }
 
@@ -106,23 +108,27 @@ export const MarkdownInput = ({
         Linking.openURL(url)
     }, [])
 
-    const onDismissMissingLink = useCallback(() => setMissingTitle(null), [])
+    const onDismissMissingLink = useCallback(() => setMissingLink(null), [])
 
     const onCreateMissingNote = useCallback(() => {
         const newId = randomUUID()
         const now = getDate()
 
+        const targetRepository = repositories.find((repository) => (
+            (repositoryPaths.get(repository.id) || '') === missingLink.path
+        ))
+
         saveNote({
             id: newId,
-            title: missingTitle,
+            title: missingLink.title,
             note: '',
             tags: [],
             createdAt: now,
             updatedAt: now
-        })
+        }, targetRepository?.id)
 
         router.push(getEditorPath(newId))
-    }, [missingTitle, saveNote])
+    }, [missingLink, repositories, repositoryPaths, saveNote])
 
     const onImagePress = useCallback((url) => router.push({
         pathname: ROUTES.IMAGE_VIEWER,
@@ -188,9 +194,9 @@ export const MarkdownInput = ({
                 dom={dom}
             />
             <ConfirmDialog
-                visible={!!missingTitle}
+                visible={!!missingLink}
                 title={t('message.wiki_links.missing_title')}
-                message={t('message.wiki_links.missing_message', { title: missingTitle })}
+                message={t('message.wiki_links.missing_message', { title: missingLink?.title })}
                 confirmLabel={t('button.create')}
                 onDismiss={onDismissMissingLink}
                 onConfirm={onCreateMissingNote}

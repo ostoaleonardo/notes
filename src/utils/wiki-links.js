@@ -33,19 +33,30 @@ export const resolveWikiLinkTarget = (linkText, notes, notePaths = new Map()) =>
 export const resolveWikiLinks = (value, notes, notePaths = new Map()) => value.replace(
     WIKI_LINK_PATTERN,
     (match, linkText, alias) => {
-        const { title } = parseWikiLinkText(linkText)
+        const { path, title } = parseWikiLinkText(linkText)
         const label = escapeHtml((alias || title).trim())
 
         const target = resolveWikiLinkTarget(linkText, notes, notePaths)
 
         if (!target) {
-            const missingHref = `${WIKI_LINK_SCHEME}${WIKI_LINK_MISSING_PREFIX}${encodeURIComponent(title)}`
+            const encodedPath = encodeURIComponent(path)
+            const encodedTitle = encodeURIComponent(title)
+            const missingHref = `${WIKI_LINK_SCHEME}${WIKI_LINK_MISSING_PREFIX}${encodedPath}/${encodedTitle}`
             return `<a href="${missingHref}" class="wiki-link-broken">${label}</a>`
         }
 
         return `<a href="${WIKI_LINK_SCHEME}${target.id}" class="wiki-link">${label}</a>`
     }
 )
+
+export const parseMissingWikiLinkTarget = (encoded) => {
+    const separatorIndex = encoded.indexOf('/')
+
+    return {
+        path: decodeURIComponent(encoded.slice(0, separatorIndex)),
+        title: decodeURIComponent(encoded.slice(separatorIndex + 1))
+    }
+}
 
 export const findBacklinks = (targetId, notes, notePaths = new Map()) => (
     notes.filter((note) => {
@@ -62,21 +73,38 @@ export const findBacklinks = (targetId, notes, notePaths = new Map()) => (
     })
 )
 
+// Re-qualifies with the target's own folder path when the new title collides with another
+// note, so the rewritten link doesn't become ambiguous again after the rename.
 export const renameWikiLinksForNote = (content, targetId, newTitle, notes, notePaths = new Map()) => {
     if (!content) return content
 
+    const targetPath = notePaths.get(targetId) || ''
+    const normalizedNewTitle = newTitle.trim().toLowerCase()
+    const isAmbiguous = targetPath && notes.some((note) => (
+        note.id !== targetId && note.title?.trim().toLowerCase() === normalizedNewTitle
+    ))
+    const qualifiedTitle = isAmbiguous ? `${targetPath}/${newTitle}` : newTitle
+
     return content.replace(WIKI_LINK_PATTERN, (match, linkText, alias) => {
         if (resolveWikiLinkTarget(linkText, notes, notePaths)?.id !== targetId) return match
-        return alias !== undefined ? `[[${newTitle}|${alias}]]` : `[[${newTitle}]]`
+        if (alias !== undefined) return `[[${qualifiedTitle}|${alias}]]`
+        return isAmbiguous ? `[[${qualifiedTitle}|${newTitle}]]` : `[[${newTitle}]]`
     })
 }
 
-export const buildBacklinksHtml = (backlinks, label) => {
+export const buildBacklinksHtml = (backlinks, label, notePaths = new Map()) => {
     if (!backlinks.length) return ''
 
-    const items = backlinks.map((note) => (
-        `<li><a href="${WIKI_LINK_SCHEME}${note.id}" class="wiki-link">${escapeHtml(note.title || '')}</a></li>`
-    )).join('')
+    const items = backlinks.map((note) => {
+        const path = notePaths.get(note.id) || ''
+        const pathHtml = path ? `<span class="backlink-path">${escapeHtml(path)}</span>` : ''
+
+        return (
+            `<li><a href="${WIKI_LINK_SCHEME}${note.id}" class="wiki-link">`
+            + `<span class="backlink-title">${escapeHtml(note.title || '')}</span>${pathHtml}`
+            + `</a></li>`
+        )
+    }).join('')
 
     return `<div class="backlinks"><div class="backlinks-title">${escapeHtml(label)}</div><ul>${items}</ul></div>`
 }

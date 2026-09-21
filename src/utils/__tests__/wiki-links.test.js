@@ -3,7 +3,8 @@ import {
     resolveWikiLinkTarget,
     findBacklinks,
     renameWikiLinksForNote,
-    buildBacklinksHtml
+    buildBacklinksHtml,
+    parseMissingWikiLinkTarget
 } from '../wiki-links'
 
 const notes = [
@@ -36,7 +37,15 @@ describe('missing note', () => {
         const result = resolveWikiLinks('[[Unknown Note]]', notes)
 
         expect(result).toBe(
-            '<a href="wikilink://missing/Unknown%20Note" class="wiki-link-broken">Unknown Note</a>'
+            '<a href="wikilink://missing//Unknown%20Note" class="wiki-link-broken">Unknown Note</a>'
+        )
+    })
+
+    test('carries the folder path so a note created from it lands in the right place', () => {
+        const result = resolveWikiLinks('[[one/Unknown Note]]', notes)
+
+        expect(result).toBe(
+            '<a href="wikilink://missing/one/Unknown%20Note" class="wiki-link-broken">Unknown Note</a>'
         )
     })
 })
@@ -46,8 +55,18 @@ describe('label escaping', () => {
         const result = resolveWikiLinks('[[Unknown Note|<b>bold</b>]]', notes)
 
         expect(result).toBe(
-            '<a href="wikilink://missing/Unknown%20Note" class="wiki-link-broken">&lt;b&gt;bold&lt;/b&gt;</a>'
+            '<a href="wikilink://missing//Unknown%20Note" class="wiki-link-broken">&lt;b&gt;bold&lt;/b&gt;</a>'
         )
+    })
+})
+
+describe('parseMissingWikiLinkTarget', () => {
+    test('splits the encoded path and title back apart', () => {
+        expect(parseMissingWikiLinkTarget('one/Unknown%20Note')).toEqual({ path: 'one', title: 'Unknown Note' })
+    })
+
+    test('returns an empty path for a root-level missing note', () => {
+        expect(parseMissingWikiLinkTarget('/Unknown%20Note')).toEqual({ path: '', title: 'Unknown Note' })
     })
 })
 
@@ -210,6 +229,48 @@ describe('renameWikiLinksForNote', () => {
 
         expect(result).toBe('Links to [[Renamed]] and [[one/Test]]')
     })
+
+    test('re-qualifies with the folder path when the new title collides with another note', () => {
+        const duplicateNotes = [
+            { id: 'sub-test', title: 'Test' },
+            { id: 'other', title: 'Fold' }
+        ]
+        const notePaths = new Map([
+            ['sub-test', 'one'],
+            ['other', '']
+        ])
+
+        const result = renameWikiLinksForNote(
+            'See [[Test]] here',
+            'sub-test',
+            'Fold',
+            duplicateNotes,
+            notePaths
+        )
+
+        expect(result).toBe('See [[one/Fold|Fold]] here')
+    })
+
+    test('does not qualify when the renamed note has no folder to qualify with', () => {
+        const duplicateNotes = [
+            { id: 'root-test', title: 'Test' },
+            { id: 'other', title: 'Fold' }
+        ]
+        const notePaths = new Map([
+            ['root-test', ''],
+            ['other', '']
+        ])
+
+        const result = renameWikiLinksForNote(
+            'See [[Test]] here',
+            'root-test',
+            'Fold',
+            duplicateNotes,
+            notePaths
+        )
+
+        expect(result).toBe('See [[Fold]] here')
+    })
 })
 
 describe('buildBacklinksHtml', () => {
@@ -231,5 +292,19 @@ describe('buildBacklinksHtml', () => {
         expect(result).not.toContain('<b>Bold</b>')
         expect(result).toContain('&lt;b&gt;Bold&lt;/b&gt;')
         expect(result).toContain('&lt;i&gt;Label&lt;/i&gt;')
+    })
+
+    test('shows the folder path under the title, similar to Obsidian, when the note is not at the root', () => {
+        const notePaths = new Map([['note-1', 'one']])
+        const result = buildBacklinksHtml([{ id: 'note-1', title: 'Test' }], 'Backlinks', notePaths)
+
+        expect(result).toContain('<span class="backlink-path">one</span>')
+    })
+
+    test('omits the path subtext for a root-level note', () => {
+        const notePaths = new Map([['note-1', '']])
+        const result = buildBacklinksHtml([{ id: 'note-1', title: 'Test' }], 'Backlinks', notePaths)
+
+        expect(result).not.toContain('backlink-path')
     })
 })

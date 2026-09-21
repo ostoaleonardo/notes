@@ -131,5 +131,10 @@ export const buildPreviewCss = ({ fontFamily, headingFontFamily, colors, fontSiz
     .markdown-preview .backlinks-title { font-size: 0.75em; text-transform: uppercase; opacity: 0.6; margin-bottom: 8px; }
     .markdown-preview .backlinks ul { list-style: none; padding: 0; margin: 0; }
     .markdown-preview .backlinks li { margin: 4px 0; }
+    .markdown-preview .backlinks .wiki-link { display: inline-block; }
+    .markdown-preview .backlinks .backlink-path {
+        display: block; font-weight: normal; text-decoration: none;
+        font-size: 0.85em; opacity: 0.6; margin-top: 2px;
+    }
 `
 }
