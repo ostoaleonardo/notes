@@ -1,6 +1,9 @@
 import { NOTE_FILE_EXTENSION } from '@/constants/file-storage'
 
 const ILLEGAL_CHARS = /[/\\:*?"<>|\x00-\x1F]/g
+const NOTE_FILE_EXTENSION_REGEX = /\.md$/i
+
+export const stripNoteExtension = (filename) => filename.replace(NOTE_FILE_EXTENSION_REGEX, '')
 
 export const sanitizeFilename = (title) => {
     const clean = (title || '').replace(ILLEGAL_CHARS, ' ').trim().slice(0, 200)

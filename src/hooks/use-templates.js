@@ -3,7 +3,7 @@ import { File } from 'expo-file-system'
 
 import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
-import { getUniqueFilename } from '@/utils/note-filename'
+import { getUniqueFilename, stripNoteExtension } from '@/utils/note-filename'
 
 export function useTemplates() {
     const { activeRepository, ensureTemplatesFolder } = useRepositories()
@@ -28,7 +28,7 @@ export function useTemplates() {
 
         return Promise.all(files.map(async (file) => ({
             filename: file.name,
-            name: file.name.replace(/\.md$/i, ''),
+            name: stripNoteExtension(file.name),
             content: await file.text()
         })))
     }, [getTemplatesUri, listMarkdownFiles])
@@ -40,7 +40,7 @@ export function useTemplates() {
         const file = findFile(uri, filename)
         if (!file) return null
 
-        return { filename, name: filename.replace(/\.md$/i, ''), content: await file.text() }
+        return { filename, name: stripNoteExtension(filename), content: await file.text() }
     }, [getTemplatesUri, findFile])
 
     const updateTemplate = useCallback(async (currentFilename, name, content) => {
