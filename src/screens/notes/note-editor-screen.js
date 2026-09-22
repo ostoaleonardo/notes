@@ -29,6 +29,7 @@ import { useNotes } from '@/hooks/use-notes'
 import { usePro } from '@/hooks/use-pro'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
+import { useUndoRedoState } from '@/hooks/use-undo-redo-state'
 import { useVersionHistory } from '@/hooks/use-version-history'
 import { getFormattedDate } from '@/utils/formatted-date'
 import { countWords } from '@/utils/word-count'
@@ -62,9 +63,8 @@ export const NoteEditorScreen = ({
     const [exportDialogVisible, setExportDialogVisible] = useState(false)
     const [shareDialogVisible, setShareDialogVisible] = useState(false)
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false)
-    const [canUndo, setCanUndo] = useState(false)
-    const [canRedo, setCanRedo] = useState(false)
     const [templates, setTemplates] = useState([])
+    const { canUndo, canRedo, onHistoryChange } = useUndoRedoState()
 
     const metaLabel = useMemo(() => (
         mode === 'read'
@@ -96,11 +96,6 @@ export const NoteEditorScreen = ({
     const tagsSheet = useBottomSheet()
     const templatesSheet = useBottomSheet()
     const recentsSheet = useBottomSheet()
-
-    const onHistoryChange = useCallback(({ canUndo, canRedo }) => {
-        setCanUndo(canUndo)
-        setCanRedo(canRedo)
-    }, [])
 
     const onSelectTemplate = useCallback((content) => {
         setNote((prev) => (prev ? prev + '\n\n' + content : content))
