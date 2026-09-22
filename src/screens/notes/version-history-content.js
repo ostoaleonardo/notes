@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { IconButton, TouchableRipple, useTheme } from 'react-native-paper'
@@ -24,7 +24,7 @@ import { FREE_VERSION_HISTORY_LIMIT } from '@/constants/default-values'
 
 const getDiffColor = (type) => (type === 'added' ? DIFF_ADDED_COLOR : DIFF_REMOVED_COLOR)
 
-export function VersionHistoryContent({
+export const VersionHistoryContent = memo(function VersionHistoryContent({
     directoryUri,
     noteId,
     currentContentRef,
@@ -209,7 +209,7 @@ export function VersionHistoryContent({
             />
         </View>
     )
-}
+})
 
 const styles = StyleSheet.create({
     container: {
