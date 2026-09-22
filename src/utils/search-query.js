@@ -66,21 +66,14 @@ export const toggleTagQualifier = (query, tagName) => {
     return `${withoutTags} ${qualifiers}`
 }
 
-export const togglePinnedQualifier = (query) => {
-    if (PINNED_QUALIFIER_REGEX.test(query)) {
-        return query.replace(PINNED_QUALIFIER_REGEX, '').trim()
-    }
-
-    return query ? `${query} ${PINNED_QUALIFIER}` : PINNED_QUALIFIER
+const toggleQualifier = (query, regex, qualifier) => {
+    if (regex.test(query)) return query.replace(regex, '').trim()
+    return query ? `${query} ${qualifier}` : qualifier
 }
 
-export const toggleImageQualifier = (query) => {
-    if (IMAGE_QUALIFIER_REGEX.test(query)) {
-        return query.replace(IMAGE_QUALIFIER_REGEX, '').trim()
-    }
+export const togglePinnedQualifier = (query) => toggleQualifier(query, PINNED_QUALIFIER_REGEX, PINNED_QUALIFIER)
 
-    return query ? `${query} ${IMAGE_QUALIFIER}` : IMAGE_QUALIFIER
-}
+export const toggleImageQualifier = (query) => toggleQualifier(query, IMAGE_QUALIFIER_REGEX, IMAGE_QUALIFIER)
 
 export const filterNotes = (notes, query, { tags, pinned }) => {
     const parsed = parseSearchQuery(query)
