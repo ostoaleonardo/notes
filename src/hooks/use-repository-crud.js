@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 import { Directory } from 'expo-file-system'
 
 import { sanitizeFilename } from '@/utils/note-filename'
+import { withBusy } from '@/utils/with-busy'
 import { FREE_SUBFOLDERS_PER_REPOSITORY } from '@/constants/default-values'
 
 export function useRepositoryCrud({
@@ -31,9 +32,7 @@ export function useRepositoryCrud({
         getOrCreateImagesFolder
     } = fileStorage
 
-    const addRepository = useCallback(async () => {
-        busyRef.current = true
-
+    const addRepository = useCallback(() => withBusy(busyRef, async () => {
         try {
             const directory = await Directory.pickDirectoryAsync()
 
@@ -53,10 +52,8 @@ export function useRepositoryCrud({
         } catch (error) {
             console.debug('error picking repository', error)
             return null
-        } finally {
-            busyRef.current = false
         }
-    }, [
+    }), [
         repositories,
         activeRepositoryId,
         buildRepository,
@@ -89,17 +86,13 @@ export function useRepositoryCrud({
         const parent = repositories.find((repository) => repository.id === parentId)
         if (!parent) return null
 
-        busyRef.current = true
-
-        try {
+        return withBusy(busyRef, async () => {
             const directory = createSubdirectory(parent.uri, sanitizeFilename(name))
             const repository = buildRepository(directory, parentId, false)
 
             await persistRepositories([...repositories, repository])
             return repository
-        } finally {
-            busyRef.current = false
-        }
+        })
     }, [
         repositories,
         buildRepository,
@@ -113,9 +106,7 @@ export function useRepositoryCrud({
         const root = getRootRepository(repository)
         if (root.templatesUri) return root.templatesUri
 
-        busyRef.current = true
-
-        try {
+        return withBusy(busyRef, async () => {
             const templatesDirectory = getOrCreateTemplatesFolder(root.uri)
             seedTemplates(templatesDirectory.uri)
 
@@ -124,9 +115,7 @@ export function useRepositoryCrud({
             )))
 
             return templatesDirectory.uri
-        } finally {
-            busyRef.current = false
-        }
+        })
     }, [getRootRepository, getOrCreateTemplatesFolder, seedTemplates, persistRepositories, repositories, busyRef])
 
     const ensureImagesFolder = useCallback((repository) => {
@@ -143,30 +132,28 @@ export function useRepositoryCrud({
             return repository
         }
 
-        busyRef.current = true
+        return withBusy(busyRef, async () => {
+            try {
+                const parent = repositories.find((r) => r.id === repository.parentId)
+                if (!parent) return 'error'
 
-        try {
-            const parent = repositories.find((r) => r.id === repository.parentId)
-            if (!parent) return 'error'
+                const sanitized = sanitizeFilename(alias)
+                const newUri = renameDirectory(repository.uri, parent.uri, sanitized)
+                const renamedRepository = { ...repository, uri: newUri, alias: sanitized }
+                const relinked = relinkUris(renamedRepository)
+                const relinkedById = new Map(relinked.map((r) => [r.id, r]))
 
-            const sanitized = sanitizeFilename(alias)
-            const newUri = renameDirectory(repository.uri, parent.uri, sanitized)
-            const renamedRepository = { ...repository, uri: newUri, alias: sanitized }
-            const relinked = relinkUris(renamedRepository)
-            const relinkedById = new Map(relinked.map((r) => [r.id, r]))
+                await persistRepositories(repositories.map((r) => {
+                    if (r.id === id) return renamedRepository
+                    return relinkedById.get(r.id) || r
+                }))
 
-            await persistRepositories(repositories.map((r) => {
-                if (r.id === id) return renamedRepository
-                return relinkedById.get(r.id) || r
-            }))
-
-            return renamedRepository
-        } catch (error) {
-            console.debug('error renaming repository folder', error)
-            return 'error'
-        } finally {
-            busyRef.current = false
-        }
+                return renamedRepository
+            } catch (error) {
+                console.debug('error renaming repository folder', error)
+                return 'error'
+            }
+        })
     }, [
         repositories,
         persistRepositories,
@@ -189,14 +176,10 @@ export function useRepositoryCrud({
         const repository = repositories.find((r) => r.id === id)
         if (!repository) return
 
-        busyRef.current = true
-
-        try {
+        return withBusy(busyRef, async () => {
             const descendantIds = getDescendants(id).map((d) => d.id)
             await removeRepositoriesFromList([id, ...descendantIds])
-        } finally {
-            busyRef.current = false
-        }
+        })
     }, [
         repositories,
         getDescendants,
@@ -212,18 +195,14 @@ export function useRepositoryCrud({
             return 'active'
         }
 
-        busyRef.current = true
-
-        try {
+        return withBusy(busyRef, async () => {
             deleteDirectory(repository.uri)
 
             const descendantIds = getDescendants(id).map((d) => d.id)
             await removeRepositoriesFromList([id, ...descendantIds])
 
             return repository
-        } finally {
-            busyRef.current = false
-        }
+        })
     }, [
         repositories,
         activeRepository,
