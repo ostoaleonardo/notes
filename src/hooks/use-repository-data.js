@@ -1,5 +1,5 @@
 import { useFileStorage } from './use-file-storage'
-import { loadRepositoryData } from '../context/load-repository-data'
+import { loadRepositoryData } from '../utils/load-repository-data'
 import { storage } from '@/utils/storage'
 
 export function useRepositoryData() {
