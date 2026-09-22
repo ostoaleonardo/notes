@@ -27,7 +27,7 @@ const getDiffColor = (type) => (type === 'added' ? DIFF_ADDED_COLOR : DIFF_REMOV
 export function VersionHistoryContent({
     directoryUri,
     noteId,
-    currentContent,
+    currentContentRef,
     pro,
     onRestore,
     onClose
@@ -58,8 +58,8 @@ export function VersionHistoryContent({
 
     const ordered = useMemo(() => [...visibleVersions].reverse(), [visibleVersions])
     const diff = useMemo(() => (
-        selected ? diffLines(selected.content, currentContent) : []
-    ), [selected, currentContent])
+        selected ? diffLines(selected.content, currentContentRef.current.content) : []
+    ), [selected, currentContentRef])
 
     const onCloseHistory = useCallback(() => {
         setSelected(null)

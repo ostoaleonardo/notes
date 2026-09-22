@@ -8,7 +8,7 @@ import { MarkdownSearchBar } from '@/screens/notes/markdown-search-bar'
 import { MarkdownInsertSheets } from '@/screens/notes/markdown-insert-sheets'
 import { RecentNotesSheet } from '@/screens/notes/recent-notes-sheet'
 import { VersionHistoryPanel } from '@/screens/notes/version-history-panel'
-import { VersionHistoryPanelContent } from '@/screens/notes/version-history-panel-content'
+import { VersionHistoryContent } from '@/screens/notes/version-history-content'
 import { TemplateEditorForm } from '@/screens/templates/template-editor-form'
 import { TemplatePlaceholders } from '@/screens/modals/template-placeholders'
 import { LoadingOverlay } from '@/components/layout'
@@ -73,7 +73,8 @@ export default function EditTemplate() {
     const onRestoreVersion = useCallback((version) => {
         setName(version.title)
         setContent(version.content)
-    }, [])
+        versionHistory.onClose()
+    }, [versionHistory.onClose])
 
     const editorActions = useMemo(() => ({
         onOpenRecents: recentsSheet.onOpen
@@ -129,10 +130,10 @@ export default function EditTemplate() {
             onClose={versionHistory.onClose}
             swipeEnabled={pro}
             panelContent={(
-                <VersionHistoryPanelContent
+                <VersionHistoryContent
                     directoryUri={templatesUri}
                     noteId={currentFilename.current}
-                    currentContent={content}
+                    currentContentRef={latestContent}
                     pro={pro}
                     onRestore={onRestoreVersion}
                     onClose={versionHistory.onClose}

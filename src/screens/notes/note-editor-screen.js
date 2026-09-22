@@ -9,7 +9,7 @@ import { MarkdownInsertSheets } from './markdown-insert-sheets'
 import { TemplatePickerSheet } from './template-picker-sheet'
 import { RecentNotesSheet } from './recent-notes-sheet'
 import { VersionHistoryPanel } from './version-history-panel'
-import { VersionHistoryPanelContent } from './version-history-panel-content'
+import { VersionHistoryContent } from './version-history-content'
 import { Tags } from '@/screens/modals/tags'
 import { ExportFormat } from '@/screens/modals/export-format'
 import { AppBar } from '@/components/app-bar/app-bar'
@@ -146,7 +146,8 @@ export const NoteEditorScreen = ({
     const onRestoreVersion = useCallback((version) => {
         setTitle(version.title)
         setNote(version.content)
-    }, [])
+        versionHistory.onClose()
+    }, [versionHistory.onClose])
 
     useEffect(() => {
         listTemplates().then(setTemplates)
@@ -171,10 +172,10 @@ export const NoteEditorScreen = ({
             onClose={versionHistory.onClose}
             swipeEnabled={pro}
             panelContent={(
-                <VersionHistoryPanelContent
+                <VersionHistoryContent
                     directoryUri={directoryUri}
                     noteId={id}
-                    currentContent={note}
+                    currentContentRef={latestContent}
                     pro={pro}
                     onRestore={onRestoreVersion}
                     onClose={versionHistory.onClose}
