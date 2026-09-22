@@ -7,7 +7,7 @@ import { CurrentNoteProvider } from '@/context/current-note-context'
 import { ImportProvider } from '@/context/import-context'
 import { NoteProvider } from '@/context/note-context'
 import { RepositoryProvider } from '@/context/repository-context'
-import { UtilsProvider } from '@/context/utils-contex'
+import { UtilsProvider } from '@/context/utils-context'
 import { GlobalSnackbarHost } from '@/components/snackbar/snackbar-host'
 
 export default function Providers({ children }) {

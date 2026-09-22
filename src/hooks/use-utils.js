@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 
 import { useStorage } from './use-storage'
-import { UtilsContext } from '@/context/utils-contex'
+import { UtilsContext } from '@/context/utils-context'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
