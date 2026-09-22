@@ -25,6 +25,8 @@ import { usePro } from '@/hooks/use-pro'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
+import { useUndoRedoState } from '@/hooks/use-undo-redo-state'
+import { stripNoteExtension } from '@/utils/note-filename'
 import { useVersionHistory } from '@/hooks/use-version-history'
 
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
@@ -51,24 +53,18 @@ export default function EditTemplate() {
     const [isFocused, setIsFocused] = useState(false)
     const [placeholdersVisible, setPlaceholdersVisible] = useState(false)
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false)
-    const [canUndo, setCanUndo] = useState(false)
-    const [canRedo, setCanRedo] = useState(false)
     const [templatesUri, setTemplatesUri] = useState('')
 
     const recentsSheet = useBottomSheet()
     const markdownAction = useMarkdownAction()
     const search = useMarkdownSearch()
+    const { canUndo, canRedo, onHistoryChange } = useUndoRedoState()
 
     const latestContent = useRef({ noteId: currentFilename.current, title: name, content })
     latestContent.current = { noteId: currentFilename.current, title: name, content }
 
     const versionHistory = useVersionHistory({ directoryUri: templatesUri, latestContent })
     const { onRunAction, linkSheet, tableSheet, imageSheet } = useMarkdownInsertSheets(markdownAction)
-
-    const onHistoryChange = useCallback(({ canUndo, canRedo }) => {
-        setCanUndo(canUndo)
-        setCanRedo(canRedo)
-    }, [])
 
     const onRestoreVersion = useCallback((version) => {
         setName(version.title)
@@ -109,7 +105,7 @@ export default function EditTemplate() {
     useAutosave(async () => {
         const trimmedName = name.trim()
         const nextName = trimmedName === originalName.current
-            ? currentFilename.current.replace(/\.md$/i, '')
+            ? stripNoteExtension(currentFilename.current)
             : trimmedName
 
         currentFilename.current = await updateTemplate(currentFilename.current, nextName, content)

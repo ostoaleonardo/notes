@@ -1,14 +1,14 @@
 import { randomUUID } from 'expo-crypto'
 
 import { getNoteKey } from '@/utils/note-key'
-import { getUniqueFilename } from '@/utils/note-filename'
+import { getUniqueFilename, stripNoteExtension } from '@/utils/note-filename'
 
 import { DEFAULT_TAGS } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { TAGS_FILENAME } from '@/constants/file-storage'
 import { NOTE_KEY_PREFIX } from '@/constants/note-key'
 
-const getTitle = (filename) => filename.replace(/\.md$/i, '')
+const getTitle = stripNoteExtension
 
 // Legacy blob -> per-note AsyncStorage entries.
 const migrateLegacyBlobNotes = async (storage) => {
