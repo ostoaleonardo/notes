@@ -8,8 +8,7 @@ import { Typography } from '@/components/typography'
 
 import { RADIUS } from '@/constants/themes'
 import { CARD_PREVIEW_LINES } from '@/constants/note-preview'
-
-export const CARDS_HEIGHT = 220
+import { CARDS_HEIGHT } from '@/constants/card-grid'
 
 export const CardGridItem = memo(function CardGridItem({
     card,

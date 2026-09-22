@@ -2,9 +2,10 @@ import { useCallback, useMemo } from 'react'
 import { FlatList, StyleSheet, useWindowDimensions } from 'react-native'
 import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 
-import { CardGridItem, CARDS_HEIGHT } from './card-grid-item'
+import { CardGridItem } from './card-grid-item'
 import { AnimatedView } from '@/components/animated/animated-view'
 import { Typography } from '@/components/typography'
+import { CARDS_HEIGHT } from '@/constants/card-grid'
 
 const CARD_MIN_WIDTH = 160
 const GRID_GAP = 24
