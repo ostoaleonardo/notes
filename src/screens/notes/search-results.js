@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { Divider, TouchableRipple } from 'react-native-paper'
+import { TouchableRipple } from 'react-native-paper'
 import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 
 import { AnimatedList } from '@/components/animated/animated-list'
@@ -12,8 +12,6 @@ export function SearchResults({ results, aliasById, onOpenResult }) {
 
     return (
         <View style={styles.container}>
-            <Divider />
-
             <AnimatedList
                 gap={2}
                 data={results}

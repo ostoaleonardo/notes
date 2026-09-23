@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native'
-import { IconButton, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
+import { useTranslation } from 'react-i18next'
 
 import { SmallInput } from './small-input'
 
@@ -10,30 +11,28 @@ import { RADIUS } from '@/constants/themes'
 export function SearchInput({
     value,
     onChangeText,
-    placeholder,
     ...props
 }) {
+    const { t } = useTranslation()
     const { colors } = useTheme()
 
     return (
-        <View
-            style={{
-                ...styles.container,
-                backgroundColor: colors.surface
-            }}
-        >
+        <View style={styles.container}>
             <SmallInput
                 value={value}
                 onChangeText={onChangeText}
-                placeholder={placeholder}
+                placeholder={t('drawer.search')}
+                background={colors.surfaceVariant}
                 {...props}
             />
 
-            <IconButton
-                disabled={true}
-                pointerEvents='none'
-                icon={(props) => <Search {...props} />}
-            />
+            <View style={styles.icon}>
+                <Search
+                    width={24}
+                    height={24}
+                    color={colors.onSurfaceVariant}
+                />
+            </View>
         </View>
     )
 }
@@ -43,5 +42,11 @@ const styles = StyleSheet.create({
         margin: 16,
         flexDirection: 'row',
         borderRadius: RADIUS.outer
+    },
+    icon: {
+        width: 48,
+        height: 48,
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })

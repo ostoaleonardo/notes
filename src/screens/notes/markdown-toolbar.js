@@ -10,6 +10,7 @@ import { Separator } from '@/components/separator/separator'
 
 import { NoteStack } from '@/icons/note-stack'
 import { Redo } from '@/icons/redo'
+import { Search } from '@/icons/search'
 import { Shapes } from '@/icons/shapes'
 import { Tag } from '@/icons/tag'
 import { Undo } from '@/icons/undo'
@@ -91,6 +92,14 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
                                 onPress={() => onRunAction('redo')}
                                 icon={(props) => <Redo {...props} />}
                                 accessibilityLabel={t('button.redo')}
+                            />
+                        </Tooltip>
+
+                        <Tooltip title={t('drawer.search')}>
+                            <IconButton
+                                onPress={actions?.onOpenSearch}
+                                icon={(props) => <Search {...props} />}
+                                accessibilityLabel={t('drawer.search')}
                             />
                         </Tooltip>
 

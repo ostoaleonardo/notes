@@ -8,6 +8,7 @@ import { MarkdownSearchBar } from './markdown-search-bar'
 import { MarkdownInsertSheets } from './markdown-insert-sheets'
 import { TemplatePickerSheet } from './template-picker-sheet'
 import { RecentNotesSheet } from './recent-notes-sheet'
+import { NoteSearchSheet } from './note-search-sheet'
 import { VersionHistoryPanel } from './version-history-panel'
 import { VersionHistoryContent } from './version-history-content'
 import { Tags } from '@/screens/modals/tags'
@@ -96,6 +97,7 @@ export const NoteEditorScreen = ({
     const tagsSheet = useBottomSheet()
     const templatesSheet = useBottomSheet()
     const recentsSheet = useBottomSheet()
+    const searchSheet = useBottomSheet()
 
     const onSelectTemplate = useCallback((content) => {
         setNote((prev) => (prev ? prev + '\n\n' + content : content))
@@ -152,11 +154,13 @@ export const NoteEditorScreen = ({
         onOpenTags: tagsSheet.onOpen,
         onOpenTemplates: templatesSheet.onOpen,
         onOpenRecents: recentsSheet.onOpen,
+        onOpenSearch: searchSheet.onOpen,
         onSaveAsTemplate
     }), [
         tagsSheet.onOpen,
         templatesSheet.onOpen,
         recentsSheet.onOpen,
+        searchSheet.onOpen,
         onSaveAsTemplate
     ])
 
@@ -283,6 +287,8 @@ export const NoteEditorScreen = ({
                 onDismiss={onCloseDeleteDialog}
                 onConfirm={onConfirmDelete}
             />
+
+            <NoteSearchSheet sheet={searchSheet} />
         </VersionHistoryPanel>
     )
 }

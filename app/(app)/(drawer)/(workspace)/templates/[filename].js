@@ -7,6 +7,7 @@ import { MarkdownModeToggle } from '@/screens/notes/markdown-mode-toggle'
 import { MarkdownSearchBar } from '@/screens/notes/markdown-search-bar'
 import { MarkdownInsertSheets } from '@/screens/notes/markdown-insert-sheets'
 import { RecentNotesSheet } from '@/screens/notes/recent-notes-sheet'
+import { NoteSearchSheet } from '@/screens/notes/note-search-sheet'
 import { VersionHistoryPanel } from '@/screens/notes/version-history-panel'
 import { VersionHistoryContent } from '@/screens/notes/version-history-content'
 import { TemplateEditorForm } from '@/screens/templates/template-editor-form'
@@ -56,6 +57,7 @@ export default function EditTemplate() {
     const [templatesUri, setTemplatesUri] = useState('')
 
     const recentsSheet = useBottomSheet()
+    const searchSheet = useBottomSheet()
     const markdownAction = useMarkdownAction()
     const search = useMarkdownSearch()
     const { canUndo, canRedo, onHistoryChange } = useUndoRedoState()
@@ -73,8 +75,9 @@ export default function EditTemplate() {
     }, [versionHistory.onClose])
 
     const editorActions = useMemo(() => ({
-        onOpenRecents: recentsSheet.onOpen
-    }), [recentsSheet.onOpen])
+        onOpenRecents: recentsSheet.onOpen,
+        onOpenSearch: searchSheet.onOpen
+    }), [recentsSheet.onOpen, searchSheet.onOpen])
 
     const onConfirmDelete = async () => {
         await deleteTemplate(currentFilename.current)
@@ -206,6 +209,8 @@ export default function EditTemplate() {
                 onDismiss={onCloseDeleteDialog}
                 onConfirm={onConfirmDelete}
             />
+
+            <NoteSearchSheet sheet={searchSheet} />
         </VersionHistoryPanel>
     )
 }
