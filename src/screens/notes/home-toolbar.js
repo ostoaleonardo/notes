@@ -5,9 +5,10 @@ import { IconButton, Tooltip, useTheme } from 'react-native-paper'
 import { RecentsButton } from '@/components/app-bar/recents-button'
 
 import { Plus } from '@/icons/plus'
+import { Search } from '@/icons/search'
 import { UploadFile } from '@/icons/upload-file'
 
-export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, recentCount }) {
+export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, onOpenSearch, recentCount }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
 
@@ -24,6 +25,14 @@ export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, recentC
                     icon={(props) => <Plus {...props} />}
                     onPress={onCreateNote}
                     accessibilityLabel={t('notes.create')}
+                />
+            </Tooltip>
+
+            <Tooltip title={t('drawer.search')}>
+                <IconButton
+                    onPress={onOpenSearch}
+                    icon={(props) => <Search {...props} />}
+                    accessibilityLabel={t('drawer.search')}
                 />
             </Tooltip>
 

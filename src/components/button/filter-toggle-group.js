@@ -38,7 +38,6 @@ export function FilterToggleGroup({ buttons, pill = false, equalWidth = false })
 const styles = StyleSheet.create({
     group: {
         gap: 2,
-        paddingHorizontal: 16,
         flexDirection: 'row',
         justifyContent: 'center'
     }

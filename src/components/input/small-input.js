@@ -5,24 +5,23 @@ import { FONTS, RADIUS, TRANSPARENT } from '@/constants/themes'
 
 export function SmallInput({ background, ...props }) {
     const { colors } = useTheme()
-    const { tertiary, surface, onBackground } = colors
 
     return (
         <View
             style={{
                 ...styles.container,
-                backgroundColor: background || surface
+                backgroundColor: background || colors.surface
             }}
         >
             <TextInput
                 style={{
                     ...styles.base,
-                    color: onBackground
+                    color: colors.onBackground
                 }}
-                cursorColor={onBackground}
-                selectionHandleColor={tertiary}
-                selectionColor={onBackground + TRANSPARENT[20]}
-                placeholderTextColor={onBackground + TRANSPARENT[40]}
+                cursorColor={colors.onBackground}
+                selectionHandleColor={colors.tertiary}
+                selectionColor={colors.onBackground + TRANSPARENT[20]}
+                placeholderTextColor={colors.onBackground + TRANSPARENT[40]}
                 {...props}
             />
         </View>

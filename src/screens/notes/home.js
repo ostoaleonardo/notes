@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native'
 import * as DocumentPicker from 'expo-document-picker'
 
 import { Intro } from './intro'
-import { NoteSearch } from './note-search'
+import { NoteSearchSheet } from './note-search-sheet'
 import { RecentNotesSheet } from './recent-notes-sheet'
 import { HomeToolbar } from './home-toolbar'
 import { AppBar } from '@/components/app-bar/app-bar'
@@ -43,6 +43,7 @@ export function Home() {
     )
 
     const recentsSheet = useBottomSheet()
+    const searchSheet = useBottomSheet()
 
     useFocusEffect(
         useCallback(() => {
@@ -76,7 +77,6 @@ export function Home() {
             />
 
             <View style={styles.container}>
-                <NoteSearch />
                 <Intro />
             </View>
 
@@ -84,6 +84,7 @@ export function Home() {
                 onCreateNote={onCreateNote}
                 onImportNote={onImportNote}
                 onOpenRecents={recentsSheet.onOpen}
+                onOpenSearch={searchSheet.onOpen}
                 recentCount={recentCount}
             />
 
@@ -91,6 +92,8 @@ export function Home() {
                 home={true}
                 sheet={recentsSheet}
             />
+
+            <NoteSearchSheet sheet={searchSheet} />
         </>
     )
 }

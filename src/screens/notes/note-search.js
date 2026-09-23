@@ -1,16 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { router } from 'expo-router'
 import { randomUUID } from 'expo-crypto'
-import { useTheme } from 'react-native-paper'
-import { useTranslation } from 'react-i18next'
-import { Keyboard, Pressable, StyleSheet } from 'react-native'
-import { FadeInDown, FadeOutUp } from 'react-native-reanimated'
+import { StyleSheet, View } from 'react-native'
+import { Divider } from 'react-native-paper'
 
 import { SearchFilters } from './search-filters'
 import { SearchResults } from './search-results'
 import { RecentSearches } from './recent-searches'
 import { SavedSearches } from './saved-searches'
-import { AnimatedView } from '@/components/animated/animated-view'
 import { SearchInput } from '@/components/input/search-input'
 
 import { useNotes } from '@/hooks/use-notes'
@@ -22,13 +19,10 @@ import { filterNotes } from '@/utils/search-query'
 import { getEditorPath } from '@/utils/editor-path'
 import { toggleSavedSearch, removeSavedSearch } from '@/utils/saved-searches'
 
-import { RADIUS } from '@/constants/themes'
 import { RECENT_SEARCHES_LIMIT } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
-export function NoteSearch() {
-    const { t } = useTranslation()
-    const { colors } = useTheme()
+export function NoteSearch({ onClose }) {
     const { repositories } = useRepositories()
     const { notes } = useNotes()
     const { tags } = useTags()
@@ -36,7 +30,6 @@ export function NoteSearch() {
     const { getItem, setItem } = useStorage()
 
     const [query, setQuery] = useState('')
-    const [expanded, setExpanded] = useState(false)
     const [recent, setRecent] = useState([])
     const [saved, setSaved] = useState([])
 
@@ -70,6 +63,7 @@ export function NoteSearch() {
 
     const onOpenResult = (id) => {
         saveRecent(trimmedQuery)
+        onClose()
         router.push(getEditorPath(id))
     }
 
@@ -85,87 +79,57 @@ export function NoteSearch() {
         setItem(STORAGE_KEYS.SAVED_SEARCHES, JSON.stringify(next))
     }
 
-    const collapse = () => setExpanded(false)
-
-    const onOutsideTap = () => {
-        Keyboard.dismiss()
-        collapse()
-    }
-
     return (
-        <Pressable
-            style={styles.overlay}
-            onPress={expanded ? onOutsideTap : undefined}
-        >
+        <View style={styles.container}>
             <SearchInput
+                autoFocus
                 value={query}
                 onChangeText={setQuery}
-                placeholder={t('drawer.search')}
-                onFocus={() => setExpanded(true)}
-                onBlur={collapse}
             />
 
-            {expanded && (
-                <AnimatedView
-                    style={styles.search}
-                    entering={FadeInDown}
-                    exiting={FadeOutUp}
-                >
-                    <AnimatedView
-                        style={{
-                            ...styles.actions,
-                            backgroundColor: colors.surface
-                        }}
-                    >
-                        <SearchFilters
-                            query={query}
-                            setQuery={setQuery}
-                            tags={tags}
-                            saved={saved}
-                            onToggleSave={onToggleSaveSearch}
-                        />
+            <View style={styles.actions}>
+                <SearchFilters
+                    tags={tags}
+                    saved={saved}
+                    query={query}
+                    setQuery={setQuery}
+                    onToggleSave={onToggleSaveSearch}
+                />
 
-                        {trimmedQuery ? (
-                            <SearchResults
-                                results={results}
-                                aliasById={aliasById}
-                                onOpenResult={onOpenResult}
-                            />
-                        ) : (
-                            <>
-                                <SavedSearches
-                                    saved={saved}
-                                    onSelect={setQuery}
-                                    onDelete={onDeleteSavedSearch}
-                                />
-                                <RecentSearches
-                                    recent={recent}
-                                    onSelect={setQuery}
-                                />
-                            </>
-                        )}
-                    </AnimatedView>
-                </AnimatedView>
-            )}
-        </Pressable>
+                {trimmedQuery ? (
+                    <>
+                        <Divider />
+                        <SearchResults
+                            results={results}
+                            aliasById={aliasById}
+                            onOpenResult={onOpenResult}
+                        />
+                    </>
+                ) : (
+                    <>
+                        <SavedSearches
+                            saved={saved}
+                            onSelect={setQuery}
+                            onDelete={onDeleteSavedSearch}
+                        />
+                        <RecentSearches
+                            recent={recent}
+                            onSelect={setQuery}
+                        />
+                    </>
+                )}
+            </View>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
-
-    overlay: {
-        position: 'absolute',
-        inset: 0,
-        zIndex: 10
-    },
-    search: {
-        width: '100%',
-        borderRadius: RADIUS.outer
+    container: {
+        flex: 1
     },
     actions: {
+        flex: 1,
         gap: 16,
-        paddingVertical: 16,
-        marginHorizontal: 16,
-        borderRadius: RADIUS.outer
+        paddingTop: 16
     }
 })
