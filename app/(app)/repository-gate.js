@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Pressable } from '@/components/button/pressable'
 import { Typography } from '@/components/typography'
+import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'
@@ -13,6 +14,11 @@ export default function RepositoryGate() {
     const { t } = useTranslation()
     const { loading } = useNotes()
     const { activeRepository, addRepository } = useRepositories()
+
+    const onAddRepository = async () => {
+        const result = await addRepository()
+        if (result === 'error') showSnackbar(t('repositories.add_failed'))
+    }
 
     return (
         <View style={styles.container}>
@@ -34,7 +40,7 @@ export default function RepositoryGate() {
 
             <Pressable
                 compact={true}
-                onPress={addRepository}
+                onPress={onAddRepository}
                 loading={activeRepository && loading}
                 disabled={activeRepository && loading}
             >
