@@ -15,7 +15,7 @@ import { useRepositories } from '@/hooks/use-repositories'
 import { useStorage } from '@/hooks/use-storage'
 import { useTags } from '@/hooks/use-tags'
 import { useUtils } from '@/hooks/use-utils'
-import { filterNotes } from '@/utils/search-query'
+import { filterNotes, parseSearchQuery } from '@/utils/search-query'
 import { getEditorPath } from '@/utils/editor-path'
 import { toggleSavedSearch, removeSavedSearch } from '@/utils/saved-searches'
 
@@ -49,9 +49,11 @@ export function NoteSearch({ onClose }) {
         new Map(repositories.map((repository) => [repository.id, repository.alias]))
     ), [repositories])
 
+    const parsed = useMemo(() => parseSearchQuery(query), [query])
+
     const results = useMemo(() => (
-        trimmedQuery ? filterNotes(notes, trimmedQuery, { tags, pinned }) : []
-    ), [trimmedQuery, notes, tags, pinned])
+        trimmedQuery ? filterNotes(notes, parsed, { tags, pinned }) : []
+    ), [trimmedQuery, parsed, notes, tags, pinned])
 
     const saveRecent = (term) => {
         if (!term) return
@@ -93,30 +95,31 @@ export function NoteSearch({ onClose }) {
                     saved={saved}
                     query={query}
                     setQuery={setQuery}
+                    parsed={parsed}
                     onToggleSave={onToggleSaveSearch}
                 />
 
+                <Divider />
+
                 {trimmedQuery ? (
-                    <>
-                        <Divider />
-                        <SearchResults
-                            results={results}
-                            aliasById={aliasById}
-                            onOpenResult={onOpenResult}
-                        />
-                    </>
+                    <SearchResults
+                        results={results}
+                        aliasById={aliasById}
+                        onOpenResult={onOpenResult}
+                    />
                 ) : (
-                    <>
+                    <View style={{ gap: 24 }}>
                         <SavedSearches
                             saved={saved}
                             onSelect={setQuery}
                             onDelete={onDeleteSavedSearch}
                         />
+                        <Divider />
                         <RecentSearches
                             recent={recent}
                             onSelect={setQuery}
                         />
-                    </>
+                    </View>
                 )}
             </View>
         </View>
@@ -129,7 +132,7 @@ const styles = StyleSheet.create({
     },
     actions: {
         flex: 1,
-        gap: 16,
-        paddingTop: 16
+        gap: 24,
+        paddingTop: 8
     }
 })

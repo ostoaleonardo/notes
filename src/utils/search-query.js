@@ -86,8 +86,7 @@ export const toggleImageQualifier = (query) => toggleQualifier(query, IMAGE_QUAL
 
 export const toggleContentQualifier = (query) => toggleQualifier(query, CONTENT_QUALIFIER_REGEX, CONTENT_QUALIFIER)
 
-export const filterNotes = (notes, query, { tags, pinned }) => {
-    const parsed = parseSearchQuery(query)
+export const filterNotes = (notes, parsed, { tags, pinned }) => {
     const tagIds = parsed.tags
         .map((name) => tags.find((t) => t.name.toLowerCase() === name)?.id)
         .filter(Boolean)
