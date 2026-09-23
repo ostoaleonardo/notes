@@ -7,15 +7,7 @@ import {
     FOOTNOTE_REFERENCE_PATTERN
 } from '@/constants/markdown-live-formatting'
 
-let lastText = null
-let lastRanges = []
-
 export const decorateFootnotes = ({ text, ranges, codeRanges }) => {
-    if (text === lastText) {
-        ranges.push(...lastRanges)
-        return
-    }
-
     const localRanges = []
     const definitionRanges = []
 
@@ -36,8 +28,6 @@ export const decorateFootnotes = ({ text, ranges, codeRanges }) => {
         localRanges.push(Decoration.mark({ class: 'cm-live-footnote-ref' }).range(from, to))
     }
 
-    lastText = text
-    lastRanges = localRanges
     ranges.push(...localRanges)
 }
 
