@@ -86,7 +86,7 @@ export const MarkdownInput = ({
         return buildBacklinksHtml(backlinks, t('title.backlinks'), notePaths)
     }, [mode, showBacklinks, id, notes, notePaths, t])
 
-    const valueWithWikiLinks = useResolvedWikiLinks(value)
+    const valueWithWikiLinks = useResolvedWikiLinks(mode === 'read' ? value : '')
     const { value: previewValue, mediaMap } = useResolvedPreviewMarkdown(valueWithWikiLinks)
     const mediaMapEntries = useMemo(() => [...mediaMap], [mediaMap])
 
