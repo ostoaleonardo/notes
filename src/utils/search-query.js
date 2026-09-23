@@ -4,15 +4,19 @@ import {
     MARKDOWN_IMAGE_REGEX,
     PINNED_QUALIFIER_REGEX,
     IMAGE_QUALIFIER_REGEX,
+    CONTENT_QUALIFIER_REGEX,
     PINNED_QUALIFIER,
-    IMAGE_QUALIFIER
+    IMAGE_QUALIFIER,
+    CONTENT_QUALIFIER
 } from '@/constants/search-query'
+import { fuzzyMatch } from './fuzzy-match'
 
 export const parseSearchQuery = (query) => {
     let text = query
     let tags = []
     let pinned = false
     let hasImage = false
+    let inContent = false
     let modified = null
     let created = null
 
@@ -23,6 +27,11 @@ export const parseSearchQuery = (query) => {
 
     text = text.replace(IMAGE_QUALIFIER_REGEX, () => {
         hasImage = true
+        return ''
+    })
+
+    text = text.replace(CONTENT_QUALIFIER_REGEX, () => {
+        inContent = true
         return ''
     })
 
@@ -37,7 +46,7 @@ export const parseSearchQuery = (query) => {
         return ''
     })
 
-    return { text: text.trim().toLowerCase(), tags, pinned, hasImage, modified, created }
+    return { text: text.trim().toLowerCase(), tags, pinned, hasImage, inContent, modified, created }
 }
 
 const toDateKey = (timestamp) => (timestamp ? new Date(timestamp).toISOString().slice(0, 10) : null)
@@ -75,19 +84,31 @@ export const togglePinnedQualifier = (query) => toggleQualifier(query, PINNED_QU
 
 export const toggleImageQualifier = (query) => toggleQualifier(query, IMAGE_QUALIFIER_REGEX, IMAGE_QUALIFIER)
 
+export const toggleContentQualifier = (query) => toggleQualifier(query, CONTENT_QUALIFIER_REGEX, CONTENT_QUALIFIER)
+
 export const filterNotes = (notes, query, { tags, pinned }) => {
     const parsed = parseSearchQuery(query)
     const tagIds = parsed.tags
         .map((name) => tags.find((t) => t.name.toLowerCase() === name)?.id)
         .filter(Boolean)
 
-    return notes.filter((note) => {
-        if (parsed.pinned && !pinned.has(note.id)) return false
-        if (tagIds.length > 0 && !tagIds.some((id) => note.tags?.includes(id))) return false
-        if (parsed.hasImage && !MARKDOWN_IMAGE_REGEX.test(note.note || '')) return false
-        if (parsed.modified && toDateKey(note.updatedAt) !== parsed.modified) return false
-        if (parsed.created && toDateKey(note.createdAt) !== parsed.created) return false
-        if (parsed.text && !note.title.toLowerCase().includes(parsed.text)) return false
-        return true
+    const scored = notes.flatMap((note) => {
+        if (parsed.pinned && !pinned.has(note.id)) return []
+        if (tagIds.length > 0 && !tagIds.some((id) => note.tags?.includes(id))) return []
+        if (parsed.hasImage && !MARKDOWN_IMAGE_REGEX.test(note.note || '')) return []
+        if (parsed.modified && toDateKey(note.updatedAt) !== parsed.modified) return []
+        if (parsed.created && toDateKey(note.createdAt) !== parsed.created) return []
+
+        if (!parsed.text) return [{ note, score: 0 }]
+
+        const titleMatch = fuzzyMatch(parsed.text, note.title)
+        const matchesContent = parsed.inContent && (note.note || '').toLowerCase().includes(parsed.text)
+        if (!titleMatch.matches && !matchesContent) return []
+
+        return [{ note, score: titleMatch.score }]
     })
+
+    if (!parsed.text) return scored.map(({ note }) => note)
+
+    return scored.sort((a, b) => b.score - a.score).map(({ note }) => note)
 }

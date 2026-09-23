@@ -3,20 +3,21 @@ import {
     parseSearchQuery,
     toggleTagQualifier,
     togglePinnedQualifier,
-    toggleImageQualifier
+    toggleImageQualifier,
+    toggleContentQualifier
 } from '../search-query'
 import { MOCK_SEARCH_NOTES, MOCK_SEARCH_TAGS } from '../__fixtures__/search-query'
 
 describe('parse search query', () => {
     test('extracts plain text', () => {
         expect(parseSearchQuery('Groceries')).toEqual({
-            text: 'groceries', tags: [], pinned: false, hasImage: false, modified: null, created: null
+            text: 'groceries', tags: [], pinned: false, hasImage: false, inContent: false, modified: null, created: null
         })
     })
 
     test('extracts a bare tag qualifier', () => {
         expect(parseSearchQuery('tag:work meeting')).toEqual({
-            text: 'meeting', tags: ['work'], pinned: false, hasImage: false, modified: null, created: null
+            text: 'meeting', tags: ['work'], pinned: false, hasImage: false, inContent: false, modified: null, created: null
         })
     })
 
@@ -24,7 +25,7 @@ describe('parse search query', () => {
         const result = parseSearchQuery('tag:"personal notes" ideas')
 
         expect(result).toEqual({
-            text: 'ideas', tags: ['personal notes'], pinned: false, hasImage: false, modified: null, created: null
+            text: 'ideas', tags: ['personal notes'], pinned: false, hasImage: false, inContent: false, modified: null, created: null
         })
     })
 
@@ -32,13 +33,13 @@ describe('parse search query', () => {
         const result = parseSearchQuery('tag:work tag:personal standup')
 
         expect(result).toEqual({
-            text: 'standup', tags: ['work', 'personal'], pinned: false, hasImage: false, modified: null, created: null
+            text: 'standup', tags: ['work', 'personal'], pinned: false, hasImage: false, inContent: false, modified: null, created: null
         })
     })
 
     test('extracts the pinned qualifier', () => {
         expect(parseSearchQuery('is:pinned todo')).toEqual({
-            text: 'todo', tags: [], pinned: true, hasImage: false, modified: null, created: null
+            text: 'todo', tags: [], pinned: true, hasImage: false, inContent: false, modified: null, created: null
         })
     })
 
@@ -46,7 +47,7 @@ describe('parse search query', () => {
         const result = parseSearchQuery('is:pinned tag:work standup')
 
         expect(result).toEqual({
-            text: 'standup', tags: ['work'], pinned: true, hasImage: false, modified: null, created: null
+            text: 'standup', tags: ['work'], pinned: true, hasImage: false, inContent: false, modified: null, created: null
         })
     })
 
@@ -54,7 +55,15 @@ describe('parse search query', () => {
         const result = parseSearchQuery('has:image recipe')
 
         expect(result).toEqual({
-            text: 'recipe', tags: [], pinned: false, hasImage: true, modified: null, created: null
+            text: 'recipe', tags: [], pinned: false, hasImage: true, inContent: false, modified: null, created: null
+        })
+    })
+
+    test('extracts the in:content qualifier', () => {
+        const result = parseSearchQuery('in:content recipe')
+
+        expect(result).toEqual({
+            text: 'recipe', tags: [], pinned: false, hasImage: false, inContent: true, modified: null, created: null
         })
     })
 
@@ -62,7 +71,7 @@ describe('parse search query', () => {
         const result = parseSearchQuery('modified:2026-01-15 report')
 
         expect(result).toEqual({
-            text: 'report', tags: [], pinned: false, hasImage: false, modified: '2026-01-15', created: null
+            text: 'report', tags: [], pinned: false, hasImage: false, inContent: false, modified: '2026-01-15', created: null
         })
     })
 
@@ -70,7 +79,7 @@ describe('parse search query', () => {
         const result = parseSearchQuery('created:2026-01-01')
 
         expect(result).toEqual({
-            text: '', tags: [], pinned: false, hasImage: false, modified: null, created: '2026-01-01'
+            text: '', tags: [], pinned: false, hasImage: false, inContent: false, modified: null, created: '2026-01-01'
         })
     })
 })
@@ -125,10 +134,48 @@ describe('toggle image qualifier', () => {
     })
 })
 
+describe('toggle content qualifier', () => {
+    test('adds the in:content qualifier to an empty query', () => {
+        expect(toggleContentQualifier('')).toBe('in:content')
+    })
+
+    test('appends the in:content qualifier to existing text', () => {
+        expect(toggleContentQualifier('recipe')).toBe('recipe in:content')
+    })
+
+    test('removes the in:content qualifier when already present', () => {
+        expect(toggleContentQualifier('recipe in:content')).toBe('recipe')
+    })
+})
+
 describe('filter notes', () => {
     test('filters by title text', () => {
         const options = { tags: MOCK_SEARCH_TAGS, pinned: new Set() }
         const result = filterNotes(MOCK_SEARCH_NOTES, 'grocery', options)
+        expect(result.map((note) => note.id)).toEqual(['note-2'])
+    })
+
+    test('fuzzy-matches a non-contiguous title query', () => {
+        const options = { tags: MOCK_SEARCH_TAGS, pinned: new Set() }
+        const result = filterNotes(MOCK_SEARCH_NOTES, 'wkstandup', options)
+        expect(result.map((note) => note.id)).toEqual(['note-1'])
+    })
+
+    test('ignores note body text by default', () => {
+        const options = { tags: MOCK_SEARCH_TAGS, pinned: new Set() }
+        const result = filterNotes(MOCK_SEARCH_NOTES, 'agenda', options)
+        expect(result).toHaveLength(0)
+    })
+
+    test('matches note body text when in:content is set', () => {
+        const options = { tags: MOCK_SEARCH_TAGS, pinned: new Set() }
+        const result = filterNotes(MOCK_SEARCH_NOTES, 'in:content agenda', options)
+        expect(result.map((note) => note.id)).toEqual(['note-1'])
+    })
+
+    test('still matches by title when in:content is set', () => {
+        const options = { tags: MOCK_SEARCH_TAGS, pinned: new Set() }
+        const result = filterNotes(MOCK_SEARCH_NOTES, 'in:content grocery', options)
         expect(result.map((note) => note.id)).toEqual(['note-2'])
     })
 
