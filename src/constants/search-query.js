@@ -3,6 +3,8 @@ export const TAG_QUALIFIER_REGEX = /\btag:"([^"]+)"|\btag:(\S+)/gi
 export const MARKDOWN_IMAGE_REGEX = /!\[[^\]]*\]\([^)]+\)/
 export const PINNED_QUALIFIER_REGEX = /\bis:pinned\b/i
 export const IMAGE_QUALIFIER_REGEX = /\bhas:image\b/i
+export const CONTENT_QUALIFIER_REGEX = /\bin:content\b/i
 
 export const PINNED_QUALIFIER = 'is:pinned'
 export const IMAGE_QUALIFIER = 'has:image'
+export const CONTENT_QUALIFIER = 'in:content'
