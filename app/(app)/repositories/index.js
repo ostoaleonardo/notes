@@ -68,6 +68,8 @@ export default function Repositories() {
         const result = await addRepository()
         if (result === 'duplicate') {
             showSnackbar(t('repositories.already_added'))
+        } else if (result === 'error') {
+            showSnackbar(t('repositories.add_failed'))
         }
     }
 

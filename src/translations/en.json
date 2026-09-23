@@ -35,7 +35,8 @@
 		"delete_folder": "Delete folder",
 		"delete_folder_message": "This will permanently delete this folder, its subfolders, and all their notes from your device.",
 		"cannot_delete_active": "Switch to another repository before deleting this one",
-		"rename_failed": "Couldn't rename this folder"
+		"rename_failed": "Couldn't rename this folder",
+		"add_failed": "Couldn't add this repository"
 	},
 	"title": {
 		"notes": "Notes",
@@ -280,6 +281,7 @@
 		"saved": "Saved",
 		"pinned": "Pinned",
 		"has_image": "Images",
+		"in_content": "Content",
 		"save": "Save",
 		"unsave": "Remove"
 	},

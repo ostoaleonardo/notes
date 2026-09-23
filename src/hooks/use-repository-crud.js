@@ -50,8 +50,10 @@ export function useRepositoryCrud({
 
             return { ...repository, welcomeNoteId }
         } catch (error) {
+            if (error.code === 'ERR_PICKER_CANCELLED') return null
+
             console.debug('error picking repository', error)
-            return null
+            return 'error'
         }
     }), [
         repositories,
