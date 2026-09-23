@@ -4,13 +4,12 @@ export const getDefaultTemplates = () => {
     const t = (key) => i18n.t(key)
 
     const header = `# {{title}}\n{{date}}\n\n`
-    const dailyHeader = `# {{title}}\n\n`
     const item = `_${t('templates.item_placeholder')}_`
 
     return [
         {
             filename: 'journal.md',
-            content: dailyHeader +
+            content:
                 `## ${t('templates.journal_mood')}\n${item}\n\n` +
                 `## ${t('templates.journal_gratitude')}\n- ${item}\n\n` +
                 `## ${t('templates.journal_highlight')}\n${item}\n\n` +
