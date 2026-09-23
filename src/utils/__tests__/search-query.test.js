@@ -151,48 +151,48 @@ describe('toggle content qualifier', () => {
 describe('filter notes', () => {
     test('filters by title text', () => {
         const options = { tags: MOCK_SEARCH_TAGS, pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, 'grocery', options)
+        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('grocery'), options)
         expect(result.map((note) => note.id)).toEqual(['note-2'])
     })
 
     test('fuzzy-matches a non-contiguous title query', () => {
         const options = { tags: MOCK_SEARCH_TAGS, pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, 'wkstandup', options)
+        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('wkstandup'), options)
         expect(result.map((note) => note.id)).toEqual(['note-1'])
     })
 
     test('ignores note body text by default', () => {
         const options = { tags: MOCK_SEARCH_TAGS, pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, 'agenda', options)
+        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('agenda'), options)
         expect(result).toHaveLength(0)
     })
 
     test('matches note body text when in:content is set', () => {
         const options = { tags: MOCK_SEARCH_TAGS, pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, 'in:content agenda', options)
+        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('in:content agenda'), options)
         expect(result.map((note) => note.id)).toEqual(['note-1'])
     })
 
     test('still matches by title when in:content is set', () => {
         const options = { tags: MOCK_SEARCH_TAGS, pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, 'in:content grocery', options)
+        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('in:content grocery'), options)
         expect(result.map((note) => note.id)).toEqual(['note-2'])
     })
 
     test('filters by tag qualifier', () => {
         const options = { tags: MOCK_SEARCH_TAGS, pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, 'tag:work', options)
+        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('tag:work'), options)
         expect(result.map((note) => note.id)).toEqual(['note-1'])
     })
 
     test('filters by more than one tag qualifier, matching any of them', () => {
         const options = { tags: MOCK_SEARCH_TAGS, pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, 'tag:work tag:personal', options)
+        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('tag:work tag:personal'), options)
         expect(result.map((note) => note.id).sort()).toEqual(['note-1', 'note-2'])
     })
 
     test('filters by pinned qualifier', () => {
-        const result = filterNotes(MOCK_SEARCH_NOTES, 'is:pinned', {
+        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('is:pinned'), {
             tags: MOCK_SEARCH_TAGS,
             pinned: new Set(['note-3'])
         })
@@ -200,7 +200,7 @@ describe('filter notes', () => {
     })
 
     test('combines pinned, tag and text qualifiers', () => {
-        const result = filterNotes(MOCK_SEARCH_NOTES, 'is:pinned tag:work standup', {
+        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('is:pinned tag:work standup'), {
             tags: MOCK_SEARCH_TAGS,
             pinned: new Set(['note-1'])
         })
@@ -208,25 +208,25 @@ describe('filter notes', () => {
     })
 
     test('returns every note for an empty query', () => {
-        const result = filterNotes(MOCK_SEARCH_NOTES, '', { tags: MOCK_SEARCH_TAGS, pinned: new Set() })
+        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery(''), { tags: MOCK_SEARCH_TAGS, pinned: new Set() })
         expect(result).toHaveLength(3)
     })
 
     test('filters by has:image qualifier', () => {
         const options = { tags: MOCK_SEARCH_TAGS, pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, 'has:image', options)
+        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('has:image'), options)
         expect(result.map((note) => note.id)).toEqual(['note-2'])
     })
 
     test('filters by modified: date qualifier', () => {
         const options = { tags: MOCK_SEARCH_TAGS, pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, 'modified:2026-01-05', options)
+        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('modified:2026-01-05'), options)
         expect(result.map((note) => note.id)).toEqual(['note-1'])
     })
 
     test('filters by created: date qualifier', () => {
         const options = { tags: MOCK_SEARCH_TAGS, pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, 'created:2026-01-02', options)
+        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('created:2026-01-02'), options)
         expect(result.map((note) => note.id)).toEqual(['note-2'])
     })
 })
