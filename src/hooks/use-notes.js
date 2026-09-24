@@ -46,7 +46,7 @@ export function useNotes() {
         const uri = getRepositoryUri(repositoryId)
         const noteWithLocation = { ...note, repositoryId }
 
-        setNotes([noteWithLocation, ...notes])
+        setNotes((prev) => [noteWithLocation, ...prev])
         if (!uri) return
 
         const filename = resolveFilename(uri, note.title, null)
@@ -61,31 +61,35 @@ export function useNotes() {
     // `notesSnapshot`/`notePaths` must reflect the note as it was BEFORE the rename, so links
     // using its old title (bare or path-qualified) still resolve to `targetId` during the rewrite.
     const propagateWikiLinkRename = async (targetId, newTitle, notesSnapshot, notePaths) => {
-        const nextNotes = notes.map((n) => {
+        const renameNote = (n) => {
             if (n.id === targetId) return n
 
             const renamed = renameWikiLinksForNote(n.note, targetId, newTitle, notesSnapshot, notePaths)
             return renamed === n.note ? n : { ...n, note: renamed }
-        })
+        }
 
-        setNotes(nextNotes)
+        setNotes((prev) => prev.map(renameNote))
+
+        // Computed from `notesSnapshot` (available synchronously) rather than the `setNotes` updater
+        // above, whose function React may call lazily rather than right away.
+        const changedNotes = notesSnapshot
+            .map(renameNote)
+            .filter((n, index) => n !== notesSnapshot[index])
 
         const changedByRepository = new Map()
-        nextNotes.forEach((n, index) => {
-            if (n.id === targetId || n.note === notes[index].note) return
-
+        changedNotes.forEach((n) => {
             const group = changedByRepository.get(n.repositoryId) || []
             group.push(n)
             changedByRepository.set(n.repositoryId, group)
         })
 
-        for (const [repositoryId, changedNotes] of changedByRepository) {
+        for (const [repositoryId, notesInRepository] of changedByRepository) {
             const otherUri = getRepositoryUri(repositoryId)
             if (!otherUri) continue
 
             const otherMetadata = await readMetadata(otherUri)
 
-            for (const changedNote of changedNotes) {
+            for (const changedNote of notesInRepository) {
                 const entry = otherMetadata[changedNote.id]
                 if (!entry) continue
 
@@ -100,7 +104,7 @@ export function useNotes() {
             return saveNote(note, note.repositoryId)
         }
 
-        setNotes(notes.map((n) => (n.id === note.id ? note : n)))
+        setNotes((prev) => prev.map((n) => (n.id === note.id ? note : n)))
 
         const uri = getRepositoryUri(note.repositoryId)
         if (!uri) return
@@ -123,7 +127,7 @@ export function useNotes() {
 
     const deleteNote = async (id) => {
         const note = notes.find((n) => n.id === id)
-        setNotes(notes.filter((n) => n.id !== id))
+        setNotes((prev) => prev.filter((n) => n.id !== id))
         if (!note) return
 
         const uri = getRepositoryUri(note.repositoryId)

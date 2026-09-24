@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
@@ -11,7 +11,7 @@ import { useCurrentNote } from '@/hooks/use-current-note'
 import { useRecentNotes } from '@/hooks/use-recent-notes'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useNotes } from '@/hooks/use-notes'
-import { useTemplates } from '@/hooks/use-templates'
+import { useTemplatesList } from '@/hooks/use-templates-list'
 import { useUtils } from '@/hooks/use-utils'
 import { getEditorPath } from '@/utils/editor-path'
 import { getPreviewNote } from '@/utils/preview-note'
@@ -30,13 +30,8 @@ export function RecentNotes({ onClose, home = false }) {
     const { currentId } = useCurrentNote()
     const { pinned, updatePinned } = useUtils()
     const { activeRepositoryTree } = useRepositories()
-    const { listTemplates } = useTemplates()
+    const { templates } = useTemplatesList()
     const { recent, removeRecent, clearRecent } = useRecentNotes()
-    const [templates, setTemplates] = useState([])
-
-    useEffect(() => {
-        listTemplates().then(setTemplates)
-    }, [])
 
     const cards = useMemo(() => {
         const ids = getRecentIds(pinned, recent, notes, templates)

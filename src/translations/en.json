@@ -8,7 +8,8 @@
 		"copy_suffix": "(copy)",
 		"go_home": "Home",
 		"delete_title": "Delete note",
-		"delete_message": "This will permanently delete this note from your device."
+		"delete_message": "This will permanently delete this note from your device.",
+		"save_failed": "Couldn't save this note"
 	},
 	"tags": {
 		"add": "Add tag",

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { router } from 'expo-router'
 
@@ -30,6 +30,7 @@ import { useNotes } from '@/hooks/use-notes'
 import { usePro } from '@/hooks/use-pro'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
+import { useTemplatesList } from '@/hooks/use-templates-list'
 import { useUndoRedoState } from '@/hooks/use-undo-redo-state'
 import { useVersionHistory } from '@/hooks/use-version-history'
 import { getFormattedDate } from '@/utils/formatted-date'
@@ -47,7 +48,8 @@ export const NoteEditorScreen = ({
     flush
 }) => {
     const { t } = useTranslation()
-    const { addTemplate, listTemplates } = useTemplates()
+    const { addTemplate } = useTemplates()
+    const { templates, refresh: refreshTemplates } = useTemplatesList()
     const { exportFile, shareFile } = useFiles()
     const { currentLanguage } = useLanguage()
     const { deleteNote, setParamId } = useNotes()
@@ -64,7 +66,6 @@ export const NoteEditorScreen = ({
     const [exportDialogVisible, setExportDialogVisible] = useState(false)
     const [shareDialogVisible, setShareDialogVisible] = useState(false)
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false)
-    const [templates, setTemplates] = useState([])
     const { canUndo, canRedo, onHistoryChange } = useUndoRedoState()
 
     const metaLabel = useMemo(() => (
@@ -109,13 +110,13 @@ export const NoteEditorScreen = ({
 
         try {
             await addTemplate(title.trim() || t('placeholder.title'), content)
-            listTemplates().then(setTemplates)
+            refreshTemplates()
             showSnackbar(t('templates.saved'))
         } catch (error) {
             console.log(error)
             showSnackbar(t('templates.save_failed'))
         }
-    }, [addTemplate, listTemplates, t])
+    }, [addTemplate, refreshTemplates, t])
 
     const onOpenExportDialog = useCallback(() => setExportDialogVisible(true), [])
     const onCloseExportDialog = useCallback(() => setExportDialogVisible(false), [])
@@ -145,10 +146,6 @@ export const NoteEditorScreen = ({
         setNote(version.content)
         versionHistory.onClose()
     }, [versionHistory.onClose])
-
-    useEffect(() => {
-        listTemplates().then(setTemplates)
-    }, [])
 
     const actions = useMemo(() => ({
         onOpenTags: tagsSheet.onOpen,

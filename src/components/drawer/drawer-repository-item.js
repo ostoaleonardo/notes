@@ -11,10 +11,7 @@ export const DrawerRepositoryItem = memo(function DrawerRepositoryItem({
     active,
     isCollapsed,
     onOpenRoot,
-    onAddSubfolder,
-    onCreateNote,
-    onEditFolder,
-    onDelete
+    onAction
 }) {
     const { toggleFolder } = useUtils()
 
@@ -34,10 +31,7 @@ export const DrawerRepositoryItem = memo(function DrawerRepositoryItem({
                 isCollapsed={isCollapsed}
                 depth={depth}
                 onPress={onPress}
-                onCreateNote={() => onCreateNote(repository.id)}
-                onAddSubfolder={() => onAddSubfolder(repository.id)}
-                onEditFolder={() => onEditFolder(repository.id)}
-                onDelete={() => onDelete(repository.id)}
+                onAction={(action) => onAction(action, repository.id)}
             />
         </AnimatedView>
     )

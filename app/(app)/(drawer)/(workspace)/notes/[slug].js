@@ -12,6 +12,7 @@ import { useWikiLinkRenameConfirm } from '@/hooks/use-wiki-link-rename-confirm'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
 import { getDate } from '@/utils/date'
+import { buildNotePayload } from '@/utils/note-payload'
 
 export default function EditNote() {
     const { t } = useTranslation()
@@ -70,19 +71,11 @@ export default function EditNote() {
         repositoriesLoading
     ])
 
-    const { flush } = useAutosave(() => {
+    const { flush } = useAutosave(async () => {
         const updatedAt = getDate()
+        const payload = buildNotePayload({ id: slug, title, note, tags, createdAt, repositoryId, updatedAt })
 
-        updateNote({
-            id: slug,
-            title: title.trim(),
-            note: note.trim(),
-            tags,
-            createdAt,
-            repositoryId,
-            updatedAt
-        })
-
+        await updateNote(payload)
         setUpdatedAt(updatedAt)
     }, [
         slug,
@@ -100,19 +93,10 @@ export default function EditNote() {
         const trimmedTitle = title.trim()
         if (!previousTitle || previousTitle === trimmedTitle) return
 
-        const trimmedNote = note.trim()
+        const payload = buildNotePayload({ id: slug, title: trimmedTitle, note, tags, createdAt, repositoryId, updatedAt: getDate() })
+        const savedNote = saveNoteWithLinkCheck(payload, previousTitle)
 
-        const savedNote = saveNoteWithLinkCheck({
-            id: slug,
-            title: trimmedTitle,
-            note: trimmedNote,
-            tags,
-            createdAt,
-            repositoryId,
-            updatedAt: getDate()
-        }, previousTitle)
-
-        if (savedNote.note !== trimmedNote) setNote(savedNote.note)
+        if (savedNote.note !== payload.note) setNote(savedNote.note)
         originalTitleRef.current = trimmedTitle
     }
 
