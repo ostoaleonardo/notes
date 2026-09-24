@@ -25,8 +25,7 @@ export function useTags() {
         const exists = tags.some((existing) => existing.name === tag.name)
         if (exists) return 'duplicate'
 
-        const localTags = [...tags, tag]
-        updateBackup(localTags)
+        updateBackup((prev) => [...prev, tag])
     }
 
     const saveTag = (name, notify = showSnackbar) => {
@@ -45,26 +44,23 @@ export function useTags() {
     }
 
     const deleteTag = (id) => {
-        const localTags = tags.filter((tag) => tag.id !== id)
-        updateBackup(localTags)
+        updateBackup((prev) => prev.filter((tag) => tag.id !== id))
     }
 
     const updateTag = (tag) => {
-        const localTags = tags.map((t) => {
-            if (t.id === tag.id) return tag
-            return t
-        })
-
-        updateBackup(localTags)
+        updateBackup((prev) => prev.map((t) => (t.id === tag.id ? tag : t)))
     }
 
     const getTag = (id) => {
         return tags.find((tag) => tag.id === id) || {}
     }
 
-    const updateBackup = (localTags) => {
-        setTags(localTags)
-        writeJson(rootRepositoryUri, TAGS_FILENAME, localTags)
+    const updateBackup = (updater) => {
+        setTags((prev) => {
+            const localTags = updater(prev)
+            writeJson(rootRepositoryUri, TAGS_FILENAME, localTags)
+            return localTags
+        })
     }
 
     const deleteAllTags = () => {

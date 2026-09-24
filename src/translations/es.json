@@ -8,7 +8,8 @@
 		"copy_suffix": "(copia)",
 		"go_home": "Inicio",
 		"delete_title": "Borrar nota",
-		"delete_message": "Esto eliminará permanentemente esta nota del dispositivo."
+		"delete_message": "Esto eliminará permanentemente esta nota del dispositivo.",
+		"save_failed": "No se pudo guardar esta nota"
 	},
 	"tags": {
 		"add": "Añadir etiqueta",

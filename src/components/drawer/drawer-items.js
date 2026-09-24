@@ -1,5 +1,5 @@
 import { router } from 'expo-router'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
@@ -19,7 +19,7 @@ import { useCurrentNote } from '@/hooks/use-current-note'
 import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTags } from '@/hooks/use-tags'
-import { useTemplates } from '@/hooks/use-templates'
+import { useTemplatesList } from '@/hooks/use-templates-list'
 import { useUtils } from '@/hooks/use-utils'
 import { buildRepositoryTree, flattenDrawerTree } from '@/utils/drawer-tree'
 import { getEditorPath } from '@/utils/editor-path'
@@ -33,7 +33,6 @@ export function DrawerItems({ navigation }) {
     const { t } = useTranslation()
     const { tags } = useTags()
     const { notes } = useNotes()
-    const { listTemplates } = useTemplates()
     const { currentId } = useCurrentNote()
     const insets = useSafeAreaInsets()
 
@@ -51,17 +50,11 @@ export function DrawerItems({ navigation }) {
         setActiveRepository
     } = useRepositories()
 
-    const [templates, setTemplates] = useState([])
+    const { templates, refresh: refreshTemplates } = useTemplatesList([activeRepository?.id])
     const [addTemplateVisible, setAddTemplateVisible] = useState(false)
     const [editFolderId, setEditFolderId] = useState('')
     const [subfolderParentId, setSubfolderParentId] = useState('')
     const [deleteId, setDeleteId] = useState('')
-
-    const refreshTemplates = () => listTemplates().then(setTemplates)
-
-    useEffect(() => {
-        refreshTemplates()
-    }, [activeRepository?.id])
 
     const notesByRepository = useMemo(() => {
         const map = new Map()
@@ -110,6 +103,13 @@ export function DrawerItems({ navigation }) {
         closeDrawer()
     }, [closeDrawer])
 
+    const onRepositoryAction = useCallback((action, repositoryId) => {
+        if (action === 'createNote') return onCreateNote(repositoryId)
+        if (action === 'addSubfolder') return setSubfolderParentId(repositoryId)
+        if (action === 'editFolder') return setEditFolderId(repositoryId)
+        if (action === 'delete') return setDeleteId(repositoryId)
+    }, [onCreateNote])
+
     const onOpenTemplate = useCallback((filename) => {
         const path = getEditorPath(TEMPLATE_TAB_PREFIX + filename)
         if (currentId) {
@@ -147,13 +147,10 @@ export function DrawerItems({ navigation }) {
                 isCollapsed={item.isCollapsed}
                 active={item.repository.id === activeRepositoryId}
                 onOpenRoot={onOpenRoot}
-                onCreateNote={onCreateNote}
-                onAddSubfolder={setSubfolderParentId}
-                onEditFolder={setEditFolderId}
-                onDelete={setDeleteId}
+                onAction={onRepositoryAction}
             />
         )
-    }, [currentId, activeRepositoryId, onOpenNote, onOpenRoot, onCreateNote])
+    }, [currentId, activeRepositoryId, onOpenNote, onOpenRoot, onRepositoryAction])
 
     return (
         <>

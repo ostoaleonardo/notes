@@ -12,6 +12,7 @@ import { useRepositories } from '@/hooks/use-repositories'
 import { useUtils } from '@/hooks/use-utils'
 import { getDate } from '@/utils/date'
 import { getUniqueTitle } from '@/utils/note-filename'
+import { buildNotePayload } from '@/utils/note-payload'
 
 export default function Note() {
     const { t } = useTranslation()
@@ -55,26 +56,20 @@ export default function Note() {
         }, [])
     )
 
-    const { flush } = useAutosave(() => {
-        const newData = {
-            id,
-            title: title.trim(),
-            note: note.trim(),
-            tags,
-            createdAt,
-            repositoryId
-        }
-
+    const { flush } = useAutosave(async () => {
         if (!isSaved.current) {
             const createdAt = getDate()
+            const payload = buildNotePayload({ id, title, note, tags, createdAt, repositoryId })
 
-            saveNote({ ...newData, createdAt }, repositoryId)
+            await saveNote(payload, repositoryId)
 
             setCreatedAt(createdAt)
             isSaved.current = true
         } else {
             const updatedAt = getDate()
-            updateNote({ ...newData, updatedAt })
+            const payload = buildNotePayload({ id, title, note, tags, createdAt, repositoryId, updatedAt })
+
+            await updateNote(payload)
             setUpdatedAt(updatedAt)
         }
     }, [id, title, note, tags, createdAt, repositoryId], {

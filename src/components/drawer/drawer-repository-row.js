@@ -19,10 +19,7 @@ export function DrawerRepositoryRow({
     isCollapsed,
     depth,
     onPress,
-    onCreateNote,
-    onAddSubfolder,
-    onEditFolder,
-    onDelete
+    onAction
 }) {
     const { t } = useTranslation()
     const { visible, onOpen, onClose, trigger } = useMenuAction()
@@ -65,10 +62,10 @@ export function DrawerRepositoryRow({
             >
                 <DrawerRepositoryMenu
                     isRoot={isRoot}
-                    onCreateNote={() => trigger(onCreateNote)}
-                    onAddSubfolder={() => trigger(onAddSubfolder)}
-                    onEditFolder={() => trigger(onEditFolder)}
-                    onDelete={() => trigger(onDelete)}
+                    onCreateNote={() => trigger(() => onAction('createNote'))}
+                    onAddSubfolder={() => trigger(() => onAction('addSubfolder'))}
+                    onEditFolder={() => trigger(() => onAction('editFolder'))}
+                    onDelete={() => trigger(() => onAction('delete'))}
                 />
             </MenuContainer>
         </View>

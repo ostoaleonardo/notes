@@ -1,19 +1,33 @@
 import { useCallback, useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 export function useAutosave(
     onSave, deps, { delay = 500, skip = false } = {}
 ) {
+    const { t } = useTranslation()
+
     const onSaveRef = useRef(onSave)
     onSaveRef.current = onSave
 
     const timerRef = useRef(null)
+
+    const save = useCallback(async () => {
+        try {
+            await onSaveRef.current()
+        } catch (error) {
+            console.debug('error autosaving note', error)
+            showSnackbar(t('notes.save_failed'))
+        }
+    }, [t])
 
     useEffect(() => {
         if (skip) return
 
         timerRef.current = setTimeout(() => {
             timerRef.current = null
-            onSaveRef.current()
+            save()
         }, delay)
 
         return () => {
@@ -21,7 +35,7 @@ export function useAutosave(
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [skip, delay, ...deps])
+    }, [skip, delay, save, ...deps])
 
     const flush = useCallback(async () => {
         if (timerRef.current) {
@@ -29,8 +43,8 @@ export function useAutosave(
             timerRef.current = null
         }
 
-        await onSaveRef.current()
-    }, [])
+        await save()
+    }, [save])
 
     return { flush }
 }

@@ -31,4 +31,16 @@ describe('get preview note', () => {
         const preview = getPreviewNote(note, 5, 10)
         expect(preview).toBe(`${'a'.repeat(10)}...`)
     })
+
+    test('reinserts each image correctly when alt text is empty or duplicated', () => {
+        const note = '![](https://example.com/a.png) and ![](https://example.com/b.png)'
+
+        expect(getPreviewNote(note)).toBe(note)
+    })
+
+    test('reinserts each link correctly when link text is duplicated', () => {
+        const note = '[here](https://example.com/a) and [here](https://example.com/b)'
+
+        expect(getPreviewNote(note)).toBe(note)
+    })
 })
