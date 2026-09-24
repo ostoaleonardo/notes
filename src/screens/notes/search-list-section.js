@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native'
-import { Divider, TouchableRipple, useTheme } from 'react-native-paper'
+import { TouchableRipple, useTheme } from 'react-native-paper'
 
 import { Section } from '@/components/section'
 import { Typography } from '@/components/typography'
@@ -20,38 +20,39 @@ export function SearchListSection({
     if (items.length === 0) return null
 
     return (
-        <View style={styles.container}>
-            <Divider />
-
-            <Section title={title}>
-                {items.map((item) => (
-                    <TouchableRipple
-                        key={keyExtractor(item)}
-                        onPress={() => onSelect(item)}
-                    >
-                        <View style={[styles.item, itemStyle]}>
-                            <Icon
-                                width={16}
-                                height={16}
-                                color={colors.onBackground}
-                                opacity={0.5}
-                            />
-                            <Typography numberOfLines={1} styleProps={labelStyle}>
-                                {getLabel(item)}
-                            </Typography>
-                            {renderTrailing?.(item)}
-                        </View>
-                    </TouchableRipple>
-                ))}
-            </Section>
-        </View>
+        <Section
+            title={title}
+            containerStyle={styles.container}
+        >
+            {items.map((item) => (
+                <TouchableRipple
+                    key={keyExtractor(item)}
+                    onPress={() => onSelect(item)}
+                >
+                    <View style={[styles.item, itemStyle]}>
+                        <Icon
+                            width={16}
+                            height={16}
+                            color={colors.onBackground}
+                            opacity={0.5}
+                        />
+                        <Typography
+                            numberOfLines={1}
+                            styleProps={labelStyle}
+                        >
+                            {getLabel(item)}
+                        </Typography>
+                        {renderTrailing?.(item)}
+                    </View>
+                </TouchableRipple>
+            ))}
+        </Section>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        gap: 16
+        width: '100%'
     },
     item: {
         gap: 12,
