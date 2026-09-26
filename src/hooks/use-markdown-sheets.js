@@ -2,28 +2,28 @@ import { useCallback } from 'react'
 
 import { useBottomSheet } from './use-bottom-sheet'
 
-export function useMarkdownInsertSheets(markdownAction) {
+export function useMarkdownSheets(action) {
     const linkSheet = useBottomSheet()
     const tableSheet = useBottomSheet()
     const imageSheet = useBottomSheet()
 
-    const onRunAction = useCallback((action) => {
-        if (action === 'link') {
+    const onRunAction = useCallback((actionName) => {
+        if (actionName === 'link') {
             linkSheet.onOpen()
             return
         }
 
-        if (action === 'table') {
+        if (actionName === 'table') {
             tableSheet.onOpen()
             return
         }
 
-        if (action === 'image') {
+        if (actionName === 'image') {
             imageSheet.onOpen()
             return
         }
 
-        markdownAction.run(action)
+        action.run(actionName)
     }, [
         linkSheet.onOpen,
         tableSheet.onOpen,

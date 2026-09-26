@@ -13,19 +13,26 @@ import { KeyboardArrowUp } from '@/icons/keyboard-arrow-up'
 
 import { RADIUS } from '@/constants/themes'
 
-export function MarkdownSearchBar({
-    search,
-    onPrevious,
-    onNext,
-    onReplaceOne,
-    onReplaceAll
-}) {
+export function MarkdownSearchBar({ search, action }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
 
-    const { visible, replaceVisible, searchQuery, setSearchQuery, replaceText, setReplaceText, onClose } = search
+    const {
+        visible,
+        replaceVisible,
+        searchQuery,
+        setSearchQuery,
+        replaceText,
+        setReplaceText,
+        onClose
+    } = search
 
     if (!visible) return null
+
+    const onPrevious = () => action.run('search-previous')
+    const onNext = () => action.run('search-next')
+    const onReplaceOne = () => action.run('search-replace')
+    const onReplaceAll = () => action.run('search-replace-all')
 
     const searchBottomRadius = replaceVisible ? RADIUS.inner : RADIUS.outer
 

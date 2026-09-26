@@ -3,7 +3,7 @@ import { TableMarkdown } from '@/screens/modals/table-markdown'
 import { ImageMarkdown } from '@/screens/modals/image-markdown'
 import { ModalSheet } from '@/components/modal/modal-sheet'
 
-export function MarkdownInsertSheets({ linkSheet, tableSheet, imageSheet, markdownAction }) {
+export function MarkdownInsertSheets({ linkSheet, tableSheet, imageSheet, action }) {
     return (
         <>
             <ModalSheet
@@ -13,7 +13,7 @@ export function MarkdownInsertSheets({ linkSheet, tableSheet, imageSheet, markdo
             >
                 <LinkMarkdown
                     onClose={linkSheet.onClose}
-                    onInsert={(payload) => markdownAction.run('link', payload)}
+                    onInsert={(payload) => action.run('link', payload)}
                 />
             </ModalSheet>
 
@@ -25,7 +25,7 @@ export function MarkdownInsertSheets({ linkSheet, tableSheet, imageSheet, markdo
             >
                 <TableMarkdown
                     onClose={tableSheet.onClose}
-                    onInsert={(payload) => markdownAction.run('table', payload)}
+                    onInsert={(payload) => action.run('table', payload)}
                 />
             </ModalSheet>
 
@@ -36,7 +36,7 @@ export function MarkdownInsertSheets({ linkSheet, tableSheet, imageSheet, markdo
             >
                 <ImageMarkdown
                     onClose={imageSheet.onClose}
-                    onInsert={(payload) => markdownAction.run('image', payload)}
+                    onInsert={(payload) => action.run('image', payload)}
                 />
             </ModalSheet>
         </>
