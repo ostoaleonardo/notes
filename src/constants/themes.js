@@ -136,13 +136,6 @@ export const SWITCH_THUMB = {
 export const SCROLLABLE_MENU_MAX_HEIGHT = 280
 export const MENU_ITEM_INDENT = 16
 
-export const TYPOGRAPHY_SIZE_VARIANTS = {
-    title: 24,
-    subtitle: 16,
-    paragraph: 14,
-    caption: 12
-}
-
 export const THEMES = {
     light: lightTheme,
     dark: darkTheme
@@ -192,10 +185,3 @@ export const ACCENT_COLORS = {
 export const THEME_OPTIONS = ['light', 'dark', 'system']
 export const ACCENT_OPTIONS = ['red', 'yellow', 'blue']
 export const FREE_ACCENT = 'white'
-
-export const FONTS = {
-    azeretLight: 'AzeretMono-Light',
-    azeretMedium: 'AzeretMono-Medium',
-    azeretItalic: 'AzeretMono-Italic',
-    nType82Headline: 'NType82-Headline'
-}

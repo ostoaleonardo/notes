@@ -19,7 +19,8 @@ import { ArrowBack } from '@/icons/arrow-back'
 import { Close } from '@/icons/close'
 
 import { DIFF_ADDED_COLOR, DIFF_REMOVED_COLOR } from '@/constants/diff'
-import { FONTS, TRANSPARENT } from '@/constants/themes'
+import { TRANSPARENT } from '@/constants/themes'
+import { FONTS } from '@/constants/fonts'
 import { FREE_VERSION_HISTORY_LIMIT } from '@/constants/default-values'
 
 const getDiffColor = (type) => (type === 'added' ? DIFF_ADDED_COLOR : DIFF_REMOVED_COLOR)

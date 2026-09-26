@@ -1,4 +1,4 @@
-import { FONTS } from './themes'
+import { FONTS } from './fonts'
 
 export const DIALOG_BUTTON_LABEL_STYLE = {
     fontSize: 12,

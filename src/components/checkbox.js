@@ -7,10 +7,9 @@ import { TRANSPARENT } from '@/constants/themes'
 
 export function Checkbox({ checked }) {
     const { colors } = useTheme()
-    const { background, onBackground } = colors
 
-    const backgroundColor = checked ? onBackground : TRANSPARENT.color
-    const borderColor = checked ? onBackground : onBackground + TRANSPARENT[20]
+    const backgroundColor = checked ? colors.onBackground : TRANSPARENT.color
+    const borderColor = checked ? colors.onBackground : colors.onBackground + TRANSPARENT[20]
 
     return (
         <View
@@ -24,7 +23,7 @@ export function Checkbox({ checked }) {
                 <Check
                     width={20}
                     height={20}
-                    color={background}
+                    color={colors.background}
                 />
             )}
         </View>

@@ -3,13 +3,12 @@ import { useTheme } from 'react-native-paper'
 
 export function Separator({ style }) {
     const { colors } = useTheme()
-    const { onBackground } = colors
 
     return (
         <View
             style={{
                 ...styles.base,
-                backgroundColor: onBackground,
+                backgroundColor: colors.onBackground,
                 ...style
             }}
         />

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { AnimatedView } from '@/components/animated/animated-view'
 import { Typography } from '@/components/typography'
 
-import { FONTS } from '@/constants/themes'
+import { FONTS } from '@/constants/fonts'
 
 export function Intro() {
     const { t } = useTranslation()

@@ -1,7 +1,7 @@
 import { StyleSheet, Text } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
-import { FONTS, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/themes'
+import { FONTS, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/fonts'
 
 export function Typography({
     children,

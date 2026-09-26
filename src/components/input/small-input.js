@@ -1,7 +1,8 @@
 import { StyleSheet, TextInput, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
-import { FONTS, RADIUS, TRANSPARENT } from '@/constants/themes'
+import { RADIUS, TRANSPARENT } from '@/constants/themes'
+import { FONTS } from '@/constants/fonts'
 
 export function SmallInput({ background, ...props }) {
     const { colors } = useTheme()

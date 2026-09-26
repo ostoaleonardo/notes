@@ -1,7 +1,8 @@
 import { buildPreviewCss } from '@/components/markdown/markdown-dom-theme'
 import { renderMarkdownRaw } from '@/components/markdown/markdown-dom-render-html'
 
-import { COLORS, FONTS, TRANSPARENT } from '@/constants/themes'
+import { COLORS, TRANSPARENT } from '@/constants/themes'
+import { FONTS } from '@/constants/fonts'
 import { EXPORT_FONT_SIZE } from '@/constants/export'
 
 export const getNoteAsHtml = (note) => {

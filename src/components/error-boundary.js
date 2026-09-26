@@ -4,7 +4,8 @@ import { StyleSheet, View, useColorScheme } from 'react-native'
 import { Typography } from './typography'
 import { Pressable } from '@/components/button/pressable'
 
-import { COLORS, FONTS } from '@/constants/themes'
+import { COLORS } from '@/constants/themes'
+import { FONTS } from '@/constants/fonts'
 
 export function ErrorBoundary({ retry }) {
     const { t } = useTranslation()
