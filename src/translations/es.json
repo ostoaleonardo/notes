@@ -9,7 +9,8 @@
 		"go_home": "Inicio",
 		"delete_title": "Borrar nota",
 		"delete_message": "Esto eliminará permanentemente esta nota del dispositivo.",
-		"save_failed": "No se pudo guardar esta nota"
+		"save_failed": "No se pudo guardar esta nota",
+		"delete_failed": "No se pudo borrar esta nota"
 	},
 	"tags": {
 		"add": "Añadir etiqueta",

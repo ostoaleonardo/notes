@@ -26,10 +26,8 @@ export function useWikiLinkRenameConfirm() {
         })
     }, [])
 
-    const saveNote = (note, previousTitle) => {
+    const saveWithLinkCheck = (note, previousTitle) => {
         const titleChanged = previousTitle && previousTitle !== note.title
-        // Captured before `updateNote` below moves the note's title in context, so link
-        // resolution against the old title (bare or path-qualified) still finds this note.
         const notePaths = getNotePaths(notes, repositories)
 
         const savedNote = titleChanged
@@ -73,9 +71,9 @@ export function useWikiLinkRenameConfirm() {
     }
 
     return {
-        saveNote,
-        dialogVisible: !!pending,
+        visible: !!pending,
         linksCount: pending?.count || 0,
+        saveWithLinkCheck,
         onDismiss,
         onConfirmOnce,
         onConfirmAlways

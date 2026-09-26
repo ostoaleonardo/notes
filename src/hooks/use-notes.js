@@ -22,8 +22,6 @@ export function useNotes() {
     const {
         notes,
         setNotes,
-        paramId,
-        setParamId,
         loading
     } = useContext(NoteContext)
 
@@ -49,17 +47,20 @@ export function useNotes() {
         setNotes((prev) => [noteWithLocation, ...prev])
         if (!uri) return
 
-        const filename = resolveFilename(uri, note.title, null)
+        try {
+            const filename = resolveFilename(uri, note.title, null)
 
-        writeNoteFile(uri, filename, note.note)
+            writeNoteFile(uri, filename, note.note)
 
-        const metadata = await readMetadata(uri)
-        metadata[note.id] = toMetadataEntry(note, filename)
-        writeMetadata(uri, metadata)
+            const metadata = await readMetadata(uri)
+            metadata[note.id] = toMetadataEntry(note, filename)
+            writeMetadata(uri, metadata)
+        } catch (error) {
+            setNotes((prev) => prev.filter((n) => n.id !== note.id))
+            throw error
+        }
     }
 
-    // `notesSnapshot`/`notePaths` must reflect the note as it was BEFORE the rename, so links
-    // using its old title (bare or path-qualified) still resolve to `targetId` during the rewrite.
     const propagateWikiLinkRename = async (targetId, newTitle, notesSnapshot, notePaths) => {
         const renameNote = (n) => {
             if (n.id === targetId) return n
@@ -70,8 +71,6 @@ export function useNotes() {
 
         setNotes((prev) => prev.map(renameNote))
 
-        // Computed from `notesSnapshot` (available synchronously) rather than the `setNotes` updater
-        // above, whose function React may call lazily rather than right away.
         const changedNotes = notesSnapshot
             .map(renameNote)
             .filter((n, index) => n !== notesSnapshot[index])
@@ -109,20 +108,25 @@ export function useNotes() {
         const uri = getRepositoryUri(note.repositoryId)
         if (!uri) return
 
-        const metadata = await readMetadata(uri)
-        const entry = metadata[note.id]
-        if (!entry) return
+        try {
+            const metadata = await readMetadata(uri)
+            const entry = metadata[note.id]
+            if (!entry) return
 
-        const filename = resolveFilename(uri, note.title, entry.filename)
+            const filename = resolveFilename(uri, note.title, entry.filename)
 
-        if (filename !== entry.filename) {
-            await renameNoteFile(uri, entry.filename, filename)
+            if (filename !== entry.filename) {
+                await renameNoteFile(uri, entry.filename, filename)
+            }
+
+            writeNoteFile(uri, filename, note.note)
+
+            metadata[note.id] = toMetadataEntry(note, filename)
+            writeMetadata(uri, metadata)
+        } catch (error) {
+            setNotes((prev) => prev.map((n) => (n.id === note.id ? previous : n)))
+            throw error
         }
-
-        writeNoteFile(uri, filename, note.note)
-
-        metadata[note.id] = toMetadataEntry(note, filename)
-        writeMetadata(uri, metadata)
     }
 
     const deleteNote = async (id) => {
@@ -133,13 +137,18 @@ export function useNotes() {
         const uri = getRepositoryUri(note.repositoryId)
         if (!uri) return
 
-        const metadata = await readMetadata(uri)
-        const entry = metadata[id]
-        if (!entry) return
+        try {
+            const metadata = await readMetadata(uri)
+            const entry = metadata[id]
+            if (!entry) return
 
-        deleteNoteFile(uri, entry.filename)
-        delete metadata[id]
-        writeMetadata(uri, metadata)
+            deleteNoteFile(uri, entry.filename)
+            delete metadata[id]
+            writeMetadata(uri, metadata)
+        } catch (error) {
+            setNotes((prev) => [note, ...prev])
+            throw error
+        }
     }
 
     const getNote = (id) => {
@@ -159,8 +168,6 @@ export function useNotes() {
         deleteAll,
         updateNote,
         propagateWikiLinkRename,
-        paramId,
-        setParamId,
         loading
     }
 }

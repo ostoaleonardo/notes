@@ -4,7 +4,7 @@ import { useLocalSearchParams } from 'expo-router'
 
 import { NoteEditorScreen } from '@/screens/notes/note-editor-screen'
 import { LoadingOverlay } from '@/components/layout'
-import { RenameLinksDialog } from '@/components/rename-links-dialog'
+import { RenameLinksDialog } from '@/screens/dialogs/rename-links-dialog'
 
 import { useAutosave } from '@/hooks/use-autosave'
 import { useNotes } from '@/hooks/use-notes'
@@ -21,12 +21,12 @@ export default function EditNote() {
     const { loading: repositoriesLoading } = useRepositories()
 
     const {
-        saveNote: saveNoteWithLinkCheck,
-        dialogVisible: renameLinksDialogVisible,
-        linksCount: renameLinksCount,
-        onDismiss: onDismissRenameLinksDialog,
-        onConfirmOnce: onConfirmRenameLinksOnce,
-        onConfirmAlways: onConfirmRenameLinksAlways
+        visible,
+        linksCount,
+        saveWithLinkCheck,
+        onDismiss,
+        onConfirmOnce,
+        onConfirmAlways
     } = useWikiLinkRenameConfirm()
 
     useRegisterCurrent(slug)
@@ -94,7 +94,7 @@ export default function EditNote() {
         if (!previousTitle || previousTitle === trimmedTitle) return
 
         const payload = buildNotePayload({ id: slug, title: trimmedTitle, note, tags, createdAt, repositoryId, updatedAt: getDate() })
-        const savedNote = saveNoteWithLinkCheck(payload, previousTitle)
+        const savedNote = saveWithLinkCheck(payload, previousTitle)
 
         if (savedNote.note !== payload.note) setNote(savedNote.note)
         originalTitleRef.current = trimmedTitle
@@ -121,11 +121,11 @@ export default function EditNote() {
             />
 
             <RenameLinksDialog
-                visible={renameLinksDialogVisible}
-                linksCount={renameLinksCount}
-                onDismiss={onDismissRenameLinksDialog}
-                onConfirmOnce={onConfirmRenameLinksOnce}
-                onConfirmAlways={onConfirmRenameLinksAlways}
+                visible={visible}
+                linksCount={linksCount}
+                onDismiss={onDismiss}
+                onConfirmOnce={onConfirmOnce}
+                onConfirmAlways={onConfirmAlways}
             />
         </>
     )

@@ -5,6 +5,7 @@ import { randomUUID } from 'expo-crypto'
 
 import { MenuItem } from '@/components/menu/menu-item'
 
+import { useCurrentNote } from '@/hooks/use-current-note'
 import { useNotes } from '@/hooks/use-notes'
 import { useUtils } from '@/hooks/use-utils'
 import { getDate } from '@/utils/date'
@@ -33,25 +34,26 @@ export const useNoteActionsMenu = ({
 }) => {
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
+    const { currentId } = useCurrentNote()
 
     const { pinned, updatePinned } = useUtils()
     const [isPinned, setIsPinned] = useState(pinned.has(slug))
 
-    const { getNote, saveNote, paramId } = useNotes()
+    const { getNote, saveNote } = useNotes()
 
     const toggleKeep = () => onTrigger(() => {
-        if (pinned.has(slug)) {
-            pinned.delete(slug)
+        if (pinned.has(currentId)) {
+            pinned.delete(currentId)
         } else {
-            pinned.add(slug)
+            pinned.add(currentId)
         }
 
-        setIsPinned(pinned.has(slug))
+        setIsPinned(pinned.has(currentId))
         updatePinned(new Set(pinned))
     })
 
     const onDuplicate = () => onTrigger(() => {
-        const note = getNote(paramId || slug)
+        const note = getNote(currentId)
 
         const duplicate = buildDuplicateNote(note, {
             id: randomUUID(),
