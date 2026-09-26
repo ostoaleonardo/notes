@@ -1,8 +1,8 @@
 import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
-import { SwipeableCard } from './swipeable-card'
-import { Typography } from '../typography'
+import { SwipeableCard } from '@/components/swipeable/swipeable-card'
+import { Typography } from '@/components/typography'
 
 import { getGroupedRadius } from '@/utils/grouped-card-style'
 

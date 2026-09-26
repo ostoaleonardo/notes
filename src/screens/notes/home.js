@@ -1,12 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { router, useFocusEffect } from 'expo-router'
+import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, View } from 'react-native'
+import { router, useFocusEffect } from 'expo-router'
 import * as DocumentPicker from 'expo-document-picker'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { Intro } from './intro'
-import { NoteSearchSheet } from './note-search-sheet'
-import { RecentNotesSheet } from './recent-notes-sheet'
+import { NoteToolbarSheets } from './note-toolbar-sheets'
 import { HomeToolbar } from './home-toolbar'
 import { AppBar } from '@/components/app-bar/app-bar'
 
@@ -70,15 +69,13 @@ export function Home() {
     }
 
     return (
-        <>
+        <View style={{ flex: 1 }}>
             <AppBar
                 mode='menu'
                 title={t('title.notes') + (pro ? ' (Pro)' : '')}
             />
 
-            <View style={styles.container}>
-                <Intro />
-            </View>
+            <Intro />
 
             <HomeToolbar
                 onCreateNote={onCreateNote}
@@ -88,20 +85,11 @@ export function Home() {
                 recentCount={recentCount}
             />
 
-            <RecentNotesSheet
+            <NoteToolbarSheets
                 home={true}
-                sheet={recentsSheet}
+                recentsSheet={recentsSheet}
+                searchSheet={searchSheet}
             />
-
-            <NoteSearchSheet sheet={searchSheet} />
-        </>
+        </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingBottom: 24,
-        alignItems: 'center'
-    }
-})

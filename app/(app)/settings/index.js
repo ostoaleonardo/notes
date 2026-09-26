@@ -3,14 +3,13 @@ import { Linking, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 
-import { Languages } from '@/screens/modals/languages'
+import { LanguagesSheet } from '@/screens/settings/languages-sheet'
 import { ProSection } from '@/screens/settings/pro-section'
 import { ThemeOption } from '@/screens/settings/theme-option'
 import { AppVersionCard } from '@/screens/settings/app-version-card'
 import { Option } from '@/screens/settings/option'
 import { WikiLinksOption } from '@/screens/settings/wiki-links-option'
 import { StartupOption } from '@/screens/settings/startup-option'
-import { ModalSheet } from '@/components/modal/modal-sheet'
 import { Scroll } from '@/components/animated/scroll'
 import { Section } from '@/components/section'
 
@@ -25,11 +24,7 @@ export default function Settings() {
     const { t } = useTranslation()
     const { colors } = useTheme()
 
-    const {
-        ref: languagesBottomRef,
-        onOpen: onOpenLanguages,
-        onClose: onCloseLanguages
-    } = useBottomSheet()
+    const languagesSheet = useBottomSheet()
 
     return (
         <View style={{ flex: 1 }}>
@@ -43,7 +38,7 @@ export default function Settings() {
                         title={t('settings.language')}
                         description={t('language')}
                         rightContent={<ArrowForward color={colors.onBackground} />}
-                        onPress={onOpenLanguages}
+                        onPress={languagesSheet.onOpen}
                         isFirst={true}
                     />
                     <ThemeOption />
@@ -88,13 +83,7 @@ export default function Settings() {
                     <AppVersionCard />
                 </Section>
 
-                <ModalSheet
-                    ref={languagesBottomRef}
-                    onClose={onCloseLanguages}
-                    snapPoints={['50%', '95%']}
-                >
-                    <Languages />
-                </ModalSheet>
+                <LanguagesSheet sheet={languagesSheet} />
             </Scroll>
         </View>
     )

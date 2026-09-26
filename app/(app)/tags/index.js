@@ -2,11 +2,11 @@ import { useState, useCallback } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
-import { UpdateTag } from '@/screens/modals/update-tag'
+import { UpdateTag } from '@/screens/dialogs/update-tag'
 import { AnimatedList } from '@/components/animated/animated-list'
 import { SmallInput } from '@/components/input/small-input'
 import { SquareButton } from '@/components/button/square-button'
-import { SwipeableTag } from '@/components/swipeable/swipeable-tag'
+import { SwipeableTag } from '@/screens/tags/swipeable-tag'
 
 import { useTags } from '@/hooks/use-tags'
 import { useHaptics } from '@/hooks/use-haptics'
