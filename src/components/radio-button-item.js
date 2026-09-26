@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native'
 import { RadioButton, useTheme } from 'react-native-paper'
 
-import { RADIUS } from '@/constants/themes'
 import { FONTS } from '@/constants/fonts'
+import { getGroupedRadius } from '@/utils/grouped-card-style'
 
 export function RadioButtonItem({ isFirst, isLast, ...props }) {
     const { colors } = useTheme()
@@ -10,12 +10,7 @@ export function RadioButtonItem({ isFirst, isLast, ...props }) {
     return (
         <RadioButton.Item
             position='trailing'
-            style={{
-                borderTopLeftRadius: isFirst ? RADIUS.outer : 0,
-                borderTopRightRadius: isFirst ? RADIUS.outer : 0,
-                borderBottomLeftRadius: isLast ? RADIUS.outer : 0,
-                borderBottomRightRadius: isLast ? RADIUS.outer : 0
-            }}
+            style={getGroupedRadius(isFirst, isLast)}
             labelStyle={{
                 ...styles.title,
                 ...props.styles
