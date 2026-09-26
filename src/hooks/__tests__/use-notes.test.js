@@ -60,8 +60,6 @@ const renderNotesHook = (initialNotes = []) => {
                     setNotes,
                     tags,
                     setTags,
-                    paramId: '',
-                    setParamId: () => { },
                     loading: false,
                     clear: () => { }
                 }}

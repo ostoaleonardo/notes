@@ -46,12 +46,12 @@ test('always saves the note through updateNote, even without a title change', as
     const { result } = await renderConfirmHook()
 
     await act(async () => {
-        result.current.saveNote({ id: 'a', title: 'Same' }, 'Same')
+        result.current.saveWithLinkCheck({ id: 'a', title: 'Same' }, 'Same')
     })
 
     expect(mockUpdateNote).toHaveBeenCalledWith({ id: 'a', title: 'Same' })
     expect(mockPropagateWikiLinkRename).not.toHaveBeenCalled()
-    expect(result.current.dialogVisible).toBe(false)
+    expect(result.current.visible).toBe(false)
 })
 
 test('saves the note without asking when the title changes but nothing links to the old title', async () => {
@@ -62,12 +62,12 @@ test('saves the note without asking when the title changes but nothing links to 
     const { result } = await renderConfirmHook()
 
     await act(async () => {
-        result.current.saveNote({ id: 'a', title: 'New' }, 'Old')
+        result.current.saveWithLinkCheck({ id: 'a', title: 'New' }, 'Old')
     })
 
     expect(mockUpdateNote).toHaveBeenCalledWith({ id: 'a', title: 'New' })
     expect(mockPropagateWikiLinkRename).not.toHaveBeenCalled()
-    expect(result.current.dialogVisible).toBe(false)
+    expect(result.current.visible).toBe(false)
 })
 
 test('rewrites the note\'s own self-referencing wiki-links when its title changes', async () => {
@@ -76,7 +76,7 @@ test('rewrites the note\'s own self-referencing wiki-links when its title change
     let savedNote
 
     await act(async () => {
-        savedNote = result.current.saveNote({ id: 'a', title: 'New', note: 'See also [[Old]] for context' }, 'Old')
+        savedNote = result.current.saveWithLinkCheck({ id: 'a', title: 'New', note: 'See also [[Old]] for context' }, 'Old')
     })
 
     const expectedNote = { id: 'a', title: 'New', note: 'See also [[New]] for context' }
@@ -90,7 +90,7 @@ test('does not touch the note body when the title is unchanged, even if it self-
     const { result } = await renderConfirmHook()
 
     await act(async () => {
-        result.current.saveNote({ id: 'a', title: 'Same', note: 'See also [[Same]]' }, 'Same')
+        result.current.saveWithLinkCheck({ id: 'a', title: 'Same', note: 'See also [[Same]]' }, 'Same')
     })
 
     expect(mockUpdateNote).toHaveBeenCalledWith({ id: 'a', title: 'Same', note: 'See also [[Same]]' })
@@ -104,12 +104,12 @@ test('opens the confirm dialog when other notes link to the renamed title', asyn
     const { result } = await renderConfirmHook()
 
     await act(async () => {
-        result.current.saveNote({ id: 'a', title: 'New' }, 'Old')
+        result.current.saveWithLinkCheck({ id: 'a', title: 'New' }, 'Old')
     })
 
     expect(mockUpdateNote).toHaveBeenCalledWith({ id: 'a', title: 'New' })
     expect(mockPropagateWikiLinkRename).not.toHaveBeenCalled()
-    expect(result.current.dialogVisible).toBe(true)
+    expect(result.current.visible).toBe(true)
     expect(result.current.linksCount).toBe(1)
 })
 
@@ -121,7 +121,7 @@ test('onConfirmOnce propagates the rename without persisting a preference', asyn
     const { result } = await renderConfirmHook()
 
     await act(async () => {
-        result.current.saveNote({ id: 'a', title: 'New' }, 'Old')
+        result.current.saveWithLinkCheck({ id: 'a', title: 'New' }, 'Old')
     })
 
     await act(async () => {
@@ -129,7 +129,7 @@ test('onConfirmOnce propagates the rename without persisting a preference', asyn
     })
 
     expect(mockPropagateWikiLinkRename).toHaveBeenCalledWith('a', 'New', mockNotes, expect.any(Map))
-    expect(result.current.dialogVisible).toBe(false)
+    expect(result.current.visible).toBe(false)
     expect(mockStoredValue).toBe(null)
 })
 
@@ -141,7 +141,7 @@ test('onConfirmAlways propagates the rename and persists the preference for futu
     const { result } = await renderConfirmHook()
 
     await act(async () => {
-        result.current.saveNote({ id: 'a', title: 'New' }, 'Old')
+        result.current.saveWithLinkCheck({ id: 'a', title: 'New' }, 'Old')
     })
 
     await act(async () => {
@@ -150,16 +150,16 @@ test('onConfirmAlways propagates the rename and persists the preference for futu
 
     expect(mockPropagateWikiLinkRename).toHaveBeenCalledWith('a', 'New', mockNotes, expect.any(Map))
     expect(mockStoredValue).toBe('true')
-    expect(result.current.dialogVisible).toBe(false)
+    expect(result.current.visible).toBe(false)
 
     mockPropagateWikiLinkRename.mockClear()
 
     await act(async () => {
-        result.current.saveNote({ id: 'a', title: 'Another title' }, 'Old')
+        result.current.saveWithLinkCheck({ id: 'a', title: 'Another title' }, 'Old')
     })
 
     expect(mockPropagateWikiLinkRename).toHaveBeenCalledWith('a', 'Another title', mockNotes, expect.any(Map))
-    expect(result.current.dialogVisible).toBe(false)
+    expect(result.current.visible).toBe(false)
 })
 
 test('onDismiss discards the pending rename without propagating it', async () => {
@@ -170,7 +170,7 @@ test('onDismiss discards the pending rename without propagating it', async () =>
     const { result } = await renderConfirmHook()
 
     await act(async () => {
-        result.current.saveNote({ id: 'a', title: 'New' }, 'Old')
+        result.current.saveWithLinkCheck({ id: 'a', title: 'New' }, 'Old')
     })
 
     await act(async () => {
@@ -178,5 +178,5 @@ test('onDismiss discards the pending rename without propagating it', async () =>
     })
 
     expect(mockPropagateWikiLinkRename).not.toHaveBeenCalled()
-    expect(result.current.dialogVisible).toBe(false)
+    expect(result.current.visible).toBe(false)
 })

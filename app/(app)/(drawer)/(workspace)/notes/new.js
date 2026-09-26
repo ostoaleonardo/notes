@@ -9,29 +9,27 @@ import { useAutosave } from '@/hooks/use-autosave'
 import { useNotes } from '@/hooks/use-notes'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
-import { useUtils } from '@/hooks/use-utils'
 import { getDate } from '@/utils/date'
 import { getUniqueTitle } from '@/utils/note-filename'
 import { buildNotePayload } from '@/utils/note-payload'
 
 export default function Note() {
     const { t } = useTranslation()
-    const { filter } = useUtils()
     const { activeRepository } = useRepositories()
-    const { notes, saveNote, updateNote, setParamId } = useNotes()
+    const { notes, saveNote, updateNote } = useNotes()
     const { repositoryId: targetRepositoryId } = useLocalSearchParams()
 
     const isSaved = useRef(false)
-    const firstRender = useRef(true)
-    const autoTitleRef = useRef('')
     const notesRef = useRef(notes)
+    const autoTitleRef = useRef('')
+    const firstRender = useRef(true)
 
     const [id, setId] = useState('')
     useRegisterCurrent(id)
 
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
-    const [tags, setTags] = useState(filter ? Array.from(filter) : [])
+    const [tags, setTags] = useState([])
 
     const [createdAt, setCreatedAt] = useState('')
     const [updatedAt, setUpdatedAt] = useState('')
@@ -46,11 +44,16 @@ export default function Note() {
             const id = randomUUID()
             firstRender.current = false
 
-            setId(id)
-            setParamId(id)
-            setRepositoryId(targetRepositoryId || activeRepository.id)
+            const resolvedRepositoryId = targetRepositoryId || activeRepository.id
 
-            const autoTitle = getUniqueTitle(notesRef.current.map((n) => n.title), t('notes.untitled'))
+            setId(id)
+            setRepositoryId(resolvedRepositoryId)
+
+            const titlesInRepository = notesRef.current
+                .filter((n) => n.repositoryId === resolvedRepositoryId)
+                .map((n) => n.title)
+
+            const autoTitle = getUniqueTitle(titlesInRepository, t('notes.untitled'))
             autoTitleRef.current = autoTitle
             setTitle(autoTitle)
         }, [])

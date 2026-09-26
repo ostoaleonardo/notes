@@ -9,7 +9,8 @@
 		"go_home": "Home",
 		"delete_title": "Delete note",
 		"delete_message": "This will permanently delete this note from your device.",
-		"save_failed": "Couldn't save this note"
+		"save_failed": "Couldn't save this note",
+		"delete_failed": "Couldn't delete this note"
 	},
 	"tags": {
 		"add": "Add tag",
