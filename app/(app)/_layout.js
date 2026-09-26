@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import * as SplashScreen from 'expo-splash-screen'
 import { Stack, router } from 'expo-router'
 import { useTheme } from 'react-native-paper'
@@ -9,6 +9,7 @@ import { AppBar } from '@/components/app-bar/app-bar'
 
 import { useNotes } from '@/hooks/use-notes'
 import { useDevMenu } from '@/hooks/use-dev-menu'
+import { useNavigationReadiness } from '@/hooks/use-navigation-readiness'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useRepositoryReconciliation } from '@/hooks/use-repository-reconciliation'
 import { useImportMarkdown } from '@/hooks/use-import-markdown'
@@ -32,17 +33,17 @@ export default function AppLayout() {
     useRepositoryReconciliation()
     useDevMenu()
 
-    const repositorySettled = !loading && reconciled
-    const isReady = repositorySettled && !!activeRepository && !notesLoading
-    const needsGate = repositorySettled && !activeRepository
-
-    const gateEntered = useRef(false)
-    if (needsGate) gateEntered.current = true
-
-    const wasReady = useRef(false)
-
-    if (isReady) wasReady.current = true
-    const showDrawer = !needsGate && wasReady.current
+    const {
+        isReady,
+        needsGate,
+        showDrawer,
+        shouldRenderNothing
+    } = useNavigationReadiness({
+        loading,
+        reconciled,
+        activeRepository,
+        notesLoading
+    })
 
     useEffect(() => {
         if (isReady || needsGate) {
@@ -55,10 +56,13 @@ export default function AppLayout() {
             router.push(getEditorPath(pendingWelcomeNoteId))
             clearPendingWelcomeNote()
         }
-    }, [showDrawer, pendingWelcomeNoteId, clearPendingWelcomeNote])
+    }, [
+        showDrawer,
+        pendingWelcomeNoteId,
+        clearPendingWelcomeNote
+    ])
 
-    if (!repositorySettled) return null
-    if (!isReady && !needsGate && !gateEntered.current && !wasReady.current) return null
+    if (shouldRenderNothing) return null
 
     return (
         <>
