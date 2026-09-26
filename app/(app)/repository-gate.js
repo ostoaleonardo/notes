@@ -8,7 +8,7 @@ import { showSnackbar } from '@/components/snackbar/snackbar-host'
 import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'
 
-import { FONTS } from '@/constants/themes'
+import { FONTS } from '@/constants/fonts'
 
 export default function RepositoryGate() {
     const { t } = useTranslation()

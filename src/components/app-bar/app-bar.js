@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { ArrowBack } from '@/icons/arrow-back'
 import { Menu } from '@/icons/menu'
 
-import { FONTS } from '@/constants/themes'
+import { FONTS } from '@/constants/fonts'
 import { ROUTES } from '@/constants/routes'
 
 export function AppBar({ title, trailing, mode = 'back' }) {

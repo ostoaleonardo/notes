@@ -7,7 +7,7 @@ import { Typography } from '@/components/typography'
 
 import { toggleTagQualifier } from '@/utils/search-query'
 
-import { FONTS } from '@/constants/themes'
+import { FONTS } from '@/constants/fonts'
 
 export function SearchTagFilters({ query, setQuery, tags, parsed }) {
     const { t } = useTranslation()

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Keyboard } from 'react-native'
 import { Dialog, Portal } from 'react-native-paper'
 
-import { FONTS } from '@/constants/themes'
+import { FONTS } from '@/constants/fonts'
 
 export function DialogModal({ title, visible, onDismiss, children, actions }) {
     const [bottom, setBottom] = useState(0)

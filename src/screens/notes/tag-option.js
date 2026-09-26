@@ -11,7 +11,6 @@ import { TRANSPARENT } from '@/constants/themes'
 
 export const TagOption = memo(function TagOption({ id, tag, onToggle, isSelected }) {
     const { colors } = useTheme()
-    const { onBackground } = colors
 
     return (
         <AnimatedView
@@ -20,7 +19,7 @@ export const TagOption = memo(function TagOption({ id, tag, onToggle, isSelected
             <Pressable
                 onPress={() => onToggle(id)}
                 style={styles.container}
-                android_ripple={{ color: onBackground + TRANSPARENT[10] }}
+                android_ripple={{ color: colors.onBackground + TRANSPARENT[10] }}
             >
                 <Typography>
                     {tag}
