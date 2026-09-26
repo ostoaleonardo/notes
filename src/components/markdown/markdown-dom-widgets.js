@@ -50,11 +50,11 @@ const AutoGrowTitle = ({
     )
 }
 
-const MetaLabel = ({ label, textColor }) => {
+const MetaLabel = ({ label, fontFamily, textColor }) => {
     if (!label) return null
 
     return (
-        <div style={buildMetaLabelStyle({ textColor })}>
+        <div style={buildMetaLabelStyle({ fontFamily, textColor })}>
             {label}
         </div>
     )
@@ -66,6 +66,7 @@ export const TitleSection = ({
     onTitleBlur,
     titlePlaceholder,
     metaLabel,
+    fontFamily,
     headingFontFamily,
     textColor
 }) => {
@@ -81,7 +82,7 @@ export const TitleSection = ({
                 fontFamily={headingFontFamily}
                 textColor={textColor}
             />
-            <MetaLabel label={metaLabel} textColor={textColor} />
+            <MetaLabel label={metaLabel} fontFamily={fontFamily} textColor={textColor} />
         </div>
     )
 }

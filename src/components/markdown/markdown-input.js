@@ -23,7 +23,8 @@ import { findBacklinks, buildBacklinksHtml, parseMissingWikiLinkTarget } from '@
 import { getNotePaths, buildRepositoryPaths } from '@/utils/note-path'
 
 import { ROUTES } from '@/constants/routes'
-import { FONTS, TRANSPARENT } from '@/constants/themes'
+import { TRANSPARENT } from '@/constants/themes'
+import { FONTS } from '@/constants/fonts'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { WIKI_LINK_SCHEME, WIKI_LINK_MISSING_PREFIX, WIKI_LINK_FORMATS } from '@/constants/wiki-links'
 
@@ -35,31 +36,24 @@ export const MarkdownInput = ({
     onChangeText,
     onHistoryChange,
     action,
-    payload,
-    onActionHandled,
     onFocus,
     onBlur,
     placeholder,
-    title,
-    setTitle,
-    onTitleBlur,
-    titlePlaceholder,
-    metaLabel,
+    titleField,
     searchQuery,
     replaceText,
     showBacklinks = true
 }) => {
-    const { colors } = useTheme()
-    const { background, onBackground, tertiary, surface } = colors
     const { t } = useTranslation()
+    const { colors } = useTheme()
+    const { notes, saveNote } = useNotes()
+    const { repositories } = useRepositories()
+
     const fonts = useDomFonts()
     const katexFonts = useKatexFonts()
 
     const bodyFontFamily = `${FONTS.azeretLight}, ui-monospace, monospace`
     const headingFontFamily = `${FONTS.nType82Headline}, system-ui, sans-serif`
-
-    const { notes, saveNote } = useNotes()
-    const { repositories } = useRepositories()
 
     const [linkFormat, setLinkFormat] = useState(WIKI_LINK_FORMATS.WIKILINK)
 
@@ -144,15 +138,15 @@ export const MarkdownInput = ({
     }), [mode])
 
     const editorColors = useMemo(() => ({
-        onBackground,
-        tertiary,
-        background,
-        surface,
-        selection: tertiary + TRANSPARENT[20],
-        placeholder: onBackground + TRANSPARENT[40],
-        codeBackground: onBackground + TRANSPARENT[10],
-        thematicBreak: tertiary + TRANSPARENT[30]
-    }), [background, onBackground, tertiary, surface])
+        onBackground: colors.onBackground,
+        tertiary: colors.tertiary,
+        background: colors.background,
+        surface: colors.surface,
+        selection: colors.tertiary + TRANSPARENT[20],
+        placeholder: colors.onBackground + TRANSPARENT[40],
+        codeBackground: colors.onBackground + TRANSPARENT[10],
+        thematicBreak: colors.tertiary + TRANSPARENT[30]
+    }), [colors])
 
     const typography = useMemo(() => ({
         fontSize: size,
@@ -173,18 +167,12 @@ export const MarkdownInput = ({
                 onChange={onChangeText}
                 onHistoryChange={onHistoryChange}
                 action={action}
-                payload={payload}
-                onActionHandled={onActionHandled}
                 onFocus={onFocus}
                 onBlur={onBlur}
                 onLinkPress={onLinkPress}
                 onImagePress={onImagePress}
                 placeholder={placeholder}
-                title={title}
-                onTitleChange={setTitle}
-                onTitleBlur={onTitleBlur}
-                titlePlaceholder={titlePlaceholder}
-                metaLabel={metaLabel}
+                titleField={titleField}
                 searchQuery={searchQuery}
                 replaceText={replaceText}
                 typography={typography}
@@ -193,6 +181,7 @@ export const MarkdownInput = ({
                 colors={editorColors}
                 dom={dom}
             />
+
             <ConfirmDialog
                 visible={!!missingLink}
                 title={t('message.wiki_links.missing_title')}

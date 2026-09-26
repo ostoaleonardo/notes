@@ -41,8 +41,6 @@ const MarkdownDomEditor = ({
     onChange,
     onHistoryChange,
     action,
-    payload,
-    onActionHandled,
     onFocus,
     onBlur,
     onLinkPress,
@@ -52,11 +50,7 @@ const MarkdownDomEditor = ({
     fonts,
     katexFonts,
     placeholder = '',
-    title,
-    onTitleChange,
-    onTitleBlur,
-    titlePlaceholder,
-    metaLabel,
+    titleField,
     searchQuery,
     replaceText
 }) => {
@@ -176,11 +170,11 @@ const MarkdownDomEditor = ({
 
     useEffect(() => {
         const view = viewRef.current
-        if (!view || !action) return
-        runAction(view, action, payload)
-        onActionHandled?.()
+        if (!view || !action.action) return
+        runAction(view, action.action, action.payload)
+        action.clear?.()
         requestAnimationFrame(() => view.focus())
-    }, [action, payload])
+    }, [action.action, action.payload])
 
     useEffect(() => {
         const view = viewRef.current
@@ -250,11 +244,8 @@ const MarkdownDomEditor = ({
             </style>
 
             <TitleSection
-                title={title}
-                onTitleChange={onTitleChange}
-                onTitleBlur={onTitleBlur}
-                titlePlaceholder={titlePlaceholder}
-                metaLabel={metaLabel}
+                {...titleField}
+                fontFamily={fontFamily}
                 headingFontFamily={headingFontFamily}
                 textColor={colors.onBackground}
             />

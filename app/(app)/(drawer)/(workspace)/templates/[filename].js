@@ -6,12 +6,11 @@ import { MarkdownEditorLayout } from '@/screens/notes/markdown-editor-layout'
 import { MarkdownModeToggle } from '@/screens/notes/markdown-mode-toggle'
 import { MarkdownSearchBar } from '@/screens/notes/markdown-search-bar'
 import { MarkdownInsertSheets } from '@/screens/notes/markdown-insert-sheets'
-import { RecentNotesSheet } from '@/screens/notes/recent-notes-sheet'
-import { NoteSearchSheet } from '@/screens/notes/note-search-sheet'
+import { NoteToolbarSheets } from '@/screens/notes/note-toolbar-sheets'
 import { VersionHistoryPanel } from '@/screens/notes/version-history-panel'
 import { VersionHistoryContent } from '@/screens/notes/version-history-content'
 import { TemplateEditorForm } from '@/screens/templates/template-editor-form'
-import { TemplatePlaceholders } from '@/screens/modals/template-placeholders'
+import { TemplatePlaceholders } from '@/screens/dialogs/template-placeholders'
 import { LoadingOverlay } from '@/components/layout'
 import { AppBar } from '@/components/app-bar/app-bar'
 import { ConfirmDialog } from '@/components/confirm-dialog'
@@ -20,7 +19,7 @@ import { useAllowLandscape } from '@/hooks/use-allow-landscape'
 import { useAutosave } from '@/hooks/use-autosave'
 import { useBottomSheet } from '@/hooks/use-bottom-sheet'
 import { useMarkdownAction } from '@/hooks/use-markdown-action'
-import { useMarkdownInsertSheets } from '@/hooks/use-markdown-insert-sheets'
+import { useMarkdownSheets } from '@/hooks/use-markdown-sheets'
 import { useMarkdownSearch } from '@/hooks/use-markdown-search'
 import { usePro } from '@/hooks/use-pro'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
@@ -58,7 +57,7 @@ export default function EditTemplate() {
 
     const recentsSheet = useBottomSheet()
     const searchSheet = useBottomSheet()
-    const markdownAction = useMarkdownAction()
+    const action = useMarkdownAction()
     const search = useMarkdownSearch()
     const { canUndo, canRedo, onHistoryChange } = useUndoRedoState()
 
@@ -66,7 +65,7 @@ export default function EditTemplate() {
     latestContent.current = { noteId: currentFilename.current, title: name, content }
 
     const versionHistory = useVersionHistory({ directoryUri: templatesUri, latestContent })
-    const { onRunAction, linkSheet, tableSheet, imageSheet } = useMarkdownInsertSheets(markdownAction)
+    const { onRunAction, linkSheet, tableSheet, imageSheet } = useMarkdownSheets(action)
 
     const onRestoreVersion = useCallback((version) => {
         setName(version.title)
@@ -157,10 +156,7 @@ export default function EditTemplate() {
 
             <MarkdownSearchBar
                 search={search}
-                onPrevious={() => markdownAction.run('search-previous')}
-                onNext={() => markdownAction.run('search-next')}
-                onReplaceOne={() => markdownAction.run('search-replace')}
-                onReplaceAll={() => markdownAction.run('search-replace-all')}
+                action={action}
             />
 
             <MarkdownEditorLayout
@@ -177,7 +173,7 @@ export default function EditTemplate() {
                     setName={setName}
                     content={content}
                     setContent={setContent}
-                    markdownAction={markdownAction}
+                    action={action}
                     mode={mode}
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
@@ -191,15 +187,13 @@ export default function EditTemplate() {
                 linkSheet={linkSheet}
                 tableSheet={tableSheet}
                 imageSheet={imageSheet}
-                markdownAction={markdownAction}
+                action={action}
             />
 
             <TemplatePlaceholders
                 visible={placeholdersVisible}
                 onDismiss={() => setPlaceholdersVisible(false)}
             />
-
-            <RecentNotesSheet sheet={recentsSheet} />
 
             <ConfirmDialog
                 visible={deleteDialogVisible}
@@ -210,7 +204,10 @@ export default function EditTemplate() {
                 onConfirm={onConfirmDelete}
             />
 
-            <NoteSearchSheet sheet={searchSheet} />
+            <NoteToolbarSheets
+                recentsSheet={recentsSheet}
+                searchSheet={searchSheet}
+            />
         </VersionHistoryPanel>
     )
 }

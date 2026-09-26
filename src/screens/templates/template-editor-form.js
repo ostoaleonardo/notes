@@ -9,7 +9,7 @@ export const TemplateEditorForm = ({
     setName,
     content,
     setContent,
-    markdownAction,
+    action,
     mode,
     onFocus,
     onBlur,
@@ -37,9 +37,7 @@ export const TemplateEditorForm = ({
                 <MarkdownInput
                     value={content}
                     onChangeText={setContent}
-                    action={markdownAction.action}
-                    payload={markdownAction.payload}
-                    onActionHandled={markdownAction.clear}
+                    action={action}
                     mode={mode}
                     onFocus={onFocus}
                     onBlur={onBlur}

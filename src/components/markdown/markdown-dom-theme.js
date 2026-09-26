@@ -2,8 +2,6 @@ import { EditorView } from '@codemirror/view'
 
 import { buildLiveFormattingTheme } from './live-formatting/live-formatting'
 
-import { FONT_FAMILY_NAMES } from '@/constants/markdown-fonts'
-
 export const buildTitleSectionStyle = () => ({
     paddingLeft: '16px',
     paddingRight: '16px',
@@ -26,14 +24,14 @@ export const buildTitleTextareaStyle = ({ fontFamily, textColor }) => ({
     margin: 0
 })
 
-export const buildMetaLabelStyle = ({ textColor }) => ({
+export const buildMetaLabelStyle = ({ textColor, fontFamily }) => ({
     marginTop: 8,
     marginBottom: 16,
     fontSize: '9px',
     textTransform: 'uppercase',
     opacity: 0.5,
     color: textColor,
-    fontFamily: `'${FONT_FAMILY_NAMES.body}', ui-monospace, monospace`
+    fontFamily
 })
 
 export const buildEditorTheme = ({ fontSize, fontFamily, headingFontFamily, colors }) => {
