@@ -32,6 +32,60 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
     const controls = MARKDOWN_CONTROLS.filter((control) => !control.scope || control.scope === scope)
     const formatting = mode !== 'read' && isFocused
 
+    const idleButtons = [
+        {
+            key: 'undo',
+            label: 'button.undo',
+            icon: Undo,
+            disabled: !canUndo,
+            onPress: () => onRunAction('undo')
+        },
+        {
+            key: 'redo',
+            label: 'button.redo',
+            icon: Redo,
+            disabled: !canRedo,
+            onPress: () => onRunAction('redo')
+        },
+        {
+            key: 'search',
+            label: 'drawer.search',
+            icon: Search,
+            onPress: actions?.onOpenSearch
+        },
+        {
+            key: 'recent',
+            label: 'search.recent',
+            icon: NoteStack,
+            onPress: actions?.onOpenRecents
+        },
+        scope !== 'template' && {
+            key: 'tags',
+            label: 'title.tags',
+            icon: Tag,
+            onPress: actions?.onOpenTags
+        },
+        scope !== 'template' && {
+            key: 'templates',
+            label: 'title.templates',
+            icon: Shapes,
+            onPress: actions?.onOpenTemplates
+        }
+    ].filter(Boolean)
+
+    const renderButton = ({
+        key, label, icon: Icon, onPress, disabled
+    }) => (
+        <Tooltip key={key} title={t(label)}>
+            <IconButton
+                onPress={onPress}
+                icon={(props) => <Icon {...props} />}
+                accessibilityLabel={t(label)}
+                disabled={disabled}
+            />
+        </Tooltip>
+    )
+
     return (
         <View
             style={{
@@ -59,15 +113,12 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
                                     key={index}
                                     style={styles.divider}
                                 />
-                            ) : (
-                                <Tooltip key={action} title={t(`markdown_action.${action}`)}>
-                                    <IconButton
-                                        onPress={() => onRunAction(action)}
-                                        icon={(props) => <Icon {...props} />}
-                                        accessibilityLabel={t(`markdown_action.${action}`)}
-                                    />
-                                </Tooltip>
-                            )
+                            ) : renderButton({
+                                key: action,
+                                label: `markdown_action.${action}`,
+                                icon: Icon,
+                                onPress: () => onRunAction(action)
+                            })
                         ))}
                     </AnimatedView>
                 )}
@@ -78,58 +129,7 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
                         exiting={FadeOutRight}
                         style={styles.row}
                     >
-                        <Tooltip title={t('button.undo')}>
-                            <IconButton
-                                disabled={!canUndo}
-                                onPress={() => onRunAction('undo')}
-                                icon={(props) => <Undo {...props} />}
-                                accessibilityLabel={t('button.undo')}
-                            />
-                        </Tooltip>
-                        <Tooltip title={t('button.redo')}>
-                            <IconButton
-                                disabled={!canRedo}
-                                onPress={() => onRunAction('redo')}
-                                icon={(props) => <Redo {...props} />}
-                                accessibilityLabel={t('button.redo')}
-                            />
-                        </Tooltip>
-
-                        <Tooltip title={t('drawer.search')}>
-                            <IconButton
-                                onPress={actions?.onOpenSearch}
-                                icon={(props) => <Search {...props} />}
-                                accessibilityLabel={t('drawer.search')}
-                            />
-                        </Tooltip>
-
-                        <Tooltip title={t('search.recent')}>
-                            <IconButton
-                                onPress={actions?.onOpenRecents}
-                                icon={(props) => <NoteStack {...props} />}
-                                accessibilityLabel={t('search.recent')}
-                            />
-                        </Tooltip>
-
-                        {scope !== 'template' && (
-                            <Tooltip title={t('title.tags')}>
-                                <IconButton
-                                    onPress={actions?.onOpenTags}
-                                    icon={(props) => <Tag {...props} />}
-                                    accessibilityLabel={t('title.tags')}
-                                />
-                            </Tooltip>
-                        )}
-
-                        {scope !== 'template' && (
-                            <Tooltip title={t('title.templates')}>
-                                <IconButton
-                                    onPress={actions?.onOpenTemplates}
-                                    icon={(props) => <Shapes {...props} />}
-                                    accessibilityLabel={t('title.templates')}
-                                />
-                            </Tooltip>
-                        )}
+                        {idleButtons.map(renderButton)}
                     </AnimatedView>
                 )}
             </Scroll>
