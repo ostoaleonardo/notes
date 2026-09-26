@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react'
-import { AppState, View } from 'react-native'
+import { View } from 'react-native'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 
 import { RepositoryItem } from '@/screens/repositories/repository-item'
-import { DeleteRepository } from '@/screens/modals/delete-repository'
-import { ForgetRepository } from '@/screens/modals/forget-repository'
-import { RenameRepository } from '@/screens/modals/rename-repository'
+import { DeleteRepository } from '@/screens/dialogs/delete-repository'
+import { ForgetRepository } from '@/screens/dialogs/forget-repository'
+import { RenameRepository } from '@/screens/dialogs/rename-repository'
 import { AnimatedList } from '@/components/animated/animated-list'
 import { FloatingButton } from '@/components/button/floating-button'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useFileStorage } from '@/hooks/use-file-storage'
+import { useOnForeground } from '@/hooks/use-on-foreground'
 import { usePro } from '@/hooks/use-pro'
 import { useRepositories } from '@/hooks/use-repositories'
+import { getRepositoryNoteCounts } from '@/utils/repository-note-counts'
 
 import { Folder } from '@/icons/folder'
 
@@ -39,23 +41,10 @@ export default function Repositories() {
     const [forgetId, setForgetId] = useState('')
     const [deleteId, setDeleteId] = useState('')
 
-    useEffect(() => {
-        const refreshCounts = () => {
-            const next = {}
-            rootRepositories.forEach((repository) => {
-                next[repository.id] = listMarkdownFiles(repository.uri).length
-            })
-            setCounts(next)
-        }
+    const refreshCounts = () => setCounts(getRepositoryNoteCounts(rootRepositories, listMarkdownFiles))
 
-        refreshCounts()
-
-        const subscription = AppState.addEventListener('change', (state) => {
-            if (state === 'active') refreshCounts()
-        })
-
-        return () => subscription.remove()
-    }, [repositories])
+    useEffect(refreshCounts, [repositories])
+    useOnForeground(refreshCounts)
 
     const canAddRepository = pro || rootRepositories.length < FREE_REPOSITORIES_LIMIT
 

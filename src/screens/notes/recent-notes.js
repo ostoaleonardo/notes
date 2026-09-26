@@ -13,7 +13,7 @@ import { useRepositories } from '@/hooks/use-repositories'
 import { useNotes } from '@/hooks/use-notes'
 import { useTemplatesList } from '@/hooks/use-templates-list'
 import { useUtils } from '@/hooks/use-utils'
-import { getEditorPath } from '@/utils/editor-path'
+import { getEditorNavigation } from '@/utils/editor-path'
 import { getPreviewNote } from '@/utils/preview-note'
 import { getRecentIds } from '@/utils/recent-ids'
 
@@ -75,12 +75,8 @@ export function RecentNotes({ onClose, home = false }) {
 
         onClose()
 
-        const path = getEditorPath(card.id)
-        if (currentId) {
-            router.replace(path)
-        } else {
-            router.push(path)
-        }
+        const { path, replace } = getEditorNavigation(card.id, currentId)
+        replace ? router.replace(path) : router.push(path)
     }, [onClose, currentId])
 
     const onRemove = useCallback((card) => {

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
-import { AppState } from 'react-native'
 
+import { useOnForeground } from './use-on-foreground'
 import { useRepositories } from './use-repositories'
 
 export function useRepositoryReconciliation() {
@@ -14,13 +14,7 @@ export function useRepositoryReconciliation() {
         reconcileRepositories().finally(() => setReconciled(true))
     }, [loading])
 
-    useEffect(() => {
-        if (loading) return
-
-        const subscription = AppState.addEventListener('change', (state) => {
-            if (state === 'active') reconcileRef.current()
-        })
-
-        return () => subscription.remove()
-    }, [loading])
+    useOnForeground(() => {
+        if (!loading) reconcileRef.current()
+    })
 }
