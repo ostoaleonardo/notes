@@ -4,10 +4,10 @@ import { FlatList, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 
-import { AddSubfolder } from '@/screens/modals/add-subfolder'
-import { AddTemplate } from '@/screens/modals/add-template'
-import { DeleteRepository } from '@/screens/modals/delete-repository'
-import { RenameRepository } from '@/screens/modals/rename-repository'
+import { AddSubfolder } from '@/screens/dialogs/add-subfolder'
+import { AddTemplate } from '@/screens/dialogs/add-template'
+import { DeleteRepository } from '@/screens/dialogs/delete-repository'
+import { RenameRepository } from '@/screens/dialogs/rename-repository'
 import { DrawerHeader } from './drawer-header'
 import { DrawerScreen } from './drawer-screen'
 import { DrawerNoteItem } from './drawer-note-item'
@@ -22,7 +22,7 @@ import { useTags } from '@/hooks/use-tags'
 import { useTemplatesList } from '@/hooks/use-templates-list'
 import { useUtils } from '@/hooks/use-utils'
 import { buildRepositoryTree, flattenDrawerTree } from '@/utils/drawer-tree'
-import { getEditorPath } from '@/utils/editor-path'
+import { getEditorNavigation } from '@/utils/editor-path'
 
 import { ROUTES } from '@/constants/routes'
 import { TEMPLATE_TAB_PREFIX, TEMPLATES_SECTION_ID } from '@/constants/tabs'
@@ -87,12 +87,8 @@ export function DrawerItems({ navigation }) {
         closeDrawer()
         if (id === currentId) return
 
-        const path = getEditorPath(id)
-        if (currentId) {
-            router.replace(path)
-        } else {
-            router.push(path)
-        }
+        const { path, replace } = getEditorNavigation(id, currentId)
+        replace ? router.replace(path) : router.push(path)
     }, [closeDrawer, currentId])
 
     const onCreateNote = useCallback((repositoryId) => {
@@ -111,12 +107,8 @@ export function DrawerItems({ navigation }) {
     }, [onCreateNote])
 
     const onOpenTemplate = useCallback((filename) => {
-        const path = getEditorPath(TEMPLATE_TAB_PREFIX + filename)
-        if (currentId) {
-            router.replace(path)
-        } else {
-            router.push(path)
-        }
+        const { path, replace } = getEditorNavigation(TEMPLATE_TAB_PREFIX + filename, currentId)
+        replace ? router.replace(path) : router.push(path)
         closeDrawer()
     }, [closeDrawer, currentId])
 

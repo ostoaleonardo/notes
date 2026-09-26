@@ -1,6 +1,6 @@
 import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { AppState } from 'react-native'
 
+import { useOnForeground } from '../hooks/use-on-foreground'
 import { useRepositoryData } from '../hooks/use-repository-data'
 import { useRepositories } from '../hooks/use-repositories'
 
@@ -11,7 +11,6 @@ export const NoteContext = createContext()
 export function NoteProvider({ children }) {
     const [notes, setNotes] = useState([])
     const [tags, setTags] = useState(DEFAULT_TAGS)
-    const [paramId, setParamId] = useState('')
     const [loading, setLoading] = useState(true)
 
     const loadRepositoryData = useRepositoryData()
@@ -24,36 +23,35 @@ export function NoteProvider({ children }) {
     const treeKey = activeRepositoryTree.map((repository) => repository.uri).join('|')
     const previousRepositoryIdRef = useRef(null)
 
+    const getNotesRef = useRef(null)
+    getNotesRef.current = async (showLoading = true) => {
+        if (!activeRepository) return
+
+        if (showLoading) setLoading(true)
+
+        try {
+            const rootRepository = activeRepositoryTree[0] || activeRepository
+            const { notes, tags } = await loadRepositoryData(activeRepositoryTree, rootRepository)
+
+            setNotes(notes)
+            setTags(tags)
+        } catch (error) {
+            console.debug('error loading notes', error)
+        } finally {
+            if (showLoading) setLoading(false)
+        }
+    }
+
     useEffect(() => {
         if (!activeRepository) return
 
         const isRepositorySwitch = previousRepositoryIdRef.current !== activeRepository.id
         previousRepositoryIdRef.current = activeRepository.id
 
-        const getNotes = async (showLoading = true) => {
-            if (showLoading) setLoading(true)
-
-            try {
-                const rootRepository = activeRepositoryTree[0] || activeRepository
-                const { notes, tags } = await loadRepositoryData(activeRepositoryTree, rootRepository)
-
-                setNotes(notes)
-                setTags(tags)
-            } catch (error) {
-                console.debug('error loading notes', error)
-            } finally {
-                if (showLoading) setLoading(false)
-            }
-        }
-
-        getNotes(isRepositorySwitch)
-
-        const subscription = AppState.addEventListener('change', (state) => {
-            if (state === 'active') getNotes(false)
-        })
-
-        return () => subscription.remove()
+        getNotesRef.current(isRepositorySwitch)
     }, [treeKey])
+
+    useOnForeground(() => getNotesRef.current(false))
 
     const clear = useCallback(() => {
         setNotes([])
@@ -65,11 +63,9 @@ export function NoteProvider({ children }) {
         setNotes,
         tags,
         setTags,
-        paramId,
-        setParamId,
         loading,
         clear
-    }), [notes, tags, paramId, loading, clear])
+    }), [notes, tags, loading, clear])
 
     return (
         <NoteContext.Provider value={value}>

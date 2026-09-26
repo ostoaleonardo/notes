@@ -11,6 +11,7 @@ import { Typography } from '@/components/typography'
 import { useFileStorage } from '@/hooks/use-file-storage'
 import { useRepositories } from '@/hooks/use-repositories'
 import { getGroupedRadius } from '@/utils/grouped-card-style'
+import { getRepositoryNoteCount } from '@/utils/repository-note-counts'
 import { getRepositoryPath } from '@/utils/repository-path'
 
 import { OpenInNew } from '@/icons/open-in-new'
@@ -50,7 +51,7 @@ export function RepositoryItem({
                 ? descendants.map((descendant) => {
                     const cache = noteCountCache.current
                     if (!cache.has(descendant.id)) {
-                        cache.set(descendant.id, listMarkdownFiles(descendant.uri).length)
+                        cache.set(descendant.id, getRepositoryNoteCount(descendant.uri, listMarkdownFiles))
                     }
 
                     return {

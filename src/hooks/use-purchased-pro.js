@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { AppState } from 'react-native'
 import { isDevice } from 'expo-device'
 import { finishTransaction, getAvailablePurchases, initConnection } from 'expo-iap'
 
+import { useOnForeground } from './use-on-foreground'
 import { useStorage } from './use-storage'
 import { findProPurchase } from '@/utils/iap'
 
@@ -44,13 +44,9 @@ export function usePurchasedPro() {
 
     useEffect(() => {
         checkPurchases()
-
-        const subscription = AppState.addEventListener('change', (state) => {
-            if (state === 'active') checkPurchases()
-        })
-
-        return () => subscription.remove()
     }, [checkPurchases])
+
+    useOnForeground(checkPurchases)
 
     return isPro
 }
