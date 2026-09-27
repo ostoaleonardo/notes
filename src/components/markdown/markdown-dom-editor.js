@@ -51,6 +51,8 @@ const MarkdownDomEditor = ({
     katexFonts,
     placeholder = '',
     titleField,
+    onTitleChange,
+    onTitleBlur,
     searchQuery,
     replaceText
 }) => {
@@ -245,6 +247,8 @@ const MarkdownDomEditor = ({
 
             <TitleSection
                 {...titleField}
+                onTitleChange={onTitleChange}
+                onTitleBlur={onTitleBlur}
                 fontFamily={fontFamily}
                 headingFontFamily={headingFontFamily}
                 textColor={colors.onBackground}

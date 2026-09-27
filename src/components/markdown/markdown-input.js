@@ -39,6 +39,8 @@ export const MarkdownInput = ({
     onBlur,
     placeholder,
     titleField,
+    onTitleChange,
+    onTitleBlur,
     searchQuery,
     replaceText,
     showBacklinks = true
@@ -170,6 +172,8 @@ export const MarkdownInput = ({
                 onImagePress={onImagePress}
                 placeholder={placeholder}
                 titleField={titleField}
+                onTitleChange={onTitleChange}
+                onTitleBlur={onTitleBlur}
                 searchQuery={searchQuery}
                 replaceText={replaceText}
                 typography={typography}

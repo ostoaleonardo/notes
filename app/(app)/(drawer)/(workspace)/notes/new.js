@@ -1,4 +1,3 @@
-import { randomUUID } from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router'
@@ -20,12 +19,14 @@ export default function Note() {
     const { repositoryId: targetRepositoryId } = useLocalSearchParams()
 
     const isSaved = useRef(false)
+    const pathRef = useRef('')
     const notesRef = useRef(notes)
     const autoTitleRef = useRef('')
     const firstRender = useRef(true)
+    const saveQueueRef = useRef(Promise.resolve())
 
-    const [id, setId] = useState('')
-    useRegisterCurrent(id)
+    const [path, setPath] = useState('')
+    useRegisterCurrent(path)
 
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
@@ -34,6 +35,7 @@ export default function Note() {
     const [createdAt, setCreatedAt] = useState('')
     const [updatedAt, setUpdatedAt] = useState('')
     const [repositoryId, setRepositoryId] = useState('')
+    const [filename, setFilename] = useState('')
 
     useEffect(() => {
         notesRef.current = notes
@@ -41,12 +43,9 @@ export default function Note() {
 
     useFocusEffect(
         useCallback(() => {
-            const id = randomUUID()
             firstRender.current = false
 
             const resolvedRepositoryId = targetRepositoryId || activeRepository.id
-
-            setId(id)
             setRepositoryId(resolvedRepositoryId)
 
             const titlesInRepository = notesRef.current
@@ -59,29 +58,45 @@ export default function Note() {
         }, [])
     )
 
-    const { flush } = useAutosave(async () => {
+    // A manual flush() (export/share) can overlap with an in-flight debounced
+    // save; running them one at a time avoids saving the note twice.
+    const runExclusive = (fn) => {
+        const result = saveQueueRef.current.then(fn, fn)
+        saveQueueRef.current = result.catch(() => {})
+        return result
+    }
+
+    const { flush } = useAutosave(() => runExclusive(async () => {
         if (!isSaved.current) {
             const createdAt = getDate()
-            const payload = buildNotePayload({ id, title, note, tags, createdAt, repositoryId })
+            const payload = buildNotePayload({ title, note, tags, createdAt, repositoryId })
 
-            await saveNote(payload, repositoryId)
+            const saved = await saveNote(payload, repositoryId)
 
+            pathRef.current = saved.path
+            setPath(saved.path)
+            setFilename(saved.filename)
             setCreatedAt(createdAt)
             isSaved.current = true
         } else {
             const updatedAt = getDate()
-            const payload = buildNotePayload({ id, title, note, tags, createdAt, repositoryId, updatedAt })
+            const payload = buildNotePayload({ path: pathRef.current, title, note, tags, createdAt, repositoryId, updatedAt })
 
-            await updateNote(payload)
+            const saved = await updateNote(payload)
+
+            pathRef.current = saved.path
+            setPath(saved.path)
+            setFilename(saved.filename)
             setUpdatedAt(updatedAt)
         }
-    }, [id, title, note, tags, createdAt, repositoryId], {
+    }), [title, note, tags, createdAt, repositoryId], {
         skip: firstRender.current || (title === autoTitleRef.current && !note)
     })
 
     return (
         <NoteEditorScreen
-            id={id}
+            id={path}
+            filename={filename}
             repositoryId={repositoryId}
             flush={flush}
             title={title}

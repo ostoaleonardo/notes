@@ -37,6 +37,7 @@ import { countWords } from '@/utils/word-count'
 
 export const NoteEditorScreen = ({
     id,
+    filename,
     repositoryId,
     title, setTitle,
     onTitleBlur,
@@ -95,8 +96,8 @@ export const NoteEditorScreen = ({
         currentLanguage
     ])
 
-    const latestContent = useRef({ noteId: id, title, content: note })
-    latestContent.current = { noteId: id, title, content: note }
+    const latestContent = useRef({ noteId: filename, title, content: note })
+    latestContent.current = { noteId: filename, title, content: note }
 
     const versionHistory = useVersionHistory({ directoryUri, latestContent })
 
@@ -180,7 +181,7 @@ export const NoteEditorScreen = ({
             panelContent={(
                 <VersionHistoryContent
                     pro={pro}
-                    noteId={id}
+                    noteId={filename}
                     directoryUri={directoryUri}
                     currentContentRef={latestContent}
                     onRestore={onRestoreVersion}
@@ -224,11 +225,11 @@ export const NoteEditorScreen = ({
                     mode={mode}
                     titleField={{
                         title,
-                        onTitleChange: setTitle,
-                        onTitleBlur,
                         titlePlaceholder: t('placeholder.title'),
                         metaLabel
                     }}
+                    onTitleChange={setTitle}
+                    onTitleBlur={onTitleBlur}
                     searchQuery={search.searchQuery}
                     replaceText={search.replaceText}
                     value={note}
