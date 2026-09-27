@@ -8,6 +8,7 @@ import { useLanguage } from './use-language'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 import { getNotesAsString } from '@/utils/files'
 import { getNoteAsHtml } from '@/utils/export-html'
+import { sanitizeFilename } from '@/utils/note-filename'
 
 import { EXPORT_FORMATS, EXPORT_MIME_TYPES, EXPORT_EXTENSIONS } from '@/constants/export'
 
@@ -16,7 +17,7 @@ export function useFiles() {
     const { getNote } = useNotes()
     const { currentLanguage } = useLanguage()
 
-    const getFileName = (note, format) => `note-${note.id.split('-')[0]}.${EXPORT_EXTENSIONS[format]}`
+    const getFileName = (note, format) => `${sanitizeFilename(note.title)}.${EXPORT_EXTENSIONS[format]}`
 
     const getFileData = async (note, format) => {
         const fileName = getFileName(note, format)

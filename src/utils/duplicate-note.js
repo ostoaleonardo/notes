@@ -1,6 +1,5 @@
-export const buildDuplicateNote = (note, { id, createdAt, copySuffix }) => ({
+export const buildDuplicateNote = (note, { createdAt, copySuffix }) => ({
     ...note,
-    id,
     title: `${note.title} ${copySuffix}`,
     createdAt,
     updatedAt: ''

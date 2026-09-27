@@ -1,4 +1,10 @@
-import { buildRepositoryPaths, getNotePaths } from '../note-path'
+import { buildNotePath, buildRepositoryPaths, getNotePaths } from '../note-path'
+
+describe('buildNotePath', () => {
+    test('joins the repository id and filename with the separator', () => {
+        expect(buildNotePath('repo-1', 'Note.md')).toBe('repo-1::Note.md')
+    })
+})
 
 describe('buildRepositoryPaths', () => {
     test('gives root repositories an empty path', () => {
@@ -34,19 +40,19 @@ describe('buildRepositoryPaths', () => {
 })
 
 describe('getNotePaths', () => {
-    test('maps each note id to its repository path', () => {
+    test('maps each note path to its repository path', () => {
         const repositories = [
             { id: 'root', alias: 'Vault', parentId: null },
             { id: 'one', alias: 'one', parentId: 'root' }
         ]
         const notes = [
-            { id: 'a', repositoryId: 'root' },
-            { id: 'b', repositoryId: 'one' }
+            { path: 'root::a.md', repositoryId: 'root' },
+            { path: 'one::b.md', repositoryId: 'one' }
         ]
 
         const paths = getNotePaths(notes, repositories)
 
-        expect(paths.get('a')).toBe('')
-        expect(paths.get('b')).toBe('one')
+        expect(paths.get('root::a.md')).toBe('')
+        expect(paths.get('one::b.md')).toBe('one')
     })
 })

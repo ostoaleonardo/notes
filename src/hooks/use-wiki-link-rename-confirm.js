@@ -26,45 +26,45 @@ export function useWikiLinkRenameConfirm() {
         })
     }, [])
 
-    const saveWithLinkCheck = (note, previousTitle) => {
+    const saveWithLinkCheck = async (note, previousTitle) => {
         const titleChanged = previousTitle && previousTitle !== note.title
         const notePaths = getNotePaths(notes, repositories)
 
         const savedNote = titleChanged
-            ? { ...note, note: renameWikiLinksForNote(note.note, note.id, note.title, notes, notePaths) }
+            ? { ...note, note: renameWikiLinksForNote(note.note, note.path, note.title, notes, notePaths) }
             : note
 
-        updateNote(savedNote)
+        const { path, filename } = await updateNote(savedNote)
 
-        if (!titleChanged) return savedNote
+        if (!titleChanged) return { savedNote, path, filename }
 
-        const backlinks = findBacklinks(note.id, notes, notePaths)
-        if (!backlinks.length) return savedNote
+        const backlinks = findBacklinks(note.path, notes, notePaths)
+        if (!backlinks.length) return { savedNote, path, filename }
 
         if (alwaysUpdate) {
-            propagateWikiLinkRename(note.id, note.title, notes, notePaths)
-            return savedNote
+            propagateWikiLinkRename(note.path, note.title, notes, notePaths)
+            return { savedNote, path, filename }
         }
 
         setPending({
-            targetId: note.id,
+            targetPath: note.path,
             newTitle: note.title,
             notesSnapshot: notes,
             notePaths,
             count: backlinks.length
         })
-        return savedNote
+        return { savedNote, path, filename }
     }
 
     const onDismiss = () => setPending(null)
 
     const onConfirmOnce = () => {
-        if (pending) propagateWikiLinkRename(pending.targetId, pending.newTitle, pending.notesSnapshot, pending.notePaths)
+        if (pending) propagateWikiLinkRename(pending.targetPath, pending.newTitle, pending.notesSnapshot, pending.notePaths)
         setPending(null)
     }
 
     const onConfirmAlways = async () => {
-        if (pending) propagateWikiLinkRename(pending.targetId, pending.newTitle, pending.notesSnapshot, pending.notePaths)
+        if (pending) propagateWikiLinkRename(pending.targetPath, pending.newTitle, pending.notesSnapshot, pending.notePaths)
         setAlwaysUpdate(true)
         await setItem(STORAGE_KEYS.ALWAYS_UPDATE_WIKI_LINKS, 'true')
         setPending(null)

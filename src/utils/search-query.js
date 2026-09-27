@@ -92,7 +92,7 @@ export const filterNotes = (notes, parsed, { tags, pinned }) => {
         .filter(Boolean)
 
     const scored = notes.flatMap((note) => {
-        if (parsed.pinned && !pinned.has(note.id)) return []
+        if (parsed.pinned && !pinned.has(note.path)) return []
         if (tagIds.length > 0 && !tagIds.some((id) => note.tags?.includes(id))) return []
         if (parsed.hasImage && !MARKDOWN_IMAGE_REGEX.test(note.note || '')) return []
         if (parsed.modified && toDateKey(note.updatedAt) !== parsed.modified) return []

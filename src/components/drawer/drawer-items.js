@@ -126,7 +126,7 @@ export function DrawerItems({ navigation }) {
                 <DrawerNoteItem
                     note={item.note}
                     depth={item.depth}
-                    active={item.note.id === currentId}
+                    active={item.note.path === currentId}
                     onOpenNote={onOpenNote}
                 />
             )

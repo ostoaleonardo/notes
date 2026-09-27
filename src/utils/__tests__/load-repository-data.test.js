@@ -233,6 +233,24 @@ describe('steady state (no legacy data)', () => {
         expect(notes[0].tags).toEqual([])
     })
 
+    test('migrates metadata keyed by a random id into metadata keyed by filename', async () => {
+        const storage = createFakeStorage()
+        const fileStorage = createFakeFileStorage()
+        fileStorage.writeNoteFile(REPO_URI, 'Note.md', 'content')
+        fileStorage.writeMetadata(REPO_URI, {
+            'old-uuid': { filename: 'Note.md', tags: ['work'], createdAt: 1, updatedAt: '2', images: [] }
+        })
+
+        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
+
+        expect(notes[0].tags).toEqual(['work'])
+        expect(notes[0].createdAt).toBe(1)
+
+        const metadata = await fileStorage.readMetadata(REPO_URI)
+        expect(metadata['old-uuid']).toBeUndefined()
+        expect(metadata['Note.md']).toEqual({ tags: ['work'], createdAt: 1, updatedAt: '2', images: [] })
+    })
+
     test('prunes metadata entries whose .md file was removed externally', async () => {
         const storage = createFakeStorage()
         const fileStorage = createFakeFileStorage()

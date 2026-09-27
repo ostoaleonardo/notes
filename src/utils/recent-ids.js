@@ -9,6 +9,6 @@ export const getRecentIds = (pinned, recent, notes, templates) => {
             return templates.some((entry) => entry.filename === filename)
         }
 
-        return notes.some((entry) => entry.id === id)
+        return notes.some((entry) => entry.path === id)
     })
 }

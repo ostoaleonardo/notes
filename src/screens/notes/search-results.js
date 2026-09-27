@@ -15,7 +15,7 @@ export function SearchResults({ results, aliasById, onOpenResult }) {
             <AnimatedList
                 gap={2}
                 data={results}
-                keyExtractor={(note) => note.id}
+                keyExtractor={(note) => note.path}
                 emptyLabel={t('message.notes.empty')}
                 keyboardShouldPersistTaps='always'
                 renderItem={({ item }) => (
@@ -24,7 +24,7 @@ export function SearchResults({ results, aliasById, onOpenResult }) {
                         exiting={FadeOutUp}
                     >
                         <TouchableRipple
-                            onPress={() => onOpenResult(item.id)}
+                            onPress={() => onOpenResult(item.path)}
                         >
                             <View style={styles.item}>
                                 <Typography

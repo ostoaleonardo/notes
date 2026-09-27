@@ -1,7 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { Linking } from 'react-native'
 import { router } from 'expo-router'
-import { randomUUID } from 'expo-crypto'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
@@ -66,7 +65,7 @@ export const MarkdownInput = ({
     const noteEntries = useMemo(() => (
         notes
             .filter((note) => note.title)
-            .map((note) => ({ id: note.id, title: note.title, path: notePaths.get(note.id) || '' }))
+            .map((note) => ({ id: note.path, title: note.title, path: notePaths.get(note.path) || '' }))
     ), [notes, notePaths])
 
     const [missingLink, setMissingLink] = useState(null)
@@ -95,7 +94,7 @@ export const MarkdownInput = ({
                 return
             }
 
-            router.push(getEditorPath(target))
+            router.push(getEditorPath(decodeURIComponent(target)))
             return
         }
 
@@ -104,16 +103,14 @@ export const MarkdownInput = ({
 
     const onDismissMissingLink = useCallback(() => setMissingLink(null), [])
 
-    const onCreateMissingNote = useCallback(() => {
-        const newId = randomUUID()
+    const onCreateMissingNote = useCallback(async () => {
         const now = getDate()
 
         const targetRepository = repositories.find((repository) => (
             (repositoryPaths.get(repository.id) || '') === missingLink.path
         ))
 
-        saveNote({
-            id: newId,
+        const { path } = await saveNote({
             title: missingLink.title,
             note: '',
             tags: [],
@@ -121,7 +118,7 @@ export const MarkdownInput = ({
             updatedAt: now
         }, targetRepository?.id)
 
-        router.push(getEditorPath(newId))
+        router.push(getEditorPath(path))
     }, [missingLink, repositories, repositoryPaths, saveNote])
 
     const onImagePress = useCallback((url) => router.push({

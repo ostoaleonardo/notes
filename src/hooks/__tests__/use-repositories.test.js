@@ -15,6 +15,7 @@ const mockFileStorage = {
     deleteDirectory: jest.fn(),
     directoryExists: jest.fn(() => true),
     renameDirectory: jest.fn(),
+    findDirectory: jest.fn(() => undefined),
     getOrCreateTemplatesFolder: jest.fn(() => ({ uri: 'content://fake/templates' })),
     getOrCreateImagesFolder: jest.fn(() => ({ uri: 'content://fake/images' }))
 }
@@ -221,5 +222,55 @@ describe('renameRepository', () => {
         const persistedGrandchild = persistedRepositories.find((r) => r.id === 'grand-1')
 
         expect(persistedGrandchild.uri).toBe('content://root-1/renamed/grand')
+    })
+})
+
+describe('ensureTemplatesFolder', () => {
+    test('reuses the folder already named "templates" on disk without persisting anything', async () => {
+        const root = { id: 'root-1', uri: 'content://root-1', parentId: null, templatesUri: 'content://root-1/templates' }
+        mockFileStorage.findDirectory.mockReturnValue({ uri: 'content://root-1/templates', name: 'templates' })
+
+        const { result } = await renderRepositoriesHook([root])
+
+        let uri
+        await act(async () => {
+            uri = await result.current.ensureTemplatesFolder(root)
+        })
+
+        expect(uri).toBe('content://root-1/templates')
+        expect(mockFileStorage.getOrCreateTemplatesFolder).not.toHaveBeenCalled()
+        expect(mockSetItem).not.toHaveBeenCalled()
+    })
+
+    test('updates the cached templatesUri when the folder was found under a different uri', async () => {
+        const root = { id: 'root-1', uri: 'content://root-1', parentId: null, templatesUri: 'content://root-1/stale' }
+        mockFileStorage.findDirectory.mockReturnValue({ uri: 'content://root-1/templates', name: 'templates' })
+
+        const { result } = await renderRepositoriesHook([root])
+
+        await act(async () => {
+            await result.current.ensureTemplatesFolder(root)
+        })
+
+        const [, persisted] = mockSetItem.mock.calls.find(([key]) => key === 'folders')
+        const persistedRoot = JSON.parse(persisted).find((r) => r.id === 'root-1')
+
+        expect(persistedRoot.templatesUri).toBe('content://root-1/templates')
+    })
+
+    test('creates and seeds a new templates folder when none is named "templates" on disk', async () => {
+        const root = { id: 'root-1', uri: 'content://root-1', parentId: null, templatesUri: 'content://root-1/renamed-away' }
+        mockFileStorage.findDirectory.mockReturnValue(undefined)
+        mockFileStorage.getOrCreateTemplatesFolder.mockReturnValue({ uri: 'content://root-1/templates' })
+
+        const { result } = await renderRepositoriesHook([root])
+
+        let uri
+        await act(async () => {
+            uri = await result.current.ensureTemplatesFolder(root)
+        })
+
+        expect(uri).toBe('content://root-1/templates')
+        expect(mockFileStorage.getOrCreateTemplatesFolder).toHaveBeenCalledWith('content://root-1')
     })
 })

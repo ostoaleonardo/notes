@@ -3,8 +3,11 @@ import { createContext, useCallback, useEffect, useMemo, useRef, useState } from
 import { useOnForeground } from '../hooks/use-on-foreground'
 import { useRepositoryData } from '../hooks/use-repository-data'
 import { useRepositories } from '../hooks/use-repositories'
+import { useUtils } from '../hooks/use-utils'
+import { useRecentNotes } from '../hooks/use-recent-notes'
 
 import { DEFAULT_TAGS } from '@/constants/default-values'
+import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 
 export const NoteContext = createContext()
 
@@ -20,8 +23,26 @@ export function NoteProvider({ children }) {
         activeRepositoryTree
     } = useRepositories()
 
+    const { pinned, updatePinned } = useUtils()
+    const { recent, removeRecent } = useRecentNotes()
+
     const treeKey = activeRepositoryTree.map((repository) => repository.uri).join('|')
     const previousRepositoryIdRef = useRef(null)
+
+    const pruneStaleFavoritesRef = useRef(null)
+    pruneStaleFavoritesRef.current = (loadedNotes) => {
+        const notePaths = new Set(loadedNotes.map((note) => note.path))
+        const isStale = (entry) => !entry.startsWith(TEMPLATE_TAB_PREFIX) && !notePaths.has(entry)
+
+        const stalePinned = [...pinned].filter(isStale)
+        if (stalePinned.length > 0) {
+            const next = new Set(pinned)
+            stalePinned.forEach((entry) => next.delete(entry))
+            updatePinned(next)
+        }
+
+        recent.filter(isStale).forEach((entry) => removeRecent(entry))
+    }
 
     const getNotesRef = useRef(null)
     getNotesRef.current = async (showLoading = true) => {
@@ -35,6 +56,7 @@ export function NoteProvider({ children }) {
 
             setNotes(notes)
             setTags(tags)
+            pruneStaleFavoritesRef.current(notes)
         } catch (error) {
             console.debug('error loading notes', error)
         } finally {

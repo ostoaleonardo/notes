@@ -8,7 +8,7 @@ export const DrawerNoteItem = memo(function DrawerNoteItem({ note, depth, active
     return (
         <AnimatedView>
             <Pressable
-                onPress={() => onOpenNote(note.id)}
+                onPress={() => onOpenNote(note.path)}
                 style={{
                     ...styles.container,
                     paddingLeft: 16 + depth * 16

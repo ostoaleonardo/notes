@@ -1,4 +1,3 @@
-import { randomUUID } from 'expo-crypto'
 import { useEffect, useRef, useState } from 'react'
 import { router } from 'expo-router'
 
@@ -6,6 +5,7 @@ import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
 import { useLanguage } from '@/hooks/use-language'
+import { useStorage } from '@/hooks/use-storage'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
 import { getDate } from '@/utils/date'
 import { getDailyNoteTitle } from '@/utils/daily-note'
@@ -19,6 +19,7 @@ export default function DailyNote() {
     const { getTemplate } = useTemplates()
     const { currentLanguage } = useLanguage()
     const { activeRepository, repositories } = useRepositories()
+    const { setItem } = useStorage()
 
     const [folderId, setFolderId] = useState(null)
     const [templateFilename, setTemplateFilename] = useState(null)
@@ -41,17 +42,18 @@ export default function DailyNote() {
         const existing = notes.find((note) => note.title === title)
 
         if (existing) {
-            router.replace(getEditorPath(existing.id))
+            router.replace(getEditorPath(existing.path))
             return
         }
 
         const createNote = async () => {
             const template = templateFilename ? await getTemplate(templateFilename) : null
+            if (templateFilename && !template && templateStorageKey) await setItem(templateStorageKey, '')
+
             const note = template ? renderTemplate(template.content, { title, language: currentLanguage }) : ''
 
-            const id = randomUUID()
-            saveNote({ id, title, note, tags: [], createdAt: getDate() }, targetRepository.id)
-            router.replace(getEditorPath(id))
+            const { path } = await saveNote({ title, note, tags: [], createdAt: getDate() }, targetRepository.id)
+            router.replace(getEditorPath(path))
         }
 
         createNote()

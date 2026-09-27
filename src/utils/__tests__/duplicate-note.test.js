@@ -3,7 +3,8 @@ import { buildDuplicateNote } from '../duplicate-note'
 describe('build duplicate note', () => {
     test('copies the note content and tags, keeping the original repository', () => {
         const note = {
-            id: 'note-1',
+            path: 'repo-1::Groceries.md',
+            filename: 'Groceries.md',
             title: 'Groceries',
             note: 'Milk, eggs',
             tags: ['tag-1'],
@@ -13,13 +14,13 @@ describe('build duplicate note', () => {
         }
 
         const result = buildDuplicateNote(note, {
-            id: 'note-2',
             createdAt: 1700000200000,
             copySuffix: '(copy)'
         })
 
         expect(result).toEqual({
-            id: 'note-2',
+            path: 'repo-1::Groceries.md',
+            filename: 'Groceries.md',
             title: 'Groceries (copy)',
             note: 'Milk, eggs',
             tags: ['tag-1'],
@@ -30,10 +31,10 @@ describe('build duplicate note', () => {
     })
 
     test('does not mutate the original note', () => {
-        const note = { id: 'note-1', title: 'Groceries', tags: [] }
+        const note = { path: 'repo-1::Groceries.md', title: 'Groceries', tags: [] }
 
-        buildDuplicateNote(note, { id: 'note-2', createdAt: 1, copySuffix: '(copy)' })
+        buildDuplicateNote(note, { createdAt: 1, copySuffix: '(copy)' })
 
-        expect(note).toEqual({ id: 'note-1', title: 'Groceries', tags: [] })
+        expect(note).toEqual({ path: 'repo-1::Groceries.md', title: 'Groceries', tags: [] })
     })
 })

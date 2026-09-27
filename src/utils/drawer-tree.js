@@ -16,7 +16,7 @@ export const flattenDrawerTree = (tree, collapsedFolders, depth = 0) => (
 
         if (isCollapsed) return [row]
 
-        const noteRows = notes.map((note) => ({ type: 'note', id: 'note:' + note.id, note, depth: depth + 1 }))
+        const noteRows = notes.map((note) => ({ type: 'note', id: 'note:' + note.path, note, depth: depth + 1 }))
         const subfolderRows = flattenDrawerTree(subfolders, collapsedFolders, depth + 1)
 
         return [row, ...noteRows, ...subfolderRows]

@@ -50,7 +50,7 @@ export function RecentNotes({ onClose, home = false }) {
                 }
             }
 
-            const note = notes.find((entry) => entry.id === id)
+            const note = notes.find((entry) => entry.path === id)
 
             return {
                 id,

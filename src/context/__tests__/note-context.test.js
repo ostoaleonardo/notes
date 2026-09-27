@@ -7,9 +7,13 @@ import { NoteContext, NoteProvider } from '../note-context'
 import { DEFAULT_TAGS } from '@/constants/default-values'
 
 const mockLoadRepositoryData = jest.fn()
+const mockUpdatePinned = jest.fn()
+const mockRemoveRecent = jest.fn()
 
 let mockActiveRepository = null
 let mockActiveRepositoryTree = []
+let mockPinned = new Set()
+let mockRecent = []
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
     default: {}
@@ -23,6 +27,12 @@ jest.mock('../../hooks/use-repositories', () => ({
         activeRepositoryTree: mockActiveRepositoryTree
     })
 }))
+jest.mock('../../hooks/use-utils', () => ({
+    useUtils: () => ({ pinned: mockPinned, updatePinned: mockUpdatePinned })
+}))
+jest.mock('../../hooks/use-recent-notes', () => ({
+    useRecentNotes: () => ({ recent: mockRecent, removeRecent: mockRemoveRecent })
+}))
 
 const renderNoteContext = () => renderHook(() => useContext(NoteContext), { wrapper: NoteProvider })
 
@@ -30,6 +40,8 @@ beforeEach(() => {
     jest.clearAllMocks()
     mockActiveRepository = null
     mockActiveRepositoryTree = []
+    mockPinned = new Set()
+    mockRecent = []
 })
 
 describe('loading notes on mount', () => {
@@ -94,6 +106,55 @@ describe('reload on app foreground', () => {
 
         expect(result.current.notes).toEqual([{ id: 'note-2', title: 'Fresh' }])
         expect(result.current.loading).toBe(false)
+    })
+})
+
+describe('pruning stale pinned and recent entries', () => {
+    test('removes pinned and recent notes that no longer resolve after loading', async () => {
+        const root = { id: 'repo-1', uri: 'content://repo-1' }
+        mockActiveRepository = root
+        mockActiveRepositoryTree = [root]
+        mockPinned = new Set(['repo-1::Gone.md', 'repo-1::Kept.md'])
+        mockRecent = ['repo-1::Gone.md', 'repo-1::AlsoGone.md']
+        mockLoadRepositoryData.mockResolvedValue({
+            notes: [{ path: 'repo-1::Kept.md', title: 'Kept' }],
+            tags: []
+        })
+
+        await renderNoteContext()
+
+        expect(mockUpdatePinned).toHaveBeenCalledWith(new Set(['repo-1::Kept.md']))
+        expect(mockRemoveRecent).toHaveBeenCalledWith('repo-1::Gone.md')
+        expect(mockRemoveRecent).toHaveBeenCalledWith('repo-1::AlsoGone.md')
+    })
+
+    test('never prunes pinned template entries', async () => {
+        const root = { id: 'repo-1', uri: 'content://repo-1' }
+        mockActiveRepository = root
+        mockActiveRepositoryTree = [root]
+        mockPinned = new Set(['template:Weekly.md'])
+        mockLoadRepositoryData.mockResolvedValue({ notes: [], tags: [] })
+
+        await renderNoteContext()
+
+        expect(mockUpdatePinned).not.toHaveBeenCalled()
+    })
+
+    test('does nothing when every pinned and recent entry still resolves', async () => {
+        const root = { id: 'repo-1', uri: 'content://repo-1' }
+        mockActiveRepository = root
+        mockActiveRepositoryTree = [root]
+        mockPinned = new Set(['repo-1::Kept.md'])
+        mockRecent = ['repo-1::Kept.md']
+        mockLoadRepositoryData.mockResolvedValue({
+            notes: [{ path: 'repo-1::Kept.md', title: 'Kept' }],
+            tags: []
+        })
+
+        await renderNoteContext()
+
+        expect(mockUpdatePinned).not.toHaveBeenCalled()
+        expect(mockRemoveRecent).not.toHaveBeenCalled()
     })
 })
 

@@ -6,6 +6,6 @@ export const MOCK_REPOSITORY_LIST = [
 ]
 
 export const MOCK_NOTES_BY_REPOSITORY = new Map([
-    ['root', [{ id: 'note-zebra', title: 'Zebra' }, { id: 'note-apple', title: 'Apple' }]],
-    ['grandchild', [{ id: 'note-nested', title: 'Nested note' }]]
+    ['root', [{ path: 'note-zebra', title: 'Zebra' }, { path: 'note-apple', title: 'Apple' }]],
+    ['grandchild', [{ path: 'note-nested', title: 'Nested note' }]]
 ])

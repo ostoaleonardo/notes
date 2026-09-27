@@ -1,5 +1,4 @@
 export const MOCK_GROCERIES_DRAFT = {
-    id: 'note-1',
     title: 'Groceries',
     note: 'milk, eggs',
     tags: [],
@@ -7,7 +6,6 @@ export const MOCK_GROCERIES_DRAFT = {
 }
 
 export const MOCK_DUPLICATE_TITLE_DRAFT = {
-    id: 'note-2',
     title: 'Groceries',
     note: 'new content',
     tags: [],
@@ -15,7 +13,8 @@ export const MOCK_DUPLICATE_TITLE_DRAFT = {
 }
 
 export const MOCK_GROCERIES_NOTE = {
-    id: 'note-1',
+    path: 'repo-1::Groceries.md',
+    filename: 'Groceries.md',
     title: 'Groceries',
     note: 'old content',
     tags: [],
@@ -24,7 +23,8 @@ export const MOCK_GROCERIES_NOTE = {
 }
 
 export const MOCK_OLD_TITLE_NOTE = {
-    id: 'note-1',
+    path: 'repo-1::Old title.md',
+    filename: 'Old title.md',
     title: 'Old title',
     note: 'content',
     tags: [],
@@ -33,7 +33,8 @@ export const MOCK_OLD_TITLE_NOTE = {
 }
 
 export const MOCK_GHOST_NOTE = {
-    id: 'ghost',
+    path: 'repo-1::Ghost.md',
+    filename: 'Ghost.md',
     title: 'Ghost',
     note: 'x',
     tags: [],
@@ -42,7 +43,8 @@ export const MOCK_GHOST_NOTE = {
 }
 
 export const MOCK_ORPHANED_NOTE = {
-    id: 'note-1',
+    path: 'missing-repo::Orphaned.md',
+    filename: 'Orphaned.md',
     title: 'Orphaned',
     note: 'x',
     tags: [],
@@ -51,7 +53,6 @@ export const MOCK_ORPHANED_NOTE = {
 }
 
 export const MOCK_UNSAVED_NOTE = {
-    id: 'note-unsaved',
     title: 'Untitled',
     note: 'quick note content',
     tags: [],
@@ -59,12 +60,12 @@ export const MOCK_UNSAVED_NOTE = {
     createdAt: 1
 }
 
-export const MOCK_MINIMAL_NOTE = { id: 'note-1', title: 'Groceries' }
+export const MOCK_MINIMAL_NOTE = { path: 'repo-1::Groceries.md', title: 'Groceries' }
 
 export const MOCK_GROCERIES_METADATA = {
-    'note-1': { filename: 'Groceries.md', tags: [], createdAt: 1, updatedAt: '' }
+    'Groceries.md': { tags: [], createdAt: 1, updatedAt: '' }
 }
 
 export const MOCK_OLD_TITLE_METADATA = {
-    'note-1': { filename: 'Old title.md', tags: [], createdAt: 1, updatedAt: '' }
+    'Old title.md': { tags: [], createdAt: 1, updatedAt: '' }
 }

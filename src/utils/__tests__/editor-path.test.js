@@ -8,6 +8,13 @@ describe('get editor path', () => {
         expect(getEditorPath('note-1')).toBe(ROUTES.EDIT_NOTE + 'note-1')
     })
 
+    test('encodes a note path so it survives as a single URL segment', () => {
+        const path = getEditorPath('repo-1::My Note.md')
+
+        expect(path).toBe(ROUTES.EDIT_NOTE + encodeURIComponent('repo-1::My Note.md'))
+        expect(path).not.toContain('/My Note.md')
+    })
+
     test('builds a template editor path for a prefixed id', () => {
         const path = getEditorPath(`${TEMPLATE_TAB_PREFIX}Weekly.md`)
 

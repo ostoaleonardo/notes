@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { router, useLocalSearchParams } from 'expo-router'
-import { randomUUID } from 'expo-crypto'
 
 import { MenuItem } from '@/components/menu/menu-item'
 
@@ -52,17 +51,16 @@ export const useNoteActionsMenu = ({
         updatePinned(new Set(pinned))
     })
 
-    const onDuplicate = () => onTrigger(() => {
+    const onDuplicate = () => onTrigger(async () => {
         const note = getNote(currentId)
 
         const duplicate = buildDuplicateNote(note, {
-            id: randomUUID(),
             createdAt: getDate(),
             copySuffix: t('notes.copy_suffix')
         })
 
-        saveNote(duplicate, note.repositoryId)
-        router.push(getEditorPath(duplicate.id))
+        const { path } = await saveNote(duplicate, note.repositoryId)
+        router.push(getEditorPath(path))
     })
 
     return [

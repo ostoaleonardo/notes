@@ -48,7 +48,7 @@ export function DrawerTemplatesSection({ templates, activeFilename, collapsed, o
                 <DrawerNoteItem
                     depth={0}
                     key={template.filename}
-                    note={{ id: template.filename, title: t(`templates.${template.name}`, template.name) }}
+                    note={{ path: template.filename, title: t(`templates.${template.name}`, template.name) }}
                     active={template.filename === activeFilename}
                     onOpenNote={onOpenTemplate}
                 />

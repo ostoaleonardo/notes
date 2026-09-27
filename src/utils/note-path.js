@@ -1,3 +1,7 @@
+import { NOTE_PATH_SEPARATOR } from '@/constants/file-storage'
+
+export const buildNotePath = (repositoryId, filename) => `${repositoryId}${NOTE_PATH_SEPARATOR}${filename}`
+
 export const buildRepositoryPaths = (repositories) => {
     const byId = new Map(repositories.map((repository) => [repository.id, repository]))
     const cache = new Map()
@@ -24,5 +28,5 @@ export const buildRepositoryPaths = (repositories) => {
 
 export const getNotePaths = (notes, repositories) => {
     const repositoryPaths = buildRepositoryPaths(repositories)
-    return new Map(notes.map((note) => [note.id, repositoryPaths.get(note.repositoryId) || '']))
+    return new Map(notes.map((note) => [note.path, repositoryPaths.get(note.repositoryId) || '']))
 }

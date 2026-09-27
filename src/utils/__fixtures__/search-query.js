@@ -5,7 +5,7 @@ export const MOCK_SEARCH_TAGS = [
 
 export const MOCK_SEARCH_NOTES = [
     {
-        id: 'note-1',
+        path: 'note-1',
         title: 'Weekly standup',
         tags: ['tag-1'],
         note: 'Agenda for the week',
@@ -13,7 +13,7 @@ export const MOCK_SEARCH_NOTES = [
         updatedAt: new Date('2026-01-05T10:00:00Z').getTime()
     },
     {
-        id: 'note-2',
+        path: 'note-2',
         title: 'Grocery list',
         tags: ['tag-2'],
         note: 'Milk, eggs\n![receipt](file:///receipt.jpg)',
@@ -21,7 +21,7 @@ export const MOCK_SEARCH_NOTES = [
         updatedAt: new Date('2026-01-02T10:00:00Z').getTime()
     },
     {
-        id: 'note-3',
+        path: 'note-3',
         title: 'Untagged idea',
         tags: [],
         note: 'A random thought',

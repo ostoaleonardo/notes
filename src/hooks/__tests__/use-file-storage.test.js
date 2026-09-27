@@ -168,6 +168,43 @@ describe('renameNoteFile', () => {
     })
 })
 
+describe('renameVersions', () => {
+    test('moves the versions file under the new filename', async () => {
+        const { result } = await renderFileStorageHook()
+
+        seedDirectory('content://repo', [])
+        result.current.writeVersions('content://repo', 'old.md', [{ id: 'v1' }])
+
+        await result.current.renameVersions('content://repo', 'old.md', 'new.md')
+
+        expect(await result.current.readVersions('content://repo', 'old.md')).toEqual([])
+        expect(await result.current.readVersions('content://repo', 'new.md')).toEqual([{ id: 'v1' }])
+    })
+
+    test('does nothing when there are no versions to move', async () => {
+        const { result } = await renderFileStorageHook()
+
+        seedDirectory('content://repo', [])
+
+        await result.current.renameVersions('content://repo', 'old.md', 'new.md')
+
+        expect(registry.get('content://repo').children).toEqual([])
+    })
+})
+
+describe('deleteVersions', () => {
+    test('removes the versions sidecar file', async () => {
+        const { result } = await renderFileStorageHook()
+
+        seedDirectory('content://repo', [])
+        result.current.writeVersions('content://repo', 'note.md', [{ id: 'v1' }])
+
+        result.current.deleteVersions('content://repo', 'note.md')
+
+        expect(await result.current.readVersions('content://repo', 'note.md')).toEqual([])
+    })
+})
+
 describe('readJson / writeJson', () => {
     test('round-trips a JSON payload through a sidecar file', async () => {
         const { result } = await renderFileStorageHook()

@@ -134,11 +134,21 @@ export function useFileStorage() {
     const readMetadata = (directoryUri) => readJson(directoryUri, METADATA_FILENAME, {})
     const writeMetadata = (directoryUri, metadata) => writeJson(directoryUri, METADATA_FILENAME, metadata)
 
-    const readVersions = (directoryUri, noteId) => readJson(directoryUri, noteId + VERSIONS_FILENAME_SUFFIX, [])
-    const writeVersions = (directoryUri, noteId, versions) => writeJson(directoryUri, noteId + VERSIONS_FILENAME_SUFFIX, versions)
+    const readVersions = (directoryUri, filename) => readJson(directoryUri, filename + VERSIONS_FILENAME_SUFFIX, [])
+    const writeVersions = (directoryUri, filename, versions) => writeJson(directoryUri, filename + VERSIONS_FILENAME_SUFFIX, versions)
+    const deleteVersions = (directoryUri, filename) => deleteNoteFile(directoryUri, filename + VERSIONS_FILENAME_SUFFIX)
+
+    const renameVersions = async (directoryUri, oldFilename, newFilename) => {
+        const versions = await readVersions(directoryUri, oldFilename)
+        if (!versions.length) return
+
+        writeVersions(directoryUri, newFilename, versions)
+        deleteVersions(directoryUri, oldFilename)
+    }
 
     return useMemo(() => ({
         findFile,
+        findDirectory,
         listMarkdownFiles,
         listSubdirectories,
         writeNoteFile,
@@ -152,6 +162,8 @@ export function useFileStorage() {
         writeMetadata,
         readVersions,
         writeVersions,
+        deleteVersions,
+        renameVersions,
         readJson,
         writeJson,
         createSubdirectory,

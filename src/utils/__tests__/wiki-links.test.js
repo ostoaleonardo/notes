@@ -8,12 +8,12 @@ import {
 } from '../wiki-links'
 
 const notes = [
-    { id: 'note-1', title: 'Meeting Notes' },
-    { id: 'note-2', title: 'Grocery List' }
+    { path: 'note-1', title: 'Meeting Notes' },
+    { path: 'note-2', title: 'Grocery List' }
 ]
 
 describe('matching note', () => {
-    test('renders a wiki link to the matching note id', () => {
+    test('renders a wiki link to the matching note path', () => {
         const result = resolveWikiLinks('See [[Meeting Notes]] for details', notes)
 
         expect(result).toBe('See <a href="wikilink://note-1" class="wiki-link">Meeting Notes</a> for details')
@@ -29,6 +29,15 @@ describe('matching note', () => {
         const result = resolveWikiLinks('[[Meeting Notes|notes from today]]', notes)
 
         expect(result).toBe('<a href="wikilink://note-1" class="wiki-link">notes from today</a>')
+    })
+
+    test('encodes the path so it survives as a single URL segment', () => {
+        const withSpecialChars = [{ path: 'repo-1::My Note.md', title: 'My Note' }]
+        const result = resolveWikiLinks('[[My Note]]', withSpecialChars)
+
+        expect(result).toBe(
+            '<a href="wikilink://repo-1%3A%3AMy%20Note.md" class="wiki-link">My Note</a>'
+        )
     })
 })
 
@@ -80,8 +89,8 @@ describe('plain text', () => {
 
 describe('duplicate titles across folders', () => {
     const duplicateNotes = [
-        { id: 'root-test', title: 'Test' },
-        { id: 'sub-test', title: 'Test' }
+        { path: 'root-test', title: 'Test' },
+        { path: 'sub-test', title: 'Test' }
     ]
     const notePaths = new Map([
         ['root-test', ''],
@@ -91,13 +100,13 @@ describe('duplicate titles across folders', () => {
     test('a bare title resolves to the first candidate', () => {
         const target = resolveWikiLinkTarget('Test', duplicateNotes, notePaths)
 
-        expect(target.id).toBe('root-test')
+        expect(target.path).toBe('root-test')
     })
 
     test('a path-qualified link resolves to the note in that folder', () => {
         const target = resolveWikiLinkTarget('one/Test', duplicateNotes, notePaths)
 
-        expect(target.id).toBe('sub-test')
+        expect(target.path).toBe('sub-test')
     })
 
     test('resolveWikiLinks renders a path-qualified link to the disambiguated note', () => {
@@ -109,67 +118,67 @@ describe('duplicate titles across folders', () => {
 
 describe('findBacklinks', () => {
     const linkingNotes = [
-        { id: 'target', title: 'Grocery List', note: 'Some content.' },
-        { id: 'a', title: 'Recipe', note: 'See [[Grocery List]] for what to buy.' },
-        { id: 'b', title: 'Other', note: 'No links here.' },
-        { id: 'c', title: 'Alias Note', note: 'Mentions [[grocery list|itself]] via alias.' }
+        { path: 'target', title: 'Grocery List', note: 'Some content.' },
+        { path: 'a', title: 'Recipe', note: 'See [[Grocery List]] for what to buy.' },
+        { path: 'b', title: 'Other', note: 'No links here.' },
+        { path: 'c', title: 'Alias Note', note: 'Mentions [[grocery list|itself]] via alias.' }
     ]
 
     test('finds notes whose content links to the given note', () => {
         const result = findBacklinks('target', linkingNotes)
 
-        expect(result.map((note) => note.id)).toEqual(['a', 'c'])
+        expect(result.map((note) => note.path)).toEqual(['a', 'c'])
     })
 
     test('matches case-insensitively and through aliases', () => {
         const result = findBacklinks('target', linkingNotes)
 
-        expect(result.map((note) => note.id)).toContain('c')
+        expect(result.map((note) => note.path)).toContain('c')
     })
 
     test('never includes the note itself', () => {
         const result = findBacklinks('target', linkingNotes)
 
-        expect(result.map((note) => note.id)).not.toContain('target')
+        expect(result.map((note) => note.path)).not.toContain('target')
     })
 
     test('returns an empty array when nothing links to the note', () => {
-        const result = findBacklinks('unlinked-id', linkingNotes)
+        const result = findBacklinks('unlinked-path', linkingNotes)
 
         expect(result).toEqual([])
     })
 
     test('only counts links that resolve to the note in the right folder', () => {
         const duplicateNotes = [
-            { id: 'root-test', title: 'Test', note: '' },
-            { id: 'sub-test', title: 'Test', note: '' },
-            { id: 'linker', title: 'Linker', note: 'See [[one/Test]] for details' }
+            { path: 'root-test', title: 'Test', note: '' },
+            { path: 'sub-test', title: 'Test', note: '' },
+            { path: 'linker', title: 'Linker', note: 'See [[one/Test]] for details' }
         ]
         const notePaths = new Map([
             ['root-test', ''],
             ['sub-test', 'one']
         ])
 
-        expect(findBacklinks('sub-test', duplicateNotes, notePaths).map((n) => n.id)).toEqual(['linker'])
+        expect(findBacklinks('sub-test', duplicateNotes, notePaths).map((n) => n.path)).toEqual(['linker'])
         expect(findBacklinks('root-test', duplicateNotes, notePaths)).toEqual([])
     })
 
     test('also counts markdown-format internal links', () => {
         const markdownLinkingNotes = [
-            { id: 'target', title: 'Grocery List', note: '' },
-            { id: 'a', title: 'Recipe', note: 'See [Grocery List](wikilink://target) for what to buy.' },
-            { id: 'b', title: 'Other', note: 'See [something](wikilink://other-id) instead.' }
+            { path: 'target', title: 'Grocery List', note: '' },
+            { path: 'a', title: 'Recipe', note: 'See [Grocery List](wikilink://target) for what to buy.' },
+            { path: 'b', title: 'Other', note: 'See [something](wikilink://other-path) instead.' }
         ]
 
         const result = findBacklinks('target', markdownLinkingNotes)
 
-        expect(result.map((note) => note.id)).toEqual(['a'])
+        expect(result.map((note) => note.path)).toEqual(['a'])
     })
 })
 
 describe('renameWikiLinksForNote', () => {
     test('renames a link that resolves to the target note', () => {
-        const notesForRename = [{ id: 'target', title: 'Grocery List' }]
+        const notesForRename = [{ path: 'target', title: 'Grocery List' }]
         const result = renameWikiLinksForNote(
             'See [[Grocery List]] for details',
             'target',
@@ -181,7 +190,7 @@ describe('renameWikiLinksForNote', () => {
     })
 
     test('preserves the alias when renaming', () => {
-        const notesForRename = [{ id: 'target', title: 'Grocery List' }]
+        const notesForRename = [{ path: 'target', title: 'Grocery List' }]
         const result = renameWikiLinksForNote(
             'See [[Grocery List|the list]] for details',
             'target',
@@ -193,7 +202,7 @@ describe('renameWikiLinksForNote', () => {
     })
 
     test('matches case-insensitively', () => {
-        const notesForRename = [{ id: 'target', title: 'Grocery List' }]
+        const notesForRename = [{ path: 'target', title: 'Grocery List' }]
         const result = renameWikiLinksForNote('[[grocery list]]', 'target', 'Shopping List', notesForRename)
 
         expect(result).toBe('[[Shopping List]]')
@@ -201,8 +210,8 @@ describe('renameWikiLinksForNote', () => {
 
     test('leaves links that resolve to a different note unchanged', () => {
         const notesForRename = [
-            { id: 'target', title: 'Grocery List' },
-            { id: 'other', title: 'Meeting Notes' }
+            { path: 'target', title: 'Grocery List' },
+            { path: 'other', title: 'Meeting Notes' }
         ]
         const result = renameWikiLinksForNote('[[Meeting Notes]]', 'target', 'Shopping List', notesForRename)
 
@@ -211,8 +220,8 @@ describe('renameWikiLinksForNote', () => {
 
     test('leaves a same-titled note in a different folder unchanged', () => {
         const duplicateNotes = [
-            { id: 'root-test', title: 'Test' },
-            { id: 'sub-test', title: 'Test' }
+            { path: 'root-test', title: 'Test' },
+            { path: 'sub-test', title: 'Test' }
         ]
         const notePaths = new Map([
             ['root-test', ''],
@@ -232,8 +241,8 @@ describe('renameWikiLinksForNote', () => {
 
     test('re-qualifies with the folder path when the new title collides with another note', () => {
         const duplicateNotes = [
-            { id: 'sub-test', title: 'Test' },
-            { id: 'other', title: 'Fold' }
+            { path: 'sub-test', title: 'Test' },
+            { path: 'other', title: 'Fold' }
         ]
         const notePaths = new Map([
             ['sub-test', 'one'],
@@ -253,8 +262,8 @@ describe('renameWikiLinksForNote', () => {
 
     test('does not qualify when the renamed note has no folder to qualify with', () => {
         const duplicateNotes = [
-            { id: 'root-test', title: 'Test' },
-            { id: 'other', title: 'Fold' }
+            { path: 'root-test', title: 'Test' },
+            { path: 'other', title: 'Fold' }
         ]
         const notePaths = new Map([
             ['root-test', ''],
@@ -278,8 +287,8 @@ describe('buildBacklinksHtml', () => {
         expect(buildBacklinksHtml([], 'Backlinks')).toBe('')
     })
 
-    test('renders a link per backlink using the note id and title', () => {
-        const result = buildBacklinksHtml([{ id: 'note-1', title: 'Recipe' }], 'Backlinks')
+    test('renders a link per backlink using the note path and title', () => {
+        const result = buildBacklinksHtml([{ path: 'note-1', title: 'Recipe' }], 'Backlinks')
 
         expect(result).toContain('href="wikilink://note-1"')
         expect(result).toContain('>Recipe<')
@@ -287,7 +296,7 @@ describe('buildBacklinksHtml', () => {
     })
 
     test('escapes html characters in titles and the label', () => {
-        const result = buildBacklinksHtml([{ id: 'note-1', title: '<b>Bold</b>' }], '<i>Label</i>')
+        const result = buildBacklinksHtml([{ path: 'note-1', title: '<b>Bold</b>' }], '<i>Label</i>')
 
         expect(result).not.toContain('<b>Bold</b>')
         expect(result).toContain('&lt;b&gt;Bold&lt;/b&gt;')
@@ -296,14 +305,14 @@ describe('buildBacklinksHtml', () => {
 
     test('shows the folder path under the title, similar to Obsidian, when the note is not at the root', () => {
         const notePaths = new Map([['note-1', 'one']])
-        const result = buildBacklinksHtml([{ id: 'note-1', title: 'Test' }], 'Backlinks', notePaths)
+        const result = buildBacklinksHtml([{ path: 'note-1', title: 'Test' }], 'Backlinks', notePaths)
 
         expect(result).toContain('<span class="backlink-path">one</span>')
     })
 
     test('omits the path subtext for a root-level note', () => {
         const notePaths = new Map([['note-1', '']])
-        const result = buildBacklinksHtml([{ id: 'note-1', title: 'Test' }], 'Backlinks', notePaths)
+        const result = buildBacklinksHtml([{ path: 'note-1', title: 'Test' }], 'Backlinks', notePaths)
 
         expect(result).not.toContain('backlink-path')
     })

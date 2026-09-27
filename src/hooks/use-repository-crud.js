@@ -4,6 +4,7 @@ import { Directory } from 'expo-file-system'
 import { sanitizeFilename } from '@/utils/note-filename'
 import { withBusy } from '@/utils/with-busy'
 import { FREE_SUBFOLDERS_PER_REPOSITORY } from '@/constants/default-values'
+import { TEMPLATES_FOLDER_NAME } from '@/constants/file-storage'
 
 export function useRepositoryCrud({
     repositories,
@@ -28,6 +29,7 @@ export function useRepositoryCrud({
         createSubdirectory,
         deleteDirectory,
         renameDirectory,
+        findDirectory,
         getOrCreateTemplatesFolder,
         getOrCreateImagesFolder
     } = fileStorage
@@ -42,13 +44,13 @@ export function useRepositoryCrud({
 
             const repository = buildRepository(directory)
             const discovered = discoverSubfolders(directory, repository.id)
-            const welcomeNoteId = await seedWelcomeNote(directory.uri)
-            if (welcomeNoteId) setPendingWelcomeNoteId(welcomeNoteId)
+            const welcomeNotePath = await seedWelcomeNote(directory.uri, repository.id)
+            if (welcomeNotePath) setPendingWelcomeNoteId(welcomeNotePath)
 
             await persistRepositories([...repositories, repository, ...discovered])
             if (!activeRepositoryId) await persistActiveRepository(repository.id)
 
-            return { ...repository, welcomeNoteId }
+            return { ...repository, welcomeNotePath }
         } catch (error) {
             if (error.code === 'ERR_PICKER_CANCELLED') return null
 
@@ -106,7 +108,17 @@ export function useRepositoryCrud({
 
     const ensureTemplatesFolder = useCallback(async (repository) => {
         const root = getRootRepository(repository)
-        if (root.templatesUri) return root.templatesUri
+        const existing = findDirectory(root.uri, TEMPLATES_FOLDER_NAME)
+
+        if (existing) {
+            if (root.templatesUri !== existing.uri) {
+                await persistRepositories(repositories.map((r) => (
+                    r.id === root.id ? { ...r, templatesUri: existing.uri } : r
+                )))
+            }
+
+            return existing.uri
+        }
 
         return withBusy(busyRef, async () => {
             const templatesDirectory = getOrCreateTemplatesFolder(root.uri)
@@ -118,7 +130,7 @@ export function useRepositoryCrud({
 
             return templatesDirectory.uri
         })
-    }, [getRootRepository, getOrCreateTemplatesFolder, seedTemplates, persistRepositories, repositories, busyRef])
+    }, [getRootRepository, findDirectory, getOrCreateTemplatesFolder, seedTemplates, persistRepositories, repositories, busyRef])
 
     const ensureImagesFolder = useCallback((repository) => {
         const root = getRootRepository(repository)

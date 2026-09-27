@@ -1,7 +1,6 @@
 import { createContext, useCallback, useEffect, useMemo, useState } from 'react'
 import * as Linking from 'expo-linking'
 import { File } from 'expo-file-system'
-import { randomUUID } from 'expo-crypto'
 import { useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 
@@ -30,10 +29,8 @@ export function ImportProvider({ children }) {
             const note = await file.text()
             const match = (name || file.name).match(/^(.+)\.(md|markdown)$/i)
             const title = match ? match[1] : 'Imported note'
-            const id = randomUUID()
 
-            saveNote({
-                id,
+            await saveNote({
                 title,
                 note,
                 tags: [],

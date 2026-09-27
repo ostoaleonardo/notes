@@ -2,6 +2,7 @@ import { randomUUID } from 'expo-crypto'
 
 import { getNoteKey } from '@/utils/note-key'
 import { getUniqueFilename, stripNoteExtension } from '@/utils/note-filename'
+import { buildNotePath } from '@/utils/note-path'
 
 import { DEFAULT_TAGS } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
@@ -55,8 +56,7 @@ const migrateStorageNotesToFiles = async (repositoryUri, rootRepositoryUri, stor
         existingNames.push(filename)
 
         fileStorage.writeNoteFile(repositoryUri, filename, note.note || '')
-        metadata[note.id] = {
-            filename,
+        metadata[filename] = {
             tags: note.tags || note.categories || [],
             createdAt: note.createdAt || Date.now(),
             updatedAt: note.updatedAt || '',
@@ -68,11 +68,38 @@ const migrateStorageNotesToFiles = async (repositoryUri, rootRepositoryUri, stor
     await storage.multiRemove(noteKeys)
 }
 
-// Loads every folder in the tree and stamps each note with the folder it lives in.
+// Old metadata was keyed by a random note id, with the filename stored inside the entry.
+const migrateMetadataKeysToFilenames = (metadata) => {
+    let changed = false
+    const migrated = {}
+
+    for (const [key, entry] of Object.entries(metadata)) {
+        if (!entry.filename) {
+            migrated[key] = entry
+            continue
+        }
+
+        migrated[entry.filename] = {
+            tags: entry.tags || [],
+            createdAt: entry.createdAt,
+            updatedAt: entry.updatedAt || '',
+            images: entry.images || []
+        }
+        changed = true
+    }
+
+    return { metadata: migrated, changed }
+}
+
+// Loads every folder in the tree and stamps each note with its identity path.
 const loadFromTree = async (tree, loadFolder, fileStorage) => {
     const perFolder = await Promise.all(tree.map(async (repository) => {
         const items = await loadFolder(repository.uri, fileStorage)
-        return items.map((item) => ({ ...item, repositoryId: repository.id }))
+        return items.map((item) => ({
+            ...item,
+            repositoryId: repository.id,
+            path: buildNotePath(repository.id, item.filename)
+        }))
     }))
 
     return perFolder.flat()
@@ -81,29 +108,23 @@ const loadFromTree = async (tree, loadFolder, fileStorage) => {
 // Reconciles .md files against the metadata sidecar.
 const loadNotesFromFolder = async (repositoryUri, fileStorage) => {
     const files = fileStorage.listMarkdownFiles(repositoryUri)
-    const metadata = await fileStorage.readMetadata(repositoryUri)
+    const rawMetadata = await fileStorage.readMetadata(repositoryUri)
+
+    const { metadata, changed: keysMigrated } = migrateMetadataKeysToFilenames(rawMetadata)
 
     const fileNames = new Set(files.map((file) => file.name))
-    let metadataChanged = false
+    let metadataChanged = keysMigrated
 
-    for (const id of Object.keys(metadata)) {
-        if (!fileNames.has(metadata[id].filename)) {
-            delete metadata[id]
+    for (const filename of Object.keys(metadata)) {
+        if (!fileNames.has(filename)) {
+            delete metadata[filename]
             metadataChanged = true
         }
     }
 
-    const filenameToId = new Map(
-        Object.entries(metadata).map(([id, entry]) => [entry.filename, id])
-    )
-
     const notes = await Promise.all(files.map(async (file) => {
-        let id = filenameToId.get(file.name)
-
-        if (!id) {
-            id = randomUUID()
-            metadata[id] = {
-                filename: file.name,
+        if (!metadata[file.name]) {
+            metadata[file.name] = {
                 tags: [],
                 createdAt: Date.now(),
                 updatedAt: '',
@@ -112,11 +133,11 @@ const loadNotesFromFolder = async (repositoryUri, fileStorage) => {
             metadataChanged = true
         }
 
-        const entry = metadata[id]
+        const entry = metadata[file.name]
         const content = await file.text()
 
         return {
-            id,
+            filename: file.name,
             title: getTitle(file.name),
             note: content,
             tags: entry.tags || [],
