@@ -46,6 +46,7 @@ export default function EditTemplate() {
     const [loading, setLoading] = useState(true)
     const currentFilename = useRef(filename)
     const originalName = useRef('')
+    const originalContent = useRef('')
 
     const [name, setName] = useState('')
     const [content, setContent] = useState('')
@@ -97,6 +98,7 @@ export default function EditTemplate() {
             setName(displayName)
             setContent(template.content)
             originalName.current = displayName
+            originalContent.current = template.content
 
             setTimeout(() => {
                 setLoading(false)
@@ -106,11 +108,15 @@ export default function EditTemplate() {
 
     useAutosave(async () => {
         const trimmedName = name.trim()
+        if (trimmedName === originalName.current && content === originalContent.current) return
+
         const nextName = trimmedName === originalName.current
             ? stripNoteExtension(currentFilename.current)
             : trimmedName
 
         currentFilename.current = await updateTemplate(currentFilename.current, nextName, content)
+        originalName.current = trimmedName
+        originalContent.current = content
     }, [name, content], { skip: loading || !name.trim() })
 
     useEffect(() => {
