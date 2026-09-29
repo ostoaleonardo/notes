@@ -61,11 +61,3 @@ export const MOCK_UNSAVED_NOTE = {
 }
 
 export const MOCK_MINIMAL_NOTE = { path: 'repo-1::Groceries.md', title: 'Groceries' }
-
-export const MOCK_GROCERIES_METADATA = {
-    'Groceries.md': { tags: [], createdAt: 1, updatedAt: '' }
-}
-
-export const MOCK_OLD_TITLE_METADATA = {
-    'Old title.md': { tags: [], createdAt: 1, updatedAt: '' }
-}
