@@ -73,8 +73,6 @@ export const findBacklinks = (targetPath, notes, notePaths = new Map()) => (
     })
 )
 
-// Re-qualifies with the target's own folder path when the new title collides with another
-// note, so the rewritten link doesn't become ambiguous again after the rename.
 export const renameWikiLinksForNote = (content, targetPath, newTitle, notes, notePaths = new Map()) => {
     if (!content) return content
 
