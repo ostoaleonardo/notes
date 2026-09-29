@@ -6,8 +6,9 @@ import { useTranslation } from 'react-i18next'
 
 import { useNotes } from '../hooks/use-notes'
 import { usePro } from '../hooks/use-pro'
+import { useTags } from '../hooks/use-tags'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
-import { getDate } from '@/utils/date'
+import { parseFrontmatter } from '@/utils/frontmatter'
 
 import { ROUTES } from '@/constants/routes'
 
@@ -18,6 +19,7 @@ export function ImportProvider({ children }) {
     const { t } = useTranslation()
     const { saveNote, loading } = useNotes()
     const { pro } = usePro()
+    const { tags: allTags, addTag } = useTags()
 
     const [importing, setImporting] = useState(false)
 
@@ -26,17 +28,16 @@ export function ImportProvider({ children }) {
             setImporting(true)
 
             const file = new File(url)
-            const note = await file.text()
+            const { frontmatter, body } = parseFrontmatter(await file.text())
             const match = (name || file.name).match(/^(.+)\.(md|markdown)$/i)
             const title = match ? match[1] : 'Imported note'
+            const tags = Array.isArray(frontmatter.tags) ? frontmatter.tags : []
 
-            await saveNote({
-                title,
-                note,
-                tags: [],
-                images: [],
-                createdAt: getDate()
-            })
+            tags
+                .filter((tagName) => !allTags.includes(tagName))
+                .forEach((tagName) => addTag(tagName))
+
+            await saveNote({ title, note: body, tags })
 
             router.push(ROUTES.HOME)
         } catch (error) {
@@ -44,7 +45,7 @@ export function ImportProvider({ children }) {
         } finally {
             setImporting(false)
         }
-    }, [router, saveNote])
+    }, [router, saveNote, allTags, addTag])
 
     useEffect(() => {
         const handleUrl = (url) => {
