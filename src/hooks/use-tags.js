@@ -1,8 +1,8 @@
 import { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { randomUUID } from 'expo-crypto'
 
 import { useFileStorage } from './use-file-storage'
+import { useNotes } from './use-notes'
 import { useRepositories } from './use-repositories'
 import { useHaptics } from './use-haptics'
 import { NoteContext } from '@/context/note-context'
@@ -18,21 +18,40 @@ export function useTags() {
     const { tags, setTags } = useContext(NoteContext)
     const { writeJson } = useFileStorage()
     const { activeRepositoryTree } = useRepositories()
+    const { notes, updateNote } = useNotes()
 
     const rootRepositoryUri = activeRepositoryTree[0]?.uri
 
-    const addTag = (tag) => {
-        const exists = tags.some((existing) => existing.name === tag.name)
-        if (exists) return 'duplicate'
+    const persist = (nextTags) => {
+        setTags(nextTags)
+        if (rootRepositoryUri) writeJson(rootRepositoryUri, TAGS_FILENAME, nextTags)
+    }
 
-        updateBackup((prev) => [...prev, tag])
+    const renameInNotes = (previousName, nextName) => {
+        const affected = notes.filter((note) => note.tags?.includes(previousName))
+        return Promise.all(affected.map((note) => updateNote({
+            ...note,
+            tags: note.tags.map((tag) => (tag === previousName ? nextName : tag))
+        })))
+    }
+
+    const removeFromNotes = (name) => {
+        const affected = notes.filter((note) => note.tags?.includes(name))
+        return Promise.all(affected.map((note) => updateNote({
+            ...note,
+            tags: note.tags.filter((tag) => tag !== name)
+        })))
+    }
+
+    const addTag = (name) => {
+        if (tags.includes(name)) return 'duplicate'
+
+        persist([...tags, name])
+        return 'success'
     }
 
     const saveTag = (name, notify = showSnackbar) => {
-        const result = addTag({
-            id: randomUUID(),
-            name: name.trim()
-        })
+        const result = addTag(name.trim())
 
         if (result === 'duplicate') {
             notify(t('tags.already_added'))
@@ -43,24 +62,18 @@ export function useTags() {
         return 'success'
     }
 
-    const deleteTag = (id) => {
-        updateBackup((prev) => prev.filter((tag) => tag.id !== id))
+    const deleteTag = async (name) => {
+        persist(tags.filter((tag) => tag !== name))
+        await removeFromNotes(name)
     }
 
-    const updateTag = (tag) => {
-        updateBackup((prev) => prev.map((t) => (t.id === tag.id ? tag : t)))
-    }
+    const updateTag = async (previousName, nextName) => {
+        const trimmed = nextName.trim()
+        if (trimmed !== previousName && tags.includes(trimmed)) return 'duplicate'
 
-    const getTag = (id) => {
-        return tags.find((tag) => tag.id === id) || {}
-    }
-
-    const updateBackup = (updater) => {
-        setTags((prev) => {
-            const localTags = updater(prev)
-            writeJson(rootRepositoryUri, TAGS_FILENAME, localTags)
-            return localTags
-        })
+        persist(tags.map((tag) => (tag === previousName ? trimmed : tag)))
+        await renameInNotes(previousName, trimmed)
+        return 'success'
     }
 
     const deleteAllTags = () => {
@@ -70,7 +83,6 @@ export function useTags() {
 
     return {
         tags,
-        getTag,
         addTag,
         saveTag,
         deleteTag,

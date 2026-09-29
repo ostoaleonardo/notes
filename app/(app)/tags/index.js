@@ -24,24 +24,24 @@ export default function Tags() {
     } = useTags()
 
     const [tag, setTag] = useState('')
-    const [selectedId, setSelectedId] = useState('')
+    const [selectedTag, setSelectedTag] = useState('')
     const [visible, setVisible] = useState(false)
     const [isOpen, setIsOpen] = useState(null)
 
     const showDialog = useCallback(() => setVisible(true), [])
     const hideDialog = useCallback(() => setVisible(false), [])
 
-    const onOpenDialog = useCallback((id) => {
+    const onOpenDialog = useCallback((name) => {
         showDialog()
-        setSelectedId(id)
+        setSelectedTag(name)
     }, [showDialog])
 
     const onSave = useCallback((tag) => {
         if (saveTag(tag) === 'success') setTag('')
     }, [saveTag])
 
-    const onDelete = useCallback((id) => {
-        deleteTag(id)
+    const onDelete = useCallback((name) => {
+        deleteTag(name)
         vibrate(FEEDBACK_TYPES.SUCCESS)
     }, [deleteTag, vibrate])
 
@@ -64,15 +64,15 @@ export default function Tags() {
             <AnimatedList
                 gap={2}
                 data={tags}
-                keyExtractor={({ id }) => id}
+                keyExtractor={(name) => name}
                 emptyLabel={t('message.tags.empty')}
                 renderItem={({ item, index }) => (
                     <SwipeableTag
-                        tag={item.name}
-                        isOpen={isOpen === item.id}
-                        onPress={() => onOpenDialog(item.id)}
-                        onOpen={() => setIsOpen(item.id)}
-                        onDelete={() => onDelete(item.id)}
+                        tag={item}
+                        isOpen={isOpen === item}
+                        onPress={() => onOpenDialog(item)}
+                        onOpen={() => setIsOpen(item)}
+                        onDelete={() => onDelete(item)}
                         isFirst={index === 0}
                         isLast={index === tags.length - 1}
                     />
@@ -82,7 +82,7 @@ export default function Tags() {
             <UpdateTag
                 visible={visible}
                 onDismiss={hideDialog}
-                selectedId={selectedId}
+                selectedTag={selectedTag}
             />
         </View>
     )

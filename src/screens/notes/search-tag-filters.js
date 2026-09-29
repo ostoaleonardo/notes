@@ -30,11 +30,11 @@ export function SearchTagFilters({ query, setQuery, tags, parsed }) {
 
                 <View style={styles.chips}>
                     {tags.map((tag) => {
-                        const selected = parsed.tags.includes(tag.name.toLowerCase())
+                        const selected = parsed.tags.includes(tag.toLowerCase())
 
                         return (
                             <Chip
-                                key={tag.name}
+                                key={tag}
                                 mode={selected ? 'flat' : 'outlined'}
                                 style={{
                                     borderRadius: 24,
@@ -44,9 +44,9 @@ export function SearchTagFilters({ query, setQuery, tags, parsed }) {
                                     fontFamily: selected ? FONTS.azeretMedium : FONTS.azeretLight,
                                     ...(selected && { color: colors.background })
                                 }}
-                                onPress={() => setQuery(toggleTagQualifier(query, tag.name))}
+                                onPress={() => setQuery(toggleTagQualifier(query, tag))}
                             >
-                                {tag.name}
+                                {tag}
                             </Chip>
                         )
                     })}

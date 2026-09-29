@@ -52,8 +52,8 @@ export function NoteSearch({ onClose }) {
     const parsed = useMemo(() => parseSearchQuery(query), [query])
 
     const results = useMemo(() => (
-        trimmedQuery ? filterNotes(notes, parsed, { tags, pinned }) : []
-    ), [trimmedQuery, parsed, notes, tags, pinned])
+        trimmedQuery ? filterNotes(notes, parsed, { pinned }) : []
+    ), [trimmedQuery, parsed, notes, pinned])
 
     const saveRecent = (term) => {
         if (!term) return

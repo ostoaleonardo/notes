@@ -24,18 +24,18 @@ export function Tags({ tags, setTags }) {
         if (saveTag(tag, notify) === 'success') setTag('')
     }
 
-    const onToggleTag = useCallback((id) => {
-        setTags((previousTags) => previousTags.includes(id)
-            ? previousTags.filter((tagId) => tagId !== id)
-            : [...previousTags, id])
+    const onToggleTag = useCallback((name) => {
+        setTags((previousTags) => previousTags.includes(name)
+            ? previousTags.filter((tagName) => tagName !== name)
+            : [...previousTags, name])
     }, [setTags])
 
-    const renderItem = useCallback(({ item: { id, name } }) => (
+    const renderItem = useCallback(({ item: name }) => (
         <TagOption
-            id={id}
+            id={name}
             tag={name}
             onToggle={onToggleTag}
-            isSelected={tags.includes(id)}
+            isSelected={tags.includes(name)}
         />
     ), [tags, onToggleTag])
 
@@ -57,7 +57,7 @@ export function Tags({ tags, setTags }) {
             <FlatList
                 alignItems='center'
                 data={allTags}
-                keyExtractor={({ id }) => id}
+                keyExtractor={(name) => name}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: 16 }}
                 ItemSeparatorComponent={<Separator style={{ marginHorizontal: 24 }} />}

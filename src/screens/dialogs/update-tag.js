@@ -11,21 +11,17 @@ import { useHaptics } from '@/hooks/use-haptics'
 import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/dialog'
 import { FEEDBACK_TYPES } from '@/constants/feedback-types'
 
-export function UpdateTag({ visible, onDismiss, selectedId }) {
+export function UpdateTag({ visible, onDismiss, selectedTag }) {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
-    const { getTag, updateTag } = useTags()
+    const { updateTag } = useTags()
 
-    const getInitialName = (id) => getTag(id).name
-    const [tag, setTag, placeholder, disabled] = useEditDialogInput(selectedId, getInitialName)
+    const [tag, setTag, placeholder, disabled] = useEditDialogInput(selectedTag, (name) => name)
 
     const onUpdate = () => {
         if (disabled) return
 
-        updateTag({
-            id: selectedId,
-            name: tag.trim()
-        })
+        updateTag(selectedTag, tag.trim())
 
         onDismiss()
         vibrate(FEEDBACK_TYPES.SUCCESS)

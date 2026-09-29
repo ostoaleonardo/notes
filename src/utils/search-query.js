@@ -86,14 +86,10 @@ export const toggleImageQualifier = (query) => toggleQualifier(query, IMAGE_QUAL
 
 export const toggleContentQualifier = (query) => toggleQualifier(query, CONTENT_QUALIFIER_REGEX, CONTENT_QUALIFIER)
 
-export const filterNotes = (notes, parsed, { tags, pinned }) => {
-    const tagIds = parsed.tags
-        .map((name) => tags.find((t) => t.name.toLowerCase() === name)?.id)
-        .filter(Boolean)
-
+export const filterNotes = (notes, parsed, { pinned }) => {
     const scored = notes.flatMap((note) => {
         if (parsed.pinned && !pinned.has(note.path)) return []
-        if (tagIds.length > 0 && !tagIds.some((id) => note.tags?.includes(id))) return []
+        if (parsed.tags.length > 0 && !parsed.tags.some((name) => note.tags?.some((tag) => tag.toLowerCase() === name))) return []
         if (parsed.hasImage && !MARKDOWN_IMAGE_REGEX.test(note.note || '')) return []
         if (parsed.modified && toDateKey(note.updatedAt) !== parsed.modified) return []
         if (parsed.created && toDateKey(note.createdAt) !== parsed.created) return []

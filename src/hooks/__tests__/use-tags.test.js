@@ -9,6 +9,8 @@ import { NoteContext } from '@/context/note-context'
 import { DEFAULT_TAGS } from '@/constants/default-values'
 
 const mockFileStorage = { writeJson: jest.fn() }
+const mockUpdateNote = jest.fn(async () => {})
+let mockNotes = []
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
     default: {}
@@ -24,6 +26,9 @@ jest.mock('../use-repository-data', () => ({
 }))
 jest.mock('../use-repositories', () => ({
     useRepositories: () => ({ activeRepositoryTree: [{ uri: MOCK_ROOT_URI }] })
+}))
+jest.mock('../use-notes', () => ({
+    useNotes: () => ({ notes: mockNotes, updateNote: mockUpdateNote })
 }))
 
 const renderTagsHook = (initialTags = []) => {
@@ -52,6 +57,7 @@ const renderTagsHook = (initialTags = []) => {
 
 beforeEach(() => {
     jest.clearAllMocks()
+    mockNotes = []
 })
 
 describe('add tag', () => {
@@ -62,7 +68,7 @@ describe('add tag', () => {
             result.current.addTag(MOCK_PERSONAL_TAG)
         })
 
-        expect(result.current.tags.map((tag) => tag.name)).toEqual(['work', 'personal'])
+        expect(result.current.tags).toEqual(['work', 'personal'])
         expect(mockFileStorage.writeJson).toHaveBeenCalledWith(
             MOCK_ROOT_URI,
             '.tags.json',
@@ -70,12 +76,12 @@ describe('add tag', () => {
         )
     })
 
-    test('does not duplicate a tag with the same name, even as a new object', async () => {
+    test('does not duplicate a tag with the same name', async () => {
         const { result } = await renderTagsHook([MOCK_WORK_TAG])
 
         let addResult
         await act(() => {
-            addResult = result.current.addTag({ id: 'tag-new', name: MOCK_WORK_TAG.name })
+            addResult = result.current.addTag(MOCK_WORK_TAG)
         })
 
         expect(addResult).toBe('duplicate')
@@ -84,45 +90,77 @@ describe('add tag', () => {
 })
 
 describe('update tag', () => {
-    test('renames a tag by id', async () => {
+    test('renames a tag', async () => {
         const { result } = await renderTagsHook([MOCK_WORK_TAG])
 
-        await act(() => {
-            result.current.updateTag({ id: 'tag-1', name: 'career' })
+        await act(async () => {
+            await result.current.updateTag(MOCK_WORK_TAG, 'career')
         })
 
-        expect(result.current.tags[0].name).toBe('career')
+        expect(result.current.tags[0]).toBe('career')
+    })
+
+    test('rejects the rename when the new name is already taken by another tag', async () => {
+        const { result } = await renderTagsHook([MOCK_WORK_TAG, MOCK_PERSONAL_TAG])
+
+        let updateResult
+        await act(async () => {
+            updateResult = await result.current.updateTag(MOCK_WORK_TAG, MOCK_PERSONAL_TAG)
+        })
+
+        expect(updateResult).toBe('duplicate')
+        expect(result.current.tags).toEqual([MOCK_WORK_TAG, MOCK_PERSONAL_TAG])
+    })
+
+    test('renames the tag in every note that has it', async () => {
+        mockNotes = [
+            { path: 'repo-1::a.md', tags: [MOCK_WORK_TAG] },
+            { path: 'repo-1::b.md', tags: [MOCK_PERSONAL_TAG] }
+        ]
+        const { result } = await renderTagsHook([MOCK_WORK_TAG, MOCK_PERSONAL_TAG])
+
+        await act(async () => {
+            await result.current.updateTag(MOCK_WORK_TAG, 'career')
+        })
+
+        expect(mockUpdateNote).toHaveBeenCalledTimes(1)
+        expect(mockUpdateNote).toHaveBeenCalledWith(
+            expect.objectContaining({ path: 'repo-1::a.md', tags: ['career'] })
+        )
     })
 })
 
 describe('delete tag', () => {
-    test('removes a tag by id and persists the change', async () => {
+    test('removes a tag and persists the change', async () => {
         const { result } = await renderTagsHook([MOCK_WORK_TAG, MOCK_PERSONAL_TAG])
 
-        await act(() => {
-            result.current.deleteTag('tag-1')
+        await act(async () => {
+            await result.current.deleteTag(MOCK_WORK_TAG)
         })
 
-        expect(result.current.tags.map((tag) => tag.id)).toEqual(['tag-2'])
+        expect(result.current.tags).toEqual([MOCK_PERSONAL_TAG])
         expect(mockFileStorage.writeJson).toHaveBeenCalledWith(
             MOCK_ROOT_URI,
             '.tags.json',
             [MOCK_PERSONAL_TAG]
         )
     })
-})
 
-describe('get tag', () => {
-    test('returns the matching tag', async () => {
-        const { result } = await renderTagsHook([MOCK_WORK_TAG])
+    test('strips the tag from every note that has it', async () => {
+        mockNotes = [
+            { path: 'repo-1::a.md', tags: [MOCK_WORK_TAG, MOCK_PERSONAL_TAG] },
+            { path: 'repo-1::b.md', tags: [MOCK_PERSONAL_TAG] }
+        ]
+        const { result } = await renderTagsHook([MOCK_WORK_TAG, MOCK_PERSONAL_TAG])
 
-        expect(result.current.getTag('tag-1')).toBe(MOCK_WORK_TAG)
-    })
+        await act(async () => {
+            await result.current.deleteTag(MOCK_WORK_TAG)
+        })
 
-    test('returns an empty object when no tag matches', async () => {
-        const { result } = await renderTagsHook([])
-
-        expect(result.current.getTag('missing')).toEqual({})
+        expect(mockUpdateNote).toHaveBeenCalledTimes(1)
+        expect(mockUpdateNote).toHaveBeenCalledWith(
+            expect.objectContaining({ path: 'repo-1::a.md', tags: [MOCK_PERSONAL_TAG] })
+        )
     })
 })
 
