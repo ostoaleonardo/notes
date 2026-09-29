@@ -69,7 +69,7 @@ export const buildPropertyRowStyle = ({ onBackground }) => ({
     color: onBackground
 })
 
-export const buildChipStyle = ({ tertiary, onTertiary }) => ({
+export const buildChipStyle = ({ tertiary, onTertiary, fontFamily }) => ({
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -80,6 +80,7 @@ export const buildChipStyle = ({ tertiary, onTertiary }) => ({
     borderRadius: '999px',
     backgroundColor: tertiary,
     color: onTertiary,
+    fontFamily,
     fontSize: '13px',
     lineHeight: '13px',
     cursor: 'pointer'

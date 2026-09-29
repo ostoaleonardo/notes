@@ -23,12 +23,7 @@ import {
 
 const ThemeContext = createContext({ colors: {}, typography: {} })
 
-const AutoGrowTitle = ({
-    value,
-    onChange,
-    onBlur,
-    placeholder
-}) => {
+const AutoGrowTitle = ({ value, onChange, onBlur, placeholder }) => {
     const { colors, typography } = useContext(ThemeContext)
     const ref = useRef(null)
     const hasFocusRef = useRef(false)
@@ -86,8 +81,8 @@ const PropertiesPanel = ({
     onRemoveTag,
     onOpenTags
 }) => {
-    const { colors } = useContext(ThemeContext)
-    const { onBackground, tertiary, onTertiary } = colors
+    const { colors, typography } = useContext(ThemeContext)
+    const { tertiary, onTertiary, onBackground } = colors
 
     if (!tags || tags.length === 0) return null
 
@@ -117,7 +112,7 @@ const PropertiesPanel = ({
                         <path d={TAG_ICON_PATH} />
                     </svg>
                     {tags.map((tag) => (
-                        <span key={tag} style={buildChipStyle({ tertiary, onTertiary })}>
+                        <span key={tag} style={buildChipStyle({ tertiary, onTertiary, fontFamily: typography.fontFamily })}>
                             {tag}
                             <svg
                                 width='10'
