@@ -11,7 +11,6 @@ import { useNotes } from '@/hooks/use-notes'
 import { useWikiLinkRenameConfirm } from '@/hooks/use-wiki-link-rename-confirm'
 import { useCurrentNote, useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
-import { getDate } from '@/utils/date'
 import { buildNotePayload } from '@/utils/note-payload'
 
 import { ROUTES } from '@/constants/routes'
@@ -49,10 +48,12 @@ export default function EditNote() {
     const [updatedAt, setUpdatedAt] = useState('')
     const [repositoryId, setRepositoryId] = useState('')
     const [filename, setFilename] = useState('')
+    const [invalidFrontmatter, setInvalidFrontmatter] = useState(null)
 
     const originalTitleRef = useRef(null)
     const originalNoteRef = useRef(null)
     const originalTagsRef = useRef(null)
+    const originalInvalidFrontmatterRef = useRef(null)
 
     useEffect(() => {
         if (notesLoading || repositoriesLoading) return
@@ -64,7 +65,8 @@ export default function EditNote() {
             createdAt = Date.now(),
             updatedAt = '',
             repositoryId = '',
-            filename = ''
+            filename = '',
+            invalidFrontmatter = null
         } = getNote(slug)
 
         const resolvedTitle = title || t('notes.untitled')
@@ -76,9 +78,11 @@ export default function EditNote() {
         setUpdatedAt(updatedAt)
         setRepositoryId(repositoryId)
         setFilename(filename)
+        setInvalidFrontmatter(invalidFrontmatter)
         originalTitleRef.current = resolvedTitle
         originalNoteRef.current = content
         originalTagsRef.current = tags
+        originalInvalidFrontmatterRef.current = invalidFrontmatter
         setLoading(false)
     }, [
         slug,
@@ -109,9 +113,12 @@ export default function EditNote() {
     }
 
     const { flush } = useAutosave(() => runExclusive(async () => {
-        if (note === originalNoteRef.current && tagsEqual(tags, originalTagsRef.current)) return
+        if (
+            note === originalNoteRef.current &&
+            tagsEqual(tags, originalTagsRef.current) &&
+            invalidFrontmatter === originalInvalidFrontmatterRef.current
+        ) return
 
-        const updatedAt = getDate()
         const payload = buildNotePayload({
             path: pathRef.current,
             title: originalTitleRef.current,
@@ -119,16 +126,18 @@ export default function EditNote() {
             tags,
             createdAt,
             repositoryId,
-            updatedAt
+            invalidFrontmatter
         })
 
         isSavingRef.current = true
         try {
             const saved = await updateNote(payload)
             moveToPath(saved.path, saved.filename)
-            setUpdatedAt(updatedAt)
+            setCreatedAt(saved.createdAt)
+            setUpdatedAt(saved.updatedAt)
             originalNoteRef.current = note
             originalTagsRef.current = tags
+            originalInvalidFrontmatterRef.current = invalidFrontmatter
         } finally {
             isSavingRef.current = false
         }
@@ -136,7 +145,8 @@ export default function EditNote() {
         note,
         tags,
         createdAt,
-        repositoryId
+        repositoryId,
+        invalidFrontmatter
     ], {
         skip: loading
     })
@@ -149,12 +159,14 @@ export default function EditNote() {
         originalTitleRef.current = trimmedTitle
 
         runExclusive(async () => {
-            const payload = buildNotePayload({ path: pathRef.current, title: trimmedTitle, note, tags, createdAt, repositoryId, updatedAt: getDate() })
+            const payload = buildNotePayload({ path: pathRef.current, title: trimmedTitle, note, tags, createdAt, repositoryId, invalidFrontmatter })
 
             isSavingRef.current = true
             try {
-                const { savedNote, path, filename: nextFilename } = await saveWithLinkCheck(payload, previousTitle)
+                const { savedNote, path, filename: nextFilename, createdAt: nextCreatedAt, updatedAt: nextUpdatedAt } = await saveWithLinkCheck(payload, previousTitle)
                 moveToPath(path, nextFilename)
+                setCreatedAt(nextCreatedAt)
+                setUpdatedAt(nextUpdatedAt)
                 if (savedNote.note !== payload.note) setNote(savedNote.note)
             } finally {
                 isSavingRef.current = false
@@ -178,6 +190,8 @@ export default function EditNote() {
                 setNote={setNote}
                 tags={tags}
                 setTags={setTags}
+                invalidFrontmatter={invalidFrontmatter}
+                setInvalidFrontmatter={setInvalidFrontmatter}
                 createdAt={createdAt}
                 updatedAt={updatedAt}
                 initialMode='read'

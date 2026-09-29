@@ -7,13 +7,13 @@ import { useFileStorage } from './use-file-storage'
 import { getWelcomeNote } from '@/utils/welcome-note'
 import { getUniqueFilename } from '@/utils/note-filename'
 import { buildNotePath } from '@/utils/note-path'
-import { getDate } from '@/utils/date'
+import { buildNoteFileContent } from '@/utils/frontmatter'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export function useWelcomeNote() {
     const { getItem, setItem } = useStorage()
-    const { listMarkdownFiles, writeNoteFile, readMetadata, writeMetadata } = useFileStorage()
+    const { listMarkdownFiles, writeNoteFile } = useFileStorage()
     const { colors } = useTheme()
 
     const seedWelcomeNote = useCallback(async (uri, repositoryId) => {
@@ -26,18 +26,12 @@ export function useWelcomeNote() {
         const existingNames = listMarkdownFiles(uri).map((file) => file.name)
         const filename = getUniqueFilename(existingNames, title, null)
 
-        writeNoteFile(uri, filename, content)
-
-        const metadata = await readMetadata(uri)
-        metadata[filename] = { tags: [], createdAt: getDate(), updatedAt: '' }
-        writeMetadata(uri, metadata)
+        writeNoteFile(uri, filename, buildNoteFileContent({ tags: [] }, content))
 
         return buildNotePath(repositoryId, filename)
     }, [
         getItem,
         setItem,
-        readMetadata,
-        writeMetadata,
         writeNoteFile,
         listMarkdownFiles,
         colors

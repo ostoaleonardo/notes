@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { DevSettings } from 'react-native'
 import { registerDevMenuItems } from 'expo-dev-menu'
 import { Directory } from 'expo-file-system'
-import { randomUUID } from 'expo-crypto'
 import { useTheme } from 'react-native-paper'
 import legacyNotes from '../../legacy/notes.json'
 import legacyTags from '../../legacy/categories.json'
@@ -14,7 +13,7 @@ import { useRepositories } from './use-repositories'
 
 import { getWelcomeNote } from '@/utils/welcome-note'
 import { sanitizeFilename } from '@/utils/note-filename'
-import { getDate } from '@/utils/date'
+import { buildNoteFileContent, parseFrontmatter } from '@/utils/frontmatter'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { TREE_BRANCHING, NOTES_PER_FOLDER } from '@/constants/dev-menu'
@@ -26,12 +25,11 @@ export function useDevMenu() {
 
     const {
         writeNoteFile,
+        findFile,
         clearRepository,
         createSubdirectory,
         getOrCreateTemplatesFolder,
-        deleteDirectory,
-        readMetadata,
-        writeMetadata
+        deleteDirectory
     } = useFileStorage()
 
     const {
@@ -106,19 +104,10 @@ export function useDevMenu() {
         const { title, content } = getWelcomeNote(colors)
         const filename = `${sanitizeFilename(title)}.md`
 
-        const metadata = await readMetadata(uri)
-        const existingId = Object.keys(metadata).find((id) => metadata[id].filename === filename)
+        const existing = findFile(uri, filename)
+        const previous = existing ? parseFrontmatter(await existing.text()).frontmatter : null
 
-        writeNoteFile(uri, filename, content)
-
-        const id = existingId || randomUUID()
-        metadata[id] = {
-            filename,
-            tags: metadata[id]?.tags || [],
-            createdAt: metadata[id]?.createdAt || getDate(),
-            updatedAt: existingId ? getDate() : ''
-        }
-        writeMetadata(uri, metadata)
+        writeNoteFile(uri, filename, buildNoteFileContent({ tags: previous?.tags || [] }, content))
 
         DevSettings.reload()
     }

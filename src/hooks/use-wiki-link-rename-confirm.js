@@ -34,16 +34,16 @@ export function useWikiLinkRenameConfirm() {
             ? { ...note, note: renameWikiLinksForNote(note.note, note.path, note.title, notes, notePaths) }
             : note
 
-        const { path, filename } = await updateNote(savedNote)
+        const { path, filename, createdAt, updatedAt } = await updateNote(savedNote)
 
-        if (!titleChanged) return { savedNote, path, filename }
+        if (!titleChanged) return { savedNote, path, filename, createdAt, updatedAt }
 
         const backlinks = findBacklinks(note.path, notes, notePaths)
-        if (!backlinks.length) return { savedNote, path, filename }
+        if (!backlinks.length) return { savedNote, path, filename, createdAt, updatedAt }
 
         if (alwaysUpdate) {
             propagateWikiLinkRename(note.path, note.title, notes, notePaths)
-            return { savedNote, path, filename }
+            return { savedNote, path, filename, createdAt, updatedAt }
         }
 
         setPending({
@@ -53,7 +53,7 @@ export function useWikiLinkRenameConfirm() {
             notePaths,
             count: backlinks.length
         })
-        return { savedNote, path, filename }
+        return { savedNote, path, filename, createdAt, updatedAt }
     }
 
     const onDismiss = () => setPending(null)

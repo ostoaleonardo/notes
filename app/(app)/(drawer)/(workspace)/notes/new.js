@@ -8,7 +8,6 @@ import { useAutosave } from '@/hooks/use-autosave'
 import { useNotes } from '@/hooks/use-notes'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
-import { getDate } from '@/utils/date'
 import { getUniqueTitle } from '@/utils/note-filename'
 import { buildNotePayload } from '@/utils/note-payload'
 
@@ -36,6 +35,7 @@ export default function Note() {
     const [updatedAt, setUpdatedAt] = useState('')
     const [repositoryId, setRepositoryId] = useState('')
     const [filename, setFilename] = useState('')
+    const [invalidFrontmatter, setInvalidFrontmatter] = useState(null)
 
     useEffect(() => {
         notesRef.current = notes
@@ -68,28 +68,28 @@ export default function Note() {
 
     const { flush } = useAutosave(() => runExclusive(async () => {
         if (!isSaved.current) {
-            const createdAt = getDate()
-            const payload = buildNotePayload({ title, note, tags, createdAt, repositoryId })
+            const payload = buildNotePayload({ title, note, tags, repositoryId, invalidFrontmatter })
 
             const saved = await saveNote(payload, repositoryId)
 
             pathRef.current = saved.path
             setPath(saved.path)
             setFilename(saved.filename)
-            setCreatedAt(createdAt)
+            setCreatedAt(saved.createdAt)
+            setUpdatedAt(saved.updatedAt)
             isSaved.current = true
         } else {
-            const updatedAt = getDate()
-            const payload = buildNotePayload({ path: pathRef.current, title, note, tags, createdAt, repositoryId, updatedAt })
+            const payload = buildNotePayload({ path: pathRef.current, title, note, tags, createdAt, repositoryId, invalidFrontmatter })
 
             const saved = await updateNote(payload)
 
             pathRef.current = saved.path
             setPath(saved.path)
             setFilename(saved.filename)
-            setUpdatedAt(updatedAt)
+            setCreatedAt(saved.createdAt)
+            setUpdatedAt(saved.updatedAt)
         }
-    }), [title, note, tags, createdAt, repositoryId], {
+    }), [title, note, tags, repositoryId, invalidFrontmatter], {
         skip: firstRender.current || (title === autoTitleRef.current && !note)
     })
 
@@ -105,6 +105,8 @@ export default function Note() {
             setNote={setNote}
             tags={tags}
             setTags={setTags}
+            invalidFrontmatter={invalidFrontmatter}
+            setInvalidFrontmatter={setInvalidFrontmatter}
             createdAt={createdAt}
             updatedAt={updatedAt}
             initialMode='live'

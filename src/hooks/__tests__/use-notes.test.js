@@ -7,23 +7,21 @@ import {
     MOCK_DUPLICATE_TITLE_DRAFT,
     MOCK_GHOST_NOTE,
     MOCK_GROCERIES_DRAFT,
-    MOCK_GROCERIES_METADATA,
     MOCK_GROCERIES_NOTE,
     MOCK_MINIMAL_NOTE,
-    MOCK_OLD_TITLE_METADATA,
     MOCK_OLD_TITLE_NOTE,
     MOCK_ORPHANED_NOTE,
     MOCK_UNSAVED_NOTE
 } from '../__fixtures__/notes'
 import { NoteContext } from '@/context/note-context'
+import { parseFrontmatter } from '@/utils/frontmatter'
 
 const mockFileStorage = {
     listMarkdownFiles: jest.fn(),
     writeNoteFile: jest.fn(),
     renameNoteFile: jest.fn(async () => { }),
     deleteNoteFile: jest.fn(),
-    readMetadata: jest.fn(),
-    writeMetadata: jest.fn(),
+    findFile: jest.fn(),
     renameVersions: jest.fn(async () => { }),
     deleteVersions: jest.fn()
 }
@@ -48,7 +46,9 @@ jest.mock('../use-repositories', () => ({
 }))
 
 let files
-let metadata
+
+const readFrontmatter = (filename) => parseFrontmatter(files.get(filename)).frontmatter
+const readBody = (filename) => parseFrontmatter(files.get(filename)).body
 
 const renderNotesHook = (initialNotes = []) => {
     const Wrapper = ({ children }) => {
@@ -76,7 +76,6 @@ const renderNotesHook = (initialNotes = []) => {
 
 beforeEach(() => {
     files = new Map()
-    metadata = {}
 
     jest.clearAllMocks()
     mockFileStorage.listMarkdownFiles.mockImplementation(() => (
@@ -86,14 +85,14 @@ beforeEach(() => {
     ))
     mockFileStorage.writeNoteFile.mockImplementation((_uri, filename, content) => {
         files.set(filename, content)
+        return { name: filename, creationTime: 1000, lastModified: 2000 }
     })
     mockFileStorage.deleteNoteFile.mockImplementation((_uri, filename) => {
         files.delete(filename)
     })
-    mockFileStorage.readMetadata.mockImplementation(async () => metadata)
-    mockFileStorage.writeMetadata.mockImplementation((_uri, value) => {
-        metadata = value
-    })
+    mockFileStorage.findFile.mockImplementation((_uri, filename) => (
+        files.has(filename) ? { name: filename } : undefined
+    ))
     mockFileStorage.renameNoteFile.mockImplementation(async (_uri, oldName, newName) => {
         files.set(newName, files.get(oldName))
         files.delete(oldName)
@@ -101,7 +100,7 @@ beforeEach(() => {
 })
 
 describe('save note', () => {
-    test('adds the note to state and writes its file and metadata', async () => {
+    test('adds the note to state and writes its file and frontmatter', async () => {
         const { result } = await renderNotesHook()
         let saved
 
@@ -109,12 +108,12 @@ describe('save note', () => {
             saved = await result.current.saveNote(MOCK_GROCERIES_DRAFT)
         })
 
-        expect(saved).toEqual({ path: 'repo-1::Groceries.md', filename: 'Groceries.md' })
+        expect(saved).toEqual({ path: 'repo-1::Groceries.md', filename: 'Groceries.md', createdAt: 1000, updatedAt: 2000 })
         expect(result.current.notes).toHaveLength(1)
         expect(result.current.notes[0].repositoryId).toBe('repo-1')
         expect(result.current.notes[0].path).toBe('repo-1::Groceries.md')
-        expect(files.get('Groceries.md')).toBe('milk, eggs')
-        expect(metadata['Groceries.md']).toEqual({ tags: [], createdAt: 1, updatedAt: '' })
+        expect(readBody('Groceries.md')).toBe('milk, eggs')
+        expect(readFrontmatter('Groceries.md')).toEqual({ tags: [] })
     })
 
     test('disambiguates the filename when the title is already taken', async () => {
@@ -125,8 +124,8 @@ describe('save note', () => {
             await result.current.saveNote(MOCK_DUPLICATE_TITLE_DRAFT)
         })
 
-        expect(files.get('Groceries (2).md')).toBe('new content')
-        expect(metadata['Groceries (2).md']).toEqual({ tags: [], createdAt: 2, updatedAt: '' })
+        expect(readBody('Groceries (2).md')).toBe('new content')
+        expect(readFrontmatter('Groceries (2).md')).toEqual({ tags: [] })
     })
 
     test('adds the note to state but does not touch the filesystem when the repository cannot be resolved', async () => {
@@ -144,23 +143,21 @@ describe('save note', () => {
 
 describe('update note', () => {
     test('rewrites the file content without renaming when the title is unchanged', async () => {
-        files.set('Groceries.md', 'old content')
-        metadata = { ...MOCK_GROCERIES_METADATA }
+        files.set('Groceries.md', '---\ntags: []\n---\n\nold content')
         const { result } = await renderNotesHook([MOCK_GROCERIES_NOTE])
 
         await act(async () => {
             await result.current.updateNote({ ...MOCK_GROCERIES_NOTE, note: 'updated content' })
         })
 
-        expect(files.get('Groceries.md')).toBe('updated content')
+        expect(readBody('Groceries.md')).toBe('updated content')
         expect(mockFileStorage.renameNoteFile).not.toHaveBeenCalled()
         expect(mockFileStorage.renameVersions).not.toHaveBeenCalled()
         expect(result.current.notes[0].note).toBe('updated content')
     })
 
     test('renames the file and its version history when the title changes', async () => {
-        files.set('Old title.md', 'content')
-        metadata = { ...MOCK_OLD_TITLE_METADATA }
+        files.set('Old title.md', '---\ntags: []\n---\n\ncontent')
         const { result } = await renderNotesHook([MOCK_OLD_TITLE_NOTE])
         let updated
 
@@ -168,7 +165,7 @@ describe('update note', () => {
             updated = await result.current.updateNote({ ...MOCK_OLD_TITLE_NOTE, title: 'New title' })
         })
 
-        expect(updated).toEqual({ path: 'repo-1::New title.md', filename: 'New title.md' })
+        expect(updated).toEqual({ path: 'repo-1::New title.md', filename: 'New title.md', createdAt: 1000, updatedAt: 2000 })
         expect(mockFileStorage.renameNoteFile).toHaveBeenCalledWith(
             MOCK_REPO_URI,
             'Old title.md',
@@ -179,8 +176,8 @@ describe('update note', () => {
             'Old title.md',
             'New title.md'
         )
-        expect(metadata['Old title.md']).toBeUndefined()
-        expect(metadata['New title.md']).toEqual({ tags: [], createdAt: 1, updatedAt: '' })
+        expect(files.has('Old title.md')).toBe(false)
+        expect(readFrontmatter('New title.md')).toEqual({ tags: [] })
         expect(result.current.notes[0].path).toBe('repo-1::New title.md')
     })
 
@@ -195,12 +192,8 @@ describe('update note', () => {
             createdAt: 1
         }
 
-        files.set('Old title.md', 'content')
+        files.set('Old title.md', '---\ntags: []\n---\n\ncontent')
         files.set('Linker.md', linkingNote.note)
-        metadata = {
-            ...MOCK_OLD_TITLE_METADATA,
-            'Linker.md': { tags: [], createdAt: 1, updatedAt: '' }
-        }
 
         const { result } = await renderNotesHook([MOCK_OLD_TITLE_NOTE, linkingNote])
 
@@ -210,7 +203,7 @@ describe('update note', () => {
 
         expect(files.get('Linker.md')).toBe('See [[Old title]] for details')
         expect(result.current.notes.find((n) => n.path === 'repo-1::Linker.md').note).toBe('See [[Old title]] for details')
-        expect(metadata['New title.md']).toEqual({ tags: [], createdAt: 1, updatedAt: '' })
+        expect(readFrontmatter('New title.md')).toEqual({ tags: [] })
     })
 
     test('updates other notes independently of updateNote', async () => {
@@ -224,12 +217,8 @@ describe('update note', () => {
             createdAt: 1
         }
 
-        files.set('Old title.md', 'content')
+        files.set('Old title.md', '---\ntags: []\n---\n\ncontent')
         files.set('Linker.md', linkingNote.note)
-        metadata = {
-            ...MOCK_OLD_TITLE_METADATA,
-            'Linker.md': { tags: [], createdAt: 1, updatedAt: '' }
-        }
 
         const { result } = await renderNotesHook([MOCK_OLD_TITLE_NOTE, linkingNote])
 
@@ -246,11 +235,11 @@ describe('update note', () => {
             )
         })
 
-        expect(files.get('Linker.md')).toBe('See [[New title]] for details')
+        expect(readBody('Linker.md')).toBe('See [[New title]] for details')
         expect(result.current.notes.find((n) => n.path === 'repo-1::Linker.md').note).toBe('See [[New title]] for details')
     })
 
-    test('does nothing when the note has no metadata entry', async () => {
+    test('does nothing when the note file no longer exists on disk', async () => {
         const { result } = await renderNotesHook([MOCK_GHOST_NOTE])
 
         await act(async () => {
@@ -267,7 +256,7 @@ describe('update note', () => {
             await result.current.updateNote({ ...MOCK_ORPHANED_NOTE, note: 'y' })
         })
 
-        expect(mockFileStorage.readMetadata).not.toHaveBeenCalled()
+        expect(mockFileStorage.findFile).not.toHaveBeenCalled()
         expect(mockFileStorage.writeNoteFile).not.toHaveBeenCalled()
     })
 
@@ -279,18 +268,17 @@ describe('update note', () => {
             saved = await result.current.updateNote(MOCK_UNSAVED_NOTE)
         })
 
-        expect(saved).toEqual({ path: 'repo-1::Untitled.md', filename: 'Untitled.md' })
+        expect(saved).toEqual({ path: 'repo-1::Untitled.md', filename: 'Untitled.md', createdAt: 1000, updatedAt: 2000 })
         expect(result.current.notes).toHaveLength(1)
         expect(result.current.notes[0].path).toBe('repo-1::Untitled.md')
-        expect(files.get('Untitled.md')).toBe('quick note content')
-        expect(metadata['Untitled.md']).toEqual({ tags: [], createdAt: 1, updatedAt: '' })
+        expect(readBody('Untitled.md')).toBe('quick note content')
+        expect(readFrontmatter('Untitled.md')).toEqual({ tags: [] })
     })
 })
 
 describe('delete note', () => {
-    test('removes the note from state, deletes its file, versions and metadata entry', async () => {
-        files.set('Groceries.md', 'content')
-        metadata = { ...MOCK_GROCERIES_METADATA }
+    test('removes the note from state, deletes its file and versions', async () => {
+        files.set('Groceries.md', '---\ntags: []\n---\n\ncontent')
         const { result } = await renderNotesHook([MOCK_GROCERIES_NOTE])
 
         await act(async () => {
@@ -300,7 +288,6 @@ describe('delete note', () => {
         expect(result.current.notes).toEqual([])
         expect(files.has('Groceries.md')).toBe(false)
         expect(mockFileStorage.deleteVersions).toHaveBeenCalledWith(MOCK_REPO_URI, 'Groceries.md')
-        expect(metadata['Groceries.md']).toBeUndefined()
     })
 
     test('is a no-op when the note path does not exist', async () => {
@@ -321,7 +308,7 @@ describe('delete note', () => {
         })
 
         expect(result.current.notes).toEqual([])
-        expect(mockFileStorage.readMetadata).not.toHaveBeenCalled()
+        expect(mockFileStorage.findFile).not.toHaveBeenCalled()
         expect(mockFileStorage.deleteNoteFile).not.toHaveBeenCalled()
     })
 })

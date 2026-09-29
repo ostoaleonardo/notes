@@ -5,6 +5,7 @@ import { useRepositories } from './use-repositories'
 import { NoteContext } from '../context/note-context'
 import { getUniqueFilename } from '@/utils/note-filename'
 import { buildNotePath } from '@/utils/note-path'
+import { buildNoteFileContent } from '@/utils/frontmatter'
 import { renameWikiLinksForNote } from '@/utils/wiki-links'
 
 export function useNotes() {
@@ -13,9 +14,8 @@ export function useNotes() {
         writeNoteFile,
         renameNoteFile,
         deleteNoteFile,
+        findFile,
         clearRepository,
-        readMetadata,
-        writeMetadata,
         renameVersions,
         deleteVersions
     } = useFileStorage()
@@ -32,11 +32,11 @@ export function useNotes() {
         repositories.find((repository) => repository.id === repositoryId)?.uri
     )
 
-    const toMetadataEntry = (note) => ({
-        tags: note.tags,
-        createdAt: note.createdAt,
-        updatedAt: note.updatedAt || ''
-    })
+    const buildFileContent = (note) => (
+        note.invalidFrontmatter != null
+            ? `---\n${note.invalidFrontmatter}\n---\n\n${note.note}`
+            : buildNoteFileContent({ tags: note.tags }, note.note)
+    )
 
     const resolveFilename = (uri, title, currentFilename) => (
         getUniqueFilename(listMarkdownFiles(uri).map((file) => file.name), title, currentFilename)
@@ -52,22 +52,13 @@ export function useNotes() {
 
         const filename = resolveFilename(uri, note.title, null)
         const path = buildNotePath(repositoryId, filename)
-        const noteWithLocation = { ...note, repositoryId, filename, path }
+        const file = writeNoteFile(uri, filename, buildFileContent(note))
+        const createdAt = file.creationTime ?? file.lastModified
+        const updatedAt = file.lastModified
 
-        setNotes((prev) => [noteWithLocation, ...prev])
+        setNotes((prev) => [{ ...note, repositoryId, filename, path, createdAt, updatedAt }, ...prev])
 
-        try {
-            writeNoteFile(uri, filename, note.note)
-
-            const metadata = await readMetadata(uri)
-            metadata[filename] = toMetadataEntry(note)
-            writeMetadata(uri, metadata)
-        } catch (error) {
-            setNotes((prev) => prev.filter((n) => n.path !== path))
-            throw error
-        }
-
-        return { path, filename }
+        return { path, filename, createdAt, updatedAt }
     }
 
     const propagateWikiLinkRename = async (targetPath, newTitle, notesSnapshot, notePaths) => {
@@ -96,7 +87,7 @@ export function useNotes() {
             if (!otherUri) continue
 
             for (const changedNote of notesInRepository) {
-                writeNoteFile(otherUri, changedNote.filename, changedNote.note)
+                writeNoteFile(otherUri, changedNote.filename, buildFileContent(changedNote))
             }
         }
     }
@@ -112,7 +103,7 @@ export function useNotes() {
             setNotes((prev) => prev.map((n) => (
                 n.path === previous.path ? { ...note, filename: previous.filename, path: previous.path } : n
             )))
-            return { path: previous.path, filename: previous.filename }
+            return { path: previous.path, filename: previous.filename, createdAt: previous.createdAt, updatedAt: previous.updatedAt }
         }
 
         const filename = resolveFilename(uri, note.title, previous.filename)
@@ -122,25 +113,28 @@ export function useNotes() {
 
         setNotes((prev) => prev.map((n) => (n.path === previous.path ? noteWithLocation : n)))
 
+        let createdAt = previous.createdAt
+        let updatedAt = previous.updatedAt
+
         try {
-            const metadata = await readMetadata(uri)
-            if (!metadata[previous.filename]) return { path, filename }
+            if (!findFile(uri, previous.filename)) return { path, filename, createdAt, updatedAt }
 
             if (renamed) {
                 await renameNoteFile(uri, previous.filename, filename)
                 await renameVersions(uri, previous.filename, filename)
-                delete metadata[previous.filename]
             }
 
-            writeNoteFile(uri, filename, note.note)
-            metadata[filename] = toMetadataEntry(note)
-            writeMetadata(uri, metadata)
+            const file = writeNoteFile(uri, filename, buildFileContent(note))
+            createdAt = file.creationTime ?? file.lastModified
+            updatedAt = file.lastModified
+
+            setNotes((prev) => prev.map((n) => (n.path === path ? { ...n, createdAt, updatedAt } : n)))
         } catch (error) {
             setNotes((prev) => prev.map((n) => (n.path === path ? previous : n)))
             throw error
         }
 
-        return { path, filename }
+        return { path, filename, createdAt, updatedAt }
     }
 
     const deleteNote = async (path) => {
@@ -152,13 +146,10 @@ export function useNotes() {
         if (!uri) return
 
         try {
-            const metadata = await readMetadata(uri)
-            if (!metadata[note.filename]) return
+            if (!findFile(uri, note.filename)) return
 
             deleteNoteFile(uri, note.filename)
             deleteVersions(uri, note.filename)
-            delete metadata[note.filename]
-            writeMetadata(uri, metadata)
         } catch (error) {
             setNotes((prev) => [note, ...prev])
             throw error

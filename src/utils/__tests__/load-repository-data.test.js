@@ -3,8 +3,10 @@ import path from 'path'
 import { randomUUID } from 'expo-crypto'
 
 import { loadRepositoryData } from '../load-repository-data'
+import { parseFrontmatter } from '../frontmatter'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { METADATA_FILENAME, SIDECAR_FILENAMES, NOTE_FILE_EXTENSION } from '@/constants/file-storage'
 
 jest.mock('expo-crypto', () => ({ randomUUID: jest.fn() }))
 
@@ -23,26 +25,26 @@ const createFakeStorage = (seed = {}) => {
 
 const createFakeFileStorage = (deviceCache = new Map()) => {
     const files = new Map()
-    const jsons = new Map()
-    const metadatas = new Map()
 
     const filesFor = (uri) => files.get(uri) || (files.set(uri, new Map()), files.get(uri))
-    const jsonsFor = (uri) => jsons.get(uri) || (jsons.set(uri, new Map()), jsons.get(uri))
+
+    const readJson = async (uri, filename, fallback) => {
+        const raw = filesFor(uri).get(filename)
+        if (raw === undefined) return fallback
+        try { return JSON.parse(raw) } catch { return fallback }
+    }
+    const writeJson = (uri, filename, value) => { filesFor(uri).set(filename, JSON.stringify(value)) }
 
     return {
-        listMarkdownFiles: (uri) => Array.from(filesFor(uri).entries()).map(([name, content]) => ({
-            name,
-            text: async () => content
-        })),
+        listMarkdownFiles: (uri) => Array.from(filesFor(uri).entries())
+            .filter(([name]) => !SIDECAR_FILENAMES.includes(name) && name.toLowerCase().endsWith(NOTE_FILE_EXTENSION))
+            .map(([name, content]) => ({ name, text: async () => content, creationTime: 0, lastModified: 0 })),
         writeNoteFile: (uri, filename, content) => { filesFor(uri).set(filename, content) },
         deleteNoteFile: (uri, filename) => { filesFor(uri).delete(filename) },
-        readMetadata: async (uri) => metadatas.get(uri) || {},
-        writeMetadata: (uri, metadata) => { metadatas.set(uri, { ...metadata }) },
-        readJson: async (uri, filename, fallback) => {
-            const store = jsonsFor(uri)
-            return store.has(filename) ? store.get(filename) : fallback
-        },
-        writeJson: (uri, filename, value) => { jsonsFor(uri).set(filename, value) },
+        readMetadata: (uri) => readJson(uri, METADATA_FILENAME, {}),
+        writeMetadata: (uri, metadata) => writeJson(uri, METADATA_FILENAME, metadata),
+        readJson,
+        writeJson,
         getOrCreateImagesFolder: (uri) => ({ uri: `${uri}/images` }),
         copyImageFile: async (sourceUri, directoryUri, filename) => {
             if (!deviceCache.has(sourceUri)) {
@@ -50,7 +52,8 @@ const createFakeFileStorage = (deviceCache = new Map()) => {
             }
             filesFor(directoryUri).set(filename, deviceCache.get(sourceUri))
             return { uri: `${directoryUri}/${filename}` }
-        }
+        },
+        listFiles: (uri) => Array.from(filesFor(uri).keys())
     }
 }
 
@@ -137,8 +140,8 @@ describeLegacyFixtures('legacy AsyncStorage migration', () => {
 
         const { tags } = await loadRepositoryData([repository], repository, storage, fileStorage)
 
-        expect(tags.some((tag) => tag.id === 'all')).toBe(false)
-        expect(tags.map((tag) => tag.name).sort()).toEqual(
+        expect(tags).not.toContain('all')
+        expect(tags.slice().sort()).toEqual(
             legacyTags.filter((tag) => tag.id !== 'all').map((tag) => tag.name).sort()
         )
     })
@@ -155,12 +158,10 @@ describeLegacyFixtures('legacy image migration', () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage(deviceCache)
 
-        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
-        const migrated = notes.find((note) => note.note === legacyNoteWithImage.note)
+        await loadRepositoryData([repository], repository, storage, fileStorage)
 
-        expect(migrated.images).toHaveLength(1)
-        expect(migrated.images[0]).toContain(`${REPO_URI}/images/`)
-        expect(migrated.images[0]).not.toContain('/cache/ImagePicker/')
+        const copiedFiles = fileStorage.listFiles(`${REPO_URI}/images`)
+        expect(copiedFiles).toHaveLength(1)
     })
 
     test('drops a legacy image whose cache file was already purged by the OS, without throwing', async () => {
@@ -170,10 +171,10 @@ describeLegacyFixtures('legacy image migration', () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage(new Map()) // nothing "survived" on device
 
-        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
+        await expect(loadRepositoryData([repository], repository, storage, fileStorage)).resolves.not.toThrow()
 
-        const migrated = notes.find((note) => note.note === legacyNoteWithImage.note)
-        expect(migrated.images).toEqual([])
+        const copiedFiles = fileStorage.listFiles(`${REPO_URI}/images`)
+        expect(copiedFiles).toHaveLength(0)
     })
 
     test('migrates every legacy note image, dropping only the ones missing from the device', async () => {
@@ -185,16 +186,10 @@ describeLegacyFixtures('legacy image migration', () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage(deviceCache)
 
-        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
+        await loadRepositoryData([repository], repository, storage, fileStorage)
 
-        for (const legacyNote of notesWithImages) {
-            const migrated = notes.find((note) => note.note === legacyNote.note)
-            expect(migrated.images).toHaveLength(legacyNote.images.length)
-            for (const uri of migrated.images) {
-                expect(uri).toContain(`${REPO_URI}/images/`)
-                expect(uri).not.toContain('/cache/ImagePicker/')
-            }
-        }
+        const copiedFiles = fileStorage.listFiles(`${REPO_URI}/images`)
+        expect(copiedFiles).toHaveLength(allImageUris.length)
     })
 })
 
@@ -210,7 +205,7 @@ describeLegacyFixtures('tags shared across the repository tree', () => {
         const { tags } = await loadRepositoryData([subfolder], root, storage, fileStorage)
 
         const expectedNames = legacyTags.filter((tag) => tag.id !== 'all').map((tag) => tag.name).sort()
-        expect(tags.map((tag) => tag.name).sort()).toEqual(expectedNames)
+        expect(tags.slice().sort()).toEqual(expectedNames)
 
         const rootSidecar = await fileStorage.readJson(root.uri, '.tags.json', null)
         expect(rootSidecar).not.toBeNull()
@@ -233,29 +228,80 @@ describe('steady state (no legacy data)', () => {
         expect(notes[0].tags).toEqual([])
     })
 
-    test('migrates metadata keyed by a random id into metadata keyed by filename', async () => {
+    test('migrates metadata keyed by a random id into embedded frontmatter, resolving tag ids to names', async () => {
         const storage = createFakeStorage()
         const fileStorage = createFakeFileStorage()
         fileStorage.writeNoteFile(REPO_URI, 'Note.md', 'content')
+        fileStorage.writeJson(REPO_URI, '.tags.json', [{ id: 'tag-1', name: 'work' }])
         fileStorage.writeMetadata(REPO_URI, {
-            'old-uuid': { filename: 'Note.md', tags: ['work'], createdAt: 1, updatedAt: '2', images: [] }
+            'old-uuid': { filename: 'Note.md', tags: ['tag-1'], createdAt: 1, updatedAt: '2' }
         })
 
         const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
 
         expect(notes[0].tags).toEqual(['work'])
-        expect(notes[0].createdAt).toBe(1)
 
-        const metadata = await fileStorage.readMetadata(REPO_URI)
-        expect(metadata['old-uuid']).toBeUndefined()
-        expect(metadata['Note.md']).toEqual({ tags: ['work'], createdAt: 1, updatedAt: '2', images: [] })
+        const noteFile = fileStorage.listMarkdownFiles(REPO_URI).find((file) => file.name === 'Note.md')
+        const { frontmatter, body } = parseFrontmatter(await noteFile.text())
+        expect(frontmatter).toEqual({ tags: ['work'] })
+        expect(body).toBe('content')
+
+        expect(await fileStorage.readMetadata(REPO_URI)).toEqual({})
+        expect(fileStorage.listFiles(REPO_URI)).not.toContain(METADATA_FILENAME)
+    })
+
+    test('drops a tag id from a legacy note that no longer resolves in the tag dictionary', async () => {
+        const storage = createFakeStorage()
+        const fileStorage = createFakeFileStorage()
+        fileStorage.writeNoteFile(REPO_URI, 'Note.md', 'content')
+        fileStorage.writeMetadata(REPO_URI, {
+            'Note.md': { tags: ['deleted-tag-id'], createdAt: 1, updatedAt: '' }
+        })
+
+        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
+
+        expect(notes[0].tags).toEqual([])
+    })
+
+    test('ignores a stale sidecar entry for a note that already has frontmatter', async () => {
+        const storage = createFakeStorage()
+        const fileStorage = createFakeFileStorage()
+        fileStorage.writeNoteFile(REPO_URI, 'Note.md', '---\ntags:\n  - real\n---\n\ncontent')
+        fileStorage.writeMetadata(REPO_URI, {
+            'Note.md': { tags: ['stale'], createdAt: 999, updatedAt: '' }
+        })
+
+        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
+
+        expect(notes[0].tags).toEqual(['real'])
+        expect(await fileStorage.readMetadata(REPO_URI)).toEqual({})
+        expect(fileStorage.listFiles(REPO_URI)).not.toContain(METADATA_FILENAME)
+    })
+
+    test('preserves a note with invalid frontmatter as-is instead of rewriting it', async () => {
+        const storage = createFakeStorage()
+        const fileStorage = createFakeFileStorage()
+        const rawContent = '---\ntags: [unterminated\n---\n\ncontent'
+        fileStorage.writeNoteFile(REPO_URI, 'Note.md', rawContent)
+        fileStorage.writeMetadata(REPO_URI, {
+            'Note.md': { tags: ['stale'], createdAt: 999, updatedAt: '' }
+        })
+
+        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
+
+        expect(notes[0].tags).toEqual([])
+        expect(notes[0].invalidFrontmatter).toBe('tags: [unterminated')
+        expect(notes[0].note).toBe('content')
+
+        const noteFile = fileStorage.listMarkdownFiles(REPO_URI).find((file) => file.name === 'Note.md')
+        expect(await noteFile.text()).toBe(rawContent)
     })
 
     test('prunes metadata entries whose .md file was removed externally', async () => {
         const storage = createFakeStorage()
         const fileStorage = createFakeFileStorage()
         fileStorage.writeMetadata(REPO_URI, {
-            'ghost-id': { filename: 'Deleted externally.md', tags: [], createdAt: 1, updatedAt: '', images: [] }
+            'ghost-id': { filename: 'Deleted externally.md', tags: [], createdAt: 1, updatedAt: '' }
         })
 
         const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
