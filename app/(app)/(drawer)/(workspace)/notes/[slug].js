@@ -105,12 +105,9 @@ export default function EditNote() {
         registerCurrent(nextPath)
     }
 
-    // Autosave and blur can both try to persist the same edit around the same
-    // time; running them one at a time keeps pathRef.current accurate for
-    // whichever one reads it next, instead of both reading it before either finishes.
     const runExclusive = (fn) => {
         const result = saveQueueRef.current.then(fn, fn)
-        saveQueueRef.current = result.catch(() => {})
+        saveQueueRef.current = result.catch(() => { })
         return result
     }
 

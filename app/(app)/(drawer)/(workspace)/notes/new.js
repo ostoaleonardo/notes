@@ -61,11 +61,9 @@ export default function Note() {
         }, [])
     )
 
-    // A manual flush() (export/share) can overlap with an in-flight debounced
-    // save; running them one at a time avoids saving the note twice.
     const runExclusive = (fn) => {
         const result = saveQueueRef.current.then(fn, fn)
-        saveQueueRef.current = result.catch(() => {})
+        saveQueueRef.current = result.catch(() => { })
         return result
     }
 
