@@ -28,12 +28,18 @@ import { useMenuAction } from '@/hooks/use-menu-action'
 import { useNotes } from '@/hooks/use-notes'
 import { usePro } from '@/hooks/use-pro'
 import { useRepositories } from '@/hooks/use-repositories'
+import { useStorage } from '@/hooks/use-storage'
+import { useStorageEffect } from '@/hooks/use-storage-effect'
+import { useTags } from '@/hooks/use-tags'
 import { useTemplates } from '@/hooks/use-templates'
 import { useTemplatesList } from '@/hooks/use-templates-list'
 import { useUndoRedoState } from '@/hooks/use-undo-redo-state'
 import { useVersionHistory } from '@/hooks/use-version-history'
+import { buildNoteFileContent, parseFrontmatter } from '@/utils/frontmatter'
 import { buildNoteMetaLabel } from '@/utils/note-meta-label'
 import { countWords } from '@/utils/word-count'
+
+import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export const NoteEditorScreen = ({
     id,
@@ -43,6 +49,7 @@ export const NoteEditorScreen = ({
     onTitleBlur,
     note, setNote,
     tags, setTags,
+    invalidFrontmatter, setInvalidFrontmatter,
     createdAt, updatedAt,
     initialMode = 'read',
     flush
@@ -54,6 +61,8 @@ export const NoteEditorScreen = ({
     const { currentLanguage } = useLanguage()
     const { repositories } = useRepositories()
     const { exportFile, shareFile } = useFiles()
+    const { tags: allTags, addTag } = useTags()
+    const { setItem } = useStorage()
     const { canUndo, canRedo, onHistoryChange } = useUndoRedoState()
     const { templates, refresh: refreshTemplates } = useTemplatesList()
 
@@ -64,6 +73,64 @@ export const NoteEditorScreen = ({
     const [mode, setMode] = useState(initialMode)
     const [isFocused, setIsFocused] = useState(false)
     const [showBacklinks, setShowBacklinks] = useState(true)
+    const [propertiesVisible, setPropertiesVisible] = useState(true)
+
+    useStorageEffect(STORAGE_KEYS.SHOW_NOTE_PROPERTIES, (value) => {
+        if (value === 'false') setPropertiesVisible(false)
+    })
+
+    const onToggleProperties = useCallback(() => {
+        setPropertiesVisible((prev) => {
+            const next = !prev
+            setItem(STORAGE_KEYS.SHOW_NOTE_PROPERTIES, next ? 'true' : 'false')
+            return next
+        })
+    }, [setItem])
+
+    const onRemoveTag = useCallback((name) => {
+        setTags((prev) => prev.filter((tag) => tag !== name))
+    }, [setTags])
+
+    const [codeBuffer, setCodeBuffer] = useState('')
+
+    const invalidProperties = mode !== 'code' && !!invalidFrontmatter
+
+    const onSetMode = useCallback((nextMode) => {
+        if (nextMode === mode) return
+
+        if (nextMode === 'code') {
+            setCodeBuffer(invalidFrontmatter != null
+                ? `---\n${invalidFrontmatter}\n---\n\n${note}`
+                : buildNoteFileContent({ tags }, note))
+        } else if (mode === 'code') {
+            const decomposed = parseFrontmatter(codeBuffer)
+            if (decomposed.body !== note) setNote(decomposed.body)
+
+            if (decomposed.error) {
+                setInvalidFrontmatter(decomposed.rawFrontmatter)
+            } else {
+                setInvalidFrontmatter(null)
+
+                const nextTags = Array.isArray(decomposed.frontmatter.tags) ? decomposed.frontmatter.tags : []
+                setTags(nextTags)
+                nextTags
+                    .filter((name) => !allTags.includes(name))
+                    .forEach((name) => addTag(name))
+            }
+        }
+
+        setMode(nextMode)
+    }, [mode, tags, note, codeBuffer, invalidFrontmatter, setNote, setTags, setInvalidFrontmatter, allTags, addTag])
+
+    const editorValue = mode === 'code' ? codeBuffer : note
+
+    const onEditorChange = useCallback((value) => {
+        if (mode === 'code') {
+            setCodeBuffer(value)
+            return
+        }
+        setNote(value)
+    }, [mode, setNote])
 
     const shareDialog = useMenuAction()
     const exportDialog = useMenuAction()
@@ -195,7 +262,7 @@ export const NoteEditorScreen = ({
                     <MarkdownModeToggle
                         mode={mode}
                         search={search}
-                        onSetMode={setMode}
+                        onSetMode={onSetMode}
                         isFocused={isFocused}
                         showBacklinks={showBacklinks}
                         onOpenShareDialog={shareDialog.onOpen}
@@ -230,10 +297,19 @@ export const NoteEditorScreen = ({
                     }}
                     onTitleChange={setTitle}
                     onTitleBlur={onTitleBlur}
+                    tags={tags}
+                    propertiesLabel={t('title.tags')}
+                    propertiesVisible={propertiesVisible}
+                    onToggleProperties={onToggleProperties}
+                    onRemoveTag={onRemoveTag}
+                    onOpenTags={tagsSheet.onOpen}
+                    invalidProperties={invalidProperties}
+                    invalidPropertiesTitle={t('tags.invalid_properties_title')}
+                    invalidPropertiesDescription={t('tags.invalid_properties_description')}
                     searchQuery={search.searchQuery}
                     replaceText={search.replaceText}
-                    value={note}
-                    onChangeText={setNote}
+                    value={editorValue}
+                    onChangeText={onEditorChange}
                     onHistoryChange={onHistoryChange}
                     onBlur={() => setIsFocused(false)}
                     onFocus={() => setIsFocused(true)}

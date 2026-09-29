@@ -41,6 +41,15 @@ export const MarkdownInput = ({
     titleField,
     onTitleChange,
     onTitleBlur,
+    tags,
+    propertiesLabel,
+    propertiesVisible,
+    onToggleProperties,
+    onRemoveTag,
+    onOpenTags,
+    invalidProperties,
+    invalidPropertiesTitle,
+    invalidPropertiesDescription,
     searchQuery,
     replaceText,
     showBacklinks = true
@@ -142,9 +151,13 @@ export const MarkdownInput = ({
         background: colors.background,
         surface: colors.surface,
         selection: colors.tertiary + TRANSPARENT[20],
+        tertiaryContainer: colors.tertiary,
+        onTertiaryContainer: colors.onBackground,
         placeholder: colors.onBackground + TRANSPARENT[40],
         codeBackground: colors.onBackground + TRANSPARENT[10],
-        thematicBreak: colors.tertiary + TRANSPARENT[30]
+        thematicBreak: colors.tertiary + TRANSPARENT[30],
+        errorContainer: colors.errorContainer,
+        onErrorContainer: colors.onErrorContainer
     }), [colors])
 
     const typography = useMemo(() => ({
@@ -174,6 +187,15 @@ export const MarkdownInput = ({
                 titleField={titleField}
                 onTitleChange={onTitleChange}
                 onTitleBlur={onTitleBlur}
+                tags={tags}
+                propertiesLabel={propertiesLabel}
+                propertiesVisible={propertiesVisible}
+                onToggleProperties={onToggleProperties}
+                onRemoveTag={onRemoveTag}
+                onOpenTags={onOpenTags}
+                invalidProperties={invalidProperties}
+                invalidPropertiesTitle={invalidPropertiesTitle}
+                invalidPropertiesDescription={invalidPropertiesDescription}
                 searchQuery={searchQuery}
                 replaceText={replaceText}
                 typography={typography}

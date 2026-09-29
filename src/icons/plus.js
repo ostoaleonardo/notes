@@ -1,7 +1,9 @@
 import { Path, Svg } from 'react-native-svg'
 
+import { PLUS_ICON_PATH } from '@/constants/icon-paths'
+
 export const Plus = (props) => (
     <Svg width='24' height='24' viewBox='0 -960 960 960' fill='currentColor' {...props}>
-        <Path d='M460-160v-300H160v-40h300v-300h40v300h300v40H500v300h-40Z' />
+        <Path d={PLUS_ICON_PATH} />
     </Svg>
 )

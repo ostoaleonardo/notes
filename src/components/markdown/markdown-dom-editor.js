@@ -23,6 +23,7 @@ import { useCompartment } from './use-compartment'
 import { listKeymap } from './markdown-dom-list-keymap'
 import { headingFoldService } from './markdown-dom-fold'
 import { pasteUrlOverSelection } from './markdown-dom-paste'
+import { buildInvalidFrontmatterHighlight } from './markdown-dom-invalid-frontmatter'
 
 const createHiddenSearchPanel = () => {
     const dom = document.createElement('div')
@@ -53,6 +54,15 @@ const MarkdownDomEditor = ({
     titleField,
     onTitleChange,
     onTitleBlur,
+    tags,
+    propertiesLabel,
+    propertiesVisible,
+    onToggleProperties,
+    onRemoveTag,
+    onOpenTags,
+    invalidProperties,
+    invalidPropertiesTitle,
+    invalidPropertiesDescription,
     searchQuery,
     replaceText
 }) => {
@@ -84,11 +94,19 @@ const MarkdownDomEditor = ({
     const noteEntriesExtension = useCompartment(viewRef, () => noteEntriesFacet.of(noteEntries || []), [noteEntries])
     const linkFormatExtension = useCompartment(viewRef, () => wikiLinkFormatFacet.of(linkFormat), [linkFormat])
     const liveFormattingExtension = useCompartment(viewRef, () => (mode === 'live' ? [liveFormatting] : []), [mode])
+    const invalidFrontmatterExtension = useCompartment(
+        viewRef,
+        () => buildInvalidFrontmatterHighlight(colors.errorContainer),
+        [colors.errorContainer]
+    )
 
     useEffect(() => {
         document.documentElement.style.height = '100%'
         document.body.style.height = '100%'
         document.body.style.margin = '0'
+
+        const root = document.getElementById('root')
+        if (root) root.style.height = '100%'
 
         const theme = buildEditorTheme({ fontSize, fontFamily, headingFontFamily, colors })
 
@@ -114,6 +132,7 @@ const MarkdownDomEditor = ({
                 headingFoldService,
                 pasteUrlOverSelection,
                 liveFormattingExtension,
+                invalidFrontmatterExtension,
                 EditorView.lineWrapping,
                 placeholderExtension(placeholder),
                 theme,
@@ -249,9 +268,22 @@ const MarkdownDomEditor = ({
                 {...titleField}
                 onTitleChange={onTitleChange}
                 onTitleBlur={onTitleBlur}
+                tags={mode === 'code' ? undefined : tags}
+                propertiesLabel={propertiesLabel}
+                propertiesVisible={propertiesVisible}
+                onToggleProperties={onToggleProperties}
+                onRemoveTag={onRemoveTag}
+                onOpenTags={onOpenTags}
+                tertiaryContainer={colors.tertiaryContainer}
+                onTertiaryContainer={colors.onTertiaryContainer}
+                invalidProperties={invalidProperties}
+                invalidPropertiesTitle={invalidPropertiesTitle}
+                invalidPropertiesDescription={invalidPropertiesDescription}
+                errorContainer={colors.errorContainer}
+                onErrorContainer={colors.onErrorContainer}
                 fontFamily={fontFamily}
                 headingFontFamily={headingFontFamily}
-                textColor={colors.onBackground}
+                onBackground={colors.onBackground}
             />
 
             <div

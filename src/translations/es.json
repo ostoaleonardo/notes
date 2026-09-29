@@ -15,7 +15,9 @@
 	"tags": {
 		"add": "Añadir etiqueta",
 		"already_added": "Esta etiqueta ya existe",
-		"update": "Actualizar etiqueta"
+		"update": "Actualizar etiqueta",
+		"invalid_properties_title": "Propiedades inválidas",
+		"invalid_properties_description": "El bloque de propiedades no se pudo interpretar."
 	},
 	"repositories": {
 		"open": "Abrir",

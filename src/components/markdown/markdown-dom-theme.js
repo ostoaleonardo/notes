@@ -8,7 +8,7 @@ export const buildTitleSectionStyle = () => ({
     paddingTop: '16px'
 })
 
-export const buildTitleTextareaStyle = ({ fontFamily, textColor }) => ({
+export const buildTitleTextareaStyle = ({ fontFamily, onBackground }) => ({
     display: 'block',
     width: '100%',
     resize: 'none',
@@ -19,19 +19,80 @@ export const buildTitleTextareaStyle = ({ fontFamily, textColor }) => ({
     fontFamily,
     fontSize: '24px',
     fontWeight: 'bold',
-    color: textColor,
+    color: onBackground,
     padding: 0,
     margin: 0
 })
 
-export const buildMetaLabelStyle = ({ textColor, fontFamily }) => ({
+export const buildMetaLabelStyle = ({ onBackground, fontFamily }) => ({
     marginTop: 8,
     marginBottom: 16,
     fontSize: '9px',
     textTransform: 'uppercase',
     opacity: 0.5,
-    color: textColor,
+    color: onBackground,
     fontFamily
+})
+
+export const buildPropertiesToggleStyle = ({ onBackground }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '4px',
+    marginTop: 4,
+    marginBottom: 8,
+    fontSize: '10px',
+    textTransform: 'uppercase',
+    opacity: 0.5,
+    color: onBackground,
+    cursor: 'pointer',
+    userSelect: 'none',
+    width: 'fit-content'
+})
+
+export const buildPropertyRowStyle = ({ onBackground }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: '6px',
+    marginBottom: 16,
+    fontSize: '13px',
+    color: onBackground
+})
+
+export const buildChipStyle = ({ tertiaryContainer, onTertiaryContainer }) => ({
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '4px',
+    height: '22px',
+    padding: '0 8px',
+    boxSizing: 'border-box',
+    borderRadius: '999px',
+    backgroundColor: tertiaryContainer,
+    color: onTertiaryContainer,
+    fontSize: '13px',
+    lineHeight: '13px',
+    cursor: 'pointer'
+})
+
+export const buildInvalidPropertiesBannerStyle = ({ errorContainer, onErrorContainer, fontFamily }) => ({
+    padding: '12px',
+    borderRadius: '8px',
+    marginBottom: 16,
+    backgroundColor: errorContainer,
+    color: onErrorContainer,
+    fontFamily
+})
+
+export const buildInvalidPropertiesTitleStyle = () => ({
+    fontSize: '13px',
+    fontWeight: 'bold'
+})
+
+export const buildInvalidPropertiesDescriptionStyle = () => ({
+    fontSize: '12px',
+    opacity: 0.8,
+    marginTop: 2
 })
 
 export const buildEditorTheme = ({ fontSize, fontFamily, headingFontFamily, colors }) => {

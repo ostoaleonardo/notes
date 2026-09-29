@@ -15,7 +15,9 @@
 	"tags": {
 		"add": "Add tag",
 		"already_added": "This tag already exists",
-		"update": "Update tag"
+		"update": "Update tag",
+		"invalid_properties_title": "Invalid properties",
+		"invalid_properties_description": "The properties block couldn't be parsed."
 	},
 	"repositories": {
 		"open": "Open",
