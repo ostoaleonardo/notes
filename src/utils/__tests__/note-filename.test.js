@@ -40,4 +40,9 @@ describe('get unique filename', () => {
         const existing = ['Groceries.md']
         expect(getUniqueFilename(existing, 'Groceries', 'Groceries.md')).toBe('Groceries.md')
     })
+
+    test('uses a custom extension when provided', () => {
+        const existing = ['Groceries.md']
+        expect(getUniqueFilename(existing, 'Groceries', null, '.html')).toBe('Groceries.html')
+    })
 })

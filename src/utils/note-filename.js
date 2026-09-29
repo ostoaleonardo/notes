@@ -23,15 +23,15 @@ export const getUniqueTitle = (existingTitles, base) => {
     return title
 }
 
-export const getUniqueFilename = (existingNames, title, currentFilename) => {
+export const getUniqueFilename = (existingNames, title, currentFilename, extension = NOTE_FILE_EXTENSION) => {
     const base = sanitizeFilename(title)
     const taken = new Set(existingNames.filter((name) => name !== currentFilename))
 
-    let filename = base + NOTE_FILE_EXTENSION
+    let filename = base + extension
     let count = 2
 
     while (taken.has(filename)) {
-        filename = `${base} (${count})${NOTE_FILE_EXTENSION}`
+        filename = `${base} (${count})${extension}`
         count++
     }
 

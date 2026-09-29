@@ -8,7 +8,7 @@ import { useLanguage } from './use-language'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 import { getNotesAsString } from '@/utils/files'
 import { getNoteAsHtml } from '@/utils/export-html'
-import { sanitizeFilename } from '@/utils/note-filename'
+import { getUniqueFilename } from '@/utils/note-filename'
 
 import { EXPORT_FORMATS, EXPORT_MIME_TYPES, EXPORT_EXTENSIONS } from '@/constants/export'
 
@@ -17,21 +17,25 @@ export function useFiles() {
     const { getNote } = useNotes()
     const { currentLanguage } = useLanguage()
 
-    const getFileName = (note, format) => `${sanitizeFilename(note.title)}.${EXPORT_EXTENSIONS[format]}`
-
     const getFileData = async (note, format) => {
-        const fileName = getFileName(note, format)
-
         if (format === EXPORT_FORMATS.PDF) {
             const { uri } = await Print.printToFileAsync({ html: getNoteAsHtml(note) })
-            return { fileName, fileData: await new File(uri).bytes() }
+            return await new File(uri).bytes()
         }
 
         if (format === EXPORT_FORMATS.HTML) {
-            return { fileName, fileData: getNoteAsHtml(note) }
+            return getNoteAsHtml(note)
         }
 
-        return { fileName, fileData: getNotesAsString([note], currentLanguage) }
+        return getNotesAsString([note], currentLanguage)
+    }
+
+    const resolveExportFilename = (directory, note, format) => {
+        const existingNames = directory.list()
+            .filter((entry) => entry instanceof File)
+            .map((entry) => entry.name)
+
+        return getUniqueFilename(existingNames, note.title, null, `.${EXPORT_EXTENSIONS[format]}`)
     }
 
     const exportFile = async (id, format = EXPORT_FORMATS.MARKDOWN) => {
@@ -39,12 +43,10 @@ export function useFiles() {
 
         try {
             const directory = await Directory.pickDirectoryAsync()
-            const { fileName, fileData } = await getFileData(note, format)
+            const fileData = await getFileData(note, format)
+            const fileName = resolveExportFilename(directory, note, format)
 
-            let file = new File(directory.uri, fileName)
-            if (file.exists) file.create({ overwrite: true })
-
-            file = directory.createFile(fileName, EXPORT_MIME_TYPES[format])
+            const file = directory.createFile(fileName, EXPORT_MIME_TYPES[format])
             file.write(fileData)
 
             showSnackbar(t('message.notes.exported'))
@@ -60,12 +62,10 @@ export function useFiles() {
         const note = getNote(id)
 
         try {
-            const { fileName, fileData } = await getFileData(note, format)
+            const fileData = await getFileData(note, format)
+            const fileName = resolveExportFilename(Paths.cache, note, format)
 
-            let file = new File(Paths.cache, fileName)
-            if (file.exists) file.create({ overwrite: true })
-
-            file = Paths.cache.createFile(fileName, EXPORT_MIME_TYPES[format])
+            const file = Paths.cache.createFile(fileName, EXPORT_MIME_TYPES[format])
             file.write(fileData)
 
             await Sharing.shareAsync(file.uri, { mimeType: EXPORT_MIME_TYPES[format] })
