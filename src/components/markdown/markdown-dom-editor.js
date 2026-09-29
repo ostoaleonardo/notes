@@ -274,16 +274,11 @@ const MarkdownDomEditor = ({
                 onToggleProperties={onToggleProperties}
                 onRemoveTag={onRemoveTag}
                 onOpenTags={onOpenTags}
-                tertiary={colors.tertiary}
-                onTertiary={colors.onTertiary}
                 invalidProperties={invalidProperties}
                 invalidPropertiesTitle={invalidPropertiesTitle}
                 invalidPropertiesDescription={invalidPropertiesDescription}
-                errorContainer={colors.errorContainer}
-                onErrorContainer={colors.onErrorContainer}
-                fontFamily={fontFamily}
-                headingFontFamily={headingFontFamily}
-                onBackground={colors.onBackground}
+                colors={colors}
+                typography={{ fontFamily, headingFontFamily }}
             />
 
             <div

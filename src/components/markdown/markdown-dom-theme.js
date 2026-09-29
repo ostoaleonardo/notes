@@ -2,6 +2,16 @@ import { EditorView } from '@codemirror/view'
 
 import { buildLiveFormattingTheme } from './live-formatting/live-formatting'
 
+import { TRANSPARENT } from '../../constants/themes'
+
+const buildDerivedColors = (colors) => ({
+    ...colors,
+    selection: colors.tertiary + TRANSPARENT[20],
+    placeholder: colors.onBackground + TRANSPARENT[40],
+    codeBackground: colors.onBackground + TRANSPARENT[10],
+    thematicBreak: colors.tertiary + TRANSPARENT[30]
+})
+
 export const buildTitleSectionStyle = () => ({
     paddingLeft: '16px',
     paddingRight: '16px',
@@ -109,7 +119,7 @@ export const buildInvalidPropertiesDescriptionStyle = () => ({
 })
 
 export const buildEditorTheme = ({ fontSize, fontFamily, headingFontFamily, colors }) => {
-    const { onBackground, tertiary, selection, placeholder, background, codeBackground, thematicBreak, surface } = colors
+    const { onBackground, tertiary, selection, placeholder, background, codeBackground, thematicBreak, surface } = buildDerivedColors(colors)
 
     return EditorView.theme({
         '&': { height: '100%', fontSize: `${fontSize}px`, backgroundColor: 'transparent' },
@@ -154,7 +164,7 @@ export const buildEditorTheme = ({ fontSize, fontFamily, headingFontFamily, colo
 }
 
 export const buildPreviewCss = ({ fontFamily, headingFontFamily, colors, fontSize }) => {
-    const { onBackground: textColor, tertiary: linkColor, background: quoteBackgroundColor, codeBackground: codeBackgroundColor, thematicBreak: thematicBreakColor } = colors
+    const { onBackground: textColor, tertiary: linkColor, background: quoteBackgroundColor, codeBackground: codeBackgroundColor, thematicBreak: thematicBreakColor } = buildDerivedColors(colors)
 
     return `
     html, body { margin: 0; overflow-x: hidden; scrollbar-width: none; }

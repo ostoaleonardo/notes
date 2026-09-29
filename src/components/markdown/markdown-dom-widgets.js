@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
 import {
     buildAddChipStyle,
@@ -21,14 +21,15 @@ import {
     TAG_ICON_PATH
 } from '../../constants/icon-paths'
 
+const ThemeContext = createContext({ colors: {}, typography: {} })
+
 const AutoGrowTitle = ({
     value,
     onChange,
     onBlur,
-    placeholder,
-    fontFamily,
-    onBackground
+    placeholder
 }) => {
+    const { colors, typography } = useContext(ThemeContext)
     const ref = useRef(null)
     const hasFocusRef = useRef(false)
     const [localValue, setLocalValue] = useState(value || '')
@@ -60,16 +61,18 @@ const AutoGrowTitle = ({
                 onChange?.(event.target.value)
             }}
             placeholder={placeholder}
-            style={buildTitleTextareaStyle({ fontFamily, onBackground })}
+            style={buildTitleTextareaStyle({ fontFamily: typography.headingFontFamily, onBackground: colors.onBackground })}
         />
     )
 }
 
-const MetaLabel = ({ label, fontFamily, onBackground }) => {
+const MetaLabel = ({ label }) => {
+    const { colors, typography } = useContext(ThemeContext)
+
     if (!label) return null
 
     return (
-        <div style={buildMetaLabelStyle({ fontFamily, onBackground })}>
+        <div style={buildMetaLabelStyle({ fontFamily: typography.fontFamily, onBackground: colors.onBackground })}>
             {label}
         </div>
     )
@@ -81,11 +84,11 @@ const PropertiesPanel = ({
     visible,
     onToggleVisible,
     onRemoveTag,
-    onOpenTags,
-    tertiary,
-    onTertiary,
-    onBackground
+    onOpenTags
 }) => {
+    const { colors } = useContext(ThemeContext)
+    const { onBackground, tertiary, onTertiary } = colors
+
     if (!tags || tags.length === 0) return null
 
     return (
@@ -147,12 +150,21 @@ const PropertiesPanel = ({
     )
 }
 
-const InvalidPropertiesBanner = ({ title, description, errorContainer, onErrorContainer, fontFamily }) => (
-    <div style={buildInvalidPropertiesBannerStyle({ errorContainer, onErrorContainer, fontFamily })}>
-        <div style={buildInvalidPropertiesTitleStyle()}>{title}</div>
-        <div style={buildInvalidPropertiesDescriptionStyle()}>{description}</div>
-    </div>
-)
+const InvalidPropertiesBanner = ({ title, description }) => {
+    const { colors, typography } = useContext(ThemeContext)
+
+    return (
+        <div style={buildInvalidPropertiesBannerStyle({
+            errorContainer: colors.errorContainer,
+            onErrorContainer: colors.onErrorContainer,
+            fontFamily: typography.fontFamily
+        })}
+        >
+            <div style={buildInvalidPropertiesTitleStyle()}>{title}</div>
+            <div style={buildInvalidPropertiesDescriptionStyle()}>{description}</div>
+        </div>
+    )
+}
 
 export const TitleSection = ({
     title,
@@ -166,51 +178,40 @@ export const TitleSection = ({
     onToggleProperties,
     onRemoveTag,
     onOpenTags,
-    tertiary,
-    onTertiary,
     invalidProperties,
     invalidPropertiesTitle,
     invalidPropertiesDescription,
-    errorContainer,
-    onErrorContainer,
-    fontFamily,
-    headingFontFamily,
-    onBackground
+    colors,
+    typography
 }) => {
     if (title === undefined) return null
 
     return (
-        <div style={buildTitleSectionStyle()}>
-            <AutoGrowTitle
-                value={title}
-                onChange={onTitleChange}
-                onBlur={onTitleBlur}
-                placeholder={titlePlaceholder}
-                fontFamily={headingFontFamily}
-                onBackground={onBackground}
-            />
-            <MetaLabel label={metaLabel} fontFamily={fontFamily} onBackground={onBackground} />
-            {invalidProperties ? (
-                <InvalidPropertiesBanner
-                    title={invalidPropertiesTitle}
-                    description={invalidPropertiesDescription}
-                    errorContainer={errorContainer}
-                    onErrorContainer={onErrorContainer}
-                    fontFamily={fontFamily}
+        <ThemeContext.Provider value={{ colors, typography }}>
+            <div style={buildTitleSectionStyle()}>
+                <AutoGrowTitle
+                    value={title}
+                    onChange={onTitleChange}
+                    onBlur={onTitleBlur}
+                    placeholder={titlePlaceholder}
                 />
-            ) : (
-                <PropertiesPanel
-                    tags={tags}
-                    propertiesLabel={propertiesLabel}
-                    visible={propertiesVisible}
-                    onToggleVisible={onToggleProperties}
-                    onRemoveTag={onRemoveTag}
-                    onOpenTags={onOpenTags}
-                    tertiary={tertiary}
-                    onTertiary={onTertiary}
-                    onBackground={onBackground}
-                />
-            )}
-        </div>
+                <MetaLabel label={metaLabel} />
+                {invalidProperties ? (
+                    <InvalidPropertiesBanner
+                        title={invalidPropertiesTitle}
+                        description={invalidPropertiesDescription}
+                    />
+                ) : (
+                    <PropertiesPanel
+                        tags={tags}
+                        propertiesLabel={propertiesLabel}
+                        visible={propertiesVisible}
+                        onToggleVisible={onToggleProperties}
+                        onRemoveTag={onRemoveTag}
+                        onOpenTags={onOpenTags}
+                    />
+                )}
+            </div>
+        </ThemeContext.Provider>
     )
 }

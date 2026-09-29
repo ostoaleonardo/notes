@@ -22,10 +22,12 @@ import { findBacklinks, buildBacklinksHtml, parseMissingWikiLinkTarget } from '@
 import { getNotePaths, buildRepositoryPaths } from '@/utils/note-path'
 
 import { ROUTES } from '@/constants/routes'
-import { TRANSPARENT } from '@/constants/themes'
 import { FONTS } from '@/constants/fonts'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { WIKI_LINK_SCHEME, WIKI_LINK_MISSING_PREFIX, WIKI_LINK_FORMATS } from '@/constants/wiki-links'
+
+const BODY_FONT_FAMILY = `${FONTS.azeretLight}, ui-monospace, monospace`
+const HEADING_FONT_FAMILY = `${FONTS.nType82Headline}, system-ui, sans-serif`
 
 export const MarkdownInput = ({
     id,
@@ -61,9 +63,6 @@ export const MarkdownInput = ({
 
     const fonts = useDomFonts()
     const katexFonts = useKatexFonts()
-
-    const bodyFontFamily = `${FONTS.azeretLight}, ui-monospace, monospace`
-    const headingFontFamily = `${FONTS.nType82Headline}, system-ui, sans-serif`
 
     const [linkFormat, setLinkFormat] = useState(WIKI_LINK_FORMATS.WIKILINK)
 
@@ -145,25 +144,11 @@ export const MarkdownInput = ({
         style: { flex: 1 }
     }), [mode])
 
-    const editorColors = useMemo(() => ({
-        onBackground: colors.onBackground,
-        tertiary: colors.tertiary,
-        background: colors.background,
-        surface: colors.surface,
-        selection: colors.tertiary + TRANSPARENT[20],
-        onTertiary: colors.onTertiary,
-        placeholder: colors.onBackground + TRANSPARENT[40],
-        codeBackground: colors.onBackground + TRANSPARENT[10],
-        thematicBreak: colors.tertiary + TRANSPARENT[30],
-        errorContainer: colors.errorContainer,
-        onErrorContainer: colors.onErrorContainer
-    }), [colors])
-
     const typography = useMemo(() => ({
         fontSize: size,
-        fontFamily: bodyFontFamily,
-        headingFontFamily
-    }), [size, bodyFontFamily, headingFontFamily])
+        fontFamily: BODY_FONT_FAMILY,
+        headingFontFamily: HEADING_FONT_FAMILY
+    }), [size])
 
     return (
         <>
@@ -200,7 +185,7 @@ export const MarkdownInput = ({
                 typography={typography}
                 fonts={fonts}
                 katexFonts={katexFonts}
-                colors={editorColors}
+                colors={colors}
                 dom={dom}
             />
 
