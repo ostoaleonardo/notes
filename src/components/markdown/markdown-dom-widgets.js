@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import {
+    buildAddChipStyle,
     buildChipStyle,
     buildInvalidPropertiesBannerStyle,
     buildInvalidPropertiesDescriptionStyle,
@@ -81,8 +82,8 @@ const PropertiesPanel = ({
     onToggleVisible,
     onRemoveTag,
     onOpenTags,
-    tertiaryContainer,
-    onTertiaryContainer,
+    tertiary,
+    onTertiary,
     onBackground
 }) => {
     if (!tags || tags.length === 0) return null
@@ -113,13 +114,13 @@ const PropertiesPanel = ({
                         <path d={TAG_ICON_PATH} />
                     </svg>
                     {tags.map((tag) => (
-                        <span key={tag} style={buildChipStyle({ tertiaryContainer, onTertiaryContainer })}>
+                        <span key={tag} style={buildChipStyle({ tertiary, onTertiary })}>
                             {tag}
                             <svg
                                 width='10'
                                 height='10'
                                 viewBox='0 -960 960 960'
-                                fill={onTertiaryContainer}
+                                fill={onTertiary}
                                 style={{ opacity: 0.7 }}
                                 onClick={() => onRemoveTag(tag)}
                             >
@@ -129,13 +130,13 @@ const PropertiesPanel = ({
                     ))}
                     <span
                         onClick={() => onOpenTags()}
-                        style={buildChipStyle({ tertiaryContainer, onTertiaryContainer })}
+                        style={buildAddChipStyle({ tertiary, onTertiary })}
                     >
                         <svg
                             width='10'
                             height='10'
                             viewBox='0 -960 960 960'
-                            fill={onTertiaryContainer}
+                            fill={onTertiary}
                         >
                             <path d={PLUS_ICON_PATH} />
                         </svg>
@@ -165,8 +166,8 @@ export const TitleSection = ({
     onToggleProperties,
     onRemoveTag,
     onOpenTags,
-    tertiaryContainer,
-    onTertiaryContainer,
+    tertiary,
+    onTertiary,
     invalidProperties,
     invalidPropertiesTitle,
     invalidPropertiesDescription,
@@ -205,8 +206,8 @@ export const TitleSection = ({
                     onToggleVisible={onToggleProperties}
                     onRemoveTag={onRemoveTag}
                     onOpenTags={onOpenTags}
-                    tertiaryContainer={tertiaryContainer}
-                    onTertiaryContainer={onTertiaryContainer}
+                    tertiary={tertiary}
+                    onTertiary={onTertiary}
                     onBackground={onBackground}
                 />
             )}

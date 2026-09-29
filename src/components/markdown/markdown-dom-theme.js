@@ -59,7 +59,7 @@ export const buildPropertyRowStyle = ({ onBackground }) => ({
     color: onBackground
 })
 
-export const buildChipStyle = ({ tertiaryContainer, onTertiaryContainer }) => ({
+export const buildChipStyle = ({ tertiary, onTertiary }) => ({
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -68,10 +68,23 @@ export const buildChipStyle = ({ tertiaryContainer, onTertiaryContainer }) => ({
     padding: '0 8px',
     boxSizing: 'border-box',
     borderRadius: '999px',
-    backgroundColor: tertiaryContainer,
-    color: onTertiaryContainer,
+    backgroundColor: tertiary,
+    color: onTertiary,
     fontSize: '13px',
     lineHeight: '13px',
+    cursor: 'pointer'
+})
+
+export const buildAddChipStyle = ({ tertiary, onTertiary }) => ({
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '22px',
+    height: '22px',
+    boxSizing: 'border-box',
+    borderRadius: '999px',
+    backgroundColor: tertiary,
+    color: onTertiary,
     cursor: 'pointer'
 })
 
