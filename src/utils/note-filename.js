@@ -23,6 +23,11 @@ export const getUniqueTitle = (existingTitles, base) => {
     return title
 }
 
+export const isTitleTaken = (existingNames, title, currentFilename) => {
+    const candidate = sanitizeFilename(title) + NOTE_FILE_EXTENSION
+    return existingNames.some((name) => name === candidate && name !== currentFilename)
+}
+
 export const getUniqueFilename = (existingNames, title, currentFilename, extension = NOTE_FILE_EXTENSION) => {
     const base = sanitizeFilename(title)
     const taken = new Set(existingNames.filter((name) => name !== currentFilename))

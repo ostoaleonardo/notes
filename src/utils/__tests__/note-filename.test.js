@@ -1,4 +1,4 @@
-import { getUniqueFilename, getUniqueTitle, sanitizeFilename } from '../note-filename'
+import { getUniqueFilename, getUniqueTitle, isTitleTaken, sanitizeFilename } from '../note-filename'
 
 describe('sanitize filename', () => {
     test('strips characters illegal in filenames', () => {
@@ -44,5 +44,22 @@ describe('get unique filename', () => {
     test('uses a custom extension when provided', () => {
         const existing = ['Groceries.md']
         expect(getUniqueFilename(existing, 'Groceries', null, '.html')).toBe('Groceries.html')
+    })
+})
+
+describe('is title taken', () => {
+    test('returns true when another file already has that title', () => {
+        const existing = ['Groceries.md', 'Chores.md']
+        expect(isTitleTaken(existing, 'Chores', 'Groceries.md')).toBe(true)
+    })
+
+    test('returns false when the only match is the file being renamed', () => {
+        const existing = ['Groceries.md']
+        expect(isTitleTaken(existing, 'Groceries', 'Groceries.md')).toBe(false)
+    })
+
+    test('returns false when no file has that title', () => {
+        const existing = ['Groceries.md']
+        expect(isTitleTaken(existing, 'Chores', 'Groceries.md')).toBe(false)
     })
 })

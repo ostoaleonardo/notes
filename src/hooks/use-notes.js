@@ -3,10 +3,12 @@ import { useContext } from 'react'
 import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
 import { NoteContext } from '../context/note-context'
-import { getUniqueFilename } from '@/utils/note-filename'
+import { getUniqueFilename, isTitleTaken } from '@/utils/note-filename'
 import { buildNotePath } from '@/utils/note-path'
 import { buildNoteFileContent } from '@/utils/frontmatter'
 import { renameWikiLinksForNote } from '@/utils/wiki-links'
+
+import { DUPLICATE_TITLE_ERROR } from '@/constants/note-errors'
 
 export function useNotes() {
     const {
@@ -104,6 +106,12 @@ export function useNotes() {
                 n.path === previous.path ? { ...note, filename: previous.filename, path: previous.path } : n
             )))
             return { path: previous.path, filename: previous.filename, createdAt: previous.createdAt, updatedAt: previous.updatedAt }
+        }
+
+        if (note.title !== previous.title && isTitleTaken(listMarkdownFiles(uri).map((file) => file.name), note.title, previous.filename)) {
+            const error = new Error('A note with this title already exists')
+            error.code = DUPLICATE_TITLE_ERROR
+            throw error
         }
 
         const filename = resolveFilename(uri, note.title, previous.filename)

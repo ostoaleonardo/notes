@@ -156,6 +156,20 @@ describe('update note', () => {
         expect(result.current.notes[0].note).toBe('updated content')
     })
 
+    test('throws a duplicate-title error and does not touch the filesystem when another note already has that title', async () => {
+        files.set('Old title.md', '---\ntags: []\n---\n\ncontent')
+        files.set('Groceries.md', '---\ntags: []\n---\n\nmilk, eggs')
+        const { result } = await renderNotesHook([MOCK_OLD_TITLE_NOTE, MOCK_GROCERIES_NOTE])
+
+        await expect(act(async () => {
+            await result.current.updateNote({ ...MOCK_OLD_TITLE_NOTE, title: 'Groceries' })
+        })).rejects.toMatchObject({ code: 'DUPLICATE_TITLE' })
+
+        expect(mockFileStorage.renameNoteFile).not.toHaveBeenCalled()
+        expect(mockFileStorage.writeNoteFile).not.toHaveBeenCalled()
+        expect(files.has('Old title.md')).toBe(true)
+    })
+
     test('renames the file and its version history when the title changes', async () => {
         files.set('Old title.md', '---\ntags: []\n---\n\ncontent')
         const { result } = await renderNotesHook([MOCK_OLD_TITLE_NOTE])

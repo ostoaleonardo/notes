@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 
 import { NoteEditorScreen } from '@/screens/notes/note-editor-screen'
+import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useAutosave } from '@/hooks/use-autosave'
 import { useNotes } from '@/hooks/use-notes'
@@ -10,6 +11,8 @@ import { useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
 import { getUniqueTitle } from '@/utils/note-filename'
 import { buildNotePayload } from '@/utils/note-payload'
+
+import { DUPLICATE_TITLE_ERROR } from '@/constants/note-errors'
 
 export default function Note() {
     const { t } = useTranslation()
@@ -81,7 +84,15 @@ export default function Note() {
         } else {
             const payload = buildNotePayload({ path: pathRef.current, title, note, tags, createdAt, repositoryId, invalidFrontmatter })
 
-            const saved = await updateNote(payload)
+            let saved
+            try {
+                saved = await updateNote(payload)
+            } catch (error) {
+                if (error.code !== DUPLICATE_TITLE_ERROR) throw error
+
+                showSnackbar(t('notes.title_duplicated'))
+                return
+            }
 
             pathRef.current = saved.path
             setPath(saved.path)

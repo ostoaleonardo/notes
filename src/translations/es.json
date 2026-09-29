@@ -10,7 +10,8 @@
 		"delete_title": "Borrar nota",
 		"delete_message": "Esto eliminará permanentemente esta nota del dispositivo.",
 		"save_failed": "No se pudo guardar esta nota",
-		"delete_failed": "No se pudo borrar esta nota"
+		"delete_failed": "No se pudo borrar esta nota",
+		"title_duplicated": "Ya existe una nota con este nombre"
 	},
 	"tags": {
 		"add": "Añadir etiqueta",

@@ -5,6 +5,7 @@ import { router, useLocalSearchParams } from 'expo-router'
 import { NoteEditorScreen } from '@/screens/notes/note-editor-screen'
 import { LoadingOverlay } from '@/components/layout'
 import { RenameLinksDialog } from '@/screens/dialogs/rename-links-dialog'
+import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useAutosave } from '@/hooks/use-autosave'
 import { useNotes } from '@/hooks/use-notes'
@@ -14,6 +15,7 @@ import { useRepositories } from '@/hooks/use-repositories'
 import { buildNotePayload } from '@/utils/note-payload'
 
 import { ROUTES } from '@/constants/routes'
+import { DUPLICATE_TITLE_ERROR } from '@/constants/note-errors'
 
 const tagsEqual = (a, b) => a.length === b.length && a.every((tag, i) => tag === b[i])
 
@@ -168,6 +170,12 @@ export default function EditNote() {
                 setCreatedAt(nextCreatedAt)
                 setUpdatedAt(nextUpdatedAt)
                 if (savedNote.note !== payload.note) setNote(savedNote.note)
+            } catch (error) {
+                if (error.code !== DUPLICATE_TITLE_ERROR) throw error
+
+                originalTitleRef.current = previousTitle
+                setTitle(previousTitle)
+                showSnackbar(t('notes.title_duplicated'))
             } finally {
                 isSavingRef.current = false
             }
