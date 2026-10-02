@@ -27,7 +27,6 @@ import { getEditorNavigation } from '@/utils/editor-path'
 import { ROUTES } from '@/constants/routes'
 import { TEMPLATE_TAB_PREFIX, TEMPLATES_SECTION_ID } from '@/constants/tabs'
 
-const DRAWER_SPACING = 12
 
 export function DrawerItems({ navigation }) {
     const { t } = useTranslation()
