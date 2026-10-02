@@ -5,10 +5,7 @@
 		"note": "This is an example note that includes an attached image.",
 		"categories": [],
 		"images": ["file:///data/user/0/com.example.app/cache/ImagePicker/example.png"],
-		"list": {
-			"type": "",
-			"items": []
-		},
+		"list": { "type": "", "items": [] },
 		"password": "",
 		"biometrics": false,
 		"createdAt": 1700000000000,
@@ -17,13 +14,10 @@
 	{
 		"id": "note-2",
 		"title": "Sample note for migration testing",
-		"note": "This note is used to test migrating notes into folders.",
+		"note": "This note is tagged Personal.",
 		"categories": ["Personal"],
 		"images": [],
-		"list": {
-			"type": "",
-			"items": []
-		},
+		"list": { "type": "", "items": [] },
 		"password": "",
 		"biometrics": false,
 		"createdAt": 1700000200000,
@@ -35,13 +29,85 @@
 		"note": "This is an example note used for testing purposes.",
 		"categories": [],
 		"images": [],
-		"list": {
-			"type": "",
-			"items": []
-		},
+		"list": { "type": "", "items": [] },
 		"password": "",
 		"biometrics": false,
 		"createdAt": 1700000400000,
 		"updatedAt": 1700000500000
+	},
+	{
+		"id": "note-4",
+		"title": "Shopping checklist",
+		"note": "Things to buy this week.",
+		"categories": ["Personal", "Work"],
+		"images": [],
+		"list": {
+			"type": "checklist",
+			"items": [
+				{ "id": "item-1", "value": "Milk", "status": "checked" },
+				{ "id": "item-2", "value": "Bread", "status": "unchecked" },
+				{ "id": "item-3", "value": "Coffee", "status": "unchecked" }
+			]
+		},
+		"password": "",
+		"biometrics": false,
+		"createdAt": 1700000600000,
+		"updatedAt": 1700000700000
+	},
+	{
+		"id": "note-5",
+		"title": "Numbered steps",
+		"note": "",
+		"categories": ["Ideas"],
+		"images": [],
+		"list": {
+			"type": "numbered",
+			"items": [
+				{ "id": "item-1", "value": "Plan", "status": "unchecked" },
+				{ "id": "item-2", "value": "Build", "status": "unchecked" },
+				{ "id": "item-3", "value": "Ship", "status": "unchecked" }
+			]
+		},
+		"password": "",
+		"biometrics": false,
+		"createdAt": 1700000800000,
+		"updatedAt": 1700000900000
+	},
+	{
+		"id": "note-6",
+		"title": "Bulleted ideas",
+		"note": "Brainstorm.",
+		"categories": ["Ideas", "Work", "Personal"],
+		"images": [],
+		"list": {
+			"type": "bulleted",
+			"items": [
+				{ "id": "item-1", "value": "Idea one", "status": "unchecked" },
+				{ "id": "item-2", "value": "", "status": "unchecked" },
+				{ "id": "item-3", "value": "Idea two", "status": "unchecked" }
+			]
+		},
+		"password": "",
+		"biometrics": false,
+		"createdAt": 1700001000000,
+		"updatedAt": 1700001100000
+	},
+	{
+		"id": "note-7",
+		"title": "Image with a checklist",
+		"note": "Everything legacy supports in one note.",
+		"categories": ["Work"],
+		"images": ["file:///data/user/0/com.example.app/cache/ImagePicker/example.png"],
+		"list": {
+			"type": "checklist",
+			"items": [
+				{ "id": "item-1", "value": "Review", "status": "checked" },
+				{ "id": "item-2", "value": "Merge", "status": "unchecked" }
+			]
+		},
+		"password": "",
+		"biometrics": false,
+		"createdAt": 1700001200000,
+		"updatedAt": 1700001300000
 	}
 ]

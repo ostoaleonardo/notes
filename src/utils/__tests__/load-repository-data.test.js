@@ -246,8 +246,9 @@ describeLegacyFixtures('legacy image migration', () => {
 
         await loadRepositoryData([repository], repository, storage, fileStorage)
 
+        const expectedCount = legacyNotes.reduce((total, note) => total + note.images.length, 0)
         const copiedFiles = fileStorage.listFiles(`${REPO_URI}/images`)
-        expect(copiedFiles).toHaveLength(1)
+        expect(copiedFiles).toHaveLength(expectedCount)
     })
 
     test('drops a legacy image whose cache file was already purged by the OS, without throwing', async () => {

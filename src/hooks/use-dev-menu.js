@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { DevSettings } from 'react-native'
 import { registerDevMenuItems } from 'expo-dev-menu'
-import { Directory } from 'expo-file-system'
+import { Directory, File, Paths } from 'expo-file-system'
 import { useTheme } from 'react-native-paper'
 import legacyNotes from '../../legacy/notes.json'
 import legacyTags from '../../legacy/categories.json'
@@ -16,7 +16,12 @@ import { sanitizeFilename } from '@/utils/note-filename'
 import { buildNoteFileContent, parseFrontmatter } from '@/utils/frontmatter'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { TREE_BRANCHING, NOTES_PER_FOLDER } from '@/constants/dev-menu'
+import {
+    TREE_BRANCHING,
+    NOTES_PER_FOLDER,
+    LEGACY_SEED_IMAGE_FILENAME,
+    LEGACY_SEED_IMAGE_BASE64
+} from '@/constants/dev-menu'
 
 export function useDevMenu() {
     const { setItem } = useStorage()
@@ -52,7 +57,16 @@ export function useDevMenu() {
     }
 
     const seedLegacyDump = async () => {
-        await setItem(STORAGE_KEYS.NOTES, JSON.stringify(legacyNotes))
+        const image = new File(Paths.cache, LEGACY_SEED_IMAGE_FILENAME)
+        if (!image.exists) image.create()
+        image.write(Uint8Array.from(atob(LEGACY_SEED_IMAGE_BASE64), (char) => char.charCodeAt(0)))
+
+        const notes = legacyNotes.map((note) => ({
+            ...note,
+            images: note.images.map(() => image.uri)
+        }))
+
+        await setItem(STORAGE_KEYS.NOTES, JSON.stringify(notes))
         await setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(legacyTags))
         console.debug('seeded legacy dump')
     }
