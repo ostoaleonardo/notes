@@ -5,7 +5,7 @@ import { getUniqueFilename, stripNoteExtension } from '@/utils/note-filename'
 import { buildNotePath } from '@/utils/note-path'
 import { buildNoteFileContent, parseFrontmatter } from '@/utils/frontmatter'
 
-import { DEFAULT_TAGS } from '@/constants/default-values'
+import { DEFAULT_TAGS, LEGACY_ALL_TAG_ID } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { TAGS_FILENAME, METADATA_FILENAME } from '@/constants/file-storage'
 import { NOTE_KEY_PREFIX } from '@/constants/note-key'
@@ -39,8 +39,14 @@ const migrateLegacyImages = async (images, imagesUri, fileStorage) => {
     return migrated
 }
 
+// Legacy notes reference tags by id or by name; frontmatter needs unique names.
+const resolveTagNames = (values, tagNameById) => {
+    const names = values.map((value) => tagNameById.get(value) ?? value)
+    return [...new Set(names)].filter((name) => name !== LEGACY_ALL_TAG_ID)
+}
+
 // Per-note entries -> .md files with embedded frontmatter.
-const migrateStorageNotesToFiles = async (repositoryUri, rootRepositoryUri, storage, fileStorage) => {
+const migrateStorageNotesToFiles = async (repositoryUri, rootRepositoryUri, storage, fileStorage, tagNameById) => {
     const keys = await storage.getAllKeys()
     const noteKeys = keys.filter((key) => key.startsWith(NOTE_KEY_PREFIX))
     if (noteKeys.length === 0) return
@@ -57,7 +63,8 @@ const migrateStorageNotesToFiles = async (repositoryUri, rootRepositoryUri, stor
 
         await migrateLegacyImages(note.images || [], imagesUri, fileStorage)
 
-        const content = buildNoteFileContent({ tags: note.tags || note.categories || [] }, note.note || '')
+        const tags = resolveTagNames(note.tags || note.categories || [], tagNameById)
+        const content = buildNoteFileContent({ tags }, note.note || '')
 
         fileStorage.writeNoteFile(repositoryUri, filename, content)
     }
@@ -224,7 +231,9 @@ const loadSidecarList = async ({ repositoryUri, filename, legacyKey, defaultValu
 
 // Drops the legacy 'all' pseudo-tag, before or after the id -> name migration.
 const purgeAllTag = (tags, repositoryUri, fileStorage) => {
-    const filtered = tags.filter((tag) => (typeof tag === 'string' ? tag !== 'all' : tag.id !== 'all'))
+    const filtered = tags.filter((tag) => (
+        typeof tag === 'string' ? tag !== LEGACY_ALL_TAG_ID : tag.id !== LEGACY_ALL_TAG_ID
+    ))
     if (filtered.length !== tags.length) fileStorage.writeJson(repositoryUri, TAGS_FILENAME, filtered)
     return filtered
 }
@@ -234,7 +243,6 @@ export const loadRepositoryData = async (tree, rootRepository, storage, fileStor
     const rootRepositoryUri = rootRepository.uri
 
     await migrateLegacyBlobNotes(storage)
-    await migrateStorageNotesToFiles(rootRepositoryUri, rootRepositoryUri, storage, fileStorage)
 
     const rawTags = await loadSidecarList({
         repositoryUri: rootRepositoryUri,
@@ -245,8 +253,16 @@ export const loadRepositoryData = async (tree, rootRepository, storage, fileStor
         fileStorage
     })
 
-    const tagNameById = buildTagNameById(rawTags)
     const purgedRawTags = purgeAllTag(rawTags, rootRepositoryUri, fileStorage)
+    const tagNameById = buildTagNameById(purgedRawTags)
+
+    await migrateStorageNotesToFiles(
+        rootRepositoryUri,
+        rootRepositoryUri,
+        storage,
+        fileStorage,
+        tagNameById
+    )
 
     const { tags, changed: tagsMigrated } = migrateTagsToNames(purgedRawTags)
     if (tagsMigrated) fileStorage.writeJson(rootRepositoryUri, TAGS_FILENAME, tags)

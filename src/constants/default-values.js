@@ -13,3 +13,5 @@ export const FREE_REPOSITORIES_LIMIT = 1
 export const VERSION_SNAPSHOT_INTERVAL = 5 * 60 * 1000
 
 export const AUTOSAVE_DELAY = 500
+
+export const LEGACY_ALL_TAG_ID = 'all'

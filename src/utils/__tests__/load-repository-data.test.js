@@ -5,6 +5,8 @@ import { randomUUID } from 'expo-crypto'
 import { loadRepositoryData } from '../load-repository-data'
 import { parseFrontmatter } from '../frontmatter'
 
+import { getNoteKey } from '../note-key'
+
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { METADATA_FILENAME, SIDECAR_FILENAMES, NOTE_FILE_EXTENSION } from '@/constants/file-storage'
 
@@ -144,6 +146,41 @@ describeLegacyFixtures('legacy AsyncStorage migration', () => {
         expect(tags.slice().sort()).toEqual(
             legacyTags.filter((tag) => tag.id !== 'all').map((tag) => tag.name).sort()
         )
+    })
+})
+
+describe('legacy per-note storage entries', () => {
+    const seedEntries = (tags) => createFakeStorage({
+        [getNoteKey('a')]: JSON.stringify({ id: 'a', title: 'Note', note: 'body', tags }),
+        [STORAGE_KEYS.CATEGORIES]: JSON.stringify([
+            { id: 'all', name: 'All' },
+            { id: 'tag-1', name: 'work' }
+        ])
+    })
+
+    const readMigrated = async (storage, fileStorage) => {
+        await loadRepositoryData([repository], repository, storage, fileStorage)
+        const file = fileStorage.listMarkdownFiles(REPO_URI).find((item) => item.name === 'Note.md')
+        return parseFrontmatter(await file.text())
+    }
+
+    test('resolves tag ids to names in the migrated frontmatter', async () => {
+        const { frontmatter, body } = await readMigrated(
+            seedEntries(['tag-1']),
+            createFakeFileStorage()
+        )
+
+        expect(frontmatter).toEqual({ tags: ['work'] })
+        expect(body).toBe('body')
+    })
+
+    test('keeps tags already stored as names and drops the "all" pseudo-tag', async () => {
+        const { frontmatter } = await readMigrated(
+            seedEntries(['all', 'work', 'tag-1']),
+            createFakeFileStorage()
+        )
+
+        expect(frontmatter).toEqual({ tags: ['work'] })
     })
 })
 
