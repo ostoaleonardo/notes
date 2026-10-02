@@ -24,6 +24,7 @@ import { useUtils } from '@/hooks/use-utils'
 import { buildRepositoryTree, flattenDrawerTree } from '@/utils/drawer-tree'
 import { getEditorNavigation } from '@/utils/editor-path'
 
+import { DRAWER_SPACING } from '@/constants/drawer'
 import { ROUTES } from '@/constants/routes'
 import { TEMPLATE_TAB_PREFIX, TEMPLATES_SECTION_ID } from '@/constants/tabs'
 
