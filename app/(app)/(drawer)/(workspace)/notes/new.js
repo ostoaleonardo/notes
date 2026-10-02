@@ -6,16 +6,19 @@ import { NoteEditorScreen } from '@/screens/notes/note-editor-screen'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useAutosave } from '@/hooks/use-autosave'
+import { useExclusiveQueue } from '@/hooks/use-exclusive-queue'
 import { useNotes } from '@/hooks/use-notes'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
 import { getUniqueTitle } from '@/utils/note-filename'
 import { buildNotePayload } from '@/utils/note-payload'
 
+import { EDITOR_MODES } from '@/constants/editor-modes'
 import { DUPLICATE_TITLE_ERROR } from '@/constants/note-errors'
 
 export default function Note() {
     const { t } = useTranslation()
+    const { runExclusive } = useExclusiveQueue()
     const { activeRepository } = useRepositories()
     const { notes, saveNote, updateNote } = useNotes()
     const { repositoryId: targetRepositoryId } = useLocalSearchParams()
@@ -25,9 +28,9 @@ export default function Note() {
     const notesRef = useRef(notes)
     const autoTitleRef = useRef('')
     const firstRender = useRef(true)
-    const saveQueueRef = useRef(Promise.resolve())
 
     const [path, setPath] = useState('')
+    const [filename, setFilename] = useState('')
     useRegisterCurrent(path)
 
     const [title, setTitle] = useState('')
@@ -37,7 +40,6 @@ export default function Note() {
     const [createdAt, setCreatedAt] = useState('')
     const [updatedAt, setUpdatedAt] = useState('')
     const [repositoryId, setRepositoryId] = useState('')
-    const [filename, setFilename] = useState('')
     const [invalidFrontmatter, setInvalidFrontmatter] = useState(null)
 
     useEffect(() => {
@@ -61,10 +63,12 @@ export default function Note() {
         }, [])
     )
 
-    const runExclusive = (fn) => {
-        const result = saveQueueRef.current.then(fn, fn)
-        saveQueueRef.current = result.catch(() => { })
-        return result
+    const applySaved = (saved) => {
+        pathRef.current = saved.path
+        setPath(saved.path)
+        setFilename(saved.filename)
+        setCreatedAt(saved.createdAt)
+        setUpdatedAt(saved.updatedAt)
     }
 
     const { flush } = useAutosave(() => runExclusive(async () => {
@@ -73,11 +77,7 @@ export default function Note() {
 
             const saved = await saveNote(payload, repositoryId)
 
-            pathRef.current = saved.path
-            setPath(saved.path)
-            setFilename(saved.filename)
-            setCreatedAt(saved.createdAt)
-            setUpdatedAt(saved.updatedAt)
+            applySaved(saved)
             isSaved.current = true
         } else {
             const payload = buildNotePayload({ path: pathRef.current, title, note, tags, createdAt, repositoryId, invalidFrontmatter })
@@ -92,11 +92,7 @@ export default function Note() {
                 return
             }
 
-            pathRef.current = saved.path
-            setPath(saved.path)
-            setFilename(saved.filename)
-            setCreatedAt(saved.createdAt)
-            setUpdatedAt(saved.updatedAt)
+            applySaved(saved)
         }
     }), [title, note, tags, repositoryId, invalidFrontmatter], {
         skip: firstRender.current || (title === autoTitleRef.current && !note)
@@ -118,7 +114,7 @@ export default function Note() {
             setInvalidFrontmatter={setInvalidFrontmatter}
             createdAt={createdAt}
             updatedAt={updatedAt}
-            initialMode='live'
+            initialMode={EDITOR_MODES.LIVE}
         />
     )
 }

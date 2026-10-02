@@ -8,6 +8,7 @@ import { RenameLinksDialog } from '@/screens/dialogs/rename-links-dialog'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useAutosave } from '@/hooks/use-autosave'
+import { useExclusiveQueue } from '@/hooks/use-exclusive-queue'
 import { useNotes } from '@/hooks/use-notes'
 import { useWikiLinkRenameConfirm } from '@/hooks/use-wiki-link-rename-confirm'
 import { useCurrentNote, useRegisterCurrent } from '@/hooks/use-current-note'
@@ -22,6 +23,8 @@ const tagsEqual = (a, b) => a.length === b.length && a.every((tag, i) => tag ===
 export default function EditNote() {
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
+    const { runExclusive } = useExclusiveQueue()
+    const { registerCurrent } = useCurrentNote()
     const { notes, getNote, updateNote, loading: notesLoading } = useNotes()
     const { loading: repositoriesLoading } = useRepositories()
 
@@ -36,8 +39,6 @@ export default function EditNote() {
 
     const pathRef = useRef(slug)
     const isSavingRef = useRef(false)
-    const saveQueueRef = useRef(Promise.resolve())
-    const { registerCurrent } = useCurrentNote()
     useRegisterCurrent(slug)
 
     const [loading, setLoading] = useState(true)
@@ -103,12 +104,6 @@ export default function EditNote() {
         pathRef.current = nextPath
         setFilename(nextFilename)
         registerCurrent(nextPath)
-    }
-
-    const runExclusive = (fn) => {
-        const result = saveQueueRef.current.then(fn, fn)
-        saveQueueRef.current = result.catch(() => { })
-        return result
     }
 
     const { flush } = useAutosave(() => runExclusive(async () => {
@@ -199,7 +194,6 @@ export default function EditNote() {
                 setInvalidFrontmatter={setInvalidFrontmatter}
                 createdAt={createdAt}
                 updatedAt={updatedAt}
-                initialMode='read'
             />
 
             <RenameLinksDialog

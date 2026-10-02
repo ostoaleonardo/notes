@@ -18,6 +18,7 @@ import { ConfirmDialog } from '@/components/confirm-dialog'
 import { useAllowLandscape } from '@/hooks/use-allow-landscape'
 import { useAutosave } from '@/hooks/use-autosave'
 import { useBottomSheet } from '@/hooks/use-bottom-sheet'
+import { useExclusiveQueue } from '@/hooks/use-exclusive-queue'
 import { useMarkdownAction } from '@/hooks/use-markdown-action'
 import { useMarkdownSheets } from '@/hooks/use-markdown-sheets'
 import { useMarkdownSearch } from '@/hooks/use-markdown-search'
@@ -29,6 +30,7 @@ import { useUndoRedoState } from '@/hooks/use-undo-redo-state'
 import { stripNoteExtension } from '@/utils/note-filename'
 import { useVersionHistory } from '@/hooks/use-version-history'
 
+import { EDITOR_MODES } from '@/constants/editor-modes'
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 
 export default function EditTemplate() {
@@ -36,6 +38,7 @@ export default function EditTemplate() {
     const { filename } = useLocalSearchParams()
     const { getTemplate, updateTemplate, deleteTemplate } = useTemplates()
     const { pro } = usePro()
+    const { runExclusive } = useExclusiveQueue()
     const { activeRepository, ensureTemplatesFolder } = useRepositories()
 
     useAllowLandscape()
@@ -50,7 +53,7 @@ export default function EditTemplate() {
 
     const [name, setName] = useState('')
     const [content, setContent] = useState('')
-    const [mode, setMode] = useState('live')
+    const [mode, setMode] = useState(EDITOR_MODES.LIVE)
     const [isFocused, setIsFocused] = useState(false)
     const [placeholdersVisible, setPlaceholdersVisible] = useState(false)
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false)
@@ -106,7 +109,7 @@ export default function EditTemplate() {
         })
     }, [filename])
 
-    useAutosave(async () => {
+    useAutosave(() => runExclusive(async () => {
         const trimmedName = name.trim()
         if (trimmedName === originalName.current && content === originalContent.current) return
 
@@ -117,7 +120,7 @@ export default function EditTemplate() {
         currentFilename.current = await updateTemplate(currentFilename.current, nextName, content)
         originalName.current = trimmedName
         originalContent.current = content
-    }, [name, content], { skip: loading || !name.trim() })
+    }), [name, content], { skip: loading || !name.trim() })
 
     useEffect(() => {
         if (!activeRepository) return
