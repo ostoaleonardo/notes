@@ -185,3 +185,5 @@ export const ACCENT_COLORS = {
 export const THEME_OPTIONS = ['light', 'dark', 'system']
 export const ACCENT_OPTIONS = ['red', 'yellow', 'blue']
 export const FREE_ACCENT = 'white'
+
+export const SWITCH_HIT_SLOP = 8

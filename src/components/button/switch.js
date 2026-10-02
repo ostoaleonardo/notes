@@ -4,7 +4,7 @@ import { useTheme } from 'react-native-paper'
 
 import { useAnimatedProgress } from '@/hooks/use-animated-progress'
 
-import { SWITCH_TRACK, SWITCH_THUMB } from '@/constants/themes'
+import { SWITCH_TRACK, SWITCH_THUMB, SWITCH_HIT_SLOP } from '@/constants/themes'
 
 const OFF_INSET = (SWITCH_TRACK.height - SWITCH_THUMB.off) / 2
 const ON_INSET = (SWITCH_TRACK.height - SWITCH_THUMB.on) / 2
@@ -41,7 +41,7 @@ export function Switch({ value, onValueChange, disabled = false, accessibilityLa
             accessibilityRole='switch'
             accessibilityState={{ checked: value, disabled }}
             accessibilityLabel={accessibilityLabel}
-            hitSlop={8}
+            hitSlop={SWITCH_HIT_SLOP}
             style={disabled && styles.disabled}
         >
             <Animated.View style={[styles.track, trackStyle]}>
