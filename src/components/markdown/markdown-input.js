@@ -23,6 +23,7 @@ import { getNotePaths, buildRepositoryPaths } from '@/utils/note-path'
 
 import { ROUTES } from '@/constants/routes'
 import { FONTS } from '@/constants/fonts'
+import { EDITOR_MODES } from '@/constants/editor-modes'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { WIKI_LINK_SCHEME, WIKI_LINK_MISSING_PREFIX, WIKI_LINK_FORMATS } from '@/constants/wiki-links'
 
@@ -31,7 +32,7 @@ const HEADING_FONT_FAMILY = `${FONTS.nType82Headline}, system-ui, sans-serif`
 
 export const MarkdownInput = ({
     id,
-    mode = 'live',
+    mode = EDITOR_MODES.LIVE,
     size = 13,
     value,
     onChangeText,
@@ -83,13 +84,13 @@ export const MarkdownInput = ({
     const repositoryPaths = useMemo(() => buildRepositoryPaths(repositories), [repositories])
 
     const backlinksHtml = useMemo(() => {
-        if (mode !== 'read' || !showBacklinks) return ''
+        if (mode !== EDITOR_MODES.READ || !showBacklinks) return ''
 
         const backlinks = findBacklinks(id, notes, notePaths)
         return buildBacklinksHtml(backlinks, t('title.backlinks'), notePaths)
     }, [mode, showBacklinks, id, notes, notePaths, t])
 
-    const valueWithWikiLinks = useResolvedWikiLinks(mode === 'read' ? value : '')
+    const valueWithWikiLinks = useResolvedWikiLinks(mode === EDITOR_MODES.READ ? value : '')
     const { value: previewValue, mediaMap } = useResolvedPreviewMarkdown(valueWithWikiLinks)
     const mediaMapEntries = useMemo(() => [...mediaMap], [mediaMap])
 
@@ -137,7 +138,7 @@ export const MarkdownInput = ({
     }), [])
 
     const dom = useMemo(() => ({
-        scrollEnabled: mode === 'read',
+        scrollEnabled: mode === EDITOR_MODES.READ,
         showsVerticalScrollIndicator: false,
         showsHorizontalScrollIndicator: false,
         androidLayerType: 'software',

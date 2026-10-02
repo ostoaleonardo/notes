@@ -7,6 +7,8 @@ import { Commit } from '@/icons/commit'
 import { Delete } from '@/icons/delete'
 import { Shapes } from '@/icons/shapes'
 
+import { EDITOR_MODES } from '@/constants/editor-modes'
+
 export const useTemplateActionsMenu = ({ onTrigger, onSetMode, onOpenPlaceholders, onOpenVersionHistory, onOpenDeleteDialog }) => {
     const { t } = useTranslation()
 
@@ -16,7 +18,7 @@ export const useTemplateActionsMenu = ({ onTrigger, onSetMode, onOpenPlaceholder
                 key='code'
                 title={t('button.code')}
                 leadingIcon={(props) => <Code {...props} />}
-                onPress={() => onTrigger(() => onSetMode('code'))}
+                onPress={() => onTrigger(() => onSetMode(EDITOR_MODES.CODE))}
             />,
             <MenuItem
                 key='placeholders'

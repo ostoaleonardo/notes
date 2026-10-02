@@ -13,6 +13,8 @@ import { Edit } from '@/icons/edit'
 import { EditNote } from '@/icons/edit-note'
 import { Search } from '@/icons/search'
 
+import { EDITOR_MODES } from '@/constants/editor-modes'
+
 export const MarkdownModeToggle = ({
     mode,
     onSetMode,
@@ -28,7 +30,7 @@ export const MarkdownModeToggle = ({
     onToggleShowBacklinks
 }) => {
     const { t } = useTranslation()
-    const read = mode === 'read'
+    const read = mode === EDITOR_MODES.READ
 
     const { visible, onOpen, onClose, trigger } = useMenuAction()
 
@@ -60,7 +62,7 @@ export const MarkdownModeToggle = ({
             leadingIcon={(props) => <Search {...props} />}
             onPress={() => trigger(search.onOpenSearch)}
         />,
-        mode !== 'read' && (
+        mode !== EDITOR_MODES.READ && (
             <MenuItem
                 key='replace'
                 title={t('button.replace')}
@@ -79,7 +81,7 @@ export const MarkdownModeToggle = ({
             visible={visible}
             icon={read ? EditNote : Book}
             label={t(read ? 'button.edit' : 'button.preview')}
-            onPress={() => onSetMode(read ? 'live' : 'read')}
+            onPress={() => onSetMode(read ? EDITOR_MODES.LIVE : EDITOR_MODES.READ)}
         >
             {groups.map((group, index) => (
                 <MenuGroup

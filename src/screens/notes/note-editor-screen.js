@@ -39,6 +39,7 @@ import { buildNoteFileContent, parseFrontmatter } from '@/utils/frontmatter'
 import { buildNoteMetaLabel } from '@/utils/note-meta-label'
 import { countWords } from '@/utils/word-count'
 
+import { EDITOR_MODES } from '@/constants/editor-modes'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export const NoteEditorScreen = ({
@@ -51,24 +52,23 @@ export const NoteEditorScreen = ({
     tags, setTags,
     invalidFrontmatter, setInvalidFrontmatter,
     createdAt, updatedAt,
-    initialMode = 'read',
+    initialMode = EDITOR_MODES.READ,
     flush
 }) => {
     const { t } = useTranslation()
     const { pro } = usePro()
+    const { setItem } = useStorage()
     const { deleteNote } = useNotes()
     const { addTemplate } = useTemplates()
     const { currentLanguage } = useLanguage()
     const { repositories } = useRepositories()
-    const { exportFile, shareFile } = useFiles()
     const { tags: allTags, addTag } = useTags()
-    const { setItem } = useStorage()
+    const { exportFile, shareFile } = useFiles()
     const { canUndo, canRedo, onHistoryChange } = useUndoRedoState()
     const { templates, refresh: refreshTemplates } = useTemplatesList()
+    useAllowLandscape()
 
     const directoryUri = repositories.find((repository) => repository.id === repositoryId)?.uri
-
-    useAllowLandscape()
 
     const [mode, setMode] = useState(initialMode)
     const [isFocused, setIsFocused] = useState(false)
@@ -93,16 +93,16 @@ export const NoteEditorScreen = ({
 
     const [codeBuffer, setCodeBuffer] = useState('')
 
-    const invalidProperties = mode !== 'code' && !!invalidFrontmatter
+    const invalidProperties = mode !== EDITOR_MODES.CODE && !!invalidFrontmatter
 
     const onSetMode = useCallback((nextMode) => {
         if (nextMode === mode) return
 
-        if (nextMode === 'code') {
+        if (nextMode === EDITOR_MODES.CODE) {
             setCodeBuffer(invalidFrontmatter != null
                 ? `---\n${invalidFrontmatter}\n---\n\n${note}`
                 : buildNoteFileContent({ tags }, note))
-        } else if (mode === 'code') {
+        } else if (mode === EDITOR_MODES.CODE) {
             const decomposed = parseFrontmatter(codeBuffer)
             if (decomposed.body !== note) setNote(decomposed.body)
 
@@ -122,10 +122,10 @@ export const NoteEditorScreen = ({
         setMode(nextMode)
     }, [mode, tags, note, codeBuffer, invalidFrontmatter, setNote, setTags, setInvalidFrontmatter, allTags, addTag])
 
-    const editorValue = mode === 'code' ? codeBuffer : note
+    const editorValue = mode === EDITOR_MODES.CODE ? codeBuffer : note
 
     const onEditorChange = useCallback((value) => {
-        if (mode === 'code') {
+        if (mode === EDITOR_MODES.CODE) {
             setCodeBuffer(value)
             return
         }
@@ -145,7 +145,7 @@ export const NoteEditorScreen = ({
 
     const metaLabel = useMemo(() => (
         buildNoteMetaLabel({
-            showDate: mode === 'read',
+            showDate: mode === EDITOR_MODES.READ,
             language: currentLanguage,
             timestamp: updatedAt || createdAt,
             dateLabel: updatedAt ? t('date.updated') : t('date.created'),

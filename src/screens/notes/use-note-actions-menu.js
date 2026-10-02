@@ -21,6 +21,8 @@ import { Link } from '@/icons/link'
 import { NoteStack } from '@/icons/note-stack'
 import { Share as ShareIcon } from '@/icons/share'
 
+import { EDITOR_MODES } from '@/constants/editor-modes'
+
 export const useNoteActionsMenu = ({
     onTrigger,
     onSetMode,
@@ -69,7 +71,7 @@ export const useNoteActionsMenu = ({
                 key='code'
                 title={t('button.code')}
                 leadingIcon={(props) => <Code {...props} />}
-                onPress={() => onTrigger(() => onSetMode('code'))}
+                onPress={() => onTrigger(() => onSetMode(EDITOR_MODES.CODE))}
             />,
             <MenuItem
                 key='pin'

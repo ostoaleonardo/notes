@@ -16,6 +16,7 @@ import { Tag } from '@/icons/tag'
 import { Undo } from '@/icons/undo'
 
 import { MARKDOWN_CONTROLS } from '@/constants/markdown-controls'
+import { EDITOR_MODES } from '@/constants/editor-modes'
 
 export const MarkdownToolbar = memo(function MarkdownToolbar({
     mode,
@@ -30,7 +31,7 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
     const { colors } = useTheme()
 
     const controls = MARKDOWN_CONTROLS.filter((control) => !control.scope || control.scope === scope)
-    const formatting = mode !== 'read' && isFocused
+    const formatting = mode !== EDITOR_MODES.READ && isFocused
 
     const idleButtons = [
         {

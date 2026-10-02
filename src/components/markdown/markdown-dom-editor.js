@@ -25,6 +25,8 @@ import { headingFoldService } from './markdown-dom-fold'
 import { pasteUrlOverSelection } from './markdown-dom-paste'
 import { buildInvalidFrontmatterHighlight } from './markdown-dom-invalid-frontmatter'
 
+import { EDITOR_MODES } from '@/constants/editor-modes'
+
 const createHiddenSearchPanel = () => {
     const dom = document.createElement('div')
     dom.style.display = 'none'
@@ -93,7 +95,7 @@ const MarkdownDomEditor = ({
     const mediaMapExtension = useCompartment(viewRef, () => mediaMapFacet.of(mediaMapValue), [mediaMapValue])
     const noteEntriesExtension = useCompartment(viewRef, () => noteEntriesFacet.of(noteEntries || []), [noteEntries])
     const linkFormatExtension = useCompartment(viewRef, () => wikiLinkFormatFacet.of(linkFormat), [linkFormat])
-    const liveFormattingExtension = useCompartment(viewRef, () => (mode === 'live' ? [liveFormatting] : []), [mode])
+    const liveFormattingExtension = useCompartment(viewRef, () => (mode === EDITOR_MODES.LIVE ? [liveFormatting] : []), [mode])
     const invalidFrontmatterExtension = useCompartment(
         viewRef,
         () => buildInvalidFrontmatterHighlight(colors.errorContainer),
@@ -233,7 +235,7 @@ const MarkdownDomEditor = ({
     }, [onLinkPress, onImagePress])
 
     const html = useMemo(
-        () => (mode === 'read' ? renderMarkdownHtml(previewValue) + (backlinksHtml || '') : ''),
+        () => (mode === EDITOR_MODES.READ ? renderMarkdownHtml(previewValue) + (backlinksHtml || '') : ''),
         [mode, previewValue, backlinksHtml]
     )
 
@@ -268,7 +270,7 @@ const MarkdownDomEditor = ({
                 {...titleField}
                 onTitleChange={onTitleChange}
                 onTitleBlur={onTitleBlur}
-                tags={mode === 'code' ? undefined : tags}
+                tags={mode === EDITOR_MODES.CODE ? undefined : tags}
                 propertiesLabel={propertiesLabel}
                 propertiesVisible={propertiesVisible}
                 onToggleProperties={onToggleProperties}
@@ -286,14 +288,14 @@ const MarkdownDomEditor = ({
                 style={{
                     flex: 1,
                     minHeight: 0,
-                    display: mode === 'read' ? 'none' : 'flex'
+                    display: mode === EDITOR_MODES.READ ? 'none' : 'flex'
                 }}
             />
 
             <div
                 ref={previewRef}
                 className='markdown-preview'
-                style={{ display: mode === 'read' ? 'block' : 'none' }}
+                style={{ display: mode === EDITOR_MODES.READ ? 'block' : 'none' }}
                 dangerouslySetInnerHTML={{ __html: html }}
             />
         </div>
