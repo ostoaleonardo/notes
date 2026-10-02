@@ -37,6 +37,17 @@ export function useAutosave(
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [skip, delay, save, ...deps])
 
+    const saveRef = useRef(save)
+    saveRef.current = save
+
+    useEffect(() => () => {
+        if (!timerRef.current) return
+
+        clearTimeout(timerRef.current)
+        timerRef.current = null
+        saveRef.current()
+    }, [])
+
     const flush = useCallback(async () => {
         if (timerRef.current) {
             clearTimeout(timerRef.current)

@@ -114,3 +114,39 @@ describe('flush', () => {
         expect(onSave).toHaveBeenCalledTimes(2)
     })
 })
+
+describe('unmount', () => {
+    test('saves a pending change instead of dropping it', async () => {
+        const onSave = jest.fn()
+
+        const { unmount } = await renderHook(() => useAutosave(onSave, ['a'], { delay: 500 }))
+
+        await unmount()
+
+        expect(onSave).toHaveBeenCalledTimes(1)
+    })
+
+    test('does not save again when the timer already fired', async () => {
+        const onSave = jest.fn()
+
+        const { unmount } = await renderHook(() => useAutosave(onSave, ['a'], { delay: 500 }))
+
+        await act(() => {
+            jest.advanceTimersByTime(500)
+        })
+
+        await unmount()
+
+        expect(onSave).toHaveBeenCalledTimes(1)
+    })
+
+    test('does not save when skip is true', async () => {
+        const onSave = jest.fn()
+
+        const { unmount } = await renderHook(() => useAutosave(onSave, ['a'], { skip: true }))
+
+        await unmount()
+
+        expect(onSave).not.toHaveBeenCalled()
+    })
+})
