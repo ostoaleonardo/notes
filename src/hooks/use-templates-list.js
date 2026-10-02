@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useTemplates } from './use-templates'
 
-export function useTemplatesList(deps = []) {
+export function useTemplatesList(deps = [], { immediate = true } = {}) {
     const { listTemplates } = useTemplates()
     const [templates, setTemplates] = useState([])
     const mountedRef = useRef(true)
@@ -18,7 +18,7 @@ export function useTemplatesList(deps = []) {
     ), [listTemplates])
 
     useEffect(() => {
-        refresh()
+        if (immediate) refresh()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, deps)
 

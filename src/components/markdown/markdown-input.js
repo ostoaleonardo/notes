@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { Linking } from 'react-native'
 import { router } from 'expo-router'
 import { useTheme } from 'react-native-paper'
@@ -73,11 +73,18 @@ export const MarkdownInput = ({
 
     const notePaths = useMemo(() => getNotePaths(notes, repositories), [notes, repositories])
 
-    const noteEntries = useMemo(() => (
-        notes
+    const noteEntriesCache = useRef({ key: '', entries: [] })
+
+    const noteEntries = useMemo(() => {
+        const entries = notes
             .filter((note) => note.title)
             .map((note) => ({ id: note.path, title: note.title, path: notePaths.get(note.path) || '' }))
-    ), [notes, notePaths])
+
+        const key = JSON.stringify(entries)
+        if (key !== noteEntriesCache.current.key) noteEntriesCache.current = { key, entries }
+
+        return noteEntriesCache.current.entries
+    }, [notes, notePaths])
 
     const [missingLink, setMissingLink] = useState(null)
 

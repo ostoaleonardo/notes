@@ -14,22 +14,19 @@ import { TemplatePlaceholders } from '@/screens/dialogs/template-placeholders'
 import { LoadingOverlay } from '@/components/layout'
 import { AppBar } from '@/components/app-bar/app-bar'
 import { ConfirmDialog } from '@/components/confirm-dialog'
+import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
-import { useAllowLandscape } from '@/hooks/use-allow-landscape'
 import { useAutosave } from '@/hooks/use-autosave'
-import { useBottomSheet } from '@/hooks/use-bottom-sheet'
-import { useMarkdownAction } from '@/hooks/use-markdown-action'
-import { useMarkdownSheets } from '@/hooks/use-markdown-sheets'
-import { useMarkdownSearch } from '@/hooks/use-markdown-search'
+import { useEditorChrome } from '@/hooks/use-editor-chrome'
 import { usePro } from '@/hooks/use-pro'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
-import { useUndoRedoState } from '@/hooks/use-undo-redo-state'
 import { stripNoteExtension } from '@/utils/note-filename'
 import { useVersionHistory } from '@/hooks/use-version-history'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
+import { ROUTES } from '@/constants/routes'
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 
 export default function EditTemplate() {
@@ -38,8 +35,6 @@ export default function EditTemplate() {
     const { getTemplate, updateTemplate, deleteTemplate } = useTemplates()
     const { pro } = usePro()
     const { activeRepository, ensureTemplatesFolder } = useRepositories()
-
-    useAllowLandscape()
 
     const tabId = TEMPLATE_TAB_PREFIX + filename
     useRegisterCurrent(tabId)
@@ -52,22 +47,31 @@ export default function EditTemplate() {
     const [name, setName] = useState('')
     const [content, setContent] = useState('')
     const [mode, setMode] = useState(EDITOR_MODES.LIVE)
-    const [isFocused, setIsFocused] = useState(false)
     const [placeholdersVisible, setPlaceholdersVisible] = useState(false)
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false)
     const [templatesUri, setTemplatesUri] = useState('')
 
-    const recentsSheet = useBottomSheet()
-    const searchSheet = useBottomSheet()
-    const action = useMarkdownAction()
-    const search = useMarkdownSearch()
-    const { canUndo, canRedo, onHistoryChange } = useUndoRedoState()
+    const {
+        isFocused,
+        onFocus,
+        onBlur,
+        recentsSheet,
+        searchSheet,
+        action,
+        search,
+        canUndo,
+        canRedo,
+        onHistoryChange,
+        onRunAction,
+        linkSheet,
+        tableSheet,
+        imageSheet
+    } = useEditorChrome()
 
     const latestContent = useRef({ noteId: currentFilename.current, title: name, content })
     latestContent.current = { noteId: currentFilename.current, title: name, content }
 
     const versionHistory = useVersionHistory({ directoryUri: templatesUri, latestContent })
-    const { onRunAction, linkSheet, tableSheet, imageSheet } = useMarkdownSheets(action)
 
     const onRestoreVersion = useCallback((version) => {
         setName(version.title)
@@ -81,8 +85,13 @@ export default function EditTemplate() {
     }), [recentsSheet.onOpen, searchSheet.onOpen])
 
     const onConfirmDelete = async () => {
-        await deleteTemplate(currentFilename.current)
-        router.back()
+        try {
+            await deleteTemplate(currentFilename.current)
+            router.back()
+        } catch (error) {
+            console.debug('error deleting template', error)
+            showSnackbar(t('templates.delete_failed'))
+        }
     }
 
     const onOpenDeleteDialog = () => setDeleteDialogVisible(true)
@@ -91,8 +100,15 @@ export default function EditTemplate() {
     const onOpenPlaceholders = () => setPlaceholdersVisible(true)
 
     useEffect(() => {
+        let cancelled = false
+
         getTemplate(filename).then((template) => {
-            if (!template) return
+            if (cancelled) return
+
+            if (!template) {
+                router.replace(ROUTES.HOME)
+                return
+            }
 
             const displayName = t(`templates.${template.name}`, template.name)
 
@@ -101,10 +117,10 @@ export default function EditTemplate() {
             originalName.current = displayName
             originalContent.current = template.content
 
-            setTimeout(() => {
-                setLoading(false)
-            }, 0)
+            setLoading(false)
         })
+
+        return () => { cancelled = true }
     }, [filename])
 
     useAutosave(async () => {
@@ -182,8 +198,8 @@ export default function EditTemplate() {
                     setContent={setContent}
                     action={action}
                     mode={mode}
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
+                    onFocus={onFocus}
+                    onBlur={onBlur}
                     onHistoryChange={onHistoryChange}
                     searchQuery={search.searchQuery}
                     replaceText={search.replaceText}

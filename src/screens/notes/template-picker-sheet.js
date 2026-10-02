@@ -1,7 +1,9 @@
+import { memo } from 'react'
+
 import { TemplatePicker } from './template-picker'
 import { ModalSheet } from '@/components/modal/modal-sheet'
 
-export function TemplatePickerSheet({ sheet, title, templates, onSelect }) {
+export const TemplatePickerSheet = memo(function TemplatePickerSheet({ sheet, title, templates, onSelect }) {
     return (
         <ModalSheet
             enableDynamicSizing
@@ -15,4 +17,4 @@ export function TemplatePickerSheet({ sheet, title, templates, onSelect }) {
             />
         </ModalSheet>
     )
-}
+})

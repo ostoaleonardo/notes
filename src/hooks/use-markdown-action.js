@@ -1,15 +1,15 @@
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 export function useMarkdownAction() {
     const [action, setAction] = useState('')
     const [payload, setPayload] = useState(null)
 
-    const run = (action, payload = null) => {
-        setPayload(payload)
-        setAction(action)
-    }
+    const run = useCallback((nextAction, nextPayload = null) => {
+        setPayload(nextPayload)
+        setAction(nextAction)
+    }, [])
 
-    const clear = () => setAction('')
+    const clear = useCallback(() => setAction(''), [])
 
-    return { action, payload, run, clear }
+    return useMemo(() => ({ action, payload, run, clear }), [action, payload, run, clear])
 }
