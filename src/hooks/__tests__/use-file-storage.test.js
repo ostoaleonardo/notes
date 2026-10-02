@@ -30,6 +30,17 @@ jest.mock('expo-file-system', () => {
             registry.set(this.uri, { ...registry.get(this.uri), content })
         }
 
+        open() {
+            const uri = this.uri
+            return {
+                writeBytes: (bytes) => {
+                    const entry = registry.get(uri)
+                    registry.set(uri, { ...entry, content: new TextDecoder().decode(bytes) })
+                },
+                close: () => { }
+            }
+        }
+
         delete() {
             registry.delete(this.uri)
             removeFromParents(this.uri)
@@ -77,7 +88,12 @@ jest.mock('expo-file-system', () => {
         }
     }
 
-    return { File: MockFile, Directory: MockDirectory, __registry: registry }
+    return {
+        File: MockFile,
+        Directory: MockDirectory,
+        FileMode: { Truncate: 'truncate' },
+        __registry: registry
+    }
 })
 
 const registry = require('expo-file-system').__registry
@@ -140,6 +156,30 @@ describe('writeNoteFile', () => {
         const children = registry.get('content://repo').children
         expect(children).toHaveLength(1)
         expect(registry.get('content://repo/note.md').content).toBe('new content')
+    })
+
+    test('rewrites the same file in place when the new content is shorter', async () => {
+        const { result } = await renderFileStorageHook()
+        const original = new File('content://repo/note.md')
+
+        seedDirectory('content://repo', [original])
+        setFileContent('content://repo/note.md', 'a much longer old content')
+
+        const written = result.current.writeNoteFile('content://repo', 'note.md', 'short')
+
+        expect(written).toBe(original)
+        expect(registry.get('content://repo/note.md').content).toBe('short')
+    })
+
+    test('creates the file when it does not exist yet', async () => {
+        const { result } = await renderFileStorageHook()
+
+        seedDirectory('content://repo', [])
+
+        result.current.writeNoteFile('content://repo', 'note.md', 'fresh')
+
+        expect(registry.get('content://repo').children.map((entry) => entry.name)).toEqual(['note.md'])
+        expect(registry.get('content://repo/note.md').content).toBe('fresh')
     })
 })
 

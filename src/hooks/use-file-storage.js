@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Directory, File } from 'expo-file-system'
+import { Directory, File, FileMode } from 'expo-file-system'
 
 import {
     NOTE_FILE_EXTENSION,
@@ -90,11 +90,20 @@ export function useFileStorage() {
 
     const writeNoteFile = (directoryUri, filename, content, mimeType = 'text/markdown') => {
         const existing = findFile(directoryUri, filename)
-        if (existing) existing.delete()
 
-        const file = new Directory(directoryUri).createFile(filename, mimeType)
-        file.write(content)
-        return file
+        if (!existing) {
+            const file = new Directory(directoryUri).createFile(filename, mimeType)
+            file.write(content)
+            return file
+        }
+
+        const handle = existing.open(FileMode.Truncate)
+        try {
+            handle.writeBytes(new TextEncoder().encode(content))
+        } finally {
+            handle.close()
+        }
+        return existing
     }
 
     const renameNoteFile = async (directoryUri, oldFilename, newFilename) => {
