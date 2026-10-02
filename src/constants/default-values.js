@@ -15,3 +15,5 @@ export const VERSION_SNAPSHOT_INTERVAL = 5 * 60 * 1000
 export const AUTOSAVE_DELAY = 500
 
 export const LEGACY_ALL_TAG_ID = 'all'
+
+export const NOT_FOUND_REDIRECT_DELAY = 3000
