@@ -64,7 +64,6 @@ const createFakeFileStorage = (deviceCache = new Map()) => {
 const LEGACY_DIR = path.join(__dirname, '..', '..', '..', 'legacy')
 const LEGACY_NOTES_PATH = path.join(LEGACY_DIR, 'notes.json')
 const LEGACY_TAGS_PATH = path.join(LEGACY_DIR, 'categories.json')
-const LEGACY_IMAGES_DIR = path.join(LEGACY_DIR, 'images')
 const hasLegacyFixtures = fs.existsSync(LEGACY_NOTES_PATH) && fs.existsSync(LEGACY_TAGS_PATH)
 
 const describeLegacyFixtures = hasLegacyFixtures ? describe : describe.skip
@@ -79,7 +78,7 @@ const seedLegacyStorage = () => createFakeStorage({
     [STORAGE_KEYS.CATEGORIES]: JSON.stringify(legacyTags)
 })
 
-const readLocalImageBytes = (uri) => fs.readFileSync(path.join(LEGACY_IMAGES_DIR, path.basename(uri)))
+const IMAGE_BYTES = 'image-bytes'
 
 beforeEach(() => {
     let counter = 0
@@ -98,7 +97,7 @@ describeLegacyFixtures('legacy AsyncStorage migration', () => {
 
         expect(notes).toHaveLength(legacyNotes.length)
         for (const legacyNote of legacyNotes) {
-            const migrated = notes.find((note) => note.note === legacyNote.note)
+            const migrated = notes.find((note) => note.note.startsWith(legacyNote.note))
             expect(migrated).toBeDefined()
         }
     })
@@ -131,7 +130,7 @@ describeLegacyFixtures('legacy AsyncStorage migration', () => {
         const fileStorage = createFakeFileStorage()
 
         const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
-        const migrated = notes.find((note) => note.note === legacyNoteWithTags.note)
+        const migrated = notes.find((note) => note.note.startsWith(legacyNoteWithTags.note))
 
         expect(migrated.tags.sort()).toEqual([...legacyNoteWithTags.categories].sort())
     })
@@ -184,6 +183,77 @@ describe('legacy per-note storage entries', () => {
     })
 })
 
+describe('legacy blob note content', () => {
+    const rootRepository = { id: 'repo-1', uri: REPO_URI }
+
+    const migrate = async (legacyNote, deviceCache = new Map()) => {
+        const storage = createFakeStorage({
+            [STORAGE_KEYS.NOTES]: JSON.stringify([{ id: 'legacy-1', title: 'Note', ...legacyNote }])
+        })
+        const fileStorage = createFakeFileStorage(deviceCache)
+
+        const result = await loadRepositoryData([rootRepository], rootRepository, storage, fileStorage)
+
+        return result.notes[0].note
+    }
+
+    test('appends migrated images to the body as markdown links', async () => {
+        const body = await migrate(
+            { note: 'text', images: ['file:///cache/a.png'] },
+            new Map([['file:///cache/a.png', IMAGE_BYTES]])
+        )
+
+        expect(body).toBe('text\n\n![](content://fake/repo/images/uuid-1.png)')
+    })
+
+    test('leaves out images that no longer exist on the device', async () => {
+        const body = await migrate({ note: 'text', images: ['file:///cache/gone.png'] })
+
+        expect(body).toBe('text')
+    })
+
+    test.each([
+        ['bulleted', '- one\n- two'],
+        ['numbered', '1. one\n2. two'],
+        ['checklist', '- [x] one\n- [ ] two']
+    ])('converts a %s list to markdown', async (type, expected) => {
+        const body = await migrate({
+            note: '',
+            list: {
+                type,
+                items: [
+                    { id: 'a', value: 'one', status: 'checked' },
+                    { id: 'b', value: 'two', status: 'unchecked' },
+                    { id: 'c', value: '  ', status: 'unchecked' }
+                ]
+            }
+        })
+
+        expect(body).toBe(expected)
+    })
+
+    test('maps each legacy note id to its new path', async () => {
+        const storage = createFakeStorage({
+            [STORAGE_KEYS.NOTES]: JSON.stringify([
+                { id: 'legacy-1', title: 'First', note: '' },
+                { id: 'legacy-2', title: 'First', note: '' }
+            ])
+        })
+
+        const { legacyPaths } = await loadRepositoryData(
+            [rootRepository],
+            rootRepository,
+            storage,
+            createFakeFileStorage()
+        )
+
+        expect(Object.fromEntries(legacyPaths)).toEqual({
+            'legacy-1': 'repo-1::First.md',
+            'legacy-2': 'repo-1::First (2).md'
+        })
+    })
+})
+
 // images
 describeLegacyFixtures('legacy image migration', () => {
     test('copies a legacy cache-referenced image into the repository images/ folder', async () => {
@@ -191,7 +261,7 @@ describeLegacyFixtures('legacy image migration', () => {
         expect(legacyNoteWithImage).toBeDefined()
 
         const imageUri = legacyNoteWithImage.images[0]
-        const deviceCache = new Map([[imageUri, readLocalImageBytes(imageUri)]])
+        const deviceCache = new Map([[imageUri, IMAGE_BYTES]])
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage(deviceCache)
 
@@ -219,7 +289,7 @@ describeLegacyFixtures('legacy image migration', () => {
         expect(notesWithImages.length).toBeGreaterThan(0)
 
         const allImageUris = legacyNotes.flatMap((note) => note.images)
-        const deviceCache = new Map(allImageUris.map((uri) => [uri, readLocalImageBytes(uri)]))
+        const deviceCache = new Map(allImageUris.map((uri) => [uri, IMAGE_BYTES]))
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage(deviceCache)
 
