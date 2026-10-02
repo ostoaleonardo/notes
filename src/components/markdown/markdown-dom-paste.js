@@ -1,6 +1,6 @@
 import { EditorView } from '@codemirror/view'
 
-const URL_PATTERN = /^https?:\/\/\S+$/
+import { URL_PATTERN } from '@/constants/markdown-patterns'
 
 export const pasteUrlOverSelection = EditorView.domEventHandlers({
     paste: (event, view) => {

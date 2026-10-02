@@ -1,6 +1,6 @@
 import { EditorSelection } from '@codemirror/state'
 
-const LIST_LINE_PATTERN = /^(\s*)([-*+]|\d+\.)(\s+)(\[[ xX]\]\s+)?/
+import { LIST_LINE_PATTERN } from '@/constants/markdown-patterns'
 
 const continueList = (view) => {
     const { state } = view

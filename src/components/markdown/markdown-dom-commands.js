@@ -4,6 +4,8 @@ import { findNext, findPrevious, replaceAll, replaceNext } from '@codemirror/sea
 import { toggleFold } from '@codemirror/language'
 import { snippet } from '@codemirror/autocomplete'
 
+import { LIST_MARKERS } from '@/constants/markdown-patterns'
+
 const insertWikiLinkSnippet = snippet('[[${}]]')
 
 const buildTableTemplate = (cols, rows) => {
@@ -14,12 +16,6 @@ const buildTableTemplate = (cols, rows) => {
     ))
 
     return [`| ${header} |`, `| ${separator} |`, ...bodyLines.map((line) => `| ${line} |`)].join('\n')
-}
-
-const LIST_MARKERS = {
-    checklist: /^(\s*)-\s+\[[ xX]\]\s+/,
-    ordered: /^(\s*)\d+\.\s+/,
-    bullet: /^(\s*)[-*+]\s+/
 }
 
 const currentLine = (view) => view.state.doc.lineAt(view.state.selection.main.head)

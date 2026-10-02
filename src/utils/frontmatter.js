@@ -1,6 +1,6 @@
 import { dump, load } from 'js-yaml'
 
-const FRONTMATTER_REGEX = /^---\r?\n([\s\S]*?)\r?\n---\r?\n*/
+import { FRONTMATTER_REGEX } from '@/constants/markdown-patterns'
 
 export const parseFrontmatter = (rawContent) => {
     const match = rawContent.match(FRONTMATTER_REGEX)

@@ -1,9 +1,9 @@
 import { PREVIEW_MAX_LINES, PREVIEW_MAX_CHARS } from '@/constants/note-preview'
-
-const imageRegex = /!\[([^\]]*)\]\(([^\)]*)\)/g
-const linkRegex = /\[([^\]]*)\]\(([^\)]*)\)/g
-
-const MARKER = '⁣'
+import {
+    PREVIEW_IMAGE_PATTERN,
+    PREVIEW_LINK_PATTERN,
+    PREVIEW_MARKER
+} from '@/constants/markdown-patterns'
 
 export const getPreviewNote = (note, maxLines = PREVIEW_MAX_LINES, maxChars = PREVIEW_MAX_CHARS) => {
     if (!note) return ''
@@ -13,14 +13,14 @@ export const getPreviewNote = (note, maxLines = PREVIEW_MAX_LINES, maxChars = PR
     const markdownByKey = new Map()
     let count = 0
 
-    let temp = preview.replace(imageRegex, (_, alt, url) => {
-        const key = `${MARKER}${count++}${MARKER}`
+    let temp = preview.replace(PREVIEW_IMAGE_PATTERN, (_, alt, url) => {
+        const key = `${PREVIEW_MARKER}${count++}${PREVIEW_MARKER}`
         markdownByKey.set(key, (text) => `![${text}](${url})`)
         return `${key}${alt}${key}`
     })
 
-    temp = temp.replace(linkRegex, (_, text, url) => {
-        const key = `${MARKER}${count++}${MARKER}`
+    temp = temp.replace(PREVIEW_LINK_PATTERN, (_, text, url) => {
+        const key = `${PREVIEW_MARKER}${count++}${PREVIEW_MARKER}`
         markdownByKey.set(key, (label) => `[${label}](${url})`)
         return `${key}${text}${key}`
     })

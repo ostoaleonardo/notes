@@ -3,8 +3,9 @@ import { File } from 'expo-file-system'
 
 import { bytesToBase64 } from '@/utils/base64'
 
-const MARKDOWN_IMAGE_PATTERN = /!\[([^\]]*)\]\(((?:file|content):\/\/[^)]+)\)/g
-const HTML_IMAGE_PATTERN = /(<img[^>]*\bsrc=["'])((?:file|content):\/\/[^"']+)(["'])/g
+import { MIME_TYPES } from '@/constants/mime-types'
+import { MARKDOWN_IMAGE_PATTERN, HTML_IMAGE_PATTERN } from '@/constants/markdown-patterns'
+
 const EMPTY_MEDIA_MAP = new Map()
 
 const extractLocalUrls = (value) => {
@@ -20,7 +21,7 @@ const resolveUrl = async (url) => {
     try {
         const file = new File(url)
         const bytes = await file.bytes()
-        const mime = file.type || 'image/jpeg'
+        const mime = file.type || MIME_TYPES.JPEG
         return `data:${mime};base64,${bytesToBase64(bytes)}`
     } catch {
         return url
