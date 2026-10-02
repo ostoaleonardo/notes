@@ -2,11 +2,13 @@ import { useCallback, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
+import { useExclusiveQueue } from './use-exclusive-queue'
 
 export function useAutosave(
     onSave, deps, { delay = 500, skip = false } = {}
 ) {
     const { t } = useTranslation()
+    const { runExclusive } = useExclusiveQueue()
 
     const onSaveRef = useRef(onSave)
     onSaveRef.current = onSave
@@ -15,15 +17,18 @@ export function useAutosave(
 
     const save = useCallback(async () => {
         try {
-            await onSaveRef.current()
+            await runExclusive(onSaveRef.current)
         } catch (error) {
             console.debug('error autosaving note', error)
             showSnackbar(t('notes.save_failed'))
         }
-    }, [t])
+    }, [t, runExclusive])
 
     useEffect(() => {
-        if (skip) return
+        if (skip) {
+            timerRef.current = null
+            return
+        }
 
         timerRef.current = setTimeout(() => {
             timerRef.current = null
@@ -57,5 +62,5 @@ export function useAutosave(
         await save()
     }, [save])
 
-    return { flush }
+    return { flush, runExclusive }
 }

@@ -40,9 +40,7 @@ export function useNotes() {
             : buildNoteFileContent({ tags: note.tags }, note.note)
     )
 
-    const resolveFilename = (uri, title, currentFilename) => (
-        getUniqueFilename(listMarkdownFiles(uri).map((file) => file.name), title, currentFilename)
-    )
+    const listNoteNames = (uri) => listMarkdownFiles(uri).map((file) => file.name)
 
     const saveNote = async (note, repositoryId = activeRepository?.id) => {
         const uri = getRepositoryUri(repositoryId)
@@ -52,7 +50,7 @@ export function useNotes() {
             return { path: '', filename: '' }
         }
 
-        const filename = resolveFilename(uri, note.title, null)
+        const filename = getUniqueFilename(listNoteNames(uri), note.title, null)
         const path = buildNotePath(repositoryId, filename)
         const file = writeNoteFile(uri, filename, buildFileContent(note))
         const createdAt = file.creationTime ?? file.lastModified
@@ -108,16 +106,18 @@ export function useNotes() {
             return { path: previous.path, filename: previous.filename, createdAt: previous.createdAt, updatedAt: previous.updatedAt }
         }
 
-        if (note.title !== previous.title && isTitleTaken(listMarkdownFiles(uri).map((file) => file.name), note.title, previous.filename)) {
+        const names = listNoteNames(uri)
+
+        if (note.title !== previous.title && isTitleTaken(names, note.title, previous.filename)) {
             const error = new Error('A note with this title already exists')
             error.code = DUPLICATE_TITLE_ERROR
             throw error
         }
 
-        const filename = resolveFilename(uri, note.title, previous.filename)
+        const filename = getUniqueFilename(names, note.title, previous.filename)
         const path = buildNotePath(note.repositoryId, filename)
         const renamed = filename !== previous.filename
-        const noteWithLocation = { ...note, filename, path }
+        const noteWithLocation = { ...note, filename, path, createdAt: previous.createdAt, updatedAt: previous.updatedAt }
 
         setNotes((prev) => prev.map((n) => (n.path === previous.path ? noteWithLocation : n)))
 
@@ -125,7 +125,7 @@ export function useNotes() {
         let updatedAt = previous.updatedAt
 
         try {
-            if (!findFile(uri, previous.filename)) return { path, filename, createdAt, updatedAt }
+            if (!names.includes(previous.filename)) return { path, filename, createdAt, updatedAt }
 
             if (renamed) {
                 await renameNoteFile(uri, previous.filename, filename)

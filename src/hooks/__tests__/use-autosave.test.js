@@ -149,4 +149,51 @@ describe('unmount', () => {
 
         expect(onSave).not.toHaveBeenCalled()
     })
+
+    test('does not save when skip turned on before unmounting', async () => {
+        const onSave = jest.fn()
+
+        const { rerender, unmount } = await renderHook(
+            ({ skip }) => useAutosave(onSave, ['a'], { skip }),
+            { initialProps: { skip: false } }
+        )
+
+        await rerender({ skip: true })
+        await unmount()
+
+        expect(onSave).not.toHaveBeenCalled()
+    })
+})
+
+describe('exclusive saves', () => {
+    test('runs a flush only after the previous save finished', async () => {
+        const order = []
+        let releaseFirst
+        const onSave = jest
+            .fn()
+            .mockImplementationOnce(() => new Promise((resolve) => {
+                releaseFirst = () => {
+                    order.push('first done')
+                    resolve()
+                }
+            }))
+            .mockImplementationOnce(async () => {
+                order.push('second start')
+            })
+
+        const { result } = await renderHook(() => useAutosave(onSave, ['a'], { delay: 500 }))
+
+        await act(() => {
+            jest.advanceTimersByTime(500)
+        })
+
+        const flushing = result.current.flush()
+
+        await act(async () => {
+            releaseFirst()
+            await flushing
+        })
+
+        expect(order).toEqual(['first done', 'second start'])
+    })
 })

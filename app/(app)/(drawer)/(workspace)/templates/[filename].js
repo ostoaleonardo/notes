@@ -18,7 +18,6 @@ import { ConfirmDialog } from '@/components/confirm-dialog'
 import { useAllowLandscape } from '@/hooks/use-allow-landscape'
 import { useAutosave } from '@/hooks/use-autosave'
 import { useBottomSheet } from '@/hooks/use-bottom-sheet'
-import { useExclusiveQueue } from '@/hooks/use-exclusive-queue'
 import { useMarkdownAction } from '@/hooks/use-markdown-action'
 import { useMarkdownSheets } from '@/hooks/use-markdown-sheets'
 import { useMarkdownSearch } from '@/hooks/use-markdown-search'
@@ -38,7 +37,6 @@ export default function EditTemplate() {
     const { filename } = useLocalSearchParams()
     const { getTemplate, updateTemplate, deleteTemplate } = useTemplates()
     const { pro } = usePro()
-    const { runExclusive } = useExclusiveQueue()
     const { activeRepository, ensureTemplatesFolder } = useRepositories()
 
     useAllowLandscape()
@@ -109,7 +107,7 @@ export default function EditTemplate() {
         })
     }, [filename])
 
-    useAutosave(() => runExclusive(async () => {
+    useAutosave(async () => {
         const trimmedName = name.trim()
         if (trimmedName === originalName.current && content === originalContent.current) return
 
@@ -120,7 +118,7 @@ export default function EditTemplate() {
         currentFilename.current = await updateTemplate(currentFilename.current, nextName, content)
         originalName.current = trimmedName
         originalContent.current = content
-    }), [name, content], { skip: loading || !name.trim() })
+    }, [name, content], { skip: loading || !name.trim() })
 
     useEffect(() => {
         if (!activeRepository) return

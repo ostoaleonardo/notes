@@ -51,7 +51,7 @@ export const NoteEditorScreen = ({
     note, setNote,
     tags, setTags,
     invalidFrontmatter, setInvalidFrontmatter,
-    createdAt, updatedAt,
+    modifiedAt,
     initialMode = EDITOR_MODES.READ,
     flush
 }) => {
@@ -147,8 +147,8 @@ export const NoteEditorScreen = ({
         buildNoteMetaLabel({
             showDate: mode === EDITOR_MODES.READ,
             language: currentLanguage,
-            timestamp: updatedAt || createdAt,
-            dateLabel: updatedAt ? t('date.updated') : t('date.created'),
+            timestamp: modifiedAt,
+            dateLabel: t('date.updated'),
             words,
             wordsLabel: t('count.words', { count: words }),
             charactersLabel: t('count.characters', { count: characters })
@@ -157,8 +157,7 @@ export const NoteEditorScreen = ({
         t,
         mode,
         words,
-        createdAt,
-        updatedAt,
+        modifiedAt,
         characters,
         currentLanguage
     ])

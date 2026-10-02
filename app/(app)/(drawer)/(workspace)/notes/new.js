@@ -6,7 +6,6 @@ import { NoteEditorScreen } from '@/screens/notes/note-editor-screen'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useAutosave } from '@/hooks/use-autosave'
-import { useExclusiveQueue } from '@/hooks/use-exclusive-queue'
 import { useNotes } from '@/hooks/use-notes'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
@@ -18,7 +17,6 @@ import { DUPLICATE_TITLE_ERROR } from '@/constants/note-errors'
 
 export default function Note() {
     const { t } = useTranslation()
-    const { runExclusive } = useExclusiveQueue()
     const { activeRepository } = useRepositories()
     const { notes, saveNote, updateNote } = useNotes()
     const { repositoryId: targetRepositoryId } = useLocalSearchParams()
@@ -37,8 +35,7 @@ export default function Note() {
     const [note, setNote] = useState('')
     const [tags, setTags] = useState([])
 
-    const [createdAt, setCreatedAt] = useState('')
-    const [updatedAt, setUpdatedAt] = useState('')
+    const [modifiedAt, setModifiedAt] = useState('')
     const [repositoryId, setRepositoryId] = useState('')
     const [invalidFrontmatter, setInvalidFrontmatter] = useState(null)
 
@@ -67,20 +64,32 @@ export default function Note() {
         pathRef.current = saved.path
         setPath(saved.path)
         setFilename(saved.filename)
-        setCreatedAt(saved.createdAt)
-        setUpdatedAt(saved.updatedAt)
+        setModifiedAt(saved.updatedAt || saved.createdAt)
     }
 
-    const { flush } = useAutosave(() => runExclusive(async () => {
+    const { flush } = useAutosave(async () => {
         if (!isSaved.current) {
-            const payload = buildNotePayload({ title, note, tags, repositoryId, invalidFrontmatter })
+            const payload = buildNotePayload({
+                title,
+                note,
+                tags,
+                repositoryId,
+                invalidFrontmatter
+            })
 
             const saved = await saveNote(payload, repositoryId)
 
             applySaved(saved)
             isSaved.current = true
         } else {
-            const payload = buildNotePayload({ path: pathRef.current, title, note, tags, createdAt, repositoryId, invalidFrontmatter })
+            const payload = buildNotePayload({
+                path: pathRef.current,
+                title,
+                note,
+                tags,
+                repositoryId,
+                invalidFrontmatter
+            })
 
             let saved
             try {
@@ -94,7 +103,13 @@ export default function Note() {
 
             applySaved(saved)
         }
-    }), [title, note, tags, repositoryId, invalidFrontmatter], {
+    }, [
+        title,
+        note,
+        tags,
+        repositoryId,
+        invalidFrontmatter
+    ], {
         skip: firstRender.current || (title === autoTitleRef.current && !note)
     })
 
@@ -112,8 +127,7 @@ export default function Note() {
             setTags={setTags}
             invalidFrontmatter={invalidFrontmatter}
             setInvalidFrontmatter={setInvalidFrontmatter}
-            createdAt={createdAt}
-            updatedAt={updatedAt}
+            modifiedAt={modifiedAt}
             initialMode={EDITOR_MODES.LIVE}
         />
     )

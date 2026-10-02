@@ -8,7 +8,6 @@ import { RenameLinksDialog } from '@/screens/dialogs/rename-links-dialog'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useAutosave } from '@/hooks/use-autosave'
-import { useExclusiveQueue } from '@/hooks/use-exclusive-queue'
 import { useNotes } from '@/hooks/use-notes'
 import { useWikiLinkRenameConfirm } from '@/hooks/use-wiki-link-rename-confirm'
 import { useCurrentNote, useRegisterCurrent } from '@/hooks/use-current-note'
@@ -23,7 +22,6 @@ const tagsEqual = (a, b) => a.length === b.length && a.every((tag, i) => tag ===
 export default function EditNote() {
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
-    const { runExclusive } = useExclusiveQueue()
     const { registerCurrent } = useCurrentNote()
     const { notes, getNote, updateNote, loading: notesLoading } = useNotes()
     const { loading: repositoriesLoading } = useRepositories()
@@ -47,8 +45,7 @@ export default function EditNote() {
     const [note, setNote] = useState('')
     const [tags, setTags] = useState([])
 
-    const [createdAt, setCreatedAt] = useState('')
-    const [updatedAt, setUpdatedAt] = useState('')
+    const [modifiedAt, setModifiedAt] = useState('')
     const [repositoryId, setRepositoryId] = useState('')
     const [filename, setFilename] = useState('')
     const [invalidFrontmatter, setInvalidFrontmatter] = useState(null)
@@ -77,8 +74,7 @@ export default function EditNote() {
         setTitle(resolvedTitle)
         setNote(content)
         setTags(tags)
-        setCreatedAt(createdAt)
-        setUpdatedAt(updatedAt)
+        setModifiedAt(updatedAt || createdAt)
         setRepositoryId(repositoryId)
         setFilename(filename)
         setInvalidFrontmatter(invalidFrontmatter)
@@ -106,7 +102,9 @@ export default function EditNote() {
         registerCurrent(nextPath)
     }
 
-    const { flush } = useAutosave(() => runExclusive(async () => {
+    const noteExists = notes.some((n) => n.path === pathRef.current)
+
+    const { flush, runExclusive } = useAutosave(async () => {
         if (
             note === originalNoteRef.current &&
             tagsEqual(tags, originalTagsRef.current) &&
@@ -118,7 +116,6 @@ export default function EditNote() {
             title: originalTitleRef.current,
             note,
             tags,
-            createdAt,
             repositoryId,
             invalidFrontmatter
         })
@@ -127,22 +124,21 @@ export default function EditNote() {
         try {
             const saved = await updateNote(payload)
             moveToPath(saved.path, saved.filename)
-            setCreatedAt(saved.createdAt)
-            setUpdatedAt(saved.updatedAt)
+            setModifiedAt(saved.updatedAt || saved.createdAt)
+
             originalNoteRef.current = note
             originalTagsRef.current = tags
             originalInvalidFrontmatterRef.current = invalidFrontmatter
         } finally {
             isSavingRef.current = false
         }
-    }), [
+    }, [
         note,
         tags,
-        createdAt,
         repositoryId,
         invalidFrontmatter
     ], {
-        skip: loading
+        skip: loading || !noteExists
     })
 
     const onTitleBlur = () => {
@@ -153,14 +149,28 @@ export default function EditNote() {
         originalTitleRef.current = trimmedTitle
 
         runExclusive(async () => {
-            const payload = buildNotePayload({ path: pathRef.current, title: trimmedTitle, note, tags, createdAt, repositoryId, invalidFrontmatter })
+            const payload = buildNotePayload({
+                path: pathRef.current,
+                title: trimmedTitle,
+                note,
+                tags,
+                repositoryId,
+                invalidFrontmatter
+            })
 
             isSavingRef.current = true
             try {
-                const { savedNote, path, filename: nextFilename, createdAt: nextCreatedAt, updatedAt: nextUpdatedAt } = await saveWithLinkCheck(payload, previousTitle)
+                const {
+                    savedNote,
+                    path,
+                    filename: nextFilename,
+                    createdAt,
+                    updatedAt
+                } = await saveWithLinkCheck(payload, previousTitle)
+
                 moveToPath(path, nextFilename)
-                setCreatedAt(nextCreatedAt)
-                setUpdatedAt(nextUpdatedAt)
+                setModifiedAt(updatedAt || createdAt)
+
                 if (savedNote.note !== payload.note) setNote(savedNote.note)
             } catch (error) {
                 if (error.code !== DUPLICATE_TITLE_ERROR) throw error
@@ -192,8 +202,7 @@ export default function EditNote() {
                 setTags={setTags}
                 invalidFrontmatter={invalidFrontmatter}
                 setInvalidFrontmatter={setInvalidFrontmatter}
-                createdAt={createdAt}
-                updatedAt={updatedAt}
+                modifiedAt={modifiedAt}
             />
 
             <RenameLinksDialog
