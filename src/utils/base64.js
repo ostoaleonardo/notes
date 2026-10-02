@@ -1,4 +1,4 @@
-const BASE64_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+import { BASE64_CHARS } from '@/constants/base64'
 
 export const bytesToBase64 = (bytes) => {
     let result = ''
