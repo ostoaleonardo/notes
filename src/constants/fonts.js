@@ -11,3 +11,6 @@ export const TYPOGRAPHY_SIZE_VARIANTS = {
     paragraph: 14,
     caption: 12
 }
+
+export const BODY_FONT_FAMILY = `${FONTS.azeretLight}, ui-monospace, monospace`
+export const HEADING_FONT_FAMILY = `${FONTS.nType82Headline}, system-ui, sans-serif`

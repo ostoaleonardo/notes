@@ -22,13 +22,10 @@ import { findBacklinks, buildBacklinksHtml, parseMissingWikiLinkTarget } from '@
 import { getNotePaths, buildRepositoryPaths } from '@/utils/note-path'
 
 import { ROUTES } from '@/constants/routes'
-import { FONTS } from '@/constants/fonts'
+import { BODY_FONT_FAMILY, HEADING_FONT_FAMILY } from '@/constants/fonts'
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { WIKI_LINK_SCHEME, WIKI_LINK_MISSING_PREFIX, WIKI_LINK_FORMATS } from '@/constants/wiki-links'
-
-const BODY_FONT_FAMILY = `${FONTS.azeretLight}, ui-monospace, monospace`
-const HEADING_FONT_FAMILY = `${FONTS.nType82Headline}, system-ui, sans-serif`
 
 export const MarkdownInput = ({
     id,
