@@ -5,12 +5,13 @@ import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 import { CardGridItem } from './card-grid-item'
 import { AnimatedView } from '@/components/animated/animated-view'
 import { Typography } from '@/components/typography'
-import { CARDS_HEIGHT } from '@/constants/card-grid'
-
-const CARD_MIN_WIDTH = 160
-const GRID_GAP = 24
-const GRID_GAP_HORIZONTAL = 16
-const GRID_PADDING = 16
+import {
+    CARDS_HEIGHT,
+    CARD_MIN_WIDTH,
+    GRID_GAP,
+    GRID_GAP_HORIZONTAL,
+    GRID_PADDING
+} from '@/constants/card-grid'
 
 export function CardGrid({ cards, onOpen, renderHeader, previewLines, emptyMessage }) {
     const { width: windowWidth } = useWindowDimensions()
