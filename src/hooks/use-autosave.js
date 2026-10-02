@@ -4,8 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 import { useExclusiveQueue } from './use-exclusive-queue'
 
+import { AUTOSAVE_DELAY } from '@/constants/default-values'
+
 export function useAutosave(
-    onSave, deps, { delay = 500, skip = false } = {}
+    onSave, deps, { delay = AUTOSAVE_DELAY, skip = false } = {}
 ) {
     const { t } = useTranslation()
     const { runExclusive } = useExclusiveQueue()

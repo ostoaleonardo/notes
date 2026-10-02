@@ -10,6 +10,7 @@ import { buildNotePath } from '@/utils/note-path'
 import { buildNoteFileContent } from '@/utils/frontmatter'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { STORAGE_BOOLEAN } from '@/constants/storage-values'
 
 export function useWelcomeNote() {
     const { getItem, setItem } = useStorage()
@@ -20,7 +21,7 @@ export function useWelcomeNote() {
         const alreadyCreated = await getItem(STORAGE_KEYS.WELCOME_NOTE_CREATED)
         if (alreadyCreated) return null
 
-        await setItem(STORAGE_KEYS.WELCOME_NOTE_CREATED, 'true')
+        await setItem(STORAGE_KEYS.WELCOME_NOTE_CREATED, STORAGE_BOOLEAN.TRUE)
 
         const { title, content } = getWelcomeNote(colors)
         const existingNames = listMarkdownFiles(uri).map((file) => file.name)

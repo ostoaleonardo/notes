@@ -7,6 +7,7 @@ import { Switch } from '@/components/button/switch'
 import { useStorage } from '@/hooks/use-storage'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { STORAGE_BOOLEAN } from '@/constants/storage-values'
 import { WIKI_LINK_FORMATS } from '@/constants/wiki-links'
 
 export function WikiLinksOption() {
@@ -16,12 +17,12 @@ export function WikiLinksOption() {
     const [autoUpdateLinks, setAutoUpdateLinks] = useState(false)
     const [useWikilinks, setUseWikilinks] = useState(true)
 
-    useStorageEffect(STORAGE_KEYS.ALWAYS_UPDATE_WIKI_LINKS, (value) => setAutoUpdateLinks(value === 'true'))
+    useStorageEffect(STORAGE_KEYS.ALWAYS_UPDATE_WIKI_LINKS, (value) => setAutoUpdateLinks(value === STORAGE_BOOLEAN.TRUE))
     useStorageEffect(STORAGE_KEYS.LINK_FORMAT, (value) => setUseWikilinks(value !== WIKI_LINK_FORMATS.MARKDOWN))
 
     const onToggleAutoUpdate = (value) => {
         setAutoUpdateLinks(value)
-        setItem(STORAGE_KEYS.ALWAYS_UPDATE_WIKI_LINKS, value ? 'true' : 'false')
+        setItem(STORAGE_KEYS.ALWAYS_UPDATE_WIKI_LINKS, value ? STORAGE_BOOLEAN.TRUE : STORAGE_BOOLEAN.FALSE)
     }
 
     const onToggleFormat = (value) => {

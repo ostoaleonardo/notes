@@ -6,6 +6,7 @@ import { useRepositories } from './use-repositories'
 import { findBacklinks, renameWikiLinksForNote } from '@/utils/wiki-links'
 import { getNotePaths } from '@/utils/note-path'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { STORAGE_BOOLEAN } from '@/constants/storage-values'
 
 export function useWikiLinkRenameConfirm() {
     const {
@@ -22,7 +23,7 @@ export function useWikiLinkRenameConfirm() {
 
     useEffect(() => {
         getItem(STORAGE_KEYS.ALWAYS_UPDATE_WIKI_LINKS).then((value) => {
-            if (value === 'true') setAlwaysUpdate(true)
+            if (value === STORAGE_BOOLEAN.TRUE) setAlwaysUpdate(true)
         })
     }, [])
 
@@ -66,7 +67,7 @@ export function useWikiLinkRenameConfirm() {
     const onConfirmAlways = async () => {
         if (pending) propagateWikiLinkRename(pending.targetPath, pending.newTitle, pending.notesSnapshot, pending.notePaths)
         setAlwaysUpdate(true)
-        await setItem(STORAGE_KEYS.ALWAYS_UPDATE_WIKI_LINKS, 'true')
+        await setItem(STORAGE_KEYS.ALWAYS_UPDATE_WIKI_LINKS, STORAGE_BOOLEAN.TRUE)
         setPending(null)
     }
 
