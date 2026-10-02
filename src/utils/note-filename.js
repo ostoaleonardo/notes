@@ -1,13 +1,19 @@
 import { NOTE_FILE_EXTENSION } from '@/constants/file-storage'
-
-const ILLEGAL_CHARS = /[/\\:*?"<>|\x00-\x1F]/g
-const NOTE_FILE_EXTENSION_REGEX = /\.md$/i
+import {
+    ILLEGAL_FILENAME_CHARS,
+    NOTE_FILE_EXTENSION_REGEX,
+    FILENAME_MAX_LENGTH,
+    DEFAULT_FILENAME
+} from '@/constants/note-filename'
 
 export const stripNoteExtension = (filename) => filename.replace(NOTE_FILE_EXTENSION_REGEX, '')
 
 export const sanitizeFilename = (title) => {
-    const clean = (title || '').replace(ILLEGAL_CHARS, ' ').trim().slice(0, 200)
-    return clean || 'Untitled'
+    const clean = (title || '')
+        .replace(ILLEGAL_FILENAME_CHARS, ' ')
+        .trim()
+        .slice(0, FILENAME_MAX_LENGTH)
+    return clean || DEFAULT_FILENAME
 }
 
 export const getUniqueTitle = (existingTitles, base) => {
