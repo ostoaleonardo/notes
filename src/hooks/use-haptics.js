@@ -1,12 +1,7 @@
 import * as Haptics from 'expo-haptics'
 
 import { FEEDBACK_TYPES } from '@/constants/feedback-types'
-
-const VIBRATION_TYPES = {
-    success: Haptics.NotificationFeedbackType.Success,
-    warning: Haptics.NotificationFeedbackType.Warning,
-    error: Haptics.NotificationFeedbackType.Error,
-}
+import { VIBRATION_TYPES } from '@/constants/haptics'
 
 export function useHaptics() {
     const vibrate = (feedbackType = FEEDBACK_TYPES.ERROR) => {
