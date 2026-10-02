@@ -19,10 +19,7 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
     default: {}
 }))
 jest.mock('../../hooks/use-repository-data', () => ({
-    useRepositoryData: () => async (...args) => ({
-        legacyPaths: new Map(),
-        ...(await mockLoadRepositoryData(...args))
-    })
+    useRepositoryData: () => mockLoadRepositoryData
 }))
 jest.mock('../../hooks/use-repositories', () => ({
     useRepositories: () => ({
@@ -129,22 +126,6 @@ describe('pruning stale pinned and recent entries', () => {
         expect(mockUpdatePinned).toHaveBeenCalledWith(new Set(['repo-1::Kept.md']))
         expect(mockRemoveRecent).toHaveBeenCalledWith('repo-1::Gone.md')
         expect(mockRemoveRecent).toHaveBeenCalledWith('repo-1::AlsoGone.md')
-    })
-
-    test('remaps pinned legacy note ids to their migrated paths', async () => {
-        const root = { id: 'repo-1', uri: 'content://repo-1' }
-        mockActiveRepository = root
-        mockActiveRepositoryTree = [root]
-        mockPinned = new Set(['legacy-1', 'legacy-gone'])
-        mockLoadRepositoryData.mockResolvedValue({
-            notes: [{ path: 'repo-1::Migrated.md', title: 'Migrated' }],
-            tags: [],
-            legacyPaths: new Map([['legacy-1', 'repo-1::Migrated.md']])
-        })
-
-        await renderNoteContext()
-
-        expect(mockUpdatePinned).toHaveBeenCalledWith(new Set(['repo-1::Migrated.md']))
     })
 
     test('never prunes pinned template entries', async () => {

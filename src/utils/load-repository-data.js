@@ -46,13 +46,11 @@ const resolveTagNames = (values, tagNameById) => {
     return [...new Set(names)].filter((name) => name !== LEGACY_ALL_TAG_ID)
 }
 
-// Per-note entries -> .md files with embedded frontmatter. Returns legacy note id -> new path.
+// Per-note entries -> .md files with embedded frontmatter.
 const migrateStorageNotesToFiles = async (rootRepository, storage, fileStorage, tagNameById) => {
-    const legacyPaths = new Map()
-
     const keys = await storage.getAllKeys()
     const noteKeys = keys.filter((key) => key.startsWith(NOTE_KEY_PREFIX))
-    if (noteKeys.length === 0) return legacyPaths
+    if (noteKeys.length === 0) return
 
     const entries = await storage.multiGet(noteKeys)
     const legacyNotes = entries.map(([, value]) => JSON.parse(value))
@@ -70,12 +68,9 @@ const migrateStorageNotesToFiles = async (rootRepository, storage, fileStorage, 
         const content = buildNoteFileContent({ tags }, buildLegacyNoteBody(note, imageUris))
 
         fileStorage.writeNoteFile(rootRepository.uri, filename, content)
-        legacyPaths.set(note.id, buildNotePath(rootRepository.id, filename))
     }
 
     await storage.multiRemove(noteKeys)
-
-    return legacyPaths
 }
 
 // Old metadata was keyed by a random note id, with the filename stored inside the entry.
@@ -262,7 +257,7 @@ export const loadRepositoryData = async (tree, rootRepository, storage, fileStor
     const purgedRawTags = purgeAllTag(rawTags, rootRepositoryUri, fileStorage)
     const tagNameById = buildTagNameById(purgedRawTags)
 
-    const legacyPaths = await migrateStorageNotesToFiles(
+    await migrateStorageNotesToFiles(
         rootRepository,
         storage,
         fileStorage,
@@ -274,5 +269,5 @@ export const loadRepositoryData = async (tree, rootRepository, storage, fileStor
 
     const notes = await loadFromTree(tree, loadNotesFromFolder, fileStorage, tagNameById)
 
-    return { notes, tags, legacyPaths }
+    return { notes, tags }
 }

@@ -231,27 +231,6 @@ describe('legacy blob note content', () => {
 
         expect(body).toBe(expected)
     })
-
-    test('maps each legacy note id to its new path', async () => {
-        const storage = createFakeStorage({
-            [STORAGE_KEYS.NOTES]: JSON.stringify([
-                { id: 'legacy-1', title: 'First', note: '' },
-                { id: 'legacy-2', title: 'First', note: '' }
-            ])
-        })
-
-        const { legacyPaths } = await loadRepositoryData(
-            [rootRepository],
-            rootRepository,
-            storage,
-            createFakeFileStorage()
-        )
-
-        expect(Object.fromEntries(legacyPaths)).toEqual({
-            'legacy-1': 'repo-1::First.md',
-            'legacy-2': 'repo-1::First (2).md'
-        })
-    })
 })
 
 // images

@@ -30,15 +30,16 @@ export function NoteProvider({ children }) {
     const previousRepositoryIdRef = useRef(null)
 
     const pruneStaleFavoritesRef = useRef(null)
-    pruneStaleFavoritesRef.current = (loadedNotes, legacyPaths) => {
+    pruneStaleFavoritesRef.current = (loadedNotes) => {
         const notePaths = new Set(loadedNotes.map((note) => note.path))
         const isStale = (entry) => !entry.startsWith(TEMPLATE_TAB_PREFIX) && !notePaths.has(entry)
 
-        const migratedPinned = new Set([...pinned].map((entry) => legacyPaths.get(entry) ?? entry))
-        const next = new Set([...migratedPinned].filter((entry) => !isStale(entry)))
-
-        const changed = next.size !== pinned.size || [...next].some((entry) => !pinned.has(entry))
-        if (changed) updatePinned(next)
+        const stalePinned = [...pinned].filter(isStale)
+        if (stalePinned.length > 0) {
+            const next = new Set(pinned)
+            stalePinned.forEach((entry) => next.delete(entry))
+            updatePinned(next)
+        }
 
         recent.filter(isStale).forEach((entry) => removeRecent(entry))
     }
@@ -51,11 +52,11 @@ export function NoteProvider({ children }) {
 
         try {
             const rootRepository = activeRepositoryTree[0] || activeRepository
-            const { notes, tags, legacyPaths } = await loadRepositoryData(activeRepositoryTree, rootRepository)
+            const { notes, tags } = await loadRepositoryData(activeRepositoryTree, rootRepository)
 
             setNotes(notes)
             setTags(tags)
-            pruneStaleFavoritesRef.current(notes, legacyPaths)
+            pruneStaleFavoritesRef.current(notes)
         } catch (error) {
             console.debug('error loading notes', error)
         } finally {
