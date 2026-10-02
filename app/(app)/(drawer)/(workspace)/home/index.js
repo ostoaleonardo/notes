@@ -1,5 +1,95 @@
-import { Home } from '@/screens/notes/home'
+import { View } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import { router, useFocusEffect } from 'expo-router'
+import * as DocumentPicker from 'expo-document-picker'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
-export default function App() {
-    return <Home />
+import { Intro } from '@/screens/notes/intro'
+import { NoteToolbarSheets } from '@/screens/notes/note-toolbar-sheets'
+import { HomeToolbar } from '@/screens/notes/home-toolbar'
+import { AppBar } from '@/components/app-bar/app-bar'
+
+import { useBottomSheet } from '@/hooks/use-bottom-sheet'
+import { useCurrentNote } from '@/hooks/use-current-note'
+import { useImportMarkdown } from '@/hooks/use-import-markdown'
+import { useNotes } from '@/hooks/use-notes'
+import { usePro } from '@/hooks/use-pro'
+import { useRecentNotes } from '@/hooks/use-recent-notes'
+import { useRepositories } from '@/hooks/use-repositories'
+import { useTemplates } from '@/hooks/use-templates'
+import { useUtils } from '@/hooks/use-utils'
+import { getRecentIds } from '@/utils/recent-ids'
+
+import { ROUTES } from '@/constants/routes'
+
+export default function Home() {
+    const { t } = useTranslation()
+    const { notes } = useNotes()
+    const { pinned } = useUtils()
+    const { pro } = usePro()
+    const { recent } = useRecentNotes()
+    const { listTemplates } = useTemplates()
+    const { importFile } = useImportMarkdown()
+    const { registerCurrent } = useCurrentNote()
+    const { activeRepositoryTree } = useRepositories()
+
+    const [templates, setTemplates] = useState([])
+    const rootId = activeRepositoryTree[0]?.id
+
+    const recentCount = useMemo(
+        () => getRecentIds(pinned, recent, notes, templates).length,
+        [pinned, recent, notes, templates]
+    )
+
+    const recentsSheet = useBottomSheet()
+    const searchSheet = useBottomSheet()
+
+    useFocusEffect(
+        useCallback(() => {
+            registerCurrent('')
+        }, [])
+    )
+
+    useEffect(() => {
+        listTemplates().then(setTemplates)
+    }, [])
+
+    const onCreateNote = () => {
+        router.push({
+            pathname: ROUTES.ADD_NOTE,
+            params: { repositoryId: rootId }
+        })
+    }
+
+    const onImportNote = async () => {
+        const result = await DocumentPicker.getDocumentAsync({ type: '*/*' })
+        if (result.canceled) return
+
+        importFile(result.assets[0].uri, result.assets[0].name)
+    }
+
+    return (
+        <View style={{ flex: 1 }}>
+            <AppBar
+                mode='menu'
+                title={t('title.notes') + (pro ? ' (Pro)' : '')}
+            />
+
+            <Intro />
+
+            <HomeToolbar
+                onCreateNote={onCreateNote}
+                onImportNote={onImportNote}
+                onOpenRecents={recentsSheet.onOpen}
+                onOpenSearch={searchSheet.onOpen}
+                recentCount={recentCount}
+            />
+
+            <NoteToolbarSheets
+                home={true}
+                recentsSheet={recentsSheet}
+                searchSheet={searchSheet}
+            />
+        </View>
+    )
 }
