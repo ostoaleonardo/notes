@@ -10,6 +10,7 @@ import {
     RESERVED_FOLDER_NAMES,
     SIDECAR_FILENAMES
 } from '@/constants/file-storage'
+import { MIME_TYPES } from '@/constants/mime-types'
 
 export function useFileStorage() {
     const listEntries = (directoryUri) => new Directory(directoryUri).list()
@@ -83,12 +84,12 @@ export function useFileStorage() {
     const copyImageFile = async (sourceUri, directoryUri, filename) => {
         const source = new File(sourceUri)
         const bytes = await source.bytes()
-        const file = new Directory(directoryUri).createFile(filename, source.type || 'image/jpeg')
+        const file = new Directory(directoryUri).createFile(filename, source.type || MIME_TYPES.JPEG)
         file.write(bytes)
         return file
     }
 
-    const writeNoteFile = (directoryUri, filename, content, mimeType = 'text/markdown') => {
+    const writeNoteFile = (directoryUri, filename, content, mimeType = MIME_TYPES.MARKDOWN) => {
         const existing = findFile(directoryUri, filename)
 
         if (!existing) {
@@ -137,7 +138,7 @@ export function useFileStorage() {
     }
 
     const writeJson = (directoryUri, filename, data) => {
-        writeNoteFile(directoryUri, filename, JSON.stringify(data), 'application/json')
+        writeNoteFile(directoryUri, filename, JSON.stringify(data), MIME_TYPES.JSON)
     }
 
     const readMetadata = (directoryUri) => readJson(directoryUri, METADATA_FILENAME, {})
