@@ -83,6 +83,19 @@ describe('list templates', () => {
     })
 })
 
+describe('list templates without content', () => {
+    test('does not read the file contents', async () => {
+        const text = jest.fn(async () => 'content a')
+        mockFileStorage.listMarkdownFiles.mockImplementation(() => [{ name: 'A.md', text }])
+        const { result } = await renderTemplatesHook()
+
+        const templates = await act(async () => result.current.listTemplates({ withContent: false }))
+
+        expect(templates).toEqual([{ filename: 'A.md', name: 'A', content: '' }])
+        expect(text).not.toHaveBeenCalled()
+    })
+})
+
 describe('get template', () => {
     test('returns the template content by filename', async () => {
         files.set('A.md', 'content a')
@@ -123,6 +136,18 @@ describe('update template', () => {
         expect(filename).toBe('B.md')
         expect(files.has('A.md')).toBe(false)
         expect(files.get('B.md')).toBe('content')
+    })
+})
+
+describe('update template that was deleted', () => {
+    test('does not recreate the file', async () => {
+        const { result } = await renderTemplatesHook()
+
+        const filename = await act(async () => result.current.updateTemplate('A.md', 'A', 'new'))
+
+        expect(filename).toBe('A.md')
+        expect(files.size).toBe(0)
+        expect(mockFileStorage.writeNoteFile).not.toHaveBeenCalled()
     })
 })
 

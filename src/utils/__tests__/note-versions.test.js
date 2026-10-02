@@ -7,7 +7,8 @@ jest.mock('expo-crypto', () => ({ randomUUID: jest.fn() }))
 const REPO_URI = 'content://fake/repo'
 const NOTE_ID = 'note-1'
 
-const createFakeFileStorage = (seed = new Map()) => ({
+const createFakeFileStorage = (seed = new Map(), existing = true) => ({
+    findFile: () => existing,
     readVersions: async (uri, noteId) => seed.get(`${uri}/${noteId}`) || [],
     writeVersions: (uri, noteId, versions) => { seed.set(`${uri}/${noteId}`, versions) }
 })
@@ -74,5 +75,15 @@ describe('commit note version', () => {
 
         expect(versions).toHaveLength(2)
         expect(versions[1].title).toBe('New title')
+    })
+
+    test('does not write a history file when the note no longer exists', async () => {
+        const seed = new Map()
+        const fileStorage = createFakeFileStorage(seed, false)
+
+        const versions = await commitNoteVersion(fileStorage, REPO_URI, NOTE_ID, 'Note', 'hello')
+
+        expect(versions).toEqual([])
+        expect(seed.size).toBe(0)
     })
 })

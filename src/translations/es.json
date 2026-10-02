@@ -270,6 +270,7 @@
 		"import": "Importar plantilla",
 		"saved": "Plantilla guardada",
 			"save_failed": "No se pudo guardar la plantilla",
+		"delete_failed": "No se pudo borrar la plantilla",
 		"view_placeholders": "Ver variables disponibles",
 		"placeholders_title": "Variables disponibles",
 		"placeholder_date": "Fecha actual",

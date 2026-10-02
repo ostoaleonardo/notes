@@ -74,7 +74,7 @@ export function StartupOption() {
         if (!activeRepository) return
 
         let cancelled = false
-        listTemplates().then((value) => { if (!cancelled) setTemplates(value) })
+        listTemplates({ withContent: false }).then((value) => { if (!cancelled) setTemplates(value) })
 
         return () => { cancelled = true }
     }, [activeRepository, listTemplates])

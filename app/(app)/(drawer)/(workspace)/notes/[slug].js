@@ -62,12 +62,12 @@ export default function EditNote() {
             title = '',
             note: content = '',
             tags = [],
-            createdAt = Date.now(),
+            createdAt = '',
             updatedAt = '',
             repositoryId = '',
             filename = '',
             invalidFrontmatter = null
-        } = getNote(slug)
+        } = getNote(pathRef.current)
 
         const resolvedTitle = title || t('notes.untitled')
 
@@ -94,13 +94,30 @@ export default function EditNote() {
         if (!notes.some((n) => n.path === pathRef.current)) router.replace(ROUTES.HOME)
     }, [notes, notesLoading, repositoriesLoading])
 
-    const moveToPath = (nextPath, nextFilename) => {
-        if (nextPath === pathRef.current) return
+    const applySaved = ({ path, filename, createdAt, updatedAt }) => {
+        if (path !== pathRef.current) {
+            pathRef.current = path
+            setFilename(filename)
+            registerCurrent(path)
+        }
 
-        pathRef.current = nextPath
-        setFilename(nextFilename)
-        registerCurrent(nextPath)
+        setModifiedAt(updatedAt || createdAt)
     }
+
+    const markSaved = (savedContent) => {
+        originalNoteRef.current = savedContent
+        originalTagsRef.current = tags
+        originalInvalidFrontmatterRef.current = invalidFrontmatter
+    }
+
+    const buildPayload = (payloadTitle, payloadNote = note) => buildNotePayload({
+        path: pathRef.current,
+        title: payloadTitle,
+        note: payloadNote,
+        tags,
+        repositoryId,
+        invalidFrontmatter
+    })
 
     const noteExists = notes.some((n) => n.path === pathRef.current)
 
@@ -111,24 +128,13 @@ export default function EditNote() {
             invalidFrontmatter === originalInvalidFrontmatterRef.current
         ) return
 
-        const payload = buildNotePayload({
-            path: pathRef.current,
-            title: originalTitleRef.current,
-            note,
-            tags,
-            repositoryId,
-            invalidFrontmatter
-        })
+        const payload = buildPayload(originalTitleRef.current)
 
         isSavingRef.current = true
-        try {
-            const saved = await updateNote(payload)
-            moveToPath(saved.path, saved.filename)
-            setModifiedAt(saved.updatedAt || saved.createdAt)
 
-            originalNoteRef.current = note
-            originalTagsRef.current = tags
-            originalInvalidFrontmatterRef.current = invalidFrontmatter
+        try {
+            applySaved(await updateNote(payload))
+            markSaved(note)
         } finally {
             isSavingRef.current = false
         }
@@ -141,47 +147,43 @@ export default function EditNote() {
         skip: loading || !noteExists
     })
 
-    const onTitleBlur = () => {
+    const commitTitle = (nextTitle, nextNote = note) => {
         const previousTitle = originalTitleRef.current
-        const trimmedTitle = title.trim()
-        if (!previousTitle || previousTitle === trimmedTitle) return
+        if (!previousTitle || previousTitle === nextTitle) return
 
-        originalTitleRef.current = trimmedTitle
+        originalTitleRef.current = nextTitle
 
         runExclusive(async () => {
-            const payload = buildNotePayload({
-                path: pathRef.current,
-                title: trimmedTitle,
-                note,
-                tags,
-                repositoryId,
-                invalidFrontmatter
-            })
-
+            const payload = buildPayload(nextTitle, nextNote)
             isSavingRef.current = true
+
             try {
-                const {
-                    savedNote,
-                    path,
-                    filename: nextFilename,
-                    createdAt,
-                    updatedAt
-                } = await saveWithLinkCheck(payload, previousTitle)
+                const { savedNote, ...saved } = await saveWithLinkCheck(payload, previousTitle)
 
-                moveToPath(path, nextFilename)
-                setModifiedAt(updatedAt || createdAt)
+                const rewritten = savedNote.note !== payload.note
 
-                if (savedNote.note !== payload.note) setNote(savedNote.note)
+                applySaved(saved)
+                markSaved(rewritten ? savedNote.note : nextNote)
+
+                if (rewritten) setNote(savedNote.note)
             } catch (error) {
                 if (error.code !== DUPLICATE_TITLE_ERROR) throw error
 
-                originalTitleRef.current = previousTitle
                 setTitle(previousTitle)
                 showSnackbar(t('notes.title_duplicated'))
+                originalTitleRef.current = previousTitle
             } finally {
                 isSavingRef.current = false
             }
         })
+    }
+
+    const onTitleBlur = () => commitTitle(title.trim())
+
+    const onRestoreVersion = (version) => {
+        setTitle(version.title)
+        setNote(version.content)
+        commitTitle(version.title.trim(), version.content)
     }
 
     if (loading) return <LoadingOverlay />
@@ -196,6 +198,7 @@ export default function EditNote() {
                 title={title}
                 setTitle={setTitle}
                 onTitleBlur={onTitleBlur}
+                onRestoreVersion={onRestoreVersion}
                 note={note}
                 setNote={setNote}
                 tags={tags}

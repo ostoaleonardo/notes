@@ -5,6 +5,8 @@ export const loadNoteVersions = (fileStorage, directoryUri, noteId) => (
 )
 
 export const commitNoteVersion = async (fileStorage, directoryUri, noteId, title, content) => {
+    if (!fileStorage.findFile(directoryUri, noteId)) return []
+
     const versions = await fileStorage.readVersions(directoryUri, noteId)
     const last = versions[versions.length - 1]
 

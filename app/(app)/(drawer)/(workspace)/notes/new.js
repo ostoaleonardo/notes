@@ -3,10 +3,12 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 
 import { NoteEditorScreen } from '@/screens/notes/note-editor-screen'
+import { RenameLinksDialog } from '@/screens/dialogs/rename-links-dialog'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useAutosave } from '@/hooks/use-autosave'
 import { useNotes } from '@/hooks/use-notes'
+import { useWikiLinkRenameConfirm } from '@/hooks/use-wiki-link-rename-confirm'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
 import { getUniqueTitle } from '@/utils/note-filename'
@@ -21,10 +23,21 @@ export default function Note() {
     const { notes, saveNote, updateNote } = useNotes()
     const { repositoryId: targetRepositoryId } = useLocalSearchParams()
 
+    const {
+        visible,
+        linksCount,
+        saveWithLinkCheck,
+        onDismiss,
+        onConfirmOnce,
+        onConfirmAlways
+    } = useWikiLinkRenameConfirm()
+
     const isSaved = useRef(false)
     const pathRef = useRef('')
     const notesRef = useRef(notes)
     const autoTitleRef = useRef('')
+    const savedTitleRef = useRef('')
+    const savedSignatureRef = useRef('')
     const firstRender = useRef(true)
 
     const [path, setPath] = useState('')
@@ -67,42 +80,32 @@ export default function Note() {
         setModifiedAt(saved.updatedAt || saved.createdAt)
     }
 
-    const { flush } = useAutosave(async () => {
-        if (!isSaved.current) {
-            const payload = buildNotePayload({
-                title,
-                note,
-                tags,
-                repositoryId,
-                invalidFrontmatter
-            })
+    const buildPayload = (payloadTitle, payloadNote = note) => buildNotePayload({
+        path: pathRef.current,
+        title: payloadTitle,
+        note: payloadNote,
+        tags,
+        repositoryId,
+        invalidFrontmatter
+    })
 
+    const { flush, runExclusive } = useAutosave(async () => {
+        if (!isSaved.current) {
+            const payload = buildPayload(title)
             const saved = await saveNote(payload, repositoryId)
 
             applySaved(saved)
             isSaved.current = true
-        } else {
-            const payload = buildNotePayload({
-                path: pathRef.current,
-                title,
-                note,
-                tags,
-                repositoryId,
-                invalidFrontmatter
-            })
-
-            let saved
-            try {
-                saved = await updateNote(payload)
-            } catch (error) {
-                if (error.code !== DUPLICATE_TITLE_ERROR) throw error
-
-                showSnackbar(t('notes.title_duplicated'))
-                return
-            }
-
-            applySaved(saved)
+            savedTitleRef.current = payload.title
+            savedSignatureRef.current = JSON.stringify([note, tags, invalidFrontmatter])
+            return
         }
+
+        const signature = JSON.stringify([note, tags, invalidFrontmatter])
+        if (signature === savedSignatureRef.current) return
+
+        applySaved(await updateNote(buildPayload(savedTitleRef.current)))
+        savedSignatureRef.current = signature
     }, [
         title,
         note,
@@ -113,22 +116,66 @@ export default function Note() {
         skip: firstRender.current || (title === autoTitleRef.current && !note)
     })
 
+    const commitTitle = (nextTitle, nextNote = note) => {
+        const previousTitle = savedTitleRef.current
+        if (!isSaved.current || !previousTitle || previousTitle === nextTitle) return
+
+        savedTitleRef.current = nextTitle
+
+        runExclusive(async () => {
+            const payload = buildPayload(nextTitle, nextNote)
+
+            try {
+                const { savedNote, ...saved } = await saveWithLinkCheck(payload, previousTitle)
+
+                applySaved(saved)
+                if (savedNote.note !== payload.note) setNote(savedNote.note)
+            } catch (error) {
+                if (error.code !== DUPLICATE_TITLE_ERROR) throw error
+
+                setTitle(previousTitle)
+                showSnackbar(t('notes.title_duplicated'))
+                savedTitleRef.current = previousTitle
+            }
+        })
+    }
+
+    const onTitleBlur = () => commitTitle(title.trim())
+
+    const onRestoreVersion = (version) => {
+        setTitle(version.title)
+        setNote(version.content)
+        commitTitle(version.title.trim(), version.content)
+    }
+
     return (
-        <NoteEditorScreen
-            id={path}
-            filename={filename}
-            repositoryId={repositoryId}
-            flush={flush}
-            title={title}
-            setTitle={setTitle}
-            note={note}
-            setNote={setNote}
-            tags={tags}
-            setTags={setTags}
-            invalidFrontmatter={invalidFrontmatter}
-            setInvalidFrontmatter={setInvalidFrontmatter}
-            modifiedAt={modifiedAt}
-            initialMode={EDITOR_MODES.LIVE}
-        />
+        <>
+            <NoteEditorScreen
+                id={path}
+                filename={filename}
+                repositoryId={repositoryId}
+                flush={flush}
+                title={title}
+                setTitle={setTitle}
+                onTitleBlur={onTitleBlur}
+                onRestoreVersion={onRestoreVersion}
+                note={note}
+                setNote={setNote}
+                tags={tags}
+                setTags={setTags}
+                invalidFrontmatter={invalidFrontmatter}
+                setInvalidFrontmatter={setInvalidFrontmatter}
+                modifiedAt={modifiedAt}
+                initialMode={EDITOR_MODES.LIVE}
+            />
+
+            <RenameLinksDialog
+                visible={visible}
+                linksCount={linksCount}
+                onDismiss={onDismiss}
+                onConfirmOnce={onConfirmOnce}
+                onConfirmAlways={onConfirmAlways}
+            />
+        </>
     )
 }

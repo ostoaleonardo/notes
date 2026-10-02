@@ -51,7 +51,7 @@ export default function Home() {
     )
 
     useEffect(() => {
-        listTemplates().then(setTemplates)
+        listTemplates({ withContent: false }).then(setTemplates)
     }, [])
 
     const onCreateNote = () => {

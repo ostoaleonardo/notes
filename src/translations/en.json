@@ -270,6 +270,7 @@
 		"import": "Import template",
 		"saved": "Template saved",
 			"save_failed": "Couldn't save the template",
+		"delete_failed": "Couldn't delete the template",
 		"view_placeholders": "View available variables",
 		"placeholders_title": "Available variables",
 		"placeholder_date": "Current date",

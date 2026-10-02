@@ -34,11 +34,7 @@ export function useNotes() {
         repositories.find((repository) => repository.id === repositoryId)?.uri
     )
 
-    const buildFileContent = (note) => (
-        note.invalidFrontmatter != null
-            ? `---\n${note.invalidFrontmatter}\n---\n\n${note.note}`
-            : buildNoteFileContent({ tags: note.tags }, note.note)
-    )
+    const buildFileContent = (note) => buildNoteFileContent(note, note.note)
 
     const listNoteNames = (uri) => listMarkdownFiles(uri).map((file) => file.name)
 

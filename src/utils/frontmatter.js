@@ -23,7 +23,22 @@ export const parseFrontmatter = (rawContent) => {
     }
 }
 
-export const buildNoteFileContent = ({ tags }, body) => {
-    const frontmatter = dump({ tags: tags || [] })
+export const buildNoteFileContent = ({ tags, invalidFrontmatter = null }, body) => {
+    const frontmatter = invalidFrontmatter != null
+        ? `${invalidFrontmatter}\n`
+        : dump({ tags: tags || [] })
+
     return `---\n${frontmatter}---\n\n${body}`
+}
+
+export const decomposeNoteFileContent = (content) => {
+    const { frontmatter, body, error, rawFrontmatter } = parseFrontmatter(content)
+
+    if (error) return { body, tags: null, invalidFrontmatter: rawFrontmatter }
+
+    return {
+        body,
+        tags: Array.isArray(frontmatter.tags) ? frontmatter.tags : [],
+        invalidFrontmatter: null
+    }
 }

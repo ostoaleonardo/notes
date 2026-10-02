@@ -20,7 +20,7 @@ export function useTemplates() {
         return await ensureTemplatesFolder(activeRepository)
     }, [activeRepository, ensureTemplatesFolder])
 
-    const listTemplates = useCallback(async () => {
+    const listTemplates = useCallback(async ({ withContent = true } = {}) => {
         const uri = await getTemplatesUri()
         if (!uri) return []
 
@@ -29,7 +29,7 @@ export function useTemplates() {
         return Promise.all(files.map(async (file) => ({
             filename: file.name,
             name: stripNoteExtension(file.name),
-            content: await file.text()
+            content: withContent ? await file.text() : ''
         })))
     }, [getTemplatesUri, listMarkdownFiles])
 
@@ -45,6 +45,8 @@ export function useTemplates() {
 
     const updateTemplate = useCallback(async (currentFilename, name, content) => {
         const uri = await getTemplatesUri()
+        if (!findFile(uri, currentFilename)) return currentFilename
+
         const existingNames = listMarkdownFiles(uri).map((file) => file.name)
         const filename = getUniqueFilename(existingNames, name, currentFilename)
 
@@ -54,7 +56,7 @@ export function useTemplates() {
 
         writeNoteFile(uri, filename, content)
         return filename
-    }, [getTemplatesUri, listMarkdownFiles, renameNoteFile, writeNoteFile])
+    }, [getTemplatesUri, findFile, listMarkdownFiles, renameNoteFile, writeNoteFile])
 
     const deleteTemplate = useCallback(async (filename) => {
         const uri = await getTemplatesUri()

@@ -1,4 +1,4 @@
-import { buildNoteFileContent, parseFrontmatter } from '../frontmatter'
+import { buildNoteFileContent, decomposeNoteFileContent, parseFrontmatter } from '../frontmatter'
 
 describe('parseFrontmatter', () => {
     test('extracts tags and dates from a leading frontmatter block', () => {
@@ -108,5 +108,52 @@ describe('buildNoteFileContent', () => {
         const { frontmatter } = parseFrontmatter(content)
 
         expect(frontmatter.tags).toEqual([])
+    })
+})
+
+describe('build note file content with invalid frontmatter', () => {
+    test('writes the raw invalid block verbatim instead of the tags', () => {
+        const content = buildNoteFileContent(
+            { tags: ['ignored'], invalidFrontmatter: 'tags: [unterminated' },
+            'Body'
+        )
+
+        expect(content).toBe('---\ntags: [unterminated\n---\n\nBody')
+    })
+})
+
+describe('decompose note file content', () => {
+    test('splits a valid file into body and tags', () => {
+        const content = buildNoteFileContent({ tags: ['one', 'two'] }, 'Body')
+
+        expect(decomposeNoteFileContent(content)).toEqual({
+            body: 'Body',
+            tags: ['one', 'two'],
+            invalidFrontmatter: null
+        })
+    })
+
+    test('returns no tags and the raw block when the yaml is invalid', () => {
+        const content = '---\ntags: [unterminated\n---\n\nBody'
+
+        expect(decomposeNoteFileContent(content)).toEqual({
+            body: 'Body',
+            tags: null,
+            invalidFrontmatter: 'tags: [unterminated'
+        })
+    })
+
+    test('returns empty tags when there is no frontmatter block', () => {
+        expect(decomposeNoteFileContent('Just text')).toEqual({
+            body: 'Just text',
+            tags: [],
+            invalidFrontmatter: null
+        })
+    })
+
+    test('round-trips invalid frontmatter through build and decompose', () => {
+        const content = buildNoteFileContent({ invalidFrontmatter: 'a: [' }, 'Body')
+
+        expect(decomposeNoteFileContent(content).invalidFrontmatter).toBe('a: [')
     })
 })
