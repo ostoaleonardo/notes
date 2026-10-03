@@ -3,7 +3,7 @@ import { Compartment } from '@codemirror/state'
 
 export const useCompartment = (viewRef, buildExtension, deps) => {
     const [compartment] = useState(() => new Compartment())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     const extension = useMemo(buildExtension, deps)
 
     useEffect(() => {

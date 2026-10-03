@@ -1,5 +1,5 @@
-export const PREVIEW_IMAGE_PATTERN = /!\[([^\]]*)\]\(([^\)]*)\)/g
-export const PREVIEW_LINK_PATTERN = /\[([^\]]*)\]\(([^\)]*)\)/g
+export const PREVIEW_IMAGE_PATTERN = /!\[([^\]]*)\]\(([^)]*)\)/g
+export const PREVIEW_LINK_PATTERN = /\[([^\]]*)\]\(([^)]*)\)/g
 export const PREVIEW_MARKER = '⁣'
 
 export const MARKDOWN_IMAGE_PATTERN = /!\[([^\]]*)\]\(((?:file|content):\/\/[^)]+)\)/g
