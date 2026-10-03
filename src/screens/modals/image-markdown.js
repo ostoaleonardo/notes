@@ -22,6 +22,7 @@ import { TRANSPARENT } from '@/constants/themes'
 import { RADIUS } from '@/constants/radius'
 import { IMAGE_EXTENSION_BY_MIME_TYPE } from '@/constants/image'
 import { SPACING } from '@/constants/spacing'
+import { logError } from '@/utils/log-error'
 
 export function ImageMarkdown({ onClose, onInsert }) {
     const { t } = useTranslation()
@@ -62,7 +63,7 @@ export function ImageMarkdown({ onClose, onInsert }) {
                 return
             }
 
-            console.log(error)
+            logError('error', error)
             return
         }
 

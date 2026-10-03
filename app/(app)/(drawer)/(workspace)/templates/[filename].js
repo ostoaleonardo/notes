@@ -30,6 +30,7 @@ import { EDITOR_MODES } from '@/constants/editor-modes'
 import { TEMPLATES_FOLDER_NAME } from '@/constants/file-storage'
 import { ROUTES } from '@/constants/routes'
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
+import { logError } from '@/utils/log-error'
 
 export default function EditTemplate() {
     const { t } = useTranslation()
@@ -106,7 +107,7 @@ export default function EditTemplate() {
             await deleteTemplate(currentFilename.current)
             router.back()
         } catch (error) {
-            console.debug('error deleting template', error)
+            logError('error deleting template', error)
             showSnackbar(t('templates.delete_failed'))
         }
     }

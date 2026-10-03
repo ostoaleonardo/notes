@@ -6,6 +6,7 @@ import { buildRepositoryPaths } from '@/utils/note-path'
 import { withBusy } from '@/utils/with-busy'
 import { FREE_SUBFOLDERS_PER_REPOSITORY } from '@/constants/default-values'
 import { TEMPLATES_FOLDER_NAME } from '@/constants/file-storage'
+import { logError } from '@/utils/log-error'
 
 export function useRepositoryCrud({
     repositories,
@@ -57,7 +58,7 @@ export function useRepositoryCrud({
         } catch (error) {
             if (error.code === 'ERR_PICKER_CANCELLED') return null
 
-            console.debug('error picking repository', error)
+            logError('error picking repository', error)
             return 'error'
         }
     }), [
@@ -172,7 +173,7 @@ export function useRepositoryCrud({
 
                 return renamedRepository
             } catch (error) {
-                console.debug('error renaming repository folder', error)
+                logError('error renaming repository folder', error)
                 return 'error'
             }
         })

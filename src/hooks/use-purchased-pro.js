@@ -7,6 +7,7 @@ import { useStorage } from './use-storage'
 import { findProPurchase } from '@/utils/iap'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { logError } from '@/utils/log-error'
 
 export function usePurchasedPro() {
     const { setItem, removeItem } = useStorage()
@@ -38,7 +39,7 @@ export function usePurchasedPro() {
             }
         } catch (error) {
             connectedRef.current = false
-            console.debug('error checking pro purchase', error)
+            logError('error checking pro purchase', error)
         }
     }, [])
 

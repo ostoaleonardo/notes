@@ -5,6 +5,7 @@ import { showSnackbar } from '@/components/snackbar/snackbar-host'
 import { useExclusiveQueue } from './use-exclusive-queue'
 
 import { AUTOSAVE_DELAY } from '@/constants/default-values'
+import { logError } from '@/utils/log-error'
 
 export function useAutosave(
     onSave, deps, { delay = AUTOSAVE_DELAY, skip = false } = {}
@@ -21,7 +22,7 @@ export function useAutosave(
         try {
             await runExclusive(onSaveRef.current)
         } catch (error) {
-            console.debug('error autosaving note', error)
+            logError('error autosaving note', error)
             showSnackbar(t('notes.save_failed'))
         }
     }, [t, runExclusive])

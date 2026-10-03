@@ -17,6 +17,7 @@ import { Check } from '@/icons/check'
 import { PRODUCT_ID } from '@/constants/iap'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { SPACING } from '@/constants/spacing'
+import { logError } from '@/utils/log-error'
 
 export function ProSection() {
     const { t } = useTranslation()
@@ -37,7 +38,7 @@ export function ProSection() {
             onSuccessfulPurchase(purchase)
         },
         onPurchaseError: (error) => {
-            console.debug('Purchase failed:', error)
+            logError('Purchase failed:', error)
             onErrorPurchase(error)
         }
     })
@@ -112,7 +113,7 @@ export function ProSection() {
                 showSnackbar(t('pro.messages.no_purchased'))
             }
         } catch (error) {
-            console.error('Failed to restore purchases:', error)
+            logError('Failed to restore purchases:', error)
         } finally {
             setLoading(false)
         }

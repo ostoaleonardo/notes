@@ -11,6 +11,7 @@ import { getNoteAsHtml } from '@/utils/export-html'
 import { getUniqueFilename } from '@/utils/note-filename'
 
 import { EXPORT_FORMATS, EXPORT_MIME_TYPES, EXPORT_EXTENSIONS } from '@/constants/export'
+import { logError } from '@/utils/log-error'
 
 export function useFiles() {
     const { t } = useTranslation()
@@ -53,7 +54,7 @@ export function useFiles() {
         } catch (error) {
             if (error.code === 'ERR_PICKER_CANCELLED') return
 
-            console.log(error)
+            logError('error', error)
             showSnackbar(t('message.notes.export_failed'))
         }
     }
@@ -70,7 +71,7 @@ export function useFiles() {
 
             await Sharing.shareAsync(file.uri, { mimeType: EXPORT_MIME_TYPES[format] })
         } catch (error) {
-            console.log(error)
+            logError('error', error)
             showSnackbar(t('message.notes.share_failed'))
         }
     }

@@ -10,6 +10,7 @@ import { showSnackbar } from '@/components/snackbar/snackbar-host'
 import { extractProperties, readFrontmatterTags, parseFrontmatter } from '@/utils/frontmatter'
 
 import { ROUTES } from '@/constants/routes'
+import { logError } from '@/utils/log-error'
 
 export const ImportContext = createContext()
 
@@ -40,7 +41,7 @@ export function ImportProvider({ children }) {
 
             router.push(ROUTES.HOME)
         } catch (error) {
-            console.debug('error importing markdown file', error)
+            logError('error importing markdown file', error)
         } finally {
             setImporting(false)
         }

@@ -40,6 +40,7 @@ import {
     SYNTAX_MAIN_PROPERTIES,
     SYNTAX_MAIN_BODY
 } from '@/constants/syntax-note'
+import { logError } from '@/utils/log-error'
 
 export function useDevMenu() {
     const { setItem } = useStorage()
@@ -128,7 +129,7 @@ export function useDevMenu() {
 
             DevSettings.reload()
         } catch (error) {
-            console.debug('error generating repository tree', error)
+            logError('error generating repository tree', error)
         }
     }
 

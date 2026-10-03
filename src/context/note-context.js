@@ -9,6 +9,7 @@ import { collectTags } from '@/utils/note-tags'
 
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 
+import { logError } from '@/utils/log-error'
 export const NoteContext = createContext()
 
 export function NoteProvider({ children }) {
@@ -56,7 +57,7 @@ export function NoteProvider({ children }) {
             setNotes(notes)
             pruneStaleFavoritesRef.current(notes)
         } catch (error) {
-            console.debug('error loading notes', error)
+            logError('error loading notes', error)
         } finally {
             if (showLoading) setLoading(false)
         }

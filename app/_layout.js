@@ -15,6 +15,7 @@ import Providers from './providers'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { THEMES } from '@/constants/themes'
 import { FREE_ACCENT } from '@/constants/theme-options'
+import { logError } from '@/utils/log-error'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -31,7 +32,7 @@ export default function MainLayout() {
 
     useEffect(() => {
         initTheme()
-            .catch((error) => console.debug('error loading app', error))
+            .catch((error) => logError('error loading app', error))
             .finally(() => setIsReady(true))
     }, [])
 
