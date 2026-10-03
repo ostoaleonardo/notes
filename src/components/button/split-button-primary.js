@@ -2,7 +2,6 @@ import { StyleSheet, View } from 'react-native'
 import { TouchableRipple, useTheme } from 'react-native-paper'
 
 import { AnimatedView } from '../animated/animated-view'
-
 import { Typography } from '../typography'
 
 import { BUTTON_SIZE } from '@/constants/button'
