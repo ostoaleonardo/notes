@@ -17,3 +17,5 @@ export const AUTOSAVE_DELAY = 500
 export const LEGACY_ALL_TAG_ID = 'all'
 
 export const NOT_FOUND_REDIRECT_DELAY = 3000
+
+export const VERSION_DIFF_MAX_CELLS = 4_000_000

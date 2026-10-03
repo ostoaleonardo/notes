@@ -13,6 +13,8 @@ const mockFileStorage = {
     writeNoteFile: jest.fn(),
     createSubdirectory: jest.fn(),
     deleteDirectory: jest.fn(),
+    renameVersionsUnder: jest.fn(),
+    deleteVersionsUnder: jest.fn(),
     directoryExists: jest.fn(() => true),
     renameDirectory: jest.fn(),
     findDirectory: jest.fn(() => undefined),
@@ -161,6 +163,18 @@ describe('removeRepository', () => {
         expect(outcome).toEqual(root)
         expect(mockFileStorage.deleteDirectory).toHaveBeenCalledWith('content://root-1')
     })
+
+    test('deletes the version history of a removed subfolder', async () => {
+        const root = { id: 'root-1', uri: 'content://root-1', parentId: null }
+        const child = { id: 'child-1', uri: 'content://root-1/child', alias: 'child', parentId: 'root-1' }
+        const { result } = await renderRepositoriesHook([root, child], 'root-1')
+
+        await act(async () => {
+            await result.current.removeRepository('child-1')
+        })
+
+        expect(mockFileStorage.deleteVersionsUnder).toHaveBeenCalledWith('content://root-1', 'child')
+    })
 })
 
 describe('reconcileRepositories', () => {
@@ -222,6 +236,25 @@ describe('renameRepository', () => {
         const persistedGrandchild = persistedRepositories.find((r) => r.id === 'grand-1')
 
         expect(persistedGrandchild.uri).toBe('content://root-1/renamed/grand')
+    })
+
+    test('moves the version history of the folder to its new path', async () => {
+        const root = { id: 'root-1', uri: 'content://root-1', parentId: null }
+        const child = { id: 'child-1', uri: 'content://root-1/child', alias: 'child', parentId: 'root-1' }
+
+        mockFileStorage.renameDirectory.mockReturnValue('content://root-1/renamed')
+
+        const { result } = await renderRepositoriesHook([root, child])
+
+        await act(async () => {
+            await result.current.renameRepository('child-1', 'renamed')
+        })
+
+        expect(mockFileStorage.renameVersionsUnder).toHaveBeenCalledWith(
+            'content://root-1',
+            'child',
+            'renamed'
+        )
     })
 })
 

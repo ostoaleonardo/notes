@@ -26,6 +26,7 @@ import { stripNoteExtension } from '@/utils/note-filename'
 import { useVersionHistory } from '@/hooks/use-version-history'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
+import { TEMPLATES_FOLDER_NAME } from '@/constants/file-storage'
 import { ROUTES } from '@/constants/routes'
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 
@@ -34,7 +35,7 @@ export default function EditTemplate() {
     const { filename } = useLocalSearchParams()
     const { getTemplate, updateTemplate, deleteTemplate } = useTemplates()
     const { pro } = usePro()
-    const { activeRepository, ensureTemplatesFolder } = useRepositories()
+    const { activeRepository, ensureTemplatesFolder, getRootRepository } = useRepositories()
 
     const tabId = TEMPLATE_TAB_PREFIX + filename
     useRegisterCurrent(tabId)
@@ -68,10 +69,20 @@ export default function EditTemplate() {
         imageSheet
     } = useEditorChrome()
 
+    const location = useMemo(() => (
+        templatesUri && activeRepository
+            ? {
+                rootUri: getRootRepository(activeRepository).uri,
+                folderUri: templatesUri,
+                folderPath: TEMPLATES_FOLDER_NAME
+            }
+            : null
+    ), [templatesUri, activeRepository, getRootRepository])
+
     const latestContent = useRef({ noteId: currentFilename.current, title: name, content })
     latestContent.current = { noteId: currentFilename.current, title: name, content }
 
-    const versionHistory = useVersionHistory({ directoryUri: templatesUri, latestContent })
+    const versionHistory = useVersionHistory({ location, latestContent })
 
     const onRestoreVersion = useCallback((version) => {
         setName(version.title)
@@ -152,7 +163,7 @@ export default function EditTemplate() {
             swipeEnabled={pro}
             panelContent={(
                 <VersionHistoryContent
-                    directoryUri={templatesUri}
+                    location={location}
                     noteId={currentFilename.current}
                     currentContentRef={latestContent}
                     pro={pro}

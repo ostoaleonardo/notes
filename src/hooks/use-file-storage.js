@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Directory, File, FileMode } from 'expo-file-system'
 
 import { getUniqueFilename, stripNoteExtension } from '@/utils/note-filename'
+import { buildVersionKey } from '@/utils/note-version-location'
 
 import {
     NOTE_FILE_EXTENSION,
@@ -9,8 +10,8 @@ import {
     TEMPLATES_FOLDER_NAME,
     IMAGES_FOLDER_NAME,
     VAULT_TRASH_FOLDER_NAME,
-    RESERVED_FOLDER_NAMES,
-    SIDECAR_FILENAMES
+    NOTES_FOLDER_NAME,
+    RESERVED_FOLDER_NAMES
 } from '@/constants/file-storage'
 import { MIME_TYPES } from '@/constants/mime-types'
 
@@ -45,10 +46,13 @@ export function useFileStorage() {
         findDirectory(directoryUri, VAULT_TRASH_FOLDER_NAME) || createSubdirectory(directoryUri, VAULT_TRASH_FOLDER_NAME)
     )
 
+    const getOrCreateNotesFolder = (directoryUri) => (
+        findDirectory(directoryUri, NOTES_FOLDER_NAME) || createSubdirectory(directoryUri, NOTES_FOLDER_NAME)
+    )
+
     const listMarkdownFiles = (directoryUri) => (
         listEntries(directoryUri).filter((entry) => (
             entry instanceof File &&
-            !SIDECAR_FILENAMES.includes(entry.name) &&
             entry.name.toLowerCase().endsWith(NOTE_FILE_EXTENSION)
         ))
     )
@@ -131,20 +135,18 @@ export function useFileStorage() {
         const source = findFile(sourceUri, filename)
         const names = listMarkdownFiles(destinationUri).map((file) => file.name)
         const target = getUniqueFilename(names, stripNoteExtension(filename), null)
-        const versions = await readVersions(sourceUri, filename)
 
         writeNoteFile(destinationUri, target, await source.text())
-        if (versions.length) writeVersions(destinationUri, target, versions)
-
         source.delete()
-        deleteVersions(sourceUri, filename)
 
         return target
     }
 
-    const clearRepository = (directoryUri) => {
-        listMarkdownFiles(directoryUri).forEach((file) => file.delete())
-        SIDECAR_FILENAMES.forEach((filename) => deleteNoteFile(directoryUri, filename))
+    const clearRepository = (directoryUri, { rootUri, folderPath }) => {
+        listMarkdownFiles(directoryUri).forEach((file) => {
+            file.delete()
+            deleteVersions(rootUri, buildVersionKey(folderPath, file.name))
+        })
     }
 
     const readJson = async (directoryUri, filename, fallback) => {
@@ -162,16 +164,71 @@ export function useFileStorage() {
         writeNoteFile(directoryUri, filename, JSON.stringify(data), MIME_TYPES.JSON)
     }
 
-    const readVersions = (directoryUri, filename) => readJson(directoryUri, filename + VERSIONS_FILENAME_SUFFIX, [])
-    const writeVersions = (directoryUri, filename, versions) => writeJson(directoryUri, filename + VERSIONS_FILENAME_SUFFIX, versions)
-    const deleteVersions = (directoryUri, filename) => deleteNoteFile(directoryUri, filename + VERSIONS_FILENAME_SUFFIX)
+    const readNotesJson = (rootUri, filename, fallback) => {
+        const folder = findDirectory(rootUri, NOTES_FOLDER_NAME)
+        return folder ? readJson(folder.uri, filename, fallback) : fallback
+    }
 
-    const renameVersions = async (directoryUri, oldFilename, newFilename) => {
-        const versions = await readVersions(directoryUri, oldFilename)
-        if (!versions.length) return
+    const writeNotesJson = (rootUri, filename, data) => {
+        writeJson(getOrCreateNotesFolder(rootUri).uri, filename, data)
+    }
 
-        writeVersions(directoryUri, newFilename, versions)
-        deleteVersions(directoryUri, oldFilename)
+    const deleteNotesFile = (rootUri, filename) => {
+        const folder = findDirectory(rootUri, NOTES_FOLDER_NAME)
+        if (folder) deleteNoteFile(folder.uri, filename)
+    }
+
+    const getVersionsFilename = (key) => encodeURIComponent(key) + VERSIONS_FILENAME_SUFFIX
+
+    const readVersions = (rootUri, key) => readNotesJson(rootUri, getVersionsFilename(key), [])
+    const writeVersions = (rootUri, key, versions) => writeNotesJson(rootUri, getVersionsFilename(key), versions)
+    const deleteVersions = (rootUri, key) => deleteNotesFile(rootUri, getVersionsFilename(key))
+
+    const renameVersions = async (rootUri, oldKey, newKey) => {
+        const versions = await readVersions(rootUri, oldKey)
+        if (Array.isArray(versions) ? !versions.length : !versions.entries?.length) return
+
+        writeVersions(rootUri, newKey, versions)
+        deleteVersions(rootUri, oldKey)
+    }
+
+    const listVersionsUnder = (rootUri, prefix) => {
+        const folder = findDirectory(rootUri, NOTES_FOLDER_NAME)
+        if (!folder) return []
+
+        const encodedPrefix = encodeURIComponent(prefix + '/')
+
+        return listEntries(folder.uri)
+            .filter((entry) => (
+                entry instanceof File &&
+                entry.name.startsWith(encodedPrefix) &&
+                entry.name.endsWith(VERSIONS_FILENAME_SUFFIX)
+            ))
+            .map((entry) => decodeURIComponent(entry.name.slice(0, -VERSIONS_FILENAME_SUFFIX.length)))
+    }
+
+    const renameVersionsUnder = async (rootUri, oldPrefix, newPrefix) => {
+        for (const key of listVersionsUnder(rootUri, oldPrefix)) {
+            await renameVersions(rootUri, key, newPrefix + key.slice(oldPrefix.length))
+        }
+    }
+
+    const deleteVersionsUnder = (rootUri, prefix) => {
+        listVersionsUnder(rootUri, prefix).forEach((key) => deleteVersions(rootUri, key))
+    }
+
+    const migrateLegacyVersions = async (folderUri, rootUri, folderPath) => {
+        const legacyFiles = listEntries(folderUri).filter((entry) => (
+            entry instanceof File && entry.name.endsWith(VERSIONS_FILENAME_SUFFIX)
+        ))
+
+        for (const file of legacyFiles) {
+            const filename = file.name.slice(0, -VERSIONS_FILENAME_SUFFIX.length)
+            const versions = await readJson(folderUri, file.name, null)
+
+            if (versions) writeVersions(rootUri, buildVersionKey(folderPath, filename), versions)
+            file.delete()
+        }
     }
 
     return useMemo(() => ({
@@ -190,12 +247,19 @@ export function useFileStorage() {
         writeVersions,
         deleteVersions,
         renameVersions,
+        renameVersionsUnder,
+        deleteVersionsUnder,
+        migrateLegacyVersions,
         readJson,
         writeJson,
+        readNotesJson,
+        writeNotesJson,
+        deleteNotesFile,
         createSubdirectory,
         getOrCreateTemplatesFolder,
         getOrCreateImagesFolder,
         getOrCreateVaultTrashFolder,
+        getOrCreateNotesFolder,
         moveNoteFiles,
         copyImageFile
     }), [])

@@ -6,6 +6,7 @@ import { useNotes } from './use-notes'
 import { useRepositories } from './use-repositories'
 import { useHaptics } from './use-haptics'
 import { NoteContext } from '@/context/note-context'
+import { dedupeTags, hasTag, isSameTag } from '@/utils/tag-names'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { DEFAULT_TAGS } from '@/constants/default-values'
@@ -16,7 +17,7 @@ export function useTags() {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
     const { tags, setTags } = useContext(NoteContext)
-    const { writeJson } = useFileStorage()
+    const { writeNotesJson } = useFileStorage()
     const { activeRepositoryTree } = useRepositories()
     const { notes, updateNote } = useNotes()
 
@@ -24,27 +25,27 @@ export function useTags() {
 
     const persist = (nextTags) => {
         setTags(nextTags)
-        if (rootRepositoryUri) writeJson(rootRepositoryUri, TAGS_FILENAME, nextTags)
+        if (rootRepositoryUri) writeNotesJson(rootRepositoryUri, TAGS_FILENAME, nextTags)
     }
 
     const renameInNotes = (previousName, nextName) => {
-        const affected = notes.filter((note) => note.tags?.includes(previousName))
+        const affected = notes.filter((note) => note.tags && hasTag(note.tags, previousName))
         return Promise.all(affected.map((note) => updateNote({
             ...note,
-            tags: note.tags.map((tag) => (tag === previousName ? nextName : tag))
+            tags: dedupeTags(note.tags.map((tag) => (isSameTag(tag, previousName) ? nextName : tag)))
         })))
     }
 
     const removeFromNotes = (name) => {
-        const affected = notes.filter((note) => note.tags?.includes(name))
+        const affected = notes.filter((note) => note.tags && hasTag(note.tags, name))
         return Promise.all(affected.map((note) => updateNote({
             ...note,
-            tags: note.tags.filter((tag) => tag !== name)
+            tags: note.tags.filter((tag) => !isSameTag(tag, name))
         })))
     }
 
     const addTag = (name) => {
-        if (tags.includes(name)) return 'duplicate'
+        if (hasTag(tags, name)) return 'duplicate'
 
         persist([...tags, name])
         return 'success'
@@ -63,22 +64,22 @@ export function useTags() {
     }
 
     const deleteTag = async (name) => {
-        persist(tags.filter((tag) => tag !== name))
+        persist(tags.filter((tag) => !isSameTag(tag, name)))
         await removeFromNotes(name)
     }
 
     const updateTag = async (previousName, nextName) => {
         const trimmed = nextName.trim()
-        if (trimmed !== previousName && tags.includes(trimmed)) return 'duplicate'
+        if (!isSameTag(trimmed, previousName) && hasTag(tags, trimmed)) return 'duplicate'
 
-        persist(tags.map((tag) => (tag === previousName ? trimmed : tag)))
+        persist(tags.map((tag) => (isSameTag(tag, previousName) ? trimmed : tag)))
         await renameInNotes(previousName, trimmed)
         return 'success'
     }
 
     const deleteAllTags = () => {
         setTags(DEFAULT_TAGS)
-        if (rootRepositoryUri) writeJson(rootRepositoryUri, TAGS_FILENAME, DEFAULT_TAGS)
+        if (rootRepositoryUri) writeNotesJson(rootRepositoryUri, TAGS_FILENAME, DEFAULT_TAGS)
     }
 
     return {

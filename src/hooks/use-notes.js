@@ -9,6 +9,7 @@ import { buildNotePath } from '@/utils/note-path'
 import { deleteNoteFiles, readDeleteBehavior } from '@/utils/delete-note-files'
 import { buildNoteFileContent } from '@/utils/frontmatter'
 import { renameWikiLinksForNote } from '@/utils/wiki-links'
+import { buildVersionKey, getVersionLocation } from '@/utils/note-version-location'
 
 import { DUPLICATE_TITLE_ERROR } from '@/constants/note-errors'
 
@@ -24,7 +25,7 @@ export function useNotes() {
     } = fileStorage
 
     const { getItem } = useStorage()
-    const { activeRepository, repositories, getRootRepository } = useRepositories()
+    const { activeRepository, repositories } = useRepositories()
 
     const {
         notes,
@@ -127,7 +128,13 @@ export function useNotes() {
 
             if (renamed) {
                 await renameNoteFile(uri, previous.filename, filename)
-                await renameVersions(uri, previous.filename, filename)
+                const { rootUri, folderPath } = getVersionLocation(repositories, note.repositoryId)
+
+                await renameVersions(
+                    rootUri,
+                    buildVersionKey(folderPath, previous.filename),
+                    buildVersionKey(folderPath, filename)
+                )
             }
 
             const file = writeNoteFile(uri, filename, buildFileContent(note))
@@ -155,11 +162,12 @@ export function useNotes() {
             if (!findFile(uri, note.filename)) return
 
             const behavior = await readDeleteBehavior(getItem)
-            const repository = repositories.find((r) => r.id === note.repositoryId)
+            const { rootUri, folderPath } = getVersionLocation(repositories, note.repositoryId)
 
             await deleteNoteFiles(behavior, {
                 uri,
-                rootUri: getRootRepository(repository).uri,
+                rootUri,
+                folderPath,
                 filename: note.filename
             }, fileStorage)
         } catch (error) {
@@ -174,7 +182,9 @@ export function useNotes() {
 
     const deleteAll = () => {
         setNotes([])
-        if (activeRepository) clearRepository(activeRepository.uri)
+        if (!activeRepository) return
+
+        clearRepository(activeRepository.uri, getVersionLocation(repositories, activeRepository.id))
     }
 
     return {

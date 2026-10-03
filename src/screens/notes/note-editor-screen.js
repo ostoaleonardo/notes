@@ -34,6 +34,7 @@ import { useVersionHistory } from '@/hooks/use-version-history'
 import { readDeleteBehavior } from '@/utils/delete-note-files'
 import { buildNoteMetaLabel } from '@/utils/note-meta-label'
 import { countWords } from '@/utils/word-count'
+import { getVersionLocation } from '@/utils/note-version-location'
 
 import { DEFAULT_DELETE_BEHAVIOR } from '@/constants/delete-behavior'
 import { EDITOR_MODES } from '@/constants/editor-modes'
@@ -63,7 +64,10 @@ export const NoteEditorScreen = ({
     const { exportFile, shareFile } = useFiles()
     const { getItem } = useStorage()
     const { templates, refresh: refreshTemplates } = useTemplatesList([], { immediate: false })
-    const directoryUri = repositories.find((repository) => repository.id === repositoryId)?.uri
+    const location = useMemo(
+        () => getVersionLocation(repositories, repositoryId),
+        [repositories, repositoryId]
+    )
 
     const [mode, setMode] = useState(initialMode)
     const [showBacklinks, setShowBacklinks] = useState(true)
@@ -154,8 +158,7 @@ export const NoteEditorScreen = ({
     const latestContent = useRef({ noteId: filename, title, content: note })
     latestContent.current = { noteId: filename, title, content: note }
 
-    const versionHistory = useVersionHistory({ directoryUri, latestContent })
-
+    const versionHistory = useVersionHistory({ location, latestContent })
 
     const onSelectTemplate = useCallback((content) => {
         setNote((prev) => (prev ? prev + TEMPLATE_INSERT_SEPARATOR + content : content))
@@ -241,7 +244,7 @@ export const NoteEditorScreen = ({
                 <VersionHistoryContent
                     pro={pro}
                     noteId={filename}
-                    directoryUri={directoryUri}
+                    location={location}
                     currentContentRef={latestContent}
                     onRestore={onRestore}
                     onClose={versionHistory.onClose}

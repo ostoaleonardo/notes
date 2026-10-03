@@ -5,9 +5,11 @@ export function useNoteVersions() {
     const fileStorage = useFileStorage()
 
     return {
-        getVersions: (directoryUri, noteId) => loadNoteVersions(fileStorage, directoryUri, noteId),
-        commitVersion: (directoryUri, noteId, title, content) => (
-            commitNoteVersion(fileStorage, directoryUri, noteId, title, content)
+        getVersions: (location, filename, limit) => (
+            loadNoteVersions(fileStorage, location, filename, limit)
+        ),
+        commitVersion: (location, filename, title, content) => (
+            commitNoteVersion(fileStorage, location, filename, title, content)
         )
     }
 }

@@ -13,6 +13,7 @@ import { useRepositories } from './use-repositories'
 
 import { getWelcomeNote } from '@/utils/welcome-note'
 import { sanitizeFilename } from '@/utils/note-filename'
+import { getVersionLocation } from '@/utils/note-version-location'
 import { buildNoteFileContent, parseFrontmatter } from '@/utils/frontmatter'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
@@ -34,6 +35,7 @@ export function useDevMenu() {
         clearRepository,
         createSubdirectory,
         getOrCreateTemplatesFolder,
+        getOrCreateNotesFolder,
         deleteDirectory
     } = useFileStorage()
 
@@ -46,8 +48,9 @@ export function useDevMenu() {
 
     const resetApp = async () => {
         if (activeRepository) {
-            clearRepository(activeRepository.uri)
+            clearRepository(activeRepository.uri, getVersionLocation(repositories, activeRepository.id))
             deleteDirectory(getOrCreateTemplatesFolder(activeRepository.uri).uri)
+            deleteDirectory(getOrCreateNotesFolder(activeRepository.uri).uri)
         }
 
         await setItem(STORAGE_KEYS.REPOSITORIES, JSON.stringify([]))

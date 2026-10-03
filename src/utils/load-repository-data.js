@@ -2,7 +2,8 @@ import { randomUUID } from 'expo-crypto'
 
 import { getNoteKey } from '@/utils/note-key'
 import { getUniqueFilename, stripNoteExtension } from '@/utils/note-filename'
-import { buildNotePath } from '@/utils/note-path'
+import { buildNotePath, buildRepositoryPaths } from '@/utils/note-path'
+import { reconcileTags } from '@/utils/tag-names'
 import {
     buildNoteFileContent,
     extractProperties,
@@ -13,7 +14,7 @@ import { buildLegacyNoteBody } from '@/utils/legacy-note-body'
 
 import { DEFAULT_TAGS, LEGACY_ALL_TAG_ID } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { TAGS_FILENAME } from '@/constants/file-storage'
+import { TAGS_FILENAME, LEGACY_TAGS_FILENAME } from '@/constants/file-storage'
 import { DEFAULT_IMAGE_EXTENSION, IMAGE_EXTENSION_PATTERN } from '@/constants/image'
 import { NOTE_KEY_PREFIX } from '@/constants/note-key'
 
@@ -146,45 +147,52 @@ const loadNotesFromFolder = async (repositoryUri, fileStorage) => {
     }))
 }
 
-// Reads a sidecar list (tags), migrating its legacy AsyncStorage value once.
-const loadSidecarList = async ({ repositoryUri, filename, legacyKey, defaultValue, normalizeLegacy = (value) => value, storage, fileStorage }) => {
-    const existing = await fileStorage.readJson(repositoryUri, filename, null)
+// Reads tags from .notes, migrating the root .tags.json and the AsyncStorage value once.
+const loadTags = async (rootUri, storage, fileStorage) => {
+    const existing = await fileStorage.readNotesJson(rootUri, TAGS_FILENAME, null)
     if (existing) return existing
 
-    const legacy = await storage.getItem(legacyKey)
-    const value = legacy ? normalizeLegacy(JSON.parse(legacy)) : defaultValue
+    const legacyFile = await fileStorage.readJson(rootUri, LEGACY_TAGS_FILENAME, null)
+    if (legacyFile) {
+        fileStorage.writeNotesJson(rootUri, TAGS_FILENAME, legacyFile)
+        fileStorage.deleteNoteFile(rootUri, LEGACY_TAGS_FILENAME)
+        return legacyFile
+    }
 
-    fileStorage.writeJson(repositoryUri, filename, value)
-    if (legacy) await storage.removeItem(legacyKey)
+    const legacy = await storage.getItem(STORAGE_KEYS.CATEGORIES)
+    const value = legacy ? JSON.parse(legacy) : DEFAULT_TAGS
+
+    fileStorage.writeNotesJson(rootUri, TAGS_FILENAME, value)
+    if (legacy) await storage.removeItem(STORAGE_KEYS.CATEGORIES)
 
     return value
 }
 
 // Drops the legacy 'all' pseudo-tag, before or after the id -> name migration.
-const purgeAllTag = (tags, repositoryUri, fileStorage) => {
+const purgeAllTag = (tags, rootUri, fileStorage) => {
     const filtered = tags.filter((tag) => (
         typeof tag === 'string' ? tag !== LEGACY_ALL_TAG_ID : tag.id !== LEGACY_ALL_TAG_ID
     ))
-    if (filtered.length !== tags.length) fileStorage.writeJson(repositoryUri, TAGS_FILENAME, filtered)
+    if (filtered.length !== tags.length) fileStorage.writeNotesJson(rootUri, TAGS_FILENAME, filtered)
     return filtered
 }
 
-// Tags are always read/written at the root, shared across the whole tree.
+const migrateLegacyVersionFiles = async (tree, rootUri, fileStorage) => {
+    const folderPaths = buildRepositoryPaths(tree)
+
+    for (const repository of tree) {
+        await fileStorage.migrateLegacyVersions(repository.uri, rootUri, folderPaths.get(repository.id) || '')
+    }
+}
+
+// Tags and version history live in the root .notes folder, shared across the whole tree.
 export const loadRepositoryData = async (tree, rootRepository, storage, fileStorage) => {
-    const rootRepositoryUri = rootRepository.uri
+    const rootUri = rootRepository.uri
 
     await migrateLegacyBlobNotes(storage)
 
-    const rawTags = await loadSidecarList({
-        repositoryUri: rootRepositoryUri,
-        filename: TAGS_FILENAME,
-        legacyKey: STORAGE_KEYS.CATEGORIES,
-        defaultValue: DEFAULT_TAGS,
-        storage,
-        fileStorage
-    })
-
-    const purgedRawTags = purgeAllTag(rawTags, rootRepositoryUri, fileStorage)
+    const rawTags = await loadTags(rootUri, storage, fileStorage)
+    const purgedRawTags = purgeAllTag(rawTags, rootUri, fileStorage)
     const tagNameById = buildTagNameById(purgedRawTags)
 
     const migration = await migrateStorageNotesToFiles(
@@ -194,10 +202,15 @@ export const loadRepositoryData = async (tree, rootRepository, storage, fileStor
         tagNameById
     )
 
-    const { tags, changed: tagsMigrated } = migrateTagsToNames(purgedRawTags)
-    if (tagsMigrated) fileStorage.writeJson(rootRepositoryUri, TAGS_FILENAME, tags)
+    const { tags: namedTags, changed: tagsMigrated } = migrateTagsToNames(purgedRawTags)
+    if (tagsMigrated) fileStorage.writeNotesJson(rootUri, TAGS_FILENAME, namedTags)
+
+    await migrateLegacyVersionFiles(tree, rootUri, fileStorage)
 
     const notes = await loadFromTree(tree, loadNotesFromFolder, fileStorage)
+
+    const { tags, changed: tagsReconciled } = reconcileTags(namedTags, notes)
+    if (tagsReconciled) fileStorage.writeNotesJson(rootUri, TAGS_FILENAME, tags)
 
     return { notes, tags, migration }
 }

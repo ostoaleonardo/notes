@@ -3,6 +3,7 @@ import { deleteNoteFiles } from '../delete-note-files'
 const location = {
     uri: 'file:///vault/sub',
     rootUri: 'file:///vault',
+    folderPath: 'sub',
     filename: 'Groceries.md'
 }
 
@@ -25,6 +26,7 @@ describe('delete note files', () => {
             'Groceries.md',
             'file:///vault/.trash'
         )
+        expect(fileStorage.deleteVersions).toHaveBeenCalledWith('file:///vault', 'sub/Groceries.md')
     })
 
     test('deletes the note and its versions for permanent deletion', async () => {
@@ -33,7 +35,7 @@ describe('delete note files', () => {
         await deleteNoteFiles('permanent', location, fileStorage)
 
         expect(fileStorage.deleteNoteFile).toHaveBeenCalledWith('file:///vault/sub', 'Groceries.md')
-        expect(fileStorage.deleteVersions).toHaveBeenCalledWith('file:///vault/sub', 'Groceries.md')
+        expect(fileStorage.deleteVersions).toHaveBeenCalledWith('file:///vault', 'sub/Groceries.md')
         expect(fileStorage.moveNoteFiles).not.toHaveBeenCalled()
     })
 })

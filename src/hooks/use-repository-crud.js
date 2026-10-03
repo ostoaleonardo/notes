@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 import { Directory } from 'expo-file-system'
 
 import { sanitizeFilename } from '@/utils/note-filename'
+import { buildRepositoryPaths } from '@/utils/note-path'
 import { withBusy } from '@/utils/with-busy'
 import { FREE_SUBFOLDERS_PER_REPOSITORY } from '@/constants/default-values'
 import { TEMPLATES_FOLDER_NAME } from '@/constants/file-storage'
@@ -31,7 +32,9 @@ export function useRepositoryCrud({
         renameDirectory,
         findDirectory,
         getOrCreateTemplatesFolder,
-        getOrCreateImagesFolder
+        getOrCreateImagesFolder,
+        renameVersionsUnder,
+        deleteVersionsUnder
     } = fileStorage
 
     const addRepository = useCallback(() => withBusy(busyRef, async () => {
@@ -152,7 +155,12 @@ export function useRepositoryCrud({
                 if (!parent) return 'error'
 
                 const sanitized = sanitizeFilename(alias)
+                const paths = buildRepositoryPaths(repositories)
+                const oldPath = paths.get(id)
+                const parentPath = paths.get(parent.id)
+                const newPath = parentPath ? `${parentPath}/${sanitized}` : sanitized
                 const newUri = renameDirectory(repository.uri, parent.uri, sanitized)
+                await renameVersionsUnder(getRootRepository(repository).uri, oldPath, newPath)
                 const renamedRepository = { ...repository, uri: newUri, alias: sanitized }
                 const relinked = relinkUris(renamedRepository)
                 const relinkedById = new Map(relinked.map((r) => [r.id, r]))
@@ -172,6 +180,8 @@ export function useRepositoryCrud({
         repositories,
         persistRepositories,
         renameDirectory,
+        renameVersionsUnder,
+        getRootRepository,
         relinkUris,
         busyRef
     ])
@@ -212,6 +222,11 @@ export function useRepositoryCrud({
         return withBusy(busyRef, async () => {
             deleteDirectory(repository.uri)
 
+            if (repository.parentId) {
+                const path = buildRepositoryPaths(repositories).get(id)
+                deleteVersionsUnder(getRootRepository(repository).uri, path)
+            }
+
             const descendantIds = getDescendants(id).map((d) => d.id)
             await removeRepositoriesFromList([id, ...descendantIds])
 
@@ -222,6 +237,8 @@ export function useRepositoryCrud({
         activeRepository,
         isAncestorOf,
         deleteDirectory,
+        deleteVersionsUnder,
+        getRootRepository,
         getDescendants,
         removeRepositoriesFromList,
         busyRef

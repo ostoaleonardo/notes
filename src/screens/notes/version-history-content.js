@@ -26,7 +26,7 @@ import { FREE_VERSION_HISTORY_LIMIT } from '@/constants/default-values'
 const getDiffColor = (type) => (type === 'added' ? DIFF_ADDED_COLOR : DIFF_REMOVED_COLOR)
 
 export const VersionHistoryContent = memo(function VersionHistoryContent({
-    directoryUri,
+    location,
     noteId,
     currentContentRef,
     pro,
@@ -44,20 +44,16 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
     const [restoreDialogVisible, setRestoreDialogVisible] = useState(false)
 
     useEffect(() => {
-        if (!directoryUri || !noteId) return
+        if (!location || !noteId) return
 
         setLoading(true)
-        getVersions(directoryUri, noteId).then((result) => {
+        getVersions(location, noteId, pro ? Infinity : FREE_VERSION_HISTORY_LIMIT).then((result) => {
             setVersions(result)
             setLoading(false)
         })
-    }, [directoryUri, noteId])
+    }, [location?.folderUri, location?.folderPath, noteId, pro])
 
-    const visibleVersions = useMemo(() => (
-        pro ? versions : versions.slice(-FREE_VERSION_HISTORY_LIMIT)
-    ), [versions, pro])
-
-    const ordered = useMemo(() => [...visibleVersions].reverse(), [visibleVersions])
+    const ordered = useMemo(() => [...versions].reverse(), [versions])
     const diff = useMemo(() => (
         selected ? diffLines(selected.content, currentContentRef.current.content) : []
     ), [selected, currentContentRef])

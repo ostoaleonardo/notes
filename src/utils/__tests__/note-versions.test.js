@@ -1,16 +1,33 @@
 import { randomUUID } from 'expo-crypto'
 
-import { commitNoteVersion, loadNoteVersions } from '../note-versions'
+import {
+    commitNoteVersion,
+    loadNoteVersions,
+    packVersions,
+    unpackVersions
+} from '../note-versions'
 
 jest.mock('expo-crypto', () => ({ randomUUID: jest.fn() }))
 
-const REPO_URI = 'content://fake/repo'
-const NOTE_ID = 'note-1'
+const FILENAME = 'note-1.md'
+const LOCATION = {
+    rootUri: 'content://fake/repo',
+    folderUri: 'content://fake/repo/sub',
+    folderPath: 'sub'
+}
+const KEY = `${LOCATION.rootUri}|sub/${FILENAME}`
 
 const createFakeFileStorage = (seed = new Map(), existing = true) => ({
     findFile: () => existing,
-    readVersions: async (uri, noteId) => seed.get(`${uri}/${noteId}`) || [],
-    writeVersions: (uri, noteId, versions) => { seed.set(`${uri}/${noteId}`, versions) }
+    readVersions: async (rootUri, key) => seed.get(`${rootUri}|${key}`) || [],
+    writeVersions: (rootUri, key, versions) => { seed.set(`${rootUri}|${key}`, versions) }
+})
+
+const legacyVersion = (id, content, title = 'Note') => ({
+    id,
+    title,
+    content,
+    createdAt: 1
 })
 
 beforeEach(() => {
@@ -18,72 +35,155 @@ beforeEach(() => {
     randomUUID.mockImplementation(() => `uuid-${++counter}`)
 })
 
+describe('pack and unpack versions', () => {
+    const versions = [
+        legacyVersion('v1', 'a\nb\nc'),
+        legacyVersion('v2', 'a\nB\nc\nd'),
+        legacyVersion('v3', 'a\nB\nd')
+    ]
+
+    test('restores every snapshot from the packed store', () => {
+        expect(unpackVersions(packVersions(versions))).toEqual(versions)
+    })
+
+    test('keeps only the newest versions when a limit is given', () => {
+        expect(unpackVersions(packVersions(versions), 2)).toEqual(versions.slice(1))
+    })
+
+    test('limits a legacy snapshot array the same way', () => {
+        expect(unpackVersions(versions, 1)).toEqual(versions.slice(2))
+    })
+
+    test('packs an empty history into an empty store', () => {
+        expect(unpackVersions(packVersions([]))).toEqual([])
+    })
+
+    test('stores only the head content as a full snapshot', () => {
+        const store = packVersions(versions)
+
+        expect(store.head).toBe('a\nB\nd')
+        expect(store.entries.every((entry) => !('content' in entry))).toBe(true)
+    })
+})
+
 describe('load note versions', () => {
     test('returns an empty list for a note with no history', async () => {
-        const fileStorage = createFakeFileStorage()
-
-        const versions = await loadNoteVersions(fileStorage, REPO_URI, NOTE_ID)
+        const versions = await loadNoteVersions(createFakeFileStorage(), LOCATION, FILENAME)
 
         expect(versions).toEqual([])
     })
 
-    test('returns the stored versions for the note', async () => {
-        const seeded = [{ id: 'v1', title: 'Note', content: 'hello', createdAt: 1 }]
-        const fileStorage = createFakeFileStorage(new Map([[`${REPO_URI}/${NOTE_ID}`, seeded]]))
+    test('reads a legacy snapshot array', async () => {
+        const seeded = [legacyVersion('v1', 'hello')]
+        const fileStorage = createFakeFileStorage(new Map([[KEY, seeded]]))
 
-        const versions = await loadNoteVersions(fileStorage, REPO_URI, NOTE_ID)
+        const versions = await loadNoteVersions(fileStorage, LOCATION, FILENAME)
 
         expect(versions).toEqual(seeded)
+    })
+
+    test('applies the limit to a delta store', async () => {
+        const seeded = packVersions([
+            legacyVersion('v1', 'one'),
+            legacyVersion('v2', 'two'),
+            legacyVersion('v3', 'three')
+        ])
+        const fileStorage = createFakeFileStorage(new Map([[KEY, seeded]]))
+
+        const versions = await loadNoteVersions(fileStorage, LOCATION, FILENAME, 2)
+
+        expect(versions.map((version) => version.content)).toEqual(['two', 'three'])
     })
 })
 
 describe('commit note version', () => {
-    test('appends a new version when there is no previous history', async () => {
-        const fileStorage = createFakeFileStorage()
+    test('stores the first version as the head', async () => {
+        const seed = new Map()
 
-        const versions = await commitNoteVersion(fileStorage, REPO_URI, NOTE_ID, 'Note', 'hello')
+        const committed = await commitNoteVersion(
+            createFakeFileStorage(seed),
+            LOCATION,
+            FILENAME,
+            'Note',
+            'hello'
+        )
 
-        expect(versions).toEqual([
-            { id: 'uuid-1', title: 'Note', content: 'hello', createdAt: expect.any(Number) }
+        expect(committed).toBe(true)
+        expect(seed.get(KEY)).toEqual({
+            head: 'hello',
+            entries: [
+                { id: 'uuid-1', title: 'Note', createdAt: expect.any(Number), delta: null }
+            ]
+        })
+    })
+
+    test('keeps every earlier snapshot recoverable after several commits', async () => {
+        const seed = new Map()
+        const fileStorage = createFakeFileStorage(seed)
+
+        await commitNoteVersion(fileStorage, LOCATION, FILENAME, 'Note', 'a\nb')
+        await commitNoteVersion(fileStorage, LOCATION, FILENAME, 'Note', 'a\nb\nc')
+        await commitNoteVersion(fileStorage, LOCATION, FILENAME, 'Note', 'x\nb\nc')
+
+        const versions = await loadNoteVersions(fileStorage, LOCATION, FILENAME)
+
+        expect(versions.map((version) => version.content)).toEqual([
+            'a\nb',
+            'a\nb\nc',
+            'x\nb\nc'
         ])
     })
 
-    test('appends a new version when the content changed since the last one', async () => {
-        const seeded = [{ id: 'v1', title: 'Note', content: 'old content', createdAt: 1 }]
-        const fileStorage = createFakeFileStorage(new Map([[`${REPO_URI}/${NOTE_ID}`, seeded]]))
+    test('does not add a version when title and content match the last one', async () => {
+        const seed = new Map([[KEY, packVersions([legacyVersion('v1', 'same')])]])
 
-        const versions = await commitNoteVersion(fileStorage, REPO_URI, NOTE_ID, 'Note', 'new content')
+        const committed = await commitNoteVersion(
+            createFakeFileStorage(seed),
+            LOCATION,
+            FILENAME,
+            'Note',
+            'same'
+        )
 
-        expect(versions).toHaveLength(2)
-        expect(versions[1].content).toBe('new content')
+        expect(committed).toBe(false)
+        expect(seed.get(KEY).entries).toHaveLength(1)
     })
 
-    test('does not duplicate a version when the content matches the last one', async () => {
-        const seeded = [{ id: 'v1', title: 'Note', content: 'same content', createdAt: 1 }]
-        const fileStorage = createFakeFileStorage(new Map([[`${REPO_URI}/${NOTE_ID}`, seeded]]))
+    test('adds a version when only the title changed', async () => {
+        const seed = new Map([[KEY, packVersions([legacyVersion('v1', 'content', 'Old')])]])
+        const fileStorage = createFakeFileStorage(seed)
 
-        const versions = await commitNoteVersion(fileStorage, REPO_URI, NOTE_ID, 'Note', 'same content')
+        await commitNoteVersion(fileStorage, LOCATION, FILENAME, 'New', 'content')
 
-        expect(versions).toEqual(seeded)
+        const versions = await loadNoteVersions(fileStorage, LOCATION, FILENAME)
+
+        expect(versions.map((version) => version.title)).toEqual(['Old', 'New'])
     })
 
-    test('appends a new version when only the title changed', async () => {
-        const seeded = [{ id: 'v1', title: 'Old title', content: 'content', createdAt: 1 }]
-        const fileStorage = createFakeFileStorage(new Map([[`${REPO_URI}/${NOTE_ID}`, seeded]]))
+    test('upgrades a legacy snapshot array to a delta store on commit', async () => {
+        const seed = new Map([[KEY, [legacyVersion('v1', 'old')]]])
+        const fileStorage = createFakeFileStorage(seed)
 
-        const versions = await commitNoteVersion(fileStorage, REPO_URI, NOTE_ID, 'New title', 'content')
+        await commitNoteVersion(fileStorage, LOCATION, FILENAME, 'Note', 'new')
 
-        expect(versions).toHaveLength(2)
-        expect(versions[1].title).toBe('New title')
+        expect(Array.isArray(seed.get(KEY))).toBe(false)
+        expect(
+            (await loadNoteVersions(fileStorage, LOCATION, FILENAME)).map((v) => v.content)
+        ).toEqual(['old', 'new'])
     })
 
     test('does not write a history file when the note no longer exists', async () => {
         const seed = new Map()
-        const fileStorage = createFakeFileStorage(seed, false)
 
-        const versions = await commitNoteVersion(fileStorage, REPO_URI, NOTE_ID, 'Note', 'hello')
+        const committed = await commitNoteVersion(
+            createFakeFileStorage(seed, false),
+            LOCATION,
+            FILENAME,
+            'Note',
+            'hello'
+        )
 
-        expect(versions).toEqual([])
+        expect(committed).toBe(false)
         expect(seed.size).toBe(0)
     })
 })

@@ -8,7 +8,7 @@ import { NoteContext } from '@/context/note-context'
 
 import { DEFAULT_TAGS } from '@/constants/default-values'
 
-const mockFileStorage = { writeJson: jest.fn() }
+const mockFileStorage = { writeNotesJson: jest.fn() }
 const mockUpdateNote = jest.fn(async () => {})
 let mockNotes = []
 
@@ -69,9 +69,9 @@ describe('add tag', () => {
         })
 
         expect(result.current.tags).toEqual(['work', 'personal'])
-        expect(mockFileStorage.writeJson).toHaveBeenCalledWith(
+        expect(mockFileStorage.writeNotesJson).toHaveBeenCalledWith(
             MOCK_ROOT_URI,
-            '.tags.json',
+            'tags.json',
             result.current.tags
         )
     })
@@ -86,6 +86,42 @@ describe('add tag', () => {
 
         expect(addResult).toBe('duplicate')
         expect(result.current.tags).toHaveLength(1)
+    })
+})
+
+describe('case insensitive tags', () => {
+    test('treats a tag differing only in case as a duplicate', async () => {
+        const { result } = await renderTagsHook([MOCK_WORK_TAG])
+
+        let addResult
+        await act(() => {
+            addResult = result.current.addTag('Work')
+        })
+
+        expect(addResult).toBe('duplicate')
+    })
+
+    test('strips the tag from notes using a different casing', async () => {
+        mockNotes = [{ path: 'repo-1::a.md', tags: ['Work', MOCK_PERSONAL_TAG] }]
+        const { result } = await renderTagsHook([MOCK_WORK_TAG, MOCK_PERSONAL_TAG])
+
+        await act(async () => {
+            await result.current.deleteTag(MOCK_WORK_TAG)
+        })
+
+        expect(mockUpdateNote).toHaveBeenCalledWith(
+            expect.objectContaining({ tags: [MOCK_PERSONAL_TAG] })
+        )
+    })
+
+    test('allows changing only the casing of a tag', async () => {
+        const { result } = await renderTagsHook([MOCK_WORK_TAG])
+
+        await act(async () => {
+            await result.current.updateTag(MOCK_WORK_TAG, 'Work')
+        })
+
+        expect(result.current.tags).toEqual(['Work'])
     })
 })
 
@@ -139,9 +175,9 @@ describe('delete tag', () => {
         })
 
         expect(result.current.tags).toEqual([MOCK_PERSONAL_TAG])
-        expect(mockFileStorage.writeJson).toHaveBeenCalledWith(
+        expect(mockFileStorage.writeNotesJson).toHaveBeenCalledWith(
             MOCK_ROOT_URI,
-            '.tags.json',
+            'tags.json',
             [MOCK_PERSONAL_TAG]
         )
     })

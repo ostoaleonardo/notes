@@ -4,7 +4,7 @@ import { useNoteVersions } from './use-note-versions'
 
 import { VERSION_SNAPSHOT_INTERVAL } from '@/constants/default-values'
 
-export function useVersionHistory({ directoryUri, latestContent }) {
+export function useVersionHistory({ location, latestContent }) {
     const { commitVersion } = useNoteVersions()
 
     const [visible, setVisible] = useState(false)
@@ -17,21 +17,21 @@ export function useVersionHistory({ directoryUri, latestContent }) {
         const { noteId, title, content } = latestContent.current
         if (!noteId) return
 
-        commitVersion(directoryUri, noteId, title, content)
+        commitVersion(location, noteId, title, content)
     }
 
     useEffect(() => {
-        if (!directoryUri) return
+        if (!location) return
 
         return () => commitLatest.current()
-    }, [directoryUri])
+    }, [location?.folderUri])
 
     useEffect(() => {
-        if (!directoryUri) return
+        if (!location) return
 
         const interval = setInterval(() => commitLatest.current(), VERSION_SNAPSHOT_INTERVAL)
         return () => clearInterval(interval)
-    }, [directoryUri])
+    }, [location?.folderUri])
 
     return { visible, onOpen, onClose }
 }

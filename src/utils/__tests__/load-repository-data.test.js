@@ -8,7 +8,12 @@ import { parseFrontmatter } from '../frontmatter'
 import { getNoteKey } from '../note-key'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { SIDECAR_FILENAMES, NOTE_FILE_EXTENSION } from '@/constants/file-storage'
+import {
+    NOTE_FILE_EXTENSION,
+    NOTES_FOLDER_NAME,
+    TAGS_FILENAME,
+    LEGACY_TAGS_FILENAME
+} from '@/constants/file-storage'
 
 jest.mock('expo-crypto', () => ({ randomUUID: jest.fn() }))
 
@@ -35,15 +40,19 @@ const createFakeFileStorage = (deviceCache = new Map()) => {
         try { return JSON.parse(raw) } catch { return fallback }
     }
     const writeJson = (uri, filename, value) => { filesFor(uri).set(filename, JSON.stringify(value)) }
+    const notesUri = (uri) => `${uri}/${NOTES_FOLDER_NAME}`
 
     return {
         listMarkdownFiles: (uri) => Array.from(filesFor(uri).entries())
-            .filter(([name]) => !SIDECAR_FILENAMES.includes(name) && name.toLowerCase().endsWith(NOTE_FILE_EXTENSION))
+            .filter(([name]) => name.toLowerCase().endsWith(NOTE_FILE_EXTENSION))
             .map(([name, content]) => ({ name, text: async () => content, creationTime: 0, lastModified: 0 })),
         writeNoteFile: (uri, filename, content) => { filesFor(uri).set(filename, content) },
         deleteNoteFile: (uri, filename) => { filesFor(uri).delete(filename) },
         readJson,
         writeJson,
+        readNotesJson: (uri, filename, fallback) => readJson(notesUri(uri), filename, fallback),
+        writeNotesJson: (uri, filename, value) => writeJson(notesUri(uri), filename, value),
+        migrateLegacyVersions: jest.fn(async () => {}),
         getOrCreateImagesFolder: (uri) => ({ uri: `${uri}/images` }),
         copyImageFile: async (sourceUri, directoryUri, filename) => {
             if (!deviceCache.has(sourceUri)) {
@@ -306,10 +315,10 @@ describeLegacyFixtures('tags shared across the repository tree', () => {
         const expectedNames = legacyTags.filter((tag) => tag.id !== 'all').map((tag) => tag.name).sort()
         expect(tags.slice().sort()).toEqual(expectedNames)
 
-        const rootSidecar = await fileStorage.readJson(root.uri, '.tags.json', null)
-        expect(rootSidecar).not.toBeNull()
-        const subSidecar = await fileStorage.readJson(subfolder.uri, '.tags.json', null)
-        expect(subSidecar).toBeNull()
+        const rootTags = await fileStorage.readNotesJson(root.uri, TAGS_FILENAME, null)
+        expect(rootTags).not.toBeNull()
+        const subTags = await fileStorage.readNotesJson(subfolder.uri, TAGS_FILENAME, null)
+        expect(subTags).toBeNull()
     })
 })
 
@@ -354,6 +363,53 @@ describe('steady state (no legacy data)', () => {
         expect(notes[0].tags).toEqual(['one', 'two'])
         expect(notes[0].properties).toEqual({ aliases: ['Alias'] })
         expect(notes[0].note).toBe('content')
+    })
+})
+
+describe('tags dictionary', () => {
+    const readTags = (fileStorage) => fileStorage.readNotesJson(REPO_URI, TAGS_FILENAME, null)
+
+    test('moves the legacy root tags file into the notes folder', async () => {
+        const fileStorage = createFakeFileStorage()
+        fileStorage.writeJson(REPO_URI, LEGACY_TAGS_FILENAME, ['work'])
+
+        const { tags } = await loadRepositoryData([repository], repository, createFakeStorage(), fileStorage)
+
+        expect(tags).toEqual(['work'])
+        expect(await readTags(fileStorage)).toEqual(['work'])
+        expect(await fileStorage.readJson(REPO_URI, LEGACY_TAGS_FILENAME, null)).toBeNull()
+    })
+
+    test('adds tags used by notes that are missing from the dictionary', async () => {
+        const fileStorage = createFakeFileStorage()
+        fileStorage.writeNotesJson(REPO_URI, TAGS_FILENAME, ['work'])
+        fileStorage.writeNoteFile(REPO_URI, 'Note.md', '---\ntags:\n  - home\n---\n\nbody')
+
+        const { tags } = await loadRepositoryData([repository], repository, createFakeStorage(), fileStorage)
+
+        expect(tags).toEqual(['work', 'home'])
+        expect(await readTags(fileStorage)).toEqual(['work', 'home'])
+    })
+
+    test('does not duplicate a tag that differs only by case', async () => {
+        const fileStorage = createFakeFileStorage()
+        fileStorage.writeNotesJson(REPO_URI, TAGS_FILENAME, ['Work'])
+        fileStorage.writeNoteFile(REPO_URI, 'Note.md', '---\ntags:\n  - work\n---\n\nbody')
+
+        const { tags } = await loadRepositoryData([repository], repository, createFakeStorage(), fileStorage)
+
+        expect(tags).toEqual(['Work'])
+    })
+
+    test('leaves the tags file untouched when nothing needs reconciling', async () => {
+        const fileStorage = createFakeFileStorage()
+        fileStorage.writeNotesJson(REPO_URI, TAGS_FILENAME, ['work'])
+        fileStorage.writeNoteFile(REPO_URI, 'Note.md', '---\ntags:\n  - work\n---\n\nbody')
+        const writeNotesJson = jest.spyOn(fileStorage, 'writeNotesJson')
+
+        await loadRepositoryData([repository], repository, createFakeStorage(), fileStorage)
+
+        expect(writeNotesJson).not.toHaveBeenCalled()
     })
 })
 
