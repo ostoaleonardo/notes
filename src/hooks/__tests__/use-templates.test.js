@@ -2,6 +2,7 @@ import { act, renderHook } from '@testing-library/react-native'
 
 import { useTemplates } from '../use-templates'
 import { MOCK_REPO_URI, MOCK_TEMPLATES_URI } from '../__fixtures__/constants'
+import { subscribeTemplatesChanged } from '@/utils/templates-events'
 
 const mockFileStorage = {
     findFile: jest.fn(),
@@ -167,5 +168,69 @@ describe('delete template', () => {
         await act(async () => result.current.deleteTemplate('A.md'))
 
         expect(files.has('A.md')).toBe(false)
+    })
+})
+
+describe('templates changed notification', () => {
+    let listener
+    let unsubscribe
+
+    beforeEach(() => {
+        listener = jest.fn()
+        unsubscribe = subscribeTemplatesChanged(listener)
+    })
+
+    afterEach(() => unsubscribe())
+
+    test('notifies after adding a template', async () => {
+        const { result } = await renderTemplatesHook()
+
+        await act(async () => result.current.addTemplate('A', 'content'))
+
+        expect(listener).toHaveBeenCalledTimes(1)
+    })
+
+    test('notifies after updating a template', async () => {
+        files.set('A.md', 'old')
+        const { result } = await renderTemplatesHook()
+
+        await act(async () => result.current.updateTemplate('A.md', 'A', 'new'))
+
+        expect(listener).toHaveBeenCalledTimes(1)
+    })
+
+    test('does not notify when updating a deleted template', async () => {
+        const { result } = await renderTemplatesHook()
+
+        await act(async () => result.current.updateTemplate('A.md', 'A', 'new'))
+
+        expect(listener).not.toHaveBeenCalled()
+    })
+
+    test('notifies after deleting a template', async () => {
+        files.set('A.md', 'content')
+        const { result } = await renderTemplatesHook()
+
+        await act(async () => result.current.deleteTemplate('A.md'))
+
+        expect(listener).toHaveBeenCalledTimes(1)
+    })
+
+    test('notifies after adding a template folder', async () => {
+        const { result } = await renderTemplatesHook()
+
+        await act(async () => result.current.addTemplateFolder('Work'))
+
+        expect(listener).toHaveBeenCalledTimes(1)
+    })
+
+    test('stops notifying after unsubscribing', async () => {
+        unsubscribe()
+        files.set('A.md', 'content')
+        const { result } = await renderTemplatesHook()
+
+        await act(async () => result.current.deleteTemplate('A.md'))
+
+        expect(listener).not.toHaveBeenCalled()
     })
 })

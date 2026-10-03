@@ -5,6 +5,7 @@ import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
 import { getUniqueFilename, sanitizeFilename, stripNoteExtension } from '@/utils/note-filename'
 import { joinTemplatePath, splitTemplatePath } from '@/utils/template-path'
+import { notifyTemplatesChanged } from '@/utils/templates-events'
 
 export function useTemplates() {
     const { activeRepository, ensureTemplatesFolder } = useRepositories()
@@ -93,6 +94,7 @@ export function useTemplates() {
         }
 
         writeNoteFile(uri, filename, content)
+        notifyTemplatesChanged()
         return joinTemplatePath(dir, filename)
     }, [getFolderUri, findFile, listMarkdownFiles, renameNoteFile, writeNoteFile])
 
@@ -100,6 +102,7 @@ export function useTemplates() {
         const { dir, base } = splitTemplatePath(path)
         const uri = await getFolderUri(dir)
         deleteNoteFile(uri, base)
+        notifyTemplatesChanged()
     }, [getFolderUri, deleteNoteFile])
 
     const addTemplate = useCallback(async (name, content = '', folder = '') => {
@@ -108,6 +111,7 @@ export function useTemplates() {
         const filename = getUniqueFilename(existingNames, name, null)
 
         writeNoteFile(uri, filename, content)
+        notifyTemplatesChanged()
         return joinTemplatePath(folder, filename)
     }, [getFolderUri, listMarkdownFiles, writeNoteFile])
 
@@ -124,6 +128,7 @@ export function useTemplates() {
         const folderName = sanitizeFilename(name)
 
         if (!findDirectory(uri, folderName)) createSubdirectory(uri, folderName)
+        notifyTemplatesChanged()
 
         return joinTemplatePath(parent, folderName)
     }, [getFolderUri, findDirectory, createSubdirectory])

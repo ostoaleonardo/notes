@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useTemplates } from './use-templates'
+import { subscribeTemplatesChanged } from '@/utils/templates-events'
 
 export function useTemplatesList(deps = [], { immediate = true } = {}) {
     const { listTemplates, listTemplateFolders } = useTemplates()
@@ -20,6 +21,8 @@ export function useTemplatesList(deps = [], { immediate = true } = {}) {
             setFolders(folderPaths)
         })
     ), [listTemplates, listTemplateFolders])
+
+    useEffect(() => subscribeTemplatesChanged(refresh), [refresh])
 
     useEffect(() => {
         if (immediate) refresh()

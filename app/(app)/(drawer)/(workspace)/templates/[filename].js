@@ -20,8 +20,10 @@ import { useAutosave } from '@/hooks/use-autosave'
 import { useEditorChrome } from '@/hooks/use-editor-chrome'
 import { usePro } from '@/hooks/use-pro'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
+import { useRecentNotes } from '@/hooks/use-recent-notes'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
+import { useUtils } from '@/hooks/use-utils'
 import { splitTemplatePath, joinTemplatePath } from '@/utils/template-path'
 import { stripNoteExtension } from '@/utils/note-filename'
 import { useVersionHistory } from '@/hooks/use-version-history'
@@ -37,6 +39,8 @@ export default function EditTemplate() {
     const { filename } = useLocalSearchParams()
     const { getTemplate, getFolderUri, updateTemplate, deleteTemplate } = useTemplates()
     const { pro } = usePro()
+    const { pinned, updatePinned } = useUtils()
+    const { removeRecent } = useRecentNotes()
     const { activeRepository, getRootRepository } = useRepositories()
 
     const tabId = TEMPLATE_TAB_PREFIX + filename
@@ -105,6 +109,16 @@ export default function EditTemplate() {
     const onConfirmDelete = async () => {
         try {
             await deleteTemplate(currentFilename.current)
+
+            const deletedId = TEMPLATE_TAB_PREFIX + currentFilename.current
+            removeRecent(deletedId)
+
+            if (pinned.has(deletedId)) {
+                const next = new Set(pinned)
+                next.delete(deletedId)
+                updatePinned(next)
+            }
+
             router.back()
         } catch (error) {
             logError('error deleting template', error)
