@@ -7,6 +7,12 @@ import {
     NOTE_ALIASES_PROPERTY,
     MARKDOWN_WIKI_LINK_PATTERN
 } from '@/constants/wiki-links'
+import {
+    BACKLINKS_CLASS,
+    BACKLINKS_TITLE_CLASS,
+    BACKLINK_TITLE_CLASS,
+    BACKLINK_PATH_CLASS
+} from '@/constants/backlinks'
 
 export const escapeHtml = (text) => text
     .replace(/&/g, '&amp;')
@@ -160,14 +166,14 @@ export const buildBacklinksHtml = (backlinks, label, notePaths = new Map()) => {
 
     const items = backlinks.map((note) => {
         const path = notePaths.get(note.path) || ''
-        const pathHtml = path ? `<span class="backlink-path">${escapeHtml(path)}</span>` : ''
+        const pathHtml = path ? `<span class="${BACKLINK_PATH_CLASS}">${escapeHtml(path)}</span>` : ''
 
         return (
             `<li><a href="${WIKI_LINK_SCHEME}${encodeURIComponent(note.path)}" class="wiki-link">`
-            + `<span class="backlink-title">${escapeHtml(note.title || '')}</span>${pathHtml}`
+            + `<span class="${BACKLINK_TITLE_CLASS}">${escapeHtml(note.title || '')}</span>${pathHtml}`
             + `</a></li>`
         )
     }).join('')
 
-    return `<div class="backlinks"><div class="backlinks-title">${escapeHtml(label)}</div><ul>${items}</ul></div>`
+    return `<div class="${BACKLINKS_CLASS}"><div class="${BACKLINKS_TITLE_CLASS}">${escapeHtml(label)}</div><ul>${items}</ul></div>`
 }

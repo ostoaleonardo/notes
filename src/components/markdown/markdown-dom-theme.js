@@ -12,6 +12,12 @@ import {
     CALLOUT_TYPE_CLASS_PREFIX
 } from '../../constants/callouts'
 import { EMBED_CLASS, EMBED_TITLE_CLASS } from '../../constants/embeds'
+import {
+    BACKLINKS_CLASS,
+    BACKLINKS_TITLE_CLASS,
+    BACKLINK_TITLE_CLASS,
+    BACKLINK_PATH_CLASS
+} from '../../constants/backlinks'
 
 const buildDerivedColors = (colors) => ({
     ...colors,
@@ -181,7 +187,7 @@ const buildCalloutCss = () => Object.entries(CALLOUT_COLORS).map(([type, color])
     .markdown-preview .${CALLOUT_TYPE_CLASS_PREFIX}${type} .${CALLOUT_TITLE_CLASS} { color: ${color}; }`).join('')
 
 export const buildPreviewCss = ({ fontFamily, headingFontFamily, colors, fontSize }) => {
-    const { onBackground: textColor, tertiary: linkColor, background: quoteBackgroundColor, codeBackground: codeBackgroundColor, thematicBreak: thematicBreakColor } = buildDerivedColors(colors)
+    const { onBackground: textColor, tertiary: linkColor, background: quoteBackgroundColor, codeBackground: codeBackgroundColor, thematicBreak: thematicBreakColor, surface: surfaceColor } = buildDerivedColors(colors)
 
     return `
     html, body { margin: 0; overflow-x: hidden; scrollbar-width: none; }
@@ -243,14 +249,25 @@ export const buildPreviewCss = ({ fontFamily, headingFontFamily, colors, fontSiz
     .markdown-preview .footnotes-sep { border: none; border-top: 1px solid ${thematicBreakColor}; margin: 16px 0; }
     .markdown-preview .footnotes { font-size: 0.85em; opacity: 0.85; }
     .markdown-preview .footnote-item > p { display: inline; }
-    .markdown-preview .backlinks { margin-top: 24px; padding-top: 16px; border-top: 1px solid ${thematicBreakColor}; }
-    .markdown-preview .backlinks-title { font-size: 0.75em; text-transform: uppercase; opacity: 0.6; margin-bottom: 8px; }
-    .markdown-preview .backlinks ul { list-style: none; padding: 0; margin: 0; }
-    .markdown-preview .backlinks li { margin: 4px 0; }
-    .markdown-preview .backlinks .wiki-link { display: inline-block; }
-    .markdown-preview .backlinks .backlink-path {
-        display: block; font-weight: normal; text-decoration: none;
-        font-size: 0.85em; opacity: 0.6; margin-top: 2px;
+    .markdown-preview .${BACKLINKS_CLASS} {
+        margin: 32px 0 16px; padding: 0; overflow: hidden; border-radius: 16px;
+        background-color: ${surfaceColor}; font-size: 13px; line-height: 1.3;
     }
+    .markdown-preview .${BACKLINKS_TITLE_CLASS} {
+        padding: 12px 16px 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+        text-transform: uppercase; opacity: 0.6;
+    }
+    .markdown-preview .${BACKLINKS_CLASS} ul { list-style: none; padding: 0; margin: 0; }
+    .markdown-preview .${BACKLINKS_CLASS} li { margin: 0; }
+    .markdown-preview .${BACKLINKS_CLASS} .wiki-link {
+        position: relative; display: block; padding: 8px 36px 8px 16px;
+        color: ${textColor}; font-weight: normal; text-decoration: none;
+    }
+    .markdown-preview .${BACKLINKS_CLASS} .wiki-link::after {
+        content: '\\203A'; position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+        font-size: 20px; opacity: 0.4;
+    }
+    .markdown-preview .${BACKLINK_TITLE_CLASS} { display: block; font-weight: 600; }
+    .markdown-preview .${BACKLINK_PATH_CLASS} { display: block; margin-top: 1px; font-size: 11px; opacity: 0.6; }
 `
 }
