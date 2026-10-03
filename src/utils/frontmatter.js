@@ -1,5 +1,7 @@
 import { dump, load } from 'js-yaml'
 
+import { dedupeTags } from '@/utils/tag-names'
+
 import {
     FRONTMATTER_REGEX,
     LEADING_HASH_PATTERN,
@@ -39,7 +41,7 @@ export const normalizeTags = (value) => {
         .map((tag) => String(tag).trim().replace(LEADING_HASH_PATTERN, ''))
         .filter(Boolean)
 
-    return [...new Set(names)]
+    return dedupeTags(names)
 }
 
 export const extractProperties = (frontmatter) => {

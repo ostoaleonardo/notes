@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 
 import { useTags } from './use-tags'
 import { buildNoteFileContent, decomposeNoteFileContent } from '@/utils/frontmatter'
+import { hasTag } from '@/utils/tag-names'
 
 export function useCodeMode({
     note,
@@ -22,7 +23,7 @@ export function useCodeMode({
 
     const leave = useCallback(() => {
         tags
-            .filter((name) => !allTags.includes(name))
+            .filter((name) => !hasTag(allTags, name))
             .forEach((name) => addTag(name))
     }, [tags, allTags, addTag])
 

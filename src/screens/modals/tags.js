@@ -11,6 +11,7 @@ import { Typography } from '@/components/typography'
 import { Separator } from '@/components/separator/separator'
 
 import { useTags } from '@/hooks/use-tags'
+import { hasTag, isSameTag } from '@/utils/tag-names'
 
 export function Tags({ tags, setTags }) {
     const { t } = useTranslation()
@@ -25,8 +26,8 @@ export function Tags({ tags, setTags }) {
     }
 
     const onToggleTag = useCallback((name) => {
-        setTags((previousTags) => previousTags.includes(name)
-            ? previousTags.filter((tagName) => tagName !== name)
+        setTags((previousTags) => hasTag(previousTags, name)
+            ? previousTags.filter((tagName) => !isSameTag(tagName, name))
             : [...previousTags, name])
     }, [setTags])
 
@@ -35,7 +36,7 @@ export function Tags({ tags, setTags }) {
             id={name}
             tag={name}
             onToggle={onToggleTag}
-            isSelected={tags.includes(name)}
+            isSelected={hasTag(tags, name)}
         />
     ), [tags, onToggleTag])
 
