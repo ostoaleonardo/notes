@@ -255,10 +255,25 @@ describeLegacyFixtures('legacy image migration', () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage(new Map()) // nothing "survived" on device
 
-        await expect(loadRepositoryData([repository], repository, storage, fileStorage)).resolves.not.toThrow()
+        const { migration } = await loadRepositoryData([repository], repository, storage, fileStorage)
 
         const copiedFiles = fileStorage.listFiles(`${REPO_URI}/images`)
         expect(copiedFiles).toHaveLength(0)
+        expect(migration.failedImages).toBeGreaterThan(0)
+    })
+
+    test('reports legacy notes that were renamed because their title was taken', async () => {
+        const storage = createFakeStorage({
+            [STORAGE_KEYS.NOTES]: JSON.stringify([
+                { id: 'legacy-1', title: 'Same', note: 'a' },
+                { id: 'legacy-2', title: 'Same', note: 'b' }
+            ])
+        })
+        const fileStorage = createFakeFileStorage(new Map())
+
+        const { migration } = await loadRepositoryData([repository], repository, storage, fileStorage)
+
+        expect(migration.renamedNotes).toBe(1)
     })
 
     test('migrates every legacy note image, dropping only the ones missing from the device', async () => {

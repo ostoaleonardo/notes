@@ -14,6 +14,7 @@ import { buildLegacyNoteBody } from '@/utils/legacy-note-body'
 import { DEFAULT_TAGS, LEGACY_ALL_TAG_ID } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { TAGS_FILENAME } from '@/constants/file-storage'
+import { DEFAULT_IMAGE_EXTENSION, IMAGE_EXTENSION_PATTERN } from '@/constants/image'
 import { NOTE_KEY_PREFIX } from '@/constants/note-key'
 
 const getTitle = stripNoteExtension
@@ -31,18 +32,20 @@ const migrateLegacyBlobNotes = async (storage) => {
 // Legacy cache images -> images/.
 const migrateLegacyImages = async (images, imagesUri, fileStorage) => {
     const migrated = []
+    let failed = 0
 
     for (const uri of images) {
         try {
-            const extension = (uri.match(/\.(\w+)$/) || [])[1] || 'jpg'
+            const extension = (uri.match(IMAGE_EXTENSION_PATTERN) || [])[1] || DEFAULT_IMAGE_EXTENSION
             const file = await fileStorage.copyImageFile(uri, imagesUri, `${randomUUID()}.${extension}`)
             migrated.push(file.uri)
         } catch (error) {
             console.debug('error migrating legacy note image', error)
+            failed++
         }
     }
 
-    return migrated
+    return { migrated, failed }
 }
 
 // Legacy notes reference tags by id or by name; frontmatter needs unique names.
@@ -55,7 +58,8 @@ const resolveTagNames = (values, tagNameById) => {
 const migrateStorageNotesToFiles = async (rootRepository, storage, fileStorage, tagNameById) => {
     const keys = await storage.getAllKeys()
     const noteKeys = keys.filter((key) => key.startsWith(NOTE_KEY_PREFIX))
-    if (noteKeys.length === 0) return
+    const report = { renamedNotes: 0, failedImages: 0 }
+    if (noteKeys.length === 0) return report
 
     const entries = await storage.multiGet(noteKeys)
 
@@ -66,8 +70,10 @@ const migrateStorageNotesToFiles = async (rootRepository, storage, fileStorage, 
         const note = JSON.parse(value)
         const filename = getUniqueFilename(existingNames, note.title, null)
         existingNames.push(filename)
+        if (filename !== getUniqueFilename([], note.title, null)) report.renamedNotes++
 
-        const imageUris = await migrateLegacyImages(note.images || [], imagesUri, fileStorage)
+        const { migrated: imageUris, failed } = await migrateLegacyImages(note.images || [], imagesUri, fileStorage)
+        report.failedImages += failed
 
         const tags = resolveTagNames(note.tags || note.categories || [], tagNameById)
         const content = buildNoteFileContent({ tags }, buildLegacyNoteBody(note, imageUris))
@@ -75,6 +81,8 @@ const migrateStorageNotesToFiles = async (rootRepository, storage, fileStorage, 
         fileStorage.writeNoteFile(rootRepository.uri, filename, content)
         await storage.removeItem(key)
     }
+
+    return report
 }
 
 // Old tags were {id, name} objects; frontmatter needs plain names.
@@ -179,7 +187,7 @@ export const loadRepositoryData = async (tree, rootRepository, storage, fileStor
     const purgedRawTags = purgeAllTag(rawTags, rootRepositoryUri, fileStorage)
     const tagNameById = buildTagNameById(purgedRawTags)
 
-    await migrateStorageNotesToFiles(
+    const migration = await migrateStorageNotesToFiles(
         rootRepository,
         storage,
         fileStorage,
@@ -191,5 +199,5 @@ export const loadRepositoryData = async (tree, rootRepository, storage, fileStor
 
     const notes = await loadFromTree(tree, loadNotesFromFolder, fileStorage)
 
-    return { notes, tags }
+    return { notes, tags, migration }
 }

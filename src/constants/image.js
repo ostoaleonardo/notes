@@ -10,3 +10,7 @@ export const IMAGE_PICKER_OPTIONS = {
     allowsEditing: true,
     quality: 1
 }
+
+export const DEFAULT_IMAGE_EXTENSION = 'jpg'
+
+export const IMAGE_EXTENSION_PATTERN = /\.(\w+)$/
