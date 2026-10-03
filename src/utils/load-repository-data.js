@@ -58,12 +58,12 @@ const migrateStorageNotesToFiles = async (rootRepository, storage, fileStorage, 
     if (noteKeys.length === 0) return
 
     const entries = await storage.multiGet(noteKeys)
-    const legacyNotes = entries.map(([, value]) => JSON.parse(value))
 
     const existingNames = fileStorage.listMarkdownFiles(rootRepository.uri).map((file) => file.name)
     const imagesUri = fileStorage.getOrCreateImagesFolder(rootRepository.uri).uri
 
-    for (const note of legacyNotes) {
+    for (const [key, value] of entries) {
+        const note = JSON.parse(value)
         const filename = getUniqueFilename(existingNames, note.title, null)
         existingNames.push(filename)
 
@@ -73,9 +73,8 @@ const migrateStorageNotesToFiles = async (rootRepository, storage, fileStorage, 
         const content = buildNoteFileContent({ tags }, buildLegacyNoteBody(note, imageUris))
 
         fileStorage.writeNoteFile(rootRepository.uri, filename, content)
+        await storage.removeItem(key)
     }
-
-    await storage.multiRemove(noteKeys)
 }
 
 // Old tags were {id, name} objects; frontmatter needs plain names.

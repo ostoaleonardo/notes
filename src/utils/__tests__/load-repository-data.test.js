@@ -20,8 +20,7 @@ const createFakeStorage = (seed = {}) => {
         removeItem: async (key) => { data.delete(key) },
         getAllKeys: async () => Array.from(data.keys()),
         multiGet: async (keys) => keys.map((key) => [key, data.has(key) ? data.get(key) : null]),
-        multiSet: async (pairs) => pairs.forEach(([key, value]) => data.set(key, value)),
-        multiRemove: async (keys) => keys.forEach((key) => data.delete(key))
+        multiSet: async (pairs) => pairs.forEach(([key, value]) => data.set(key, value))
     }
 }
 
@@ -344,6 +343,31 @@ describe('steady state (no legacy data)', () => {
 })
 
 // tree-wide loading
+describe('interrupted migration', () => {
+    test('resumes without duplicating notes that were already migrated', async () => {
+        const storage = createFakeStorage({
+            [getNoteKey('a')]: JSON.stringify({ id: 'a', title: 'First', note: 'one' }),
+            [getNoteKey('b')]: JSON.stringify({ id: 'b', title: 'Second', note: 'two' })
+        })
+        const fileStorage = createFakeFileStorage()
+        const writeNoteFile = fileStorage.writeNoteFile
+        fileStorage.writeNoteFile = (uri, filename, content) => {
+            if (filename === 'Second.md') throw new Error('disk full')
+            return writeNoteFile(uri, filename, content)
+        }
+
+        await expect(
+            loadRepositoryData([repository], repository, storage, fileStorage)
+        ).rejects.toThrow('disk full')
+
+        fileStorage.writeNoteFile = writeNoteFile
+        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
+
+        expect(notes.map((note) => note.title).sort()).toEqual(['First', 'Second'])
+        expect(await storage.getAllKeys()).toEqual([])
+    })
+})
+
 describe('tree-wide loading', () => {
     test('merges notes from every folder in the tree, each stamped with its own repositoryId', async () => {
         const storage = createFakeStorage()

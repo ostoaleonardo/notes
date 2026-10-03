@@ -6,6 +6,5 @@ export const storage = {
     removeItem: async (key) => { await AsyncStorage.removeItem(key) },
     getAllKeys: async () => await AsyncStorage.getAllKeys(),
     multiGet: async (keys) => await AsyncStorage.multiGet(keys),
-    multiSet: async (entries) => { await AsyncStorage.multiSet(entries) },
-    multiRemove: async (keys) => { await AsyncStorage.multiRemove(keys) }
+    multiSet: async (entries) => { await AsyncStorage.multiSet(entries) }
 }
