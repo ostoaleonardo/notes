@@ -13,12 +13,6 @@
 	"date": {
 		"updated": "Güncellendi:"
 	},
-	"list": {
-		"add": "Öğe ekle",
-		"bulleted": "Madde işaretli liste",
-		"numbered": "Numaralı liste",
-		"checklist": "Kontrol listesi"
-	},
 	"settings": {
 		"language": "Dil",
 		"theme": "Renk teması",
@@ -63,7 +57,6 @@
 		"tag": "Yeni etiket..."
 	},
 	"drawer": {
-		"notes": "Notlar",
 		"tags": "Etiketler"
 	}
 }

@@ -13,12 +13,6 @@
 	"date": {
 		"updated": "更新日時:"
 	},
-	"list": {
-		"add": "項目を追加",
-		"bulleted": "箇条書きリスト",
-		"numbered": "順序付きリスト",
-		"checklist": "チェックリスト"
-	},
 	"settings": {
 		"language": "言語",
 		"theme": "カラーテーマ",
@@ -63,7 +57,6 @@
 		"tag": "新しいタグ..."
 	},
 	"drawer": {
-		"notes": "メモ",
 		"tags": "タグ"
 	}
 }

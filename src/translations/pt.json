@@ -13,12 +13,6 @@
 	"date": {
 		"updated": "Atualizado:"
 	},
-	"list": {
-		"add": "Adicionar item",
-		"bulleted": "Lista com marcadores",
-		"numbered": "Lista numerada",
-		"checklist": "Checklist"
-	},
 	"settings": {
 		"language": "Idioma",
 		"theme": "Cor do tema",
@@ -63,7 +57,6 @@
 		"tag": "Nova etiqueta..."
 	},
 	"drawer": {
-		"notes": "Notas",
 		"tags": "Etiquetas"
 	}
 }

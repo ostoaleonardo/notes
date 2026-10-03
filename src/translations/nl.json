@@ -13,12 +13,6 @@
 	"date": {
 		"updated": "Gewijzigd:"
 	},
-	"list": {
-		"add": "Item toevoegen",
-		"bulleted": "Puntenlijst",
-		"numbered": "Geordende lijst",
-		"checklist": "Controlelijst"
-	},
 	"settings": {
 		"language": "Taal",
 		"theme": "Thema",
@@ -32,8 +26,7 @@
 	"theme": {
 		"light": "Licht",
 		"dark": "Donker",
-		"system": "Systeem",
-		"chooseTheme": "Kies een thema voor de app."
+		"system": "Systeem"
 	},
 	"button": {
 		"edit": "Bewerken",
@@ -63,7 +56,6 @@
 		"tag": "Nieuw label..."
 	},
 	"drawer": {
-		"notes": "Notities",
 		"tags": "Labels"
 	}
 }

@@ -13,12 +13,6 @@
 	"date": {
 		"updated": "Aktualisiert:"
 	},
-	"list": {
-		"add": "Artikel Hinzufügen",
-		"bulleted": "Punkteliste",
-		"numbered": "Geordnete Liste",
-		"checklist": "Checkliste"
-	},
 	"settings": {
 		"language": "Sprache",
 		"theme": "Farbthema",
@@ -63,7 +57,6 @@
 		"tag": "Neuer Tag..."
 	},
 	"drawer": {
-		"notes": "Notizen",
 		"tags": "Tags"
 	}
 }

@@ -13,12 +13,6 @@
 	"date": {
 		"updated": "Mis à jour :"
 	},
-	"list": {
-		"add": "Ajouter un élément",
-		"bulleted": "Liste à puces",
-		"numbered": "Liste numérotée",
-		"checklist": "Liste de contrôle"
-	},
 	"settings": {
 		"language": "Langue",
 		"theme": "Thème",
@@ -63,7 +57,6 @@
 		"tag": "Nouvelle étiquette..."
 	},
 	"drawer": {
-		"notes": "Notes",
 		"tags": "Étiquettes"
 	}
 }

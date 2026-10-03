@@ -13,12 +13,6 @@
 	"date": {
 		"updated": "Upraveno:"
 	},
-	"list": {
-		"add": "Přidat položku",
-		"bulleted": "Odrážkový seznam",
-		"numbered": "Číselný seznam",
-		"checklist": "Odškrtávací seznam"
-	},
 	"settings": {
 		"language": "Jazyk",
 		"theme": "Barevné schéma",
@@ -63,7 +57,6 @@
 		"tag": "Nový štítek..."
 	},
 	"drawer": {
-		"notes": "Poznámky",
 		"tags": "Štítky"
 	}
 }
