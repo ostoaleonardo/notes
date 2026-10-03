@@ -15,6 +15,7 @@ export const STORAGE_KEYS = {
     LANGUAGE: 'language',
     COLLAPSED_FOLDERS: 'collapsed-folders',
     DRAWER_VIEW: 'drawer-view',
+    TAG_SORT: 'tag-sort',
     ALWAYS_UPDATE_WIKI_LINKS: 'always-update-wiki-links',
     LINK_FORMAT: 'link-format',
     SHOW_NOTE_PROPERTIES: 'show-note-properties',

@@ -238,7 +238,11 @@
 		"expand_all": "Expandir todo",
 		"open": "Abrir menú",
 		"notes": "Notas",
-		"change_view": "Cambiar vista"
+		"change_view": "Cambiar vista",
+		"sort_name_asc": "Nombre (A a Z)",
+		"sort_name_desc": "Nombre (Z a A)",
+		"sort_count_desc": "Uso (mayor a menor)",
+		"sort_count_asc": "Uso (menor a mayor)"
 	},
 	"templates": {
 		"journal": "Diario",

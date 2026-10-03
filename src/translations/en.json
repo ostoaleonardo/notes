@@ -238,7 +238,11 @@
 		"expand_all": "Expand all",
 		"open": "Open drawer",
 		"notes": "Notes",
-		"change_view": "Change view"
+		"change_view": "Change view",
+		"sort_name_asc": "Name (A to Z)",
+		"sort_name_desc": "Name (Z to A)",
+		"sort_count_desc": "Usage (high to low)",
+		"sort_count_asc": "Usage (low to high)"
 	},
 	"templates": {
 		"journal": "Journal",

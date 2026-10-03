@@ -56,6 +56,13 @@ export const useUtils = () => {
     const collapseAll = (ids) => updateCollapsedFolders(new Set(ids))
     const expandAll = () => updateCollapsedFolders(new Set())
 
+    const setFoldersCollapsed = (ids, collapsed) => {
+        const next = new Set(collapsedFolders)
+
+        ids.forEach((id) => (collapsed ? next.add(id) : next.delete(id)))
+        updateCollapsedFolders(next)
+    }
+
     return {
         pinned,
         collapsedFolders,
@@ -63,6 +70,7 @@ export const useUtils = () => {
         onPinned,
         toggleFolder,
         collapseAll,
-        expandAll
+        expandAll,
+        setFoldersCollapsed
     }
 }

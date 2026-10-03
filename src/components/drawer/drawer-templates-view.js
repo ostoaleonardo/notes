@@ -17,14 +17,16 @@ import { flattenTemplateTree } from '@/utils/template-path'
 
 import { CreateNewFolder } from '@/icons/create-new-folder'
 import { Plus } from '@/icons/plus'
+import { CollapseAll } from '@/icons/collapse-all'
+import { ExpandAll } from '@/icons/expand-all'
 
 import { REPOSITORY_ACTIONS } from '@/constants/repository-actions'
-import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
+import { TEMPLATE_FOLDER_KEY_PREFIX, TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 
 export function DrawerTemplatesView({ closeDrawer }) {
     const { t } = useTranslation()
     const { currentId } = useCurrentNote()
-    const { collapsedFolders } = useUtils()
+    const { collapsedFolders, setFoldersCollapsed } = useUtils()
     const { activeRepository } = useRepositories()
     const { templates, folders, refresh } = useTemplatesList([activeRepository?.id])
     const [addTemplateFolderPath, setAddTemplateFolderPath] = useState(null)
@@ -60,6 +62,17 @@ export function DrawerTemplatesView({ closeDrawer }) {
         if (action === REPOSITORY_ACTIONS.ADD_SUBFOLDER) setAddSubfolderParent(path)
     }, [])
 
+    const folderIds = useMemo(
+        () => folders.map((path) => TEMPLATE_FOLDER_KEY_PREFIX + path),
+        [folders]
+    )
+
+    const anyCollapsed = folderIds.some((id) => collapsedFolders.has(id))
+
+    const onToggleCollapseAll = useCallback(() => {
+        setFoldersCollapsed(folderIds, !anyCollapsed)
+    }, [setFoldersCollapsed, folderIds, anyCollapsed])
+
     const toolbarItems = useMemo(() => [
         {
             key: 'new-template',
@@ -72,8 +85,14 @@ export function DrawerTemplatesView({ closeDrawer }) {
             icon: CreateNewFolder,
             onPress: () => setAddSubfolderParent(''),
             accessibilityLabel: t('repositories.add_subfolder')
+        },
+        {
+            key: 'toggle-all',
+            icon: anyCollapsed ? ExpandAll : CollapseAll,
+            onPress: onToggleCollapseAll,
+            accessibilityLabel: t(anyCollapsed ? 'drawer.expand_all' : 'drawer.collapse_all')
         }
-    ], [t])
+    ], [t, anyCollapsed, onToggleCollapseAll])
 
     const renderItem = useCallback(({ item }) => {
         if (item.type === 'folder') {

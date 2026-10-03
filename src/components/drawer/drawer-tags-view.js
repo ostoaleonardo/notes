@@ -1,88 +1,114 @@
 import { memo, useCallback, useMemo, useState } from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { Typography } from '../typography'
 import { DrawerList } from './drawer-list'
-import { DrawerNoteItem } from './drawer-note-item'
-import { openEditor } from './drawer-open-editor'
+import { DrawerToolbar, DrawerToolbarButton } from './drawer-toolbar'
+import { DrawerTreeRow } from './drawer-tree-row'
 
-import { useCurrentNote } from '@/hooks/use-current-note'
 import { useNotes } from '@/hooks/use-notes'
-import { useTags } from '@/hooks/use-tags'
-import { buildDrawerTagRows } from '@/utils/drawer-tags'
+import { useStorage } from '@/hooks/use-storage'
+import { useStorageEffect } from '@/hooks/use-storage-effect'
+import { buildTagTree, collectTagKeys, flattenTagTree } from '@/utils/drawer-tags'
 
+import { ArrowDownward } from '@/icons/arrow-downward'
+import { ArrowUpward } from '@/icons/arrow-upward'
+import { CollapseAll } from '@/icons/collapse-all'
+import { ExpandAll } from '@/icons/expand-all'
+import { SortByAlpha } from '@/icons/sort-by-alpha'
 
+import { DEFAULT_TAG_SORT, TAG_SORT_LABELS, TAG_SORTS } from '@/constants/tags'
 import { SPACING } from '@/constants/spacing'
+import { STORAGE_KEYS } from '@/constants/storage-keys'
 
-const TagRow = memo(function TagRow({ name, count, expanded, onToggle }) {
+const TagRow = memo(function TagRow({ tagKey, name, depth, count, hasChildren, expanded, onToggle }) {
     return (
-        <Pressable
-            onPress={() => onToggle(name)}
-            accessibilityState={{ expanded }}
-            style={styles.tag}
-        >
-            <Typography
-                bold={expanded}
-                numberOfLines={1}
-                styleProps={styles.tagName}
-            >
-                {name}
-            </Typography>
-            <Typography
-                opacity={0.5}
-                variant='caption'
-            >
-                {count}
-            </Typography>
-        </Pressable>
+        <DrawerTreeRow
+            compact={true}
+            label={name}
+            depth={depth}
+            count={count}
+            collapsed={!expanded}
+            expandable={hasChildren}
+            onPress={() => onToggle(tagKey)}
+        />
     )
 })
 
-export function DrawerTagsView({ closeDrawer }) {
+export function DrawerTagsView() {
     const { t } = useTranslation()
-    const { tags } = useTags()
     const { notes } = useNotes()
-    const { currentId } = useCurrentNote()
-    const [expandedTag, setExpandedTag] = useState('')
+    const { setItem } = useStorage()
+    const [sort, setSort] = useState(DEFAULT_TAG_SORT)
+    const [expandedTags, setExpandedTags] = useState(() => new Set())
 
-    const rows = useMemo(
-        () => buildDrawerTagRows(tags || [], notes, expandedTag),
-        [tags, notes, expandedTag]
-    )
+    const tree = useMemo(() => buildTagTree(notes), [notes])
+    const rows = useMemo(() => flattenTagTree(tree, expandedTags, sort), [tree, expandedTags, sort])
 
-    const onToggleTag = useCallback((name) => {
-        setExpandedTag((current) => (current === name ? '' : name))
-    }, [])
+    useStorageEffect(STORAGE_KEYS.TAG_SORT, (stored) => {
+        if (TAG_SORT_LABELS[stored]) setSort(stored)
+    })
 
-    const onOpenNote = useCallback((id) => {
-        closeDrawer()
-        if (id === currentId) return
+    const onChangeSort = useCallback((next) => {
+        setSort(next)
+        setItem(STORAGE_KEYS.TAG_SORT, next)
+    }, [setItem])
 
-        openEditor(id, currentId)
-    }, [closeDrawer, currentId])
+    const onToggleCollapseAll = useCallback(() => {
+        setExpandedTags((current) => (
+            current.size > 0 ? new Set() : new Set(collectTagKeys(tree))
+        ))
+    }, [tree])
 
-    const renderItem = useCallback(({ item }) => {
-        if (item.type === 'note') {
-            return (
-                <DrawerNoteItem
-                    note={item.note}
-                    depth={item.depth}
-                    active={item.note.path === currentId}
-                    onOpenNote={onOpenNote}
-                />
-            )
+    const anyExpanded = expandedTags.size > 0
+
+    const toolbarItems = useMemo(() => {
+        const sortItem = (key, [firstIcon, secondIcon], first, second) => {
+            const next = sort === first ? second : first
+
+            return {
+                key,
+                icon: sort === second ? secondIcon : firstIcon,
+                style: sort !== first && sort !== second && styles.inactive,
+                onPress: () => onChangeSort(next),
+                accessibilityLabel: t(TAG_SORT_LABELS[next])
+            }
         }
 
+        return [
+            sortItem('sort-name', [SortByAlpha, SortByAlpha], TAG_SORTS.NAME_ASC, TAG_SORTS.NAME_DESC),
+            sortItem('sort-usage', [ArrowDownward, ArrowUpward], TAG_SORTS.COUNT_DESC, TAG_SORTS.COUNT_ASC),
+            {
+                key: 'toggle-all',
+                icon: anyExpanded ? CollapseAll : ExpandAll,
+                onPress: onToggleCollapseAll,
+                accessibilityLabel: t(anyExpanded ? 'drawer.collapse_all' : 'drawer.expand_all')
+            }
+        ]
+    }, [sort, onChangeSort, anyExpanded, onToggleCollapseAll, t])
+
+    const onToggleTag = useCallback((key) => {
+        setExpandedTags((current) => {
+            const next = new Set(current)
+            if (!next.delete(key)) next.add(key)
+            return next
+        })
+    }, [])
+
+    const renderItem = useCallback(({ item }) => {
         return (
             <TagRow
+                tagKey={item.key}
                 name={item.name}
+                depth={item.depth}
                 count={item.count}
+                hasChildren={item.hasChildren}
                 expanded={item.expanded}
                 onToggle={onToggleTag}
             />
         )
-    }, [currentId, onOpenNote, onToggleTag])
+    }, [onToggleTag])
 
     return (
         <>
@@ -98,22 +124,22 @@ export function DrawerTagsView({ closeDrawer }) {
                     </View>
                 )}
             />
+
+            <DrawerToolbar>
+                {toolbarItems.map(({ key, ...item }) => (
+                    <DrawerToolbarButton
+                        key={key}
+                        {...item}
+                    />
+                ))}
+            </DrawerToolbar>
         </>
     )
 }
 
 const styles = StyleSheet.create({
-    tag: {
-        gap: SPACING.sm,
-        paddingVertical: SPACING.xs,
-        paddingStart: SPACING.sm,
-        paddingEnd: SPACING.lg,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-    },
-    tagName: {
-        flex: 1
+    inactive: {
+        opacity: 0.4
     },
     empty: {
         paddingVertical: SPACING.lg,
