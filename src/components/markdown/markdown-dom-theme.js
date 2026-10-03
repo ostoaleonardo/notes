@@ -5,6 +5,13 @@ import { buildLiveFormattingTheme } from './live-formatting/live-formatting'
 import { TRANSPARENT } from '../../constants/themes'
 import { SPACING } from '../../constants/spacing'
 import { INLINE_TAG_CLASS } from '../../constants/tags'
+import {
+    CALLOUT_CLASS,
+    CALLOUT_COLORS,
+    CALLOUT_TITLE_CLASS,
+    CALLOUT_TYPE_CLASS_PREFIX
+} from '../../constants/callouts'
+import { EMBED_CLASS, EMBED_TITLE_CLASS } from '../../constants/embeds'
 
 const buildDerivedColors = (colors) => ({
     ...colors,
@@ -167,6 +174,12 @@ export const buildEditorTheme = ({ fontSize, fontFamily, headingFontFamily, colo
     })
 }
 
+const buildCalloutCss = () => Object.entries(CALLOUT_COLORS).map(([type, color]) => `
+    .markdown-preview .${CALLOUT_TYPE_CLASS_PREFIX}${type} {
+        border-left-color: ${color}; background-color: ${color + TRANSPARENT[10]};
+    }
+    .markdown-preview .${CALLOUT_TYPE_CLASS_PREFIX}${type} .${CALLOUT_TITLE_CLASS} { color: ${color}; }`).join('')
+
 export const buildPreviewCss = ({ fontFamily, headingFontFamily, colors, fontSize }) => {
     const { onBackground: textColor, tertiary: linkColor, background: quoteBackgroundColor, codeBackground: codeBackgroundColor, thematicBreak: thematicBreakColor } = buildDerivedColors(colors)
 
@@ -197,6 +210,21 @@ export const buildPreviewCss = ({ fontFamily, headingFontFamily, colors, fontSiz
         margin: 0.4em 0; padding: 0.2em 0.8em;
         background-color: ${quoteBackgroundColor}; border-left: 4px solid ${linkColor};
     }
+    .markdown-preview mark { background-color: ${linkColor + TRANSPARENT[30]}; color: inherit; border-radius: 2px; }
+    .markdown-preview > div, .markdown-preview > details { margin: 0.6em 0; }
+    .markdown-preview .${CALLOUT_CLASS} {
+        margin: 0.6em 0; padding: 0.6em 0.8em; border-left: 4px solid ${linkColor}; border-radius: 4px;
+    }
+    .markdown-preview .${CALLOUT_TITLE_CLASS} { font-weight: bold; }
+    .markdown-preview .${CALLOUT_CLASS} > :last-child { margin-bottom: 0; }
+    .markdown-preview summary.${CALLOUT_TITLE_CLASS} { cursor: pointer; }
+    .markdown-preview .${CALLOUT_CLASS} > .${CALLOUT_TITLE_CLASS} + * { margin-top: 0.4em; }
+    ${buildCalloutCss()}
+    .markdown-preview .${EMBED_CLASS} {
+        margin: 0.6em 0; padding: 0.2em 0.8em; border-left: 2px solid ${thematicBreakColor};
+        background-color: ${quoteBackgroundColor};
+    }
+    .markdown-preview .${EMBED_TITLE_CLASS} { font-weight: bold; opacity: 0.6; font-size: 0.85em; margin-top: 0.4em; }
     .markdown-preview code {
         background-color: ${codeBackgroundColor}; border-radius: 4px; padding: 0.1em 0.3em;
         font-family: monospace;

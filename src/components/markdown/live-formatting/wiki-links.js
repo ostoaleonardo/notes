@@ -5,13 +5,16 @@ import { isRangeSelected, overlapsAny } from './utils'
 import { resolveWikiLinkTarget } from '@/utils/wiki-links'
 
 import { WIKI_LINK_PATTERN, WIKI_LINK_ANCHOR_SEPARATOR } from '@/constants/wiki-links'
+import { EMBED_IMAGE_PATTERN, EMBED_LIVE_CLASS, EMBED_MARKER } from '@/constants/embeds'
 
 export const findWikiLinkRanges = (text) => {
     const ranges = []
 
     for (const match of text.matchAll(WIKI_LINK_PATTERN)) {
-        const from = match.index
-        const to = from + match[0].length
+        const linkStart = match.index
+        const isEmbed = text[linkStart - 1] === EMBED_MARKER
+        const from = isEmbed ? linkStart - 1 : linkStart
+        const to = linkStart + match[0].length
         const linkText = match[1]
         const alias = match[2]
 
@@ -20,10 +23,10 @@ export const findWikiLinkRanges = (text) => {
         const separatorIndex = head.lastIndexOf('/')
 
         const labelFrom = alias !== undefined
-            ? from + 2 + linkText.length + 1
-            : from + 2 + (separatorIndex === -1 ? 0 : separatorIndex + 1)
+            ? linkStart + 2 + linkText.length + 1
+            : linkStart + 2 + (separatorIndex === -1 ? 0 : separatorIndex + 1)
 
-        ranges.push({ from, to, linkText, labelFrom, labelTo: to - 2 })
+        ranges.push({ from, to, linkText, labelFrom, labelTo: to - 2, isEmbed })
     }
 
     return ranges
@@ -45,11 +48,12 @@ const getResolverInputs = (noteEntries) => {
 export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntries, selection }) => {
     const { notes, notePaths } = getResolverInputs(noteEntries)
 
-    for (const { from, to, linkText, labelFrom, labelTo } of wikiLinkRanges) {
+    for (const { from, to, linkText, labelFrom, labelTo, isEmbed } of wikiLinkRanges) {
         if (overlapsAny(from, to, codeRanges)) continue
 
         const resolved = !!resolveWikiLinkTarget(linkText, notes, notePaths)
-        const className = resolved ? 'cm-live-wikilink' : 'cm-live-wikilink-broken'
+        const isEmbedTarget = isEmbed && (resolved || EMBED_IMAGE_PATTERN.test(linkText.trim()))
+        const className = isEmbedTarget ? EMBED_LIVE_CLASS : resolved ? 'cm-live-wikilink' : 'cm-live-wikilink-broken'
 
         if (isRangeSelected(selection, from, to)) {
             ranges.push(Decoration.mark({ class: className }).range(from, to))
@@ -64,5 +68,6 @@ export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntr
 
 export const wikiLinksTheme = ({ linkColor, onBackgroundColor }) => ({
     '.cm-live-wikilink': { color: linkColor, fontWeight: 'bold' },
+    [`.${EMBED_LIVE_CLASS}`]: { color: linkColor, fontWeight: 'bold', fontStyle: 'italic' },
     '.cm-live-wikilink-broken': { color: onBackgroundColor, opacity: 0.5, textDecoration: 'underline dashed' }
 })

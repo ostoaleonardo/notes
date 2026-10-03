@@ -8,7 +8,7 @@ import {
     MARKDOWN_WIKI_LINK_PATTERN
 } from '@/constants/wiki-links'
 
-const escapeHtml = (text) => text
+export const escapeHtml = (text) => text
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')

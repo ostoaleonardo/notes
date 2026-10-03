@@ -1,0 +1,9 @@
+export const HIGHLIGHT_LIVE_PATTERN = /==(?=\S)([^=\n]+?)==/g
+export const COMMENT_LIVE_PATTERN = /%%[\s\S]*?%%/g
+export const COMMENT_OR_CODE_PATTERN = /(```|~~~)[\s\S]*?(\1|$)|`[^`\n]*`|%%[\s\S]*?%%/g
+export const HIGHLIGHT_OPENING_INVALID_PATTERN = /[\s=]/
+export const HIGHLIGHT_LIVE_CLASS = 'cm-live-highlight'
+export const COMMENT_LIVE_CLASS = 'cm-live-comment'
+export const COMMENT_MARKER = '%%'
+export const HIGHLIGHT_MARKER = '=='
+export const HIGHLIGHT_MARKER_CHAR_CODE = 0x3D

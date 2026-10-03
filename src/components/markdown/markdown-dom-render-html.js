@@ -5,6 +5,8 @@ import texmath from 'markdown-it-texmath'
 import footnote from 'markdown-it-footnote'
 import taskLists from 'markdown-it-task-lists'
 
+import { markdownItExtras } from './markdown-it-extras'
+
 import { findInlineTags } from '@/utils/inline-tags'
 
 import { TAG_LINK_SCHEME } from '@/constants/tags'
@@ -14,6 +16,7 @@ const md = new MarkdownIt({ html: true, linkify: true })
     .use(taskLists, { enabled: true })
     .use(texmath, { engine: katex, delimiters: 'dollars' })
     .use(footnote)
+    .use(markdownItExtras)
 
 const wikiLinkProtocol = WIKI_LINK_SCHEME.split(':')[0]
 const tagLinkProtocol = TAG_LINK_SCHEME.split(':')[0]
