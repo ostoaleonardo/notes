@@ -108,14 +108,13 @@ beforeEach(() => {
 })
 
 describe('listMarkdownFiles', () => {
-    test('keeps only .md files and excludes sidecar json files', async () => {
+    test('keeps only .md files and excludes json files', async () => {
         const { result } = await renderFileStorageHook()
 
         seedDirectory('content://repo', [
             new File('content://repo/note.md'),
             new File('content://repo/NOTE-UPPER.MD'),
-            new File('content://repo/.notes-meta.json'),
-            new File('content://repo/.tags.json'),
+            new File('content://repo/data.json'),
             new File('content://repo/image.png'),
             new Directory('content://repo/templates')
         ])

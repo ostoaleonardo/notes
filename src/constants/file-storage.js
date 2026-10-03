@@ -1,7 +1,5 @@
 // Files
 export const NOTE_FILE_EXTENSION = '.md'
-export const TAGS_FILENAME = 'tags.json'
-export const LEGACY_TAGS_FILENAME = '.tags.json'
 export const VERSIONS_FILENAME_SUFFIX = '.versions.json'
 export const CORRUPT_FILE_SUFFIX = '.corrupt'
 export const NOTE_PATH_SEPARATOR = '::'

@@ -13,7 +13,7 @@ import { buildLegacyNoteBody } from '@/utils/legacy-note-body'
 
 import { LEGACY_ALL_TAG_ID } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { TAGS_FILENAME, LEGACY_TAGS_FILENAME, TEMPLATES_FOLDER_NAME } from '@/constants/file-storage'
+import { TEMPLATES_FOLDER_NAME } from '@/constants/file-storage'
 import { DEFAULT_IMAGE_EXTENSION, IMAGE_EXTENSION_PATTERN } from '@/constants/image'
 import { NOTE_KEY_PREFIX } from '@/constants/note-key'
 
@@ -58,10 +58,8 @@ const resolveTagNames = (values, tagNameById) => {
 }
 
 // Legacy tag dictionaries (id -> name) are only read to resolve ids while migrating old notes.
-const loadLegacyTagNameById = async (rootUri, storage, fileStorage) => {
-    const stored = await fileStorage.readNotesJson(rootUri, TAGS_FILENAME, null)
-        ?? await fileStorage.readJson(rootUri, LEGACY_TAGS_FILENAME, null)
-        ?? JSON.parse(await storage.getItem(STORAGE_KEYS.CATEGORIES) || '[]')
+const loadLegacyTagNameById = async (storage) => {
+    const stored = JSON.parse(await storage.getItem(STORAGE_KEYS.CATEGORIES) || '[]')
 
     const map = new Map()
     for (const tag of stored) {
@@ -162,7 +160,7 @@ export const loadRepositoryData = async (tree, rootRepository, storage, fileStor
         rootRepository,
         storage,
         fileStorage,
-        () => loadLegacyTagNameById(rootUri, storage, fileStorage)
+        () => loadLegacyTagNameById(storage)
     )
 
     await migrateLegacyVersionFiles(tree, rootUri, storage, fileStorage)
