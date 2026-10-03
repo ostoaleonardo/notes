@@ -36,6 +36,16 @@ describe('resolve embeds', () => {
         expect(result).toContain('[[Alpha]]')
     })
 
+    test('leaves embeds inside inline code untouched', () => {
+        expect(resolve('use `![[Alpha]]` here')).toBe('use `![[Alpha]]` here')
+    })
+
+    test('leaves embeds inside fenced blocks untouched', () => {
+        const value = '```\n![[Alpha]]\n```'
+
+        expect(resolve(value)).toBe(value)
+    })
+
     test('does not embed a note into itself', () => {
         const result = resolve('![[Loop]]')
 

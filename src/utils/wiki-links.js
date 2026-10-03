@@ -13,6 +13,7 @@ import {
     BACKLINK_TITLE_CLASS,
     BACKLINK_PATH_CLASS
 } from '@/constants/backlinks'
+import { mapOutsideCode } from '@/utils/outside-code'
 
 export const escapeHtml = (text) => text
     .replace(/&/g, '&amp;')
@@ -91,26 +92,29 @@ export const resolveWikiLinkTarget = (linkText, notes, notePaths = new Map()) =>
     resolveWikiLink(linkText, notes, notePaths).note
 )
 
-export const resolveWikiLinks = (value, notes, notePaths = new Map()) => value.replace(
-    WIKI_LINK_PATTERN,
-    (match, linkText, alias) => {
-        const { note, target, anchor } = resolveWikiLink(linkText, notes, notePaths)
-        const { path, title } = parseWikiLinkText(target)
+export const resolveWikiLinks = (value, notes, notePaths = new Map()) => mapOutsideCode(
+    value,
+    (segment) => segment.replace(
+        WIKI_LINK_PATTERN,
+        (match, linkText, alias) => {
+            const { note, target, anchor } = resolveWikiLink(linkText, notes, notePaths)
+            const { path, title } = parseWikiLinkText(target)
 
-        if (!title.trim()) return escapeHtml((alias || anchor).trim())
+            if (!title.trim()) return escapeHtml((alias || anchor).trim())
 
-        const defaultLabel = anchor ? `${title}${WIKI_LINK_ANCHOR_LABEL_SEPARATOR}${anchor}` : title
-        const label = escapeHtml((alias || defaultLabel).trim())
+            const defaultLabel = anchor ? `${title}${WIKI_LINK_ANCHOR_LABEL_SEPARATOR}${anchor}` : title
+            const label = escapeHtml((alias || defaultLabel).trim())
 
-        if (!note) {
-            const encodedPath = encodeURIComponent(path)
-            const encodedTitle = encodeURIComponent(title)
-            const missingHref = `${WIKI_LINK_SCHEME}${WIKI_LINK_MISSING_PREFIX}${encodedPath}/${encodedTitle}`
-            return `<a href="${missingHref}" class="wiki-link-broken">${label}</a>`
+            if (!note) {
+                const encodedPath = encodeURIComponent(path)
+                const encodedTitle = encodeURIComponent(title)
+                const missingHref = `${WIKI_LINK_SCHEME}${WIKI_LINK_MISSING_PREFIX}${encodedPath}/${encodedTitle}`
+                return `<a href="${missingHref}" class="wiki-link-broken">${label}</a>`
+            }
+
+            return `<a href="${WIKI_LINK_SCHEME}${encodeURIComponent(note.path)}" class="wiki-link">${label}</a>`
         }
-
-        return `<a href="${WIKI_LINK_SCHEME}${encodeURIComponent(note.path)}" class="wiki-link">${label}</a>`
-    }
+    )
 )
 
 export const parseMissingWikiLinkTarget = (encoded) => {

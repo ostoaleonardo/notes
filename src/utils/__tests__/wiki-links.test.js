@@ -41,6 +41,24 @@ describe('matching note', () => {
     })
 })
 
+describe('code spans and blocks', () => {
+    test('leaves a wiki link inside inline code untouched', () => {
+        expect(resolveWikiLinks('use `[[Meeting Notes]]` here', notes)).toBe('use `[[Meeting Notes]]` here')
+    })
+
+    test('leaves a wiki link inside a fenced block untouched', () => {
+        const value = '```\n[[Meeting Notes]]\n```'
+
+        expect(resolveWikiLinks(value, notes)).toBe(value)
+    })
+
+    test('still resolves wiki links next to code', () => {
+        const result = resolveWikiLinks('`code` [[Meeting Notes]]', notes)
+
+        expect(result).toBe('`code` <a href="wikilink://note-1" class="wiki-link">Meeting Notes</a>')
+    })
+})
+
 describe('missing note', () => {
     test('renders a clickable broken link carrying the missing title when no note matches', () => {
         const result = resolveWikiLinks('[[Unknown Note]]', notes)
