@@ -19,6 +19,7 @@ import { Keep } from '@/icons/keep'
 import { KeepFilled } from '@/icons/keep-filled'
 import { Link } from '@/icons/link'
 import { NoteStack } from '@/icons/note-stack'
+import { Shapes } from '@/icons/shapes'
 import { Share as ShareIcon } from '@/icons/share'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
@@ -30,6 +31,7 @@ export const useNoteActionsMenu = ({
     onOpenExportDialog,
     onOpenShareDialog,
     onOpenDeleteDialog,
+    onSaveAsTemplate,
     showBacklinks,
     onToggleShowBacklinks
 }) => {
@@ -111,6 +113,12 @@ export const useNoteActionsMenu = ({
                     onPress={onDuplicate}
                 />
             ),
+            <MenuItem
+                key='save-as-template'
+                title={t('button.save_as_template')}
+                leadingIcon={(props) => <Shapes {...props} />}
+                onPress={() => onTrigger(onSaveAsTemplate)}
+            />,
             <MenuItem
                 key='version-history'
                 title={t('title.version_history')}

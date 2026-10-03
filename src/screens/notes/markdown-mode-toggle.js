@@ -27,6 +27,7 @@ export const MarkdownModeToggle = ({
     onOpenExportDialog,
     onOpenShareDialog,
     onOpenDeleteDialog,
+    onSaveAsTemplate,
     showBacklinks,
     onToggleShowBacklinks
 }) => {
@@ -42,6 +43,7 @@ export const MarkdownModeToggle = ({
         onOpenExportDialog,
         onOpenShareDialog,
         onOpenDeleteDialog,
+        onSaveAsTemplate,
         showBacklinks,
         onToggleShowBacklinks
     })

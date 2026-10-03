@@ -171,14 +171,12 @@ export const NoteEditorScreen = ({
         onOpenTags: tagsSheet.onOpen,
         onOpenTemplates: noteTemplates.onOpen,
         onOpenRecents: recentsSheet.onOpen,
-        onOpenSearch,
-        onSaveAsTemplate: noteTemplates.onSaveAsTemplate
+        onOpenSearch
     }), [
         tagsSheet.onOpen,
         noteTemplates.onOpen,
         recentsSheet.onOpen,
-        onOpenSearch,
-        noteTemplates.onSaveAsTemplate
+        onOpenSearch
     ])
 
     return (
@@ -210,6 +208,7 @@ export const NoteEditorScreen = ({
                         onOpenShareDialog={shareDialog.onOpen}
                         onOpenExportDialog={exportDialog.onOpen}
                         onOpenDeleteDialog={noteDelete.onOpen}
+                        onSaveAsTemplate={noteTemplates.onSaveAsTemplate}
                         onOpenVersionHistory={versionHistory.onOpen}
                         onToggleShowBacklinks={onToggleShowBacklinks}
                     />
