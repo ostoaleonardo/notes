@@ -6,6 +6,7 @@ import { Pressable } from '@/components/button/pressable'
 
 import { COLORS } from '@/constants/themes'
 import { FONTS } from '@/constants/fonts'
+import { SPACING } from '@/constants/spacing'
 
 export function ErrorBoundary({ retry }) {
     const { t } = useTranslation()
@@ -13,7 +14,7 @@ export function ErrorBoundary({ retry }) {
 
     return (
         <View style={{ ...styles.container, backgroundColor: colors.background }}>
-            <View style={{ gap: 16 }}>
+            <View style={{ gap: SPACING.lg }}>
                 <Typography
                     fontSize={32}
                     textAlign='center'
@@ -45,8 +46,8 @@ export function ErrorBoundary({ retry }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        gap: 32,
-        padding: 24,
+        gap: SPACING.xxxl,
+        padding: SPACING.xxl,
         alignItems: 'center',
         justifyContent: 'center'
     }

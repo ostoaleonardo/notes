@@ -3,6 +3,7 @@ import { EditorView } from '@codemirror/view'
 import { buildLiveFormattingTheme } from './live-formatting/live-formatting'
 
 import { TRANSPARENT } from '../../constants/themes'
+import { SPACING } from '../../constants/spacing'
 
 const buildDerivedColors = (colors) => ({
     ...colors,
@@ -35,8 +36,8 @@ export const buildTitleTextareaStyle = ({ fontFamily, onBackground }) => ({
 })
 
 export const buildMetaLabelStyle = ({ onBackground, fontFamily }) => ({
-    marginTop: 8,
-    marginBottom: 16,
+    marginTop: SPACING.sm,
+    marginBottom: SPACING.lg,
     fontSize: '9px',
     textTransform: 'uppercase',
     opacity: 0.5,
@@ -48,8 +49,8 @@ export const buildPropertiesToggleStyle = ({ onBackground }) => ({
     display: 'flex',
     alignItems: 'center',
     gap: '4px',
-    marginTop: 4,
-    marginBottom: 8,
+    marginTop: SPACING.xxs,
+    marginBottom: SPACING.sm,
     fontSize: '10px',
     textTransform: 'uppercase',
     opacity: 0.5,
@@ -64,7 +65,7 @@ export const buildPropertyRowStyle = ({ onBackground }) => ({
     alignItems: 'center',
     flexWrap: 'wrap',
     gap: '6px',
-    marginBottom: 16,
+    marginBottom: SPACING.lg,
     fontSize: '13px',
     color: onBackground
 })
@@ -102,7 +103,7 @@ export const buildAddChipStyle = ({ tertiary, onTertiary }) => ({
 export const buildInvalidPropertiesBannerStyle = ({ errorContainer, onErrorContainer, fontFamily }) => ({
     padding: '12px',
     borderRadius: '8px',
-    marginBottom: 16,
+    marginBottom: SPACING.lg,
     backgroundColor: errorContainer,
     color: onErrorContainer,
     fontFamily

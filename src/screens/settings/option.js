@@ -4,6 +4,7 @@ import { useTheme } from 'react-native-paper'
 import { Typography } from '@/components/typography'
 
 import { getGroupedRadius } from '@/utils/grouped-card-style'
+import { SPACING } from '@/constants/spacing'
 
 export function Option({ title, description, rightContent, onPress, visible = true, isFirst, isLast }) {
     const { colors } = useTheme()
@@ -41,14 +42,14 @@ export function Option({ title, description, rightContent, onPress, visible = tr
 
 const styles = StyleSheet.create({
     container: {
-        gap: 16,
-        padding: 16,
+        gap: SPACING.lg,
+        padding: SPACING.lg,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
     },
     left: {
         flex: 1,
-        gap: 4
+        gap: SPACING.xxs
     }
 })

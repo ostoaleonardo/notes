@@ -1,6 +1,7 @@
 import i18n from '../i18n/i18next'
 
-import { RADIUS, TRANSPARENT } from '@/constants/themes'
+import { TRANSPARENT } from '@/constants/themes'
+import { RADIUS } from '@/constants/radius'
 
 const getFeatureCard = (colors, items) => {
     const border = colors.onBackground + TRANSPARENT[5]

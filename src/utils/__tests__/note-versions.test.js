@@ -1,5 +1,7 @@
 import { randomUUID } from 'expo-crypto'
 
+import { MAX_STORED_VERSIONS } from '@/constants/default-values'
+
 import {
     commitNoteVersion,
     loadNoteVersions,
@@ -185,5 +187,23 @@ describe('commit note version', () => {
 
         expect(committed).toBe(false)
         expect(seed.size).toBe(0)
+    })
+})
+
+describe('version pruning', () => {
+    test('drops the oldest versions once the cap is exceeded', async () => {
+        const seed = new Map()
+        const fileStorage = createFakeFileStorage(seed)
+        const total = MAX_STORED_VERSIONS + 3
+
+        for (let index = 0; index < total; index++) {
+            await commitNoteVersion(fileStorage, LOCATION, FILENAME, 'Note', `line ${index}`)
+        }
+
+        const versions = await loadNoteVersions(fileStorage, LOCATION, FILENAME)
+
+        expect(versions).toHaveLength(MAX_STORED_VERSIONS)
+        expect(versions[0].content).toBe('line 3')
+        expect(versions[versions.length - 1].content).toBe(`line ${total - 1}`)
     })
 })

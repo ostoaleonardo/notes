@@ -4,6 +4,7 @@ import { File } from 'expo-file-system'
 import { bytesToBase64 } from '@/utils/base64'
 
 import { MIME_TYPES } from '@/constants/mime-types'
+import { MAX_PREVIEW_IMAGE_CACHE } from '@/constants/image'
 import { MARKDOWN_IMAGE_PATTERN, HTML_IMAGE_PATTERN } from '@/constants/markdown-patterns'
 
 const EMPTY_MEDIA_MAP = new Map()
@@ -51,7 +52,11 @@ export const useResolvedPreviewMarkdown = (value) => {
             if (cancelled) return
 
             const resolvedUrls = new Map(pairs)
-            resolvedUrls.forEach((dataUrl, url) => cache.set(url, dataUrl))
+            resolvedUrls.forEach((dataUrl, url) => {
+                cache.delete(url)
+                cache.set(url, dataUrl)
+            })
+            while (cache.size > MAX_PREVIEW_IMAGE_CACHE) cache.delete(cache.keys().next().value)
             setMediaMap(resolvedUrls)
 
             const withMarkdownResolved = value.replace(

@@ -109,33 +109,6 @@ const lightTheme = {
     }
 }
 
-export const RADIUS = {
-    outer: 16,
-    inner: 8
-}
-
-export const GROUP_CORNERS = {
-    first: { left: 24, right: 6 },
-    middle: { left: 6, right: 6 },
-    last: { left: 6, right: 24 }
-}
-
-export const GROUP_PILL_RADIUS = 24
-
-export const SWITCH_TRACK = {
-    width: 52,
-    height: 32,
-    borderWidth: 2
-}
-
-export const SWITCH_THUMB = {
-    off: 16,
-    on: 24
-}
-
-export const SCROLLABLE_MENU_MAX_HEIGHT = 280
-export const MENU_ITEM_INDENT = 16
-
 export const THEMES = {
     light: lightTheme,
     dark: darkTheme
@@ -181,9 +154,3 @@ export const ACCENT_COLORS = {
         borderColor: '#002f6c'
     }
 }
-
-export const THEME_OPTIONS = ['light', 'dark', 'system']
-export const ACCENT_OPTIONS = ['red', 'yellow', 'blue']
-export const FREE_ACCENT = 'white'
-
-export const SWITCH_HIT_SLOP = 8

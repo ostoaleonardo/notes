@@ -1,4 +1,7 @@
+import { SPACING } from './spacing'
 export const BUTTON_SIZE = 44
+
+export const GROUP_GAP = 2
 
 export const BUTTON_DISABLED_OPACITY = 0.4
 
@@ -14,5 +17,5 @@ export const ICON_TOGGLE = {
     iconSize: 20,
     iconSizeWithLabel: 16,
     labelPaddingHorizontal: 16,
-    gap: 6
+    gap: SPACING.xs
 }

@@ -8,6 +8,7 @@ import { Typography } from '@/components/typography'
 import { toggleTagQualifier } from '@/utils/search-query'
 
 import { FONTS } from '@/constants/fonts'
+import { SPACING } from '@/constants/spacing'
 
 export function SearchTagFilters({ query, setQuery, tags, parsed }) {
     const { t } = useTranslation()
@@ -58,10 +59,10 @@ export function SearchTagFilters({ query, setQuery, tags, parsed }) {
 
 const styles = StyleSheet.create({
     scroll: {
-        paddingHorizontal: 16
+        paddingHorizontal: SPACING.lg
     },
     carousel: {
-        gap: 8,
+        gap: SPACING.sm,
         flexDirection: 'row',
         alignItems: 'center'
     },

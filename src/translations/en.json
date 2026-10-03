@@ -242,7 +242,9 @@
 		"search": "Search notes",
 		"collapse_all": "Collapse all",
 		"expand_all": "Expand all",
-		"open": "Open drawer"
+		"open": "Open drawer",
+		"notes": "Notes",
+		"change_view": "Change view"
 	},
 	"templates": {
 		"journal": "Journal",

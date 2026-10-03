@@ -5,6 +5,7 @@ import { AnimatedView } from '../animated/animated-view'
 import { Typography } from '../typography'
 
 import { BUTTON_SIZE } from '@/constants/button'
+import { SPACING } from '@/constants/spacing'
 
 export function SplitButtonPrimary({ icon: Icon, label, onPress }) {
     const { colors } = useTheme()
@@ -50,9 +51,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     content: {
-        gap: 8,
+        gap: SPACING.sm,
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: 16
+        paddingHorizontal: SPACING.lg
     }
 })

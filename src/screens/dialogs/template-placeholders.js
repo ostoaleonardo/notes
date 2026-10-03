@@ -9,6 +9,7 @@ import { renderTemplate } from '@/utils/render-template'
 
 import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/dialog'
 import { TEMPLATE_PLACEHOLDERS } from '@/constants/template-placeholders'
+import { SPACING } from '@/constants/spacing'
 
 export function TemplatePlaceholders({ visible, onDismiss }) {
     const { t } = useTranslation()
@@ -60,6 +61,6 @@ export function TemplatePlaceholders({ visible, onDismiss }) {
 
 const styles = StyleSheet.create({
     list: {
-        gap: 12
+        gap: SPACING.md
     }
 })

@@ -7,6 +7,7 @@ import { RecentsButton } from '@/components/app-bar/recents-button'
 import { Plus } from '@/icons/plus'
 import { Search } from '@/icons/search'
 import { UploadFile } from '@/icons/upload-file'
+import { SPACING } from '@/constants/spacing'
 
 export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, onOpenSearch, recentCount }) {
     const { t } = useTranslation()
@@ -54,7 +55,7 @@ export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, onOpenS
 
 const styles = StyleSheet.create({
     toolbar: {
-        paddingHorizontal: 4,
+        paddingHorizontal: SPACING.xxs,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',

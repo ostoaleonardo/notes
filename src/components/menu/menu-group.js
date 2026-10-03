@@ -1,7 +1,8 @@
 import { View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
-import { RADIUS, TRANSPARENT } from '@/constants/themes'
+import { TRANSPARENT } from '@/constants/themes'
+import { RADIUS } from '@/constants/radius'
 
 export function MenuGroup({ children, first = true, last = true }) {
     const { colors } = useTheme()

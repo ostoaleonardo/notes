@@ -6,6 +6,7 @@ import { SearchListSection } from './search-list-section'
 
 import { Close } from '@/icons/close'
 import { Search } from '@/icons/search'
+import { SPACING } from '@/constants/spacing'
 
 export function SavedSearches({ saved, onSelect, onDelete }) {
     const { t } = useTranslation()
@@ -34,7 +35,7 @@ export function SavedSearches({ saved, onSelect, onDelete }) {
 
 const styles = StyleSheet.create({
     item: {
-        paddingLeft: 16
+        paddingLeft: SPACING.lg
     },
     label: {
         flex: 1

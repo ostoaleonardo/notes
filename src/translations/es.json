@@ -242,7 +242,9 @@
 		"search": "Buscar notas",
 		"collapse_all": "Colapsar todo",
 		"expand_all": "Expandir todo",
-		"open": "Abrir menú"
+		"open": "Abrir menú",
+		"notes": "Notas",
+		"change_view": "Cambiar vista"
 	},
 	"templates": {
 		"journal": "Diario",

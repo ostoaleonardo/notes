@@ -17,6 +17,7 @@ import { Check } from '@/icons/check'
 import { DEFAULT_DELETE_BEHAVIOR, DELETE_BEHAVIORS } from '@/constants/delete-behavior'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { TRANSPARENT } from '@/constants/themes'
+import { SPACING } from '@/constants/spacing'
 
 const OPTIONS = Object.values(DELETE_BEHAVIORS)
 
@@ -79,6 +80,6 @@ const styles = StyleSheet.create({
     },
     item: {
         flexGrow: 1,
-        marginRight: 12
+        marginRight: SPACING.md
     }
 })

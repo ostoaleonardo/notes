@@ -15,6 +15,7 @@ import { getRepositoryNoteCount } from '@/utils/repository-note-counts'
 import { getRepositoryPath } from '@/utils/repository-path'
 
 import { OpenInNew } from '@/icons/open-in-new'
+import { SPACING } from '@/constants/spacing'
 
 export function RepositoryItem({
     repository,
@@ -151,21 +152,21 @@ export function RepositoryItem({
 
 const styles = StyleSheet.create({
     container: {
-        paddingVertical: 16,
-        gap: 16
+        paddingVertical: SPACING.lg,
+        gap: SPACING.lg
     },
     row: {
-        paddingLeft: 20,
-        paddingRight: 8,
+        paddingLeft: SPACING.xl,
+        paddingRight: SPACING.sm,
         alignItems: 'center',
         flexDirection: 'row'
     },
     content: {
         flex: 1,
-        gap: 4
+        gap: SPACING.xxs
     },
     structure: {
-        paddingHorizontal: 20,
-        gap: 12
+        paddingHorizontal: SPACING.xl,
+        gap: SPACING.md
     }
 })

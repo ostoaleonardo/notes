@@ -6,6 +6,7 @@ import { useTheme } from 'react-native-paper'
 import { LargeInput } from '@/components/input/large-input'
 import { Pressable } from '@/components/button/pressable'
 import { Section } from '@/components/section'
+import { SPACING } from '@/constants/spacing'
 
 export function LinkMarkdown({ onClose, onInsert }) {
     const { t } = useTranslation()
@@ -64,11 +65,11 @@ export function LinkMarkdown({ onClose, onInsert }) {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        gap: 24,
-        paddingVertical: 24
+        gap: SPACING.xxl,
+        paddingVertical: SPACING.xxl
     },
     field: {
-        paddingHorizontal: 16
+        paddingHorizontal: SPACING.lg
     },
     buttons: {
         width: '100%',

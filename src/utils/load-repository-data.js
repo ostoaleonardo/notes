@@ -177,7 +177,10 @@ const purgeAllTag = (tags, rootUri, fileStorage) => {
     return filtered
 }
 
-const migrateLegacyVersionFiles = async (tree, rootUri, fileStorage) => {
+const migrateLegacyVersionFiles = async (tree, rootUri, storage, fileStorage) => {
+    const migratedKey = STORAGE_KEYS.LEGACY_VERSIONS_MIGRATED_PREFIX + rootUri
+    if (await storage.getItem(migratedKey)) return
+
     const folderPaths = buildRepositoryPaths(tree)
 
     for (const repository of tree) {
@@ -186,6 +189,8 @@ const migrateLegacyVersionFiles = async (tree, rootUri, fileStorage) => {
 
     const templates = fileStorage.findDirectory(rootUri, TEMPLATES_FOLDER_NAME)
     if (templates) await fileStorage.migrateLegacyVersions(templates.uri, rootUri, TEMPLATES_FOLDER_NAME)
+
+    await storage.setItem(migratedKey, 'true')
 }
 
 // Tags and version history live in the root .notes folder, shared across the whole tree.
@@ -208,7 +213,7 @@ export const loadRepositoryData = async (tree, rootRepository, storage, fileStor
     const { tags: namedTags, changed: tagsMigrated } = migrateTagsToNames(purgedRawTags)
     if (tagsMigrated) fileStorage.writeNotesJson(rootUri, TAGS_FILENAME, namedTags)
 
-    await migrateLegacyVersionFiles(tree, rootUri, fileStorage)
+    await migrateLegacyVersionFiles(tree, rootUri, storage, fileStorage)
 
     const notes = await loadFromTree(tree, loadNotesFromFolder, fileStorage)
 

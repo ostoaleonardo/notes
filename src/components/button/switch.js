@@ -4,7 +4,7 @@ import { useTheme } from 'react-native-paper'
 
 import { useAnimatedProgress } from '@/hooks/use-animated-progress'
 
-import { SWITCH_TRACK, SWITCH_THUMB, SWITCH_HIT_SLOP } from '@/constants/themes'
+import { SWITCH_TRACK, SWITCH_THUMB, SWITCH_HIT_SLOP } from '@/constants/switch'
 
 const OFF_INSET = (SWITCH_TRACK.height - SWITCH_THUMB.off) / 2
 const ON_INSET = (SWITCH_TRACK.height - SWITCH_THUMB.on) / 2

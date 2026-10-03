@@ -3,6 +3,7 @@ import { TouchableRipple, useTheme } from 'react-native-paper'
 
 import { Section } from '@/components/section'
 import { Typography } from '@/components/typography'
+import { SPACING } from '@/constants/spacing'
 
 export function SearchListSection({
     title,
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     item: {
-        gap: 12,
+        gap: SPACING.md,
         flexDirection: 'row',
         alignItems: 'center'
     }

@@ -18,6 +18,7 @@ import { Undo } from '@/icons/undo'
 import { MARKDOWN_CONTROLS } from '@/constants/markdown-controls'
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { TEMPLATE_SCOPE, TOOLBAR_BUTTON_KEYS } from '@/constants/toolbar'
+import { SPACING } from '@/constants/spacing'
 
 export const MarkdownToolbar = memo(function MarkdownToolbar({
     mode,
@@ -151,11 +152,11 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        paddingHorizontal: 4
+        paddingHorizontal: SPACING.xxs
     },
     divider: {
         width: 1,
         height: 24,
-        marginHorizontal: 4
+        marginHorizontal: SPACING.xxs
     }
 })

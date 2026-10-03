@@ -4,7 +4,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { Typography } from '../typography'
 
-import { RADIUS } from '@/constants/themes'
+import { RADIUS } from '@/constants/radius'
+import { SPACING } from '@/constants/spacing'
 
 let listener = null
 let currentMessage = null
@@ -38,7 +39,7 @@ export function GlobalSnackbarHost() {
             visible={!!message}
             onDismiss={onDismiss}
             wrapperStyle={{
-                paddingHorizontal: 8,
+                paddingHorizontal: SPACING.sm,
                 paddingBottom: bottom + 8
             }}
             style={{

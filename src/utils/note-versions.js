@@ -3,6 +3,8 @@ import { randomUUID } from 'expo-crypto'
 import { applyLineDelta, buildLineDelta } from './line-delta'
 import { buildVersionKey } from './note-version-location'
 
+import { MAX_STORED_VERSIONS } from '@/constants/default-values'
+
 const EMPTY_STORE = { head: '', entries: [] }
 
 export const packVersions = (versions) => {
@@ -63,6 +65,7 @@ export const commitNoteVersion = async (fileStorage, location, filename, title, 
     fileStorage.writeVersions(location.rootUri, key, {
         head: content,
         entries: [...previous, { id: randomUUID(), title, createdAt: Date.now(), delta: null }]
+            .slice(-MAX_STORED_VERSIONS)
     })
 
     return true

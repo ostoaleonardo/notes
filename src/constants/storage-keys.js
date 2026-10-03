@@ -14,6 +14,7 @@ export const STORAGE_KEYS = {
     ACCENT: 'accent',
     LANGUAGE: 'language',
     COLLAPSED_FOLDERS: 'collapsed-folders',
+    DRAWER_VIEW: 'drawer-view',
     ALWAYS_UPDATE_WIKI_LINKS: 'always-update-wiki-links',
     LINK_FORMAT: 'link-format',
     SHOW_NOTE_PROPERTIES: 'show-note-properties',
@@ -26,6 +27,7 @@ export const STORAGE_KEYS = {
     CURRENT_NOTE: 'current-note',
     RECENT_NOTES: 'recent-notes',
     WELCOME_NOTE_CREATED: 'welcome-note-created',
+    LEGACY_VERSIONS_MIGRATED_PREFIX: 'legacy-versions-migrated:',
 
     // Search
     RECENT_SEARCHES: 'recent-searches',

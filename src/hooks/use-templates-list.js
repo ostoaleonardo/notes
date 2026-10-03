@@ -3,8 +3,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTemplates } from './use-templates'
 
 export function useTemplatesList(deps = [], { immediate = true } = {}) {
-    const { listTemplates } = useTemplates()
+    const { listTemplates, listTemplateFolders } = useTemplates()
     const [templates, setTemplates] = useState([])
+    const [folders, setFolders] = useState([])
     const mountedRef = useRef(true)
 
     useEffect(() => () => {
@@ -12,15 +13,18 @@ export function useTemplatesList(deps = [], { immediate = true } = {}) {
     }, [])
 
     const refresh = useCallback(() => (
-        listTemplates().then((result) => {
-            if (mountedRef.current) setTemplates(result)
+        Promise.all([listTemplates(), listTemplateFolders()]).then(([result, folderPaths]) => {
+            if (!mountedRef.current) return
+
+            setTemplates(result)
+            setFolders(folderPaths)
         })
-    ), [listTemplates])
+    ), [listTemplates, listTemplateFolders])
 
     useEffect(() => {
         if (immediate) refresh()
          
     }, deps)
 
-    return { templates, refresh }
+    return { templates, folders, refresh }
 }

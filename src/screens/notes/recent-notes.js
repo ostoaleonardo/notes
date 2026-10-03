@@ -23,6 +23,7 @@ import { Plus } from '@/icons/plus'
 
 import { ROUTES } from '@/constants/routes'
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
+import { SPACING } from '@/constants/spacing'
 
 export function RecentNotes({ onClose, home = false }) {
     const { t } = useTranslation()
@@ -167,8 +168,8 @@ const styles = StyleSheet.create({
     },
     actions: {
         width: '100%',
-        paddingVertical: 24,
-        paddingHorizontal: 16,
+        paddingVertical: SPACING.xxl,
+        paddingHorizontal: SPACING.lg,
         flexDirection: 'row',
         justifyContent: 'center'
     },

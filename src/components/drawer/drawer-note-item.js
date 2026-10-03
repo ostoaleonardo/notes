@@ -3,6 +3,7 @@ import { Pressable, StyleSheet } from 'react-native'
 
 import { AnimatedView } from '@/components/animated/animated-view'
 import { Typography } from '../typography'
+import { SPACING } from '@/constants/spacing'
 
 export const DrawerNoteItem = memo(function DrawerNoteItem({ note, depth, active, onOpenNote }) {
     return (
@@ -11,7 +12,7 @@ export const DrawerNoteItem = memo(function DrawerNoteItem({ note, depth, active
                 onPress={() => onOpenNote(note.path)}
                 style={{
                     ...styles.container,
-                    paddingLeft: 16 + depth * 16
+                    paddingLeft: SPACING.sm + depth * SPACING.lg
                 }}
             >
                 <Typography
@@ -27,7 +28,7 @@ export const DrawerNoteItem = memo(function DrawerNoteItem({ note, depth, active
 
 const styles = StyleSheet.create({
     container: {
-        paddingVertical: 6,
-        paddingRight: 16
+        paddingVertical: SPACING.xs,
+        paddingRight: SPACING.lg
     }
 })

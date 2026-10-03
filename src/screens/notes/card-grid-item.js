@@ -6,9 +6,10 @@ import { useTheme } from 'react-native-paper'
 import { AnimatedView } from '@/components/animated/animated-view'
 import { Typography } from '@/components/typography'
 
-import { RADIUS } from '@/constants/themes'
+import { RADIUS } from '@/constants/radius'
 import { CARD_PREVIEW_LINES } from '@/constants/note-preview'
 import { CARDS_HEIGHT } from '@/constants/card-grid'
+import { SPACING } from '@/constants/spacing'
 
 export const CardGridItem = memo(function CardGridItem({
     card,
@@ -23,7 +24,7 @@ export const CardGridItem = memo(function CardGridItem({
         <AnimatedView
             entering={FadeInUp}
             exiting={FadeOutUp}
-            style={{ ...cellStyle, gap: 8 }}
+            style={{ ...cellStyle, gap: SPACING.sm }}
         >
             <Pressable
                 disabled={card.active}
@@ -42,8 +43,8 @@ export const CardGridItem = memo(function CardGridItem({
                     numberOfLines={previewLines}
                     color={card.active ? colors.background : undefined}
                     styleProps={{
-                        paddingVertical: 8,
-                        paddingHorizontal: 12
+                        paddingVertical: SPACING.sm,
+                        paddingHorizontal: SPACING.md
                     }}
                 >
                     {card.preview}

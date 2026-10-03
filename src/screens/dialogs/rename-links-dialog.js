@@ -6,6 +6,7 @@ import { DialogModal } from '@/components/dialog'
 import { Typography } from '@/components/typography'
 
 import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/dialog'
+import { SPACING } from '@/constants/spacing'
 
 export function RenameLinksDialog({ visible, linksCount, onDismiss, onConfirmOnce, onConfirmAlways }) {
     const { t } = useTranslation()
@@ -20,7 +21,7 @@ export function RenameLinksDialog({ visible, linksCount, onDismiss, onConfirmOnc
                     key='actions'
                     style={{
                         width: '100%',
-                        gap: 8
+                        gap: SPACING.sm
                     }}
                 >
                     <Button

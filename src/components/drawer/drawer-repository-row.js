@@ -12,7 +12,11 @@ import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
 import { KeyboardArrowUp } from '@/icons/keyboard-arrow-up'
 import { MoreVert } from '@/icons/more-vert'
 
+import { BUTTON_SIZE } from '@/constants/button'
 import { REPOSITORY_ACTIONS } from '@/constants/repository-actions'
+import { SPACING } from '@/constants/spacing'
+
+const ALL_ACTIONS = Object.values(REPOSITORY_ACTIONS)
 
 export function DrawerRepositoryRow({
     alias,
@@ -20,6 +24,8 @@ export function DrawerRepositoryRow({
     active,
     isCollapsed,
     depth,
+    actions = ALL_ACTIONS,
+    createLabelKey,
     onPress,
     onAction
 }) {
@@ -30,7 +36,7 @@ export function DrawerRepositoryRow({
         <View
             style={{
                 ...styles.container,
-                paddingLeft: depth * 16
+                paddingLeft: depth * SPACING.lg
             }}
         >
             <Pressable
@@ -38,6 +44,7 @@ export function DrawerRepositoryRow({
                 style={styles.content}
             >
                 <DrawerIconButton
+                    style={styles.chevron}
                     pointerEvents='none'
                     importantForAccessibility='no'
                     icon={isCollapsed ? KeyboardArrowUp : KeyboardArrowDown}
@@ -51,38 +58,42 @@ export function DrawerRepositoryRow({
                 </Typography>
             </Pressable>
 
-            <MenuContainer
-                visible={visible}
-                onClose={onClose}
-                anchor={
-                    <DrawerIconButton
-                        onPress={onOpen}
-                        icon={MoreVert}
-                        accessibilityLabel={t('button.more')}
+            {!isRoot && (
+                <MenuContainer
+                    visible={visible}
+                    onClose={onClose}
+                    anchor={
+                        <DrawerIconButton
+                            onPress={onOpen}
+                            icon={MoreVert}
+                            accessibilityLabel={t('button.more')}
+                        />
+                    }
+                >
+                    <DrawerRepositoryMenu
+                        actions={actions}
+                        createLabelKey={createLabelKey}
+                        onAction={(action) => trigger(() => onAction(action))}
                     />
-                }
-            >
-                <DrawerRepositoryMenu
-                    isRoot={isRoot}
-                    onCreateNote={() => trigger(() => onAction(REPOSITORY_ACTIONS.CREATE_NOTE))}
-                    onAddSubfolder={() => trigger(() => onAction(REPOSITORY_ACTIONS.ADD_SUBFOLDER))}
-                    onEditFolder={() => trigger(() => onAction(REPOSITORY_ACTIONS.EDIT_FOLDER))}
-                    onDelete={() => trigger(() => onAction(REPOSITORY_ACTIONS.DELETE))}
-                />
-            </MenuContainer>
+                </MenuContainer>
+            )}
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
+        minHeight: BUTTON_SIZE,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
     },
+    chevron: {
+        margin: 0
+    },
     content: {
         flex: 1,
-        gap: 8,
+        gap: SPACING.sm,
         flexDirection: 'row',
         alignItems: 'center'
     }

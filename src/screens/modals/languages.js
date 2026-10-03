@@ -6,6 +6,7 @@ import { RadioButtonItem } from '@/components/radio-button-item'
 import { useLanguage } from '@/hooks/use-language'
 
 import { LANGUAGES } from '@/constants/languages'
+import { SPACING } from '@/constants/spacing'
 
 export function Languages() {
     const { currentLanguage, changeLanguage } = useLanguage()
@@ -19,7 +20,7 @@ export function Languages() {
                 data={LANGUAGES}
                 keyExtractor={({ code }) => code}
                 contentContainerStyle={{
-                    paddingBottom: 16, gap: 2
+                    paddingBottom: SPACING.lg, gap: 2
                 }}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item, index }) => (

@@ -18,8 +18,10 @@ import { getCameraPermission, openImagePicker, requestCameraPermission } from '@
 import { Camera } from '@/icons/camera'
 import { Picture } from '@/icons/picture'
 
-import { RADIUS, TRANSPARENT } from '@/constants/themes'
+import { TRANSPARENT } from '@/constants/themes'
+import { RADIUS } from '@/constants/radius'
 import { IMAGE_EXTENSION_BY_MIME_TYPE } from '@/constants/image'
+import { SPACING } from '@/constants/spacing'
 
 export function ImageMarkdown({ onClose, onInsert }) {
     const { t } = useTranslation()
@@ -183,14 +185,14 @@ export function ImageMarkdown({ onClose, onInsert }) {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        gap: 24,
-        paddingVertical: 24
+        gap: SPACING.xxl,
+        paddingVertical: SPACING.xxl
     },
     field: {
-        paddingHorizontal: 16
+        paddingHorizontal: SPACING.lg
     },
     permissionCard: {
-        marginHorizontal: 16,
+        marginHorizontal: SPACING.lg,
         borderRadius: RADIUS.outer,
         overflow: 'hidden'
     },
@@ -198,14 +200,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        gap: 12,
-        padding: 16
+        gap: SPACING.md,
+        padding: SPACING.lg
     },
     permissionText: {
         flex: 1
     },
     permissionMessage: {
-        marginTop: 4
+        marginTop: SPACING.xxs
     },
     preview: {
         width: '100%',
@@ -221,6 +223,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingHorizontal: 16
+        paddingHorizontal: SPACING.lg
     }
 })

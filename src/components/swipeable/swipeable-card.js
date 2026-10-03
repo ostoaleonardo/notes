@@ -5,6 +5,7 @@ import { FadeInUp, SlideOutLeft } from 'react-native-reanimated'
 
 import { AnimatedView } from '@/components/animated/animated-view'
 import { DeleteAction } from '@/components/swipeable/actions/delete-action'
+import { SPACING } from '@/constants/spacing'
 
 export function SwipeableCard({ children, isOpen, onOpen, onDelete, renderRightActions, ...props }) {
     const ref = useRef(null)
@@ -39,6 +40,6 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     swipeable: {
-        paddingHorizontal: 16
+        paddingHorizontal: SPACING.lg
     }
 })

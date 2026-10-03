@@ -1,6 +1,7 @@
 import React from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
+import { SPACING } from '@/constants/spacing'
 
 export function FloatingButton({ icon, onPress }) {
     const { colors } = useTheme()
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 16,
         right: 16,
-        padding: 24,
+        padding: SPACING.xxl,
         borderRadius: 24
     }
 })

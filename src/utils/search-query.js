@@ -96,11 +96,18 @@ const NOTE_FILTERS = [
     (note, parsed) => !parsed.created || toDateKey(note.createdAt) === parsed.created
 ]
 
+const lowerContentCache = new WeakMap()
+
+const getLowerContent = (note) => {
+    if (!lowerContentCache.has(note)) lowerContentCache.set(note, (note.note || '').toLowerCase())
+    return lowerContentCache.get(note)
+}
+
 const scoreNote = (note, parsed) => {
     if (!parsed.text) return { note, score: 0 }
 
     const titleMatch = fuzzyMatch(parsed.text, note.title)
-    const matchesContent = parsed.inContent && (note.note || '').toLowerCase().includes(parsed.text)
+    const matchesContent = parsed.inContent && getLowerContent(note).includes(parsed.text)
 
     return titleMatch.matches || matchesContent ? { note, score: titleMatch.score } : null
 }

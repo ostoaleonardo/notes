@@ -1,8 +1,10 @@
 import { StyleSheet, TextInput, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
-import { RADIUS, TRANSPARENT } from '@/constants/themes'
+import { TRANSPARENT } from '@/constants/themes'
+import { RADIUS } from '@/constants/radius'
 import { FONTS } from '@/constants/fonts'
+import { SPACING } from '@/constants/spacing'
 
 export function SmallInput({ background, ...props }) {
     const { colors } = useTheme()
@@ -34,8 +36,8 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         borderRadius: RADIUS.outer,
-        paddingVertical: 8,
-        paddingHorizontal: 16
+        paddingVertical: SPACING.sm,
+        paddingHorizontal: SPACING.lg
     },
     base: {
         flex: 1,

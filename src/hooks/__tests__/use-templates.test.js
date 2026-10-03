@@ -5,7 +5,10 @@ import { MOCK_REPO_URI, MOCK_TEMPLATES_URI } from '../__fixtures__/constants'
 
 const mockFileStorage = {
     findFile: jest.fn(),
+    findDirectory: jest.fn(),
     listMarkdownFiles: jest.fn(),
+    listSubdirectories: jest.fn(() => []),
+    createSubdirectory: jest.fn(),
     writeNoteFile: jest.fn(),
     renameNoteFile: jest.fn(async () => { }),
     deleteNoteFile: jest.fn()
@@ -91,7 +94,12 @@ describe('list templates without content', () => {
 
         const templates = await act(async () => result.current.listTemplates({ withContent: false }))
 
-        expect(templates).toEqual([{ filename: 'A.md', name: 'A', content: '' }])
+        expect(templates).toEqual([{
+            filename: 'A.md',
+            name: 'A',
+            folder: '',
+            content: ''
+        }])
         expect(text).not.toHaveBeenCalled()
     })
 })

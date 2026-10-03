@@ -8,6 +8,7 @@ import { parseFrontmatter } from '../frontmatter'
 import { getNoteKey } from '../note-key'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { NOTE_KEY_PREFIX } from '@/constants/note-key'
 import {
     NOTE_FILE_EXTENSION,
     NOTES_FOLDER_NAME,
@@ -28,6 +29,10 @@ const createFakeStorage = (seed = {}) => {
         multiSet: async (pairs) => pairs.forEach(([key, value]) => data.set(key, value))
     }
 }
+
+const getLegacyNoteKeys = async (storage) => (
+    (await storage.getAllKeys()).filter((key) => key.startsWith(NOTE_KEY_PREFIX))
+)
 
 const createFakeFileStorage = (deviceCache = new Map()) => {
     const files = new Map()
@@ -116,7 +121,7 @@ describeLegacyFixtures('legacy AsyncStorage migration', () => {
         await loadRepositoryData([repository], repository, storage, fileStorage)
 
         expect(await storage.getItem(STORAGE_KEYS.NOTES)).toBeNull()
-        expect(await storage.getAllKeys()).toHaveLength(0)
+        expect(await getLegacyNoteKeys(storage)).toHaveLength(0)
     })
 
     test('is idempotent: reloading after migration does not duplicate or re-migrate notes', async () => {
@@ -381,6 +386,17 @@ describe('legacy versions migration', () => {
             'templates'
         )
     })
+
+    test('skips the migration once it already ran for the root', async () => {
+        const fileStorage = createFakeFileStorage()
+        const storage = createFakeStorage()
+
+        await loadRepositoryData([repository], repository, storage, fileStorage)
+        fileStorage.migrateLegacyVersions.mockClear()
+        await loadRepositoryData([repository], repository, storage, fileStorage)
+
+        expect(fileStorage.migrateLegacyVersions).not.toHaveBeenCalled()
+    })
 })
 
 describe('tags dictionary', () => {
@@ -452,7 +468,7 @@ describe('interrupted migration', () => {
         const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
 
         expect(notes.map((note) => note.title).sort()).toEqual(['First', 'Second'])
-        expect(await storage.getAllKeys()).toEqual([])
+        expect(await getLegacyNoteKeys(storage)).toEqual([])
     })
 })
 

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { LargeInput } from '@/components/input/large-input'
 import { MarkdownInput } from '@/components/markdown/markdown-input'
 import { Section } from '@/components/section'
+import { SPACING } from '@/constants/spacing'
 
 export const TemplateEditorForm = ({
     name,
@@ -21,7 +22,7 @@ export const TemplateEditorForm = ({
 
     return (
         <>
-            <Section containerStyle={{ paddingHorizontal: 16 }}>
+            <Section containerStyle={{ paddingHorizontal: SPACING.lg }}>
                 <LargeInput
                     bold
                     value={name}

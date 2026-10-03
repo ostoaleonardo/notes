@@ -20,6 +20,7 @@ import { getEditorPath } from '@/utils/editor-path'
 import { getDate } from '@/utils/date'
 import { findBacklinks, buildBacklinksHtml, getAliases, parseMissingWikiLinkTarget } from '@/utils/wiki-links'
 import { getNotePaths, buildRepositoryPaths } from '@/utils/note-path'
+import { areNoteEntriesEqual } from '@/utils/note-entries'
 
 import { ROUTES } from '@/constants/routes'
 import { BODY_FONT_FAMILY, HEADING_FONT_FAMILY } from '@/constants/fonts'
@@ -70,7 +71,7 @@ export const MarkdownInput = ({
 
     const notePaths = useMemo(() => getNotePaths(notes, repositories), [notes, repositories])
 
-    const noteEntriesCache = useRef({ key: '', entries: [] })
+    const noteEntriesCache = useRef([])
 
     const noteEntries = useMemo(() => {
         const entries = notes
@@ -82,10 +83,9 @@ export const MarkdownInput = ({
                 path: notePaths.get(note.path) || ''
             }))
 
-        const key = JSON.stringify(entries)
-        if (key !== noteEntriesCache.current.key) noteEntriesCache.current = { key, entries }
+        if (!areNoteEntriesEqual(noteEntriesCache.current, entries)) noteEntriesCache.current = entries
 
-        return noteEntriesCache.current.entries
+        return noteEntriesCache.current
     }, [notes, notePaths])
 
     const [missingLink, setMissingLink] = useState(null)

@@ -4,11 +4,10 @@ import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 
 import { NoteEditorScreen } from '@/screens/notes/note-editor-screen'
 import { RenameLinksDialog } from '@/screens/dialogs/rename-links-dialog'
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useAutosave } from '@/hooks/use-autosave'
 import { useNoteDraft } from '@/hooks/use-note-draft'
-import { useTitleLinkWarning } from '@/hooks/use-title-link-warning'
+import { useTitleCommit } from '@/hooks/use-title-commit'
 import { useNotes } from '@/hooks/use-notes'
 import { useWikiLinkRenameConfirm } from '@/hooks/use-wiki-link-rename-confirm'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
@@ -16,7 +15,6 @@ import { useRepositories } from '@/hooks/use-repositories'
 import { getUniqueTitle } from '@/utils/note-filename'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
-import { DUPLICATE_TITLE_ERROR } from '@/constants/note-errors'
 
 export default function Note() {
     const { t } = useTranslation()
@@ -112,44 +110,18 @@ export default function Note() {
         skip: firstRender.current || (title === autoTitleRef.current && !note)
     })
 
-    const warnTitleLinks = useTitleLinkWarning()
-
-    const commitTitle = (nextTitle, nextNote = note) => {
-        const previousTitle = savedTitleRef.current
-        if (!isSaved.current || !previousTitle || previousTitle === nextTitle) return
-
-        savedTitleRef.current = nextTitle
-
-        runExclusive(async () => {
-            const payload = buildPayload(nextTitle, nextNote)
-
-            try {
-                const { savedNote, ...saved } = await saveWithLinkCheck(payload, previousTitle)
-
-                applySaved(saved)
-                if (savedNote.note !== payload.note) setNote(savedNote.note)
-            } catch (error) {
-                if (error.code !== DUPLICATE_TITLE_ERROR) throw error
-
-                setTitle(previousTitle)
-                showSnackbar(t('notes.title_duplicated'))
-                savedTitleRef.current = previousTitle
-            }
-        })
-    }
-
-    const onTitleBlur = () => {
-        const trimmedTitle = title.trim()
-
-        warnTitleLinks(trimmedTitle)
-        commitTitle(trimmedTitle)
-    }
-
-    const onRestoreVersion = (version) => {
-        setTitle(version.title)
-        setNote(version.content)
-        commitTitle(version.title.trim(), version.content)
-    }
+    const { onTitleBlur, onRestoreVersion } = useTitleCommit({
+        title,
+        note,
+        titleRef: savedTitleRef,
+        canCommit: () => isSaved.current,
+        setTitle,
+        setNote,
+        buildPayload,
+        runExclusive,
+        saveWithLinkCheck,
+        applySaved
+    })
 
     return (
         <>

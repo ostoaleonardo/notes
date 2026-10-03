@@ -8,7 +8,8 @@ import { usePro } from '@/hooks/use-pro'
 import { useStorage } from '@/hooks/use-storage'
 import { revertAccentOnProRevoke } from '@/utils/accent'
 
-import { FREE_ACCENT, THEMES, ACCENT_COLORS } from '@/constants/themes'
+import { THEMES, ACCENT_COLORS } from '@/constants/themes'
+import { FREE_ACCENT } from '@/constants/theme-options'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export const ThemeContext = createContext()

@@ -11,7 +11,8 @@ import { FindReplace } from '@/icons/find-replace'
 import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
 import { KeyboardArrowUp } from '@/icons/keyboard-arrow-up'
 
-import { RADIUS } from '@/constants/themes'
+import { RADIUS } from '@/constants/radius'
+import { SPACING } from '@/constants/spacing'
 
 export function MarkdownSearchBar({ search, action }) {
     const { t } = useTranslation()
@@ -116,16 +117,16 @@ export function MarkdownSearchBar({ search, action }) {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        paddingHorizontal: 16,
-        paddingBottom: 8,
+        paddingHorizontal: SPACING.lg,
+        paddingBottom: SPACING.sm,
         gap: 2
     },
     row: {
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 6,
-        paddingRight: 4,
-        gap: 4
+        paddingVertical: SPACING.xs,
+        paddingRight: SPACING.xxs,
+        gap: SPACING.xxs
     }
 })

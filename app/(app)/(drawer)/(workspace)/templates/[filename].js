@@ -22,6 +22,7 @@ import { usePro } from '@/hooks/use-pro'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
+import { splitTemplatePath, joinTemplatePath } from '@/utils/template-path'
 import { stripNoteExtension } from '@/utils/note-filename'
 import { useVersionHistory } from '@/hooks/use-version-history'
 
@@ -33,9 +34,9 @@ import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 export default function EditTemplate() {
     const { t } = useTranslation()
     const { filename } = useLocalSearchParams()
-    const { getTemplate, updateTemplate, deleteTemplate } = useTemplates()
+    const { getTemplate, getFolderUri, updateTemplate, deleteTemplate } = useTemplates()
     const { pro } = usePro()
-    const { activeRepository, ensureTemplatesFolder, getRootRepository } = useRepositories()
+    const { activeRepository, getRootRepository } = useRepositories()
 
     const tabId = TEMPLATE_TAB_PREFIX + filename
     useRegisterCurrent(tabId)
@@ -50,7 +51,7 @@ export default function EditTemplate() {
     const [mode, setMode] = useState(EDITOR_MODES.LIVE)
     const [placeholdersVisible, setPlaceholdersVisible] = useState(false)
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false)
-    const [templatesUri, setTemplatesUri] = useState('')
+    const [folderUri, setFolderUri] = useState('')
 
     const {
         isFocused,
@@ -70,17 +71,22 @@ export default function EditTemplate() {
     } = useEditorChrome()
 
     const location = useMemo(() => (
-        templatesUri && activeRepository
+        folderUri && activeRepository
             ? {
                 rootUri: getRootRepository(activeRepository).uri,
-                folderUri: templatesUri,
-                folderPath: TEMPLATES_FOLDER_NAME
+                folderUri,
+                folderPath: joinTemplatePath(
+                    TEMPLATES_FOLDER_NAME,
+                    splitTemplatePath(filename).dir
+                )
             }
             : null
-    ), [templatesUri, activeRepository, getRootRepository])
+    ), [folderUri, activeRepository, getRootRepository, filename])
 
-    const latestContent = useRef({ noteId: currentFilename.current, title: name, content })
-    latestContent.current = { noteId: currentFilename.current, title: name, content }
+    const versionNoteId = splitTemplatePath(currentFilename.current).base
+
+    const latestContent = useRef({ noteId: versionNoteId, title: name, content })
+    latestContent.current = { noteId: versionNoteId, title: name, content }
 
     const versionHistory = useVersionHistory({ location, latestContent })
 
@@ -139,7 +145,7 @@ export default function EditTemplate() {
         if (trimmedName === originalName.current && content === originalContent.current) return
 
         const nextName = trimmedName === originalName.current
-            ? stripNoteExtension(currentFilename.current)
+            ? stripNoteExtension(splitTemplatePath(currentFilename.current).base)
             : trimmedName
 
         currentFilename.current = await updateTemplate(currentFilename.current, nextName, content)
@@ -150,8 +156,8 @@ export default function EditTemplate() {
     useEffect(() => {
         if (!activeRepository) return
 
-        ensureTemplatesFolder(activeRepository).then(setTemplatesUri)
-    }, [activeRepository])
+        getFolderUri(splitTemplatePath(filename).dir).then((uri) => setFolderUri(uri || ''))
+    }, [activeRepository, filename])
 
     if (loading) return <LoadingOverlay />
 
@@ -164,7 +170,7 @@ export default function EditTemplate() {
             panelContent={(
                 <VersionHistoryContent
                     location={location}
-                    noteId={currentFilename.current}
+                    noteId={versionNoteId}
                     currentContentRef={latestContent}
                     pro={pro}
                     onRestore={onRestoreVersion}

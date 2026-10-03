@@ -18,7 +18,9 @@ import { Check } from '@/icons/check'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { STARTUP_BEHAVIORS } from '@/constants/startup-behavior'
-import { MENU_ITEM_INDENT, SCROLLABLE_MENU_MAX_HEIGHT, TRANSPARENT } from '@/constants/themes'
+import { TRANSPARENT } from '@/constants/themes'
+import { MENU_ITEM_INDENT, SCROLLABLE_MENU_MAX_HEIGHT } from '@/constants/menu'
+import { SPACING } from '@/constants/spacing'
 
 const OPTIONS = Object.values(STARTUP_BEHAVIORS)
 
@@ -218,7 +220,7 @@ const styles = StyleSheet.create({
     },
     item: {
         flexGrow: 1,
-        marginRight: 12
+        marginRight: SPACING.md
     },
     folderMenuScroll: {
         maxHeight: SCROLLABLE_MENU_MAX_HEIGHT

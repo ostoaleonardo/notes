@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { act, renderHook } from '@testing-library/react-native'
 
 import { useNotes } from '../use-notes'
@@ -59,11 +59,13 @@ const renderNotesHook = (initialNotes = []) => {
     const Wrapper = ({ children }) => {
         const [notes, setNotes] = useState(initialNotes)
         const [tags, setTags] = useState([])
+        const notesByPath = useMemo(() => new Map(notes.map((note) => [note.path, note])), [notes])
 
         return (
             <NoteContext.Provider
                 value={{
                     notes,
+                    notesByPath,
                     setNotes,
                     tags,
                     setTags,

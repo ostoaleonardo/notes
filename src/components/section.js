@@ -1,6 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 
 import { Typography } from './typography'
+import { SPACING } from '@/constants/spacing'
 
 export function Section({ title, children, containerStyle, contentStyle, visible = true }) {
     if (!visible) return null
@@ -39,11 +40,11 @@ export function Section({ title, children, containerStyle, contentStyle, visible
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        gap: 16
+        gap: SPACING.lg
     },
     title: {
         width: '100%',
-        paddingHorizontal: 16
+        paddingHorizontal: SPACING.lg
     },
     content: {
         width: '100%'

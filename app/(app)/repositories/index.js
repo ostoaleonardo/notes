@@ -21,6 +21,7 @@ import { Folder } from '@/icons/folder'
 
 import { ROUTES } from '@/constants/routes'
 import { FREE_REPOSITORIES_LIMIT } from '@/constants/default-values'
+import { SPACING } from '@/constants/spacing'
 
 export default function Repositories() {
     const { t } = useTranslation()
@@ -70,7 +71,7 @@ export default function Repositories() {
     return (
         <View style={{ flex: 1 }}>
             <AnimatedList
-                contentContainerStyle={{ paddingHorizontal: 16 }}
+                contentContainerStyle={{ paddingHorizontal: SPACING.lg }}
                 gap={2}
                 data={rootRepositories}
                 keyExtractor={(repository) => repository.id}

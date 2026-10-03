@@ -8,3 +8,12 @@ export const toggleSavedSearch = (saved, query, id) => {
 }
 
 export const removeSavedSearch = (saved, id) => saved.filter((entry) => entry.id !== id)
+
+export const parseStoredList = (value) => {
+    try {
+        const parsed = JSON.parse(value)
+        return Array.isArray(parsed) ? parsed : []
+    } catch {
+        return []
+    }
+}

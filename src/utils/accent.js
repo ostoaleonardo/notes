@@ -1,4 +1,4 @@
-import { FREE_ACCENT } from '@/constants/themes'
+import { FREE_ACCENT } from '@/constants/theme-options'
 
 export const isAccentAllowed = (accent, pro) => (
     pro || accent === FREE_ACCENT

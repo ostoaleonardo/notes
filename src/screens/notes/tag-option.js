@@ -8,6 +8,7 @@ import { Checkbox } from '@/components/checkbox'
 import { Typography } from '@/components/typography'
 
 import { TRANSPARENT } from '@/constants/themes'
+import { SPACING } from '@/constants/spacing'
 
 export const TagOption = memo(function TagOption({ id, tag, onToggle, isSelected }) {
     const { colors } = useTheme()
@@ -34,8 +35,8 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         flexDirection: 'row',
-        paddingVertical: 16,
-        paddingHorizontal: 24,
+        paddingVertical: SPACING.lg,
+        paddingHorizontal: SPACING.xxl,
         alignItems: 'center',
         justifyContent: 'space-between'
     }

@@ -7,6 +7,7 @@ import { Pressable } from '@/components/button/pressable'
 import { Typography } from '@/components/typography'
 
 import { MAX_TABLE_COLS, MAX_TABLE_ROWS, TABLE_CELL_SIZE, TABLE_CELL_GAP } from '@/constants/table'
+import { SPACING } from '@/constants/spacing'
 
 export function TableMarkdown({ onClose, onInsert }) {
     const { t } = useTranslation()
@@ -91,8 +92,8 @@ export function TableMarkdown({ onClose, onInsert }) {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        gap: 16,
-        padding: 24,
+        gap: SPACING.lg,
+        padding: SPACING.xxl,
         alignItems: 'center'
     },
     row: {

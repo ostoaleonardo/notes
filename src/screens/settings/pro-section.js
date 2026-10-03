@@ -16,6 +16,7 @@ import { Check } from '@/icons/check'
 
 import { PRODUCT_ID } from '@/constants/iap'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { SPACING } from '@/constants/spacing'
 
 export function ProSection() {
     const { t } = useTranslation()
@@ -122,7 +123,7 @@ export function ProSection() {
     return (
         <Section
             title={t('settings.pro')}
-            containerStyle={{ paddingHorizontal: 16 }}
+            containerStyle={{ paddingHorizontal: SPACING.lg }}
             contentStyle={{ gap: 3 }}
         >
             <Option

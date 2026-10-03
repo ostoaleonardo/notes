@@ -6,6 +6,7 @@ import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 import { AnimatedList } from '@/components/animated/animated-list'
 import { AnimatedView } from '@/components/animated/animated-view'
 import { Typography } from '@/components/typography'
+import { SPACING } from '@/constants/spacing'
 
 export function SearchResults({ results, aliasById, onOpenResult }) {
     const { t } = useTranslation()
@@ -53,11 +54,11 @@ export function SearchResults({ results, aliasById, onOpenResult }) {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        gap: 16
+        gap: SPACING.lg
     },
     item: {
         borderRadius: 8,
-        paddingVertical: 8,
-        paddingHorizontal: 16
+        paddingVertical: SPACING.sm,
+        paddingHorizontal: SPACING.lg
     }
 })

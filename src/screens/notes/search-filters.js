@@ -2,6 +2,7 @@ import { StyleSheet, View } from 'react-native'
 
 import { SearchTagFilters } from './search-tag-filters'
 import { SearchToggleFilters } from './search-toggle-filters'
+import { SPACING } from '@/constants/spacing'
 
 export function SearchFilters({ query, setQuery, tags, saved, parsed, onToggleSave }) {
     return (
@@ -28,11 +29,11 @@ export function SearchFilters({ query, setQuery, tags, saved, parsed, onToggleSa
 
 const styles = StyleSheet.create({
     container: {
-        gap: 8
+        gap: SPACING.sm
     },
     filters: {
-        gap: 4,
-        paddingHorizontal: 8,
+        gap: SPACING.xxs,
+        paddingHorizontal: SPACING.sm,
         alignItems: 'center',
         flexDirection: 'row'
     }

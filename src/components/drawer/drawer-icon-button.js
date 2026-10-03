@@ -1,14 +1,15 @@
 import { IconButton } from 'react-native-paper'
+import { ICON_SIZE } from '@/constants/icon-size'
 
-export function DrawerIconButton({ icon: Icon, ...props }) {
+export function DrawerIconButton({ icon: Icon, size = ICON_SIZE.sm, ...props }) {
     return (
         <IconButton
             {...props}
-            size={16}
+            size={size}
             icon={(props) => (
                 <Icon
-                    width={16}
-                    height={16}
+                    width={size}
+                    height={size}
                     {...props}
                 />
             )}

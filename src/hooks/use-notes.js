@@ -29,6 +29,7 @@ export function useNotes() {
 
     const {
         notes,
+        notesByPath,
         setNotes,
         loading
     } = useContext(NoteContext)
@@ -51,7 +52,7 @@ export function useNotes() {
 
         const filename = getUniqueFilename(listNoteNames(uri), note.title, null)
         const path = buildNotePath(repositoryId, filename)
-        const file = writeNoteFile(uri, filename, buildFileContent(note))
+        const file = writeNoteFile(uri, filename, buildFileContent(note), undefined, null)
         const createdAt = file.creationTime ?? file.lastModified
         const updatedAt = file.lastModified
 
@@ -92,7 +93,7 @@ export function useNotes() {
     }
 
     const updateNote = async (note) => {
-        const previous = notes.find((n) => n.path === note.path)
+        const previous = notesByPath.get(note.path)
         if (!previous) {
             return saveNote(note, note.repositoryId)
         }
@@ -105,7 +106,9 @@ export function useNotes() {
             return { path: previous.path, filename: previous.filename, createdAt: previous.createdAt, updatedAt: previous.updatedAt }
         }
 
-        const names = listNoteNames(uri)
+        const files = listMarkdownFiles(uri)
+        const names = files.map((file) => file.name)
+        const existing = files.find((file) => file.name === previous.filename)
 
         if (note.title !== previous.title && isTitleTaken(names, note.title, previous.filename)) {
             const error = new Error('A note with this title already exists')
@@ -124,7 +127,7 @@ export function useNotes() {
         let updatedAt = previous.updatedAt
 
         try {
-            if (!names.includes(previous.filename)) return { path, filename, createdAt, updatedAt }
+            if (!existing) return { path, filename, createdAt, updatedAt }
 
             if (renamed) {
                 await renameNoteFile(uri, previous.filename, filename)
@@ -137,7 +140,7 @@ export function useNotes() {
                 )
             }
 
-            const file = writeNoteFile(uri, filename, buildFileContent(note))
+            const file = writeNoteFile(uri, filename, buildFileContent(note), undefined, renamed ? undefined : existing)
             createdAt = file.creationTime ?? file.lastModified
             updatedAt = file.lastModified
 
@@ -151,7 +154,7 @@ export function useNotes() {
     }
 
     const deleteNote = async (path) => {
-        const note = notes.find((n) => n.path === path)
+        const note = notesByPath.get(path)
         setNotes((prev) => prev.filter((n) => n.path !== path))
         if (!note) return
 
@@ -177,7 +180,7 @@ export function useNotes() {
     }
 
     const getNote = (path) => {
-        return notes.find((note) => note.path === path) || {}
+        return notesByPath.get(path) || {}
     }
 
     const deleteAll = () => {

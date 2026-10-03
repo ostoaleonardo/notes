@@ -35,14 +35,35 @@ const splitAnchor = (text) => {
     return { target: text.slice(0, index), anchor: text.slice(index + 1) }
 }
 
+const indexCache = new WeakMap()
+
+const pushTo = (map, key, note) => {
+    if (map.has(key)) map.get(key).push(note)
+    else map.set(key, [note])
+}
+
+const getNoteIndex = (notes) => {
+    if (indexCache.has(notes)) return indexCache.get(notes)
+
+    const byTitle = new Map()
+    const byAlias = new Map()
+
+    for (const note of notes) {
+        pushTo(byTitle, normalizeName(note.title || ''), note)
+        for (const alias of new Set(getAliases(note).map(normalizeName))) pushTo(byAlias, alias, note)
+    }
+
+    const index = { byTitle, byAlias }
+    indexCache.set(notes, index)
+    return index
+}
+
 const findNote = (linkText, notes, notePaths) => {
     const { path, title } = parseWikiLinkText(linkText)
     const name = normalizeName(title)
+    const { byTitle, byAlias } = getNoteIndex(notes)
 
-    const byTitle = notes.filter((note) => normalizeName(note.title || '') === name)
-    const candidates = byTitle.length
-        ? byTitle
-        : notes.filter((note) => getAliases(note).some((alias) => normalizeName(alias) === name))
+    const candidates = byTitle.get(name) || byAlias.get(name) || []
     if (candidates.length < 2 || !path) return candidates[0]
 
     const normalizedPath = normalizeName(path)

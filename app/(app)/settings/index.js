@@ -20,6 +20,7 @@ import { ArrowForward } from '@/icons/arrow-forward'
 import { OpenInNew } from '@/icons/open-in-new'
 
 import { LINKS } from '@/constants/links'
+import { SPACING } from '@/constants/spacing'
 
 export default function Settings() {
     const { t } = useTranslation()
@@ -100,12 +101,12 @@ export default function Settings() {
 
 const styles = StyleSheet.create({
     scroll: {
-        paddingBottom: 24,
-        paddingTop: 8,
+        paddingBottom: SPACING.xxl,
+        paddingTop: SPACING.sm,
         gap: 40
     },
     section: {
-        paddingHorizontal: 16
+        paddingHorizontal: SPACING.lg
     },
     items: {
         gap: 3

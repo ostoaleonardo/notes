@@ -22,6 +22,7 @@ import { DIFF_ADDED_COLOR, DIFF_REMOVED_COLOR } from '@/constants/diff'
 import { TRANSPARENT } from '@/constants/themes'
 import { FONTS } from '@/constants/fonts'
 import { FREE_VERSION_HISTORY_LIMIT } from '@/constants/default-values'
+import { SPACING } from '@/constants/spacing'
 
 const getDiffColor = (type) => (type === 'added' ? DIFF_ADDED_COLOR : DIFF_REMOVED_COLOR)
 
@@ -134,7 +135,7 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
                             <Typography
                                 variant='title'
                                 styleProps={{
-                                    paddingLeft: 8,
+                                    paddingLeft: SPACING.sm,
                                     fontFamily: FONTS.nType82Headline
                                 }}
                             >
@@ -216,13 +217,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingHorizontal: 16,
-        marginBottom: 16
+        paddingHorizontal: SPACING.lg,
+        marginBottom: SPACING.lg
     },
     headerLeft: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 8
+        gap: SPACING.sm
     },
     headerRight: {
         flexDirection: 'row',
@@ -230,22 +231,22 @@ const styles = StyleSheet.create({
     },
     list: {
         gap: 2,
-        paddingHorizontal: 16
+        paddingHorizontal: SPACING.lg
     },
     item: {
         minWidth: '100%',
-        padding: 20
+        padding: SPACING.xl
     },
     diff: {
         flex: 1,
-        marginHorizontal: 16,
+        marginHorizontal: SPACING.lg,
         borderRadius: 8,
         overflow: 'hidden',
-        marginBottom: 16
+        marginBottom: SPACING.lg
     },
     diffLine: {
         paddingVertical: 1,
-        paddingHorizontal: 4
+        paddingHorizontal: SPACING.xxs
     },
     diffText: {
         fontFamily: FONTS.azeretLight,

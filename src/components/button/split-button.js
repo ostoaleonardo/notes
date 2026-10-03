@@ -5,6 +5,7 @@ import { MenuContainer } from '../menu/menu-container'
 import { SplitButtonPrimary } from './split-button-primary'
 import { SplitButtonTrigger } from './split-button-trigger'
 
+import { GROUP_GAP } from '@/constants/button'
 import { useAnimatedProgress } from '@/hooks/use-animated-progress'
 
 export const SplitButton = ({
@@ -52,7 +53,7 @@ export const SplitButton = ({
 
 const styles = StyleSheet.create({
     container: {
-        gap: 2,
+        gap: GROUP_GAP,
         flexDirection: 'row',
         alignItems: 'center'
     }

@@ -1,4 +1,4 @@
-import { toggleSavedSearch, removeSavedSearch } from '../saved-searches'
+import { toggleSavedSearch, removeSavedSearch, parseStoredList } from '../saved-searches'
 
 describe('toggle saved search', () => {
     test('saves the trimmed query when not already saved', () => {
@@ -37,5 +37,19 @@ describe('remove saved search', () => {
     test('is a no-op when the id is not found', () => {
         const saved = [{ id: 'search-1', query: 'tag:work' }]
         expect(removeSavedSearch(saved, 'missing')).toEqual(saved)
+    })
+})
+
+describe('parse stored list', () => {
+    test('returns the parsed array', () => {
+        expect(parseStoredList('["a","b"]')).toEqual(['a', 'b'])
+    })
+
+    test('returns an empty list for invalid json', () => {
+        expect(parseStoredList('{oops')).toEqual([])
+    })
+
+    test('returns an empty list when the value is not an array', () => {
+        expect(parseStoredList('{"a":1}')).toEqual([])
     })
 })

@@ -14,3 +14,5 @@ export const IMAGE_PICKER_OPTIONS = {
 export const DEFAULT_IMAGE_EXTENSION = 'jpg'
 
 export const IMAGE_EXTENSION_PATTERN = /\.(\w+)$/
+
+export const MAX_PREVIEW_IMAGE_CACHE = 20

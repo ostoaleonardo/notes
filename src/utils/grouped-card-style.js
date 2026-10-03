@@ -1,4 +1,4 @@
-import { RADIUS } from '@/constants/themes'
+import { RADIUS } from '@/constants/radius'
 
 export const getGroupedRadius = (isFirst, isLast) => ({
     borderTopLeftRadius: isFirst ? RADIUS.outer : 0,

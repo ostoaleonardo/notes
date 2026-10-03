@@ -5,6 +5,7 @@ import { SwipeableCard } from '@/components/swipeable/swipeable-card'
 import { Typography } from '@/components/typography'
 
 import { getGroupedRadius } from '@/utils/grouped-card-style'
+import { SPACING } from '@/constants/spacing'
 
 export function SwipeableTag({ tag, onPress, isOpen, onOpen, onDelete, isFirst, isLast }) {
     const { colors } = useTheme()
@@ -34,6 +35,6 @@ export function SwipeableTag({ tag, onPress, isOpen, onOpen, onDelete, isFirst, 
 const styles = StyleSheet.create({
     container: {
         minWidth: '100%',
-        padding: 20
+        padding: SPACING.xl
     }
 })

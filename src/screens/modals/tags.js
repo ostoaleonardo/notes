@@ -12,6 +12,7 @@ import { Separator } from '@/components/separator/separator'
 
 import { useTags } from '@/hooks/use-tags'
 import { hasTag, isSameTag } from '@/utils/tag-names'
+import { SPACING } from '@/constants/spacing'
 
 export function Tags({ tags, setTags }) {
     const { t } = useTranslation()
@@ -60,8 +61,8 @@ export function Tags({ tags, setTags }) {
                 data={allTags}
                 keyExtractor={(name) => name}
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: 16 }}
-                ItemSeparatorComponent={<Separator style={{ marginHorizontal: 24 }} />}
+                contentContainerStyle={{ paddingBottom: SPACING.lg }}
+                ItemSeparatorComponent={<Separator style={{ marginHorizontal: SPACING.xxl }} />}
                 renderItem={renderItem}
                 ListEmptyComponent={() => (
                     <View style={{ paddingTop: 64 }}>
@@ -79,8 +80,8 @@ export function Tags({ tags, setTags }) {
 
 const styles = StyleSheet.create({
     container: {
-        gap: 16,
-        padding: 16,
+        gap: SPACING.lg,
+        padding: SPACING.lg,
         paddingTop: 0,
         flexDirection: 'row'
     }

@@ -1,234 +1,107 @@
 import { router } from 'expo-router'
 import { useCallback, useMemo, useState } from 'react'
-import { FlatList, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import { useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 
-import { AddSubfolder } from '@/screens/dialogs/add-subfolder'
-import { AddTemplate } from '@/screens/dialogs/add-template'
-import { DeleteRepository } from '@/screens/dialogs/delete-repository'
-import { RenameRepository } from '@/screens/dialogs/rename-repository'
-import { DrawerHeader } from './drawer-header'
-import { DrawerScreen } from './drawer-screen'
-import { DrawerNoteItem } from './drawer-note-item'
-import { DrawerRepositoryItem } from './drawer-repository-item'
-import { DrawerTemplatesSection } from './drawer-templates-section'
-import { Separator } from '@/components/separator/separator'
+import { IconToggleGroup } from '@/components/button/icon-toggle-group'
+import { DrawerNotesView } from './drawer-notes-view'
+import { DrawerTagsView } from './drawer-tags-view'
+import { DrawerToolbar } from './drawer-toolbar'
+import { DrawerTemplatesView } from './drawer-templates-view'
+import { DrawerViewSwitcher } from './drawer-view-switcher'
 
-import { useCurrentNote } from '@/hooks/use-current-note'
-import { useNotes } from '@/hooks/use-notes'
-import { useRepositories } from '@/hooks/use-repositories'
-import { useTags } from '@/hooks/use-tags'
-import { useTemplatesList } from '@/hooks/use-templates-list'
-import { useUtils } from '@/hooks/use-utils'
-import { buildRepositoryTree, flattenDrawerTree } from '@/utils/drawer-tree'
-import { getEditorNavigation } from '@/utils/editor-path'
+import { useStorage } from '@/hooks/use-storage'
+import { useStorageEffect } from '@/hooks/use-storage-effect'
 
-import { DRAWER_SPACING } from '@/constants/drawer'
-import { REPOSITORY_ACTIONS } from '@/constants/repository-actions'
+import { FolderCode } from '@/icons/folder-code'
+import { Settings } from '@/icons/settings'
+
+import { DEFAULT_DRAWER_VIEW, DRAWER_VIEWS } from '@/constants/drawer-views'
+import { SPACING } from '@/constants/spacing'
+import { TRANSPARENT } from '@/constants/themes'
 import { ROUTES } from '@/constants/routes'
-import { TEMPLATE_TAB_PREFIX, TEMPLATES_SECTION_ID } from '@/constants/tabs'
+import { STORAGE_KEYS } from '@/constants/storage-keys'
 
-const openEditor = (id, currentId) => {
-    const { path, replace } = getEditorNavigation(id, currentId)
-    replace ? router.replace(path) : router.push(path)
+const VIEW_COMPONENTS = {
+    [DRAWER_VIEWS.NOTES]: DrawerNotesView,
+    [DRAWER_VIEWS.TEMPLATES]: DrawerTemplatesView,
+    [DRAWER_VIEWS.TAGS]: DrawerTagsView
 }
 
 export function DrawerItems({ navigation }) {
     const { t } = useTranslation()
-    const { tags } = useTags()
-    const { notes } = useNotes()
-    const { currentId } = useCurrentNote()
+    const { colors } = useTheme()
+    const { setItem } = useStorage()
     const insets = useSafeAreaInsets()
+    const [view, setView] = useState(null)
 
-    const {
-        collapsedFolders,
-        collapseAll,
-        expandAll,
-        toggleFolder
-    } = useUtils()
-
-    const {
-        activeRepositoryTree,
-        activeRepository,
-        activeRepositoryId,
-        setActiveRepository
-    } = useRepositories()
-
-    const { templates, refresh: refreshTemplates } = useTemplatesList([activeRepository?.id])
-    const [addTemplateVisible, setAddTemplateVisible] = useState(false)
-    const [editFolderId, setEditFolderId] = useState('')
-    const [subfolderParentId, setSubfolderParentId] = useState('')
-    const [deleteId, setDeleteId] = useState('')
-
-    const notesByRepository = useMemo(() => {
-        const map = new Map()
-        notes.forEach((note) => {
-            if (!map.has(note.repositoryId)) map.set(note.repositoryId, [])
-            map.get(note.repositoryId).push(note)
-        })
-        return map
-    }, [notes])
-
-    const tree = useMemo(
-        () => buildRepositoryTree(activeRepositoryTree, notesByRepository),
-        [activeRepositoryTree, notesByRepository]
-    )
-
-    const rows = useMemo(
-        () => flattenDrawerTree(tree, collapsedFolders),
-        [tree, collapsedFolders]
-    )
+    useStorageEffect(STORAGE_KEYS.DRAWER_VIEW, (stored) => {
+        setView(VIEW_COMPONENTS[stored] ? stored : DEFAULT_DRAWER_VIEW)
+    })
 
     const closeDrawer = useCallback(() => {
         navigation.dispatch({ type: 'CLOSE_DRAWER' })
     }, [navigation])
 
-    const onOpenRoot = useCallback((id) => {
-        if (id !== activeRepositoryId) setActiveRepository(id)
-    }, [activeRepositoryId, setActiveRepository])
+    const onOpenRepositories = useCallback(() => router.push(ROUTES.REPOSITORIES), [])
+    const onOpenSettings = useCallback(() => router.push(ROUTES.SETTINGS), [])
 
-    const onOpenNote = useCallback((id) => {
-        closeDrawer()
-        if (id === currentId) return
+    const onChangeView = useCallback((next) => {
+        setView(next)
+        setItem(STORAGE_KEYS.DRAWER_VIEW, next)
+    }, [setItem])
 
-        openEditor(id, currentId)
-    }, [closeDrawer, currentId])
-
-    const onCreateNote = useCallback((repositoryId) => {
-        router.push({
-            pathname: ROUTES.ADD_NOTE,
-            params: { repositoryId }
-        })
-        closeDrawer()
-    }, [closeDrawer])
-
-    const onRepositoryAction = useCallback((action, repositoryId) => {
-        if (action === REPOSITORY_ACTIONS.CREATE_NOTE) return onCreateNote(repositoryId)
-        if (action === REPOSITORY_ACTIONS.ADD_SUBFOLDER) return setSubfolderParentId(repositoryId)
-        if (action === REPOSITORY_ACTIONS.EDIT_FOLDER) return setEditFolderId(repositoryId)
-        if (action === REPOSITORY_ACTIONS.DELETE) return setDeleteId(repositoryId)
-    }, [onCreateNote])
-
-    const onOpenTemplate = useCallback((filename) => {
-        openEditor(TEMPLATE_TAB_PREFIX + filename, currentId)
-        closeDrawer()
-    }, [closeDrawer, currentId])
-
-    const onToggleCollapseAll = () => {
-        if (collapsedFolders.size > 0) {
-            expandAll()
-        } else {
-            collapseAll(activeRepositoryTree.map((repository) => repository.id))
+    const footerItems = useMemo(() => [
+        {
+            icon: FolderCode,
+            onPress: onOpenRepositories,
+            label: t('drawer.repositories')
+        },
+        {
+            icon: Settings,
+            onPress: onOpenSettings,
+            label: t('title.settings')
         }
-    }
+    ], [onOpenRepositories, onOpenSettings, t])
 
-    const renderItem = useCallback(({ item }) => {
-        if (item.type === 'note') {
-            return (
-                <DrawerNoteItem
-                    note={item.note}
-                    depth={item.depth}
-                    active={item.note.path === currentId}
-                    onOpenNote={onOpenNote}
-                />
-            )
-        }
-
-        return (
-            <DrawerRepositoryItem
-                repository={item.repository}
-                depth={item.depth}
-                isCollapsed={item.isCollapsed}
-                active={item.repository.id === activeRepositoryId}
-                onOpenRoot={onOpenRoot}
-                onAction={onRepositoryAction}
-            />
-        )
-    }, [currentId, activeRepositoryId, onOpenNote, onOpenRoot, onRepositoryAction])
+    const ActiveView = VIEW_COMPONENTS[view]
 
     return (
         <>
-            <FlatList
-                data={rows}
-                keyExtractor={(row) => row.id}
-                renderItem={renderItem}
-                showsVerticalScrollIndicator={false}
-                style={styles.list}
-                contentContainerStyle={{
-                    paddingTop: DRAWER_SPACING + insets.top,
-                    paddingBottom: DRAWER_SPACING + insets.bottom,
-                    paddingStart: DRAWER_SPACING + insets.left,
-                    paddingEnd: DRAWER_SPACING + insets.right
-                }}
-                ListHeaderComponent={(
-                    <DrawerHeader
-                        collapsed={collapsedFolders.size > 0}
-                        onToggleCollapseAll={onToggleCollapseAll}
-                    />
-                )}
-                ListFooterComponent={(
-                    <View>
-                        <Separator style={styles.separator} />
+            {ActiveView && <ActiveView closeDrawer={closeDrawer} />}
 
-                        <DrawerTemplatesSection
-                            templates={templates}
-                            activeFilename={currentId.startsWith(TEMPLATE_TAB_PREFIX) ? currentId.slice(TEMPLATE_TAB_PREFIX.length) : ''}
-                            collapsed={collapsedFolders.has(TEMPLATES_SECTION_ID)}
-                            onToggleCollapse={() => toggleFolder(TEMPLATES_SECTION_ID)}
-                            onOpenTemplate={onOpenTemplate}
-                            onAddTemplate={() => setAddTemplateVisible(true)}
-                        />
-
-                        <Separator style={styles.separator} />
-
-                        <View>
-                            <DrawerScreen
-                                path={ROUTES.TAGS}
-                                label={t('drawer.tags')}
-                                indicator={t('count.tags', { count: tags?.length || 0 })}
-                            />
-                            <DrawerScreen
-                                path={ROUTES.SETTINGS}
-                                label={t('title.settings')}
-                            />
+            <View style={{ paddingTop: SPACING.lg, paddingBottom: insets.bottom }}>
+                <DrawerToolbar>
+                    <View style={styles.actions}>
+                        <View style={styles.switcher}>
+                            {view && (
+                                <DrawerViewSwitcher
+                                    view={view}
+                                    onChange={onChangeView}
+                                />
+                            )}
                         </View>
+                        <IconToggleGroup
+                            buttons={footerItems}
+                            background={colors.onBackground + TRANSPARENT[10]}
+                        />
                     </View>
-                )}
-            />
-
-            <RenameRepository
-                visible={!!editFolderId}
-                repositoryId={editFolderId}
-                onDismiss={() => setEditFolderId('')}
-            />
-            <AddSubfolder
-                visible={!!subfolderParentId}
-                parentId={subfolderParentId}
-                onDismiss={() => setSubfolderParentId('')}
-            />
-            <DeleteRepository
-                visible={!!deleteId}
-                repositoryId={deleteId}
-                onDismiss={() => setDeleteId('')}
-            />
-            <AddTemplate
-                visible={addTemplateVisible}
-                onDismiss={() => {
-                    setAddTemplateVisible(false)
-                    refreshTemplates()
-                    closeDrawer()
-                }}
-            />
+                </DrawerToolbar>
+            </View>
         </>
     )
 }
 
 const styles = StyleSheet.create({
-    list: {
-        flex: 1
+    actions: {
+        flex: 1,
+        flexDirection: 'row',
+        gap: SPACING.sm,
+        alignItems: 'center'
     },
-    separator: {
-        marginVertical: 12
+    switcher: {
+        flex: 1
     }
 })

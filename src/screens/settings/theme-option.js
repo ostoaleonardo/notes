@@ -10,7 +10,9 @@ import { useToggleMode } from '@/hooks/use-toggle-mode'
 import { usePro } from '@/hooks/use-pro'
 import { isAccentAllowed, toggleAccentSelection } from '@/utils/accent'
 
-import { ACCENT_COLORS, ACCENT_OPTIONS, THEME_COLORS, THEME_OPTIONS } from '@/constants/themes'
+import { ACCENT_COLORS, THEME_COLORS } from '@/constants/themes'
+import { ACCENT_OPTIONS, THEME_OPTIONS } from '@/constants/theme-options'
+import { SPACING } from '@/constants/spacing'
 
 export function ThemeOption() {
     const { t } = useTranslation()
@@ -38,7 +40,7 @@ export function ThemeOption() {
         >
             <Section
                 title={t('settings.themes')}
-                containerStyle={{ marginTop: 16 }}
+                containerStyle={{ marginTop: SPACING.lg }}
                 contentStyle={styles.container}
             >
                 {THEME_OPTIONS.map((color) => (
@@ -76,7 +78,7 @@ export function ThemeOption() {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        paddingVertical: 8,
+        paddingVertical: SPACING.sm,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-evenly',

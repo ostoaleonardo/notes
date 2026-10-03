@@ -3,7 +3,8 @@ import { useTheme } from 'react-native-paper'
 
 import { Plus } from '@/icons/plus'
 
-import { COLORS, RADIUS, TRANSPARENT } from '@/constants/themes'
+import { COLORS, TRANSPARENT } from '@/constants/themes'
+import { RADIUS } from '@/constants/radius'
 
 export function SquareButton({ onPress, disabled }) {
     const { colors } = useTheme()

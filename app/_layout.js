@@ -13,7 +13,8 @@ import { ThemeProvider } from '@/context/theme-context'
 import Providers from './providers'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { FREE_ACCENT, THEMES } from '@/constants/themes'
+import { THEMES } from '@/constants/themes'
+import { FREE_ACCENT } from '@/constants/theme-options'
 
 SplashScreen.preventAutoHideAsync()
 

@@ -80,14 +80,17 @@ export function NoteProvider({ children }) {
         setTags(DEFAULT_TAGS)
     }, [])
 
+    const notesByPath = useMemo(() => new Map(notes.map((note) => [note.path, note])), [notes])
+
     const value = useMemo(() => ({
         notes,
+        notesByPath,
         setNotes,
         tags,
         setTags,
         loading,
         clear
-    }), [notes, tags, loading, clear])
+    }), [notes, notesByPath, tags, loading, clear])
 
     return (
         <NoteContext.Provider value={value}>

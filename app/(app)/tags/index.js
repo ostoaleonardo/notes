@@ -12,6 +12,7 @@ import { useTags } from '@/hooks/use-tags'
 import { useHaptics } from '@/hooks/use-haptics'
 
 import { FEEDBACK_TYPES } from '@/constants/feedback-types'
+import { SPACING } from '@/constants/spacing'
 
 export default function Tags() {
     const { t } = useTranslation()
@@ -97,8 +98,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingHorizontal: 16,
-        paddingBottom: 16,
-        gap: 8
+        paddingHorizontal: SPACING.lg,
+        paddingBottom: SPACING.lg,
+        gap: SPACING.sm
     }
 })

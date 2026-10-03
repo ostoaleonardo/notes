@@ -14,7 +14,7 @@ import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/dialog'
 import { FEEDBACK_TYPES } from '@/constants/feedback-types'
 import { ROUTES } from '@/constants/routes'
 
-export function AddTemplate({ visible, onDismiss }) {
+export function AddTemplate({ visible, onDismiss, folder = '' }) {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
     const { addTemplate, importTemplate } = useTemplates()
@@ -24,7 +24,7 @@ export function AddTemplate({ visible, onDismiss }) {
     const onCreate = async () => {
         if (disabled) return
 
-        const filename = await addTemplate(name.trim())
+        const filename = await addTemplate(name.trim(), '', folder)
         onDismiss()
         vibrate(FEEDBACK_TYPES.SUCCESS)
         router.push(ROUTES.EDIT_TEMPLATE + encodeURIComponent(filename))
@@ -34,7 +34,11 @@ export function AddTemplate({ visible, onDismiss }) {
         const result = await DocumentPicker.getDocumentAsync({ type: '*/*' })
         if (result.canceled) return
 
-        await importTemplate(result.assets[0].uri, result.assets[0].name)
+        await importTemplate(
+            result.assets[0].uri,
+            result.assets[0].name,
+            folder
+        )
         onDismiss()
         vibrate(FEEDBACK_TYPES.SUCCESS)
     }

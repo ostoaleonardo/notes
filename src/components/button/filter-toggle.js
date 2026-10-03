@@ -7,6 +7,7 @@ import { Typography } from '../typography'
 import { useSegmentedCornerStyle } from '@/hooks/use-segmented-corner-style'
 
 import { BUTTON_SIZE } from '@/constants/button'
+import { SPACING } from '@/constants/spacing'
 
 export function FilterToggle({
     icon: Icon,
@@ -68,17 +69,17 @@ const styles = StyleSheet.create({
         opacity: 0.4
     },
     touchable: {
-        paddingVertical: 6,
-        paddingHorizontal: 12
+        paddingVertical: SPACING.xs,
+        paddingHorizontal: SPACING.md
     },
     touchablePill: {
         height: BUTTON_SIZE,
         paddingVertical: 0,
-        paddingHorizontal: 16,
+        paddingHorizontal: SPACING.lg,
         justifyContent: 'center'
     },
     content: {
-        gap: 6,
+        gap: SPACING.xs,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center'

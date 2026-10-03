@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native'
 import { SearchListSection } from './search-list-section'
 
 import { History } from '@/icons/history'
+import { SPACING } from '@/constants/spacing'
 
 export function RecentSearches({ recent, onSelect }) {
     const { t } = useTranslation()
@@ -24,7 +25,7 @@ export function RecentSearches({ recent, onSelect }) {
 const styles = StyleSheet.create({
     item: {
         borderRadius: 8,
-        paddingVertical: 8,
-        paddingHorizontal: 16
+        paddingVertical: SPACING.sm,
+        paddingHorizontal: SPACING.lg
     }
 })

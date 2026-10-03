@@ -5,13 +5,14 @@ import { AnimatedView } from '@/components/animated/animated-view'
 import { Typography } from '@/components/typography'
 
 import { FONTS } from '@/constants/fonts'
+import { SPACING } from '@/constants/spacing'
 
 export function Intro() {
     const { t } = useTranslation()
 
     return (
         <AnimatedView style={styles.container}>
-            <View style={{ gap: 16 }}>
+            <View style={{ gap: SPACING.lg }}>
                 <Typography
                     fontSize={32}
                     textAlign='center'
@@ -33,8 +34,8 @@ export function Intro() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        gap: 32,
-        padding: 24,
+        gap: SPACING.xxxl,
+        padding: SPACING.xxl,
         alignItems: 'center',
         justifyContent: 'center'
     }

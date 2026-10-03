@@ -102,6 +102,19 @@ const MarkdownDomEditor = ({
         [colors.errorContainer]
     )
 
+    const colorsKey = JSON.stringify(colors)
+
+    const themeExtension = useCompartment(
+        viewRef,
+        () => buildEditorTheme({ fontSize, fontFamily, headingFontFamily, colors }),
+        [fontSize, fontFamily, headingFontFamily, colorsKey]
+    )
+    const placeholderCompartment = useCompartment(
+        viewRef,
+        () => placeholderExtension(placeholder),
+        [placeholder]
+    )
+
     useEffect(() => {
         document.documentElement.style.height = '100%'
         document.body.style.height = '100%'
@@ -109,8 +122,6 @@ const MarkdownDomEditor = ({
 
         const root = document.getElementById('root')
         if (root) root.style.height = '100%'
-
-        const theme = buildEditorTheme({ fontSize, fontFamily, headingFontFamily, colors })
 
         const state = EditorState.create({
             doc: value || '',
@@ -136,8 +147,8 @@ const MarkdownDomEditor = ({
                 liveFormattingExtension,
                 invalidFrontmatterExtension,
                 EditorView.lineWrapping,
-                placeholderExtension(placeholder),
-                theme,
+                placeholderCompartment,
+                themeExtension,
                 EditorView.updateListener.of((update) => {
                     if (update.docChanged) {
                         const newValue = update.state.doc.toString()
@@ -241,6 +252,10 @@ const MarkdownDomEditor = ({
 
     const fontsReady = !!fonts && !!katexFonts
 
+    const fontsCss = useMemo(() => (
+        fontFacesCss(fonts) + katexFontFacesCss(katexFonts)
+    ), [fonts, katexFonts])
+
     const previewCss = useMemo(() => buildPreviewCss({
         fontFamily,
         headingFontFamily,
@@ -260,8 +275,7 @@ const MarkdownDomEditor = ({
             }}
         >
             <style>
-                {fontFacesCss(fonts)}
-                {katexFontFacesCss(katexFonts)}
+                {fontsCss}
                 {katexCss}
                 {previewCss}
             </style>

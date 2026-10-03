@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useDeferredValue, useEffect, useMemo, useState } from 'react'
 import { router } from 'expo-router'
 import { randomUUID } from 'expo-crypto'
 import { StyleSheet, View } from 'react-native'
@@ -17,10 +17,11 @@ import { useTags } from '@/hooks/use-tags'
 import { useUtils } from '@/hooks/use-utils'
 import { filterNotes, parseSearchQuery } from '@/utils/search-query'
 import { getEditorPath } from '@/utils/editor-path'
-import { toggleSavedSearch, removeSavedSearch } from '@/utils/saved-searches'
+import { toggleSavedSearch, removeSavedSearch, parseStoredList } from '@/utils/saved-searches'
 
 import { RECENT_SEARCHES_LIMIT } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { SPACING } from '@/constants/spacing'
 
 export function NoteSearch({ onClose }) {
     const { repositories } = useRepositories()
@@ -37,11 +38,11 @@ export function NoteSearch({ onClose }) {
 
     useEffect(() => {
         getItem(STORAGE_KEYS.RECENT_SEARCHES).then((value) => {
-            if (value) setRecent(JSON.parse(value))
+            if (value) setRecent(parseStoredList(value))
         })
 
         getItem(STORAGE_KEYS.SAVED_SEARCHES).then((value) => {
-            if (value) setSaved(JSON.parse(value))
+            if (value) setSaved(parseStoredList(value))
         })
     }, [])
 
@@ -51,9 +52,11 @@ export function NoteSearch({ onClose }) {
 
     const parsed = useMemo(() => parseSearchQuery(query), [query])
 
+    const deferredParsed = useDeferredValue(parsed)
+
     const results = useMemo(() => (
-        trimmedQuery ? filterNotes(notes, parsed, { pinned }) : []
-    ), [trimmedQuery, parsed, notes, pinned])
+        trimmedQuery ? filterNotes(notes, deferredParsed, { pinned }) : []
+    ), [trimmedQuery, deferredParsed, notes, pinned])
 
     const saveRecent = (term) => {
         if (!term) return
@@ -108,7 +111,7 @@ export function NoteSearch({ onClose }) {
                         onOpenResult={onOpenResult}
                     />
                 ) : (
-                    <View style={{ gap: 24 }}>
+                    <View style={{ gap: SPACING.xxl }}>
                         <SavedSearches
                             saved={saved}
                             onSelect={setQuery}
@@ -132,7 +135,7 @@ const styles = StyleSheet.create({
     },
     actions: {
         flex: 1,
-        gap: 24,
-        paddingTop: 8
+        gap: SPACING.xxl,
+        paddingTop: SPACING.sm
     }
 })

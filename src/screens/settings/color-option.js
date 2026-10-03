@@ -6,7 +6,8 @@ import { Typography } from '@/components/typography'
 
 import { useAnimatedBorderRadius } from '@/hooks/use-animated-border-radius'
 
-import { RADIUS } from '@/constants/themes'
+import { RADIUS } from '@/constants/radius'
+import { SPACING } from '@/constants/spacing'
 
 export const ColorOption = memo(function ColorOption({ name, active, onPress, children, options }) {
     const colors = options[name]
@@ -21,7 +22,7 @@ export const ColorOption = memo(function ColorOption({ name, active, onPress, ch
             style={{
                 width: 100 / 3 + '%',
                 alignItems: 'center',
-                gap: 4
+                gap: SPACING.xxs
             }}
         >
             <Animated.View
