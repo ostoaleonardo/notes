@@ -9,7 +9,8 @@ import {
     CONTENT_QUALIFIER_REGEX,
     PINNED_QUALIFIER,
     IMAGE_QUALIFIER,
-    CONTENT_QUALIFIER
+    CONTENT_QUALIFIER,
+    DATE_KEY_LENGTH
 } from '@/constants/search-query'
 import { fuzzyMatch } from './fuzzy-match'
 import { getNoteTags } from './note-tags'
@@ -63,7 +64,7 @@ export const parseSearchQuery = (query) => {
     return { text: text.trim().toLowerCase(), tags, paths, files, pinned, hasImage, inContent, modified, created }
 }
 
-const toDateKey = (timestamp) => (timestamp ? new Date(timestamp).toISOString().slice(0, 10) : null)
+const toDateKey = (timestamp) => (timestamp ? new Date(timestamp).toISOString().slice(0, DATE_KEY_LENGTH) : null)
 
 export const toggleTagQualifier = (query, tagName) => {
     const target = tagName.toLowerCase()

@@ -25,7 +25,7 @@ const inlineTagHighlight = ViewPlugin.fromClass(class {
     decorations: (instance) => instance.decorations
 })
 
-export const buildInlineTagPress = (onPressRef) => EditorView.domEventHandlers({
+const buildInlineTagPress = (onPressRef) => EditorView.domEventHandlers({
     mousedown: (event, view) => {
         if (view.hasFocus || !event.target.closest?.(`.${INLINE_TAG_CLASS}`)) return false
 

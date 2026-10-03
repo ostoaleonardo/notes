@@ -5,6 +5,8 @@ export const FONTS = {
     nType82Headline: 'NType82-Headline'
 }
 
+export const DEFAULT_EDITOR_FONT_SIZE = 13
+
 export const TYPOGRAPHY_SIZE_VARIANTS = {
     title: 24,
     subtitle: 16,

@@ -28,6 +28,7 @@ import { pasteUrlOverSelection } from './markdown-dom-paste'
 import { buildInvalidFrontmatterHighlight } from './markdown-dom-invalid-frontmatter'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
+import { DEFAULT_EDITOR_FONT_SIZE } from '@/constants/fonts'
 import { EMBED_CLASS } from '@/constants/embeds'
 import { TASK_CHECKBOX_SELECTOR } from '@/constants/tasks'
 
@@ -75,7 +76,7 @@ const MarkdownDomEditor = ({
     searchQuery,
     replaceText
 }) => {
-    const { fontSize = 13, fontFamily, headingFontFamily } = typography
+    const { fontSize = DEFAULT_EDITOR_FONT_SIZE, fontFamily, headingFontFamily } = typography
 
     const containerRef = useRef(null)
     const previewRef = useRef(null)
