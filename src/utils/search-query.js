@@ -86,22 +86,30 @@ export const toggleImageQualifier = (query) => toggleQualifier(query, IMAGE_QUAL
 
 export const toggleContentQualifier = (query) => toggleQualifier(query, CONTENT_QUALIFIER_REGEX, CONTENT_QUALIFIER)
 
-export const filterNotes = (notes, parsed, { pinned }) => {
-    const scored = notes.flatMap((note) => {
-        if (parsed.pinned && !pinned.has(note.path)) return []
-        if (parsed.tags.length > 0 && !parsed.tags.some((name) => note.tags?.some((tag) => tag.toLowerCase() === name))) return []
-        if (parsed.hasImage && !MARKDOWN_IMAGE_REGEX.test(note.note || '')) return []
-        if (parsed.modified && toDateKey(note.updatedAt) !== parsed.modified) return []
-        if (parsed.created && toDateKey(note.createdAt) !== parsed.created) return []
+const hasMatchingTag = (note, tags) => note.tags?.some((tag) => tags.includes(tag.toLowerCase()))
 
-        if (!parsed.text) return [{ note, score: 0 }]
+const NOTE_FILTERS = [
+    (note, parsed, { pinned }) => !parsed.pinned || pinned.has(note.path),
+    (note, parsed) => parsed.tags.length === 0 || hasMatchingTag(note, parsed.tags),
+    (note, parsed) => !parsed.hasImage || MARKDOWN_IMAGE_REGEX.test(note.note || ''),
+    (note, parsed) => !parsed.modified || toDateKey(note.updatedAt) === parsed.modified,
+    (note, parsed) => !parsed.created || toDateKey(note.createdAt) === parsed.created
+]
 
-        const titleMatch = fuzzyMatch(parsed.text, note.title)
-        const matchesContent = parsed.inContent && (note.note || '').toLowerCase().includes(parsed.text)
-        if (!titleMatch.matches && !matchesContent) return []
+const scoreNote = (note, parsed) => {
+    if (!parsed.text) return { note, score: 0 }
 
-        return [{ note, score: titleMatch.score }]
-    })
+    const titleMatch = fuzzyMatch(parsed.text, note.title)
+    const matchesContent = parsed.inContent && (note.note || '').toLowerCase().includes(parsed.text)
+
+    return titleMatch.matches || matchesContent ? { note, score: titleMatch.score } : null
+}
+
+export const filterNotes = (notes, parsed, context) => {
+    const scored = notes
+        .filter((note) => NOTE_FILTERS.every((filter) => filter(note, parsed, context)))
+        .map((note) => scoreNote(note, parsed))
+        .filter(Boolean)
 
     if (!parsed.text) return scored.map(({ note }) => note)
 

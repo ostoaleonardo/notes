@@ -4,7 +4,7 @@ import { findNext, findPrevious, replaceAll, replaceNext } from '@codemirror/sea
 import { toggleFold } from '@codemirror/language'
 import { snippet } from '@codemirror/autocomplete'
 
-import { LIST_MARKERS } from '@/constants/markdown-patterns'
+import { LIST_MARKERS, LIST_TYPES, WRAP_MARKERS } from '@/constants/markdown-patterns'
 
 const insertWikiLinkSnippet = snippet('[[${}]]')
 
@@ -153,9 +153,11 @@ const toggleListMarker = (view, type) => {
         const isOrdered = !isChecklist && LIST_MARKERS.ordered.test(text)
         const isBullet = !isChecklist && !isOrdered && LIST_MARKERS.bullet.test(text)
 
-        const alreadyActive = (type === 'checklist' && isChecklist)
-            || (type === 'ordered' && isOrdered)
-            || (type === 'bullet' && isBullet)
+        const alreadyActive = {
+            [LIST_TYPES.CHECKLIST]: isChecklist,
+            [LIST_TYPES.ORDERED]: isOrdered,
+            [LIST_TYPES.BULLET]: isBullet
+        }[type]
 
         const stripped = stripListMarker(text)
         if (alreadyActive) return stripped
@@ -163,43 +165,48 @@ const toggleListMarker = (view, type) => {
         const indent = stripped.match(/^\s*/)[0]
         const content = stripped.slice(indent.length)
 
-        if (type === 'checklist') return `${indent}- [ ] ${content}`
-        if (type === 'ordered') return `${indent}1. ${content}`
+        if (type === LIST_TYPES.CHECKLIST) return `${indent}- [ ] ${content}`
+        if (type === LIST_TYPES.ORDERED) return `${indent}1. ${content}`
         return `${indent}- ${content}`
     })
 }
 
-export const runAction = (view, action, payload) => {
-    switch (action) {
-        case 'bold': return toggleWrap(view, '*')
-        case 'italic': return toggleWrap(view, '_')
-        case 'strike': return toggleWrap(view, '~~')
-        case 'code': return toggleWrap(view, '`')
-        case 'h1': return toggleHeading(view, 1)
-        case 'h2': return toggleHeading(view, 2)
-        case 'h3': return toggleHeading(view, 3)
-        case 'h4': return toggleHeading(view, 4)
-        case 'h5': return toggleHeading(view, 5)
-        case 'h6': return toggleHeading(view, 6)
-        case 'quote': return toggleQuote(view)
-        case 'hr': return insertHorizontalRule(view)
-        case 'image': return insertLineLink(view, payload, (label, url) => `![${label}](${url})`)
-        case 'link': return insertLineLink(view, payload, (label, url) => `[${label}](${url})`)
-        case 'wiki-link': return insertWikiLink(view)
-        case 'list-bullet': return toggleListMarker(view, 'bullet')
-        case 'list-ordered': return toggleListMarker(view, 'ordered')
-        case 'list-checklist': return toggleListMarker(view, 'checklist')
-        case 'fold': return toggleFold(view)
-        case 'insert-date': return insertAtCursor(view, '{{date}}')
-        case 'insert-time': return insertAtCursor(view, '{{time}}')
-        case 'insert-title': return insertAtCursor(view, '{{title}}')
-        case 'undo': return undo(view)
-        case 'redo': return redo(view)
-        case 'search-next': return findNext(view)
-        case 'search-previous': return findPrevious(view)
-        case 'search-replace': return replaceNext(view)
-        case 'search-replace-all': return replaceAll(view)
-        case 'table': return insertTable(view, payload)
-        default: return
-    }
+const wrap = (chars) => (view) => toggleWrap(view, chars)
+const heading = (level) => (view) => toggleHeading(view, level)
+const list = (type) => (view) => toggleListMarker(view, type)
+const insert = (text) => (view) => insertAtCursor(view, text)
+const insertLink = (format) => (view, payload) => insertLineLink(view, payload, format)
+
+const ACTION_HANDLERS = {
+    bold: wrap(WRAP_MARKERS.BOLD),
+    italic: wrap(WRAP_MARKERS.ITALIC),
+    strike: wrap(WRAP_MARKERS.STRIKE),
+    code: wrap(WRAP_MARKERS.CODE),
+    h1: heading(1),
+    h2: heading(2),
+    h3: heading(3),
+    h4: heading(4),
+    h5: heading(5),
+    h6: heading(6),
+    quote: toggleQuote,
+    hr: insertHorizontalRule,
+    image: insertLink((label, url) => `![${label}](${url})`),
+    link: insertLink((label, url) => `[${label}](${url})`),
+    'wiki-link': insertWikiLink,
+    'list-bullet': list(LIST_TYPES.BULLET),
+    'list-ordered': list(LIST_TYPES.ORDERED),
+    'list-checklist': list(LIST_TYPES.CHECKLIST),
+    fold: toggleFold,
+    'insert-date': insert('{{date}}'),
+    'insert-time': insert('{{time}}'),
+    'insert-title': insert('{{title}}'),
+    undo,
+    redo,
+    'search-next': findNext,
+    'search-previous': findPrevious,
+    'search-replace': replaceNext,
+    'search-replace-all': replaceAll,
+    table: insertTable
 }
+
+export const runAction = (view, action, payload) => ACTION_HANDLERS[action]?.(view, payload)

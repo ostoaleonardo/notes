@@ -17,3 +17,16 @@ export const LIST_MARKERS = {
     ordered: /^(\s*)\d+\.\s+/,
     bullet: /^(\s*)[-*+]\s+/
 }
+
+export const LIST_TYPES = {
+    BULLET: 'bullet',
+    ORDERED: 'ordered',
+    CHECKLIST: 'checklist'
+}
+
+export const WRAP_MARKERS = {
+    BOLD: '*',
+    ITALIC: '_',
+    STRIKE: '~~',
+    CODE: '`'
+}
