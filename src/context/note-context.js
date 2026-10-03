@@ -6,10 +6,11 @@ import { useRepositories } from '../hooks/use-repositories'
 import { useUtils } from '../hooks/use-utils'
 import { useRecentNotes } from '../hooks/use-recent-notes'
 import { collectTags } from '@/utils/note-tags'
+import { getNotePaths } from '@/utils/note-path'
 
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
-
 import { logError } from '@/utils/log-error'
+
 export const NoteContext = createContext()
 
 export function NoteProvider({ children }) {
@@ -19,6 +20,7 @@ export function NoteProvider({ children }) {
     const loadRepositoryData = useRepositoryData()
 
     const {
+        repositories,
         activeRepository,
         activeRepositoryTree
     } = useRepositories()
@@ -81,14 +83,17 @@ export function NoteProvider({ children }) {
     const tags = useMemo(() => collectTags(notes), [notes])
     const notesByPath = useMemo(() => new Map(notes.map((note) => [note.path, note])), [notes])
 
+    const notePaths = useMemo(() => getNotePaths(notes, repositories), [notes, repositories])
+
     const value = useMemo(() => ({
         notes,
         notesByPath,
+        notePaths,
         setNotes,
         tags,
         loading,
         clear
-    }), [notes, notesByPath, tags, loading, clear])
+    }), [notes, notesByPath, notePaths, tags, loading, clear])
 
     return (
         <NoteContext.Provider value={value}>

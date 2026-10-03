@@ -2,20 +2,18 @@ import { useEffect, useState } from 'react'
 
 import { useNotes } from './use-notes'
 import { useStorage } from './use-storage'
-import { useRepositories } from './use-repositories'
 import { findBacklinks, renameWikiLinksForNote } from '@/utils/wiki-links'
-import { getNotePaths } from '@/utils/note-path'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { STORAGE_BOOLEAN } from '@/constants/storage-values'
 
 export function useWikiLinkRenameConfirm() {
     const {
         notes,
+        notePaths,
         updateNote,
         propagateWikiLinkRename
     } = useNotes()
 
-    const { repositories } = useRepositories()
     const { getItem, setItem } = useStorage()
 
     const [alwaysUpdate, setAlwaysUpdate] = useState(false)
@@ -29,7 +27,6 @@ export function useWikiLinkRenameConfirm() {
 
     const saveWithLinkCheck = async (note, previousTitle) => {
         const titleChanged = previousTitle && previousTitle !== note.title
-        const notePaths = getNotePaths(notes, repositories)
 
         const savedNote = titleChanged
             ? { ...note, note: renameWikiLinksForNote(note.note, note.path, note.title, notes, notePaths) }

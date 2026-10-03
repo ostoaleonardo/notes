@@ -22,6 +22,7 @@ jest.mock('../../hooks/use-repository-data', () => ({
 }))
 jest.mock('../../hooks/use-repositories', () => ({
     useRepositories: () => ({
+        repositories: [],
         activeRepository: mockActiveRepository,
         activeRepositoryTree: mockActiveRepositoryTree
     })

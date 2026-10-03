@@ -5,13 +5,10 @@ import { useNotes } from './use-notes'
 import { useRepositories } from './use-repositories'
 import { resolveWikiLinks } from '@/utils/wiki-links'
 import { resolveEmbeds } from '@/utils/embeds'
-import { getNotePaths } from '@/utils/note-path'
 
 export const useResolvedWikiLinks = (value, selfPath) => {
-    const { notes } = useNotes()
-    const { repositories, activeRepository, ensureImagesFolder } = useRepositories()
-
-    const notePaths = useMemo(() => getNotePaths(notes, repositories), [notes, repositories])
+    const { notes, notePaths } = useNotes()
+    const { activeRepository, ensureImagesFolder } = useRepositories()
 
     const listImageUris = useCallback(() => (
         new Map(

@@ -17,7 +17,6 @@ import { useTags } from '@/hooks/use-tags'
 import { useUtils } from '@/hooks/use-utils'
 import { filterNotes, parseSearchQuery } from '@/utils/search-query'
 import { getEditorPath } from '@/utils/editor-path'
-import { getNotePaths } from '@/utils/note-path'
 import { toggleSavedSearch, removeSavedSearch, parseStoredList } from '@/utils/saved-searches'
 
 import { RECENT_SEARCHES_LIMIT } from '@/constants/default-values'
@@ -26,7 +25,7 @@ import { SPACING } from '@/constants/spacing'
 
 export function NoteSearch({ onClose, initialQuery = '' }) {
     const { repositories } = useRepositories()
-    const { notes } = useNotes()
+    const { notes, notePaths } = useNotes()
     const { tags } = useTags()
     const { pinned } = useUtils()
     const { getItem, setItem } = useStorage()
@@ -54,8 +53,6 @@ export function NoteSearch({ onClose, initialQuery = '' }) {
     const parsed = useMemo(() => parseSearchQuery(query), [query])
 
     const deferredParsed = useDeferredValue(parsed)
-
-    const notePaths = useMemo(() => getNotePaths(notes, repositories), [notes, repositories])
 
     const results = useMemo(() => (
         trimmedQuery ? filterNotes(notes, deferredParsed, { pinned, notePaths }) : []
