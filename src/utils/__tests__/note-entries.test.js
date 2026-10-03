@@ -1,4 +1,4 @@
-import { areNoteEntriesEqual } from '../note-entries'
+import { areNoteEntriesEqual, buildNoteEntries } from '../note-entries'
 
 const entry = (overrides = {}) => ({
     id: 'a',
@@ -24,5 +24,24 @@ describe('note entries equality', () => {
     test('detects changed aliases', () => {
         expect(areNoteEntriesEqual([entry()], [entry({ aliases: ['y'] })])).toBe(false)
         expect(areNoteEntriesEqual([entry()], [entry({ aliases: [] })])).toBe(false)
+    })
+})
+
+describe('build note entries', () => {
+    test('skips untitled notes and resolves folder paths', () => {
+        const notes = [
+            { path: 'r::A.md', title: 'A' },
+            { path: 'r::B.md', title: '' }
+        ]
+
+        expect(buildNoteEntries(notes, new Map([['r::A.md', 'work']]))).toEqual([
+            { id: 'r::A.md', title: 'A', aliases: [], path: 'work' }
+        ])
+    })
+
+    test('falls back to an empty path when the note has no known folder', () => {
+        const entries = buildNoteEntries([{ path: 'r::A.md', title: 'A' }], new Map())
+
+        expect(entries[0].path).toBe('')
     })
 })

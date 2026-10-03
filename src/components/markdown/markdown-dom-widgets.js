@@ -168,20 +168,24 @@ export const TitleSection = ({
     onTitleBlur,
     titlePlaceholder,
     metaLabel,
-    tags,
-    propertiesLabel,
-    propertiesVisible,
+    propertiesPanel,
     onToggleProperties,
     onRemoveTag,
     onOpenTags,
     onTagPress,
-    invalidProperties,
-    invalidPropertiesTitle,
-    invalidPropertiesDescription,
     colors,
     typography
 }) => {
     if (title === undefined) return null
+
+    const {
+        tags,
+        label,
+        visible,
+        invalid,
+        invalidTitle,
+        invalidDescription
+    } = propertiesPanel || {}
 
     return (
         <ThemeContext.Provider value={{ colors, typography }}>
@@ -193,16 +197,16 @@ export const TitleSection = ({
                     placeholder={titlePlaceholder}
                 />
                 <MetaLabel label={metaLabel} />
-                {invalidProperties ? (
+                {invalid ? (
                     <InvalidPropertiesBanner
-                        title={invalidPropertiesTitle}
-                        description={invalidPropertiesDescription}
+                        title={invalidTitle}
+                        description={invalidDescription}
                     />
                 ) : (
                     <PropertiesPanel
                         tags={tags}
-                        propertiesLabel={propertiesLabel}
-                        visible={propertiesVisible}
+                        propertiesLabel={label}
+                        visible={visible}
                         onToggleVisible={onToggleProperties}
                         onRemoveTag={onRemoveTag}
                         onOpenTags={onOpenTags}

@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { LargeInput } from '@/components/input/large-input'
@@ -19,6 +20,7 @@ export const TemplateEditorForm = ({
     replaceText
 }) => {
     const { t } = useTranslation()
+    const search = useMemo(() => ({ query: searchQuery, replace: replaceText }), [searchQuery, replaceText])
 
     return (
         <>
@@ -43,8 +45,7 @@ export const TemplateEditorForm = ({
                     onFocus={onFocus}
                     onBlur={onBlur}
                     onHistoryChange={onHistoryChange}
-                    searchQuery={searchQuery}
-                    replaceText={replaceText}
+                    search={search}
                     placeholder={t('placeholder.note')}
                 />
             </Section>

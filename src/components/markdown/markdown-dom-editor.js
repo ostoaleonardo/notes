@@ -2,13 +2,8 @@
 
 import { useEffect, useMemo, useRef } from 'react'
 import { EditorState } from '@codemirror/state'
-import { EditorView, keymap, placeholder as placeholderExtension } from '@codemirror/view'
-import { autocompletion, closeBrackets } from '@codemirror/autocomplete'
-import { defaultKeymap, history, historyKeymap, indentWithTab, redoDepth, undoDepth } from '@codemirror/commands'
-import { closeSearchPanel, openSearchPanel, search, searchKeymap, setSearchQuery, SearchQuery } from '@codemirror/search'
-import { codeFolding } from '@codemirror/language'
-import { markdown } from '@codemirror/lang-markdown'
-import { GFM } from '@lezer/markdown'
+import { EditorView, placeholder as placeholderExtension } from '@codemirror/view'
+import { closeSearchPanel, openSearchPanel, setSearchQuery, SearchQuery } from '@codemirror/search'
 
 import { fontFacesCss } from './markdown-dom-fonts'
 import { katexFontFacesCss } from './markdown-dom-katex-fonts'
@@ -17,26 +12,18 @@ import { TitleSection } from './markdown-dom-widgets'
 import { buildEditorTheme, buildPreviewCss } from './markdown-dom-theme'
 import { renderMarkdownHtml } from './markdown-dom-render-html'
 import { runAction } from './markdown-dom-commands'
+import { buildEditorExtensions, buildUpdateListener } from './markdown-dom-editor-extensions'
+import { resolvePreviewClick } from './markdown-dom-preview-click'
 import { liveFormatting, mediaMapFacet } from './live-formatting/live-formatting'
-import { noteEntriesFacet, wikiLinkFormatFacet, wikiLinkCompletionSource } from './wiki-link-completion'
-import { knownTagsFacet, tagCompletionSource } from './tag-completion'
-import { inlineTagExtensions } from './inline-tag-highlight'
+import { noteEntriesFacet, wikiLinkFormatFacet } from './wiki-link-completion'
+import { knownTagsFacet } from './tag-completion'
 import { useCompartment } from './use-compartment'
-import { listKeymap } from './markdown-dom-list-keymap'
-import { headingFoldService } from './markdown-dom-fold'
-import { pasteUrlOverSelection } from './markdown-dom-paste'
+import { useLatestRef } from './use-latest-ref'
 import { buildInvalidFrontmatterHighlight } from './markdown-dom-invalid-frontmatter'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { DEFAULT_EDITOR_FONT_SIZE } from '@/constants/fonts'
-import { EMBED_CLASS } from '@/constants/embeds'
-import { TASK_CHECKBOX_SELECTOR } from '@/constants/tasks'
-
-const createHiddenSearchPanel = () => {
-    const dom = document.createElement('div')
-    dom.style.display = 'none'
-    return { dom }
-}
+import { PREVIEW_CLICK_TYPES } from '@/constants/preview-click'
 
 const MarkdownDomEditor = ({
     mode,
@@ -64,42 +51,28 @@ const MarkdownDomEditor = ({
     titleField,
     onTitleChange,
     onTitleBlur,
-    tags,
-    propertiesLabel,
-    propertiesVisible,
+    propertiesPanel,
     onToggleProperties,
     onRemoveTag,
     onOpenTags,
-    invalidProperties,
-    invalidPropertiesTitle,
-    invalidPropertiesDescription,
-    searchQuery,
-    replaceText
+    search
 }) => {
+    const { query: searchQuery, replace: replaceText } = search || {}
     const { fontSize = DEFAULT_EDITOR_FONT_SIZE, fontFamily, headingFontFamily } = typography
 
     const containerRef = useRef(null)
     const previewRef = useRef(null)
     const viewRef = useRef(null)
 
-    const onChangeRef = useRef(onChange)
-    onChangeRef.current = onChange
-
-    const onHistoryChangeRef = useRef(onHistoryChange)
-    onHistoryChangeRef.current = onHistoryChange
-
-    const onFocusRef = useRef(onFocus)
-    onFocusRef.current = onFocus
-
-    const onBlurRef = useRef(onBlur)
-    onBlurRef.current = onBlur
+    const onChangeRef = useLatestRef(onChange)
+    const onHistoryChangeRef = useLatestRef(onHistoryChange)
+    const onFocusRef = useLatestRef(onFocus)
+    const onBlurRef = useLatestRef(onBlur)
+    const onTagPressRef = useLatestRef(onTagPress)
 
     const historyRef = useRef({ canUndo: false, canRedo: false })
     const lastEmittedValueRef = useRef(value)
     const hasFocusRef = useRef(false)
-
-    const onTagPressRef = useRef(onTagPress)
-    onTagPressRef.current = onTagPress
 
     const mediaMapValue = useMemo(() => new Map(mediaMap || []), [mediaMap])
 
@@ -137,48 +110,25 @@ const MarkdownDomEditor = ({
 
         const state = EditorState.create({
             doc: value || '',
-            extensions: [
-                history(),
-                search({ createPanel: createHiddenSearchPanel }),
-                keymap.of([
-                    indentWithTab,
-                    ...listKeymap,
-                    ...defaultKeymap,
-                    ...historyKeymap,
-                    ...searchKeymap
-                ]),
-                markdown({ extensions: GFM }),
-                mediaMapExtension,
-                noteEntriesExtension,
-                knownTagsExtension,
-                linkFormatExtension,
-                inlineTagExtensions(onTagPressRef),
-                autocompletion({ override: [wikiLinkCompletionSource, tagCompletionSource] }),
-                closeBrackets(),
-                codeFolding(),
-                headingFoldService,
-                pasteUrlOverSelection,
-                liveFormattingExtension,
-                invalidFrontmatterExtension,
-                EditorView.lineWrapping,
-                placeholderCompartment,
-                themeExtension,
-                EditorView.updateListener.of((update) => {
-                    if (update.docChanged) {
-                        const newValue = update.state.doc.toString()
-                        lastEmittedValueRef.current = newValue
-                        onChangeRef.current(newValue)
-                    }
-
-                    const canUndo = undoDepth(update.state) > 0
-                    const canRedo = redoDepth(update.state) > 0
-
-                    if (canUndo !== historyRef.current.canUndo || canRedo !== historyRef.current.canRedo) {
-                        historyRef.current = { canUndo, canRedo }
-                        onHistoryChangeRef.current?.(historyRef.current)
-                    }
+            extensions: buildEditorExtensions({
+                dynamic: [
+                    mediaMapExtension,
+                    noteEntriesExtension,
+                    knownTagsExtension,
+                    linkFormatExtension,
+                    liveFormattingExtension,
+                    invalidFrontmatterExtension,
+                    placeholderCompartment,
+                    themeExtension
+                ],
+                onTagPressRef,
+                updateListener: buildUpdateListener({
+                    onChangeRef,
+                    onHistoryChangeRef,
+                    historyRef,
+                    lastEmittedValueRef
                 })
-            ]
+            })
         })
 
         const view = new EditorView({ state, parent: containerRef.current })
@@ -244,27 +194,22 @@ const MarkdownDomEditor = ({
         if (!container) return
 
         const onClick = (event) => {
-            const link = event.target.closest('a')
-            if (link) {
-                event.preventDefault()
-                onLinkPress?.(link.getAttribute('href'))
-                return
-            }
+            const click = resolvePreviewClick(event.target, container)
+            if (!click) return
 
-            const image = event.target.closest('img')
-            if (image) {
-                onImagePress?.(image.getAttribute('src'))
-                return
-            }
-
-            if (event.target.matches(TASK_CHECKBOX_SELECTOR)) {
-                const checkboxes = [...container.querySelectorAll(TASK_CHECKBOX_SELECTOR)]
-                    .filter((checkbox) => !checkbox.closest(`.${EMBED_CLASS}`))
-
-                const index = checkboxes.indexOf(event.target)
-
-                if (index === -1) event.preventDefault()
-                else onToggleTask?.(index)
+            switch (click.type) {
+                case PREVIEW_CLICK_TYPES.LINK:
+                    event.preventDefault()
+                    onLinkPress?.(click.url)
+                    break
+                case PREVIEW_CLICK_TYPES.IMAGE:
+                    onImagePress?.(click.url)
+                    break
+                case PREVIEW_CLICK_TYPES.TASK:
+                    onToggleTask?.(click.index)
+                    break
+                default:
+                    event.preventDefault()
             }
         }
 
@@ -311,16 +256,11 @@ const MarkdownDomEditor = ({
                 {...titleField}
                 onTitleChange={onTitleChange}
                 onTitleBlur={onTitleBlur}
-                tags={mode === EDITOR_MODES.CODE ? undefined : tags}
-                propertiesLabel={propertiesLabel}
-                propertiesVisible={propertiesVisible}
+                propertiesPanel={mode === EDITOR_MODES.CODE ? undefined : propertiesPanel}
                 onToggleProperties={onToggleProperties}
                 onRemoveTag={onRemoveTag}
                 onOpenTags={onOpenTags}
                 onTagPress={onTagPress}
-                invalidProperties={invalidProperties}
-                invalidPropertiesTitle={invalidPropertiesTitle}
-                invalidPropertiesDescription={invalidPropertiesDescription}
                 colors={colors}
                 typography={{ fontFamily, headingFontFamily }}
             />
