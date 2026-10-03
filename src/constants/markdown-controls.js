@@ -22,6 +22,8 @@ import { Schedule } from '@/icons/schedule'
 import { Table } from '@/icons/table'
 import { Title } from '@/icons/title'
 
+import { TEMPLATE_SCOPE } from '@/constants/toolbar'
+
 export const MARKDOWN_CONTROLS = [
     { action: 'wiki-link', Icon: DataArray },
     { action: 'fold', Icon: CollapseContent },
@@ -46,8 +48,8 @@ export const MARKDOWN_CONTROLS = [
     { action: 'image', Icon: Picture },
     { action: 'link', Icon: Link },
     { action: 'table', Icon: Table },
-    { divider: true, scope: 'template' },
-    { action: 'insert-date', Icon: CalendarToday, scope: 'template' },
-    { action: 'insert-time', Icon: Schedule, scope: 'template' },
-    { action: 'insert-title', Icon: Title, scope: 'template' }
+    { divider: true, scope: TEMPLATE_SCOPE },
+    { action: 'insert-date', Icon: CalendarToday, scope: TEMPLATE_SCOPE },
+    { action: 'insert-time', Icon: Schedule, scope: TEMPLATE_SCOPE },
+    { action: 'insert-title', Icon: Title, scope: TEMPLATE_SCOPE }
 ]

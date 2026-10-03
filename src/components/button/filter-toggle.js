@@ -6,6 +6,8 @@ import { Typography } from '../typography'
 
 import { useSegmentedCornerStyle } from '@/hooks/use-segmented-corner-style'
 
+import { BUTTON_SIZE } from '@/constants/button'
+
 export function FilterToggle({
     icon: Icon,
     label,
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12
     },
     touchablePill: {
-        height: 44,
+        height: BUTTON_SIZE,
         paddingVertical: 0,
         paddingHorizontal: 16,
         justifyContent: 'center'

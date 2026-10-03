@@ -7,6 +7,8 @@ import { Typography } from '../typography'
 
 import { useSegmentedCornerStyle } from '@/hooks/use-segmented-corner-style'
 
+import { BUTTON_DISABLED_OPACITY, BUTTON_SIZE, ICON_TOGGLE } from '@/constants/button'
+
 export function IconToggle({
     icon: Icon,
     label,
@@ -21,6 +23,8 @@ export function IconToggle({
     const backgroundColor = background ?? colors.surfaceVariant
     const contentColor = color ?? colors.onBackground
 
+    const iconSize = showLabel ? ICON_TOGGLE.iconSizeWithLabel : ICON_TOGGLE.iconSize
+
     const [pressed, setPressed] = useState(false)
     const animatedStyle = useSegmentedCornerStyle(position, pressed)
 
@@ -30,7 +34,7 @@ export function IconToggle({
                 style={[
                     styles.container,
                     animatedStyle,
-                    { backgroundColor, opacity: disabled ? 0.4 : 1 }
+                    { backgroundColor, opacity: disabled ? BUTTON_DISABLED_OPACITY : 1 }
                 ]}
             >
                 <TouchableRipple
@@ -45,8 +49,8 @@ export function IconToggle({
                         {Icon && (
                             <Icon
                                 color={contentColor}
-                                width={showLabel ? 16 : 20}
-                                height={showLabel ? 16 : 20}
+                                width={iconSize}
+                                height={iconSize}
                             />
                         )}
                         {showLabel && (
@@ -66,19 +70,19 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     },
     touchable: {
-        width: 44,
-        height: 44,
+        width: BUTTON_SIZE,
+        height: BUTTON_SIZE,
         alignItems: 'center',
         justifyContent: 'center'
     },
     touchableLabel: {
-        height: 44,
-        paddingHorizontal: 16,
+        height: BUTTON_SIZE,
+        paddingHorizontal: ICON_TOGGLE.labelPaddingHorizontal,
         alignItems: 'center',
         justifyContent: 'center'
     },
     content: {
-        gap: 6,
+        gap: ICON_TOGGLE.gap,
         flexDirection: 'row',
         alignItems: 'center'
     }

@@ -17,6 +17,7 @@ import { Undo } from '@/icons/undo'
 
 import { MARKDOWN_CONTROLS } from '@/constants/markdown-controls'
 import { EDITOR_MODES } from '@/constants/editor-modes'
+import { TEMPLATE_SCOPE, TOOLBAR_BUTTON_KEYS } from '@/constants/toolbar'
 
 export const MarkdownToolbar = memo(function MarkdownToolbar({
     mode,
@@ -35,39 +36,39 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
 
     const idleButtons = [
         {
-            key: 'undo',
+            key: TOOLBAR_BUTTON_KEYS.UNDO,
             label: 'button.undo',
             icon: Undo,
             disabled: !canUndo,
             onPress: () => onRunAction('undo')
         },
         {
-            key: 'redo',
+            key: TOOLBAR_BUTTON_KEYS.REDO,
             label: 'button.redo',
             icon: Redo,
             disabled: !canRedo,
             onPress: () => onRunAction('redo')
         },
         {
-            key: 'search',
+            key: TOOLBAR_BUTTON_KEYS.SEARCH,
             label: 'drawer.search',
             icon: Search,
             onPress: actions?.onOpenSearch
         },
         {
-            key: 'recent',
+            key: TOOLBAR_BUTTON_KEYS.RECENT,
             label: 'search.recent',
             icon: NoteStack,
             onPress: actions?.onOpenRecents
         },
-        scope !== 'template' && {
-            key: 'tags',
+        scope !== TEMPLATE_SCOPE && {
+            key: TOOLBAR_BUTTON_KEYS.TAGS,
             label: 'title.tags',
             icon: Tag,
             onPress: actions?.onOpenTags
         },
-        scope !== 'template' && {
-            key: 'templates',
+        scope !== TEMPLATE_SCOPE && {
+            key: TOOLBAR_BUTTON_KEYS.TEMPLATES,
             label: 'title.templates',
             icon: Shapes,
             onPress: actions?.onOpenTemplates

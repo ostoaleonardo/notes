@@ -14,6 +14,7 @@ import { EditNote } from '@/icons/edit-note'
 import { Search } from '@/icons/search'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
+import { TEMPLATE_SCOPE } from '@/constants/toolbar'
 
 export const MarkdownModeToggle = ({
     mode,
@@ -53,7 +54,7 @@ export const MarkdownModeToggle = ({
         onOpenDeleteDialog
     })
 
-    const actionGroups = scope === 'template' ? templateActionsGroups : noteActionsGroups
+    const actionGroups = scope === TEMPLATE_SCOPE ? templateActionsGroups : noteActionsGroups
 
     const searchGroup = !isFocused && [
         <MenuItem

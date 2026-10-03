@@ -5,6 +5,8 @@ import { AnimatedView } from '../animated/animated-view'
 
 import { Typography } from '../typography'
 
+import { BUTTON_SIZE } from '@/constants/button'
+
 export function SplitButtonPrimary({ icon: Icon, label, onPress }) {
     const { colors } = useTheme()
 
@@ -37,7 +39,7 @@ export function SplitButtonPrimary({ icon: Icon, label, onPress }) {
 
 const styles = StyleSheet.create({
     primary: {
-        height: 44,
+        height: BUTTON_SIZE,
         borderRadius: 4,
         borderTopLeftRadius: 22,
         borderBottomLeftRadius: 22,
