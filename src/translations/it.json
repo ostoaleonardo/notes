@@ -1,8 +1,5 @@
 {
 	"language": "Italiano",
-	"tags": {
-		"update": "Aggiorna tag"
-	},
 	"title": {
 		"notes": "Note",
 		"tags": "Tag",
@@ -53,8 +50,7 @@
 	},
 	"placeholder": {
 		"title": "Il tuo titolo...",
-		"note": "Scrivi la tua nota qui...",
-		"tag": "Nuovo tag..."
+		"note": "Scrivi la tua nota qui..."
 	},
 	"drawer": {
 		"tags": "Tag"

@@ -1,4 +1,4 @@
-import { dedupeTags, hasTag, isSameTag, reconcileTags } from '../tag-names'
+import { dedupeTags, hasTag, isSameTag, isValidTagName, matchesTag, sanitizeTagName } from '../tag-names'
 
 describe('tag names', () => {
     test('compares tags ignoring case', () => {
@@ -16,34 +16,48 @@ describe('tag names', () => {
     })
 })
 
-describe('reconcile tags', () => {
-    test('adds tags used by notes that are missing from the dictionary', () => {
-        const notes = [{ tags: ['work', 'ideas'] }, { tags: ['ideas'] }]
-
-        expect(reconcileTags(['work'], notes)).toEqual({
-            tags: ['work', 'ideas'],
-            changed: true
-        })
+describe('match tag', () => {
+    test('matches the same tag ignoring case', () => {
+        expect(matchesTag('Work', 'work')).toBe(true)
     })
 
-    test('keeps the dictionary casing over the note casing', () => {
-        const result = reconcileTags(['Work'], [{ tags: ['work'] }])
-
-        expect(result).toEqual({ tags: ['Work'], changed: false })
+    test('matches nested tags under the queried parent', () => {
+        expect(matchesTag('work/projects/a', 'work')).toBe(true)
+        expect(matchesTag('work/projects/a', 'work/projects')).toBe(true)
     })
 
-    test('keeps dictionary tags that no note uses', () => {
-        expect(reconcileTags(['unused'], [{ tags: [] }]).tags).toEqual(['unused'])
+    test('does not match a tag that only shares a prefix', () => {
+        expect(matchesTag('workshop', 'work')).toBe(false)
     })
 
-    test('collapses case duplicates inside the dictionary', () => {
-        expect(reconcileTags(['Work', 'work'], [])).toEqual({
-            tags: ['Work'],
-            changed: true
-        })
+    test('does not match a parent when querying a child', () => {
+        expect(matchesTag('work', 'work/projects')).toBe(false)
+    })
+})
+
+describe('sanitize tag name', () => {
+    test('removes leading hashes and trims spaces', () => {
+        expect(sanitizeTagName('  ##work ')).toBe('work')
     })
 
-    test('tolerates notes without tags', () => {
-        expect(reconcileTags(['a'], [{}]).changed).toBe(false)
+    test('joins words with hyphens', () => {
+        expect(sanitizeTagName('my  big tag')).toBe('my-big-tag')
+    })
+
+    test('removes punctuation but keeps slashes, hyphens and underscores', () => {
+        expect(sanitizeTagName('a/b_c-d!?.')).toBe('a/b_c-d')
+    })
+
+    test('drops trailing slashes', () => {
+        expect(sanitizeTagName('work//')).toBe('work')
+    })
+})
+
+describe('valid tag name', () => {
+    test('requires at least one non numeric character', () => {
+        expect(isValidTagName('work')).toBe(true)
+        expect(isValidTagName('2024a')).toBe(true)
+        expect(isValidTagName('2024')).toBe(false)
+        expect(isValidTagName('')).toBe(false)
     })
 })

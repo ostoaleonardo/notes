@@ -1,8 +1,5 @@
 {
 	"language": "Français",
-	"tags": {
-		"update": "Modifier l'étiquette"
-	},
 	"title": {
 		"notes": "Notes",
 		"tags": "Étiquettes",
@@ -53,8 +50,7 @@
 	},
 	"placeholder": {
 		"title": "Votre titre...",
-		"note": "Tapez votre note ici...",
-		"tag": "Nouvelle étiquette..."
+		"note": "Tapez votre note ici..."
 	},
 	"drawer": {
 		"tags": "Étiquettes"

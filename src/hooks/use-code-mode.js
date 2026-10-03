@@ -1,8 +1,6 @@
 import { useCallback, useState } from 'react'
 
-import { useTags } from './use-tags'
 import { buildNoteFileContent, decomposeNoteFileContent } from '@/utils/frontmatter'
-import { hasTag } from '@/utils/tag-names'
 
 export function useCodeMode({
     note,
@@ -14,18 +12,11 @@ export function useCodeMode({
     setProperties,
     setInvalidFrontmatter
 }) {
-    const { tags: allTags, addTag } = useTags()
     const [codeBuffer, setCodeBuffer] = useState('')
 
     const enter = useCallback(() => {
         setCodeBuffer(buildNoteFileContent({ tags, properties, invalidFrontmatter }, note))
     }, [tags, properties, invalidFrontmatter, note])
-
-    const leave = useCallback(() => {
-        tags
-            .filter((name) => !hasTag(allTags, name))
-            .forEach((name) => addTag(name))
-    }, [tags, allTags, addTag])
 
     const onChange = useCallback((value) => {
         const decomposed = decomposeNoteFileContent(value)
@@ -37,5 +28,5 @@ export function useCodeMode({
         if (decomposed.properties) setProperties(decomposed.properties)
     }, [setNote, setTags, setProperties, setInvalidFrontmatter])
 
-    return { codeBuffer, enter, leave, onChange }
+    return { codeBuffer, enter, onChange }
 }

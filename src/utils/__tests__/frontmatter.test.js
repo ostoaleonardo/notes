@@ -3,7 +3,8 @@ import {
     decomposeNoteFileContent,
     extractProperties,
     normalizeTags,
-    parseFrontmatter
+    parseFrontmatter,
+    readFrontmatterTags
 } from '../frontmatter'
 
 describe('parseFrontmatter', () => {
@@ -180,8 +181,12 @@ describe('normalize tags', () => {
         expect(normalizeTags(['#one', 'one', ' two '])).toEqual(['one', 'two'])
     })
 
-    test('stringifies numeric tags', () => {
-        expect(normalizeTags([2024])).toEqual(['2024'])
+    test('drops tags made only of digits', () => {
+        expect(normalizeTags([2024, '2024', 'y2024'])).toEqual(['y2024'])
+    })
+
+    test('joins words with hyphens and removes invalid characters', () => {
+        expect(normalizeTags(['my tag!', 'a/b/', 'x,y'])).toEqual(['my-tag', 'a/b', 'xy'])
     })
 
     test('drops entries that are not strings or numbers', () => {
@@ -191,6 +196,25 @@ describe('normalize tags', () => {
     test('returns an empty list for missing or unsupported values', () => {
         expect(normalizeTags(undefined)).toEqual([])
         expect(normalizeTags({ a: 1 })).toEqual([])
+    })
+})
+
+describe('read frontmatter tags', () => {
+    test('reads the tags key as a list or a string', () => {
+        expect(readFrontmatterTags({ tags: ['one', 'two'] })).toEqual(['one', 'two'])
+        expect(readFrontmatterTags({ tags: 'one, two' })).toEqual(['one', 'two'])
+    })
+
+    test('reads the singular tag key too', () => {
+        expect(readFrontmatterTags({ tag: 'one' })).toEqual(['one'])
+    })
+
+    test('merges both keys without duplicates', () => {
+        expect(readFrontmatterTags({ tags: ['One'], tag: 'one two' })).toEqual(['One', 'two'])
+    })
+
+    test('returns an empty list when no key is present', () => {
+        expect(readFrontmatterTags({})).toEqual([])
     })
 })
 

@@ -11,6 +11,7 @@ import { ConfirmDialog } from '@/components/confirm-dialog'
 import { useDomFonts } from '@/hooks/use-dom-fonts'
 import { useKatexFonts } from '@/hooks/use-katex-fonts'
 import { useNotes } from '@/hooks/use-notes'
+import { useTags } from '@/hooks/use-tags'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useResolvedPreviewMarkdown } from '@/hooks/use-resolved-preview-markdown'
 import { useResolvedWikiLinks } from '@/hooks/use-resolved-wiki-links'
@@ -26,6 +27,7 @@ import { ROUTES } from '@/constants/routes'
 import { BODY_FONT_FAMILY, HEADING_FONT_FAMILY } from '@/constants/fonts'
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { TAG_LINK_SCHEME } from '@/constants/tags'
 import { WIKI_LINK_SCHEME, WIKI_LINK_MISSING_PREFIX, WIKI_LINK_FORMATS } from '@/constants/wiki-links'
 
 export const MarkdownInput = ({
@@ -48,6 +50,7 @@ export const MarkdownInput = ({
     onToggleProperties,
     onRemoveTag,
     onOpenTags,
+    onTagPress,
     invalidProperties,
     invalidPropertiesTitle,
     invalidPropertiesDescription,
@@ -58,6 +61,7 @@ export const MarkdownInput = ({
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { notes, saveNote } = useNotes()
+    const { tags: knownTags } = useTags()
     const { repositories } = useRepositories()
 
     const fonts = useDomFonts()
@@ -106,6 +110,11 @@ export const MarkdownInput = ({
     const onLinkPress = useCallback((url) => {
         if (!url) return
 
+        if (url.startsWith(TAG_LINK_SCHEME)) {
+            onTagPress?.(decodeURIComponent(url.slice(TAG_LINK_SCHEME.length)))
+            return
+        }
+
         if (url.startsWith(WIKI_LINK_SCHEME)) {
             const target = url.slice(WIKI_LINK_SCHEME.length)
 
@@ -119,7 +128,7 @@ export const MarkdownInput = ({
         }
 
         Linking.openURL(url)
-    }, [])
+    }, [onTagPress])
 
     const onDismissMissingLink = useCallback(() => setMissingLink(null), [])
 
@@ -168,6 +177,7 @@ export const MarkdownInput = ({
                 previewValue={previewValue}
                 mediaMap={mediaMapEntries}
                 noteEntries={noteEntries}
+                knownTags={knownTags}
                 linkFormat={linkFormat}
                 backlinksHtml={backlinksHtml}
                 onChange={onChangeText}
@@ -176,6 +186,7 @@ export const MarkdownInput = ({
                 onFocus={onFocus}
                 onBlur={onBlur}
                 onLinkPress={onLinkPress}
+                onTagPress={onTagPress}
                 onImagePress={onImagePress}
                 placeholder={placeholder}
                 titleField={titleField}

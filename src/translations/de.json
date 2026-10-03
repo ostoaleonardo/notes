@@ -1,8 +1,5 @@
 {
 	"language": "Deutsch",
-	"tags": {
-		"update": "Tag aktualisieren"
-	},
 	"title": {
 		"notes": "Notizen",
 		"tags": "Tags",
@@ -53,8 +50,7 @@
 	},
 	"placeholder": {
 		"title": "Dein Titel...",
-		"note": "Schreib deine Notiz hier...",
-		"tag": "Neuer Tag..."
+		"note": "Schreib deine Notiz hier..."
 	},
 	"drawer": {
 		"tags": "Tags"

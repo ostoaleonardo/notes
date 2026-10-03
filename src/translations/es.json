@@ -17,9 +17,6 @@
 		"migration_notice": "La migración terminó con avisos: {{renamed}} notas se renombraron y {{images}} imágenes no se pudieron recuperar."
 	},
 	"tags": {
-		"add": "Añadir etiqueta",
-		"already_added": "Esta etiqueta ya existe",
-		"update": "Actualizar etiqueta",
 		"invalid_properties_title": "Propiedades inválidas",
 		"invalid_properties_description": "El bloque de propiedades no se pudo interpretar."
 	},
@@ -156,8 +153,6 @@
 	"count": {
 		"notes": "{{count}} nota",
 		"notes_plural": "{{count}} notas",
-		"tags": "{{count}} etiqueta",
-		"tags_plural": "{{count}} etiquetas",
 		"folders": "{{count}} carpeta",
 		"folders_plural": "{{count}} carpetas",
 		"templates": "{{count}} plantilla",
@@ -232,8 +227,7 @@
 	},
 	"placeholder": {
 		"title": "Tu título...",
-		"note": "Escribe tu nota aquí...",
-		"tag": "Nueva etiqueta..."
+		"note": "Escribe tu nota aquí..."
 	},
 	"drawer": {
 		"repositories": "Repositorios",

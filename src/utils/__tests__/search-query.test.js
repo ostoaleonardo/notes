@@ -191,6 +191,16 @@ describe('filter notes', () => {
         expect(result.map((note) => note.path).sort()).toEqual(['note-1', 'note-2'])
     })
 
+    test('matches nested tags when filtering by their parent', () => {
+        const notes = [
+            { path: 'a', title: 'A', tags: ['work/projects'] },
+            { path: 'b', title: 'B', tags: ['workshop'] },
+            { path: 'c', title: 'C', tags: [], note: 'text #work/todo' }
+        ]
+        const result = filterNotes(notes, parseSearchQuery('tag:work'), { pinned: new Set() })
+        expect(result.map((note) => note.path)).toEqual(['a', 'c'])
+    })
+
     test('filters by pinned qualifier', () => {
         const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('is:pinned'), {
             pinned: new Set(['note-3'])

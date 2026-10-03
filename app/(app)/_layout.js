@@ -76,14 +76,6 @@ export default function AppLayout() {
                 <Stack.Protected guard={showDrawer}>
                     <Stack.Screen name='(drawer)' />
                     <Stack.Screen
-                        name='tags/index'
-                        options={{
-                            headerShown: true,
-                            title: t('title.tags'),
-                            header: (props) => <AppBar title={props.options.title} />
-                        }}
-                    />
-                    <Stack.Screen
                         name='repositories/index'
                         options={{
                             headerShown: true,

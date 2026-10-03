@@ -7,6 +7,14 @@ export const HTML_IMAGE_PATTERN = /(<img[^>]*\bsrc=["'])((?:file|content):\/\/[^
 
 export const TAG_SEPARATOR_PATTERN = /[,\s]+/
 export const LEADING_HASH_PATTERN = /^#/
+export const INLINE_TAG_PATTERN = /(^|\s)#([^\s!-,.:-@[-^`{-~]+)/g
+export const WHITESPACE_RUN_PATTERN = /\s+/g
+export const INVALID_TAG_CHAR_PATTERN = /[!-,.:-@[-^`{-~]/g
+export const TAG_TYPING_PATTERN = /#[^\s!-,.:-@[-^`{-~]*/
+export const TRAILING_SLASHES_PATTERN = /\/+$/
+export const NON_NUMERIC_PATTERN = /\D/
+export const FENCED_CODE_PATTERN = /(```|~~~)[\s\S]*?(\1|$)/g
+export const INLINE_CODE_PATTERN = /`[^`\n]*`/g
 
 export const URL_PATTERN = /^https?:\/\/\S+$/
 export const FRONTMATTER_REGEX = /^---\r?\n([\s\S]*?)\r?\n---\r?\n*/

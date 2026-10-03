@@ -23,14 +23,14 @@ import { RECENT_SEARCHES_LIMIT } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { SPACING } from '@/constants/spacing'
 
-export function NoteSearch({ onClose }) {
+export function NoteSearch({ onClose, initialQuery = '' }) {
     const { repositories } = useRepositories()
     const { notes } = useNotes()
     const { tags } = useTags()
     const { pinned } = useUtils()
     const { getItem, setItem } = useStorage()
 
-    const [query, setQuery] = useState('')
+    const [query, setQuery] = useState(initialQuery)
     const [recent, setRecent] = useState([])
     const [saved, setSaved] = useState([])
 

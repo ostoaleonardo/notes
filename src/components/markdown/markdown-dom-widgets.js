@@ -79,7 +79,8 @@ const PropertiesPanel = ({
     visible,
     onToggleVisible,
     onRemoveTag,
-    onOpenTags
+    onOpenTags,
+    onTagPress
 }) => {
     const { colors, typography } = useContext(ThemeContext)
     const { tertiary, onTertiary, onBackground } = colors
@@ -113,7 +114,7 @@ const PropertiesPanel = ({
                     </svg>
                     {tags.map((tag) => (
                         <span key={tag} style={buildChipStyle({ tertiary, onTertiary, fontFamily: typography.fontFamily })}>
-                            {tag}
+                            <span onClick={() => onTagPress(tag)}>{tag}</span>
                             <svg
                                 width='10'
                                 height='10'
@@ -173,6 +174,7 @@ export const TitleSection = ({
     onToggleProperties,
     onRemoveTag,
     onOpenTags,
+    onTagPress,
     invalidProperties,
     invalidPropertiesTitle,
     invalidPropertiesDescription,
@@ -204,6 +206,7 @@ export const TitleSection = ({
                         onToggleVisible={onToggleProperties}
                         onRemoveTag={onRemoveTag}
                         onOpenTags={onOpenTags}
+                        onTagPress={onTagPress}
                     />
                 )}
             </div>

@@ -1,8 +1,5 @@
 {
 	"language": "Türkçe",
-	"tags": {
-		"update": "Etiketi güncelle"
-	},
 	"title": {
 		"notes": "Notlar",
 		"tags": "Etiketler",
@@ -53,8 +50,7 @@
 	},
 	"placeholder": {
 		"title": "Ünvanınız...",
-		"note": "Notunuzu buraya yazın...",
-		"tag": "Yeni etiket..."
+		"note": "Notunuzu buraya yazın..."
 	},
 	"drawer": {
 		"tags": "Etiketler"

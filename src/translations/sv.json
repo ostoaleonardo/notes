@@ -1,8 +1,5 @@
 {
 	"language": "Svenska",
-	"tags": {
-		"update": "Uppdatera tagg"
-	},
 	"title": {
 		"notes": "Anteckningar",
 		"tags": "Taggar",
@@ -53,8 +50,7 @@
 	},
 	"placeholder": {
 		"title": "Titel...",
-		"note": "Skriv här...",
-		"tag": "Ny tagg..."
+		"note": "Skriv här..."
 	},
 	"drawer": {
 		"tags": "Taggar"

@@ -1,8 +1,5 @@
 {
 	"language": "Čeština",
-	"tags": {
-		"update": "Upravit štítek"
-	},
 	"title": {
 		"notes": "Poznámky",
 		"tags": "Štítky",
@@ -53,8 +50,7 @@
 	},
 	"placeholder": {
 		"title": "Váš titul...",
-		"note": "Zde napište poznámku...",
-		"tag": "Nový štítek..."
+		"note": "Zde napište poznámku..."
 	},
 	"drawer": {
 		"tags": "Štítky"

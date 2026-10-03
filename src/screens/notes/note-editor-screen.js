@@ -35,6 +35,8 @@ import { readDeleteBehavior } from '@/utils/delete-note-files'
 import { buildNoteMetaLabel } from '@/utils/note-meta-label'
 import { countWords } from '@/utils/word-count'
 import { getVersionLocation } from '@/utils/note-version-location'
+import { toggleTagQualifier } from '@/utils/search-query'
+
 
 import { DEFAULT_DELETE_BEHAVIOR } from '@/constants/delete-behavior'
 import { EDITOR_MODES } from '@/constants/editor-modes'
@@ -90,6 +92,18 @@ export const NoteEditorScreen = ({
 
     const { propertiesVisible, onToggleProperties } = useShowProperties()
 
+    const [searchSeed, setSearchSeed] = useState('')
+
+    const onOpenSearch = useCallback(() => {
+        setSearchSeed('')
+        searchSheet.onOpen()
+    }, [searchSheet.onOpen])
+
+    const onTagPress = useCallback((name) => {
+        setSearchSeed(toggleTagQualifier('', name))
+        searchSheet.onOpen()
+    }, [searchSheet.onOpen])
+
     const onRemoveTag = useCallback((name) => {
         setTags((prev) => prev.filter((tag) => tag !== name))
     }, [setTags])
@@ -111,10 +125,9 @@ export const NoteEditorScreen = ({
         if (nextMode === mode) return
 
         if (nextMode === EDITOR_MODES.CODE) codeMode.enter()
-        else if (mode === EDITOR_MODES.CODE) codeMode.leave()
 
         setMode(nextMode)
-    }, [mode, codeMode.enter, codeMode.leave])
+    }, [mode, codeMode.enter])
 
     const isCodeMode = mode === EDITOR_MODES.CODE
     const editorValue = isCodeMode ? codeMode.codeBuffer : note
@@ -224,13 +237,13 @@ export const NoteEditorScreen = ({
         onOpenTags: tagsSheet.onOpen,
         onOpenTemplates,
         onOpenRecents: recentsSheet.onOpen,
-        onOpenSearch: searchSheet.onOpen,
+        onOpenSearch,
         onSaveAsTemplate
     }), [
         tagsSheet.onOpen,
         onOpenTemplates,
         recentsSheet.onOpen,
-        searchSheet.onOpen,
+        onOpenSearch,
         onSaveAsTemplate
     ])
 
@@ -294,6 +307,7 @@ export const NoteEditorScreen = ({
                     onToggleProperties={onToggleProperties}
                     onRemoveTag={onRemoveTag}
                     onOpenTags={tagsSheet.onOpen}
+                    onTagPress={onTagPress}
                     invalidProperties={invalidProperties}
                     invalidPropertiesTitle={t('tags.invalid_properties_title')}
                     invalidPropertiesDescription={t('tags.invalid_properties_description')}
@@ -333,6 +347,7 @@ export const NoteEditorScreen = ({
             <NoteToolbarSheets
                 recentsSheet={recentsSheet}
                 searchSheet={searchSheet}
+                initialSearch={searchSeed}
             />
 
             <ExportFormat

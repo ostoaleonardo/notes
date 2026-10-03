@@ -1,8 +1,5 @@
 {
 	"language": "Nederlands",
-	"tags": {
-		"update": "Label bewerken"
-	},
 	"title": {
 		"notes": "Notities",
 		"tags": "Labels",
@@ -52,8 +49,7 @@
 	},
 	"placeholder": {
 		"title": "Je titel...",
-		"note": "Typ uw notitie hier...",
-		"tag": "Nieuw label..."
+		"note": "Typ uw notitie hier..."
 	},
 	"drawer": {
 		"tags": "Labels"

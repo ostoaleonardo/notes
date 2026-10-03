@@ -2,13 +2,6 @@ import { act, renderHook } from '@testing-library/react-native'
 
 import { useCodeMode } from '../use-code-mode'
 
-const mockAddTag = jest.fn()
-let mockAllTags = []
-
-jest.mock('../use-tags', () => ({
-    useTags: () => ({ tags: mockAllTags, addTag: mockAddTag })
-}))
-
 const setup = async (overrides = {}) => {
     const props = {
         note: 'Body',
@@ -29,7 +22,6 @@ const setup = async (overrides = {}) => {
 
 beforeEach(() => {
     jest.clearAllMocks()
-    mockAllTags = []
 })
 
 describe('enter code mode', () => {
@@ -87,17 +79,5 @@ describe('edit in code mode', () => {
         expect(props.setProperties).not.toHaveBeenCalled()
         expect(props.setInvalidFrontmatter).toHaveBeenCalledWith('tags: [two')
         expect(props.setNote).toHaveBeenCalledWith('Edited')
-    })
-})
-
-describe('leave code mode', () => {
-    test('registers only the tags missing from the global list', async () => {
-        mockAllTags = ['one']
-        const { result } = await setup({ tags: ['one', 'two'] })
-
-        await act(async () => result.current.leave())
-
-        expect(mockAddTag).toHaveBeenCalledTimes(1)
-        expect(mockAddTag).toHaveBeenCalledWith('two')
     })
 })

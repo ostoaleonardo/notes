@@ -10,6 +10,8 @@ import {
     CONTENT_QUALIFIER
 } from '@/constants/search-query'
 import { fuzzyMatch } from './fuzzy-match'
+import { getNoteTags } from './note-tags'
+import { matchesTag } from './tag-names'
 
 export const parseSearchQuery = (query) => {
     let text = query
@@ -86,7 +88,9 @@ export const toggleImageQualifier = (query) => toggleQualifier(query, IMAGE_QUAL
 
 export const toggleContentQualifier = (query) => toggleQualifier(query, CONTENT_QUALIFIER_REGEX, CONTENT_QUALIFIER)
 
-const hasMatchingTag = (note, tags) => note.tags?.some((tag) => tags.includes(tag.toLowerCase()))
+const hasMatchingTag = (note, queries) => (
+    getNoteTags(note).some((tag) => queries.some((query) => matchesTag(tag, query)))
+)
 
 const NOTE_FILTERS = [
     (note, parsed, { pinned }) => !parsed.pinned || pinned.has(note.path),

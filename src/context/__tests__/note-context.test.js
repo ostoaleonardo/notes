@@ -4,7 +4,6 @@ import { act, renderHook, waitFor } from '@testing-library/react-native'
 
 import { NoteContext, NoteProvider } from '../note-context'
 
-import { DEFAULT_TAGS } from '@/constants/default-values'
 
 const mockLoadRepositoryData = jest.fn()
 const mockUpdatePinned = jest.fn()
@@ -57,15 +56,14 @@ describe('loading notes on mount', () => {
         mockActiveRepository = root
         mockActiveRepositoryTree = [root]
         mockLoadRepositoryData.mockResolvedValue({
-            notes: [{ id: 'note-1', title: 'Hello' }],
-            tags: [{ id: 'tag-1', name: 'work' }]
+            notes: [{ id: 'note-1', title: 'Hello', tags: ['work'], note: 'a #work/todo' }]
         })
 
         const { result } = await renderNoteContext()
 
         expect(mockLoadRepositoryData).toHaveBeenCalledWith([root], root)
-        expect(result.current.notes).toEqual([{ id: 'note-1', title: 'Hello' }])
-        expect(result.current.tags).toEqual([{ id: 'tag-1', name: 'work' }])
+        expect(result.current.notes).toHaveLength(1)
+        expect(result.current.tags).toEqual(['work', 'work/todo'])
         expect(result.current.loading).toBe(false)
     })
 
@@ -90,7 +88,7 @@ describe('reload on app foreground', () => {
 
         const addEventListenerSpy = jest.spyOn(AppState, 'addEventListener')
 
-        mockLoadRepositoryData.mockResolvedValue({ notes: [], tags: [] })
+        mockLoadRepositoryData.mockResolvedValue({ notes: [] })
         const { result } = await renderNoteContext()
 
         const [, handler] = addEventListenerSpy.mock.calls.find(([event]) => event === 'change')
@@ -133,7 +131,7 @@ describe('pruning stale pinned and recent entries', () => {
         mockActiveRepository = root
         mockActiveRepositoryTree = [root]
         mockPinned = new Set(['template:Weekly.md'])
-        mockLoadRepositoryData.mockResolvedValue({ notes: [], tags: [] })
+        mockLoadRepositoryData.mockResolvedValue({ notes: [] })
 
         await renderNoteContext()
 
@@ -159,13 +157,12 @@ describe('pruning stale pinned and recent entries', () => {
 })
 
 describe('clear', () => {
-    test('resets notes and tags to their defaults', async () => {
+    test('empties notes and the tags derived from them', async () => {
         const root = { id: 'repo-1', uri: 'content://repo-1' }
         mockActiveRepository = root
         mockActiveRepositoryTree = [root]
         mockLoadRepositoryData.mockResolvedValue({
-            notes: [{ id: 'note-1', title: 'Hello' }],
-            tags: [{ id: 'tag-1', name: 'work' }]
+            notes: [{ id: 'note-1', title: 'Hello', tags: ['work'] }]
         })
 
         const { result } = await renderNoteContext()
@@ -176,6 +173,6 @@ describe('clear', () => {
         })
 
         expect(result.current.notes).toEqual([])
-        expect(result.current.tags).toEqual(DEFAULT_TAGS)
+        expect(result.current.tags).toEqual([])
     })
 })

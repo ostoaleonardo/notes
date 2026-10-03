@@ -17,9 +17,6 @@
 		"migration_notice": "Migration finished with issues: {{renamed}} notes were renamed and {{images}} images couldn't be recovered."
 	},
 	"tags": {
-		"add": "Add tag",
-		"already_added": "This tag already exists",
-		"update": "Update tag",
 		"invalid_properties_title": "Invalid properties",
 		"invalid_properties_description": "The properties block couldn't be parsed."
 	},
@@ -156,8 +153,6 @@
 	"count": {
 		"notes": "{{count}} note",
 		"notes_plural": "{{count}} notes",
-		"tags": "{{count}} tag",
-		"tags_plural": "{{count}} tags",
 		"folders": "{{count}} folder",
 		"folders_plural": "{{count}} folders",
 		"templates": "{{count}} template",
@@ -232,8 +227,7 @@
 	},
 	"placeholder": {
 		"title": "Your title...",
-		"note": "Type your note here...",
-		"tag": "New tag..."
+		"note": "Type your note here..."
 	},
 	"drawer": {
 		"repositories": "Repositories",

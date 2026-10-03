@@ -4,6 +4,7 @@ import { buildLiveFormattingTheme } from './live-formatting/live-formatting'
 
 import { TRANSPARENT } from '../../constants/themes'
 import { SPACING } from '../../constants/spacing'
+import { INLINE_TAG_CLASS } from '../../constants/tags'
 
 const buildDerivedColors = (colors) => ({
     ...colors,
@@ -139,6 +140,7 @@ export const buildEditorTheme = ({ fontSize, fontFamily, headingFontFamily, colo
         '.cm-gutters': { display: 'none' },
         '&.cm-focused': { outline: 'none' },
         '.cm-placeholder': { color: placeholder },
+        [`.${INLINE_TAG_CLASS}`]: { color: tertiary, fontWeight: 'bold' },
         '.cm-searchMatch': { backgroundColor: `${tertiary}40 !important` },
         '.cm-searchMatch-selected': { backgroundColor: `${tertiary}80 !important` },
         '.cm-tooltip.cm-tooltip-autocomplete': {
@@ -189,6 +191,7 @@ export const buildPreviewCss = ({ fontFamily, headingFontFamily, colors, fontSiz
     .markdown-preview p { margin: 0.4em 0; }
     .markdown-preview a { color: ${linkColor}; text-decoration: underline; }
     .markdown-preview .wiki-link { color: ${linkColor}; text-decoration: underline; font-weight: bold; }
+    .markdown-preview .tag { color: ${linkColor}; text-decoration: none; font-weight: bold; }
     .markdown-preview .wiki-link-broken { color: ${textColor}; opacity: 0.5; text-decoration: underline dashed; }
     .markdown-preview blockquote {
         margin: 0.4em 0; padding: 0.2em 0.8em;

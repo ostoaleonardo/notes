@@ -5,7 +5,7 @@ import { ModalSheet } from '@/components/modal/modal-sheet'
 
 import { SHEET_SNAP_POINTS } from '@/constants/sheet'
 
-export function NoteSearchSheet({ sheet }) {
+export function NoteSearchSheet({ sheet, initialQuery }) {
     const [openCount, setOpenCount] = useState(0)
 
     return (
@@ -19,6 +19,7 @@ export function NoteSearchSheet({ sheet }) {
         >
             <NoteSearch
                 key={openCount}
+                initialQuery={initialQuery}
                 onClose={sheet.onClose}
             />
         </ModalSheet>

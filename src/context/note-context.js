@@ -5,15 +5,14 @@ import { useRepositoryData } from '../hooks/use-repository-data'
 import { useRepositories } from '../hooks/use-repositories'
 import { useUtils } from '../hooks/use-utils'
 import { useRecentNotes } from '../hooks/use-recent-notes'
+import { collectTags } from '@/utils/note-tags'
 
-import { DEFAULT_TAGS } from '@/constants/default-values'
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 
 export const NoteContext = createContext()
 
 export function NoteProvider({ children }) {
     const [notes, setNotes] = useState([])
-    const [tags, setTags] = useState(DEFAULT_TAGS)
     const [loading, setLoading] = useState(true)
 
     const loadRepositoryData = useRepositoryData()
@@ -52,10 +51,9 @@ export function NoteProvider({ children }) {
 
         try {
             const rootRepository = activeRepositoryTree[0] || activeRepository
-            const { notes, tags } = await loadRepositoryData(activeRepositoryTree, rootRepository)
+            const { notes } = await loadRepositoryData(activeRepositoryTree, rootRepository)
 
             setNotes(notes)
-            setTags(tags)
             pruneStaleFavoritesRef.current(notes)
         } catch (error) {
             console.debug('error loading notes', error)
@@ -77,9 +75,9 @@ export function NoteProvider({ children }) {
 
     const clear = useCallback(() => {
         setNotes([])
-        setTags(DEFAULT_TAGS)
     }, [])
 
+    const tags = useMemo(() => collectTags(notes), [notes])
     const notesByPath = useMemo(() => new Map(notes.map((note) => [note.path, note])), [notes])
 
     const value = useMemo(() => ({
@@ -87,7 +85,6 @@ export function NoteProvider({ children }) {
         notesByPath,
         setNotes,
         tags,
-        setTags,
         loading,
         clear
     }), [notes, notesByPath, tags, loading, clear])

@@ -4,10 +4,7 @@ import { act, renderHook } from '@testing-library/react-native'
 import { ImportContext, ImportProvider } from '../import-context'
 
 const mockSaveNote = jest.fn(async () => ({ path: 'repo::Note.md', filename: 'Note.md' }))
-const mockAddTag = jest.fn()
 const mockPush = jest.fn()
-
-let mockAllTags = []
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
     default: {}
@@ -31,15 +28,11 @@ jest.mock('../../hooks/use-notes', () => ({
 jest.mock('../../hooks/use-pro', () => ({
     usePro: () => ({ pro: true })
 }))
-jest.mock('../../hooks/use-tags', () => ({
-    useTags: () => ({ tags: mockAllTags, addTag: mockAddTag })
-}))
 
 const renderImportContext = () => renderHook(() => useContext(ImportContext), { wrapper: ImportProvider })
 
 beforeEach(() => {
     jest.clearAllMocks()
-    mockAllTags = []
 })
 
 describe('import file', () => {
@@ -69,19 +62,6 @@ describe('import file', () => {
             note: 'Actual content',
             tags: ['personal', 'work']
         }))
-    })
-
-    test('registers new tags from the frontmatter in the global tag list', async () => {
-        mockAllTags = ['personal']
-        global.__mockFileText = '---\ntags:\n  - personal\n  - work\n---\n\nActual content'
-        const { result } = await renderImportContext()
-
-        await act(async () => {
-            await result.current.importFile('content://picked/Note.md')
-        })
-
-        expect(mockAddTag).toHaveBeenCalledTimes(1)
-        expect(mockAddTag).toHaveBeenCalledWith('work')
     })
 
     test('derives the title from the file name when none is provided', async () => {

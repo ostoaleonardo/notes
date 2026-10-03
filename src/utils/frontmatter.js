@@ -1,12 +1,9 @@
 import { dump, load } from 'js-yaml'
 
-import { dedupeTags } from '@/utils/tag-names'
+import { dedupeTags, isValidTagName, sanitizeTagName } from '@/utils/tag-names'
 
-import {
-    FRONTMATTER_REGEX,
-    LEADING_HASH_PATTERN,
-    TAG_SEPARATOR_PATTERN
-} from '@/constants/markdown-patterns'
+import { FRONTMATTER_REGEX, TAG_SEPARATOR_PATTERN } from '@/constants/markdown-patterns'
+import { TAG_PROPERTY_KEYS } from '@/constants/tags'
 
 export const parseFrontmatter = (rawContent) => {
     const match = rawContent.match(FRONTMATTER_REGEX)
@@ -38,15 +35,19 @@ const toTagList = (value) => {
 export const normalizeTags = (value) => {
     const names = toTagList(value)
         .filter((tag) => typeof tag === 'string' || typeof tag === 'number')
-        .map((tag) => String(tag).trim().replace(LEADING_HASH_PATTERN, ''))
-        .filter(Boolean)
+        .map((tag) => sanitizeTagName(String(tag)))
+        .filter(isValidTagName)
 
     return dedupeTags(names)
 }
 
+export const readFrontmatterTags = (frontmatter) => (
+    normalizeTags(TAG_PROPERTY_KEYS.flatMap((key) => toTagList(frontmatter[key])))
+)
+
 export const extractProperties = (frontmatter) => {
     const properties = { ...frontmatter }
-    delete properties.tags
+    TAG_PROPERTY_KEYS.forEach((key) => delete properties[key])
     return properties
 }
 
@@ -65,7 +66,7 @@ export const decomposeNoteFileContent = (content) => {
 
     return {
         body,
-        tags: normalizeTags(frontmatter.tags),
+        tags: readFrontmatterTags(frontmatter),
         properties: extractProperties(frontmatter),
         invalidFrontmatter: null
     }

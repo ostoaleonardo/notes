@@ -19,6 +19,8 @@ import { renderMarkdownHtml } from './markdown-dom-render-html'
 import { runAction } from './markdown-dom-commands'
 import { liveFormatting, mediaMapFacet } from './live-formatting/live-formatting'
 import { noteEntriesFacet, wikiLinkFormatFacet, wikiLinkCompletionSource } from './wiki-link-completion'
+import { knownTagsFacet, tagCompletionSource } from './tag-completion'
+import { inlineTagExtensions } from './inline-tag-highlight'
 import { useCompartment } from './use-compartment'
 import { listKeymap } from './markdown-dom-list-keymap'
 import { headingFoldService } from './markdown-dom-fold'
@@ -39,6 +41,7 @@ const MarkdownDomEditor = ({
     previewValue,
     mediaMap,
     noteEntries,
+    knownTags,
     linkFormat,
     backlinksHtml,
     onChange,
@@ -47,6 +50,7 @@ const MarkdownDomEditor = ({
     onFocus,
     onBlur,
     onLinkPress,
+    onTagPress,
     onImagePress,
     colors,
     typography,
@@ -90,10 +94,14 @@ const MarkdownDomEditor = ({
     const lastEmittedValueRef = useRef(value)
     const hasFocusRef = useRef(false)
 
+    const onTagPressRef = useRef(onTagPress)
+    onTagPressRef.current = onTagPress
+
     const mediaMapValue = useMemo(() => new Map(mediaMap || []), [mediaMap])
 
     const mediaMapExtension = useCompartment(viewRef, () => mediaMapFacet.of(mediaMapValue), [mediaMapValue])
     const noteEntriesExtension = useCompartment(viewRef, () => noteEntriesFacet.of(noteEntries || []), [noteEntries])
+    const knownTagsExtension = useCompartment(viewRef, () => knownTagsFacet.of(knownTags || []), [knownTags])
     const linkFormatExtension = useCompartment(viewRef, () => wikiLinkFormatFacet.of(linkFormat), [linkFormat])
     const liveFormattingExtension = useCompartment(viewRef, () => (mode === EDITOR_MODES.LIVE ? [liveFormatting] : []), [mode])
     const invalidFrontmatterExtension = useCompartment(
@@ -138,8 +146,10 @@ const MarkdownDomEditor = ({
                 markdown({ extensions: GFM }),
                 mediaMapExtension,
                 noteEntriesExtension,
+                knownTagsExtension,
                 linkFormatExtension,
-                autocompletion({ override: [wikiLinkCompletionSource] }),
+                inlineTagExtensions(onTagPressRef),
+                autocompletion({ override: [wikiLinkCompletionSource, tagCompletionSource] }),
                 closeBrackets(),
                 codeFolding(),
                 headingFoldService,
@@ -290,6 +300,7 @@ const MarkdownDomEditor = ({
                 onToggleProperties={onToggleProperties}
                 onRemoveTag={onRemoveTag}
                 onOpenTags={onOpenTags}
+                onTagPress={onTagPress}
                 invalidProperties={invalidProperties}
                 invalidPropertiesTitle={invalidPropertiesTitle}
                 invalidPropertiesDescription={invalidPropertiesDescription}
