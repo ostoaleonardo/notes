@@ -35,6 +35,7 @@ const toTagList = (value) => {
 
 export const normalizeTags = (value) => {
     const names = toTagList(value)
+        .filter((tag) => typeof tag === 'string' || typeof tag === 'number')
         .map((tag) => String(tag).trim().replace(LEADING_HASH_PATTERN, ''))
         .filter(Boolean)
 

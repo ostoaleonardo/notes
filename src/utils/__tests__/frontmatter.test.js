@@ -184,6 +184,10 @@ describe('normalize tags', () => {
         expect(normalizeTags([2024])).toEqual(['2024'])
     })
 
+    test('drops entries that are not strings or numbers', () => {
+        expect(normalizeTags(['one', { aliases: ['foo'] }, ['nested'], null])).toEqual(['one'])
+    })
+
     test('returns an empty list for missing or unsupported values', () => {
         expect(normalizeTags(undefined)).toEqual([])
         expect(normalizeTags({ a: 1 })).toEqual([])
