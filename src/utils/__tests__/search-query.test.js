@@ -11,13 +11,13 @@ import { MOCK_SEARCH_NOTES } from '../__fixtures__/search-query'
 describe('parse search query', () => {
     test('extracts plain text', () => {
         expect(parseSearchQuery('Groceries')).toEqual({
-            text: 'groceries', tags: [], pinned: false, hasImage: false, inContent: false, modified: null, created: null
+            text: 'groceries', tags: [], pinned: false, hasImage: false, inContent: false, paths: [], files: [], modified: null, created: null
         })
     })
 
     test('extracts a bare tag qualifier', () => {
         expect(parseSearchQuery('tag:work meeting')).toEqual({
-            text: 'meeting', tags: ['work'], pinned: false, hasImage: false, inContent: false, modified: null, created: null
+            text: 'meeting', tags: ['work'], pinned: false, hasImage: false, inContent: false, paths: [], files: [], modified: null, created: null
         })
     })
 
@@ -25,7 +25,7 @@ describe('parse search query', () => {
         const result = parseSearchQuery('tag:"personal notes" ideas')
 
         expect(result).toEqual({
-            text: 'ideas', tags: ['personal notes'], pinned: false, hasImage: false, inContent: false, modified: null, created: null
+            text: 'ideas', tags: ['personal notes'], pinned: false, hasImage: false, inContent: false, paths: [], files: [], modified: null, created: null
         })
     })
 
@@ -33,13 +33,13 @@ describe('parse search query', () => {
         const result = parseSearchQuery('tag:work tag:personal standup')
 
         expect(result).toEqual({
-            text: 'standup', tags: ['work', 'personal'], pinned: false, hasImage: false, inContent: false, modified: null, created: null
+            text: 'standup', tags: ['work', 'personal'], pinned: false, hasImage: false, inContent: false, paths: [], files: [], modified: null, created: null
         })
     })
 
     test('extracts the pinned qualifier', () => {
         expect(parseSearchQuery('is:pinned todo')).toEqual({
-            text: 'todo', tags: [], pinned: true, hasImage: false, inContent: false, modified: null, created: null
+            text: 'todo', tags: [], pinned: true, hasImage: false, inContent: false, paths: [], files: [], modified: null, created: null
         })
     })
 
@@ -47,7 +47,7 @@ describe('parse search query', () => {
         const result = parseSearchQuery('is:pinned tag:work standup')
 
         expect(result).toEqual({
-            text: 'standup', tags: ['work'], pinned: true, hasImage: false, inContent: false, modified: null, created: null
+            text: 'standup', tags: ['work'], pinned: true, hasImage: false, inContent: false, paths: [], files: [], modified: null, created: null
         })
     })
 
@@ -55,7 +55,7 @@ describe('parse search query', () => {
         const result = parseSearchQuery('has:image recipe')
 
         expect(result).toEqual({
-            text: 'recipe', tags: [], pinned: false, hasImage: true, inContent: false, modified: null, created: null
+            text: 'recipe', tags: [], pinned: false, hasImage: true, inContent: false, paths: [], files: [], modified: null, created: null
         })
     })
 
@@ -63,7 +63,7 @@ describe('parse search query', () => {
         const result = parseSearchQuery('in:content recipe')
 
         expect(result).toEqual({
-            text: 'recipe', tags: [], pinned: false, hasImage: false, inContent: true, modified: null, created: null
+            text: 'recipe', tags: [], pinned: false, hasImage: false, inContent: true, paths: [], files: [], modified: null, created: null
         })
     })
 
@@ -71,7 +71,7 @@ describe('parse search query', () => {
         const result = parseSearchQuery('modified:2026-01-15 report')
 
         expect(result).toEqual({
-            text: 'report', tags: [], pinned: false, hasImage: false, inContent: false, modified: '2026-01-15', created: null
+            text: 'report', tags: [], pinned: false, hasImage: false, inContent: false, paths: [], files: [], modified: '2026-01-15', created: null
         })
     })
 
@@ -79,7 +79,7 @@ describe('parse search query', () => {
         const result = parseSearchQuery('created:2026-01-01')
 
         expect(result).toEqual({
-            text: '', tags: [], pinned: false, hasImage: false, inContent: false, modified: null, created: '2026-01-01'
+            text: '', tags: [], pinned: false, hasImage: false, inContent: false, paths: [], files: [], modified: null, created: '2026-01-01'
         })
     })
 })
@@ -145,6 +145,20 @@ describe('toggle content qualifier', () => {
 
     test('removes the in:content qualifier when already present', () => {
         expect(toggleContentQualifier('recipe in:content')).toBe('recipe')
+    })
+})
+
+describe('parse path, file and hashed tag qualifiers', () => {
+    test('extracts path and file qualifiers', () => {
+        const result = parseSearchQuery('path:work/ideas file:"my note" plan')
+
+        expect(result.paths).toEqual(['work/ideas'])
+        expect(result.files).toEqual(['my note'])
+        expect(result.text).toBe('plan')
+    })
+
+    test('ignores the leading hash of a tag qualifier', () => {
+        expect(parseSearchQuery('tag:#work').tags).toEqual(['work'])
     })
 })
 
@@ -236,5 +250,30 @@ describe('filter notes', () => {
         const options = { pinned: new Set() }
         const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('created:2026-01-02'), options)
         expect(result.map((note) => note.path)).toEqual(['note-2'])
+    })
+
+    describe('by path and file', () => {
+        const notes = [
+            { path: 'r1::a.md', filename: 'a.md', title: 'a' },
+            { path: 'r2::b.md', filename: 'b.md', title: 'b' },
+            { path: 'r2::plan.md', filename: 'plan.md', title: 'plan' }
+        ]
+        const notePaths = new Map([['r1::a.md', ''], ['r2::b.md', 'Work/Ideas'], ['r2::plan.md', 'Work/Ideas']])
+        const options = { pinned: new Set(), notePaths }
+
+        test('filters by folder path', () => {
+            const result = filterNotes(notes, parseSearchQuery('path:work/ideas'), options)
+            expect(result.map((note) => note.path)).toEqual(['r2::b.md', 'r2::plan.md'])
+        })
+
+        test('filters by file name', () => {
+            const result = filterNotes(notes, parseSearchQuery('file:plan'), options)
+            expect(result.map((note) => note.path)).toEqual(['r2::plan.md'])
+        })
+
+        test('combines path and file qualifiers', () => {
+            const result = filterNotes(notes, parseSearchQuery('path:work file:b.md'), options)
+            expect(result.map((note) => note.path)).toEqual(['r2::b.md'])
+        })
     })
 })

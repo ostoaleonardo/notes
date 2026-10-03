@@ -1,6 +1,8 @@
 import {
     DATE_QUALIFIER_REGEX,
     TAG_QUALIFIER_REGEX,
+    PATH_QUALIFIER_REGEX,
+    FILE_QUALIFIER_REGEX,
     MARKDOWN_IMAGE_REGEX,
     PINNED_QUALIFIER_REGEX,
     IMAGE_QUALIFIER_REGEX,
@@ -13,9 +15,18 @@ import { fuzzyMatch } from './fuzzy-match'
 import { getNoteTags } from './note-tags'
 import { matchesTag } from './tag-names'
 
+import { LEADING_HASH_PATTERN } from '@/constants/markdown-patterns'
+
+const collectQualifier = (text, regex, values) => text.replace(regex, (match, quoted, bare) => {
+    values.push((quoted || bare).toLowerCase())
+    return ''
+})
+
 export const parseSearchQuery = (query) => {
     let text = query
     let tags = []
+    const paths = []
+    const files = []
     let pinned = false
     let hasImage = false
     let inContent = false
@@ -43,12 +54,13 @@ export const parseSearchQuery = (query) => {
         return ''
     })
 
-    text = text.replace(TAG_QUALIFIER_REGEX, (match, quoted, bare) => {
-        tags.push((quoted || bare).toLowerCase())
-        return ''
-    })
+    text = collectQualifier(text, TAG_QUALIFIER_REGEX, tags)
+    text = collectQualifier(text, PATH_QUALIFIER_REGEX, paths)
+    text = collectQualifier(text, FILE_QUALIFIER_REGEX, files)
 
-    return { text: text.trim().toLowerCase(), tags, pinned, hasImage, inContent, modified, created }
+    tags = tags.map((tag) => tag.replace(LEADING_HASH_PATTERN, ''))
+
+    return { text: text.trim().toLowerCase(), tags, paths, files, pinned, hasImage, inContent, modified, created }
 }
 
 const toDateKey = (timestamp) => (timestamp ? new Date(timestamp).toISOString().slice(0, 10) : null)
@@ -92,8 +104,15 @@ const hasMatchingTag = (note, queries) => (
     getNoteTags(note).some((tag) => queries.some((query) => matchesTag(tag, query)))
 )
 
+const getFullPath = (note, notePaths) => {
+    const folder = notePaths?.get(note.path)
+    return (folder ? `${folder}/${note.filename}` : note.filename || '').toLowerCase()
+}
+
 const NOTE_FILTERS = [
     (note, parsed, { pinned }) => !parsed.pinned || pinned.has(note.path),
+    (note, parsed, { notePaths }) => parsed.paths.every((path) => getFullPath(note, notePaths).includes(path)),
+    (note, parsed) => parsed.files.every((file) => (note.filename || '').toLowerCase().includes(file)),
     (note, parsed) => parsed.tags.length === 0 || hasMatchingTag(note, parsed.tags),
     (note, parsed) => !parsed.hasImage || MARKDOWN_IMAGE_REGEX.test(note.note || ''),
     (note, parsed) => !parsed.modified || toDateKey(note.updatedAt) === parsed.modified,

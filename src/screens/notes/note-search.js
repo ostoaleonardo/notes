@@ -17,6 +17,7 @@ import { useTags } from '@/hooks/use-tags'
 import { useUtils } from '@/hooks/use-utils'
 import { filterNotes, parseSearchQuery } from '@/utils/search-query'
 import { getEditorPath } from '@/utils/editor-path'
+import { getNotePaths } from '@/utils/note-path'
 import { toggleSavedSearch, removeSavedSearch, parseStoredList } from '@/utils/saved-searches'
 
 import { RECENT_SEARCHES_LIMIT } from '@/constants/default-values'
@@ -54,9 +55,11 @@ export function NoteSearch({ onClose, initialQuery = '' }) {
 
     const deferredParsed = useDeferredValue(parsed)
 
+    const notePaths = useMemo(() => getNotePaths(notes, repositories), [notes, repositories])
+
     const results = useMemo(() => (
-        trimmedQuery ? filterNotes(notes, deferredParsed, { pinned }) : []
-    ), [trimmedQuery, deferredParsed, notes, pinned])
+        trimmedQuery ? filterNotes(notes, deferredParsed, { pinned, notePaths }) : []
+    ), [trimmedQuery, deferredParsed, notes, pinned, notePaths])
 
     const saveRecent = (term) => {
         if (!term) return
