@@ -11,7 +11,7 @@ const escapeHtml = (text) => text
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
 
-export const parseWikiLinkText = (text) => {
+const parseWikiLinkText = (text) => {
     const trimmed = (text || '').trim()
     const separatorIndex = trimmed.lastIndexOf('/')
 
