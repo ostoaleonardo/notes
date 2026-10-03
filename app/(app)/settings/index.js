@@ -10,6 +10,7 @@ import { AppVersionCard } from '@/screens/settings/app-version-card'
 import { Option } from '@/screens/settings/option'
 import { WikiLinksOption } from '@/screens/settings/wiki-links-option'
 import { StartupOption } from '@/screens/settings/startup-option'
+import { DeleteBehaviorOption } from '@/screens/settings/delete-behavior-option'
 import { Scroll } from '@/components/animated/scroll'
 import { Section } from '@/components/section'
 
@@ -50,6 +51,14 @@ export default function Settings() {
                     contentStyle={styles.items}
                 >
                     <StartupOption />
+                </Section>
+
+                <Section
+                    title={t('settings.deleted_files')}
+                    containerStyle={styles.section}
+                    contentStyle={styles.items}
+                >
+                    <DeleteBehaviorOption />
                 </Section>
 
                 <Section

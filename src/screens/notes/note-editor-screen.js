@@ -27,13 +27,16 @@ import { useNotes } from '@/hooks/use-notes'
 import { usePro } from '@/hooks/use-pro'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useShowProperties } from '@/hooks/use-show-properties'
+import { useStorage } from '@/hooks/use-storage'
 import { useTemplates } from '@/hooks/use-templates'
 import { useTemplatesList } from '@/hooks/use-templates-list'
 import { useVersionHistory } from '@/hooks/use-version-history'
 import { buildNoteMetaLabel } from '@/utils/note-meta-label'
 import { countWords } from '@/utils/word-count'
 
+import { DEFAULT_DELETE_BEHAVIOR } from '@/constants/delete-behavior'
 import { EDITOR_MODES } from '@/constants/editor-modes'
+import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { TEMPLATE_INSERT_SEPARATOR } from '@/constants/template-placeholders'
 
 export const NoteEditorScreen = ({
@@ -57,6 +60,7 @@ export const NoteEditorScreen = ({
     const { currentLanguage } = useLanguage()
     const { repositories } = useRepositories()
     const { exportFile, shareFile } = useFiles()
+    const { getItem } = useStorage()
     const { templates, refresh: refreshTemplates } = useTemplatesList([], { immediate: false })
     const directoryUri = repositories.find((repository) => repository.id === repositoryId)?.uri
 
@@ -112,6 +116,7 @@ export const NoteEditorScreen = ({
     const shareDialog = useMenuAction()
     const exportDialog = useMenuAction()
     const deleteDialog = useMenuAction()
+    const [deleteBehavior, setDeleteBehavior] = useState(DEFAULT_DELETE_BEHAVIOR)
 
     const tagsSheet = useBottomSheet()
     const templatesSheet = useBottomSheet()
@@ -177,6 +182,11 @@ export const NoteEditorScreen = ({
     }, [flush, shareFile, id])
 
     const onToggleShowBacklinks = useCallback(() => setShowBacklinks((prev) => !prev), [])
+
+    const onOpenDeleteDialog = useCallback(async () => {
+        setDeleteBehavior((await getItem(STORAGE_KEYS.DELETE_BEHAVIOR)) || DEFAULT_DELETE_BEHAVIOR)
+        deleteDialog.onOpen()
+    }, [getItem, deleteDialog.onOpen])
 
     const onConfirmDelete = useCallback(async () => {
         try {
@@ -246,7 +256,7 @@ export const NoteEditorScreen = ({
                         showBacklinks={showBacklinks}
                         onOpenShareDialog={shareDialog.onOpen}
                         onOpenExportDialog={exportDialog.onOpen}
-                        onOpenDeleteDialog={deleteDialog.onOpen}
+                        onOpenDeleteDialog={onOpenDeleteDialog}
                         onOpenVersionHistory={versionHistory.onOpen}
                         onToggleShowBacklinks={onToggleShowBacklinks}
                     />
@@ -336,7 +346,7 @@ export const NoteEditorScreen = ({
             <ConfirmDialog
                 visible={deleteDialog.visible}
                 title={t('notes.delete_title')}
-                message={t('notes.delete_message')}
+                message={t(`notes.delete_message_${deleteBehavior}`)}
                 confirmLabel={t('button.delete')}
                 onDismiss={deleteDialog.onClose}
                 onConfirm={onConfirmDelete}

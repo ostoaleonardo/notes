@@ -8,10 +8,11 @@
 		"copy_suffix": "(copy)",
 		"go_home": "Home",
 		"delete_title": "Delete note",
-		"delete_message": "This will permanently delete this note from your device.",
 		"save_failed": "Couldn't save this note",
 		"delete_failed": "Couldn't delete this note",
-		"title_duplicated": "A note with this name already exists"
+		"title_duplicated": "A note with this name already exists",
+		"delete_message_vault-trash": "The note will be moved to the hidden .trash folder of your repository. It won't show up in the app anymore, but you can still recover it with a file manager.",
+		"delete_message_permanent": "This note will be deleted forever and can't be recovered."
 	},
 	"tags": {
 		"add": "Add tag",
@@ -84,7 +85,11 @@
 		"use_wikilinks": "Use [[Wikilinks]]",
 		"use_wikilinks_description": "Turn off to generate Markdown links instead when linking notes.",
 		"auto_update_links": "Automatically update internal links",
-		"auto_update_links_description": "Turn off to be asked before updating links after renaming a note."
+		"auto_update_links_description": "Turn off to be asked before updating links after renaming a note.",
+		"delete_behavior": "On delete",
+		"delete_behavior_vault-trash": "Move to .trash folder",
+		"delete_behavior_permanent": "Delete permanently",
+		"deleted_files": "Deleted files"
 	},
 	"pro": {
 		"get": "Get Version Pro",
@@ -269,7 +274,7 @@
 		"new": "New template",
 		"import": "Import template",
 		"saved": "Template saved",
-			"save_failed": "Couldn't save the template",
+		"save_failed": "Couldn't save the template",
 		"delete_failed": "Couldn't delete the template",
 		"view_placeholders": "View available variables",
 		"placeholders_title": "Available variables",

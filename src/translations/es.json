@@ -8,10 +8,11 @@
 		"copy_suffix": "(copia)",
 		"go_home": "Inicio",
 		"delete_title": "Borrar nota",
-		"delete_message": "Esto eliminará permanentemente esta nota del dispositivo.",
 		"save_failed": "No se pudo guardar esta nota",
 		"delete_failed": "No se pudo borrar esta nota",
-		"title_duplicated": "Ya existe una nota con este nombre"
+		"title_duplicated": "Ya existe una nota con este nombre",
+		"delete_message_vault-trash": "La nota se moverá a la carpeta oculta .trash de tu repositorio. Dejará de aparecer en la app, pero podrás recuperarla con un administrador de archivos.",
+		"delete_message_permanent": "Esta nota se eliminará para siempre y no se podrá recuperar."
 	},
 	"tags": {
 		"add": "Añadir etiqueta",
@@ -84,7 +85,11 @@
 		"use_wikilinks": "Usar [[Wikilinks]]",
 		"use_wikilinks_description": "Desactívalo para generar enlaces de Markdown en su lugar al enlazar notas.",
 		"auto_update_links": "Actualizar enlaces internos automáticamente",
-		"auto_update_links_description": "Desactívalo para que se te pregunte antes de actualizar los enlaces al renombrar una nota."
+		"auto_update_links_description": "Desactívalo para que se te pregunte antes de actualizar los enlaces al renombrar una nota.",
+		"delete_behavior": "Al eliminar",
+		"delete_behavior_vault-trash": "Mover a la carpeta .trash",
+		"delete_behavior_permanent": "Eliminar permanentemente",
+		"deleted_files": "Archivos eliminados"
 	},
 	"pro": {
 		"get": "Obtener versión Pro",
@@ -269,7 +274,7 @@
 		"new": "Nueva plantilla",
 		"import": "Importar plantilla",
 		"saved": "Plantilla guardada",
-			"save_failed": "No se pudo guardar la plantilla",
+		"save_failed": "No se pudo guardar la plantilla",
 		"delete_failed": "No se pudo borrar la plantilla",
 		"view_placeholders": "Ver variables disponibles",
 		"placeholders_title": "Variables disponibles",
