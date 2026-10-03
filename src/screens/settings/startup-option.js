@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
@@ -7,7 +7,7 @@ import { Option } from './option'
 import { MenuContainer } from '@/components/menu/menu-container'
 import { MenuItem } from '@/components/menu/menu-item'
 
-import { useMenuAction } from '@/hooks/use-menu-action'
+import { useMenuAnchor } from '@/hooks/use-menu-anchor'
 import { useStorage } from '@/hooks/use-storage'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
 import { useRepositories } from '@/hooks/use-repositories'
@@ -21,21 +21,6 @@ import { STARTUP_BEHAVIORS } from '@/constants/startup-behavior'
 import { MENU_ITEM_INDENT, SCROLLABLE_MENU_MAX_HEIGHT, TRANSPARENT } from '@/constants/themes'
 
 const OPTIONS = Object.values(STARTUP_BEHAVIORS)
-
-const useMenuAnchor = () => {
-    const rowRef = useRef(null)
-    const menu = useMenuAction()
-    const [anchor, setAnchor] = useState({ x: 0, y: 0 })
-
-    const onPressRow = () => {
-        rowRef.current?.measureInWindow((x, y, width, height) => {
-            setAnchor({ x: x + width, y: y + height })
-            menu.onOpen()
-        })
-    }
-
-    return { rowRef, anchor, onPressRow, ...menu }
-}
 
 export function StartupOption() {
     const { t } = useTranslation()
