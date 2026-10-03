@@ -114,13 +114,13 @@ export function NoteSearch({ onClose, initialQuery = '' }) {
                         onOpenResult={onOpenResult}
                     />
                 ) : (
-                    <View style={{ gap: SPACING.xxl }}>
+                    <View style={styles.suggestions}>
                         <SavedSearches
                             saved={saved}
                             onSelect={setQuery}
                             onDelete={onDeleteSavedSearch}
                         />
-                        <Divider />
+                        {saved.length > 0 && recent.length > 0 && <Divider />}
                         <RecentSearches
                             recent={recent}
                             onSelect={setQuery}
@@ -135,6 +135,9 @@ export function NoteSearch({ onClose, initialQuery = '' }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1
+    },
+    suggestions: {
+        gap: SPACING.xxl
     },
     actions: {
         flex: 1,
