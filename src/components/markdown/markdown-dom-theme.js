@@ -242,6 +242,7 @@ export const buildPreviewCss = ({ fontFamily, headingFontFamily, colors, fontSiz
     .markdown-preview .footnote-ref a, .markdown-preview .footnote-backref { color: ${linkColor}; }
     .markdown-preview .footnotes-sep { border: none; border-top: 1px solid ${thematicBreakColor}; margin: 16px 0; }
     .markdown-preview .footnotes { font-size: 0.85em; opacity: 0.85; }
+    .markdown-preview .footnote-item > p { display: inline; }
     .markdown-preview .backlinks { margin-top: 24px; padding-top: 16px; border-top: 1px solid ${thematicBreakColor}; }
     .markdown-preview .backlinks-title { font-size: 0.75em; text-transform: uppercase; opacity: 0.6; margin-bottom: 8px; }
     .markdown-preview .backlinks ul { list-style: none; padding: 0; margin: 0; }
