@@ -2,6 +2,9 @@ import {
     WIKI_LINK_SCHEME,
     WIKI_LINK_MISSING_PREFIX,
     WIKI_LINK_PATTERN,
+    WIKI_LINK_ANCHOR_SEPARATOR,
+    WIKI_LINK_ANCHOR_LABEL_SEPARATOR,
+    NOTE_ALIASES_PROPERTY,
     MARKDOWN_WIKI_LINK_PATTERN
 } from '@/constants/wiki-links'
 
@@ -19,33 +22,67 @@ const parseWikiLinkText = (text) => {
     return { path: trimmed.slice(0, separatorIndex), title: trimmed.slice(separatorIndex + 1) }
 }
 
-export const resolveWikiLinkTarget = (linkText, notes, notePaths = new Map()) => {
-    const { path, title } = parseWikiLinkText(linkText)
-    const trimmedTitle = title.toLowerCase()
+const normalizeName = (text) => text.normalize('NFC').trim().toLowerCase()
 
-    const candidates = notes.filter((note) => note.title?.trim().toLowerCase() === trimmedTitle)
+export const getAliases = (note) => {
+    const aliases = note.properties?.[NOTE_ALIASES_PROPERTY]
+    return (Array.isArray(aliases) ? aliases : [aliases]).filter((alias) => typeof alias === 'string')
+}
+
+const splitAnchor = (text) => {
+    const index = text.indexOf(WIKI_LINK_ANCHOR_SEPARATOR)
+    if (index === -1) return null
+    return { target: text.slice(0, index), anchor: text.slice(index + 1) }
+}
+
+const findNote = (linkText, notes, notePaths) => {
+    const { path, title } = parseWikiLinkText(linkText)
+    const name = normalizeName(title)
+
+    const byTitle = notes.filter((note) => normalizeName(note.title || '') === name)
+    const candidates = byTitle.length
+        ? byTitle
+        : notes.filter((note) => getAliases(note).some((alias) => normalizeName(alias) === name))
     if (candidates.length < 2 || !path) return candidates[0]
 
-    const trimmedPath = path.trim().toLowerCase()
-    return candidates.find((note) => (notePaths.get(note.path) || '').toLowerCase() === trimmedPath) || candidates[0]
+    const normalizedPath = normalizeName(path)
+    return candidates.find((note) => normalizeName(notePaths.get(note.path) || '') === normalizedPath) || candidates[0]
 }
+
+const resolveWikiLink = (linkText, notes, notePaths) => {
+    const whole = findNote(linkText, notes, notePaths)
+    if (whole) return { note: whole, target: linkText, anchor: '' }
+
+    const split = splitAnchor(linkText)
+    if (!split) return { note: undefined, target: linkText, anchor: '' }
+
+    const note = split.target.trim() ? findNote(split.target, notes, notePaths) : undefined
+    return { note, ...split }
+}
+
+export const resolveWikiLinkTarget = (linkText, notes, notePaths = new Map()) => (
+    resolveWikiLink(linkText, notes, notePaths).note
+)
 
 export const resolveWikiLinks = (value, notes, notePaths = new Map()) => value.replace(
     WIKI_LINK_PATTERN,
     (match, linkText, alias) => {
-        const { path, title } = parseWikiLinkText(linkText)
-        const label = escapeHtml((alias || title).trim())
+        const { note, target, anchor } = resolveWikiLink(linkText, notes, notePaths)
+        const { path, title } = parseWikiLinkText(target)
 
-        const target = resolveWikiLinkTarget(linkText, notes, notePaths)
+        if (!title.trim()) return escapeHtml((alias || anchor).trim())
 
-        if (!target) {
+        const defaultLabel = anchor ? `${title}${WIKI_LINK_ANCHOR_LABEL_SEPARATOR}${anchor}` : title
+        const label = escapeHtml((alias || defaultLabel).trim())
+
+        if (!note) {
             const encodedPath = encodeURIComponent(path)
             const encodedTitle = encodeURIComponent(title)
             const missingHref = `${WIKI_LINK_SCHEME}${WIKI_LINK_MISSING_PREFIX}${encodedPath}/${encodedTitle}`
             return `<a href="${missingHref}" class="wiki-link-broken">${label}</a>`
         }
 
-        return `<a href="${WIKI_LINK_SCHEME}${encodeURIComponent(target.path)}" class="wiki-link">${label}</a>`
+        return `<a href="${WIKI_LINK_SCHEME}${encodeURIComponent(note.path)}" class="wiki-link">${label}</a>`
     }
 )
 
@@ -77,16 +114,23 @@ export const renameWikiLinksForNote = (content, targetPath, newTitle, notes, not
     if (!content) return content
 
     const folderPath = notePaths.get(targetPath) || ''
-    const normalizedNewTitle = newTitle.trim().toLowerCase()
+    const normalizedNewTitle = normalizeName(newTitle)
     const isAmbiguous = folderPath && notes.some((note) => (
-        note.path !== targetPath && note.title?.trim().toLowerCase() === normalizedNewTitle
+        note.path !== targetPath && normalizeName(note.title || '') === normalizedNewTitle
     ))
     const qualifiedTitle = isAmbiguous ? `${folderPath}/${newTitle}` : newTitle
 
     return content.replace(WIKI_LINK_PATTERN, (match, linkText, alias) => {
-        if (resolveWikiLinkTarget(linkText, notes, notePaths)?.path !== targetPath) return match
-        if (alias !== undefined) return `[[${qualifiedTitle}|${alias}]]`
-        return isAmbiguous ? `[[${qualifiedTitle}|${newTitle}]]` : `[[${newTitle}]]`
+        const { note, target, anchor } = resolveWikiLink(linkText, notes, notePaths)
+        if (note?.path !== targetPath) return match
+        if (normalizeName(parseWikiLinkText(target).title) !== normalizeName(note.title || '')) return match
+
+        const suffix = anchor ? `${WIKI_LINK_ANCHOR_SEPARATOR}${anchor}` : ''
+        if (alias !== undefined) return `[[${qualifiedTitle}${suffix}|${alias}]]`
+        if (!isAmbiguous) return `[[${newTitle}${suffix}]]`
+
+        const label = anchor ? `${newTitle}${WIKI_LINK_ANCHOR_LABEL_SEPARATOR}${anchor}` : newTitle
+        return `[[${qualifiedTitle}${suffix}|${label}]]`
     })
 }
 

@@ -1,6 +1,7 @@
 import { NOTE_FILE_EXTENSION } from '@/constants/file-storage'
 import {
     ILLEGAL_FILENAME_CHARS,
+    LINK_BREAKING_FILENAME_CHARS,
     NOTE_FILE_EXTENSION_REGEX,
     FILENAME_MAX_LENGTH,
     DEFAULT_FILENAME
@@ -15,6 +16,8 @@ export const sanitizeFilename = (title) => {
         .slice(0, FILENAME_MAX_LENGTH)
     return clean || DEFAULT_FILENAME
 }
+
+export const hasLinkBreakingChars = (title) => LINK_BREAKING_FILENAME_CHARS.test(title || '')
 
 export const getUniqueTitle = (existingTitles, base) => {
     const taken = new Set(existingTitles)

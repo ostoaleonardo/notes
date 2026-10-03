@@ -11,6 +11,7 @@
 		"save_failed": "Couldn't save this note",
 		"delete_failed": "Couldn't delete this note",
 		"title_duplicated": "A note with this name already exists",
+		"title_breaks_links": "The characters # ^ [ ] stop links to this note from working in Obsidian",
 		"delete_message_vault-trash": "The note will be moved to the hidden .trash folder of your repository. It won't show up in the app anymore, but you can still recover it with a file manager.",
 		"delete_message_permanent": "This note will be deleted forever and can't be recovered.",
 		"migration_notice": "Migration finished with issues: {{renamed}} notes were renamed and {{images}} images couldn't be recovered."

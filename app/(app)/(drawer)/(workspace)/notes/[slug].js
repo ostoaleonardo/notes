@@ -9,6 +9,7 @@ import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useAutosave } from '@/hooks/use-autosave'
 import { useNoteDraft } from '@/hooks/use-note-draft'
+import { useTitleLinkWarning } from '@/hooks/use-title-link-warning'
 import { useNotes } from '@/hooks/use-notes'
 import { useWikiLinkRenameConfirm } from '@/hooks/use-wiki-link-rename-confirm'
 import { useCurrentNote, useRegisterCurrent } from '@/hooks/use-current-note'
@@ -148,6 +149,8 @@ export default function EditNote() {
         skip: loading || !noteExists
     })
 
+    const warnTitleLinks = useTitleLinkWarning()
+
     const commitTitle = (nextTitle, nextNote = note) => {
         const previousTitle = originalTitleRef.current
         if (!previousTitle || previousTitle === nextTitle) return
@@ -179,7 +182,12 @@ export default function EditNote() {
         })
     }
 
-    const onTitleBlur = () => commitTitle(title.trim())
+    const onTitleBlur = () => {
+        const trimmedTitle = title.trim()
+
+        warnTitleLinks(trimmedTitle)
+        commitTitle(trimmedTitle)
+    }
 
     const onRestoreVersion = (version) => {
         setTitle(version.title)

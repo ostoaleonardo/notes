@@ -11,6 +11,7 @@
 		"save_failed": "No se pudo guardar esta nota",
 		"delete_failed": "No se pudo borrar esta nota",
 		"title_duplicated": "Ya existe una nota con este nombre",
+		"title_breaks_links": "Los caracteres # ^ [ ] hacen que los enlaces a esta nota no funcionen en Obsidian",
 		"delete_message_vault-trash": "La nota se moverá a la carpeta oculta .trash de tu repositorio. Dejará de aparecer en la app, pero podrás recuperarla con un administrador de archivos.",
 		"delete_message_permanent": "Esta nota se eliminará para siempre y no se podrá recuperar.",
 		"migration_notice": "La migración terminó con avisos: {{renamed}} notas se renombraron y {{images}} imágenes no se pudieron recuperar."

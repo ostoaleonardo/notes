@@ -18,7 +18,7 @@ import { useStorageEffect } from '@/hooks/use-storage-effect'
 
 import { getEditorPath } from '@/utils/editor-path'
 import { getDate } from '@/utils/date'
-import { findBacklinks, buildBacklinksHtml, parseMissingWikiLinkTarget } from '@/utils/wiki-links'
+import { findBacklinks, buildBacklinksHtml, getAliases, parseMissingWikiLinkTarget } from '@/utils/wiki-links'
 import { getNotePaths, buildRepositoryPaths } from '@/utils/note-path'
 
 import { ROUTES } from '@/constants/routes'
@@ -75,7 +75,12 @@ export const MarkdownInput = ({
     const noteEntries = useMemo(() => {
         const entries = notes
             .filter((note) => note.title)
-            .map((note) => ({ id: note.path, title: note.title, path: notePaths.get(note.path) || '' }))
+            .map((note) => ({
+                id: note.path,
+                title: note.title,
+                aliases: getAliases(note),
+                path: notePaths.get(note.path) || ''
+            }))
 
         const key = JSON.stringify(entries)
         if (key !== noteEntriesCache.current.key) noteEntriesCache.current = { key, entries }

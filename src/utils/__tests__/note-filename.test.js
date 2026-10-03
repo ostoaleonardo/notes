@@ -1,4 +1,10 @@
-import { getUniqueFilename, getUniqueTitle, isTitleTaken, sanitizeFilename } from '../note-filename'
+import {
+    getUniqueFilename,
+    getUniqueTitle,
+    hasLinkBreakingChars,
+    isTitleTaken,
+    sanitizeFilename
+} from '../note-filename'
 
 describe('sanitize filename', () => {
     test('strips characters illegal in filenames', () => {
@@ -61,5 +67,19 @@ describe('is title taken', () => {
     test('returns false when no file has that title', () => {
         const existing = ['Groceries.md']
         expect(isTitleTaken(existing, 'Chores', 'Groceries.md')).toBe(false)
+    })
+})
+
+describe('has link breaking chars', () => {
+    test.each(['C# notes', 'a ^ b', 'a [b', 'a ]b'])('flags %s', (title) => {
+        expect(hasLinkBreakingChars(title)).toBe(true)
+    })
+
+    test('accepts a plain title', () => {
+        expect(hasLinkBreakingChars('Groceries (2)')).toBe(false)
+    })
+
+    test('accepts an empty title', () => {
+        expect(hasLinkBreakingChars('')).toBe(false)
     })
 })

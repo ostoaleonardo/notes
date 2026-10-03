@@ -317,3 +317,125 @@ describe('buildBacklinksHtml', () => {
         expect(result).not.toContain('backlink-path')
     })
 })
+
+describe('heading and block anchors', () => {
+    test('resolves a heading link to its note and shows the heading in the label', () => {
+        const result = resolveWikiLinks('[[Meeting Notes#Agenda]]', notes)
+
+        expect(result).toBe('<a href="wikilink://note-1" class="wiki-link">Meeting Notes &gt; Agenda</a>')
+    })
+
+    test('resolves a block link to its note', () => {
+        const result = resolveWikiLinks('[[Meeting Notes#^abc123]]', notes)
+
+        expect(result).toContain('href="wikilink://note-1"')
+    })
+
+    test('uses the alias as the label when provided', () => {
+        const result = resolveWikiLinks('[[Meeting Notes#Agenda|the agenda]]', notes)
+
+        expect(result).toBe('<a href="wikilink://note-1" class="wiki-link">the agenda</a>')
+    })
+
+    test('resolves a path-qualified heading link', () => {
+        const duplicateNotes = [
+            { path: 'root-test', title: 'Test' },
+            { path: 'sub-test', title: 'Test' }
+        ]
+        const notePaths = new Map([
+            ['root-test', ''],
+            ['sub-test', 'one']
+        ])
+
+        const target = resolveWikiLinkTarget('one/Test#Heading', duplicateNotes, notePaths)
+
+        expect(target.path).toBe('sub-test')
+    })
+
+    test('prefers a note whose title contains the hash over splitting at it', () => {
+        const hashNotes = [
+            { path: 'c', title: 'C' },
+            { path: 'c-sharp', title: 'C# notes' }
+        ]
+
+        expect(resolveWikiLinkTarget('C# notes', hashNotes).path).toBe('c-sharp')
+    })
+
+    test('a missing heading link carries the title without the anchor', () => {
+        const result = resolveWikiLinks('[[Unknown#Heading]]', notes)
+
+        expect(result).toBe(
+            '<a href="wikilink://missing//Unknown" class="wiki-link-broken">Unknown &gt; Heading</a>'
+        )
+    })
+
+    test('a same-note heading link renders as plain text', () => {
+        expect(resolveWikiLinks('[[#Agenda]]', notes)).toBe('Agenda')
+    })
+
+    test('counts heading links as backlinks', () => {
+        const linkingNotes = [
+            { path: 'target', title: 'Grocery List', note: '' },
+            { path: 'a', title: 'Recipe', note: 'See [[Grocery List#Fruit]]' }
+        ]
+
+        expect(findBacklinks('target', linkingNotes).map((note) => note.path)).toEqual(['a'])
+    })
+
+    test('keeps the anchor when renaming', () => {
+        const notesForRename = [{ path: 'target', title: 'Grocery List' }]
+        const result = renameWikiLinksForNote(
+            '[[Grocery List#Fruit]] and [[Grocery List#^b1|block]]',
+            'target',
+            'Shopping List',
+            notesForRename
+        )
+
+        expect(result).toBe('[[Shopping List#Fruit]] and [[Shopping List#^b1|block]]')
+    })
+})
+
+describe('frontmatter aliases', () => {
+    const aliasNotes = [
+        { path: 'note-1', title: 'Meeting Notes', properties: { aliases: ['Standup', 'Sync'] } },
+        { path: 'note-2', title: 'Standup' }
+    ]
+
+    test('resolves a link written with an alias', () => {
+        const target = resolveWikiLinkTarget('Sync', aliasNotes)
+
+        expect(target.path).toBe('note-1')
+    })
+
+    test('accepts a single string alias', () => {
+        const target = resolveWikiLinkTarget('Daily', [{ path: 'a', title: 'A', properties: { aliases: 'Daily' } }])
+
+        expect(target.path).toBe('a')
+    })
+
+    test('prefers a title match over an alias match', () => {
+        const target = resolveWikiLinkTarget('Standup', aliasNotes)
+
+        expect(target.path).toBe('note-2')
+    })
+
+    test('counts alias links as backlinks', () => {
+        const linkingNotes = [...aliasNotes, { path: 'a', title: 'Recipe', note: 'See [[Sync]]' }]
+
+        expect(findBacklinks('note-1', linkingNotes).map((note) => note.path)).toEqual(['a'])
+    })
+
+    test('does not rewrite links that matched through an alias when the title changes', () => {
+        const result = renameWikiLinksForNote('[[Sync]] and [[Meeting Notes]]', 'note-1', 'Retro', aliasNotes)
+
+        expect(result).toBe('[[Sync]] and [[Retro]]')
+    })
+})
+
+describe('unicode normalization', () => {
+    test('matches a decomposed link to a composed title', () => {
+        const composed = [{ path: 'cafe', title: 'Caf\u00e9' }]
+
+        expect(resolveWikiLinkTarget('Cafe\u0301', composed).path).toBe('cafe')
+    })
+})
