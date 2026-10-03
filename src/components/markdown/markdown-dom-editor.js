@@ -28,6 +28,8 @@ import { pasteUrlOverSelection } from './markdown-dom-paste'
 import { buildInvalidFrontmatterHighlight } from './markdown-dom-invalid-frontmatter'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
+import { EMBED_CLASS } from '@/constants/embeds'
+import { TASK_CHECKBOX_SELECTOR } from '@/constants/tasks'
 
 const createHiddenSearchPanel = () => {
     const dom = document.createElement('div')
@@ -52,6 +54,7 @@ const MarkdownDomEditor = ({
     onLinkPress,
     onTagPress,
     onImagePress,
+    onToggleTask,
     colors,
     typography,
     fonts,
@@ -248,12 +251,25 @@ const MarkdownDomEditor = ({
             }
 
             const image = event.target.closest('img')
-            if (image) onImagePress?.(image.getAttribute('src'))
+            if (image) {
+                onImagePress?.(image.getAttribute('src'))
+                return
+            }
+
+            if (event.target.matches(TASK_CHECKBOX_SELECTOR)) {
+                const checkboxes = [...container.querySelectorAll(TASK_CHECKBOX_SELECTOR)]
+                    .filter((checkbox) => !checkbox.closest(`.${EMBED_CLASS}`))
+
+                const index = checkboxes.indexOf(event.target)
+
+                if (index === -1) event.preventDefault()
+                else onToggleTask?.(index)
+            }
         }
 
         container.addEventListener('click', onClick)
         return () => container.removeEventListener('click', onClick)
-    }, [onLinkPress, onImagePress])
+    }, [onLinkPress, onImagePress, onToggleTask])
 
     const html = useMemo(
         () => (mode === EDITOR_MODES.READ ? renderMarkdownHtml(previewValue) + (backlinksHtml || '') : ''),

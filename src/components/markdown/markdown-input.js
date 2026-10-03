@@ -22,6 +22,7 @@ import { getDate } from '@/utils/date'
 import { findBacklinks, buildBacklinksHtml, getAliases, parseMissingWikiLinkTarget } from '@/utils/wiki-links'
 import { getNotePaths, buildRepositoryPaths } from '@/utils/note-path'
 import { areNoteEntriesEqual } from '@/utils/note-entries'
+import { toggleTask } from '@/utils/tasks'
 
 import { ROUTES } from '@/constants/routes'
 import { BODY_FONT_FAMILY, HEADING_FONT_FAMILY } from '@/constants/fonts'
@@ -103,7 +104,7 @@ export const MarkdownInput = ({
         return buildBacklinksHtml(backlinks, t('title.backlinks'), notePaths)
     }, [mode, showBacklinks, id, notes, notePaths, t])
 
-    const valueWithWikiLinks = useResolvedWikiLinks(mode === EDITOR_MODES.READ ? value : '')
+    const valueWithWikiLinks = useResolvedWikiLinks(mode === EDITOR_MODES.READ ? value : '', id)
     const { value: previewValue, mediaMap } = useResolvedPreviewMarkdown(valueWithWikiLinks)
     const mediaMapEntries = useMemo(() => [...mediaMap], [mediaMap])
 
@@ -155,6 +156,10 @@ export const MarkdownInput = ({
         params: { url: encodeURIComponent(url) }
     }), [])
 
+    const onToggleTask = useCallback((index) => {
+        onChangeText(toggleTask(value, index))
+    }, [value, onChangeText])
+
     const dom = useMemo(() => ({
         scrollEnabled: mode === EDITOR_MODES.READ,
         showsVerticalScrollIndicator: false,
@@ -188,6 +193,7 @@ export const MarkdownInput = ({
                 onLinkPress={onLinkPress}
                 onTagPress={onTagPress}
                 onImagePress={onImagePress}
+                onToggleTask={onToggleTask}
                 placeholder={placeholder}
                 titleField={titleField}
                 onTitleChange={onTitleChange}
