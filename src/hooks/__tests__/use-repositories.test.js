@@ -274,3 +274,14 @@ describe('ensureTemplatesFolder', () => {
         expect(mockFileStorage.getOrCreateTemplatesFolder).toHaveBeenCalledWith('content://root-1')
     })
 })
+
+describe('get root repository', () => {
+    test('resolves the root of a nested repository', async () => {
+        const root = { id: 'root-1', uri: 'content://root-1', parentId: null }
+        const child = { id: 'child-1', uri: 'content://child-1', parentId: 'root-1' }
+        const grandchild = { id: 'grandchild-1', uri: 'content://grandchild-1', parentId: 'child-1' }
+        const { result } = await renderRepositoriesHook([root, child, grandchild], 'root-1')
+
+        expect(result.current.getRootRepository(grandchild)).toEqual(root)
+    })
+})
