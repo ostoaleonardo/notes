@@ -1,6 +1,5 @@
 // Files
 export const NOTE_FILE_EXTENSION = '.md'
-export const METADATA_FILENAME = '.notes-meta.json'
 export const TAGS_FILENAME = '.tags.json'
 export const VERSIONS_FILENAME_SUFFIX = '.versions.json'
 export const NOTE_PATH_SEPARATOR = '::'
@@ -14,7 +13,4 @@ export const RESERVED_FOLDER_NAMES = [
     TEMPLATES_FOLDER_NAME,
     IMAGES_FOLDER_NAME
 ]
-export const SIDECAR_FILENAMES = [
-    METADATA_FILENAME,
-    TAGS_FILENAME
-]
+export const SIDECAR_FILENAMES = [TAGS_FILENAME]

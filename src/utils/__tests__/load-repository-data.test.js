@@ -8,7 +8,7 @@ import { parseFrontmatter } from '../frontmatter'
 import { getNoteKey } from '../note-key'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { METADATA_FILENAME, SIDECAR_FILENAMES, NOTE_FILE_EXTENSION } from '@/constants/file-storage'
+import { SIDECAR_FILENAMES, NOTE_FILE_EXTENSION } from '@/constants/file-storage'
 
 jest.mock('expo-crypto', () => ({ randomUUID: jest.fn() }))
 
@@ -43,8 +43,6 @@ const createFakeFileStorage = (deviceCache = new Map()) => {
             .map(([name, content]) => ({ name, text: async () => content, creationTime: 0, lastModified: 0 })),
         writeNoteFile: (uri, filename, content) => { filesFor(uri).set(filename, content) },
         deleteNoteFile: (uri, filename) => { filesFor(uri).delete(filename) },
-        readMetadata: (uri) => readJson(uri, METADATA_FILENAME, {}),
-        writeMetadata: (uri, metadata) => writeJson(uri, METADATA_FILENAME, metadata),
         readJson,
         writeJson,
         getOrCreateImagesFolder: (uri) => ({ uri: `${uri}/images` }),
@@ -303,7 +301,7 @@ describeLegacyFixtures('tags shared across the repository tree', () => {
 
 // steady state
 describe('steady state (no legacy data)', () => {
-    test('adopts a foreign .md file with no metadata entry, using default values', async () => {
+    test('adopts a foreign .md file with no frontmatter, using default values', async () => {
         const storage = createFakeStorage()
         const fileStorage = createFakeFileStorage()
         fileStorage.writeNoteFile(REPO_URI, 'External note.md', 'Added from outside the app.')
@@ -315,64 +313,11 @@ describe('steady state (no legacy data)', () => {
         expect(notes[0].tags).toEqual([])
     })
 
-    test('migrates metadata keyed by a random id into embedded frontmatter, resolving tag ids to names', async () => {
-        const storage = createFakeStorage()
-        const fileStorage = createFakeFileStorage()
-        fileStorage.writeNoteFile(REPO_URI, 'Note.md', 'content')
-        fileStorage.writeJson(REPO_URI, '.tags.json', [{ id: 'tag-1', name: 'work' }])
-        fileStorage.writeMetadata(REPO_URI, {
-            'old-uuid': { filename: 'Note.md', tags: ['tag-1'], createdAt: 1, updatedAt: '2' }
-        })
-
-        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
-
-        expect(notes[0].tags).toEqual(['work'])
-
-        const noteFile = fileStorage.listMarkdownFiles(REPO_URI).find((file) => file.name === 'Note.md')
-        const { frontmatter, body } = parseFrontmatter(await noteFile.text())
-        expect(frontmatter).toEqual({ tags: ['work'] })
-        expect(body).toBe('content')
-
-        expect(await fileStorage.readMetadata(REPO_URI)).toEqual({})
-        expect(fileStorage.listFiles(REPO_URI)).not.toContain(METADATA_FILENAME)
-    })
-
-    test('drops a tag id from a legacy note that no longer resolves in the tag dictionary', async () => {
-        const storage = createFakeStorage()
-        const fileStorage = createFakeFileStorage()
-        fileStorage.writeNoteFile(REPO_URI, 'Note.md', 'content')
-        fileStorage.writeMetadata(REPO_URI, {
-            'Note.md': { tags: ['deleted-tag-id'], createdAt: 1, updatedAt: '' }
-        })
-
-        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
-
-        expect(notes[0].tags).toEqual([])
-    })
-
-    test('ignores a stale sidecar entry for a note that already has frontmatter', async () => {
-        const storage = createFakeStorage()
-        const fileStorage = createFakeFileStorage()
-        fileStorage.writeNoteFile(REPO_URI, 'Note.md', '---\ntags:\n  - real\n---\n\ncontent')
-        fileStorage.writeMetadata(REPO_URI, {
-            'Note.md': { tags: ['stale'], createdAt: 999, updatedAt: '' }
-        })
-
-        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
-
-        expect(notes[0].tags).toEqual(['real'])
-        expect(await fileStorage.readMetadata(REPO_URI)).toEqual({})
-        expect(fileStorage.listFiles(REPO_URI)).not.toContain(METADATA_FILENAME)
-    })
-
     test('preserves a note with invalid frontmatter as-is instead of rewriting it', async () => {
         const storage = createFakeStorage()
         const fileStorage = createFakeFileStorage()
         const rawContent = '---\ntags: [unterminated\n---\n\ncontent'
         fileStorage.writeNoteFile(REPO_URI, 'Note.md', rawContent)
-        fileStorage.writeMetadata(REPO_URI, {
-            'Note.md': { tags: ['stale'], createdAt: 999, updatedAt: '' }
-        })
 
         const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
 
@@ -384,19 +329,6 @@ describe('steady state (no legacy data)', () => {
         expect(await noteFile.text()).toBe(rawContent)
     })
 
-    test('prunes metadata entries whose .md file was removed externally', async () => {
-        const storage = createFakeStorage()
-        const fileStorage = createFakeFileStorage()
-        fileStorage.writeMetadata(REPO_URI, {
-            'ghost-id': { filename: 'Deleted externally.md', tags: [], createdAt: 1, updatedAt: '' }
-        })
-
-        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
-
-        expect(notes).toEqual([])
-        const metadata = await fileStorage.readMetadata(REPO_URI)
-        expect(metadata['ghost-id']).toBeUndefined()
-    })
 })
 
 // tree-wide loading

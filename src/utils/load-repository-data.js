@@ -8,7 +8,7 @@ import { buildLegacyNoteBody } from '@/utils/legacy-note-body'
 
 import { DEFAULT_TAGS, LEGACY_ALL_TAG_ID } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { TAGS_FILENAME, METADATA_FILENAME } from '@/constants/file-storage'
+import { TAGS_FILENAME } from '@/constants/file-storage'
 import { NOTE_KEY_PREFIX } from '@/constants/note-key'
 
 const getTitle = stripNoteExtension
@@ -73,24 +73,6 @@ const migrateStorageNotesToFiles = async (rootRepository, storage, fileStorage, 
     await storage.multiRemove(noteKeys)
 }
 
-// Old metadata was keyed by a random note id, with the filename stored inside the entry.
-const migrateMetadataKeysToFilenames = (metadata) => {
-    let changed = false
-    const migrated = {}
-
-    for (const [key, entry] of Object.entries(metadata)) {
-        if (!entry.filename) {
-            migrated[key] = entry
-            continue
-        }
-
-        migrated[entry.filename] = { tags: entry.tags || [] }
-        changed = true
-    }
-
-    return { metadata: migrated, changed }
-}
-
 // Old tags were {id, name} objects; frontmatter needs plain names.
 const migrateTagsToNames = (tags) => {
     const names = []
@@ -120,9 +102,9 @@ const buildTagNameById = (rawTags) => {
 }
 
 // Loads every folder in the tree and stamps each note with its identity path.
-const loadFromTree = async (tree, loadFolder, fileStorage, tagNameById) => {
+const loadFromTree = async (tree, loadFolder, fileStorage) => {
     const perFolder = await Promise.all(tree.map(async (repository) => {
-        const items = await loadFolder(repository.uri, fileStorage, tagNameById)
+        const items = await loadFolder(repository.uri, fileStorage)
         return items.map((item) => ({
             ...item,
             repositoryId: repository.id,
@@ -133,87 +115,22 @@ const loadFromTree = async (tree, loadFolder, fileStorage, tagNameById) => {
     return perFolder.flat()
 }
 
-// Reconciles .md files against the metadata sidecar, migrating each note to embedded frontmatter.
-const loadNotesFromFolder = async (repositoryUri, fileStorage, tagNameById) => {
+const loadNotesFromFolder = async (repositoryUri, fileStorage) => {
     const files = fileStorage.listMarkdownFiles(repositoryUri)
-    const rawMetadata = await fileStorage.readMetadata(repositoryUri)
 
-    const { metadata, changed: keysMigrated } = migrateMetadataKeysToFilenames(rawMetadata)
-
-    const fileNames = new Set(files.map((file) => file.name))
-    let metadataChanged = keysMigrated
-    let migrationFailed = false
-
-    for (const filename of Object.keys(metadata)) {
-        if (!fileNames.has(filename)) {
-            delete metadata[filename]
-            metadataChanged = true
-        }
-    }
-
-    const notes = await Promise.all(files.map(async (file) => {
-        const rawContent = await file.text()
-        const { frontmatter, body, error, hasBlock, rawFrontmatter } = parseFrontmatter(rawContent)
-        const createdAt = file.creationTime ?? file.lastModified
-        const updatedAt = file.lastModified
-
-        if (hasBlock) {
-            if (metadata[file.name]) {
-                delete metadata[file.name]
-                metadataChanged = true
-            }
-
-            return {
-                filename: file.name,
-                title: getTitle(file.name),
-                note: body,
-                tags: frontmatter.tags || [],
-                invalidFrontmatter: error ? rawFrontmatter : null,
-                createdAt,
-                updatedAt
-            }
-        }
-
-        if (!metadata[file.name]) {
-            metadata[file.name] = { tags: [] }
-            metadataChanged = true
-        }
-
-        const entry = metadata[file.name]
-        const tags = (entry.tags || []).map((id) => tagNameById.get(id)).filter(Boolean)
-
-        try {
-            const content = buildNoteFileContent({ tags }, body)
-            fileStorage.writeNoteFile(repositoryUri, file.name, content)
-            delete metadata[file.name]
-            metadataChanged = true
-        } catch (error) {
-            console.debug('error migrating note to frontmatter', error)
-            migrationFailed = true
-        }
+    return Promise.all(files.map(async (file) => {
+        const { frontmatter, body, error, rawFrontmatter } = parseFrontmatter(await file.text())
 
         return {
             filename: file.name,
             title: getTitle(file.name),
             note: body,
-            tags,
-            invalidFrontmatter: null,
-            createdAt,
-            updatedAt
+            tags: frontmatter.tags || [],
+            invalidFrontmatter: error ? rawFrontmatter : null,
+            createdAt: file.creationTime ?? file.lastModified,
+            updatedAt: file.lastModified
         }
     }))
-
-    if (metadataChanged) fileStorage.writeMetadata(repositoryUri, metadata)
-
-    if (!migrationFailed && Object.keys(metadata).length === 0) {
-        try {
-            fileStorage.deleteNoteFile(repositoryUri, METADATA_FILENAME)
-        } catch (error) {
-            console.debug('error deleting migrated metadata sidecar', error)
-        }
-    }
-
-    return notes
 }
 
 // Reads a sidecar list (tags), migrating its legacy AsyncStorage value once.
@@ -267,7 +184,7 @@ export const loadRepositoryData = async (tree, rootRepository, storage, fileStor
     const { tags, changed: tagsMigrated } = migrateTagsToNames(purgedRawTags)
     if (tagsMigrated) fileStorage.writeJson(rootRepositoryUri, TAGS_FILENAME, tags)
 
-    const notes = await loadFromTree(tree, loadNotesFromFolder, fileStorage, tagNameById)
+    const notes = await loadFromTree(tree, loadNotesFromFolder, fileStorage)
 
     return { notes, tags }
 }

@@ -3,7 +3,6 @@ import { Directory, File, FileMode } from 'expo-file-system'
 
 import {
     NOTE_FILE_EXTENSION,
-    METADATA_FILENAME,
     VERSIONS_FILENAME_SUFFIX,
     TEMPLATES_FOLDER_NAME,
     IMAGES_FOLDER_NAME,
@@ -141,9 +140,6 @@ export function useFileStorage() {
         writeNoteFile(directoryUri, filename, JSON.stringify(data), MIME_TYPES.JSON)
     }
 
-    const readMetadata = (directoryUri) => readJson(directoryUri, METADATA_FILENAME, {})
-    const writeMetadata = (directoryUri, metadata) => writeJson(directoryUri, METADATA_FILENAME, metadata)
-
     const readVersions = (directoryUri, filename) => readJson(directoryUri, filename + VERSIONS_FILENAME_SUFFIX, [])
     const writeVersions = (directoryUri, filename, versions) => writeJson(directoryUri, filename + VERSIONS_FILENAME_SUFFIX, versions)
     const deleteVersions = (directoryUri, filename) => deleteNoteFile(directoryUri, filename + VERSIONS_FILENAME_SUFFIX)
@@ -168,8 +164,6 @@ export function useFileStorage() {
         deleteDirectory,
         directoryExists,
         renameDirectory,
-        readMetadata,
-        writeMetadata,
         readVersions,
         writeVersions,
         deleteVersions,
