@@ -31,12 +31,12 @@ import { useStorage } from '@/hooks/use-storage'
 import { useTemplates } from '@/hooks/use-templates'
 import { useTemplatesList } from '@/hooks/use-templates-list'
 import { useVersionHistory } from '@/hooks/use-version-history'
+import { readDeleteBehavior } from '@/utils/delete-note-files'
 import { buildNoteMetaLabel } from '@/utils/note-meta-label'
 import { countWords } from '@/utils/word-count'
 
 import { DEFAULT_DELETE_BEHAVIOR } from '@/constants/delete-behavior'
 import { EDITOR_MODES } from '@/constants/editor-modes'
-import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { TEMPLATE_INSERT_SEPARATOR } from '@/constants/template-placeholders'
 
 export const NoteEditorScreen = ({
@@ -187,7 +187,7 @@ export const NoteEditorScreen = ({
     const onToggleShowBacklinks = useCallback(() => setShowBacklinks((prev) => !prev), [])
 
     const onOpenDeleteDialog = useCallback(async () => {
-        setDeleteBehavior((await getItem(STORAGE_KEYS.DELETE_BEHAVIOR)) || DEFAULT_DELETE_BEHAVIOR)
+        setDeleteBehavior(await readDeleteBehavior(getItem))
         deleteDialog.onOpen()
     }, [getItem, deleteDialog.onOpen])
 

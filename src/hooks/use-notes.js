@@ -6,13 +6,11 @@ import { useStorage } from './use-storage'
 import { NoteContext } from '../context/note-context'
 import { getUniqueFilename, isTitleTaken } from '@/utils/note-filename'
 import { buildNotePath } from '@/utils/note-path'
-import { deleteNoteFiles } from '@/utils/delete-note-files'
+import { deleteNoteFiles, readDeleteBehavior } from '@/utils/delete-note-files'
 import { buildNoteFileContent } from '@/utils/frontmatter'
 import { renameWikiLinksForNote } from '@/utils/wiki-links'
 
-import { DEFAULT_DELETE_BEHAVIOR } from '@/constants/delete-behavior'
 import { DUPLICATE_TITLE_ERROR } from '@/constants/note-errors'
-import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export function useNotes() {
     const fileStorage = useFileStorage()
@@ -156,7 +154,7 @@ export function useNotes() {
         try {
             if (!findFile(uri, note.filename)) return
 
-            const behavior = (await getItem(STORAGE_KEYS.DELETE_BEHAVIOR)) || DEFAULT_DELETE_BEHAVIOR
+            const behavior = await readDeleteBehavior(getItem)
             const repository = repositories.find((r) => r.id === note.repositoryId)
 
             await deleteNoteFiles(behavior, {
