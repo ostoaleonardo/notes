@@ -250,7 +250,7 @@ export const buildPreviewCss = ({ fontFamily, headingFontFamily, colors, fontSiz
     .markdown-preview .footnotes { font-size: 0.85em; opacity: 0.85; }
     .markdown-preview .footnote-item > p { display: inline; }
     .markdown-preview .${BACKLINKS_CLASS} {
-        margin: 32px 0 16px; padding: 0; overflow: hidden; border-radius: 16px;
+        margin: 32px 0 16px; padding: 8px 0; overflow: hidden; border-radius: 16px;
         background-color: ${surfaceColor}; font-size: 13px; line-height: 1.3;
     }
     .markdown-preview .${BACKLINKS_TITLE_CLASS} {
