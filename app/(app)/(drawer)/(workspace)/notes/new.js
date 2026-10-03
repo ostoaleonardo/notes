@@ -7,12 +7,12 @@ import { RenameLinksDialog } from '@/screens/dialogs/rename-links-dialog'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useAutosave } from '@/hooks/use-autosave'
+import { useNoteDraft } from '@/hooks/use-note-draft'
 import { useNotes } from '@/hooks/use-notes'
 import { useWikiLinkRenameConfirm } from '@/hooks/use-wiki-link-rename-confirm'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
 import { getUniqueTitle } from '@/utils/note-filename'
-import { buildNotePayload } from '@/utils/note-payload'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { DUPLICATE_TITLE_ERROR } from '@/constants/note-errors'
@@ -41,17 +41,19 @@ export default function Note() {
     const firstRender = useRef(true)
 
     const [path, setPath] = useState('')
-    const [filename, setFilename] = useState('')
     useRegisterCurrent(path)
 
-    const [title, setTitle] = useState('')
-    const [note, setNote] = useState('')
-    const [tags, setTags] = useState([])
-    const [properties, setProperties] = useState({})
-
-    const [modifiedAt, setModifiedAt] = useState('')
-    const [repositoryId, setRepositoryId] = useState('')
-    const [invalidFrontmatter, setInvalidFrontmatter] = useState(null)
+    const {
+        title, setTitle,
+        note, setNote,
+        tags, setTags,
+        properties, setProperties,
+        modifiedAt, setModifiedAt,
+        repositoryId, setRepositoryId,
+        filename, setFilename,
+        invalidFrontmatter, setInvalidFrontmatter,
+        buildPayload
+    } = useNoteDraft(pathRef)
 
     useEffect(() => {
         notesRef.current = notes
@@ -80,16 +82,6 @@ export default function Note() {
         setFilename(saved.filename)
         setModifiedAt(saved.updatedAt || saved.createdAt)
     }
-
-    const buildPayload = (payloadTitle, payloadNote = note) => buildNotePayload({
-        path: pathRef.current,
-        title: payloadTitle,
-        note: payloadNote,
-        tags,
-        properties,
-        repositoryId,
-        invalidFrontmatter
-    })
 
     const { flush, runExclusive } = useAutosave(async () => {
         if (!isSaved.current) {

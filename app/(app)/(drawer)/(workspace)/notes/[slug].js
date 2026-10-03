@@ -8,11 +8,11 @@ import { RenameLinksDialog } from '@/screens/dialogs/rename-links-dialog'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useAutosave } from '@/hooks/use-autosave'
+import { useNoteDraft } from '@/hooks/use-note-draft'
 import { useNotes } from '@/hooks/use-notes'
 import { useWikiLinkRenameConfirm } from '@/hooks/use-wiki-link-rename-confirm'
 import { useCurrentNote, useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
-import { buildNotePayload } from '@/utils/note-payload'
 
 import { ROUTES } from '@/constants/routes'
 import { DUPLICATE_TITLE_ERROR } from '@/constants/note-errors'
@@ -41,15 +41,17 @@ export default function EditNote() {
 
     const [loading, setLoading] = useState(true)
 
-    const [title, setTitle] = useState('')
-    const [note, setNote] = useState('')
-    const [tags, setTags] = useState([])
-    const [properties, setProperties] = useState({})
-
-    const [modifiedAt, setModifiedAt] = useState('')
-    const [repositoryId, setRepositoryId] = useState('')
-    const [filename, setFilename] = useState('')
-    const [invalidFrontmatter, setInvalidFrontmatter] = useState(null)
+    const {
+        title, setTitle,
+        note, setNote,
+        tags, setTags,
+        properties, setProperties,
+        modifiedAt, setModifiedAt,
+        repositoryId, setRepositoryId,
+        filename, setFilename,
+        invalidFrontmatter, setInvalidFrontmatter,
+        buildPayload
+    } = useNoteDraft(pathRef)
 
     const originalTitleRef = useRef(null)
     const originalNoteRef = useRef(null)
@@ -115,16 +117,6 @@ export default function EditNote() {
         originalPropertiesRef.current = JSON.stringify(properties)
         originalInvalidFrontmatterRef.current = invalidFrontmatter
     }
-
-    const buildPayload = (payloadTitle, payloadNote = note) => buildNotePayload({
-        path: pathRef.current,
-        title: payloadTitle,
-        note: payloadNote,
-        tags,
-        properties,
-        repositoryId,
-        invalidFrontmatter
-    })
 
     const noteExists = notes.some((n) => n.path === pathRef.current)
 
