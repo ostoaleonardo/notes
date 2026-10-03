@@ -17,12 +17,29 @@ import { getVersionLocation } from '@/utils/note-version-location'
 import { buildNoteFileContent, parseFrontmatter } from '@/utils/frontmatter'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { MIME_TYPES } from '@/constants/mime-types'
+import { NOTE_FILE_EXTENSION } from '@/constants/file-storage'
 import {
     TREE_BRANCHING,
     NOTES_PER_FOLDER,
     LEGACY_SEED_IMAGE_FILENAME,
     LEGACY_SEED_IMAGE_BASE64
 } from '@/constants/dev-menu'
+import {
+    SYNTAX_IMAGE_FILENAME,
+    SYNTAX_IMAGE_BASE64,
+    SYNTAX_LINKED_TITLE,
+    SYNTAX_LINKED_TAGS,
+    SYNTAX_LINKED_PROPERTIES,
+    SYNTAX_LINKED_BODY,
+    SYNTAX_EMBED_TITLE,
+    SYNTAX_EMBED_TAGS,
+    SYNTAX_EMBED_BODY,
+    SYNTAX_MAIN_TITLE,
+    SYNTAX_MAIN_TAGS,
+    SYNTAX_MAIN_PROPERTIES,
+    SYNTAX_MAIN_BODY
+} from '@/constants/syntax-note'
 
 export function useDevMenu() {
     const { setItem } = useStorage()
@@ -43,7 +60,8 @@ export function useDevMenu() {
         repositories,
         activeRepository,
         activeRepositoryId,
-        buildRepository
+        buildRepository,
+        ensureImagesFolder
     } = useRepositories()
 
     const resetApp = async () => {
@@ -129,6 +147,50 @@ export function useDevMenu() {
         DevSettings.reload()
     }
 
+    const createSyntaxNote = () => {
+        if (!activeRepository) return
+
+        const uri = activeRepository.uri
+
+        const notes = [
+            {
+                title: SYNTAX_LINKED_TITLE,
+                tags: SYNTAX_LINKED_TAGS,
+                properties: SYNTAX_LINKED_PROPERTIES,
+                body: SYNTAX_LINKED_BODY
+            },
+            {
+                title: SYNTAX_EMBED_TITLE,
+                tags: SYNTAX_EMBED_TAGS,
+                body: SYNTAX_EMBED_BODY
+            },
+            {
+                title: SYNTAX_MAIN_TITLE,
+                tags: SYNTAX_MAIN_TAGS,
+                properties: SYNTAX_MAIN_PROPERTIES,
+                body: SYNTAX_MAIN_BODY
+            }
+        ]
+
+        notes.forEach(({ title, tags, properties, body }) => {
+            writeNoteFile(
+                uri,
+                `${sanitizeFilename(title)}${NOTE_FILE_EXTENSION}`,
+                buildNoteFileContent({ tags, properties }, body)
+            )
+        })
+
+        const imagesUri = ensureImagesFolder(activeRepository)
+
+        if (!findFile(imagesUri, SYNTAX_IMAGE_FILENAME)) {
+            new Directory(imagesUri)
+                .createFile(SYNTAX_IMAGE_FILENAME, MIME_TYPES.PNG)
+                .write(Uint8Array.from(atob(SYNTAX_IMAGE_BASE64), (char) => char.charCodeAt(0)))
+        }
+
+        DevSettings.reload()
+    }
+
     useEffect(() => {
         if (!__DEV__) return
 
@@ -151,6 +213,11 @@ export function useDevMenu() {
             {
                 name: 'Create/replace welcome note',
                 callback: createWelcomeNote,
+                shouldCollapse: true
+            },
+            {
+                name: 'Create/replace syntax test notes',
+                callback: createSyntaxNote,
                 shouldCollapse: true
             },
             {
