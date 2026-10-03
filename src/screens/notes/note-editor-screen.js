@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { router } from 'expo-router'
 
 import { MarkdownEditorLayout } from './markdown-editor-layout'
 import { MarkdownModeToggle } from './markdown-mode-toggle'
@@ -15,32 +14,24 @@ import { ExportFormat } from '@/screens/dialogs/export-format'
 import { AppBar } from '@/components/app-bar/app-bar'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { MarkdownInput } from '@/components/markdown/markdown-input'
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
-import { useCodeMode } from '@/hooks/use-code-mode'
-import { useEditorChrome } from '@/hooks/use-editor-chrome'
 import { useBottomSheet } from '@/hooks/use-bottom-sheet'
-import { useFiles } from '@/hooks/use-files'
+import { useEditorChrome } from '@/hooks/use-editor-chrome'
 import { useLanguage } from '@/hooks/use-language'
-import { useMenuAction } from '@/hooks/use-menu-action'
-import { useNotes } from '@/hooks/use-notes'
+import { useNoteDelete } from '@/hooks/use-note-delete'
+import { useNoteMode } from '@/hooks/use-note-mode'
+import { useNoteSharing } from '@/hooks/use-note-sharing'
+import { useNoteTemplates } from '@/hooks/use-note-templates'
 import { usePro } from '@/hooks/use-pro'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useShowProperties } from '@/hooks/use-show-properties'
-import { useStorage } from '@/hooks/use-storage'
-import { useTemplates } from '@/hooks/use-templates'
-import { useTemplatesList } from '@/hooks/use-templates-list'
+import { useTagSearchSeed } from '@/hooks/use-tag-search-seed'
 import { useVersionHistory } from '@/hooks/use-version-history'
-import { readDeleteBehavior } from '@/utils/delete-note-files'
 import { buildNoteMetaLabel } from '@/utils/note-meta-label'
 import { countWords } from '@/utils/word-count'
 import { getVersionLocation } from '@/utils/note-version-location'
-import { toggleTagQualifier } from '@/utils/search-query'
 
-
-import { DEFAULT_DELETE_BEHAVIOR } from '@/constants/delete-behavior'
 import { EDITOR_MODES } from '@/constants/editor-modes'
-import { TEMPLATE_INSERT_SEPARATOR } from '@/constants/template-placeholders'
 
 export const NoteEditorScreen = ({
     id,
@@ -59,19 +50,13 @@ export const NoteEditorScreen = ({
 }) => {
     const { t } = useTranslation()
     const { pro } = usePro()
-    const { deleteNote } = useNotes()
-    const { addTemplate } = useTemplates()
     const { currentLanguage } = useLanguage()
     const { repositories } = useRepositories()
-    const { exportFile, shareFile } = useFiles()
-    const { getItem } = useStorage()
-    const { templates, refresh: refreshTemplates } = useTemplatesList([], { immediate: false })
     const location = useMemo(
         () => getVersionLocation(repositories, repositoryId),
         [repositories, repositoryId]
     )
 
-    const [mode, setMode] = useState(initialMode)
     const [showBacklinks, setShowBacklinks] = useState(true)
     const {
         isFocused,
@@ -92,23 +77,19 @@ export const NoteEditorScreen = ({
 
     const { propertiesVisible, onToggleProperties } = useShowProperties()
 
-    const [searchSeed, setSearchSeed] = useState('')
-
-    const onOpenSearch = useCallback(() => {
-        setSearchSeed('')
-        searchSheet.onOpen()
-    }, [searchSheet.onOpen])
-
-    const onTagPress = useCallback((name) => {
-        setSearchSeed(toggleTagQualifier('', name))
-        searchSheet.onOpen()
-    }, [searchSheet.onOpen])
+    const { seed: searchSeed, onOpenSearch, onTagPress } = useTagSearchSeed(searchSheet.onOpen)
 
     const onRemoveTag = useCallback((name) => {
         setTags((prev) => prev.filter((tag) => tag !== name))
     }, [setTags])
 
-    const codeMode = useCodeMode({
+    const {
+        mode,
+        onSetMode,
+        editorValue,
+        onEditorChange
+    } = useNoteMode({
+        initialMode,
         note,
         tags,
         properties,
@@ -119,27 +100,25 @@ export const NoteEditorScreen = ({
         setInvalidFrontmatter
     })
 
-    const invalidProperties = mode !== EDITOR_MODES.CODE && !!invalidFrontmatter
+    const invalid = mode !== EDITOR_MODES.CODE && !!invalidFrontmatter
 
-    const onSetMode = useCallback((nextMode) => {
-        if (nextMode === mode) return
+    const propertiesPanel = useMemo(() => ({
+        tags,
+        label: t('title.tags'),
+        visible: propertiesVisible,
+        invalid,
+        invalidTitle: t('tags.invalid_properties_title'),
+        invalidDescription: t('tags.invalid_properties_description')
+    }), [tags, t, propertiesVisible, invalid])
 
-        if (nextMode === EDITOR_MODES.CODE) codeMode.enter()
-
-        setMode(nextMode)
-    }, [mode, codeMode.enter])
-
-    const isCodeMode = mode === EDITOR_MODES.CODE
-    const editorValue = isCodeMode ? codeMode.codeBuffer : note
-    const onEditorChange = isCodeMode ? codeMode.onChange : setNote
-
-    const shareDialog = useMenuAction()
-    const exportDialog = useMenuAction()
-    const deleteDialog = useMenuAction()
-    const [deleteBehavior, setDeleteBehavior] = useState(DEFAULT_DELETE_BEHAVIOR)
+    const searchField = useMemo(() => ({
+        query: search.searchQuery,
+        replace: search.replaceText
+    }), [search.searchQuery, search.replaceText])
 
     const tagsSheet = useBottomSheet()
-    const templatesSheet = useBottomSheet()
+    const { shareDialog, exportDialog, onConfirmExport, onConfirmShare } = useNoteSharing({ id, flush })
+    const noteDelete = useNoteDelete(id)
 
     const { words, characters } = countWords(note)
 
@@ -173,49 +152,9 @@ export const NoteEditorScreen = ({
 
     const versionHistory = useVersionHistory({ location, latestContent })
 
-    const onSelectTemplate = useCallback((content) => {
-        setNote((prev) => (prev ? prev + TEMPLATE_INSERT_SEPARATOR + content : content))
-        templatesSheet.onClose()
-    }, [])
-
-    const onSaveAsTemplate = useCallback(async () => {
-        const { title, content } = latestContent.current
-
-        try {
-            await addTemplate(title.trim() || t('placeholder.title'), content)
-            showSnackbar(t('templates.saved'))
-        } catch (error) {
-            console.debug('error saving template', error)
-            showSnackbar(t('templates.save_failed'))
-        }
-    }, [addTemplate, t])
-
-    const onConfirmExport = useCallback(async (format) => {
-        await flush()
-        exportFile(id, format)
-    }, [flush, exportFile, id])
-
-    const onConfirmShare = useCallback(async (format) => {
-        await flush()
-        shareFile(id, format)
-    }, [flush, shareFile, id])
+    const noteTemplates = useNoteTemplates({ latestContent, setNote })
 
     const onToggleShowBacklinks = useCallback(() => setShowBacklinks((prev) => !prev), [])
-
-    const onOpenDeleteDialog = useCallback(async () => {
-        setDeleteBehavior(await readDeleteBehavior(getItem))
-        deleteDialog.onOpen()
-    }, [getItem, deleteDialog.onOpen])
-
-    const onConfirmDelete = useCallback(async () => {
-        try {
-            await deleteNote(id)
-            router.back()
-        } catch (error) {
-            console.debug('error deleting note', error)
-            showSnackbar(t('notes.delete_failed'))
-        }
-    }, [deleteNote, id, t])
 
     const onRestore = useCallback((version) => {
         if (onRestoreVersion) {
@@ -228,23 +167,18 @@ export const NoteEditorScreen = ({
         versionHistory.onClose()
     }, [onRestoreVersion, versionHistory.onClose])
 
-    const onOpenTemplates = useCallback(() => {
-        refreshTemplates()
-        templatesSheet.onOpen()
-    }, [refreshTemplates, templatesSheet.onOpen])
-
     const actions = useMemo(() => ({
         onOpenTags: tagsSheet.onOpen,
-        onOpenTemplates,
+        onOpenTemplates: noteTemplates.onOpen,
         onOpenRecents: recentsSheet.onOpen,
         onOpenSearch,
-        onSaveAsTemplate
+        onSaveAsTemplate: noteTemplates.onSaveAsTemplate
     }), [
         tagsSheet.onOpen,
-        onOpenTemplates,
+        noteTemplates.onOpen,
         recentsSheet.onOpen,
         onOpenSearch,
-        onSaveAsTemplate
+        noteTemplates.onSaveAsTemplate
     ])
 
     return (
@@ -275,7 +209,7 @@ export const NoteEditorScreen = ({
                         showBacklinks={showBacklinks}
                         onOpenShareDialog={shareDialog.onOpen}
                         onOpenExportDialog={exportDialog.onOpen}
-                        onOpenDeleteDialog={onOpenDeleteDialog}
+                        onOpenDeleteDialog={noteDelete.onOpen}
                         onOpenVersionHistory={versionHistory.onOpen}
                         onToggleShowBacklinks={onToggleShowBacklinks}
                     />
@@ -301,18 +235,12 @@ export const NoteEditorScreen = ({
                     titleField={titleField}
                     onTitleChange={setTitle}
                     onTitleBlur={onTitleBlur}
-                    tags={tags}
-                    propertiesLabel={t('title.tags')}
-                    propertiesVisible={propertiesVisible}
+                    propertiesPanel={propertiesPanel}
                     onToggleProperties={onToggleProperties}
                     onRemoveTag={onRemoveTag}
                     onOpenTags={tagsSheet.onOpen}
                     onTagPress={onTagPress}
-                    invalidProperties={invalidProperties}
-                    invalidPropertiesTitle={t('tags.invalid_properties_title')}
-                    invalidPropertiesDescription={t('tags.invalid_properties_description')}
-                    searchQuery={search.searchQuery}
-                    replaceText={search.replaceText}
+                    search={searchField}
                     value={editorValue}
                     onChangeText={onEditorChange}
                     onHistoryChange={onHistoryChange}
@@ -338,10 +266,10 @@ export const NoteEditorScreen = ({
             />
 
             <TemplatePickerSheet
-                sheet={templatesSheet}
+                sheet={noteTemplates.sheet}
                 title={title}
-                templates={templates}
-                onSelect={onSelectTemplate}
+                templates={noteTemplates.templates}
+                onSelect={noteTemplates.onSelect}
             />
 
             <NoteToolbarSheets
@@ -365,12 +293,12 @@ export const NoteEditorScreen = ({
             />
 
             <ConfirmDialog
-                visible={deleteDialog.visible}
+                visible={noteDelete.visible}
                 title={t('notes.delete_title')}
-                message={t(`notes.delete_message_${deleteBehavior}`)}
+                message={t(`notes.delete_message_${noteDelete.behavior}`)}
                 confirmLabel={t('button.delete')}
-                onDismiss={deleteDialog.onClose}
-                onConfirm={onConfirmDelete}
+                onDismiss={noteDelete.onClose}
+                onConfirm={noteDelete.onConfirm}
             />
         </VersionHistoryPanel>
     )
