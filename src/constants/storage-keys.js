@@ -18,6 +18,7 @@ export const STORAGE_KEYS = {
     LINK_FORMAT: 'link-format',
     SHOW_NOTE_PROPERTIES: 'show-note-properties',
     STARTUP_BEHAVIOR: 'startup-behavior',
+    DELETE_BEHAVIOR: 'delete-behavior',
     DAILY_NOTE_FOLDER: 'daily-note-folder',
     DAILY_NOTE_TEMPLATE: 'daily-note-template',
 

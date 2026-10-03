@@ -7,6 +7,7 @@ export const NOTE_PATH_SEPARATOR = '::'
 // Folders
 export const TEMPLATES_FOLDER_NAME = 'templates'
 export const IMAGES_FOLDER_NAME = 'images'
+export const VAULT_TRASH_FOLDER_NAME = '.trash'
 
 // Groups
 export const RESERVED_FOLDER_NAMES = [

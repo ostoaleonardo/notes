@@ -208,6 +208,38 @@ describe('renameNoteFile', () => {
     })
 })
 
+describe('moveNoteFiles', () => {
+    test('moves the note and its versions to the destination and removes the source', async () => {
+        const { result } = await renderFileStorageHook()
+
+        seedDirectory('content://repo', [new File('content://repo/note.md')])
+        seedDirectory('content://bin', [])
+        setFileContent('content://repo/note.md', 'hello')
+        result.current.writeVersions('content://repo', 'note.md', [{ id: 'v1' }])
+
+        const target = await result.current.moveNoteFiles('content://repo', 'note.md', 'content://bin')
+
+        expect(target).toBe('note.md')
+        expect(await new File('content://bin/note.md').text()).toBe('hello')
+        expect(await result.current.readVersions('content://bin', 'note.md')).toEqual([{ id: 'v1' }])
+        expect(result.current.findFile('content://repo', 'note.md')).toBeUndefined()
+        expect(await result.current.readVersions('content://repo', 'note.md')).toEqual([])
+    })
+
+    test('picks a unique filename when the destination already has one', async () => {
+        const { result } = await renderFileStorageHook()
+
+        seedDirectory('content://repo', [new File('content://repo/note.md')])
+        seedDirectory('content://bin', [new File('content://bin/note.md')])
+        setFileContent('content://repo/note.md', 'new')
+
+        const target = await result.current.moveNoteFiles('content://repo', 'note.md', 'content://bin')
+
+        expect(target).toBe('note (2).md')
+        expect(await new File('content://bin/note (2).md').text()).toBe('new')
+    })
+})
+
 describe('renameVersions', () => {
     test('moves the versions file under the new filename', async () => {
         const { result } = await renderFileStorageHook()

@@ -1,11 +1,14 @@
 import { useMemo } from 'react'
 import { Directory, File, FileMode } from 'expo-file-system'
 
+import { getUniqueFilename, stripNoteExtension } from '@/utils/note-filename'
+
 import {
     NOTE_FILE_EXTENSION,
     VERSIONS_FILENAME_SUFFIX,
     TEMPLATES_FOLDER_NAME,
     IMAGES_FOLDER_NAME,
+    VAULT_TRASH_FOLDER_NAME,
     RESERVED_FOLDER_NAMES,
     SIDECAR_FILENAMES
 } from '@/constants/file-storage'
@@ -36,6 +39,10 @@ export function useFileStorage() {
 
     const getOrCreateImagesFolder = (directoryUri) => (
         findDirectory(directoryUri, IMAGES_FOLDER_NAME) || createSubdirectory(directoryUri, IMAGES_FOLDER_NAME)
+    )
+
+    const getOrCreateVaultTrashFolder = (directoryUri) => (
+        findDirectory(directoryUri, VAULT_TRASH_FOLDER_NAME) || createSubdirectory(directoryUri, VAULT_TRASH_FOLDER_NAME)
     )
 
     const listMarkdownFiles = (directoryUri) => (
@@ -120,6 +127,21 @@ export function useFileStorage() {
         if (file) file.delete()
     }
 
+    const moveNoteFiles = async (sourceUri, filename, destinationUri) => {
+        const source = findFile(sourceUri, filename)
+        const names = listMarkdownFiles(destinationUri).map((file) => file.name)
+        const target = getUniqueFilename(names, stripNoteExtension(filename), null)
+        const versions = await readVersions(sourceUri, filename)
+
+        writeNoteFile(destinationUri, target, await source.text())
+        if (versions.length) writeVersions(destinationUri, target, versions)
+
+        source.delete()
+        deleteVersions(sourceUri, filename)
+
+        return target
+    }
+
     const clearRepository = (directoryUri) => {
         listMarkdownFiles(directoryUri).forEach((file) => file.delete())
         SIDECAR_FILENAMES.forEach((filename) => deleteNoteFile(directoryUri, filename))
@@ -173,6 +195,8 @@ export function useFileStorage() {
         createSubdirectory,
         getOrCreateTemplatesFolder,
         getOrCreateImagesFolder,
+        getOrCreateVaultTrashFolder,
+        moveNoteFiles,
         copyImageFile
     }), [])
 }

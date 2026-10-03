@@ -23,8 +23,12 @@ const mockFileStorage = {
     deleteNoteFile: jest.fn(),
     findFile: jest.fn(),
     renameVersions: jest.fn(async () => { }),
-    deleteVersions: jest.fn()
+    deleteVersions: jest.fn(),
+    moveNoteFiles: jest.fn(async () => { }),
+    getOrCreateVaultTrashFolder: jest.fn(() => ({ uri: 'file:///repo/.trash' }))
 }
+
+let mockDeleteBehavior = null
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
     default: {}
@@ -33,7 +37,7 @@ jest.mock('../use-file-storage', () => ({
     useFileStorage: () => mockFileStorage
 }))
 jest.mock('../use-storage', () => ({
-    useStorage: () => ({ getItem: jest.fn(async () => null) })
+    useStorage: () => ({ getItem: jest.fn(async () => mockDeleteBehavior) })
 }))
 jest.mock('../use-repository-data', () => ({
     useRepositoryData: () => async () => ({ notes: [], tags: [] })
@@ -41,7 +45,8 @@ jest.mock('../use-repository-data', () => ({
 jest.mock('../use-repositories', () => ({
     useRepositories: () => ({
         activeRepository: { id: 'repo-1', uri: MOCK_REPO_URI },
-        repositories: [{ id: 'repo-1', uri: MOCK_REPO_URI }]
+        repositories: [{ id: 'repo-1', uri: MOCK_REPO_URI }],
+        getRootRepository: (repository) => repository
     })
 }))
 
@@ -76,6 +81,7 @@ const renderNotesHook = (initialNotes = []) => {
 
 beforeEach(() => {
     files = new Map()
+    mockDeleteBehavior = null
 
     jest.clearAllMocks()
     mockFileStorage.listMarkdownFiles.mockImplementation(() => (
@@ -302,7 +308,8 @@ describe('update note', () => {
 })
 
 describe('delete note', () => {
-    test('removes the note from state, deletes its file and versions', async () => {
+    test('removes the note from state and permanently deletes its file and versions', async () => {
+        mockDeleteBehavior = 'permanent'
         files.set('Groceries.md', '---\ntags: []\n---\n\ncontent')
         const { result } = await renderNotesHook([MOCK_GROCERIES_NOTE])
 
@@ -313,6 +320,34 @@ describe('delete note', () => {
         expect(result.current.notes).toEqual([])
         expect(files.has('Groceries.md')).toBe(false)
         expect(mockFileStorage.deleteVersions).toHaveBeenCalledWith(MOCK_REPO_URI, 'Groceries.md')
+    })
+
+    test('moves the note to the vault trash folder by default', async () => {
+        files.set('Groceries.md', '---\ntags: []\n---\n\ncontent')
+        const { result } = await renderNotesHook([MOCK_GROCERIES_NOTE])
+
+        await act(async () => {
+            await result.current.deleteNote('repo-1::Groceries.md')
+        })
+
+        expect(mockFileStorage.getOrCreateVaultTrashFolder).toHaveBeenCalledWith(MOCK_REPO_URI)
+        expect(mockFileStorage.moveNoteFiles).toHaveBeenCalledWith(
+            MOCK_REPO_URI,
+            'Groceries.md',
+            'file:///repo/.trash'
+        )
+    })
+
+    test('restores the note in state when moving it fails', async () => {
+        mockFileStorage.moveNoteFiles.mockRejectedValueOnce(new Error('move failed'))
+        files.set('Groceries.md', '---\ntags: []\n---\n\ncontent')
+        const { result } = await renderNotesHook([MOCK_GROCERIES_NOTE])
+
+        await act(async () => {
+            await expect(result.current.deleteNote('repo-1::Groceries.md')).rejects.toThrow('move failed')
+        })
+
+        expect(result.current.notes).toEqual([MOCK_GROCERIES_NOTE])
     })
 
     test('is a no-op when the note path does not exist', async () => {

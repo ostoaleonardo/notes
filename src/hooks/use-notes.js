@@ -2,27 +2,31 @@ import { useContext } from 'react'
 
 import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
+import { useStorage } from './use-storage'
 import { NoteContext } from '../context/note-context'
 import { getUniqueFilename, isTitleTaken } from '@/utils/note-filename'
 import { buildNotePath } from '@/utils/note-path'
+import { deleteNoteFiles } from '@/utils/delete-note-files'
 import { buildNoteFileContent } from '@/utils/frontmatter'
 import { renameWikiLinksForNote } from '@/utils/wiki-links'
 
+import { DEFAULT_DELETE_BEHAVIOR } from '@/constants/delete-behavior'
 import { DUPLICATE_TITLE_ERROR } from '@/constants/note-errors'
+import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export function useNotes() {
+    const fileStorage = useFileStorage()
     const {
         listMarkdownFiles,
         writeNoteFile,
         renameNoteFile,
-        deleteNoteFile,
         findFile,
         clearRepository,
-        renameVersions,
-        deleteVersions
-    } = useFileStorage()
+        renameVersions
+    } = fileStorage
 
-    const { activeRepository, repositories } = useRepositories()
+    const { getItem } = useStorage()
+    const { activeRepository, repositories, getRootRepository } = useRepositories()
 
     const {
         notes,
@@ -152,8 +156,14 @@ export function useNotes() {
         try {
             if (!findFile(uri, note.filename)) return
 
-            deleteNoteFile(uri, note.filename)
-            deleteVersions(uri, note.filename)
+            const behavior = (await getItem(STORAGE_KEYS.DELETE_BEHAVIOR)) || DEFAULT_DELETE_BEHAVIOR
+            const repository = repositories.find((r) => r.id === note.repositoryId)
+
+            await deleteNoteFiles(behavior, {
+                uri,
+                rootUri: getRootRepository(repository).uri,
+                filename: note.filename
+            }, fileStorage)
         } catch (error) {
             setNotes((prev) => [note, ...prev])
             throw error
