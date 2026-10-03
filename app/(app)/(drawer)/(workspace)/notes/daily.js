@@ -15,7 +15,7 @@ import { renderTemplate } from '@/utils/render-template'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export default function DailyNote() {
-    const { notes, saveNote } = useNotes()
+    const { notes, saveNote, loading } = useNotes()
     const { getTemplate } = useTemplates()
     const { currentLanguage } = useLanguage()
     const { activeRepository, repositories } = useRepositories()
@@ -32,7 +32,7 @@ export default function DailyNote() {
     useStorageEffect(templateStorageKey, (value) => setTemplateFilename(value || ''))
 
     useEffect(() => {
-        if (handled.current || !activeRepository || folderId === null || templateFilename === null) return
+        if (handled.current || loading || !activeRepository || folderId === null || templateFilename === null) return
 
         const targetRepository = repositories.find((repository) => repository.id === folderId) || activeRepository
 
@@ -57,7 +57,17 @@ export default function DailyNote() {
         }
 
         createNote()
-    }, [activeRepository, repositories, notes, folderId, templateFilename, getTemplate, currentLanguage, saveNote])
+    }, [
+        loading,
+        notes,
+        folderId,
+        repositories,
+        activeRepository,
+        templateFilename,
+        currentLanguage,
+        getTemplate,
+        saveNote
+    ])
 
     return null
 }
