@@ -3,7 +3,12 @@ import { randomUUID } from 'expo-crypto'
 import { getNoteKey } from '@/utils/note-key'
 import { getUniqueFilename, stripNoteExtension } from '@/utils/note-filename'
 import { buildNotePath } from '@/utils/note-path'
-import { buildNoteFileContent, parseFrontmatter } from '@/utils/frontmatter'
+import {
+    buildNoteFileContent,
+    extractProperties,
+    normalizeTags,
+    parseFrontmatter
+} from '@/utils/frontmatter'
 import { buildLegacyNoteBody } from '@/utils/legacy-note-body'
 
 import { DEFAULT_TAGS, LEGACY_ALL_TAG_ID } from '@/constants/default-values'
@@ -125,7 +130,8 @@ const loadNotesFromFolder = async (repositoryUri, fileStorage) => {
             filename: file.name,
             title: getTitle(file.name),
             note: body,
-            tags: frontmatter.tags || [],
+            tags: normalizeTags(frontmatter.tags),
+            properties: extractProperties(frontmatter),
             invalidFrontmatter: error ? rawFrontmatter : null,
             createdAt: file.creationTime ?? file.lastModified,
             updatedAt: file.lastModified

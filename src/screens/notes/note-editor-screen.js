@@ -48,6 +48,7 @@ export const NoteEditorScreen = ({
     onRestoreVersion,
     note, setNote,
     tags, setTags,
+    properties, setProperties,
     invalidFrontmatter, setInvalidFrontmatter,
     modifiedAt,
     initialMode = EDITOR_MODES.READ,
@@ -92,9 +93,11 @@ export const NoteEditorScreen = ({
     const codeMode = useCodeMode({
         note,
         tags,
+        properties,
         invalidFrontmatter,
         setNote,
         setTags,
+        setProperties,
         setInvalidFrontmatter
     })
 

@@ -5,6 +5,9 @@ export const PREVIEW_MARKER = '⁣'
 export const MARKDOWN_IMAGE_PATTERN = /!\[([^\]]*)\]\(((?:file|content):\/\/[^)]+)\)/g
 export const HTML_IMAGE_PATTERN = /(<img[^>]*\bsrc=["'])((?:file|content):\/\/[^"']+)(["'])/g
 
+export const TAG_SEPARATOR_PATTERN = /[,\s]+/
+export const LEADING_HASH_PATTERN = /^#/
+
 export const URL_PATTERN = /^https?:\/\/\S+$/
 export const FRONTMATTER_REGEX = /^---\r?\n([\s\S]*?)\r?\n---\r?\n*/
 

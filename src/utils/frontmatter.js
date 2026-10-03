@@ -1,6 +1,10 @@
 import { dump, load } from 'js-yaml'
 
-import { FRONTMATTER_REGEX } from '@/constants/markdown-patterns'
+import {
+    FRONTMATTER_REGEX,
+    LEADING_HASH_PATTERN,
+    TAG_SEPARATOR_PATTERN
+} from '@/constants/markdown-patterns'
 
 export const parseFrontmatter = (rawContent) => {
     const match = rawContent.match(FRONTMATTER_REGEX)
@@ -23,10 +27,30 @@ export const parseFrontmatter = (rawContent) => {
     }
 }
 
-export const buildNoteFileContent = ({ tags, invalidFrontmatter = null }, body) => {
+const toTagList = (value) => {
+    if (Array.isArray(value)) return value
+    if (typeof value === 'string') return value.split(TAG_SEPARATOR_PATTERN)
+    return []
+}
+
+export const normalizeTags = (value) => {
+    const names = toTagList(value)
+        .map((tag) => String(tag).trim().replace(LEADING_HASH_PATTERN, ''))
+        .filter(Boolean)
+
+    return [...new Set(names)]
+}
+
+export const extractProperties = (frontmatter) => {
+    const properties = { ...frontmatter }
+    delete properties.tags
+    return properties
+}
+
+export const buildNoteFileContent = ({ tags, properties, invalidFrontmatter = null }, body) => {
     const frontmatter = invalidFrontmatter != null
         ? `${invalidFrontmatter}\n`
-        : dump({ tags: tags || [] })
+        : dump({ ...properties, tags: tags || [] })
 
     return `---\n${frontmatter}---\n\n${body}`
 }
@@ -34,11 +58,12 @@ export const buildNoteFileContent = ({ tags, invalidFrontmatter = null }, body) 
 export const decomposeNoteFileContent = (content) => {
     const { frontmatter, body, error, rawFrontmatter } = parseFrontmatter(content)
 
-    if (error) return { body, tags: null, invalidFrontmatter: rawFrontmatter }
+    if (error) return { body, tags: null, properties: null, invalidFrontmatter: rawFrontmatter }
 
     return {
         body,
-        tags: Array.isArray(frontmatter.tags) ? frontmatter.tags : [],
+        tags: normalizeTags(frontmatter.tags),
+        properties: extractProperties(frontmatter),
         invalidFrontmatter: null
     }
 }

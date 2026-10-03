@@ -1,4 +1,10 @@
-import { buildNoteFileContent, decomposeNoteFileContent, parseFrontmatter } from '../frontmatter'
+import {
+    buildNoteFileContent,
+    decomposeNoteFileContent,
+    extractProperties,
+    normalizeTags,
+    parseFrontmatter
+} from '../frontmatter'
 
 describe('parseFrontmatter', () => {
     test('extracts tags and dates from a leading frontmatter block', () => {
@@ -129,6 +135,7 @@ describe('decompose note file content', () => {
         expect(decomposeNoteFileContent(content)).toEqual({
             body: 'Body',
             tags: ['one', 'two'],
+            properties: {},
             invalidFrontmatter: null
         })
     })
@@ -139,6 +146,7 @@ describe('decompose note file content', () => {
         expect(decomposeNoteFileContent(content)).toEqual({
             body: 'Body',
             tags: null,
+            properties: null,
             invalidFrontmatter: 'tags: [unterminated'
         })
     })
@@ -147,6 +155,7 @@ describe('decompose note file content', () => {
         expect(decomposeNoteFileContent('Just text')).toEqual({
             body: 'Just text',
             tags: [],
+            properties: {},
             invalidFrontmatter: null
         })
     })
@@ -155,5 +164,59 @@ describe('decompose note file content', () => {
         const content = buildNoteFileContent({ invalidFrontmatter: 'a: [' }, 'Body')
 
         expect(decomposeNoteFileContent(content).invalidFrontmatter).toBe('a: [')
+    })
+})
+
+describe('normalize tags', () => {
+    test('keeps a list of tags as is', () => {
+        expect(normalizeTags(['one', 'two'])).toEqual(['one', 'two'])
+    })
+
+    test('splits a string on commas and spaces', () => {
+        expect(normalizeTags('one, two  three')).toEqual(['one', 'two', 'three'])
+    })
+
+    test('strips leading hashes and duplicates', () => {
+        expect(normalizeTags(['#one', 'one', ' two '])).toEqual(['one', 'two'])
+    })
+
+    test('stringifies numeric tags', () => {
+        expect(normalizeTags([2024])).toEqual(['2024'])
+    })
+
+    test('returns an empty list for missing or unsupported values', () => {
+        expect(normalizeTags(undefined)).toEqual([])
+        expect(normalizeTags({ a: 1 })).toEqual([])
+    })
+})
+
+describe('note properties', () => {
+    test('extracts every key except tags', () => {
+        const frontmatter = { tags: ['a'], aliases: ['Alias'], cssclasses: 'wide' }
+
+        expect(extractProperties(frontmatter)).toEqual({ aliases: ['Alias'], cssclasses: 'wide' })
+    })
+
+    test('writes unknown properties back next to the tags', () => {
+        const content = buildNoteFileContent(
+            { tags: ['a'], properties: { aliases: ['Alias'], rating: 5 } },
+            'Body'
+        )
+
+        const { frontmatter, body } = parseFrontmatter(content)
+
+        expect(frontmatter).toEqual({ aliases: ['Alias'], rating: 5, tags: ['a'] })
+        expect(body).toBe('Body')
+    })
+
+    test('decomposes a file with comma separated tags and extra properties', () => {
+        const content = '---\ntags: a, b\naliases:\n  - Alias\n---\n\nBody'
+
+        expect(decomposeNoteFileContent(content)).toEqual({
+            body: 'Body',
+            tags: ['a', 'b'],
+            properties: { aliases: ['Alias'] },
+            invalidFrontmatter: null
+        })
     })
 })

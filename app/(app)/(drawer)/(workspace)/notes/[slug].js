@@ -44,6 +44,7 @@ export default function EditNote() {
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
     const [tags, setTags] = useState([])
+    const [properties, setProperties] = useState({})
 
     const [modifiedAt, setModifiedAt] = useState('')
     const [repositoryId, setRepositoryId] = useState('')
@@ -53,6 +54,7 @@ export default function EditNote() {
     const originalTitleRef = useRef(null)
     const originalNoteRef = useRef(null)
     const originalTagsRef = useRef(null)
+    const originalPropertiesRef = useRef(null)
     const originalInvalidFrontmatterRef = useRef(null)
 
     useEffect(() => {
@@ -62,6 +64,7 @@ export default function EditNote() {
             title = '',
             note: content = '',
             tags = [],
+            properties = {},
             createdAt = '',
             updatedAt = '',
             repositoryId = '',
@@ -74,6 +77,7 @@ export default function EditNote() {
         setTitle(resolvedTitle)
         setNote(content)
         setTags(tags)
+        setProperties(properties)
         setModifiedAt(updatedAt || createdAt)
         setRepositoryId(repositoryId)
         setFilename(filename)
@@ -81,6 +85,7 @@ export default function EditNote() {
         originalTitleRef.current = resolvedTitle
         originalNoteRef.current = content
         originalTagsRef.current = tags
+        originalPropertiesRef.current = JSON.stringify(properties)
         originalInvalidFrontmatterRef.current = invalidFrontmatter
         setLoading(false)
     }, [
@@ -107,6 +112,7 @@ export default function EditNote() {
     const markSaved = (savedContent) => {
         originalNoteRef.current = savedContent
         originalTagsRef.current = tags
+        originalPropertiesRef.current = JSON.stringify(properties)
         originalInvalidFrontmatterRef.current = invalidFrontmatter
     }
 
@@ -115,6 +121,7 @@ export default function EditNote() {
         title: payloadTitle,
         note: payloadNote,
         tags,
+        properties,
         repositoryId,
         invalidFrontmatter
     })
@@ -125,6 +132,7 @@ export default function EditNote() {
         if (
             note === originalNoteRef.current &&
             tagsEqual(tags, originalTagsRef.current) &&
+            JSON.stringify(properties) === originalPropertiesRef.current &&
             invalidFrontmatter === originalInvalidFrontmatterRef.current
         ) return
 
@@ -141,6 +149,7 @@ export default function EditNote() {
     }, [
         note,
         tags,
+        properties,
         repositoryId,
         invalidFrontmatter
     ], {
@@ -203,6 +212,8 @@ export default function EditNote() {
                 setNote={setNote}
                 tags={tags}
                 setTags={setTags}
+                properties={properties}
+                setProperties={setProperties}
                 invalidFrontmatter={invalidFrontmatter}
                 setInvalidFrontmatter={setInvalidFrontmatter}
                 modifiedAt={modifiedAt}

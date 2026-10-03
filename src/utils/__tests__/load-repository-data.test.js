@@ -329,6 +329,18 @@ describe('steady state (no legacy data)', () => {
         expect(await noteFile.text()).toBe(rawContent)
     })
 
+    test('keeps foreign properties and reads comma separated tags from an obsidian note', async () => {
+        const storage = createFakeStorage()
+        const fileStorage = createFakeFileStorage()
+        const rawContent = '---\naliases:\n  - Alias\ntags: one, two\n---\n\ncontent'
+        fileStorage.writeNoteFile(REPO_URI, 'Note.md', rawContent)
+
+        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
+
+        expect(notes[0].tags).toEqual(['one', 'two'])
+        expect(notes[0].properties).toEqual({ aliases: ['Alias'] })
+        expect(notes[0].note).toBe('content')
+    })
 })
 
 // tree-wide loading

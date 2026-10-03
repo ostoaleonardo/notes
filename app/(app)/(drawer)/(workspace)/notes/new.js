@@ -47,6 +47,7 @@ export default function Note() {
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
     const [tags, setTags] = useState([])
+    const [properties, setProperties] = useState({})
 
     const [modifiedAt, setModifiedAt] = useState('')
     const [repositoryId, setRepositoryId] = useState('')
@@ -85,6 +86,7 @@ export default function Note() {
         title: payloadTitle,
         note: payloadNote,
         tags,
+        properties,
         repositoryId,
         invalidFrontmatter
     })
@@ -97,11 +99,11 @@ export default function Note() {
             applySaved(saved)
             isSaved.current = true
             savedTitleRef.current = payload.title
-            savedSignatureRef.current = JSON.stringify([note, tags, invalidFrontmatter])
+            savedSignatureRef.current = JSON.stringify([note, tags, properties, invalidFrontmatter])
             return
         }
 
-        const signature = JSON.stringify([note, tags, invalidFrontmatter])
+        const signature = JSON.stringify([note, tags, properties, invalidFrontmatter])
         if (signature === savedSignatureRef.current) return
 
         applySaved(await updateNote(buildPayload(savedTitleRef.current)))
@@ -110,6 +112,7 @@ export default function Note() {
         title,
         note,
         tags,
+        properties,
         repositoryId,
         invalidFrontmatter
     ], {
@@ -163,6 +166,8 @@ export default function Note() {
                 setNote={setNote}
                 tags={tags}
                 setTags={setTags}
+                properties={properties}
+                setProperties={setProperties}
                 invalidFrontmatter={invalidFrontmatter}
                 setInvalidFrontmatter={setInvalidFrontmatter}
                 modifiedAt={modifiedAt}

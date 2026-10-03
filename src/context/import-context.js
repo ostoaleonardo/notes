@@ -8,7 +8,7 @@ import { useNotes } from '../hooks/use-notes'
 import { usePro } from '../hooks/use-pro'
 import { useTags } from '../hooks/use-tags'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
-import { parseFrontmatter } from '@/utils/frontmatter'
+import { extractProperties, normalizeTags, parseFrontmatter } from '@/utils/frontmatter'
 
 import { ROUTES } from '@/constants/routes'
 
@@ -31,13 +31,18 @@ export function ImportProvider({ children }) {
             const { frontmatter, body } = parseFrontmatter(await file.text())
             const match = (name || file.name).match(/^(.+)\.(md|markdown)$/i)
             const title = match ? match[1] : 'Imported note'
-            const tags = Array.isArray(frontmatter.tags) ? frontmatter.tags : []
+            const tags = normalizeTags(frontmatter.tags)
 
             tags
                 .filter((tagName) => !allTags.includes(tagName))
                 .forEach((tagName) => addTag(tagName))
 
-            await saveNote({ title, note: body, tags })
+            await saveNote({
+                title,
+                note: body,
+                tags,
+                properties: extractProperties(frontmatter)
+            })
 
             router.push(ROUTES.HOME)
         } catch (error) {
