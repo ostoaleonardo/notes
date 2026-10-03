@@ -25,9 +25,14 @@ import { buildRepositoryTree, flattenDrawerTree } from '@/utils/drawer-tree'
 import { getEditorNavigation } from '@/utils/editor-path'
 
 import { DRAWER_SPACING } from '@/constants/drawer'
+import { REPOSITORY_ACTIONS } from '@/constants/repository-actions'
 import { ROUTES } from '@/constants/routes'
 import { TEMPLATE_TAB_PREFIX, TEMPLATES_SECTION_ID } from '@/constants/tabs'
 
+const openEditor = (id, currentId) => {
+    const { path, replace } = getEditorNavigation(id, currentId)
+    replace ? router.replace(path) : router.push(path)
+}
 
 export function DrawerItems({ navigation }) {
     const { t } = useTranslation()
@@ -87,8 +92,7 @@ export function DrawerItems({ navigation }) {
         closeDrawer()
         if (id === currentId) return
 
-        const { path, replace } = getEditorNavigation(id, currentId)
-        replace ? router.replace(path) : router.push(path)
+        openEditor(id, currentId)
     }, [closeDrawer, currentId])
 
     const onCreateNote = useCallback((repositoryId) => {
@@ -100,15 +104,14 @@ export function DrawerItems({ navigation }) {
     }, [closeDrawer])
 
     const onRepositoryAction = useCallback((action, repositoryId) => {
-        if (action === 'createNote') return onCreateNote(repositoryId)
-        if (action === 'addSubfolder') return setSubfolderParentId(repositoryId)
-        if (action === 'editFolder') return setEditFolderId(repositoryId)
-        if (action === 'delete') return setDeleteId(repositoryId)
+        if (action === REPOSITORY_ACTIONS.CREATE_NOTE) return onCreateNote(repositoryId)
+        if (action === REPOSITORY_ACTIONS.ADD_SUBFOLDER) return setSubfolderParentId(repositoryId)
+        if (action === REPOSITORY_ACTIONS.EDIT_FOLDER) return setEditFolderId(repositoryId)
+        if (action === REPOSITORY_ACTIONS.DELETE) return setDeleteId(repositoryId)
     }, [onCreateNote])
 
     const onOpenTemplate = useCallback((filename) => {
-        const { path, replace } = getEditorNavigation(TEMPLATE_TAB_PREFIX + filename, currentId)
-        replace ? router.replace(path) : router.push(path)
+        openEditor(TEMPLATE_TAB_PREFIX + filename, currentId)
         closeDrawer()
     }, [closeDrawer, currentId])
 

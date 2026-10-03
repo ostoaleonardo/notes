@@ -12,6 +12,8 @@ import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
 import { KeyboardArrowUp } from '@/icons/keyboard-arrow-up'
 import { MoreVert } from '@/icons/more-vert'
 
+import { REPOSITORY_ACTIONS } from '@/constants/repository-actions'
+
 export function DrawerRepositoryRow({
     alias,
     isRoot,
@@ -62,10 +64,10 @@ export function DrawerRepositoryRow({
             >
                 <DrawerRepositoryMenu
                     isRoot={isRoot}
-                    onCreateNote={() => trigger(() => onAction('createNote'))}
-                    onAddSubfolder={() => trigger(() => onAction('addSubfolder'))}
-                    onEditFolder={() => trigger(() => onAction('editFolder'))}
-                    onDelete={() => trigger(() => onAction('delete'))}
+                    onCreateNote={() => trigger(() => onAction(REPOSITORY_ACTIONS.CREATE_NOTE))}
+                    onAddSubfolder={() => trigger(() => onAction(REPOSITORY_ACTIONS.ADD_SUBFOLDER))}
+                    onEditFolder={() => trigger(() => onAction(REPOSITORY_ACTIONS.EDIT_FOLDER))}
+                    onDelete={() => trigger(() => onAction(REPOSITORY_ACTIONS.DELETE))}
                 />
             </MenuContainer>
         </View>
