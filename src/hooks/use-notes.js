@@ -4,25 +4,21 @@ import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
 import { useStorage } from './use-storage'
 import { NoteContext } from '../context/note-context'
-import { getUniqueFilename, isTitleTaken } from '@/utils/note-filename'
-import { buildNotePath } from '@/utils/note-path'
 import { deleteNoteFiles, readDeleteBehavior } from '@/utils/delete-note-files'
-import { buildNoteFileContent } from '@/utils/frontmatter'
-import { renameWikiLinksForNote } from '@/utils/wiki-links'
-import { buildVersionKey, getVersionLocation } from '@/utils/note-version-location'
-
-import { DUPLICATE_TITLE_ERROR } from '@/constants/note-errors'
+import { getVersionLocation } from '@/utils/note-version-location'
+import {
+    createNote,
+    getRepositoryUri,
+    persistNoteUpdate,
+    planNoteUpdate,
+    planWikiLinkRename,
+    withOptimisticUpdate,
+    writeChangedNotes
+} from '@/utils/note-operations'
 
 export function useNotes() {
     const fileStorage = useFileStorage()
-    const {
-        listMarkdownFiles,
-        writeNoteFile,
-        renameNoteFile,
-        findFile,
-        clearRepository,
-        renameVersions
-    } = fileStorage
+    const { clearRepository } = fileStorage
 
     const { getItem } = useStorage()
     const { activeRepository, repositories } = useRepositories()
@@ -30,153 +26,99 @@ export function useNotes() {
     const {
         notes,
         notesByPath,
+        notePaths,
         setNotes,
         loading
     } = useContext(NoteContext)
 
-    const getRepositoryUri = (repositoryId) => (
-        repositories.find((repository) => repository.id === repositoryId)?.uri
-    )
-
-    const buildFileContent = (note) => buildNoteFileContent(note, note.note)
-
-    const listNoteNames = (uri) => listMarkdownFiles(uri).map((file) => file.name)
-
     const saveNote = async (note, repositoryId = activeRepository?.id) => {
-        const uri = getRepositoryUri(repositoryId)
+        const uri = getRepositoryUri(repositories, repositoryId)
+        const { record, result } = createNote({ note, repositoryId, uri }, fileStorage)
 
-        if (!uri) {
-            setNotes((prev) => [{ ...note, repositoryId, filename: '', path: '' }, ...prev])
-            return { path: '', filename: '' }
-        }
+        setNotes((prev) => [record, ...prev])
 
-        const filename = getUniqueFilename(listNoteNames(uri), note.title, null)
-        const path = buildNotePath(repositoryId, filename)
-        const file = writeNoteFile(uri, filename, buildFileContent(note), undefined, null)
-        const createdAt = file.creationTime ?? file.lastModified
-        const updatedAt = file.lastModified
-
-        setNotes((prev) => [{ ...note, repositoryId, filename, path, createdAt, updatedAt }, ...prev])
-
-        return { path, filename, createdAt, updatedAt }
+        return result
     }
 
     const propagateWikiLinkRename = async (targetPath, newTitle, notesSnapshot, notePaths) => {
-        const renameNote = (n) => {
-            if (n.path === targetPath) return n
-
-            const renamed = renameWikiLinksForNote(n.note, targetPath, newTitle, notesSnapshot, notePaths)
-            return renamed === n.note ? n : { ...n, note: renamed }
-        }
-
-        setNotes((prev) => prev.map(renameNote))
-
-        const changedNotes = notesSnapshot
-            .map(renameNote)
-            .filter((n, index) => n !== notesSnapshot[index])
-
-        const changedByRepository = new Map()
-        changedNotes.forEach((n) => {
-            const group = changedByRepository.get(n.repositoryId) || []
-            group.push(n)
-            changedByRepository.set(n.repositoryId, group)
+        const { renameNote, changedNotes } = planWikiLinkRename({
+            targetPath,
+            newTitle,
+            notes: notesSnapshot,
+            notePaths
         })
 
-        for (const [repositoryId, notesInRepository] of changedByRepository) {
-            const otherUri = getRepositoryUri(repositoryId)
-            if (!otherUri) continue
-
-            for (const changedNote of notesInRepository) {
-                writeNoteFile(otherUri, changedNote.filename, buildFileContent(changedNote))
-            }
-        }
+        setNotes((prev) => prev.map(renameNote))
+        writeChangedNotes(changedNotes, repositories, fileStorage)
     }
 
     const updateNote = async (note) => {
         const previous = notesByPath.get(note.path)
-        if (!previous) {
-            return saveNote(note, note.repositoryId)
+        if (!previous) return saveNote(note, note.repositoryId)
+
+        const uri = getRepositoryUri(repositories, note.repositoryId)
+        const unchanged = {
+            path: previous.path,
+            filename: previous.filename,
+            createdAt: previous.createdAt,
+            updatedAt: previous.updatedAt
         }
 
-        const uri = getRepositoryUri(note.repositoryId)
         if (!uri) {
             setNotes((prev) => prev.map((n) => (
                 n.path === previous.path ? { ...note, filename: previous.filename, path: previous.path } : n
             )))
-            return { path: previous.path, filename: previous.filename, createdAt: previous.createdAt, updatedAt: previous.updatedAt }
+            return unchanged
         }
 
-        const files = listMarkdownFiles(uri)
-        const names = files.map((file) => file.name)
-        const existing = files.find((file) => file.name === previous.filename)
+        const plan = planNoteUpdate({ note, previous, uri }, fileStorage)
+        const { filename, path, existing } = plan
 
-        if (note.title !== previous.title && isTitleTaken(names, note.title, previous.filename)) {
-            const error = new Error('A note with this title already exists')
-            error.code = DUPLICATE_TITLE_ERROR
-            throw error
-        }
+        const optimistic = { ...note, filename, path, createdAt: previous.createdAt, updatedAt: previous.updatedAt }
 
-        const filename = getUniqueFilename(names, note.title, previous.filename)
-        const path = buildNotePath(note.repositoryId, filename)
-        const renamed = filename !== previous.filename
-        const noteWithLocation = { ...note, filename, path, createdAt: previous.createdAt, updatedAt: previous.updatedAt }
+        return withOptimisticUpdate(
+            setNotes,
+            {
+                apply: (prev) => prev.map((n) => (n.path === previous.path ? optimistic : n)),
+                rollback: (prev) => prev.map((n) => (n.path === path ? previous : n))
+            },
+            async () => {
+                if (!existing) return { ...unchanged, path, filename }
 
-        setNotes((prev) => prev.map((n) => (n.path === previous.path ? noteWithLocation : n)))
+                const times = await persistNoteUpdate({ note, previous, uri, plan, repositories }, fileStorage)
+                setNotes((prev) => prev.map((n) => (n.path === path ? { ...n, ...times } : n)))
 
-        let createdAt = previous.createdAt
-        let updatedAt = previous.updatedAt
-
-        try {
-            if (!existing) return { path, filename, createdAt, updatedAt }
-
-            if (renamed) {
-                await renameNoteFile(uri, previous.filename, filename)
-                const { rootUri, folderPath } = getVersionLocation(repositories, note.repositoryId)
-
-                await renameVersions(
-                    rootUri,
-                    buildVersionKey(folderPath, previous.filename),
-                    buildVersionKey(folderPath, filename)
-                )
+                return { path, filename, ...times }
             }
-
-            const file = writeNoteFile(uri, filename, buildFileContent(note), undefined, renamed ? undefined : existing)
-            createdAt = file.creationTime ?? file.lastModified
-            updatedAt = file.lastModified
-
-            setNotes((prev) => prev.map((n) => (n.path === path ? { ...n, createdAt, updatedAt } : n)))
-        } catch (error) {
-            setNotes((prev) => prev.map((n) => (n.path === path ? previous : n)))
-            throw error
-        }
-
-        return { path, filename, createdAt, updatedAt }
+        )
     }
 
     const deleteNote = async (path) => {
         const note = notesByPath.get(path)
-        setNotes((prev) => prev.filter((n) => n.path !== path))
         if (!note) return
 
-        const uri = getRepositoryUri(note.repositoryId)
-        if (!uri) return
+        const uri = getRepositoryUri(repositories, note.repositoryId)
 
-        try {
-            if (!findFile(uri, note.filename)) return
+        await withOptimisticUpdate(
+            setNotes,
+            {
+                apply: (prev) => prev.filter((n) => n.path !== path),
+                rollback: (prev) => [note, ...prev]
+            },
+            async () => {
+                if (!uri || !fileStorage.findFile(uri, note.filename)) return
 
-            const behavior = await readDeleteBehavior(getItem)
-            const { rootUri, folderPath } = getVersionLocation(repositories, note.repositoryId)
+                const behavior = await readDeleteBehavior(getItem)
+                const { rootUri, folderPath } = getVersionLocation(repositories, note.repositoryId)
 
-            await deleteNoteFiles(behavior, {
-                uri,
-                rootUri,
-                folderPath,
-                filename: note.filename
-            }, fileStorage)
-        } catch (error) {
-            setNotes((prev) => [note, ...prev])
-            throw error
-        }
+                await deleteNoteFiles(behavior, {
+                    uri,
+                    rootUri,
+                    folderPath,
+                    filename: note.filename
+                }, fileStorage)
+            }
+        )
     }
 
     const getNote = (path) => {
@@ -192,6 +134,7 @@ export function useNotes() {
 
     return {
         notes,
+        notePaths,
         getNote,
         saveNote,
         deleteNote,
