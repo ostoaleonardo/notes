@@ -53,6 +53,7 @@ const createFakeFileStorage = (deviceCache = new Map()) => {
         readNotesJson: (uri, filename, fallback) => readJson(notesUri(uri), filename, fallback),
         writeNotesJson: (uri, filename, value) => writeJson(notesUri(uri), filename, value),
         migrateLegacyVersions: jest.fn(async () => {}),
+        findDirectory: jest.fn(() => undefined),
         getOrCreateImagesFolder: (uri) => ({ uri: `${uri}/images` }),
         copyImageFile: async (sourceUri, directoryUri, filename) => {
             if (!deviceCache.has(sourceUri)) {
@@ -363,6 +364,22 @@ describe('steady state (no legacy data)', () => {
         expect(notes[0].tags).toEqual(['one', 'two'])
         expect(notes[0].properties).toEqual({ aliases: ['Alias'] })
         expect(notes[0].note).toBe('content')
+    })
+})
+
+describe('legacy versions migration', () => {
+    test('migrates the versions of every folder and of the templates folder', async () => {
+        const fileStorage = createFakeFileStorage()
+        fileStorage.findDirectory.mockReturnValue({ uri: `${REPO_URI}/templates` })
+
+        await loadRepositoryData([repository], repository, createFakeStorage(), fileStorage)
+
+        expect(fileStorage.migrateLegacyVersions).toHaveBeenCalledWith(REPO_URI, REPO_URI, '')
+        expect(fileStorage.migrateLegacyVersions).toHaveBeenCalledWith(
+            `${REPO_URI}/templates`,
+            REPO_URI,
+            'templates'
+        )
     })
 })
 

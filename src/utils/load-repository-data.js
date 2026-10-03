@@ -14,7 +14,7 @@ import { buildLegacyNoteBody } from '@/utils/legacy-note-body'
 
 import { DEFAULT_TAGS, LEGACY_ALL_TAG_ID } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { TAGS_FILENAME, LEGACY_TAGS_FILENAME } from '@/constants/file-storage'
+import { TAGS_FILENAME, LEGACY_TAGS_FILENAME, TEMPLATES_FOLDER_NAME } from '@/constants/file-storage'
 import { DEFAULT_IMAGE_EXTENSION, IMAGE_EXTENSION_PATTERN } from '@/constants/image'
 import { NOTE_KEY_PREFIX } from '@/constants/note-key'
 
@@ -183,6 +183,9 @@ const migrateLegacyVersionFiles = async (tree, rootUri, fileStorage) => {
     for (const repository of tree) {
         await fileStorage.migrateLegacyVersions(repository.uri, rootUri, folderPaths.get(repository.id) || '')
     }
+
+    const templates = fileStorage.findDirectory(rootUri, TEMPLATES_FOLDER_NAME)
+    if (templates) await fileStorage.migrateLegacyVersions(templates.uri, rootUri, TEMPLATES_FOLDER_NAME)
 }
 
 // Tags and version history live in the root .notes folder, shared across the whole tree.
