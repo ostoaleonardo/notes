@@ -78,6 +78,13 @@ export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntr
             continue
         }
 
+        const imagePending = isEmbedTarget && !resolved && !mediaMap?.has(linkText.trim())
+
+        if (imagePending) {
+            ranges.push(Decoration.replace({}).range(from, to))
+            continue
+        }
+
         if (from < labelFrom) ranges.push(Decoration.replace({}).range(from, labelFrom))
         if (labelFrom < labelTo) ranges.push(Decoration.mark({ class: className }).range(labelFrom, labelTo))
         if (labelTo < to) ranges.push(Decoration.replace({}).range(labelTo, to))

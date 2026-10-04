@@ -33,8 +33,8 @@ export const useEmbedImageMap = (value, enabled) => {
             if (uri) cache.set(name, await resolveUrl(uri))
         })).catch((error) => logError('error resolving embedded images', error)).then(() => {
             if (cancelled) return
-            const names = namesKey.split('\n').filter((name) => cache.has(name))
-            setMap(new Map(names.map((name) => [name, cache.get(name)])))
+            const names = namesKey.split('\n')
+            setMap(new Map(names.map((name) => [name, cache.get(name) ?? null])))
         })
 
         return () => { cancelled = true }
