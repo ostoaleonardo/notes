@@ -56,7 +56,8 @@ export const NoteEditorScreen = ({
     modifiedAt,
     initialMode = EDITOR_MODES.READ,
     blockId,
-    flush
+    flush,
+    busyRef
 }) => {
     const { t } = useTranslation()
     const { pro } = usePro()
@@ -163,7 +164,7 @@ export const NoteEditorScreen = ({
 
     const tagsSheet = useBottomSheet()
     const { shareDialog, exportDialog, onConfirmExport, onConfirmShare } = useNoteSharing({ id, flush })
-    const noteDelete = useNoteDelete(id)
+    const noteDelete = useNoteDelete(id, busyRef)
 
     const { words, characters } = countWords(note)
 

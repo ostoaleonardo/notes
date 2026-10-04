@@ -11,7 +11,7 @@ import { readDeleteBehavior } from '@/utils/delete-note-files'
 import { DEFAULT_DELETE_BEHAVIOR } from '@/constants/delete-behavior'
 import { logError } from '@/utils/log-error'
 
-export function useNoteDelete(id) {
+export function useNoteDelete(id, busyRef) {
     const { t } = useTranslation()
     const { deleteNote } = useNotes()
     const { getItem } = useStorage()
@@ -26,14 +26,17 @@ export function useNoteDelete(id) {
     }, [getItem, openDialog])
 
     const onConfirm = useCallback(async () => {
+        if (busyRef) busyRef.current = true
+
         try {
             await deleteNote(id)
             router.back()
         } catch (error) {
+            if (busyRef) busyRef.current = false
             logError('error deleting note', error)
             showSnackbar(t('notes.delete_failed'))
         }
-    }, [deleteNote, id, t])
+    }, [deleteNote, busyRef, id, t])
 
     return {
         visible: dialog.visible,

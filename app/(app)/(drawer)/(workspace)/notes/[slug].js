@@ -238,6 +238,7 @@ export default function EditNote() {
                 filename={filename}
                 repositoryId={repositoryId}
                 flush={flush}
+                busyRef={isSavingRef}
                 title={title}
                 setTitle={setTitle}
                 onTitleBlur={onTitleBlur}

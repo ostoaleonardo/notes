@@ -65,6 +65,29 @@ describe('confirm delete', () => {
         expect(router.back).toHaveBeenCalledTimes(1)
     })
 
+    test('keeps the editor busy while the note is deleted so it does not redirect again', async () => {
+        const busyRef = { current: false }
+        let busyDuringDelete
+        mockDeleteNote.mockImplementation(async () => {
+            busyDuringDelete = busyRef.current
+        })
+
+        const { result } = await renderHook(() => useNoteDelete('repo::note.md', busyRef))
+        await act(async () => result.current.onConfirm())
+
+        expect(busyDuringDelete).toBe(true)
+    })
+
+    test('releases the busy flag when deleting fails', async () => {
+        const busyRef = { current: false }
+        mockDeleteNote.mockRejectedValue(new Error('boom'))
+
+        const { result } = await renderHook(() => useNoteDelete('repo::note.md', busyRef))
+        await act(async () => result.current.onConfirm())
+
+        expect(busyRef.current).toBe(false)
+    })
+
     test('stays on the note and warns when deleting fails', async () => {
         mockDeleteNote.mockRejectedValue(new Error('boom'))
         const { result } = await setup()
