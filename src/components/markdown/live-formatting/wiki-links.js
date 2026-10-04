@@ -4,6 +4,7 @@ import { isRangeSelected, overlapsAny } from './utils'
 import { ImageWidget } from './widgets'
 
 import { resolveWikiLinkTarget } from '@/utils/wiki-links'
+import { getEntryResolverInputs } from '@/utils/note-entries'
 import { buildFileLinkUrl, isFileLinkTarget } from '@/utils/file-links'
 import { buildIconMaskUrl } from '@/utils/icon-mask'
 
@@ -40,21 +41,8 @@ export const findWikiLinkRanges = (text) => {
     return ranges
 }
 
-const resolverInputsByEntries = new WeakMap()
-
-const getResolverInputs = (noteEntries) => {
-    if (!resolverInputsByEntries.has(noteEntries)) {
-        resolverInputsByEntries.set(noteEntries, {
-            notes: noteEntries.map(({ id, title, aliases }) => ({ path: id, title, properties: { aliases } })),
-            notePaths: new Map(noteEntries.map(({ id, path }) => [id, path]))
-        })
-    }
-
-    return resolverInputsByEntries.get(noteEntries)
-}
-
 export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntries, selection, mediaMap }) => {
-    const { notes, notePaths } = getResolverInputs(noteEntries)
+    const { notes, notePaths } = getEntryResolverInputs(noteEntries)
 
     for (const { from, to, linkText, labelFrom, labelTo, isEmbed } of wikiLinkRanges) {
         if (overlapsAny(from, to, codeRanges)) continue

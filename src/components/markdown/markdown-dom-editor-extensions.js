@@ -6,7 +6,7 @@ import { codeFolding } from '@codemirror/language'
 import { markdown } from '@codemirror/lang-markdown'
 import { GFM } from '@lezer/markdown'
 
-import { wikiLinkCompletionSource } from './wiki-link-completion'
+import { wikiLinkCompletionSource, blockCompletionSource } from './wiki-link-completion'
 import { tagCompletionSource } from './tag-completion'
 import { inlineTagExtensions } from './inline-tag-highlight'
 import { fileLinkPress } from './live-formatting/wiki-links'
@@ -52,7 +52,7 @@ export const buildEditorExtensions = ({ dynamic, onTagPressRef, onLinkPressRef, 
     markdown({ extensions: GFM }),
     inlineTagExtensions(onTagPressRef),
     fileLinkPress(onLinkPressRef),
-    autocompletion({ override: [wikiLinkCompletionSource, tagCompletionSource] }),
+    autocompletion({ override: [wikiLinkCompletionSource, blockCompletionSource, tagCompletionSource] }),
     closeBrackets(),
     codeFolding(),
     headingFoldService,

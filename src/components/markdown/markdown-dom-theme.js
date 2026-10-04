@@ -269,11 +269,17 @@ export const buildEditorTheme = ({ colors, typography }) => {
         '.cm-searchMatch': { backgroundColor: `${tertiary}40 !important` },
         '.cm-searchMatch-selected': { backgroundColor: `${tertiary}80 !important` },
         '.cm-tooltip.cm-tooltip-autocomplete': {
-            backgroundColor: surface, border: 'none', borderRadius: '8px', overflow: 'hidden'
+            backgroundColor: surface,
+            border: `1px solid ${onBackground + TRANSPARENT[5]}`,
+            borderRadius: `${RADIUS.outer}px`,
+            overflow: 'hidden'
         },
         '.cm-tooltip-autocomplete ul': { fontFamily, color: onBackground },
         '.cm-tooltip-autocomplete ul li': { padding: '8px 0 !important' },
-        '.cm-tooltip-autocomplete ul li[aria-selected]': { backgroundColor: `${tertiary}30`, color: onBackground },
+        '.cm-tooltip-autocomplete ul li[aria-selected]': {
+            backgroundColor: onBackground + TRANSPARENT[10],
+            color: onBackground
+        },
         '.cm-completionDetail': {
             display: 'block', fontStyle: 'normal', opacity: 0.5, fontSize: '0.85em', marginTop: '2px'
         },

@@ -10,3 +10,4 @@ export const WIKI_LINK_FORMATS = {
     WIKILINK: 'wikilink',
     MARKDOWN: 'markdown'
 }
+export const WIKI_LINK_CLOSING = ']]'

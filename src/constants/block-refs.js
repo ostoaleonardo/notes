@@ -8,3 +8,5 @@ export const BLOCK_HIGHLIGHT_CLASS = 'block-target'
 export const LIST_ITEM_PATTERN = /^(\s*)(?:[-*+]|\d+[.)])\s+/
 export const BLOCK_HIGHLIGHT_DURATION = 2000
 export const BLOCK_PARAM = 'block'
+export const BLOCK_PREVIEW_MAX_LENGTH = 60
+export const BLOCK_COMPLETION_PATTERN = /\[\[([^\]|#]*)#\^([^\]|]*)$/
