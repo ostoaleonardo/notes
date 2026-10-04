@@ -12,6 +12,7 @@ import { findInlineTags } from '@/utils/inline-tags'
 import { TAG_LINK_SCHEME } from '@/constants/tags'
 import { WIKI_LINK_SCHEME } from '@/constants/wiki-links'
 import { FILE_LINK_SCHEME } from '@/constants/file-links'
+import { PREVIEW_TABLE_SCROLL_CLASS } from '@/constants/table-widget'
 
 const md = new MarkdownIt({ html: true, linkify: true, breaks: true })
     .use(taskLists, { enabled: true })
@@ -36,6 +37,14 @@ md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
 
     return defaultLinkOpen(tokens, idx, options, env, self)
 }
+
+md.renderer.rules.table_open = (tokens, idx, options, env, self) => (
+    `<div class="${PREVIEW_TABLE_SCROLL_CLASS}">${self.renderToken(tokens, idx, options)}`
+)
+
+md.renderer.rules.table_close = (tokens, idx, options, env, self) => (
+    `${self.renderToken(tokens, idx, options)}</div>`
+)
 
 const renderHtmlToken = (tokens, idx, options, env) => (
     env.sanitizeHtml ? env.sanitizeHtml(tokens[idx].content) : tokens[idx].content
@@ -91,4 +100,8 @@ export const renderMarkdownRaw = (text, env = {}) => md.render(text || '', env)
 
 export const renderMarkdownHtml = (text) => (
     DOMPurify.sanitize(renderMarkdownRaw(text, { tags: true }), { ALLOWED_URI_REGEXP })
+)
+
+export const renderInlineHtml = (text) => (
+    DOMPurify.sanitize(md.renderInline(text || '', { tags: true }), { ALLOWED_URI_REGEXP })
 )

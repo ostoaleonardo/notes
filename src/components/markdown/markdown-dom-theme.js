@@ -5,6 +5,12 @@ import { buildLiveFormattingTheme } from './live-formatting/live-formatting'
 import { TRANSPARENT } from '../../constants/themes'
 import { SPACING } from '../../constants/spacing'
 import { RADIUS } from '../../constants/radius'
+import {
+    PREVIEW_TABLE_SCROLL_CLASS,
+    TABLE_BLEED,
+    TABLE_CELL_MAX_WIDTH,
+    TABLE_CELL_MIN_WIDTH
+} from '../../constants/table-widget'
 import { INLINE_TAG_CLASS } from '../../constants/tags'
 import {
     CALLOUT_CLASS,
@@ -392,8 +398,16 @@ export const buildPreviewCss = ({ colors, typography }) => {
     }
     .markdown-preview img { max-width: 100%; object-fit: contain; border-radius: 8px; }
     .markdown-preview hr { border: none; border-top: 1px solid ${thematicBreakColor}; margin: 16px 0; }
-    .markdown-preview table { border-collapse: collapse; margin: 0.4em 0; overflow-x: auto; display: block; }
-    .markdown-preview th, .markdown-preview td { border: 1px solid ${codeBackgroundColor}; padding: 4px 8px; }
+    .markdown-preview .${PREVIEW_TABLE_SCROLL_CLASS} {
+        overflow-x: auto; margin: 0.6em -${TABLE_BLEED}px; padding: 0 ${TABLE_BLEED}px;
+    }
+    .markdown-preview table {
+        border-collapse: collapse; width: max-content; min-width: 100%; margin: 0; overflow-wrap: normal;
+    }
+    .markdown-preview th, .markdown-preview td {
+        border: 1px solid ${textColor + TRANSPARENT[20]}; padding: 6px 10px; vertical-align: top;
+        min-width: ${TABLE_CELL_MIN_WIDTH}px; max-width: ${TABLE_CELL_MAX_WIDTH}px; overflow-wrap: break-word;
+    }
     .markdown-preview .katex-display { overflow-x: auto; margin: 0.6em 0; }
     .markdown-preview .footnote-ref a, .markdown-preview .footnote-backref { color: ${linkColor}; }
     .markdown-preview .footnotes-sep { border: none; border-top: 1px solid ${thematicBreakColor}; margin: 16px 0; }
