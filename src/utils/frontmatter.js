@@ -57,14 +57,30 @@ const isEmptyFrontmatter = ({ tags, properties, invalidFrontmatter }) => (
     Object.keys(properties || {}).length === 0
 )
 
-export const buildNoteFileContent = ({ tags, properties, invalidFrontmatter = null }, body) => {
-    if (isEmptyFrontmatter({ tags, properties, invalidFrontmatter }) && !FRONTMATTER_REGEX.test(body)) {
+const isSameFrontmatter = (rawFrontmatter, tags, properties) => {
+    const { frontmatter, error } = parseFrontmatter(`---\n${rawFrontmatter}\n---\n`)
+    if (error) return false
+
+    return (
+        JSON.stringify(readFrontmatterTags(frontmatter)) === JSON.stringify(tags || []) &&
+        JSON.stringify(extractProperties(frontmatter)) === JSON.stringify(properties || {})
+    )
+}
+
+export const buildNoteFileContent = (
+    { tags, properties, invalidFrontmatter = null, rawFrontmatter = null },
+    body
+) => {
+    const reuseRaw = rawFrontmatter != null && isSameFrontmatter(rawFrontmatter, tags, properties)
+
+    if (!reuseRaw && isEmptyFrontmatter({ tags, properties, invalidFrontmatter }) && !FRONTMATTER_REGEX.test(body)) {
         return body
     }
 
-    const frontmatter = invalidFrontmatter != null
-        ? `${invalidFrontmatter}\n`
-        : dump(tags?.length ? { ...properties, tags } : { ...properties })
+    let frontmatter
+    if (invalidFrontmatter != null) frontmatter = `${invalidFrontmatter}\n`
+    else if (reuseRaw) frontmatter = `${rawFrontmatter}\n`
+    else frontmatter = dump(tags?.length ? { ...properties, tags } : { ...properties })
 
     return `---\n${frontmatter}---\n\n${body}`
 }

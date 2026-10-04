@@ -1,4 +1,5 @@
 import { getUniqueFilename, isTitleTaken } from '@/utils/note-filename'
+import { logError } from '@/utils/log-error'
 import { buildNotePath } from '@/utils/note-path'
 import { buildNoteFileContent } from '@/utils/frontmatter'
 import { renameWikiLinksForNote } from '@/utils/wiki-links'
@@ -88,7 +89,7 @@ export const persistNoteUpdate = async ({ note, previous, uri, plan, repositorie
         fileStorage.writeNoteFile(
             uri,
             filename,
-            buildFileContent(note),
+            buildFileContent({ ...note, rawFrontmatter: previous.rawFrontmatter }),
             undefined,
             renamed ? undefined : existing
         )
@@ -111,10 +112,19 @@ export const planWikiLinkRename = ({ targetPath, newTitle, notes, notePaths }) =
 }
 
 export const writeChangedNotes = (changedNotes, repositories, fileStorage) => {
+    const failed = []
+
     changedNotes.forEach((note) => {
         const uri = getRepositoryUri(repositories, note.repositoryId)
         if (!uri) return
 
-        fileStorage.writeNoteFile(uri, note.filename, buildFileContent(note))
+        try {
+            fileStorage.writeNoteFile(uri, note.filename, buildFileContent(note))
+        } catch (error) {
+            logError(`error writing renamed links in ${note.filename}`, error)
+            failed.push(note.path)
+        }
     })
+
+    return failed
 }

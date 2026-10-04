@@ -49,7 +49,14 @@ export function useNotes() {
         })
 
         setNotes((prev) => prev.map(renameNote))
-        writeChangedNotes(changedNotes, repositories, fileStorage)
+
+        const failed = writeChangedNotes(changedNotes, repositories, fileStorage)
+        if (!failed.length) return
+
+        const originals = new Map(notesSnapshot.map((note) => [note.path, note]))
+        setNotes((prev) => prev.map((note) => (
+            failed.includes(note.path) ? originals.get(note.path) : note
+        )))
     }
 
     const updateNote = async (note) => {
@@ -74,7 +81,14 @@ export function useNotes() {
         const plan = planNoteUpdate({ note, previous, uri }, fileStorage)
         const { filename, path, existing } = plan
 
-        const optimistic = { ...note, filename, path, createdAt: previous.createdAt, updatedAt: previous.updatedAt }
+        const optimistic = {
+            ...note,
+            filename,
+            path,
+            rawFrontmatter: previous.rawFrontmatter,
+            createdAt: previous.createdAt,
+            updatedAt: previous.updatedAt
+        }
 
         return withOptimisticUpdate(
             setNotes,

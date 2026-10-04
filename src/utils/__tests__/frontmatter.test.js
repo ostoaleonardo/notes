@@ -144,6 +144,38 @@ describe('buildNoteFileContent', () => {
     })
 })
 
+describe('build note file content with the original raw block', () => {
+    const rawFrontmatter = '# my comment\nzeta: 1\ntags: [b, a]\nalpha: 2'
+
+    test('keeps comments and key order when tags and properties are unchanged', () => {
+        const content = buildNoteFileContent(
+            { tags: ['b', 'a'], properties: { zeta: 1, alpha: 2 }, rawFrontmatter },
+            'Body'
+        )
+
+        expect(content).toBe(`---\n${rawFrontmatter}\n---\n\nBody`)
+    })
+
+    test('rewrites the block when the tags changed', () => {
+        const content = buildNoteFileContent(
+            { tags: ['b'], properties: { zeta: 1, alpha: 2 }, rawFrontmatter },
+            'Body'
+        )
+
+        expect(content).not.toContain('# my comment')
+        expect(parseFrontmatter(content).frontmatter.tags).toEqual(['b'])
+    })
+
+    test('rewrites the block when a property changed', () => {
+        const content = buildNoteFileContent(
+            { tags: ['b', 'a'], properties: { zeta: 9, alpha: 2 }, rawFrontmatter },
+            'Body'
+        )
+
+        expect(parseFrontmatter(content).frontmatter.zeta).toBe(9)
+    })
+})
+
 describe('build note file content with invalid frontmatter', () => {
     test('writes the raw invalid block verbatim instead of the tags', () => {
         const content = buildNoteFileContent(

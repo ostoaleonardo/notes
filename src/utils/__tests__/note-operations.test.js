@@ -209,6 +209,27 @@ describe('write changed notes', () => {
 
         expect(writes).toEqual([[REPO_URI, 'A.md']])
     })
+
+    test('keeps writing the remaining notes and reports the ones that failed', () => {
+        const storage = createFakeStorage()
+        const writes = []
+        storage.writeNoteFile = (_uri, filename) => {
+            if (filename === 'A.md') throw new Error('disk full')
+            writes.push(filename)
+        }
+
+        const failed = writeChangedNotes(
+            [
+                { path: 'p/A', repositoryId: 'repo-1', filename: 'A.md', note: 'a', tags: [] },
+                { path: 'p/B', repositoryId: 'repo-1', filename: 'B.md', note: 'b', tags: [] }
+            ],
+            REPOSITORIES,
+            storage
+        )
+
+        expect(failed).toEqual(['p/A'])
+        expect(writes).toEqual(['B.md'])
+    })
 })
 
 describe('with optimistic update', () => {

@@ -129,6 +129,7 @@ const loadNotesFromFolder = async (repositoryUri, fileStorage) => {
             tags: readFrontmatterTags(frontmatter),
             properties: extractProperties(frontmatter),
             invalidFrontmatter: error ? rawFrontmatter : null,
+            rawFrontmatter: error ? null : rawFrontmatter ?? null,
             createdAt: file.creationTime ?? file.lastModified,
             updatedAt: file.lastModified
         }
