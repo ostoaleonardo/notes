@@ -29,7 +29,7 @@ export function ImportProvider({ children }) {
             const file = new File(url)
             const { frontmatter, body } = parseFrontmatter(await file.text())
             const match = (name || file.name).match(/^(.+)\.(md|markdown)$/i)
-            const title = match ? match[1] : 'Imported note'
+            const title = match ? match[1] : t('notes.untitled')
             const tags = readFrontmatterTags(frontmatter)
 
             await saveNote({
@@ -45,7 +45,7 @@ export function ImportProvider({ children }) {
         } finally {
             setImporting(false)
         }
-    }, [router, saveNote])
+    }, [router, saveNote, t])
 
     useEffect(() => {
         const handleUrl = (url) => {

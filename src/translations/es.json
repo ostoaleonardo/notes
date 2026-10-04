@@ -32,7 +32,6 @@
 	},
 	"repositories": {
 		"open": "Abrir",
-		"add": "Añadir repositorio",
 		"rename": "Renombrar repositorio",
 		"forget": "Olvidar repositorio",
 		"forget_message": "Esto quitará el repositorio de la lista sin eliminar nada de tu dispositivo.",
@@ -173,8 +172,6 @@
 		"notes_plural": "{{count}} notas",
 		"folders": "{{count}} carpeta",
 		"folders_plural": "{{count}} carpetas",
-		"templates": "{{count}} plantilla",
-		"templates_plural": "{{count}} plantillas",
 		"words": "{{count}} palabra",
 		"words_plural": "{{count}} palabras",
 		"characters": "{{count}} carácter",
@@ -190,8 +187,6 @@
 		"image_gallery": "Elegir de la galería",
 		"camera_permission_title": "Permiso de cámara",
 		"camera_permission_message": "Actívalo para tomar fotos desde la app.",
-		"camera_permission_grant": "Activar",
-		"camera_permission_settings": "Abrir ajustes",
 		"camera_permission_denied": "Activa el permiso de cámara en los ajustes del sistema para tomar fotos.",
 		"image_pick_failed": "No se pudo abrir el selector de imágenes.",
 		"image_save_failed": "No se pudo guardar la imagen en la carpeta de adjuntos."
