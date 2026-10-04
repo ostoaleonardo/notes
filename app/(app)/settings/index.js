@@ -11,6 +11,7 @@ import { Option } from '@/screens/settings/option'
 import { WikiLinksOption } from '@/screens/settings/wiki-links-option'
 import { AttachmentsOption } from '@/screens/settings/attachments-option'
 import { StartupOption } from '@/screens/settings/startup-option'
+import { EditorDisplayOption } from '@/screens/settings/editor-display-option'
 import { DailyNoteOption } from '@/screens/settings/daily-note-option'
 import { DeleteBehaviorOption } from '@/screens/settings/delete-behavior-option'
 import { Scroll } from '@/components/animated/scroll'
@@ -23,6 +24,13 @@ import { OpenInNew } from '@/icons/open-in-new'
 
 import { LINKS } from '@/constants/links'
 import { SPACING } from '@/constants/spacing'
+import { STORAGE_KEYS } from '@/constants/storage-keys'
+import {
+    DEFAULT_EDITOR_FONT_SIZE,
+    DEFAULT_EDITOR_LINE_WIDTH,
+    EDITOR_FONT_SIZES,
+    EDITOR_LINE_WIDTHS
+} from '@/constants/editor-display'
 
 export default function Settings() {
     const { t } = useTranslation()
@@ -54,6 +62,19 @@ export default function Settings() {
                     contentStyle={styles.items}
                 >
                     <StartupOption />
+                    <EditorDisplayOption
+                        storageKey={STORAGE_KEYS.EDITOR_FONT_SIZE}
+                        translationKey='editor_font_size'
+                        options={EDITOR_FONT_SIZES}
+                        defaultValue={DEFAULT_EDITOR_FONT_SIZE}
+                    />
+                    <EditorDisplayOption
+                        storageKey={STORAGE_KEYS.EDITOR_LINE_WIDTH}
+                        translationKey='editor_line_width'
+                        options={EDITOR_LINE_WIDTHS}
+                        defaultValue={DEFAULT_EDITOR_LINE_WIDTH}
+                        isLast={true}
+                    />
                 </Section>
 
                 <Section

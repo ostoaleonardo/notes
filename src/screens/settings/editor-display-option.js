@@ -14,60 +14,63 @@ import { useStorageEffect } from '@/hooks/use-storage-effect'
 import { ArrowForward } from '@/icons/arrow-forward'
 import { Check } from '@/icons/check'
 
-import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { STARTUP_BEHAVIORS } from '@/constants/startup-behavior'
 import { TRANSPARENT } from '@/constants/themes'
 import { SPACING } from '@/constants/spacing'
 
-const OPTIONS = Object.values(STARTUP_BEHAVIORS)
-
-export function StartupOption() {
+export function EditorDisplayOption({
+    storageKey,
+    translationKey,
+    options,
+    defaultValue,
+    isFirst,
+    isLast
+}) {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { setItem } = useStorage()
 
-    const behaviorMenu = useMenuAnchor()
+    const menu = useMenuAnchor()
 
-    const [behavior, setBehavior] = useState(STARTUP_BEHAVIORS.LAST_OPENED)
+    const [current, setCurrent] = useState(defaultValue)
 
-    useStorageEffect(STORAGE_KEYS.STARTUP_BEHAVIOR, (value) => {
-        if (value) setBehavior(value)
+    useStorageEffect(storageKey, (value) => {
+        if (value in options) setCurrent(value)
     })
 
-    const onSelectBehavior = (value) => {
-        setBehavior(value)
-        setItem(STORAGE_KEYS.STARTUP_BEHAVIOR, value)
+    const onSelect = (value) => {
+        setCurrent(value)
+        setItem(storageKey, value)
     }
 
     return (
         <View>
-            <View ref={behaviorMenu.rowRef} collapsable={false}>
+            <View ref={menu.rowRef} collapsable={false}>
                 <Option
-                    title={t('settings.startup_behavior')}
-                    description={t(`settings.startup_behavior_${behavior}`)}
+                    title={t(`settings.${translationKey}`)}
+                    description={t(`settings.${translationKey}_${current}`)}
                     rightContent={<ArrowForward color={colors.onBackground} />}
-                    onPress={behaviorMenu.onPressRow}
-                    isFirst={true}
-                    isLast={false}
+                    onPress={menu.onPressRow}
+                    isFirst={isFirst}
+                    isLast={isLast}
                 />
             </View>
 
             <MenuContainer
-                visible={behaviorMenu.visible}
-                onClose={behaviorMenu.onClose}
-                anchor={behaviorMenu.anchor}
+                visible={menu.visible}
+                onClose={menu.onClose}
+                anchor={menu.anchor}
             >
-                {OPTIONS.map((value) => {
-                    const selected = value === behavior
+                {Object.keys(options).map((value) => {
+                    const selected = value === current
 
                     return (
                         <MenuItem
                             key={value}
                             contentStyle={styles.item}
-                            title={t(`settings.startup_behavior_${value}`)}
+                            title={t(`settings.${translationKey}_${value}`)}
                             trailingIcon={selected ? (props) => <Check {...props} color={colors.tertiary} /> : undefined}
                             style={selected && { backgroundColor: colors.tertiary + TRANSPARENT[10] }}
-                            onPress={() => behaviorMenu.trigger(() => onSelectBehavior(value))}
+                            onPress={() => menu.trigger(() => onSelect(value))}
                         />
                     )
                 })}

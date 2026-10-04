@@ -8,6 +8,7 @@ import MarkdownDomEditor from './markdown-dom-editor'
 
 import { ConfirmDialog } from '@/components/confirm-dialog'
 
+import { useEditorDisplay } from '@/hooks/use-editor-display'
 import { useDomFonts } from '@/hooks/use-dom-fonts'
 import { useKatexFonts } from '@/hooks/use-katex-fonts'
 import { useTags } from '@/hooks/use-tags'
@@ -38,7 +39,6 @@ import { WIKI_LINK_FORMATS } from '@/constants/wiki-links'
 export const MarkdownInput = ({
     id,
     mode = EDITOR_MODES.LIVE,
-    size = 13,
     value,
     onChangeText,
     onHistoryChange,
@@ -144,14 +144,17 @@ export const MarkdownInput = ({
         style: { flex: 1 }
     }), [mode])
 
+    const { fontSize, maxWidth } = useEditorDisplay()
+
     const theme = useMemo(() => ({
         colors,
+        layout: { maxWidth },
         typography: {
-            fontSize: size,
+            fontSize,
             fontFamily: BODY_FONT_FAMILY,
             headingFontFamily: HEADING_FONT_FAMILY
         }
-    }), [colors, size])
+    }), [colors, fontSize, maxWidth])
 
     return (
         <>

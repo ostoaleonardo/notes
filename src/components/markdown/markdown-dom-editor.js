@@ -290,6 +290,8 @@ const MarkdownDomEditor = ({
                 display: 'flex',
                 overflowX: 'hidden',
                 flexDirection: 'column',
+                maxWidth: stableTheme.layout?.maxWidth,
+                margin: '0 auto',
                 opacity: fontsReady ? 1 : 0,
                 transition: 'opacity 120ms ease'
             }}

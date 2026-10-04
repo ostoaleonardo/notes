@@ -22,6 +22,8 @@ export const STORAGE_KEYS = {
     ATTACHMENT_FOLDER: 'attachment-folder',
     SHOW_NOTE_PROPERTIES: 'show-note-properties',
     STARTUP_BEHAVIOR: 'startup-behavior',
+    EDITOR_FONT_SIZE: 'editor-font-size',
+    EDITOR_LINE_WIDTH: 'editor-line-width',
     DELETE_BEHAVIOR: 'delete-behavior',
     DAILY_NOTE_FOLDER: 'daily-note-folder',
     DAILY_NOTE_TEMPLATE: 'daily-note-template',

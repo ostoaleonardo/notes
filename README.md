@@ -31,7 +31,7 @@
 -   <samp>Multiple repositories (folders on your device) with subfolders.<samp>
 -   <samp>Version history to restore previous edits.<samp>
 -   <samp>Import existing Markdown notes.<samp>
--   <samp>Light and dark themes with accent colors.<samp>
+-   <samp>Light and dark themes with accent colors, adjustable font size and line width.<samp>
 -   <samp>Available in 15 languages.<samp>
 -   <samp>Minimalist and easy to use UI.<samp>
 
