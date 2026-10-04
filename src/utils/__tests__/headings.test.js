@@ -80,6 +80,18 @@ describe('rename heading links', () => {
 
         expect(renameHeadingLinks(content, 'target', renames, notes)).toBe(content)
     })
+
+    test('renames links to a heading of the same note', () => {
+        const result = renameHeadingLinks('[[#Old]] and ![[#old|alias]]', 'target', renames, notes)
+
+        expect(result).toBe('[[#New]] and ![[#New|alias]]')
+    })
+
+    test('leaves same-note links to other headings and blocks untouched', () => {
+        const content = '[[#Other]] [[#^old]]'
+
+        expect(renameHeadingLinks(content, 'target', renames, notes)).toBe(content)
+    })
 })
 
 describe('build outline', () => {

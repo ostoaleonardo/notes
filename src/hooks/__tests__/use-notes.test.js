@@ -263,6 +263,40 @@ describe('update note', () => {
         expect(result.current.notes.find((n) => n.path === 'repo-1::Linker.md').note).toBe('See [[New title]] for details')
     })
 
+    test('rewrites heading links in other notes when a heading is renamed', async () => {
+        const targetNote = {
+            ...MOCK_OLD_TITLE_NOTE,
+            note: '# Old'
+        }
+        const linkingNote = {
+            path: 'repo-1::Linker.md',
+            filename: 'Linker.md',
+            title: 'Linker',
+            note: 'See [[Old title#Old]] and [[Other#Old]]',
+            tags: [],
+            repositoryId: 'repo-1',
+            createdAt: 1
+        }
+
+        files.set('Old title.md', '# Old')
+        files.set('Linker.md', linkingNote.note)
+
+        const { result } = await renderNotesHook([targetNote, linkingNote])
+
+        await act(async () => {
+            await result.current.propagateHeadingRename(
+                'repo-1::Old title.md',
+                [{ from: 'Old', to: 'New' }],
+                [targetNote, linkingNote],
+                new Map()
+            )
+        })
+
+        expect(readBody('Linker.md')).toBe('See [[Old title#New]] and [[Other#Old]]')
+        expect(result.current.notes.find((n) => n.path === 'repo-1::Linker.md').note)
+            .toBe('See [[Old title#New]] and [[Other#Old]]')
+    })
+
     test('does nothing when the note file no longer exists on disk', async () => {
         const { result } = await renderNotesHook([MOCK_GHOST_NOTE])
 

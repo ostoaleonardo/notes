@@ -16,7 +16,7 @@ import { useRepositories } from '@/hooks/use-repositories'
 import { useNoteVersions } from '@/hooks/use-note-versions'
 import { getVersionLocation } from '@/utils/note-version-location'
 import { logError } from '@/utils/log-error'
-import { findHeadingRenames } from '@/utils/headings'
+import { findHeadingRenames, renameHeadingLinks } from '@/utils/headings'
 import { planExternalSync } from '@/utils/external-note-sync'
 
 import { ANCHOR_PARAM } from '@/constants/block-refs'
@@ -185,7 +185,14 @@ export default function EditNote() {
 
     const markSaved = (savedContent) => {
         const renames = findHeadingRenames(originalNoteRef.current || '', savedContent || '')
-        if (renames.length) propagateHeadingRename(pathRef.current, renames, notes, notePaths)
+        if (renames.length) {
+            propagateHeadingRename(pathRef.current, renames, notes, notePaths)
+
+            const rewritten = renameHeadingLinks(savedContent, pathRef.current, renames, notes, notePaths)
+            if (rewritten !== savedContent) {
+                setNote((current) => (current === savedContent ? rewritten : current))
+            }
+        }
 
         originalNoteRef.current = savedContent
         originalTagsRef.current = tags

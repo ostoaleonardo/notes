@@ -90,7 +90,7 @@ export const renameHeadingLinks = (content, targetPath, renames, notes, notePath
     const targets = new Map(renames.map(({ from, to }) => [normalizeHeading(from), to]))
 
     return mapOutsideCode(content, (segment) => segment.replace(WIKI_LINK_PATTERN, (match, linkText, alias) => {
-        const { note, target, anchor } = resolveWikiLink(linkText, notes, notePaths)
+        const { note, target, anchor } = resolveWikiLink(linkText, notes, notePaths, targetPath)
         if (note?.path !== targetPath || !anchor || anchor.startsWith(BLOCK_ANCHOR_PREFIX)) return match
 
         const renamed = targets.get(normalizeHeading(anchor))
