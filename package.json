@@ -23,6 +23,7 @@
     "@gorhom/bottom-sheet": "^5.2.8",
     "@lezer/markdown": "^1.7.2",
     "@react-native-async-storage/async-storage": "2.2.0",
+    "diff-match-patch": "^1.0.5",
     "dompurify": "^3.4.14",
     "expo": "~57.0.26",
     "expo-application": "~57.0.3",

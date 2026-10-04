@@ -1,7 +1,9 @@
 import { getUniqueFilename, isTitleTaken } from '@/utils/note-filename'
 import { logError } from '@/utils/log-error'
 import { buildNotePath } from '@/utils/note-path'
-import { buildNoteFileContent } from '@/utils/frontmatter'
+import { buildNoteFileContent, decomposeNoteFileContent } from '@/utils/frontmatter'
+import { commitNoteVersion } from '@/utils/note-versions'
+import { planExternalSync, toSyncShape } from '@/utils/external-note-sync'
 import { renameWikiLinksForNote } from '@/utils/wiki-links'
 import { buildVersionKey, getVersionLocation } from '@/utils/note-version-location'
 
@@ -89,16 +91,50 @@ export const planNoteUpdate = ({ note, previous, uri }, fileStorage) => {
     }
 }
 
+const readDiskNote = async (existing) => {
+    const { body, ...fields } = decomposeNoteFileContent(await existing.text())
+    return toSyncShape({ note: body, ...fields })
+}
+
+const keepExternalText = async ({ previous, text, repositories, repositoryId }, fileStorage) => {
+    try {
+        const location = getVersionLocation(repositories, repositoryId)
+        await commitNoteVersion(fileStorage, location, previous.filename, previous.title, text)
+    } catch (error) {
+        logError(`error keeping external text of ${previous.filename}`, error)
+    }
+}
+
+const mergeExternalEdits = async ({ note, previous, existing, repositories }, fileStorage) => {
+    if (!existing || existing.lastModified === previous.updatedAt) return null
+
+    const incoming = await readDiskNote(existing)
+    const plan = planExternalSync({ draft: toSyncShape(note), original: toSyncShape(previous), incoming })
+    if (!plan) return null
+
+    if (plan.lostExternalText) {
+        await keepExternalText(
+            { previous, text: incoming.note, repositories, repositoryId: note.repositoryId },
+            fileStorage
+        )
+    }
+
+    return plan.draft
+}
+
 export const persistNoteUpdate = async ({ note, previous, uri, plan, repositories }, fileStorage) => {
     const { filename, renamed, existing } = plan
 
+    const merged = await mergeExternalEdits({ note, previous, existing, repositories }, fileStorage)
+
     const content = buildFileContent({
         ...note,
-        rawFrontmatter: note.rawFrontmatter ?? previous.rawFrontmatter
+        ...merged,
+        rawFrontmatter: merged ? merged.rawFrontmatter : note.rawFrontmatter ?? previous.rawFrontmatter
     })
 
     if (!renamed) {
-        return readFileTimes(fileStorage.writeNoteFile(uri, filename, content, undefined, existing))
+        return { ...readFileTimes(fileStorage.writeNoteFile(uri, filename, content, undefined, existing)), merged }
     }
 
     const times = readFileTimes(fileStorage.writeNoteFile(uri, filename, content, undefined, null))
@@ -112,7 +148,7 @@ export const persistNoteUpdate = async ({ note, previous, uri, plan, repositorie
         buildVersionKey(folderPath, filename)
     )
 
-    return times
+    return { ...times, merged }
 }
 
 export const planWikiLinkRename = ({
@@ -145,6 +181,12 @@ export const writeChangedNotes = (changedNotes, repositories, fileStorage) => {
 
         try {
             const existing = note.fileUri ? fileStorage.getExistingFile(note.fileUri) : undefined
+
+            if (existing && existing.lastModified !== note.updatedAt) {
+                failed.push(note.path)
+                return
+            }
+
             fileStorage.writeNoteFile(uri, note.filename, buildFileContent(note), undefined, existing)
         } catch (error) {
             logError(`error writing renamed links in ${note.filename}`, error)

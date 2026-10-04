@@ -104,8 +104,11 @@ export function useNotes() {
             async () => {
                 if (!existing) return { ...unchanged, path, filename }
 
-                const times = await persistNoteUpdate({ note, previous, uri, plan, repositories }, fileStorage)
-                setNotes((prev) => prev.map((n) => (n.path === path ? { ...n, ...times } : n)))
+                const { merged, ...times } = await persistNoteUpdate(
+                    { note, previous, uri, plan, repositories },
+                    fileStorage
+                )
+                setNotes((prev) => prev.map((n) => (n.path === path ? { ...n, ...merged, ...times } : n)))
 
                 return { path, filename, ...times }
             }

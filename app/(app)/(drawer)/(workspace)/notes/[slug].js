@@ -13,6 +13,9 @@ import { useNotes } from '@/hooks/use-notes'
 import { useWikiLinkRenameConfirm } from '@/hooks/use-wiki-link-rename-confirm'
 import { useCurrentNote, useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
+import { useNoteVersions } from '@/hooks/use-note-versions'
+import { getVersionLocation } from '@/utils/note-version-location'
+import { logError } from '@/utils/log-error'
 import { planExternalSync } from '@/utils/external-note-sync'
 
 import { ROUTES } from '@/constants/routes'
@@ -24,7 +27,8 @@ export default function EditNote() {
     const { slug } = useLocalSearchParams()
     const { registerCurrent } = useCurrentNote()
     const { notes, getNote, updateNote, loading: notesLoading } = useNotes()
-    const { loading: repositoriesLoading } = useRepositories()
+    const { repositories, loading: repositoriesLoading } = useRepositories()
+    const { commitVersion } = useNoteVersions()
 
     const {
         visible,
@@ -116,33 +120,44 @@ export default function EditNote() {
 
         const incoming = notes.find((n) => n.path === pathRef.current)
         const synced = planExternalSync({
-            draft: { note, tags, properties, invalidFrontmatter },
+            draft: { note, tags, properties, invalidFrontmatter, rawFrontmatter },
             original: {
                 note: originalNoteRef.current,
                 tags: originalTagsRef.current,
                 properties: JSON.parse(originalPropertiesRef.current),
-                invalidFrontmatter: originalInvalidFrontmatterRef.current
+                invalidFrontmatter: originalInvalidFrontmatterRef.current,
+                rawFrontmatter: originalRawFrontmatterRef.current
             },
             incoming: incoming && {
                 note: incoming.note,
                 tags: incoming.tags ?? [],
                 properties: incoming.properties ?? {},
-                invalidFrontmatter: incoming.invalidFrontmatter ?? null
+                invalidFrontmatter: incoming.invalidFrontmatter ?? null,
+                rawFrontmatter: incoming.rawFrontmatter ?? null
             }
         })
         if (!synced) return
 
-        setNote(synced.note)
-        setTags(synced.tags)
-        setProperties(synced.properties)
-        setInvalidFrontmatter(synced.invalidFrontmatter)
-        setRawFrontmatter(incoming.rawFrontmatter ?? null)
+        setNote(synced.draft.note)
+        setTags(synced.draft.tags)
+        setProperties(synced.draft.properties)
+        setInvalidFrontmatter(synced.draft.invalidFrontmatter)
+        setRawFrontmatter(synced.draft.rawFrontmatter)
         setModifiedAt(incoming.updatedAt || incoming.createdAt)
-        originalNoteRef.current = synced.note
-        originalTagsRef.current = synced.tags
-        originalPropertiesRef.current = JSON.stringify(synced.properties)
-        originalInvalidFrontmatterRef.current = synced.invalidFrontmatter
-        originalRawFrontmatterRef.current = incoming.rawFrontmatter ?? null
+        originalNoteRef.current = synced.original.note
+        originalTagsRef.current = synced.original.tags
+        originalPropertiesRef.current = JSON.stringify(synced.original.properties)
+        originalInvalidFrontmatterRef.current = synced.original.invalidFrontmatter
+        originalRawFrontmatterRef.current = synced.original.rawFrontmatter
+
+        if (synced.lostExternalText) {
+            commitVersion(
+                getVersionLocation(repositories, repositoryId),
+                filename,
+                originalTitleRef.current,
+                synced.original.note
+            ).catch((error) => logError('error keeping external text', error))
+        }
     })
 
     useEffect(() => {

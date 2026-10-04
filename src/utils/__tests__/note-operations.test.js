@@ -168,7 +168,7 @@ describe('persist note update', () => {
         expect(storage.files.has('Groceries.md')).toBe(false)
         expect(storage.calls.versions).toEqual([['Groceries.md', 'Shopping.md']])
         expect(parseFrontmatter(storage.files.get('Shopping.md')).body).toBe('bread')
-        expect(times).toEqual({ createdAt: 10, updatedAt: 20 })
+        expect(times).toEqual({ createdAt: 10, updatedAt: 20, merged: null })
     })
 
     test('only rewrites the content when the title is unchanged', async () => {
@@ -182,6 +182,76 @@ describe('persist note update', () => {
         )
 
         expect(storage.calls.versions).toEqual([])
+    })
+})
+
+describe('persist note update with external edits', () => {
+    const base = 'alpha beta gamma delta epsilon zeta eta theta iota kappa lambda'
+    const previous = {
+        ...createNoteDraft({ note: base }),
+        path: 'repo-1::Groceries.md',
+        filename: 'Groceries.md',
+        updatedAt: 20
+    }
+
+    const createDiskFile = (content, lastModified) => ({
+        name: 'Groceries.md',
+        lastModified,
+        text: jest.fn(async () => content)
+    })
+
+    const persist = (note, disk) => {
+        const storage = createFakeStorage({ 'Groceries.md': 'x' })
+        const plan = { filename: 'Groceries.md', renamed: false, existing: disk }
+
+        return {
+            storage,
+            run: () => persistNoteUpdate(
+                { note, previous, uri: REPO_URI, plan, repositories: REPOSITORIES },
+                storage
+            )
+        }
+    }
+
+    test('does not read the file when the timestamp is unchanged', async () => {
+        const disk = createDiskFile(base, 20)
+        const { run } = persist({ ...previous, note: 'edited' }, disk)
+
+        const { merged } = await run()
+
+        expect(disk.text).not.toHaveBeenCalled()
+        expect(merged).toBeNull()
+    })
+
+    test('writes the draft when only the timestamp changed', async () => {
+        const disk = createDiskFile(`---\ntags: []\n---\n\n${base}`, 30)
+        const { run, storage } = persist({ ...previous, note: `${base} typed` }, disk)
+
+        const { merged } = await run()
+
+        expect(merged).toBeNull()
+        expect(parseFrontmatter(storage.files.get('Groceries.md')).body).toBe(`${base} typed`)
+    })
+
+    test('combines edits made in different parts of the note', async () => {
+        const disk = createDiskFile(base.replace('gamma', 'GAMMA'), 30)
+        const { run, storage } = persist({ ...previous, note: `${base} typed` }, disk)
+
+        const { merged } = await run()
+        const expected = `${base.replace('gamma', 'GAMMA')} typed`
+
+        expect(merged.note).toBe(expected)
+        expect(parseFrontmatter(storage.files.get('Groceries.md')).body).toBe(expected)
+    })
+
+    test('keeps the draft when the external text cannot be merged', async () => {
+        const draft = 'the quick brown fox jumps over the lazy dog and runs far away'
+        const disk = createDiskFile(base.replace('gamma', 'GAMMA'), 30)
+        const { run, storage } = persist({ ...previous, note: draft }, disk)
+
+        await run()
+
+        expect(parseFrontmatter(storage.files.get('Groceries.md')).body).toBe(draft)
     })
 })
 
@@ -252,6 +322,22 @@ describe('write changed notes', () => {
         )
 
         expect(writes).toEqual([[REPO_URI, 'A.md']])
+    })
+
+    test('skips and reports notes whose file changed outside the app', () => {
+        const storage = createFakeStorage()
+        const writes = []
+        storage.getExistingFile = () => ({ lastModified: 99 })
+        storage.writeNoteFile = (_uri, filename) => writes.push(filename)
+
+        const failed = writeChangedNotes(
+            [{ path: 'p/A', repositoryId: 'repo-1', filename: 'A.md', fileUri: 'u', updatedAt: 1, note: 'a' }],
+            REPOSITORIES,
+            storage
+        )
+
+        expect(failed).toEqual(['p/A'])
+        expect(writes).toEqual([])
     })
 
     test('keeps writing the remaining notes and reports the ones that failed', () => {
