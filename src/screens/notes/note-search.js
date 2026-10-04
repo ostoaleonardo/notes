@@ -44,7 +44,7 @@ export function NoteSearch({ onClose, initialQuery = '' }) {
         getItem(STORAGE_KEYS.SAVED_SEARCHES).then((value) => {
             if (value) setSaved(parseStoredList(value))
         })
-    }, [])
+    }, [getItem])
 
     const aliasById = useMemo(() => (
         new Map(repositories.map((repository) => [repository.id, repository.alias]))

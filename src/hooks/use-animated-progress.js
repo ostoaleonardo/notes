@@ -8,7 +8,7 @@ export function useAnimatedProgress(active, duration = ANIMATION_DURATION) {
 
     useEffect(() => {
         progress.value = withTiming(active ? 1 : 0, { duration })
-    }, [active])
+    }, [active, duration, progress])
 
     return progress
 }

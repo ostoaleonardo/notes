@@ -1,9 +1,11 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 import { useStorage } from './use-storage'
 
 export function useStorageEffect(key, onValue) {
     const { getItem } = useStorage()
+    const onValueRef = useRef(onValue)
+    onValueRef.current = onValue
 
     useEffect(() => {
         if (!key) return
@@ -11,9 +13,9 @@ export function useStorageEffect(key, onValue) {
         let cancelled = false
 
         getItem(key).then((value) => {
-            if (!cancelled) onValue(value)
+            if (!cancelled) onValueRef.current(value)
         })
 
         return () => { cancelled = true }
-    }, [key])
+    }, [key, getItem])
 }

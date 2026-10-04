@@ -33,7 +33,7 @@ export function RepositoryProvider({ children }) {
         }
 
         getRepositories()
-    }, [])
+    }, [getItem])
 
     const value = useMemo(() => ({
         repositories,

@@ -11,8 +11,8 @@ export function useRepositoryReconciliation() {
 
     useEffect(() => {
         if (loading) return
-        reconcileRepositories().finally(() => setReconciled(true))
-    }, [loading])
+        reconcileRef.current().finally(() => setReconciled(true))
+    }, [loading, setReconciled])
 
     useOnForeground(() => {
         if (!loading) reconcileRef.current()

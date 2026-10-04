@@ -15,7 +15,7 @@ export function CurrentNoteProvider({ children }) {
         getItem(STORAGE_KEYS.CURRENT_NOTE).then((value) => {
             if (value) setCurrentId(value)
         })
-    }, [])
+    }, [getItem])
 
     const value = useMemo(() => ({ currentId, setCurrentId }), [currentId])
 

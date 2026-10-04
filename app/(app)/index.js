@@ -27,7 +27,7 @@ export default function App() {
         })
 
         return () => { cancelled = true }
-    }, [])
+    }, [getItem])
 
     const isReady = !!activeRepository && !loading && !!startupBehavior
 

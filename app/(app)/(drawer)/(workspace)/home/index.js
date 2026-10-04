@@ -2,7 +2,7 @@ import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { router, useFocusEffect } from 'expo-router'
 import * as DocumentPicker from 'expo-document-picker'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useEffectEvent, useMemo, useState } from 'react'
 
 import { Intro } from '@/screens/notes/intro'
 import { NoteToolbarSheets } from '@/screens/notes/note-toolbar-sheets'
@@ -47,11 +47,15 @@ export default function Home() {
     useFocusEffect(
         useCallback(() => {
             registerCurrent('')
-        }, [])
+        }, [registerCurrent])
     )
 
-    useEffect(() => {
+    const loadTemplates = useEffectEvent(() => {
         listTemplates({ withContent: false }).then(setTemplates)
+    })
+
+    useEffect(() => {
+        loadTemplates()
     }, [])
 
     const onCreateNote = () => {

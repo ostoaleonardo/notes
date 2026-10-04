@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useEffectEvent, useState } from 'react'
 import { ErrorCode, finishTransaction, useIAP } from 'expo-iap'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, useTheme } from 'react-native-paper'
@@ -43,19 +43,17 @@ export function ProSection() {
         }
     })
 
+    const loadPurchases = useEffectEvent(async () => {
+        fetchProducts({
+            skus: PRODUCT_ID,
+            type: 'in-app'
+        })
+
+        await getAvailablePurchases()
+    })
+
     useEffect(() => {
-        const getPurchases = async () => {
-            if (connected) {
-                fetchProducts({
-                    skus: PRODUCT_ID,
-                    type: 'in-app'
-                })
-
-                await getAvailablePurchases()
-            }
-        }
-
-        getPurchases()
+        if (connected) loadPurchases()
     }, [connected])
 
     const purcharsePro = async () => {

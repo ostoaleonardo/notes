@@ -61,7 +61,7 @@ export function RecentNotes({ onClose, home = false }) {
                 active: id === currentId
             }
         })
-    }, [pinned, recent, notes, templates, currentId])
+    }, [pinned, recent, notes, templates, currentId, t])
 
     const onCreateNote = () => {
         onClose()

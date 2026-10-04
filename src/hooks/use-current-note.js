@@ -13,7 +13,7 @@ export function useCurrentNote() {
     const { getItem, setItem } = useStorage()
     const { refresh } = useRecentNotes()
 
-    const registerCurrent = async (id) => {
+    const registerCurrent = useCallback(async (id) => {
         setCurrentId(id)
         await setItem(STORAGE_KEYS.CURRENT_NOTE, id)
 
@@ -24,7 +24,7 @@ export function useCurrentNote() {
         const next = [id, ...recent.filter((entry) => entry !== id)].slice(0, RECENT_NOTES_LIMIT)
         await setItem(STORAGE_KEYS.RECENT_NOTES, JSON.stringify(next))
         refresh()
-    }
+    }, [setCurrentId, getItem, setItem, refresh])
 
     return { currentId, registerCurrent }
 }
@@ -35,6 +35,6 @@ export function useRegisterCurrent(id) {
     useFocusEffect(
         useCallback(() => {
             if (id) registerCurrent(id)
-        }, [id])
+        }, [id, registerCurrent])
     )
 }

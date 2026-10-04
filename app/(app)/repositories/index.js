@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { View } from 'react-native'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
@@ -35,16 +35,22 @@ export default function Repositories() {
         setActiveRepository
     } = useRepositories()
 
-    const rootRepositories = repositories.filter((repository) => !repository.parentId)
+    const rootRepositories = useMemo(() => (
+        repositories.filter((repository) => !repository.parentId)
+    ), [repositories])
 
     const [counts, setCounts] = useState({})
     const [renameId, setRenameId] = useState('')
     const [forgetId, setForgetId] = useState('')
     const [deleteId, setDeleteId] = useState('')
 
-    const refreshCounts = () => setCounts(getRepositoryNoteCounts(rootRepositories, listMarkdownFiles))
+    const refreshCounts = useCallback(() => (
+        setCounts(getRepositoryNoteCounts(rootRepositories, listMarkdownFiles))
+    ), [rootRepositories, listMarkdownFiles])
 
-    useEffect(refreshCounts, [repositories])
+    useEffect(() => {
+        refreshCounts()
+    }, [refreshCounts])
     useOnForeground(refreshCounts)
 
     const canAddRepository = pro || rootRepositories.length < FREE_REPOSITORIES_LIMIT

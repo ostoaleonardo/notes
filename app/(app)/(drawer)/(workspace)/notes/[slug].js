@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useEffectEvent, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { router, useLocalSearchParams } from 'expo-router'
 
@@ -61,9 +61,7 @@ export default function EditNote() {
     const originalInvalidFrontmatterRef = useRef(null)
     const originalRawFrontmatterRef = useRef(null)
 
-    useEffect(() => {
-        if (notesLoading || repositoriesLoading) return
-
+    const loadNote = useEffectEvent(() => {
         const {
             title = '',
             note: content = '',
@@ -96,6 +94,12 @@ export default function EditNote() {
         originalInvalidFrontmatterRef.current = invalidFrontmatter
         originalRawFrontmatterRef.current = rawFrontmatter
         setLoading(false)
+    })
+
+    useEffect(() => {
+        if (notesLoading || repositoriesLoading) return
+
+        loadNote()
     }, [
         slug,
         notesLoading,
@@ -107,7 +111,7 @@ export default function EditNote() {
         if (!notes.some((n) => n.path === pathRef.current)) router.replace(ROUTES.HOME)
     }, [notes, notesLoading, repositoriesLoading])
 
-    useEffect(() => {
+    const syncExternalChanges = useEffectEvent(() => {
         if (loading || isSavingRef.current) return
 
         const incoming = notes.find((n) => n.path === pathRef.current)
@@ -139,6 +143,10 @@ export default function EditNote() {
         originalPropertiesRef.current = JSON.stringify(synced.properties)
         originalInvalidFrontmatterRef.current = synced.invalidFrontmatter
         originalRawFrontmatterRef.current = incoming.rawFrontmatter ?? null
+    })
+
+    useEffect(() => {
+        syncExternalChanges()
     }, [notes])
 
     const applySaved = ({ path, filename, createdAt, updatedAt }) => {

@@ -195,6 +195,7 @@ export const NoteEditorScreen = ({
     latestContent.current = { noteId: filename, title, content: note }
 
     const versionHistory = useVersionHistory({ location, latestContent })
+    const { onClose: closeVersionHistory } = versionHistory
 
     const noteTemplates = useNoteTemplates({ latestContent, setNote })
 
@@ -208,8 +209,8 @@ export const NoteEditorScreen = ({
             setNote(version.content)
         }
 
-        versionHistory.onClose()
-    }, [onRestoreVersion, versionHistory.onClose])
+        closeVersionHistory()
+    }, [onRestoreVersion, setTitle, setNote, closeVersionHistory])
 
     const actions = useMemo(() => ({
         onOpenTags: tagsSheet.onOpen,

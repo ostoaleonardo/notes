@@ -37,7 +37,6 @@ export function useRepositoryTree({ repositories, activeRepository }) {
         const root = getRootRepository(activeRepository)
         return [{ ...root, depth: 0 }, ...buildSubtree(root.id, 1)]
     }, [
-        repositories,
         activeRepository,
         getRootRepository,
         buildSubtree

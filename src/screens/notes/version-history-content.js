@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { IconButton, TouchableRipple, useTheme } from 'react-native-paper'
@@ -44,7 +44,7 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
     const [selected, setSelected] = useState(null)
     const [restoreDialogVisible, setRestoreDialogVisible] = useState(false)
 
-    useEffect(() => {
+    const loadVersions = useEffectEvent(() => {
         if (!location || !noteId) return
 
         setLoading(true)
@@ -52,6 +52,10 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
             setVersions(result)
             setLoading(false)
         })
+    })
+
+    useEffect(() => {
+        loadVersions()
     }, [location?.folderUri, location?.folderPath, noteId, pro])
 
     const ordered = useMemo(() => [...versions].reverse(), [versions])

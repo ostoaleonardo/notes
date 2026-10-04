@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { createContext, useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 
 import { useOnForeground } from '../hooks/use-on-foreground'
 import { useRepositoryData } from '../hooks/use-repository-data'
@@ -65,13 +65,17 @@ export function NoteProvider({ children }) {
         }
     }
 
-    useEffect(() => {
+    const reloadForTree = useEffectEvent(() => {
         if (!activeRepository) return
 
         const isRepositorySwitch = previousRepositoryIdRef.current !== activeRepository.id
         previousRepositoryIdRef.current = activeRepository.id
 
         getNotesRef.current(isRepositorySwitch)
+    })
+
+    useEffect(() => {
+        reloadForTree()
     }, [treeKey])
 
     useOnForeground(() => getNotesRef.current(false))

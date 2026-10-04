@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
 
 import { MarkdownEditorLayout } from '@/screens/notes/markdown-editor-layout'
@@ -94,12 +94,13 @@ export default function EditTemplate() {
     latestContent.current = { noteId: versionNoteId, title: name, content }
 
     const versionHistory = useVersionHistory({ location, latestContent })
+    const { onClose: closeVersionHistory } = versionHistory
 
     const onRestoreVersion = useCallback((version) => {
         setName(version.title)
         setContent(version.content)
-        versionHistory.onClose()
-    }, [versionHistory.onClose])
+        closeVersionHistory()
+    }, [closeVersionHistory])
 
     const editorActions = useMemo(() => ({
         onOpenRecents: recentsSheet.onOpen,
@@ -131,11 +132,9 @@ export default function EditTemplate() {
 
     const onOpenPlaceholders = () => setPlaceholdersVisible(true)
 
-    useEffect(() => {
-        let cancelled = false
-
+    const loadTemplate = useEffectEvent((isCancelled) => {
         getTemplate(filename).then((template) => {
-            if (cancelled) return
+            if (isCancelled()) return
 
             if (!template) {
                 router.replace(ROUTES.HOME)
@@ -151,7 +150,11 @@ export default function EditTemplate() {
 
             setLoading(false)
         })
+    })
 
+    useEffect(() => {
+        let cancelled = false
+        loadTemplate(() => cancelled)
         return () => { cancelled = true }
     }, [filename])
 
@@ -172,7 +175,7 @@ export default function EditTemplate() {
         if (!activeRepository) return
 
         getFolderUri(splitTemplatePath(filename).dir).then((uri) => setFolderUri(uri || ''))
-    }, [activeRepository, filename])
+    }, [activeRepository, filename, getFolderUri])
 
     if (loading) return <LoadingOverlay />
 

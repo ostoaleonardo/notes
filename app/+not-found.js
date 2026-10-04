@@ -13,7 +13,7 @@ export default function NotFound() {
         }, NOT_FOUND_REDIRECT_DELAY)
 
         return () => clearTimeout(timer)
-    }, [])
+    }, [router])
 
     return null
 }

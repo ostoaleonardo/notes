@@ -1,6 +1,6 @@
 'use dom'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 import { EditorState } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
 import { closeSearchPanel, openSearchPanel, setSearchQuery, SearchQuery } from '@codemirror/search'
@@ -115,7 +115,7 @@ const MarkdownDomEditor = ({
         [placeholder]
     )
 
-    useEffect(() => {
+    const initEditor = useEffectEvent(() => {
         document.documentElement.style.height = '100%'
         document.body.style.height = '100%'
         document.body.style.margin = '0'
@@ -167,7 +167,9 @@ const MarkdownDomEditor = ({
             view.dom.removeEventListener('blur', handleBlur, true)
             view.destroy()
         }
-    }, [])
+    })
+
+    useEffect(() => initEditor(), [])
 
     useEffect(() => {
         const view = viewRef.current
@@ -195,11 +197,15 @@ const MarkdownDomEditor = ({
         })
     }, [value])
 
-    useEffect(() => {
+    const runPendingAction = useEffectEvent(() => {
         const view = viewRef.current
         if (!view || !action.action) return
         runAction(view, action.action, action.payload)
         requestAnimationFrame(() => view.focus())
+    })
+
+    useEffect(() => {
+        runPendingAction()
     }, [action.nonce])
 
     useEffect(() => {

@@ -8,14 +8,15 @@ export function useNoteMode({ initialMode, note, setNote, ...codeModeParams }) {
     const [mode, setMode] = useState(initialMode)
 
     const codeMode = useCodeMode({ note, setNote, ...codeModeParams })
+    const { enter } = codeMode
 
     const onSetMode = useCallback((nextMode) => {
         if (nextMode === mode) return
 
-        if (nextMode === EDITOR_MODES.CODE) codeMode.enter()
+        if (nextMode === EDITOR_MODES.CODE) enter()
 
         setMode(nextMode)
-    }, [mode, codeMode.enter])
+    }, [mode, enter])
 
     const isCodeMode = mode === EDITOR_MODES.CODE
 

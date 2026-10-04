@@ -24,6 +24,8 @@ export function ThemeProvider({ initialTheme, children }) {
     const [theme, setTheme] = useState({})
     const [accent, setAccent] = useState('')
     const proRef = useRef(false)
+    const accentRef = useRef(accent)
+    accentRef.current = accent
 
     useEffect(() => {
         setMode(initialTheme.mode)
@@ -33,15 +35,16 @@ export function ThemeProvider({ initialTheme, children }) {
     }, [initialTheme])
 
     useEffect(() => {
-        const nextAccent = revertAccentOnProRevoke(proRef.current, pro, accent)
+        const currentAccent = accentRef.current
+        const nextAccent = revertAccentOnProRevoke(proRef.current, pro, currentAccent)
 
-        if (nextAccent !== accent) {
+        if (nextAccent !== currentAccent) {
             setAccent(nextAccent)
             setItem(STORAGE_KEYS.ACCENT, nextAccent)
         }
 
         proRef.current = pro
-    }, [pro])
+    }, [pro, setItem])
 
     useEffect(() => {
         const theme = mode !== 'system' ? mode : colorScheme
@@ -53,7 +56,7 @@ export function ThemeProvider({ initialTheme, children }) {
             setTheme(THEMES[theme])
         }
 
-    }, [mode, accent])
+    }, [mode, accent, colorScheme])
 
     const updateTheme = (mode, accent) => {
         const { background, onBackground } = ACCENT_COLORS[accent]

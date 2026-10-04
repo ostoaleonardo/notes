@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useEffectEvent } from 'react'
 import { DevSettings } from 'react-native'
 import { registerDevMenuItems } from 'expo-dev-menu'
 import { Directory, File, Paths } from 'expo-file-system'
@@ -192,7 +192,7 @@ export function useDevMenu() {
         DevSettings.reload()
     }
 
-    useEffect(() => {
+    const registerItems = useEffectEvent(() => {
         if (!__DEV__) return
 
         registerDevMenuItems([
@@ -227,6 +227,10 @@ export function useDevMenu() {
                 shouldCollapse: true
             }
         ])
+    })
+
+    useEffect(() => {
+        registerItems()
     }, [
         pro,
         colors,

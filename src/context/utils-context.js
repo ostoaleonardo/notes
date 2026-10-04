@@ -22,7 +22,7 @@ export function UtilsProvider({ children }) {
         }
 
         getUtils()
-    }, [])
+    }, [getItem])
 
     const value = useMemo(() => ({
         pinned,

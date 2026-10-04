@@ -26,7 +26,7 @@ export function useTemplatesList(deps = [], { immediate = true } = {}) {
 
     useEffect(() => {
         if (immediate) refresh()
-         
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, deps)
 
     return { templates, folders, refresh }

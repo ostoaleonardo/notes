@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export function useCreateDialogInput(visible) {
     const [value, setValue] = useState('')
@@ -15,9 +15,11 @@ export function useCreateDialogInput(visible) {
 export function useEditDialogInput(key, getInitialValue) {
     const [value, setValue] = useState('')
     const [placeholder, setPlaceholder] = useState('')
+    const getInitialValueRef = useRef(getInitialValue)
+    getInitialValueRef.current = getInitialValue
 
     useEffect(() => {
-        const initial = getInitialValue(key) || ''
+        const initial = getInitialValueRef.current(key) || ''
         setValue(initial)
         setPlaceholder(initial)
     }, [key])

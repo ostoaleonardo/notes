@@ -15,11 +15,12 @@ export function useNoteTemplates({ latestContent, setNote }) {
     const { templates, refresh } = useTemplatesList([], { immediate: false })
 
     const sheet = useBottomSheet()
+    const { onOpen: openSheet, onClose: closeSheet } = sheet
 
     const onSelect = useCallback((content) => {
         setNote((prev) => (prev ? prev + TEMPLATE_INSERT_SEPARATOR + content : content))
-        sheet.onClose()
-    }, [])
+        closeSheet()
+    }, [setNote, closeSheet])
 
     const onSaveAsTemplate = useCallback(async () => {
         const { title, content } = latestContent.current
@@ -31,12 +32,12 @@ export function useNoteTemplates({ latestContent, setNote }) {
             logError('error saving template', error)
             showSnackbar(t('templates.save_failed'))
         }
-    }, [addTemplate, t])
+    }, [addTemplate, latestContent, t])
 
     const onOpen = useCallback(() => {
         refresh()
-        sheet.onOpen()
-    }, [refresh, sheet.onOpen])
+        openSheet()
+    }, [refresh, openSheet])
 
     return {
         sheet,

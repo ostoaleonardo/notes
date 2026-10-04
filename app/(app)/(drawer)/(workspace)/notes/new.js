@@ -59,21 +59,24 @@ export default function Note() {
         notesRef.current = notes
     }, [notes])
 
+    const initDraftRef = useRef(null)
+    initDraftRef.current = () => {
+        firstRender.current = false
+
+        const resolvedRepositoryId = targetRepositoryId || activeRepository.id
+        setRepositoryId(resolvedRepositoryId)
+
+        const titlesInRepository = notesRef.current
+            .filter((n) => n.repositoryId === resolvedRepositoryId)
+            .map((n) => n.title)
+
+        const autoTitle = getUniqueTitle(titlesInRepository, t('notes.untitled'))
+        autoTitleRef.current = autoTitle
+        setTitle(autoTitle)
+    }
+
     useFocusEffect(
-        useCallback(() => {
-            firstRender.current = false
-
-            const resolvedRepositoryId = targetRepositoryId || activeRepository.id
-            setRepositoryId(resolvedRepositoryId)
-
-            const titlesInRepository = notesRef.current
-                .filter((n) => n.repositoryId === resolvedRepositoryId)
-                .map((n) => n.title)
-
-            const autoTitle = getUniqueTitle(titlesInRepository, t('notes.untitled'))
-            autoTitleRef.current = autoTitle
-            setTitle(autoTitle)
-        }, [])
+        useCallback(() => initDraftRef.current(), [])
     )
 
     const applySaved = (saved) => {

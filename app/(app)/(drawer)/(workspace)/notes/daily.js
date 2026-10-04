@@ -66,7 +66,9 @@ export default function DailyNote() {
         templateFilename,
         currentLanguage,
         getTemplate,
-        saveNote
+        saveNote,
+        setItem,
+        templateStorageKey
     ])
 
     return null

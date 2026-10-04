@@ -14,11 +14,11 @@ export function RecentNotesProvider({ children }) {
         getItem(STORAGE_KEYS.RECENT_NOTES).then((value) => {
             setRecent(value ? JSON.parse(value) : [])
         })
-    ), [])
+    ), [getItem])
 
     useEffect(() => {
         refresh()
-    }, [])
+    }, [refresh])
 
     const removeRecent = useCallback((id) => {
         setRecent((prev) => {
@@ -26,12 +26,12 @@ export function RecentNotesProvider({ children }) {
             setItem(STORAGE_KEYS.RECENT_NOTES, JSON.stringify(next))
             return next
         })
-    }, [])
+    }, [setItem])
 
     const clearRecent = useCallback(() => {
         setRecent([])
         setItem(STORAGE_KEYS.RECENT_NOTES, JSON.stringify([]))
-    }, [])
+    }, [setItem])
 
     const value = useMemo(
         () => ({ recent, refresh, removeRecent, clearRecent }),

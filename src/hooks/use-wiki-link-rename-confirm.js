@@ -23,7 +23,7 @@ export function useWikiLinkRenameConfirm() {
         getItem(STORAGE_KEYS.ALWAYS_UPDATE_WIKI_LINKS).then((value) => {
             if (value === STORAGE_BOOLEAN.TRUE) setAlwaysUpdate(true)
         })
-    }, [])
+    }, [getItem])
 
     const saveWithLinkCheck = async (note, previousTitle) => {
         const titleChanged = previousTitle && previousTitle !== note.title

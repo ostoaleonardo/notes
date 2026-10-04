@@ -41,7 +41,7 @@ export function usePurchasedPro() {
             connectedRef.current = false
             logError('error checking pro purchase', error)
         }
-    }, [])
+    }, [setItem, removeItem])
 
     useEffect(() => {
         const hydrate = async () => {
@@ -55,7 +55,7 @@ export function usePurchasedPro() {
         }
 
         hydrate()
-    }, [checkPurchases])
+    }, [getItem, checkPurchases])
 
     useOnForeground(checkPurchases)
 

@@ -41,6 +41,7 @@ export function useAutosave(
         return () => {
             if (timerRef.current) clearTimeout(timerRef.current)
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [skip, delay, save, ...deps])
 
     const saveRef = useRef(save)

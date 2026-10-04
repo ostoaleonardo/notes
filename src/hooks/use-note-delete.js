@@ -17,12 +17,13 @@ export function useNoteDelete(id) {
     const { getItem } = useStorage()
 
     const dialog = useMenuAction()
+    const { onOpen: openDialog } = dialog
     const [behavior, setBehavior] = useState(DEFAULT_DELETE_BEHAVIOR)
 
     const onOpen = useCallback(async () => {
         setBehavior(await readDeleteBehavior(getItem))
-        dialog.onOpen()
-    }, [getItem, dialog.onOpen])
+        openDialog()
+    }, [getItem, openDialog])
 
     const onConfirm = useCallback(async () => {
         try {

@@ -1,6 +1,6 @@
 import * as SplashScreen from 'expo-splash-screen'
 import { Slot } from 'expo-router'
-import { useEffect, useState } from 'react'
+import { useEffect, useEffectEvent, useState } from 'react'
 import { useColorScheme } from 'react-native'
 
 import { ErrorBoundary } from '@/components/error-boundary'
@@ -30,10 +30,14 @@ export default function MainLayout() {
     const [initialTheme, setInitialTheme] = useState({})
     const isPro = usePurchasedPro()
 
-    useEffect(() => {
+    const init = useEffectEvent(() => {
         initTheme()
             .catch((error) => logError('error loading app', error))
             .finally(() => setIsReady(true))
+    })
+
+    useEffect(() => {
+        init()
     }, [])
 
     const initTheme = async () => {

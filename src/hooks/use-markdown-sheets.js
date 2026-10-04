@@ -6,29 +6,29 @@ export function useMarkdownSheets(action) {
     const linkSheet = useBottomSheet()
     const tableSheet = useBottomSheet()
     const imageSheet = useBottomSheet()
+    const { run } = action
+    const { onOpen: openLink } = linkSheet
+    const { onOpen: openTable } = tableSheet
+    const { onOpen: openImage } = imageSheet
 
     const onRunAction = useCallback((actionName) => {
         if (actionName === 'link') {
-            linkSheet.onOpen()
+            openLink()
             return
         }
 
         if (actionName === 'table') {
-            tableSheet.onOpen()
+            openTable()
             return
         }
 
         if (actionName === 'image') {
-            imageSheet.onOpen()
+            openImage()
             return
         }
 
-        action.run(actionName)
-    }, [
-        linkSheet.onOpen,
-        tableSheet.onOpen,
-        imageSheet.onOpen
-    ])
+        run(actionName)
+    }, [run, openLink, openTable, openImage])
 
     return { onRunAction, linkSheet, tableSheet, imageSheet }
 }
