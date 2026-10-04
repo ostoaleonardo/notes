@@ -4,6 +4,6 @@ import { IconSvg } from './icon-svg'
 
 export const FormatIndentIncrease = (props) => (
     <IconSvg {...props}>
-        <Path d='M160-760h640v40H160v-40Zm240 200h400v40H400v-40Zm0 160h400v40H400v-40ZM160-200h640v-40H160v40Zm0-400v240l120-120-120-120Z' />
+        <Path d='M160-160v-40h640v40H160Zm320-150v-40h320v40H480Zm0-150v-40h320v40H480Zm0-150v-40h320v40H480ZM160-760v-40h640v40H160Zm0 392.31v-224.62L272.31-480 160-367.69Z' />
     </IconSvg>
 )
