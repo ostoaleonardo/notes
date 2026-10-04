@@ -29,6 +29,7 @@ import { toggleTask } from '@/utils/tasks'
 import { ROUTES } from '@/constants/routes'
 import { BODY_FONT_FAMILY, HEADING_FONT_FAMILY } from '@/constants/fonts'
 import { EDITOR_MODES } from '@/constants/editor-modes'
+import { BLOCK_ANCHOR_PREFIX } from '@/constants/block-refs'
 import { LINK_TYPES } from '@/constants/link-types'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { WIKI_LINK_FORMATS } from '@/constants/wiki-links'
@@ -54,6 +55,7 @@ export const MarkdownInput = ({
     onAddTag,
     onTagPress,
     search,
+    blockId,
     showBacklinks = true
 }) => {
     const { t } = useTranslation()
@@ -94,7 +96,7 @@ export const MarkdownInput = ({
                 setMissing(link.missing)
                 break
             case LINK_TYPES.NOTE:
-                router.push(getEditorPath(link.id))
+                router.push(getEditorPath(link.id, link.anchor?.slice(BLOCK_ANCHOR_PREFIX.length)))
                 break
             case LINK_TYPES.FILE:
                 openFile(findFileByTarget(listFiles(), link.target))
@@ -160,6 +162,7 @@ export const MarkdownInput = ({
                 onRemoveTag={onRemoveTag}
                 onAddTag={onAddTag}
                 search={search}
+                blockId={blockId}
                 theme={theme}
                 fonts={fonts}
                 katexFonts={katexFonts}

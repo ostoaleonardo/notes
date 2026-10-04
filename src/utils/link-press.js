@@ -2,7 +2,11 @@ import { parseMissingWikiLinkTarget } from '@/utils/wiki-links'
 
 import { LINK_TYPES } from '@/constants/link-types'
 import { TAG_LINK_SCHEME } from '@/constants/tags'
-import { WIKI_LINK_SCHEME, WIKI_LINK_MISSING_PREFIX } from '@/constants/wiki-links'
+import {
+    WIKI_LINK_SCHEME,
+    WIKI_LINK_MISSING_PREFIX,
+    WIKI_LINK_ANCHOR_SEPARATOR
+} from '@/constants/wiki-links'
 import { FILE_LINK_SCHEME } from '@/constants/file-links'
 
 export const resolveLinkPress = (url) => {
@@ -26,7 +30,14 @@ export const resolveLinkPress = (url) => {
             }
         }
 
-        return { type: LINK_TYPES.NOTE, id: decodeURIComponent(target) }
+        const separator = target.indexOf(WIKI_LINK_ANCHOR_SEPARATOR)
+        if (separator === -1) return { type: LINK_TYPES.NOTE, id: decodeURIComponent(target) }
+
+        return {
+            type: LINK_TYPES.NOTE,
+            id: decodeURIComponent(target.slice(0, separator)),
+            anchor: decodeURIComponent(target.slice(separator + 1))
+        }
     }
 
     return { type: LINK_TYPES.EXTERNAL, url }

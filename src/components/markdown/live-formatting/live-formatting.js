@@ -19,6 +19,7 @@ import {
 import { htmlNodeNames, decorateHtml, htmlTheme } from './html'
 import { decorateMath, mathTheme } from './math'
 import { decorateFootnotes, footnotesTheme } from './footnotes'
+import { decorateBlockIds, blockIdsTheme } from './block-ids'
 import { decorateExtraMarks, extraMarksTheme } from './extra-marks'
 import { findWikiLinkRanges, decorateWikiLinks, wikiLinksTheme } from './wiki-links'
 import { noteEntriesFacet } from '../wiki-link-completion'
@@ -64,6 +65,7 @@ const buildDecorations = (state) => {
 
     decorateMath({ text, selection, ranges, codeRanges })
     decorateFootnotes({ text, ranges, codeRanges })
+    decorateBlockIds({ text, ranges })
     decorateExtraMarks({ text, selection, ranges, codeRanges })
     decorateWikiLinks({ ranges, codeRanges, wikiLinkRanges, noteEntries, selection, mediaMap })
 
@@ -93,5 +95,6 @@ export const buildLiveFormattingTheme = (theme) => ({
     ...mathTheme(),
     ...footnotesTheme(theme),
     ...extraMarksTheme(theme),
+    ...blockIdsTheme(theme),
     ...wikiLinksTheme(theme)
 })

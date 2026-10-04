@@ -24,6 +24,14 @@ describe('resolve link press', () => {
         })
     })
 
+    test('resolves a wiki link with a block anchor', () => {
+        expect(resolveLinkPress('wikilink://note%2F1#%5Eabc')).toEqual({
+            type: 'note',
+            id: 'note/1',
+            anchor: '^abc'
+        })
+    })
+
     test('resolves a missing wiki link to its path and title', () => {
         expect(resolveLinkPress('wikilink://missing/work/New%20note')).toEqual({
             type: 'missing-note',

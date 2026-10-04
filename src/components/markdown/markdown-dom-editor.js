@@ -23,6 +23,7 @@ import { useLatestRef } from './use-latest-ref'
 import { buildInvalidFrontmatterHighlight } from './markdown-dom-invalid-frontmatter'
 import { buildPropertiesTrigger, frontmatterAutoClose } from './markdown-dom-frontmatter'
 import { buildBlankPlaceholder } from './markdown-dom-placeholder'
+import { scrollToEditorBlock, scrollToPreviewBlock } from './markdown-dom-block-target'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { PREVIEW_CLICK_TYPES } from '@/constants/preview-click'
@@ -57,7 +58,8 @@ const MarkdownDomEditor = ({
     onChangeProperty,
     onRemoveTag,
     onAddTag,
-    search
+    search,
+    blockId
 }) => {
     const { query: searchQuery, replace: replaceText } = search || {}
     const themeKey = JSON.stringify(theme)
@@ -255,6 +257,17 @@ const MarkdownDomEditor = ({
     )
 
     const fontsReady = !!fonts && !!katexFonts
+
+    const scrollToBlock = useEffectEvent(() => {
+        if (!blockId || !fontsReady) return
+
+        if (mode === EDITOR_MODES.READ) scrollToPreviewBlock(previewRef.current, blockId)
+        else if (viewRef.current) scrollToEditorBlock(viewRef.current, blockId)
+    })
+
+    useEffect(() => {
+        scrollToBlock()
+    }, [blockId, html, fontsReady])
 
     const fontsCss = useMemo(() => (
         fontFacesCss(fonts) + katexFontFacesCss(katexFonts)

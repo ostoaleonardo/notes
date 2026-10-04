@@ -346,7 +346,7 @@ describe('heading and block anchors', () => {
     test('resolves a block link to its note', () => {
         const result = resolveWikiLinks('[[Meeting Notes#^abc123]]', notes)
 
-        expect(result).toContain('href="wikilink://note-1"')
+        expect(result).toContain('href="wikilink://note-1#%5Eabc123"')
     })
 
     test('uses the alias as the label when provided', () => {

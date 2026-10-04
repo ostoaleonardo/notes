@@ -55,6 +55,7 @@ export const NoteEditorScreen = ({
     rawFrontmatter, setRawFrontmatter,
     modifiedAt,
     initialMode = EDITOR_MODES.READ,
+    blockId,
     flush
 }) => {
     const { t } = useTranslation()
@@ -293,6 +294,7 @@ export const NoteEditorScreen = ({
                     onFocus={onFocus}
                     placeholder={t('placeholder.note')}
                     action={action}
+                    blockId={blockId}
                     showBacklinks={showBacklinks}
                 />
             </MarkdownEditorLayout>

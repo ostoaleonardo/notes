@@ -84,3 +84,22 @@ describe('file embeds', () => {
         expect(result).toBe('[[sample.pdf]] and [[song.wav]]')
     })
 })
+
+describe('block embeds', () => {
+    const blockNotes = [
+        { path: 'p', title: 'Source', note: 'Intro\n\nKey idea ^idea\n\nOutro' }
+    ]
+    const resolveBlock = (value) => resolveEmbeds(value, { notes: blockNotes, getImageUrl })
+
+    test('embeds only the referenced block', () => {
+        const result = resolveBlock('![[Source#^idea]]')
+
+        expect(result).toContain('Key idea')
+        expect(result).not.toContain('Intro')
+        expect(result).not.toContain('^idea')
+    })
+
+    test('turns an embed of a missing block into a plain wiki link', () => {
+        expect(resolveBlock('![[Source#^nope]]')).toBe('[[Source#^nope]]')
+    })
+})

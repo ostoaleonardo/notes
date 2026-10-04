@@ -1,6 +1,9 @@
-import { resolveWikiLinkTarget, escapeHtml } from './wiki-links'
+import { resolveWikiLink, escapeHtml } from './wiki-links'
 import { mapOutsideCode } from './outside-code'
 import { isFileLinkTarget } from './file-links'
+import { extractBlock } from './block-refs'
+
+import { BLOCK_ANCHOR_PREFIX } from '@/constants/block-refs'
 
 import {
     EMBED_CLASS,
@@ -35,10 +38,15 @@ const replaceEmbeds = (value, context, depth, visited) => mapOutsideCode(
 
             if (isFileLinkTarget(target)) return match.slice(1)
 
-            const note = resolveWikiLinkTarget(target, context.notes, context.notePaths)
+            const { note, anchor } = resolveWikiLink(target, context.notes, context.notePaths)
             if (!note || depth >= EMBED_MAX_DEPTH || visited.has(note.path)) return match.slice(1)
 
-            const body = replaceEmbeds(note.note || '', context, depth + 1, new Set([...visited, note.path]))
+            const source = anchor.startsWith(BLOCK_ANCHOR_PREFIX)
+                ? extractBlock(note.note, anchor.slice(BLOCK_ANCHOR_PREFIX.length))
+                : note.note || ''
+            if (source === null) return match.slice(1)
+
+            const body = replaceEmbeds(source, context, depth + 1, new Set([...visited, note.path]))
             const title = escapeHtml(note.title || '')
 
             return `\n\n<div class="${EMBED_CLASS}"><div class="${EMBED_TITLE_CLASS}">${title}</div>\n\n${body}\n\n</div>\n\n`

@@ -1,0 +1,10 @@
+export const BLOCK_ANCHOR_PREFIX = '^'
+export const BLOCK_ID_TRAILING_PATTERN = /(^|[ \t])\^([A-Za-z0-9-]+)[ \t]*$/
+export const BLOCK_ID_STANDALONE_PATTERN = /^\^([A-Za-z0-9-]+)$/
+export const BLOCK_ID_LIVE_CLASS = 'cm-live-block-id'
+export const BLOCK_ID_MUTED_OPACITY = 0.45
+export const BLOCK_ID_ATTRIBUTE = 'data-block-id'
+export const BLOCK_HIGHLIGHT_CLASS = 'block-target'
+export const LIST_ITEM_PATTERN = /^(\s*)(?:[-*+]|\d+[.)])\s+/
+export const BLOCK_HIGHLIGHT_DURATION = 2000
+export const BLOCK_PARAM = 'block'

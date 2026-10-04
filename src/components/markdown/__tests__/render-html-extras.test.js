@@ -67,3 +67,33 @@ describe('render callouts', () => {
         expect(renderMarkdownRaw('> quote')).toContain('<blockquote>')
     })
 })
+
+describe('render block ids', () => {
+    test('hides the trailing id and marks the paragraph', () => {
+        const html = renderMarkdownRaw('Key idea ^idea-1')
+
+        expect(html).toContain('<p data-block-id="idea-1">Key idea</p>')
+        expect(html).not.toContain('^idea-1')
+    })
+
+    test('marks the list item for a tight list entry', () => {
+        const html = renderMarkdownRaw('- one\n- two ^second')
+
+        expect(html).toContain('<li data-block-id="second">two</li>')
+    })
+
+    test('attaches a standalone id to the block above it', () => {
+        const html = renderMarkdownRaw('| a | b |\n| - | - |\n| 1 | 2 |\n\n^table')
+
+        expect(html).toContain('<table data-block-id="table">')
+        expect(html).not.toContain('^table')
+    })
+
+    test('keeps ids inside code untouched', () => {
+        expect(renderMarkdownRaw('`x ^id`')).toContain('x ^id')
+    })
+
+    test('leaves a mid-paragraph caret alone', () => {
+        expect(renderMarkdownRaw('2 ^3 apples')).toContain('2 ^3 apples')
+    })
+})

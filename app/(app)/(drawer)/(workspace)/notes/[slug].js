@@ -18,13 +18,14 @@ import { getVersionLocation } from '@/utils/note-version-location'
 import { logError } from '@/utils/log-error'
 import { planExternalSync } from '@/utils/external-note-sync'
 
+import { BLOCK_PARAM } from '@/constants/block-refs'
 import { ROUTES } from '@/constants/routes'
 
 const tagsEqual = (a, b) => a.length === b.length && a.every((tag, i) => tag === b[i])
 
 export default function EditNote() {
     const { t } = useTranslation()
-    const { slug } = useLocalSearchParams()
+    const { slug, [BLOCK_PARAM]: blockId } = useLocalSearchParams()
     const { registerCurrent } = useCurrentNote()
     const { notes, getNote, updateNote, loading: notesLoading } = useNotes()
     const { repositories, loading: repositoriesLoading } = useRepositories()
@@ -252,6 +253,7 @@ export default function EditNote() {
                 rawFrontmatter={rawFrontmatter}
                 setRawFrontmatter={setRawFrontmatter}
                 modifiedAt={modifiedAt}
+                blockId={blockId}
             />
 
             <RenameLinksDialog

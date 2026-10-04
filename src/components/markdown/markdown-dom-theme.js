@@ -14,6 +14,7 @@ import {
 } from '../../constants/callouts'
 import { EMBED_CLASS, EMBED_TITLE_CLASS } from '../../constants/embeds'
 import { FILE_LINK_CLASS } from '../../constants/file-links'
+import { BLOCK_HIGHLIGHT_CLASS } from '../../constants/block-refs'
 import { ATTACH_FILE_ICON_PATH } from '../../constants/icon-paths'
 import { buildIconMaskUrl } from '../../utils/icon-mask'
 import {
@@ -292,8 +293,8 @@ const buildCalloutCss = () => Object.entries(CALLOUT_COLORS).map(([type, color])
 
 export const buildPreviewCss = ({ colors, typography }) => {
     const { onBackground: textColor, tertiary: linkColor, background: quoteBackgroundColor, codeBackground: codeBackgroundColor, thematicBreak: thematicBreakColor, surface: surfaceColor } = buildDerivedColors(colors)
-
     const { fontSize, fontFamily, headingFontFamily } = typography
+
     return `
     html, body { margin: 0; overflow-x: hidden; scrollbar-width: none; }
     ::-webkit-scrollbar { display: none; }
@@ -313,6 +314,10 @@ export const buildPreviewCss = ({ colors, typography }) => {
     .markdown-preview h5 { font-size: ${fontSize * 1.4}px; }
     .markdown-preview h6 { font-size: ${fontSize * 1.2}px; }
     .markdown-preview p { margin: 0.4em 0; }
+    .markdown-preview .${BLOCK_HIGHLIGHT_CLASS} {
+        background-color: ${linkColor + TRANSPARENT[20]}; border-radius: ${RADIUS.segment}px;
+        transition: background-color 400ms ease;
+    }
     .markdown-preview a { color: ${linkColor}; text-decoration: underline; }
     .markdown-preview .wiki-link { color: ${linkColor}; text-decoration: underline; font-weight: bold; }
     .markdown-preview .tag { color: ${linkColor}; text-decoration: none; font-weight: bold; }
