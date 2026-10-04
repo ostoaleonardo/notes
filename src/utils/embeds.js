@@ -5,10 +5,13 @@ import { extractBlock } from './block-refs'
 import { extractSection } from './headings'
 
 import { BLOCK_ANCHOR_PREFIX } from '@/constants/block-refs'
+import { WIKI_LINK_SCHEME, WIKI_LINK_ANCHOR_SEPARATOR } from '@/constants/wiki-links'
 
 import {
     EMBED_CLASS,
     EMBED_TITLE_CLASS,
+    EMBED_OPEN_CLASS,
+    EMBED_OPEN_ICON,
     EMBED_PATTERN,
     EMBED_IMAGE_PATTERN,
     EMBED_WIDTH_PATTERN,
@@ -24,6 +27,13 @@ const buildImage = (name, width, getImageUrl) => {
     }
 
     return `![${name}](${url})`
+}
+
+const buildOpenLink = (note, anchor) => {
+    const suffix = anchor ? `${WIKI_LINK_ANCHOR_SEPARATOR}${encodeURIComponent(anchor)}` : ''
+    const href = `${WIKI_LINK_SCHEME}${encodeURIComponent(note.path)}${suffix}`
+
+    return `<a href="${href}" class="${EMBED_OPEN_CLASS}">${EMBED_OPEN_ICON}</a>`
 }
 
 const extractSource = (text, anchor) => {
@@ -53,14 +63,20 @@ const replaceEmbeds = (value, context, depth, visited) => mapOutsideCode(
 
             const body = replaceEmbeds(source, context, depth + 1, new Set([...visited, note.path]))
             const title = escapeHtml(note.title || '')
+            const openLink = context.withOpenLink ? buildOpenLink(note, anchor) : ''
 
-            return `\n\n<div class="${EMBED_CLASS}"><div class="${EMBED_TITLE_CLASS}">${title}</div>\n\n${body}\n\n</div>\n\n`
+            return `\n\n<div class="${EMBED_CLASS}"><div class="${EMBED_TITLE_CLASS}"><span>${title}</span>${openLink}</div>\n\n${body}\n\n</div>\n\n`
         }
     )
 )
 
-export const resolveEmbeds = (value, { notes, notePaths = new Map(), getImageUrl, selfPath }) => (
-    replaceEmbeds(value, { notes, notePaths, getImageUrl, selfPath }, 0, new Set(selfPath ? [selfPath] : []))
+export const resolveEmbeds = (value, { notes, notePaths = new Map(), getImageUrl, selfPath, withOpenLink = false }) => (
+    replaceEmbeds(
+        value,
+        { notes, notePaths, getImageUrl, selfPath, withOpenLink },
+        0,
+        new Set(selfPath ? [selfPath] : [])
+    )
 )
 
 export const extractEmbedImageNames = (value) => {

@@ -12,7 +12,7 @@ import {
     CALLOUT_TITLE_CLASS,
     CALLOUT_TYPE_CLASS_PREFIX
 } from '../../constants/callouts'
-import { EMBED_CLASS, EMBED_TITLE_CLASS } from '../../constants/embeds'
+import { EMBED_CLASS, EMBED_TITLE_CLASS, EMBED_OPEN_CLASS } from '../../constants/embeds'
 import { FILE_LINK_CLASS } from '../../constants/file-links'
 import { BLOCK_HIGHLIGHT_CLASS } from '../../constants/block-refs'
 import { ATTACH_FILE_ICON_PATH } from '../../constants/icon-paths'
@@ -366,7 +366,12 @@ export const buildPreviewCss = ({ colors, typography }) => {
         margin: 0.6em 0; padding: 0.2em 0.8em; border-left: 2px solid ${thematicBreakColor};
         background-color: ${quoteBackgroundColor};
     }
-    .markdown-preview .${EMBED_TITLE_CLASS} { font-weight: bold; opacity: 0.6; font-size: 0.85em; margin-top: 0.4em; }
+    .markdown-preview .${EMBED_TITLE_CLASS} {
+        display: flex; align-items: center; justify-content: space-between; gap: 0.5em;
+        font-weight: bold; font-size: 0.85em; margin-top: 0.4em;
+    }
+    .markdown-preview .${EMBED_TITLE_CLASS} > span { opacity: 0.6; }
+    .markdown-preview a.${EMBED_OPEN_CLASS} { display: inline-flex; padding: 0.3em; font-size: 1.2em; color: inherit; opacity: 0.6; }
     .markdown-preview code {
         background-color: ${codeBackgroundColor}; border-radius: 4px; padding: 0.1em 0.3em;
         font-family: monospace;

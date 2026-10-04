@@ -16,8 +16,29 @@ describe('resolve embeds', () => {
     test('inlines the body of an embedded note under its title', () => {
         const result = resolve('![[Alpha]]')
 
-        expect(result).toContain('<div class="embed-title">Alpha</div>')
+        expect(result).toContain('<div class="embed-title"><span>Alpha</span></div>')
         expect(result).toContain('alpha body')
+    })
+
+    test('adds a link to the original note when requested', () => {
+        const result = resolveEmbeds('![[Alpha]]', { notes, getImageUrl, withOpenLink: true })
+
+        expect(result).toContain('<a href="wikilink://a" class="embed-open">')
+    })
+
+    test('links the open button to the embedded heading', () => {
+        const withHeading = [{ path: 'h', title: 'Doc', note: '# Intro\ntext' }]
+        const result = resolveEmbeds('![[Doc#Intro]]', {
+            notes: withHeading,
+            getImageUrl,
+            withOpenLink: true
+        })
+
+        expect(result).toContain('href="wikilink://h#Intro"')
+    })
+
+    test('omits the open button by default', () => {
+        expect(resolve('![[Alpha]]')).not.toContain('embed-open')
     })
 
     test('turns image embeds into markdown images', () => {
@@ -31,7 +52,7 @@ describe('resolve embeds', () => {
     test('resolves nested embeds up to the depth limit', () => {
         const result = resolve('![[Deep]]')
 
-        expect(result).toContain('<div class="embed-title">Beta</div>')
+        expect(result).toContain('<div class="embed-title"><span>Beta</span></div>')
         expect(result).not.toContain('alpha body')
         expect(result).toContain('[[Alpha]]')
     })

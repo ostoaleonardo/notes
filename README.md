@@ -20,7 +20,7 @@
 -   <samp>Obsidian-compatible syntax: callouts, highlights, comments, math (LaTeX), footnotes, task lists (including custom statuses such as <code>[/]</code> and <code>[-]</code>), inline footnotes and tables.<samp>
 -   <samp>Properties panel for frontmatter (tags, aliases, text, numbers, dates, date and time, lists and checkboxes).<samp>
 -   <samp>Wiki links with aliases, links to headings and blocks, and links within the same note.<samp>
--   <samp>Embeds of notes, headings, blocks and images, with autocomplete for links and block ids.<samp>
+-   <samp>Embeds of notes, headings, blocks and images with a button to open the original note, and autocomplete for links and block ids.<samp>
 -   <samp>Backlinks, unlinked mentions and automatic link updates when you rename a note or a heading.<samp>
 -   <samp>Outline of the note's headings and a panel of outgoing links.<samp>
 -   <samp>Attachments: images, audio, video and PDFs.<samp>

@@ -17,7 +17,13 @@ export const useResolvedWikiLinks = (value, selfPath) => {
             return imageUris.get(name)
         }
 
-        const withEmbeds = resolveEmbeds(value || '', { notes, notePaths, getImageUrl, selfPath })
+        const withEmbeds = resolveEmbeds(value || '', {
+            notes,
+            notePaths,
+            getImageUrl,
+            selfPath,
+            withOpenLink: true
+        })
         return resolveWikiLinks(withEmbeds, notes, notePaths, selfPath)
     }, [value, selfPath, notes, notePaths, listImageUris])
 }
