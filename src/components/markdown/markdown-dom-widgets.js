@@ -78,6 +78,7 @@ export const TitleSection = ({
     onTitleChange,
     onTitleBlur,
     titlePlaceholder,
+    showTitle = true,
     metaLabel,
     propertiesPanel,
     onToggleProperties,
@@ -106,12 +107,14 @@ export const TitleSection = ({
     return (
         <ThemeContext.Provider value={theme}>
             <div style={buildTitleSectionStyle()}>
-                <AutoGrowTitle
-                    value={title}
-                    onChange={onTitleChange}
-                    onBlur={onTitleBlur}
-                    placeholder={titlePlaceholder}
-                />
+                {showTitle && (
+                    <AutoGrowTitle
+                        value={title}
+                        onChange={onTitleChange}
+                        onBlur={onTitleBlur}
+                        placeholder={titlePlaceholder}
+                    />
+                )}
                 <MetaLabel label={metaLabel} />
                 {invalid ? (
                     <InvalidPropertiesBanner

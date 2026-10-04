@@ -27,9 +27,15 @@ import { SPACING } from '@/constants/spacing'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import {
     DEFAULT_EDITOR_FONT_SIZE,
+    DEFAULT_EDITOR_INLINE_TITLE,
+    DEFAULT_EDITOR_LINE_NUMBERS,
     DEFAULT_EDITOR_LINE_WIDTH,
+    DEFAULT_EDITOR_SPELLCHECK,
+    DEFAULT_EDITOR_TAB_SIZE,
     EDITOR_FONT_SIZES,
-    EDITOR_LINE_WIDTHS
+    EDITOR_LINE_WIDTHS,
+    EDITOR_TAB_SIZES,
+    EDITOR_TOGGLE
 } from '@/constants/editor-display'
 
 export default function Settings() {
@@ -73,6 +79,30 @@ export default function Settings() {
                         translationKey='editor_line_width'
                         options={EDITOR_LINE_WIDTHS}
                         defaultValue={DEFAULT_EDITOR_LINE_WIDTH}
+                    />
+                    <EditorDisplayOption
+                        storageKey={STORAGE_KEYS.EDITOR_TAB_SIZE}
+                        translationKey='editor_tab_size'
+                        options={EDITOR_TAB_SIZES}
+                        defaultValue={DEFAULT_EDITOR_TAB_SIZE}
+                    />
+                    <EditorDisplayOption
+                        storageKey={STORAGE_KEYS.EDITOR_LINE_NUMBERS}
+                        translationKey='editor_line_numbers'
+                        options={EDITOR_TOGGLE}
+                        defaultValue={DEFAULT_EDITOR_LINE_NUMBERS}
+                    />
+                    <EditorDisplayOption
+                        storageKey={STORAGE_KEYS.EDITOR_SPELLCHECK}
+                        translationKey='editor_spellcheck'
+                        options={EDITOR_TOGGLE}
+                        defaultValue={DEFAULT_EDITOR_SPELLCHECK}
+                    />
+                    <EditorDisplayOption
+                        storageKey={STORAGE_KEYS.EDITOR_INLINE_TITLE}
+                        translationKey='editor_inline_title'
+                        options={EDITOR_TOGGLE}
+                        defaultValue={DEFAULT_EDITOR_INLINE_TITLE}
                         isLast={true}
                     />
                 </Section>

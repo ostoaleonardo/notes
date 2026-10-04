@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 import { EditorState } from '@codemirror/state'
-import { EditorView } from '@codemirror/view'
+import { EditorView, lineNumbers as cmLineNumbers } from '@codemirror/view'
+import { indentUnit } from '@codemirror/language'
 import { closeSearchPanel, openSearchPanel, setSearchQuery, SearchQuery } from '@codemirror/search'
 
 import { fontFacesCss } from './markdown-dom-fonts'
@@ -37,6 +38,10 @@ const MarkdownDomEditor = ({
     knownTags,
     linkFormat,
     tableLabels,
+    lineNumbers,
+    spellcheck,
+    tabSize,
+    inlineTitle,
     backlinksHtml,
     onChange,
     onHistoryChange,
@@ -97,6 +102,25 @@ const MarkdownDomEditor = ({
     const knownTagsExtension = useCompartment(viewRef, () => knownTagsFacet.of(knownTags || []), [knownTags])
     const linkFormatExtension = useCompartment(viewRef, () => wikiLinkFormatFacet.of(linkFormat), [linkFormat])
     const tableLabelsExtension = useCompartment(viewRef, () => tableLabelsFacet.of(tableLabels || {}), [tableLabels])
+    const lineNumbersExtension = useCompartment(
+        viewRef,
+        () => (mode === EDITOR_MODES.CODE && lineNumbers ? [cmLineNumbers()] : []),
+        [mode, lineNumbers]
+    )
+    const spellcheckExtension = useCompartment(
+        viewRef,
+        () => EditorView.contentAttributes.of({
+            spellcheck: String(spellcheck),
+            autocorrect: spellcheck ? 'on' : 'off',
+            autocapitalize: spellcheck ? 'sentences' : 'off'
+        }),
+        [spellcheck]
+    )
+    const indentExtension = useCompartment(
+        viewRef,
+        () => [indentUnit.of(' '.repeat(tabSize)), EditorState.tabSize.of(tabSize)],
+        [tabSize]
+    )
     const liveFormattingExtension = useCompartment(viewRef, () => (mode === EDITOR_MODES.LIVE ? [liveFormatting] : []), [mode])
     const invalidFrontmatterExtension = useCompartment(
         viewRef,
@@ -139,6 +163,9 @@ const MarkdownDomEditor = ({
                     linkFormatExtension,
                     tableLabelsExtension,
                     liveFormattingExtension,
+                    lineNumbersExtension,
+                    spellcheckExtension,
+                    indentExtension,
                     invalidFrontmatterExtension,
                     frontmatterExtension,
                     placeholderCompartment,
@@ -308,6 +335,7 @@ const MarkdownDomEditor = ({
 
             <TitleSection
                 {...titleField}
+                showTitle={inlineTitle}
                 onTitleChange={onTitleChange}
                 onTitleBlur={onTitleBlur}
                 propertiesPanel={mode === EDITOR_MODES.CODE ? undefined : propertiesPanel}

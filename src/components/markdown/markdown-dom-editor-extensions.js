@@ -2,7 +2,7 @@ import { EditorView, keymap } from '@codemirror/view'
 import { autocompletion, closeBrackets } from '@codemirror/autocomplete'
 import { defaultKeymap, history, historyKeymap, indentWithTab, redoDepth, undoDepth } from '@codemirror/commands'
 import { search, searchKeymap } from '@codemirror/search'
-import { codeFolding, indentUnit } from '@codemirror/language'
+import { codeFolding } from '@codemirror/language'
 import { markdown } from '@codemirror/lang-markdown'
 import { GFM } from '@lezer/markdown'
 
@@ -13,8 +13,6 @@ import { fileLinkPress } from './live-formatting/wiki-links'
 import { listKeymap } from './markdown-dom-list-keymap'
 import { headingFoldService } from './markdown-dom-fold'
 import { pasteUrlOverSelection } from './markdown-dom-paste'
-
-import { LIST_INDENT } from '@/constants/markdown-patterns'
 
 const createHiddenSearchPanel = () => {
     const dom = document.createElement('div')
@@ -51,7 +49,6 @@ export const buildEditorExtensions = ({ dynamic, onTagPressRef, onLinkPressRef, 
         ...historyKeymap,
         ...searchKeymap
     ]),
-    indentUnit.of(LIST_INDENT),
     markdown({ extensions: GFM }),
     inlineTagExtensions(onTagPressRef),
     fileLinkPress(onLinkPressRef),
