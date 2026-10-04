@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import { useTheme } from 'react-native-paper'
 
 import { useStorage } from './use-storage'
 import { useFileStorage } from './use-file-storage'
@@ -15,7 +14,6 @@ import { STORAGE_BOOLEAN } from '@/constants/storage-values'
 export function useWelcomeNote() {
     const { getItem, setItem } = useStorage()
     const { listMarkdownFiles, writeNoteFile } = useFileStorage()
-    const { colors } = useTheme()
 
     const seedWelcomeNote = useCallback(async (uri, repositoryId) => {
         const alreadyCreated = await getItem(STORAGE_KEYS.WELCOME_NOTE_CREATED)
@@ -23,7 +21,7 @@ export function useWelcomeNote() {
 
         await setItem(STORAGE_KEYS.WELCOME_NOTE_CREATED, STORAGE_BOOLEAN.TRUE)
 
-        const { title, content } = getWelcomeNote(colors)
+        const { title, content } = getWelcomeNote()
         const existingNames = listMarkdownFiles(uri).map((file) => file.name)
         const filename = getUniqueFilename(existingNames, title, null)
 
@@ -34,8 +32,7 @@ export function useWelcomeNote() {
         getItem,
         setItem,
         writeNoteFile,
-        listMarkdownFiles,
-        colors
+        listMarkdownFiles
     ])
 
     return { seedWelcomeNote }

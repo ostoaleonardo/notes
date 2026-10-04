@@ -2,7 +2,6 @@ import { useEffect, useEffectEvent } from 'react'
 import { DevSettings } from 'react-native'
 import { registerDevMenuItems } from 'expo-dev-menu'
 import { Directory, File, Paths } from 'expo-file-system'
-import { useTheme } from 'react-native-paper'
 import legacyNotes from '../../legacy/notes.json'
 import legacyTags from '../../legacy/categories.json'
 
@@ -45,7 +44,6 @@ import { logError } from '@/utils/log-error'
 export function useDevMenu() {
     const { setItem } = useStorage()
     const { pro, setPro } = usePro()
-    const { colors } = useTheme()
 
     const {
         writeNoteFile,
@@ -137,7 +135,7 @@ export function useDevMenu() {
         if (!activeRepository) return
 
         const uri = activeRepository.uri
-        const { title, content } = getWelcomeNote(colors)
+        const { title, content } = getWelcomeNote()
         const filename = `${sanitizeFilename(title)}.md`
 
         const existing = findFile(uri, filename)
@@ -233,7 +231,6 @@ export function useDevMenu() {
         registerItems()
     }, [
         pro,
-        colors,
         repositories,
         activeRepository,
         activeRepositoryId

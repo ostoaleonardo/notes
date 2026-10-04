@@ -1,23 +1,10 @@
 import i18n from '../i18n/i18next'
 
-import { TRANSPARENT } from '@/constants/themes'
-import { RADIUS } from '@/constants/radius'
+const getBulletList = (items) => (
+    items.map(({ title, body }) => `* **${title}**: ${body}`).join('\n')
+)
 
-const getFeatureCard = (colors, items) => {
-    const border = colors.onBackground + TRANSPARENT[5]
-    const divider = colors.onBackground + TRANSPARENT[10]
-    const row = ({ title, body }, isLast) => (
-        `<div style="padding:14px 16px;${isLast ? '' : `border-bottom:1px solid ${divider};`}"><strong>${title}</strong>: ${body}</div>`
-    )
-
-    return (
-        `<div style="border:1px solid ${border};border-radius:${RADIUS.outer}px;overflow:hidden;background:${colors.surface}">` +
-        items.map((item, index) => row(item, index === items.length - 1)).join('') +
-        `</div>`
-    )
-}
-
-export const getWelcomeNote = (colors) => {
+export const getWelcomeNote = () => {
     const t = (key) => i18n.t(key)
 
     const toolsItems = [
@@ -56,11 +43,10 @@ export const getWelcomeNote = (colors) => {
         `* ${t('welcome.attachments_bullet_image')}\n` +
         `* ${t('welcome.attachments_bullet_link')}\n\n` +
         `${t('welcome.attachments_footer')}\n\n---\n\n` +
-        `## ${t('welcome.tools_heading')}\n\n` +
-        `${getFeatureCard(colors, toolsItems)}\n\n---\n\n` +
+        `## ${t('welcome.tools_heading')}\n` +
+        `${getBulletList(toolsItems)}\n\n---\n\n` +
         `## ${t('welcome.pro_heading')}\n${t('welcome.pro_intro')}\n\n` +
-        `${getFeatureCard(colors, proItems)}\n\n` +
-        `<div style="height:12px"></div>\n\n` +
+        `${getBulletList(proItems)}\n\n` +
         `> ${t('welcome.pro_cta')}\n`
 
     return {
