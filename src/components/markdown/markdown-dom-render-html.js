@@ -13,7 +13,7 @@ import { TAG_LINK_SCHEME } from '@/constants/tags'
 import { WIKI_LINK_SCHEME } from '@/constants/wiki-links'
 import { FILE_LINK_SCHEME } from '@/constants/file-links'
 
-const md = new MarkdownIt({ html: true, linkify: true })
+const md = new MarkdownIt({ html: true, linkify: true, breaks: true })
     .use(taskLists, { enabled: true })
     .use(texmath, { engine: katex, delimiters: 'dollars' })
     .use(footnote)

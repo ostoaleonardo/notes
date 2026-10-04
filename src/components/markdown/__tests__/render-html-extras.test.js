@@ -97,3 +97,18 @@ describe('render block ids', () => {
         expect(renderMarkdownRaw('2 ^3 apples')).toContain('2 ^3 apples')
     })
 })
+
+describe('render line breaks', () => {
+    test('turns a single newline into a line break', () => {
+        expect(renderMarkdownRaw('one\ntwo')).toContain('one<br>\ntwo')
+    })
+})
+
+describe('render inline footnotes', () => {
+    test('renders a caret bracket note as a numbered footnote', () => {
+        const html = renderMarkdownRaw('Text^[inline note] end')
+
+        expect(html).toContain('class="footnote-ref"')
+        expect(html).toContain('inline note')
+    })
+})

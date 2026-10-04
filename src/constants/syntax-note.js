@@ -274,6 +274,8 @@ export const SYNTAX_MAIN_BODY = [
     '[^1]: Contenido de la primera nota al pie.',
     '[^larga]: Una nota al pie con **formato** y un enlace a [[Nota enlazada]].',
     '',
+    'Nota al pie en línea^[Se escribe dentro del propio texto, sin definición aparte.].',
+    '',
     '## 12. Separadores',
     '',
     '---',
