@@ -20,11 +20,12 @@ const createHiddenSearchPanel = () => {
     return { dom }
 }
 
-export const buildUpdateListener = ({ onChangeRef, onHistoryChangeRef, historyRef, lastEmittedValueRef }) => (
+export const buildUpdateListener = ({ onChangeRef, onHistoryChangeRef, historyRef, lastEmittedValueRef, pendingEmittedRef }) => (
     EditorView.updateListener.of((update) => {
         if (update.docChanged) {
             const newValue = update.state.doc.toString()
             lastEmittedValueRef.current = newValue
+            pendingEmittedRef.current.add(newValue)
             onChangeRef.current(newValue)
         }
 

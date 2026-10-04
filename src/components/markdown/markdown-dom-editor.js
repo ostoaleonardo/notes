@@ -13,6 +13,7 @@ import { buildEditorTheme, buildPreviewCss } from './markdown-dom-theme'
 import { renderMarkdownHtml } from './markdown-dom-render-html'
 import { runAction } from './markdown-dom-commands'
 import { buildEditorExtensions, buildUpdateListener } from './markdown-dom-editor-extensions'
+import { shouldApplyExternalValue } from './markdown-dom-external-value'
 import { resolvePreviewClick } from './markdown-dom-preview-click'
 import { liveFormatting, mediaMapFacet } from './live-formatting/live-formatting'
 import { noteEntriesFacet, wikiLinkFormatFacet } from './wiki-link-completion'
@@ -80,7 +81,7 @@ const MarkdownDomEditor = ({
 
     const historyRef = useRef({ canUndo: false, canRedo: false })
     const lastEmittedValueRef = useRef(value)
-    const hasFocusRef = useRef(false)
+    const pendingEmittedRef = useRef(new Set())
 
     const mediaMapValue = useMemo(() => new Map(mediaMap || []), [mediaMap])
 
@@ -142,7 +143,8 @@ const MarkdownDomEditor = ({
                     onChangeRef,
                     onHistoryChangeRef,
                     historyRef,
-                    lastEmittedValueRef
+                    lastEmittedValueRef,
+                    pendingEmittedRef
                 })
             })
         })
@@ -150,11 +152,9 @@ const MarkdownDomEditor = ({
         const view = new EditorView({ state, parent: containerRef.current })
 
         const handleFocus = () => {
-            hasFocusRef.current = true
             onFocusRef.current?.()
         }
         const handleBlur = () => {
-            hasFocusRef.current = false
             onBlurRef.current?.()
         }
         view.dom.addEventListener('focus', handleFocus, true)
@@ -172,14 +172,27 @@ const MarkdownDomEditor = ({
     useEffect(() => {
         const view = viewRef.current
         if (!view) return
-        if (hasFocusRef.current) return
-        if (value === lastEmittedValueRef.current) return
-        if (value !== view.state.doc.toString()) {
-            lastEmittedValueRef.current = value
-            view.dispatch({
-                changes: { from: 0, to: view.state.doc.length, insert: value || '' }
-            })
+
+        if (value === lastEmittedValueRef.current) {
+            pendingEmittedRef.current.clear()
+            return
         }
+
+        const docValue = view.state.doc.toString()
+        const shouldApply = shouldApplyExternalValue({
+            value,
+            docValue,
+            lastEmitted: lastEmittedValueRef.current,
+            pendingEmitted: pendingEmittedRef.current
+        })
+        if (!shouldApply) return
+
+        const newValue = value || ''
+        lastEmittedValueRef.current = value
+        view.dispatch({
+            changes: { from: 0, to: view.state.doc.length, insert: newValue },
+            selection: { anchor: Math.min(view.state.selection.main.head, newValue.length) }
+        })
     }, [value])
 
     useEffect(() => {
