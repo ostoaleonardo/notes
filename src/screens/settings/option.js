@@ -13,6 +13,7 @@ export function Option({ title, description, rightContent, onPress, visible = tr
 
     return (
         <Pressable
+            accessibilityRole='button'
             onPress={onPress}
             style={{
                 ...styles.container,

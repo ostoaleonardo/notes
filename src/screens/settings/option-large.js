@@ -11,6 +11,7 @@ export function OptionLarge({ title, description, children, onPress, isFirst, is
 
     return (
         <Pressable
+            accessibilityRole='button'
             onPress={onPress}
             style={{
                 ...styles.container,

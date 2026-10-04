@@ -111,7 +111,7 @@ export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
                         { backgroundColor: colors.tertiary + TRANSPARENT[10] }
                     ]}
                 >
-                    <TouchableRipple onPress={onRequestCameraPermission}>
+                    <TouchableRipple accessibilityRole='button' onPress={onRequestCameraPermission}>
                         <View style={styles.permissionContent}>
                             <View style={styles.permissionText}>
                                 <Typography bold uppercase color={colors.tertiary} variant='caption'>

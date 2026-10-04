@@ -38,6 +38,7 @@ export function IconToggle({
                 ]}
             >
                 <TouchableRipple
+                    accessibilityRole='button'
                     disabled={disabled}
                     onPress={onPress}
                     onPressIn={() => setPressed(true)}

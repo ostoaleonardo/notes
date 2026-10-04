@@ -3,7 +3,7 @@ import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { SPACING } from '@/constants/spacing'
 
-export function FloatingButton({ icon, onPress }) {
+export function FloatingButton({ icon, label, onPress }) {
     const { colors } = useTheme()
 
     const style = {
@@ -16,7 +16,7 @@ export function FloatingButton({ icon, onPress }) {
     })
 
     return (
-        <Pressable onPress={onPress} style={style}>
+        <Pressable onPress={onPress} style={style} accessibilityRole='button' accessibilityLabel={label}>
             {content}
         </Pressable>
     )

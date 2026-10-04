@@ -18,6 +18,7 @@ export const TagOption = memo(function TagOption({ id, tag, onToggle, isSelected
             entering={FadeInUp}
         >
             <Pressable
+                accessibilityRole='button'
                 onPress={() => onToggle(id)}
                 style={styles.container}
                 android_ripple={{ color: colors.onBackground + TRANSPARENT[10] }}

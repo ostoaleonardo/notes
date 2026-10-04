@@ -18,6 +18,8 @@ export const ColorOption = memo(function ColorOption({ name, active, onPress, ch
 
     return (
         <Pressable
+            accessibilityRole='button'
+            accessibilityState={{ selected: !!active }}
             onPress={onPress}
             style={{
                 width: 100 / 3 + '%',

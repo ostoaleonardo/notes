@@ -27,6 +27,7 @@ export function SearchListSection({
         >
             {items.map((item) => (
                 <TouchableRipple
+                    accessibilityRole='button'
                     key={keyExtractor(item)}
                     onPress={() => onSelect(item)}
                 >

@@ -44,6 +44,8 @@ export function FilterToggle({
                 ]}
             >
                 <TouchableRipple
+                    accessibilityRole='button'
+                    accessibilityState={{ selected: !!selected }}
                     disabled={disabled}
                     onPress={onPress}
                     style={[styles.touchable, pill && styles.touchablePill]}

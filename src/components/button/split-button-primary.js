@@ -18,6 +18,7 @@ export function SplitButtonPrimary({ icon: Icon, label, onPress }) {
             }}
         >
             <TouchableRipple
+                accessibilityRole='button'
                 onPress={onPress}
                 style={styles.touchable}
             >

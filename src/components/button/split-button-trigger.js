@@ -32,6 +32,7 @@ export function SplitButtonTrigger({ menuVisible, onPress, openProgress }) {
                 ]}
             />
             <TouchableRipple
+                accessibilityRole='button'
                 onPress={onPress}
                 style={styles.touchable}
             >

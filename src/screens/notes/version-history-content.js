@@ -85,7 +85,7 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
 
     const renderVersionItem = useCallback(({ item: version, index }) => (
         <AnimatedView>
-            <TouchableRipple onPress={() => setSelected(version)}>
+            <TouchableRipple accessibilityRole='button' onPress={() => setSelected(version)}>
                 <View
                     style={{
                         ...styles.item,

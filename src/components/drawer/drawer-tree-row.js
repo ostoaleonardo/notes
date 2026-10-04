@@ -24,6 +24,7 @@ export function DrawerTreeRow({
     return (
         <View style={[styles.container, !compact && styles.regular, { paddingLeft: depth * SPACING.lg }]}>
             <Pressable
+                accessibilityRole='button'
                 onPress={onPress}
                 style={styles.content}
                 accessibilityState={expandable ? { expanded: !collapsed } : undefined}

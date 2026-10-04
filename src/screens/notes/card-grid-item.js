@@ -27,6 +27,8 @@ export const CardGridItem = memo(function CardGridItem({
             style={{ ...cellStyle, gap: SPACING.sm }}
         >
             <Pressable
+                accessibilityRole='button'
+                accessibilityState={{ selected: !!card.active }}
                 disabled={card.active}
                 onPress={() => onOpen(card)}
                 style={{

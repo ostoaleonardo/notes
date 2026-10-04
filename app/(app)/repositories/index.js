@@ -93,6 +93,7 @@ export default function Repositories() {
 
             <FloatingButton
                 icon={<Folder />}
+                label={t('repositories.choose_button')}
                 onPress={onAddRepository}
             />
 

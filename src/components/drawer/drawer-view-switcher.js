@@ -34,6 +34,7 @@ export const DrawerViewSwitcher = memo(function DrawerViewSwitcher({ view, onCha
             onClose={onClose}
             anchor={(
                 <Pressable
+                    accessibilityRole='button'
                     onPress={onOpen}
                     accessibilityLabel={t('drawer.change_view')}
                     style={({ pressed }) => [

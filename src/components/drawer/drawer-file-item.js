@@ -15,6 +15,7 @@ export const DrawerFileItem = memo(function DrawerFileItem({ file, onOpenFile })
     return (
         <AnimatedView>
             <Pressable
+                accessibilityRole='button'
                 onPress={() => onOpenFile(file)}
                 style={styles.container}
             >

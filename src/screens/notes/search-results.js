@@ -25,6 +25,7 @@ export function SearchResults({ results, aliasById, onOpenResult }) {
                         exiting={FadeOutUp}
                     >
                         <TouchableRipple
+                            accessibilityRole='button'
                             onPress={() => onOpenResult(item.path)}
                         >
                             <View style={styles.item}>

@@ -9,6 +9,8 @@ export const DrawerNoteItem = memo(function DrawerNoteItem({ note, depth, active
     return (
         <AnimatedView>
             <Pressable
+                accessibilityRole='button'
+                accessibilityState={{ selected: !!active }}
                 onPress={() => onOpenNote(note.path)}
                 style={{
                     ...styles.container,

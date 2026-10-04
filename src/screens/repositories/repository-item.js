@@ -76,6 +76,8 @@ export function RepositoryItem({
         >
             <View style={styles.row}>
                 <Pressable
+                    accessibilityRole='button'
+                    accessibilityState={{ expanded }}
                     onPress={() => setExpanded((prev) => !prev)}
                     style={styles.content}
                 >
