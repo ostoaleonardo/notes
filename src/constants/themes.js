@@ -3,7 +3,9 @@ import { MD3DarkTheme, MD3LightTheme } from 'react-native-paper'
 export const COLORS = {
     base: {
         white: '#f0f2f1',
-        accent: '#c8102e',
+        red: '#c8102e',
+        yellow: '#ffc700',
+        blue: '#002f6c',
         transparent: 'transparent'
     },
     light: {
@@ -139,18 +141,18 @@ export const ACCENT_COLORS = {
         borderColor: COLORS.dark.onBackground
     },
     red: {
-        background: COLORS.base.accent,
+        background: COLORS.base.red,
         onBackground: COLORS.dark.onBackground,
-        borderColor: COLORS.base.accent
+        borderColor: COLORS.base.red
     },
     yellow: {
-        background: '#ffc700',
+        background: COLORS.base.yellow,
         onBackground: COLORS.dark.background,
-        borderColor: '#ffc700'
+        borderColor: COLORS.base.yellow
     },
     blue: {
-        background: '#002f6c',
+        background: COLORS.base.blue,
         onBackground: COLORS.dark.onBackground,
-        borderColor: '#002f6c'
+        borderColor: COLORS.base.blue
     }
 }
