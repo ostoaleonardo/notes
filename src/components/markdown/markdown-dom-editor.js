@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { EditorState } from '@codemirror/state'
-import { EditorView, placeholder as placeholderExtension } from '@codemirror/view'
+import { EditorView } from '@codemirror/view'
 import { closeSearchPanel, openSearchPanel, setSearchQuery, SearchQuery } from '@codemirror/search'
 
 import { fontFacesCss } from './markdown-dom-fonts'
@@ -21,6 +21,7 @@ import { useCompartment } from './use-compartment'
 import { useLatestRef } from './use-latest-ref'
 import { buildInvalidFrontmatterHighlight } from './markdown-dom-invalid-frontmatter'
 import { buildPropertiesTrigger, frontmatterAutoClose } from './markdown-dom-frontmatter'
+import { buildBlankPlaceholder } from './markdown-dom-placeholder'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { DEFAULT_EDITOR_FONT_SIZE } from '@/constants/fonts'
@@ -108,7 +109,7 @@ const MarkdownDomEditor = ({
     )
     const placeholderCompartment = useCompartment(
         viewRef,
-        () => placeholderExtension(placeholder),
+        () => buildBlankPlaceholder(placeholder),
         [placeholder]
     )
 
