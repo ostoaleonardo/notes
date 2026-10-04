@@ -5,7 +5,7 @@ import { useTheme } from 'react-native-paper'
 
 import { Option } from './option'
 import { MenuContainer } from '@/components/menu/menu-container'
-import { MenuItem } from '@/components/menu/menu-item'
+import { SelectMenuItem } from '@/components/menu/select-menu-item'
 
 import { useMenuAnchor } from '@/hooks/use-menu-anchor'
 import { useStorage } from '@/hooks/use-storage'
@@ -14,12 +14,9 @@ import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
 
 import { ArrowForward } from '@/icons/arrow-forward'
-import { Check } from '@/icons/check'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { TRANSPARENT } from '@/constants/themes'
 import { MENU_ITEM_INDENT, SCROLLABLE_MENU_MAX_HEIGHT } from '@/constants/menu'
-import { SPACING } from '@/constants/spacing'
 
 export function DailyNoteOption() {
     const { t } = useTranslation()
@@ -106,23 +103,20 @@ export function DailyNoteOption() {
                 anchor={folderMenu.anchor}
             >
                 <ScrollView style={styles.menuScroll}>
-                    <MenuItem
-                        contentStyle={styles.item}
+                    <SelectMenuItem
                         title={t('settings.daily_note_folder_root')}
-                        trailingIcon={!dailyFolder ? (props) => <Check {...props} color={colors.tertiary} /> : undefined}
-                        style={!dailyFolder && { backgroundColor: colors.tertiary + TRANSPARENT[10] }}
+                        selected={!dailyFolder}
                         onPress={() => folderMenu.trigger(() => onSelectFolder(''))}
                     />
                     {descendants.map((repository) => {
                         const selected = repository.id === dailyFolder
 
                         return (
-                            <MenuItem
+                            <SelectMenuItem
                                 key={repository.id}
-                                contentStyle={[styles.item, { paddingLeft: repository.depth * MENU_ITEM_INDENT }]}
+                                contentStyle={{ paddingLeft: repository.depth * MENU_ITEM_INDENT }}
                                 title={repository.alias}
-                                trailingIcon={selected ? (props) => <Check {...props} color={colors.tertiary} /> : undefined}
-                                style={selected && { backgroundColor: colors.tertiary + TRANSPARENT[10] }}
+                                selected={selected}
                                 onPress={() => folderMenu.trigger(() => onSelectFolder(repository.id))}
                             />
                         )
@@ -136,23 +130,19 @@ export function DailyNoteOption() {
                 anchor={templateMenu.anchor}
             >
                 <ScrollView style={styles.menuScroll}>
-                    <MenuItem
-                        contentStyle={styles.item}
+                    <SelectMenuItem
                         title={t('settings.daily_note_template_none')}
-                        trailingIcon={!dailyTemplate ? (props) => <Check {...props} color={colors.tertiary} /> : undefined}
-                        style={!dailyTemplate && { backgroundColor: colors.tertiary + TRANSPARENT[10] }}
+                        selected={!dailyTemplate}
                         onPress={() => templateMenu.trigger(() => onSelectTemplate(''))}
                     />
                     {templates.map((template) => {
                         const selected = template.filename === dailyTemplate
 
                         return (
-                            <MenuItem
+                            <SelectMenuItem
                                 key={template.filename}
-                                contentStyle={styles.item}
                                 title={t(`templates.${template.name}`, template.name)}
-                                trailingIcon={selected ? (props) => <Check {...props} color={colors.tertiary} /> : undefined}
-                                style={selected && { backgroundColor: colors.tertiary + TRANSPARENT[10] }}
+                                selected={selected}
                                 onPress={() => templateMenu.trigger(() => onSelectTemplate(template.filename))}
                             />
                         )
@@ -166,10 +156,6 @@ export function DailyNoteOption() {
 const styles = StyleSheet.create({
     group: {
         gap: 3
-    },
-    item: {
-        flexGrow: 1,
-        marginRight: SPACING.md
     },
     menuScroll: {
         maxHeight: SCROLLABLE_MENU_MAX_HEIGHT

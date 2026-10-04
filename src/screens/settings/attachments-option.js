@@ -7,7 +7,7 @@ import { Option } from './option'
 import { DialogModal } from '@/components/dialog'
 import { LargeInput } from '@/components/input/large-input'
 import { MenuContainer } from '@/components/menu/menu-container'
-import { MenuItem } from '@/components/menu/menu-item'
+import { SelectMenuItem } from '@/components/menu/select-menu-item'
 
 import { useMenuAnchor } from '@/hooks/use-menu-anchor'
 import { useStorage } from '@/hooks/use-storage'
@@ -15,7 +15,6 @@ import { useStorageEffect } from '@/hooks/use-storage-effect'
 import { sanitizeFolderName } from '@/utils/attachments'
 
 import { ArrowForward } from '@/icons/arrow-forward'
-import { Check } from '@/icons/check'
 
 import {
     ATTACHMENT_FOLDER_LOCATIONS,
@@ -25,8 +24,6 @@ import {
 } from '@/constants/attachments'
 import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/dialog'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { TRANSPARENT } from '@/constants/themes'
-import { SPACING } from '@/constants/spacing'
 
 const OPTIONS = Object.values(ATTACHMENT_LOCATIONS)
 
@@ -99,12 +96,10 @@ export function AttachmentsOption() {
                     const selected = value === location
 
                     return (
-                        <MenuItem
+                        <SelectMenuItem
                             key={value}
-                            contentStyle={styles.item}
                             title={t(`settings.attachment_location_${value}`)}
-                            trailingIcon={selected ? (props) => <Check {...props} color={colors.tertiary} /> : undefined}
-                            style={selected && { backgroundColor: colors.tertiary + TRANSPARENT[10] }}
+                            selected={selected}
                             onPress={() => locationMenu.trigger(() => onSelectLocation(value))}
                         />
                     )
@@ -139,9 +134,5 @@ export function AttachmentsOption() {
 const styles = StyleSheet.create({
     group: {
         gap: 3
-    },
-    item: {
-        flexGrow: 1,
-        marginRight: SPACING.md
     }
 })

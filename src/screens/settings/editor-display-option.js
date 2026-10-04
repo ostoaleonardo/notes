@@ -1,21 +1,18 @@
 import { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 
 import { Option } from './option'
 import { MenuContainer } from '@/components/menu/menu-container'
-import { MenuItem } from '@/components/menu/menu-item'
+import { SelectMenuItem } from '@/components/menu/select-menu-item'
 
 import { useMenuAnchor } from '@/hooks/use-menu-anchor'
 import { useStorage } from '@/hooks/use-storage'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
 
 import { ArrowForward } from '@/icons/arrow-forward'
-import { Check } from '@/icons/check'
 
-import { TRANSPARENT } from '@/constants/themes'
-import { SPACING } from '@/constants/spacing'
 
 export function EditorDisplayOption({
     storageKey,
@@ -64,12 +61,10 @@ export function EditorDisplayOption({
                     const selected = value === current
 
                     return (
-                        <MenuItem
+                        <SelectMenuItem
                             key={value}
-                            contentStyle={styles.item}
                             title={t(`settings.${translationKey}_${value}`)}
-                            trailingIcon={selected ? (props) => <Check {...props} color={colors.tertiary} /> : undefined}
-                            style={selected && { backgroundColor: colors.tertiary + TRANSPARENT[10] }}
+                            selected={selected}
                             onPress={() => menu.trigger(() => onSelect(value))}
                         />
                     )
@@ -78,10 +73,3 @@ export function EditorDisplayOption({
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    item: {
-        flexGrow: 1,
-        marginRight: SPACING.md
-    }
-})
