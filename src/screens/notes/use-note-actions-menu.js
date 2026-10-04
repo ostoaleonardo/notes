@@ -19,6 +19,7 @@ import { KeepFilled } from '@/icons/keep-filled'
 import { FormatListBulleted } from '@/icons/format-list-bulleted'
 import { Link } from '@/icons/link'
 import { NoteStack } from '@/icons/note-stack'
+import { OpenInNew } from '@/icons/open-in-new'
 import { Share as ShareIcon } from '@/icons/share'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
@@ -28,6 +29,7 @@ export const useNoteActionsMenu = ({
     onSetMode,
     onOpenVersionHistory,
     onOpenOutline,
+    onOpenOutgoingLinks,
     onOpenSharingDialog,
     onOpenDeleteDialog,
     showBacklinks,
@@ -78,6 +80,12 @@ export const useNoteActionsMenu = ({
                 title={t('title.outline')}
                 leadingIcon={(props) => <FormatListBulleted {...props} />}
                 onPress={() => onTrigger(onOpenOutline)}
+            />,
+            <MenuItem
+                key='outgoing-links'
+                title={t('title.outgoing_links')}
+                leadingIcon={(props) => <OpenInNew {...props} />}
+                onPress={() => onTrigger(onOpenOutgoingLinks)}
             />,
             slug && (
                 <MenuItem

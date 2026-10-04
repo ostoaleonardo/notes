@@ -63,6 +63,7 @@
 		"version_history": "Version history",
 		"backlinks": "Backlinks",
 		"outline": "Outline",
+		"outgoing_links": "Outgoing links",
 		"unlinked_mentions": "Unlinked mentions"
 	},
 	"date": {
@@ -243,6 +244,9 @@
 		},
 		"outline": {
 			"empty": "This note has no headings"
+		},
+		"outgoing_links": {
+			"empty": "This note has no links to other notes"
 		},
 		"tags": {
 			"empty": "You don't have any tags yet"

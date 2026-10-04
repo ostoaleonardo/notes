@@ -22,7 +22,7 @@
 -   <samp>Wiki links with aliases, links to headings and blocks, and links within the same note.<samp>
 -   <samp>Embeds of notes, headings, blocks and images, with autocomplete for links and block ids.<samp>
 -   <samp>Backlinks, unlinked mentions and automatic link updates when you rename a note or a heading.<samp>
--   <samp>Outline of the note's headings to jump between sections.<samp>
+-   <samp>Outline of the note's headings and a panel of outgoing links.<samp>
 -   <samp>Attachments: images, audio, video and PDFs.<samp>
 -   <samp>Nested tags, search operators (<code>tag:</code>, <code>path:</code>, <code>is:pinned</code>, <code>has:image</code>, dates), saved and recent searches.<samp>
 -   <samp>Find and replace text inside a note.<samp>

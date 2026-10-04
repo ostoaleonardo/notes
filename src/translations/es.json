@@ -63,6 +63,7 @@
 		"version_history": "Historial de versiones",
 		"backlinks": "Enlaces entrantes",
 		"outline": "Esquema",
+		"outgoing_links": "Enlaces salientes",
 		"unlinked_mentions": "Menciones sin enlazar"
 	},
 	"date": {
@@ -243,6 +244,9 @@
 		},
 		"outline": {
 			"empty": "Esta nota no tiene encabezados"
+		},
+		"outgoing_links": {
+			"empty": "Esta nota no enlaza a otras notas"
 		},
 		"tags": {
 			"empty": "Todavía no tienes etiquetas"

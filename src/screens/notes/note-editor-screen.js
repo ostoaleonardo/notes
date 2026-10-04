@@ -5,6 +5,7 @@ import { MarkdownEditorLayout } from './markdown-editor-layout'
 import { MarkdownModeToggle } from './markdown-mode-toggle'
 import { MarkdownSearchBar } from './markdown-search-bar'
 import { MarkdownInsertSheets } from './markdown-insert-sheets'
+import { OutgoingLinksSheet } from './outgoing-links-sheet'
 import { OutlineSheet } from './outline-sheet'
 import { TemplatePickerSheet } from './template-picker-sheet'
 import { NoteToolbarSheets } from './note-toolbar-sheets'
@@ -165,6 +166,7 @@ export const NoteEditorScreen = ({
 
     const tagsSheet = useBottomSheet()
     const outlineSheet = useBottomSheet()
+    const outgoingLinksSheet = useBottomSheet()
 
     const [jump, setJump] = useState(null)
     const onSelectHeading = useCallback((index) => {
@@ -266,6 +268,7 @@ export const NoteEditorScreen = ({
                         onOpenDeleteDialog={noteDelete.onOpen}
                         onOpenVersionHistory={versionHistory.onOpen}
                         onOpenOutline={outlineSheet.onOpen}
+                        onOpenOutgoingLinks={outgoingLinksSheet.onOpen}
                         onToggleShowBacklinks={onToggleShowBacklinks}
                     />
                 )}
@@ -316,6 +319,12 @@ export const NoteEditorScreen = ({
                 sheet={outlineSheet}
                 contentRef={latestContent}
                 onSelect={onSelectHeading}
+            />
+
+            <OutgoingLinksSheet
+                sheet={outgoingLinksSheet}
+                contentRef={latestContent}
+                selfPath={id}
             />
 
             <TagsSheet
