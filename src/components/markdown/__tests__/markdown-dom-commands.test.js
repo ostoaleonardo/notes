@@ -47,12 +47,12 @@ describe('formatting commands', () => {
 
         runAction(view, 'bold')
 
-        expect(view.state.doc.toString()).toBe('*hello* world')
+        expect(view.state.doc.toString()).toBe('**hello** world')
     })
 
     test('bold unwraps text already wrapped', () => {
-        const view = createView('*hello* world')
-        view.dispatch({ selection: { anchor: 1, head: 6 } })
+        const view = createView('**hello** world')
+        view.dispatch({ selection: { anchor: 2, head: 7 } })
 
         runAction(view, 'bold')
 
@@ -290,7 +290,7 @@ describe('undo and redo', () => {
         const view = createView('hello')
         view.dispatch({ selection: { anchor: 5 } })
         runAction(view, 'bold')
-        expect(view.state.doc.toString()).toBe('hello**')
+        expect(view.state.doc.toString()).toBe('hello****')
 
         runAction(view, 'undo')
 
@@ -306,7 +306,7 @@ describe('undo and redo', () => {
 
         runAction(view, 'redo')
 
-        expect(view.state.doc.toString()).toBe('hello**')
+        expect(view.state.doc.toString()).toBe('hello****')
     })
 
     test('undoDepth is zero for a document with no edits', () => {

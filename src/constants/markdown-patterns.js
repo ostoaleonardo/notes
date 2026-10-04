@@ -33,7 +33,7 @@ export const LIST_TYPES = {
 }
 
 export const WRAP_MARKERS = {
-    BOLD: '*',
+    BOLD: '**',
     ITALIC: '_',
     STRIKE: '~~',
     CODE: '`'
