@@ -102,28 +102,28 @@ const migrateStorageNotesToFiles = async (rootRepository, storage, fileStorage, 
     return report
 }
 
-// Loads every folder in the tree and stamps each note with its identity path.
-const loadFromTree = async (tree, loadFolder, fileStorage) => {
-    const perFolder = await Promise.all(tree.map(async (repository) => {
-        const items = await loadFolder(repository.uri, fileStorage)
-        return items.map((item) => ({
-            ...item,
-            repositoryId: repository.id,
-            path: buildNotePath(repository.id, item.filename)
-        }))
-    }))
+const loadFromTree = async (tree, loadFolder, fileStorage, previousByPath) => {
+    const perFolder = await Promise.all(tree.map((repository) => (
+        loadFolder(repository, fileStorage, previousByPath)
+    )))
 
     return perFolder.flat()
 }
 
-const loadNotesFromFolder = async (repositoryUri, fileStorage) => {
-    const files = fileStorage.listMarkdownFiles(repositoryUri)
+const loadNotesFromFolder = async (repository, fileStorage, previousByPath) => {
+    const files = fileStorage.listMarkdownFiles(repository.uri)
 
     return Promise.all(files.map(async (file) => {
+        const path = buildNotePath(repository.id, file.name)
+        const unchanged = previousByPath.get(path)
+        if (unchanged && unchanged.updatedAt === file.lastModified) return unchanged
+
         const { frontmatter, body, error, rawFrontmatter } = parseFrontmatter(await file.text())
 
         return {
             filename: file.name,
+            repositoryId: repository.id,
+            path,
             title: getTitle(file.name),
             note: body,
             tags: readFrontmatterTags(frontmatter),
@@ -153,7 +153,13 @@ const migrateLegacyVersionFiles = async (tree, rootUri, storage, fileStorage) =>
 }
 
 // Version history lives in the root .notes folder, shared across the whole tree.
-export const loadRepositoryData = async (tree, rootRepository, storage, fileStorage) => {
+export const loadRepositoryData = async (
+    tree,
+    rootRepository,
+    storage,
+    fileStorage,
+    previousNotes = []
+) => {
     const rootUri = rootRepository.uri
 
     await migrateLegacyBlobNotes(storage)
@@ -167,7 +173,8 @@ export const loadRepositoryData = async (tree, rootRepository, storage, fileStor
 
     await migrateLegacyVersionFiles(tree, rootUri, storage, fileStorage)
 
-    const notes = await loadFromTree(tree, loadNotesFromFolder, fileStorage)
+    const previousByPath = new Map(previousNotes.map((note) => [note.path, note]))
+    const notes = await loadFromTree(tree, loadNotesFromFolder, fileStorage, previousByPath)
 
     return { notes, migration }
 }

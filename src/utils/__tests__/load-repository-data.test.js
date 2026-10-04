@@ -413,3 +413,46 @@ describe('tree-wide loading', () => {
         expect(subNote.repositoryId).toBe('sub-id')
     })
 })
+
+describe('reload with previous notes', () => {
+    const setupFiles = () => {
+        const fileStorage = createFakeFileStorage()
+        const reads = []
+        const listMarkdownFiles = fileStorage.listMarkdownFiles
+
+        fileStorage.listMarkdownFiles = (uri) => listMarkdownFiles(uri).map((file) => ({
+            ...file,
+            text: async () => {
+                reads.push(file.name)
+                return file.text()
+            }
+        }))
+        fileStorage.writeNoteFile(REPO_URI, 'A.md', 'body')
+
+        return { fileStorage, reads }
+    }
+
+    const tree = [{ id: 'repo', uri: REPO_URI }]
+
+    test('reuses notes whose file did not change', async () => {
+        const { fileStorage, reads } = setupFiles()
+        const storage = createFakeStorage()
+
+        const first = await loadRepositoryData(tree, tree[0], storage, fileStorage)
+        const second = await loadRepositoryData(tree, tree[0], storage, fileStorage, first.notes)
+
+        expect(reads).toEqual(['A.md'])
+        expect(second.notes[0]).toBe(first.notes[0])
+    })
+
+    test('rereads notes whose file changed', async () => {
+        const { fileStorage, reads } = setupFiles()
+        const storage = createFakeStorage()
+
+        const first = await loadRepositoryData(tree, tree[0], storage, fileStorage)
+        const stale = first.notes.map((note) => ({ ...note, updatedAt: 1 }))
+        await loadRepositoryData(tree, tree[0], storage, fileStorage, stale)
+
+        expect(reads).toEqual(['A.md', 'A.md'])
+    })
+})

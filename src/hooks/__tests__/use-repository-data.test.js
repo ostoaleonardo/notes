@@ -46,7 +46,8 @@ describe('load repository data', () => {
             tree,
             root,
             { id: 'storage' },
-            mockFileStorage
+            mockFileStorage,
+            undefined
         )
     })
 

@@ -54,10 +54,10 @@ export function NoteProvider({ children }) {
 
         try {
             const rootRepository = activeRepositoryTree[0] || activeRepository
-            const { notes } = await loadRepositoryData(activeRepositoryTree, rootRepository)
+            const { notes: loaded } = await loadRepositoryData(activeRepositoryTree, rootRepository, notes)
 
-            setNotes(notes)
-            pruneStaleFavoritesRef.current(notes)
+            setNotes(loaded)
+            pruneStaleFavoritesRef.current(loaded)
         } catch (error) {
             logError('error loading notes', error)
         } finally {

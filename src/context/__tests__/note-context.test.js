@@ -62,7 +62,7 @@ describe('loading notes on mount', () => {
 
         const { result } = await renderNoteContext()
 
-        expect(mockLoadRepositoryData).toHaveBeenCalledWith([root], root)
+        expect(mockLoadRepositoryData).toHaveBeenCalledWith([root], root, [])
         expect(result.current.notes).toHaveLength(1)
         expect(result.current.tags).toEqual(['work', 'work/todo'])
         expect(result.current.loading).toBe(false)
