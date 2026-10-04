@@ -13,6 +13,7 @@ import { useNotes } from '@/hooks/use-notes'
 import { useWikiLinkRenameConfirm } from '@/hooks/use-wiki-link-rename-confirm'
 import { useCurrentNote, useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
+import { planExternalSync } from '@/utils/external-note-sync'
 
 import { ROUTES } from '@/constants/routes'
 
@@ -99,6 +100,38 @@ export default function EditNote() {
         if (notesLoading || repositoriesLoading || isSavingRef.current) return
         if (!notes.some((n) => n.path === pathRef.current)) router.replace(ROUTES.HOME)
     }, [notes, notesLoading, repositoriesLoading])
+
+    useEffect(() => {
+        if (loading || isSavingRef.current) return
+
+        const incoming = notes.find((n) => n.path === pathRef.current)
+        const synced = planExternalSync({
+            draft: { note, tags, properties, invalidFrontmatter },
+            original: {
+                note: originalNoteRef.current,
+                tags: originalTagsRef.current,
+                properties: JSON.parse(originalPropertiesRef.current),
+                invalidFrontmatter: originalInvalidFrontmatterRef.current
+            },
+            incoming: incoming && {
+                note: incoming.note,
+                tags: incoming.tags ?? [],
+                properties: incoming.properties ?? {},
+                invalidFrontmatter: incoming.invalidFrontmatter ?? null
+            }
+        })
+        if (!synced) return
+
+        setNote(synced.note)
+        setTags(synced.tags)
+        setProperties(synced.properties)
+        setInvalidFrontmatter(synced.invalidFrontmatter)
+        setModifiedAt(incoming.updatedAt || incoming.createdAt)
+        originalNoteRef.current = synced.note
+        originalTagsRef.current = synced.tags
+        originalPropertiesRef.current = JSON.stringify(synced.properties)
+        originalInvalidFrontmatterRef.current = synced.invalidFrontmatter
+    }, [notes])
 
     const applySaved = ({ path, filename, createdAt, updatedAt }) => {
         if (path !== pathRef.current) {
