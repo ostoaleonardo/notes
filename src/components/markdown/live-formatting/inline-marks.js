@@ -23,13 +23,13 @@ export const decorateInlineMark = (node, { selection, ranges }) => {
     return false
 }
 
-export const inlineMarksTheme = ({ codeBackgroundColor }) => ({
+export const inlineMarksTheme = ({ colors }) => ({
     '.cm-live-strong': { fontWeight: 'bold' },
     '.cm-live-em': { fontStyle: 'italic' },
     '.cm-live-strike': { textDecoration: 'line-through' },
     '.cm-live-code': {
         fontFamily: 'ui-monospace, monospace',
-        backgroundColor: codeBackgroundColor,
+        backgroundColor: colors.codeBackground,
         borderRadius: '4px',
         padding: '0.1em 0.3em'
     }

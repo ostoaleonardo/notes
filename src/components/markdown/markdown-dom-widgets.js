@@ -13,7 +13,7 @@ import {
 } from './markdown-dom-theme'
 
 const AutoGrowTitle = ({ value, onChange, onBlur, placeholder }) => {
-    const { colors, typography } = useContext(ThemeContext)
+    const theme = useContext(ThemeContext)
     const ref = useRef(null)
     const hasFocusRef = useRef(false)
     const [localValue, setLocalValue] = useState(value || '')
@@ -45,33 +45,28 @@ const AutoGrowTitle = ({ value, onChange, onBlur, placeholder }) => {
                 onChange?.(event.target.value)
             }}
             placeholder={placeholder}
-            style={buildTitleTextareaStyle({ fontFamily: typography.headingFontFamily, onBackground: colors.onBackground })}
+            style={buildTitleTextareaStyle(theme)}
         />
     )
 }
 
 const MetaLabel = ({ label }) => {
-    const { colors, typography } = useContext(ThemeContext)
+    const theme = useContext(ThemeContext)
 
     if (!label) return null
 
     return (
-        <div style={buildMetaLabelStyle({ fontFamily: typography.fontFamily, onBackground: colors.onBackground })}>
+        <div style={buildMetaLabelStyle(theme)}>
             {label}
         </div>
     )
 }
 
 const InvalidPropertiesBanner = ({ title, description }) => {
-    const { colors, typography } = useContext(ThemeContext)
+    const theme = useContext(ThemeContext)
 
     return (
-        <div style={buildInvalidPropertiesBannerStyle({
-            errorContainer: colors.errorContainer,
-            onErrorContainer: colors.onErrorContainer,
-            fontFamily: typography.fontFamily
-        })}
-        >
+        <div style={buildInvalidPropertiesBannerStyle(theme)}>
             <div style={buildInvalidPropertiesTitleStyle()}>{title}</div>
             <div style={buildInvalidPropertiesDescriptionStyle()}>{description}</div>
         </div>
@@ -91,8 +86,7 @@ export const TitleSection = ({
     onRemoveTag,
     onAddTag,
     onTagPress,
-    colors,
-    typography
+    theme
 }) => {
     if (title === undefined) return null
 
@@ -110,7 +104,7 @@ export const TitleSection = ({
     } = propertiesPanel || {}
 
     return (
-        <ThemeContext.Provider value={{ colors, typography }}>
+        <ThemeContext.Provider value={theme}>
             <div style={buildTitleSectionStyle()}>
                 <AutoGrowTitle
                     value={title}

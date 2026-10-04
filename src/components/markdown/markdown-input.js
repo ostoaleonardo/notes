@@ -121,11 +121,14 @@ export const MarkdownInput = ({
         style: { flex: 1 }
     }), [mode])
 
-    const typography = useMemo(() => ({
-        fontSize: size,
-        fontFamily: BODY_FONT_FAMILY,
-        headingFontFamily: HEADING_FONT_FAMILY
-    }), [size])
+    const theme = useMemo(() => ({
+        colors,
+        typography: {
+            fontSize: size,
+            fontFamily: BODY_FONT_FAMILY,
+            headingFontFamily: HEADING_FONT_FAMILY
+        }
+    }), [colors, size])
 
     return (
         <>
@@ -157,10 +160,9 @@ export const MarkdownInput = ({
                 onRemoveTag={onRemoveTag}
                 onAddTag={onAddTag}
                 search={search}
-                typography={typography}
+                theme={theme}
                 fonts={fonts}
                 katexFonts={katexFonts}
-                colors={colors}
                 dom={dom}
             />
 

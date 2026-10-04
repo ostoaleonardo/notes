@@ -47,7 +47,8 @@ const DomIcon = ({ path, size = ICON_SIZE.sm, color, style, onClick }) => (
 )
 
 const PropertyIcon = ({ path }) => {
-    const { colors } = useContext(ThemeContext)
+    const theme = useContext(ThemeContext)
+    const { colors } = theme
 
     return <DomIcon path={path} color={colors.onBackground} style={{ opacity: 0.6 }} />
 }
@@ -66,7 +67,7 @@ const useSyncedText = (value) => {
 }
 
 const ValueInput = ({ type, value, placeholder, onCommit }) => {
-    const { colors, typography } = useContext(ThemeContext)
+    const theme = useContext(ThemeContext)
     const { text, setText, hasFocusRef } = useSyncedText(formatPropertyValue(type, value))
 
     return (
@@ -81,16 +82,13 @@ const ValueInput = ({ type, value, placeholder, onCommit }) => {
                 setText(event.target.value)
                 onCommit(parsePropertyValue(type, event.target.value))
             }}
-            style={buildPropertyInputStyle({
-                onBackground: colors.onBackground,
-                fontFamily: typography.fontFamily
-            })}
+            style={buildPropertyInputStyle(theme)}
         />
     )
 }
 
 const NameInput = ({ name, keys, autoFocus, placeholder, onSubmit, onDiscard }) => {
-    const { colors, typography } = useContext(ThemeContext)
+    const theme = useContext(ThemeContext)
     const { text, setText, hasFocusRef } = useSyncedText(name)
 
     const submit = () => {
@@ -120,16 +118,14 @@ const NameInput = ({ name, keys, autoFocus, placeholder, onSubmit, onDiscard }) 
                 if (event.key === 'Enter') event.currentTarget.blur()
             }}
             onChange={(event) => setText(event.target.value)}
-            style={buildPropertyInputStyle({
-                onBackground: colors.onBackground,
-                fontFamily: typography.fontFamily
-            })}
+            style={buildPropertyInputStyle(theme)}
         />
     )
 }
 
 const PropertyValue = ({ row, placeholder, onChange }) => {
-    const { colors, typography } = useContext(ThemeContext)
+    const theme = useContext(ThemeContext)
+    const { colors } = theme
 
     if (row.type === PROPERTY_TYPES.CHECKBOX) {
         return (
@@ -145,11 +141,7 @@ const PropertyValue = ({ row, placeholder, onChange }) => {
     if (row.type === PROPERTY_TYPES.UNSUPPORTED) {
         return (
             <span
-                style={buildPropertyInputStyle({
-                    onBackground: colors.onBackground,
-                    fontFamily: typography.fontFamily,
-                    opacity: 0.6
-                })}
+                style={buildPropertyInputStyle(theme, { opacity: 0.6 })}
             >
                 {row.value}
             </span>
@@ -167,7 +159,8 @@ const PropertyValue = ({ row, placeholder, onChange }) => {
 }
 
 const PropertyRow = ({ row, keys, labels, onChangeProperty }) => {
-    const { colors } = useContext(ThemeContext)
+    const theme = useContext(ThemeContext)
+    const { colors } = theme
 
     return (
         <div style={buildPropertyEntryStyle()}>
@@ -199,7 +192,7 @@ const PropertyRow = ({ row, keys, labels, onChangeProperty }) => {
                 aria-label={labels.remove}
                 onClick={() => onChangeProperty({ action: PROPERTY_CHANGES.REMOVE, key: row.key })}
                 style={{
-                    ...buildPropertyIconButtonStyle({ onBackground: colors.onBackground, opacity: 0.4 }),
+                    ...buildPropertyIconButtonStyle(theme, { opacity: 0.4 }),
                     alignSelf: 'center'
                 }}
             >
@@ -210,16 +203,13 @@ const PropertyRow = ({ row, keys, labels, onChangeProperty }) => {
 }
 
 const MenuItem = ({ iconPath, label, onSelect }) => {
-    const { colors, typography } = useContext(ThemeContext)
+    const theme = useContext(ThemeContext)
 
     return (
         <div
             onMouseDown={keepFocus}
             onClick={onSelect}
-            style={buildPropertyMenuItemStyle({
-                onBackground: colors.onBackground,
-                fontFamily: typography.fontFamily
-            })}
+            style={buildPropertyMenuItemStyle(theme)}
         >
             <PropertyIcon path={iconPath} />
             {label}
@@ -228,7 +218,7 @@ const MenuItem = ({ iconPath, label, onSelect }) => {
 }
 
 const DraftRow = ({ keys, suggestions, labels, onChangeProperty, onAddTags, onClose }) => {
-    const { colors } = useContext(ThemeContext)
+    const theme = useContext(ThemeContext)
     const [type, setType] = useState(PROPERTY_TYPES.TEXT)
     const [typeMenuOpen, setTypeMenuOpen] = useState(false)
     const [query, setQuery] = useState('')
@@ -272,7 +262,7 @@ const DraftRow = ({ keys, suggestions, labels, onChangeProperty, onAddTags, onCl
                     type='button'
                     onMouseDown={keepFocus}
                     onClick={() => setTypeMenuOpen((open) => !open)}
-                    style={buildPropertyIconButtonStyle({ onBackground: colors.onBackground })}
+                    style={buildPropertyIconButtonStyle(theme)}
                 >
                     <PropertyIcon path={PROPERTY_TYPE_ICON_PATHS[type]} />
                 </button>
@@ -286,7 +276,7 @@ const DraftRow = ({ keys, suggestions, labels, onChangeProperty, onAddTags, onCl
             </div>
 
             {typeMenuOpen && (
-                <div style={buildPropertyMenuStyle({ surface: colors.surface, onBackground: colors.onBackground })}>
+                <div style={buildPropertyMenuStyle(theme)}>
                     {EDITABLE_PROPERTY_TYPES.map((item) => (
                         <MenuItem
                             key={item}
@@ -304,7 +294,7 @@ const DraftRow = ({ keys, suggestions, labels, onChangeProperty, onAddTags, onCl
             {!typeMenuOpen && filtered.length > 0 && (
                 <div
                     style={{
-                        ...buildPropertyMenuStyle({ surface: colors.surface, onBackground: colors.onBackground }),
+                        ...buildPropertyMenuStyle(theme),
                         left: 'auto',
                         right: 0
                     }}
@@ -324,7 +314,7 @@ const DraftRow = ({ keys, suggestions, labels, onChangeProperty, onAddTags, onCl
 }
 
 const DraftNameInput = ({ keys, placeholder, onQueryChange, onSubmit, onClose }) => {
-    const { colors, typography } = useContext(ThemeContext)
+    const theme = useContext(ThemeContext)
     const [text, setText] = useState('')
 
     const finish = () => {
@@ -353,16 +343,13 @@ const DraftNameInput = ({ keys, placeholder, onQueryChange, onSubmit, onClose })
                 setText(event.target.value)
                 onQueryChange(event.target.value)
             }}
-            style={buildPropertyInputStyle({
-                onBackground: colors.onBackground,
-                fontFamily: typography.fontFamily
-            })}
+            style={buildPropertyInputStyle(theme)}
         />
     )
 }
 
 const TagInput = ({ tags, allTags, autoFocus, onAddTag }) => {
-    const { colors, typography } = useContext(ThemeContext)
+    const theme = useContext(ThemeContext)
     const [text, setText] = useState('')
     const [focused, setFocused] = useState(false)
 
@@ -391,16 +378,13 @@ const TagInput = ({ tags, allTags, autoFocus, onAddTag }) => {
                     if (event.key === 'Escape') event.currentTarget.blur()
                 }}
                 onChange={(event) => setText(event.target.value)}
-                style={buildPropertyInputStyle({
-                    onBackground: colors.onBackground,
-                    fontFamily: typography.fontFamily
-                })}
+                style={buildPropertyInputStyle(theme)}
             />
 
             {focused && options.length > 0 && (
                 <div
                     style={{
-                        ...buildPropertyMenuStyle({ surface: colors.surface, onBackground: colors.onBackground }),
+                        ...buildPropertyMenuStyle(theme),
                         left: 'auto',
                         right: 0
                     }}
@@ -420,7 +404,8 @@ const TagInput = ({ tags, allTags, autoFocus, onAddTag }) => {
 }
 
 const TagsRow = ({ tags, allTags, tagsKey, autoFocus, onRemoveTag, onAddTag, onTagPress }) => {
-    const { colors, typography } = useContext(ThemeContext)
+    const theme = useContext(ThemeContext)
+    const { colors, typography } = theme
     const { tertiary } = colors
 
     return (
@@ -431,7 +416,7 @@ const TagsRow = ({ tags, allTags, tagsKey, autoFocus, onRemoveTag, onAddTag, onT
             </div>
             <div style={buildPropertyValueStyle()}>
                 {tags.map((tag) => (
-                    <span key={tag} style={buildChipStyle({ tertiary, fontFamily: typography.fontFamily })}>
+                    <span key={tag} style={buildChipStyle(theme)}>
                         <span onClick={() => onTagPress(tag)}>{tag}</span>
                         <DomIcon
                             path={CLOSE_ICON_PATH}
@@ -468,7 +453,8 @@ export const PropertiesPanel = ({
     onAddTag,
     onTagPress
 }) => {
-    const { colors, typography } = useContext(ThemeContext)
+    const theme = useContext(ThemeContext)
+    const { colors } = theme
     const { onBackground } = colors
     const [drafting, setDrafting] = useState(false)
     const [tagsAdded, setTagsAdded] = useState(false)
@@ -494,7 +480,7 @@ export const PropertiesPanel = ({
 
     return (
         <div>
-            <div style={buildPropertiesToggleStyle({ onBackground })} onClick={() => onToggleVisible()}>
+            <div style={buildPropertiesToggleStyle(theme)} onClick={() => onToggleVisible()}>
                 <DomIcon
                     path={visible ? KEYBOARD_ARROW_UP_ICON_PATH : KEYBOARD_ARROW_DOWN_ICON_PATH}
                     color={onBackground}
@@ -503,7 +489,7 @@ export const PropertiesPanel = ({
             </div>
 
             {visible && (
-                <div style={buildPropertiesCardStyle({ surface: colors.surface, onBackground })}>
+                <div style={buildPropertiesCardStyle(theme)}>
                     {(tags.length > 0 || tagsAdded) && (
                         <TagsRow
                             tags={tags}
@@ -541,10 +527,7 @@ export const PropertiesPanel = ({
                         <button
                             type='button'
                             onClick={() => setDrafting(true)}
-                            style={buildPropertyAddButtonStyle({
-                                onBackground,
-                                fontFamily: typography.fontFamily
-                            })}
+                            style={buildPropertyAddButtonStyle(theme)}
                         >
                             <DomIcon path={PLUS_ICON_PATH} size={ICON_SIZE.compact} color={onBackground} />
                             {labels.add}

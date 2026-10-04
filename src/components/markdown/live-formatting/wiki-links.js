@@ -93,16 +93,16 @@ export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntr
 
 const ATTACH_FILE_MASK = buildIconMaskUrl(ATTACH_FILE_ICON_PATH)
 
-export const wikiLinksTheme = ({ linkColor, onBackgroundColor, surfaceColor }) => ({
-    '.cm-live-wikilink': { color: linkColor, fontWeight: 'bold' },
-    [`.${EMBED_LIVE_CLASS}`]: { color: linkColor, fontWeight: 'bold', fontStyle: 'italic' },
+export const wikiLinksTheme = ({ colors }) => ({
+    '.cm-live-wikilink': { color: colors.tertiary, fontWeight: 'bold' },
+    [`.${EMBED_LIVE_CLASS}`]: { color: colors.tertiary, fontWeight: 'bold', fontStyle: 'italic' },
     [`.${FILE_LINK_LIVE_CLASS}`]: {
-        color: onBackgroundColor,
+        color: colors.onBackground,
         padding: '1px 6px',
         cursor: 'pointer',
-        backgroundColor: surfaceColor,
+        backgroundColor: colors.surface,
         borderRadius: `${RADIUS.segment}px`,
-        border: `1px solid ${onBackgroundColor + TRANSPARENT[5]}`
+        border: `1px solid ${colors.onBackground + TRANSPARENT[5]}`
     },
     [`.${FILE_LINK_LIVE_CLASS}::before`]: {
         content: '""',
@@ -116,7 +116,7 @@ export const wikiLinksTheme = ({ linkColor, onBackgroundColor, surfaceColor }) =
         mask: `${ATTACH_FILE_MASK} center / contain no-repeat`,
         WebkitMask: `${ATTACH_FILE_MASK} center / contain no-repeat`
     },
-    '.cm-live-wikilink-broken': { color: onBackgroundColor, opacity: 0.5, textDecoration: 'underline dashed' }
+    '.cm-live-wikilink-broken': { color: colors.onBackground, opacity: 0.5, textDecoration: 'underline dashed' }
 })
 
 export const fileLinkPress = (onPressRef) => EditorView.domEventHandlers({

@@ -20,6 +20,6 @@ export const decorateList = (node, { doc, selection, ranges }) => {
     return true
 }
 
-export const listsTheme = ({ linkColor }) => ({
-    '.cm-live-checkbox': { verticalAlign: 'middle', marginRight: '0.3em', accentColor: linkColor }
+export const listsTheme = ({ colors }) => ({
+    '.cm-live-checkbox': { verticalAlign: 'middle', marginRight: '0.3em', accentColor: colors.tertiary }
 })

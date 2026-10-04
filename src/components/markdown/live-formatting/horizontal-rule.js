@@ -13,12 +13,12 @@ export const decorateHorizontalRule = (node, { selection, ranges }) => {
     return true
 }
 
-export const horizontalRuleTheme = ({ thematicBreakColor }) => ({
+export const horizontalRuleTheme = ({ colors }) => ({
     '.cm-live-hr': {
         display: 'inline-block',
         width: '100%',
         color: 'transparent',
         lineHeight: 0,
-        borderTop: `1px solid ${thematicBreakColor}`
+        borderTop: `1px solid ${colors.thematicBreak}`
     }
 })

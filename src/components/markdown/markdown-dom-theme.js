@@ -25,7 +25,7 @@ import {
 
 const ATTACH_FILE_MASK = buildIconMaskUrl(ATTACH_FILE_ICON_PATH)
 
-const buildDerivedColors = (colors) => ({
+export const buildDerivedColors = (colors) => ({
     ...colors,
     selection: colors.tertiary + TRANSPARENT[20],
     placeholder: colors.onBackground + TRANSPARENT[40],
@@ -41,7 +41,7 @@ export const buildTitleSectionStyle = () => ({
     paddingTop: '16px'
 })
 
-export const buildTitleTextareaStyle = ({ fontFamily, onBackground }) => ({
+export const buildTitleTextareaStyle = ({ colors, typography }) => ({
     display: 'block',
     width: '100%',
     resize: 'none',
@@ -49,25 +49,25 @@ export const buildTitleTextareaStyle = ({ fontFamily, onBackground }) => ({
     border: 'none',
     outline: 'none',
     background: 'transparent',
-    fontFamily,
+    fontFamily: typography.headingFontFamily,
     fontSize: '24px',
     fontWeight: 'bold',
-    color: onBackground,
+    color: colors.onBackground,
     padding: 0,
     margin: 0
 })
 
-export const buildMetaLabelStyle = ({ onBackground, fontFamily }) => ({
+export const buildMetaLabelStyle = ({ colors, typography }) => ({
     marginTop: SPACING.sm,
     marginBottom: SPACING.lg,
     fontSize: '9px',
     textTransform: 'uppercase',
     opacity: 0.5,
-    color: onBackground,
-    fontFamily
+    color: colors.onBackground,
+    fontFamily: typography.fontFamily
 })
 
-export const buildPropertiesToggleStyle = ({ onBackground }) => ({
+export const buildPropertiesToggleStyle = ({ colors }) => ({
     display: 'flex',
     alignItems: 'center',
     gap: '4px',
@@ -76,23 +76,23 @@ export const buildPropertiesToggleStyle = ({ onBackground }) => ({
     fontSize: '10px',
     textTransform: 'uppercase',
     opacity: 0.5,
-    color: onBackground,
+    color: colors.onBackground,
     cursor: 'pointer',
     userSelect: 'none',
     width: 'fit-content'
 })
 
-export const buildPropertyRowStyle = ({ onBackground }) => ({
+export const buildPropertyRowStyle = ({ colors }) => ({
     display: 'flex',
     alignItems: 'center',
     flexWrap: 'wrap',
     gap: '6px',
     marginBottom: SPACING.lg,
     fontSize: '13px',
-    color: onBackground
+    color: colors.onBackground
 })
 
-export const buildChipStyle = ({ tertiary, fontFamily }) => ({
+export const buildChipStyle = ({ colors, typography }) => ({
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -101,24 +101,24 @@ export const buildChipStyle = ({ tertiary, fontFamily }) => ({
     padding: '0 8px',
     boxSizing: 'border-box',
     borderRadius: '999px',
-    backgroundColor: tertiary + TRANSPARENT[20],
-    color: tertiary,
-    fontFamily,
+    backgroundColor: colors.tertiary + TRANSPARENT[20],
+    color: colors.tertiary,
+    fontFamily: typography.fontFamily,
     fontSize: '13px',
     lineHeight: '13px',
     cursor: 'pointer'
 })
 
-export const buildPropertiesCardStyle = ({ surface, onBackground }) => ({
+export const buildPropertiesCardStyle = ({ colors }) => ({
     display: 'flex',
     flexDirection: 'column',
     gap: SPACING.xxs,
     padding: SPACING.sm,
     marginBottom: SPACING.lg,
     borderRadius: '8px',
-    backgroundColor: surface,
-    border: `1px solid ${onBackground + TRANSPARENT[5]}`,
-    color: onBackground
+    backgroundColor: colors.surface,
+    border: `1px solid ${colors.onBackground + TRANSPARENT[5]}`,
+    color: colors.onBackground
 })
 
 export const buildPropertyEntryStyle = () => ({
@@ -150,7 +150,7 @@ export const buildPropertyValueStyle = () => ({
     minWidth: 0
 })
 
-export const buildPropertyInputStyle = ({ onBackground, fontFamily, opacity = 1 }) => ({
+export const buildPropertyInputStyle = ({ colors, typography }, { opacity = 1 } = {}) => ({
     flex: 1,
     minWidth: 0,
     width: '100%',
@@ -159,13 +159,13 @@ export const buildPropertyInputStyle = ({ onBackground, fontFamily, opacity = 1 
     background: 'transparent',
     padding: 0,
     margin: 0,
-    fontFamily,
+    fontFamily: typography.fontFamily,
     fontSize: '13px',
-    color: onBackground,
+    color: colors.onBackground,
     opacity
 })
 
-export const buildPropertyIconButtonStyle = ({ onBackground, opacity = 0.6 }) => ({
+export const buildPropertyIconButtonStyle = ({ colors }, { opacity = 0.6 } = {}) => ({
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -175,12 +175,12 @@ export const buildPropertyIconButtonStyle = ({ onBackground, opacity = 0.6 }) =>
     padding: 0,
     border: 'none',
     background: 'transparent',
-    color: onBackground,
+    color: colors.onBackground,
     opacity,
     cursor: 'pointer'
 })
 
-export const buildPropertyAddButtonStyle = ({ onBackground, fontFamily }) => ({
+export const buildPropertyAddButtonStyle = ({ colors, typography }) => ({
     display: 'inline-flex',
     alignItems: 'center',
     gap: SPACING.xs,
@@ -188,14 +188,14 @@ export const buildPropertyAddButtonStyle = ({ onBackground, fontFamily }) => ({
     padding: '4px 0',
     border: 'none',
     background: 'transparent',
-    fontFamily,
+    fontFamily: typography.fontFamily,
     fontSize: '13px',
-    color: onBackground,
+    color: colors.onBackground,
     opacity: 0.6,
     cursor: 'pointer'
 })
 
-export const buildPropertyMenuStyle = ({ surface, onBackground }) => ({
+export const buildPropertyMenuStyle = ({ colors }) => ({
     position: 'absolute',
     top: '100%',
     left: 0,
@@ -207,29 +207,29 @@ export const buildPropertyMenuStyle = ({ surface, onBackground }) => ({
     overflowY: 'auto',
     padding: SPACING.xs,
     borderRadius: `${RADIUS.outer}px`,
-    backgroundColor: surface,
-    border: `1px solid ${onBackground + TRANSPARENT[5]}`
+    backgroundColor: colors.surface,
+    border: `1px solid ${colors.onBackground + TRANSPARENT[5]}`
 })
 
-export const buildPropertyMenuItemStyle = ({ onBackground, fontFamily }) => ({
+export const buildPropertyMenuItemStyle = ({ colors, typography }) => ({
     display: 'flex',
     alignItems: 'center',
     gap: SPACING.sm,
     padding: '6px 8px',
     borderRadius: '6px',
-    fontFamily,
+    fontFamily: typography.fontFamily,
     fontSize: '13px',
-    color: onBackground,
+    color: colors.onBackground,
     cursor: 'pointer'
 })
 
-export const buildInvalidPropertiesBannerStyle = ({ errorContainer, onErrorContainer, fontFamily }) => ({
+export const buildInvalidPropertiesBannerStyle = ({ colors, typography }) => ({
     padding: '12px',
     borderRadius: '8px',
     marginBottom: SPACING.lg,
-    backgroundColor: errorContainer,
-    color: onErrorContainer,
-    fontFamily
+    backgroundColor: colors.errorContainer,
+    color: colors.onErrorContainer,
+    fontFamily: typography.fontFamily
 })
 
 export const buildInvalidPropertiesTitleStyle = () => ({
@@ -243,8 +243,10 @@ export const buildInvalidPropertiesDescriptionStyle = () => ({
     marginTop: 2
 })
 
-export const buildEditorTheme = ({ fontSize, fontFamily, headingFontFamily, colors }) => {
-    const { onBackground, tertiary, selection, placeholder, background, codeBackground, thematicBreak, surface } = buildDerivedColors(colors)
+export const buildEditorTheme = ({ colors, typography }) => {
+    const derived = buildDerivedColors(colors)
+    const { onBackground, tertiary, selection, placeholder, surface } = derived
+    const { fontSize, fontFamily } = typography
 
     return EditorView.theme({
         '&': { height: '100%', fontSize: `${fontSize}px`, backgroundColor: 'transparent' },
@@ -278,15 +280,7 @@ export const buildEditorTheme = ({ fontSize, fontFamily, headingFontFamily, colo
             backgroundColor: `${surface} !important`, border: 'none !important',
             color: `${tertiary} !important`, borderRadius: '4px', padding: '0 6px', fontFamily
         },
-        ...buildLiveFormattingTheme({
-            linkColor: tertiary,
-            surfaceColor: surface,
-            quoteBackgroundColor: background,
-            codeBackgroundColor: codeBackground,
-            thematicBreakColor: thematicBreak,
-            onBackgroundColor: onBackground,
-            headingFontFamily
-        })
+        ...buildLiveFormattingTheme({ colors: derived, typography })
     })
 }
 
@@ -296,9 +290,10 @@ const buildCalloutCss = () => Object.entries(CALLOUT_COLORS).map(([type, color])
     }
     .markdown-preview .${CALLOUT_TYPE_CLASS_PREFIX}${type} .${CALLOUT_TITLE_CLASS} { color: ${color}; }`).join('')
 
-export const buildPreviewCss = ({ fontFamily, headingFontFamily, colors, fontSize }) => {
+export const buildPreviewCss = ({ colors, typography }) => {
     const { onBackground: textColor, tertiary: linkColor, background: quoteBackgroundColor, codeBackground: codeBackgroundColor, thematicBreak: thematicBreakColor, surface: surfaceColor } = buildDerivedColors(colors)
 
+    const { fontSize, fontFamily, headingFontFamily } = typography
     return `
     html, body { margin: 0; overflow-x: hidden; scrollbar-width: none; }
     ::-webkit-scrollbar { display: none; }

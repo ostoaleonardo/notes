@@ -46,15 +46,15 @@ const calloutTheme = () => Object.fromEntries(Object.entries(CALLOUT_COLORS).map
     { fontStyle: 'normal', opacity: 1, borderLeftColor: color, backgroundColor: color + TRANSPARENT[10] }
 ]))
 
-export const blockquoteTheme = ({ linkColor, quoteBackgroundColor }) => ({
+export const blockquoteTheme = ({ colors }) => ({
     '.cm-live-quote': {
         fontStyle: 'italic',
         opacity: 0.85,
-        backgroundColor: quoteBackgroundColor,
-        borderLeft: `4px solid ${linkColor}`,
+        backgroundColor: colors.background,
+        borderLeft: `4px solid ${colors.tertiary}`,
         paddingLeft: '0.6em'
     },
-    '.cm-live-accent-mark': { color: linkColor, fontWeight: 'bold' },
+    '.cm-live-accent-mark': { color: colors.tertiary, fontWeight: 'bold' },
     ...calloutTheme(),
     [`.${CALLOUT_LIVE_TITLE_CLASS}`]: { fontWeight: 'bold' }
 })

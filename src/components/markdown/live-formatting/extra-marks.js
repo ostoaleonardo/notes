@@ -40,7 +40,7 @@ export const decorateExtraMarks = ({ text, selection, ranges, codeRanges }) => {
     }
 }
 
-export const extraMarksTheme = ({ linkColor }) => ({
-    [`.${HIGHLIGHT_LIVE_CLASS}`]: { backgroundColor: linkColor + TRANSPARENT[30], borderRadius: '2px' },
+export const extraMarksTheme = ({ colors }) => ({
+    [`.${HIGHLIGHT_LIVE_CLASS}`]: { backgroundColor: colors.tertiary + TRANSPARENT[30], borderRadius: '2px' },
     [`.${COMMENT_LIVE_CLASS}`]: { opacity: 0.5, fontStyle: 'italic' }
 })

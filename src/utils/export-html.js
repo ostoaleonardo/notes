@@ -5,8 +5,8 @@ import { replaceLocalImageUrls } from '@/utils/local-images'
 import { sanitizeHtml } from '@/utils/sanitize-html'
 import { escapeHtml, unwrapWikiLinks } from '@/utils/wiki-links'
 
-import { COLORS, TRANSPARENT } from '@/constants/themes'
-import { FONTS } from '@/constants/fonts'
+import { COLORS, THEMES } from '@/constants/themes'
+import { FONTS, HEADING_FONT_FAMILY } from '@/constants/fonts'
 import { EXPORT_FONT_SIZE, EXPORT_CONTENT_SECURITY_POLICY } from '@/constants/export'
 
 const NO_IMAGES = () => null
@@ -25,16 +25,12 @@ export const getExportMarkdown = (note, { notes = [], notePaths, getImageUrl = N
 
 export const getNoteAsHtml = (note, { imageUrls = NO_URLS, ...context } = {}) => {
     const css = buildPreviewCss({
-        fontFamily: FONTS.azeretLight,
-        headingFontFamily: `${FONTS.nType82Headline}, system-ui, sans-serif`,
-        colors: {
-            text: COLORS.light.onBackground,
-            link: COLORS.base.accent,
-            quoteBackground: COLORS.light.background,
-            codeBackground: COLORS.light.onBackground + TRANSPARENT[10],
-            thematicBreak: COLORS.base.accent + TRANSPARENT[30]
-        },
-        fontSize: EXPORT_FONT_SIZE
+        colors: THEMES.light.colors,
+        typography: {
+            fontSize: EXPORT_FONT_SIZE,
+            fontFamily: FONTS.azeretLight,
+            headingFontFamily: HEADING_FONT_FAMILY
+        }
     })
 
     const markdown = replaceLocalImageUrls(getExportMarkdown(note, context), imageUrls)

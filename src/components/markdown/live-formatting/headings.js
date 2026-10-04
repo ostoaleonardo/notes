@@ -35,11 +35,11 @@ export const decorateHeading = (node, { doc, selection, ranges }) => {
     return true
 }
 
-export const headingsTheme = ({ fontFamily }) => ({
-    '.cm-live-h1': { fontWeight: 'bold', fontSize: '2em', fontFamily },
-    '.cm-live-h2': { fontWeight: 'bold', fontSize: '1.8em', fontFamily },
-    '.cm-live-h3': { fontWeight: 'bold', fontSize: '1.6em', fontFamily },
-    '.cm-live-h4': { fontWeight: 'bold', fontSize: '1.5em', fontFamily },
-    '.cm-live-h5': { fontWeight: 'bold', fontSize: '1.4em', fontFamily },
-    '.cm-live-h6': { fontWeight: 'bold', fontSize: '1.2em', fontFamily }
+export const headingsTheme = ({ typography }) => ({
+    '.cm-live-h1': { fontWeight: 'bold', fontSize: '2em', fontFamily: typography.headingFontFamily },
+    '.cm-live-h2': { fontWeight: 'bold', fontSize: '1.8em', fontFamily: typography.headingFontFamily },
+    '.cm-live-h3': { fontWeight: 'bold', fontSize: '1.6em', fontFamily: typography.headingFontFamily },
+    '.cm-live-h4': { fontWeight: 'bold', fontSize: '1.5em', fontFamily: typography.headingFontFamily },
+    '.cm-live-h5': { fontWeight: 'bold', fontSize: '1.4em', fontFamily: typography.headingFontFamily },
+    '.cm-live-h6': { fontWeight: 'bold', fontSize: '1.2em', fontFamily: typography.headingFontFamily }
 })

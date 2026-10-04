@@ -25,7 +25,6 @@ import { buildPropertiesTrigger, frontmatterAutoClose } from './markdown-dom-fro
 import { buildBlankPlaceholder } from './markdown-dom-placeholder'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
-import { DEFAULT_EDITOR_FONT_SIZE } from '@/constants/fonts'
 import { PREVIEW_CLICK_TYPES } from '@/constants/preview-click'
 
 const MarkdownDomEditor = ({
@@ -46,8 +45,7 @@ const MarkdownDomEditor = ({
     onTagPress,
     onImagePress,
     onToggleTask,
-    colors,
-    typography,
+    theme,
     fonts,
     katexFonts,
     placeholder = '',
@@ -62,7 +60,9 @@ const MarkdownDomEditor = ({
     search
 }) => {
     const { query: searchQuery, replace: replaceText } = search || {}
-    const { fontSize = DEFAULT_EDITOR_FONT_SIZE, fontFamily, headingFontFamily } = typography
+    const themeKey = JSON.stringify(theme)
+    const stableTheme = useMemo(() => JSON.parse(themeKey), [themeKey])
+    const { colors } = stableTheme
 
     const containerRef = useRef(null)
     const previewRef = useRef(null)
@@ -102,12 +102,10 @@ const MarkdownDomEditor = ({
         [mode]
     )
 
-    const colorsKey = JSON.stringify(colors)
-
     const themeExtension = useCompartment(
         viewRef,
-        () => buildEditorTheme({ fontSize, fontFamily, headingFontFamily, colors }),
-        [fontSize, fontFamily, headingFontFamily, colorsKey]
+        () => buildEditorTheme(stableTheme),
+        [stableTheme]
     )
     const placeholderCompartment = useCompartment(
         viewRef,
@@ -262,12 +260,7 @@ const MarkdownDomEditor = ({
         fontFacesCss(fonts) + katexFontFacesCss(katexFonts)
     ), [fonts, katexFonts])
 
-    const previewCss = useMemo(() => buildPreviewCss({
-        fontFamily,
-        headingFontFamily,
-        colors,
-        fontSize
-    }), [fontFamily, headingFontFamily, colors, fontSize])
+    const previewCss = useMemo(() => buildPreviewCss(stableTheme), [stableTheme])
 
     return (
         <div
@@ -298,8 +291,7 @@ const MarkdownDomEditor = ({
                 onRemoveTag={onRemoveTag}
                 onAddTag={onAddTag}
                 onTagPress={onTagPress}
-                colors={colors}
-                typography={{ fontFamily, headingFontFamily }}
+                theme={stableTheme}
             />
 
             <div

@@ -35,19 +35,15 @@ export const decorateHtml = (node, { doc, selection, ranges }) => {
     return true
 }
 
-export const htmlTheme = ({
-    linkColor,
-    codeBackgroundColor,
-    headingFontFamily
-}) => ({
+export const htmlTheme = ({ colors, typography }) => ({
     '.cm-live-block': { display: 'block', overflowX: 'auto' },
     '.cm-live-block table': { borderCollapse: 'collapse' },
-    '.cm-live-block th, .cm-live-block td': { border: `1px solid ${codeBackgroundColor}`, padding: '4px 8px' },
-    '.cm-live-block code': { backgroundColor: codeBackgroundColor, borderRadius: '4px', padding: '0.1em 0.3em', fontFamily: 'monospace' },
+    '.cm-live-block th, .cm-live-block td': { border: `1px solid ${colors.codeBackground}`, padding: '4px 8px' },
+    '.cm-live-block code': { backgroundColor: colors.codeBackground, borderRadius: '4px', padding: '0.1em 0.3em', fontFamily: 'monospace' },
     '.cm-live-block img': { maxWidth: '100%', borderRadius: '8px' },
-    '.cm-live-block a': { color: linkColor },
+    '.cm-live-block a': { color: colors.tertiary },
     '.cm-live-block h1, .cm-live-block h2, .cm-live-block h3, .cm-live-block h4, .cm-live-block h5, .cm-live-block h6': {
-        fontWeight: 'bold', fontFamily: headingFontFamily
+        fontWeight: 'bold', fontFamily: typography.headingFontFamily
     },
     '.cm-live-inline-html': { fontFamily: 'ui-monospace, monospace', opacity: 0.6 }
 })

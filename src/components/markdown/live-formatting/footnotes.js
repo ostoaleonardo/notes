@@ -31,7 +31,7 @@ export const decorateFootnotes = ({ text, ranges, codeRanges }) => {
     ranges.push(...localRanges)
 }
 
-export const footnotesTheme = ({ linkColor }) => ({
-    '.cm-live-footnote-marker': { color: linkColor, fontWeight: 'bold' },
-    '.cm-live-footnote-ref': { color: linkColor, fontWeight: 'bold', fontSize: '0.75em', verticalAlign: 'super' }
+export const footnotesTheme = ({ colors }) => ({
+    '.cm-live-footnote-marker': { color: colors.tertiary, fontWeight: 'bold' },
+    '.cm-live-footnote-ref': { color: colors.tertiary, fontWeight: 'bold', fontSize: '0.75em', verticalAlign: 'super' }
 })

@@ -22,9 +22,9 @@ export const decorateCodeBlock = (node, { doc, ranges }) => {
     return true
 }
 
-export const codeBlocksTheme = ({ codeBackgroundColor }) => ({
+export const codeBlocksTheme = ({ colors }) => ({
     '.cm-live-codeblock-line': {
-        backgroundColor: codeBackgroundColor,
+        backgroundColor: colors.codeBackground,
         fontFamily: 'ui-monospace, monospace',
         paddingLeft: '0.4em',
         paddingRight: '0.4em'
