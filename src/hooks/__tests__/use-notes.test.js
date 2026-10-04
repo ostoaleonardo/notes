@@ -19,7 +19,6 @@ import { parseFrontmatter } from '@/utils/frontmatter'
 const mockFileStorage = {
     listMarkdownFiles: jest.fn(),
     writeNoteFile: jest.fn(),
-    renameNoteFile: jest.fn(async () => { }),
     deleteNoteFile: jest.fn(),
     findFile: jest.fn(),
     renameVersions: jest.fn(async () => { }),
@@ -88,7 +87,9 @@ beforeEach(() => {
     jest.clearAllMocks()
     mockFileStorage.listMarkdownFiles.mockImplementation(() => (
         Array.from(files.entries()).map(([name, content]) => ({
-            name, text: async () => content
+            name,
+            text: async () => content,
+            delete: () => files.delete(name)
         }))
     ))
     mockFileStorage.writeNoteFile.mockImplementation((_uri, filename, content) => {
@@ -101,10 +102,6 @@ beforeEach(() => {
     mockFileStorage.findFile.mockImplementation((_uri, filename) => (
         files.has(filename) ? { name: filename } : undefined
     ))
-    mockFileStorage.renameNoteFile.mockImplementation(async (_uri, oldName, newName) => {
-        files.set(newName, files.get(oldName))
-        files.delete(oldName)
-    })
 })
 
 describe('save note', () => {
@@ -159,7 +156,6 @@ describe('update note', () => {
         })
 
         expect(readBody('Groceries.md')).toBe('updated content')
-        expect(mockFileStorage.renameNoteFile).not.toHaveBeenCalled()
         expect(mockFileStorage.renameVersions).not.toHaveBeenCalled()
         expect(result.current.notes[0].note).toBe('updated content')
     })
@@ -173,6 +169,7 @@ describe('update note', () => {
         })
 
         expect(mockFileStorage.listMarkdownFiles).toHaveBeenCalledTimes(1)
+        expect(mockFileStorage.findFile).not.toHaveBeenCalled()
     })
 
     test('throws a duplicate-title error and does not touch the filesystem when another note already has that title', async () => {
@@ -184,7 +181,6 @@ describe('update note', () => {
             await result.current.updateNote({ ...MOCK_OLD_TITLE_NOTE, title: 'Groceries' })
         })).rejects.toMatchObject({ code: 'DUPLICATE_TITLE' })
 
-        expect(mockFileStorage.renameNoteFile).not.toHaveBeenCalled()
         expect(mockFileStorage.writeNoteFile).not.toHaveBeenCalled()
         expect(files.has('Old title.md')).toBe(true)
     })
@@ -199,11 +195,6 @@ describe('update note', () => {
         })
 
         expect(updated).toEqual({ path: 'repo-1::New title.md', filename: 'New title.md', createdAt: 1000, updatedAt: 2000 })
-        expect(mockFileStorage.renameNoteFile).toHaveBeenCalledWith(
-            MOCK_REPO_URI,
-            'Old title.md',
-            'New title.md'
-        )
         expect(mockFileStorage.renameVersions).toHaveBeenCalledWith(
             MOCK_REPO_URI,
             'Old title.md',

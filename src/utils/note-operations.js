@@ -92,29 +92,27 @@ export const planNoteUpdate = ({ note, previous, uri }, fileStorage) => {
 export const persistNoteUpdate = async ({ note, previous, uri, plan, repositories }, fileStorage) => {
     const { filename, renamed, existing } = plan
 
-    if (renamed) {
-        await fileStorage.renameNoteFile(uri, previous.filename, filename)
-        const { rootUri, folderPath } = getVersionLocation(repositories, note.repositoryId)
+    const content = buildFileContent({
+        ...note,
+        rawFrontmatter: note.rawFrontmatter ?? previous.rawFrontmatter
+    })
 
-        await fileStorage.renameVersions(
-            rootUri,
-            buildVersionKey(folderPath, previous.filename),
-            buildVersionKey(folderPath, filename)
-        )
+    if (!renamed) {
+        return readFileTimes(fileStorage.writeNoteFile(uri, filename, content, undefined, existing))
     }
 
-    return readFileTimes(
-        fileStorage.writeNoteFile(
-            uri,
-            filename,
-            buildFileContent({
-                ...note,
-                rawFrontmatter: note.rawFrontmatter ?? previous.rawFrontmatter
-            }),
-            undefined,
-            renamed ? undefined : existing
-        )
+    const times = readFileTimes(fileStorage.writeNoteFile(uri, filename, content, undefined, null))
+    existing.delete()
+
+    const { rootUri, folderPath } = getVersionLocation(repositories, note.repositoryId)
+
+    await fileStorage.renameVersions(
+        rootUri,
+        buildVersionKey(folderPath, previous.filename),
+        buildVersionKey(folderPath, filename)
     )
+
+    return times
 }
 
 export const planWikiLinkRename = ({

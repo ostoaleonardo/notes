@@ -16,21 +16,19 @@ const HANDLE = { name: 'Groceries.md', uri: 'file:///repo/Groceries.md' }
 
 const createFakeStorage = (initialFiles = {}) => {
     const files = new Map(Object.entries(initialFiles))
-    const calls = { renamed: [], versions: [] }
+    const calls = { versions: [] }
 
     return {
         files,
         calls,
-        listMarkdownFiles: jest.fn(() => [...files.keys()].map((name) => ({ name }))),
+        listMarkdownFiles: jest.fn(() => [...files.keys()].map((name) => ({
+            name,
+            delete: () => files.delete(name)
+        }))),
         getExistingFile: jest.fn((fileUri) => (fileUri === 'file:///repo/Groceries.md' ? HANDLE : undefined)),
         writeNoteFile: (_uri, filename, content) => {
             files.set(filename, content)
             return { creationTime: 10, lastModified: 20 }
-        },
-        renameNoteFile: async (_uri, from, to) => {
-            calls.renamed.push([from, to])
-            files.set(to, files.get(from))
-            files.delete(from)
         },
         renameVersions: async (_root, from, to) => {
             calls.versions.push([from, to])
@@ -99,7 +97,7 @@ describe('plan note update', () => {
 
         expect(plan.renamed).toBe(false)
         expect(plan.filename).toBe('Groceries.md')
-        expect(plan.existing).toEqual({ name: 'Groceries.md' })
+        expect(plan.existing).toMatchObject({ name: 'Groceries.md' })
     })
 
     test('reuses the known file without listing the folder when the title is unchanged', () => {
@@ -119,7 +117,7 @@ describe('plan note update', () => {
 
         const plan = planNoteUpdate({ note: stale, previous: stale, uri: REPO_URI }, storage)
 
-        expect(plan.existing).toEqual({ name: 'Groceries.md' })
+        expect(plan.existing).toMatchObject({ name: 'Groceries.md' })
         expect(storage.listMarkdownFiles).toHaveBeenCalledTimes(1)
     })
 
@@ -167,8 +165,8 @@ describe('persist note update', () => {
             storage
         )
 
-        expect(storage.calls.renamed).toEqual([['Groceries.md', 'Shopping.md']])
-        expect(storage.calls.versions).toHaveLength(1)
+        expect(storage.files.has('Groceries.md')).toBe(false)
+        expect(storage.calls.versions).toEqual([['Groceries.md', 'Shopping.md']])
         expect(parseFrontmatter(storage.files.get('Shopping.md')).body).toBe('bread')
         expect(times).toEqual({ createdAt: 10, updatedAt: 20 })
     })
@@ -183,7 +181,6 @@ describe('persist note update', () => {
             storage
         )
 
-        expect(storage.calls.renamed).toEqual([])
         expect(storage.calls.versions).toEqual([])
     })
 })
