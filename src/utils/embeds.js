@@ -2,6 +2,7 @@ import { resolveWikiLink, escapeHtml } from './wiki-links'
 import { mapOutsideCode } from './outside-code'
 import { isFileLinkTarget } from './file-links'
 import { extractBlock } from './block-refs'
+import { extractSection } from './headings'
 
 import { BLOCK_ANCHOR_PREFIX } from '@/constants/block-refs'
 
@@ -25,6 +26,12 @@ const buildImage = (name, width, getImageUrl) => {
     return `![${name}](${url})`
 }
 
+const extractSource = (text, anchor) => {
+    if (!anchor) return text
+    if (anchor.startsWith(BLOCK_ANCHOR_PREFIX)) return extractBlock(text, anchor.slice(BLOCK_ANCHOR_PREFIX.length))
+    return extractSection(text, anchor)
+}
+
 const replaceEmbeds = (value, context, depth, visited) => mapOutsideCode(
     value,
     (segment) => segment.replace(
@@ -38,12 +45,10 @@ const replaceEmbeds = (value, context, depth, visited) => mapOutsideCode(
 
             if (isFileLinkTarget(target)) return match.slice(1)
 
-            const { note, anchor } = resolveWikiLink(target, context.notes, context.notePaths)
+            const { note, anchor } = resolveWikiLink(target, context.notes, context.notePaths, context.selfPath)
             if (!note || depth >= EMBED_MAX_DEPTH || visited.has(note.path)) return match.slice(1)
 
-            const source = anchor.startsWith(BLOCK_ANCHOR_PREFIX)
-                ? extractBlock(note.note, anchor.slice(BLOCK_ANCHOR_PREFIX.length))
-                : note.note || ''
+            const source = extractSource(note.note || '', anchor)
             if (source === null) return match.slice(1)
 
             const body = replaceEmbeds(source, context, depth + 1, new Set([...visited, note.path]))
@@ -55,7 +60,7 @@ const replaceEmbeds = (value, context, depth, visited) => mapOutsideCode(
 )
 
 export const resolveEmbeds = (value, { notes, notePaths = new Map(), getImageUrl, selfPath }) => (
-    replaceEmbeds(value, { notes, notePaths, getImageUrl }, 0, new Set(selfPath ? [selfPath] : []))
+    replaceEmbeds(value, { notes, notePaths, getImageUrl, selfPath }, 0, new Set(selfPath ? [selfPath] : []))
 )
 
 export const extractEmbedImageNames = (value) => {

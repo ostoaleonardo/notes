@@ -3,7 +3,7 @@ import { Decoration, EditorView } from '@codemirror/view'
 import { isRangeSelected, overlapsAny } from './utils'
 import { ImageWidget } from './widgets'
 
-import { resolveWikiLinkTarget } from '@/utils/wiki-links'
+import { isSameNoteTarget, resolveWikiLinkTarget } from '@/utils/wiki-links'
 import { getEntryResolverInputs } from '@/utils/note-entries'
 import { buildFileLinkUrl, isFileLinkTarget } from '@/utils/file-links'
 import { buildIconMaskUrl } from '@/utils/icon-mask'
@@ -47,7 +47,7 @@ export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntr
     for (const { from, to, linkText, labelFrom, labelTo, isEmbed } of wikiLinkRanges) {
         if (overlapsAny(from, to, codeRanges)) continue
 
-        const resolved = !!resolveWikiLinkTarget(linkText, notes, notePaths)
+        const resolved = isSameNoteTarget(linkText) || !!resolveWikiLinkTarget(linkText, notes, notePaths)
         const isEmbedTarget = isEmbed && (resolved || EMBED_IMAGE_PATTERN.test(linkText.trim()))
         const isFileTarget = !resolved && !isEmbedTarget && isFileLinkTarget(linkText)
         const className = isFileTarget

@@ -57,6 +57,7 @@ export const MarkdownInput = ({
     onTagPress,
     search,
     anchor,
+    onJumpToAnchor,
     headingIndex,
     jumpNonce,
     showBacklinks = true
@@ -104,7 +105,8 @@ export const MarkdownInput = ({
                 setMissing(link.missing)
                 break
             case LINK_TYPES.NOTE:
-                router.push(getEditorPath(link.id, link.anchor))
+                if (link.id === id && link.anchor) onJumpToAnchor(link.anchor)
+                else router.push(getEditorPath(link.id, link.anchor))
                 break
             case LINK_TYPES.LINK_MENTION:
                 linkMention(link.path)
@@ -115,7 +117,15 @@ export const MarkdownInput = ({
             default:
                 Linking.openURL(link.url)
         }
-    }, [onTagPress, setMissing, linkMention, listFiles, openFile])
+    }, [
+        id,
+        onJumpToAnchor,
+        onTagPress,
+        setMissing,
+        linkMention,
+        listFiles,
+        openFile
+    ])
 
     const onImagePress = useCallback((url) => router.push({
         pathname: ROUTES.IMAGE_VIEWER,

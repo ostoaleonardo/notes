@@ -103,3 +103,45 @@ describe('block embeds', () => {
         expect(resolveBlock('![[Source#^nope]]')).toBe('[[Source#^nope]]')
     })
 })
+
+describe('heading embeds', () => {
+    const sectionNotes = [
+        {
+            path: 'p',
+            title: 'Source',
+            note: '# One\n\nfirst\n\n## Sub\n\nnested\n\n# Two\n\nsecond'
+        }
+    ]
+    const resolveSection = (value, selfPath) => resolveEmbeds(
+        value,
+        { notes: sectionNotes, getImageUrl, selfPath }
+    )
+
+    test('embeds the section up to the next heading of the same level', () => {
+        const result = resolveSection('![[Source#One]]')
+
+        expect(result).toContain('first')
+        expect(result).toContain('nested')
+        expect(result).not.toContain('second')
+    })
+
+    test('stops a subsection at the next heading of a higher level', () => {
+        const result = resolveSection('![[Source#Sub]]')
+
+        expect(result).toContain('nested')
+        expect(result).not.toContain('first')
+        expect(result).not.toContain('second')
+    })
+
+    test('matches the heading ignoring case and spacing', () => {
+        expect(resolveSection('![[Source#  TWO ]]')).toContain('second')
+    })
+
+    test('turns an embed of a missing heading into a plain wiki link', () => {
+        expect(resolveSection('![[Source#Nope]]')).toBe('[[Source#Nope]]')
+    })
+
+    test('turns an embed of a heading in the same note into a plain wiki link', () => {
+        expect(resolveSection('![[#One]]', 'p')).toBe('[[#One]]')
+    })
+})

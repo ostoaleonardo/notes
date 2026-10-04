@@ -170,6 +170,9 @@ export const NoteEditorScreen = ({
     const onSelectHeading = useCallback((index) => {
         setJump((prev) => ({ index, nonce: (prev?.nonce ?? 0) + 1 }))
     }, [])
+    const onJumpToAnchor = useCallback((value) => {
+        setJump((prev) => ({ anchor: value, nonce: (prev?.nonce ?? 0) + 1 }))
+    }, [])
     const { dialog: sharingDialog, onConfirmExport, onConfirmShare } = useNoteSharing({ id, flush })
     const noteDelete = useNoteDelete(id, busyRef)
 
@@ -301,7 +304,8 @@ export const NoteEditorScreen = ({
                     onFocus={onFocus}
                     placeholder={t('placeholder.note')}
                     action={action}
-                    anchor={jump ? undefined : anchor}
+                    anchor={jump ? jump.anchor : anchor}
+                    onJumpToAnchor={onJumpToAnchor}
                     headingIndex={jump?.index}
                     jumpNonce={jump?.nonce}
                     showBacklinks={showBacklinks}

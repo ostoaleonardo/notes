@@ -28,6 +28,18 @@ export const findHeadings = (text) => {
     return headings
 }
 
+export const extractSection = (text, headingText) => {
+    const headings = findHeadings(text)
+    const name = normalizeHeading(headingText)
+    const index = headings.findIndex((heading) => normalizeHeading(heading.text) === name)
+    if (index === -1) return null
+
+    const { level, from } = headings[index]
+    const next = headings.slice(index + 1).find((heading) => heading.level <= level)
+
+    return text.slice(from, next ? next.from : text.length).trim()
+}
+
 export const buildOutline = (headings) => {
     const stack = []
 

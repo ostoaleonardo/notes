@@ -1,5 +1,6 @@
 import {
     buildOutline,
+    extractSection,
     findHeadingRenames,
     findHeadings,
     getVisibleOutline,
@@ -116,5 +117,25 @@ describe('get visible outline', () => {
         const visible = getVisibleOutline(outline, new Set([1]))
 
         expect(visible.map((item) => item.text)).toEqual(['A', 'B', 'D', 'E'])
+    })
+})
+
+describe('extract section', () => {
+    const text = '# One\n\na\n\n## Sub\n\nb\n\n# Two\n\nc'
+
+    test('returns the heading through the next heading of the same level', () => {
+        expect(extractSection(text, 'One')).toBe('# One\n\na\n\n## Sub\n\nb')
+    })
+
+    test('returns the last section through the end of the text', () => {
+        expect(extractSection(text, 'Two')).toBe('# Two\n\nc')
+    })
+
+    test('returns null when the heading does not exist', () => {
+        expect(extractSection(text, 'Three')).toBeNull()
+    })
+
+    test('ignores headings inside code blocks', () => {
+        expect(extractSection('```\n# One\n```', 'One')).toBeNull()
     })
 })

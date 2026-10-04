@@ -387,8 +387,26 @@ describe('heading and block anchors', () => {
         )
     })
 
-    test('a same-note heading link renders as plain text', () => {
+    test('a same-note heading link renders as plain text without the current note', () => {
         expect(resolveWikiLinks('[[#Agenda]]', notes)).toBe('Agenda')
+    })
+
+    test('a same-note heading link points to the current note', () => {
+        const result = resolveWikiLinks('[[#Agenda]]', notes, new Map(), 'note-1')
+
+        expect(result).toBe('<a href="wikilink://note-1#Agenda" class="wiki-link">#Agenda</a>')
+    })
+
+    test('a same-note heading link uses the alias as the label', () => {
+        const result = resolveWikiLinks('[[#Agenda|the agenda]]', notes, new Map(), 'note-1')
+
+        expect(result).toBe('<a href="wikilink://note-1#Agenda" class="wiki-link">the agenda</a>')
+    })
+
+    test('a same-note block link points to the current note', () => {
+        const result = resolveWikiLinks('[[#^abc123]]', notes, new Map(), 'note-1')
+
+        expect(result).toContain('href="wikilink://note-1#%5Eabc123"')
     })
 
     test('counts heading links as backlinks', () => {

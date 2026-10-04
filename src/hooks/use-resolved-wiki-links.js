@@ -18,6 +18,6 @@ export const useResolvedWikiLinks = (value, selfPath) => {
         }
 
         const withEmbeds = resolveEmbeds(value || '', { notes, notePaths, getImageUrl, selfPath })
-        return resolveWikiLinks(withEmbeds, notes, notePaths)
+        return resolveWikiLinks(withEmbeds, notes, notePaths, selfPath)
     }, [value, selfPath, notes, notePaths, listImageUris])
 }

@@ -80,46 +80,55 @@ const findNote = (linkText, notes, notePaths) => {
     return candidates.find((note) => normalizeName(notePaths.get(note.path) || '') === normalizedPath) || candidates[0]
 }
 
-export const resolveWikiLink = (linkText, notes, notePaths) => {
+export const resolveWikiLink = (linkText, notes, notePaths, selfPath) => {
     const whole = findNote(linkText, notes, notePaths)
     if (whole) return { note: whole, target: linkText, anchor: '' }
 
     const split = splitAnchor(linkText)
     if (!split) return { note: undefined, target: linkText, anchor: '' }
 
-    const note = split.target.trim() ? findNote(split.target, notes, notePaths) : undefined
+    const note = split.target.trim()
+        ? findNote(split.target, notes, notePaths)
+        : notes.find(({ path }) => path === selfPath)
+
     return { note, ...split }
 }
+
+export const isSameNoteTarget = (linkText) => linkText.trim().startsWith(WIKI_LINK_ANCHOR_SEPARATOR)
 
 export const resolveWikiLinkTarget = (linkText, notes, notePaths = new Map()) => (
     resolveWikiLink(linkText, notes, notePaths).note
 )
 
+const buildDefaultLabel = (title, anchor) => {
+    if (!anchor) return title
+    if (!title) return `${WIKI_LINK_ANCHOR_SEPARATOR}${anchor}`
+    return `${title}${WIKI_LINK_ANCHOR_LABEL_SEPARATOR}${anchor}`
+}
+
 export const unwrapWikiLinks = (value) => mapOutsideCode(
     value,
     (segment) => segment.replace(
         WIKI_LINK_PATTERN,
-        (match, linkText, alias) => {
+        (_, linkText, alias) => {
             const { target, anchor } = resolveWikiLink(linkText, [], new Map())
             const { title } = parseWikiLinkText(target)
-            const defaultLabel = anchor ? `${title}${WIKI_LINK_ANCHOR_LABEL_SEPARATOR}${anchor}` : title
-
-            return escapeHtml((alias || defaultLabel || anchor).trim())
+            return escapeHtml((alias || buildDefaultLabel(title, anchor)).trim())
         }
     )
 )
 
-export const resolveWikiLinks = (value, notes, notePaths = new Map()) => mapOutsideCode(
+export const resolveWikiLinks = (value, notes, notePaths = new Map(), selfPath) => mapOutsideCode(
     value,
     (segment) => segment.replace(
         WIKI_LINK_PATTERN,
         (match, linkText, alias) => {
-            const { note, target, anchor } = resolveWikiLink(linkText, notes, notePaths)
+            const { note, target, anchor } = resolveWikiLink(linkText, notes, notePaths, selfPath)
             const { path, title } = parseWikiLinkText(target)
 
-            if (!title.trim()) return escapeHtml((alias || anchor).trim())
+            if (!title.trim() && !note) return escapeHtml((alias || anchor).trim())
 
-            const defaultLabel = anchor ? `${title}${WIKI_LINK_ANCHOR_LABEL_SEPARATOR}${anchor}` : title
+            const defaultLabel = buildDefaultLabel(title, anchor)
             const label = escapeHtml((alias || defaultLabel).trim())
 
             if (!note && isFileLinkTarget(target)) {
