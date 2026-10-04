@@ -10,6 +10,7 @@ import { DrawerNotesView } from './drawer-notes-view'
 import { DrawerTagsView } from './drawer-tags-view'
 import { DrawerToolbar } from './drawer-toolbar'
 import { DrawerTemplatesView } from './drawer-templates-view'
+import { DrawerFilesView } from './drawer-files-view'
 import { DrawerViewSwitcher } from './drawer-view-switcher'
 
 import { useStorage } from '@/hooks/use-storage'
@@ -27,7 +28,8 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 const VIEW_COMPONENTS = {
     [DRAWER_VIEWS.NOTES]: DrawerNotesView,
     [DRAWER_VIEWS.TEMPLATES]: DrawerTemplatesView,
-    [DRAWER_VIEWS.TAGS]: DrawerTagsView
+    [DRAWER_VIEWS.TAGS]: DrawerTagsView,
+    [DRAWER_VIEWS.FILES]: DrawerFilesView
 }
 
 export function DrawerItems({ navigation }) {

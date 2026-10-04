@@ -1,13 +1,13 @@
 import { useCallback } from 'react'
 
 import { useRepositories } from './use-repositories'
-import { collectImageUris } from '@/utils/attachments'
+import { buildFileRows, collectFiles } from '@/utils/attachments'
 import { listDirectoryEntries } from '@/utils/list-directory-entries'
 
-export const useImageUris = () => {
+export const useAttachmentFiles = () => {
     const { activeRepository, getRootRepository } = useRepositories()
 
     return useCallback(() => (
-        collectImageUris(getRootRepository(activeRepository).uri, listDirectoryEntries)
+        buildFileRows(collectFiles(getRootRepository(activeRepository).uri, listDirectoryEntries))
     ), [activeRepository, getRootRepository])
 }
