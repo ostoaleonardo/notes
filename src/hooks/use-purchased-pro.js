@@ -10,7 +10,7 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { logError } from '@/utils/log-error'
 
 export function usePurchasedPro() {
-    const { setItem, removeItem } = useStorage()
+    const { getItem, setItem, removeItem } = useStorage()
     const [isPro, setIsPro] = useState(false)
     const connectedRef = useRef(false)
 
@@ -44,7 +44,17 @@ export function usePurchasedPro() {
     }, [])
 
     useEffect(() => {
-        checkPurchases()
+        const hydrate = async () => {
+            try {
+                if (await getItem(STORAGE_KEYS.PRO)) setIsPro(true)
+            } catch (error) {
+                logError('error reading stored pro purchase', error)
+            }
+
+            await checkPurchases()
+        }
+
+        hydrate()
     }, [checkPurchases])
 
     useOnForeground(checkPurchases)
