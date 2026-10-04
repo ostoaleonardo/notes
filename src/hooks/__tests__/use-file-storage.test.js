@@ -182,6 +182,53 @@ describe('writeNoteFile', () => {
     })
 })
 
+describe('verified write', () => {
+    const mockReportedSize = (sizes) => {
+        const reader = jest.fn()
+        sizes.forEach((size) => reader.mockReturnValueOnce(size))
+        Object.defineProperty(File.prototype, 'size', { get: reader, configurable: true })
+        return reader
+    }
+
+    afterEach(() => {
+        delete File.prototype.size
+    })
+
+    test('writes again when the reported size does not match', async () => {
+        const { result } = await renderFileStorageHook()
+        const reader = mockReportedSize([0, 5])
+
+        seedDirectory('content://repo', [])
+
+        result.current.writeNoteFile('content://repo', 'note.md', 'fresh')
+
+        expect(reader).toHaveBeenCalledTimes(2)
+        expect(registry.get('content://repo/note.md').content).toBe('fresh')
+    })
+
+    test('throws when the size never matches', async () => {
+        const { result } = await renderFileStorageHook()
+        mockReportedSize([0, 0])
+
+        seedDirectory('content://repo', [])
+
+        expect(() => (
+            result.current.writeNoteFile('content://repo', 'note.md', 'fresh')
+        )).toThrow('write verification failed for note.md')
+    })
+
+    test('accepts the write when the size is unavailable', async () => {
+        const { result } = await renderFileStorageHook()
+        mockReportedSize([null])
+
+        seedDirectory('content://repo', [])
+
+        expect(() => (
+            result.current.writeNoteFile('content://repo', 'note.md', 'fresh')
+        )).not.toThrow()
+    })
+})
+
 describe('renameNoteFile', () => {
     test('moves the content under the new filename and deletes the old file', async () => {
         const { result } = await renderFileStorageHook()

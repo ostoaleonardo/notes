@@ -11,7 +11,8 @@ import {
     VAULT_TRASH_FOLDER_NAME,
     NOTES_FOLDER_NAME,
     RESERVED_FOLDER_NAMES,
-    CORRUPT_FILE_SUFFIX
+    CORRUPT_FILE_SUFFIX,
+    WRITE_ATTEMPTS
 } from '@/constants/file-storage'
 import { MIME_TYPES } from '@/constants/mime-types'
 import { logError } from './log-error'
@@ -110,6 +111,24 @@ const copyImageFile = async (sourceUri, directoryUri, filename) => {
     return file
 }
 
+const writeVerified = (file, content) => {
+    const bytes = new TextEncoder().encode(content)
+
+    for (let attempt = 0; attempt < WRITE_ATTEMPTS; attempt++) {
+        const handle = file.open(FileMode.Truncate)
+        try {
+            handle.writeBytes(bytes)
+        } finally {
+            handle.close()
+        }
+
+        const size = file.size
+        if (size == null || size === bytes.length) return
+    }
+
+    throw new Error(`write verification failed for ${file.name}`)
+}
+
 const writeNoteFile = (
     directoryUri,
     filename,
@@ -117,19 +136,9 @@ const writeNoteFile = (
     mimeType = MIME_TYPES.MARKDOWN,
     existing = findFile(directoryUri, filename)
 ) => {
-    if (!existing) {
-        const file = new Directory(directoryUri).createFile(filename, mimeType)
-        file.write(content)
-        return file
-    }
-
-    const handle = existing.open(FileMode.Truncate)
-    try {
-        handle.writeBytes(new TextEncoder().encode(content))
-    } finally {
-        handle.close()
-    }
-    return existing
+    const file = existing || new Directory(directoryUri).createFile(filename, mimeType)
+    writeVerified(file, content)
+    return file
 }
 
 const renameNoteFile = async (directoryUri, oldFilename, newFilename) => {

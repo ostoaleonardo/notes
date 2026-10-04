@@ -4,6 +4,9 @@ export const VERSIONS_FILENAME_SUFFIX = '.versions.json'
 export const CORRUPT_FILE_SUFFIX = '.corrupt'
 export const NOTE_PATH_SEPARATOR = '::'
 
+// Writing
+export const WRITE_ATTEMPTS = 2
+
 // Loading
 export const NOTE_READ_CONCURRENCY = 16
 
