@@ -3,6 +3,7 @@ import {
     buildPropertyRows,
     buildPropertySuggestions,
     formatPropertyValue,
+    getDefaultPropertyValue,
     inferPropertyType,
     isValidPropertyName,
     parsePropertyValue
@@ -16,6 +17,22 @@ describe('property type inference', () => {
         expect(inferPropertyType(null)).toBe(PROPERTY_TYPES.TEXT)
         expect(inferPropertyType(3)).toBe(PROPERTY_TYPES.NUMBER)
         expect(inferPropertyType(true)).toBe(PROPERTY_TYPES.CHECKBOX)
+    })
+
+    test('detects date and datetime strings', () => {
+        expect(inferPropertyType('2026-10-04')).toBe(PROPERTY_TYPES.DATE)
+        expect(inferPropertyType('2026-10-04T09:30')).toBe(PROPERTY_TYPES.DATETIME)
+        expect(inferPropertyType('2026-10-04T09:30:15')).toBe(PROPERTY_TYPES.DATETIME)
+        expect(inferPropertyType('2026-10-04 09:30')).toBe(PROPERTY_TYPES.TEXT)
+        expect(inferPropertyType('2026-10')).toBe(PROPERTY_TYPES.TEXT)
+    })
+
+    test('builds today as the default value of date types', () => {
+        const now = new Date(2026, 9, 4, 9, 5)
+
+        expect(getDefaultPropertyValue(PROPERTY_TYPES.DATE, now)).toBe('2026-10-04')
+        expect(getDefaultPropertyValue(PROPERTY_TYPES.DATETIME, now)).toBe('2026-10-04T09:05')
+        expect(getDefaultPropertyValue(PROPERTY_TYPES.CHECKBOX, now)).toBe(false)
     })
 
     test('maps arrays of scalars to a list', () => {
@@ -40,12 +57,10 @@ describe('property rows', () => {
 
     test('shows unsupported values as readable text', () => {
         const rows = buildPropertyRows({
-            nested: { a: 1 },
-            date: new Date('2024-01-02T00:00:00.000Z')
+            nested: { a: 1 }
         })
 
         expect(rows[0].value).toBe('{"a":1}')
-        expect(rows[1].value).toBe('2024-01-02T00:00:00.000Z')
     })
 
     test('returns no rows without properties', () => {

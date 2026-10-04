@@ -1,6 +1,10 @@
 import {
+    DATE_PROPERTY_PATTERN,
+    DATETIME_PROPERTY_PATTERN,
     KNOWN_PROPERTIES,
+    PROPERTY_DEFAULT_VALUES,
     PROPERTY_CHANGES,
+    DATE_PART_WIDTH,
     PROPERTY_LIST_JOINER,
     PROPERTY_LIST_SEPARATOR,
     PROPERTY_TYPES,
@@ -11,12 +15,31 @@ const isScalar = (value) => ['string', 'number', 'boolean'].includes(typeof valu
 
 const hasKey = (object, key) => Object.prototype.hasOwnProperty.call(object, key)
 
-const formatUnsupported = (value) => (
-    value instanceof Date ? value.toISOString() : JSON.stringify(value)
+const inferStringType = (value) => {
+    if (DATE_PROPERTY_PATTERN.test(value)) return PROPERTY_TYPES.DATE
+    if (DATETIME_PROPERTY_PATTERN.test(value)) return PROPERTY_TYPES.DATETIME
+    return PROPERTY_TYPES.TEXT
+}
+
+const pad = (number) => String(number).padStart(DATE_PART_WIDTH, '0')
+
+export const formatLocalDate = (date) => (
+    `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
 )
 
+export const formatLocalDateTime = (date) => (
+    `${formatLocalDate(date)}T${pad(date.getHours())}:${pad(date.getMinutes())}`
+)
+
+export const getDefaultPropertyValue = (type, now) => {
+    if (type === PROPERTY_TYPES.DATE) return formatLocalDate(now)
+    if (type === PROPERTY_TYPES.DATETIME) return formatLocalDateTime(now)
+    return PROPERTY_DEFAULT_VALUES[type]
+}
+
 export const inferPropertyType = (value) => {
-    if (value === null || value === undefined || typeof value === 'string') return PROPERTY_TYPES.TEXT
+    if (typeof value === 'string') return inferStringType(value)
+    if (value === null || value === undefined) return PROPERTY_TYPES.TEXT
     if (typeof value === 'number') return PROPERTY_TYPES.NUMBER
     if (typeof value === 'boolean') return PROPERTY_TYPES.CHECKBOX
     if (Array.isArray(value) && value.every(isScalar)) return PROPERTY_TYPES.LIST
@@ -30,7 +53,7 @@ export const buildPropertyRows = (properties) => (
         return {
             key,
             type,
-            value: type === PROPERTY_TYPES.UNSUPPORTED ? formatUnsupported(value) : value
+            value: type === PROPERTY_TYPES.UNSUPPORTED ? JSON.stringify(value) : value
         }
     })
 )

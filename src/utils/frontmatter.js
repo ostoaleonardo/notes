@@ -1,4 +1,4 @@
-import { dump, load } from 'js-yaml'
+import { CORE_SCHEMA, dump, load } from 'js-yaml'
 
 import { dedupeTags, isValidTagName, sanitizeTagName } from '@/utils/tag-names'
 
@@ -80,7 +80,7 @@ export const buildNoteFileContent = (
     let frontmatter
     if (invalidFrontmatter != null) frontmatter = `${invalidFrontmatter}\n`
     else if (reuseRaw) frontmatter = `${rawFrontmatter}\n`
-    else frontmatter = dump(tags?.length ? { ...properties, tags } : { ...properties })
+    else frontmatter = dump(tags?.length ? { ...properties, tags } : { ...properties }, { schema: CORE_SCHEMA })
 
     return `---\n${frontmatter}---\n\n${body}`
 }

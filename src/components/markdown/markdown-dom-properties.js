@@ -25,12 +25,17 @@ import { ICON_FILL, ICON_SIZE, ICON_VIEW_BOX } from '@/constants/icon-size'
 import {
     EDITABLE_PROPERTY_TYPES,
     PROPERTY_CHANGES,
-    PROPERTY_DEFAULT_VALUES,
+    PROPERTY_INPUT_TYPES,
     PROPERTY_TYPES,
     PROPERTY_TYPE_ICON_PATHS
 } from '@/constants/properties'
 import { TAG_PROPERTY_KEYS } from '@/constants/tags'
-import { formatPropertyValue, isValidPropertyName, parsePropertyValue } from '@/utils/properties'
+import {
+    formatPropertyValue,
+    getDefaultPropertyValue,
+    isValidPropertyName,
+    parsePropertyValue
+} from '@/utils/properties'
 import { filterTagSuggestions } from '@/utils/tag-names'
 
 const DomIcon = ({ path, size = ICON_SIZE.sm, color, style, onClick }) => (
@@ -72,7 +77,7 @@ const ValueInput = ({ type, value, placeholder, onCommit }) => {
 
     return (
         <input
-            type='text'
+            type={PROPERTY_INPUT_TYPES[type] ?? 'text'}
             inputMode={type === PROPERTY_TYPES.NUMBER ? 'decimal' : 'text'}
             value={text}
             placeholder={placeholder}
@@ -230,7 +235,7 @@ const DraftRow = ({ keys, suggestions, labels, onChangeProperty, onAddTags, onCl
         onChangeProperty({
             action: PROPERTY_CHANGES.SET,
             key,
-            value: PROPERTY_DEFAULT_VALUES[propertyType]
+            value: getDefaultPropertyValue(propertyType, new Date())
         })
         onClose()
     }

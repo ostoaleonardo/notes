@@ -28,7 +28,9 @@
 		"type_text": "Text",
 		"type_number": "Number",
 		"type_list": "List",
-		"type_checkbox": "Checkbox"
+		"type_checkbox": "Checkbox",
+		"type_date": "Date",
+		"type_datetime": "Date and time"
 	},
 	"repositories": {
 		"open": "Open",

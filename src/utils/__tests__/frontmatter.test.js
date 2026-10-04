@@ -304,6 +304,20 @@ describe('note properties', () => {
         expect(body).toBe('Body')
     })
 
+    test('writes date properties unquoted', () => {
+        const content = buildNoteFileContent(
+            { tags: [], properties: { due: '2026-10-04', at: '2026-10-04T09:30' } },
+            'Body'
+        )
+
+        expect(content).toContain('due: 2026-10-04\n')
+        expect(content).toContain('at: 2026-10-04T09:30\n')
+        expect(parseFrontmatter(content).frontmatter).toEqual({
+            due: '2026-10-04',
+            at: '2026-10-04T09:30'
+        })
+    })
+
     test('decomposes a file with comma separated tags and extra properties', () => {
         const content = '---\ntags: a, b\naliases:\n  - Alias\n---\n\nBody'
 

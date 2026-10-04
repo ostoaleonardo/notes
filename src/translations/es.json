@@ -28,7 +28,9 @@
 		"type_text": "Texto",
 		"type_number": "Número",
 		"type_list": "Lista",
-		"type_checkbox": "Casilla"
+		"type_checkbox": "Casilla",
+		"type_date": "Fecha",
+		"type_datetime": "Fecha y hora"
 	},
 	"repositories": {
 		"open": "Abrir",

@@ -10,7 +10,7 @@ export const SYNTAX_EMBED_TAGS = ['pruebas/embeds']
 export const SYNTAX_MAIN_TAGS = ['pruebas', 'pruebas/sintaxis', 'app/notes']
 
 export const SYNTAX_LINKED_PROPERTIES = { aliases: ['Alias de prueba'] }
-export const SYNTAX_MAIN_PROPERTIES = { aliases: ['Sintaxis completa'], autor: 'Equipo de Notes', version: 1 }
+export const SYNTAX_MAIN_PROPERTIES = { aliases: ['Sintaxis completa'], autor: 'Equipo de Notes', version: 1, fecha: '2026-01-15', recordatorio: '2026-01-15T09:30' }
 
 export const SYNTAX_LINKED_BODY = [
     '# Nota enlazada',
