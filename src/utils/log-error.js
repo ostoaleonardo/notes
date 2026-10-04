@@ -1,3 +1,3 @@
 export const logError = (message, error) => {
-    console.debug(message, error)
+    console.warn(message, error)
 }
