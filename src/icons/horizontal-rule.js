@@ -1,7 +1,9 @@
-import { Path, Svg } from 'react-native-svg'
+import { Path } from 'react-native-svg'
+
+import { IconSvg } from './icon-svg'
 
 export const HorizontalRule = (props) => (
-    <Svg width='24' height='24' viewBox='0 -960 960 960' fill='currentColor' {...props}>
+    <IconSvg {...props}>
         <Path d='M200-460v-40h560v40H200Z' />
-    </Svg>
+    </IconSvg>
 )

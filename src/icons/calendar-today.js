@@ -1,7 +1,9 @@
-import { Path, Svg } from 'react-native-svg'
+import { Path } from 'react-native-svg'
+
+import { IconSvg } from './icon-svg'
 
 export const CalendarToday = (props) => (
-    <Svg width='24' height='24' viewBox='0 -960 960 960' fill='currentColor' {...props}>
+    <IconSvg {...props}>
         <Path d='M160-120v-640h135.38v-89.23h43.08V-760h286.16v-89.23h40V-760H800v640H160Zm40-40h560v-375.38H200V-160Zm0-415.39h560V-720H200v144.61Zm0 0V-720v144.61Z' />
-    </Svg>
+    </IconSvg>
 )

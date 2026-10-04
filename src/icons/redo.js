@@ -1,7 +1,9 @@
-import { Path, Svg } from 'react-native-svg'
+import { Path } from 'react-native-svg'
+
+import { IconSvg } from './icon-svg'
 
 export const Redo = (props) => (
-    <Svg width='24' height='24' viewBox='0 -960 960 960' fill='currentColor' {...props}>
+    <IconSvg {...props}>
         <Path d='M373.69-240q-78.54 0-134.19-54.54-55.65-54.54-55.65-132.38 0-77.85 55.65-132 55.65-54.16 134.19-54.16h309.69L564.77-731.69 593.08-760 760-593.08 593.08-426.15l-28.31-28.31 118.61-118.62H373.69q-62.23 0-106.04 42.31-43.8 42.31-43.8 103.85 0 61.54 43.8 104.23Q311.46-280 373.69-280h290.16v40H373.69Z' />
-    </Svg>
+    </IconSvg>
 )
