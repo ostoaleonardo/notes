@@ -4,9 +4,8 @@ import * as Sharing from 'expo-sharing'
 import * as Print from 'expo-print'
 
 import { useNotes } from './use-notes'
-import { useLanguage } from './use-language'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
-import { getNotesAsString } from '@/utils/files'
+import { buildFileContent } from '@/utils/note-operations'
 import { getNoteAsHtml } from '@/utils/export-html'
 import { getUniqueFilename } from '@/utils/note-filename'
 
@@ -16,7 +15,6 @@ import { logError } from '@/utils/log-error'
 export function useFiles() {
     const { t } = useTranslation()
     const { getNote } = useNotes()
-    const { currentLanguage } = useLanguage()
 
     const getFileData = async (note, format) => {
         if (format === EXPORT_FORMATS.PDF) {
@@ -28,7 +26,7 @@ export function useFiles() {
             return getNoteAsHtml(note)
         }
 
-        return getNotesAsString([note], currentLanguage)
+        return buildFileContent(note)
     }
 
     const resolveExportFilename = (directory, note, format) => {
