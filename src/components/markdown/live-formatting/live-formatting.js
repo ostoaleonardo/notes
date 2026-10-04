@@ -19,6 +19,7 @@ import {
 import { htmlNodeNames, decorateHtml, htmlTheme } from './html'
 import { decorateTable, tableTheme } from './table'
 import { tableLabelsFacet } from './table-labels'
+import { TableWidget } from './table-widget'
 import { decorateMath, mathTheme } from './math'
 import { decorateFootnotes, footnotesTheme } from './footnotes'
 import { decorateBlockIds, blockIdsTheme } from './block-ids'
@@ -90,7 +91,12 @@ export const liveFormatting = StateField.define({
     update: (decorations, tr) => (
         tr.docChanged || tr.selection || tr.reconfigured ? buildDecorations(tr.state) : decorations.map(tr.changes)
     ),
-    provide: (field) => EditorView.decorations.from(field)
+    provide: (field) => [
+        EditorView.decorations.from(field),
+        EditorView.atomicRanges.of((view) => view.state.field(field).update({
+            filter: (from, to, value) => value.spec.widget instanceof TableWidget
+        }))
+    ]
 })
 
 export const buildLiveFormattingTheme = (theme) => ({

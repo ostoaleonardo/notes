@@ -1,7 +1,6 @@
 import { Decoration } from '@codemirror/view'
 
 import { decorateHtml } from './html'
-import { isRangeSelected } from './utils'
 import { TableWidget } from './table-widget'
 
 import { parseTable } from '@/utils/markdown-table'
@@ -19,13 +18,11 @@ import { RADIUS } from '@/constants/radius'
 import { SPACING } from '@/constants/spacing'
 
 export const decorateTable = (node, context) => {
-    const { doc, selection, ranges, tableLabels } = context
+    const { doc, ranges, tableLabels } = context
     const source = doc.sliceString(node.from, node.to)
     const isTopLevel = node.node.parent?.name === 'Document' && doc.lineAt(node.from).from === node.from
 
     if (!isTopLevel || !parseTable(source)) return decorateHtml(node, context)
-    if (isRangeSelected(selection, node.from, node.to)) return true
-
     ranges.push(
         Decoration.replace({ widget: new TableWidget(source, tableLabels), block: true }).range(node.from, node.to)
     )
