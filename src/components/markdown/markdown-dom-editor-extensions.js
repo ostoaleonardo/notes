@@ -13,6 +13,7 @@ import { fileLinkPress } from './live-formatting/wiki-links'
 import { listKeymap } from './markdown-dom-list-keymap'
 import { headingFoldService } from './markdown-dom-fold'
 import { pasteUrlOverSelection } from './markdown-dom-paste'
+import { markdownAutoPair } from './markdown-dom-auto-pair'
 
 const createHiddenSearchPanel = () => {
     const dom = document.createElement('div')
@@ -55,6 +56,7 @@ export const buildEditorExtensions = ({ dynamic, onTagPressRef, onLinkPressRef, 
     blockIdCreatorFacet.of(onCreateBlockIdRef),
     autocompletion({ override: [wikiLinkCompletionSource, blockCompletionSource, tagCompletionSource] }),
     closeBrackets(),
+    markdownAutoPair,
     codeFolding(),
     headingFoldService,
     pasteUrlOverSelection,

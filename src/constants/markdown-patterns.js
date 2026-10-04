@@ -40,3 +40,14 @@ export const WRAP_MARKERS = {
     STRIKE: '~~',
     CODE: '`'
 }
+
+export const AUTO_PAIR_CHARS = ['*', '_', '~', '=', '`']
+export const AUTO_PAIR_EXPAND_CHARS = ['*', '_', '~', '=']
+export const AUTO_PAIR_WORD_PATTERN = /[\p{L}\p{N}]/u
+export const AUTO_PAIR_CLOSER_PATTERN = /[\s)\]}.,;:!?]/
+export const AUTO_PAIR_ACTIONS = {
+    WRAP: 'wrap',
+    EXPAND: 'expand',
+    SKIP: 'skip',
+    PAIR: 'pair'
+}
