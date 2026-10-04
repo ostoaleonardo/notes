@@ -10,7 +10,7 @@ module.exports = [
         plugins: { react, 'react-hooks': reactHooks },
         rules: {
             'react/jsx-uses-vars': 'error',
-            'react-hooks/exhaustive-deps': 'off',
+            'react-hooks/exhaustive-deps': 'warn',
             'no-unused-vars': ['error', { ignoreRestSiblings: true }]
         },
         languageOptions: {
