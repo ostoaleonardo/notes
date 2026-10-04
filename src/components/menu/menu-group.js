@@ -4,7 +4,7 @@ import { useTheme } from 'react-native-paper'
 import { TRANSPARENT } from '@/constants/themes'
 import { RADIUS } from '@/constants/radius'
 
-export function MenuGroup({ children, first = true, last = true, color }) {
+export function MenuGroup({ children, first = true, last = true }) {
     const { colors } = useTheme()
     const topRadius = first ? RADIUS.outer : RADIUS.inner
     const bottomRadius = last ? RADIUS.outer : RADIUS.inner
@@ -19,7 +19,7 @@ export function MenuGroup({ children, first = true, last = true, color }) {
                 borderBottomLeftRadius: bottomRadius,
                 borderBottomRightRadius: bottomRadius,
                 borderColor: colors.onBackground + TRANSPARENT[5],
-                backgroundColor: color || colors.surface
+                backgroundColor: colors.surface
             }}
         >
             {children}
