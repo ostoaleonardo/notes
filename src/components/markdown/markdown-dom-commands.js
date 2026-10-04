@@ -136,9 +136,18 @@ const insertWikiLink = (view) => {
 
 const insertTable = (view, payload) => {
     const { cols = 2, rows = 1 } = payload || {}
-    const { from, to } = view.state.selection.main
+    const { doc, selection } = view.state
+    const line = doc.lineAt(selection.main.head)
+    const nextLine = line.number < doc.lines ? doc.line(line.number + 1) : null
+    const suffix = nextLine && nextLine.text.trim() !== '' ? '\n' : ''
+    const template = buildTableTemplate(cols, rows) + suffix
 
-    snippet(buildTableTemplate(cols, rows))(view, null, from, to)
+    if (line.text.trim() === '') {
+        snippet(template)(view, null, line.from, line.to)
+    } else {
+        snippet(`\n\n${template}`)(view, null, line.to, line.to)
+    }
+
     view.focus()
 }
 

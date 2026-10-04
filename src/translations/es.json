@@ -208,6 +208,23 @@
 		"image_pick_failed": "No se pudo abrir el selector de imágenes.",
 		"image_save_failed": "No se pudo guardar la imagen en la carpeta de adjuntos."
 	},
+	"table_menu": {
+		"row_insert_before": "Insertar fila arriba",
+		"row_insert_after": "Insertar fila abajo",
+		"row_move_before": "Mover fila arriba",
+		"row_move_after": "Mover fila abajo",
+		"row_duplicate": "Duplicar fila",
+		"row_delete": "Eliminar fila",
+		"col_insert_before": "Insertar columna a la izquierda",
+		"col_insert_after": "Insertar columna a la derecha",
+		"col_move_before": "Mover columna a la izquierda",
+		"col_move_after": "Mover columna a la derecha",
+		"col_align_left": "Alinear a la izquierda",
+		"col_align_center": "Centrar",
+		"col_align_right": "Alinear a la derecha",
+		"col_duplicate": "Duplicar columna",
+		"col_delete": "Eliminar columna"
+	},
 	"markdown_action": {
 		"bold": "Negrita",
 		"italic": "Cursiva",

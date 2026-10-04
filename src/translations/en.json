@@ -208,6 +208,23 @@
 		"image_pick_failed": "Could not open the image picker.",
 		"image_save_failed": "Could not save the image to your attachments folder."
 	},
+	"table_menu": {
+		"row_insert_before": "Insert row above",
+		"row_insert_after": "Insert row below",
+		"row_move_before": "Move row up",
+		"row_move_after": "Move row down",
+		"row_duplicate": "Duplicate row",
+		"row_delete": "Delete row",
+		"col_insert_before": "Insert column left",
+		"col_insert_after": "Insert column right",
+		"col_move_before": "Move column left",
+		"col_move_after": "Move column right",
+		"col_align_left": "Align left",
+		"col_align_center": "Align center",
+		"col_align_right": "Align right",
+		"col_duplicate": "Duplicate column",
+		"col_delete": "Delete column"
+	},
 	"markdown_action": {
 		"bold": "Bold",
 		"italic": "Italic",

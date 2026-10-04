@@ -15,7 +15,7 @@ import { runAction } from './markdown-dom-commands'
 import { buildEditorExtensions, buildUpdateListener } from './markdown-dom-editor-extensions'
 import { shouldApplyExternalValue } from './markdown-dom-external-value'
 import { resolvePreviewClick } from './markdown-dom-preview-click'
-import { liveFormatting, mediaMapFacet } from './live-formatting/live-formatting'
+import { liveFormatting, mediaMapFacet, tableLabelsFacet } from './live-formatting/live-formatting'
 import { noteEntriesFacet, wikiLinkFormatFacet } from './wiki-link-completion'
 import { knownTagsFacet } from './tag-completion'
 import { useCompartment } from './use-compartment'
@@ -36,6 +36,7 @@ const MarkdownDomEditor = ({
     noteEntries,
     knownTags,
     linkFormat,
+    tableLabels,
     backlinksHtml,
     onChange,
     onHistoryChange,
@@ -95,6 +96,7 @@ const MarkdownDomEditor = ({
     const noteEntriesExtension = useCompartment(viewRef, () => noteEntriesFacet.of(noteEntries || []), [noteEntries])
     const knownTagsExtension = useCompartment(viewRef, () => knownTagsFacet.of(knownTags || []), [knownTags])
     const linkFormatExtension = useCompartment(viewRef, () => wikiLinkFormatFacet.of(linkFormat), [linkFormat])
+    const tableLabelsExtension = useCompartment(viewRef, () => tableLabelsFacet.of(tableLabels || {}), [tableLabels])
     const liveFormattingExtension = useCompartment(viewRef, () => (mode === EDITOR_MODES.LIVE ? [liveFormatting] : []), [mode])
     const invalidFrontmatterExtension = useCompartment(
         viewRef,
@@ -135,6 +137,7 @@ const MarkdownDomEditor = ({
                     noteEntriesExtension,
                     knownTagsExtension,
                     linkFormatExtension,
+                    tableLabelsExtension,
                     liveFormattingExtension,
                     invalidFrontmatterExtension,
                     frontmatterExtension,

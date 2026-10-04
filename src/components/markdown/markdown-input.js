@@ -28,6 +28,7 @@ import { getEditorPath } from '@/utils/editor-path'
 import { resolveLinkPress } from '@/utils/link-press'
 import { findFileByTarget } from '@/utils/attachments'
 import { toggleTask } from '@/utils/tasks'
+import { buildTableLabels } from '@/utils/table-labels'
 
 import { ROUTES } from '@/constants/routes'
 import { BODY_FONT_FAMILY, HEADING_FONT_FAMILY } from '@/constants/fonts'
@@ -136,6 +137,8 @@ export const MarkdownInput = ({
         onChangeText(toggleTask(value, index))
     }, [value, onChangeText])
 
+    const tableLabels = useMemo(() => buildTableLabels(t), [t])
+
     const dom = useMemo(() => ({
         scrollEnabled: mode === EDITOR_MODES.READ,
         showsVerticalScrollIndicator: false,
@@ -166,6 +169,7 @@ export const MarkdownInput = ({
                 noteEntries={noteEntries}
                 knownTags={knownTags}
                 linkFormat={linkFormat}
+                tableLabels={tableLabels}
                 backlinksHtml={backlinksHtml}
                 onChange={onChangeText}
                 onHistoryChange={onHistoryChange}

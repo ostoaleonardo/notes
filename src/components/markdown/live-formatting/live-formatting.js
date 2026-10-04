@@ -17,6 +17,8 @@ import {
     horizontalRuleTheme
 } from './horizontal-rule'
 import { htmlNodeNames, decorateHtml, htmlTheme } from './html'
+import { decorateTable, tableTheme } from './table'
+import { tableLabelsFacet } from './table-labels'
 import { decorateMath, mathTheme } from './math'
 import { decorateFootnotes, footnotesTheme } from './footnotes'
 import { decorateBlockIds, blockIdsTheme } from './block-ids'
@@ -40,7 +42,8 @@ const NODE_HANDLERS = new Map([
     ...blockquoteNodeNames.map((name) => [name, decorateBlockquote]),
     ...codeBlockNodeNames.map((name) => [name, decorateCodeBlock]),
     ...horizontalRuleNodeNames.map((name) => [name, decorateHorizontalRule]),
-    ...htmlNodeNames.map((name) => [name, decorateHtml])
+    ...htmlNodeNames.map((name) => [name, decorateHtml]),
+    ['Table', decorateTable]
 ])
 
 const buildDecorations = (state) => {
@@ -49,6 +52,7 @@ const buildDecorations = (state) => {
     const doc = state.doc
     const mediaMap = state.facet(mediaMapFacet)
     const noteEntries = state.facet(noteEntriesFacet)
+    const tableLabels = state.facet(tableLabelsFacet)
     const codeRanges = []
     const text = doc.toString()
     const wikiLinkRanges = findWikiLinkRanges(text)
@@ -65,7 +69,7 @@ const buildDecorations = (state) => {
             const handler = NODE_HANDLERS.get(node.name)
             if (!handler) return
 
-            if (handler(node, { doc, selection, ranges, mediaMap })) return false
+            if (handler(node, { doc, selection, ranges, mediaMap, tableLabels })) return false
         }
     })
 
@@ -79,7 +83,7 @@ const buildDecorations = (state) => {
     return Decoration.set(ranges, true)
 }
 
-export { mediaMapFacet }
+export { mediaMapFacet, tableLabelsFacet }
 
 export const liveFormatting = StateField.define({
     create: (state) => buildDecorations(state),
@@ -99,6 +103,7 @@ export const buildLiveFormattingTheme = (theme) => ({
     ...codeBlocksTheme(theme),
     ...horizontalRuleTheme(theme),
     ...htmlTheme(theme),
+    ...tableTheme(theme),
     ...mathTheme(),
     ...footnotesTheme(theme),
     ...extraMarksTheme(theme),
