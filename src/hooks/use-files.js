@@ -4,9 +4,12 @@ import * as Sharing from 'expo-sharing'
 import * as Print from 'expo-print'
 
 import { useNotes } from './use-notes'
+import { useImageUris } from './use-image-uris'
+import { resolveUrl } from './use-resolved-preview-markdown'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 import { buildFileContent } from '@/utils/note-operations'
 import { getNoteAsHtml } from '@/utils/export-html'
+import { extractEmbedImageNames } from '@/utils/embeds'
 import { getUniqueFilename } from '@/utils/note-filename'
 
 import { EXPORT_FORMATS, EXPORT_MIME_TYPES, EXPORT_EXTENSIONS } from '@/constants/export'
@@ -14,16 +17,33 @@ import { logError } from '@/utils/log-error'
 
 export function useFiles() {
     const { t } = useTranslation()
-    const { getNote } = useNotes()
+    const { getNote, notes, notePaths } = useNotes()
+    const listImageUris = useImageUris()
+
+    const buildHtml = async (note) => {
+        const names = extractEmbedImageNames(note.note || '')
+        const uris = names.length ? listImageUris() : new Map()
+        const images = new Map()
+
+        await Promise.all(names.map(async (name) => {
+            if (uris.has(name)) images.set(name, await resolveUrl(uris.get(name)))
+        }))
+
+        return getNoteAsHtml(note, {
+            notes,
+            notePaths,
+            getImageUrl: (name) => images.get(name)
+        })
+    }
 
     const getFileData = async (note, format) => {
         if (format === EXPORT_FORMATS.PDF) {
-            const { uri } = await Print.printToFileAsync({ html: getNoteAsHtml(note) })
+            const { uri } = await Print.printToFileAsync({ html: await buildHtml(note) })
             return await new File(uri).bytes()
         }
 
         if (format === EXPORT_FORMATS.HTML) {
-            return getNoteAsHtml(note)
+            return buildHtml(note)
         }
 
         return buildFileContent(note)

@@ -95,6 +95,20 @@ export const resolveWikiLinkTarget = (linkText, notes, notePaths = new Map()) =>
     resolveWikiLink(linkText, notes, notePaths).note
 )
 
+export const unwrapWikiLinks = (value) => mapOutsideCode(
+    value,
+    (segment) => segment.replace(
+        WIKI_LINK_PATTERN,
+        (match, linkText, alias) => {
+            const { target, anchor } = resolveWikiLink(linkText, [], new Map())
+            const { title } = parseWikiLinkText(target)
+            const defaultLabel = anchor ? `${title}${WIKI_LINK_ANCHOR_LABEL_SEPARATOR}${anchor}` : title
+
+            return escapeHtml((alias || defaultLabel || anchor).trim())
+        }
+    )
+)
+
 export const resolveWikiLinks = (value, notes, notePaths = new Map()) => mapOutsideCode(
     value,
     (segment) => segment.replace(

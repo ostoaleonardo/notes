@@ -1,11 +1,15 @@
 import { buildPreviewCss } from '@/components/markdown/markdown-dom-theme'
 import { renderMarkdownRaw } from '@/components/markdown/markdown-dom-render-html'
+import { resolveEmbeds } from '@/utils/embeds'
+import { escapeHtml, unwrapWikiLinks } from '@/utils/wiki-links'
 
 import { COLORS, TRANSPARENT } from '@/constants/themes'
 import { FONTS } from '@/constants/fonts'
-import { EXPORT_FONT_SIZE } from '@/constants/export'
+import { EXPORT_FONT_SIZE, EXPORT_CONTENT_SECURITY_POLICY } from '@/constants/export'
 
-export const getNoteAsHtml = (note) => {
+const NO_IMAGES = () => null
+
+export const getNoteAsHtml = (note, { notes = [], notePaths, getImageUrl = NO_IMAGES } = {}) => {
     const css = buildPreviewCss({
         fontFamily: FONTS.azeretLight,
         headingFontFamily: `${FONTS.nType82Headline}, system-ui, sans-serif`,
@@ -19,14 +23,16 @@ export const getNoteAsHtml = (note) => {
         fontSize: EXPORT_FONT_SIZE
     })
 
-    const body = renderMarkdownRaw(`# ${note.title}\n\n${note.note || ''}`)
+    const embedded = resolveEmbeds(note.note || '', { notes, notePaths, getImageUrl, selfPath: note.path })
+    const body = renderMarkdownRaw(`# ${note.title}\n\n${unwrapWikiLinks(embedded)}`)
 
     return `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>${note.title}</title>
+<meta http-equiv="Content-Security-Policy" content="${EXPORT_CONTENT_SECURITY_POLICY}" />
+<title>${escapeHtml(note.title)}</title>
 <style>
     body { background: ${COLORS.light.foreground}; margin: 0; }
     ${css}

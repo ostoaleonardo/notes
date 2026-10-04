@@ -17,3 +17,5 @@ export const EXPORT_EXTENSIONS = {
     [EXPORT_FORMATS.HTML]: 'html',
     [EXPORT_FORMATS.PDF]: 'pdf'
 }
+
+export const EXPORT_CONTENT_SECURITY_POLICY = "script-src 'none'; object-src 'none'; frame-src 'none'"
