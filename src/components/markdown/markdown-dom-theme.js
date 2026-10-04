@@ -14,12 +14,16 @@ import {
 } from '../../constants/callouts'
 import { EMBED_CLASS, EMBED_TITLE_CLASS } from '../../constants/embeds'
 import { FILE_LINK_CLASS } from '../../constants/file-links'
+import { ATTACH_FILE_ICON_PATH } from '../../constants/icon-paths'
+import { buildIconMaskUrl } from '../../utils/icon-mask'
 import {
     BACKLINKS_CLASS,
     BACKLINKS_TITLE_CLASS,
     BACKLINK_TITLE_CLASS,
     BACKLINK_PATH_CLASS
 } from '../../constants/backlinks'
+
+const ATTACH_FILE_MASK = buildIconMaskUrl(ATTACH_FILE_ICON_PATH)
 
 const buildDerivedColors = (colors) => ({
     ...colors,
@@ -320,6 +324,11 @@ export const buildPreviewCss = ({ fontFamily, headingFontFamily, colors, fontSiz
     .markdown-preview .${FILE_LINK_CLASS} {
         display: inline-block; padding: 0 8px; border-radius: ${RADIUS.segment}px; text-decoration: none;
         color: ${textColor}; background-color: ${surfaceColor}; border: 1px solid ${textColor + TRANSPARENT[5]};
+    }
+    .markdown-preview .${FILE_LINK_CLASS}::before {
+        content: ''; display: inline-block; width: 1em; height: 1em; margin-right: 2px; vertical-align: -0.2em;
+        background-color: currentColor; opacity: 0.6; -webkit-mask: ${ATTACH_FILE_MASK} center / contain no-repeat;
+        mask: ${ATTACH_FILE_MASK} center / contain no-repeat;
     }
     .markdown-preview .wiki-link-broken { color: ${textColor}; opacity: 0.5; text-decoration: underline dashed; }
     .markdown-preview blockquote {

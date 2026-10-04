@@ -5,10 +5,12 @@ import { ImageWidget } from './widgets'
 
 import { resolveWikiLinkTarget } from '@/utils/wiki-links'
 import { buildFileLinkUrl, isFileLinkTarget } from '@/utils/file-links'
+import { buildIconMaskUrl } from '@/utils/icon-mask'
 
 import { TRANSPARENT } from '@/constants/themes'
 import { RADIUS } from '@/constants/radius'
 import { FILE_LINK_LIVE_CLASS } from '@/constants/file-links'
+import { ATTACH_FILE_ICON_PATH } from '@/constants/icon-paths'
 
 import { WIKI_LINK_PATTERN, WIKI_LINK_ANCHOR_SEPARATOR } from '@/constants/wiki-links'
 import { EMBED_IMAGE_PATTERN, EMBED_LIVE_CLASS, EMBED_MARKER } from '@/constants/embeds'
@@ -82,6 +84,8 @@ export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntr
     }
 }
 
+const ATTACH_FILE_MASK = buildIconMaskUrl(ATTACH_FILE_ICON_PATH)
+
 export const wikiLinksTheme = ({ linkColor, onBackgroundColor, surfaceColor }) => ({
     '.cm-live-wikilink': { color: linkColor, fontWeight: 'bold' },
     [`.${EMBED_LIVE_CLASS}`]: { color: linkColor, fontWeight: 'bold', fontStyle: 'italic' },
@@ -92,6 +96,18 @@ export const wikiLinksTheme = ({ linkColor, onBackgroundColor, surfaceColor }) =
         backgroundColor: surfaceColor,
         borderRadius: `${RADIUS.segment}px`,
         border: `1px solid ${onBackgroundColor + TRANSPARENT[5]}`
+    },
+    [`.${FILE_LINK_LIVE_CLASS}::before`]: {
+        content: '""',
+        display: 'inline-block',
+        width: '1em',
+        height: '1em',
+        marginRight: '2px',
+        verticalAlign: '-0.2em',
+        backgroundColor: 'currentColor',
+        opacity: 0.6,
+        mask: `${ATTACH_FILE_MASK} center / contain no-repeat`,
+        WebkitMask: `${ATTACH_FILE_MASK} center / contain no-repeat`
     },
     '.cm-live-wikilink-broken': { color: onBackgroundColor, opacity: 0.5, textDecoration: 'underline dashed' }
 })
