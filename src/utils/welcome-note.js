@@ -12,7 +12,8 @@ export const getWelcomeNote = () => {
         { title: t('welcome.tools_templates_title'), body: t('welcome.tools_templates_body') },
         { title: t('welcome.tools_history_title'), body: t('welcome.tools_history_body') },
         { title: t('welcome.tools_export_title'), body: t('welcome.tools_export_body') },
-        { title: t('welcome.tools_share_title'), body: t('welcome.tools_share_body') }
+        { title: t('welcome.tools_share_title'), body: t('welcome.tools_share_body') },
+        { title: t('welcome.tools_daily_title'), body: t('welcome.tools_daily_body') }
     ]
 
     const proItems = [

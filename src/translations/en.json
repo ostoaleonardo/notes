@@ -368,6 +368,8 @@
 		"tools_export_body": "Save your note as a Markdown file.",
 		"tools_share_title": "Share",
 		"tools_share_body": "Send it straight to another app.",
+		"tools_daily_title": "Daily note",
+		"tools_daily_body": "Tap the calendar button in the drawer to open today's note. Pick its folder and template in Settings.",
 		"pro_heading": "⭐ Get more out of Pro",
 		"pro_intro": "The Pro version gives you:",
 		"pro_versions_title": "Full version history",
