@@ -68,8 +68,15 @@ export default function Settings() {
                     containerStyle={styles.section}
                     contentStyle={styles.items}
                 >
-                    <AttachmentsOption />
                     <WikiLinksOption />
+                </Section>
+
+                <Section
+                    title={t('settings.attachments')}
+                    containerStyle={styles.section}
+                    contentStyle={styles.items}
+                >
+                    <AttachmentsOption />
                 </Section>
 
                 {isDevice && <ProSection />}
