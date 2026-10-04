@@ -31,6 +31,7 @@ import { PREVIEW_CLICK_TYPES } from '@/constants/preview-click'
 
 const MarkdownDomEditor = ({
     mode,
+    onEdit,
     value,
     previewValue,
     mediaMap,
@@ -282,9 +283,17 @@ const MarkdownDomEditor = ({
             }
         }
 
+        const onDoubleClick = (event) => {
+            if (!resolvePreviewClick(event.target, container)) onEdit?.()
+        }
+
         container.addEventListener('click', onClick)
-        return () => container.removeEventListener('click', onClick)
-    }, [onLinkPress, onImagePress, onToggleTask])
+        container.addEventListener('dblclick', onDoubleClick)
+        return () => {
+            container.removeEventListener('click', onClick)
+            container.removeEventListener('dblclick', onDoubleClick)
+        }
+    }, [onLinkPress, onImagePress, onToggleTask, onEdit])
 
     const html = useMemo(
         () => (mode === EDITOR_MODES.READ ? renderMarkdownHtml(previewValue) + (backlinksHtml || '') : ''),

@@ -40,6 +40,7 @@ import { WIKI_LINK_FORMATS } from '@/constants/wiki-links'
 export const MarkdownInput = ({
     id,
     mode = EDITOR_MODES.LIVE,
+    onEdit,
     value,
     onChangeText,
     onHistoryChange,
@@ -163,6 +164,7 @@ export const MarkdownInput = ({
         <>
             <MarkdownDomEditor
                 mode={mode}
+                onEdit={onEdit}
                 value={value}
                 previewValue={previewValue}
                 mediaMap={mediaMapEntries}

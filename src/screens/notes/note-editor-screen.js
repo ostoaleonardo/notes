@@ -128,6 +128,8 @@ export const NoteEditorScreen = ({
         setRawFrontmatter
     })
 
+    const onEdit = useCallback(() => onSetMode(EDITOR_MODES.LIVE), [onSetMode])
+
     const invalid = mode !== EDITOR_MODES.CODE && !!invalidFrontmatter
 
     const propertyLabels = useMemo(() => ({
@@ -290,6 +292,7 @@ export const NoteEditorScreen = ({
                 <MarkdownInput
                     id={id}
                     mode={mode}
+                    onEdit={onEdit}
                     titleField={titleField}
                     onTitleChange={setTitle}
                     onTitleBlur={onTitleBlur}
