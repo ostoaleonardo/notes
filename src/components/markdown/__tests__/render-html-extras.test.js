@@ -98,6 +98,31 @@ describe('render block ids', () => {
     })
 })
 
+describe('render custom task statuses', () => {
+    test('renders a custom status as a checked checkbox tagged with its status', () => {
+        const html = renderMarkdownRaw('- [/] doing\n- [-] dropped')
+
+        expect(html).toContain('data-task="/"')
+        expect(html).toContain('data-task="-"')
+        expect(html.match(/checked=""/g)).toHaveLength(2)
+        expect(html).toContain('doing')
+    })
+
+    test('tags the checkbox of a custom status with its glyph', () => {
+        const html = renderMarkdownRaw('- [/] doing\n- [ ] todo')
+
+        expect(html).toContain('data-status="/"')
+        expect(html.match(/data-status=/g)).toHaveLength(1)
+    })
+
+    test('leaves regular tasks without a status attribute', () => {
+        const html = renderMarkdownRaw('- [ ] a\n- [x] b')
+
+        expect(html).not.toContain('data-task')
+        expect(html.match(/<input/g)).toHaveLength(2)
+    })
+})
+
 describe('render line breaks', () => {
     test('turns a single newline into a line break', () => {
         expect(renderMarkdownRaw('one\ntwo')).toContain('one<br>\ntwo')

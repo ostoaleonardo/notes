@@ -1,4 +1,4 @@
-import { toggleTask } from '../tasks'
+import { findCustomTaskRanges, toggleTask } from '../tasks'
 
 describe('toggle task', () => {
     test('checks an unchecked task', () => {
@@ -40,7 +40,35 @@ describe('toggle task', () => {
         expect(toggleTask('- item\n- [ ] task', 0)).toBe('- item\n- [x] task')
     })
 
+    test('unchecks a custom status because it renders as checked', () => {
+        expect(toggleTask('- [/] doing', 0)).toBe('- [ ] doing')
+        expect(toggleTask('- [-] dropped\n- [>] later', 1)).toBe('- [-] dropped\n- [ ] later')
+    })
+
+    test('counts custom statuses together with regular tasks', () => {
+        expect(toggleTask('- [ ] a\n- [/] b\n- [ ] c', 2)).toBe('- [ ] a\n- [/] b\n- [x] c')
+    })
+
     test('keeps the source when the index does not exist', () => {
         expect(toggleTask('- [ ] only', 3)).toBe('- [ ] only')
+    })
+})
+
+describe('find custom task ranges', () => {
+    test('returns the marker range and status of each custom task', () => {
+        expect(findCustomTaskRanges('- [/] a\n- [-] b')).toEqual([
+            { from: 2, to: 5, status: '/' },
+            { from: 10, to: 13, status: '-' }
+        ])
+    })
+
+    test('ignores regular tasks and plain brackets', () => {
+        expect(findCustomTaskRanges('- [ ] a\n- [x] b\n[/] c\n- [/]d')).toEqual([])
+    })
+
+    test('supports nested, quoted and numbered tasks', () => {
+        const ranges = findCustomTaskRanges('  - [>] a\n> - [/] b\n1. [-] c')
+
+        expect(ranges.map((range) => range.status)).toEqual(['>', '/', '-'])
     })
 })

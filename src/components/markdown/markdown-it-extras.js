@@ -13,6 +13,13 @@ import {
     CALLOUT_TYPE_CLASS_PREFIX
 } from '@/constants/callouts'
 import {
+    CUSTOM_TASK_PATTERN,
+    CUSTOM_TASK_STATUS_ATTRIBUTE,
+    TASK_CHECKBOX_TAG_PATTERN,
+    TASK_CHECKED_MARK,
+    TASK_STATUS_ATTRIBUTE
+} from '@/constants/tasks'
+import {
     COMMENT_MARKER,
     COMMENT_OR_CODE_PATTERN,
     HIGHLIGHT_MARKER,
@@ -150,6 +157,41 @@ const markBlockIds = (state) => {
     }
 }
 
+const markCustomTasks = (state) => {
+    const { tokens } = state
+
+    for (let index = 2; index < tokens.length; index++) {
+        const token = tokens[index]
+        const first = token.children?.[0]
+        const isItemText = token.type === 'inline'
+            && tokens[index - 1].type === 'paragraph_open'
+            && tokens[index - 2].type === 'list_item_open'
+        const match = isItemText && first?.type === 'text' && CUSTOM_TASK_PATTERN.exec(token.content)
+        if (!match) continue
+
+        const checked = `[${TASK_CHECKED_MARK}]`
+        tokens[index - 2].attrSet(TASK_STATUS_ATTRIBUTE, match[1])
+        token.content = checked + token.content.slice(checked.length)
+        first.content = checked + first.content.slice(checked.length)
+    }
+}
+
+const markCustomTaskCheckboxes = (state) => {
+    const { tokens } = state
+
+    for (let index = 2; index < tokens.length; index++) {
+        const status = tokens[index - 2].attrGet(TASK_STATUS_ATTRIBUTE)
+        const checkbox = tokens[index].type === 'inline' && status
+            && tokens[index].children?.find((child) => child.content.startsWith(TASK_CHECKBOX_TAG_PATTERN))
+        if (!checkbox) continue
+
+        checkbox.content = checkbox.content.replace(
+            TASK_CHECKBOX_TAG_PATTERN,
+            `${TASK_CHECKBOX_TAG_PATTERN} ${CUSTOM_TASK_STATUS_ATTRIBUTE}="${status}"`
+        )
+    }
+}
+
 export const markdownItExtras = (md) => {
     md.inline.ruler.before('emphasis', 'highlight', highlightRule)
 
@@ -157,6 +199,8 @@ export const markdownItExtras = (md) => {
         state.src = stripComments(state.src)
     })
 
+    md.core.ruler.after('inline', 'custom-tasks', markCustomTasks)
+    md.core.ruler.push('custom-task-checkboxes', markCustomTaskCheckboxes)
     md.core.ruler.after('inline', 'block-ids', markBlockIds)
 
     md.core.ruler.before('inline', 'callouts', (state) => {

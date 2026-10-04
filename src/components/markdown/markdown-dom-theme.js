@@ -27,6 +27,14 @@ import {
     MENTION_ACTION_CLASS
 } from '../../constants/backlinks'
 
+import {
+    CUSTOM_TASK_BOX_MARGIN,
+    CUSTOM_TASK_BOX_RADIUS,
+    CUSTOM_TASK_BOX_SIZE,
+    CUSTOM_TASK_GLYPH_SIZE,
+    CUSTOM_TASK_STATUS_ATTRIBUTE
+} from '../../constants/tasks'
+
 const ATTACH_FILE_MASK = buildIconMaskUrl(ATTACH_FILE_ICON_PATH)
 
 export const buildDerivedColors = (colors) => ({
@@ -368,6 +376,15 @@ export const buildPreviewCss = ({ colors, typography }) => {
     .markdown-preview ul, .markdown-preview ol { padding-left: 1.4em; margin: 0.4em 0; list-style-position: inside; }
     .markdown-preview li.task-list-item { list-style: none; margin-left: -1.4em; }
     .markdown-preview input[type="checkbox"] { accent-color: ${linkColor}; margin-right: 0.4em; }
+    .markdown-preview input.task-list-item-checkbox[${CUSTOM_TASK_STATUS_ATTRIBUTE}] {
+        appearance: none; -webkit-appearance: none; box-sizing: border-box; vertical-align: middle;
+        width: ${CUSTOM_TASK_BOX_SIZE}; height: ${CUSTOM_TASK_BOX_SIZE}; border-radius: ${CUSTOM_TASK_BOX_RADIUS};
+        margin: ${CUSTOM_TASK_BOX_MARGIN}; background-color: ${linkColor}; padding: 0;
+    }
+    .markdown-preview input.task-list-item-checkbox[${CUSTOM_TASK_STATUS_ATTRIBUTE}]::before {
+        content: attr(${CUSTOM_TASK_STATUS_ATTRIBUTE}); display: block; text-align: center; font-weight: bold;
+        font-size: ${CUSTOM_TASK_GLYPH_SIZE}; line-height: ${CUSTOM_TASK_BOX_SIZE}; color: ${colors.background};
+    }
     .markdown-preview img { max-width: 100%; object-fit: contain; border-radius: 8px; }
     .markdown-preview hr { border: none; border-top: 1px solid ${thematicBreakColor}; margin: 16px 0; }
     .markdown-preview table { border-collapse: collapse; margin: 0.4em 0; overflow-x: auto; display: block; }

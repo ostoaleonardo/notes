@@ -21,8 +21,11 @@ import { decorateMath, mathTheme } from './math'
 import { decorateFootnotes, footnotesTheme } from './footnotes'
 import { decorateBlockIds, blockIdsTheme } from './block-ids'
 import { decorateExtraMarks, extraMarksTheme } from './extra-marks'
+import { decorateCustomTasks, customTasksTheme } from './custom-tasks'
 import { findWikiLinkRanges, decorateWikiLinks, wikiLinksTheme } from './wiki-links'
 import { noteEntriesFacet } from '../wiki-link-completion'
+
+import { findCustomTaskRanges } from '@/utils/tasks'
 
 import { CODE_RANGE_NODE_NAMES } from '@/constants/markdown-live-formatting'
 
@@ -49,12 +52,15 @@ const buildDecorations = (state) => {
     const codeRanges = []
     const text = doc.toString()
     const wikiLinkRanges = findWikiLinkRanges(text)
+    const customTaskRanges = findCustomTaskRanges(text)
 
     syntaxTree(state).iterate({
         enter: (node) => {
             if (codeRangeNodeNames.has(node.name)) codeRanges.push({ from: node.from, to: node.to })
 
-            if (linkNodeNames.includes(node.name) && overlapsAny(node.from, node.to, wikiLinkRanges)) return
+            const isLink = linkNodeNames.includes(node.name)
+            if (isLink && overlapsAny(node.from, node.to, wikiLinkRanges)) return
+            if (isLink && overlapsAny(node.from, node.to, customTaskRanges)) return
 
             const handler = NODE_HANDLERS.get(node.name)
             if (!handler) return
@@ -66,6 +72,7 @@ const buildDecorations = (state) => {
     decorateMath({ text, selection, ranges, codeRanges })
     decorateFootnotes({ text, ranges, codeRanges })
     decorateBlockIds({ text, ranges })
+    decorateCustomTasks({ customTaskRanges, selection, ranges, codeRanges })
     decorateExtraMarks({ text, selection, ranges, codeRanges })
     decorateWikiLinks({ ranges, codeRanges, wikiLinkRanges, noteEntries, selection, mediaMap })
 
@@ -95,6 +102,7 @@ export const buildLiveFormattingTheme = (theme) => ({
     ...mathTheme(),
     ...footnotesTheme(theme),
     ...extraMarksTheme(theme),
+    ...customTasksTheme(theme),
     ...blockIdsTheme(theme),
     ...wikiLinksTheme(theme)
 })
