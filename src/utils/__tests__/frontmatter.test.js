@@ -121,12 +121,12 @@ describe('buildNoteFileContent', () => {
         expect(parseFrontmatter(content).body).toBe(body)
     })
 
-    test('defaults tags to an empty array when there are properties', () => {
+    test('omits the tags key when there are properties but no tags', () => {
         const content = buildNoteFileContent({ properties: { author: 'Ana' } }, 'Body')
 
         const { frontmatter } = parseFrontmatter(content)
 
-        expect(frontmatter.tags).toEqual([])
+        expect(frontmatter).toEqual({ author: 'Ana' })
     })
 })
 

@@ -64,7 +64,7 @@ export const buildNoteFileContent = ({ tags, properties, invalidFrontmatter = nu
 
     const frontmatter = invalidFrontmatter != null
         ? `${invalidFrontmatter}\n`
-        : dump({ ...properties, tags: tags || [] })
+        : dump(tags?.length ? { ...properties, tags } : { ...properties })
 
     return `---\n${frontmatter}---\n\n${body}`
 }
