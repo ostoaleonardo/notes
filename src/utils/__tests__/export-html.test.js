@@ -1,4 +1,4 @@
-import { getNoteAsHtml } from '../export-html'
+import { getExportMarkdown, getNoteAsHtml } from '../export-html'
 
 jest.mock('@/components/markdown/markdown-dom-theme', () => ({
     buildPreviewCss: () => ''
@@ -46,5 +46,24 @@ describe('note as html', () => {
         )
 
         expect(html).toContain('![a.png](data:image/png;base64,AAA)')
+    })
+
+    test('replaces local image urls with the resolved ones', () => {
+        const html = getNoteAsHtml(
+            { title: 'T', note: '![pic](content://vault/pic.png)' },
+            { notes, imageUrls: new Map([['content://vault/pic.png', 'data:image/png;base64,BBB']]) }
+        )
+
+        expect(html).toContain('![pic](data:image/png;base64,BBB)')
+    })
+})
+
+describe('export markdown', () => {
+    test('inlines embeds and unwraps wiki links', () => {
+        const markdown = getExportMarkdown({ title: 'T', note: '![[Alpha]] [[Beta]]' }, { notes })
+
+        expect(markdown).toContain('alpha body')
+        expect(markdown).toContain('Beta')
+        expect(markdown).not.toContain('[[')
     })
 })

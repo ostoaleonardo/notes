@@ -63,6 +63,7 @@ jest.mock('@/utils/log-error', () => ({
     logError: jest.fn()
 }))
 jest.mock('@/utils/export-html', () => ({
+    getExportMarkdown: jest.fn(() => ''),
     getNoteAsHtml: jest.fn(() => '<html>note</html>')
 }))
 jest.mock('../use-notes', () => ({

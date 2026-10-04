@@ -2,21 +2,12 @@ import { useEffect, useRef, useState } from 'react'
 import { File } from 'expo-file-system'
 
 import { bytesToBase64 } from '@/utils/base64'
+import { extractLocalUrls, replaceLocalImageUrls } from '@/utils/local-images'
 
 import { MIME_TYPES } from '@/constants/mime-types'
 import { MAX_PREVIEW_IMAGE_CACHE } from '@/constants/image'
-import { MARKDOWN_IMAGE_PATTERN, HTML_IMAGE_PATTERN } from '@/constants/markdown-patterns'
 
 const EMPTY_MEDIA_MAP = new Map()
-
-const extractLocalUrls = (value) => {
-    const urls = new Set()
-
-    for (const match of value.matchAll(MARKDOWN_IMAGE_PATTERN)) urls.add(match[2])
-    for (const match of value.matchAll(HTML_IMAGE_PATTERN)) urls.add(match[2])
-
-    return [...urls]
-}
 
 export const resolveUrl = async (url) => {
     try {
@@ -59,15 +50,7 @@ export const useResolvedPreviewMarkdown = (value) => {
             while (cache.size > MAX_PREVIEW_IMAGE_CACHE) cache.delete(cache.keys().next().value)
             setMediaMap(resolvedUrls)
 
-            const withMarkdownResolved = value.replace(
-                MARKDOWN_IMAGE_PATTERN,
-                (_, label, url) => `![${label}](${resolvedUrls.get(url) || url})`
-            )
-
-            setResolved(withMarkdownResolved.replace(
-                HTML_IMAGE_PATTERN,
-                (_, prefix, url, suffix) => `${prefix}${resolvedUrls.get(url) || url}${suffix}`
-            ))
+            setResolved(replaceLocalImageUrls(value, resolvedUrls))
         })
 
         return () => { cancelled = true }

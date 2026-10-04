@@ -8,11 +8,17 @@ import { useImageUris } from './use-image-uris'
 import { resolveUrl } from './use-resolved-preview-markdown'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 import { buildFileContent } from '@/utils/note-operations'
-import { getNoteAsHtml } from '@/utils/export-html'
+import { getExportMarkdown, getNoteAsHtml } from '@/utils/export-html'
 import { extractEmbedImageNames } from '@/utils/embeds'
+import { extractLocalUrls } from '@/utils/local-images'
 import { getUniqueFilename } from '@/utils/note-filename'
 
-import { EXPORT_FORMATS, EXPORT_MIME_TYPES, EXPORT_EXTENSIONS } from '@/constants/export'
+import {
+    EXPORT_FORMATS,
+    EXPORT_MIME_TYPES,
+    EXPORT_EXTENSIONS,
+    EXPORT_LOCAL_IMAGE_URL_PATTERN
+} from '@/constants/export'
 import { logError } from '@/utils/log-error'
 
 export function useFiles() {
@@ -29,11 +35,18 @@ export function useFiles() {
             if (uris.has(name)) images.set(name, await resolveUrl(uris.get(name)))
         }))
 
-        return getNoteAsHtml(note, {
+        const context = {
             notes,
             notePaths,
             getImageUrl: (name) => images.get(name)
-        })
+        }
+        const localUrls = extractLocalUrls(getExportMarkdown(note, context))
+            .filter((url) => EXPORT_LOCAL_IMAGE_URL_PATTERN.test(url))
+        const imageUrls = new Map(await Promise.all(
+            localUrls.map(async (url) => [url, await resolveUrl(url)])
+        ))
+
+        return getNoteAsHtml(note, { ...context, imageUrls })
     }
 
     const getFileData = async (note, format) => {

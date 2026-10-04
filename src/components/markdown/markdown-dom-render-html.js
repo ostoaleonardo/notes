@@ -37,6 +37,13 @@ md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
     return defaultLinkOpen(tokens, idx, options, env, self)
 }
 
+const renderHtmlToken = (tokens, idx, options, env) => (
+    env.sanitizeHtml ? env.sanitizeHtml(tokens[idx].content) : tokens[idx].content
+)
+
+md.renderer.rules.html_block = renderHtmlToken
+md.renderer.rules.html_inline = renderHtmlToken
+
 const buildTextToken = (Token, content) => {
     const token = new Token('text', '', 0)
     token.content = content
