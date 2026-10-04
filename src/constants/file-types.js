@@ -2,7 +2,8 @@ export const FILE_KINDS = {
     IMAGE: 'image',
     AUDIO: 'audio',
     VIDEO: 'video',
-    PDF: 'pdf'
+    PDF: 'pdf',
+    TEXT: 'text'
 }
 
 export const FILE_MIME_TYPES = {
@@ -25,7 +26,8 @@ export const FILE_MIME_TYPES = {
     ogv: 'video/ogg',
     mov: 'video/quicktime',
     mkv: 'video/x-matroska',
-    pdf: 'application/pdf'
+    pdf: 'application/pdf',
+    txt: 'text/plain'
 }
 
 export const FILE_KIND_BY_EXTENSION = {
@@ -48,5 +50,6 @@ export const FILE_KIND_BY_EXTENSION = {
     ogv: FILE_KINDS.VIDEO,
     mov: FILE_KINDS.VIDEO,
     mkv: FILE_KINDS.VIDEO,
-    pdf: FILE_KINDS.PDF
+    pdf: FILE_KINDS.PDF,
+    txt: FILE_KINDS.TEXT
 }

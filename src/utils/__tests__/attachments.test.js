@@ -157,6 +157,7 @@ describe('file kind', () => {
         expect(getFileKind('a.m4a')).toBe(FILE_KINDS.AUDIO)
         expect(getFileKind('a.mov')).toBe(FILE_KINDS.VIDEO)
         expect(getFileKind('a.pdf')).toBe(FILE_KINDS.PDF)
+        expect(getFileKind('tags.TXT')).toBe(FILE_KINDS.TEXT)
     })
 
     test('returns null for unsupported files and names without extension', () => {
