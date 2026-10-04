@@ -73,7 +73,15 @@ export const tableTheme = ({ colors, typography }) => {
             color: colors.onBackground,
             opacity: 0.6,
             cursor: 'pointer',
-            touchAction: 'manipulation'
+            touchAction: 'none',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            WebkitTouchCallout: 'none'
+        },
+        [`.${TABLE_CLASSES.DROP}`]: {
+            position: 'absolute',
+            pointerEvents: 'none',
+            backgroundColor: accent
         },
         [`.${TABLE_CLASSES.ROW_GRIP}`]: { left: `${TABLE_BLEED}px`, width: `${TABLE_GUTTER}px` },
         [`.${TABLE_CLASSES.COL_GRIP}`]: { top: 0, height: `${TABLE_GUTTER}px` },

@@ -87,7 +87,7 @@ export const deleteRow = (table, index) => {
 
 export const moveRow = (table, index, offset) => {
     const target = index + offset
-    if (index === 0 || target < 1 || target >= table.rows.length) return table
+    if (target < 0 || target >= table.rows.length) return table
     return { ...table, rows: swap(table.rows, index, target) }
 }
 
@@ -154,6 +154,8 @@ const AXIS_OPS = {
         remove: deleteCol
     }
 }
+
+export const moveTableItem = (table, axis, from, to) => AXIS_OPS[axis].move(table, from, to - from)
 
 const ALIGN_BY_ACTION = {
     [TABLE_ACTIONS.ALIGN_LEFT]: TABLE_ALIGNS.LEFT,

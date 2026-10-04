@@ -2,7 +2,13 @@ import { WidgetType } from '@codemirror/view'
 
 import { renderInlineHtml } from '../markdown-dom-render-html'
 
-import { applyTableAction, parseTable, serializeTable, setCell } from '@/utils/markdown-table'
+import {
+    applyTableAction,
+    moveTableItem,
+    parseTable,
+    serializeTable,
+    setCell
+} from '@/utils/markdown-table'
 
 import { ICON_FILL, ICON_VIEW_BOX } from '@/constants/icon-size'
 import {
@@ -11,7 +17,14 @@ import {
     TABLE_MENU_ICON_PATHS,
     TABLE_MENU_LAYOUT
 } from '@/constants/table'
-import { TABLE_CLASSES, TABLE_MENU_ICON_SIZE, TABLE_SCROLL_END_TOLERANCE } from '@/constants/table-widget'
+import {
+    TABLE_CLASSES,
+    TABLE_DRAG_THRESHOLD,
+    TABLE_DROP_THICKNESS,
+    TABLE_HOLD_DELAY,
+    TABLE_MENU_ICON_SIZE,
+    TABLE_SCROLL_END_TOLERANCE
+} from '@/constants/table-widget'
 
 const SVG_NS = 'http://www.w3.org/2000/svg'
 
@@ -207,14 +220,118 @@ export class TableWidget extends WidgetType {
         return { ...wrap.table, rows }
     }
 
-    runAction(view, wrap, axis, index, action) {
-        const current = this.readTable(wrap)
-        const next = applyTableAction(current, axis, index, action)
+    applyChange(view, wrap, current, next) {
         if (next === current) return
 
         document.activeElement?.blur?.()
         wrap.table = next
         this.commit(view, wrap, next)
+    }
+
+    runAction(view, wrap, axis, index, action) {
+        const current = this.readTable(wrap)
+        this.applyChange(view, wrap, current, applyTableAction(current, axis, index, action))
+    }
+
+    moveItem(view, wrap, axis, from, to) {
+        const current = this.readTable(wrap)
+        this.applyChange(view, wrap, current, moveTableItem(current, axis, from, to))
+    }
+
+    getDropTarget(wrap, axis, point) {
+        const isRow = axis === TABLE_AXES.ROW
+        const lanes = wrap.cells.filter((cell) => (isRow ? cell.col === 0 : cell.row === 0))
+        const rects = lanes.map((cell) => cell.getBoundingClientRect())
+        const position = isRow ? point.y : point.x
+        const found = rects.findIndex((rect) => position < (isRow ? rect.bottom : rect.right))
+        const index = found === -1 ? lanes.length - 1 : found
+
+        return { index, rect: rects[index] }
+    }
+
+    drawDrop(wrap, axis, scroll, from, target) {
+        const isRow = axis === TABLE_AXES.ROW
+        const { drop } = wrap
+        drop.classList.toggle(TABLE_CLASSES.HIDDEN, target.index === from)
+
+        const wrapRect = wrap.getBoundingClientRect()
+        const scrollRect = scroll.getBoundingClientRect()
+        const after = target.index > from
+        const half = TABLE_DROP_THICKNESS / 2
+
+        if (isRow) {
+            const edge = after ? target.rect.bottom : target.rect.top
+            drop.style.left = `${scrollRect.left - wrapRect.left}px`
+            drop.style.width = `${scroll.clientWidth}px`
+            drop.style.top = `${edge - wrapRect.top - half}px`
+            drop.style.height = `${TABLE_DROP_THICKNESS}px`
+        } else {
+            const edge = after ? target.rect.right : target.rect.left
+            drop.style.top = `${scrollRect.top - wrapRect.top}px`
+            drop.style.height = `${scroll.clientHeight}px`
+            drop.style.left = `${edge - wrapRect.left - half}px`
+            drop.style.width = `${TABLE_DROP_THICKNESS}px`
+        }
+    }
+
+    bindDrag(view, wrap, grip, axis, scroll) {
+        let drag = null
+        let holdTimer = null
+
+        const highlight = (index, on) => wrap.cells.forEach((cell) => {
+            const position = axis === TABLE_AXES.ROW ? cell.row : cell.col
+            if (position === index) cell.classList.toggle(TABLE_CLASSES.HIGHLIGHT, on)
+        })
+
+        const finish = (commit) => {
+            clearTimeout(holdTimer)
+            if (!drag) return
+
+            const { from, to, moving } = drag
+            drag = null
+            wrap.drop?.remove()
+            wrap.drop = null
+            if (moving) highlight(from, false)
+            if (moving && commit && to !== null && to !== from) this.moveItem(view, wrap, axis, from, to)
+            setTimeout(() => { wrap.suppressClick = false })
+        }
+
+        grip.addEventListener('pointerdown', (event) => {
+            if (!wrap.active) return
+
+            const from = axis === TABLE_AXES.ROW ? wrap.active.row : wrap.active.col
+            drag = { from, to: null, moving: false, x: event.clientX, y: event.clientY }
+            grip.setPointerCapture(event.pointerId)
+
+            holdTimer = setTimeout(() => {
+                wrap.suppressClick = true
+                this.openMenu(view, wrap, axis, grip)
+            }, TABLE_HOLD_DELAY)
+        })
+
+        grip.addEventListener('pointermove', (event) => {
+            if (!drag) return
+
+            if (!drag.moving) {
+                const distance = Math.hypot(event.clientX - drag.x, event.clientY - drag.y)
+                if (distance < TABLE_DRAG_THRESHOLD) return
+
+                clearTimeout(holdTimer)
+
+                drag.moving = true
+                wrap.suppressClick = true
+                this.closeMenu(wrap)
+                highlight(drag.from, true)
+                wrap.drop = buildElement('div', TABLE_CLASSES.DROP, wrap)
+            }
+
+            const target = this.getDropTarget(wrap, axis, { x: event.clientX, y: event.clientY })
+            drag.to = target.index
+            this.drawDrop(wrap, axis, scroll, drag.from, target)
+        })
+
+        grip.addEventListener('pointerup', () => finish(true))
+        grip.addEventListener('pointercancel', () => finish(false))
     }
 
     openMenu(view, wrap, axis, grip) {
@@ -275,8 +392,12 @@ export class TableWidget extends WidgetType {
         }
 
         const bindGrip = (grip, axis) => {
+            this.bindDrag(view, wrap, grip, axis, scroll)
             grip.addEventListener('mousedown', keepFocus)
-            grip.addEventListener('click', () => toggleMenu(axis, grip))
+            grip.addEventListener('selectstart', keepFocus)
+            grip.addEventListener('click', () => {
+                if (!wrap.suppressClick) toggleMenu(axis, grip)
+            })
             grip.addEventListener('contextmenu', (event) => {
                 event.preventDefault()
                 this.openMenu(view, wrap, axis, grip)

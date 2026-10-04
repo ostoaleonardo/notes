@@ -8,6 +8,7 @@ import {
     insertRow,
     moveCol,
     moveRow,
+    moveTableItem,
     parseTable,
     serializeTable,
     setAlign,
@@ -70,9 +71,9 @@ describe('row operations', () => {
         expect(deleteRow(deleteRow(table, 1), 1).rows).toHaveLength(2)
     })
 
-    test('moves a body row within the body', () => {
+    test('moves a row within the table', () => {
         expect(moveRow(table, 1, 1).rows[1]).toEqual(['3', '4'])
-        expect(moveRow(table, 1, -1)).toBe(table)
+        expect(moveRow(table, 1, -1).rows[0]).toEqual(['1', '2'])
         expect(moveRow(table, 2, 1)).toBe(table)
     })
 
@@ -128,5 +129,30 @@ describe('apply table action', () => {
         expect(applyTableAction(table, 'row', 0, 'delete')).toBe(table)
         expect(applyTableAction(table, 'col', 0, 'move_before')).toBe(table)
         expect(applyTableAction(table, 'row', 1, 'align_left')).toBe(table)
+    })
+})
+
+describe('move table item', () => {
+    const table = parseTable('| a | b | c |\n| --- | --- | --- |\n| 1 | 2 | 3 |\n| 4 | 5 | 6 |\n| 7 | 8 | 9 |')
+
+    test('moves a row to any target index', () => {
+        expect(moveTableItem(table, 'row', 1, 3).rows.map((row) => row[0])).toEqual(['a', '4', '7', '1'])
+        expect(moveTableItem(table, 'row', 3, 1).rows.map((row) => row[0])).toEqual(['a', '7', '1', '4'])
+    })
+
+    test('moves the header row like any other row', () => {
+        expect(moveTableItem(table, 'row', 0, 2).rows.map((row) => row[0])).toEqual(['1', '4', 'a', '7'])
+        expect(moveTableItem(table, 'row', 3, 0).rows.map((row) => row[0])).toEqual(['7', 'a', '1', '4'])
+    })
+
+    test('moves a column to any target index', () => {
+        expect(moveTableItem(table, 'col', 0, 2).rows[0]).toEqual(['b', 'c', 'a'])
+        expect(moveTableItem(table, 'col', 2, 0).rows[0]).toEqual(['c', 'a', 'b'])
+    })
+
+    test('returns the same table when the move is not possible', () => {
+        expect(moveTableItem(table, 'row', 0, 9)).toBe(table)
+        expect(moveTableItem(table, 'row', 1, -1)).toBe(table)
+        expect(moveTableItem(table, 'col', 1, 5)).toBe(table)
     })
 })
