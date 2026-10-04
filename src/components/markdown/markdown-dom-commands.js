@@ -76,6 +76,10 @@ const toggleHeading = (view, level) => {
     })
 }
 
+const clearHeading = (view) => {
+    replaceLine(view, (text) => text.replace(/^#{1,6}\s+/, ''))
+}
+
 const toggleQuote = (view) => {
     replaceLine(view, (text) => {
         if (text.startsWith('> ')) return text.slice(2)
@@ -191,6 +195,7 @@ const ACTION_HANDLERS = {
     italic: wrap(WRAP_MARKERS.ITALIC),
     strike: wrap(WRAP_MARKERS.STRIKE),
     code: wrap(WRAP_MARKERS.CODE),
+    h0: clearHeading,
     h1: heading(1),
     h2: heading(2),
     h3: heading(3),

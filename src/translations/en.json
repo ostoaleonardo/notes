@@ -241,7 +241,13 @@
 		"col_duplicate": "Duplicate",
 		"col_delete": "Delete"
 	},
+	"markdown_group": {
+		"heading": "Headings",
+		"list": "Lists",
+		"insert": "Insert"
+	},
 	"markdown_action": {
+		"h0": "No heading",
 		"bold": "Bold",
 		"italic": "Italic",
 		"strike": "Strikethrough",

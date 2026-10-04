@@ -241,7 +241,13 @@
 		"col_duplicate": "Duplicar",
 		"col_delete": "Eliminar"
 	},
+	"markdown_group": {
+		"heading": "Encabezados",
+		"list": "Listas",
+		"insert": "Insertar"
+	},
 	"markdown_action": {
+		"h0": "Sin encabezado",
 		"bold": "Negrita",
 		"italic": "Cursiva",
 		"strike": "Tachado",

@@ -1,3 +1,4 @@
+import { AttachFile } from '@/icons/attach-file'
 import { CalendarToday } from '@/icons/calendar-today'
 import { Checklist } from '@/icons/checklist'
 import { CollapseContent } from '@/icons/collapse-content'
@@ -26,32 +27,60 @@ import { Title } from '@/icons/title'
 
 import { TEMPLATE_SCOPE } from '@/constants/toolbar'
 
+export const MARKDOWN_GROUP_KEYS = {
+    HEADING: 'heading',
+    LIST: 'list',
+    INSERT: 'insert'
+}
+
+export const MARKDOWN_GROUPS = {
+    [MARKDOWN_GROUP_KEYS.HEADING]: {
+        Icon: FormatH1,
+        items: [
+            { action: 'h0', Icon: Title },
+            { action: 'h1', Icon: FormatH1 },
+            { action: 'h2', Icon: FormatH2 },
+            { action: 'h3', Icon: FormatH3 },
+            { action: 'h4', Icon: FormatH4 },
+            { action: 'h5', Icon: FormatH5 },
+            { action: 'h6', Icon: FormatH6 }
+        ]
+    },
+    [MARKDOWN_GROUP_KEYS.LIST]: {
+        Icon: FormatListBulleted,
+        items: [
+            { action: 'list-bullet', Icon: FormatListBulleted },
+            { action: 'list-ordered', Icon: FormatListNumbered },
+            { action: 'list-checklist', Icon: Checklist }
+        ]
+    },
+    [MARKDOWN_GROUP_KEYS.INSERT]: {
+        Icon: AttachFile,
+        items: [
+            { action: 'image', Icon: Picture },
+            { action: 'link', Icon: Link },
+            { action: 'table', Icon: Table }
+        ]
+    }
+}
+
 export const MARKDOWN_CONTROLS = [
     { action: 'wiki-link', Icon: DataArray },
     { action: 'fold', Icon: CollapseContent },
     { divider: true },
+    { group: MARKDOWN_GROUP_KEYS.HEADING },
     { action: 'bold', Icon: FormatBold },
     { action: 'italic', Icon: FormatItalic },
     { action: 'strike', Icon: FormatStrikethrough },
-    { action: 'h1', Icon: FormatH1 },
-    { action: 'h2', Icon: FormatH2 },
-    { action: 'h3', Icon: FormatH3 },
-    { action: 'h4', Icon: FormatH4 },
-    { action: 'h5', Icon: FormatH5 },
-    { action: 'h6', Icon: FormatH6 },
     { divider: true },
-    { action: 'list-bullet', Icon: FormatListBulleted },
-    { action: 'list-ordered', Icon: FormatListNumbered },
-    { action: 'list-checklist', Icon: Checklist },
+    { group: MARKDOWN_GROUP_KEYS.LIST },
     { action: 'outdent', Icon: FormatIndentDecrease },
     { action: 'indent', Icon: FormatIndentIncrease },
     { divider: true },
-    { action: 'quote', Icon: FormaQuote },
+    { group: MARKDOWN_GROUP_KEYS.INSERT },
     { action: 'code', Icon: Code },
+    { action: 'quote', Icon: FormaQuote },
     { action: 'hr', Icon: HorizontalRule },
-    { action: 'image', Icon: Picture },
-    { action: 'link', Icon: Link },
-    { action: 'table', Icon: Table },
     { divider: true, scope: TEMPLATE_SCOPE },
     { action: 'insert-date', Icon: CalendarToday, scope: TEMPLATE_SCOPE },
     { action: 'insert-time', Icon: Schedule, scope: TEMPLATE_SCOPE },
