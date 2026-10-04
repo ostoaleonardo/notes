@@ -1,37 +1,24 @@
 import { EditorSelection } from '@codemirror/state'
 
-import { LIST_LINE_PATTERN } from '@/constants/markdown-patterns'
+import { getListBackspaceEdit, getListEnterEdit } from '@/utils/list-edit'
 
-const continueList = (view) => {
+const applyEdit = (getEdit) => (view) => {
     const { state } = view
     const { from, to } = state.selection.main
     if (from !== to) return false
 
     const line = state.doc.lineAt(from)
-    if (from !== line.to) return false
-
-    const match = line.text.match(LIST_LINE_PATTERN)
-    if (!match) return false
-
-    const [full, indent, marker, spacing, checkbox] = match
-    const content = line.text.slice(full.length)
-
-    if (content.trim() === '') {
-        view.dispatch({
-            changes: { from: line.from, to: line.to, insert: indent },
-            selection: EditorSelection.cursor(line.from + indent.length)
-        })
-        return true
-    }
-
-    const nextMarker = /^\d+\.$/.test(marker) ? `${parseInt(marker, 10) + 1}.` : marker
-    const insert = `\n${indent}${nextMarker}${spacing}${checkbox ? '[ ] ' : ''}`
+    const edit = getEdit(line.text, from - line.from)
+    if (!edit) return false
 
     view.dispatch({
-        changes: { from, insert },
-        selection: EditorSelection.cursor(from + insert.length)
+        changes: { from: line.from + edit.from, to: line.from + edit.to, insert: edit.insert },
+        selection: EditorSelection.cursor(line.from + edit.cursor)
     })
     return true
 }
 
-export const listKeymap = [{ key: 'Enter', run: continueList }]
+export const listKeymap = [
+    { key: 'Enter', run: applyEdit(getListEnterEdit) },
+    { key: 'Backspace', run: applyEdit(getListBackspaceEdit) }
+]
