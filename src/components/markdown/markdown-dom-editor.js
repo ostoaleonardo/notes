@@ -184,9 +184,8 @@ const MarkdownDomEditor = ({
         const view = viewRef.current
         if (!view || !action.action) return
         runAction(view, action.action, action.payload)
-        action.clear?.()
         requestAnimationFrame(() => view.focus())
-    }, [action.action, action.payload])
+    }, [action.nonce])
 
     useEffect(() => {
         const view = viewRef.current
