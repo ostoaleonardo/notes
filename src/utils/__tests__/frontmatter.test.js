@@ -50,6 +50,20 @@ describe('parseFrontmatter', () => {
         expect(hasBlock).toBe(true)
     })
 
+    test('accepts a closing fence at the end of the file without a trailing newline', () => {
+        const { frontmatter, body, hasBlock } = parseFrontmatter('---\ntags: [one]\n---')
+
+        expect(frontmatter.tags).toEqual(['one'])
+        expect(body).toBe('')
+        expect(hasBlock).toBe(true)
+    })
+
+    test('does not close the block on a fence followed by other characters', () => {
+        const content = '---\ntags: [one]\n---x\n'
+
+        expect(parseFrontmatter(content).hasBlock).toBe(false)
+    })
+
     test('treats two adjacent dash fences with no blank line as having no frontmatter block', () => {
         const content = '---\n---\n\nBody text'
 

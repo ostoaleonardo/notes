@@ -17,7 +17,7 @@ export const FENCED_CODE_PATTERN = /(```|~~~)[\s\S]*?(\1|$)/g
 export const INLINE_CODE_PATTERN = /`[^`\n]*`/g
 
 export const URL_PATTERN = /^https?:\/\/\S+$/
-export const FRONTMATTER_REGEX = /^---\r?\n([\s\S]*?)\r?\n---\r?\n*/
+export const FRONTMATTER_REGEX = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n+|$)/
 
 export const LIST_LINE_PATTERN = /^(\s*)([-*+]|\d+\.)(\s+)(\[[ xX]\]\s+)?/
 export const LIST_MARKERS = {
