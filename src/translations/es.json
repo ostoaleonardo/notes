@@ -228,6 +228,8 @@
 		"list-bullet": "Lista con viñetas",
 		"list-ordered": "Lista numerada",
 		"list-checklist": "Lista de tareas",
+		"outdent": "Reducir sangría",
+		"indent": "Aumentar sangría",
 		"fold": "Colapsar sección",
 		"insert-date": "Insertar fecha",
 		"insert-time": "Insertar hora",

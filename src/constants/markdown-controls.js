@@ -7,6 +7,8 @@ import { FormaQuote } from '@/icons/forma-quote'
 import { FormatBold } from '@/icons/format-bold'
 import { FormatListBulleted } from '@/icons/format-list-bulleted'
 import { FormatListNumbered } from '@/icons/format-list-numbered'
+import { FormatIndentDecrease } from '@/icons/format-indent-decrease'
+import { FormatIndentIncrease } from '@/icons/format-indent-increase'
 import { FormatH1 } from '@/icons/format-h1'
 import { FormatH2 } from '@/icons/format-h2'
 import { FormatH3 } from '@/icons/format-h3'
@@ -41,6 +43,8 @@ export const MARKDOWN_CONTROLS = [
     { action: 'list-bullet', Icon: FormatListBulleted },
     { action: 'list-ordered', Icon: FormatListNumbered },
     { action: 'list-checklist', Icon: Checklist },
+    { action: 'outdent', Icon: FormatIndentDecrease },
+    { action: 'indent', Icon: FormatIndentIncrease },
     { divider: true },
     { action: 'quote', Icon: FormaQuote },
     { action: 'code', Icon: Code },

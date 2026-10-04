@@ -228,6 +228,8 @@
 		"list-bullet": "Bulleted list",
 		"list-ordered": "Numbered list",
 		"list-checklist": "Checklist",
+		"outdent": "Decrease indent",
+		"indent": "Increase indent",
 		"fold": "Collapse section",
 		"insert-date": "Insert date",
 		"insert-time": "Insert time",

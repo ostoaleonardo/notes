@@ -32,6 +32,8 @@ export const LIST_TYPES = {
     CHECKLIST: 'checklist'
 }
 
+export const LIST_INDENT = '    '
+
 export const WRAP_MARKERS = {
     BOLD: '**',
     ITALIC: '_',

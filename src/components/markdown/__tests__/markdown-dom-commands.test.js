@@ -5,13 +5,15 @@ import { EditorState } from '@codemirror/state'
 import { EditorView, keymap } from '@codemirror/view'
 import { defaultKeymap, historyKeymap, history, redoDepth, undoDepth } from '@codemirror/commands'
 import { search, searchKeymap, setSearchQuery, SearchQuery } from '@codemirror/search'
-import { codeFolding } from '@codemirror/language'
+import { codeFolding, indentUnit } from '@codemirror/language'
 import { markdown } from '@codemirror/lang-markdown'
 import { GFM } from '@lezer/markdown'
 
 import { runAction } from '../markdown-dom-commands'
 import { listKeymap } from '../markdown-dom-list-keymap'
 import { headingFoldService } from '../markdown-dom-fold'
+
+import { LIST_INDENT } from '@/constants/markdown-patterns'
 
 const createView = (doc, cursor = doc.length) => {
     const state = EditorState.create({
@@ -20,6 +22,16 @@ const createView = (doc, cursor = doc.length) => {
         extensions: [history(), search(), keymap.of([
             ...defaultKeymap, ...historyKeymap, ...searchKeymap
         ])]
+    })
+
+    return new EditorView({ state })
+}
+
+const createIndentView = (doc, selection) => {
+    const state = EditorState.create({
+        doc,
+        selection,
+        extensions: [indentUnit.of(LIST_INDENT)]
     })
 
     return new EditorView({ state })
@@ -178,6 +190,40 @@ describe('list commands', () => {
         runAction(view, 'list-checklist')
 
         expect(view.state.doc.toString()).toBe('Milk')
+    })
+})
+
+describe('list indentation', () => {
+    test('indent nests the current list item one level', () => {
+        const view = createIndentView('- Milk', { anchor: 6 })
+
+        runAction(view, 'indent')
+
+        expect(view.state.doc.toString()).toBe('    - Milk')
+    })
+
+    test('indent nests every selected line', () => {
+        const view = createIndentView('- Milk\n- Eggs', { anchor: 0, head: 13 })
+
+        runAction(view, 'indent')
+
+        expect(view.state.doc.toString()).toBe('    - Milk\n    - Eggs')
+    })
+
+    test('outdent removes one level of nesting', () => {
+        const view = createIndentView('        - Milk', { anchor: 14 })
+
+        runAction(view, 'outdent')
+
+        expect(view.state.doc.toString()).toBe('    - Milk')
+    })
+
+    test('outdent leaves a top level item untouched', () => {
+        const view = createIndentView('- Milk', { anchor: 6 })
+
+        runAction(view, 'outdent')
+
+        expect(view.state.doc.toString()).toBe('- Milk')
     })
 })
 

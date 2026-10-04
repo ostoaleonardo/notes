@@ -1,5 +1,5 @@
 import { EditorSelection } from '@codemirror/state'
-import { redo, undo } from '@codemirror/commands'
+import { indentLess, indentMore, redo, undo } from '@codemirror/commands'
 import { findNext, findPrevious, replaceAll, replaceNext } from '@codemirror/search'
 import { toggleFold } from '@codemirror/language'
 import { snippet } from '@codemirror/autocomplete'
@@ -197,6 +197,8 @@ const ACTION_HANDLERS = {
     'list-bullet': list(LIST_TYPES.BULLET),
     'list-ordered': list(LIST_TYPES.ORDERED),
     'list-checklist': list(LIST_TYPES.CHECKLIST),
+    indent: indentMore,
+    outdent: indentLess,
     fold: toggleFold,
     'insert-date': insert('{{date}}'),
     'insert-time': insert('{{time}}'),

@@ -25,7 +25,7 @@
 -   <samp>Outline of the note's headings and a panel of outgoing links.<samp>
 -   <samp>Attachments: images, audio, video and PDFs.<samp>
 -   <samp>Nested tags, advanced search (negation, <code>OR</code>, phrases, regex, <code>line:</code>, <code>task:</code>, property queries, date ranges and the <code>tag:</code>, <code>path:</code>, <code>is:pinned</code>, <code>has:image</code> operators), saved and recent searches.<samp>
--   <samp>Find and replace text inside a note.<samp>
+-   <samp>Find and replace text inside a note, and indent or outdent list items from the toolbar.<samp>
 -   <samp>Templates with placeholders and a daily note.<samp>
 -   <samp>Sort notes by name, modification date or creation date.<samp>
 -   <samp>Pin, duplicate, export (Markdown, HTML and PDF) and share notes.<samp>
