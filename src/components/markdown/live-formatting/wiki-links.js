@@ -61,7 +61,7 @@ export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntr
 
         const resolved = !!resolveWikiLinkTarget(linkText, notes, notePaths)
         const isEmbedTarget = isEmbed && (resolved || EMBED_IMAGE_PATTERN.test(linkText.trim()))
-        const isFileTarget = !resolved && isFileLinkTarget(linkText)
+        const isFileTarget = !resolved && !isEmbedTarget && isFileLinkTarget(linkText)
         const className = isFileTarget
             ? FILE_LINK_LIVE_CLASS
             : isEmbedTarget ? EMBED_LIVE_CLASS : resolved ? 'cm-live-wikilink' : 'cm-live-wikilink-broken'
