@@ -1,7 +1,7 @@
 import { KATEX_FONT_FACES } from '@/constants/markdown-katex'
 
 export const katexFontFacesCss = (katexFonts) => {
-    if (!katexFonts) return ''
+    if (!Object.keys(katexFonts || {}).length) return ''
 
     return KATEX_FONT_FACES.map(({ family, style, weight, file }) => `
         @font-face {

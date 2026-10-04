@@ -3,6 +3,9 @@ import { Asset } from 'expo-asset'
 import { File } from 'expo-file-system'
 
 import { bytesToBase64 } from '@/utils/base64'
+import { logError } from '@/utils/log-error'
+
+const NO_FONTS = {}
 
 const resolveFontDataUrl = async (module, mimeType) => {
     const asset = await Asset.fromModule(module).downloadAsync()
@@ -19,6 +22,11 @@ export const createAssetFontsHook = (fontModules, mimeType) => {
 
             fontsPromise = Promise.all(entries.map(([, module]) => resolveFontDataUrl(module, mimeType)))
                 .then((urls) => Object.fromEntries(entries.map(([name], index) => [name, urls[index]])))
+                .catch((error) => {
+                    fontsPromise = null
+                    logError('error loading editor fonts', error)
+                    return NO_FONTS
+                })
         }
 
         return fontsPromise

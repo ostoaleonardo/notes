@@ -1,7 +1,7 @@
 import { FONTS } from '@/constants/fonts'
 
 export const fontFacesCss = (fonts) => {
-    if (!fonts) return ''
+    if (!fonts?.body) return ''
 
     return `
         @font-face { font-family: '${FONTS.azeretLight}'; src: url(${fonts.body}); font-weight: 400; font-style: normal; }
