@@ -168,14 +168,14 @@
 		"update_always": "Always update"
 	},
 	"count": {
-		"notes": "{{count}} note",
-		"notes_plural": "{{count}} notes",
-		"folders": "{{count}} folder",
-		"folders_plural": "{{count}} folders",
-		"words": "{{count}} word",
-		"words_plural": "{{count}} words",
-		"characters": "{{count}} character",
-		"characters_plural": "{{count}} characters"
+		"notes_one": "{{count}} note",
+		"notes_other": "{{count}} notes",
+		"folders_one": "{{count}} folder",
+		"folders_other": "{{count}} folders",
+		"words_one": "{{count}} word",
+		"words_other": "{{count}} words",
+		"characters_one": "{{count}} character",
+		"characters_other": "{{count}} characters"
 	},
 	"markdown": {
 		"link_title": "Title",
@@ -237,8 +237,8 @@
 		},
 		"wiki_links": {
 			"rename_title": "Update links",
-			"rename_message": "Do you want to update the internal link pointing to this note?",
-			"rename_message_plural": "Do you want to update the {{count}} internal links pointing to this note?",
+			"rename_message_one": "Do you want to update the internal link pointing to this note?",
+			"rename_message_other": "Do you want to update the {{count}} internal links pointing to this note?",
 			"missing_title": "Note not found",
 			"missing_message": "There's no note titled \"{{title}}\". Do you want to create it?"
 		}

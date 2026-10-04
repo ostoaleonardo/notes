@@ -168,14 +168,14 @@
 		"update_always": "Siempre actualizar"
 	},
 	"count": {
-		"notes": "{{count}} nota",
-		"notes_plural": "{{count}} notas",
-		"folders": "{{count}} carpeta",
-		"folders_plural": "{{count}} carpetas",
-		"words": "{{count}} palabra",
-		"words_plural": "{{count}} palabras",
-		"characters": "{{count}} carácter",
-		"characters_plural": "{{count}} caracteres"
+		"notes_one": "{{count}} nota",
+		"notes_other": "{{count}} notas",
+		"folders_one": "{{count}} carpeta",
+		"folders_other": "{{count}} carpetas",
+		"words_one": "{{count}} palabra",
+		"words_other": "{{count}} palabras",
+		"characters_one": "{{count}} carácter",
+		"characters_other": "{{count}} caracteres"
 	},
 	"markdown": {
 		"link_title": "Título",
@@ -237,8 +237,8 @@
 		},
 		"wiki_links": {
 			"rename_title": "Actualizar enlaces",
-			"rename_message": "¿Quiere actualizar el enlace interno que apunta a esta nota?",
-			"rename_message_plural": "¿Quiere actualizar los {{count}} enlaces internos que apuntan a esta nota?",
+			"rename_message_one": "¿Quiere actualizar el enlace interno que apunta a esta nota?",
+			"rename_message_other": "¿Quiere actualizar los {{count}} enlaces internos que apuntan a esta nota?",
 			"missing_title": "Nota no encontrada",
 			"missing_message": "No existe una nota titulada \"{{title}}\". ¿Quiere crearla?"
 		}
