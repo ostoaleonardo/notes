@@ -415,3 +415,98 @@ describe('readJson / writeJson', () => {
         expect(data).toBe('fallback')
     })
 })
+
+describe('special folders', () => {
+    test('creates the images folder once and reuses it afterwards', async () => {
+        const { result } = await renderFileStorageHook()
+
+        seedDirectory('content://repo', [])
+
+        const first = result.current.getOrCreateImagesFolder('content://repo')
+        const second = result.current.getOrCreateImagesFolder('content://repo')
+
+        expect(first.uri).toBe('content://repo/images')
+        expect(second.uri).toBe(first.uri)
+        expect(registry.get('content://repo').children).toHaveLength(1)
+    })
+
+    test('creates the templates folder when it is missing', async () => {
+        const { result } = await renderFileStorageHook()
+
+        seedDirectory('content://repo', [])
+
+        const folder = result.current.getOrCreateTemplatesFolder('content://repo')
+
+        expect(folder.uri).toBe('content://repo/templates')
+        expect(registry.has('content://repo/templates')).toBe(true)
+    })
+})
+
+describe('delete directory', () => {
+    test('removes the directory and reports it as missing', async () => {
+        const { result } = await renderFileStorageHook()
+
+        seedDirectory('content://repo/Work', [])
+
+        expect(result.current.directoryExists('content://repo/Work')).toBe(true)
+
+        result.current.deleteDirectory('content://repo/Work')
+
+        expect(result.current.directoryExists('content://repo/Work')).toBe(false)
+    })
+})
+
+describe('rename directory', () => {
+    test('copies nested files and folders under the new name and removes the old one', async () => {
+        const { result } = await renderFileStorageHook()
+
+        seedDirectory('content://repo', [])
+        seedDirectory('content://repo/Old', [
+            new File('content://repo/Old/a.md'),
+            new Directory('content://repo/Old/sub')
+        ])
+        seedDirectory('content://repo/Old/sub', [new File('content://repo/Old/sub/b.md')])
+
+        const uri = await result.current.renameDirectory('content://repo/Old', 'content://repo', 'New')
+
+        expect(uri).toBe('content://repo/New')
+        expect(registry.has('content://repo/Old')).toBe(false)
+        expect(result.current.findFile('content://repo/New', 'a.md')).toBeDefined()
+        expect(result.current.findFile('content://repo/New/sub', 'b.md')).toBeDefined()
+    })
+
+    test('removes the partial copy and keeps the original when copying fails', async () => {
+        const { result } = await renderFileStorageHook()
+        const broken = new File('content://repo/Old/a.md')
+
+        broken.bytes = async () => {
+            throw new Error('read failed')
+        }
+        seedDirectory('content://repo', [])
+        seedDirectory('content://repo/Old', [broken])
+
+        await expect(
+            result.current.renameDirectory('content://repo/Old', 'content://repo', 'New')
+        ).rejects.toThrow('read failed')
+
+        expect(registry.has('content://repo/New')).toBe(false)
+        expect(registry.has('content://repo/Old')).toBe(true)
+    })
+})
+
+describe('copy image file', () => {
+    test('creates the image with the given name in the target directory', async () => {
+        const { result } = await renderFileStorageHook()
+
+        seedDirectory('content://repo/images', [])
+
+        const file = await result.current.copyImageFile(
+            'content://picker/photo.png',
+            'content://repo/images',
+            'pasted.png'
+        )
+
+        expect(file.uri).toBe('content://repo/images/pasted.png')
+        expect(registry.get(file.uri).type).toBe('image/jpeg')
+    })
+})
