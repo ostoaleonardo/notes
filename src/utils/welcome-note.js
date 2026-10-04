@@ -54,8 +54,7 @@ export const getWelcomeNote = (colors) => {
         `${t('welcome.style_footer')}\n\n---\n\n` +
         `## ${t('welcome.attachments_heading')}\n` +
         `* ${t('welcome.attachments_bullet_image')}\n` +
-        `* ${t('welcome.attachments_bullet_link')}\n` +
-        `* ${t('welcome.attachments_bullet_embed')}\n\n` +
+        `* ${t('welcome.attachments_bullet_link')}\n\n` +
         `${t('welcome.attachments_footer')}\n\n---\n\n` +
         `## ${t('welcome.tools_heading')}\n\n` +
         `${getFeatureCard(colors, toolsItems)}\n\n---\n\n` +
