@@ -289,6 +289,7 @@ const MarkdownDomEditor = ({
                 width: '100%',
                 display: 'flex',
                 overflowX: 'hidden',
+                overflowY: 'auto',
                 flexDirection: 'column',
                 maxWidth: stableTheme.layout?.maxWidth,
                 margin: '0 auto',
@@ -319,8 +320,7 @@ const MarkdownDomEditor = ({
             <div
                 ref={containerRef}
                 style={{
-                    flex: 1,
-                    minHeight: 0,
+                    flex: '1 0 auto',
                     display: mode === EDITOR_MODES.READ ? 'none' : 'flex'
                 }}
             />

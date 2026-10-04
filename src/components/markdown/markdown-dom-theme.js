@@ -253,14 +253,14 @@ export const buildEditorTheme = ({ colors, typography }) => {
     const { fontSize, fontFamily } = typography
 
     return EditorView.theme({
-        '&': { height: '100%', fontSize: `${fontSize}px`, backgroundColor: 'transparent' },
+        '&': { width: '100%', fontSize: `${fontSize}px`, backgroundColor: 'transparent' },
         '.cm-content': {
             fontFamily, color: onBackground, caretColor: tertiary, overflowWrap: 'anywhere',
             paddingLeft: '16px', paddingRight: '16px', paddingTop: '8px'
         },
         '.cm-line': { overflowWrap: 'anywhere', padding: 0 },
         '.cm-scroller': {
-            overflowY: 'auto', overflowX: 'hidden', fontFamily,
+            overflowY: 'visible', overflowX: 'hidden', fontFamily,
             WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none'
         },
         '.cm-scroller::-webkit-scrollbar': { display: 'none' },
