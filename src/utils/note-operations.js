@@ -96,7 +96,13 @@ export const persistNoteUpdate = async ({ note, previous, uri, plan, repositorie
     )
 }
 
-export const planWikiLinkRename = ({ targetPath, newTitle, notes, notePaths }) => {
+export const planWikiLinkRename = ({
+    targetPath,
+    newTitle,
+    notes,
+    notePaths,
+    currentNotes = notes
+}) => {
     const renameNote = (note) => {
         if (note.path === targetPath) return note
 
@@ -104,9 +110,9 @@ export const planWikiLinkRename = ({ targetPath, newTitle, notes, notePaths }) =
         return renamed === note.note ? note : { ...note, note: renamed }
     }
 
-    const changedNotes = notes
+    const changedNotes = currentNotes
         .map(renameNote)
-        .filter((note, index) => note !== notes[index])
+        .filter((note, index) => note !== currentNotes[index])
 
     return { renameNote, changedNotes }
 }

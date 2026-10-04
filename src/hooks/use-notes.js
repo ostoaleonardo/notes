@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useRef } from 'react'
 
 import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
@@ -31,6 +31,9 @@ export function useNotes() {
         loading
     } = useContext(NoteContext)
 
+    const currentNotesRef = useRef(notes)
+    currentNotesRef.current = notes
+
     const saveNote = async (note, repositoryId = activeRepository?.id) => {
         const uri = getRepositoryUri(repositories, repositoryId)
         const { record, result } = createNote({ note, repositoryId, uri }, fileStorage)
@@ -45,7 +48,8 @@ export function useNotes() {
             targetPath,
             newTitle,
             notes: notesSnapshot,
-            notePaths
+            notePaths,
+            currentNotes: currentNotesRef.current
         })
 
         setNotes((prev) => prev.map(renameNote))
@@ -53,7 +57,7 @@ export function useNotes() {
         const failed = writeChangedNotes(changedNotes, repositories, fileStorage)
         if (!failed.length) return
 
-        const originals = new Map(notesSnapshot.map((note) => [note.path, note]))
+        const originals = new Map(currentNotesRef.current.map((note) => [note.path, note]))
         setNotes((prev) => prev.map((note) => (
             failed.includes(note.path) ? originals.get(note.path) : note
         )))

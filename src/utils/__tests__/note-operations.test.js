@@ -180,6 +180,20 @@ describe('plan wiki link rename', () => {
         expect(changedNotes[0].note).toBe('see [[New]]')
     })
 
+    test('rewrites the current content of notes edited after the snapshot', () => {
+        const edited = { ...linker, note: 'edited [[Old]] again' }
+
+        const { changedNotes } = planWikiLinkRename({
+            targetPath: target.path,
+            newTitle: 'New',
+            notes: [target, linker],
+            notePaths: new Map(),
+            currentNotes: [target, edited]
+        })
+
+        expect(changedNotes[0].note).toBe('edited [[New]] again')
+    })
+
     test('never rewrites the target note itself', () => {
         const { renameNote } = planWikiLinkRename({
             targetPath: target.path,
