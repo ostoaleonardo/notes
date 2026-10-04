@@ -16,18 +16,22 @@
 
 ## <samp>Features<samp>
 
--   <samp>Markdown notes with a live formatting preview.<samp>
--   <samp>Math formulas (LaTeX) and footnotes.<samp>
+-   <samp>Markdown notes with three modes: read, live formatting and raw code.<samp>
+-   <samp>Obsidian-compatible syntax: callouts, highlights, comments, math (LaTeX), footnotes, task lists and tables.<samp>
+-   <samp>Properties panel for frontmatter (tags, aliases, text, numbers, lists and checkboxes).<samp>
+-   <samp>Wiki links with aliases, links to headings and blocks, and links within the same note.<samp>
+-   <samp>Embeds of notes, headings, blocks and images, with autocomplete for links and block ids.<samp>
+-   <samp>Backlinks, unlinked mentions and automatic link updates when you rename a note or a heading.<samp>
+-   <samp>Outline of the note's headings to jump between sections.<samp>
+-   <samp>Attachments: images, audio, video and PDFs.<samp>
+-   <samp>Nested tags, search operators (<code>tag:</code>, <code>path:</code>, <code>is:pinned</code>, <code>has:image</code>, dates), saved and recent searches.<samp>
 -   <samp>Find and replace text inside a note.<samp>
--   <samp>Organize notes with tags.<samp>
--   <samp>Templates with placeholders to start new notes quickly.<samp>
--   <samp>Search with filters (tags, pinned, images, dates) and saved searches.<samp>
--   <samp>Pin, duplicate, export and share notes.<samp>
+-   <samp>Templates with placeholders and a daily note.<samp>
+-   <samp>Pin, duplicate, export (Markdown, HTML and PDF) and share notes.<samp>
 -   <samp>Multiple repositories (folders on your device) with subfolders.<samp>
 -   <samp>Version history to restore previous edits.<samp>
 -   <samp>Import existing Markdown notes.<samp>
 -   <samp>Light and dark themes with accent colors.<samp>
--   <samp>Haptic feedback.<samp>
 -   <samp>Available in 15 languages.<samp>
 -   <samp>Minimalist and easy to use UI.<samp>
 
@@ -39,6 +43,7 @@
 | <samp>Subfolders per repository<samp> | <samp>1<samp> | <samp>Unlimited<samp> |
 | <samp>Version history<samp> | <samp>Last 5 versions<samp> | <samp>Full, unlimited<samp> |
 | <samp>Accent colors<samp> | <samp>White only<samp> | <samp>All colors<samp> |
+| <samp>HTML and PDF export<samp> | <samp>-<samp> | <samp>Included<samp> |
 
 ## <samp>Download<samp>
 
