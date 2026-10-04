@@ -4,6 +4,9 @@ export const VERSIONS_FILENAME_SUFFIX = '.versions.json'
 export const CORRUPT_FILE_SUFFIX = '.corrupt'
 export const NOTE_PATH_SEPARATOR = '::'
 
+// Loading
+export const NOTE_READ_CONCURRENCY = 16
+
 // Folders
 export const TEMPLATES_FOLDER_NAME = 'templates'
 export const IMAGES_FOLDER_NAME = 'images'

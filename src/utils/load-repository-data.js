@@ -10,10 +10,11 @@ import {
     parseFrontmatter
 } from '@/utils/frontmatter'
 import { buildLegacyNoteBody } from '@/utils/legacy-note-body'
+import { createLimiter } from '@/utils/create-limiter'
 
 import { LEGACY_ALL_TAG_ID } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { TEMPLATES_FOLDER_NAME } from '@/constants/file-storage'
+import { NOTE_READ_CONCURRENCY, TEMPLATES_FOLDER_NAME } from '@/constants/file-storage'
 import { DEFAULT_IMAGE_EXTENSION, IMAGE_EXTENSION_PATTERN } from '@/constants/image'
 import { NOTE_KEY_PREFIX } from '@/constants/note-key'
 import { logError } from '@/utils/log-error'
@@ -103,14 +104,15 @@ const migrateStorageNotesToFiles = async (rootRepository, storage, fileStorage, 
 }
 
 const loadFromTree = async (tree, loadFolder, fileStorage, previousByPath) => {
+    const limit = createLimiter(NOTE_READ_CONCURRENCY)
     const perFolder = await Promise.all(tree.map((repository) => (
-        loadFolder(repository, fileStorage, previousByPath)
+        loadFolder(repository, fileStorage, previousByPath, limit)
     )))
 
     return perFolder.flat()
 }
 
-const loadNotesFromFolder = async (repository, fileStorage, previousByPath) => {
+const loadNotesFromFolder = async (repository, fileStorage, previousByPath, limit) => {
     const files = fileStorage.listMarkdownFiles(repository.uri)
 
     return Promise.all(files.map(async (file) => {
@@ -118,12 +120,14 @@ const loadNotesFromFolder = async (repository, fileStorage, previousByPath) => {
         const unchanged = previousByPath.get(path)
         if (unchanged && unchanged.updatedAt === file.lastModified) return unchanged
 
-        const { frontmatter, body, error, rawFrontmatter } = parseFrontmatter(await file.text())
+        const content = await limit(() => file.text())
+        const { frontmatter, body, error, rawFrontmatter } = parseFrontmatter(content)
 
         return {
             filename: file.name,
             repositoryId: repository.id,
             path,
+            fileUri: file.uri,
             title: getTitle(file.name),
             note: body,
             tags: readFrontmatterTags(frontmatter),

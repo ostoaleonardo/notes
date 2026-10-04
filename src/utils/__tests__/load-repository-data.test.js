@@ -434,6 +434,19 @@ describe('reload with previous notes', () => {
 
     const tree = [{ id: 'repo', uri: REPO_URI }]
 
+    test('keeps the file uri on every loaded note', async () => {
+        const { fileStorage } = setupFiles()
+        const listMarkdownFiles = fileStorage.listMarkdownFiles
+        fileStorage.listMarkdownFiles = (uri) => listMarkdownFiles(uri).map((file) => ({
+            ...file,
+            uri: `${uri}/${file.name}`
+        }))
+
+        const { notes } = await loadRepositoryData(tree, tree[0], createFakeStorage(), fileStorage)
+
+        expect(notes[0].fileUri).toBe(`${REPO_URI}/A.md`)
+    })
+
     test('reuses notes whose file did not change', async () => {
         const { fileStorage, reads } = setupFiles()
         const storage = createFakeStorage()
