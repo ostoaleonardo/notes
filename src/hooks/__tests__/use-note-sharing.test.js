@@ -47,12 +47,13 @@ describe('note sharing', () => {
         )
     })
 
-    test('keeps the share and export dialogs independent', async () => {
+    test('opens and closes the dialog', async () => {
         const { result } = await setup()
 
-        await act(async () => result.current.exportDialog.onOpen())
+        await act(async () => result.current.dialog.onOpen())
+        expect(result.current.dialog.visible).toBe(true)
 
-        expect(result.current.exportDialog.visible).toBe(true)
-        expect(result.current.shareDialog.visible).toBe(false)
+        await act(async () => result.current.dialog.onClose())
+        expect(result.current.dialog.visible).toBe(false)
     })
 })

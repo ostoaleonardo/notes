@@ -5,6 +5,7 @@ import { MarkdownEditorLayout } from './markdown-editor-layout'
 import { MarkdownModeToggle } from './markdown-mode-toggle'
 import { MarkdownSearchBar } from './markdown-search-bar'
 import { MarkdownInsertSheets } from './markdown-insert-sheets'
+import { OutlineSheet } from './outline-sheet'
 import { TemplatePickerSheet } from './template-picker-sheet'
 import { NoteToolbarSheets } from './note-toolbar-sheets'
 import { TagsSheet } from './tags-sheet'
@@ -55,7 +56,7 @@ export const NoteEditorScreen = ({
     rawFrontmatter, setRawFrontmatter,
     modifiedAt,
     initialMode = EDITOR_MODES.READ,
-    blockId,
+    anchor,
     flush,
     busyRef
 }) => {
@@ -163,7 +164,13 @@ export const NoteEditorScreen = ({
     }), [search.searchQuery, search.replaceText])
 
     const tagsSheet = useBottomSheet()
-    const { shareDialog, exportDialog, onConfirmExport, onConfirmShare } = useNoteSharing({ id, flush })
+    const outlineSheet = useBottomSheet()
+
+    const [jump, setJump] = useState(null)
+    const onSelectHeading = useCallback((index) => {
+        setJump((prev) => ({ index, nonce: (prev?.nonce ?? 0) + 1 }))
+    }, [])
+    const { dialog: sharingDialog, onConfirmExport, onConfirmShare } = useNoteSharing({ id, flush })
     const noteDelete = useNoteDelete(id, busyRef)
 
     const { words, characters } = countWords(note)
@@ -252,11 +259,10 @@ export const NoteEditorScreen = ({
                         onSetMode={onSetMode}
                         isFocused={isFocused}
                         showBacklinks={showBacklinks}
-                        onOpenShareDialog={shareDialog.onOpen}
-                        onOpenExportDialog={exportDialog.onOpen}
+                        onOpenSharingDialog={sharingDialog.onOpen}
                         onOpenDeleteDialog={noteDelete.onOpen}
-                        onSaveAsTemplate={noteTemplates.onSaveAsTemplate}
                         onOpenVersionHistory={versionHistory.onOpen}
+                        onOpenOutline={outlineSheet.onOpen}
                         onToggleShowBacklinks={onToggleShowBacklinks}
                     />
                 )}
@@ -295,10 +301,18 @@ export const NoteEditorScreen = ({
                     onFocus={onFocus}
                     placeholder={t('placeholder.note')}
                     action={action}
-                    blockId={blockId}
+                    anchor={jump ? undefined : anchor}
+                    headingIndex={jump?.index}
+                    jumpNonce={jump?.nonce}
                     showBacklinks={showBacklinks}
                 />
             </MarkdownEditorLayout>
+
+            <OutlineSheet
+                sheet={outlineSheet}
+                contentRef={latestContent}
+                onSelect={onSelectHeading}
+            />
 
             <TagsSheet
                 sheet={tagsSheet}
@@ -319,6 +333,7 @@ export const NoteEditorScreen = ({
                 title={title}
                 templates={noteTemplates.templates}
                 onSelect={noteTemplates.onSelect}
+                onSaveAsTemplate={noteTemplates.onSaveAsTemplate}
             />
 
             <NoteToolbarSheets
@@ -328,17 +343,11 @@ export const NoteEditorScreen = ({
             />
 
             <ExportFormat
-                title={t('export.export_title')}
-                visible={exportDialog.visible}
-                onDismiss={exportDialog.onClose}
-                onConfirm={onConfirmExport}
-            />
-
-            <ExportFormat
-                title={t('export.share_title')}
-                visible={shareDialog.visible}
-                onDismiss={shareDialog.onClose}
-                onConfirm={onConfirmShare}
+                title={t('export.title')}
+                visible={sharingDialog.visible}
+                onDismiss={sharingDialog.onClose}
+                onExport={onConfirmExport}
+                onShare={onConfirmShare}
             />
 
             <ConfirmDialog

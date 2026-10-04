@@ -6,8 +6,7 @@ import { useMenuAction } from './use-menu-action'
 export function useNoteSharing({ id, flush }) {
     const { exportFile, shareFile } = useFiles()
 
-    const shareDialog = useMenuAction()
-    const exportDialog = useMenuAction()
+    const dialog = useMenuAction()
 
     const onConfirmExport = useCallback(async (format) => {
         await flush()
@@ -20,8 +19,7 @@ export function useNoteSharing({ id, flush }) {
     }, [flush, shareFile, id])
 
     return {
-        shareDialog,
-        exportDialog,
+        dialog,
         onConfirmExport,
         onConfirmShare
     }

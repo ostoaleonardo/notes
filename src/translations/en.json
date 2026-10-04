@@ -62,6 +62,7 @@
 		"import": "Import note",
 		"version_history": "Version history",
 		"backlinks": "Backlinks",
+		"outline": "Outline",
 		"unlinked_mentions": "Unlinked mentions"
 	},
 	"date": {
@@ -147,6 +148,7 @@
 		"link_mention": "Link",
 		"export": "Export",
 		"share": "Share",
+		"export_share": "Export / Share",
 		"duplicate": "Duplicate",
 		"save_as_template": "Save as template",
 		"insert": "Insert",
@@ -229,6 +231,9 @@
 		},
 		"files": {
 			"open_failed": "Couldn't open the file"
+		},
+		"outline": {
+			"empty": "This note has no headings"
 		},
 		"tags": {
 			"empty": "You don't have any tags yet"
@@ -326,12 +331,10 @@
 		"message": "We ran into an unexpected problem. Please try again."
 	},
 	"export": {
-		"export_title": "Export as",
-		"share_title": "Share as",
+		"title": "Export or share as",
 		"markdown": "Markdown",
 		"html": "HTML",
-		"pdf": "PDF",
-		"generate": "Generate"
+		"pdf": "PDF"
 	},
 	"welcome": {
 		"title": "Welcome",

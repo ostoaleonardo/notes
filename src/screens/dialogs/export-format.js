@@ -10,14 +10,14 @@ import { usePro } from '@/hooks/use-pro'
 import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/dialog'
 import { EXPORT_FORMATS } from '@/constants/export'
 
-export function ExportFormat({ title, visible, onDismiss, onConfirm }) {
+export function ExportFormat({ title, visible, onDismiss, onExport, onShare }) {
     const { t } = useTranslation()
     const { pro } = usePro()
 
     const [format, setFormat] = useState(EXPORT_FORMATS.MARKDOWN)
 
-    const onConfirmPress = () => {
-        onConfirm(format)
+    const onPress = (action) => {
+        action(format)
         onDismiss()
     }
 
@@ -36,13 +36,21 @@ export function ExportFormat({ title, visible, onDismiss, onConfirm }) {
                     {t('button.cancel')}
                 </Button>,
                 <Button
-                    key='confirm'
+                    key='export'
                     compact={true}
-                    mode='contained'
-                    onPress={onConfirmPress}
+                    onPress={() => onPress(onExport)}
                     labelStyle={DIALOG_BUTTON_LABEL_STYLE}
                 >
-                    {t('export.generate')}
+                    {t('button.export')}
+                </Button>,
+                <Button
+                    key='share'
+                    compact={true}
+                    mode='contained'
+                    onPress={() => onPress(onShare)}
+                    labelStyle={DIALOG_BUTTON_LABEL_STYLE}
+                >
+                    {t('button.share')}
                 </Button>
             ]}
         >

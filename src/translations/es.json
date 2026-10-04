@@ -62,6 +62,7 @@
 		"import": "Importar nota",
 		"version_history": "Historial de versiones",
 		"backlinks": "Enlaces entrantes",
+		"outline": "Esquema",
 		"unlinked_mentions": "Menciones sin enlazar"
 	},
 	"date": {
@@ -147,6 +148,7 @@
 		"link_mention": "Enlazar",
 		"export": "Exportar",
 		"share": "Compartir",
+		"export_share": "Exportar / Compartir",
 		"duplicate": "Duplicar",
 		"save_as_template": "Guardar como plantilla",
 		"insert": "Insertar",
@@ -229,6 +231,9 @@
 		},
 		"files": {
 			"open_failed": "No se pudo abrir el archivo"
+		},
+		"outline": {
+			"empty": "Esta nota no tiene encabezados"
 		},
 		"tags": {
 			"empty": "Todavía no tienes etiquetas"
@@ -326,12 +331,10 @@
 		"message": "Ocurrió un problema inesperado. Inténtalo de nuevo."
 	},
 	"export": {
-		"export_title": "Exportar como",
-		"share_title": "Compartir como",
+		"title": "Exportar o compartir como",
 		"markdown": "Markdown",
 		"html": "HTML",
-		"pdf": "PDF",
-		"generate": "Generar"
+		"pdf": "PDF"
 	},
 	"welcome": {
 		"title": "Bienvenida",

@@ -24,10 +24,9 @@ export const MarkdownModeToggle = ({
     search,
     onOpenPlaceholders,
     onOpenVersionHistory,
-    onOpenExportDialog,
-    onOpenShareDialog,
+    onOpenOutline,
+    onOpenSharingDialog,
     onOpenDeleteDialog,
-    onSaveAsTemplate,
     showBacklinks,
     onToggleShowBacklinks
 }) => {
@@ -40,10 +39,9 @@ export const MarkdownModeToggle = ({
         onTrigger: trigger,
         onSetMode,
         onOpenVersionHistory,
-        onOpenExportDialog,
-        onOpenShareDialog,
+        onOpenOutline,
+        onOpenSharingDialog,
         onOpenDeleteDialog,
-        onSaveAsTemplate,
         showBacklinks,
         onToggleShowBacklinks
     })

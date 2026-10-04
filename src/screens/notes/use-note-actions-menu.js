@@ -14,12 +14,11 @@ import { buildDuplicateNote } from '@/utils/duplicate-note'
 import { Code } from '@/icons/code'
 import { Commit } from '@/icons/commit'
 import { Delete } from '@/icons/delete'
-import { FileExport } from '@/icons/file-export'
 import { Keep } from '@/icons/keep'
 import { KeepFilled } from '@/icons/keep-filled'
+import { FormatListBulleted } from '@/icons/format-list-bulleted'
 import { Link } from '@/icons/link'
 import { NoteStack } from '@/icons/note-stack'
-import { Shapes } from '@/icons/shapes'
 import { Share as ShareIcon } from '@/icons/share'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
@@ -28,10 +27,9 @@ export const useNoteActionsMenu = ({
     onTrigger,
     onSetMode,
     onOpenVersionHistory,
-    onOpenExportDialog,
-    onOpenShareDialog,
+    onOpenOutline,
+    onOpenSharingDialog,
     onOpenDeleteDialog,
-    onSaveAsTemplate,
     showBacklinks,
     onToggleShowBacklinks
 }) => {
@@ -76,10 +74,10 @@ export const useNoteActionsMenu = ({
                 onPress={() => onTrigger(() => onSetMode(EDITOR_MODES.CODE))}
             />,
             <MenuItem
-                key='pin'
-                title={isPinned ? t('button.unpin') : t('button.pin')}
-                leadingIcon={(props) => (isPinned ? <KeepFilled {...props} /> : <Keep {...props} />)}
-                onPress={toggleKeep}
+                key='outline'
+                title={t('title.outline')}
+                leadingIcon={(props) => <FormatListBulleted {...props} />}
+                onPress={() => onTrigger(onOpenOutline)}
             />,
             slug && (
                 <MenuItem
@@ -88,23 +86,15 @@ export const useNoteActionsMenu = ({
                     leadingIcon={(props) => <Link {...props} />}
                     onPress={() => onTrigger(onToggleShowBacklinks)}
                 />
-            ),
-            slug && (
-                <MenuItem
-                    key='export'
-                    title={t('button.export')}
-                    leadingIcon={(props) => <FileExport {...props} />}
-                    onPress={() => onTrigger(onOpenExportDialog)}
-                />
-            ),
-            slug && (
-                <MenuItem
-                    key='share'
-                    title={t('button.share')}
-                    leadingIcon={(props) => <ShareIcon {...props} />}
-                    onPress={() => onTrigger(onOpenShareDialog)}
-                />
-            ),
+            )
+        ].filter(Boolean),
+        [
+            <MenuItem
+                key='pin'
+                title={isPinned ? t('button.unpin') : t('button.pin')}
+                leadingIcon={(props) => (isPinned ? <KeepFilled {...props} /> : <Keep {...props} />)}
+                onPress={toggleKeep}
+            />,
             slug && (
                 <MenuItem
                     key='duplicate'
@@ -113,12 +103,14 @@ export const useNoteActionsMenu = ({
                     onPress={onDuplicate}
                 />
             ),
-            <MenuItem
-                key='save-as-template'
-                title={t('button.save_as_template')}
-                leadingIcon={(props) => <Shapes {...props} />}
-                onPress={() => onTrigger(onSaveAsTemplate)}
-            />,
+            slug && (
+                <MenuItem
+                    key='sharing'
+                    title={t('button.export_share')}
+                    leadingIcon={(props) => <ShareIcon {...props} />}
+                    onPress={() => onTrigger(onOpenSharingDialog)}
+                />
+            ),
             <MenuItem
                 key='version-history'
                 title={t('title.version_history')}
