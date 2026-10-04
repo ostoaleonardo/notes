@@ -45,8 +45,9 @@ export const MarkdownInput = ({
     onTitleBlur,
     propertiesPanel,
     onToggleProperties,
+    onChangeProperty,
     onRemoveTag,
-    onOpenTags,
+    onAddTag,
     onTagPress,
     search,
     showBacklinks = true
@@ -142,8 +143,9 @@ export const MarkdownInput = ({
                 onTitleBlur={onTitleBlur}
                 propertiesPanel={propertiesPanel}
                 onToggleProperties={onToggleProperties}
+                onChangeProperty={onChangeProperty}
                 onRemoveTag={onRemoveTag}
-                onOpenTags={onOpenTags}
+                onAddTag={onAddTag}
                 search={search}
                 typography={typography}
                 fonts={fonts}

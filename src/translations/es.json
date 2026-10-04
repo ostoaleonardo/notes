@@ -20,6 +20,16 @@
 		"invalid_properties_title": "Propiedades inválidas",
 		"invalid_properties_description": "El bloque de propiedades no se pudo interpretar."
 	},
+	"properties": {
+		"add": "Añadir propiedad",
+		"remove": "Quitar propiedad",
+		"name_placeholder": "Nombre de la propiedad",
+		"value_placeholder": "Sin valor",
+		"type_text": "Texto",
+		"type_number": "Número",
+		"type_list": "Lista",
+		"type_checkbox": "Casilla"
+	},
 	"repositories": {
 		"open": "Abrir",
 		"add": "Añadir repositorio",

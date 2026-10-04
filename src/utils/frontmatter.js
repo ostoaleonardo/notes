@@ -51,7 +51,17 @@ export const extractProperties = (frontmatter) => {
     return properties
 }
 
+const isEmptyFrontmatter = ({ tags, properties, invalidFrontmatter }) => (
+    invalidFrontmatter == null &&
+    !tags?.length &&
+    Object.keys(properties || {}).length === 0
+)
+
 export const buildNoteFileContent = ({ tags, properties, invalidFrontmatter = null }, body) => {
+    if (isEmptyFrontmatter({ tags, properties, invalidFrontmatter }) && !FRONTMATTER_REGEX.test(body)) {
+        return body
+    }
+
     const frontmatter = invalidFrontmatter != null
         ? `${invalidFrontmatter}\n`
         : dump({ ...properties, tags: tags || [] })

@@ -121,7 +121,7 @@ describe('save note', () => {
         expect(result.current.notes[0].repositoryId).toBe('repo-1')
         expect(result.current.notes[0].path).toBe('repo-1::Groceries.md')
         expect(readBody('Groceries.md')).toBe('milk, eggs')
-        expect(readFrontmatter('Groceries.md')).toEqual({ tags: [] })
+        expect(readFrontmatter('Groceries.md')).toEqual({})
     })
 
     test('disambiguates the filename when the title is already taken', async () => {
@@ -133,7 +133,7 @@ describe('save note', () => {
         })
 
         expect(readBody('Groceries (2).md')).toBe('new content')
-        expect(readFrontmatter('Groceries (2).md')).toEqual({ tags: [] })
+        expect(readFrontmatter('Groceries (2).md')).toEqual({})
     })
 
     test('adds the note to state but does not touch the filesystem when the repository cannot be resolved', async () => {
@@ -210,7 +210,7 @@ describe('update note', () => {
             'New title.md'
         )
         expect(files.has('Old title.md')).toBe(false)
-        expect(readFrontmatter('New title.md')).toEqual({ tags: [] })
+        expect(readFrontmatter('New title.md')).toEqual({})
         expect(result.current.notes[0].path).toBe('repo-1::New title.md')
     })
 
@@ -236,7 +236,7 @@ describe('update note', () => {
 
         expect(files.get('Linker.md')).toBe('See [[Old title]] for details')
         expect(result.current.notes.find((n) => n.path === 'repo-1::Linker.md').note).toBe('See [[Old title]] for details')
-        expect(readFrontmatter('New title.md')).toEqual({ tags: [] })
+        expect(readFrontmatter('New title.md')).toEqual({})
     })
 
     test('updates other notes independently of updateNote', async () => {
@@ -305,7 +305,7 @@ describe('update note', () => {
         expect(result.current.notes).toHaveLength(1)
         expect(result.current.notes[0].path).toBe('repo-1::Untitled.md')
         expect(readBody('Untitled.md')).toBe('quick note content')
-        expect(readFrontmatter('Untitled.md')).toEqual({ tags: [] })
+        expect(readFrontmatter('Untitled.md')).toEqual({})
     })
 })
 

@@ -1,6 +1,6 @@
 'use dom'
 
-import { useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { EditorState } from '@codemirror/state'
 import { EditorView, placeholder as placeholderExtension } from '@codemirror/view'
 import { closeSearchPanel, openSearchPanel, setSearchQuery, SearchQuery } from '@codemirror/search'
@@ -20,6 +20,7 @@ import { knownTagsFacet } from './tag-completion'
 import { useCompartment } from './use-compartment'
 import { useLatestRef } from './use-latest-ref'
 import { buildInvalidFrontmatterHighlight } from './markdown-dom-invalid-frontmatter'
+import { buildPropertiesTrigger, frontmatterAutoClose } from './markdown-dom-frontmatter'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { DEFAULT_EDITOR_FONT_SIZE } from '@/constants/fonts'
@@ -53,8 +54,9 @@ const MarkdownDomEditor = ({
     onTitleBlur,
     propertiesPanel,
     onToggleProperties,
+    onChangeProperty,
     onRemoveTag,
-    onOpenTags,
+    onAddTag,
     search
 }) => {
     const { query: searchQuery, replace: replaceText } = search || {}
@@ -69,6 +71,10 @@ const MarkdownDomEditor = ({
     const onFocusRef = useLatestRef(onFocus)
     const onBlurRef = useLatestRef(onBlur)
     const onTagPressRef = useLatestRef(onTagPress)
+
+    const [addPropertyRequest, setAddPropertyRequest] = useState(0)
+    const onAddProperty = useCallback(() => setAddPropertyRequest((count) => count + 1), [])
+    const onAddPropertyRef = useLatestRef(onAddProperty)
 
     const historyRef = useRef({ canUndo: false, canRedo: false })
     const lastEmittedValueRef = useRef(value)
@@ -85,6 +91,12 @@ const MarkdownDomEditor = ({
         viewRef,
         () => buildInvalidFrontmatterHighlight(colors.errorContainer),
         [colors.errorContainer]
+    )
+
+    const frontmatterExtension = useCompartment(
+        viewRef,
+        () => (mode === EDITOR_MODES.CODE ? frontmatterAutoClose : buildPropertiesTrigger(onAddPropertyRef)),
+        [mode]
     )
 
     const colorsKey = JSON.stringify(colors)
@@ -118,6 +130,7 @@ const MarkdownDomEditor = ({
                     linkFormatExtension,
                     liveFormattingExtension,
                     invalidFrontmatterExtension,
+                    frontmatterExtension,
                     placeholderCompartment,
                     themeExtension
                 ],
@@ -239,6 +252,7 @@ const MarkdownDomEditor = ({
         <div
             style={{
                 height: '100%',
+                width: '100%',
                 display: 'flex',
                 overflowX: 'hidden',
                 flexDirection: 'column',
@@ -258,8 +272,10 @@ const MarkdownDomEditor = ({
                 onTitleBlur={onTitleBlur}
                 propertiesPanel={mode === EDITOR_MODES.CODE ? undefined : propertiesPanel}
                 onToggleProperties={onToggleProperties}
+                addPropertyRequest={addPropertyRequest}
+                onChangeProperty={onChangeProperty}
                 onRemoveTag={onRemoveTag}
-                onOpenTags={onOpenTags}
+                onAddTag={onAddTag}
                 onTagPress={onTagPress}
                 colors={colors}
                 typography={{ fontFamily, headingFontFamily }}

@@ -109,8 +109,20 @@ describe('buildNoteFileContent', () => {
         expect(body).toBe('Body')
     })
 
-    test('defaults tags to an empty array', () => {
-        const content = buildNoteFileContent({}, 'Body')
+    test('omits the block when there are no tags or properties', () => {
+        expect(buildNoteFileContent({ tags: [], properties: {} }, 'Body')).toBe('Body')
+        expect(buildNoteFileContent({}, 'Body')).toBe('Body')
+    })
+
+    test('keeps an empty block when the body itself starts with a fence', () => {
+        const body = '---\nrule\n---\nText'
+        const content = buildNoteFileContent({ tags: [] }, body)
+
+        expect(parseFrontmatter(content).body).toBe(body)
+    })
+
+    test('defaults tags to an empty array when there are properties', () => {
+        const content = buildNoteFileContent({ properties: { author: 'Ana' } }, 'Body')
 
         const { frontmatter } = parseFrontmatter(content)
 

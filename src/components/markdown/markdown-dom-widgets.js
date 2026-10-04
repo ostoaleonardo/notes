@@ -1,27 +1,16 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
+
+import { PropertiesPanel } from './markdown-dom-properties'
+import { ThemeContext } from './markdown-dom-theme-context'
 
 import {
-    buildAddChipStyle,
-    buildChipStyle,
     buildInvalidPropertiesBannerStyle,
     buildInvalidPropertiesDescriptionStyle,
     buildInvalidPropertiesTitleStyle,
     buildMetaLabelStyle,
-    buildPropertiesToggleStyle,
-    buildPropertyRowStyle,
     buildTitleSectionStyle,
     buildTitleTextareaStyle
 } from './markdown-dom-theme'
-
-import {
-    CLOSE_ICON_PATH,
-    KEYBOARD_ARROW_DOWN_ICON_PATH,
-    KEYBOARD_ARROW_UP_ICON_PATH,
-    PLUS_ICON_PATH,
-    TAG_ICON_PATH
-} from '../../constants/icon-paths'
-
-const ThemeContext = createContext({ colors: {}, typography: {} })
 
 const AutoGrowTitle = ({ value, onChange, onBlur, placeholder }) => {
     const { colors, typography } = useContext(ThemeContext)
@@ -73,79 +62,6 @@ const MetaLabel = ({ label }) => {
     )
 }
 
-const PropertiesPanel = ({
-    tags,
-    propertiesLabel,
-    visible,
-    onToggleVisible,
-    onRemoveTag,
-    onOpenTags,
-    onTagPress
-}) => {
-    const { colors, typography } = useContext(ThemeContext)
-    const { tertiary, onTertiary, onBackground } = colors
-
-    if (!tags || tags.length === 0) return null
-
-    return (
-        <div>
-            <div style={buildPropertiesToggleStyle({ onBackground })} onClick={() => onToggleVisible()}>
-                <svg
-                    width='16'
-                    height='16'
-                    viewBox='0 -960 960 960'
-                    fill={onBackground}
-                >
-                    <path d={visible ? KEYBOARD_ARROW_UP_ICON_PATH : KEYBOARD_ARROW_DOWN_ICON_PATH} />
-                </svg>
-                {propertiesLabel}
-            </div>
-
-            {visible && (
-                <div style={buildPropertyRowStyle({ onBackground })}>
-                    <svg
-                        width='14'
-                        height='14'
-                        viewBox='0 -960 960 960'
-                        fill={onBackground}
-                        style={{ opacity: 0.6 }}
-                    >
-                        <path d={TAG_ICON_PATH} />
-                    </svg>
-                    {tags.map((tag) => (
-                        <span key={tag} style={buildChipStyle({ tertiary, onTertiary, fontFamily: typography.fontFamily })}>
-                            <span onClick={() => onTagPress(tag)}>{tag}</span>
-                            <svg
-                                width='10'
-                                height='10'
-                                viewBox='0 -960 960 960'
-                                fill={onTertiary}
-                                style={{ opacity: 0.7 }}
-                                onClick={() => onRemoveTag(tag)}
-                            >
-                                <path d={CLOSE_ICON_PATH} />
-                            </svg>
-                        </span>
-                    ))}
-                    <span
-                        onClick={() => onOpenTags()}
-                        style={buildAddChipStyle({ tertiary, onTertiary })}
-                    >
-                        <svg
-                            width='10'
-                            height='10'
-                            viewBox='0 -960 960 960'
-                            fill={onTertiary}
-                        >
-                            <path d={PLUS_ICON_PATH} />
-                        </svg>
-                    </span>
-                </div>
-            )}
-        </div>
-    )
-}
-
 const InvalidPropertiesBanner = ({ title, description }) => {
     const { colors, typography } = useContext(ThemeContext)
 
@@ -170,8 +86,10 @@ export const TitleSection = ({
     metaLabel,
     propertiesPanel,
     onToggleProperties,
+    addPropertyRequest,
+    onChangeProperty,
     onRemoveTag,
-    onOpenTags,
+    onAddTag,
     onTagPress,
     colors,
     typography
@@ -180,6 +98,10 @@ export const TitleSection = ({
 
     const {
         tags,
+        allTags,
+        rows,
+        suggestions,
+        labels,
         label,
         visible,
         invalid,
@@ -202,14 +124,20 @@ export const TitleSection = ({
                         title={invalidTitle}
                         description={invalidDescription}
                     />
-                ) : (
+                ) : propertiesPanel && (
                     <PropertiesPanel
                         tags={tags}
+                        allTags={allTags}
+                        rows={rows}
+                        suggestions={suggestions}
+                        labels={labels}
                         propertiesLabel={label}
                         visible={visible}
+                        addRequest={addPropertyRequest}
                         onToggleVisible={onToggleProperties}
+                        onChangeProperty={onChangeProperty}
                         onRemoveTag={onRemoveTag}
-                        onOpenTags={onOpenTags}
+                        onAddTag={onAddTag}
                         onTagPress={onTagPress}
                     />
                 )}

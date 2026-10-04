@@ -1,4 +1,11 @@
-import { dedupeTags, hasTag, isSameTag, isValidTagName, matchesTag, sanitizeTagName } from '../tag-names'
+import {
+    dedupeTags,
+    filterTagSuggestions,
+    hasTag, isSameTag,
+    isValidTagName,
+    matchesTag,
+    sanitizeTagName
+} from '../tag-names'
 
 describe('tag names', () => {
     test('compares tags ignoring case', () => {
@@ -59,5 +66,21 @@ describe('valid tag name', () => {
         expect(isValidTagName('2024a')).toBe(true)
         expect(isValidTagName('2024')).toBe(false)
         expect(isValidTagName('')).toBe(false)
+    })
+})
+
+describe('tag suggestions', () => {
+    const allTags = ['Work', 'home', 'workout']
+
+    test('excludes tags already on the note regardless of casing', () => {
+        expect(filterTagSuggestions(allTags, ['WORK'], '')).toEqual(['home', 'workout'])
+    })
+
+    test('filters by the typed text ignoring case and surrounding spaces', () => {
+        expect(filterTagSuggestions(allTags, [], ' WOR ')).toEqual(['Work', 'workout'])
+    })
+
+    test('returns nothing when no tag matches', () => {
+        expect(filterTagSuggestions(allTags, [], 'zzz')).toEqual([])
     })
 })

@@ -25,13 +25,21 @@ import { useNoteTemplates } from '@/hooks/use-note-templates'
 import { usePro } from '@/hooks/use-pro'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useShowProperties } from '@/hooks/use-show-properties'
+import { useTags } from '@/hooks/use-tags'
 import { useTagSearchSeed } from '@/hooks/use-tag-search-seed'
 import { useVersionHistory } from '@/hooks/use-version-history'
 import { buildNoteMetaLabel } from '@/utils/note-meta-label'
 import { countWords } from '@/utils/word-count'
+import {
+    applyPropertyChange,
+    buildPropertyRows,
+    buildPropertySuggestions
+} from '@/utils/properties'
+import { hasTag, isValidTagName, sanitizeTagName } from '@/utils/tag-names'
 import { getVersionLocation } from '@/utils/note-version-location'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
+import { EDITABLE_PROPERTY_TYPES } from '@/constants/properties'
 
 export const NoteEditorScreen = ({
     id,
@@ -83,6 +91,19 @@ export const NoteEditorScreen = ({
         setTags((prev) => prev.filter((tag) => tag !== name))
     }, [setTags])
 
+    const onAddTag = useCallback((name) => {
+        const clean = sanitizeTagName(name)
+        if (!isValidTagName(clean)) return
+
+        setTags((prev) => hasTag(prev, clean) ? prev : [...prev, clean])
+    }, [setTags])
+
+    const onChangeProperty = useCallback((change) => {
+        setProperties((prev) => applyPropertyChange(prev, change))
+    }, [setProperties])
+
+    const { tags: allTags } = useTags()
+
     const {
         mode,
         onSetMode,
@@ -102,14 +123,34 @@ export const NoteEditorScreen = ({
 
     const invalid = mode !== EDITOR_MODES.CODE && !!invalidFrontmatter
 
+    const propertyLabels = useMemo(() => ({
+        add: t('properties.add'),
+        remove: t('properties.remove'),
+        namePlaceholder: t('properties.name_placeholder'),
+        valuePlaceholder: t('properties.value_placeholder'),
+        types: Object.fromEntries(
+            EDITABLE_PROPERTY_TYPES.map((type) => [type, t(`properties.type_${type}`)])
+        )
+    }), [t])
+
+    const rows = useMemo(() => buildPropertyRows(properties), [properties])
+
+    const suggestions = useMemo(() => (
+        buildPropertySuggestions({ properties, tags })
+    ), [properties, tags])
+
     const propertiesPanel = useMemo(() => ({
         tags,
+        allTags,
+        rows,
+        suggestions,
+        labels: propertyLabels,
         label: t('title.tags'),
         visible: propertiesVisible,
         invalid,
         invalidTitle: t('tags.invalid_properties_title'),
         invalidDescription: t('tags.invalid_properties_description')
-    }), [tags, t, propertiesVisible, invalid])
+    }), [tags, allTags, rows, suggestions, propertyLabels, t, propertiesVisible, invalid])
 
     const searchField = useMemo(() => ({
         query: search.searchQuery,
@@ -236,8 +277,9 @@ export const NoteEditorScreen = ({
                     onTitleBlur={onTitleBlur}
                     propertiesPanel={propertiesPanel}
                     onToggleProperties={onToggleProperties}
+                    onChangeProperty={onChangeProperty}
                     onRemoveTag={onRemoveTag}
-                    onOpenTags={tagsSheet.onOpen}
+                    onAddTag={onAddTag}
                     onTagPress={onTagPress}
                     search={searchField}
                     value={editorValue}

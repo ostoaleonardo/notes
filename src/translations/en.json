@@ -20,6 +20,16 @@
 		"invalid_properties_title": "Invalid properties",
 		"invalid_properties_description": "The properties block couldn't be parsed."
 	},
+	"properties": {
+		"add": "Add property",
+		"remove": "Remove property",
+		"name_placeholder": "Property name",
+		"value_placeholder": "No value",
+		"type_text": "Text",
+		"type_number": "Number",
+		"type_list": "List",
+		"type_checkbox": "Checkbox"
+	},
 	"repositories": {
 		"open": "Open",
 		"add": "Add repository",

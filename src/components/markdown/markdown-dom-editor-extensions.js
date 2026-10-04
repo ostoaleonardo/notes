@@ -12,7 +12,6 @@ import { inlineTagExtensions } from './inline-tag-highlight'
 import { listKeymap } from './markdown-dom-list-keymap'
 import { headingFoldService } from './markdown-dom-fold'
 import { pasteUrlOverSelection } from './markdown-dom-paste'
-import { frontmatterAutoClose } from './markdown-dom-frontmatter'
 
 const createHiddenSearchPanel = () => {
     const dom = document.createElement('div')
@@ -55,7 +54,6 @@ export const buildEditorExtensions = ({ dynamic, onTagPressRef, updateListener }
     codeFolding(),
     headingFoldService,
     pasteUrlOverSelection,
-    frontmatterAutoClose,
     EditorView.lineWrapping,
     ...dynamic,
     updateListener

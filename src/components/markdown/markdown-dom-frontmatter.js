@@ -6,14 +6,24 @@ import {
     FRONTMATTER_FENCE_TYPING
 } from '@/constants/frontmatter'
 
-export const getFrontmatterAutoClose = (doc, from, to, text) => {
-    if (text !== FRONTMATTER_FENCE_CHAR || from !== to) return null
+const typesOnFirstLine = (view, from, to, text) => (
+    text === FRONTMATTER_FENCE_CHAR && from === to && view.state.doc.lineAt(from).number === 1
+)
 
-    const firstLineEnd = doc.indexOf('\n') === -1 ? doc.length : doc.indexOf('\n')
-    if (from !== firstLineEnd || doc.slice(0, firstLineEnd) !== FRONTMATTER_FENCE_TYPING) return null
+export const isFrontmatterFenceCompletion = (doc, from, to, text) => {
+    if (text !== FRONTMATTER_FENCE_CHAR || from !== to) return false
+
+    const lineBreak = doc.indexOf('\n')
+    const firstLineEnd = lineBreak === -1 ? doc.length : lineBreak
+
+    return from === firstLineEnd && doc.slice(0, firstLineEnd) === FRONTMATTER_FENCE_TYPING
+}
+
+export const getFrontmatterAutoClose = (doc, from, to, text) => {
+    if (!isFrontmatterFenceCompletion(doc, from, to, text)) return null
 
     const hasClosingFence = doc
-        .slice(firstLineEnd + 1)
+        .slice(from + 1)
         .split('\n')
         .some((line) => line.trimEnd() === FRONTMATTER_FENCE)
     if (hasClosingFence) return null
@@ -25,9 +35,20 @@ export const getFrontmatterAutoClose = (doc, from, to, text) => {
 }
 
 export const frontmatterAutoClose = EditorView.inputHandler.of((view, from, to, text) => {
+    if (!typesOnFirstLine(view, from, to, text)) return false
+
     const result = getFrontmatterAutoClose(view.state.doc.toString(), from, to, text)
     if (!result) return false
 
     view.dispatch({ ...result, userEvent: 'input.type' })
+    return true
+})
+
+export const buildPropertiesTrigger = (onTriggerRef) => EditorView.inputHandler.of((view, from, to, text) => {
+    if (!typesOnFirstLine(view, from, to, text)) return false
+    if (!isFrontmatterFenceCompletion(view.state.doc.toString(), from, to, text)) return false
+
+    view.dispatch({ changes: { from: 0, to: from }, userEvent: 'input.type' })
+    onTriggerRef.current?.()
     return true
 })

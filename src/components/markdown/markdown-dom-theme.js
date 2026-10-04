@@ -4,6 +4,7 @@ import { buildLiveFormattingTheme } from './live-formatting/live-formatting'
 
 import { TRANSPARENT } from '../../constants/themes'
 import { SPACING } from '../../constants/spacing'
+import { RADIUS } from '../../constants/radius'
 import { INLINE_TAG_CLASS } from '../../constants/tags'
 import {
     CALLOUT_CLASS,
@@ -28,6 +29,8 @@ const buildDerivedColors = (colors) => ({
 })
 
 export const buildTitleSectionStyle = () => ({
+    boxSizing: 'border-box',
+    width: '100%',
     paddingLeft: '16px',
     paddingRight: '16px',
     paddingTop: '16px'
@@ -84,7 +87,7 @@ export const buildPropertyRowStyle = ({ onBackground }) => ({
     color: onBackground
 })
 
-export const buildChipStyle = ({ tertiary, onTertiary, fontFamily }) => ({
+export const buildChipStyle = ({ tertiary, fontFamily }) => ({
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -93,24 +96,125 @@ export const buildChipStyle = ({ tertiary, onTertiary, fontFamily }) => ({
     padding: '0 8px',
     boxSizing: 'border-box',
     borderRadius: '999px',
-    backgroundColor: tertiary,
-    color: onTertiary,
+    backgroundColor: tertiary + TRANSPARENT[20],
+    color: tertiary,
     fontFamily,
     fontSize: '13px',
     lineHeight: '13px',
     cursor: 'pointer'
 })
 
-export const buildAddChipStyle = ({ tertiary, onTertiary }) => ({
+export const buildPropertiesCardStyle = ({ surface, onBackground }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: SPACING.xxs,
+    padding: SPACING.sm,
+    marginBottom: SPACING.lg,
+    borderRadius: '8px',
+    backgroundColor: surface,
+    border: `1px solid ${onBackground + TRANSPARENT[5]}`,
+    color: onBackground
+})
+
+export const buildPropertyEntryStyle = () => ({
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: SPACING.sm,
+    minHeight: '32px',
+    position: 'relative'
+})
+
+export const buildPropertyNameStyle = ({ fill = false } = {}) => ({
+    display: 'flex',
+    alignItems: 'center',
+    gap: SPACING.sm,
+    flex: fill ? 1 : '0 0 30%',
+    minHeight: '32px',
+    minWidth: 0
+})
+
+export const buildPropertyValueStyle = () => ({
+    display: 'flex',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: '6px',
+    flex: 1,
+    boxSizing: 'border-box',
+    minHeight: '32px',
+    padding: '5px 0',
+    minWidth: 0
+})
+
+export const buildPropertyInputStyle = ({ onBackground, fontFamily, opacity = 1 }) => ({
+    flex: 1,
+    minWidth: 0,
+    width: '100%',
+    border: 'none',
+    outline: 'none',
+    background: 'transparent',
+    padding: 0,
+    margin: 0,
+    fontFamily,
+    fontSize: '13px',
+    color: onBackground,
+    opacity
+})
+
+export const buildPropertyIconButtonStyle = ({ onBackground, opacity = 0.6 }) => ({
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '22px',
-    height: '22px',
-    boxSizing: 'border-box',
-    borderRadius: '999px',
-    backgroundColor: tertiary,
-    color: onTertiary,
+    flexShrink: 0,
+    width: '20px',
+    height: '20px',
+    padding: 0,
+    border: 'none',
+    background: 'transparent',
+    color: onBackground,
+    opacity,
+    cursor: 'pointer'
+})
+
+export const buildPropertyAddButtonStyle = ({ onBackground, fontFamily }) => ({
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: SPACING.xs,
+    width: 'fit-content',
+    padding: '4px 0',
+    border: 'none',
+    background: 'transparent',
+    fontFamily,
+    fontSize: '13px',
+    color: onBackground,
+    opacity: 0.6,
+    cursor: 'pointer'
+})
+
+export const buildPropertyMenuStyle = ({ surface, onBackground }) => ({
+    position: 'absolute',
+    top: '100%',
+    left: 0,
+    zIndex: 10,
+    display: 'flex',
+    flexDirection: 'column',
+    minWidth: '200px',
+    maxHeight: '220px',
+    overflowY: 'auto',
+    padding: SPACING.xs,
+    borderRadius: `${RADIUS.outer}px`,
+    backgroundColor: surface,
+    border: `1px solid ${onBackground + TRANSPARENT[5]}`
+})
+
+export const buildPropertyMenuItemStyle = ({ onBackground, fontFamily }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    gap: SPACING.sm,
+    padding: '6px 8px',
+    borderRadius: '6px',
+    fontFamily,
+    fontSize: '13px',
+    color: onBackground,
     cursor: 'pointer'
 })
 

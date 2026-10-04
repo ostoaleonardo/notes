@@ -37,4 +37,12 @@ export const sanitizeTagName = (name) => name
     .replace(INVALID_TAG_CHAR_PATTERN, '')
     .replace(TRAILING_SLASHES_PATTERN, '')
 
+export const filterTagSuggestions = (allTags, tags, query) => {
+    const key = tagKey(query.trim())
+
+    return allTags.filter((tag) => (
+        !hasTag(tags, tag) && tagKey(tag).includes(key)
+    ))
+}
+
 export const isValidTagName = (name) => NON_NUMERIC_PATTERN.test(name)
