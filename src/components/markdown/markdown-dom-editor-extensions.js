@@ -6,7 +6,7 @@ import { codeFolding } from '@codemirror/language'
 import { markdown } from '@codemirror/lang-markdown'
 import { GFM } from '@lezer/markdown'
 
-import { wikiLinkCompletionSource, blockCompletionSource } from './wiki-link-completion'
+import { wikiLinkCompletionSource, blockCompletionSource, blockIdCreatorFacet } from './wiki-link-completion'
 import { tagCompletionSource } from './tag-completion'
 import { inlineTagExtensions } from './inline-tag-highlight'
 import { fileLinkPress } from './live-formatting/wiki-links'
@@ -39,7 +39,7 @@ export const buildUpdateListener = ({ onChangeRef, onHistoryChangeRef, historyRe
     })
 )
 
-export const buildEditorExtensions = ({ dynamic, onTagPressRef, onLinkPressRef, updateListener }) => [
+export const buildEditorExtensions = ({ dynamic, onTagPressRef, onLinkPressRef, onCreateBlockIdRef, updateListener }) => [
     history(),
     search({ createPanel: createHiddenSearchPanel }),
     keymap.of([
@@ -52,6 +52,7 @@ export const buildEditorExtensions = ({ dynamic, onTagPressRef, onLinkPressRef, 
     markdown({ extensions: GFM }),
     inlineTagExtensions(onTagPressRef),
     fileLinkPress(onLinkPressRef),
+    blockIdCreatorFacet.of(onCreateBlockIdRef),
     autocompletion({ override: [wikiLinkCompletionSource, blockCompletionSource, tagCompletionSource] }),
     closeBrackets(),
     codeFolding(),

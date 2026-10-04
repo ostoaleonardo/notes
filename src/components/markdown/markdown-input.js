@@ -13,6 +13,7 @@ import { useKatexFonts } from '@/hooks/use-katex-fonts'
 import { useTags } from '@/hooks/use-tags'
 import { useBacklinksHtml } from '@/hooks/use-backlinks-html'
 import { useMissingNote } from '@/hooks/use-missing-note'
+import { useBlockIdCreator } from '@/hooks/use-block-id-creator'
 import { useNoteEntries } from '@/hooks/use-note-entries'
 import { useResolvedPreviewMarkdown } from '@/hooks/use-resolved-preview-markdown'
 import { useResolvedWikiLinks } from '@/hooks/use-resolved-wiki-links'
@@ -71,7 +72,11 @@ export const MarkdownInput = ({
         if (value === WIKI_LINK_FORMATS.MARKDOWN) setLinkFormat(WIKI_LINK_FORMATS.MARKDOWN)
     })
 
-    const noteEntries = useNoteEntries()
+    const allNoteEntries = useNoteEntries()
+    const noteEntries = useMemo(() => allNoteEntries.map((entry) => (
+        entry.id === id ? { ...entry, unlabeled: [] } : entry
+    )), [allNoteEntries, id])
+    const onCreateBlockId = useBlockIdCreator()
     const backlinksHtml = useBacklinksHtml(id, mode === EDITOR_MODES.READ && showBacklinks)
     const missingNote = useMissingNote()
 
@@ -150,6 +155,7 @@ export const MarkdownInput = ({
                 onBlur={onBlur}
                 onLinkPress={onLinkPress}
                 onTagPress={onTagPress}
+                onCreateBlockId={onCreateBlockId}
                 onImagePress={onImagePress}
                 onToggleTask={onToggleTask}
                 placeholder={placeholder}

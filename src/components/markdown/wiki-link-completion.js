@@ -1,5 +1,6 @@
 import { Facet } from '@codemirror/state'
 
+import { generateBlockId } from '@/utils/block-refs'
 import { getBlockSuggestions } from '@/utils/note-entries'
 
 import { WIKI_LINK_FORMATS, WIKI_LINK_CLOSING } from '@/constants/wiki-links'
@@ -7,6 +8,10 @@ import { BLOCK_COMPLETION_PATTERN } from '@/constants/block-refs'
 
 export const noteEntriesFacet = Facet.define({
     combine: (values) => values[values.length - 1] || []
+})
+
+export const blockIdCreatorFacet = Facet.define({
+    combine: (values) => values[values.length - 1]
 })
 
 export const wikiLinkFormatFacet = Facet.define({
@@ -70,29 +75,50 @@ export const wikiLinkCompletionSource = (context) => {
     return { from: match.from + 2, options }
 }
 
+const applyBlockId = (view, from, to, id) => {
+    const doc = view.state.doc
+    const hasClosing = doc.sliceString(to, to + WIKI_LINK_CLOSING.length) === WIKI_LINK_CLOSING
+    const insert = hasClosing ? id : id + WIKI_LINK_CLOSING
+
+    view.dispatch({
+        changes: { from, to, insert },
+        selection: { anchor: from + id.length + WIKI_LINK_CLOSING.length }
+    })
+}
+
 export const blockCompletionSource = (context) => {
     const match = context.matchBefore(BLOCK_COMPLETION_PATTERN)
     if (!match) return null
 
     const [, target, query] = BLOCK_COMPLETION_PATTERN.exec(match.text)
-    const suggestions = getBlockSuggestions(context.state.facet(noteEntriesFacet), target, query)
+    const entries = context.state.facet(noteEntriesFacet)
+    const suggestions = getBlockSuggestions(entries, target, query)
     if (!suggestions.length) return null
 
     return {
         from: match.to - query.length,
-        options: suggestions.map(({ id, preview }) => ({
-            label: id,
-            detail: preview,
-            apply: (view, _completion, from, to) => {
-                const doc = view.state.doc
-                const hasClosing = doc.sliceString(to, to + WIKI_LINK_CLOSING.length) === WIKI_LINK_CLOSING
-                const insert = hasClosing ? id : id + WIKI_LINK_CLOSING
-
-                view.dispatch({
-                    changes: { from, to, insert },
-                    selection: { anchor: from + id.length + WIKI_LINK_CLOSING.length }
-                })
+        filter: false,
+        options: suggestions.map((suggestion) => {
+            if (suggestion.id) {
+                return {
+                    label: suggestion.id,
+                    detail: suggestion.preview,
+                    apply: (view, _completion, from, to) => applyBlockId(view, from, to, suggestion.id)
+                }
             }
-        }))
+
+            const { path, index, preview } = suggestion
+
+            return {
+                label: preview,
+                apply: (view, _completion, from, to) => {
+                    const taken = entries.find((entry) => entry.id === path)?.blocks.map(({ id }) => id)
+                    const id = generateBlockId(taken)
+
+                    applyBlockId(view, from, to, id)
+                    view.state.facet(blockIdCreatorFacet)?.current?.({ path, index, preview, id })
+                }
+            }
+        })
     }
 }

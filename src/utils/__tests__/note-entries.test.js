@@ -10,6 +10,7 @@ const entry = (overrides = {}) => ({
     aliases: ['x'],
     path: 'folder',
     blocks: [],
+    unlabeled: [],
     ...overrides
 })
 
@@ -31,6 +32,14 @@ describe('note entries equality', () => {
         expect(areNoteEntriesEqual([entry()], [entry({ aliases: [] })])).toBe(false)
     })
 
+    test('detects changed unlabeled blocks', () => {
+        const withUnlabeled = entry({ unlabeled: [{ preview: 'Plain' }] })
+
+        expect(areNoteEntriesEqual([entry()], [withUnlabeled])).toBe(false)
+        expect(areNoteEntriesEqual([withUnlabeled], [entry({ unlabeled: [{ preview: 'Other' }] })])).toBe(false)
+        expect(areNoteEntriesEqual([withUnlabeled], [entry({ unlabeled: [{ preview: 'Plain' }] })])).toBe(true)
+    })
+
     test('detects changed blocks', () => {
         const withBlock = entry({ blocks: [{ id: 'one', preview: 'First' }] })
 
@@ -47,7 +56,7 @@ describe('build note entries', () => {
         ]
 
         expect(buildNoteEntries(notes, new Map([['r::A.md', 'work']]))).toEqual([
-            { id: 'r::A.md', title: 'A', aliases: [], path: 'work', blocks: [] }
+            { id: 'r::A.md', title: 'A', aliases: [], path: 'work', blocks: [], unlabeled: [] }
         ])
     })
 
@@ -75,6 +84,15 @@ describe('build note entries', () => {
         expect(buildNoteEntries(updated, new Map())[0].blocks).toEqual([{ id: 'new', preview: 'New' }])
     })
 
+    test('lists the blocks that have no id yet', () => {
+        const notes = [{ path: 'r::E.md', title: 'E', note: 'Labeled ^one\n\nPlain paragraph\n\n- item' }]
+
+        expect(buildNoteEntries(notes, new Map())[0].unlabeled).toEqual([
+            { preview: 'Plain paragraph' },
+            { preview: '- item' }
+        ])
+    })
+
     test('truncates long previews', () => {
         const notes = [{ path: 'r::D.md', title: 'D', note: `${'word '.repeat(30)}^long` }]
 
@@ -91,17 +109,29 @@ describe('block suggestions', () => {
             blocks: [
                 { id: 'idea-1', preview: 'Key idea' },
                 { id: 'todo', preview: 'Buy milk' }
-            ]
+            ],
+            unlabeled: [{ preview: 'Plain paragraph' }, { preview: 'Second paragraph' }]
         }),
         entry({ id: 'r::B.md', title: 'Beta', blocks: [{ id: 'other', preview: 'Elsewhere' }] })
     ]
 
-    test('returns every block of the linked note for an empty query', () => {
-        expect(getBlockSuggestions(entries, 'Alpha', '').map(({ id }) => id)).toEqual(['idea-1', 'todo'])
+    test('returns the labeled blocks first, then the ones without an id, for an empty query', () => {
+        expect(getBlockSuggestions(entries, 'Alpha', '')).toEqual([
+            { id: 'idea-1', preview: 'Key idea' },
+            { id: 'todo', preview: 'Buy milk' },
+            { preview: 'Plain paragraph', index: 0, path: 'r::A.md' },
+            { preview: 'Second paragraph', index: 1, path: 'r::A.md' }
+        ])
+    })
+
+    test('keeps the original position of an unlabeled block after filtering', () => {
+        expect(getBlockSuggestions(entries, 'Alpha', 'second')).toEqual([
+            { preview: 'Second paragraph', index: 1, path: 'r::A.md' }
+        ])
     })
 
     test('resolves the target through aliases', () => {
-        expect(getBlockSuggestions(entries, 'Al', '').map(({ id }) => id)).toEqual(['idea-1', 'todo'])
+        expect(getBlockSuggestions(entries, 'Al', '').map(({ id }) => id).filter(Boolean)).toEqual(['idea-1', 'todo'])
     })
 
     test('filters by id or preview text, ignoring case', () => {

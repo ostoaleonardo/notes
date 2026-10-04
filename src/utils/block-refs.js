@@ -1,6 +1,11 @@
 import {
+    BLOCK_ANCHOR_PREFIX,
+    BLOCK_ID_ALPHABET,
+    BLOCK_ID_LENGTH,
     BLOCK_ID_STANDALONE_PATTERN,
     BLOCK_ID_TRAILING_PATTERN,
+    BLOCK_NON_TARGET_PATTERN,
+    BLOCK_PREVIEW_MAX_LENGTH,
     LIST_ITEM_PATTERN
 } from '@/constants/block-refs'
 import { CODE_SEGMENT_PATTERN } from '@/constants/code-segments'
@@ -104,3 +109,46 @@ export const findBlocks = (text) => {
 }
 
 export const extractBlock = (text, id) => findBlocks(text).find((block) => block.id === id)?.text ?? null
+
+export const getBlockPreview = (text) => text.split('\n')[0].trim().slice(0, BLOCK_PREVIEW_MAX_LENGTH)
+
+const findGroupUnlabeledBlocks = (group) => {
+    const blocks = []
+
+    group.forEach((line, index) => {
+        const trimmed = line.text.trim()
+        if (BLOCK_ID_STANDALONE_PATTERN.test(trimmed) || BLOCK_ID_TRAILING_PATTERN.test(line.text)) return
+
+        const insertAt = line.start + line.text.trimEnd().length
+
+        if (LIST_ITEM_PATTERN.test(line.text)) {
+            blocks.push({ text: joinLines(findListItemBlock(group, index)), insertAt })
+        } else if (index === group.length - 1 && !BLOCK_NON_TARGET_PATTERN.test(trimmed)) {
+            blocks.push({ text: joinLines(group), insertAt })
+        }
+    })
+
+    return blocks
+}
+
+export const findUnlabeledBlocks = (text) => groupLines(text || '').flatMap(findGroupUnlabeledBlocks)
+
+export const addBlockId = (text, { index, preview }, id) => {
+    const block = findUnlabeledBlocks(text)[index]
+    if (!block || getBlockPreview(block.text) !== preview) return null
+
+    return `${text.slice(0, block.insertAt)} ${BLOCK_ANCHOR_PREFIX}${id}${text.slice(block.insertAt)}`
+}
+
+export const generateBlockId = (takenIds = []) => {
+    let id
+
+    do {
+        id = Array.from(
+            { length: BLOCK_ID_LENGTH },
+            () => BLOCK_ID_ALPHABET[Math.floor(Math.random() * BLOCK_ID_ALPHABET.length)]
+        ).join('')
+    } while (takenIds.includes(id))
+
+    return id
+}

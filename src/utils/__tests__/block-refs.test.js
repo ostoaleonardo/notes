@@ -1,4 +1,10 @@
-import { extractBlock, findBlocks } from '../block-refs'
+import {
+    addBlockId,
+    extractBlock,
+    findBlocks,
+    findUnlabeledBlocks,
+    generateBlockId
+} from '../block-refs'
 
 describe('find blocks', () => {
     test('finds a paragraph that ends with an id', () => {
@@ -63,5 +69,70 @@ describe('extract block', () => {
 
     test('returns null when the id does not exist', () => {
         expect(extractBlock('Intro ^a', 'b')).toBeNull()
+    })
+})
+
+describe('find unlabeled blocks', () => {
+    test('finds paragraphs and list items that have no id', () => {
+        const blocks = findUnlabeledBlocks('Intro\nline two\n\n- one\n- two')
+
+        expect(blocks.map(({ text }) => text)).toEqual(['Intro\nline two', '- one', '- two'])
+    })
+
+    test('skips blocks that already have an id', () => {
+        expect(findUnlabeledBlocks('Done ^a\n\n- one ^b\n- two')).toHaveLength(1)
+    })
+
+    test('skips headings, tables, rules and fenced code', () => {
+        const text = '# Title\n\n| a | b |\n| - | - |\n\n---\n\n```\ncode\n```'
+
+        expect(findUnlabeledBlocks(text)).toEqual([])
+    })
+
+    test('reports where the id goes, before trailing whitespace', () => {
+        const [block] = findUnlabeledBlocks('Intro   ')
+
+        expect(block.insertAt).toBe(5)
+    })
+})
+
+describe('add block id', () => {
+    test('appends the id to the chosen paragraph', () => {
+        const text = 'First\n\nSecond'
+
+        expect(addBlockId(text, { index: 1, preview: 'Second' }, 'abc123')).toBe('First\n\nSecond ^abc123')
+    })
+
+    test('appends the id to the chosen list item', () => {
+        const text = '- one\n- two\n- three'
+
+        expect(addBlockId(text, { index: 1, preview: '- two' }, 'x1')).toBe('- one\n- two ^x1\n- three')
+    })
+
+    test('makes the new block discoverable by its id', () => {
+        const text = addBlockId('Intro\n\nKey idea', { index: 1, preview: 'Key idea' }, 'abc123')
+
+        expect(extractBlock(text, 'abc123')).toBe('Key idea')
+    })
+
+    test('refuses to write when the block moved or changed', () => {
+        expect(addBlockId('First\n\nSecond', { index: 1, preview: 'Other' }, 'x1')).toBeNull()
+        expect(addBlockId('First', { index: 4, preview: 'First' }, 'x1')).toBeNull()
+    })
+})
+
+describe('generate block id', () => {
+    test('produces a valid id', () => {
+        expect(generateBlockId()).toMatch(/^[a-z0-9]{6}$/)
+    })
+
+    test('never repeats a taken id', () => {
+        const random = jest.spyOn(Math, 'random')
+        random.mockReturnValueOnce(0).mockReturnValueOnce(0).mockReturnValueOnce(0)
+        random.mockReturnValueOnce(0).mockReturnValueOnce(0).mockReturnValueOnce(0)
+
+        expect(generateBlockId(['aaaaaa'])).not.toBe('aaaaaa')
+
+        random.mockRestore()
     })
 })

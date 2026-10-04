@@ -10,3 +10,6 @@ export const BLOCK_HIGHLIGHT_DURATION = 2000
 export const BLOCK_PARAM = 'block'
 export const BLOCK_PREVIEW_MAX_LENGTH = 60
 export const BLOCK_COMPLETION_PATTERN = /\[\[([^\]|#]*)#\^([^\]|]*)$/
+export const BLOCK_ID_LENGTH = 6
+export const BLOCK_ID_ALPHABET = 'abcdefghijklmnopqrstuvwxyz0123456789'
+export const BLOCK_NON_TARGET_PATTERN = /^(#{1,6}\s|\||[-*_]{3,}\s*$)/

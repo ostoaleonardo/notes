@@ -44,6 +44,7 @@ const MarkdownDomEditor = ({
     onBlur,
     onLinkPress,
     onTagPress,
+    onCreateBlockId,
     onImagePress,
     onToggleTask,
     theme,
@@ -76,6 +77,7 @@ const MarkdownDomEditor = ({
     const onBlurRef = useLatestRef(onBlur)
     const onTagPressRef = useLatestRef(onTagPress)
     const onLinkPressRef = useLatestRef(onLinkPress)
+    const onCreateBlockIdRef = useLatestRef(onCreateBlockId)
 
     const [addPropertyRequest, setAddPropertyRequest] = useState(0)
     const onAddProperty = useCallback(() => setAddPropertyRequest((count) => count + 1), [])
@@ -139,6 +141,7 @@ const MarkdownDomEditor = ({
                 ],
                 onTagPressRef,
                 onLinkPressRef,
+                onCreateBlockIdRef,
                 updateListener: buildUpdateListener({
                     onChangeRef,
                     onHistoryChangeRef,

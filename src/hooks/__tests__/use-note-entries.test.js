@@ -23,7 +23,7 @@ describe('note entries', () => {
         const { result } = await renderHook(() => useNoteEntries())
 
         expect(result.current).toEqual([
-            { id: 'r::A.md', title: 'A', aliases: [], path: 'work', blocks: [] }
+            { id: 'r::A.md', title: 'A', aliases: [], path: 'work', blocks: [], unlabeled: [] }
         ])
     })
 
