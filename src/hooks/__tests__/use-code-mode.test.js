@@ -12,6 +12,7 @@ const setup = async (overrides = {}) => {
         setTags: jest.fn(),
         setProperties: jest.fn(),
         setInvalidFrontmatter: jest.fn(),
+        setRawFrontmatter: jest.fn(),
         ...overrides
     }
 
@@ -41,6 +42,14 @@ describe('enter code mode', () => {
         expect(result.current.codeBuffer).toBe('---\naliases:\n  - Alias\ntags:\n  - one\n---\n\nBody')
     })
 
+    test('keeps the yaml comments of the raw block in the buffer', async () => {
+        const { result } = await setup({ rawFrontmatter: 'tags:\n  - one # keep' })
+
+        await act(async () => result.current.enter())
+
+        expect(result.current.codeBuffer).toBe('---\ntags:\n  - one # keep\n---\n\nBody')
+    })
+
     test('composes the buffer from the invalid frontmatter when present', async () => {
         const { result } = await setup({ invalidFrontmatter: 'a: [' })
 
@@ -59,6 +68,7 @@ describe('edit in code mode', () => {
         expect(props.setNote).toHaveBeenCalledWith('Edited')
         expect(props.setTags).toHaveBeenCalledWith(['two'])
         expect(props.setInvalidFrontmatter).toHaveBeenCalledWith(null)
+        expect(props.setRawFrontmatter).toHaveBeenCalledWith('tags: [two]')
         expect(result.current.codeBuffer).toBe('---\ntags: [two]\n---\n\nEdited')
     })
 

@@ -89,7 +89,7 @@ export function useNotes() {
             ...note,
             filename,
             path,
-            rawFrontmatter: previous.rawFrontmatter,
+            rawFrontmatter: note.rawFrontmatter ?? previous.rawFrontmatter,
             createdAt: previous.createdAt,
             updatedAt: previous.updatedAt
         }

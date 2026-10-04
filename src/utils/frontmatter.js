@@ -88,12 +88,15 @@ export const buildNoteFileContent = (
 export const decomposeNoteFileContent = (content) => {
     const { frontmatter, body, error, rawFrontmatter } = parseFrontmatter(content)
 
-    if (error) return { body, tags: null, properties: null, invalidFrontmatter: rawFrontmatter }
+    if (error) {
+        return { body, tags: null, properties: null, invalidFrontmatter: rawFrontmatter, rawFrontmatter: null }
+    }
 
     return {
         body,
         tags: readFrontmatterTags(frontmatter),
         properties: extractProperties(frontmatter),
-        invalidFrontmatter: null
+        invalidFrontmatter: null,
+        rawFrontmatter: rawFrontmatter ?? null
     }
 }

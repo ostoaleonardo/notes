@@ -89,7 +89,10 @@ export const persistNoteUpdate = async ({ note, previous, uri, plan, repositorie
         fileStorage.writeNoteFile(
             uri,
             filename,
-            buildFileContent({ ...note, rawFrontmatter: previous.rawFrontmatter }),
+            buildFileContent({
+                ...note,
+                rawFrontmatter: note.rawFrontmatter ?? previous.rawFrontmatter
+            }),
             undefined,
             renamed ? undefined : existing
         )

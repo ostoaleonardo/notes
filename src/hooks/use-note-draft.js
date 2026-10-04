@@ -11,6 +11,7 @@ export function useNoteDraft(pathRef) {
     const [repositoryId, setRepositoryId] = useState('')
     const [filename, setFilename] = useState('')
     const [invalidFrontmatter, setInvalidFrontmatter] = useState(null)
+    const [rawFrontmatter, setRawFrontmatter] = useState(null)
 
     const buildPayload = (payloadTitle, payloadNote = note) => buildNotePayload({
         path: pathRef.current,
@@ -19,7 +20,8 @@ export function useNoteDraft(pathRef) {
         tags,
         properties,
         repositoryId,
-        invalidFrontmatter
+        invalidFrontmatter,
+        rawFrontmatter
     })
 
     return {
@@ -31,6 +33,7 @@ export function useNoteDraft(pathRef) {
         repositoryId, setRepositoryId,
         filename, setFilename,
         invalidFrontmatter, setInvalidFrontmatter,
+        rawFrontmatter, setRawFrontmatter,
         buildPayload
     }
 }

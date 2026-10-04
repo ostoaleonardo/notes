@@ -51,6 +51,7 @@ export default function Note() {
         repositoryId, setRepositoryId,
         filename, setFilename,
         invalidFrontmatter, setInvalidFrontmatter,
+        rawFrontmatter, setRawFrontmatter,
         buildPayload
     } = useNoteDraft(pathRef)
 
@@ -90,11 +91,11 @@ export default function Note() {
             applySaved(saved)
             isSaved.current = true
             savedTitleRef.current = payload.title
-            savedSignatureRef.current = JSON.stringify([note, tags, properties, invalidFrontmatter])
+            savedSignatureRef.current = JSON.stringify([note, tags, properties, invalidFrontmatter, rawFrontmatter])
             return
         }
 
-        const signature = JSON.stringify([note, tags, properties, invalidFrontmatter])
+        const signature = JSON.stringify([note, tags, properties, invalidFrontmatter, rawFrontmatter])
         if (signature === savedSignatureRef.current) return
 
         applySaved(await updateNote(buildPayload(savedTitleRef.current)))
@@ -105,7 +106,8 @@ export default function Note() {
         tags,
         properties,
         repositoryId,
-        invalidFrontmatter
+        invalidFrontmatter,
+        rawFrontmatter
     ], {
         skip: firstRender.current || (title === autoTitleRef.current && !note)
     })
@@ -142,6 +144,8 @@ export default function Note() {
                 setProperties={setProperties}
                 invalidFrontmatter={invalidFrontmatter}
                 setInvalidFrontmatter={setInvalidFrontmatter}
+                rawFrontmatter={rawFrontmatter}
+                setRawFrontmatter={setRawFrontmatter}
                 modifiedAt={modifiedAt}
                 initialMode={EDITOR_MODES.LIVE}
             />

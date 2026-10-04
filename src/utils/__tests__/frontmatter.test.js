@@ -195,7 +195,8 @@ describe('decompose note file content', () => {
             body: 'Body',
             tags: ['one', 'two'],
             properties: {},
-            invalidFrontmatter: null
+            invalidFrontmatter: null,
+            rawFrontmatter: 'tags:\n  - one\n  - two'
         })
     })
 
@@ -206,7 +207,8 @@ describe('decompose note file content', () => {
             body: 'Body',
             tags: null,
             properties: null,
-            invalidFrontmatter: 'tags: [unterminated'
+            invalidFrontmatter: 'tags: [unterminated',
+            rawFrontmatter: null
         })
     })
 
@@ -215,8 +217,15 @@ describe('decompose note file content', () => {
             body: 'Just text',
             tags: [],
             properties: {},
-            invalidFrontmatter: null
+            invalidFrontmatter: null,
+            rawFrontmatter: null
         })
+    })
+
+    test('keeps the yaml comments of the raw block', () => {
+        const content = '---\ntags:\n  - one # keep\n---\n\nBody'
+
+        expect(decomposeNoteFileContent(content).rawFrontmatter).toBe('tags:\n  - one # keep')
     })
 
     test('round-trips invalid frontmatter through build and decompose', () => {
@@ -302,7 +311,8 @@ describe('note properties', () => {
             body: 'Body',
             tags: ['a', 'b'],
             properties: { aliases: ['Alias'] },
-            invalidFrontmatter: null
+            invalidFrontmatter: null,
+            rawFrontmatter: 'tags: a, b\naliases:\n  - Alias'
         })
     })
 })

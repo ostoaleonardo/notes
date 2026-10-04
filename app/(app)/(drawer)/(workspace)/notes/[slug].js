@@ -50,6 +50,7 @@ export default function EditNote() {
         repositoryId, setRepositoryId,
         filename, setFilename,
         invalidFrontmatter, setInvalidFrontmatter,
+        rawFrontmatter, setRawFrontmatter,
         buildPayload
     } = useNoteDraft(pathRef)
 
@@ -58,6 +59,7 @@ export default function EditNote() {
     const originalTagsRef = useRef(null)
     const originalPropertiesRef = useRef(null)
     const originalInvalidFrontmatterRef = useRef(null)
+    const originalRawFrontmatterRef = useRef(null)
 
     useEffect(() => {
         if (notesLoading || repositoriesLoading) return
@@ -71,7 +73,8 @@ export default function EditNote() {
             updatedAt = '',
             repositoryId = '',
             filename = '',
-            invalidFrontmatter = null
+            invalidFrontmatter = null,
+            rawFrontmatter = null
         } = getNote(pathRef.current)
 
         const resolvedTitle = title || t('notes.untitled')
@@ -84,11 +87,14 @@ export default function EditNote() {
         setRepositoryId(repositoryId)
         setFilename(filename)
         setInvalidFrontmatter(invalidFrontmatter)
+        setRawFrontmatter(rawFrontmatter)
+
         originalTitleRef.current = resolvedTitle
         originalNoteRef.current = content
         originalTagsRef.current = tags
         originalPropertiesRef.current = JSON.stringify(properties)
         originalInvalidFrontmatterRef.current = invalidFrontmatter
+        originalRawFrontmatterRef.current = rawFrontmatter
         setLoading(false)
     }, [
         slug,
@@ -126,11 +132,13 @@ export default function EditNote() {
         setTags(synced.tags)
         setProperties(synced.properties)
         setInvalidFrontmatter(synced.invalidFrontmatter)
+        setRawFrontmatter(incoming.rawFrontmatter ?? null)
         setModifiedAt(incoming.updatedAt || incoming.createdAt)
         originalNoteRef.current = synced.note
         originalTagsRef.current = synced.tags
         originalPropertiesRef.current = JSON.stringify(synced.properties)
         originalInvalidFrontmatterRef.current = synced.invalidFrontmatter
+        originalRawFrontmatterRef.current = incoming.rawFrontmatter ?? null
     }, [notes])
 
     const applySaved = ({ path, filename, createdAt, updatedAt }) => {
@@ -148,6 +156,7 @@ export default function EditNote() {
         originalTagsRef.current = tags
         originalPropertiesRef.current = JSON.stringify(properties)
         originalInvalidFrontmatterRef.current = invalidFrontmatter
+        originalRawFrontmatterRef.current = rawFrontmatter
     }
 
     const noteExists = notes.some((n) => n.path === pathRef.current)
@@ -157,7 +166,8 @@ export default function EditNote() {
             note === originalNoteRef.current &&
             tagsEqual(tags, originalTagsRef.current) &&
             JSON.stringify(properties) === originalPropertiesRef.current &&
-            invalidFrontmatter === originalInvalidFrontmatterRef.current
+            invalidFrontmatter === originalInvalidFrontmatterRef.current &&
+            rawFrontmatter === originalRawFrontmatterRef.current
         ) return
 
         const payload = buildPayload(originalTitleRef.current)
@@ -175,7 +185,8 @@ export default function EditNote() {
         tags,
         properties,
         repositoryId,
-        invalidFrontmatter
+        invalidFrontmatter,
+        rawFrontmatter
     ], {
         skip: loading || !noteExists
     })
@@ -215,6 +226,8 @@ export default function EditNote() {
                 setProperties={setProperties}
                 invalidFrontmatter={invalidFrontmatter}
                 setInvalidFrontmatter={setInvalidFrontmatter}
+                rawFrontmatter={rawFrontmatter}
+                setRawFrontmatter={setRawFrontmatter}
                 modifiedAt={modifiedAt}
             />
 

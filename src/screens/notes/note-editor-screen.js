@@ -52,6 +52,7 @@ export const NoteEditorScreen = ({
     tags, setTags,
     properties, setProperties,
     invalidFrontmatter, setInvalidFrontmatter,
+    rawFrontmatter, setRawFrontmatter,
     modifiedAt,
     initialMode = EDITOR_MODES.READ,
     flush
@@ -115,10 +116,12 @@ export const NoteEditorScreen = ({
         tags,
         properties,
         invalidFrontmatter,
+        rawFrontmatter,
         setNote,
         setTags,
         setProperties,
-        setInvalidFrontmatter
+        setInvalidFrontmatter,
+        setRawFrontmatter
     })
 
     const invalid = mode !== EDITOR_MODES.CODE && !!invalidFrontmatter

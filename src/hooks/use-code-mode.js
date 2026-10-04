@@ -7,16 +7,18 @@ export function useCodeMode({
     tags,
     properties,
     invalidFrontmatter,
+    rawFrontmatter,
     setNote,
     setTags,
     setProperties,
-    setInvalidFrontmatter
+    setInvalidFrontmatter,
+    setRawFrontmatter
 }) {
     const [codeBuffer, setCodeBuffer] = useState('')
 
     const enter = useCallback(() => {
-        setCodeBuffer(buildNoteFileContent({ tags, properties, invalidFrontmatter }, note))
-    }, [tags, properties, invalidFrontmatter, note])
+        setCodeBuffer(buildNoteFileContent({ tags, properties, invalidFrontmatter, rawFrontmatter }, note))
+    }, [tags, properties, invalidFrontmatter, rawFrontmatter, note])
 
     const onChange = useCallback((value) => {
         const decomposed = decomposeNoteFileContent(value)
@@ -24,9 +26,10 @@ export function useCodeMode({
         setCodeBuffer(value)
         setNote(decomposed.body)
         setInvalidFrontmatter(decomposed.invalidFrontmatter)
+        setRawFrontmatter(decomposed.rawFrontmatter)
         if (decomposed.tags) setTags(decomposed.tags)
         if (decomposed.properties) setProperties(decomposed.properties)
-    }, [setNote, setTags, setProperties, setInvalidFrontmatter])
+    }, [setNote, setTags, setProperties, setInvalidFrontmatter, setRawFrontmatter])
 
     return { codeBuffer, enter, onChange }
 }

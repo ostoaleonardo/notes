@@ -5,7 +5,8 @@ export const buildNotePayload = ({
     tags,
     properties,
     repositoryId,
-    invalidFrontmatter = null
+    invalidFrontmatter = null,
+    rawFrontmatter = null
 }) => ({
     path,
     title: title.trim(),
@@ -13,5 +14,6 @@ export const buildNotePayload = ({
     tags,
     properties,
     repositoryId,
-    invalidFrontmatter
+    invalidFrontmatter,
+    rawFrontmatter
 })
