@@ -18,7 +18,7 @@ const extractLocalUrls = (value) => {
     return [...urls]
 }
 
-const resolveUrl = async (url) => {
+export const resolveUrl = async (url) => {
     try {
         const file = new File(url)
         const bytes = await file.bytes()

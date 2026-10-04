@@ -13,6 +13,8 @@ import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useFileStorage } from '@/hooks/use-file-storage'
 import { useRepositories } from '@/hooks/use-repositories'
+import { useStorage } from '@/hooks/use-storage'
+import { readAttachmentSettings } from '@/utils/attachments'
 import { getCameraPermission, openImagePicker, requestCameraPermission } from '@/utils/image-picker'
 
 import { Camera } from '@/icons/camera'
@@ -24,19 +26,21 @@ import { IMAGE_EXTENSION_BY_MIME_TYPE } from '@/constants/image'
 import { SPACING } from '@/constants/spacing'
 import { logError } from '@/utils/log-error'
 
-export function ImageMarkdown({ onClose, onInsert }) {
+export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
     const { t } = useTranslation()
     const { copyImageFile } = useFileStorage()
-    const { activeRepository, ensureImagesFolder } = useRepositories()
+    const { getItem } = useStorage()
+    const { repositories, activeRepository, ensureAttachmentsFolder } = useRepositories()
     const { colors } = useTheme()
 
     const [title, setTitle] = useState('')
     const [url, setUrl] = useState('')
-    const [isDeviceImage, setIsDeviceImage] = useState(false)
+    const [deviceImageName, setDeviceImageName] = useState('')
     const [imageSize, setImageSize] = useState(null)
     const [cameraPermission, setCameraPermission] = useState(null)
 
     const hasPreview = url.trim() !== ''
+    const isDeviceImage = deviceImageName !== ''
 
     useEffect(() => {
         getCameraPermission().then(setCameraPermission)
@@ -64,28 +68,36 @@ export function ImageMarkdown({ onClose, onInsert }) {
             }
 
             logError('error', error)
+            showSnackbar(t('markdown.image_pick_failed'))
             return
         }
 
         if (!asset) return
 
-        const imagesUri = ensureImagesFolder(activeRepository)
-        const extension = IMAGE_EXTENSION_BY_MIME_TYPE[asset.mimeType] || 'jpg'
-        const file = await copyImageFile(asset.uri, imagesUri, `${randomUUID()}.${extension}`)
+        try {
+            const repository = repositories.find((item) => item.id === repositoryId) || activeRepository
+            const settings = await readAttachmentSettings(getItem)
+            const attachmentsUri = ensureAttachmentsFolder(repository, settings)
+            const extension = IMAGE_EXTENSION_BY_MIME_TYPE[asset.mimeType] || 'jpg'
+            const file = await copyImageFile(asset.uri, attachmentsUri, `${randomUUID()}.${extension}`)
 
-        setUrl(file.uri)
-        setIsDeviceImage(true)
-        setImageSize(null)
+            setUrl(file.uri)
+            setDeviceImageName(file.name)
+            setImageSize(null)
+        } catch (error) {
+            logError('error saving picked image', error)
+            showSnackbar(t('markdown.image_save_failed'))
+        }
     }
 
     const onAdd = () => {
         if (!url.trim()) return
 
-        onInsert({ title, url })
+        onInsert(isDeviceImage ? { embed: deviceImageName } : { title, url })
 
         setTitle('')
         setUrl('')
-        setIsDeviceImage(false)
+        setDeviceImageName('')
         setImageSize(null)
         onClose()
     }

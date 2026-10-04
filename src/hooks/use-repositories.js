@@ -96,6 +96,7 @@ export function useRepositories() {
         setActiveRepository: crud.setActiveRepository,
         ensureTemplatesFolder: crud.ensureTemplatesFolder,
         ensureImagesFolder: crud.ensureImagesFolder,
+        ensureAttachmentsFolder: crud.ensureAttachmentsFolder,
         getDescendants: tree.getDescendants,
         getRootRepository: tree.getRootRepository,
         buildRepository: treeOps.buildRepository,

@@ -191,6 +191,7 @@ const ACTION_HANDLERS = {
     quote: toggleQuote,
     hr: insertHorizontalRule,
     image: insertLink((label, url) => `![${label}](${url})`),
+    'image-embed': (view, { embed }) => insertAtCursor(view, `![[${embed}]]`),
     link: insertLink((label, url) => `[${label}](${url})`),
     'wiki-link': insertWikiLink,
     'list-bullet': list(LIST_TYPES.BULLET),

@@ -1,4 +1,4 @@
-import { resolveEmbeds } from '../embeds'
+import { extractEmbedImageNames, resolveEmbeds } from '../embeds'
 
 const notes = [
     { path: 'a', title: 'Alpha', note: 'alpha body' },
@@ -62,5 +62,17 @@ describe('resolve embeds', () => {
 
     test('turns an unresolved embed into a plain wiki link', () => {
         expect(resolve('![[Missing]]')).toBe('[[Missing]]')
+    })
+})
+
+describe('extract embed image names', () => {
+    test('lists each embedded image once', () => {
+        const value = '![[a.png]] text ![[b one.jpg|200]] ![[a.png]] ![[Alpha]]'
+
+        expect(extractEmbedImageNames(value)).toEqual(['a.png', 'b one.jpg'])
+    })
+
+    test('ignores embeds inside code', () => {
+        expect(extractEmbedImageNames('`![[a.png]]`')).toEqual([])
     })
 })

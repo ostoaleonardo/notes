@@ -303,6 +303,7 @@ export const NoteEditorScreen = ({
                 linkSheet={linkSheet}
                 tableSheet={tableSheet}
                 imageSheet={imageSheet}
+                repositoryId={repositoryId}
                 action={action}
             />
 

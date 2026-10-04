@@ -90,6 +90,12 @@
 		"daily_note_folder_root": "Raíz del repositorio",
 		"daily_note_template": "Plantilla de la nota diaria",
 		"daily_note_template_none": "Ninguna",
+		"attachment_location": "Ubicación predeterminada para los archivos adjuntos nuevos",
+		"attachment_location_vault": "Raíz del repositorio",
+		"attachment_location_same": "Misma carpeta donde está la nota",
+		"attachment_location_subfolder": "En una subcarpeta de la carpeta de la nota",
+		"attachment_location_folder": "En la carpeta especificada abajo",
+		"attachment_folder": "Nombre de la carpeta de adjuntos",
 		"files_links": "Enlaces",
 		"use_wikilinks": "Usar [[Wikilinks]]",
 		"use_wikilinks_description": "Desactívalo para generar enlaces de Markdown en su lugar al enlazar notas.",
@@ -185,7 +191,9 @@
 		"camera_permission_message": "Actívalo para tomar fotos desde la app.",
 		"camera_permission_grant": "Activar",
 		"camera_permission_settings": "Abrir ajustes",
-		"camera_permission_denied": "Activa el permiso de cámara en los ajustes del sistema para tomar fotos."
+		"camera_permission_denied": "Activa el permiso de cámara en los ajustes del sistema para tomar fotos.",
+		"image_pick_failed": "No se pudo abrir el selector de imágenes.",
+		"image_save_failed": "No se pudo guardar la imagen en la carpeta de adjuntos."
 	},
 	"markdown_action": {
 		"bold": "Negrita",

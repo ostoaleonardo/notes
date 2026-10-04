@@ -1,0 +1,14 @@
+export const ATTACHMENT_LOCATIONS = {
+    VAULT: 'vault',
+    SAME_FOLDER: 'same',
+    SUBFOLDER: 'subfolder',
+    FOLDER: 'folder'
+}
+
+export const DEFAULT_ATTACHMENT_LOCATION = ATTACHMENT_LOCATIONS.FOLDER
+export const DEFAULT_ATTACHMENT_FOLDER = 'images'
+export const INVALID_FOLDER_NAME_PATTERN = /[\\/:*?"<>|]/g
+export const ATTACHMENT_FOLDER_LOCATIONS = [
+    ATTACHMENT_LOCATIONS.SUBFOLDER,
+    ATTACHMENT_LOCATIONS.FOLDER
+]

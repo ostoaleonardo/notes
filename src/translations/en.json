@@ -90,6 +90,12 @@
 		"daily_note_folder_root": "Vault root",
 		"daily_note_template": "Daily note template",
 		"daily_note_template_none": "None",
+		"attachment_location": "Default location for new attachments",
+		"attachment_location_vault": "Vault root",
+		"attachment_location_same": "Same folder as the note",
+		"attachment_location_subfolder": "In subfolder under the note's folder",
+		"attachment_location_folder": "In the folder specified below",
+		"attachment_folder": "Attachment folder name",
 		"files_links": "Links",
 		"use_wikilinks": "Use [[Wikilinks]]",
 		"use_wikilinks_description": "Turn off to generate Markdown links instead when linking notes.",
@@ -185,7 +191,9 @@
 		"camera_permission_message": "Turn it on to take photos from the app.",
 		"camera_permission_grant": "Enable",
 		"camera_permission_settings": "Open settings",
-		"camera_permission_denied": "Enable camera access in system settings to take photos."
+		"camera_permission_denied": "Enable camera access in system settings to take photos.",
+		"image_pick_failed": "Could not open the image picker.",
+		"image_save_failed": "Could not save the image to your attachments folder."
 	},
 	"markdown_action": {
 		"bold": "Bold",

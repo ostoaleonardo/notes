@@ -18,6 +18,8 @@ export const STORAGE_KEYS = {
     TAG_SORT: 'tag-sort',
     ALWAYS_UPDATE_WIKI_LINKS: 'always-update-wiki-links',
     LINK_FORMAT: 'link-format',
+    ATTACHMENT_LOCATION: 'attachment-location',
+    ATTACHMENT_FOLDER: 'attachment-folder',
     SHOW_NOTE_PROPERTIES: 'show-note-properties',
     STARTUP_BEHAVIOR: 'startup-behavior',
     DELETE_BEHAVIOR: 'delete-behavior',

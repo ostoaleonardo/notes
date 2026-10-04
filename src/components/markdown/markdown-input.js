@@ -16,6 +16,7 @@ import { useMissingNote } from '@/hooks/use-missing-note'
 import { useNoteEntries } from '@/hooks/use-note-entries'
 import { useResolvedPreviewMarkdown } from '@/hooks/use-resolved-preview-markdown'
 import { useResolvedWikiLinks } from '@/hooks/use-resolved-wiki-links'
+import { useEmbedImageMap } from '@/hooks/use-embed-image-map'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
 
 import { getEditorPath } from '@/utils/editor-path'
@@ -71,7 +72,8 @@ export const MarkdownInput = ({
 
     const valueWithWikiLinks = useResolvedWikiLinks(mode === EDITOR_MODES.READ ? value : '', id)
     const { value: previewValue, mediaMap } = useResolvedPreviewMarkdown(valueWithWikiLinks)
-    const mediaMapEntries = useMemo(() => [...mediaMap], [mediaMap])
+    const embedImageMap = useEmbedImageMap(value, mode === EDITOR_MODES.LIVE)
+    const mediaMapEntries = useMemo(() => [...mediaMap, ...embedImageMap], [mediaMap, embedImageMap])
 
     const { setMissing } = missingNote
 

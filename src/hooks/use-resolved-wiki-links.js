@@ -1,23 +1,13 @@
-import { useCallback, useMemo } from 'react'
-import { Directory, File } from 'expo-file-system'
+import { useMemo } from 'react'
 
 import { useNotes } from './use-notes'
-import { useRepositories } from './use-repositories'
+import { useImageUris } from './use-image-uris'
 import { resolveWikiLinks } from '@/utils/wiki-links'
 import { resolveEmbeds } from '@/utils/embeds'
 
 export const useResolvedWikiLinks = (value, selfPath) => {
     const { notes, notePaths } = useNotes()
-    const { activeRepository, ensureImagesFolder } = useRepositories()
-
-    const listImageUris = useCallback(() => (
-        new Map(
-            new Directory(ensureImagesFolder(activeRepository))
-                .list()
-                .filter((entry) => entry instanceof File)
-                .map((entry) => [entry.name, entry.uri])
-        )
-    ), [activeRepository, ensureImagesFolder])
+    const listImageUris = useImageUris()
 
     return useMemo(() => {
         let imageUris = null

@@ -46,3 +46,18 @@ const replaceEmbeds = (value, context, depth, visited) => mapOutsideCode(
 export const resolveEmbeds = (value, { notes, notePaths = new Map(), getImageUrl, selfPath }) => (
     replaceEmbeds(value, { notes, notePaths, getImageUrl }, 0, new Set(selfPath ? [selfPath] : []))
 )
+
+export const extractEmbedImageNames = (value) => {
+    const names = new Set()
+
+    mapOutsideCode(value, (segment) => {
+        for (const match of segment.matchAll(EMBED_PATTERN)) {
+            const target = match[1].trim()
+            if (EMBED_IMAGE_PATTERN.test(target)) names.add(target)
+        }
+
+        return segment
+    })
+
+    return [...names]
+}

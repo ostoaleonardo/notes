@@ -65,7 +65,7 @@ const buildDecorations = (state) => {
     decorateMath({ text, selection, ranges, codeRanges })
     decorateFootnotes({ text, ranges, codeRanges })
     decorateExtraMarks({ text, selection, ranges, codeRanges })
-    decorateWikiLinks({ ranges, codeRanges, wikiLinkRanges, noteEntries, selection })
+    decorateWikiLinks({ ranges, codeRanges, wikiLinkRanges, noteEntries, selection, mediaMap })
 
     return Decoration.set(ranges, true)
 }

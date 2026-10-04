@@ -5,7 +5,7 @@ import { TableMarkdown } from '@/screens/modals/table-markdown'
 import { ImageMarkdown } from '@/screens/modals/image-markdown'
 import { ModalSheet } from '@/components/modal/modal-sheet'
 
-export const MarkdownInsertSheets = memo(function MarkdownInsertSheets({ linkSheet, tableSheet, imageSheet, action }) {
+export const MarkdownInsertSheets = memo(function MarkdownInsertSheets({ linkSheet, tableSheet, imageSheet, repositoryId, action }) {
     return (
         <>
             <ModalSheet
@@ -38,7 +38,8 @@ export const MarkdownInsertSheets = memo(function MarkdownInsertSheets({ linkShe
             >
                 <ImageMarkdown
                     onClose={imageSheet.onClose}
-                    onInsert={(payload) => action.run('image', payload)}
+                    repositoryId={repositoryId}
+                    onInsert={(payload) => action.run(payload.embed ? 'image-embed' : 'image', payload)}
                 />
             </ModalSheet>
         </>

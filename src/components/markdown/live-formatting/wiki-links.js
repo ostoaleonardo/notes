@@ -1,6 +1,7 @@
 import { Decoration } from '@codemirror/view'
 
 import { isRangeSelected, overlapsAny } from './utils'
+import { ImageWidget } from './widgets'
 
 import { resolveWikiLinkTarget } from '@/utils/wiki-links'
 
@@ -45,7 +46,7 @@ const getResolverInputs = (noteEntries) => {
     return resolverInputsByEntries.get(noteEntries)
 }
 
-export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntries, selection }) => {
+export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntries, selection, mediaMap }) => {
     const { notes, notePaths } = getResolverInputs(noteEntries)
 
     for (const { from, to, linkText, labelFrom, labelTo, isEmbed } of wikiLinkRanges) {
@@ -57,6 +58,13 @@ export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntr
 
         if (isRangeSelected(selection, from, to)) {
             ranges.push(Decoration.mark({ class: className }).range(from, to))
+            continue
+        }
+
+        const imageUrl = isEmbed && mediaMap?.get(linkText.trim())
+
+        if (imageUrl) {
+            ranges.push(Decoration.replace({ widget: new ImageWidget(imageUrl, linkText) }).range(from, to))
             continue
         }
 

@@ -9,6 +9,7 @@ import { ThemeOption } from '@/screens/settings/theme-option'
 import { AppVersionCard } from '@/screens/settings/app-version-card'
 import { Option } from '@/screens/settings/option'
 import { WikiLinksOption } from '@/screens/settings/wiki-links-option'
+import { AttachmentsOption } from '@/screens/settings/attachments-option'
 import { StartupOption } from '@/screens/settings/startup-option'
 import { DeleteBehaviorOption } from '@/screens/settings/delete-behavior-option'
 import { Scroll } from '@/components/animated/scroll'
@@ -67,6 +68,7 @@ export default function Settings() {
                     containerStyle={styles.section}
                     contentStyle={styles.items}
                 >
+                    <AttachmentsOption />
                     <WikiLinksOption />
                 </Section>
 

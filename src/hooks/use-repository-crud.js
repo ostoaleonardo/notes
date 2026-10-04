@@ -4,6 +4,7 @@ import { Directory } from 'expo-file-system'
 import { sanitizeFilename } from '@/utils/note-filename'
 import { buildRepositoryPaths } from '@/utils/note-path'
 import { withBusy } from '@/utils/with-busy'
+import { resolveAttachmentTarget } from '@/utils/attachments'
 import { FREE_SUBFOLDERS_PER_REPOSITORY } from '@/constants/default-values'
 import { TEMPLATES_FOLDER_NAME } from '@/constants/file-storage'
 import { logError } from '@/utils/log-error'
@@ -141,6 +142,17 @@ export function useRepositoryCrud({
         return getOrCreateImagesFolder(root.uri).uri
     }, [getRootRepository, getOrCreateImagesFolder])
 
+    const ensureAttachmentsFolder = useCallback((repository, settings) => {
+        const { parentUri, folderName } = resolveAttachmentTarget(settings, {
+            rootUri: getRootRepository(repository).uri,
+            noteFolderUri: repository.uri
+        })
+
+        if (!folderName) return parentUri
+
+        return (findDirectory(parentUri, folderName) || createSubdirectory(parentUri, folderName)).uri
+    }, [getRootRepository, findDirectory, createSubdirectory])
+
     const renameRepository = useCallback(async (id, alias) => {
         const repository = repositories.find((r) => r.id === id)
         if (!repository) return null
@@ -256,6 +268,7 @@ export function useRepositoryCrud({
         removeRepository,
         setActiveRepository,
         ensureTemplatesFolder,
-        ensureImagesFolder
+        ensureImagesFolder,
+        ensureAttachmentsFolder
     }
 }
