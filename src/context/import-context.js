@@ -5,8 +5,6 @@ import { useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 
 import { useNotes } from '../hooks/use-notes'
-import { usePro } from '../hooks/use-pro'
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
 import { extractProperties, readFrontmatterTags, parseFrontmatter } from '@/utils/frontmatter'
 
 import { ROUTES } from '@/constants/routes'
@@ -18,7 +16,6 @@ export function ImportProvider({ children }) {
     const router = useRouter()
     const { t } = useTranslation()
     const { saveNote, loading } = useNotes()
-    const { pro } = usePro()
 
     const [importing, setImporting] = useState(false)
 
@@ -53,11 +50,6 @@ export function ImportProvider({ children }) {
             if (!url) return
             if (!url.startsWith('content://') && !url.startsWith('file://')) return
 
-            if (!pro) {
-                showSnackbar(t('repositories.pro_required'))
-                return
-            }
-
             importFile(url)
         }
 
@@ -65,9 +57,9 @@ export function ImportProvider({ children }) {
         const subscription = Linking.addEventListener('url', ({ url }) => handleUrl(url))
 
         return () => subscription.remove()
-    }, [loading, pro, t, importFile])
+    }, [loading, importFile])
 
-    const value = useMemo(() => ({ importing, importFile, pro }), [importing, importFile, pro])
+    const value = useMemo(() => ({ importing, importFile }), [importing, importFile])
 
     return (
         <ImportContext.Provider value={value}>

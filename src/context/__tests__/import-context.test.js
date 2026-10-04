@@ -25,9 +25,6 @@ jest.mock('expo-router', () => ({
 jest.mock('../../hooks/use-notes', () => ({
     useNotes: () => ({ saveNote: mockSaveNote, loading: false })
 }))
-jest.mock('../../hooks/use-pro', () => ({
-    usePro: () => ({ pro: true })
-}))
 
 const renderImportContext = () => renderHook(() => useContext(ImportContext), { wrapper: ImportProvider })
 
