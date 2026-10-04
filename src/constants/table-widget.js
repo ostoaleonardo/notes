@@ -11,6 +11,8 @@ export const TABLE_CLASSES = {
     ADD_COL: 'cm-table-add-col',
     MENU: 'cm-table-menu',
     MENU_ITEM: 'cm-table-menu-item',
+    MENU_LABEL: 'cm-table-menu-label',
+    MENU_GROUP: 'cm-table-menu-group',
     HIGHLIGHT: 'cm-table-highlight',
     DISABLED: 'cm-table-disabled',
     HIDDEN: 'cm-table-hidden'

@@ -16,6 +16,7 @@ import {
 } from '@/constants/table-widget'
 import { TRANSPARENT } from '@/constants/themes'
 import { RADIUS } from '@/constants/radius'
+import { SPACING } from '@/constants/spacing'
 
 export const decorateTable = (node, context) => {
     const { doc, selection, ranges, tableLabels } = context
@@ -105,22 +106,38 @@ export const tableTheme = ({ colors, typography }) => {
             display: 'flex',
             flexDirection: 'column',
             minWidth: `${TABLE_MENU_MIN_WIDTH}px`,
-            padding: '4px',
-            borderRadius: `${RADIUS.outer}px`,
+            gap: `${SPACING.xxs}px`,
+            padding: `${SPACING.xs}px`
+        },
+        [`.${TABLE_CLASSES.MENU_GROUP}`]: {
+            overflow: 'hidden',
+            borderRadius: `${RADIUS.inner}px`,
             backgroundColor: colors.surface,
-            border: `1px solid ${colors.onBackground + TRANSPARENT[5]}`,
-            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3)'
+            border: `1px solid ${colors.onBackground + TRANSPARENT[5]}`
+        },
+        [`.${TABLE_CLASSES.MENU_GROUP}:first-child`]: {
+            borderTopLeftRadius: `${RADIUS.outer}px`,
+            borderTopRightRadius: `${RADIUS.outer}px`
+        },
+        [`.${TABLE_CLASSES.MENU_GROUP}:last-child`]: {
+            borderBottomLeftRadius: `${RADIUS.outer}px`,
+            borderBottomRightRadius: `${RADIUS.outer}px`
         },
         [`.${TABLE_CLASSES.MENU_ITEM}`]: {
             display: 'flex',
             alignItems: 'center',
             gap: '10px',
             padding: '8px 10px',
-            borderRadius: '6px',
             fontFamily: typography.fontFamily,
             fontSize: '14px',
             color: colors.onBackground,
             cursor: 'pointer'
+        },
+        [`.${TABLE_CLASSES.MENU_LABEL}`]: {
+            padding: '8px 10px 2px',
+            fontFamily: typography.fontFamily,
+            fontSize: '12px',
+            color: colors.onBackground + TRANSPARENT[50]
         },
         [`.${TABLE_CLASSES.DISABLED}`]: { opacity: 0.35, pointerEvents: 'none' }
     }

@@ -115,8 +115,8 @@ export class TableWidget extends WidgetType {
 
         rowGrip.appendChild(buildSvg(TABLE_GRIP_ICON_PATH, TABLE_MENU_ICON_SIZE))
         colGrip.appendChild(buildSvg(TABLE_GRIP_ICON_PATH, TABLE_MENU_ICON_SIZE))
-        addRow.appendChild(buildSvg(TABLE_MENU_ICON_PATHS.PLUS, TABLE_MENU_ICON_SIZE))
-        addCol.appendChild(buildSvg(TABLE_MENU_ICON_PATHS.PLUS, TABLE_MENU_ICON_SIZE))
+        addRow.appendChild(buildSvg(TABLE_MENU_ICON_PATHS.ADD, TABLE_MENU_ICON_SIZE))
+        addCol.appendChild(buildSvg(TABLE_MENU_ICON_PATHS.ADD, TABLE_MENU_ICON_SIZE))
         rowGrip.classList.add(TABLE_CLASSES.HIDDEN)
         colGrip.classList.add(TABLE_CLASSES.HIDDEN)
 
@@ -234,18 +234,23 @@ export class TableWidget extends WidgetType {
             if (position === index) cell.classList.add(TABLE_CLASSES.HIGHLIGHT)
         })
 
-        TABLE_MENU_LAYOUT[axis].forEach(({ action, icon }) => {
-            const disabled = applyTableAction(current, axis, index, action) === current
-            const item = buildElement('div', TABLE_CLASSES.MENU_ITEM, menu)
-            item.appendChild(buildSvg(TABLE_MENU_ICON_PATHS[icon], TABLE_MENU_ICON_SIZE))
-            buildElement('span', '', item).textContent = labels[`${axis}_${action}`] || action
-            if (disabled) item.classList.add(TABLE_CLASSES.DISABLED)
+        TABLE_MENU_LAYOUT[axis].forEach(({ group, items }) => {
+            const section = buildElement('div', TABLE_CLASSES.MENU_GROUP, menu)
+            if (group) buildElement('div', TABLE_CLASSES.MENU_LABEL, section).textContent = labels[`group_${group}`] || group
 
-            item.addEventListener('mousedown', keepFocus)
-            item.addEventListener('click', () => {
-                if (disabled) return
-                this.closeMenu(wrap)
-                this.runAction(view, wrap, axis, index, action)
+            items.forEach(({ action, icon }) => {
+                const disabled = applyTableAction(current, axis, index, action) === current
+                const item = buildElement('div', TABLE_CLASSES.MENU_ITEM, section)
+                item.appendChild(buildSvg(TABLE_MENU_ICON_PATHS[icon], TABLE_MENU_ICON_SIZE))
+                buildElement('span', '', item).textContent = labels[`${axis}_${action}`] || action
+                if (disabled) item.classList.add(TABLE_CLASSES.DISABLED)
+
+                item.addEventListener('mousedown', keepFocus)
+                item.addEventListener('click', () => {
+                    if (disabled) return
+                    this.closeMenu(wrap)
+                    this.runAction(view, wrap, axis, index, action)
+                })
             })
         })
 
