@@ -1,5 +1,6 @@
 import { resolveWikiLinkTarget, escapeHtml } from './wiki-links'
 import { mapOutsideCode } from './outside-code'
+import { isFileLinkTarget } from './file-links'
 
 import {
     EMBED_CLASS,
@@ -31,6 +32,8 @@ const replaceEmbeds = (value, context, depth, visited) => mapOutsideCode(
             if (EMBED_IMAGE_PATTERN.test(target)) {
                 return buildImage(target, alias, context.getImageUrl) ?? match.slice(1)
             }
+
+            if (isFileLinkTarget(target)) return match.slice(1)
 
             const note = resolveWikiLinkTarget(target, context.notes, context.notePaths)
             if (!note || depth >= EMBED_MAX_DEPTH || visited.has(note.path)) return match.slice(1)

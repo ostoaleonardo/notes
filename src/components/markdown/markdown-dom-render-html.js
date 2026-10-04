@@ -11,6 +11,7 @@ import { findInlineTags } from '@/utils/inline-tags'
 
 import { TAG_LINK_SCHEME } from '@/constants/tags'
 import { WIKI_LINK_SCHEME } from '@/constants/wiki-links'
+import { FILE_LINK_SCHEME } from '@/constants/file-links'
 
 const md = new MarkdownIt({ html: true, linkify: true })
     .use(taskLists, { enabled: true })
@@ -20,8 +21,9 @@ const md = new MarkdownIt({ html: true, linkify: true })
 
 const wikiLinkProtocol = WIKI_LINK_SCHEME.split(':')[0]
 const tagLinkProtocol = TAG_LINK_SCHEME.split(':')[0]
+const fileLinkProtocol = FILE_LINK_SCHEME.split(':')[0]
 const ALLOWED_URI_REGEXP = new RegExp(
-    `^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|${wikiLinkProtocol}|${tagLinkProtocol}):|[^a-z]|[a-z+.\\-]+(?:[^a-z+.\\-:]|$))`,
+    `^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|${wikiLinkProtocol}|${tagLinkProtocol}|${fileLinkProtocol}):|[^a-z]|[a-z+.\\-]+(?:[^a-z+.\\-:]|$))`,
     'i'
 )
 

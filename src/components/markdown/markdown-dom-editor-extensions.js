@@ -9,6 +9,7 @@ import { GFM } from '@lezer/markdown'
 import { wikiLinkCompletionSource } from './wiki-link-completion'
 import { tagCompletionSource } from './tag-completion'
 import { inlineTagExtensions } from './inline-tag-highlight'
+import { fileLinkPress } from './live-formatting/wiki-links'
 import { listKeymap } from './markdown-dom-list-keymap'
 import { headingFoldService } from './markdown-dom-fold'
 import { pasteUrlOverSelection } from './markdown-dom-paste'
@@ -37,7 +38,7 @@ export const buildUpdateListener = ({ onChangeRef, onHistoryChangeRef, historyRe
     })
 )
 
-export const buildEditorExtensions = ({ dynamic, onTagPressRef, updateListener }) => [
+export const buildEditorExtensions = ({ dynamic, onTagPressRef, onLinkPressRef, updateListener }) => [
     history(),
     search({ createPanel: createHiddenSearchPanel }),
     keymap.of([
@@ -49,6 +50,7 @@ export const buildEditorExtensions = ({ dynamic, onTagPressRef, updateListener }
     ]),
     markdown({ extensions: GFM }),
     inlineTagExtensions(onTagPressRef),
+    fileLinkPress(onLinkPressRef),
     autocompletion({ override: [wikiLinkCompletionSource, tagCompletionSource] }),
     closeBrackets(),
     codeFolding(),

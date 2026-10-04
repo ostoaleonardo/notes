@@ -457,3 +457,25 @@ describe('unicode normalization', () => {
         expect(resolveWikiLinkTarget('Cafe\u0301', composed).path).toBe('cafe')
     })
 })
+
+describe('file links', () => {
+    test('renders a link to a vault file as a file link', () => {
+        const result = resolveWikiLinks('[[docs/sample doc.pdf]]', notes)
+
+        expect(result).toBe(
+            '<a href="filelink://docs%2Fsample%20doc.pdf" class="file-link">sample doc.pdf</a>'
+        )
+    })
+
+    test('uses the alias as the label and drops the anchor from the target', () => {
+        const result = resolveWikiLinks('[[sample.pdf#page=2|Manual]]', notes)
+
+        expect(result).toBe('<a href="filelink://sample.pdf" class="file-link">Manual</a>')
+    })
+
+    test('keeps a note with a file-like title as a note link', () => {
+        const result = resolveWikiLinks('[[spec.pdf]]', [{ path: 'note-3', title: 'spec.pdf' }])
+
+        expect(result).toBe('<a href="wikilink://note-3" class="wiki-link">spec.pdf</a>')
+    })
+})

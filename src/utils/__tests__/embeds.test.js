@@ -76,3 +76,11 @@ describe('extract embed image names', () => {
         expect(extractEmbedImageNames('`![[a.png]]`')).toEqual([])
     })
 })
+
+describe('file embeds', () => {
+    test('turns an embed of a non-image file into a plain link', () => {
+        const result = resolveEmbeds('![[sample.pdf]] and ![[song.wav]]', { notes, getImageUrl })
+
+        expect(result).toBe('[[sample.pdf]] and [[song.wav]]')
+    })
+})

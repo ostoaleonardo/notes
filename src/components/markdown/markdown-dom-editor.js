@@ -72,6 +72,7 @@ const MarkdownDomEditor = ({
     const onFocusRef = useLatestRef(onFocus)
     const onBlurRef = useLatestRef(onBlur)
     const onTagPressRef = useLatestRef(onTagPress)
+    const onLinkPressRef = useLatestRef(onLinkPress)
 
     const [addPropertyRequest, setAddPropertyRequest] = useState(0)
     const onAddProperty = useCallback(() => setAddPropertyRequest((count) => count + 1), [])
@@ -136,6 +137,7 @@ const MarkdownDomEditor = ({
                     themeExtension
                 ],
                 onTagPressRef,
+                onLinkPressRef,
                 updateListener: buildUpdateListener({
                     onChangeRef,
                     onHistoryChangeRef,

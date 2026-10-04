@@ -13,6 +13,7 @@ import {
     CALLOUT_TYPE_CLASS_PREFIX
 } from '../../constants/callouts'
 import { EMBED_CLASS, EMBED_TITLE_CLASS } from '../../constants/embeds'
+import { FILE_LINK_CLASS } from '../../constants/file-links'
 import {
     BACKLINKS_CLASS,
     BACKLINKS_TITLE_CLASS,
@@ -275,6 +276,7 @@ export const buildEditorTheme = ({ fontSize, fontFamily, headingFontFamily, colo
         },
         ...buildLiveFormattingTheme({
             linkColor: tertiary,
+            surfaceColor: surface,
             quoteBackgroundColor: background,
             codeBackgroundColor: codeBackground,
             thematicBreakColor: thematicBreak,
@@ -315,6 +317,10 @@ export const buildPreviewCss = ({ fontFamily, headingFontFamily, colors, fontSiz
     .markdown-preview a { color: ${linkColor}; text-decoration: underline; }
     .markdown-preview .wiki-link { color: ${linkColor}; text-decoration: underline; font-weight: bold; }
     .markdown-preview .tag { color: ${linkColor}; text-decoration: none; font-weight: bold; }
+    .markdown-preview .${FILE_LINK_CLASS} {
+        display: inline-block; padding: 0 8px; border-radius: ${RADIUS.segment}px; text-decoration: none;
+        color: ${textColor}; background-color: ${surfaceColor}; border: 1px solid ${textColor + TRANSPARENT[5]};
+    }
     .markdown-preview .wiki-link-broken { color: ${textColor}; opacity: 0.5; text-decoration: underline dashed; }
     .markdown-preview blockquote {
         margin: 0.4em 0; padding: 0.2em 0.8em;

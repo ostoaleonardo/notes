@@ -17,6 +17,13 @@ describe('resolve link press', () => {
         })
     })
 
+    test('resolves a file link to the decoded target', () => {
+        expect(resolveLinkPress('filelink://docs%2Fsample%20doc.pdf')).toEqual({
+            type: 'file',
+            target: 'docs/sample doc.pdf'
+        })
+    })
+
     test('resolves a missing wiki link to its path and title', () => {
         expect(resolveLinkPress('wikilink://missing/work/New%20note')).toEqual({
             type: 'missing-note',

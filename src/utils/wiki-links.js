@@ -14,6 +14,9 @@ import {
     BACKLINK_PATH_CLASS
 } from '@/constants/backlinks'
 import { mapOutsideCode } from '@/utils/outside-code'
+import { buildFileLinkUrl, isFileLinkTarget } from '@/utils/file-links'
+
+import { FILE_LINK_CLASS } from '@/constants/file-links'
 
 export const escapeHtml = (text) => text
     .replace(/&/g, '&amp;')
@@ -104,6 +107,10 @@ export const resolveWikiLinks = (value, notes, notePaths = new Map()) => mapOuts
 
             const defaultLabel = anchor ? `${title}${WIKI_LINK_ANCHOR_LABEL_SEPARATOR}${anchor}` : title
             const label = escapeHtml((alias || defaultLabel).trim())
+
+            if (!note && isFileLinkTarget(target)) {
+                return `<a href="${buildFileLinkUrl(target)}" class="${FILE_LINK_CLASS}">${escapeHtml((alias || title).trim())}</a>`
+            }
 
             if (!note) {
                 const encodedPath = encodeURIComponent(path)

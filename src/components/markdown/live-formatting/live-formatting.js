@@ -86,6 +86,7 @@ export const buildLiveFormattingTheme = ({
     codeBackgroundColor,
     thematicBreakColor,
     onBackgroundColor,
+    surfaceColor,
     headingFontFamily
 }) => ({
     ...inlineMarksTheme({ codeBackgroundColor }),
@@ -100,5 +101,5 @@ export const buildLiveFormattingTheme = ({
     ...mathTheme(),
     ...footnotesTheme({ linkColor }),
     ...extraMarksTheme({ linkColor }),
-    ...wikiLinksTheme({ linkColor, onBackgroundColor })
+    ...wikiLinksTheme({ linkColor, onBackgroundColor, surfaceColor })
 })

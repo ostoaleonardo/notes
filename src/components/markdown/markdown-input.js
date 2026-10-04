@@ -17,10 +17,13 @@ import { useNoteEntries } from '@/hooks/use-note-entries'
 import { useResolvedPreviewMarkdown } from '@/hooks/use-resolved-preview-markdown'
 import { useResolvedWikiLinks } from '@/hooks/use-resolved-wiki-links'
 import { useEmbedImageMap } from '@/hooks/use-embed-image-map'
+import { useAttachmentFiles } from '@/hooks/use-attachment-files'
+import { useOpenFile } from '@/hooks/use-open-file'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
 
 import { getEditorPath } from '@/utils/editor-path'
 import { resolveLinkPress } from '@/utils/link-press'
+import { findFileByTarget } from '@/utils/attachments'
 import { toggleTask } from '@/utils/tasks'
 
 import { ROUTES } from '@/constants/routes'
@@ -76,6 +79,8 @@ export const MarkdownInput = ({
     const mediaMapEntries = useMemo(() => [...mediaMap, ...embedImageMap], [mediaMap, embedImageMap])
 
     const { setMissing } = missingNote
+    const listFiles = useAttachmentFiles()
+    const openFile = useOpenFile()
 
     const onLinkPress = useCallback((url) => {
         const link = resolveLinkPress(url)
@@ -91,10 +96,13 @@ export const MarkdownInput = ({
             case LINK_TYPES.NOTE:
                 router.push(getEditorPath(link.id))
                 break
+            case LINK_TYPES.FILE:
+                openFile(findFileByTarget(listFiles(), link.target))
+                break
             default:
                 Linking.openURL(link.url)
         }
-    }, [onTagPress, setMissing])
+    }, [onTagPress, setMissing, listFiles, openFile])
 
     const onImagePress = useCallback((url) => router.push({
         pathname: ROUTES.IMAGE_VIEWER,

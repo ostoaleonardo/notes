@@ -1,9 +1,14 @@
-import { Decoration } from '@codemirror/view'
+import { Decoration, EditorView } from '@codemirror/view'
 
 import { isRangeSelected, overlapsAny } from './utils'
 import { ImageWidget } from './widgets'
 
 import { resolveWikiLinkTarget } from '@/utils/wiki-links'
+import { buildFileLinkUrl, isFileLinkTarget } from '@/utils/file-links'
+
+import { TRANSPARENT } from '@/constants/themes'
+import { RADIUS } from '@/constants/radius'
+import { FILE_LINK_LIVE_CLASS } from '@/constants/file-links'
 
 import { WIKI_LINK_PATTERN, WIKI_LINK_ANCHOR_SEPARATOR } from '@/constants/wiki-links'
 import { EMBED_IMAGE_PATTERN, EMBED_LIVE_CLASS, EMBED_MARKER } from '@/constants/embeds'
@@ -54,7 +59,10 @@ export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntr
 
         const resolved = !!resolveWikiLinkTarget(linkText, notes, notePaths)
         const isEmbedTarget = isEmbed && (resolved || EMBED_IMAGE_PATTERN.test(linkText.trim()))
-        const className = isEmbedTarget ? EMBED_LIVE_CLASS : resolved ? 'cm-live-wikilink' : 'cm-live-wikilink-broken'
+        const isFileTarget = !resolved && isFileLinkTarget(linkText)
+        const className = isFileTarget
+            ? FILE_LINK_LIVE_CLASS
+            : isEmbedTarget ? EMBED_LIVE_CLASS : resolved ? 'cm-live-wikilink' : 'cm-live-wikilink-broken'
 
         if (isRangeSelected(selection, from, to)) {
             ranges.push(Decoration.mark({ class: className }).range(from, to))
@@ -74,8 +82,33 @@ export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntr
     }
 }
 
-export const wikiLinksTheme = ({ linkColor, onBackgroundColor }) => ({
+export const wikiLinksTheme = ({ linkColor, onBackgroundColor, surfaceColor }) => ({
     '.cm-live-wikilink': { color: linkColor, fontWeight: 'bold' },
     [`.${EMBED_LIVE_CLASS}`]: { color: linkColor, fontWeight: 'bold', fontStyle: 'italic' },
+    [`.${FILE_LINK_LIVE_CLASS}`]: {
+        color: onBackgroundColor,
+        padding: '1px 6px',
+        cursor: 'pointer',
+        backgroundColor: surfaceColor,
+        borderRadius: `${RADIUS.segment}px`,
+        border: `1px solid ${onBackgroundColor + TRANSPARENT[5]}`
+    },
     '.cm-live-wikilink-broken': { color: onBackgroundColor, opacity: 0.5, textDecoration: 'underline dashed' }
+})
+
+export const fileLinkPress = (onPressRef) => EditorView.domEventHandlers({
+    mousedown: (event, view) => {
+        if (view.hasFocus || !event.target.closest?.(`.${FILE_LINK_LIVE_CLASS}`)) return false
+
+        const position = view.posAtCoords({ x: event.clientX, y: event.clientY })
+        if (position === null) return false
+
+        const range = findWikiLinkRanges(view.state.doc.toString())
+            .find(({ from, to, linkText }) => position >= from && position <= to && isFileLinkTarget(linkText))
+        if (!range) return false
+
+        event.preventDefault()
+        onPressRef.current?.(buildFileLinkUrl(range.linkText))
+        return true
+    }
 })
