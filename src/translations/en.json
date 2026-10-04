@@ -283,10 +283,15 @@
 		"files": "Files",
 		"files_empty": "No attachments in this repository yet",
 		"change_view": "Change view",
-		"sort_name_asc": "Name (A to Z)",
-		"sort_name_desc": "Name (Z to A)",
-		"sort_count_desc": "Usage (high to low)",
-		"sort_count_asc": "Usage (low to high)"
+		"sort_name_asc": "Name (A - Z)",
+		"sort_name_desc": "Name (Z - A)",
+		"sort_count_desc": "Usage (high - low)",
+		"sort_count_asc": "Usage (low - high)",
+		"sort_notes": "Sort notes",
+		"sort_modified_desc": "Modified (new - old)",
+		"sort_modified_asc": "Modified (old - new)",
+		"sort_created_desc": "Created (new - old)",
+		"sort_created_asc": "Created (old - new)"
 	},
 	"templates": {
 		"journal": "Journal",

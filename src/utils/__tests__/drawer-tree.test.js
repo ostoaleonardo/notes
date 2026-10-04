@@ -1,4 +1,5 @@
 import { buildRepositoryTree, flattenDrawerTree } from '../drawer-tree'
+import { NOTE_SORTS } from '@/constants/note-sort'
 import { MOCK_NOTES_BY_REPOSITORY, MOCK_REPOSITORY_LIST } from '../__fixtures__/drawer-tree'
 
 describe('build repository tree', () => {
@@ -15,6 +16,12 @@ describe('build repository tree', () => {
         const tree = buildRepositoryTree(MOCK_REPOSITORY_LIST, MOCK_NOTES_BY_REPOSITORY)
 
         expect(tree[0].notes.map((note) => note.title)).toEqual(['Apple', 'Zebra'])
+    })
+
+    test('applies the given sort to notes within a folder', () => {
+        const tree = buildRepositoryTree(MOCK_REPOSITORY_LIST, MOCK_NOTES_BY_REPOSITORY, NOTE_SORTS.NAME_DESC)
+
+        expect(tree[0].notes.map((note) => note.title)).toEqual(['Zebra', 'Apple'])
     })
 
     test('returns an empty notes list for folders without notes', () => {

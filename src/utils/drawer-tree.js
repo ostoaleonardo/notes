@@ -1,11 +1,12 @@
-export const buildRepositoryTree = (flatList, notesByRepository, parentId = null) => (
+import { sortNotes } from './note-sort'
+
+export const buildRepositoryTree = (flatList, notesByRepository, sort, parentId = null) => (
     flatList
         .filter((repository) => (repository.parentId || null) === parentId)
         .map((repository) => ({
             repository,
-            notes: (notesByRepository.get(repository.id) || []).slice()
-                .sort((a, b) => a.title.localeCompare(b.title)),
-            subfolders: buildRepositoryTree(flatList, notesByRepository, repository.id)
+            notes: sortNotes(notesByRepository.get(repository.id) || [], sort),
+            subfolders: buildRepositoryTree(flatList, notesByRepository, sort, repository.id)
         }))
 )
 

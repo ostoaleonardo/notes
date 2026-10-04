@@ -7,12 +7,14 @@ import { AddSubfolder } from '@/screens/dialogs/add-subfolder'
 import { DeleteRepository } from '@/screens/dialogs/delete-repository'
 import { DrawerToolbar, DrawerToolbarButton } from './drawer-toolbar'
 import { DrawerList } from './drawer-list'
+import { DrawerSortMenu } from './drawer-sort-menu'
 import { DrawerNoteItem } from './drawer-note-item'
 import { DrawerRepositoryItem } from './drawer-repository-item'
 import { openEditor } from './drawer-open-editor'
 
 import { useCurrentNote } from '@/hooks/use-current-note'
 import { useDailyNote } from '@/hooks/use-daily-note'
+import { useNoteSort } from '@/hooks/use-note-sort'
 import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useUtils } from '@/hooks/use-utils'
@@ -33,6 +35,7 @@ export function DrawerNotesView({ closeDrawer }) {
     const { currentId } = useCurrentNote()
     const { collapsedFolders, collapseAll, expandAll } = useUtils()
     const openDailyNote = useDailyNote()
+    const { sort, onChangeSort } = useNoteSort()
 
     const {
         activeRepositoryTree,
@@ -54,8 +57,8 @@ export function DrawerNotesView({ closeDrawer }) {
     }, [notes])
 
     const tree = useMemo(
-        () => buildRepositoryTree(activeRepositoryTree, notesByRepository),
-        [activeRepositoryTree, notesByRepository]
+        () => buildRepositoryTree(activeRepositoryTree, notesByRepository, sort),
+        [activeRepositoryTree, notesByRepository, sort]
     )
 
     const rows = useMemo(
@@ -196,6 +199,11 @@ export function DrawerNotesView({ closeDrawer }) {
                         {...item}
                     />
                 ))}
+
+                <DrawerSortMenu
+                    sort={sort}
+                    onChange={onChangeSort}
+                />
             </DrawerToolbar>
 
             <RenameRepository

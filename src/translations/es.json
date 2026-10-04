@@ -283,10 +283,15 @@
 		"files": "Archivos",
 		"files_empty": "Aún no hay archivos adjuntos en este repositorio",
 		"change_view": "Cambiar vista",
-		"sort_name_asc": "Nombre (A a Z)",
-		"sort_name_desc": "Nombre (Z a A)",
-		"sort_count_desc": "Uso (mayor a menor)",
-		"sort_count_asc": "Uso (menor a mayor)"
+		"sort_name_asc": "Nombre (A - Z)",
+		"sort_name_desc": "Nombre (Z - A)",
+		"sort_count_desc": "Uso (mayor - menor)",
+		"sort_count_asc": "Uso (menor - mayor)",
+		"sort_notes": "Ordenar notas",
+		"sort_modified_desc": "Editada (nueva - antigua)",
+		"sort_modified_asc": "Editada (antigua - nueva)",
+		"sort_created_desc": "Creada (nueva - antigua)",
+		"sort_created_asc": "Creada (antigua - nueva)"
 	},
 	"templates": {
 		"journal": "Diario",
