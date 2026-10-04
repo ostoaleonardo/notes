@@ -12,6 +12,7 @@ import { DrawerRepositoryItem } from './drawer-repository-item'
 import { openEditor } from './drawer-open-editor'
 
 import { useCurrentNote } from '@/hooks/use-current-note'
+import { useDailyNote } from '@/hooks/use-daily-note'
 import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useUtils } from '@/hooks/use-utils'
@@ -19,6 +20,7 @@ import { buildRepositoryTree, flattenDrawerTree } from '@/utils/drawer-tree'
 
 import { CreateNewFolder } from '@/icons/create-new-folder'
 import { Plus } from '@/icons/plus'
+import { CalendarToday } from '@/icons/calendar-today'
 import { CollapseAll } from '@/icons/collapse-all'
 import { ExpandAll } from '@/icons/expand-all'
 
@@ -30,6 +32,7 @@ export function DrawerNotesView({ closeDrawer }) {
     const { notes } = useNotes()
     const { currentId } = useCurrentNote()
     const { collapsedFolders, collapseAll, expandAll } = useUtils()
+    const openDailyNote = useDailyNote()
 
     const {
         activeRepositoryTree,
@@ -86,6 +89,14 @@ export function DrawerNotesView({ closeDrawer }) {
         if (action === REPOSITORY_ACTIONS.DELETE) return setDeleteId(repositoryId)
     }, [onCreateNote])
 
+    const onOpenDailyNote = useCallback(async () => {
+        const path = await openDailyNote()
+        if (!path) return
+
+        closeDrawer()
+        if (path !== currentId) openEditor(path, currentId)
+    }, [openDailyNote, closeDrawer, currentId])
+
     const rootId = activeRepositoryTree[0]?.id
 
     const onCreateRootNote = useCallback(() => onCreateNote(rootId), [onCreateNote, rootId])
@@ -114,6 +125,12 @@ export function DrawerNotesView({ closeDrawer }) {
             accessibilityLabel: t('repositories.create_note')
         },
         {
+            key: 'daily-note',
+            icon: CalendarToday,
+            onPress: onOpenDailyNote,
+            accessibilityLabel: t('drawer.daily_note')
+        },
+        {
             key: 'add-subfolder',
             icon: CreateNewFolder,
             onPress: onAddRootSubfolder,
@@ -125,7 +142,14 @@ export function DrawerNotesView({ closeDrawer }) {
             onPress: onToggleCollapseAll,
             accessibilityLabel: t(allCollapsed ? 'drawer.expand_all' : 'drawer.collapse_all')
         }
-    ], [onCreateRootNote, onAddRootSubfolder, onToggleCollapseAll, allCollapsed, t])
+    ], [
+        onCreateRootNote,
+        onOpenDailyNote,
+        onAddRootSubfolder,
+        onToggleCollapseAll,
+        allCollapsed,
+        t
+    ])
 
     const renderItem = useCallback(({ item }) => {
         if (item.type === 'note') {

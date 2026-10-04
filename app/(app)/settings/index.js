@@ -11,6 +11,7 @@ import { Option } from '@/screens/settings/option'
 import { WikiLinksOption } from '@/screens/settings/wiki-links-option'
 import { AttachmentsOption } from '@/screens/settings/attachments-option'
 import { StartupOption } from '@/screens/settings/startup-option'
+import { DailyNoteOption } from '@/screens/settings/daily-note-option'
 import { DeleteBehaviorOption } from '@/screens/settings/delete-behavior-option'
 import { Scroll } from '@/components/animated/scroll'
 import { Section } from '@/components/section'
@@ -53,6 +54,14 @@ export default function Settings() {
                     contentStyle={styles.items}
                 >
                     <StartupOption />
+                </Section>
+
+                <Section
+                    title={t('settings.daily_note')}
+                    containerStyle={styles.section}
+                    contentStyle={styles.items}
+                >
+                    <DailyNoteOption />
                 </Section>
 
                 <Section

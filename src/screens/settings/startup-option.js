@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { useState } from 'react'
+import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 
@@ -10,8 +10,6 @@ import { MenuItem } from '@/components/menu/menu-item'
 import { useMenuAnchor } from '@/hooks/use-menu-anchor'
 import { useStorage } from '@/hooks/use-storage'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
-import { useRepositories } from '@/hooks/use-repositories'
-import { useTemplates } from '@/hooks/use-templates'
 
 import { ArrowForward } from '@/icons/arrow-forward'
 import { Check } from '@/icons/check'
@@ -19,7 +17,6 @@ import { Check } from '@/icons/check'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { STARTUP_BEHAVIORS } from '@/constants/startup-behavior'
 import { TRANSPARENT } from '@/constants/themes'
-import { MENU_ITEM_INDENT, SCROLLABLE_MENU_MAX_HEIGHT } from '@/constants/menu'
 import { SPACING } from '@/constants/spacing'
 
 const OPTIONS = Object.values(STARTUP_BEHAVIORS)
@@ -28,106 +25,31 @@ export function StartupOption() {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { setItem } = useStorage()
-    const { activeRepository, getDescendants } = useRepositories()
-    const { listTemplates } = useTemplates()
 
     const behaviorMenu = useMenuAnchor()
-    const folderMenu = useMenuAnchor()
-    const templateMenu = useMenuAnchor()
 
     const [behavior, setBehavior] = useState(STARTUP_BEHAVIORS.LAST_OPENED)
-    const [dailyFolder, setDailyFolder] = useState('')
-    const [dailyTemplate, setDailyTemplate] = useState('')
-    const [templates, setTemplates] = useState([])
-
-    const folderStorageKey = activeRepository ? `${STORAGE_KEYS.DAILY_NOTE_FOLDER}:${activeRepository.id}` : null
-    const templateStorageKey = activeRepository ? `${STORAGE_KEYS.DAILY_NOTE_TEMPLATE}:${activeRepository.id}` : null
 
     useStorageEffect(STORAGE_KEYS.STARTUP_BEHAVIOR, (value) => {
         if (value) setBehavior(value)
     })
-
-    useEffect(() => setDailyFolder(''), [folderStorageKey])
-    useStorageEffect(folderStorageKey, (value) => {
-        if (value) setDailyFolder(value)
-    })
-
-    useEffect(() => setDailyTemplate(''), [templateStorageKey])
-    useStorageEffect(templateStorageKey, (value) => {
-        if (value) setDailyTemplate(value)
-    })
-
-    useEffect(() => {
-        if (!activeRepository) return
-
-        let cancelled = false
-        listTemplates({ withContent: false }).then((value) => { if (!cancelled) setTemplates(value) })
-
-        return () => { cancelled = true }
-    }, [activeRepository, listTemplates])
 
     const onSelectBehavior = (value) => {
         setBehavior(value)
         setItem(STORAGE_KEYS.STARTUP_BEHAVIOR, value)
     }
 
-    const onSelectFolder = (id) => {
-        setDailyFolder(id)
-        if (folderStorageKey) setItem(folderStorageKey, id)
-    }
-
-    const onSelectTemplate = (filename) => {
-        setDailyTemplate(filename)
-        if (templateStorageKey) setItem(templateStorageKey, filename)
-    }
-
-    const descendants = useMemo(() => (
-        activeRepository ? getDescendants(activeRepository.id) : []
-    ), [activeRepository, getDescendants])
-
-    const selectedRepository = descendants.find((repository) => repository.id === dailyFolder)
-    const selectedTemplate = templates.find((template) => template.filename === dailyTemplate)
-
-    const showFolderOption = behavior === STARTUP_BEHAVIORS.DAILY_NOTE
-
     return (
         <View>
-            <View style={styles.group}>
-                <View ref={behaviorMenu.rowRef} collapsable={false}>
-                    <Option
-                        title={t('settings.startup_behavior')}
-                        description={t(`settings.startup_behavior_${behavior}`)}
-                        rightContent={<ArrowForward color={colors.onBackground} />}
-                        onPress={behaviorMenu.onPressRow}
-                        isFirst={true}
-                        isLast={!showFolderOption}
-                    />
-                </View>
-
-                {showFolderOption && (
-                    <View ref={folderMenu.rowRef} collapsable={false}>
-                        <Option
-                            title={t('settings.daily_note_folder')}
-                            description={selectedRepository ? selectedRepository.alias : t('settings.daily_note_folder_root')}
-                            rightContent={<ArrowForward color={colors.onBackground} />}
-                            onPress={folderMenu.onPressRow}
-                        />
-                    </View>
-                )}
-
-                {showFolderOption && (
-                    <View ref={templateMenu.rowRef} collapsable={false}>
-                        <Option
-                            title={t('settings.daily_note_template')}
-                            description={selectedTemplate
-                                ? t(`templates.${selectedTemplate.name}`, selectedTemplate.name)
-                                : t('settings.daily_note_template_none')}
-                            rightContent={<ArrowForward color={colors.onBackground} />}
-                            onPress={templateMenu.onPressRow}
-                            isLast={true}
-                        />
-                    </View>
-                )}
+            <View ref={behaviorMenu.rowRef} collapsable={false}>
+                <Option
+                    title={t('settings.startup_behavior')}
+                    description={t(`settings.startup_behavior_${behavior}`)}
+                    rightContent={<ArrowForward color={colors.onBackground} />}
+                    onPress={behaviorMenu.onPressRow}
+                    isFirst={true}
+                    isLast={true}
+                />
             </View>
 
             <MenuContainer
@@ -150,79 +72,13 @@ export function StartupOption() {
                     )
                 })}
             </MenuContainer>
-
-            <MenuContainer
-                visible={folderMenu.visible}
-                onClose={folderMenu.onClose}
-                anchor={folderMenu.anchor}
-            >
-                <ScrollView style={styles.folderMenuScroll}>
-                    <MenuItem
-                        contentStyle={styles.item}
-                        title={t('settings.daily_note_folder_root')}
-                        trailingIcon={!dailyFolder ? (props) => <Check {...props} color={colors.tertiary} /> : undefined}
-                        style={!dailyFolder && { backgroundColor: colors.tertiary + TRANSPARENT[10] }}
-                        onPress={() => folderMenu.trigger(() => onSelectFolder(''))}
-                    />
-                    {descendants.map((repository) => {
-                        const selected = repository.id === dailyFolder
-
-                        return (
-                            <MenuItem
-                                key={repository.id}
-                                contentStyle={[styles.item, { paddingLeft: repository.depth * MENU_ITEM_INDENT }]}
-                                title={repository.alias}
-                                trailingIcon={selected ? (props) => <Check {...props} color={colors.tertiary} /> : undefined}
-                                style={selected && { backgroundColor: colors.tertiary + TRANSPARENT[10] }}
-                                onPress={() => folderMenu.trigger(() => onSelectFolder(repository.id))}
-                            />
-                        )
-                    })}
-                </ScrollView>
-            </MenuContainer>
-
-            <MenuContainer
-                visible={templateMenu.visible}
-                onClose={templateMenu.onClose}
-                anchor={templateMenu.anchor}
-            >
-                <ScrollView style={styles.folderMenuScroll}>
-                    <MenuItem
-                        contentStyle={styles.item}
-                        title={t('settings.daily_note_template_none')}
-                        trailingIcon={!dailyTemplate ? (props) => <Check {...props} color={colors.tertiary} /> : undefined}
-                        style={!dailyTemplate && { backgroundColor: colors.tertiary + TRANSPARENT[10] }}
-                        onPress={() => templateMenu.trigger(() => onSelectTemplate(''))}
-                    />
-                    {templates.map((template) => {
-                        const selected = template.filename === dailyTemplate
-
-                        return (
-                            <MenuItem
-                                key={template.filename}
-                                contentStyle={styles.item}
-                                title={t(`templates.${template.name}`, template.name)}
-                                trailingIcon={selected ? (props) => <Check {...props} color={colors.tertiary} /> : undefined}
-                                style={selected && { backgroundColor: colors.tertiary + TRANSPARENT[10] }}
-                                onPress={() => templateMenu.trigger(() => onSelectTemplate(template.filename))}
-                            />
-                        )
-                    })}
-                </ScrollView>
-            </MenuContainer>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    group: {
-        gap: 3
-    },
     item: {
         flexGrow: 1,
         marginRight: SPACING.md
-    },
-    folderMenuScroll: {
-        maxHeight: SCROLLABLE_MENU_MAX_HEIGHT
     }
 })

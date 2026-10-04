@@ -1,75 +1,26 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { router } from 'expo-router'
 
+import { useDailyNote } from '@/hooks/use-daily-note'
 import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'
-import { useTemplates } from '@/hooks/use-templates'
-import { useLanguage } from '@/hooks/use-language'
-import { useStorage } from '@/hooks/use-storage'
-import { useStorageEffect } from '@/hooks/use-storage-effect'
-import { getDate } from '@/utils/date'
-import { getDailyNoteTitle } from '@/utils/daily-note'
 import { getEditorPath } from '@/utils/editor-path'
-import { renderTemplate } from '@/utils/render-template'
-
-import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export default function DailyNote() {
-    const { notes, saveNote, loading } = useNotes()
-    const { getTemplate } = useTemplates()
-    const { currentLanguage } = useLanguage()
-    const { activeRepository, repositories } = useRepositories()
-    const { setItem } = useStorage()
-
-    const [folderId, setFolderId] = useState(null)
-    const [templateFilename, setTemplateFilename] = useState(null)
+    const { loading } = useNotes()
+    const { activeRepository } = useRepositories()
+    const openDailyNote = useDailyNote()
     const handled = useRef(false)
 
-    const folderStorageKey = activeRepository ? `${STORAGE_KEYS.DAILY_NOTE_FOLDER}:${activeRepository.id}` : null
-    useStorageEffect(folderStorageKey, (value) => setFolderId(value || ''))
-
-    const templateStorageKey = activeRepository ? `${STORAGE_KEYS.DAILY_NOTE_TEMPLATE}:${activeRepository.id}` : null
-    useStorageEffect(templateStorageKey, (value) => setTemplateFilename(value || ''))
-
     useEffect(() => {
-        if (handled.current || loading || !activeRepository || folderId === null || templateFilename === null) return
-
-        const targetRepository = repositories.find((repository) => repository.id === folderId) || activeRepository
+        if (handled.current || loading || !activeRepository) return
 
         handled.current = true
 
-        const title = getDailyNoteTitle()
-        const existing = notes.find((note) => note.title === title)
-
-        if (existing) {
-            router.replace(getEditorPath(existing.path))
-            return
-        }
-
-        const createNote = async () => {
-            const template = templateFilename ? await getTemplate(templateFilename) : null
-            if (templateFilename && !template && templateStorageKey) await setItem(templateStorageKey, '')
-
-            const note = template ? renderTemplate(template.content, { title, language: currentLanguage }) : ''
-
-            const { path } = await saveNote({ title, note, tags: [], createdAt: getDate() }, targetRepository.id)
-            router.replace(getEditorPath(path))
-        }
-
-        createNote()
-    }, [
-        loading,
-        notes,
-        folderId,
-        repositories,
-        activeRepository,
-        templateFilename,
-        currentLanguage,
-        getTemplate,
-        saveNote,
-        setItem,
-        templateStorageKey
-    ])
+        openDailyNote().then((path) => {
+            if (path) router.replace(getEditorPath(path))
+        })
+    }, [loading, activeRepository, openDailyNote])
 
     return null
 }
