@@ -14,6 +14,7 @@ import { useTags } from '@/hooks/use-tags'
 import { useBacklinksHtml } from '@/hooks/use-backlinks-html'
 import { useMissingNote } from '@/hooks/use-missing-note'
 import { useBlockIdCreator } from '@/hooks/use-block-id-creator'
+import { useMentionLinker } from '@/hooks/use-mention-linker'
 import { useNoteEntries } from '@/hooks/use-note-entries'
 import { useResolvedPreviewMarkdown } from '@/hooks/use-resolved-preview-markdown'
 import { useResolvedWikiLinks } from '@/hooks/use-resolved-wiki-links'
@@ -77,6 +78,7 @@ export const MarkdownInput = ({
         entry.id === id ? { ...entry, unlabeled: [] } : entry
     )), [allNoteEntries, id])
     const onCreateBlockId = useBlockIdCreator()
+    const linkMention = useMentionLinker(id)
     const backlinksHtml = useBacklinksHtml(id, mode === EDITOR_MODES.READ && showBacklinks)
     const missingNote = useMissingNote()
 
@@ -103,13 +105,16 @@ export const MarkdownInput = ({
             case LINK_TYPES.NOTE:
                 router.push(getEditorPath(link.id, link.anchor?.slice(BLOCK_ANCHOR_PREFIX.length)))
                 break
+            case LINK_TYPES.LINK_MENTION:
+                linkMention(link.path)
+                break
             case LINK_TYPES.FILE:
                 openFile(findFileByTarget(listFiles(), link.target))
                 break
             default:
                 Linking.openURL(link.url)
         }
-    }, [onTagPress, setMissing, listFiles, openFile])
+    }, [onTagPress, setMissing, linkMention, listFiles, openFile])
 
     const onImagePress = useCallback((url) => router.push({
         pathname: ROUTES.IMAGE_VIEWER,

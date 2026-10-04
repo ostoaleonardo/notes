@@ -61,7 +61,8 @@
 		"about": "Acerca de la app",
 		"import": "Importar nota",
 		"version_history": "Historial de versiones",
-		"backlinks": "Enlaces entrantes"
+		"backlinks": "Enlaces entrantes",
+		"unlinked_mentions": "Menciones sin enlazar"
 	},
 	"date": {
 		"updated": "Actualizado:"
@@ -143,6 +144,7 @@
 		"unpin": "Desfijar",
 		"show_backlinks": "Mostrar enlaces entrantes",
 		"hide_backlinks": "Ocultar enlaces entrantes",
+		"link_mention": "Enlazar",
 		"export": "Exportar",
 		"share": "Compartir",
 		"duplicate": "Duplicar",

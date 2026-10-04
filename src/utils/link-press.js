@@ -8,12 +8,17 @@ import {
     WIKI_LINK_ANCHOR_SEPARATOR
 } from '@/constants/wiki-links'
 import { FILE_LINK_SCHEME } from '@/constants/file-links'
+import { LINK_MENTION_SCHEME } from '@/constants/unlinked-mentions'
 
 export const resolveLinkPress = (url) => {
     if (!url) return null
 
     if (url.startsWith(TAG_LINK_SCHEME)) {
         return { type: LINK_TYPES.TAG, tag: decodeURIComponent(url.slice(TAG_LINK_SCHEME.length)) }
+    }
+
+    if (url.startsWith(LINK_MENTION_SCHEME)) {
+        return { type: LINK_TYPES.LINK_MENTION, path: decodeURIComponent(url.slice(LINK_MENTION_SCHEME.length)) }
     }
 
     if (url.startsWith(FILE_LINK_SCHEME)) {

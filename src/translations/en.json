@@ -61,7 +61,8 @@
 		"about": "About the app",
 		"import": "Import note",
 		"version_history": "Version history",
-		"backlinks": "Backlinks"
+		"backlinks": "Backlinks",
+		"unlinked_mentions": "Unlinked mentions"
 	},
 	"date": {
 		"updated": "Updated:"
@@ -143,6 +144,7 @@
 		"unpin": "Unpin",
 		"show_backlinks": "Show backlinks",
 		"hide_backlinks": "Hide backlinks",
+		"link_mention": "Link",
 		"export": "Export",
 		"share": "Share",
 		"duplicate": "Duplicate",

@@ -21,7 +21,10 @@ import {
     BACKLINKS_CLASS,
     BACKLINKS_TITLE_CLASS,
     BACKLINK_TITLE_CLASS,
-    BACKLINK_PATH_CLASS
+    BACKLINK_PATH_CLASS,
+    MENTIONS_CLASS,
+    MENTION_ROW_CLASS,
+    MENTION_ACTION_CLASS
 } from '../../constants/backlinks'
 
 const ATTACH_FILE_MASK = buildIconMaskUrl(ATTACH_FILE_ICON_PATH)
@@ -394,5 +397,13 @@ export const buildPreviewCss = ({ colors, typography }) => {
     }
     .markdown-preview .${BACKLINK_TITLE_CLASS} { display: block; font-weight: 600; }
     .markdown-preview .${BACKLINK_PATH_CLASS} { display: block; margin-top: 1px; font-size: 11px; opacity: 0.6; }
+    .markdown-preview .${MENTIONS_CLASS} { margin-top: 0; }
+    .markdown-preview .${MENTION_ROW_CLASS} { display: flex; align-items: center; padding-right: 16px; }
+    .markdown-preview .${MENTIONS_CLASS} .wiki-link { flex: 1; min-width: 0; padding-right: 8px; }
+    .markdown-preview .${MENTIONS_CLASS} .wiki-link::after { display: none; }
+    .markdown-preview .${MENTION_ACTION_CLASS} {
+        padding: 6px 12px; border-radius: 999px; background-color: ${codeBackgroundColor};
+        color: ${linkColor}; font-size: 12px; font-weight: 600; text-decoration: none;
+    }
 `
 }

@@ -17,6 +17,13 @@ describe('resolve link press', () => {
         })
     })
 
+    test('resolves a link mention to the decoded note path', () => {
+        expect(resolveLinkPress('linkmention://repo-1%3A%3AMy%20note.md')).toEqual({
+            type: 'link-mention',
+            path: 'repo-1::My note.md'
+        })
+    })
+
     test('resolves a file link to the decoded target', () => {
         expect(resolveLinkPress('filelink://docs%2Fsample%20doc.pdf')).toEqual({
             type: 'file',
