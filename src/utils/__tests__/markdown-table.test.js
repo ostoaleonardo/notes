@@ -4,6 +4,7 @@ import {
     deleteRow,
     duplicateCol,
     duplicateRow,
+    getTableLength,
     insertCol,
     insertRow,
     moveCol,
@@ -41,6 +42,19 @@ describe('parse table', () => {
 
     test('returns null without a delimiter row', () => {
         expect(parseTable('| a |')).toBeNull()
+    })
+
+    test('stops at the first line without a pipe', () => {
+        const table = parseTable('| a | b |\n| --- | --- |\n| 1 | 2 |\nhi')
+        expect(table.rows).toEqual([['a', 'b'], ['1', '2']])
+    })
+})
+
+describe('get table length', () => {
+    test('covers only the lines that belong to the table', () => {
+        const source = '| a | b |\n| --- | --- |\n| 1 | 2 |'
+        expect(getTableLength(`${source}\nhi`)).toBe(source.length)
+        expect(getTableLength(source)).toBe(source.length)
     })
 })
 

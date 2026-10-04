@@ -3,7 +3,7 @@ import { Decoration } from '@codemirror/view'
 import { decorateHtml } from './html'
 import { TableWidget } from './table-widget'
 
-import { parseTable } from '@/utils/markdown-table'
+import { getTableLength, parseTable } from '@/utils/markdown-table'
 
 import {
     TABLE_BLEED,
@@ -19,12 +19,14 @@ import { SPACING } from '@/constants/spacing'
 
 export const decorateTable = (node, context) => {
     const { doc, ranges, tableLabels } = context
-    const source = doc.sliceString(node.from, node.to)
+    const raw = doc.sliceString(node.from, node.to)
+    const to = node.from + getTableLength(raw)
+    const source = raw.slice(0, to - node.from)
     const isTopLevel = node.node.parent?.name === 'Document' && doc.lineAt(node.from).from === node.from
 
     if (!isTopLevel || !parseTable(source)) return decorateHtml(node, context)
     ranges.push(
-        Decoration.replace({ widget: new TableWidget(source, tableLabels), block: true }).range(node.from, node.to)
+        Decoration.replace({ widget: new TableWidget(source, tableLabels), block: true }).range(node.from, to)
     )
     return true
 }

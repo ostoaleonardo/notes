@@ -2,6 +2,11 @@ export const MAX_TABLE_ROWS = 7
 export const MAX_TABLE_COLS = 7
 export const TABLE_CELL_SIZE = 32
 export const TABLE_CELL_GAP = 6
+export const TABLE_PIPE = '|'
+export const TABLE_BODY_START_LINE = 2
+export const TABLE_RULE_NAME = 'table'
+export const TABLE_BOUNDARY_GAP = '\n\n'
+export const TABLE_BOUNDARY_INPUT_EVENTS = ['input', 'paste']
 
 export const TABLE_ALIGNS = {
     NONE: 'none',

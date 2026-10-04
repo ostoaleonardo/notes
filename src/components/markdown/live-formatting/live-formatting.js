@@ -1,4 +1,4 @@
-import { StateField } from '@codemirror/state'
+import { EditorSelection, EditorState, StateField } from '@codemirror/state'
 import { syntaxTree } from '@codemirror/language'
 import { Decoration, EditorView } from '@codemirror/view'
 
@@ -29,8 +29,10 @@ import { findWikiLinkRanges, decorateWikiLinks, wikiLinksTheme } from './wiki-li
 import { noteEntriesFacet } from '../wiki-link-completion'
 
 import { findCustomTaskRanges } from '@/utils/tasks'
+import { getBoundaryEdit } from '@/utils/table-boundary'
 
 import { CODE_RANGE_NODE_NAMES } from '@/constants/markdown-live-formatting'
+import { TABLE_BOUNDARY_INPUT_EVENTS } from '@/constants/table'
 
 const codeRangeNodeNames = new Set(CODE_RANGE_NODE_NAMES)
 
@@ -84,6 +86,31 @@ const buildDecorations = (state) => {
     return Decoration.set(ranges, true)
 }
 
+const guardTableBoundary = (field) => EditorState.transactionFilter.of((tr) => {
+    if (!tr.docChanged || !TABLE_BOUNDARY_INPUT_EVENTS.some((event) => tr.isUserEvent(event))) return tr
+
+    const edits = []
+    tr.changes.iterChanges((from, to, fromB, toB, inserted) => {
+        edits.push({ from, to, insert: inserted.toString() })
+    })
+    if (edits.length !== 1) return tr
+
+    const tables = []
+    tr.startState.field(field).between(edits[0].from, edits[0].to, (from, to, value) => {
+        if (value.spec.widget instanceof TableWidget) tables.push({ from, to })
+    })
+
+    const edit = getBoundaryEdit(edits[0], tables)
+    if (!edit) return tr
+
+    return {
+        changes: edit.changes,
+        selection: EditorSelection.cursor(edit.cursor),
+        userEvent: 'input',
+        scrollIntoView: true
+    }
+})
+
 export { mediaMapFacet, tableLabelsFacet }
 
 export const liveFormatting = StateField.define({
@@ -93,6 +120,7 @@ export const liveFormatting = StateField.define({
     ),
     provide: (field) => [
         EditorView.decorations.from(field),
+        guardTableBoundary(field),
         EditorView.atomicRanges.of((view) => view.state.field(field).update({
             filter: (from, to, value) => value.spec.widget instanceof TableWidget
         }))

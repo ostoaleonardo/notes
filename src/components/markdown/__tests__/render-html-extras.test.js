@@ -137,3 +137,20 @@ describe('render inline footnotes', () => {
         expect(html).toContain('inline note')
     })
 })
+
+describe('render tables', () => {
+    const TABLE = '| a | b |\n| --- | --- |\n| 1 | 2 |'
+
+    test('leaves a line without a pipe outside the table', () => {
+        const html = renderMarkdownRaw(`${TABLE}\nhi`)
+
+        expect(html.match(/<tr>/g)).toHaveLength(2)
+        expect(html).toContain('<p>hi</p>')
+    })
+
+    test('keeps every row that has a pipe', () => {
+        const html = renderMarkdownRaw(`${TABLE}\n| 3 | 4 |\nhi`)
+
+        expect(html.match(/<tr>/g)).toHaveLength(3)
+    })
+})

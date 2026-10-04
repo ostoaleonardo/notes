@@ -1,4 +1,10 @@
-import { TABLE_ACTIONS, TABLE_ALIGNS, TABLE_AXES } from '../constants/table'
+import {
+    TABLE_ACTIONS,
+    TABLE_ALIGNS,
+    TABLE_AXES,
+    TABLE_BODY_START_LINE,
+    TABLE_PIPE
+} from '../constants/table'
 
 const splitRow = (line) => {
     const text = line.trim().replace(/^\|/, '').replace(/(?<!\\)\|$/, '')
@@ -40,8 +46,16 @@ const buildDelimiter = (align) => {
     }
 }
 
-export const parseTable = (source) => {
+const getTableLines = (source) => {
     const lines = source.split('\n').filter((line) => line.trim())
+    const end = lines.findIndex((line, index) => index >= TABLE_BODY_START_LINE && !line.includes(TABLE_PIPE))
+    return end === -1 ? lines : lines.slice(0, end)
+}
+
+export const getTableLength = (source) => getTableLines(source).join('\n').length
+
+export const parseTable = (source) => {
+    const lines = getTableLines(source)
     if (lines.length < 2) return null
 
     const header = splitRow(lines[0])

@@ -19,6 +19,7 @@ import {
     TASK_CHECKED_MARK,
     TASK_STATUS_ATTRIBUTE
 } from '@/constants/tasks'
+import { TABLE_BODY_START_LINE, TABLE_PIPE, TABLE_RULE_NAME } from '@/constants/table'
 import {
     COMMENT_MARKER,
     COMMENT_OR_CODE_PATTERN,
@@ -192,7 +193,26 @@ const markCustomTaskCheckboxes = (state) => {
     }
 }
 
+const limitTableRows = (md) => {
+    const { fn, alt } = md.block.ruler.__rules__.find((rule) => rule.name === TABLE_RULE_NAME)
+
+    md.block.ruler.at(TABLE_RULE_NAME, (state, startLine, endLine, silent) => {
+        let limit = endLine
+
+        for (let line = startLine + TABLE_BODY_START_LINE; line < endLine; line++) {
+            const text = state.src.slice(state.bMarks[line] + state.tShift[line], state.eMarks[line])
+            if (!text.includes(TABLE_PIPE)) {
+                limit = line
+                break
+            }
+        }
+
+        return fn(state, startLine, limit, silent)
+    }, { alt })
+}
+
 export const markdownItExtras = (md) => {
+    limitTableRows(md)
     md.inline.ruler.before('emphasis', 'highlight', highlightRule)
 
     md.core.ruler.before('normalize', 'comments', (state) => {
