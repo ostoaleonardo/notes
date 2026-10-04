@@ -24,6 +24,11 @@ const findFile = (directoryUri, filename) => (
     ))
 )
 
+const getExistingFile = (fileUri) => {
+    const file = new File(fileUri)
+    return file.exists ? file : undefined
+}
+
 const findDirectory = (directoryUri, name) => (
     listEntries(directoryUri).find((entry) => (
         entry instanceof Directory && entry.name === name
@@ -247,6 +252,7 @@ const migrateLegacyVersions = async (folderUri, rootUri, folderPath) => {
 
 export const fileStorage = {
     findFile,
+    getExistingFile,
     findDirectory,
     listMarkdownFiles,
     listSubdirectories,

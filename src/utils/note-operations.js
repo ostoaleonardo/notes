@@ -16,6 +16,7 @@ export const buildFileContent = (note) => buildNoteFileContent(note, note.note)
 const listNoteNames = (fileStorage, uri) => fileStorage.listMarkdownFiles(uri).map((file) => file.name)
 
 const readFileTimes = (file) => ({
+    fileUri: file.uri,
     createdAt: file.creationTime ?? file.lastModified,
     updatedAt: file.lastModified
 })
@@ -51,7 +52,24 @@ export const createNote = ({ note, repositoryId, uri }, fileStorage) => {
     }
 }
 
+const planInPlaceUpdate = (previous, fileStorage) => {
+    const existing = previous.fileUri && fileStorage.getExistingFile(previous.fileUri)
+    if (!existing) return null
+
+    return {
+        filename: previous.filename,
+        path: previous.path,
+        renamed: false,
+        existing
+    }
+}
+
 export const planNoteUpdate = ({ note, previous, uri }, fileStorage) => {
+    if (note.title === previous.title) {
+        const inPlace = planInPlaceUpdate(previous, fileStorage)
+        if (inPlace) return inPlace
+    }
+
     const files = fileStorage.listMarkdownFiles(uri)
     const names = files.map((file) => file.name)
 
@@ -128,7 +146,8 @@ export const writeChangedNotes = (changedNotes, repositories, fileStorage) => {
         if (!uri) return
 
         try {
-            fileStorage.writeNoteFile(uri, note.filename, buildFileContent(note))
+            const existing = note.fileUri ? fileStorage.getExistingFile(note.fileUri) : undefined
+            fileStorage.writeNoteFile(uri, note.filename, buildFileContent(note), undefined, existing)
         } catch (error) {
             logError(`error writing renamed links in ${note.filename}`, error)
             failed.push(note.path)
