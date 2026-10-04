@@ -5,6 +5,7 @@ import { useRepositories } from './use-repositories'
 import { useStorage } from './use-storage'
 import { NoteContext } from '../context/note-context'
 import { deleteNoteFiles, readDeleteBehavior } from '@/utils/delete-note-files'
+import { renameHeadingLinks } from '@/utils/headings'
 import { getVersionLocation } from '@/utils/note-version-location'
 import {
     createNote,
@@ -43,15 +44,7 @@ export function useNotes() {
         return result
     }
 
-    const propagateWikiLinkRename = async (targetPath, newTitle, notesSnapshot, notePaths) => {
-        const { renameNote, changedNotes } = planWikiLinkRename({
-            targetPath,
-            newTitle,
-            notes: notesSnapshot,
-            notePaths,
-            currentNotes: currentNotesRef.current
-        })
-
+    const applyLinkRewrite = async ({ renameNote, changedNotes }) => {
         setNotes((prev) => prev.map(renameNote))
 
         const failed = writeChangedNotes(changedNotes, repositories, fileStorage)
@@ -62,6 +55,26 @@ export function useNotes() {
             failed.includes(note.path) ? originals.get(note.path) : note
         )))
     }
+
+    const propagateWikiLinkRename = (targetPath, newTitle, notesSnapshot, notePaths) => applyLinkRewrite(
+        planWikiLinkRename({
+            targetPath,
+            newTitle,
+            notes: notesSnapshot,
+            notePaths,
+            currentNotes: currentNotesRef.current
+        })
+    )
+
+    const propagateHeadingRename = (targetPath, renames, notesSnapshot, notePaths) => applyLinkRewrite(
+        planWikiLinkRename({
+            targetPath,
+            notes: notesSnapshot,
+            notePaths,
+            currentNotes: currentNotesRef.current,
+            rewrite: (content) => renameHeadingLinks(content, targetPath, renames, notesSnapshot, notePaths)
+        })
+    )
 
     const updateNote = async (note) => {
         const previous = notesByPath.get(note.path)
@@ -163,6 +176,7 @@ export function useNotes() {
         deleteAll,
         updateNote,
         propagateWikiLinkRename,
+        propagateHeadingRename,
         loading
     }
 }

@@ -156,12 +156,13 @@ export const planWikiLinkRename = ({
     newTitle,
     notes,
     notePaths,
-    currentNotes = notes
+    currentNotes = notes,
+    rewrite = (content) => renameWikiLinksForNote(content, targetPath, newTitle, notes, notePaths)
 }) => {
     const renameNote = (note) => {
         if (note.path === targetPath) return note
 
-        const renamed = renameWikiLinksForNote(note.note, targetPath, newTitle, notes, notePaths)
+        const renamed = rewrite(note.note)
         return renamed === note.note ? note : { ...note, note: renamed }
     }
 

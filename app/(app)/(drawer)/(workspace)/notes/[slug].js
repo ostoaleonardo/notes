@@ -16,18 +16,26 @@ import { useRepositories } from '@/hooks/use-repositories'
 import { useNoteVersions } from '@/hooks/use-note-versions'
 import { getVersionLocation } from '@/utils/note-version-location'
 import { logError } from '@/utils/log-error'
+import { findHeadingRenames } from '@/utils/headings'
 import { planExternalSync } from '@/utils/external-note-sync'
 
-import { BLOCK_PARAM } from '@/constants/block-refs'
+import { ANCHOR_PARAM } from '@/constants/block-refs'
 import { ROUTES } from '@/constants/routes'
 
 const tagsEqual = (a, b) => a.length === b.length && a.every((tag, i) => tag === b[i])
 
 export default function EditNote() {
     const { t } = useTranslation()
-    const { slug, [BLOCK_PARAM]: blockId } = useLocalSearchParams()
+    const { slug, [ANCHOR_PARAM]: anchor } = useLocalSearchParams()
     const { registerCurrent } = useCurrentNote()
-    const { notes, getNote, updateNote, loading: notesLoading } = useNotes()
+    const {
+        notes,
+        notePaths,
+        getNote,
+        updateNote,
+        propagateHeadingRename,
+        loading: notesLoading
+    } = useNotes()
     const { repositories, loading: repositoriesLoading } = useRepositories()
     const { commitVersion } = useNoteVersions()
 
@@ -176,6 +184,9 @@ export default function EditNote() {
     }
 
     const markSaved = (savedContent) => {
+        const renames = findHeadingRenames(originalNoteRef.current || '', savedContent || '')
+        if (renames.length) propagateHeadingRename(pathRef.current, renames, notes, notePaths)
+
         originalNoteRef.current = savedContent
         originalTagsRef.current = tags
         originalPropertiesRef.current = JSON.stringify(properties)
@@ -254,7 +265,7 @@ export default function EditNote() {
                 rawFrontmatter={rawFrontmatter}
                 setRawFrontmatter={setRawFrontmatter}
                 modifiedAt={modifiedAt}
-                blockId={blockId}
+                anchor={anchor}
             />
 
             <RenameLinksDialog

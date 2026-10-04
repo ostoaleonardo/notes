@@ -23,7 +23,7 @@ import { useLatestRef } from './use-latest-ref'
 import { buildInvalidFrontmatterHighlight } from './markdown-dom-invalid-frontmatter'
 import { buildPropertiesTrigger, frontmatterAutoClose } from './markdown-dom-frontmatter'
 import { buildBlankPlaceholder } from './markdown-dom-placeholder'
-import { scrollToEditorBlock, scrollToPreviewBlock } from './markdown-dom-block-target'
+import { scrollToEditorTarget, scrollToPreviewTarget } from './markdown-dom-anchor-target'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { PREVIEW_CLICK_TYPES } from '@/constants/preview-click'
@@ -60,7 +60,9 @@ const MarkdownDomEditor = ({
     onRemoveTag,
     onAddTag,
     search,
-    blockId
+    anchor,
+    headingIndex,
+    jumpNonce
 }) => {
     const { query: searchQuery, replace: replaceText } = search || {}
     const themeKey = JSON.stringify(theme)
@@ -261,16 +263,18 @@ const MarkdownDomEditor = ({
 
     const fontsReady = !!fonts && !!katexFonts
 
-    const scrollToBlock = useEffectEvent(() => {
-        if (!blockId || !fontsReady) return
+    const scrollToTarget = useEffectEvent(() => {
+        if ((!anchor && headingIndex == null) || !fontsReady) return
 
-        if (mode === EDITOR_MODES.READ) scrollToPreviewBlock(previewRef.current, blockId)
-        else if (viewRef.current) scrollToEditorBlock(viewRef.current, blockId)
+        const target = { anchor, headingIndex }
+
+        if (mode === EDITOR_MODES.READ) scrollToPreviewTarget(previewRef.current, target)
+        else if (viewRef.current) scrollToEditorTarget(viewRef.current, target)
     })
 
     useEffect(() => {
-        scrollToBlock()
-    }, [blockId, html, fontsReady])
+        scrollToTarget()
+    }, [anchor, headingIndex, jumpNonce, html, fontsReady])
 
     const fontsCss = useMemo(() => (
         fontFacesCss(fonts) + katexFontFacesCss(katexFonts)

@@ -340,7 +340,7 @@ describe('heading and block anchors', () => {
     test('resolves a heading link to its note and shows the heading in the label', () => {
         const result = resolveWikiLinks('[[Meeting Notes#Agenda]]', notes)
 
-        expect(result).toBe('<a href="wikilink://note-1" class="wiki-link">Meeting Notes &gt; Agenda</a>')
+        expect(result).toBe('<a href="wikilink://note-1#Agenda" class="wiki-link">Meeting Notes &gt; Agenda</a>')
     })
 
     test('resolves a block link to its note', () => {
@@ -352,7 +352,7 @@ describe('heading and block anchors', () => {
     test('uses the alias as the label when provided', () => {
         const result = resolveWikiLinks('[[Meeting Notes#Agenda|the agenda]]', notes)
 
-        expect(result).toBe('<a href="wikilink://note-1" class="wiki-link">the agenda</a>')
+        expect(result).toBe('<a href="wikilink://note-1#Agenda" class="wiki-link">the agenda</a>')
     })
 
     test('resolves a path-qualified heading link', () => {

@@ -15,8 +15,8 @@ describe('get editor path', () => {
         expect(path).not.toContain('/My Note.md')
     })
 
-    test('adds the block id as a query param', () => {
-        expect(getEditorPath('note-1', 'abc-1')).toBe(`${ROUTES.EDIT_NOTE}note-1?block=abc-1`)
+    test('adds the anchor as a query param', () => {
+        expect(getEditorPath('note-1', 'abc-1')).toBe(`${ROUTES.EDIT_NOTE}note-1?anchor=abc-1`)
     })
 
     test('builds a template editor path for a prefixed id', () => {

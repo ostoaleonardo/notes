@@ -17,7 +17,6 @@ import { mapOutsideCode } from '@/utils/outside-code'
 import { buildFileLinkUrl, isFileLinkTarget } from '@/utils/file-links'
 
 import { FILE_LINK_CLASS } from '@/constants/file-links'
-import { BLOCK_ANCHOR_PREFIX } from '@/constants/block-refs'
 
 export const escapeHtml = (text) => text
     .replace(/&/g, '&amp;')
@@ -134,11 +133,9 @@ export const resolveWikiLinks = (value, notes, notePaths = new Map()) => mapOuts
                 return `<a href="${missingHref}" class="wiki-link-broken">${label}</a>`
             }
 
-            const blockSuffix = anchor.startsWith(BLOCK_ANCHOR_PREFIX)
-                ? `${WIKI_LINK_ANCHOR_SEPARATOR}${encodeURIComponent(anchor)}`
-                : ''
+            const anchorSuffix = anchor ? `${WIKI_LINK_ANCHOR_SEPARATOR}${encodeURIComponent(anchor)}` : ''
 
-            return `<a href="${WIKI_LINK_SCHEME}${encodeURIComponent(note.path)}${blockSuffix}" class="wiki-link">${label}</a>`
+            return `<a href="${WIKI_LINK_SCHEME}${encodeURIComponent(note.path)}${anchorSuffix}" class="wiki-link">${label}</a>`
         }
     )
 )
