@@ -12,6 +12,7 @@ import { BUTTON_DISABLED_OPACITY, BUTTON_SIZE, ICON_TOGGLE } from '@/constants/b
 export function IconToggle({
     icon: Icon,
     label,
+    testID,
     onPress,
     position = 'middle',
     showLabel = false,
@@ -40,6 +41,7 @@ export function IconToggle({
                 <TouchableRipple
                     accessibilityRole='button'
                     disabled={disabled}
+                    testID={testID}
                     onPress={onPress}
                     onPressIn={() => setPressed(true)}
                     onPressOut={() => setPressed(false)}

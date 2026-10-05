@@ -1,0 +1,13 @@
+appId: com.monospace.notes
+---
+- launchApp
+- tapOn:
+    id: home-create-note
+- waitForAnimationToEnd
+- tapOn: Sin título
+- eraseText: 30
+- inputText: ${TITLE}
+- hideKeyboard
+- waitForAnimationToEnd
+- tapOn:
+    point: 50%,35%

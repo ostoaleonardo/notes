@@ -7,6 +7,7 @@ import { Menu } from '@/icons/menu'
 
 import { FONTS } from '@/constants/fonts'
 import { ROUTES } from '@/constants/routes'
+import { TEST_IDS } from '@/constants/test-ids'
 
 export function AppBar({ title, trailing, mode = 'back' }) {
     const { t } = useTranslation()
@@ -23,6 +24,7 @@ export function AppBar({ title, trailing, mode = 'back' }) {
                     <Appbar.Action
                         animated={false}
                         onPress={goBack}
+                        testID={TEST_IDS.APP_BAR_BACK}
                         icon={(props) => <ArrowBack {...props} />}
                         accessibilityLabel={t('button.back')}
                     />
@@ -34,6 +36,7 @@ export function AppBar({ title, trailing, mode = 'back' }) {
                     <Appbar.Action
                         animated={false}
                         onPress={openDrawer}
+                        testID={TEST_IDS.APP_BAR_MENU}
                         icon={(props) => <Menu {...props} />}
                         accessibilityLabel={t('drawer.open')}
                     />

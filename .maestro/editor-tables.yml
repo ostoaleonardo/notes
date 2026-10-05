@@ -1,0 +1,38 @@
+appId: com.monospace.notes
+---
+- runFlow:
+    file: subflows/create-note.yml
+    env:
+      TITLE: maestro-table
+- tapOn:
+    id: editor-menu
+- waitForAnimationToEnd
+- tapOn:
+    id: menu-item
+    text: CÓDIGO
+- waitForAnimationToEnd
+- inputText: '| a | b |'
+- pressKey: Enter
+- inputText: '| - | - |'
+- pressKey: Enter
+- inputText: '| 1 | 2 |'
+- hideKeyboard
+- tapOn:
+    id: editor-mode-toggle
+- waitForAnimationToEnd
+- tapOn:
+    id: editor-mode-toggle
+- waitForAnimationToEnd
+- tapOn:
+    point: 50%,70%
+- inputText: hello
+- hideKeyboard
+- tapOn:
+    id: editor-menu
+- waitForAnimationToEnd
+- tapOn:
+    id: menu-item
+    text: CÓDIGO
+- waitForAnimationToEnd
+- assertVisible: '(?s).*\| 1 \| 2 \|\n+hello.*'
+- runFlow: subflows/delete-note.yml

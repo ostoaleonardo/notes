@@ -1,0 +1,12 @@
+appId: com.monospace.notes
+---
+- launchApp
+- tapOn:
+      id: home-create-note
+- waitForAnimationToEnd
+- assertNotVisible:
+      id: home-create-note
+- back
+- waitForAnimationToEnd
+- assertVisible:
+      id: home-create-note

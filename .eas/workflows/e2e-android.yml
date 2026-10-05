@@ -1,0 +1,18 @@
+name: e2e-android
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build_android:
+    type: build
+    params:
+      platform: android
+      profile: e2e-test
+  maestro_test:
+    needs: [build_android]
+    type: maestro
+    params:
+      build_id: ${{ needs.build_android.outputs.build_id }}
+      flow_path: [".maestro"]

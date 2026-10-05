@@ -15,6 +15,12 @@
     },
     "production": {
       "autoIncrement": false
+    },
+    "e2e-test": {
+      "withoutCredentials": true,
+      "android": {
+        "buildType": "apk"
+      }
     }
   },
   "submit": {

@@ -18,6 +18,7 @@ import { DRAWER_VIEWS, DRAWER_VIEW_LABELS } from '@/constants/drawer-views'
 import { TRANSPARENT } from '@/constants/themes'
 import { RADIUS } from '@/constants/radius'
 import { SPACING } from '@/constants/spacing'
+import { TEST_IDS } from '@/constants/test-ids'
 import { ICON_SIZE } from '@/constants/icon-size'
 
 const VIEW_OPTIONS = Object.values(DRAWER_VIEWS)
@@ -36,6 +37,7 @@ export const DrawerViewSwitcher = memo(function DrawerViewSwitcher({ view, onCha
                 <Pressable
                     accessibilityRole='button'
                     onPress={onOpen}
+                    testID={TEST_IDS.DRAWER_VIEW_SWITCHER}
                     accessibilityLabel={t('drawer.change_view')}
                     style={({ pressed }) => [
                         styles.pill,

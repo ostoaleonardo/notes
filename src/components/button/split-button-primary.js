@@ -7,7 +7,7 @@ import { Typography } from '../typography'
 import { BUTTON_SIZE } from '@/constants/button'
 import { SPACING } from '@/constants/spacing'
 
-export function SplitButtonPrimary({ icon: Icon, label, onPress }) {
+export function SplitButtonPrimary({ icon: Icon, label, onPress, testID }) {
     const { colors } = useTheme()
 
     return (
@@ -20,6 +20,7 @@ export function SplitButtonPrimary({ icon: Icon, label, onPress }) {
             <TouchableRipple
                 accessibilityRole='button'
                 onPress={onPress}
+                testID={testID}
                 style={styles.touchable}
             >
                 <View style={styles.content}>

@@ -8,6 +8,7 @@ import { Plus } from '@/icons/plus'
 import { Search } from '@/icons/search'
 import { UploadFile } from '@/icons/upload-file'
 import { SPACING } from '@/constants/spacing'
+import { TEST_IDS } from '@/constants/test-ids'
 
 export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, onOpenSearch, recentCount }) {
     const { t } = useTranslation()
@@ -25,6 +26,7 @@ export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, onOpenS
                 <IconButton
                     icon={(props) => <Plus {...props} />}
                     onPress={onCreateNote}
+                    testID={TEST_IDS.HOME_CREATE_NOTE}
                     accessibilityLabel={t('notes.create')}
                 />
             </Tooltip>
@@ -32,6 +34,7 @@ export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, onOpenS
             <Tooltip title={t('drawer.search')}>
                 <IconButton
                     onPress={onOpenSearch}
+                    testID={TEST_IDS.HOME_SEARCH}
                     icon={(props) => <Search {...props} />}
                     accessibilityLabel={t('drawer.search')}
                 />
@@ -39,12 +42,14 @@ export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, onOpenS
 
             <RecentsButton
                 onPress={onOpenRecents}
+                testID={TEST_IDS.HOME_RECENTS}
                 count={recentCount}
             />
 
             <Tooltip title={t('title.import')}>
                 <IconButton
                     onPress={onImportNote}
+                    testID={TEST_IDS.HOME_IMPORT}
                     icon={(props) => <UploadFile {...props} />}
                     accessibilityLabel={t('title.import')}
                 />

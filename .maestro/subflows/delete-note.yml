@@ -1,0 +1,14 @@
+appId: com.monospace.notes
+---
+- tapOn:
+    id: editor-menu
+- waitForAnimationToEnd
+- tapOn:
+    id: menu-item
+    text: BORRAR
+- tapOn:
+    id: button
+    text: BORRAR
+- waitForAnimationToEnd
+- assertVisible:
+    id: home-create-note

@@ -1,0 +1,22 @@
+appId: com.monospace.notes
+---
+- launchApp
+- tapOn:
+    id: app-bar-menu
+- tapOn:
+    id: drawer-repositories
+- waitForAnimationToEnd
+- assertVisible:
+    id: app-bar-back
+- assertVisible: Elegir carpeta
+- tapOn: Más opciones
+- waitForAnimationToEnd
+- assertVisible:
+    id: menu-item
+- tapOn: Close menu
+- waitForAnimationToEnd
+- assertVisible: Elegir carpeta
+- tapOn:
+    id: app-bar-back
+- assertVisible:
+    id: home-create-note

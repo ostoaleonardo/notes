@@ -11,7 +11,7 @@ import {
     SPLIT_TRIGGER_RADII
 } from '@/constants/button'
 
-export function SplitButtonTrigger({ menuVisible, onPress, openProgress }) {
+export function SplitButtonTrigger({ menuVisible, onPress, openProgress, testID }) {
     const { colors } = useTheme()
 
     const animatedStyle = useAnimatedStyle(() => ({
@@ -34,6 +34,7 @@ export function SplitButtonTrigger({ menuVisible, onPress, openProgress }) {
             <TouchableRipple
                 accessibilityRole='button'
                 onPress={onPress}
+                testID={testID}
                 style={styles.touchable}
             >
                 {menuVisible

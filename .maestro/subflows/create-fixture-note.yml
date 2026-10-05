@@ -1,0 +1,17 @@
+appId: com.monospace.notes
+---
+- runFlow:
+    file: create-note.yml
+    env:
+      TITLE: maestro-fixture
+- inputText: '# Alpha'
+- pressKey: Enter
+- inputText: test text
+- pressKey: Enter
+- inputText: '## Beta'
+- pressKey: Enter
+- inputText: '- one'
+- pressKey: Enter
+- inputText: two
+- hideKeyboard
+- waitForAnimationToEnd

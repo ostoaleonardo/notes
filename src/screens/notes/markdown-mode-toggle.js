@@ -15,6 +15,7 @@ import { Search } from '@/icons/search'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { TEMPLATE_SCOPE } from '@/constants/toolbar'
+import { TEST_IDS } from '@/constants/test-ids'
 
 export const MarkdownModeToggle = ({
     mode,
@@ -82,6 +83,8 @@ export const MarkdownModeToggle = ({
             onOpen={onOpen}
             onClose={onClose}
             visible={visible}
+            primaryTestID={TEST_IDS.EDITOR_MODE_TOGGLE}
+            triggerTestID={TEST_IDS.EDITOR_MENU}
             icon={read ? EditNote : Book}
             label={t(read ? 'button.edit' : 'button.preview')}
             onPress={() => onSetMode(read ? EDITOR_MODES.LIVE : EDITOR_MODES.READ)}

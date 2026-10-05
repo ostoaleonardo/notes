@@ -1,0 +1,29 @@
+appId: com.monospace.notes
+---
+- launchApp
+- tapOn:
+    id: home-create-note
+- waitForAnimationToEnd
+- tapOn: Sin título
+- eraseText: 20
+- inputText: maestro-temp
+- hideKeyboard
+- waitForAnimationToEnd
+- runFlow: subflows/open-drawer.yml
+- assertVisible: maestro-temp
+- back
+- waitForAnimationToEnd
+- tapOn:
+    id: editor-menu
+- waitForAnimationToEnd
+- tapOn:
+    id: menu-item
+    text: BORRAR
+- tapOn:
+    id: button
+    text: BORRAR
+- waitForAnimationToEnd
+- assertVisible:
+    id: home-create-note
+- runFlow: subflows/open-drawer.yml
+- assertNotVisible: maestro-temp

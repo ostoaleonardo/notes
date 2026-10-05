@@ -28,6 +28,7 @@ import { ExpandAll } from '@/icons/expand-all'
 
 import { REPOSITORY_ACTIONS } from '@/constants/repository-actions'
 import { ROUTES } from '@/constants/routes'
+import { TEST_IDS } from '@/constants/test-ids'
 
 export function DrawerNotesView({ closeDrawer }) {
     const { t } = useTranslation()
@@ -123,24 +124,28 @@ export function DrawerNotesView({ closeDrawer }) {
     const toolbarItems = useMemo(() => [
         {
             key: 'create-note',
+            testID: TEST_IDS.DRAWER_CREATE_NOTE,
             icon: Plus,
             onPress: onCreateRootNote,
             accessibilityLabel: t('repositories.create_note')
         },
         {
             key: 'daily-note',
+            testID: TEST_IDS.DRAWER_DAILY_NOTE,
             icon: CalendarToday,
             onPress: onOpenDailyNote,
             accessibilityLabel: t('drawer.daily_note')
         },
         {
             key: 'add-subfolder',
+            testID: TEST_IDS.DRAWER_ADD_SUBFOLDER,
             icon: CreateNewFolder,
             onPress: onAddRootSubfolder,
             accessibilityLabel: t('repositories.add_subfolder')
         },
         {
             key: 'toggle-all',
+            testID: TEST_IDS.DRAWER_TOGGLE_ALL,
             icon: allCollapsed ? ExpandAll : CollapseAll,
             onPress: onToggleCollapseAll,
             accessibilityLabel: t(allCollapsed ? 'drawer.expand_all' : 'drawer.collapse_all')

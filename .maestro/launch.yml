@@ -1,0 +1,13 @@
+appId: com.monospace.notes
+---
+- launchApp
+- assertVisible:
+    id: home-create-note
+- assertVisible:
+    id: home-search
+- assertVisible:
+    id: home-recents
+- assertVisible:
+    id: home-import
+- assertVisible:
+    id: app-bar-menu

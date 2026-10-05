@@ -9,6 +9,7 @@ import { useMenuAction } from '@/hooks/use-menu-action'
 import { SortByAlpha } from '@/icons/sort-by-alpha'
 
 import { NOTE_SORT_LABELS } from '@/constants/note-sort'
+import { TEST_IDS } from '@/constants/test-ids'
 
 const SORT_OPTIONS = Object.keys(NOTE_SORT_LABELS)
 
@@ -24,6 +25,7 @@ export function DrawerSortMenu({ sort, onChange }) {
                 <DrawerToolbarButton
                     icon={SortByAlpha}
                     onPress={onOpen}
+                    testID={TEST_IDS.DRAWER_SORT}
                     accessibilityLabel={t('drawer.sort_notes')}
                 />
             }

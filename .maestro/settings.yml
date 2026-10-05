@@ -1,0 +1,25 @@
+appId: com.monospace.notes
+---
+- launchApp
+- tapOn:
+    id: app-bar-menu
+- tapOn:
+    id: drawer-settings
+- waitForAnimationToEnd
+- assertVisible:
+    id: app-bar-back
+- assertVisible: GENERAL
+- assertVisible: TEMA DE COLOR
+- tapOn: IDIOMA.*
+- waitForAnimationToEnd
+- assertVisible: Cerrar hoja
+- tapOn: Cerrar hoja
+- waitForAnimationToEnd
+- assertNotVisible: Cerrar hoja
+- scrollUntilVisible:
+    element: TAMAÑO DE TABULACIÓN.*
+- assertVisible: ANCHO DE LÍNEA.*
+- tapOn:
+    id: app-bar-back
+- assertVisible:
+    id: home-create-note

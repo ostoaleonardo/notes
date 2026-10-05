@@ -15,6 +15,8 @@ export const SplitButton = ({
     visible: controlledVisible,
     onOpen: controlledOnOpen,
     onClose: controlledOnClose,
+    primaryTestID,
+    triggerTestID,
     children
 }) => {
     const [uncontrolledVisible, setUncontrolledVisible] = useState(false)
@@ -30,6 +32,7 @@ export const SplitButton = ({
                 icon={icon}
                 label={label}
                 onPress={onPress}
+                testID={primaryTestID}
             />
 
             <MenuContainer
@@ -40,6 +43,7 @@ export const SplitButton = ({
                 anchor={
                     <SplitButtonTrigger
                         onPress={openMenu}
+                        testID={triggerTestID}
                         menuVisible={menuVisible}
                         openProgress={openProgress}
                     />

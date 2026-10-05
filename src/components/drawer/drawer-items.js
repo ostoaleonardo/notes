@@ -23,6 +23,7 @@ import { DEFAULT_DRAWER_VIEW, DRAWER_VIEWS } from '@/constants/drawer-views'
 import { SPACING } from '@/constants/spacing'
 import { TRANSPARENT } from '@/constants/themes'
 import { ROUTES } from '@/constants/routes'
+import { TEST_IDS } from '@/constants/test-ids'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 const VIEW_COMPONENTS = {
@@ -59,11 +60,13 @@ export function DrawerItems({ navigation }) {
         {
             icon: FolderCode,
             onPress: onOpenRepositories,
+            testID: TEST_IDS.DRAWER_REPOSITORIES,
             label: t('drawer.repositories')
         },
         {
             icon: Settings,
             onPress: onOpenSettings,
+            testID: TEST_IDS.DRAWER_SETTINGS,
             label: t('title.settings')
         }
     ], [onOpenRepositories, onOpenSettings, t])

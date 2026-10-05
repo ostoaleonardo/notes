@@ -1,0 +1,17 @@
+appId: com.monospace.notes
+---
+- runFlow: subflows/create-fixture-note.yml
+- assertVisible:
+    id: toolbar-bold
+- tapOn:
+    id: toolbar-bold
+- inputText: bold
+- tapOn:
+    id: editor-menu
+- waitForAnimationToEnd
+- tapOn:
+    id: menu-item
+    text: CÓDIGO
+- waitForAnimationToEnd
+- assertVisible: '(?s).*\*\*bold\*\*.*'
+- runFlow: subflows/delete-note.yml

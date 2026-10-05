@@ -1,0 +1,18 @@
+appId: com.monospace.notes
+---
+- runFlow: subflows/create-fixture-note.yml
+- tapOn:
+    id: editor-mode-toggle
+- waitForAnimationToEnd
+- tapOn:
+    id: toolbar-search
+- waitForAnimationToEnd
+- assertVisible: RECIENTES
+- tapOn: Buscar notas
+- inputText: maestro-fix
+- hideKeyboard
+- waitForAnimationToEnd
+- assertNotVisible: RECIENTES
+- back
+- waitForAnimationToEnd
+- runFlow: subflows/delete-note.yml

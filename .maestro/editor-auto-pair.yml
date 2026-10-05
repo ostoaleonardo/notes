@@ -1,0 +1,11 @@
+appId: com.monospace.notes
+---
+- runFlow:
+    file: subflows/create-note.yml
+    env:
+      TITLE: maestro-pair
+- inputText: '*'
+- assertVisible: '.*\b2 CARACTERES'
+- pressKey: Backspace
+- assertNotVisible: '.*CARACTERES'
+- runFlow: subflows/delete-note.yml

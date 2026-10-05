@@ -23,6 +23,7 @@ import { MARKDOWN_CONTROLS, MARKDOWN_GROUPS } from '@/constants/markdown-control
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { TEMPLATE_SCOPE, TOOLBAR_BUTTON_KEYS } from '@/constants/toolbar'
 import { SPACING } from '@/constants/spacing'
+import { TEST_IDS } from '@/constants/test-ids'
 
 export const MarkdownToolbar = memo(function MarkdownToolbar({
     mode,
@@ -100,6 +101,7 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
         <Tooltip key={key} title={t(label)}>
             <IconButton
                 onPress={onPress}
+                testID={TEST_IDS.TOOLBAR_PREFIX + key}
                 icon={(props) => <Icon {...props} />}
                 accessibilityLabel={t(label)}
                 disabled={disabled}

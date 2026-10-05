@@ -1,0 +1,29 @@
+appId: com.monospace.notes
+---
+- launchApp
+- runFlow: subflows/open-drawer.yml
+- assertVisible:
+      id: drawer-daily-note
+- runFlow:
+      file: subflows/switch-view.yml
+      env:
+          VIEW: PLANTILLAS
+- assertVisible: Nueva plantilla
+- assertNotVisible:
+      id: drawer-daily-note
+- runFlow:
+      file: subflows/switch-view.yml
+      env:
+          VIEW: ETIQUETAS
+- assertVisible: Uso \(mayor - menor\)
+- runFlow:
+      file: subflows/switch-view.yml
+      env:
+          VIEW: ARCHIVOS
+- assertNotVisible: Uso \(mayor - menor\)
+- runFlow:
+      file: subflows/switch-view.yml
+      env:
+          VIEW: NOTAS
+- assertVisible:
+      id: drawer-daily-note

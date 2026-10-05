@@ -1,0 +1,6 @@
+appId: com.monospace.notes
+---
+- launchApp
+- runFlow: open-drawer.yml
+- tapOn: ${NOTE}
+- waitForAnimationToEnd

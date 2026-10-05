@@ -7,8 +7,10 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "lint": "eslint src app",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "test:maestro": "bash scripts/test-maestro.sh"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.20.3",
@@ -91,6 +93,12 @@
   "private": true,
   "jest": {
     "preset": "jest-expo",
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "app/**/*.js",
+      "!**/__tests__/**",
+      "!**/__fixtures__/**"
+    ],
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/src/$1"
     }

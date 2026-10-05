@@ -4,7 +4,7 @@ import { Badge, IconButton, Tooltip, useTheme } from 'react-native-paper'
 
 import { NoteStack } from '@/icons/note-stack'
 
-export function RecentsButton({ onPress, count = 0 }) {
+export function RecentsButton({ onPress, testID, count = 0 }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const label = t('search.recent')
@@ -14,6 +14,7 @@ export function RecentsButton({ onPress, count = 0 }) {
             <View>
                 <IconButton
                     onPress={onPress}
+                    testID={testID}
                     icon={(props) => <NoteStack {...props} />}
                     accessibilityLabel={label}
                 />

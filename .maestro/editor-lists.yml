@@ -1,0 +1,26 @@
+appId: com.monospace.notes
+---
+- runFlow:
+    file: subflows/create-note.yml
+    env:
+      TITLE: maestro-lists
+- inputText: '- a'
+- pressKey: Enter
+- inputText: b
+- pressKey: Enter
+- pressKey: Enter
+- inputText: c
+- pressKey: Enter
+- inputText: '- [ ] t'
+- pressKey: Enter
+- inputText: u
+- hideKeyboard
+- tapOn:
+    id: editor-menu
+- waitForAnimationToEnd
+- tapOn:
+    id: menu-item
+    text: CÓDIGO
+- waitForAnimationToEnd
+- assertVisible: '(?s).*- a\n- b\nc\n- \[ \] t\n- \[ \] u.*'
+- runFlow: subflows/delete-note.yml

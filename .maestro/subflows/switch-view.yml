@@ -1,0 +1,8 @@
+appId: com.monospace.notes
+---
+- tapOn:
+      id: drawer-view-switcher
+- tapOn:
+      id: menu-item
+      text: ${VIEW}
+- waitForAnimationToEnd
