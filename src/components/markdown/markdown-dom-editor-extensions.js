@@ -1,3 +1,4 @@
+import { Prec } from '@codemirror/state'
 import { EditorView, keymap } from '@codemirror/view'
 import { autocompletion, closeBrackets } from '@codemirror/autocomplete'
 import { defaultKeymap, history, historyKeymap, indentWithTab, redoDepth, undoDepth } from '@codemirror/commands'
@@ -45,11 +46,11 @@ export const buildEditorExtensions = ({ dynamic, onTagPressRef, onLinkPressRef, 
     search({ createPanel: createHiddenSearchPanel }),
     keymap.of([
         indentWithTab,
-        ...listKeymap,
         ...defaultKeymap,
         ...historyKeymap,
         ...searchKeymap
     ]),
+    Prec.high(keymap.of(listKeymap)),
     markdown({ extensions: GFM }),
     inlineTagExtensions(onTagPressRef),
     fileLinkPress(onLinkPressRef),

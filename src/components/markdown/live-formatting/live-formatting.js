@@ -32,7 +32,7 @@ import { findCustomTaskRanges } from '@/utils/tasks'
 import { getBoundaryEdit } from '@/utils/table-boundary'
 
 import { CODE_RANGE_NODE_NAMES } from '@/constants/markdown-live-formatting'
-import { TABLE_BOUNDARY_INPUT_EVENTS } from '@/constants/table'
+import { TABLE_BOUNDARY_INPUT_EVENTS, TABLE_END_LINE } from '@/constants/table'
 
 const codeRangeNodeNames = new Set(CODE_RANGE_NODE_NAMES)
 
@@ -111,6 +111,25 @@ const guardTableBoundary = (field) => EditorState.transactionFilter.of((tr) => {
     }
 })
 
+const ensureLineAfterTable = (field) => EditorState.transactionFilter.of((tr) => {
+    if (tr.docChanged || !tr.isUserEvent('select')) return tr
+
+    const end = tr.startState.doc.length
+    if (tr.newSelection.main.head !== end) return tr
+
+    let endsWithTable = false
+    tr.startState.field(field).between(end, end, (from, to, value) => {
+        if (value.spec.widget instanceof TableWidget) endsWithTable = true
+    })
+    if (!endsWithTable) return tr
+
+    return [tr, {
+        changes: { from: end, insert: TABLE_END_LINE },
+        selection: EditorSelection.cursor(end + TABLE_END_LINE.length),
+        sequential: true
+    }]
+})
+
 export { mediaMapFacet, tableLabelsFacet }
 
 export const liveFormatting = StateField.define({
@@ -121,6 +140,7 @@ export const liveFormatting = StateField.define({
     provide: (field) => [
         EditorView.decorations.from(field),
         guardTableBoundary(field),
+        ensureLineAfterTable(field),
         EditorView.atomicRanges.of((view) => view.state.field(field).update({
             filter: (from, to, value) => value.spec.widget instanceof TableWidget
         }))

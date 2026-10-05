@@ -1,4 +1,4 @@
-import { EditorSelection } from '@codemirror/state'
+import { EditorSelection, Prec } from '@codemirror/state'
 import { syntaxTree } from '@codemirror/language'
 import { EditorView, keymap } from '@codemirror/view'
 
@@ -82,5 +82,5 @@ const deleteEmptyPair = (view) => {
 
 export const markdownAutoPair = [
     EditorView.inputHandler.of(handleInput),
-    keymap.of([{ key: 'Backspace', run: deleteEmptyPair }])
+    Prec.high(keymap.of([{ key: 'Backspace', run: deleteEmptyPair }]))
 ]

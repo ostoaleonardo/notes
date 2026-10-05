@@ -6,6 +6,7 @@ export const TABLE_PIPE = '|'
 export const TABLE_BODY_START_LINE = 2
 export const TABLE_RULE_NAME = 'table'
 export const TABLE_BOUNDARY_GAP = '\n\n'
+export const TABLE_END_LINE = '\n'
 export const TABLE_BOUNDARY_INPUT_EVENTS = ['input', 'paste']
 
 export const TABLE_ALIGNS = {
