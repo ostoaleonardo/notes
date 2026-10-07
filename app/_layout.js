@@ -14,7 +14,8 @@ import Providers from './providers'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { THEMES } from '@/constants/themes'
-import { FREE_ACCENT } from '@/constants/theme-options'
+import { FREE_ACCENT, THEME_MODES } from '@/constants/theme-options'
+import { LOG_MESSAGES } from '@/constants/log-messages'
 import { logError } from '@/utils/log-error'
 
 SplashScreen.preventAutoHideAsync()
@@ -32,7 +33,7 @@ export default function MainLayout() {
 
     const init = useEffectEvent(() => {
         initTheme()
-            .catch((error) => logError('error loading app', error))
+            .catch((error) => logError(LOG_MESSAGES.ERROR_LOADING_APP, error))
             .finally(() => setIsReady(true))
     })
 
@@ -42,8 +43,8 @@ export default function MainLayout() {
 
     const initTheme = async () => {
         const accent = await getItem(STORAGE_KEYS.ACCENT) || FREE_ACCENT
-        const mode = await getItem(STORAGE_KEYS.THEME) || 'system'
-        const name = mode !== 'system' ? mode : colorScheme
+        const mode = await getItem(STORAGE_KEYS.THEME) || THEME_MODES.SYSTEM
+        const name = mode !== THEME_MODES.SYSTEM ? mode : colorScheme
         const theme = THEMES[name]
 
         setInitialTheme({ mode, name, theme, accent })

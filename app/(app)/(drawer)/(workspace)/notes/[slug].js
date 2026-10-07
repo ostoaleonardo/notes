@@ -21,6 +21,7 @@ import { planExternalSync } from '@/utils/external-note-sync'
 
 import { ANCHOR_PARAM } from '@/constants/block-refs'
 import { ROUTES } from '@/constants/routes'
+import { LOG_MESSAGES } from '@/constants/log-messages'
 
 const tagsEqual = (a, b) => a.length === b.length && a.every((tag, i) => tag === b[i])
 
@@ -39,14 +40,7 @@ export default function EditNote() {
     const { repositories, loading: repositoriesLoading } = useRepositories()
     const { commitVersion } = useNoteVersions()
 
-    const {
-        visible,
-        linksCount,
-        saveWithLinkCheck,
-        onDismiss,
-        onConfirmOnce,
-        onConfirmAlways
-    } = useWikiLinkRenameConfirm()
+    const { saveWithLinkCheck, ...renameDialogProps } = useWikiLinkRenameConfirm()
 
     const pathRef = useRef(slug)
     const isSavingRef = useRef(false)
@@ -55,11 +49,12 @@ export default function EditNote() {
     const [loading, setLoading] = useState(true)
 
     const {
+        editorProps,
         title, setTitle,
         note, setNote,
         tags, setTags,
         properties, setProperties,
-        modifiedAt, setModifiedAt,
+        setModifiedAt,
         repositoryId, setRepositoryId,
         filename, setFilename,
         invalidFrontmatter, setInvalidFrontmatter,
@@ -165,7 +160,7 @@ export default function EditNote() {
                 filename,
                 originalTitleRef.current,
                 synced.original.note
-            ).catch((error) => logError('error keeping external text', error))
+            ).catch((error) => logError(LOG_MESSAGES.ERROR_KEEPING_EXTERNAL_TEXT, error))
         }
     })
 
@@ -253,35 +248,15 @@ export default function EditNote() {
         <>
             <NoteEditorScreen
                 id={pathRef.current}
-                filename={filename}
-                repositoryId={repositoryId}
                 flush={flush}
                 busyRef={isSavingRef}
-                title={title}
-                setTitle={setTitle}
+                {...editorProps}
                 onTitleBlur={onTitleBlur}
                 onRestoreVersion={onRestoreVersion}
-                note={note}
-                setNote={setNote}
-                tags={tags}
-                setTags={setTags}
-                properties={properties}
-                setProperties={setProperties}
-                invalidFrontmatter={invalidFrontmatter}
-                setInvalidFrontmatter={setInvalidFrontmatter}
-                rawFrontmatter={rawFrontmatter}
-                setRawFrontmatter={setRawFrontmatter}
-                modifiedAt={modifiedAt}
                 anchor={anchor}
             />
 
-            <RenameLinksDialog
-                visible={visible}
-                linksCount={linksCount}
-                onDismiss={onDismiss}
-                onConfirmOnce={onConfirmOnce}
-                onConfirmAlways={onConfirmAlways}
-            />
+            <RenameLinksDialog {...renameDialogProps} />
         </>
     )
 }

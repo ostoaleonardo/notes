@@ -22,14 +22,7 @@ export default function Note() {
     const { notes, saveNote, updateNote } = useNotes()
     const { repositoryId: targetRepositoryId } = useLocalSearchParams()
 
-    const {
-        visible,
-        linksCount,
-        saveWithLinkCheck,
-        onDismiss,
-        onConfirmOnce,
-        onConfirmAlways
-    } = useWikiLinkRenameConfirm()
+    const { saveWithLinkCheck, ...renameDialogProps } = useWikiLinkRenameConfirm()
 
     const isSaved = useRef(false)
     const pathRef = useRef('')
@@ -43,15 +36,16 @@ export default function Note() {
     useRegisterCurrent(path)
 
     const {
+        editorProps,
         title, setTitle,
         note, setNote,
-        tags, setTags,
-        properties, setProperties,
-        modifiedAt, setModifiedAt,
+        tags,
+        properties,
+        setModifiedAt,
         repositoryId, setRepositoryId,
-        filename, setFilename,
-        invalidFrontmatter, setInvalidFrontmatter,
-        rawFrontmatter, setRawFrontmatter,
+        setFilename,
+        invalidFrontmatter,
+        rawFrontmatter,
         buildPayload
     } = useNoteDraft(pathRef)
 
@@ -132,34 +126,14 @@ export default function Note() {
         <>
             <NoteEditorScreen
                 id={path}
-                filename={filename}
-                repositoryId={repositoryId}
                 flush={flush}
-                title={title}
-                setTitle={setTitle}
+                {...editorProps}
                 onTitleBlur={onTitleBlur}
                 onRestoreVersion={onRestoreVersion}
-                note={note}
-                setNote={setNote}
-                tags={tags}
-                setTags={setTags}
-                properties={properties}
-                setProperties={setProperties}
-                invalidFrontmatter={invalidFrontmatter}
-                setInvalidFrontmatter={setInvalidFrontmatter}
-                rawFrontmatter={rawFrontmatter}
-                setRawFrontmatter={setRawFrontmatter}
-                modifiedAt={modifiedAt}
                 initialMode={EDITOR_MODES.LIVE}
             />
 
-            <RenameLinksDialog
-                visible={visible}
-                linksCount={linksCount}
-                onDismiss={onDismiss}
-                onConfirmOnce={onConfirmOnce}
-                onConfirmAlways={onConfirmAlways}
-            />
+            <RenameLinksDialog {...renameDialogProps} />
         </>
     )
 }

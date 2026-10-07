@@ -21,7 +21,8 @@ import { Folder } from '@/icons/folder'
 
 import { ROUTES } from '@/constants/routes'
 import { FREE_REPOSITORIES_LIMIT } from '@/constants/default-values'
-import { SPACING } from '@/constants/spacing'
+import { SPACING } from '@/constants/theme'
+import { REPOSITORY_RESULTS } from '@/constants/repository-results'
 
 export default function Repositories() {
     const { t } = useTranslation()
@@ -55,46 +56,53 @@ export default function Repositories() {
 
     const canAddRepository = pro || rootRepositories.length < FREE_REPOSITORIES_LIMIT
 
-    const onAddRepository = async () => {
+    const onAddRepository = useCallback(async () => {
         if (!canAddRepository) {
             showSnackbar(t('repositories.pro_required'))
             return
         }
 
         const result = await addRepository()
-        if (result === 'duplicate') {
+        if (result === REPOSITORY_RESULTS.DUPLICATE) {
             showSnackbar(t('repositories.already_added'))
-        } else if (result === 'error') {
+        } else if (result === REPOSITORY_RESULTS.ERROR) {
             showSnackbar(t('repositories.add_failed'))
         }
-    }
+    }, [canAddRepository, addRepository, t])
 
-    const onOpen = (id) => {
+    const onOpen = useCallback((id) => {
         setActiveRepository(id)
         router.replace(ROUTES.HOME)
-    }
+    }, [setActiveRepository])
+
+    const keyExtractor = useCallback((repository) => repository.id, [])
+    const onDismissRename = useCallback(() => setRenameId(''), [])
+    const onDismissForget = useCallback(() => setForgetId(''), [])
+    const onDismissDelete = useCallback(() => setDeleteId(''), [])
+
+    const renderItem = useCallback(({ item, index }) => (
+        <RepositoryItem
+            repository={item}
+            count={t('count.notes', { count: counts[item.id] || 0 })}
+            active={item.id === activeRepositoryId}
+            onOpen={onOpen}
+            onRename={setRenameId}
+            onForget={setForgetId}
+            onDelete={setDeleteId}
+            isFirst={index === 0}
+            isLast={index === rootRepositories.length - 1}
+        />
+    ), [t, counts, activeRepositoryId, onOpen, rootRepositories.length])
 
     return (
         <View style={{ flex: 1 }}>
             <AnimatedList
                 contentContainerStyle={{ paddingHorizontal: SPACING.lg }}
-                gap={2}
+                gap={SPACING.xxxs}
                 data={rootRepositories}
-                keyExtractor={(repository) => repository.id}
+                keyExtractor={keyExtractor}
                 emptyLabel={t('message.notes.empty')}
-                renderItem={({ item, index }) => (
-                    <RepositoryItem
-                        repository={item}
-                        count={t('count.notes', { count: counts[item.id] || 0 })}
-                        active={item.id === activeRepositoryId}
-                        onOpen={() => onOpen(item.id)}
-                        onRename={() => setRenameId(item.id)}
-                        onForget={() => setForgetId(item.id)}
-                        onDelete={() => setDeleteId(item.id)}
-                        isFirst={index === 0}
-                        isLast={index === rootRepositories.length - 1}
-                    />
-                )}
+                renderItem={renderItem}
             />
 
             <FloatingButton
@@ -106,17 +114,17 @@ export default function Repositories() {
             <RenameRepository
                 visible={!!renameId}
                 repositoryId={renameId}
-                onDismiss={() => setRenameId('')}
+                onDismiss={onDismissRename}
             />
             <ForgetRepository
                 visible={!!forgetId}
                 repositoryId={forgetId}
-                onDismiss={() => setForgetId('')}
+                onDismiss={onDismissForget}
             />
             <DeleteRepository
                 visible={!!deleteId}
                 repositoryId={deleteId}
-                onDismiss={() => setDeleteId('')}
+                onDismiss={onDismissDelete}
             />
         </View>
     )

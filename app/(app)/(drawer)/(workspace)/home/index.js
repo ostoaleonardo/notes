@@ -21,6 +21,7 @@ import { useUtils } from '@/hooks/use-utils'
 import { getRecentIds } from '@/utils/recent-ids'
 
 import { ROUTES } from '@/constants/routes'
+import { APP_BAR_MODES } from '@/constants/app-bar'
 
 export default function Home() {
     const { t } = useTranslation()
@@ -75,7 +76,7 @@ export default function Home() {
     return (
         <View style={{ flex: 1 }}>
             <AppBar
-                mode='menu'
+                mode={APP_BAR_MODES.MENU}
                 title={t('title.notes') + (pro ? ' (Pro)' : '')}
             />
 

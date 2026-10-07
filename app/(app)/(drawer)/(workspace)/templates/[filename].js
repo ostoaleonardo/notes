@@ -2,29 +2,22 @@ import { useTranslation } from 'react-i18next'
 import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
 
-import { MarkdownEditorLayout } from '@/screens/notes/markdown-editor-layout'
-import { MarkdownModeToggle } from '@/screens/notes/markdown-mode-toggle'
-import { MarkdownSearchBar } from '@/screens/notes/markdown-search-bar'
-import { MarkdownInsertSheets } from '@/screens/notes/markdown-insert-sheets'
-import { NoteToolbarSheets } from '@/screens/notes/note-toolbar-sheets'
-import { VersionHistoryPanel } from '@/screens/notes/version-history-panel'
-import { VersionHistoryContent } from '@/screens/notes/version-history-content'
+import { EditorShell } from '@/screens/notes/editor-shell'
 import { TemplateEditorForm } from '@/screens/templates/template-editor-form'
 import { TemplatePlaceholders } from '@/screens/dialogs/template-placeholders'
 import { LoadingOverlay } from '@/components/layout'
-import { AppBar } from '@/components/app-bar/app-bar'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useAutosave } from '@/hooks/use-autosave'
 import { useEditorChrome } from '@/hooks/use-editor-chrome'
-import { usePro } from '@/hooks/use-pro'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRecentNotes } from '@/hooks/use-recent-notes'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
 import { useUtils } from '@/hooks/use-utils'
 import { splitTemplatePath, joinTemplatePath } from '@/utils/template-path'
+import { toggleInSet } from '@/utils/toggle-in-set'
 import { stripNoteExtension } from '@/utils/note-filename'
 import { useVersionHistory } from '@/hooks/use-version-history'
 
@@ -32,13 +25,14 @@ import { EDITOR_MODES } from '@/constants/editor-modes'
 import { TEMPLATES_FOLDER_NAME } from '@/constants/file-storage'
 import { ROUTES } from '@/constants/routes'
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
+import { TEMPLATE_SCOPE } from '@/constants/toolbar'
+import { LOG_MESSAGES } from '@/constants/log-messages'
 import { logError } from '@/utils/log-error'
 
 export default function EditTemplate() {
     const { t } = useTranslation()
     const { filename } = useLocalSearchParams()
     const { getTemplate, getFolderUri, updateTemplate, deleteTemplate } = useTemplates()
-    const { pro } = usePro()
     const { pinned, updatePinned } = useUtils()
     const { removeRecent } = useRecentNotes()
     const { activeRepository, getRootRepository } = useRepositories()
@@ -58,22 +52,8 @@ export default function EditTemplate() {
     const [deleteDialogVisible, setDeleteDialogVisible] = useState(false)
     const [folderUri, setFolderUri] = useState('')
 
-    const {
-        isFocused,
-        onFocus,
-        onBlur,
-        recentsSheet,
-        searchSheet,
-        action,
-        search,
-        canUndo,
-        canRedo,
-        onHistoryChange,
-        onRunAction,
-        linkSheet,
-        tableSheet,
-        imageSheet
-    } = useEditorChrome()
+    const chrome = useEditorChrome()
+    const { recentsSheet, searchSheet } = chrome
 
     const location = useMemo(() => (
         folderUri && activeRepository
@@ -114,23 +94,25 @@ export default function EditTemplate() {
             const deletedId = TEMPLATE_TAB_PREFIX + currentFilename.current
             removeRecent(deletedId)
 
-            if (pinned.has(deletedId)) {
-                const next = new Set(pinned)
-                next.delete(deletedId)
-                updatePinned(next)
-            }
+            if (pinned.has(deletedId)) updatePinned(toggleInSet(pinned, deletedId))
 
             router.back()
         } catch (error) {
-            logError('error deleting template', error)
+            logError(LOG_MESSAGES.ERROR_DELETING_TEMPLATE, error)
             showSnackbar(t('templates.delete_failed'))
         }
     }
 
-    const onOpenDeleteDialog = () => setDeleteDialogVisible(true)
-    const onCloseDeleteDialog = () => setDeleteDialogVisible(false)
+    const onOpenDeleteDialog = useCallback(() => setDeleteDialogVisible(true), [])
+    const onCloseDeleteDialog = useCallback(() => setDeleteDialogVisible(false), [])
 
-    const onOpenPlaceholders = () => setPlaceholdersVisible(true)
+    const toggleProps = useMemo(() => ({
+        onOpenPlaceholders,
+        onOpenDeleteDialog
+    }), [onOpenPlaceholders, onOpenDeleteDialog])
+
+    const onOpenPlaceholders = useCallback(() => setPlaceholdersVisible(true), [])
+    const onClosePlaceholders = useCallback(() => setPlaceholdersVisible(false), [])
 
     const loadTemplate = useEffectEvent((isCancelled) => {
         getTemplate(filename).then((template) => {
@@ -180,92 +162,49 @@ export default function EditTemplate() {
     if (loading) return <LoadingOverlay />
 
     return (
-        <VersionHistoryPanel
-            visible={versionHistory.visible}
-            onOpen={versionHistory.onOpen}
-            onClose={versionHistory.onClose}
-            swipeEnabled={pro}
-            panelContent={(
-                <VersionHistoryContent
-                    location={location}
-                    noteId={versionNoteId}
-                    currentContentRef={latestContent}
-                    pro={pro}
-                    onRestore={onRestoreVersion}
-                    onClose={versionHistory.onClose}
-                />
+        <EditorShell
+            mode={mode}
+            scope={TEMPLATE_SCOPE}
+            chrome={chrome}
+            onSetMode={setMode}
+            actions={editorActions}
+            noteId={versionNoteId}
+            location={location}
+            contentRef={latestContent}
+            onRestore={onRestoreVersion}
+            toggleProps={toggleProps}
+            versionHistory={versionHistory}
+            sheets={(
+                <>
+                    <TemplatePlaceholders
+                        visible={placeholdersVisible}
+                        onDismiss={onClosePlaceholders}
+                    />
+
+                    <ConfirmDialog
+                        visible={deleteDialogVisible}
+                        title={t('templates.delete_title')}
+                        message={t('templates.delete_message')}
+                        confirmLabel={t('button.delete')}
+                        onDismiss={onCloseDeleteDialog}
+                        onConfirm={onConfirmDelete}
+                    />
+                </>
             )}
         >
-            <AppBar
-                mode='menu'
-                trailing={(
-                    <MarkdownModeToggle
-                        mode={mode}
-                        onSetMode={setMode}
-                        scope='template'
-                        isFocused={isFocused}
-                        search={search}
-                        onOpenPlaceholders={onOpenPlaceholders}
-                        onOpenVersionHistory={versionHistory.onOpen}
-                        onOpenDeleteDialog={onOpenDeleteDialog}
-                    />
-                )}
-            />
-
-            <MarkdownSearchBar
-                search={search}
-                action={action}
-            />
-
-            <MarkdownEditorLayout
+            <TemplateEditorForm
+                name={name}
+                setName={setName}
+                content={content}
+                setContent={setContent}
+                action={chrome.action}
                 mode={mode}
-                isFocused={isFocused}
-                onRunAction={onRunAction}
-                scope='template'
-                actions={editorActions}
-                canUndo={canUndo}
-                canRedo={canRedo}
-            >
-                <TemplateEditorForm
-                    name={name}
-                    setName={setName}
-                    content={content}
-                    setContent={setContent}
-                    action={action}
-                    mode={mode}
-                    onFocus={onFocus}
-                    onBlur={onBlur}
-                    onHistoryChange={onHistoryChange}
-                    searchQuery={search.searchQuery}
-                    replaceText={search.replaceText}
-                />
-            </MarkdownEditorLayout>
-
-            <MarkdownInsertSheets
-                linkSheet={linkSheet}
-                tableSheet={tableSheet}
-                imageSheet={imageSheet}
-                action={action}
+                onFocus={chrome.onFocus}
+                onBlur={chrome.onBlur}
+                onHistoryChange={chrome.onHistoryChange}
+                searchQuery={chrome.search.searchQuery}
+                replaceText={chrome.search.replaceText}
             />
-
-            <TemplatePlaceholders
-                visible={placeholdersVisible}
-                onDismiss={() => setPlaceholdersVisible(false)}
-            />
-
-            <ConfirmDialog
-                visible={deleteDialogVisible}
-                title={t('templates.delete_title')}
-                message={t('templates.delete_message')}
-                confirmLabel={t('button.delete')}
-                onDismiss={onCloseDeleteDialog}
-                onConfirm={onConfirmDelete}
-            />
-
-            <NoteToolbarSheets
-                recentsSheet={recentsSheet}
-                searchSheet={searchSheet}
-            />
-        </VersionHistoryPanel>
+        </EditorShell>
     )
 }

@@ -10,10 +10,8 @@ import { AppVersionCard } from '@/screens/settings/app-version-card'
 import { Option } from '@/screens/settings/option'
 import { WikiLinksOption } from '@/screens/settings/wiki-links-option'
 import { AttachmentsOption } from '@/screens/settings/attachments-option'
-import { StartupOption } from '@/screens/settings/startup-option'
-import { EditorDisplayOption } from '@/screens/settings/editor-display-option'
+import { StorageSelectOption } from '@/screens/settings/storage-select-option'
 import { DailyNoteOption } from '@/screens/settings/daily-note-option'
-import { DeleteBehaviorOption } from '@/screens/settings/delete-behavior-option'
 import { Scroll } from '@/components/animated/scroll'
 import { Section } from '@/components/section'
 
@@ -23,20 +21,13 @@ import { ArrowForward } from '@/icons/arrow-forward'
 import { OpenInNew } from '@/icons/open-in-new'
 
 import { LINKS } from '@/constants/links'
-import { SPACING } from '@/constants/spacing'
-import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { SPACING } from '@/constants/theme'
 import {
-    DEFAULT_EDITOR_FONT_SIZE,
-    DEFAULT_EDITOR_INLINE_TITLE,
-    DEFAULT_EDITOR_LINE_NUMBERS,
-    DEFAULT_EDITOR_LINE_WIDTH,
-    DEFAULT_EDITOR_SPELLCHECK,
-    DEFAULT_EDITOR_TAB_SIZE,
-    EDITOR_FONT_SIZES,
-    EDITOR_LINE_WIDTHS,
-    EDITOR_TAB_SIZES,
-    EDITOR_TOGGLE
-} from '@/constants/editor-display'
+    DELETE_BEHAVIOR_SELECT_OPTION,
+    EDITOR_SELECT_OPTIONS,
+    LAST_EDITOR_SELECT_INDEX,
+    STARTUP_SELECT_OPTION
+} from '@/constants/settings-select-options'
 
 export default function Settings() {
     const { t } = useTranslation()
@@ -67,44 +58,17 @@ export default function Settings() {
                     containerStyle={styles.section}
                     contentStyle={styles.items}
                 >
-                    <StartupOption />
-                    <EditorDisplayOption
-                        storageKey={STORAGE_KEYS.EDITOR_FONT_SIZE}
-                        translationKey='editor_font_size'
-                        options={EDITOR_FONT_SIZES}
-                        defaultValue={DEFAULT_EDITOR_FONT_SIZE}
+                    <StorageSelectOption
+                        {...STARTUP_SELECT_OPTION}
+                        isFirst={true}
                     />
-                    <EditorDisplayOption
-                        storageKey={STORAGE_KEYS.EDITOR_LINE_WIDTH}
-                        translationKey='editor_line_width'
-                        options={EDITOR_LINE_WIDTHS}
-                        defaultValue={DEFAULT_EDITOR_LINE_WIDTH}
-                    />
-                    <EditorDisplayOption
-                        storageKey={STORAGE_KEYS.EDITOR_TAB_SIZE}
-                        translationKey='editor_tab_size'
-                        options={EDITOR_TAB_SIZES}
-                        defaultValue={DEFAULT_EDITOR_TAB_SIZE}
-                    />
-                    <EditorDisplayOption
-                        storageKey={STORAGE_KEYS.EDITOR_LINE_NUMBERS}
-                        translationKey='editor_line_numbers'
-                        options={EDITOR_TOGGLE}
-                        defaultValue={DEFAULT_EDITOR_LINE_NUMBERS}
-                    />
-                    <EditorDisplayOption
-                        storageKey={STORAGE_KEYS.EDITOR_SPELLCHECK}
-                        translationKey='editor_spellcheck'
-                        options={EDITOR_TOGGLE}
-                        defaultValue={DEFAULT_EDITOR_SPELLCHECK}
-                    />
-                    <EditorDisplayOption
-                        storageKey={STORAGE_KEYS.EDITOR_INLINE_TITLE}
-                        translationKey='editor_inline_title'
-                        options={EDITOR_TOGGLE}
-                        defaultValue={DEFAULT_EDITOR_INLINE_TITLE}
-                        isLast={true}
-                    />
+                    {EDITOR_SELECT_OPTIONS.map((option, index) => (
+                        <StorageSelectOption
+                            key={option.storageKey}
+                            {...option}
+                            isLast={index === LAST_EDITOR_SELECT_INDEX}
+                        />
+                    ))}
                 </Section>
 
                 <Section
@@ -120,7 +84,11 @@ export default function Settings() {
                     containerStyle={styles.section}
                     contentStyle={styles.items}
                 >
-                    <DeleteBehaviorOption />
+                    <StorageSelectOption
+                        {...DELETE_BEHAVIOR_SELECT_OPTION}
+                        isFirst={true}
+                        isLast={true}
+                    />
                 </Section>
 
                 <Section
@@ -172,12 +140,12 @@ const styles = StyleSheet.create({
     scroll: {
         paddingBottom: SPACING.xxl,
         paddingTop: SPACING.sm,
-        gap: 40
+        gap: SPACING.xxxxl
     },
     section: {
         paddingHorizontal: SPACING.lg
     },
     items: {
-        gap: 3
+        gap: SPACING.xxs
     }
 })
