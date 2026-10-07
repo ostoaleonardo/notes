@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { buildNotePayload } from '@/utils/note-payload'
 
@@ -13,7 +13,7 @@ export function useNoteDraft(pathRef) {
     const [invalidFrontmatter, setInvalidFrontmatter] = useState(null)
     const [rawFrontmatter, setRawFrontmatter] = useState(null)
 
-    const buildPayload = (payloadTitle, payloadNote = note) => buildNotePayload({
+    const buildPayload = useCallback((payloadTitle, payloadNote = note) => buildNotePayload({
         path: pathRef.current,
         title: payloadTitle,
         note: payloadNote,
@@ -22,7 +22,7 @@ export function useNoteDraft(pathRef) {
         repositoryId,
         invalidFrontmatter,
         rawFrontmatter
-    })
+    }), [pathRef, note, tags, properties, repositoryId, invalidFrontmatter, rawFrontmatter])
 
     const editorProps = {
         title, setTitle,
