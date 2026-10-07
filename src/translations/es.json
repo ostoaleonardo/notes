@@ -132,7 +132,7 @@
 		"delete_behavior": "Al eliminar",
 		"delete_behavior_vault-trash": "Mover a la carpeta .trash",
 		"delete_behavior_permanent": "Eliminar permanentemente",
-		"deleted_files": "Archivos eliminados"
+		"editor": "Editor"
 	},
 	"pro": {
 		"get": "Obtener versión Pro",

@@ -10,7 +10,7 @@ import { AppVersionCard } from '@/screens/settings/app-version-card'
 import { Option } from '@/screens/settings/option'
 import { WikiLinksOption } from '@/screens/settings/wiki-links-option'
 import { AttachmentsOption } from '@/screens/settings/attachments-option'
-import { StorageSelectOption } from '@/screens/settings/storage-select-option'
+import { SelectOptionList } from '@/screens/settings/select-option-list'
 import { DailyNoteOption } from '@/screens/settings/daily-note-option'
 import { Scroll } from '@/components/animated/scroll'
 import { Section } from '@/components/section'
@@ -21,13 +21,9 @@ import { ArrowForward } from '@/icons/arrow-forward'
 import { OpenInNew } from '@/icons/open-in-new'
 
 import { LINKS } from '@/constants/links'
+import { SETTINGS_LIST } from '@/constants/components'
 import { SPACING } from '@/constants/theme'
-import {
-    DELETE_BEHAVIOR_SELECT_OPTION,
-    EDITOR_SELECT_OPTIONS,
-    LAST_EDITOR_SELECT_INDEX,
-    STARTUP_SELECT_OPTION
-} from '@/constants/settings-select-options'
+import { EDITOR_SELECT_OPTIONS, NOTES_SELECT_OPTIONS } from '@/constants/settings-select-options'
 
 export default function Settings() {
     const { t } = useTranslation()
@@ -58,17 +54,15 @@ export default function Settings() {
                     containerStyle={styles.section}
                     contentStyle={styles.items}
                 >
-                    <StorageSelectOption
-                        {...STARTUP_SELECT_OPTION}
-                        isFirst={true}
-                    />
-                    {EDITOR_SELECT_OPTIONS.map((option, index) => (
-                        <StorageSelectOption
-                            key={option.storageKey}
-                            {...option}
-                            isLast={index === LAST_EDITOR_SELECT_INDEX}
-                        />
-                    ))}
+                    <SelectOptionList options={NOTES_SELECT_OPTIONS} />
+                </Section>
+
+                <Section
+                    title={t('settings.editor')}
+                    containerStyle={styles.section}
+                    contentStyle={styles.items}
+                >
+                    <SelectOptionList options={EDITOR_SELECT_OPTIONS} />
                 </Section>
 
                 <Section
@@ -77,18 +71,6 @@ export default function Settings() {
                     contentStyle={styles.items}
                 >
                     <DailyNoteOption />
-                </Section>
-
-                <Section
-                    title={t('settings.deleted_files')}
-                    containerStyle={styles.section}
-                    contentStyle={styles.items}
-                >
-                    <StorageSelectOption
-                        {...DELETE_BEHAVIOR_SELECT_OPTION}
-                        isFirst={true}
-                        isLast={true}
-                    />
                 </Section>
 
                 <Section
@@ -146,6 +128,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: SPACING.lg
     },
     items: {
-        gap: SPACING.xxs
+        gap: SETTINGS_LIST.itemGap
     }
 })
