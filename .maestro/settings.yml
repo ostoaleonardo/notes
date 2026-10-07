@@ -19,6 +19,28 @@ appId: com.monospace.notes
 - scrollUntilVisible:
     element: TAMAÑO DE TABULACIÓN.*
 - assertVisible: ANCHO DE LÍNEA.*
+- tapOn: TAMAÑO DE TABULACIÓN.*
+- waitForAnimationToEnd
+- tapOn: '8'
+- waitForAnimationToEnd
+- assertVisible: TAMAÑO DE TABULACIÓN.*
+- tapOn: TAMAÑO DE TABULACIÓN.*
+- waitForAnimationToEnd
+- tapOn: '4'
+- waitForAnimationToEnd
+- scrollUntilVisible:
+    element: UBICACIÓN DE LA NOTA DIARIA.*
+- tapOn: UBICACIÓN DE LA NOTA DIARIA.*
+- waitForAnimationToEnd
+- tapOn: Raíz del repositorio
+- waitForAnimationToEnd
+- scrollUntilVisible:
+    element: AL ELIMINAR.*
+- tapOn: AL ELIMINAR.*
+- waitForAnimationToEnd
+- assertVisible: Mover a la carpeta .trash
+- tapOn: Mover a la carpeta .trash
+- waitForAnimationToEnd
 - tapOn:
     id: app-bar-back
 - assertVisible:
