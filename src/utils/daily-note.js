@@ -1,7 +1,9 @@
+import { DATE_PART_PAD_LENGTH, DATE_PART_PAD_CHAR } from '@/constants/date-format'
+
 export const getDailyNoteTitle = (date = new Date()) => {
     const year = date.getFullYear()
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const day = String(date.getDate()).padStart(2, '0')
+    const month = String(date.getMonth() + 1).padStart(DATE_PART_PAD_LENGTH, DATE_PART_PAD_CHAR)
+    const day = String(date.getDate()).padStart(DATE_PART_PAD_LENGTH, DATE_PART_PAD_CHAR)
 
     return `${year}-${month}-${day}`
 }

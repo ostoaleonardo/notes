@@ -1,4 +1,4 @@
-import { TABLE_ACTIONS, TABLE_AXES, TABLE_MENU_GROUPS } from '../constants/table'
+import { TABLE_ACTIONS, TABLE_AXES, TABLE_MENU_GROUPS } from '@/constants/table'
 
 export const buildTableLabels = (t) => Object.fromEntries([
     ...Object.values(TABLE_AXES).flatMap((axis) => (

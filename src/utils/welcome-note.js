@@ -1,4 +1,4 @@
-import i18n from '../i18n/i18next'
+import i18n from '@/i18n/i18next'
 
 const getBulletList = (items) => (
     items.map(({ title, body }) => `* **${title}**: ${body}`).join('\n')

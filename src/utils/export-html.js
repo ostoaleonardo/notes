@@ -1,4 +1,4 @@
-import { buildPreviewCss } from '@/components/markdown/markdown-dom-theme'
+import { buildPreviewCss } from '@/components/markdown/markdown-dom-preview-css'
 import { renderMarkdownRaw } from '@/components/markdown/markdown-dom-render-html'
 import { resolveEmbeds } from '@/utils/embeds'
 import { replaceLocalImageUrls } from '@/utils/local-images'
@@ -6,7 +6,7 @@ import { sanitizeHtml } from '@/utils/sanitize-html'
 import { escapeHtml, unwrapWikiLinks } from '@/utils/wiki-links'
 
 import { COLORS, THEMES } from '@/constants/themes'
-import { FONTS, HEADING_FONT_FAMILY } from '@/constants/fonts'
+import { FONTS, HEADING_FONT_FAMILY } from '@/constants/theme'
 import { EXPORT_FONT_SIZE, EXPORT_CONTENT_SECURITY_POLICY } from '@/constants/export'
 
 const NO_IMAGES = () => null

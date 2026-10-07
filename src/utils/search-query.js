@@ -2,13 +2,11 @@ import {
     CLOSING_BRACKETS,
     CONTENT_QUALIFIER,
     CONTENT_QUALIFIER_REGEX,
-    DATE_KEY_LENGTH,
     DATE_VALUE_REGEX,
     DAY_IN_MS,
     IMAGE_QUALIFIER,
     IMAGE_QUALIFIER_REGEX,
     LINE_OPERATORS,
-    MARKDOWN_IMAGE_REGEX,
     NEGATION_PREFIX,
     OPENING_BRACKETS,
     OR_KEYWORD,
@@ -22,20 +20,15 @@ import {
     REGEX_FLAGS,
     REGEX_TOKEN_REGEX,
     SEARCH_OPERATORS,
+    SEARCH_QUALIFIER_VALUES,
     TAG_QUALIFIER_REGEX,
-    TASK_STATUS_LINE_REGEX,
-    TASK_STATUS_TODO,
-    TASK_STATUSES_DONE,
-    WHITESPACE_REGEX,
     WRAPPED_VALUE_REGEX
 } from '@/constants/search-query'
-import { fuzzyMatch } from './fuzzy-match'
-import { getNoteTags } from './note-tags'
-import { matchesTag } from './tag-names'
+import { toDateKey } from './date-key'
 
-import { LEADING_HASH_PATTERN } from '@/constants/markdown-patterns'
+import { LEADING_HASH_PATTERN, WHITESPACE_PATTERN, WHITESPACE_RUN_PATTERN } from '@/constants/markdown-patterns'
 
-const isWhitespace = (char) => WHITESPACE_REGEX.test(char)
+const isWhitespace = (char) => WHITESPACE_PATTERN.test(char)
 
 const splitTokens = (query) => {
     const tokens = []
@@ -73,8 +66,6 @@ const unwrap = (value) => {
     const match = WRAPPED_VALUE_REGEX.exec(value)
     return match ? (match[1] ?? match[2]) : value
 }
-
-const toDateKey = (timestamp) => (timestamp ? new Date(timestamp).toISOString().slice(0, DATE_KEY_LENGTH) : null)
 
 const shiftDateKey = (key, days) => toDateKey(Date.parse(key) + days * DAY_IN_MS)
 
@@ -119,7 +110,7 @@ const setDateRange = (field) => (parsed, value) => {
 }
 
 const addLine = (kind) => (parsed, value) => {
-    const terms = unwrap(value).toLowerCase().split(WHITESPACE_REGEX).filter(Boolean)
+    const terms = unwrap(value).toLowerCase().split(WHITESPACE_RUN_PATTERN).filter(Boolean)
     if (terms.length === 0 && kind === SEARCH_OPERATORS.LINE) return false
 
     parsed.lines.push({ kind, terms })
@@ -133,19 +124,19 @@ const QUALIFIER_HANDLERS = {
     [SEARCH_OPERATORS.MODIFIED]: setDateRange('modified'),
     [SEARCH_OPERATORS.CREATED]: setDateRange('created'),
     [SEARCH_OPERATORS.IS]: (parsed, value, negate) => {
-        if (value.toLowerCase() !== 'pinned') return false
+        if (value.toLowerCase() !== SEARCH_QUALIFIER_VALUES.PINNED) return false
 
         parsed[negate ? 'notPinned' : 'pinned'] = true
         return true
     },
     [SEARCH_OPERATORS.HAS]: (parsed, value, negate) => {
-        if (value.toLowerCase() !== 'image') return false
+        if (value.toLowerCase() !== SEARCH_QUALIFIER_VALUES.IMAGE) return false
 
         parsed[negate ? 'noImage' : 'hasImage'] = true
         return true
     },
     [SEARCH_OPERATORS.IN]: (parsed, value) => {
-        if (value.toLowerCase() !== 'content') return false
+        if (value.toLowerCase() !== SEARCH_QUALIFIER_VALUES.CONTENT) return false
 
         parsed.inContent = true
         return true
@@ -200,7 +191,7 @@ const toMatcher = ({ words, phrases, regexes }) => ({
     regexes
 })
 
-const hasMatchers = ({ text, phrases, regexes }) => !!text || phrases.length > 0 || regexes.length > 0
+export const hasMatchers = ({ text, phrases, regexes }) => !!text || phrases.length > 0 || regexes.length > 0
 
 export const parseSearchQuery = (query) => {
     const parsed = {
@@ -259,7 +250,7 @@ export const toggleTagQualifier = (query, tagName) => {
         : [...existingTags, tagName]
 
     const qualifiers = nextTags
-        .map((name) => (/\s/.test(name) ? `tag:"${name}"` : `tag:${name}`))
+        .map((name) => (WHITESPACE_PATTERN.test(name) ? `tag:"${name}"` : `tag:${name}`))
         .join(' ')
 
     if (!withoutTags) return qualifiers
@@ -277,119 +268,3 @@ export const togglePinnedQualifier = (query) => toggleQualifier(query, PINNED_QU
 export const toggleImageQualifier = (query) => toggleQualifier(query, IMAGE_QUALIFIER_REGEX, IMAGE_QUALIFIER)
 
 export const toggleContentQualifier = (query) => toggleQualifier(query, CONTENT_QUALIFIER_REGEX, CONTENT_QUALIFIER)
-
-const hasMatchingTag = (note, queries) => (
-    getNoteTags(note).some((tag) => queries.some((query) => matchesTag(tag, query)))
-)
-
-const getFullPath = (note, notePaths) => {
-    const folder = notePaths?.get(note.path)
-    return (folder ? `${folder}/${note.filename}` : note.filename || '').toLowerCase()
-}
-
-const inDateRange = (timestamp, range) => {
-    if (!range) return true
-
-    const key = toDateKey(timestamp)
-    if (!key) return false
-
-    return (!range.from || key >= range.from) && (!range.to || key <= range.to)
-}
-
-const lowerContentCache = new WeakMap()
-
-const getLowerContent = (note) => {
-    if (!lowerContentCache.has(note)) lowerContentCache.set(note, (note.note || '').toLowerCase())
-    return lowerContentCache.get(note)
-}
-
-const includesTerm = (note, parsed, term) => (
-    (note.title || '').toLowerCase().includes(term)
-    || (parsed.inContent && getLowerContent(note).includes(term))
-)
-
-const matchesRegex = (note, parsed, regex) => (
-    regex.test(note.title || '') || (parsed.inContent && regex.test(note.note || ''))
-)
-
-const getPropertyValues = (note, key) => {
-    const entry = Object.entries(note.properties || {}).find(([name]) => name.toLowerCase() === key)
-    if (!entry) return null
-
-    return (Array.isArray(entry[1]) ? entry[1] : [entry[1]]).map((item) => String(item ?? '').toLowerCase())
-}
-
-const matchesProperty = (note, { key, value }) => {
-    const values = getPropertyValues(note, key)
-    if (!values) return false
-
-    return !value || values.some((item) => item.includes(value))
-}
-
-const lineMatches = (line, { kind, terms }) => {
-    const task = TASK_STATUS_LINE_REGEX.exec(line)
-    const text = (task ? line.slice(task[0].length) : line).toLowerCase()
-
-    if (!terms.every((term) => text.includes(term))) return false
-    if (kind === SEARCH_OPERATORS.LINE) return true
-    if (!task) return false
-    if (kind === SEARCH_OPERATORS.TASK_TODO) return task[1] === TASK_STATUS_TODO
-    if (kind === SEARCH_OPERATORS.TASK_DONE) return TASK_STATUSES_DONE.includes(task[1])
-
-    return true
-}
-
-const matchesLines = (note, specs) => {
-    const lines = (note.note || '').split('\n')
-    return specs.every((spec) => lines.some((line) => lineMatches(line, spec)))
-}
-
-const NOTE_FILTERS = [
-    (note, parsed, { pinned }) => !parsed.pinned || pinned.has(note.path),
-    (note, parsed, { pinned }) => !parsed.notPinned || !pinned.has(note.path),
-    (note, parsed, { notePaths }) => parsed.paths.every((path) => getFullPath(note, notePaths).includes(path)),
-    (note, parsed, { notePaths }) => !parsed.excludedPaths.some((path) => getFullPath(note, notePaths).includes(path)),
-    (note, parsed) => parsed.files.every((file) => (note.filename || '').toLowerCase().includes(file)),
-    (note, parsed) => !parsed.excludedFiles.some((file) => (note.filename || '').toLowerCase().includes(file)),
-    (note, parsed) => parsed.tags.length === 0 || hasMatchingTag(note, parsed.tags),
-    (note, parsed) => !hasMatchingTag(note, parsed.excludedTags),
-    (note, parsed) => !parsed.hasImage || MARKDOWN_IMAGE_REGEX.test(note.note || ''),
-    (note, parsed) => !parsed.noImage || !MARKDOWN_IMAGE_REGEX.test(note.note || ''),
-    (note, parsed) => inDateRange(note.updatedAt, parsed.modified),
-    (note, parsed) => inDateRange(note.createdAt, parsed.created),
-    (note, parsed) => matchesLines(note, parsed.lines),
-    (note, parsed) => parsed.properties.every((property) => matchesProperty(note, property) !== property.negate),
-    (note, parsed) => !parsed.excludedTerms.some((term) => includesTerm(note, parsed, term)),
-    (note, parsed) => !parsed.excludedRegexes.some((regex) => matchesRegex(note, parsed, regex))
-]
-
-const scoreGroup = (note, parsed, group) => {
-    const phrasesMatch = group.phrases.every((phrase) => includesTerm(note, parsed, phrase))
-    const regexesMatch = group.regexes.every((regex) => matchesRegex(note, parsed, regex))
-
-    if (!phrasesMatch || !regexesMatch) return null
-    if (!group.text) return 0
-
-    const titleMatch = fuzzyMatch(group.text, note.title)
-    const matchesContent = parsed.inContent && getLowerContent(note).includes(group.text)
-
-    return titleMatch.matches || matchesContent ? titleMatch.score : null
-}
-
-const scoreNote = (note, parsed) => {
-    const groups = [parsed, ...parsed.orGroups].filter(hasMatchers)
-    if (groups.length === 0) return { note, score: 0 }
-
-    const scores = groups.map((group) => scoreGroup(note, parsed, group)).filter((score) => score !== null)
-
-    return scores.length > 0 ? { note, score: Math.max(...scores) } : null
-}
-
-export const filterNotes = (notes, parsed, context) => (
-    notes
-        .filter((note) => NOTE_FILTERS.every((filter) => filter(note, parsed, context)))
-        .map((note) => scoreNote(note, parsed))
-        .filter(Boolean)
-        .sort((a, b) => b.score - a.score)
-        .map(({ note }) => note)
-)

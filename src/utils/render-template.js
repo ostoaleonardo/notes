@@ -1,3 +1,5 @@
+import { TEMPLATE_VARIABLE_PATTERN } from '@/constants/template-placeholders'
+
 export const renderTemplate = (content, { title, language } = {}) => {
     const now = new Date()
 
@@ -7,7 +9,7 @@ export const renderTemplate = (content, { title, language } = {}) => {
         title: title || ''
     }
 
-    return content.replace(/\{\{\s*(\w+)\s*\}\}/g, (match, key) => (
+    return content.replace(TEMPLATE_VARIABLE_PATTERN, (match, key) => (
         key in values ? values[key] : match
     ))
 }

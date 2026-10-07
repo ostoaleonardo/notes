@@ -1,4 +1,4 @@
-import { TABLE_BOUNDARY_GAP } from '../constants/table'
+import { TABLE_BOUNDARY_GAP } from '@/constants/table'
 
 export const getBoundaryEdit = ({ from, to, insert }, tables) => {
     if (from !== to || !insert || insert.startsWith('\n')) return null

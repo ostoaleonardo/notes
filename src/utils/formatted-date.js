@@ -6,6 +6,6 @@ export const getFormattedDate = (timestamp, language) => {
         month: 'short',
         year: 'numeric',
         hour: 'numeric',
-        minute: 'numeric',
+        minute: 'numeric'
     })
 }

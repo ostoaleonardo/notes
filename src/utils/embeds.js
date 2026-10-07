@@ -3,15 +3,17 @@ import { mapOutsideCode } from './outside-code'
 import { isFileLinkTarget } from './file-links'
 import { extractBlock } from './block-refs'
 import { extractSection } from './headings'
+import { buildIconMarkup } from './icon-mask'
 
 import { BLOCK_ANCHOR_PREFIX } from '@/constants/block-refs'
+import { OPEN_IN_NEW_FILLED_ICON_PATH } from '@/constants/icon-paths'
 import { WIKI_LINK_SCHEME, WIKI_LINK_ANCHOR_SEPARATOR } from '@/constants/wiki-links'
 
 import {
     EMBED_CLASS,
     EMBED_TITLE_CLASS,
     EMBED_OPEN_CLASS,
-    EMBED_OPEN_ICON,
+    EMBED_OPEN_ICON_SIZE,
     EMBED_PATTERN,
     EMBED_IMAGE_PATTERN,
     EMBED_WIDTH_PATTERN,
@@ -33,7 +35,9 @@ const buildOpenLink = (note, anchor) => {
     const suffix = anchor ? `${WIKI_LINK_ANCHOR_SEPARATOR}${encodeURIComponent(anchor)}` : ''
     const href = `${WIKI_LINK_SCHEME}${encodeURIComponent(note.path)}${suffix}`
 
-    return `<a href="${href}" class="${EMBED_OPEN_CLASS}">${EMBED_OPEN_ICON}</a>`
+    const icon = buildIconMarkup(OPEN_IN_NEW_FILLED_ICON_PATH, EMBED_OPEN_ICON_SIZE)
+
+    return `<a href="${href}" class="${EMBED_OPEN_CLASS}">${icon}</a>`
 }
 
 const extractSource = (text, anchor) => {

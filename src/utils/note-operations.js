@@ -8,6 +8,7 @@ import { renameWikiLinksForNote } from '@/utils/wiki-links'
 import { buildVersionKey, getVersionLocation } from '@/utils/note-version-location'
 
 import { DUPLICATE_TITLE_ERROR } from '@/constants/note-errors'
+import { LOG_MESSAGES } from '@/constants/log-messages'
 
 export const getRepositoryUri = (repositories, repositoryId) => (
     repositories.find((repository) => repository.id === repositoryId)?.uri
@@ -101,7 +102,7 @@ const keepExternalText = async ({ previous, text, repositories, repositoryId }, 
         const location = getVersionLocation(repositories, repositoryId)
         await commitNoteVersion(fileStorage, location, previous.filename, previous.title, text)
     } catch (error) {
-        logError(`error keeping external text of ${previous.filename}`, error)
+        logError(LOG_MESSAGES.KEEPING_EXTERNAL_TEXT_OF(previous.filename), error)
     }
 }
 
@@ -190,7 +191,7 @@ export const writeChangedNotes = (changedNotes, repositories, fileStorage) => {
 
             fileStorage.writeNoteFile(uri, note.filename, buildFileContent(note), undefined, existing)
         } catch (error) {
-            logError(`error writing renamed links in ${note.filename}`, error)
+            logError(LOG_MESSAGES.WRITING_RENAMED_LINKS_IN(note.filename), error)
             failed.push(note.path)
         }
     })

@@ -1,6 +1,5 @@
-import { LIST_INDENT, LIST_LINE_PATTERN } from '@/constants/markdown-patterns'
+import { LIST_INDENT, LIST_LINE_PATTERN, ORDERED_MARKER_PATTERN } from '@/constants/markdown-patterns'
 
-const ORDERED_PATTERN = /^\d+\.$/
 const NEW_CHECKBOX = '[ ] '
 
 export const getListEnterEdit = (text, offset) => {
@@ -17,7 +16,7 @@ export const getListEnterEdit = (text, offset) => {
         return { from: 0, to: text.length, insert, cursor: insert.length }
     }
 
-    const nextMarker = ORDERED_PATTERN.test(marker) ? `${parseInt(marker, 10) + 1}.` : marker
+    const nextMarker = ORDERED_MARKER_PATTERN.test(marker) ? `${parseInt(marker, 10) + 1}.` : marker
     const insert = `\n${indent}${nextMarker}${spacing}${checkbox ? NEW_CHECKBOX : ''}`
 
     return { from: offset, to: offset, insert, cursor: offset + insert.length }

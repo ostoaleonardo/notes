@@ -1,6 +1,7 @@
 import MarkdownIt from 'markdown-it'
 
 import { COMMENT_MARKER, COMMENT_OR_CODE_PATTERN } from '@/constants/extra-marks'
+import { MARKDOWN_IT_TOKENS } from '@/constants/markdown-it-tokens'
 import {
     CUSTOM_TASK_LINE_PATTERN,
     CUSTOM_TASK_MARKER_LENGTH,
@@ -22,8 +23,8 @@ const findTaskLines = (source) => {
     const tokens = md.parse(maskComments(source), {})
 
     return tokens.flatMap((token, index) => (
-        token.type === 'list_item_open'
-        && tokens[index + 1]?.type === 'paragraph_open'
+        token.type === MARKDOWN_IT_TOKENS.LIST_ITEM_OPEN
+        && tokens[index + 1]?.type === MARKDOWN_IT_TOKENS.PARAGRAPH_OPEN
         && TASK_CONTENT_PATTERN.test(tokens[index + 2]?.content ?? '')
             ? [token.map[0]]
             : []

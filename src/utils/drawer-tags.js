@@ -2,14 +2,14 @@ import { getNoteTags } from './note-tags'
 
 import { DEFAULT_TAG_SORT, TAG_PATH_SEPARATOR, TAG_SORTS } from '@/constants/tags'
 
-const compareByName = (a, b) => a.name.localeCompare(b.name)
+const compareTagsByName = (a, b) => a.name.localeCompare(b.name)
 const compareByCount = (a, b) => a.uses - b.uses
 
 const TAG_COMPARATORS = {
-    [TAG_SORTS.NAME_ASC]: compareByName,
-    [TAG_SORTS.NAME_DESC]: (a, b) => compareByName(b, a),
-    [TAG_SORTS.COUNT_DESC]: (a, b) => compareByCount(b, a) || compareByName(a, b),
-    [TAG_SORTS.COUNT_ASC]: (a, b) => compareByCount(a, b) || compareByName(a, b)
+    [TAG_SORTS.NAME_ASC]: compareTagsByName,
+    [TAG_SORTS.NAME_DESC]: (a, b) => compareTagsByName(b, a),
+    [TAG_SORTS.COUNT_DESC]: (a, b) => compareByCount(b, a) || compareTagsByName(a, b),
+    [TAG_SORTS.COUNT_ASC]: (a, b) => compareByCount(a, b) || compareTagsByName(a, b)
 }
 
 export const buildTagTree = (notes) => {
@@ -44,7 +44,7 @@ export const buildTagTree = (notes) => {
 }
 
 export const flattenTagTree = (tree, expanded, sort = DEFAULT_TAG_SORT, depth = 0) => (
-    [...tree.values()].sort(TAG_COMPARATORS[sort] || compareByName).flatMap((node) => {
+    [...tree.values()].sort(TAG_COMPARATORS[sort] || compareTagsByName).flatMap((node) => {
         const isExpanded = expanded.has(node.key)
         const row = {
             id: 'tag:' + node.key,

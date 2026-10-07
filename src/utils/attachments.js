@@ -54,7 +54,7 @@ export const collectImageUris = (directoryUri, listEntries, found = new Map()) =
     return found
 }
 
-export const getFileExtension = (filename) => (
+const getFileExtension = (filename) => (
     filename.slice(filename.lastIndexOf('.') + 1).toLowerCase()
 )
 

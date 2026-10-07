@@ -15,6 +15,7 @@ import {
     WRITE_ATTEMPTS
 } from '@/constants/file-storage'
 import { MIME_TYPES } from '@/constants/mime-types'
+import { LOG_MESSAGES } from '@/constants/log-messages'
 import { logError } from './log-error'
 
 const listEntries = (directoryUri) => new Directory(directoryUri).list()
@@ -175,7 +176,7 @@ const readJson = async (directoryUri, filename, fallback) => {
     try {
         return JSON.parse(text)
     } catch (error) {
-        logError(`error parsing json file ${filename}`, error)
+        logError(LOG_MESSAGES.PARSING_JSON_FILE(filename), error)
         writeNoteFile(directoryUri, filename + CORRUPT_FILE_SUFFIX, text, MIME_TYPES.JSON)
         return fallback
     }

@@ -1,5 +1,5 @@
-import { stripNoteExtension } from '@/utils/note-filename'
 import { TEMPLATE_FOLDER_KEY_PREFIX } from '@/constants/tabs'
+import { DRAWER_ITEM_TYPES } from '@/constants/drawer-views'
 
 const SEPARATOR = '/'
 
@@ -13,15 +13,13 @@ export const splitTemplatePath = (path) => {
         : { dir: path.slice(0, index), base: path.slice(index + 1) }
 }
 
-export const getTemplateName = (path) => stripNoteExtension(splitTemplatePath(path).base)
-
 const byName = (a, b) => a.localeCompare(b)
 
 export const flattenTemplateTree = (templates, folders, collapsedFolders, dir = '', depth = 0) => {
     const own = templates
         .filter((template) => template.folder === dir)
         .sort((a, b) => byName(a.name, b.name))
-        .map((template) => ({ type: 'template', id: 'template:' + template.filename, template, depth }))
+        .map((template) => ({ type: DRAWER_ITEM_TYPES.TEMPLATE, id: 'template:' + template.filename, template, depth }))
 
     const subfolders = folders
         .filter((path) => splitTemplatePath(path).dir === dir)
@@ -29,7 +27,7 @@ export const flattenTemplateTree = (templates, folders, collapsedFolders, dir = 
         .flatMap((path) => {
             const isCollapsed = collapsedFolders.has(TEMPLATE_FOLDER_KEY_PREFIX + path)
             const row = {
-                type: 'folder',
+                type: DRAWER_ITEM_TYPES.FOLDER,
                 id: TEMPLATE_FOLDER_KEY_PREFIX + path,
                 path,
                 name: splitTemplatePath(path).base,

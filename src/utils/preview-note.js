@@ -1,4 +1,4 @@
-import { PREVIEW_MAX_LINES, PREVIEW_MAX_CHARS } from '@/constants/note-preview'
+import { PREVIEW_MAX_LINES, PREVIEW_MAX_CHARS, PREVIEW_ELLIPSIS } from '@/constants/note-preview'
 import {
     PREVIEW_IMAGE_PATTERN,
     PREVIEW_LINK_PATTERN,
@@ -25,7 +25,7 @@ export const getPreviewNote = (note, maxLines = PREVIEW_MAX_LINES, maxChars = PR
         return `${key}${text}${key}`
     })
 
-    const limited = temp.length > maxChars ? temp.slice(0, maxChars) + '...' : temp
+    const limited = temp.length > maxChars ? temp.slice(0, maxChars) + PREVIEW_ELLIPSIS : temp
 
     let rendered = limited
     markdownByKey.forEach((toMarkdown, key) => {

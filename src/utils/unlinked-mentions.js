@@ -2,6 +2,7 @@ import { escapeHtml, findBacklinks, getAliases } from '@/utils/wiki-links'
 import { mapOutsideCode } from '@/utils/outside-code'
 
 import { WIKI_LINK_SCHEME } from '@/constants/wiki-links'
+import { REGEXP_SPECIAL_CHARS_PATTERN } from '@/constants/markdown-patterns'
 import {
     BACKLINKS_CLASS,
     BACKLINKS_TITLE_CLASS,
@@ -18,7 +19,7 @@ import {
     MENTION_EXISTING_LINKS_SOURCE
 } from '@/constants/unlinked-mentions'
 
-const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+const escapeRegExp = (text) => text.replace(REGEXP_SPECIAL_CHARS_PATTERN, '\\$&')
 
 const getMentionNames = (target) => (
     [...new Set([target.title, ...getAliases(target)].map((name) => (name || '').trim()).filter(Boolean))]

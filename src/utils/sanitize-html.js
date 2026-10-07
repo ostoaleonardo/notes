@@ -7,15 +7,19 @@ import {
     EXPORT_URL_ATTRIBUTES
 } from '@/constants/export'
 
-const TAG_PATTERN = /<(\/?)([a-zA-Z][a-zA-Z0-9-]*)((?:\s+[^\s"'<>/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'<>=`]+))?)*)\s*(\/?)>/g
-const ATTRIBUTE_PATTERN = /([^\s"'<>/=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'<>=`]+)))?/g
+import {
+    HTML_ATTRIBUTE_PATTERN,
+    HTML_ESCAPES,
+    HTML_LESS_THAN_PATTERN,
+    HTML_TAG_PATTERN
+} from '@/constants/html-sanitize'
 
-const escapeText = (text) => text.replace(/</g, '&lt;')
+const escapeText = (text) => text.replace(HTML_LESS_THAN_PATTERN, HTML_ESCAPES['<'])
 
 const buildAttributes = (source) => {
     const attributes = []
 
-    for (const match of source.matchAll(ATTRIBUTE_PATTERN)) {
+    for (const match of source.matchAll(HTML_ATTRIBUTE_PATTERN)) {
         const name = match[1].toLowerCase()
         if (!EXPORT_ALLOWED_ATTRIBUTES.includes(name)) continue
 
@@ -37,7 +41,7 @@ export const sanitizeHtml = (html) => {
     let result = ''
     let cursor = 0
 
-    for (const match of html.matchAll(TAG_PATTERN)) {
+    for (const match of html.matchAll(HTML_TAG_PATTERN)) {
         const [tag, closing, rawName, attributes, selfClosing] = match
         const name = rawName.toLowerCase()
 

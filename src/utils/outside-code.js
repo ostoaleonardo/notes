@@ -11,3 +11,12 @@ export const mapOutsideCode = (text, transform) => {
 
     return result + transform(text.slice(cursor))
 }
+
+export const getCodeRanges = (text) => [...text.matchAll(CODE_SEGMENT_PATTERN)].map((match) => [
+    match.index,
+    match.index + match[0].length
+])
+
+export const isInsideRanges = (ranges, position) => (
+    ranges.some(([from, to]) => position >= from && position < to)
+)

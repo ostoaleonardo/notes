@@ -1,24 +1,21 @@
-import { CODE_SEGMENT_PATTERN } from '@/constants/code-segments'
 import { HEADING_PATTERN } from '@/constants/headings'
 import { WIKI_LINK_ANCHOR_SEPARATOR, WIKI_LINK_PATTERN } from '@/constants/wiki-links'
 import { BLOCK_ANCHOR_PREFIX } from '@/constants/block-refs'
+import { WHITESPACE_RUN_PATTERN } from '@/constants/markdown-patterns'
 
-import { mapOutsideCode } from '@/utils/outside-code'
+import { getCodeRanges, isInsideRanges, mapOutsideCode } from '@/utils/outside-code'
 import { resolveWikiLink } from '@/utils/wiki-links'
 
-export const normalizeHeading = (text) => text.normalize('NFC').replace(/\s+/g, ' ').trim().toLowerCase()
+export const normalizeHeading = (text) => text.normalize('NFC').replace(WHITESPACE_RUN_PATTERN, ' ').trim().toLowerCase()
 
 export const findHeadings = (text) => {
-    const codeRanges = [...text.matchAll(CODE_SEGMENT_PATTERN)].map((match) => [
-        match.index,
-        match.index + match[0].length
-    ])
+    const codeRanges = getCodeRanges(text)
 
     const headings = []
     let from = 0
 
     for (const line of text.split('\n')) {
-        const inCode = codeRanges.some(([start, end]) => from >= start && from < end)
+        const inCode = isInsideRanges(codeRanges, from)
         const match = inCode ? null : HEADING_PATTERN.exec(line)
         if (match) headings.push({ level: match[1].length, text: match[2].trim(), from })
 

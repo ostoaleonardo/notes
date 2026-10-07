@@ -17,12 +17,9 @@ import { mapOutsideCode } from '@/utils/outside-code'
 import { buildFileLinkUrl, isFileLinkTarget } from '@/utils/file-links'
 
 import { FILE_LINK_CLASS } from '@/constants/file-links'
+import { HTML_ESCAPE_PATTERN, HTML_ESCAPES } from '@/constants/html-sanitize'
 
-export const escapeHtml = (text) => text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
+export const escapeHtml = (text) => text.replace(HTML_ESCAPE_PATTERN, (char) => HTML_ESCAPES[char])
 
 const parseWikiLinkText = (text) => {
     const trimmed = (text || '').trim()

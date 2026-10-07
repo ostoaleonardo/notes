@@ -8,9 +8,11 @@ import {
     BLOCK_PREVIEW_MAX_LENGTH,
     LIST_ITEM_PATTERN
 } from '@/constants/block-refs'
-import { CODE_SEGMENT_PATTERN } from '@/constants/code-segments'
+import { LEADING_WHITESPACE_PATTERN } from '@/constants/markdown-patterns'
 
-const getIndent = (line) => line.match(/^\s*/)[0].length
+import { getCodeRanges, isInsideRanges } from '@/utils/outside-code'
+
+const getIndent = (line) => line.match(LEADING_WHITESPACE_PATTERN)[0].length
 
 const stripTrailingId = (line) => line.replace(BLOCK_ID_TRAILING_PATTERN, '')
 
@@ -24,18 +26,13 @@ const toLines = (text) => {
     })
 }
 
-const isInside = (ranges, position) => ranges.some(([from, to]) => position >= from && position < to)
-
 const groupLines = (text) => {
-    const codeRanges = [...text.matchAll(CODE_SEGMENT_PATTERN)].map((match) => [
-        match.index,
-        match.index + match[0].length
-    ])
+    const codeRanges = getCodeRanges(text)
     const groups = []
     let current = null
 
     for (const line of toLines(text)) {
-        if (!line.text.trim() || isInside(codeRanges, line.start)) {
+        if (!line.text.trim() || isInsideRanges(codeRanges, line.start)) {
             current = null
             continue
         }

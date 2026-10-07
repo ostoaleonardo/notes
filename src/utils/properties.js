@@ -23,11 +23,11 @@ const inferStringType = (value) => {
 
 const pad = (number) => String(number).padStart(DATE_PART_WIDTH, '0')
 
-export const formatLocalDate = (date) => (
+const formatLocalDate = (date) => (
     `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
 )
 
-export const formatLocalDateTime = (date) => (
+const formatLocalDateTime = (date) => (
     `${formatLocalDate(date)}T${pad(date.getHours())}:${pad(date.getMinutes())}`
 )
 

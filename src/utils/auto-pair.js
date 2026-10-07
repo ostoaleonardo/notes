@@ -3,7 +3,7 @@ import {
     AUTO_PAIR_CLOSER_PATTERN,
     AUTO_PAIR_EXPAND_CHARS,
     AUTO_PAIR_WORD_PATTERN
-} from '../constants/markdown-patterns'
+} from '@/constants/markdown-patterns'
 
 export const getPairAction = ({ char, before, after, selected }) => {
     if (selected) return AUTO_PAIR_ACTIONS.WRAP

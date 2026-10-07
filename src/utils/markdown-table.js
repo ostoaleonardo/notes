@@ -4,10 +4,12 @@ import {
     TABLE_AXES,
     TABLE_BODY_START_LINE,
     TABLE_PIPE
-} from '../constants/table'
+} from '@/constants/table'
+
+import { TABLE_LEADING_PIPE_PATTERN, TABLE_TRAILING_PIPE_PATTERN, NEWLINE_PATTERN, TABLE_UNESCAPED_PIPE_PATTERN } from '@/constants/markdown-patterns'
 
 const splitRow = (line) => {
-    const text = line.trim().replace(/^\|/, '').replace(/(?<!\\)\|$/, '')
+    const text = line.trim().replace(TABLE_LEADING_PIPE_PATTERN, '').replace(TABLE_TRAILING_PIPE_PATTERN, '')
     const cells = []
     let current = ''
 
@@ -70,7 +72,7 @@ export const parseTable = (source) => {
     }
 }
 
-const escapeCell = (cell) => cell.replace(/\n/g, ' ').replace(/(?<!\\)\|/g, '\\|')
+const escapeCell = (cell) => cell.replace(NEWLINE_PATTERN, ' ').replace(TABLE_UNESCAPED_PIPE_PATTERN, '\\|')
 
 export const serializeTable = ({ rows, aligns }) => {
     const toLine = (cells) => `| ${cells.map(escapeCell).join(' | ')} |`

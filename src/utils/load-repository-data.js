@@ -17,6 +17,7 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { NOTE_READ_CONCURRENCY, TEMPLATES_FOLDER_NAME } from '@/constants/file-storage'
 import { DEFAULT_IMAGE_EXTENSION, IMAGE_EXTENSION_PATTERN } from '@/constants/image'
 import { NOTE_KEY_PREFIX } from '@/constants/note-key'
+import { LOG_MESSAGES } from '@/constants/log-messages'
 import { logError } from '@/utils/log-error'
 
 const getTitle = stripNoteExtension
@@ -42,7 +43,7 @@ const migrateLegacyImages = async (images, imagesUri, fileStorage) => {
             const file = await fileStorage.copyImageFile(uri, imagesUri, `${randomUUID()}.${extension}`)
             migrated.push(file.uri)
         } catch (error) {
-            logError('error migrating legacy note image', error)
+            logError(LOG_MESSAGES.ERROR_MIGRATING_LEGACY_NOTE_IMAGE, error)
             failed++
         }
     }

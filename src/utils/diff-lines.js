@@ -1,3 +1,5 @@
+import { DIFF_TYPES } from '@/constants/diff'
+
 export const diffLines = (oldText, newText) => (
     diffLineArrays((oldText || '').split('\n'), (newText || '').split('\n'))
 )
@@ -22,25 +24,25 @@ export const diffLineArrays = (oldLines, newLines) => {
 
     while (i < m && j < n) {
         if (oldLines[i] === newLines[j]) {
-            result.push({ type: 'unchanged', line: oldLines[i] })
+            result.push({ type: DIFF_TYPES.UNCHANGED, line: oldLines[i] })
             i++
             j++
         } else if (lcs[i + 1][j] >= lcs[i][j + 1]) {
-            result.push({ type: 'removed', line: oldLines[i] })
+            result.push({ type: DIFF_TYPES.REMOVED, line: oldLines[i] })
             i++
         } else {
-            result.push({ type: 'added', line: newLines[j] })
+            result.push({ type: DIFF_TYPES.ADDED, line: newLines[j] })
             j++
         }
     }
 
     while (i < m) {
-        result.push({ type: 'removed', line: oldLines[i] })
+        result.push({ type: DIFF_TYPES.REMOVED, line: oldLines[i] })
         i++
     }
 
     while (j < n) {
-        result.push({ type: 'added', line: newLines[j] })
+        result.push({ type: DIFF_TYPES.ADDED, line: newLines[j] })
         j++
     }
 

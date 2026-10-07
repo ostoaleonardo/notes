@@ -1,6 +1,7 @@
 import { diffLineArrays } from './diff-lines'
 
 import { VERSION_DIFF_MAX_CELLS } from '@/constants/default-values'
+import { DIFF_TYPES } from '@/constants/diff'
 
 const sharedPrefixLength = (a, b) => {
     let length = 0
@@ -24,7 +25,7 @@ const diffToHunks = (ops, offset) => {
     let current = null
 
     for (const op of ops) {
-        if (op.type === 'unchanged') {
+        if (op.type === DIFF_TYPES.UNCHANGED) {
             current = null
             position++
             continue
@@ -35,7 +36,7 @@ const diffToHunks = (ops, offset) => {
             hunks.push(current)
         }
 
-        if (op.type === 'removed') {
+        if (op.type === DIFF_TYPES.REMOVED) {
             current.remove++
             position++
         } else {
