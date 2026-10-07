@@ -24,7 +24,9 @@ describe('sanitize html', () => {
     })
 
     test('drops unsafe url schemes', () => {
-        const html = sanitizeHtml('<a href="javascript:alert(1)">x</a><img src="data:text/html;base64,AAA">')
+        const html = sanitizeHtml(
+            '<a href="javascript:alert(1)">x</a><img src="data:text/html;base64,AAA">'
+        )
 
         expect(html).toBe('<a>x</a><img>')
     })

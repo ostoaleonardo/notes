@@ -81,7 +81,7 @@ describe('navigation readiness', () => {
         })
     })
 
-    test('keeps showing something while switching repositories away from the active one', async () => {
+    test('keeps showing something while switching away from the active repository', async () => {
         const { result, rerender } = await renderHook(
             (props) => useNavigationReadiness(props),
             {

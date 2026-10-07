@@ -103,7 +103,10 @@ describe('property changes', () => {
         const properties = { author: 'Ana' }
 
         expect(
-            applyPropertyChange(properties, { action: PROPERTY_CHANGES.SET, key: 'tags', value: [] })
+            applyPropertyChange(
+                properties,
+                { action: PROPERTY_CHANGES.SET, key: 'tags', value: [] }
+            )
         ).toBe(properties)
         expect(
             applyPropertyChange(properties, { action: PROPERTY_CHANGES.SET, key: ' ', value: '' })
@@ -189,7 +192,9 @@ describe('property suggestions', () => {
         })
 
         expect(suggestions).toEqual(
-            KNOWN_PROPERTIES.filter(({ key, type }) => key !== 'author' && type !== PROPERTY_TYPES.TAGS)
+            KNOWN_PROPERTIES.filter(
+                ({ key, type }) => key !== 'author' && type !== PROPERTY_TYPES.TAGS
+            )
         )
     })
 })

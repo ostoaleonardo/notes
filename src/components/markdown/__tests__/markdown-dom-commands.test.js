@@ -308,7 +308,9 @@ describe('search', () => {
 
         runAction(view, 'search-previous')
 
-        expect(view.state.doc.sliceString(view.state.selection.main.from, view.state.selection.main.to)).toBe('foo')
+        expect(
+            view.state.doc.sliceString(view.state.selection.main.from, view.state.selection.main.to)
+        ).toBe('foo')
     })
 
     test('search-replace replaces only the next match', () => {

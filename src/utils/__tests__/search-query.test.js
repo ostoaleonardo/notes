@@ -1,11 +1,11 @@
 import {
-    filterNotes,
     parseSearchQuery,
     toggleTagQualifier,
     togglePinnedQualifier,
     toggleImageQualifier,
     toggleContentQualifier
 } from '../search-query'
+import { filterNotes } from '../search-filter'
 import { MOCK_SEARCH_NOTES } from '../__fixtures__/search-query'
 
 const parsedWith = (overrides) => ({
@@ -181,11 +181,15 @@ describe('toggle tag qualifier', () => {
     })
 
     test('adds a second tag qualifier alongside an existing one', () => {
-        expect(toggleTagQualifier('meeting tag:work', 'personal')).toBe('meeting tag:work tag:personal')
+        expect(toggleTagQualifier('meeting tag:work', 'personal')).toBe(
+            'meeting tag:work tag:personal'
+        )
     })
 
     test('removes only the toggled tag, keeping other selected tags', () => {
-        expect(toggleTagQualifier('meeting tag:work tag:personal', 'work')).toBe('meeting tag:personal')
+        expect(toggleTagQualifier('meeting tag:work tag:personal', 'work')).toBe(
+            'meeting tag:personal'
+        )
     })
 })
 
@@ -266,13 +270,21 @@ describe('filter notes', () => {
 
     test('matches note body text when in:content is set', () => {
         const options = { pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('in:content agenda'), options)
+        const result = filterNotes(
+            MOCK_SEARCH_NOTES,
+            parseSearchQuery('in:content agenda'),
+            options
+        )
         expect(result.map((note) => note.path)).toEqual(['note-1'])
     })
 
     test('still matches by title when in:content is set', () => {
         const options = { pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('in:content grocery'), options)
+        const result = filterNotes(
+            MOCK_SEARCH_NOTES,
+            parseSearchQuery('in:content grocery'),
+            options
+        )
         expect(result.map((note) => note.path)).toEqual(['note-2'])
     })
 
@@ -284,7 +296,11 @@ describe('filter notes', () => {
 
     test('filters by more than one tag qualifier, matching any of them', () => {
         const options = { pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('tag:work tag:personal'), options)
+        const result = filterNotes(
+            MOCK_SEARCH_NOTES,
+            parseSearchQuery('tag:work tag:personal'),
+            options
+        )
         expect(result.map((note) => note.path).sort()).toEqual(['note-1', 'note-2'])
     })
 
@@ -306,9 +322,11 @@ describe('filter notes', () => {
     })
 
     test('combines pinned, tag and text qualifiers', () => {
-        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('is:pinned tag:work standup'), {
-            pinned: new Set(['note-1'])
-        })
+        const result = filterNotes(
+            MOCK_SEARCH_NOTES,
+            parseSearchQuery('is:pinned tag:work standup'),
+            { pinned: new Set(['note-1']) }
+        )
         expect(result.map((note) => note.path)).toEqual(['note-1'])
     })
 
@@ -325,13 +343,21 @@ describe('filter notes', () => {
 
     test('filters by modified: date qualifier', () => {
         const options = { pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('modified:2026-01-05'), options)
+        const result = filterNotes(
+            MOCK_SEARCH_NOTES,
+            parseSearchQuery('modified:2026-01-05'),
+            options
+        )
         expect(result.map((note) => note.path)).toEqual(['note-1'])
     })
 
     test('filters by created: date qualifier', () => {
         const options = { pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('created:2026-01-02'), options)
+        const result = filterNotes(
+            MOCK_SEARCH_NOTES,
+            parseSearchQuery('created:2026-01-02'),
+            options
+        )
         expect(result.map((note) => note.path)).toEqual(['note-2'])
     })
 
@@ -341,7 +367,9 @@ describe('filter notes', () => {
             { path: 'r2::b.md', filename: 'b.md', title: 'b' },
             { path: 'r2::plan.md', filename: 'plan.md', title: 'plan' }
         ]
-        const notePaths = new Map([['r1::a.md', ''], ['r2::b.md', 'Work/Ideas'], ['r2::plan.md', 'Work/Ideas']])
+        const notePaths = new Map(
+            [['r1::a.md', ''], ['r2::b.md', 'Work/Ideas'], ['r2::plan.md', 'Work/Ideas']]
+        )
         const options = { pinned: new Set(), notePaths }
 
         test('filters by folder path', () => {

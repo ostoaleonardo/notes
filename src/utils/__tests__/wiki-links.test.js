@@ -16,7 +16,9 @@ describe('matching note', () => {
     test('renders a wiki link to the matching note path', () => {
         const result = resolveWikiLinks('See [[Meeting Notes]] for details', notes)
 
-        expect(result).toBe('See <a href="wikilink://note-1" class="wiki-link">Meeting Notes</a> for details')
+        expect(result).toBe(
+            'See <a href="wikilink://note-1" class="wiki-link">Meeting Notes</a> for details'
+        )
     })
 
     test('matches the title case-insensitively', () => {
@@ -43,7 +45,9 @@ describe('matching note', () => {
 
 describe('code spans and blocks', () => {
     test('leaves a wiki link inside inline code untouched', () => {
-        expect(resolveWikiLinks('use `[[Meeting Notes]]` here', notes)).toBe('use `[[Meeting Notes]]` here')
+        expect(resolveWikiLinks('use `[[Meeting Notes]]` here', notes)).toBe(
+            'use `[[Meeting Notes]]` here'
+        )
     })
 
     test('leaves a wiki link inside a fenced block untouched', () => {
@@ -55,7 +59,9 @@ describe('code spans and blocks', () => {
     test('still resolves wiki links next to code', () => {
         const result = resolveWikiLinks('`code` [[Meeting Notes]]', notes)
 
-        expect(result).toBe('`code` <a href="wikilink://note-1" class="wiki-link">Meeting Notes</a>')
+        expect(result).toBe(
+            '`code` <a href="wikilink://note-1" class="wiki-link">Meeting Notes</a>'
+        )
     })
 })
 
@@ -64,7 +70,8 @@ describe('missing note', () => {
         const result = resolveWikiLinks('[[Unknown Note]]', notes)
 
         expect(result).toBe(
-            '<a href="wikilink://missing//Unknown%20Note" class="wiki-link-broken">Unknown Note</a>'
+            '<a href="wikilink://missing//Unknown%20Note" ' +
+            'class="wiki-link-broken">Unknown Note</a>'
         )
     })
 
@@ -72,7 +79,8 @@ describe('missing note', () => {
         const result = resolveWikiLinks('[[one/Unknown Note]]', notes)
 
         expect(result).toBe(
-            '<a href="wikilink://missing/one/Unknown%20Note" class="wiki-link-broken">Unknown Note</a>'
+            '<a href="wikilink://missing/one/Unknown%20Note" ' +
+            'class="wiki-link-broken">Unknown Note</a>'
         )
     })
 })
@@ -82,18 +90,23 @@ describe('label escaping', () => {
         const result = resolveWikiLinks('[[Unknown Note|<b>bold</b>]]', notes)
 
         expect(result).toBe(
-            '<a href="wikilink://missing//Unknown%20Note" class="wiki-link-broken">&lt;b&gt;bold&lt;/b&gt;</a>'
+            '<a href="wikilink://missing//Unknown%20Note" ' +
+            'class="wiki-link-broken">&lt;b&gt;bold&lt;/b&gt;</a>'
         )
     })
 })
 
-describe('parseMissingWikiLinkTarget', () => {
+describe('missing wiki link target', () => {
     test('splits the encoded path and title back apart', () => {
-        expect(parseMissingWikiLinkTarget('one/Unknown%20Note')).toEqual({ path: 'one', title: 'Unknown Note' })
+        expect(parseMissingWikiLinkTarget('one/Unknown%20Note')).toEqual(
+            { path: 'one', title: 'Unknown Note' }
+        )
     })
 
     test('returns an empty path for a root-level missing note', () => {
-        expect(parseMissingWikiLinkTarget('/Unknown%20Note')).toEqual({ path: '', title: 'Unknown Note' })
+        expect(parseMissingWikiLinkTarget('/Unknown%20Note')).toEqual(
+            { path: '', title: 'Unknown Note' }
+        )
     })
 })
 
@@ -134,7 +147,7 @@ describe('duplicate titles across folders', () => {
     })
 })
 
-describe('findBacklinks', () => {
+describe('find backlinks', () => {
     const linkingNotes = [
         { path: 'target', title: 'Grocery List', note: 'Some content.' },
         { path: 'a', title: 'Recipe', note: 'See [[Grocery List]] for what to buy.' },
@@ -177,14 +190,20 @@ describe('findBacklinks', () => {
             ['sub-test', 'one']
         ])
 
-        expect(findBacklinks('sub-test', duplicateNotes, notePaths).map((n) => n.path)).toEqual(['linker'])
+        expect(findBacklinks('sub-test', duplicateNotes, notePaths).map((n) => n.path)).toEqual(
+            ['linker']
+        )
         expect(findBacklinks('root-test', duplicateNotes, notePaths)).toEqual([])
     })
 
     test('also counts markdown-format internal links', () => {
         const markdownLinkingNotes = [
             { path: 'target', title: 'Grocery List', note: '' },
-            { path: 'a', title: 'Recipe', note: 'See [Grocery List](wikilink://target) for what to buy.' },
+            {
+                path: 'a',
+                title: 'Recipe',
+                note: 'See [Grocery List](wikilink://target) for what to buy.'
+            },
             { path: 'b', title: 'Other', note: 'See [something](wikilink://other-path) instead.' }
         ]
 
@@ -194,7 +213,7 @@ describe('findBacklinks', () => {
     })
 })
 
-describe('renameWikiLinksForNote', () => {
+describe('rename wiki links for note', () => {
     test('renames a link that resolves to the target note', () => {
         const notesForRename = [{ path: 'target', title: 'Grocery List' }]
         const result = renameWikiLinksForNote(
@@ -221,7 +240,12 @@ describe('renameWikiLinksForNote', () => {
 
     test('matches case-insensitively', () => {
         const notesForRename = [{ path: 'target', title: 'Grocery List' }]
-        const result = renameWikiLinksForNote('[[grocery list]]', 'target', 'Shopping List', notesForRename)
+        const result = renameWikiLinksForNote(
+            '[[grocery list]]',
+            'target',
+            'Shopping List',
+            notesForRename
+        )
 
         expect(result).toBe('[[Shopping List]]')
     })
@@ -231,7 +255,12 @@ describe('renameWikiLinksForNote', () => {
             { path: 'target', title: 'Grocery List' },
             { path: 'other', title: 'Meeting Notes' }
         ]
-        const result = renameWikiLinksForNote('[[Meeting Notes]]', 'target', 'Shopping List', notesForRename)
+        const result = renameWikiLinksForNote(
+            '[[Meeting Notes]]',
+            'target',
+            'Shopping List',
+            notesForRename
+        )
 
         expect(result).toBe('[[Meeting Notes]]')
     })
@@ -300,7 +329,7 @@ describe('renameWikiLinksForNote', () => {
     })
 })
 
-describe('buildBacklinksHtml', () => {
+describe('backlinks html', () => {
     test('returns an empty string when there are no backlinks', () => {
         expect(buildBacklinksHtml([], 'Backlinks')).toBe('')
     })
@@ -314,23 +343,34 @@ describe('buildBacklinksHtml', () => {
     })
 
     test('escapes html characters in titles and the label', () => {
-        const result = buildBacklinksHtml([{ path: 'note-1', title: '<b>Bold</b>' }], '<i>Label</i>')
+        const result = buildBacklinksHtml(
+            [{ path: 'note-1', title: '<b>Bold</b>' }],
+            '<i>Label</i>'
+        )
 
         expect(result).not.toContain('<b>Bold</b>')
         expect(result).toContain('&lt;b&gt;Bold&lt;/b&gt;')
         expect(result).toContain('&lt;i&gt;Label&lt;/i&gt;')
     })
 
-    test('shows the folder path under the title, similar to Obsidian, when the note is not at the root', () => {
+    test('shows the folder path under the title when the note is not at the root', () => {
         const notePaths = new Map([['note-1', 'one']])
-        const result = buildBacklinksHtml([{ path: 'note-1', title: 'Test' }], 'Backlinks', notePaths)
+        const result = buildBacklinksHtml(
+            [{ path: 'note-1', title: 'Test' }],
+            'Backlinks',
+            notePaths
+        )
 
         expect(result).toContain('<span class="backlink-path">one</span>')
     })
 
     test('omits the path subtext for a root-level note', () => {
         const notePaths = new Map([['note-1', '']])
-        const result = buildBacklinksHtml([{ path: 'note-1', title: 'Test' }], 'Backlinks', notePaths)
+        const result = buildBacklinksHtml(
+            [{ path: 'note-1', title: 'Test' }],
+            'Backlinks',
+            notePaths
+        )
 
         expect(result).not.toContain('backlink-path')
     })
@@ -340,7 +380,9 @@ describe('heading and block anchors', () => {
     test('resolves a heading link to its note and shows the heading in the label', () => {
         const result = resolveWikiLinks('[[Meeting Notes#Agenda]]', notes)
 
-        expect(result).toBe('<a href="wikilink://note-1#Agenda" class="wiki-link">Meeting Notes &gt; Agenda</a>')
+        expect(result).toBe(
+            '<a href="wikilink://note-1#Agenda" class="wiki-link">Meeting Notes &gt; Agenda</a>'
+        )
     })
 
     test('resolves a block link to its note', () => {
@@ -383,7 +425,8 @@ describe('heading and block anchors', () => {
         const result = resolveWikiLinks('[[Unknown#Heading]]', notes)
 
         expect(result).toBe(
-            '<a href="wikilink://missing//Unknown" class="wiki-link-broken">Unknown &gt; Heading</a>'
+            '<a href="wikilink://missing//Unknown" ' +
+            'class="wiki-link-broken">Unknown &gt; Heading</a>'
         )
     })
 
@@ -444,7 +487,10 @@ describe('frontmatter aliases', () => {
     })
 
     test('accepts a single string alias', () => {
-        const target = resolveWikiLinkTarget('Daily', [{ path: 'a', title: 'A', properties: { aliases: 'Daily' } }])
+        const target = resolveWikiLinkTarget(
+            'Daily',
+            [{ path: 'a', title: 'A', properties: { aliases: 'Daily' } }]
+        )
 
         expect(target.path).toBe('a')
     })
@@ -462,7 +508,12 @@ describe('frontmatter aliases', () => {
     })
 
     test('does not rewrite links that matched through an alias when the title changes', () => {
-        const result = renameWikiLinksForNote('[[Sync]] and [[Meeting Notes]]', 'note-1', 'Retro', aliasNotes)
+        const result = renameWikiLinksForNote(
+            '[[Sync]] and [[Meeting Notes]]',
+            'note-1',
+            'Retro',
+            aliasNotes
+        )
 
         expect(result).toBe('[[Sync]] and [[Retro]]')
     })

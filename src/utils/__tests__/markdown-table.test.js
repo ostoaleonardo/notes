@@ -147,16 +147,26 @@ describe('apply table action', () => {
 })
 
 describe('move table item', () => {
-    const table = parseTable('| a | b | c |\n| --- | --- | --- |\n| 1 | 2 | 3 |\n| 4 | 5 | 6 |\n| 7 | 8 | 9 |')
+    const table = parseTable(
+        '| a | b | c |\n| --- | --- | --- |\n| 1 | 2 | 3 |\n| 4 | 5 | 6 |\n| 7 | 8 | 9 |'
+    )
 
     test('moves a row to any target index', () => {
-        expect(moveTableItem(table, 'row', 1, 3).rows.map((row) => row[0])).toEqual(['a', '4', '7', '1'])
-        expect(moveTableItem(table, 'row', 3, 1).rows.map((row) => row[0])).toEqual(['a', '7', '1', '4'])
+        expect(moveTableItem(table, 'row', 1, 3).rows.map((row) => row[0])).toEqual(
+            ['a', '4', '7', '1']
+        )
+        expect(moveTableItem(table, 'row', 3, 1).rows.map((row) => row[0])).toEqual(
+            ['a', '7', '1', '4']
+        )
     })
 
     test('moves the header row like any other row', () => {
-        expect(moveTableItem(table, 'row', 0, 2).rows.map((row) => row[0])).toEqual(['1', '4', 'a', '7'])
-        expect(moveTableItem(table, 'row', 3, 0).rows.map((row) => row[0])).toEqual(['7', 'a', '1', '4'])
+        expect(moveTableItem(table, 'row', 0, 2).rows.map((row) => row[0])).toEqual(
+            ['1', '4', 'a', '7']
+        )
+        expect(moveTableItem(table, 'row', 3, 0).rows.map((row) => row[0])).toEqual(
+            ['7', 'a', '1', '4']
+        )
     })
 
     test('moves a column to any target index', () => {

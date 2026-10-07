@@ -26,7 +26,8 @@ jest.mock('../../hooks/use-notes', () => ({
     useNotes: () => ({ saveNote: mockSaveNote, loading: false })
 }))
 
-const renderImportContext = () => renderHook(() => useContext(ImportContext), { wrapper: ImportProvider })
+const renderImportContext = () =>
+    renderHook(() => useContext(ImportContext), { wrapper: ImportProvider })
 
 beforeEach(() => {
     jest.clearAllMocks()

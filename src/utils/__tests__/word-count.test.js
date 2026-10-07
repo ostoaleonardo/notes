@@ -1,6 +1,6 @@
 import { countWords } from '../word-count'
 
-describe('countWords', () => {
+describe('count words', () => {
     test('counts words and characters for plain text', () => {
         expect(countWords('hello world')).toEqual({ words: 2, characters: 11 })
     })

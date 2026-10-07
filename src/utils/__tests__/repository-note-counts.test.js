@@ -1,14 +1,16 @@
 import { getRepositoryNoteCount, getRepositoryNoteCounts } from '../repository-note-counts'
 
-describe('getRepositoryNoteCount', () => {
+describe('repository note count', () => {
     test('returns the number of markdown files at the given uri', () => {
-        const listMarkdownFiles = (uri) => (uri === 'repo-a' ? [{ name: 'a.md' }, { name: 'b.md' }] : [])
+        const listMarkdownFiles = (uri) => (
+            uri === 'repo-a' ? [{ name: 'a.md' }, { name: 'b.md' }] : []
+        )
 
         expect(getRepositoryNoteCount('repo-a', listMarkdownFiles)).toBe(2)
     })
 })
 
-describe('getRepositoryNoteCounts', () => {
+describe('repository note counts', () => {
     test('maps each repository id to its note count', () => {
         const repositories = [
             { id: 'r1', uri: 'repo-a' },

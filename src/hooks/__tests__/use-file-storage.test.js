@@ -107,7 +107,7 @@ beforeEach(() => {
     registry.clear()
 })
 
-describe('listMarkdownFiles', () => {
+describe('list markdown files', () => {
     test('keeps only .md files and excludes json files', async () => {
         const { result } = await renderFileStorageHook()
 
@@ -125,7 +125,7 @@ describe('listMarkdownFiles', () => {
     })
 })
 
-describe('listSubdirectories', () => {
+describe('list subdirectories', () => {
     test('excludes dotfolders and reserved folder names', async () => {
         const { result } = await renderFileStorageHook()
 
@@ -143,7 +143,7 @@ describe('listSubdirectories', () => {
     })
 })
 
-describe('writeNoteFile', () => {
+describe('write note file', () => {
     test('replaces an existing file with the same name', async () => {
         const { result } = await renderFileStorageHook()
 
@@ -177,7 +177,9 @@ describe('writeNoteFile', () => {
 
         result.current.writeNoteFile('content://repo', 'note.md', 'fresh')
 
-        expect(registry.get('content://repo').children.map((entry) => entry.name)).toEqual(['note.md'])
+        expect(
+            registry.get('content://repo').children.map((entry) => entry.name)
+        ).toEqual(['note.md'])
         expect(registry.get('content://repo/note.md').content).toBe('fresh')
     })
 })
@@ -229,7 +231,7 @@ describe('verified write', () => {
     })
 })
 
-describe('renameNoteFile', () => {
+describe('rename note file', () => {
     test('moves the content under the new filename and deletes the old file', async () => {
         const { result } = await renderFileStorageHook()
 
@@ -254,7 +256,7 @@ describe('renameNoteFile', () => {
     })
 })
 
-describe('moveNoteFiles', () => {
+describe('move note files', () => {
     test('moves the note to the destination and removes the source', async () => {
         const { result } = await renderFileStorageHook()
 
@@ -262,7 +264,11 @@ describe('moveNoteFiles', () => {
         seedDirectory('content://bin', [])
         setFileContent('content://repo/note.md', 'hello')
 
-        const target = await result.current.moveNoteFiles('content://repo', 'note.md', 'content://bin')
+        const target = await result.current.moveNoteFiles(
+            'content://repo',
+            'note.md',
+            'content://bin'
+        )
 
         expect(target).toBe('note.md')
         expect(await new File('content://bin/note.md').text()).toBe('hello')
@@ -276,7 +282,11 @@ describe('moveNoteFiles', () => {
         seedDirectory('content://bin', [new File('content://bin/note.md')])
         setFileContent('content://repo/note.md', 'new')
 
-        const target = await result.current.moveNoteFiles('content://repo', 'note.md', 'content://bin')
+        const target = await result.current.moveNoteFiles(
+            'content://repo',
+            'note.md',
+            'content://bin'
+        )
 
         expect(target).toBe('note (2).md')
         expect(await new File('content://bin/note (2).md').text()).toBe('new')
@@ -292,7 +302,9 @@ describe('notes folder', () => {
         result.current.writeNotesJson('content://root', 'tags.json', ['work'])
 
         expect(registry.has('content://root/.notes')).toBe(true)
-        expect(await result.current.readNotesJson('content://root', 'tags.json', null)).toEqual(['work'])
+        expect(
+            await result.current.readNotesJson('content://root', 'tags.json', null)
+        ).toEqual(['work'])
     })
 
     test('returns the fallback without creating the folder when it does not exist', async () => {
@@ -300,7 +312,9 @@ describe('notes folder', () => {
 
         seedDirectory('content://root', [])
 
-        expect(await result.current.readNotesJson('content://root', 'tags.json', 'fallback')).toBe('fallback')
+        expect(
+            await result.current.readNotesJson('content://root', 'tags.json', 'fallback')
+        ).toBe('fallback')
         expect(registry.has('content://root/.notes')).toBe(false)
     })
 
@@ -323,7 +337,9 @@ describe('versions', () => {
         result.current.writeVersions('content://root', 'Work/note.md', [{ id: 'v1' }])
 
         expect(registry.has('content://root/.notes/Work%2Fnote.md.versions.json')).toBe(true)
-        expect(await result.current.readVersions('content://root', 'Work/note.md')).toEqual([{ id: 'v1' }])
+        expect(
+            await result.current.readVersions('content://root', 'Work/note.md')
+        ).toEqual([{ id: 'v1' }])
     })
 
     test('keeps notes with the same filename in different folders apart', async () => {
@@ -334,8 +350,12 @@ describe('versions', () => {
         result.current.writeVersions('content://root', 'a/note.md', [{ id: 'a' }])
         result.current.writeVersions('content://root', 'b/note.md', [{ id: 'b' }])
 
-        expect(await result.current.readVersions('content://root', 'a/note.md')).toEqual([{ id: 'a' }])
-        expect(await result.current.readVersions('content://root', 'b/note.md')).toEqual([{ id: 'b' }])
+        expect(
+            await result.current.readVersions('content://root', 'a/note.md')
+        ).toEqual([{ id: 'a' }])
+        expect(
+            await result.current.readVersions('content://root', 'b/note.md')
+        ).toEqual([{ id: 'b' }])
     })
 
     test('removes the versions of a deleted note', async () => {
@@ -358,7 +378,9 @@ describe('versions', () => {
         await result.current.renameVersions('content://root', 'old.md', 'new.md')
 
         expect(await result.current.readVersions('content://root', 'old.md')).toEqual([])
-        expect(await result.current.readVersions('content://root', 'new.md')).toEqual([{ id: 'v1' }])
+        expect(
+            await result.current.readVersions('content://root', 'new.md')
+        ).toEqual([{ id: 'v1' }])
     })
 
     test('does nothing when there are no versions to rename', async () => {
@@ -381,10 +403,16 @@ describe('versions', () => {
 
         await result.current.renameVersionsUnder('content://root', 'Work', 'Job')
 
-        expect(await result.current.readVersions('content://root', 'Job/a.md')).toEqual([{ id: 'a' }])
-        expect(await result.current.readVersions('content://root', 'Job/Q1/b.md')).toEqual([{ id: 'b' }])
+        expect(
+            await result.current.readVersions('content://root', 'Job/a.md')
+        ).toEqual([{ id: 'a' }])
+        expect(
+            await result.current.readVersions('content://root', 'Job/Q1/b.md')
+        ).toEqual([{ id: 'b' }])
         expect(await result.current.readVersions('content://root', 'Work/a.md')).toEqual([])
-        expect(await result.current.readVersions('content://root', 'Workshop/c.md')).toEqual([{ id: 'c' }])
+        expect(
+            await result.current.readVersions('content://root', 'Workshop/c.md')
+        ).toEqual([{ id: 'c' }])
     })
 
     test('deletes the versions of every note under a deleted folder', async () => {
@@ -399,7 +427,9 @@ describe('versions', () => {
 
         expect(await result.current.readVersions('content://root', 'Work/a.md')).toEqual([])
         expect(await result.current.readVersions('content://root', 'Work/Q1/b.md')).toEqual([])
-        expect(await result.current.readVersions('content://root', 'Workshop/c.md')).toEqual([{ id: 'c' }])
+        expect(
+            await result.current.readVersions('content://root', 'Workshop/c.md')
+        ).toEqual([{ id: 'c' }])
     })
 
     test('moves legacy versions files beside notes into the notes folder', async () => {
@@ -411,12 +441,14 @@ describe('versions', () => {
 
         await result.current.migrateLegacyVersions('content://root/Work', 'content://root', 'Work')
 
-        expect(await result.current.readVersions('content://root', 'Work/a.md')).toEqual([{ id: 'v1' }])
+        expect(
+            await result.current.readVersions('content://root', 'Work/a.md')
+        ).toEqual([{ id: 'v1' }])
         expect(result.current.findFile('content://root/Work', 'a.md.versions.json')).toBeUndefined()
     })
 })
 
-describe('clearRepository', () => {
+describe('clear repository', () => {
     test('deletes every note and its versions', async () => {
         const { result } = await renderFileStorageHook()
 
@@ -424,7 +456,10 @@ describe('clearRepository', () => {
         seedDirectory('content://root/Work', [new File('content://root/Work/a.md')])
         result.current.writeVersions('content://root', 'Work/a.md', [{ id: 'v1' }])
 
-        result.current.clearRepository('content://root/Work', { rootUri: 'content://root', folderPath: 'Work' })
+        result.current.clearRepository(
+            'content://root/Work',
+            { rootUri: 'content://root', folderPath: 'Work' }
+        )
 
         expect(result.current.findFile('content://root/Work', 'a.md')).toBeUndefined()
         expect(await result.current.readVersions('content://root', 'Work/a.md')).toEqual([])
@@ -514,7 +549,11 @@ describe('rename directory', () => {
         ])
         seedDirectory('content://repo/Old/sub', [new File('content://repo/Old/sub/b.md')])
 
-        const uri = await result.current.renameDirectory('content://repo/Old', 'content://repo', 'New')
+        const uri = await result.current.renameDirectory(
+            'content://repo/Old',
+            'content://repo',
+            'New'
+        )
 
         expect(uri).toBe('content://repo/New')
         expect(registry.has('content://repo/Old')).toBe(false)

@@ -113,7 +113,12 @@ describe('save note', () => {
             saved = await result.current.saveNote(MOCK_GROCERIES_DRAFT)
         })
 
-        expect(saved).toEqual({ path: 'repo-1::Groceries.md', filename: 'Groceries.md', createdAt: 1000, updatedAt: 2000 })
+        expect(saved).toEqual({
+            path: 'repo-1::Groceries.md',
+            filename: 'Groceries.md',
+            createdAt: 1000,
+            updatedAt: 2000
+        })
         expect(result.current.notes).toHaveLength(1)
         expect(result.current.notes[0].repositoryId).toBe('repo-1')
         expect(result.current.notes[0].path).toBe('repo-1::Groceries.md')
@@ -133,7 +138,7 @@ describe('save note', () => {
         expect(readFrontmatter('Groceries (2).md')).toEqual({})
     })
 
-    test('adds the note to state but does not touch the filesystem when the repository cannot be resolved', async () => {
+    test('adds the note to state only when the repository is unknown', async () => {
         const { result } = await renderNotesHook()
 
         await act(async () => {
@@ -172,7 +177,7 @@ describe('update note', () => {
         expect(mockFileStorage.findFile).not.toHaveBeenCalled()
     })
 
-    test('throws a duplicate-title error and does not touch the filesystem when another note already has that title', async () => {
+    test('throws a duplicate-title error without touching the filesystem', async () => {
         files.set('Old title.md', '---\ntags: []\n---\n\ncontent')
         files.set('Groceries.md', '---\ntags: []\n---\n\nmilk, eggs')
         const { result } = await renderNotesHook([MOCK_OLD_TITLE_NOTE, MOCK_GROCERIES_NOTE])
@@ -191,10 +196,18 @@ describe('update note', () => {
         let updated
 
         await act(async () => {
-            updated = await result.current.updateNote({ ...MOCK_OLD_TITLE_NOTE, title: 'New title' })
+            updated = await result.current.updateNote({
+                ...MOCK_OLD_TITLE_NOTE,
+                title: 'New title'
+            })
         })
 
-        expect(updated).toEqual({ path: 'repo-1::New title.md', filename: 'New title.md', createdAt: 1000, updatedAt: 2000 })
+        expect(updated).toEqual({
+            path: 'repo-1::New title.md',
+            filename: 'New title.md',
+            createdAt: 1000,
+            updatedAt: 2000
+        })
         expect(mockFileStorage.renameVersions).toHaveBeenCalledWith(
             MOCK_REPO_URI,
             'Old title.md',
@@ -205,7 +218,7 @@ describe('update note', () => {
         expect(result.current.notes[0].path).toBe('repo-1::New title.md')
     })
 
-    test('never touches wiki-links in other notes on its own, even when the title changes', async () => {
+    test('never touches wiki-links in other notes, even if the title changes', async () => {
         const linkingNote = {
             path: 'repo-1::Linker.md',
             filename: 'Linker.md',
@@ -226,7 +239,9 @@ describe('update note', () => {
         })
 
         expect(files.get('Linker.md')).toBe('See [[Old title]] for details')
-        expect(result.current.notes.find((n) => n.path === 'repo-1::Linker.md').note).toBe('See [[Old title]] for details')
+        expect(
+            result.current.notes.find((n) => n.path === 'repo-1::Linker.md').note
+        ).toBe('See [[Old title]] for details')
         expect(readFrontmatter('New title.md')).toEqual({})
     })
 
@@ -260,7 +275,9 @@ describe('update note', () => {
         })
 
         expect(readBody('Linker.md')).toBe('See [[New title]] for details')
-        expect(result.current.notes.find((n) => n.path === 'repo-1::Linker.md').note).toBe('See [[New title]] for details')
+        expect(
+            result.current.notes.find((n) => n.path === 'repo-1::Linker.md').note
+        ).toBe('See [[New title]] for details')
     })
 
     test('rewrites heading links in other notes when a heading is renamed', async () => {
@@ -318,7 +335,7 @@ describe('update note', () => {
         expect(mockFileStorage.writeNoteFile).not.toHaveBeenCalled()
     })
 
-    test('creates the note instead of silently discarding the edit when it is not in state yet', async () => {
+    test('creates the note instead of dropping an edit missing from state', async () => {
         const { result } = await renderNotesHook([])
         let saved
 
@@ -326,7 +343,12 @@ describe('update note', () => {
             saved = await result.current.updateNote(MOCK_UNSAVED_NOTE)
         })
 
-        expect(saved).toEqual({ path: 'repo-1::Untitled.md', filename: 'Untitled.md', createdAt: 1000, updatedAt: 2000 })
+        expect(saved).toEqual({
+            path: 'repo-1::Untitled.md',
+            filename: 'Untitled.md',
+            createdAt: 1000,
+            updatedAt: 2000
+        })
         expect(result.current.notes).toHaveLength(1)
         expect(result.current.notes[0].path).toBe('repo-1::Untitled.md')
         expect(readBody('Untitled.md')).toBe('quick note content')
@@ -371,7 +393,9 @@ describe('delete note', () => {
         const { result } = await renderNotesHook([MOCK_GROCERIES_NOTE])
 
         await act(async () => {
-            await expect(result.current.deleteNote('repo-1::Groceries.md')).rejects.toThrow('move failed')
+            await expect(
+                result.current.deleteNote('repo-1::Groceries.md')
+            ).rejects.toThrow('move failed')
         })
 
         expect(result.current.notes).toEqual([MOCK_GROCERIES_NOTE])
@@ -387,7 +411,7 @@ describe('delete note', () => {
         expect(mockFileStorage.deleteNoteFile).not.toHaveBeenCalled()
     })
 
-    test('removes the note from state but does not touch the filesystem when the repository cannot be resolved', async () => {
+    test('removes the note from state only when the repository is unknown', async () => {
         const { result } = await renderNotesHook([MOCK_ORPHANED_NOTE])
 
         await act(async () => {

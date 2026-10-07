@@ -31,7 +31,10 @@ describe('plan external sync', () => {
     })
 
     test('keeps the draft and flags the loss when the disk text cannot be merged', () => {
-        const draft = { ...base, note: 'the quick brown fox jumps over the lazy dog and runs far away' }
+        const draft = {
+            ...base,
+            note: 'the quick brown fox jumps over the lazy dog and runs far away'
+        }
         const incoming = { ...base, note: base.note.replace('gamma', 'GAMMA') }
 
         const plan = planExternalSync({ draft, original: base, incoming })
@@ -52,8 +55,12 @@ describe('plan external sync', () => {
         const withTags = { ...base, tags: ['a', 'b'] }
         const withProperties = { ...base, properties: { x: 2 } }
 
-        expect(planExternalSync({ draft: base, original: base, incoming: withTags }).draft).toBe(withTags)
-        expect(planExternalSync({ draft: base, original: base, incoming: withProperties }).draft).toBe(withProperties)
+        expect(planExternalSync({ draft: base, original: base, incoming: withTags }).draft).toBe(
+            withTags
+        )
+        expect(
+            planExternalSync({ draft: base, original: base, incoming: withProperties }).draft
+        ).toBe(withProperties)
     })
 
     test('returns null when nothing changed or the note is gone', () => {

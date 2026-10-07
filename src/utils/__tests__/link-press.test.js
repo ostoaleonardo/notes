@@ -47,6 +47,8 @@ describe('resolve link press', () => {
     })
 
     test('treats any other url as external', () => {
-        expect(resolveLinkPress('https://expo.dev')).toEqual({ type: 'external', url: 'https://expo.dev' })
+        expect(resolveLinkPress('https://expo.dev')).toEqual(
+            { type: 'external', url: 'https://expo.dev' }
+        )
     })
 })

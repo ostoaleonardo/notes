@@ -53,7 +53,10 @@ describe('title blur', () => {
         await act(async () => result.current.onTitleBlur())
 
         expect(mockWarnTitleLinks).toHaveBeenCalledWith('New')
-        expect(options.saveWithLinkCheck).toHaveBeenCalledWith({ title: 'New', note: 'body' }, 'Old')
+        expect(options.saveWithLinkCheck).toHaveBeenCalledWith(
+            { title: 'New', note: 'body' },
+            'Old'
+        )
         expect(options.titleRef.current).toBe('New')
     })
 
@@ -81,7 +84,10 @@ describe('commit result', () => {
         const onSaved = jest.fn()
         const options = buildOptions({
             onSaved,
-            saveWithLinkCheck: jest.fn(async () => ({ savedNote: { note: 'rewritten' }, path: 'p' }))
+            saveWithLinkCheck: jest.fn(async () => ({
+                savedNote: { note: 'rewritten' },
+                path: 'p'
+            }))
         })
         const { result } = await renderCommitHook(options)
 
@@ -128,7 +134,9 @@ describe('restore version', () => {
         const options = buildOptions()
         const { result } = await renderCommitHook(options)
 
-        await act(async () => result.current.onRestoreVersion({ title: ' Restored ', content: 'old body' }))
+        await act(async () =>
+            result.current.onRestoreVersion({ title: ' Restored ', content: 'old body' })
+        )
 
         expect(options.setTitle).toHaveBeenCalledWith(' Restored ')
         expect(options.setNote).toHaveBeenCalledWith('old body')

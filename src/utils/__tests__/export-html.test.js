@@ -1,6 +1,6 @@
 import { getExportMarkdown, getNoteAsHtml } from '../export-html'
 
-jest.mock('@/components/markdown/markdown-dom-theme', () => ({
+jest.mock('@/components/markdown/markdown-dom-preview-css', () => ({
     buildPreviewCss: () => ''
 }))
 
@@ -27,7 +27,10 @@ describe('note as html', () => {
     })
 
     test('turns wiki links into plain labels', () => {
-        const html = getNoteAsHtml({ title: 'T', note: '[[Alpha|first]] and [[Beta#Intro]]' }, { notes })
+        const html = getNoteAsHtml(
+            { title: 'T', note: '[[Alpha|first]] and [[Beta#Intro]]' },
+            { notes }
+        )
 
         expect(html).toContain('first and Beta &gt; Intro')
         expect(html).not.toContain('[[')
@@ -51,7 +54,10 @@ describe('note as html', () => {
     test('replaces local image urls with the resolved ones', () => {
         const html = getNoteAsHtml(
             { title: 'T', note: '![pic](content://vault/pic.png)' },
-            { notes, imageUrls: new Map([['content://vault/pic.png', 'data:image/png;base64,BBB']]) }
+            {
+                notes,
+                imageUrls: new Map([['content://vault/pic.png', 'data:image/png;base64,BBB']])
+            }
         )
 
         expect(html).toContain('![pic](data:image/png;base64,BBB)')

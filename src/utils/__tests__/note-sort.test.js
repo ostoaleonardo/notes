@@ -15,23 +15,33 @@ describe('sort notes', () => {
     })
 
     test('orders by name descending', () => {
-        expect(titles(sortNotes(MOCK_NOTES, NOTE_SORTS.NAME_DESC))).toEqual(['Cherry', 'Banana', 'Apple'])
+        expect(titles(sortNotes(MOCK_NOTES, NOTE_SORTS.NAME_DESC))).toEqual(
+            ['Cherry', 'Banana', 'Apple']
+        )
     })
 
     test('orders by most recently modified first', () => {
-        expect(titles(sortNotes(MOCK_NOTES, NOTE_SORTS.MODIFIED_DESC))).toEqual(['Cherry', 'Banana', 'Apple'])
+        expect(titles(sortNotes(MOCK_NOTES, NOTE_SORTS.MODIFIED_DESC))).toEqual(
+            ['Cherry', 'Banana', 'Apple']
+        )
     })
 
     test('falls back to the creation date for never modified notes', () => {
-        expect(titles(sortNotes(MOCK_NOTES, NOTE_SORTS.MODIFIED_ASC))).toEqual(['Apple', 'Banana', 'Cherry'])
+        expect(titles(sortNotes(MOCK_NOTES, NOTE_SORTS.MODIFIED_ASC))).toEqual(
+            ['Apple', 'Banana', 'Cherry']
+        )
     })
 
     test('orders by newest created first', () => {
-        expect(titles(sortNotes(MOCK_NOTES, NOTE_SORTS.CREATED_DESC))).toEqual(['Banana', 'Cherry', 'Apple'])
+        expect(titles(sortNotes(MOCK_NOTES, NOTE_SORTS.CREATED_DESC))).toEqual(
+            ['Banana', 'Cherry', 'Apple']
+        )
     })
 
     test('orders by oldest created first', () => {
-        expect(titles(sortNotes(MOCK_NOTES, NOTE_SORTS.CREATED_ASC))).toEqual(['Apple', 'Cherry', 'Banana'])
+        expect(titles(sortNotes(MOCK_NOTES, NOTE_SORTS.CREATED_ASC))).toEqual(
+            ['Apple', 'Cherry', 'Banana']
+        )
     })
 
     test('breaks ties by name', () => {

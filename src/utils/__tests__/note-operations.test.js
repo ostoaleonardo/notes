@@ -25,7 +25,9 @@ const createFakeStorage = (initialFiles = {}) => {
             name,
             delete: () => files.delete(name)
         }))),
-        getExistingFile: jest.fn((fileUri) => (fileUri === 'file:///repo/Groceries.md' ? HANDLE : undefined)),
+        getExistingFile: jest.fn(
+            (fileUri) => (fileUri === 'file:///repo/Groceries.md' ? HANDLE : undefined)
+        ),
         writeNoteFile: (_uri, filename, content) => {
             files.set(filename, content)
             return { creationTime: 10, lastModified: 20 }
@@ -88,7 +90,11 @@ describe('create note', () => {
 })
 
 describe('plan note update', () => {
-    const previous = { ...createNoteDraft(), path: 'repo-1::Groceries.md', filename: 'Groceries.md' }
+    const previous = {
+        ...createNoteDraft(),
+        path: 'repo-1::Groceries.md',
+        filename: 'Groceries.md'
+    }
 
     test('keeps the filename when the title is unchanged', () => {
         const storage = createFakeStorage({ 'Groceries.md': 'x' })
@@ -125,7 +131,10 @@ describe('plan note update', () => {
         const storage = createFakeStorage({ 'Groceries.md': 'x' })
         const located = { ...previous, fileUri: HANDLE.uri }
 
-        planNoteUpdate({ note: { ...located, title: 'Shopping' }, previous: located, uri: REPO_URI }, storage)
+        planNoteUpdate(
+            { note: { ...located, title: 'Shopping' }, previous: located, uri: REPO_URI },
+            storage
+        )
 
         expect(storage.listMarkdownFiles).toHaveBeenCalledTimes(1)
     })
@@ -153,7 +162,11 @@ describe('plan note update', () => {
 })
 
 describe('persist note update', () => {
-    const previous = { ...createNoteDraft(), path: 'repo-1::Groceries.md', filename: 'Groceries.md' }
+    const previous = {
+        ...createNoteDraft(),
+        path: 'repo-1::Groceries.md',
+        filename: 'Groceries.md'
+    }
 
     test('renames the file and its versions before writing the new content', async () => {
         const storage = createFakeStorage({ 'Groceries.md': 'x' })
@@ -331,7 +344,16 @@ describe('write changed notes', () => {
         storage.writeNoteFile = (_uri, filename) => writes.push(filename)
 
         const failed = writeChangedNotes(
-            [{ path: 'p/A', repositoryId: 'repo-1', filename: 'A.md', fileUri: 'u', updatedAt: 1, note: 'a' }],
+            [
+                {
+                    path: 'p/A',
+                    repositoryId: 'repo-1',
+                    filename: 'A.md',
+                    fileUri: 'u',
+                    updatedAt: 1,
+                    note: 'a'
+                }
+            ],
             REPOSITORIES,
             storage
         )

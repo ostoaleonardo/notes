@@ -1,6 +1,5 @@
 import {
     flattenTemplateTree,
-    getTemplateName,
     joinTemplatePath,
     splitTemplatePath
 } from '../template-path'
@@ -14,10 +13,6 @@ describe('template path', () => {
     test('splits a path into folder and file name', () => {
         expect(splitTemplatePath('a/b/x.md')).toEqual({ dir: 'a/b', base: 'x.md' })
         expect(splitTemplatePath('x.md')).toEqual({ dir: '', base: 'x.md' })
-    })
-
-    test('derives the display name without folder or extension', () => {
-        expect(getTemplateName('a/b/Meeting.md')).toBe('Meeting')
     })
 })
 

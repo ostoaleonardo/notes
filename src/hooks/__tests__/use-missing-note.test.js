@@ -60,6 +60,9 @@ describe('missing note', () => {
         await act(async () => result.current.setMissing({ path: 'Nowhere', title: 'Ideas' }))
         await act(async () => result.current.create())
 
-        expect(mockSaveNote).toHaveBeenCalledWith(expect.objectContaining({ title: 'Ideas' }), undefined)
+        expect(mockSaveNote).toHaveBeenCalledWith(
+            expect.objectContaining({ title: 'Ideas' }),
+            undefined
+        )
     })
 })

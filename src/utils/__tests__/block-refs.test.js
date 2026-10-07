@@ -100,13 +100,17 @@ describe('add block id', () => {
     test('appends the id to the chosen paragraph', () => {
         const text = 'First\n\nSecond'
 
-        expect(addBlockId(text, { index: 1, preview: 'Second' }, 'abc123')).toBe('First\n\nSecond ^abc123')
+        expect(addBlockId(text, { index: 1, preview: 'Second' }, 'abc123')).toBe(
+            'First\n\nSecond ^abc123'
+        )
     })
 
     test('appends the id to the chosen list item', () => {
         const text = '- one\n- two\n- three'
 
-        expect(addBlockId(text, { index: 1, preview: '- two' }, 'x1')).toBe('- one\n- two ^x1\n- three')
+        expect(addBlockId(text, { index: 1, preview: '- two' }, 'x1')).toBe(
+            '- one\n- two ^x1\n- three'
+        )
     })
 
     test('makes the new block discoverable by its id', () => {

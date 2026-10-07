@@ -1,6 +1,6 @@
 import { isAccentAllowed, revertAccentOnProRevoke, toggleAccentSelection } from '../accent'
 
-describe('isAccentAllowed', () => {
+describe('accent permission', () => {
     test('allows any accent for a pro user', () => {
         expect(isAccentAllowed('red', true)).toBe(true)
     })
@@ -14,7 +14,7 @@ describe('isAccentAllowed', () => {
     })
 })
 
-describe('toggleAccentSelection', () => {
+describe('accent selection toggle', () => {
     test('deselects the currently active color back to the free accent', () => {
         expect(toggleAccentSelection('red', 'red')).toBe('white')
     })
@@ -24,7 +24,7 @@ describe('toggleAccentSelection', () => {
     })
 })
 
-describe('revertAccentOnProRevoke', () => {
+describe('accent revert on pro revoke', () => {
     test('resets a paid accent to the free one when pro is revoked', () => {
         expect(revertAccentOnProRevoke(true, false, 'red')).toBe('white')
     })

@@ -41,8 +41,14 @@ describe('merge note changes', () => {
             ...base,
             note: 'alpha beta gamma delta epsilon zeta eta theta iota kappa lambda'
         }
-        const mine = { ...longBase, note: 'the quick brown fox jumps over the lazy dog and runs far away' }
-        const theirs = { ...longBase, note: 'alpha beta GAMMA delta epsilon zeta eta theta iota kappa lambda' }
+        const mine = {
+            ...longBase,
+            note: 'the quick brown fox jumps over the lazy dog and runs far away'
+        }
+        const theirs = {
+            ...longBase,
+            note: 'alpha beta GAMMA delta epsilon zeta eta theta iota kappa lambda'
+        }
 
         const { merged, lostExternalText } = mergeNoteChanges({ base: longBase, mine, theirs })
 

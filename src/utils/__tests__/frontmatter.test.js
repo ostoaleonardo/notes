@@ -7,9 +7,10 @@ import {
     readFrontmatterTags
 } from '../frontmatter'
 
-describe('parseFrontmatter', () => {
+describe('parse frontmatter', () => {
     test('extracts tags and dates from a leading frontmatter block', () => {
-        const content = '---\ntags:\n  - one\n  - two\ncreatedAt: 100\nupdatedAt: 200\n---\n\nHello world'
+        const content = '---\ntags:\n  - one\n  - two\n'
+            + 'createdAt: 100\nupdatedAt: 200\n---\n\nHello world'
 
         const { frontmatter, body, error, hasBlock } = parseFrontmatter(content)
 
@@ -64,7 +65,7 @@ describe('parseFrontmatter', () => {
         expect(parseFrontmatter(content).hasBlock).toBe(false)
     })
 
-    test('treats two adjacent dash fences with no blank line as having no frontmatter block', () => {
+    test('treats two adjacent dash fences as having no frontmatter block', () => {
         const content = '---\n---\n\nBody text'
 
         const { frontmatter, body, error, hasBlock } = parseFrontmatter(content)
@@ -86,7 +87,7 @@ describe('parseFrontmatter', () => {
         expect(hasBlock).toBe(true)
     })
 
-    test('flags invalid yaml in the frontmatter block as an error and preserves the raw text', () => {
+    test('flags invalid yaml in the frontmatter as an error and keeps the raw text', () => {
         const content = '---\ntags: [unterminated\n---\n\nBody text'
 
         const { frontmatter, body, error, hasBlock, rawFrontmatter } = parseFrontmatter(content)
@@ -107,7 +108,7 @@ describe('parseFrontmatter', () => {
     })
 })
 
-describe('buildNoteFileContent', () => {
+describe('build note file content', () => {
     test('serializes tags as a yaml block list', () => {
         const content = buildNoteFileContent({ tags: ['personal', 'work'] }, 'Body')
 

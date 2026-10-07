@@ -1,7 +1,7 @@
 import { findProPurchase, isProPurchase } from '../iap'
 import { PRO } from '@/constants/iap'
 
-describe('isProPurchase', () => {
+describe('pro purchase check', () => {
     test('returns true for a purchased pro entitlement', () => {
         expect(isProPurchase({ productId: PRO, purchaseState: 'purchased' })).toBe(true)
     })
@@ -19,7 +19,7 @@ describe('isProPurchase', () => {
     })
 })
 
-describe('findProPurchase', () => {
+describe('find pro purchase', () => {
     test('returns the matching purchase when present', () => {
         const purchase = { productId: PRO, purchaseState: 'purchased', transactionId: 'tx-1' }
         expect(findProPurchase([purchase])).toBe(purchase)

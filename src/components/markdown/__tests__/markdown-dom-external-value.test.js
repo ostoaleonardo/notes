@@ -24,6 +24,8 @@ describe('apply external editor value', () => {
     })
 
     test('ignores a value the document already holds', () => {
-        expect(shouldApplyExternalValue(build({ value: 'typed', lastEmitted: 'other' }))).toBe(false)
+        expect(
+            shouldApplyExternalValue(build({ value: 'typed', lastEmitted: 'other' }))
+        ).toBe(false)
     })
 })

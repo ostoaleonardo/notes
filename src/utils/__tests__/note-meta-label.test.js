@@ -1,9 +1,11 @@
 import { buildNoteMetaLabel } from '../note-meta-label'
 import { getFormattedDate } from '../formatted-date'
 
-describe('buildNoteMetaLabel', () => {
+describe('note meta label', () => {
     test('returns empty string when showing the date but there is no timestamp', () => {
-        expect(buildNoteMetaLabel({ showDate: true, timestamp: '', currentLanguage: 'en', words: 0 })).toBe('')
+        expect(
+            buildNoteMetaLabel({ showDate: true, timestamp: '', currentLanguage: 'en', words: 0 })
+        ).toBe('')
     })
 
     test('formats the label with the given timestamp and language', () => {

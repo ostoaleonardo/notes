@@ -50,7 +50,11 @@ describe('find unlinked mentions', () => {
 
     test('matches names with accents at word boundaries', () => {
         const accented = { path: 'target', title: 'Canción' }
-        const notes = [accented, buildNote('a', 'La canción favorita'), buildNote('b', 'Canciones')]
+        const notes = [
+            accented,
+            buildNote('a', 'La canción favorita'),
+            buildNote('b', 'Canciones')
+        ]
 
         expect(findUnlinkedMentions(accented, notes).map((note) => note.path)).toEqual(['a'])
     })

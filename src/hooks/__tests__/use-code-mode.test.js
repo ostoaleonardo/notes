@@ -39,7 +39,9 @@ describe('enter code mode', () => {
 
         await act(async () => result.current.enter())
 
-        expect(result.current.codeBuffer).toBe('---\naliases:\n  - Alias\ntags:\n  - one\n---\n\nBody')
+        expect(result.current.codeBuffer).toBe(
+            '---\naliases:\n  - Alias\ntags:\n  - one\n---\n\nBody'
+        )
     })
 
     test('keeps the yaml comments of the raw block in the buffer', async () => {
@@ -75,7 +77,9 @@ describe('edit in code mode', () => {
     test('propagates the extra properties to the note state', async () => {
         const { result, props } = await setup()
 
-        await act(async () => result.current.onChange('---\naliases: [Alias]\ntags: [two]\n---\n\nEdited'))
+        await act(async () =>
+            result.current.onChange('---\naliases: [Alias]\ntags: [two]\n---\n\nEdited')
+        )
 
         expect(props.setProperties).toHaveBeenCalledWith({ aliases: ['Alias'] })
     })

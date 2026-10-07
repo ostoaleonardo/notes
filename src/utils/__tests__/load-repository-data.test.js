@@ -11,7 +11,7 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { NOTE_KEY_PREFIX } from '@/constants/note-key'
 import {
     NOTE_FILE_EXTENSION,
-    NOTES_FOLDER_NAME,
+    NOTES_FOLDER_NAME
 } from '@/constants/file-storage'
 
 jest.mock('expo-crypto', () => ({ randomUUID: jest.fn() }))
@@ -42,13 +42,20 @@ const createFakeFileStorage = (deviceCache = new Map()) => {
         if (raw === undefined) return fallback
         try { return JSON.parse(raw) } catch { return fallback }
     }
-    const writeJson = (uri, filename, value) => { filesFor(uri).set(filename, JSON.stringify(value)) }
+    const writeJson = (uri, filename, value) => {
+        filesFor(uri).set(filename, JSON.stringify(value))
+    }
     const notesUri = (uri) => `${uri}/${NOTES_FOLDER_NAME}`
 
     return {
         listMarkdownFiles: (uri) => Array.from(filesFor(uri).entries())
             .filter(([name]) => name.toLowerCase().endsWith(NOTE_FILE_EXTENSION))
-            .map(([name, content]) => ({ name, text: async () => content, creationTime: 0, lastModified: 0 })),
+            .map(([name, content]) => ({
+                name,
+                text: async () => content,
+                creationTime: 0,
+                lastModified: 0
+            })),
         writeNoteFile: (uri, filename, content) => { filesFor(uri).set(filename, content) },
         deleteNoteFile: (uri, filename) => { filesFor(uri).delete(filename) },
         readJson,
@@ -68,8 +75,6 @@ const createFakeFileStorage = (deviceCache = new Map()) => {
         listFiles: (uri) => Array.from(filesFor(uri).keys())
     }
 }
-
-// --- Fixtures ---
 
 const LEGACY_DIR = path.join(__dirname, '..', '..', '..', 'legacy')
 const LEGACY_NOTES_PATH = path.join(LEGACY_DIR, 'notes.json')
@@ -95,9 +100,6 @@ beforeEach(() => {
     randomUUID.mockImplementation(() => `uuid-${++counter}`)
 })
 
-// --- Tests ---
-
-// migration
 describeLegacyFixtures('legacy AsyncStorage migration', () => {
     test('migrates every legacy note into a .md file with matching content', async () => {
         const storage = seedLegacyStorage()
@@ -122,12 +124,17 @@ describeLegacyFixtures('legacy AsyncStorage migration', () => {
         expect(await getLegacyNoteKeys(storage)).toHaveLength(0)
     })
 
-    test('is idempotent: reloading after migration does not duplicate or re-migrate notes', async () => {
+    test('is idempotent: reloading after migration does not re-migrate notes', async () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage()
 
         await loadRepositoryData([repository], repository, storage, fileStorage)
-        const { notes: secondLoad } = await loadRepositoryData([repository], repository, storage, fileStorage)
+        const { notes: secondLoad } = await loadRepositoryData(
+            [repository],
+            repository,
+            storage,
+            fileStorage
+        )
 
         expect(secondLoad).toHaveLength(legacyNotes.length)
     })
@@ -190,7 +197,12 @@ describe('legacy blob note content', () => {
         })
         const fileStorage = createFakeFileStorage(deviceCache)
 
-        const result = await loadRepositoryData([rootRepository], rootRepository, storage, fileStorage)
+        const result = await loadRepositoryData(
+            [rootRepository],
+            rootRepository,
+            storage,
+            fileStorage
+        )
 
         return result.notes[0].note
     }
@@ -231,7 +243,6 @@ describe('legacy blob note content', () => {
     })
 })
 
-// images
 describeLegacyFixtures('legacy image migration', () => {
     test('copies a legacy cache-referenced image into the repository images/ folder', async () => {
         const legacyNoteWithImage = legacyNotes.find((note) => note.images.length > 0)
@@ -249,14 +260,19 @@ describeLegacyFixtures('legacy image migration', () => {
         expect(copiedFiles).toHaveLength(expectedCount)
     })
 
-    test('drops a legacy image whose cache file was already purged by the OS, without throwing', async () => {
+    test('drops a legacy image whose cache file was purged, without throwing', async () => {
         const legacyNoteWithImage = legacyNotes.find((note) => note.images.length > 0)
         expect(legacyNoteWithImage).toBeDefined()
 
         const storage = seedLegacyStorage()
-        const fileStorage = createFakeFileStorage(new Map()) // nothing "survived" on device
+        const fileStorage = createFakeFileStorage(new Map())
 
-        const { migration } = await loadRepositoryData([repository], repository, storage, fileStorage)
+        const { migration } = await loadRepositoryData(
+            [repository],
+            repository,
+            storage,
+            fileStorage
+        )
 
         const copiedFiles = fileStorage.listFiles(`${REPO_URI}/images`)
         expect(copiedFiles).toHaveLength(0)
@@ -272,12 +288,17 @@ describeLegacyFixtures('legacy image migration', () => {
         })
         const fileStorage = createFakeFileStorage(new Map())
 
-        const { migration } = await loadRepositoryData([repository], repository, storage, fileStorage)
+        const { migration } = await loadRepositoryData(
+            [repository],
+            repository,
+            storage,
+            fileStorage
+        )
 
         expect(migration.renamedNotes).toBe(1)
     })
 
-    test('migrates every legacy note image, dropping only the ones missing from the device', async () => {
+    test('migrates every legacy image, dropping only the ones missing on device', async () => {
         const notesWithImages = legacyNotes.filter((note) => note.images.length > 0)
         expect(notesWithImages.length).toBeGreaterThan(0)
 
@@ -293,8 +314,6 @@ describeLegacyFixtures('legacy image migration', () => {
     })
 })
 
-
-// steady state
 describe('steady state (no legacy data)', () => {
     test('adopts a foreign .md file with no frontmatter, using default values', async () => {
         const storage = createFakeStorage()
@@ -320,11 +339,13 @@ describe('steady state (no legacy data)', () => {
         expect(notes[0].invalidFrontmatter).toBe('tags: [unterminated')
         expect(notes[0].note).toBe('content')
 
-        const noteFile = fileStorage.listMarkdownFiles(REPO_URI).find((file) => file.name === 'Note.md')
+        const noteFile = fileStorage.listMarkdownFiles(REPO_URI).find(
+            (file) => file.name === 'Note.md'
+        )
         expect(await noteFile.text()).toBe(rawContent)
     })
 
-    test('keeps foreign properties and reads comma separated tags from an obsidian note', async () => {
+    test('keeps foreign properties and reads comma separated obsidian tags', async () => {
         const storage = createFakeStorage()
         const fileStorage = createFakeFileStorage()
         const rawContent = '---\naliases:\n  - Alias\ntags: one, two\n---\n\ncontent'
@@ -365,7 +386,6 @@ describe('legacy versions migration', () => {
     })
 })
 
-// tree-wide loading
 describe('interrupted migration', () => {
     test('resumes without duplicating notes that were already migrated', async () => {
         const storage = createFakeStorage({
@@ -392,7 +412,7 @@ describe('interrupted migration', () => {
 })
 
 describe('tree-wide loading', () => {
-    test('merges notes from every folder in the tree, each stamped with its own repositoryId', async () => {
+    test('merges notes from every folder, each stamped with its repositoryId', async () => {
         const storage = createFakeStorage()
         const fileStorage = createFakeFileStorage()
 

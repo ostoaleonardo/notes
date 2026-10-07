@@ -53,7 +53,9 @@ describe('list enter edit', () => {
 describe('list backspace edit', () => {
     test('removes the marker when the cursor is right after it', () => {
         expect(getListBackspaceEdit('- a', 2)).toEqual({ from: 0, to: 2, insert: '', cursor: 0 })
-        expect(getListBackspaceEdit('  - [ ] a', 8)).toEqual({ from: 2, to: 8, insert: '', cursor: 2 })
+        expect(getListBackspaceEdit('  - [ ] a', 8)).toEqual(
+            { from: 2, to: 8, insert: '', cursor: 2 }
+        )
     })
 
     test('does nothing elsewhere', () => {

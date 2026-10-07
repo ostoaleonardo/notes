@@ -19,7 +19,11 @@ describe('build repository tree', () => {
     })
 
     test('applies the given sort to notes within a folder', () => {
-        const tree = buildRepositoryTree(MOCK_REPOSITORY_LIST, MOCK_NOTES_BY_REPOSITORY, NOTE_SORTS.NAME_DESC)
+        const tree = buildRepositoryTree(
+            MOCK_REPOSITORY_LIST,
+            MOCK_NOTES_BY_REPOSITORY,
+            NOTE_SORTS.NAME_DESC
+        )
 
         expect(tree[0].notes.map((note) => note.title)).toEqual(['Zebra', 'Apple'])
     })

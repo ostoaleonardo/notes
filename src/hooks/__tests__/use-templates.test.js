@@ -58,7 +58,9 @@ describe('add template', () => {
     test('writes a new template file and returns its filename', async () => {
         const { result } = await renderTemplatesHook()
 
-        const filename = await act(async () => result.current.addTemplate('Meeting notes', '# {{title}}'))
+        const filename = await act(async () =>
+            result.current.addTemplate('Meeting notes', '# {{title}}')
+        )
 
         expect(filename).toBe('Meeting notes.md')
         expect(files.get('Meeting notes.md')).toBe('# {{title}}')
@@ -93,7 +95,9 @@ describe('list templates without content', () => {
         mockFileStorage.listMarkdownFiles.mockImplementation(() => [{ name: 'A.md', text }])
         const { result } = await renderTemplatesHook()
 
-        const templates = await act(async () => result.current.listTemplates({ withContent: false }))
+        const templates = await act(async () =>
+            result.current.listTemplates({ withContent: false })
+        )
 
         expect(templates).toEqual([{
             filename: 'A.md',
@@ -140,7 +144,9 @@ describe('update template', () => {
         files.set('A.md', 'content')
         const { result } = await renderTemplatesHook()
 
-        const filename = await act(async () => result.current.updateTemplate('A.md', 'B', 'content'))
+        const filename = await act(async () =>
+            result.current.updateTemplate('A.md', 'B', 'content')
+        )
 
         expect(filename).toBe('B.md')
         expect(files.has('A.md')).toBe(false)

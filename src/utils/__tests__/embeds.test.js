@@ -42,11 +42,15 @@ describe('resolve embeds', () => {
     })
 
     test('turns image embeds into markdown images', () => {
-        expect(resolve('![[photo one.png]]')).toBe('![photo one.png](file:///images/photo%20one.png)')
+        expect(resolve('![[photo one.png]]')).toBe(
+            '![photo one.png](file:///images/photo%20one.png)'
+        )
     })
 
     test('applies a numeric size to image embeds', () => {
-        expect(resolve('![[a.png|200]]')).toBe('<img src="file:///images/a.png" alt="a.png" width="200">')
+        expect(resolve('![[a.png|200]]')).toBe(
+            '<img src="file:///images/a.png" alt="a.png" width="200">'
+        )
     })
 
     test('resolves nested embeds up to the depth limit', () => {

@@ -51,7 +51,7 @@ test('always saves the note through updateNote, even without a title change', as
     expect(result.current.visible).toBe(false)
 })
 
-test('saves the note without asking when the title changes but nothing links to the old title', async () => {
+test('saves without asking when the title changes and nothing links to the old one', async () => {
     mockNotes = [
         { path: 'a', title: 'Old', note: '' },
         { path: 'b', title: 'Other', note: 'no links here' }
@@ -73,7 +73,10 @@ test('rewrites the note\'s own self-referencing wiki-links when its title change
     let outcome
 
     await act(async () => {
-        outcome = await result.current.saveWithLinkCheck({ path: 'a', title: 'New', note: 'See also [[Old]] for context' }, 'Old')
+        outcome = await result.current.saveWithLinkCheck(
+            { path: 'a', title: 'New', note: 'See also [[Old]] for context' },
+            'Old'
+        )
     })
 
     const expectedNote = { path: 'a', title: 'New', note: 'See also [[New]] for context' }
@@ -82,15 +85,22 @@ test('rewrites the note\'s own self-referencing wiki-links when its title change
     expect(outcome.savedNote).toEqual(expectedNote)
 })
 
-test('does not touch the note body when the title is unchanged, even if it self-links', async () => {
+test('keeps the note body when the title is unchanged, even if it self-links', async () => {
     mockNotes = [{ path: 'a', title: 'Same', note: 'See also [[Same]]' }]
     const { result } = await renderConfirmHook()
 
     await act(async () => {
-        await result.current.saveWithLinkCheck({ path: 'a', title: 'Same', note: 'See also [[Same]]' }, 'Same')
+        await result.current.saveWithLinkCheck(
+            { path: 'a', title: 'Same', note: 'See also [[Same]]' },
+            'Same'
+        )
     })
 
-    expect(mockUpdateNote).toHaveBeenCalledWith({ path: 'a', title: 'Same', note: 'See also [[Same]]' })
+    expect(mockUpdateNote).toHaveBeenCalledWith({
+        path: 'a',
+        title: 'Same',
+        note: 'See also [[Same]]'
+    })
 })
 
 test('opens the confirm dialog when other notes link to the renamed title', async () => {
@@ -130,7 +140,7 @@ test('onConfirmOnce propagates the rename without persisting a preference', asyn
     expect(mockStoredValue).toBe(null)
 })
 
-test('onConfirmAlways propagates the rename and persists the preference for future saves', async () => {
+test('confirming always propagates the rename and persists the preference', async () => {
     mockNotes = [
         { path: 'a', title: 'Old', note: '' },
         { path: 'b', title: 'Linker', note: 'See [[Old]] for details' }
@@ -155,7 +165,12 @@ test('onConfirmAlways propagates the rename and persists the preference for futu
         await result.current.saveWithLinkCheck({ path: 'a', title: 'Another title' }, 'Old')
     })
 
-    expect(mockPropagateWikiLinkRename).toHaveBeenCalledWith('a', 'Another title', mockNotes, expect.any(Map))
+    expect(mockPropagateWikiLinkRename).toHaveBeenCalledWith(
+        'a',
+        'Another title',
+        mockNotes,
+        expect.any(Map)
+    )
     expect(result.current.visible).toBe(false)
 })
 

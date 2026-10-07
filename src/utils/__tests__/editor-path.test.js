@@ -34,10 +34,14 @@ describe('get editor path', () => {
 
 describe('get editor navigation', () => {
     test('replaces when a note is already open', () => {
-        expect(getEditorNavigation('note-1', 'note-2')).toEqual({ path: ROUTES.EDIT_NOTE + 'note-1', replace: true })
+        expect(getEditorNavigation('note-1', 'note-2')).toEqual(
+            { path: ROUTES.EDIT_NOTE + 'note-1', replace: true }
+        )
     })
 
     test('pushes when no note is open yet', () => {
-        expect(getEditorNavigation('note-1', '')).toEqual({ path: ROUTES.EDIT_NOTE + 'note-1', replace: false })
+        expect(getEditorNavigation('note-1', '')).toEqual(
+            { path: ROUTES.EDIT_NOTE + 'note-1', replace: false }
+        )
     })
 })
