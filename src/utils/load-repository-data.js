@@ -22,7 +22,6 @@ import { logError } from '@/utils/log-error'
 
 const getTitle = stripNoteExtension
 
-// Legacy blob -> per-note AsyncStorage entries.
 const migrateLegacyBlobNotes = async (storage) => {
     const legacy = await storage.getItem(STORAGE_KEYS.NOTES)
     if (!legacy) return
@@ -32,7 +31,6 @@ const migrateLegacyBlobNotes = async (storage) => {
     await storage.removeItem(STORAGE_KEYS.NOTES)
 }
 
-// Legacy cache images -> images/.
 const migrateLegacyImages = async (images, imagesUri, fileStorage) => {
     const migrated = []
     let failed = 0
@@ -51,7 +49,6 @@ const migrateLegacyImages = async (images, imagesUri, fileStorage) => {
     return { migrated, failed }
 }
 
-// Legacy notes reference tags by id or by name; frontmatter needs unique names.
 const resolveTagNames = (values, tagNameById) => {
     const names = values
         .filter((value) => value !== LEGACY_ALL_TAG_ID)
@@ -60,7 +57,6 @@ const resolveTagNames = (values, tagNameById) => {
     return [...new Set(names)]
 }
 
-// Legacy tag dictionaries (id -> name) are only read to resolve ids while migrating old notes.
 const loadLegacyTagNameById = async (storage) => {
     const stored = JSON.parse(await storage.getItem(STORAGE_KEYS.CATEGORIES) || '[]')
 
@@ -72,7 +68,6 @@ const loadLegacyTagNameById = async (storage) => {
     return map
 }
 
-// Per-note entries -> .md files with embedded frontmatter.
 const migrateStorageNotesToFiles = async (rootRepository, storage, fileStorage, loadTagNameById) => {
     const keys = await storage.getAllKeys()
     const noteKeys = keys.filter((key) => key.startsWith(NOTE_KEY_PREFIX))
@@ -157,7 +152,6 @@ const migrateLegacyVersionFiles = async (tree, rootUri, storage, fileStorage) =>
     await storage.setItem(migratedKey, 'true')
 }
 
-// Version history lives in the root .notes folder, shared across the whole tree.
 export const loadRepositoryData = async (
     tree,
     rootRepository,
