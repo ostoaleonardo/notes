@@ -8,7 +8,7 @@ import { Checkbox } from '@/components/checkbox'
 import { Typography } from '@/components/typography'
 
 import { TRANSPARENT } from '@/constants/themes'
-import { SPACING } from '@/constants/spacing'
+import { SPACING } from '@/constants/theme'
 
 export const TagOption = memo(function TagOption({ id, tag, onToggle, isSelected }) {
     const { colors } = useTheme()

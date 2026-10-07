@@ -6,10 +6,9 @@ import { useTheme } from 'react-native-paper'
 import { AnimatedView } from '@/components/animated/animated-view'
 import { Typography } from '@/components/typography'
 
-import { RADIUS } from '@/constants/radius'
+import { RADIUS, SPACING, OPACITY, BORDER_WIDTH } from '@/constants/theme'
 import { CARD_PREVIEW_LINES } from '@/constants/note-preview'
-import { CARDS_HEIGHT } from '@/constants/card-grid'
-import { SPACING } from '@/constants/spacing'
+import { CARD_GRID } from '@/constants/components'
 
 export const CardGridItem = memo(function CardGridItem({
     card,
@@ -40,7 +39,7 @@ export const CardGridItem = memo(function CardGridItem({
                 {renderHeader && renderHeader(card)}
 
                 <Typography
-                    opacity={0.6}
+                    opacity={OPACITY.secondary}
                     fontSize={11}
                     numberOfLines={previewLines}
                     color={card.active ? colors.background : undefined}
@@ -66,10 +65,10 @@ export const CardGridItem = memo(function CardGridItem({
 
 const styles = StyleSheet.create({
     card: {
-        height: CARDS_HEIGHT,
-        borderWidth: 1,
+        height: CARD_GRID.cardHeight,
+        borderWidth: BORDER_WIDTH.thin,
         flexDirection: 'column',
-        borderRadius: RADIUS.outer,
+        borderRadius: RADIUS.lg,
         overflow: 'hidden'
     }
 })

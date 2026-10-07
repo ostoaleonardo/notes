@@ -4,12 +4,18 @@ import { useTheme } from 'react-native-paper'
 import { Typography } from '@/components/typography'
 
 import { getGroupedRadius } from '@/utils/grouped-card-style'
-import { SPACING } from '@/constants/spacing'
+import { SPACING, OPACITY } from '@/constants/theme'
 
-export function Option({ title, description, rightContent, onPress, visible = true, isFirst, isLast }) {
+export function Option({
+    title,
+    description,
+    rightContent,
+    children,
+    onPress,
+    isFirst,
+    isLast
+}) {
     const { colors } = useTheme()
-
-    if (!visible) return null
 
     return (
         <Pressable
@@ -17,6 +23,7 @@ export function Option({ title, description, rightContent, onPress, visible = tr
             onPress={onPress}
             style={{
                 ...styles.container,
+                ...(children ? styles.stacked : styles.inline),
                 backgroundColor: colors.surface,
                 ...getGroupedRadius(isFirst, isLast)
             }}
@@ -29,7 +36,7 @@ export function Option({ title, description, rightContent, onPress, visible = tr
                 </Typography>
                 {description && (
                     <Typography
-                        opacity={0.5}
+                        opacity={OPACITY.muted}
                         variant='caption'
                     >
                         {description}
@@ -37,6 +44,7 @@ export function Option({ title, description, rightContent, onPress, visible = tr
                 )}
             </View>
             {rightContent}
+            {children}
         </Pressable>
     )
 }
@@ -44,10 +52,15 @@ export function Option({ title, description, rightContent, onPress, visible = tr
 const styles = StyleSheet.create({
     container: {
         gap: SPACING.lg,
-        padding: SPACING.lg,
+        padding: SPACING.lg
+    },
+    inline: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
+    },
+    stacked: {
+        alignItems: 'flex-start'
     },
     left: {
         flex: 1,

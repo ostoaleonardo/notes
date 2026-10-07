@@ -1,27 +1,18 @@
-import { useState } from 'react'
-
 import { NoteSearch } from './note-search'
-import { ModalSheet } from '@/components/modal/modal-sheet'
+import { FreshSheet } from '@/components/modal/fresh-sheet'
 
-import { SHEET_SNAP_POINTS } from '@/constants/sheet'
+import { SHEET } from '@/constants/components'
 
 export function NoteSearchSheet({ sheet, initialQuery }) {
-    const [openCount, setOpenCount] = useState(0)
-
     return (
-        <ModalSheet
-            ref={sheet.ref}
-            onClose={sheet.onClose}
-            snapPoints={SHEET_SNAP_POINTS.SEARCH}
-            onChange={(index) => {
-                if (index >= 0) setOpenCount((count) => count + 1)
-            }}
+        <FreshSheet
+            sheet={sheet}
+            snapPoints={SHEET.snapPoints.search}
         >
             <NoteSearch
-                key={openCount}
                 initialQuery={initialQuery}
                 onClose={sheet.onClose}
             />
-        </ModalSheet>
+        </FreshSheet>
     )
 }

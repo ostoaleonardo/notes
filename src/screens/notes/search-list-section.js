@@ -3,7 +3,7 @@ import { TouchableRipple, useTheme } from 'react-native-paper'
 
 import { Section } from '@/components/section'
 import { Typography } from '@/components/typography'
-import { SPACING } from '@/constants/spacing'
+import { SPACING, OPACITY, ICON_SIZE } from '@/constants/theme'
 
 export function SearchListSection({
     title,
@@ -33,10 +33,10 @@ export function SearchListSection({
                 >
                     <View style={[styles.item, itemStyle]}>
                         <Icon
-                            width={16}
-                            height={16}
+                            width={ICON_SIZE.md}
+                            height={ICON_SIZE.md}
                             color={colors.onBackground}
-                            opacity={0.5}
+                            opacity={OPACITY.muted}
                         />
                         <Typography
                             numberOfLines={1}

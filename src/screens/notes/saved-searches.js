@@ -1,3 +1,4 @@
+import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet } from 'react-native'
 import { IconButton } from 'react-native-paper'
@@ -6,32 +7,40 @@ import { SearchListSection } from './search-list-section'
 
 import { Close } from '@/icons/close'
 import { Search } from '@/icons/search'
-import { SPACING } from '@/constants/spacing'
+import { SPACING, ICON_SIZE } from '@/constants/theme'
 
-export function SavedSearches({ saved, onSelect, onDelete }) {
+const closeIcon = (props) => <Close {...props} />
+const getEntryKey = (entry) => entry.id
+const getEntryLabel = (entry) => entry.query
+
+export const SavedSearches = memo(function SavedSearches({ saved, onSelect, onDelete }) {
     const { t } = useTranslation()
+
+    const onSelectEntry = useCallback((entry) => onSelect(entry.query), [onSelect])
+
+    const renderTrailing = useCallback((entry) => (
+        <IconButton
+            size={ICON_SIZE.md}
+            onPress={() => onDelete(entry.id)}
+            icon={closeIcon}
+            accessibilityLabel={t('button.delete')}
+        />
+    ), [onDelete, t])
 
     return (
         <SearchListSection
             title={t('search.saved')}
             items={saved}
-            keyExtractor={(entry) => entry.id}
+            keyExtractor={getEntryKey}
             icon={Search}
-            getLabel={(entry) => entry.query}
-            onSelect={(entry) => onSelect(entry.query)}
+            getLabel={getEntryLabel}
+            onSelect={onSelectEntry}
             itemStyle={styles.item}
             labelStyle={styles.label}
-            renderTrailing={(entry) => (
-                <IconButton
-                    size={16}
-                    onPress={() => onDelete(entry.id)}
-                    icon={(props) => <Close {...props} />}
-                    accessibilityLabel={t('button.delete')}
-                />
-            )}
+            renderTrailing={renderTrailing}
         />
     )
-}
+})
 
 const styles = StyleSheet.create({
     item: {

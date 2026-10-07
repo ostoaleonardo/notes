@@ -17,6 +17,8 @@ import sv from '@/translations/sv.json'
 import tr from '@/translations/tr.json'
 import uk from '@/translations/uk.json'
 
+import { DEFAULT_LANGUAGE } from '@/constants/languages'
+
 const languageResources = {
     ar: { translation: ar },
     cs: { translation: cs },
@@ -36,8 +38,8 @@ const languageResources = {
 }
 
 i18next.use(initReactI18next).init({
-    lng: 'en',
-    fallbackLng: 'en',
+    lng: DEFAULT_LANGUAGE,
+    fallbackLng: DEFAULT_LANGUAGE,
     resources: languageResources
 })
 

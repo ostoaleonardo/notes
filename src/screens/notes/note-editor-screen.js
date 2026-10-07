@@ -1,19 +1,12 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { MarkdownEditorLayout } from './markdown-editor-layout'
-import { MarkdownModeToggle } from './markdown-mode-toggle'
-import { MarkdownSearchBar } from './markdown-search-bar'
-import { MarkdownInsertSheets } from './markdown-insert-sheets'
 import { OutgoingLinksSheet } from './outgoing-links-sheet'
 import { OutlineSheet } from './outline-sheet'
 import { TemplatePickerSheet } from './template-picker-sheet'
-import { NoteToolbarSheets } from './note-toolbar-sheets'
 import { TagsSheet } from './tags-sheet'
-import { VersionHistoryPanel } from './version-history-panel'
-import { VersionHistoryContent } from './version-history-content'
+import { EditorShell } from './editor-shell'
 import { ExportFormat } from '@/screens/dialogs/export-format'
-import { AppBar } from '@/components/app-bar/app-bar'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { MarkdownInput } from '@/components/markdown/markdown-input'
 
@@ -24,7 +17,6 @@ import { useNoteDelete } from '@/hooks/use-note-delete'
 import { useNoteMode } from '@/hooks/use-note-mode'
 import { useNoteSharing } from '@/hooks/use-note-sharing'
 import { useNoteTemplates } from '@/hooks/use-note-templates'
-import { usePro } from '@/hooks/use-pro'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useShowProperties } from '@/hooks/use-show-properties'
 import { useTags } from '@/hooks/use-tags'
@@ -62,7 +54,6 @@ export const NoteEditorScreen = ({
     busyRef
 }) => {
     const { t } = useTranslation()
-    const { pro } = usePro()
     const { currentLanguage } = useLanguage()
     const { repositories } = useRepositories()
     const location = useMemo(
@@ -71,22 +62,16 @@ export const NoteEditorScreen = ({
     )
 
     const [showBacklinks, setShowBacklinks] = useState(true)
+    const chrome = useEditorChrome()
     const {
-        isFocused,
         onFocus,
         onBlur,
         recentsSheet,
         searchSheet,
         action,
         search,
-        canUndo,
-        canRedo,
-        onHistoryChange,
-        onRunAction,
-        linkSheet,
-        tableSheet,
-        imageSheet
-    } = useEditorChrome()
+        onHistoryChange
+    } = chrome
 
     const { propertiesVisible, onToggleProperties } = useShowProperties()
 
@@ -240,140 +225,110 @@ export const NoteEditorScreen = ({
         onOpenSearch
     ])
 
+    const toggleProps = useMemo(() => ({
+        showBacklinks,
+        onOpenSharingDialog: sharingDialog.onOpen,
+        onOpenDeleteDialog: noteDelete.onOpen,
+        onOpenOutline: outlineSheet.onOpen,
+        onOpenOutgoingLinks: outgoingLinksSheet.onOpen,
+        onToggleShowBacklinks
+    }), [
+        showBacklinks,
+        sharingDialog.onOpen,
+        noteDelete.onOpen,
+        outlineSheet.onOpen,
+        outgoingLinksSheet.onOpen,
+        onToggleShowBacklinks
+    ])
+
     return (
-        <VersionHistoryPanel
-            visible={versionHistory.visible}
-            onOpen={versionHistory.onOpen}
-            onClose={versionHistory.onClose}
-            swipeEnabled={pro}
-            panelContent={(
-                <VersionHistoryContent
-                    pro={pro}
-                    noteId={filename}
-                    location={location}
-                    currentContentRef={latestContent}
-                    onRestore={onRestore}
-                    onClose={versionHistory.onClose}
-                />
+        <EditorShell
+            mode={mode}
+            chrome={chrome}
+            actions={actions}
+            noteId={filename}
+            location={location}
+            onSetMode={onSetMode}
+            contentRef={latestContent}
+            onRestore={onRestore}
+            toggleProps={toggleProps}
+            repositoryId={repositoryId}
+            initialSearch={searchSeed}
+            versionHistory={versionHistory}
+            sheets={(
+                <>
+                    <OutlineSheet
+                        sheet={outlineSheet}
+                        contentRef={latestContent}
+                        onSelect={onSelectHeading}
+                    />
+
+                    <OutgoingLinksSheet
+                        sheet={outgoingLinksSheet}
+                        contentRef={latestContent}
+                        selfPath={id}
+                    />
+
+                    <TagsSheet
+                        sheet={tagsSheet}
+                        tags={tags}
+                        setTags={setTags}
+                    />
+
+                    <TemplatePickerSheet
+                        sheet={noteTemplates.sheet}
+                        title={title}
+                        templates={noteTemplates.templates}
+                        onSelect={noteTemplates.onSelect}
+                        onSaveAsTemplate={noteTemplates.onSaveAsTemplate}
+                    />
+
+                    <ExportFormat
+                        title={t('export.title')}
+                        visible={sharingDialog.visible}
+                        onDismiss={sharingDialog.onClose}
+                        onExport={onConfirmExport}
+                        onShare={onConfirmShare}
+                    />
+
+                    <ConfirmDialog
+                        visible={noteDelete.visible}
+                        title={t('notes.delete_title')}
+                        message={t(`notes.delete_message_${noteDelete.behavior}`)}
+                        confirmLabel={t('button.delete')}
+                        onDismiss={noteDelete.onClose}
+                        onConfirm={noteDelete.onConfirm}
+                    />
+                </>
             )}
         >
-            <AppBar
-                mode='menu'
-                trailing={(
-                    <MarkdownModeToggle
-                        mode={mode}
-                        search={search}
-                        onSetMode={onSetMode}
-                        isFocused={isFocused}
-                        showBacklinks={showBacklinks}
-                        onOpenSharingDialog={sharingDialog.onOpen}
-                        onOpenDeleteDialog={noteDelete.onOpen}
-                        onOpenVersionHistory={versionHistory.onOpen}
-                        onOpenOutline={outlineSheet.onOpen}
-                        onOpenOutgoingLinks={outgoingLinksSheet.onOpen}
-                        onToggleShowBacklinks={onToggleShowBacklinks}
-                    />
-                )}
-            />
-
-            <MarkdownSearchBar
-                search={search}
-                action={action}
-            />
-
-            <MarkdownEditorLayout
+            <MarkdownInput
+                id={id}
                 mode={mode}
-                isFocused={isFocused}
-                onRunAction={onRunAction}
-                actions={actions}
-                canUndo={canUndo}
-                canRedo={canRedo}
-            >
-                <MarkdownInput
-                    id={id}
-                    mode={mode}
-                    onEdit={onEdit}
-                    titleField={titleField}
-                    onTitleChange={setTitle}
-                    onTitleBlur={onTitleBlur}
-                    propertiesPanel={propertiesPanel}
-                    onToggleProperties={onToggleProperties}
-                    onChangeProperty={onChangeProperty}
-                    onRemoveTag={onRemoveTag}
-                    onAddTag={onAddTag}
-                    onTagPress={onTagPress}
-                    search={searchField}
-                    value={editorValue}
-                    onChangeText={onEditorChange}
-                    onHistoryChange={onHistoryChange}
-                    onBlur={onBlur}
-                    onFocus={onFocus}
-                    placeholder={t('placeholder.note')}
-                    action={action}
-                    anchor={jump ? jump.anchor : anchor}
-                    onJumpToAnchor={onJumpToAnchor}
-                    headingIndex={jump?.index}
-                    jumpNonce={jump?.nonce}
-                    showBacklinks={showBacklinks}
-                />
-            </MarkdownEditorLayout>
-
-            <OutlineSheet
-                sheet={outlineSheet}
-                contentRef={latestContent}
-                onSelect={onSelectHeading}
-            />
-
-            <OutgoingLinksSheet
-                sheet={outgoingLinksSheet}
-                contentRef={latestContent}
-                selfPath={id}
-            />
-
-            <TagsSheet
-                sheet={tagsSheet}
-                tags={tags}
-                setTags={setTags}
-            />
-
-            <MarkdownInsertSheets
-                linkSheet={linkSheet}
-                tableSheet={tableSheet}
-                imageSheet={imageSheet}
-                repositoryId={repositoryId}
+                onEdit={onEdit}
+                titleField={titleField}
+                onTitleChange={setTitle}
+                onTitleBlur={onTitleBlur}
+                propertiesPanel={propertiesPanel}
+                onToggleProperties={onToggleProperties}
+                onChangeProperty={onChangeProperty}
+                onRemoveTag={onRemoveTag}
+                onAddTag={onAddTag}
+                onTagPress={onTagPress}
+                search={searchField}
+                value={editorValue}
+                onChangeText={onEditorChange}
+                onHistoryChange={onHistoryChange}
+                onBlur={onBlur}
+                onFocus={onFocus}
+                placeholder={t('placeholder.note')}
                 action={action}
+                anchor={jump ? jump.anchor : anchor}
+                onJumpToAnchor={onJumpToAnchor}
+                headingIndex={jump?.index}
+                jumpNonce={jump?.nonce}
+                showBacklinks={showBacklinks}
             />
-
-            <TemplatePickerSheet
-                sheet={noteTemplates.sheet}
-                title={title}
-                templates={noteTemplates.templates}
-                onSelect={noteTemplates.onSelect}
-                onSaveAsTemplate={noteTemplates.onSaveAsTemplate}
-            />
-
-            <NoteToolbarSheets
-                recentsSheet={recentsSheet}
-                searchSheet={searchSheet}
-                initialSearch={searchSeed}
-            />
-
-            <ExportFormat
-                title={t('export.title')}
-                visible={sharingDialog.visible}
-                onDismiss={sharingDialog.onClose}
-                onExport={onConfirmExport}
-                onShare={onConfirmShare}
-            />
-
-            <ConfirmDialog
-                visible={noteDelete.visible}
-                title={t('notes.delete_title')}
-                message={t(`notes.delete_message_${noteDelete.behavior}`)}
-                confirmLabel={t('button.delete')}
-                onDismiss={noteDelete.onClose}
-                onConfirm={noteDelete.onConfirm}
-            />
-        </VersionHistoryPanel>
+        </EditorShell>
     )
 }

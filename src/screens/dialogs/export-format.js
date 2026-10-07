@@ -7,7 +7,7 @@ import { FilterToggleGroup } from '@/components/button/filter-toggle-group'
 
 import { usePro } from '@/hooks/use-pro'
 
-import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/dialog'
+import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
 import { EXPORT_FORMATS } from '@/constants/export'
 
 export function ExportFormat({ title, visible, onDismiss, onExport, onShare }) {

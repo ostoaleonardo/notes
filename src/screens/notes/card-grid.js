@@ -5,26 +5,22 @@ import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 import { CardGridItem } from './card-grid-item'
 import { AnimatedView } from '@/components/animated/animated-view'
 import { Typography } from '@/components/typography'
-import {
-    CARDS_HEIGHT,
-    CARD_MIN_WIDTH,
-    GRID_GAP,
-    GRID_GAP_HORIZONTAL,
-    GRID_PADDING
-} from '@/constants/card-grid'
+import { CARD_GRID } from '@/constants/components'
+
+import { OPACITY } from '@/constants/theme'
 
 export function CardGrid({ cards, onOpen, renderHeader, previewLines, emptyMessage }) {
     const { width: windowWidth } = useWindowDimensions()
 
     const columns = useMemo(() => {
-        const containerWidth = windowWidth - (GRID_PADDING - GRID_GAP_HORIZONTAL / 2) * 2
-        return Math.max(1, Math.floor(containerWidth / CARD_MIN_WIDTH))
+        const containerWidth = windowWidth - (CARD_GRID.padding - CARD_GRID.columnGap / 2) * 2
+        return Math.max(1, Math.floor(containerWidth / CARD_GRID.cardMinWidth))
     }, [windowWidth])
 
     const cellStyle = useMemo(() => ({
         width: `${100 / columns}%`,
-        paddingHorizontal: GRID_GAP_HORIZONTAL / 2,
-        paddingVertical: GRID_GAP / 2
+        paddingHorizontal: CARD_GRID.columnGap / 2,
+        paddingVertical: CARD_GRID.rowGap / 2
     }), [columns])
 
     const renderItem = useCallback(({ item: card }) => (
@@ -47,7 +43,7 @@ export function CardGrid({ cards, onOpen, renderHeader, previewLines, emptyMessa
                 style={[styles.empty, { width: windowWidth }]}
             >
                 <Typography
-                    opacity={0.5}
+                    opacity={OPACITY.muted}
                     textAlign='center'
                 >
                     {emptyMessage}
@@ -74,16 +70,16 @@ export function CardGrid({ cards, onOpen, renderHeader, previewLines, emptyMessa
 
 const styles = StyleSheet.create({
     container: {
-        maxHeight: CARDS_HEIGHT * 2 + 48
+        maxHeight: CARD_GRID.cardHeight * 2 + 48
     },
     empty: {
-        minHeight: CARDS_HEIGHT,
-        paddingHorizontal: GRID_PADDING,
+        minHeight: CARD_GRID.cardHeight,
+        paddingHorizontal: CARD_GRID.padding,
         alignItems: 'center',
         justifyContent: 'center'
     },
     grid: {
-        paddingHorizontal: GRID_PADDING - GRID_GAP_HORIZONTAL / 2
+        paddingHorizontal: CARD_GRID.padding - CARD_GRID.columnGap / 2
     },
     row: {
         justifyContent: 'center'

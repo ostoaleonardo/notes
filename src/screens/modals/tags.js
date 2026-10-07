@@ -3,13 +3,13 @@ import { View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { useTranslation } from 'react-i18next'
 
-import { TagOption } from '../notes/tag-option'
+import { TagOption } from '@/screens/notes/tag-option'
 import { Typography } from '@/components/typography'
 import { Separator } from '@/components/separator/separator'
 
 import { useTags } from '@/hooks/use-tags'
 import { hasTag, isSameTag } from '@/utils/tag-names'
-import { SPACING } from '@/constants/spacing'
+import { SPACING, OPACITY } from '@/constants/theme'
 
 export function Tags({ tags, setTags }) {
     const { t } = useTranslation()
@@ -42,7 +42,7 @@ export function Tags({ tags, setTags }) {
             ListEmptyComponent={() => (
                 <View style={{ paddingTop: 64 }}>
                     <Typography
-                        opacity={0.5}
+                        opacity={OPACITY.muted}
                     >
                         {t('message.tags.empty')}
                     </Typography>

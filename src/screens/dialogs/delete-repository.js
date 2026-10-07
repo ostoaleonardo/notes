@@ -7,6 +7,7 @@ import { useHaptics } from '@/hooks/use-haptics'
 import { useRepositories } from '@/hooks/use-repositories'
 
 import { FEEDBACK_TYPES } from '@/constants/feedback-types'
+import { REPOSITORY_RESULTS } from '@/constants/repository-results'
 
 export function DeleteRepository({ visible, onDismiss, repositoryId }) {
     const { t } = useTranslation()
@@ -18,7 +19,7 @@ export function DeleteRepository({ visible, onDismiss, repositoryId }) {
     const onDelete = async () => {
         const result = await removeRepository(repositoryId)
 
-        if (result === 'active') {
+        if (result === REPOSITORY_RESULTS.ACTIVE) {
             ToastAndroid.show(t('repositories.cannot_delete_active'), ToastAndroid.SHORT)
             return
         }

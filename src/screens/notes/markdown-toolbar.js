@@ -22,8 +22,9 @@ import { Undo } from '@/icons/undo'
 import { MARKDOWN_CONTROLS, MARKDOWN_GROUPS } from '@/constants/markdown-controls'
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { TEMPLATE_SCOPE, TOOLBAR_BUTTON_KEYS } from '@/constants/toolbar'
-import { SPACING } from '@/constants/spacing'
+import { DIVIDER, SPACING } from '@/constants/theme'
 import { TEST_IDS } from '@/constants/test-ids'
+import { MARKDOWN_ACTIONS } from '@/constants/markdown-actions'
 
 export const MarkdownToolbar = memo(function MarkdownToolbar({
     mode,
@@ -60,14 +61,14 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
             label: 'button.undo',
             icon: Undo,
             disabled: !canUndo,
-            onPress: () => onRunAction('undo')
+            onPress: () => onRunAction(MARKDOWN_ACTIONS.UNDO)
         },
         {
             key: TOOLBAR_BUTTON_KEYS.REDO,
             label: 'button.redo',
             icon: Redo,
             disabled: !canRedo,
-            onPress: () => onRunAction('redo')
+            onPress: () => onRunAction(MARKDOWN_ACTIONS.REDO)
         },
         {
             key: TOOLBAR_BUTTON_KEYS.SEARCH,
@@ -194,8 +195,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: SPACING.xxs
     },
     divider: {
-        width: 1,
-        height: 24,
+        width: DIVIDER.thickness,
+        height: DIVIDER.length,
         marginHorizontal: SPACING.xxs
     }
 })

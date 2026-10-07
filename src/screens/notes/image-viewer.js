@@ -7,6 +7,9 @@ import { ResumableZoom, fitContainer, useImageResolution } from 'react-native-zo
 
 import { Close } from '@/icons/close'
 
+import { SPACING } from '@/constants/theme'
+import { IMAGE_VIEWER_MAX_SCALE } from '@/constants/image'
+
 export function ImageViewer({ url, onClose }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
@@ -35,13 +38,13 @@ export function ImageViewer({ url, onClose }) {
                 accessibilityLabel={t('button.close')}
                 style={{
                     ...styles.close,
-                    top: insets.top + 8,
-                    right: insets.right + 8
+                    top: insets.top + SPACING.sm,
+                    right: insets.right + SPACING.sm
                 }}
             />
 
             {url && (
-                <ResumableZoom maxScale={resolution ?? 6}>
+                <ResumableZoom maxScale={resolution ?? IMAGE_VIEWER_MAX_SCALE}>
                     <Image
                         style={size}
                         source={{ uri: url }}

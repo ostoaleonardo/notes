@@ -16,6 +16,7 @@ import { useUtils } from '@/hooks/use-utils'
 import { getEditorNavigation } from '@/utils/editor-path'
 import { getPreviewNote } from '@/utils/preview-note'
 import { getRecentIds } from '@/utils/recent-ids'
+import { toggleInSet } from '@/utils/toggle-in-set'
 
 import { Close } from '@/icons/close'
 import { KeepFilled } from '@/icons/keep-filled'
@@ -23,7 +24,7 @@ import { Plus } from '@/icons/plus'
 
 import { ROUTES } from '@/constants/routes'
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
-import { SPACING } from '@/constants/spacing'
+import { SPACING } from '@/constants/theme'
 
 export function RecentNotes({ onClose, home = false }) {
     const { t } = useTranslation()
@@ -82,9 +83,7 @@ export function RecentNotes({ onClose, home = false }) {
 
     const onRemove = useCallback((card) => {
         if (card.pinned) {
-            const next = new Set(pinned)
-            next.delete(card.id)
-            updatePinned(next)
+            updatePinned(toggleInSet(pinned, card.id))
         } else {
             removeRecent(card.id)
         }
@@ -97,7 +96,7 @@ export function RecentNotes({ onClose, home = false }) {
 
     const renderCardHeader = useCallback((card) => (
         <IconButton
-            size={4}
+            size={SPACING.xxs}
             mode='contained'
             onPress={() => onRemove(card)}
             style={styles.removeButton}

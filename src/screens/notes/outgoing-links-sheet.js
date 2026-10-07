@@ -1,19 +1,17 @@
 import { memo, useCallback, useState } from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
+import { Pressable, StyleSheet } from 'react-native'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 
-import { ModalSheet } from '@/components/modal/modal-sheet'
+import { ListSheet } from '@/components/modal/list-sheet'
 import { Typography } from '@/components/typography'
 
 import { useNotes } from '@/hooks/use-notes'
 import { getEditorPath } from '@/utils/editor-path'
 import { findOutgoingLinks } from '@/utils/outgoing-links'
 
-import { SHEET_SNAP_POINTS } from '@/constants/sheet'
-import { SPACING } from '@/constants/spacing'
+import { SPACING, OPACITY } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'
 
 const OutgoingLinkItem = memo(function OutgoingLinkItem({ item, onPress }) {
@@ -28,7 +26,7 @@ const OutgoingLinkItem = memo(function OutgoingLinkItem({ item, onPress }) {
             android_ripple={{ color: colors.onBackground + TRANSPARENT[10] }}
             style={styles.item}
         >
-            <Typography opacity={resolved ? 1 : 0.5}>
+            <Typography opacity={resolved ? 1 : OPACITY.muted}>
                 {item.title}
             </Typography>
         </Pressable>
@@ -59,40 +57,22 @@ export const OutgoingLinksSheet = memo(function OutgoingLinksSheet({ sheet, cont
     ), [onPress])
 
     return (
-        <ModalSheet
-            ref={sheet.ref}
-            onClose={sheet.onClose}
+        <ListSheet
+            sheet={sheet}
             onChange={onChange}
-            snapPoints={SHEET_SNAP_POINTS.TALL}
-        >
-            <FlatList
-                data={links}
-                keyExtractor={(item) => item.key}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.list}
-                renderItem={renderItem}
-                ListEmptyComponent={(
-                    <View style={styles.empty}>
-                        <Typography opacity={0.5}>
-                            {t('message.outgoing_links.empty')}
-                        </Typography>
-                    </View>
-                )}
-            />
-        </ModalSheet>
+            data={links}
+            renderItem={renderItem}
+            keyExtractor={getLinkKey}
+            emptyMessage={t('message.outgoing_links.empty')}
+        />
     )
 })
 
+const getLinkKey = (item) => item.key
+
 const styles = StyleSheet.create({
-    list: {
-        paddingBottom: SPACING.lg
-    },
     item: {
         paddingVertical: SPACING.sm,
         paddingHorizontal: SPACING.lg
-    },
-    empty: {
-        paddingTop: 64,
-        alignItems: 'center'
     }
 })

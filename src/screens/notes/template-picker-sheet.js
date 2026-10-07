@@ -7,7 +7,7 @@ import { TemplatePicker } from './template-picker'
 import { Pressable } from '@/components/button/pressable'
 import { ModalSheet } from '@/components/modal/modal-sheet'
 
-import { SPACING } from '@/constants/spacing'
+import { SPACING } from '@/constants/theme'
 
 export const TemplatePickerSheet = memo(function TemplatePickerSheet({
     sheet,

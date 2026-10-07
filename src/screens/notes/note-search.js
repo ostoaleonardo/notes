@@ -1,4 +1,4 @@
-import { useDeferredValue, useEffect, useMemo, useState } from 'react'
+import { useCallback, useDeferredValue, useEffect, useMemo, useState } from 'react'
 import { router } from 'expo-router'
 import { randomUUID } from 'expo-crypto'
 import { StyleSheet, View } from 'react-native'
@@ -15,13 +15,14 @@ import { useRepositories } from '@/hooks/use-repositories'
 import { useStorage } from '@/hooks/use-storage'
 import { useTags } from '@/hooks/use-tags'
 import { useUtils } from '@/hooks/use-utils'
-import { filterNotes, parseSearchQuery } from '@/utils/search-query'
+import { filterNotes } from '@/utils/search-filter'
+import { parseSearchQuery } from '@/utils/search-query'
 import { getEditorPath } from '@/utils/editor-path'
 import { toggleSavedSearch, removeSavedSearch, parseStoredList } from '@/utils/saved-searches'
 
 import { RECENT_SEARCHES_LIMIT } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { SPACING } from '@/constants/spacing'
+import { SPACING } from '@/constants/theme'
 
 export function NoteSearch({ onClose, initialQuery = '' }) {
     const { repositories } = useRepositories()
@@ -58,31 +59,31 @@ export function NoteSearch({ onClose, initialQuery = '' }) {
         trimmedQuery ? filterNotes(notes, deferredParsed, { pinned, notePaths }) : []
     ), [trimmedQuery, deferredParsed, notes, pinned, notePaths])
 
-    const saveRecent = (term) => {
+    const saveRecent = useCallback((term) => {
         if (!term) return
 
         const next = [term, ...recent.filter((entry) => entry !== term)].slice(0, RECENT_SEARCHES_LIMIT)
         setRecent(next)
         setItem(STORAGE_KEYS.RECENT_SEARCHES, JSON.stringify(next))
-    }
+    }, [recent, setItem])
 
-    const onOpenResult = (id) => {
+    const onOpenResult = useCallback((id) => {
         saveRecent(trimmedQuery)
         onClose()
         router.push(getEditorPath(id))
-    }
+    }, [saveRecent, trimmedQuery, onClose])
 
-    const onToggleSaveSearch = () => {
+    const onToggleSaveSearch = useCallback(() => {
         const next = toggleSavedSearch(saved, trimmedQuery, randomUUID())
         setSaved(next)
         setItem(STORAGE_KEYS.SAVED_SEARCHES, JSON.stringify(next))
-    }
+    }, [saved, trimmedQuery, setItem])
 
-    const onDeleteSavedSearch = (id) => {
+    const onDeleteSavedSearch = useCallback((id) => {
         const next = removeSavedSearch(saved, id)
         setSaved(next)
         setItem(STORAGE_KEYS.SAVED_SEARCHES, JSON.stringify(next))
-    }
+    }, [saved, setItem])
 
     return (
         <View style={styles.container}>

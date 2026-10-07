@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
-import { OptionLarge } from './option-large'
+import { Option } from './option'
 import { ColorOption } from './color-option'
 import { Section } from '@/components/section'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
@@ -12,7 +12,7 @@ import { isAccentAllowed, toggleAccentSelection } from '@/utils/accent'
 
 import { ACCENT_COLORS, THEME_COLORS } from '@/constants/themes'
 import { ACCENT_OPTIONS, THEME_OPTIONS } from '@/constants/theme-options'
-import { SPACING } from '@/constants/spacing'
+import { SPACING } from '@/constants/theme'
 
 export function ThemeOption() {
     const { t } = useTranslation()
@@ -33,45 +33,59 @@ export function ThemeOption() {
     }
 
     return (
-        <OptionLarge
+        <Option
             title={t('settings.theme')}
             description={t('theme.choose')}
             isLast={true}
         >
-            <Section
+            <ColorSection
                 title={t('settings.themes')}
+                names={THEME_OPTIONS}
+                options={THEME_COLORS}
+                isActive={(color) => mode === color}
+                onPress={toggleMode}
+                getLabel={(color) => t(`theme.${color}`)}
                 containerStyle={{ marginTop: SPACING.lg }}
-                contentStyle={styles.container}
-            >
-                {THEME_OPTIONS.map((color) => (
-                    <ColorOption
-                        key={color}
-                        name={color}
-                        active={mode === color}
-                        onPress={() => toggleMode(color)}
-                        options={THEME_COLORS}
-                    >
-                        {t(`theme.${color}`)}
-                    </ColorOption>
-                ))}
-            </Section>
-            <Section
+            />
+            <ColorSection
                 title={t('settings.accent')}
-                contentStyle={styles.container}
-            >
-                {ACCENT_OPTIONS.map((color) => (
-                    <ColorOption
-                        key={color}
-                        name={color}
-                        active={accent === color}
-                        onPress={() => onToggleAccent(color)}
-                        options={ACCENT_COLORS}
-                    >
-                        {t(`accent.${color}`)}
-                    </ColorOption>
-                ))}
-            </Section>
-        </OptionLarge>
+                names={ACCENT_OPTIONS}
+                options={ACCENT_COLORS}
+                isActive={(color) => accent === color}
+                onPress={onToggleAccent}
+                getLabel={(color) => t(`accent.${color}`)}
+            />
+        </Option>
+    )
+}
+
+function ColorSection({
+    title,
+    names,
+    options,
+    isActive,
+    onPress,
+    getLabel,
+    containerStyle
+}) {
+    return (
+        <Section
+            title={title}
+            containerStyle={containerStyle}
+            contentStyle={styles.container}
+        >
+            {names.map((color) => (
+                <ColorOption
+                    key={color}
+                    name={color}
+                    active={isActive(color)}
+                    onPress={() => onPress(color)}
+                    options={options}
+                >
+                    {getLabel(color)}
+                </ColorOption>
+            ))}
+        </Section>
     )
 }
 

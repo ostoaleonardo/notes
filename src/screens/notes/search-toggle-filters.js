@@ -12,6 +12,8 @@ import { NoteStack } from '@/icons/note-stack'
 import { Picture } from '@/icons/picture'
 import { Plus } from '@/icons/plus'
 
+import { ICON_SIZE } from '@/constants/theme'
+
 export function SearchToggleFilters({ query, setQuery, parsed, saved, onToggleSave }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
@@ -24,12 +26,12 @@ export function SearchToggleFilters({ query, setQuery, parsed, saved, onToggleSa
         <>
             <Tooltip title={t('search.in_content')}>
                 <IconButton
-                    size={16}
+                    size={ICON_SIZE.md}
                     mode={parsed.inContent ? 'contained' : 'outlined'}
                     iconColor={parsed.inContent ? colors.background : colors.onBackground}
                     containerColor={parsed.inContent ? colors.onBackground : undefined}
                     onPress={() => setQuery(toggleContentQualifier(query))}
-                    icon={(props) => <NoteStack width={16} height={16} {...props} />}
+                    icon={(props) => <NoteStack width={ICON_SIZE.md} height={ICON_SIZE.md} {...props} />}
                     accessibilityLabel={t('search.in_content')}
                 />
             </Tooltip>

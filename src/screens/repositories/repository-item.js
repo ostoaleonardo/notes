@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { IconButton, Tooltip, useTheme } from 'react-native-paper'
@@ -15,9 +15,9 @@ import { getRepositoryNoteCount } from '@/utils/repository-note-counts'
 import { getRepositoryPath } from '@/utils/repository-path'
 
 import { OpenInNew } from '@/icons/open-in-new'
-import { SPACING } from '@/constants/spacing'
+import { SPACING, OPACITY } from '@/constants/theme'
 
-export function RepositoryItem({
+export const RepositoryItem = memo(function RepositoryItem({
     repository,
     count,
     active,
@@ -34,6 +34,13 @@ export function RepositoryItem({
     const { listMarkdownFiles } = useFileStorage()
 
     const [expanded, setExpanded] = useState(false)
+    const onToggleExpanded = useCallback(() => setExpanded((prev) => !prev), [])
+    const openIcon = useCallback((props) => <OpenInNew {...props} />, [])
+    const repositoryId = repository.id
+    const onPressOpen = useCallback(() => onOpen(repositoryId), [onOpen, repositoryId])
+    const onPressRename = useCallback(() => onRename(repositoryId), [onRename, repositoryId])
+    const onPressForget = useCallback(() => onForget(repositoryId), [onForget, repositoryId])
+    const onPressDelete = useCallback(() => onDelete(repositoryId), [onDelete, repositoryId])
     const noteCountCache = useRef(new Map())
 
     useEffect(() => {
@@ -78,7 +85,7 @@ export function RepositoryItem({
                 <Pressable
                     accessibilityRole='button'
                     accessibilityState={{ expanded }}
-                    onPress={() => setExpanded((prev) => !prev)}
+                    onPress={onToggleExpanded}
                     style={styles.content}
                 >
                     <Typography
@@ -89,14 +96,14 @@ export function RepositoryItem({
                     </Typography>
                     <Typography
                         variant='caption'
-                        opacity={0.4}
+                        opacity={OPACITY.disabled}
                     >
                         {getRepositoryPath(repository.uri)}
                     </Typography>
 
                     <Typography
                         variant='caption'
-                        opacity={active ? 0.8 : 0.5}
+                        opacity={active ? OPACITY.emphasized : OPACITY.muted}
                     >
                         {count}, {t('count.folders', { count: folderCount })}
                     </Typography>
@@ -104,16 +111,16 @@ export function RepositoryItem({
 
                 <Tooltip title={t('repositories.open')}>
                     <IconButton
-                        onPress={onOpen}
-                        icon={(props) => <OpenInNew {...props} />}
+                        onPress={onPressOpen}
+                        icon={openIcon}
                         accessibilityLabel={t('repositories.open')}
                     />
                 </Tooltip>
 
                 <RepositoryMenu
-                    onRename={onRename}
-                    onForget={onForget}
-                    onDelete={onDelete}
+                    onRename={onPressRename}
+                    onForget={onPressForget}
+                    onDelete={onPressDelete}
                 />
             </View>
 
@@ -124,7 +131,7 @@ export function RepositoryItem({
                     {descendantsWithCounts.length === 0 ? (
                         <Typography
                             variant='caption'
-                            opacity={0.4}
+                            opacity={OPACITY.disabled}
                         >
                             {t('repositories.no_folders')}
                         </Typography>
@@ -132,14 +139,14 @@ export function RepositoryItem({
                         descendantsWithCounts.map((descendant) => (
                             <View
                                 key={descendant.id}
-                                style={{ paddingLeft: descendant.depth * 16 }}
+                                style={{ paddingLeft: descendant.depth * SPACING.lg }}
                             >
                                 <Typography variant='caption'>
                                     {descendant.alias}
                                 </Typography>
                                 <Typography
                                     variant='caption'
-                                    opacity={0.4}
+                                    opacity={OPACITY.disabled}
                                 >
                                     {t('count.notes', { count: descendant.noteCount })}, {t('count.folders', { count: descendant.folderCount })}
                                 </Typography>
@@ -150,7 +157,7 @@ export function RepositoryItem({
             )}
         </AnimatedView>
     )
-}
+})
 
 const styles = StyleSheet.create({
     container: {

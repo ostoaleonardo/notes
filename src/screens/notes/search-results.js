@@ -6,7 +6,7 @@ import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 import { AnimatedList } from '@/components/animated/animated-list'
 import { AnimatedView } from '@/components/animated/animated-view'
 import { Typography } from '@/components/typography'
-import { SPACING } from '@/constants/spacing'
+import { SPACING, OPACITY, RADIUS } from '@/constants/theme'
 
 export function SearchResults({ results, aliasById, onOpenResult }) {
     const { t } = useTranslation()
@@ -14,7 +14,7 @@ export function SearchResults({ results, aliasById, onOpenResult }) {
     return (
         <View style={styles.container}>
             <AnimatedList
-                gap={2}
+                gap={SPACING.xxxs}
                 data={results}
                 keyExtractor={(note) => note.path}
                 emptyLabel={t('message.notes.empty')}
@@ -37,7 +37,7 @@ export function SearchResults({ results, aliasById, onOpenResult }) {
                                 </Typography>
                                 {aliasById.has(item.repositoryId) && (
                                     <Typography
-                                        opacity={0.5}
+                                        opacity={OPACITY.muted}
                                         variant='caption'
                                     >
                                         {aliasById.get(item.repositoryId)}
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         gap: SPACING.lg
     },
     item: {
-        borderRadius: 8,
+        borderRadius: RADIUS.md,
         paddingVertical: SPACING.sm,
         paddingHorizontal: SPACING.lg
     }

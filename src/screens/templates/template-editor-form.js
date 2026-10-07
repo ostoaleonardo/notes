@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { LargeInput } from '@/components/input/large-input'
 import { MarkdownInput } from '@/components/markdown/markdown-input'
 import { Section } from '@/components/section'
-import { SPACING } from '@/constants/spacing'
+import { SPACING } from '@/constants/theme'
 
 export const TemplateEditorForm = ({
     name,

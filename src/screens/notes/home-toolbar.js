@@ -7,7 +7,7 @@ import { RecentsButton } from '@/components/app-bar/recents-button'
 import { Plus } from '@/icons/plus'
 import { Search } from '@/icons/search'
 import { UploadFile } from '@/icons/upload-file'
-import { SPACING } from '@/constants/spacing'
+import { SPACING } from '@/constants/theme'
 import { TEST_IDS } from '@/constants/test-ids'
 
 export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, onOpenSearch, recentCount }) {

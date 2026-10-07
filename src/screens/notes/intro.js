@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { AnimatedView } from '@/components/animated/animated-view'
 import { Typography } from '@/components/typography'
 
-import { FONTS } from '@/constants/fonts'
-import { SPACING } from '@/constants/spacing'
+import { FONTS, SPACING, OPACITY, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
 
 export function Intro() {
     const { t } = useTranslation()
@@ -14,14 +13,14 @@ export function Intro() {
         <AnimatedView style={styles.container}>
             <View style={{ gap: SPACING.lg }}>
                 <Typography
-                    fontSize={32}
+                    fontSize={TYPOGRAPHY_SIZE_VARIANTS.display}
                     textAlign='center'
                     styleProps={{ fontFamily: FONTS.nType82Headline }}
                 >
                     {t('notes.intro_title')}
                 </Typography>
                 <Typography
-                    opacity={0.6}
+                    opacity={OPACITY.secondary}
                     textAlign='center'
                 >
                     {t('notes.intro_subtitle')}

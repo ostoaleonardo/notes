@@ -18,13 +18,39 @@ import { getGroupedRadius } from '@/utils/grouped-card-style'
 import { ArrowBack } from '@/icons/arrow-back'
 import { Close } from '@/icons/close'
 
-import { DIFF_ADDED_COLOR, DIFF_REMOVED_COLOR } from '@/constants/diff'
+import { DIFF_ADDED_COLOR, DIFF_REMOVED_COLOR, DIFF_TYPES } from '@/constants/diff'
 import { TRANSPARENT } from '@/constants/themes'
-import { FONTS } from '@/constants/fonts'
+import { FONTS, TYPOGRAPHY_SIZE_VARIANTS, SPACING, OPACITY, RADIUS } from '@/constants/theme'
 import { FREE_VERSION_HISTORY_LIMIT } from '@/constants/default-values'
-import { SPACING } from '@/constants/spacing'
 
-const getDiffColor = (type) => (type === 'added' ? DIFF_ADDED_COLOR : DIFF_REMOVED_COLOR)
+const getDiffColor = (type) => (type === DIFF_TYPES.ADDED ? DIFF_ADDED_COLOR : DIFF_REMOVED_COLOR)
+
+const VersionItem = memo(function VersionItem({ version, first, last, onSelect }) {
+    const { colors } = useTheme()
+    const { currentLanguage } = useLanguage()
+    const onPress = useCallback(() => onSelect(version), [onSelect, version])
+
+    return (
+        <AnimatedView>
+            <TouchableRipple accessibilityRole='button' onPress={onPress}>
+                <View
+                    style={{
+                        ...styles.item,
+                        backgroundColor: colors.surface,
+                        ...getGroupedRadius(first, last)
+                    }}
+                >
+                    <Typography bold numberOfLines={1}>
+                        {version.title}
+                    </Typography>
+                    <Typography opacity={OPACITY.muted} variant='caption'>
+                        {getFormattedDate(version.createdAt, currentLanguage)}
+                    </Typography>
+                </View>
+            </TouchableRipple>
+        </AnimatedView>
+    )
+})
 
 export const VersionHistoryContent = memo(function VersionHistoryContent({
     location,
@@ -69,8 +95,8 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
     }, [onClose])
 
     const renderDiffItem = useCallback(({ item: entry }) => {
-        const isChanged = entry.type !== 'unchanged'
-        const prefix = entry.type === 'added' ? '+ ' : entry.type === 'removed' ? '- ' : '  '
+        const isChanged = entry.type !== DIFF_TYPES.UNCHANGED
+        const prefix = entry.type === DIFF_TYPES.ADDED ? '+ ' : entry.type === DIFF_TYPES.REMOVED ? '- ' : '  '
         const background = isChanged
             ? getDiffColor(entry.type) + TRANSPARENT[20]
             : 'transparent'
@@ -88,25 +114,18 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
     }, [colors.onBackground])
 
     const renderVersionItem = useCallback(({ item: version, index }) => (
-        <AnimatedView>
-            <TouchableRipple accessibilityRole='button' onPress={() => setSelected(version)}>
-                <View
-                    style={{
-                        ...styles.item,
-                        backgroundColor: colors.surface,
-                        ...getGroupedRadius(index === 0, index === ordered.length - 1)
-                    }}
-                >
-                    <Typography bold numberOfLines={1}>
-                        {version.title}
-                    </Typography>
-                    <Typography opacity={0.5} variant='caption'>
-                        {getFormattedDate(version.createdAt, currentLanguage)}
-                    </Typography>
-                </View>
-            </TouchableRipple>
-        </AnimatedView>
-    ), [colors.surface, ordered.length, currentLanguage])
+        <VersionItem
+            version={version}
+            first={index === 0}
+            last={index === ordered.length - 1}
+            onSelect={setSelected}
+        />
+    ), [ordered.length])
+
+    const onBack = useCallback(() => setSelected(null), [])
+    const onOpenRestore = useCallback(() => setRestoreDialogVisible(true), [])
+    const onCloseRestore = useCallback(() => setRestoreDialogVisible(false), [])
+    const onConfirmRestore = useCallback(() => onRestore(selected), [onRestore, selected])
 
     return (
         <View style={styles.container}>
@@ -114,7 +133,7 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
                 <View style={styles.headerLeft}>
                     {selected && (
                         <IconButton
-                            onPress={() => setSelected(null)}
+                            onPress={onBack}
                             icon={(props) => <ArrowBack {...props} />}
                             accessibilityLabel={t('button.back')}
                         />
@@ -126,7 +145,7 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
                             entering={FadeIn}
                             exiting={FadeOut}
                         >
-                            <Typography opacity={0.5} variant='caption'>
+                            <Typography opacity={OPACITY.muted} variant='caption'>
                                 {getFormattedDate(selected.createdAt, currentLanguage)}
                             </Typography>
                         </AnimatedView>
@@ -158,7 +177,7 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
                             <Pressable
                                 compact={true}
                                 mode='contained'
-                                onPress={() => setRestoreDialogVisible(true)}
+                                onPress={onOpenRestore}
                             >
                                 {t('button.restore')}
                             </Pressable>
@@ -184,7 +203,7 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
             ) : (
                 <>
                     {!loading && ordered.length === 0 && (
-                        <Typography opacity={0.5}>
+                        <Typography opacity={OPACITY.muted}>
                             {t('message.version_history.empty')}
                         </Typography>
                     )}
@@ -206,8 +225,8 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
                 title={t('message.version_history.restore_title')}
                 message={t('message.version_history.restore_message')}
                 confirmLabel={t('button.restore')}
-                onDismiss={() => setRestoreDialogVisible(false)}
-                onConfirm={() => onRestore(selected)}
+                onDismiss={onCloseRestore}
+                onConfirm={onConfirmRestore}
             />
         </View>
     )
@@ -234,7 +253,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     list: {
-        gap: 2,
+        gap: SPACING.xxxs,
         paddingHorizontal: SPACING.lg
     },
     item: {
@@ -244,16 +263,16 @@ const styles = StyleSheet.create({
     diff: {
         flex: 1,
         marginHorizontal: SPACING.lg,
-        borderRadius: 8,
+        borderRadius: RADIUS.md,
         overflow: 'hidden',
         marginBottom: SPACING.lg
     },
     diffLine: {
-        paddingVertical: 1,
+        paddingVertical: SPACING.xxxs,
         paddingHorizontal: SPACING.xxs
     },
     diffText: {
         fontFamily: FONTS.azeretLight,
-        fontSize: 12
+        fontSize: TYPOGRAPHY_SIZE_VARIANTS.caption
     }
 })

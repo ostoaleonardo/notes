@@ -1,12 +1,12 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 
-import { ModalSheet } from '@/components/modal/modal-sheet'
+import { ListSheet } from '@/components/modal/list-sheet'
 import { Typography } from '@/components/typography'
 
+import { toggleInSet } from '@/utils/toggle-in-set'
 import { buildOutline, findHeadings, getVisibleOutline } from '@/utils/headings'
 
 import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
@@ -16,8 +16,7 @@ import {
     HEADING_OUTLINE_GUIDE_WIDTH,
     HEADING_OUTLINE_INDENT
 } from '@/constants/headings'
-import { SHEET_SNAP_POINTS } from '@/constants/sheet'
-import { SPACING } from '@/constants/spacing'
+import { SPACING } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'
 
 const guideOffset = (level) => (
@@ -91,13 +90,7 @@ export const OutlineSheet = memo(function OutlineSheet({ sheet, contentRef, onSe
         onSelect(index)
     }, [sheet, onSelect])
 
-    const onToggle = useCallback((index) => {
-        setCollapsed((prev) => {
-            const next = new Set(prev)
-            if (!next.delete(index)) next.add(index)
-            return next
-        })
-    }, [])
+    const onToggle = useCallback((index) => setCollapsed((prev) => toggleInSet(prev, index)), [])
 
     const renderItem = useCallback(({ item }) => (
         <OutlineItem
@@ -109,34 +102,20 @@ export const OutlineSheet = memo(function OutlineSheet({ sheet, contentRef, onSe
     ), [collapsed, onPress, onToggle])
 
     return (
-        <ModalSheet
-            ref={sheet.ref}
-            onClose={sheet.onClose}
+        <ListSheet
+            sheet={sheet}
             onChange={onChange}
-            snapPoints={SHEET_SNAP_POINTS.TALL}
-        >
-            <FlatList
-                data={items}
-                keyExtractor={(item) => String(item.index)}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.list}
-                renderItem={renderItem}
-                ListEmptyComponent={(
-                    <View style={styles.empty}>
-                        <Typography opacity={0.5}>
-                            {t('message.outline.empty')}
-                        </Typography>
-                    </View>
-                )}
-            />
-        </ModalSheet>
+            data={items}
+            renderItem={renderItem}
+            keyExtractor={getOutlineKey}
+            emptyMessage={t('message.outline.empty')}
+        />
     )
 })
 
+const getOutlineKey = (item) => String(item.index)
+
 const styles = StyleSheet.create({
-    list: {
-        paddingBottom: SPACING.lg
-    },
     item: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -161,9 +140,5 @@ const styles = StyleSheet.create({
     text: {
         flex: 1,
         marginLeft: SPACING.sm
-    },
-    empty: {
-        paddingTop: 64,
-        alignItems: 'center'
     }
 })

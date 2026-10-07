@@ -9,8 +9,9 @@ import { useEditDialogInput } from '@/hooks/use-dialog-input'
 import { useHaptics } from '@/hooks/use-haptics'
 import { useRepositories } from '@/hooks/use-repositories'
 
-import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/dialog'
+import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
 import { FEEDBACK_TYPES } from '@/constants/feedback-types'
+import { REPOSITORY_RESULTS } from '@/constants/repository-results'
 
 export function RenameRepository({ visible, onDismiss, repositoryId }) {
     const { t } = useTranslation()
@@ -28,7 +29,7 @@ export function RenameRepository({ visible, onDismiss, repositoryId }) {
         const result = await renameRepository(repositoryId, alias.trim())
         onDismiss()
 
-        if (result === 'error') {
+        if (result === REPOSITORY_RESULTS.ERROR) {
             ToastAndroid.show(t('repositories.rename_failed'), ToastAndroid.SHORT)
             return
         }

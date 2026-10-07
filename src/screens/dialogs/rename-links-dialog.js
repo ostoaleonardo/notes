@@ -5,8 +5,8 @@ import { Button } from 'react-native-paper'
 import { DialogModal } from '@/components/dialog'
 import { Typography } from '@/components/typography'
 
-import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/dialog'
-import { SPACING } from '@/constants/spacing'
+import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
+import { SPACING, OPACITY } from '@/constants/theme'
 
 export function RenameLinksDialog({ visible, linksCount, onDismiss, onConfirmOnce, onConfirmAlways }) {
     const { t } = useTranslation()
@@ -48,7 +48,7 @@ export function RenameLinksDialog({ visible, linksCount, onDismiss, onConfirmOnc
                 </View>
             ]}
         >
-            <Typography opacity={0.6}>
+            <Typography opacity={OPACITY.secondary}>
                 {t('message.wiki_links.rename_message', { count: linksCount })}
             </Typography>
         </DialogModal>

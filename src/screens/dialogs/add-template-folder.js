@@ -1,53 +1,21 @@
-import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
-import { DialogModal } from '@/components/dialog'
-import { LargeInput } from '@/components/input/large-input'
+import { NameDialog } from '@/components/name-dialog'
 
-import { useCreateDialogInput } from '@/hooks/use-dialog-input'
-import { useHaptics } from '@/hooks/use-haptics'
 import { useTemplates } from '@/hooks/use-templates'
-
-import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/dialog'
-import { FEEDBACK_TYPES } from '@/constants/feedback-types'
 
 export function AddTemplateFolder({ visible, onDismiss, parent = '' }) {
     const { t } = useTranslation()
-    const { vibrate } = useHaptics()
     const { addTemplateFolder } = useTemplates()
 
-    const [name, setName, disabled] = useCreateDialogInput(visible)
-
-    const onCreate = async () => {
-        if (disabled) return
-
-        await addTemplateFolder(name.trim(), parent)
-        onDismiss()
-        vibrate(FEEDBACK_TYPES.SUCCESS)
-    }
+    const onSubmit = (name) => addTemplateFolder(name, parent)
 
     return (
-        <DialogModal
+        <NameDialog
             title={t('repositories.add_subfolder')}
             visible={visible}
             onDismiss={onDismiss}
-            actions={
-                <Button
-                    mode='contained'
-                    onPress={onCreate}
-                    disabled={disabled}
-                    labelStyle={DIALOG_BUTTON_LABEL_STYLE}
-                >
-                    {t('button.create')}
-                </Button>
-            }
-        >
-            <LargeInput
-                autoFocus
-                value={name}
-                placeholder={t('repositories.add_subfolder')}
-                onChangeText={setName}
-            />
-        </DialogModal>
+            onSubmit={onSubmit}
+        />
     )
 }

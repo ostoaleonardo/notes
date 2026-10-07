@@ -11,8 +11,8 @@ import { FindReplace } from '@/icons/find-replace'
 import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
 import { KeyboardArrowUp } from '@/icons/keyboard-arrow-up'
 
-import { RADIUS } from '@/constants/radius'
-import { SPACING } from '@/constants/spacing'
+import { RADIUS, SPACING } from '@/constants/theme'
+import { MARKDOWN_ACTIONS } from '@/constants/markdown-actions'
 
 export function MarkdownSearchBar({ search, action }) {
     const { t } = useTranslation()
@@ -30,12 +30,12 @@ export function MarkdownSearchBar({ search, action }) {
 
     if (!visible) return null
 
-    const onPrevious = () => action.run('search-previous')
-    const onNext = () => action.run('search-next')
-    const onReplaceOne = () => action.run('search-replace')
-    const onReplaceAll = () => action.run('search-replace-all')
+    const onPrevious = () => action.run(MARKDOWN_ACTIONS.SEARCH_PREVIOUS)
+    const onNext = () => action.run(MARKDOWN_ACTIONS.SEARCH_NEXT)
+    const onReplaceOne = () => action.run(MARKDOWN_ACTIONS.SEARCH_REPLACE)
+    const onReplaceAll = () => action.run(MARKDOWN_ACTIONS.SEARCH_REPLACE_ALL)
 
-    const searchBottomRadius = replaceVisible ? RADIUS.inner : RADIUS.outer
+    const searchBottomRadius = replaceVisible ? RADIUS.md : RADIUS.lg
 
     return (
         <View style={styles.container}>
@@ -43,8 +43,8 @@ export function MarkdownSearchBar({ search, action }) {
                 style={{
                     ...styles.row,
                     backgroundColor: colors.surface,
-                    borderTopLeftRadius: RADIUS.outer,
-                    borderTopRightRadius: RADIUS.outer,
+                    borderTopLeftRadius: RADIUS.lg,
+                    borderTopRightRadius: RADIUS.lg,
                     borderBottomLeftRadius: searchBottomRadius,
                     borderBottomRightRadius: searchBottomRadius
                 }}
@@ -82,10 +82,10 @@ export function MarkdownSearchBar({ search, action }) {
                     style={{
                         ...styles.row,
                         backgroundColor: colors.surface,
-                        borderTopLeftRadius: RADIUS.inner,
-                        borderTopRightRadius: RADIUS.inner,
-                        borderBottomLeftRadius: RADIUS.outer,
-                        borderBottomRightRadius: RADIUS.outer
+                        borderTopLeftRadius: RADIUS.md,
+                        borderTopRightRadius: RADIUS.md,
+                        borderBottomLeftRadius: RADIUS.lg,
+                        borderBottomRightRadius: RADIUS.lg
                     }}
                 >
                     <SmallInput
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingHorizontal: SPACING.lg,
         paddingBottom: SPACING.sm,
-        gap: 2
+        gap: SPACING.xxxs
     },
     row: {
         width: '100%',

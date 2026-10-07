@@ -1,28 +1,25 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { router, useLocalSearchParams } from 'expo-router'
 
-import { MenuItem } from '@/components/menu/menu-item'
+import { useCommonActionsMenu } from './use-common-actions-menu'
+import { ActionMenuItem } from '@/components/menu/action-menu-item'
 
 import { useCurrentNote } from '@/hooks/use-current-note'
 import { useNotes } from '@/hooks/use-notes'
 import { useUtils } from '@/hooks/use-utils'
+import { toggleInSet } from '@/utils/toggle-in-set'
 import { getDate } from '@/utils/date'
 import { getEditorPath } from '@/utils/editor-path'
 import { buildDuplicateNote } from '@/utils/duplicate-note'
 
-import { Code } from '@/icons/code'
-import { Commit } from '@/icons/commit'
-import { Delete } from '@/icons/delete'
+import { FormatListBulleted } from '@/icons/format-list-bulleted'
 import { Keep } from '@/icons/keep'
 import { KeepFilled } from '@/icons/keep-filled'
-import { FormatListBulleted } from '@/icons/format-list-bulleted'
 import { Link } from '@/icons/link'
 import { NoteStack } from '@/icons/note-stack'
 import { OpenInNew } from '@/icons/open-in-new'
 import { Share as ShareIcon } from '@/icons/share'
-
-import { EDITOR_MODES } from '@/constants/editor-modes'
 
 export const useNoteActionsMenu = ({
     onTrigger,
@@ -44,18 +41,21 @@ export const useNoteActionsMenu = ({
 
     const { getNote, saveNote } = useNotes()
 
-    const toggleKeep = () => onTrigger(() => {
-        if (pinned.has(currentId)) {
-            pinned.delete(currentId)
-        } else {
-            pinned.add(currentId)
-        }
-
-        setIsPinned(pinned.has(currentId))
-        updatePinned(new Set(pinned))
+    const common = useCommonActionsMenu({
+        onTrigger,
+        onSetMode,
+        onOpenVersionHistory,
+        onOpenDeleteDialog
     })
 
-    const onDuplicate = () => onTrigger(async () => {
+    const toggleKeep = useCallback(() => {
+        const next = toggleInSet(pinned, currentId)
+
+        setIsPinned(next.has(currentId))
+        updatePinned(next)
+    }, [pinned, currentId, updatePinned])
+
+    const onDuplicate = useCallback(async () => {
         const note = getNote(currentId)
 
         const duplicate = buildDuplicateNote(note, {
@@ -65,74 +65,63 @@ export const useNoteActionsMenu = ({
 
         const { path } = await saveNote(duplicate, note.repositoryId)
         router.push(getEditorPath(path))
-    })
+    }, [getNote, currentId, saveNote, t])
 
     return [
         [
-            <MenuItem
-                key='code'
-                title={t('button.code')}
-                leadingIcon={(props) => <Code {...props} />}
-                onPress={() => onTrigger(() => onSetMode(EDITOR_MODES.CODE))}
-            />,
-            <MenuItem
+            common.code,
+            <ActionMenuItem
                 key='outline'
                 title={t('title.outline')}
-                leadingIcon={(props) => <FormatListBulleted {...props} />}
-                onPress={() => onTrigger(onOpenOutline)}
+                icon={FormatListBulleted}
+                action={onOpenOutline}
+                onTrigger={onTrigger}
             />,
-            <MenuItem
+            <ActionMenuItem
                 key='outgoing-links'
                 title={t('title.outgoing_links')}
-                leadingIcon={(props) => <OpenInNew {...props} />}
-                onPress={() => onTrigger(onOpenOutgoingLinks)}
+                icon={OpenInNew}
+                action={onOpenOutgoingLinks}
+                onTrigger={onTrigger}
             />,
             slug && (
-                <MenuItem
+                <ActionMenuItem
                     key='backlinks'
                     title={showBacklinks ? t('button.hide_backlinks') : t('button.show_backlinks')}
-                    leadingIcon={(props) => <Link {...props} />}
-                    onPress={() => onTrigger(onToggleShowBacklinks)}
+                    icon={Link}
+                    action={onToggleShowBacklinks}
+                    onTrigger={onTrigger}
                 />
             )
         ].filter(Boolean),
         [
-            <MenuItem
+            <ActionMenuItem
                 key='pin'
                 title={isPinned ? t('button.unpin') : t('button.pin')}
-                leadingIcon={(props) => (isPinned ? <KeepFilled {...props} /> : <Keep {...props} />)}
-                onPress={toggleKeep}
+                icon={isPinned ? KeepFilled : Keep}
+                action={toggleKeep}
+                onTrigger={onTrigger}
             />,
             slug && (
-                <MenuItem
+                <ActionMenuItem
                     key='duplicate'
                     title={t('button.duplicate')}
-                    leadingIcon={(props) => <NoteStack {...props} />}
-                    onPress={onDuplicate}
+                    icon={NoteStack}
+                    action={onDuplicate}
+                    onTrigger={onTrigger}
                 />
             ),
             slug && (
-                <MenuItem
+                <ActionMenuItem
                     key='sharing'
                     title={t('button.export_share')}
-                    leadingIcon={(props) => <ShareIcon {...props} />}
-                    onPress={() => onTrigger(onOpenSharingDialog)}
+                    icon={ShareIcon}
+                    action={onOpenSharingDialog}
+                    onTrigger={onTrigger}
                 />
             ),
-            <MenuItem
-                key='version-history'
-                title={t('title.version_history')}
-                leadingIcon={(props) => <Commit {...props} />}
-                onPress={() => onTrigger(onOpenVersionHistory)}
-            />
+            common.versionHistory
         ].filter(Boolean),
-        [
-            <MenuItem
-                key='delete'
-                title={t('button.delete')}
-                leadingIcon={(props) => <Delete {...props} />}
-                onPress={() => onTrigger(onOpenDeleteDialog)}
-            />
-        ]
+        [common.remove]
     ]
 }

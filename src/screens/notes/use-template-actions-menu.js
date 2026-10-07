@@ -1,45 +1,37 @@
 import { useTranslation } from 'react-i18next'
 
-import { MenuItem } from '@/components/menu/menu-item'
+import { useCommonActionsMenu } from './use-common-actions-menu'
+import { ActionMenuItem } from '@/components/menu/action-menu-item'
 
-import { Code } from '@/icons/code'
-import { Commit } from '@/icons/commit'
-import { Delete } from '@/icons/delete'
 import { Shapes } from '@/icons/shapes'
 
-import { EDITOR_MODES } from '@/constants/editor-modes'
-
-export const useTemplateActionsMenu = ({ onTrigger, onSetMode, onOpenPlaceholders, onOpenVersionHistory, onOpenDeleteDialog }) => {
+export const useTemplateActionsMenu = ({
+    onTrigger,
+    onSetMode,
+    onOpenPlaceholders,
+    onOpenVersionHistory,
+    onOpenDeleteDialog
+}) => {
     const { t } = useTranslation()
+    const common = useCommonActionsMenu({
+        onTrigger,
+        onSetMode,
+        onOpenVersionHistory,
+        onOpenDeleteDialog
+    })
 
     return [
         [
-            <MenuItem
-                key='code'
-                title={t('button.code')}
-                leadingIcon={(props) => <Code {...props} />}
-                onPress={() => onTrigger(() => onSetMode(EDITOR_MODES.CODE))}
-            />,
-            <MenuItem
+            common.code,
+            <ActionMenuItem
                 key='placeholders'
                 title={t('templates.view_placeholders')}
-                leadingIcon={(props) => <Shapes {...props} />}
-                onPress={() => onTrigger(onOpenPlaceholders)}
+                icon={Shapes}
+                action={onOpenPlaceholders}
+                onTrigger={onTrigger}
             />,
-            <MenuItem
-                key='version-history'
-                title={t('title.version_history')}
-                leadingIcon={(props) => <Commit {...props} />}
-                onPress={() => onTrigger(onOpenVersionHistory)}
-            />
+            common.versionHistory
         ],
-        [
-            <MenuItem
-                key='delete'
-                title={t('button.delete')}
-                leadingIcon={(props) => <Delete {...props} />}
-                onPress={() => onTrigger(onOpenDeleteDialog)}
-            />
-        ]
+        [common.remove]
     ]
 }

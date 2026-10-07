@@ -7,9 +7,9 @@ import { Typography } from '@/components/typography'
 
 import { renderTemplate } from '@/utils/render-template'
 
-import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/dialog'
+import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
 import { TEMPLATE_PLACEHOLDERS } from '@/constants/template-placeholders'
-import { SPACING } from '@/constants/spacing'
+import { SPACING, OPACITY } from '@/constants/theme'
 
 export function TemplatePlaceholders({ visible, onDismiss }) {
     const { t } = useTranslation()
@@ -41,13 +41,13 @@ export function TemplatePlaceholders({ visible, onDismiss }) {
                             {`{{${key}}}`}
                         </Typography>
                         <Typography
-                            opacity={0.6}
+                            opacity={OPACITY.secondary}
                             variant='caption'
                         >
                             {t(`templates.placeholder_${key}`)}
                         </Typography>
                         <Typography
-                            opacity={0.4}
+                            opacity={OPACITY.disabled}
                             variant='caption'
                         >
                             {t('templates.placeholder_example', { value: examples[key] })}

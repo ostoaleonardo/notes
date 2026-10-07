@@ -10,7 +10,7 @@ import { Typography } from '@/components/typography'
 import { useGroupedCornerStyle } from '@/hooks/use-grouped-corner-style'
 
 import { MARKDOWN_GROUPS } from '@/constants/markdown-controls'
-import { SPACING } from '@/constants/spacing'
+import { SPACING } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'
 
 const GroupItem = memo(function GroupItem({ action, Icon, first, last, onSelect }) {

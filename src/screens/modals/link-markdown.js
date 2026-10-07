@@ -5,8 +5,8 @@ import { useTheme } from 'react-native-paper'
 
 import { LargeInput } from '@/components/input/large-input'
 import { Pressable } from '@/components/button/pressable'
-import { Section } from '@/components/section'
-import { SPACING } from '@/constants/spacing'
+import { SheetField, SheetForm } from '@/components/modal/sheet-form'
+import { INPUT_EXAMPLES } from '@/constants/input-examples'
 
 export function LinkMarkdown({ onClose, onInsert }) {
     const { t } = useTranslation()
@@ -26,27 +26,22 @@ export function LinkMarkdown({ onClose, onInsert }) {
     }
 
     return (
-        <View style={styles.container}>
-            <Section
-                title={t('markdown.link_title')}
-                contentStyle={styles.field}
-            >
+        <SheetForm>
+            <SheetField title={t('markdown.link_title')}>
                 <LargeInput
                     value={title}
                     onChangeText={setTitle}
-                    placeholder='YouTube'
+                    placeholder={INPUT_EXAMPLES.LINK_TITLE}
                 />
-            </Section>
-            <Section
-                title={t('markdown.link_url')}
-                contentStyle={styles.field}
-            >
+            </SheetField>
+
+            <SheetField title={t('markdown.link_url')}>
                 <LargeInput
                     value={url}
                     onChangeText={setUrl}
-                    placeholder='www.youtube.com'
+                    placeholder={INPUT_EXAMPLES.LINK_URL}
                 />
-            </Section>
+            </SheetField>
 
             <View style={styles.buttons}>
                 <Pressable
@@ -58,19 +53,11 @@ export function LinkMarkdown({ onClose, onInsert }) {
                     {t('button.insert')}
                 </Pressable>
             </View>
-        </View>
+        </SheetForm>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        gap: SPACING.xxl,
-        paddingVertical: SPACING.xxl
-    },
-    field: {
-        paddingHorizontal: SPACING.lg
-    },
     buttons: {
         width: '100%',
         flexDirection: 'row',

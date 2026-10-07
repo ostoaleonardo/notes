@@ -7,8 +7,7 @@ import { Typography } from '@/components/typography'
 
 import { toggleTagQualifier } from '@/utils/search-query'
 
-import { FONTS } from '@/constants/fonts'
-import { SPACING } from '@/constants/spacing'
+import { FONTS, SPACING, OPACITY, RADIUS } from '@/constants/theme'
 
 export function SearchTagFilters({ query, setQuery, tags, parsed }) {
     const { t } = useTranslation()
@@ -23,7 +22,7 @@ export function SearchTagFilters({ query, setQuery, tags, parsed }) {
         >
             <View style={styles.carousel}>
                 <Typography
-                    opacity={0.5}
+                    opacity={OPACITY.muted}
                     variant='caption'
                 >
                     {tags.length === 0 ? t('message.tags.empty') : t('title.tags') + ':'}
@@ -38,7 +37,7 @@ export function SearchTagFilters({ query, setQuery, tags, parsed }) {
                                 key={tag}
                                 mode={selected ? 'flat' : 'outlined'}
                                 style={{
-                                    borderRadius: 24,
+                                    borderRadius: RADIUS.xl,
                                     ...(selected && { backgroundColor: colors.onBackground })
                                 }}
                                 textStyle={{
@@ -67,7 +66,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     chips: {
-        gap: 3,
+        gap: SPACING.xxs,
         flexDirection: 'row'
     }
 })
