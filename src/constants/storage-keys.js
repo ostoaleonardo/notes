@@ -1,13 +1,10 @@
 export const STORAGE_KEYS = {
-    // Legacy
     NOTES: 'notes',
     CATEGORIES: 'categories',
 
-    // Repositories
     REPOSITORIES: 'folders',
     ACTIVE_REPOSITORY: 'active-folder',
 
-    // Settings
     PINNED: 'pinned',
     PRO: 'pro',
     THEME: 'theme',
@@ -33,13 +30,11 @@ export const STORAGE_KEYS = {
     DAILY_NOTE_FOLDER: 'daily-note-folder',
     DAILY_NOTE_TEMPLATE: 'daily-note-template',
 
-    // Notes
     CURRENT_NOTE: 'current-note',
     RECENT_NOTES: 'recent-notes',
     WELCOME_NOTE_CREATED: 'welcome-note-created',
     LEGACY_VERSIONS_MIGRATED_PREFIX: 'legacy-versions-migrated:',
 
-    // Search
     RECENT_SEARCHES: 'recent-searches',
     SAVED_SEARCHES: 'saved-searches'
 }

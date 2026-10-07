@@ -1,3 +1,5 @@
+import { MIME_TYPES } from './mime-types'
+
 export const FILE_KINDS = {
     IMAGE: 'image',
     AUDIO: 'audio',
@@ -7,27 +9,27 @@ export const FILE_KINDS = {
 }
 
 export const FILE_MIME_TYPES = {
-    png: 'image/png',
-    jpg: 'image/jpeg',
-    jpeg: 'image/jpeg',
-    gif: 'image/gif',
-    webp: 'image/webp',
-    svg: 'image/svg+xml',
-    bmp: 'image/bmp',
-    avif: 'image/avif',
-    mp3: 'audio/mpeg',
-    wav: 'audio/wav',
-    m4a: 'audio/mp4',
-    ogg: 'audio/ogg',
-    flac: 'audio/flac',
-    '3gp': 'audio/3gpp',
-    mp4: 'video/mp4',
-    webm: 'video/webm',
-    ogv: 'video/ogg',
-    mov: 'video/quicktime',
-    mkv: 'video/x-matroska',
-    pdf: 'application/pdf',
-    txt: 'text/plain'
+    png: MIME_TYPES.PNG,
+    jpg: MIME_TYPES.JPEG,
+    jpeg: MIME_TYPES.JPEG,
+    gif: MIME_TYPES.GIF,
+    webp: MIME_TYPES.WEBP,
+    svg: MIME_TYPES.SVG,
+    bmp: MIME_TYPES.BMP,
+    avif: MIME_TYPES.AVIF,
+    mp3: MIME_TYPES.MP3,
+    wav: MIME_TYPES.WAV,
+    m4a: MIME_TYPES.M4A,
+    ogg: MIME_TYPES.OGG_AUDIO,
+    flac: MIME_TYPES.FLAC,
+    '3gp': MIME_TYPES.GPP3,
+    mp4: MIME_TYPES.MP4,
+    webm: MIME_TYPES.WEBM,
+    ogv: MIME_TYPES.OGG_VIDEO,
+    mov: MIME_TYPES.QUICKTIME,
+    mkv: MIME_TYPES.MATROSKA,
+    pdf: MIME_TYPES.PDF,
+    txt: MIME_TYPES.TEXT
 }
 
 export const FILE_KIND_BY_EXTENSION = {

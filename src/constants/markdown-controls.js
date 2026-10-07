@@ -26,8 +26,9 @@ import { Table } from '@/icons/table'
 import { Title } from '@/icons/title'
 
 import { TEMPLATE_SCOPE } from '@/constants/toolbar'
+import { MARKDOWN_ACTIONS } from '@/constants/markdown-actions'
 
-export const MARKDOWN_GROUP_KEYS = {
+const MARKDOWN_GROUP_KEYS = {
     HEADING: 'heading',
     LIST: 'list',
     INSERT: 'insert'
@@ -37,52 +38,52 @@ export const MARKDOWN_GROUPS = {
     [MARKDOWN_GROUP_KEYS.HEADING]: {
         Icon: FormatH1,
         items: [
-            { action: 'h0', Icon: Title },
-            { action: 'h1', Icon: FormatH1 },
-            { action: 'h2', Icon: FormatH2 },
-            { action: 'h3', Icon: FormatH3 },
-            { action: 'h4', Icon: FormatH4 },
-            { action: 'h5', Icon: FormatH5 },
-            { action: 'h6', Icon: FormatH6 }
+            { action: MARKDOWN_ACTIONS.H0, Icon: Title },
+            { action: MARKDOWN_ACTIONS.H1, Icon: FormatH1 },
+            { action: MARKDOWN_ACTIONS.H2, Icon: FormatH2 },
+            { action: MARKDOWN_ACTIONS.H3, Icon: FormatH3 },
+            { action: MARKDOWN_ACTIONS.H4, Icon: FormatH4 },
+            { action: MARKDOWN_ACTIONS.H5, Icon: FormatH5 },
+            { action: MARKDOWN_ACTIONS.H6, Icon: FormatH6 }
         ]
     },
     [MARKDOWN_GROUP_KEYS.LIST]: {
         Icon: FormatListBulleted,
         items: [
-            { action: 'list-bullet', Icon: FormatListBulleted },
-            { action: 'list-ordered', Icon: FormatListNumbered },
-            { action: 'list-checklist', Icon: Checklist }
+            { action: MARKDOWN_ACTIONS.LIST_BULLET, Icon: FormatListBulleted },
+            { action: MARKDOWN_ACTIONS.LIST_ORDERED, Icon: FormatListNumbered },
+            { action: MARKDOWN_ACTIONS.LIST_CHECKLIST, Icon: Checklist }
         ]
     },
     [MARKDOWN_GROUP_KEYS.INSERT]: {
         Icon: AttachFile,
         items: [
-            { action: 'image', Icon: Picture },
-            { action: 'link', Icon: Link },
-            { action: 'table', Icon: Table }
+            { action: MARKDOWN_ACTIONS.IMAGE, Icon: Picture },
+            { action: MARKDOWN_ACTIONS.LINK, Icon: Link },
+            { action: MARKDOWN_ACTIONS.TABLE, Icon: Table }
         ]
     }
 }
 
 export const MARKDOWN_CONTROLS = [
-    { action: 'wiki-link', Icon: DataArray },
-    { action: 'fold', Icon: CollapseContent },
+    { action: MARKDOWN_ACTIONS.WIKI_LINK, Icon: DataArray },
+    { action: MARKDOWN_ACTIONS.FOLD, Icon: CollapseContent },
     { divider: true },
     { group: MARKDOWN_GROUP_KEYS.HEADING },
-    { action: 'bold', Icon: FormatBold },
-    { action: 'italic', Icon: FormatItalic },
-    { action: 'strike', Icon: FormatStrikethrough },
+    { action: MARKDOWN_ACTIONS.BOLD, Icon: FormatBold },
+    { action: MARKDOWN_ACTIONS.ITALIC, Icon: FormatItalic },
+    { action: MARKDOWN_ACTIONS.STRIKE, Icon: FormatStrikethrough },
     { divider: true },
     { group: MARKDOWN_GROUP_KEYS.LIST },
-    { action: 'outdent', Icon: FormatIndentDecrease },
-    { action: 'indent', Icon: FormatIndentIncrease },
+    { action: MARKDOWN_ACTIONS.OUTDENT, Icon: FormatIndentDecrease },
+    { action: MARKDOWN_ACTIONS.INDENT, Icon: FormatIndentIncrease },
     { divider: true },
     { group: MARKDOWN_GROUP_KEYS.INSERT },
-    { action: 'code', Icon: Code },
-    { action: 'quote', Icon: FormaQuote },
-    { action: 'hr', Icon: HorizontalRule },
+    { action: MARKDOWN_ACTIONS.CODE, Icon: Code },
+    { action: MARKDOWN_ACTIONS.QUOTE, Icon: FormaQuote },
+    { action: MARKDOWN_ACTIONS.HR, Icon: HorizontalRule },
     { divider: true, scope: TEMPLATE_SCOPE },
-    { action: 'insert-date', Icon: CalendarToday, scope: TEMPLATE_SCOPE },
-    { action: 'insert-time', Icon: Schedule, scope: TEMPLATE_SCOPE },
-    { action: 'insert-title', Icon: Title, scope: TEMPLATE_SCOPE }
+    { action: MARKDOWN_ACTIONS.INSERT_DATE, Icon: CalendarToday, scope: TEMPLATE_SCOPE },
+    { action: MARKDOWN_ACTIONS.INSERT_TIME, Icon: Schedule, scope: TEMPLATE_SCOPE },
+    { action: MARKDOWN_ACTIONS.INSERT_TITLE, Icon: Title, scope: TEMPLATE_SCOPE }
 ]

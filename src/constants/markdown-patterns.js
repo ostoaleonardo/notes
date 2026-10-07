@@ -51,3 +51,17 @@ export const AUTO_PAIR_ACTIONS = {
     SKIP: 'skip',
     PAIR: 'pair'
 }
+
+export const WHITESPACE_PATTERN = /\s/
+export const NON_WHITESPACE_PATTERN = /\S/
+export const NON_WORD_PATTERN = /\W/
+export const NEWLINE_PATTERN = /\n/g
+export const LEADING_WHITESPACE_PATTERN = /^\s*/
+export const REGEXP_SPECIAL_CHARS_PATTERN = /[.*+?^${}()|[\]\\]/g
+export const ORDERED_MARKER_PATTERN = /^\d+\.$/
+export const MARKDOWN_FILE_NAME_PATTERN = /^(.+)\.(md|markdown)$/i
+export const TEMPLATE_FILE_EXTENSION_PATTERN = /\.(md|markdown|txt)$/i
+export const TABLE_LEADING_PIPE_PATTERN = /^\|/
+export const TABLE_TRAILING_PIPE_PATTERN = /(?<!\\)\|$/
+export const TABLE_UNESCAPED_PIPE_PATTERN = /(?<!\\)\|/g
+export const CHECKED_TASK_PATTERN = /\[[xX]\]/

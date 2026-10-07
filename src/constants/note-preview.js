@@ -3,3 +3,5 @@ export const PREVIEW_MAX_CHARS = 400
 
 export const CARD_PREVIEW_LINES = 12
 export const TEMPLATE_CARD_PREVIEW_LINES = 14
+
+export const PREVIEW_ELLIPSIS = '...'

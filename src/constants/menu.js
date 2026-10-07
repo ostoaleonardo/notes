@@ -1,2 +1,0 @@
-export const SCROLLABLE_MENU_MAX_HEIGHT = 280
-export const MENU_ITEM_INDENT = 16

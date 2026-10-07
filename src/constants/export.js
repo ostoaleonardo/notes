@@ -1,3 +1,5 @@
+import { MIME_TYPES } from './mime-types'
+
 export const EXPORT_FONT_SIZE = 13
 
 export const EXPORT_FORMATS = {
@@ -7,9 +9,9 @@ export const EXPORT_FORMATS = {
 }
 
 export const EXPORT_MIME_TYPES = {
-    [EXPORT_FORMATS.MARKDOWN]: 'text/markdown',
-    [EXPORT_FORMATS.HTML]: 'text/html',
-    [EXPORT_FORMATS.PDF]: 'application/pdf'
+    [EXPORT_FORMATS.MARKDOWN]: MIME_TYPES.MARKDOWN,
+    [EXPORT_FORMATS.HTML]: MIME_TYPES.HTML,
+    [EXPORT_FORMATS.PDF]: MIME_TYPES.PDF
 }
 
 export const EXPORT_EXTENSIONS = {
@@ -35,7 +37,7 @@ export const EXPORT_SAFE_URL_PATTERN = /^(?:https?:|mailto:|tel:|data:image\/(?:
 
 export const EXPORT_LOCAL_IMAGE_URL_PATTERN = /^(?:file|content):\/\//i
 
-export const EXPORT_CONTENT_SECURITY_POLICY_DIRECTIVES = [
+const EXPORT_CONTENT_SECURITY_POLICY_DIRECTIVES = [
     "script-src 'none'",
     "object-src 'none'",
     "frame-src 'none'",

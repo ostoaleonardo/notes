@@ -11,3 +11,4 @@ export const WIKI_LINK_FORMATS = {
     MARKDOWN: 'markdown'
 }
 export const WIKI_LINK_CLOSING = ']]'
+export const WIKI_LINK_TYPING_PATTERN = /\[\[[^\]]*/

@@ -60,3 +60,5 @@ export const LANGUAGES = [
         name: 'Українська'
     }
 ]
+
+export const DEFAULT_LANGUAGE = 'en'

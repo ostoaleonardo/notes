@@ -11,7 +11,6 @@ export const PHRASE_TOKEN_REGEX = /^"(.+)"$/
 export const WRAPPED_VALUE_REGEX = /^(?:"(.*)"|\((.*)\))$/
 export const DATE_VALUE_REGEX = /^(?:(\d{4}-\d{2}-\d{2})\.\.(\d{4}-\d{2}-\d{2})|(>=|<=|>|<)?(\d{4}-\d{2}-\d{2}))$/
 export const TASK_STATUS_LINE_REGEX = /^\s*(?:>\s*)*(?:[-*+]|\d+[.)])\s+\[(.)\]\s/
-export const WHITESPACE_REGEX = /\s+/
 
 export const DATE_KEY_LENGTH = 10
 export const DAY_IN_MS = 86400000
@@ -52,3 +51,9 @@ export const LINE_OPERATORS = [
 
 export const TASK_STATUS_TODO = ' '
 export const TASK_STATUSES_DONE = ['x', 'X']
+
+export const SEARCH_QUALIFIER_VALUES = {
+    PINNED: 'pinned',
+    IMAGE: 'image',
+    CONTENT: 'content'
+}
