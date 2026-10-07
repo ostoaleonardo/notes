@@ -1,4 +1,4 @@
-import { FONTS } from '@/constants/fonts'
+import { FONTS } from '@/constants/theme'
 
 export const fontFacesCss = (fonts) => {
     if (!fonts?.body) return ''

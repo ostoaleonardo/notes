@@ -11,6 +11,8 @@ import {
     CALLOUT_QUOTE_HEAD_PATTERN
 } from '@/constants/callouts'
 import { TRANSPARENT } from '@/constants/themes'
+import { OPACITY } from '@/constants/theme'
+import { LEZER_NODES } from '@/constants/lezer-nodes'
 
 export const blockquoteNodeNames = BLOCKQUOTE_NODE_NAMES
 
@@ -23,7 +25,7 @@ const findCallout = (node, doc) => {
 }
 
 export const decorateBlockquote = (node, { doc, ranges }) => {
-    if (node.name === 'QuoteMark') {
+    if (node.name === LEZER_NODES.QUOTE_MARK) {
         ranges.push(Decoration.mark({ class: 'cm-live-accent-mark' }).range(node.from, node.to))
         return true
     }
@@ -49,7 +51,7 @@ const calloutTheme = () => Object.fromEntries(Object.entries(CALLOUT_COLORS).map
 export const blockquoteTheme = ({ colors }) => ({
     '.cm-live-quote': {
         fontStyle: 'italic',
-        opacity: 0.85,
+        opacity: OPACITY.strong,
         backgroundColor: colors.background,
         borderLeft: `4px solid ${colors.tertiary}`,
         paddingLeft: '0.6em'

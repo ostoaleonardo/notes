@@ -6,6 +6,7 @@ import { getPairAction, isEmptyPair } from '@/utils/auto-pair'
 
 import { AUTO_PAIR_ACTIONS, AUTO_PAIR_CHARS } from '@/constants/markdown-patterns'
 import { CODE_RANGE_NODE_NAMES } from '@/constants/markdown-live-formatting'
+import { KEYBOARD_KEYS } from '@/constants/keyboard-keys'
 
 const isInsideCode = (state, pos) => {
     for (let node = syntaxTree(state).resolveInner(pos, -1); node; node = node.parent) {
@@ -82,5 +83,5 @@ const deleteEmptyPair = (view) => {
 
 export const markdownAutoPair = [
     EditorView.inputHandler.of(handleInput),
-    Prec.high(keymap.of([{ key: 'Backspace', run: deleteEmptyPair }]))
+    Prec.high(keymap.of([{ key: KEYBOARD_KEYS.BACKSPACE, run: deleteEmptyPair }]))
 ]

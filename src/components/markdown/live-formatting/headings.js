@@ -3,6 +3,8 @@ import { Decoration } from '@codemirror/view'
 import { isRangeSelected } from './utils'
 
 import { ATX_HEADING_LEVELS, SETEXT_HEADING_LEVELS } from '@/constants/markdown-live-formatting'
+import { HEADING_SCALE } from '@/constants/headings'
+import { LEZER_NODES } from '@/constants/lezer-nodes'
 
 export const headingNodeNames = [
     ...Object.keys(ATX_HEADING_LEVELS),
@@ -15,7 +17,7 @@ export const decorateHeading = (node, { doc, selection, ranges }) => {
     const atxLevel = ATX_HEADING_LEVELS[node.name]
     if (atxLevel) {
         const mark = node.node.firstChild
-        if (!mark || mark.name !== 'HeaderMark') return true
+        if (!mark || mark.name !== LEZER_NODES.HEADER_MARK) return true
 
         let hideTo = mark.to
         if (doc.sliceString(hideTo, hideTo + 1) === ' ') hideTo += 1
@@ -26,20 +28,20 @@ export const decorateHeading = (node, { doc, selection, ranges }) => {
     }
 
     const setextLevel = SETEXT_HEADING_LEVELS[node.name]
-    const mark = node.node.getChild('HeaderMark')
+    const mark = node.node.getChild(LEZER_NODES.HEADER_MARK)
     if (!mark) return true
 
-    if (node.from < mark.from) ranges.push(Decoration.mark({ class: `cm-live-h${setextLevel}` }).range(node.from, mark.from))
+    if (node.from < mark.from) {
+        ranges.push(Decoration.mark({ class: `cm-live-h${setextLevel}` }).range(node.from, mark.from))
+    }
     ranges.push(Decoration.replace({}).range(mark.from, mark.to))
 
     return true
 }
 
-export const headingsTheme = ({ typography }) => ({
-    '.cm-live-h1': { fontWeight: 'bold', fontSize: '2em', fontFamily: typography.headingFontFamily },
-    '.cm-live-h2': { fontWeight: 'bold', fontSize: '1.8em', fontFamily: typography.headingFontFamily },
-    '.cm-live-h3': { fontWeight: 'bold', fontSize: '1.6em', fontFamily: typography.headingFontFamily },
-    '.cm-live-h4': { fontWeight: 'bold', fontSize: '1.5em', fontFamily: typography.headingFontFamily },
-    '.cm-live-h5': { fontWeight: 'bold', fontSize: '1.4em', fontFamily: typography.headingFontFamily },
-    '.cm-live-h6': { fontWeight: 'bold', fontSize: '1.2em', fontFamily: typography.headingFontFamily }
-})
+export const headingsTheme = ({ typography }) => Object.fromEntries(
+    HEADING_SCALE.map((scale, index) => [
+        `.cm-live-h${index + 1}`,
+        { fontWeight: 'bold', fontSize: `${scale}em`, fontFamily: typography.headingFontFamily }
+    ])
+)

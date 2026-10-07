@@ -1,6 +1,9 @@
-import { Decoration, ViewPlugin, WidgetType } from '@codemirror/view'
+import { Decoration, WidgetType } from '@codemirror/view'
+
+import { buildDocDecorationsPlugin } from './markdown-dom-doc-decorations'
 
 import { PLACEHOLDER_CLASS, PLACEHOLDER_POINTER_EVENTS } from '@/constants/editor-placeholder'
+import { NON_WHITESPACE_PATTERN } from '@/constants/markdown-patterns'
 
 class PlaceholderWidget extends WidgetType {
     constructor(text) {
@@ -28,12 +31,12 @@ class PlaceholderWidget extends WidgetType {
 
 export const isBlankDoc = (doc) => {
     for (const chunk of doc.iter()) {
-        if (/\S/.test(chunk)) return false
+        if (NON_WHITESPACE_PATTERN.test(chunk)) return false
     }
     return true
 }
 
-const buildDecorations = (view, text) => (
+const buildPlaceholderDecorations = (view, text) => (
     isBlankDoc(view.state.doc)
         ? Decoration.set([Decoration.widget({ widget: new PlaceholderWidget(text), side: 1 }).range(0)])
         : Decoration.none
@@ -41,14 +44,6 @@ const buildDecorations = (view, text) => (
 
 export const buildBlankPlaceholder = (text) => (
     text
-        ? ViewPlugin.fromClass(class {
-            constructor(view) {
-                this.decorations = buildDecorations(view, text)
-            }
-
-            update(update) {
-                if (update.docChanged) this.decorations = buildDecorations(update.view, text)
-            }
-        }, { decorations: (plugin) => plugin.decorations })
+        ? buildDocDecorationsPlugin((view) => buildPlaceholderDecorations(view, text))
         : []
 )

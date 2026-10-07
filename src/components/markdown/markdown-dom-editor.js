@@ -4,30 +4,30 @@ import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } fro
 import { EditorState } from '@codemirror/state'
 import { EditorView, lineNumbers as cmLineNumbers } from '@codemirror/view'
 import { indentUnit } from '@codemirror/language'
-import { closeSearchPanel, openSearchPanel, setSearchQuery, SearchQuery } from '@codemirror/search'
 
 import { fontFacesCss } from './markdown-dom-fonts'
 import { katexFontFacesCss } from './markdown-dom-katex-fonts'
 import { katexCss } from './markdown-dom-katex-css'
 import { TitleSection } from './markdown-dom-widgets'
-import { buildEditorTheme, buildPreviewCss } from './markdown-dom-theme'
+import { buildEditorTheme } from './markdown-dom-theme'
+import { buildPreviewCss } from './markdown-dom-preview-css'
 import { renderMarkdownHtml } from './markdown-dom-render-html'
 import { runAction } from './markdown-dom-commands'
 import { buildEditorExtensions, buildUpdateListener } from './markdown-dom-editor-extensions'
 import { shouldApplyExternalValue } from './markdown-dom-external-value'
-import { resolvePreviewClick } from './markdown-dom-preview-click'
 import { liveFormatting, mediaMapFacet, tableLabelsFacet } from './live-formatting/live-formatting'
 import { noteEntriesFacet, wikiLinkFormatFacet } from './wiki-link-completion'
 import { knownTagsFacet } from './tag-completion'
 import { useCompartment } from './use-compartment'
 import { useLatestRef } from './use-latest-ref'
+import { useEditorSearch } from './use-editor-search'
+import { usePreviewClicks } from './use-preview-clicks'
 import { buildInvalidFrontmatterHighlight } from './markdown-dom-invalid-frontmatter'
 import { buildPropertiesTrigger, frontmatterAutoClose } from './markdown-dom-frontmatter'
 import { buildBlankPlaceholder } from './markdown-dom-placeholder'
 import { scrollToEditorTarget, scrollToPreviewTarget } from './markdown-dom-anchor-target'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
-import { PREVIEW_CLICK_TYPES } from '@/constants/preview-click'
 
 const MarkdownDomEditor = ({
     mode,
@@ -122,7 +122,11 @@ const MarkdownDomEditor = ({
         () => [indentUnit.of(' '.repeat(tabSize)), EditorState.tabSize.of(tabSize)],
         [tabSize]
     )
-    const liveFormattingExtension = useCompartment(viewRef, () => (mode === EDITOR_MODES.LIVE ? [liveFormatting] : []), [mode])
+    const liveFormattingExtension = useCompartment(
+        viewRef,
+        () => (mode === EDITOR_MODES.LIVE ? [liveFormatting] : []),
+        [mode]
+    )
     const invalidFrontmatterExtension = useCompartment(
         viewRef,
         () => buildInvalidFrontmatterHighlight(colors.errorContainer),
@@ -244,56 +248,9 @@ const MarkdownDomEditor = ({
         runPendingAction()
     }, [action.nonce])
 
-    useEffect(() => {
-        const view = viewRef.current
-        if (!view) return
+    useEditorSearch(viewRef, searchQuery, replaceText)
 
-        if (searchQuery) {
-            openSearchPanel(view)
-        } else {
-            closeSearchPanel(view)
-        }
-
-        view.dispatch({
-            effects: setSearchQuery.of(new SearchQuery({ search: searchQuery || '', replace: replaceText || '' }))
-        })
-    }, [searchQuery, replaceText])
-
-    useEffect(() => {
-        const container = previewRef.current
-        if (!container) return
-
-        const onClick = (event) => {
-            const click = resolvePreviewClick(event.target, container)
-            if (!click) return
-
-            switch (click.type) {
-                case PREVIEW_CLICK_TYPES.LINK:
-                    event.preventDefault()
-                    onLinkPress?.(click.url)
-                    break
-                case PREVIEW_CLICK_TYPES.IMAGE:
-                    onImagePress?.(click.url)
-                    break
-                case PREVIEW_CLICK_TYPES.TASK:
-                    onToggleTask?.(click.index)
-                    break
-                default:
-                    event.preventDefault()
-            }
-        }
-
-        const onDoubleClick = (event) => {
-            if (!resolvePreviewClick(event.target, container)) onEdit?.()
-        }
-
-        container.addEventListener('click', onClick)
-        container.addEventListener('dblclick', onDoubleClick)
-        return () => {
-            container.removeEventListener('click', onClick)
-            container.removeEventListener('dblclick', onDoubleClick)
-        }
-    }, [onLinkPress, onImagePress, onToggleTask, onEdit])
+    usePreviewClicks(previewRef, { onLinkPress, onImagePress, onToggleTask, onEdit })
 
     const html = useMemo(
         () => (mode === EDITOR_MODES.READ ? renderMarkdownHtml(previewValue) + (backlinksHtml || '') : ''),

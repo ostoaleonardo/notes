@@ -1,6 +1,6 @@
 import { Facet } from '@codemirror/state'
 
-import { TAG_TYPING_PATTERN } from '../../constants/markdown-patterns'
+import { TAG_TYPING_PATTERN, WHITESPACE_PATTERN } from '@/constants/markdown-patterns'
 
 export const knownTagsFacet = Facet.define({
     combine: (values) => values[values.length - 1] || []
@@ -11,7 +11,7 @@ export const tagCompletionSource = (context) => {
     if (!match) return null
 
     const before = match.from > 0 ? context.state.sliceDoc(match.from - 1, match.from) : ''
-    if (before && !/\s/.test(before)) return null
+    if (before && !WHITESPACE_PATTERN.test(before)) return null
 
     const query = match.text.slice(1).toLowerCase()
 

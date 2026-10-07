@@ -22,7 +22,13 @@ const createHiddenSearchPanel = () => {
     return { dom }
 }
 
-export const buildUpdateListener = ({ onChangeRef, onHistoryChangeRef, historyRef, lastEmittedValueRef, pendingEmittedRef }) => (
+export const buildUpdateListener = ({
+    onChangeRef,
+    onHistoryChangeRef,
+    historyRef,
+    lastEmittedValueRef,
+    pendingEmittedRef
+}) => (
     EditorView.updateListener.of((update) => {
         if (update.docChanged) {
             const newValue = update.state.doc.toString()
@@ -41,7 +47,13 @@ export const buildUpdateListener = ({ onChangeRef, onHistoryChangeRef, historyRe
     })
 )
 
-export const buildEditorExtensions = ({ dynamic, onTagPressRef, onLinkPressRef, onCreateBlockIdRef, updateListener }) => [
+export const buildEditorExtensions = ({
+    dynamic,
+    onTagPressRef,
+    onLinkPressRef,
+    onCreateBlockIdRef,
+    updateListener
+}) => [
     history(),
     search({ createPanel: createHiddenSearchPanel }),
     keymap.of([

@@ -2,6 +2,8 @@ import { EditorSelection } from '@codemirror/state'
 
 import { getListBackspaceEdit, getListEnterEdit } from '@/utils/list-edit'
 
+import { KEYBOARD_KEYS } from '@/constants/keyboard-keys'
+
 const applyEdit = (getEdit) => (view) => {
     const { state } = view
     const { from, to } = state.selection.main
@@ -19,6 +21,6 @@ const applyEdit = (getEdit) => (view) => {
 }
 
 export const listKeymap = [
-    { key: 'Enter', run: applyEdit(getListEnterEdit) },
-    { key: 'Backspace', run: applyEdit(getListBackspaceEdit) }
+    { key: KEYBOARD_KEYS.ENTER, run: applyEdit(getListEnterEdit) },
+    { key: KEYBOARD_KEYS.BACKSPACE, run: applyEdit(getListBackspaceEdit) }
 ]

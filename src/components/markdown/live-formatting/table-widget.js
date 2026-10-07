@@ -1,7 +1,11 @@
 import { WidgetType } from '@codemirror/view'
 
-import { renderInlineHtml } from '../markdown-dom-render-html'
+import { bindTableDrag } from './table-drag'
+import { buildElement, buildSvg, placeCaretAtEnd } from './table-dom'
+import { closeTableMenu, openTableMenu } from './table-menu'
+import { renderInlineHtml } from '@/components/markdown/markdown-dom-render-html'
 
+import { keepFocus } from '@/utils/keep-focus'
 import {
     applyTableAction,
     moveTableItem,
@@ -10,56 +14,15 @@ import {
     setCell
 } from '@/utils/markdown-table'
 
-import { ICON_FILL, ICON_VIEW_BOX } from '@/constants/icon-size'
-import {
-    TABLE_AXES,
-    TABLE_GRIP_ICON_PATH,
-    TABLE_MENU_ICON_PATHS,
-    TABLE_MENU_LAYOUT
-} from '@/constants/table'
+import { NEWLINE_PATTERN } from '@/constants/markdown-patterns'
+import { KEYBOARD_KEYS } from '@/constants/keyboard-keys'
+import { DRAG_INDICATOR_ICON_PATH, TABLE_MENU_ICON_PATHS } from '@/constants/icon-paths'
+import { TABLE_AXES } from '@/constants/table'
 import {
     TABLE_CLASSES,
-    TABLE_DRAG_THRESHOLD,
-    TABLE_DROP_THICKNESS,
-    TABLE_HOLD_DELAY,
     TABLE_MENU_ICON_SIZE,
     TABLE_SCROLL_END_TOLERANCE
 } from '@/constants/table-widget'
-
-const SVG_NS = 'http://www.w3.org/2000/svg'
-
-const buildSvg = (path, size) => {
-    const svg = document.createElementNS(SVG_NS, 'svg')
-    svg.setAttribute('width', size)
-    svg.setAttribute('height', size)
-    svg.setAttribute('viewBox', ICON_VIEW_BOX)
-    svg.setAttribute('fill', ICON_FILL)
-
-    const shape = document.createElementNS(SVG_NS, 'path')
-    shape.setAttribute('d', path)
-    svg.appendChild(shape)
-
-    return svg
-}
-
-const buildElement = (tag, className, parent) => {
-    const element = document.createElement(tag)
-    element.className = className
-    parent?.appendChild(element)
-    return element
-}
-
-const keepFocus = (event) => event.preventDefault()
-
-const placeCaretAtEnd = (element) => {
-    const range = document.createRange()
-    range.selectNodeContents(element)
-    range.collapse(false)
-
-    const selection = window.getSelection()
-    selection.removeAllRanges()
-    selection.addRange(range)
-}
 
 const getShape = (table) => `${table.rows.length}x${table.aligns.length}:${table.aligns.join(',')}`
 
@@ -126,8 +89,8 @@ export class TableWidget extends WidgetType {
         const addRow = buildElement('div', `${TABLE_CLASSES.ADD} ${TABLE_CLASSES.ADD_ROW}`, wrap)
         const addCol = buildElement('div', `${TABLE_CLASSES.ADD} ${TABLE_CLASSES.ADD_COL}`, wrap)
 
-        rowGrip.appendChild(buildSvg(TABLE_GRIP_ICON_PATH, TABLE_MENU_ICON_SIZE))
-        colGrip.appendChild(buildSvg(TABLE_GRIP_ICON_PATH, TABLE_MENU_ICON_SIZE))
+        rowGrip.appendChild(buildSvg(DRAG_INDICATOR_ICON_PATH, TABLE_MENU_ICON_SIZE))
+        colGrip.appendChild(buildSvg(DRAG_INDICATOR_ICON_PATH, TABLE_MENU_ICON_SIZE))
         addRow.appendChild(buildSvg(TABLE_MENU_ICON_PATHS.ADD, TABLE_MENU_ICON_SIZE))
         addCol.appendChild(buildSvg(TABLE_MENU_ICON_PATHS.ADD, TABLE_MENU_ICON_SIZE))
         rowGrip.classList.add(TABLE_CLASSES.HIDDEN)
@@ -160,14 +123,14 @@ export class TableWidget extends WidgetType {
         })
 
         cell.addEventListener('blur', () => {
-            const next = cell.textContent.replace(/\n/g, ' ')
+            const next = cell.textContent.replace(NEWLINE_PATTERN, ' ')
             const changed = next !== cell.raw
             this.fillCell(cell, next)
             if (changed) this.commit(view, wrap, setCell(wrap.table, cell.row, cell.col, next))
         })
 
         cell.addEventListener('keydown', (event) => {
-            if (event.key !== 'Enter') return
+            if (event.key !== KEYBOARD_KEYS.ENTER) return
             event.preventDefault()
             cell.blur()
         })
@@ -212,7 +175,7 @@ export class TableWidget extends WidgetType {
         const rows = []
 
         wrap.cells.forEach((cell) => {
-            const value = document.activeElement === cell ? cell.textContent.replace(/\n/g, ' ') : cell.raw
+            const value = document.activeElement === cell ? cell.textContent.replace(NEWLINE_PATTERN, ' ') : cell.raw
             if (!rows[cell.row]) rows[cell.row] = []
             rows[cell.row][cell.col] = value
         })
@@ -233,156 +196,36 @@ export class TableWidget extends WidgetType {
         this.applyChange(view, wrap, current, applyTableAction(current, axis, index, action))
     }
 
+
     moveItem(view, wrap, axis, from, to) {
         const current = this.readTable(wrap)
         this.applyChange(view, wrap, current, moveTableItem(current, axis, from, to))
     }
 
-    getDropTarget(wrap, axis, point) {
-        const isRow = axis === TABLE_AXES.ROW
-        const lanes = wrap.cells.filter((cell) => (isRow ? cell.col === 0 : cell.row === 0))
-        const rects = lanes.map((cell) => cell.getBoundingClientRect())
-        const position = isRow ? point.y : point.x
-        const found = rects.findIndex((rect) => position < (isRow ? rect.bottom : rect.right))
-        const index = found === -1 ? lanes.length - 1 : found
-
-        return { index, rect: rects[index] }
-    }
-
-    drawDrop(wrap, axis, scroll, from, target) {
-        const isRow = axis === TABLE_AXES.ROW
-        const { drop } = wrap
-        drop.classList.toggle(TABLE_CLASSES.HIDDEN, target.index === from)
-
-        const wrapRect = wrap.getBoundingClientRect()
-        const scrollRect = scroll.getBoundingClientRect()
-        const after = target.index > from
-        const half = TABLE_DROP_THICKNESS / 2
-
-        if (isRow) {
-            const edge = after ? target.rect.bottom : target.rect.top
-            drop.style.left = `${scrollRect.left - wrapRect.left}px`
-            drop.style.width = `${scroll.clientWidth}px`
-            drop.style.top = `${edge - wrapRect.top - half}px`
-            drop.style.height = `${TABLE_DROP_THICKNESS}px`
-        } else {
-            const edge = after ? target.rect.right : target.rect.left
-            drop.style.top = `${scrollRect.top - wrapRect.top}px`
-            drop.style.height = `${scroll.clientHeight}px`
-            drop.style.left = `${edge - wrapRect.left - half}px`
-            drop.style.width = `${TABLE_DROP_THICKNESS}px`
-        }
-    }
-
     bindDrag(view, wrap, grip, axis, scroll) {
-        let drag = null
-        let holdTimer = null
-
-        const highlight = (index, on) => wrap.cells.forEach((cell) => {
-            const position = axis === TABLE_AXES.ROW ? cell.row : cell.col
-            if (position === index) cell.classList.toggle(TABLE_CLASSES.HIGHLIGHT, on)
+        bindTableDrag({
+            wrap,
+            grip,
+            axis,
+            scroll,
+            onHold: () => this.openMenu(view, wrap, axis, grip),
+            onStart: () => this.closeMenu(wrap),
+            onDrop: (from, to) => this.moveItem(view, wrap, axis, from, to)
         })
-
-        const finish = (commit) => {
-            clearTimeout(holdTimer)
-            if (!drag) return
-
-            const { from, to, moving } = drag
-            drag = null
-            wrap.drop?.remove()
-            wrap.drop = null
-            if (moving) highlight(from, false)
-            if (moving && commit && to !== null && to !== from) this.moveItem(view, wrap, axis, from, to)
-            setTimeout(() => { wrap.suppressClick = false })
-        }
-
-        grip.addEventListener('pointerdown', (event) => {
-            if (!wrap.active) return
-
-            const from = axis === TABLE_AXES.ROW ? wrap.active.row : wrap.active.col
-            drag = { from, to: null, moving: false, x: event.clientX, y: event.clientY }
-            grip.setPointerCapture(event.pointerId)
-
-            holdTimer = setTimeout(() => {
-                wrap.suppressClick = true
-                this.openMenu(view, wrap, axis, grip)
-            }, TABLE_HOLD_DELAY)
-        })
-
-        grip.addEventListener('pointermove', (event) => {
-            if (!drag) return
-
-            if (!drag.moving) {
-                const distance = Math.hypot(event.clientX - drag.x, event.clientY - drag.y)
-                if (distance < TABLE_DRAG_THRESHOLD) return
-
-                clearTimeout(holdTimer)
-
-                drag.moving = true
-                wrap.suppressClick = true
-                this.closeMenu(wrap)
-                highlight(drag.from, true)
-                wrap.drop = buildElement('div', TABLE_CLASSES.DROP, wrap)
-            }
-
-            const target = this.getDropTarget(wrap, axis, { x: event.clientX, y: event.clientY })
-            drag.to = target.index
-            this.drawDrop(wrap, axis, scroll, drag.from, target)
-        })
-
-        grip.addEventListener('pointerup', () => finish(true))
-        grip.addEventListener('pointercancel', () => finish(false))
     }
 
     openMenu(view, wrap, axis, grip) {
-        this.closeMenu(wrap)
-
-        const { active, labels } = wrap
-        if (!active) return
-
-        const index = axis === TABLE_AXES.ROW ? active.row : active.col
-        const current = this.readTable(wrap)
-        const menu = buildElement('div', TABLE_CLASSES.MENU, wrap)
-        wrap.menu = menu
-        wrap.menuAxis = axis
-
-        wrap.cells.forEach((cell) => {
-            const position = axis === TABLE_AXES.ROW ? cell.row : cell.col
-            if (position === index) cell.classList.add(TABLE_CLASSES.HIGHLIGHT)
+        openTableMenu({
+            wrap,
+            axis,
+            grip,
+            current: this.readTable(wrap),
+            onAction: (index, action) => this.runAction(view, wrap, axis, index, action)
         })
-
-        TABLE_MENU_LAYOUT[axis].forEach(({ group, items }) => {
-            const section = buildElement('div', TABLE_CLASSES.MENU_GROUP, menu)
-            if (group) buildElement('div', TABLE_CLASSES.MENU_LABEL, section).textContent = labels[`group_${group}`] || group
-
-            items.forEach(({ action, icon }) => {
-                const disabled = applyTableAction(current, axis, index, action) === current
-                const item = buildElement('div', TABLE_CLASSES.MENU_ITEM, section)
-                item.appendChild(buildSvg(TABLE_MENU_ICON_PATHS[icon], TABLE_MENU_ICON_SIZE))
-                buildElement('span', '', item).textContent = labels[`${axis}_${action}`] || action
-                if (disabled) item.classList.add(TABLE_CLASSES.DISABLED)
-
-                item.addEventListener('mousedown', keepFocus)
-                item.addEventListener('click', () => {
-                    if (disabled) return
-                    this.closeMenu(wrap)
-                    this.runAction(view, wrap, axis, index, action)
-                })
-            })
-        })
-
-        const gripRect = grip.getBoundingClientRect()
-        const wrapRect = wrap.getBoundingClientRect()
-        const left = axis === TABLE_AXES.ROW ? gripRect.right - wrapRect.left : gripRect.left - wrapRect.left
-        const top = axis === TABLE_AXES.ROW ? gripRect.top - wrapRect.top : gripRect.bottom - wrapRect.top
-        menu.style.left = `${Math.max(0, Math.min(left, wrap.clientWidth - menu.offsetWidth))}px`
-        menu.style.top = `${top}px`
     }
 
     closeMenu(wrap) {
-        wrap.menu?.remove()
-        wrap.menu = null
-        wrap.cells.forEach((cell) => cell.classList.remove(TABLE_CLASSES.HIGHLIGHT))
+        closeTableMenu(wrap)
     }
 
     bindControls(view, wrap, { rowGrip, colGrip, addRow, addCol, scroll }) {

@@ -13,6 +13,7 @@ import { TAG_LINK_SCHEME } from '@/constants/tags'
 import { WIKI_LINK_SCHEME } from '@/constants/wiki-links'
 import { FILE_LINK_SCHEME } from '@/constants/file-links'
 import { PREVIEW_TABLE_SCROLL_CLASS } from '@/constants/table-widget'
+import { MARKDOWN_IT_TOKENS } from '@/constants/markdown-it-tokens'
 
 const md = new MarkdownIt({ html: true, linkify: true, breaks: true })
     .use(taskLists, { enabled: true })
@@ -54,7 +55,7 @@ md.renderer.rules.html_block = renderHtmlToken
 md.renderer.rules.html_inline = renderHtmlToken
 
 const buildTextToken = (Token, content) => {
-    const token = new Token('text', '', 0)
+    const token = new Token(MARKDOWN_IT_TOKENS.TEXT, '', 0)
     token.content = content
     return token
 }
@@ -69,10 +70,11 @@ const splitTagTokens = (token, Token) => {
     for (const { name, from, to } of found) {
         if (from > cursor) tokens.push(buildTextToken(Token, token.content.slice(cursor, from)))
 
-        const open = new Token('link_open', 'a', 1)
+        const open = new Token(MARKDOWN_IT_TOKENS.LINK_OPEN, 'a', 1)
         open.attrs = [['href', TAG_LINK_SCHEME + encodeURIComponent(name)], ['class', 'tag']]
 
-        tokens.push(open, buildTextToken(Token, token.content.slice(from, to)), new Token('link_close', 'a', -1))
+        const close = new Token(MARKDOWN_IT_TOKENS.LINK_CLOSE, 'a', -1)
+        tokens.push(open, buildTextToken(Token, token.content.slice(from, to)), close)
         cursor = to
     }
 
@@ -84,14 +86,15 @@ const splitTagTokens = (token, Token) => {
 md.core.ruler.push('inline_tags', (state) => {
     if (!state.env.tags) return
 
-    state.tokens.filter((block) => block.type === 'inline').forEach((block) => {
+    state.tokens.filter((block) => block.type === MARKDOWN_IT_TOKENS.INLINE).forEach((block) => {
         let linkDepth = 0
 
         block.children = block.children.flatMap((token) => {
-            if (token.type === 'link_open') linkDepth++
-            if (token.type === 'link_close') linkDepth--
+            if (token.type === MARKDOWN_IT_TOKENS.LINK_OPEN) linkDepth++
+            if (token.type === MARKDOWN_IT_TOKENS.LINK_CLOSE) linkDepth--
 
-            return token.type === 'text' && linkDepth === 0 ? splitTagTokens(token, state.Token) : [token]
+            const isPlainText = token.type === MARKDOWN_IT_TOKENS.TEXT && linkDepth === 0
+            return isPlainText ? splitTagTokens(token, state.Token) : [token]
         })
     })
 })

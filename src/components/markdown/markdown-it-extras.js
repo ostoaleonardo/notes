@@ -20,6 +20,7 @@ import {
     TASK_STATUS_ATTRIBUTE
 } from '@/constants/tasks'
 import { TABLE_BODY_START_LINE, TABLE_PIPE, TABLE_RULE_NAME } from '@/constants/table'
+import { MARKDOWN_IT_TOKENS } from '@/constants/markdown-it-tokens'
 import {
     COMMENT_MARKER,
     COMMENT_OR_CODE_PATTERN,
@@ -59,13 +60,14 @@ const stripComments = (src) => src.replace(
 )
 
 const findClosing = (tokens, openIndex) => tokens.findIndex((token, index) => (
-    index > openIndex && token.type === 'blockquote_close' && token.level === tokens[openIndex].level
+    index > openIndex && token.type === MARKDOWN_IT_TOKENS.BLOCKQUOTE_CLOSE && token.level === tokens[openIndex].level
 ))
 
 const convertCallout = (state, openIndex) => {
     const { tokens } = state
     const inline = tokens[openIndex + 2]
-    if (tokens[openIndex + 1]?.type !== 'paragraph_open' || inline?.type !== 'inline') return
+    const opensParagraph = tokens[openIndex + 1]?.type === MARKDOWN_IT_TOKENS.PARAGRAPH_OPEN
+    if (!opensParagraph || inline?.type !== MARKDOWN_IT_TOKENS.INLINE) return
 
     const [firstLine, ...rest] = inline.content.split('\n')
     const match = CALLOUT_PATTERN.exec(firstLine)
@@ -97,7 +99,7 @@ const findBlockOwner = (tokens, inlineIndex) => {
     if (!open?.hidden) return open
 
     for (let index = inlineIndex - 1; index >= 0; index--) {
-        if (tokens[index].type === 'list_item_open') return tokens[index]
+        if (tokens[index].type === MARKDOWN_IT_TOKENS.LIST_ITEM_OPEN) return tokens[index]
     }
 
     return null
@@ -117,15 +119,15 @@ const findPreviousBlock = (tokens, index) => {
 }
 
 const isStandaloneId = (tokens, index) => (
-    tokens[index].type === 'paragraph_open' &&
-    tokens[index + 1]?.type === 'inline' &&
-    tokens[index + 2]?.type === 'paragraph_close' &&
+    tokens[index].type === MARKDOWN_IT_TOKENS.PARAGRAPH_OPEN &&
+    tokens[index + 1]?.type === MARKDOWN_IT_TOKENS.INLINE &&
+    tokens[index + 2]?.type === MARKDOWN_IT_TOKENS.PARAGRAPH_CLOSE &&
     BLOCK_ID_STANDALONE_PATTERN.test(tokens[index + 1].content.trim())
 )
 
 const stripTrailingBlockId = (inline) => {
     const last = inline.children?.[inline.children.length - 1]
-    if (last?.type !== 'text') return null
+    if (last?.type !== MARKDOWN_IT_TOKENS.TEXT) return null
 
     const match = BLOCK_ID_TRAILING_PATTERN.exec(last.content)
     if (!match) return null
@@ -150,7 +152,7 @@ const markBlockIds = (state) => {
             continue
         }
 
-        if (tokens[index].type !== 'inline') continue
+        if (tokens[index].type !== MARKDOWN_IT_TOKENS.INLINE) continue
 
         const owner = findBlockOwner(tokens, index)
         const id = owner && stripTrailingBlockId(tokens[index])
@@ -164,10 +166,10 @@ const markCustomTasks = (state) => {
     for (let index = 2; index < tokens.length; index++) {
         const token = tokens[index]
         const first = token.children?.[0]
-        const isItemText = token.type === 'inline'
-            && tokens[index - 1].type === 'paragraph_open'
-            && tokens[index - 2].type === 'list_item_open'
-        const match = isItemText && first?.type === 'text' && CUSTOM_TASK_PATTERN.exec(token.content)
+        const isItemText = token.type === MARKDOWN_IT_TOKENS.INLINE
+            && tokens[index - 1].type === MARKDOWN_IT_TOKENS.PARAGRAPH_OPEN
+            && tokens[index - 2].type === MARKDOWN_IT_TOKENS.LIST_ITEM_OPEN
+        const match = isItemText && first?.type === MARKDOWN_IT_TOKENS.TEXT && CUSTOM_TASK_PATTERN.exec(token.content)
         if (!match) continue
 
         const checked = `[${TASK_CHECKED_MARK}]`
@@ -182,7 +184,7 @@ const markCustomTaskCheckboxes = (state) => {
 
     for (let index = 2; index < tokens.length; index++) {
         const status = tokens[index - 2].attrGet(TASK_STATUS_ATTRIBUTE)
-        const checkbox = tokens[index].type === 'inline' && status
+        const checkbox = tokens[index].type === MARKDOWN_IT_TOKENS.INLINE && status
             && tokens[index].children?.find((child) => child.content.startsWith(TASK_CHECKBOX_TAG_PATTERN))
         if (!checkbox) continue
 
@@ -225,7 +227,7 @@ export const markdownItExtras = (md) => {
 
     md.core.ruler.before('inline', 'callouts', (state) => {
         for (let index = 0; index < state.tokens.length; index++) {
-            if (state.tokens[index].type === 'blockquote_open') convertCallout(state, index)
+            if (state.tokens[index].type === MARKDOWN_IT_TOKENS.BLOCKQUOTE_OPEN) convertCallout(state, index)
         }
     })
 }

@@ -10,7 +10,7 @@ import {
     buildMetaLabelStyle,
     buildTitleSectionStyle,
     buildTitleTextareaStyle
-} from './markdown-dom-theme'
+} from './markdown-dom-panel-theme'
 
 const AutoGrowTitle = ({ value, onChange, onBlur, placeholder }) => {
     const theme = useContext(ThemeContext)

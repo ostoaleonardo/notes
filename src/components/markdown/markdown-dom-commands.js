@@ -4,7 +4,11 @@ import { findNext, findPrevious, replaceAll, replaceNext } from '@codemirror/sea
 import { toggleFold } from '@codemirror/language'
 import { snippet } from '@codemirror/autocomplete'
 
-import { LIST_MARKERS, LIST_TYPES, WRAP_MARKERS } from '@/constants/markdown-patterns'
+import { LIST_MARKERS, LIST_TYPES, WRAP_MARKERS, LEADING_WHITESPACE_PATTERN } from '@/constants/markdown-patterns'
+import { HEADING_LINE_PATTERN, HEADING_MARKER_PATTERN } from '@/constants/headings'
+import { MARKDOWN_ACTIONS, HEADING_ACTION_LEVELS } from '@/constants/markdown-actions'
+import { QUOTE_PREFIX, QUOTE_MARKER, HORIZONTAL_RULE, LINK_URL_PLACEHOLDER } from '@/constants/markdown-syntax'
+import { DEFAULT_TABLE_SIZE } from '@/constants/table'
 
 const insertWikiLinkSnippet = snippet('[[${}]]')
 
@@ -66,7 +70,7 @@ const replaceLine = (view, transform) => {
 
 const toggleHeading = (view, level) => {
     replaceLine(view, (text) => {
-        const match = text.match(/^(#{1,6})\s+(.*)$/)
+        const match = text.match(HEADING_LINE_PATTERN)
         const marker = '#'.repeat(level)
 
         if (match && match[1] === marker) return match[2]
@@ -77,14 +81,14 @@ const toggleHeading = (view, level) => {
 }
 
 const clearHeading = (view) => {
-    replaceLine(view, (text) => text.replace(/^#{1,6}\s+/, ''))
+    replaceLine(view, (text) => text.replace(HEADING_MARKER_PATTERN, ''))
 }
 
 const toggleQuote = (view) => {
     replaceLine(view, (text) => {
-        if (text.startsWith('> ')) return text.slice(2)
-        if (text.startsWith('>')) return text.slice(1)
-        return `> ${text}`
+        if (text.startsWith(QUOTE_PREFIX)) return text.slice(QUOTE_PREFIX.length)
+        if (text.startsWith(QUOTE_MARKER)) return text.slice(QUOTE_MARKER.length)
+        return `${QUOTE_PREFIX}${text}`
     })
 }
 
@@ -93,13 +97,13 @@ const insertHorizontalRule = (view) => {
 
     if (line.text.trim() === '') {
         view.dispatch({
-            changes: { from: line.from, to: line.to, insert: '___' },
-            selection: EditorSelection.cursor(line.from + 3)
+            changes: { from: line.from, to: line.to, insert: HORIZONTAL_RULE },
+            selection: EditorSelection.cursor(line.from + HORIZONTAL_RULE.length)
         })
     } else {
         view.dispatch({
-            changes: { from: line.to, insert: '\n___' },
-            selection: EditorSelection.cursor(line.to + 4)
+            changes: { from: line.to, insert: `\n${HORIZONTAL_RULE}` },
+            selection: EditorSelection.cursor(line.to + 1 + HORIZONTAL_RULE.length)
         })
     }
 
@@ -107,17 +111,9 @@ const insertHorizontalRule = (view) => {
 }
 
 const insertLineLink = (view, payload, format) => {
-    const line = currentLine(view)
     const { title, url } = payload || {}
-    const label = title && title.trim() !== '' ? title : line.text
-    const newText = format(label, url || 'url')
 
-    view.dispatch({
-        changes: { from: line.from, to: line.to, insert: newText },
-        selection: EditorSelection.cursor(line.from + newText.length)
-    })
-
-    view.focus()
+    replaceLine(view, (text) => format(title && title.trim() !== '' ? title : text, url || LINK_URL_PLACEHOLDER))
 }
 
 const insertAtCursor = (view, text) => {
@@ -139,7 +135,7 @@ const insertWikiLink = (view) => {
 }
 
 const insertTable = (view, payload) => {
-    const { cols = 2, rows = 1 } = payload || {}
+    const { cols = DEFAULT_TABLE_SIZE.cols, rows = DEFAULT_TABLE_SIZE.rows } = payload || {}
     const { doc, selection } = view.state
     const line = doc.lineAt(selection.main.head)
     const nextLine = line.number < doc.lines ? doc.line(line.number + 1) : null
@@ -175,7 +171,7 @@ const toggleListMarker = (view, type) => {
         const stripped = stripListMarker(text)
         if (alreadyActive) return stripped
 
-        const indent = stripped.match(/^\s*/)[0]
+        const indent = stripped.match(LEADING_WHITESPACE_PATTERN)[0]
         const content = stripped.slice(indent.length)
 
         if (type === LIST_TYPES.CHECKLIST) return `${indent}- [ ] ${content}`
@@ -191,39 +187,36 @@ const insert = (text) => (view) => insertAtCursor(view, text)
 const insertLink = (format) => (view, payload) => insertLineLink(view, payload, format)
 
 const ACTION_HANDLERS = {
-    bold: wrap(WRAP_MARKERS.BOLD),
-    italic: wrap(WRAP_MARKERS.ITALIC),
-    strike: wrap(WRAP_MARKERS.STRIKE),
-    code: wrap(WRAP_MARKERS.CODE),
-    h0: clearHeading,
-    h1: heading(1),
-    h2: heading(2),
-    h3: heading(3),
-    h4: heading(4),
-    h5: heading(5),
-    h6: heading(6),
-    quote: toggleQuote,
-    hr: insertHorizontalRule,
-    image: insertLink((label, url) => `![${label}](${url})`),
-    'image-embed': (view, { embed }) => insertAtCursor(view, `![[${embed}]]`),
-    link: insertLink((label, url) => `[${label}](${url})`),
-    'wiki-link': insertWikiLink,
-    'list-bullet': list(LIST_TYPES.BULLET),
-    'list-ordered': list(LIST_TYPES.ORDERED),
-    'list-checklist': list(LIST_TYPES.CHECKLIST),
-    indent: indentMore,
-    outdent: indentLess,
-    fold: toggleFold,
-    'insert-date': insert('{{date}}'),
-    'insert-time': insert('{{time}}'),
-    'insert-title': insert('{{title}}'),
-    undo,
-    redo,
-    'search-next': findNext,
-    'search-previous': findPrevious,
-    'search-replace': replaceNext,
-    'search-replace-all': replaceAll,
-    table: insertTable
+    [MARKDOWN_ACTIONS.BOLD]: wrap(WRAP_MARKERS.BOLD),
+    [MARKDOWN_ACTIONS.ITALIC]: wrap(WRAP_MARKERS.ITALIC),
+    [MARKDOWN_ACTIONS.STRIKE]: wrap(WRAP_MARKERS.STRIKE),
+    [MARKDOWN_ACTIONS.CODE]: wrap(WRAP_MARKERS.CODE),
+    [MARKDOWN_ACTIONS.H0]: clearHeading,
+    ...Object.fromEntries(
+        Object.entries(HEADING_ACTION_LEVELS).map(([action, level]) => [action, heading(level)])
+    ),
+    [MARKDOWN_ACTIONS.QUOTE]: toggleQuote,
+    [MARKDOWN_ACTIONS.HR]: insertHorizontalRule,
+    [MARKDOWN_ACTIONS.IMAGE]: insertLink((label, url) => `![${label}](${url})`),
+    [MARKDOWN_ACTIONS.IMAGE_EMBED]: (view, { embed }) => insertAtCursor(view, `![[${embed}]]`),
+    [MARKDOWN_ACTIONS.LINK]: insertLink((label, url) => `[${label}](${url})`),
+    [MARKDOWN_ACTIONS.WIKI_LINK]: insertWikiLink,
+    [MARKDOWN_ACTIONS.LIST_BULLET]: list(LIST_TYPES.BULLET),
+    [MARKDOWN_ACTIONS.LIST_ORDERED]: list(LIST_TYPES.ORDERED),
+    [MARKDOWN_ACTIONS.LIST_CHECKLIST]: list(LIST_TYPES.CHECKLIST),
+    [MARKDOWN_ACTIONS.INDENT]: indentMore,
+    [MARKDOWN_ACTIONS.OUTDENT]: indentLess,
+    [MARKDOWN_ACTIONS.FOLD]: toggleFold,
+    [MARKDOWN_ACTIONS.INSERT_DATE]: insert('{{date}}'),
+    [MARKDOWN_ACTIONS.INSERT_TIME]: insert('{{time}}'),
+    [MARKDOWN_ACTIONS.INSERT_TITLE]: insert('{{title}}'),
+    [MARKDOWN_ACTIONS.UNDO]: undo,
+    [MARKDOWN_ACTIONS.REDO]: redo,
+    [MARKDOWN_ACTIONS.SEARCH_NEXT]: findNext,
+    [MARKDOWN_ACTIONS.SEARCH_PREVIOUS]: findPrevious,
+    [MARKDOWN_ACTIONS.SEARCH_REPLACE]: replaceNext,
+    [MARKDOWN_ACTIONS.SEARCH_REPLACE_ALL]: replaceAll,
+    [MARKDOWN_ACTIONS.TABLE]: insertTable
 }
 
 export const runAction = (view, action, payload) => ACTION_HANDLERS[action]?.(view, payload)

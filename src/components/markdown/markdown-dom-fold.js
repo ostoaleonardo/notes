@@ -1,6 +1,7 @@
 import { foldService, syntaxTree } from '@codemirror/language'
 
 import { ATX_HEADING_LEVELS } from '@/constants/markdown-live-formatting'
+import { HEADING_PREFIX_PATTERN } from '@/constants/headings'
 
 export const headingFoldService = foldService.of((state, lineStart, lineEnd) => {
     let headingNode = null
@@ -27,7 +28,7 @@ export const headingFoldService = foldService.of((state, lineStart, lineEnd) => 
 
     for (let lineNumber = startLine.number + 1; lineNumber <= doc.lines; lineNumber++) {
         const line = doc.line(lineNumber)
-        const match = line.text.match(/^(#{1,6})\s/)
+        const match = line.text.match(HEADING_PREFIX_PATTERN)
         if (match && match[1].length <= level) {
             endPos = line.from - 1
             break

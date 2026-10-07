@@ -30,7 +30,7 @@ export const getFrontmatterAutoClose = (doc, from, to, text) => {
 
     return {
         changes: { from, insert: `${FRONTMATTER_FENCE_CHAR}\n\n${FRONTMATTER_FENCE}` },
-        selection: { anchor: from + 2 }
+        selection: { anchor: from + FRONTMATTER_FENCE_CHAR.length + 1 }
     }
 }
 

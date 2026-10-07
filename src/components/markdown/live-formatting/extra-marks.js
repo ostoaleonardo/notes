@@ -11,6 +11,7 @@ import {
     HIGHLIGHT_MARKER
 } from '@/constants/extra-marks'
 import { TRANSPARENT } from '@/constants/themes'
+import { OPACITY } from '@/constants/theme'
 
 const MARKS = [
     { pattern: HIGHLIGHT_LIVE_PATTERN, marker: HIGHLIGHT_MARKER, className: HIGHLIGHT_LIVE_CLASS },
@@ -42,5 +43,5 @@ export const decorateExtraMarks = ({ text, selection, ranges, codeRanges }) => {
 
 export const extraMarksTheme = ({ colors }) => ({
     [`.${HIGHLIGHT_LIVE_CLASS}`]: { backgroundColor: colors.tertiary + TRANSPARENT[30], borderRadius: '2px' },
-    [`.${COMMENT_LIVE_CLASS}`]: { opacity: 0.5, fontStyle: 'italic' }
+    [`.${COMMENT_LIVE_CLASS}`]: { opacity: OPACITY.muted, fontStyle: 'italic' }
 })

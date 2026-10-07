@@ -39,7 +39,8 @@ export const decorateMath = ({ text, selection, ranges, codeRanges }) => {
         const html = renderKatex(match[1].trim(), true)
         if (!html) continue
 
-        ranges.push(Decoration.replace({ widget: new HtmlWidget(html, 'cm-live-math-block'), block: true }).range(from, to))
+        const widget = new HtmlWidget(html, 'cm-live-math-block')
+        ranges.push(Decoration.replace({ widget, block: true }).range(from, to))
     }
 
     for (const match of text.matchAll(INLINE_MATH_PATTERN)) {

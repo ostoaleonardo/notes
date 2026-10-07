@@ -3,6 +3,7 @@ import { Decoration } from '@codemirror/view'
 import { collectMarks, isRangeSelected } from './utils'
 
 import { INLINE_MARK_NODE_TYPES } from '@/constants/markdown-live-formatting'
+import { INLINE_CODE_STYLE, MONOSPACE_FONT_FAMILY } from '@/constants/theme'
 
 export const inlineMarkNodeNames = Object.keys(INLINE_MARK_NODE_TYPES)
 
@@ -28,9 +29,8 @@ export const inlineMarksTheme = ({ colors }) => ({
     '.cm-live-em': { fontStyle: 'italic' },
     '.cm-live-strike': { textDecoration: 'line-through' },
     '.cm-live-code': {
-        fontFamily: 'ui-monospace, monospace',
+        fontFamily: MONOSPACE_FONT_FAMILY,
         backgroundColor: colors.codeBackground,
-        borderRadius: '4px',
-        padding: '0.1em 0.3em'
+        ...INLINE_CODE_STYLE
     }
 })

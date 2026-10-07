@@ -1,9 +1,10 @@
 import { RangeSetBuilder } from '@codemirror/state'
-import { Decoration, ViewPlugin } from '@codemirror/view'
+import { Decoration } from '@codemirror/view'
 
-import { parseFrontmatter } from '../../utils/frontmatter'
+import { buildDocDecorationsPlugin } from './markdown-dom-doc-decorations'
+import { parseFrontmatter } from '@/utils/frontmatter'
 
-const buildDecorations = (view, backgroundColor) => {
+const buildInvalidFrontmatterDecorations = (view, backgroundColor) => {
     const builder = new RangeSetBuilder()
     const { error, hasBlock, rawFrontmatter } = parseFrontmatter(view.state.doc.toString())
 
@@ -26,14 +27,6 @@ const buildDecorations = (view, backgroundColor) => {
     return builder.finish()
 }
 
-export const buildInvalidFrontmatterHighlight = (backgroundColor) => ViewPlugin.fromClass(class {
-    constructor(view) {
-        this.decorations = buildDecorations(view, backgroundColor)
-    }
-
-    update(update) {
-        if (update.docChanged) this.decorations = buildDecorations(update.view, backgroundColor)
-    }
-}, {
-    decorations: (instance) => instance.decorations
-})
+export const buildInvalidFrontmatterHighlight = (backgroundColor) => buildDocDecorationsPlugin(
+    (view) => buildInvalidFrontmatterDecorations(view, backgroundColor)
+)

@@ -26,13 +26,14 @@ import { decorateBlockIds, blockIdsTheme } from './block-ids'
 import { decorateExtraMarks, extraMarksTheme } from './extra-marks'
 import { decorateCustomTasks, customTasksTheme } from './custom-tasks'
 import { findWikiLinkRanges, decorateWikiLinks, wikiLinksTheme } from './wiki-links'
-import { noteEntriesFacet } from '../wiki-link-completion'
+import { noteEntriesFacet } from '@/components/markdown/wiki-link-completion'
 
 import { findCustomTaskRanges } from '@/utils/tasks'
 import { getBoundaryEdit } from '@/utils/table-boundary'
 
 import { CODE_RANGE_NODE_NAMES } from '@/constants/markdown-live-formatting'
 import { TABLE_BOUNDARY_INPUT_EVENTS, TABLE_END_LINE } from '@/constants/table'
+import { LEZER_NODES } from '@/constants/lezer-nodes'
 
 const codeRangeNodeNames = new Set(CODE_RANGE_NODE_NAMES)
 
@@ -46,10 +47,10 @@ const NODE_HANDLERS = new Map([
     ...codeBlockNodeNames.map((name) => [name, decorateCodeBlock]),
     ...horizontalRuleNodeNames.map((name) => [name, decorateHorizontalRule]),
     ...htmlNodeNames.map((name) => [name, decorateHtml]),
-    ['Table', decorateTable]
+    [LEZER_NODES.TABLE, decorateTable]
 ])
 
-const buildDecorations = (state) => {
+const buildLiveFormattingDecorations = (state) => {
     const ranges = []
     const selection = state.selection.main
     const doc = state.doc
@@ -133,9 +134,9 @@ const ensureLineAfterTable = (field) => EditorState.transactionFilter.of((tr) =>
 export { mediaMapFacet, tableLabelsFacet }
 
 export const liveFormatting = StateField.define({
-    create: (state) => buildDecorations(state),
+    create: (state) => buildLiveFormattingDecorations(state),
     update: (decorations, tr) => (
-        tr.docChanged || tr.selection || tr.reconfigured ? buildDecorations(tr.state) : decorations.map(tr.changes)
+        tr.docChanged || tr.selection || tr.reconfigured ? buildLiveFormattingDecorations(tr.state) : decorations.map(tr.changes)
     ),
     provide: (field) => [
         EditorView.decorations.from(field),

@@ -9,7 +9,7 @@ import { buildFileLinkUrl, isFileLinkTarget } from '@/utils/file-links'
 import { buildIconMaskUrl } from '@/utils/icon-mask'
 
 import { TRANSPARENT } from '@/constants/themes'
-import { RADIUS } from '@/constants/radius'
+import { RADIUS, OPACITY } from '@/constants/theme'
 import { FILE_LINK_LIVE_CLASS } from '@/constants/file-links'
 import { ATTACH_FILE_ICON_PATH } from '@/constants/icon-paths'
 
@@ -89,7 +89,7 @@ export const wikiLinksTheme = ({ colors }) => ({
         padding: '1px 6px',
         cursor: 'pointer',
         backgroundColor: colors.surface,
-        borderRadius: `${RADIUS.segment}px`,
+        borderRadius: `${RADIUS.sm}px`,
         border: `1px solid ${colors.onBackground + TRANSPARENT[5]}`
     },
     [`.${FILE_LINK_LIVE_CLASS}::before`]: {
@@ -100,11 +100,15 @@ export const wikiLinksTheme = ({ colors }) => ({
         marginRight: '2px',
         verticalAlign: '-0.2em',
         backgroundColor: 'currentColor',
-        opacity: 0.6,
+        opacity: OPACITY.secondary,
         mask: `${ATTACH_FILE_MASK} center / contain no-repeat`,
         WebkitMask: `${ATTACH_FILE_MASK} center / contain no-repeat`
     },
-    '.cm-live-wikilink-broken': { color: colors.onBackground, opacity: 0.5, textDecoration: 'underline dashed' }
+    '.cm-live-wikilink-broken': {
+        color: colors.onBackground,
+        opacity: OPACITY.muted,
+        textDecoration: 'underline dashed'
+    }
 })
 
 export const fileLinkPress = (onPressRef) => EditorView.domEventHandlers({

@@ -14,15 +14,15 @@ import {
     TABLE_MENU_MIN_WIDTH
 } from '@/constants/table-widget'
 import { TRANSPARENT } from '@/constants/themes'
-import { RADIUS } from '@/constants/radius'
-import { SPACING } from '@/constants/spacing'
+import { RADIUS, SPACING, OPACITY, Z_INDEX, INLINE_CODE_STYLE, DOM_FONT_SIZE } from '@/constants/theme'
+import { LEZER_NODES } from '@/constants/lezer-nodes'
 
 export const decorateTable = (node, context) => {
     const { doc, ranges, tableLabels } = context
     const raw = doc.sliceString(node.from, node.to)
     const to = node.from + getTableLength(raw)
     const source = raw.slice(0, to - node.from)
-    const isTopLevel = node.node.parent?.name === 'Document' && doc.lineAt(node.from).from === node.from
+    const isTopLevel = node.node.parent?.name === LEZER_NODES.DOCUMENT && doc.lineAt(node.from).from === node.from
 
     if (!isTopLevel || !parseTable(source)) return decorateHtml(node, context)
     ranges.push(
@@ -59,8 +59,7 @@ export const tableTheme = ({ colors, typography }) => {
         [`.${TABLE_CLASSES.CELL} a`]: { color: accent },
         [`.${TABLE_CLASSES.CELL} code`]: {
             backgroundColor: colors.codeBackground,
-            borderRadius: '4px',
-            padding: '0.1em 0.3em',
+            ...INLINE_CODE_STYLE,
             fontFamily: 'monospace'
         },
         [`.${TABLE_CLASSES.HIGHLIGHT}`]: { backgroundColor: accent + TRANSPARENT[10] },
@@ -70,7 +69,7 @@ export const tableTheme = ({ colors, typography }) => {
             alignItems: 'center',
             justifyContent: 'center',
             color: colors.onBackground,
-            opacity: 0.6,
+            opacity: OPACITY.secondary,
             cursor: 'pointer',
             touchAction: 'none',
             userSelect: 'none',
@@ -91,7 +90,7 @@ export const tableTheme = ({ colors, typography }) => {
             alignItems: 'center',
             justifyContent: 'center',
             color: colors.onBackground,
-            opacity: 0.4,
+            opacity: OPACITY.disabled,
             cursor: 'pointer'
         },
         [`.${TABLE_CLASSES.ADD_ROW}`]: {
@@ -109,7 +108,7 @@ export const tableTheme = ({ colors, typography }) => {
         [`.${TABLE_CLASSES.HIDDEN}`]: { display: 'none' },
         [`.${TABLE_CLASSES.MENU}`]: {
             position: 'absolute',
-            zIndex: 20,
+            zIndex: Z_INDEX.tableMenu,
             display: 'flex',
             flexDirection: 'column',
             minWidth: `${TABLE_MENU_MIN_WIDTH}px`,
@@ -118,17 +117,17 @@ export const tableTheme = ({ colors, typography }) => {
         },
         [`.${TABLE_CLASSES.MENU_GROUP}`]: {
             overflow: 'hidden',
-            borderRadius: `${RADIUS.inner}px`,
+            borderRadius: `${RADIUS.md}px`,
             backgroundColor: colors.surface,
             border: `1px solid ${colors.onBackground + TRANSPARENT[5]}`
         },
         [`.${TABLE_CLASSES.MENU_GROUP}:first-child`]: {
-            borderTopLeftRadius: `${RADIUS.outer}px`,
-            borderTopRightRadius: `${RADIUS.outer}px`
+            borderTopLeftRadius: `${RADIUS.lg}px`,
+            borderTopRightRadius: `${RADIUS.lg}px`
         },
         [`.${TABLE_CLASSES.MENU_GROUP}:last-child`]: {
-            borderBottomLeftRadius: `${RADIUS.outer}px`,
-            borderBottomRightRadius: `${RADIUS.outer}px`
+            borderBottomLeftRadius: `${RADIUS.lg}px`,
+            borderBottomRightRadius: `${RADIUS.lg}px`
         },
         [`.${TABLE_CLASSES.MENU_ITEM}`]: {
             display: 'flex',
@@ -136,14 +135,14 @@ export const tableTheme = ({ colors, typography }) => {
             gap: '10px',
             padding: '8px 10px',
             fontFamily: typography.fontFamily,
-            fontSize: '14px',
+            fontSize: DOM_FONT_SIZE.body,
             color: colors.onBackground,
             cursor: 'pointer'
         },
         [`.${TABLE_CLASSES.MENU_LABEL}`]: {
             padding: '8px 10px 2px',
             fontFamily: typography.fontFamily,
-            fontSize: '12px',
+            fontSize: DOM_FONT_SIZE.caption,
             color: colors.onBackground + TRANSPARENT[50]
         },
         [`.${TABLE_CLASSES.DISABLED}`]: { opacity: 0.35, pointerEvents: 'none' }

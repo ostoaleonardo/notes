@@ -31,7 +31,7 @@ import { toggleTask } from '@/utils/tasks'
 import { buildTableLabels } from '@/utils/table-labels'
 
 import { ROUTES } from '@/constants/routes'
-import { BODY_FONT_FAMILY, HEADING_FONT_FAMILY } from '@/constants/fonts'
+import { BODY_FONT_FAMILY, HEADING_FONT_FAMILY } from '@/constants/theme'
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { LINK_TYPES } from '@/constants/link-types'
 import { STORAGE_KEYS } from '@/constants/storage-keys'

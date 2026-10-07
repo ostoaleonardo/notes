@@ -3,8 +3,9 @@ import { Facet } from '@codemirror/state'
 import { generateBlockId } from '@/utils/block-refs'
 import { getBlockSuggestions } from '@/utils/note-entries'
 
-import { WIKI_LINK_FORMATS, WIKI_LINK_CLOSING } from '@/constants/wiki-links'
+import { WIKI_LINK_FORMATS, WIKI_LINK_CLOSING, WIKI_LINK_TYPING_PATTERN } from '@/constants/wiki-links'
 import { BLOCK_COMPLETION_PATTERN } from '@/constants/block-refs'
+import { WIKI_LINK_OPEN, WIKI_LINK_CLOSE } from '@/constants/markdown-syntax'
 
 export const noteEntriesFacet = Facet.define({
     combine: (values) => values[values.length - 1] || []
@@ -19,10 +20,10 @@ export const wikiLinkFormatFacet = Facet.define({
 })
 
 export const wikiLinkCompletionSource = (context) => {
-    const match = context.matchBefore(/\[\[[^\]]*/)
+    const match = context.matchBefore(WIKI_LINK_TYPING_PATTERN)
     if (!match) return null
 
-    const query = match.text.slice(2).toLowerCase()
+    const query = match.text.slice(WIKI_LINK_OPEN.length).toLowerCase()
     const entries = context.state.facet(noteEntriesFacet)
     const format = context.state.facet(wikiLinkFormatFacet)
 
@@ -50,17 +51,17 @@ export const wikiLinkCompletionSource = (context) => {
                 detail: isAmbiguous ? (path || undefined) : undefined,
                 boost: title.toLowerCase().startsWith(query) ? 1 : 0,
                 apply: (view, _completion, from, to) => {
-                    const insertFrom = from - 2
+                    const insertFrom = from - WIKI_LINK_OPEN.length
 
                     const doc = view.state.doc
-                    const afterCursor = doc.sliceString(to, Math.min(to + 2, doc.length))
-                    const insertTo = afterCursor === ']]' ? to + 2 : to
+                    const afterCursor = doc.sliceString(to, Math.min(to + WIKI_LINK_CLOSE.length, doc.length))
+                    const insertTo = afterCursor === WIKI_LINK_CLOSE ? to + WIKI_LINK_CLOSE.length : to
 
                     const insertText = format === WIKI_LINK_FORMATS.MARKDOWN
                         ? `[${title}](wikilink://${id})`
                         : isAmbiguous && path
-                            ? `[[${path}/${title}|${title}]]`
-                            : `[[${title}]]`
+                            ? `${WIKI_LINK_OPEN}${path}/${title}|${title}${WIKI_LINK_CLOSE}`
+                            : `${WIKI_LINK_OPEN}${title}${WIKI_LINK_CLOSE}`
 
                     view.dispatch({
                         changes: { from: insertFrom, to: insertTo, insert: insertText },
@@ -72,7 +73,7 @@ export const wikiLinkCompletionSource = (context) => {
 
     if (!options.length) return null
 
-    return { from: match.from + 2, options }
+    return { from: match.from + WIKI_LINK_OPEN.length, options }
 }
 
 const applyBlockId = (view, from, to, id) => {

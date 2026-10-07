@@ -4,6 +4,7 @@ import { collectMarks, isRangeSelected } from './utils'
 import { ImageWidget } from './widgets'
 
 import { IMAGE_NODE_NAMES } from '@/constants/markdown-live-formatting'
+import { LEZER_NODES } from '@/constants/lezer-nodes'
 
 export const imageNodeNames = IMAGE_NODE_NAMES
 
@@ -13,7 +14,7 @@ export const decorateImage = (node, { doc, selection, ranges, mediaMap }) => {
     const marks = collectMarks(node.node)
     if (marks.length < 4) return true
 
-    const urlNode = node.node.getChild('URL')
+    const urlNode = node.node.getChild(LEZER_NODES.URL)
     const rawUrl = urlNode ? doc.sliceString(urlNode.from, urlNode.to) : ''
     const url = mediaMap?.get(rawUrl) || rawUrl
     const alt = doc.sliceString(marks[0].to, marks[1].from)
