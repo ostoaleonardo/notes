@@ -10,8 +10,7 @@ import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { MENU } from '@/constants/components'
-import { SPACING } from '@/constants/theme'
+import { MENU, SETTINGS_LIST } from '@/constants/components'
 
 export function DailyNoteOption() {
     const { t } = useTranslation()
@@ -105,6 +104,6 @@ export function DailyNoteOption() {
 
 const styles = StyleSheet.create({
     group: {
-        gap: SPACING.xxs
+        gap: SETTINGS_LIST.itemGap
     }
 })

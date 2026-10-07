@@ -39,6 +39,7 @@ export const OPACITY = {
 }
 
 export const Z_INDEX = {
+    base: 1,
     dropdown: 10,
     tableMenu: 20
 }

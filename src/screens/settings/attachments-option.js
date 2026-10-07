@@ -20,9 +20,8 @@ import {
     DEFAULT_ATTACHMENT_FOLDER,
     DEFAULT_ATTACHMENT_LOCATION
 } from '@/constants/attachments'
-import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
+import { DIALOG_BUTTON_LABEL_STYLE, SETTINGS_LIST } from '@/constants/components'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { SPACING } from '@/constants/theme'
 
 const LOCATIONS = Object.values(ATTACHMENT_LOCATIONS)
 
@@ -116,6 +115,6 @@ export function AttachmentsOption() {
 
 const styles = StyleSheet.create({
     group: {
-        gap: SPACING.xxs
+        gap: SETTINGS_LIST.itemGap
     }
 })

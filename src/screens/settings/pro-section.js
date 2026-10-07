@@ -16,6 +16,7 @@ import { Check } from '@/icons/check'
 
 import { PRODUCT_ID } from '@/constants/iap'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { SETTINGS_LIST } from '@/constants/components'
 import { SPACING } from '@/constants/theme'
 import { LOG_MESSAGES } from '@/constants/log-messages'
 import { logError } from '@/utils/log-error'
@@ -123,7 +124,7 @@ export function ProSection() {
         <Section
             title={t('settings.pro')}
             containerStyle={{ paddingHorizontal: SPACING.lg }}
-            contentStyle={{ gap: SPACING.xxs }}
+            contentStyle={{ gap: SETTINGS_LIST.itemGap }}
         >
             <Option
                 title={t(pro ? 'pro.pro' : 'pro.get')}

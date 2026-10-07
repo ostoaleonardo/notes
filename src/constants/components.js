@@ -69,9 +69,18 @@ export const SHEET = {
 export const CARD_GRID = {
     cardHeight: 220,
     cardMinWidth: 160,
+    previewFontSize: 11,
     rowGap: SPACING.xxl,
     columnGap: SPACING.lg,
     padding: SPACING.lg
+}
+
+export const SETTINGS_LIST = {
+    itemGap: 3
+}
+
+export const EMPTY_STATE = {
+    paddingTop: 64
 }
 
 export const DIALOG_BUTTON_LABEL_STYLE = {

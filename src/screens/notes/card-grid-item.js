@@ -40,7 +40,7 @@ export const CardGridItem = memo(function CardGridItem({
 
                 <Typography
                     opacity={OPACITY.secondary}
-                    fontSize={11}
+                    fontSize={CARD_GRID.previewFontSize}
                     numberOfLines={previewLines}
                     color={card.active ? colors.background : undefined}
                     styleProps={{

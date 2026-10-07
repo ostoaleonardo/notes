@@ -9,6 +9,7 @@ import { Separator } from '@/components/separator/separator'
 
 import { useTags } from '@/hooks/use-tags'
 import { hasTag, isSameTag } from '@/utils/tag-names'
+import { EMPTY_STATE } from '@/constants/components'
 import { SPACING, OPACITY } from '@/constants/theme'
 
 export function Tags({ tags, setTags }) {
@@ -40,7 +41,7 @@ export function Tags({ tags, setTags }) {
             ItemSeparatorComponent={<Separator style={{ marginHorizontal: SPACING.xxl }} />}
             renderItem={renderItem}
             ListEmptyComponent={() => (
-                <View style={{ paddingTop: 64 }}>
+                <View style={{ paddingTop: EMPTY_STATE.paddingTop }}>
                     <Typography
                         opacity={OPACITY.muted}
                     >

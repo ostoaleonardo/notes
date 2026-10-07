@@ -145,6 +145,6 @@ export const tableTheme = ({ colors, typography }) => {
             fontSize: DOM_FONT_SIZE.caption,
             color: colors.onBackground + TRANSPARENT[50]
         },
-        [`.${TABLE_CLASSES.DISABLED}`]: { opacity: 0.35, pointerEvents: 'none' }
+        [`.${TABLE_CLASSES.DISABLED}`]: { opacity: OPACITY.disabled, pointerEvents: 'none' }
     }
 }

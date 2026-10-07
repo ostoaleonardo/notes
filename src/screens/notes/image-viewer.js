@@ -7,7 +7,7 @@ import { ResumableZoom, fitContainer, useImageResolution } from 'react-native-zo
 
 import { Close } from '@/icons/close'
 
-import { SPACING } from '@/constants/theme'
+import { SPACING, Z_INDEX } from '@/constants/theme'
 import { IMAGE_VIEWER_MAX_SCALE } from '@/constants/image'
 
 export function ImageViewer({ url, onClose }) {
@@ -64,6 +64,6 @@ const styles = StyleSheet.create({
     },
     close: {
         position: 'absolute',
-        zIndex: 1
+        zIndex: Z_INDEX.base
     }
 })
