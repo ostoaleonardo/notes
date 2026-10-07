@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { MenuContainer } from '../menu/menu-container'
+import { MenuContainer } from '@/components/menu/menu-container'
 import { DrawerIconButton } from './drawer-icon-button'
 import { DrawerRepositoryMenu } from './drawer-repository-menu'
 import { DrawerTreeRow } from './drawer-tree-row'

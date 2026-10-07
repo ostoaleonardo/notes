@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { RenameRepository } from '@/screens/dialogs/rename-repository'
 import { AddSubfolder } from '@/screens/dialogs/add-subfolder'
 import { DeleteRepository } from '@/screens/dialogs/delete-repository'
-import { DrawerToolbar, DrawerToolbarButton } from './drawer-toolbar'
-import { DrawerList } from './drawer-list'
+import { DrawerView } from './drawer-view'
 import { DrawerSortMenu } from './drawer-sort-menu'
 import { DrawerNoteItem } from './drawer-note-item'
 import { DrawerRepositoryItem } from './drawer-repository-item'
@@ -29,6 +28,7 @@ import { ExpandAll } from '@/icons/expand-all'
 import { REPOSITORY_ACTIONS } from '@/constants/repository-actions'
 import { ROUTES } from '@/constants/routes'
 import { TEST_IDS } from '@/constants/test-ids'
+import { DRAWER_ITEM_TYPES, DRAWER_TOOLBAR_KEYS } from '@/constants/drawer-views'
 
 export function DrawerNotesView({ closeDrawer }) {
     const { t } = useTranslation()
@@ -101,6 +101,10 @@ export function DrawerNotesView({ closeDrawer }) {
         if (path !== currentId) openEditor(path, currentId)
     }, [openDailyNote, closeDrawer, currentId])
 
+    const onDismissEdit = useCallback(() => setEditFolderId(''), [])
+    const onDismissSubfolder = useCallback(() => setSubfolderParentId(''), [])
+    const onDismissDelete = useCallback(() => setDeleteId(''), [])
+
     const rootId = activeRepositoryTree[0]?.id
 
     const onCreateRootNote = useCallback(() => onCreateNote(rootId), [onCreateNote, rootId])
@@ -144,7 +148,7 @@ export function DrawerNotesView({ closeDrawer }) {
             accessibilityLabel: t('repositories.add_subfolder')
         },
         {
-            key: 'toggle-all',
+            key: DRAWER_TOOLBAR_KEYS.TOGGLE_ALL,
             testID: TEST_IDS.DRAWER_TOGGLE_ALL,
             icon: allCollapsed ? ExpandAll : CollapseAll,
             onPress: onToggleCollapseAll,
@@ -159,8 +163,15 @@ export function DrawerNotesView({ closeDrawer }) {
         t
     ])
 
+    const toolbarExtra = useMemo(() => (
+        <DrawerSortMenu
+            sort={sort}
+            onChange={onChangeSort}
+        />
+    ), [sort, onChangeSort])
+
     const renderItem = useCallback(({ item }) => {
-        if (item.type === 'note') {
+        if (item.type === DRAWER_ITEM_TYPES.NOTE) {
             return (
                 <DrawerNoteItem
                     note={item.note}
@@ -190,42 +201,27 @@ export function DrawerNotesView({ closeDrawer }) {
     ])
 
     return (
-        <>
-            <DrawerList
-                data={rows}
-                keyExtractor={(row) => row.id}
-                renderItem={renderItem}
-            />
-
-            <DrawerToolbar>
-                {toolbarItems.map(({ key, ...item }) => (
-                    <DrawerToolbarButton
-                        key={key}
-                        {...item}
-                    />
-                ))}
-
-                <DrawerSortMenu
-                    sort={sort}
-                    onChange={onChangeSort}
-                />
-            </DrawerToolbar>
-
+        <DrawerView
+            data={rows}
+            renderItem={renderItem}
+            toolbarItems={toolbarItems}
+            toolbarExtra={toolbarExtra}
+        >
             <RenameRepository
                 visible={!!editFolderId}
                 repositoryId={editFolderId}
-                onDismiss={() => setEditFolderId('')}
+                onDismiss={onDismissEdit}
             />
             <AddSubfolder
                 visible={!!subfolderParentId}
                 parentId={subfolderParentId}
-                onDismiss={() => setSubfolderParentId('')}
+                onDismiss={onDismissSubfolder}
             />
             <DeleteRepository
                 visible={!!deleteId}
                 repositoryId={deleteId}
-                onDismiss={() => setDeleteId('')}
+                onDismiss={onDismissDelete}
             />
-        </>
+        </DrawerView>
     )
 }

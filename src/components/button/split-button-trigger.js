@@ -5,22 +5,27 @@ import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated
 import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
 import { KeyboardArrowUp } from '@/icons/keyboard-arrow-up'
 
-import {
-    BUTTON_SIZE,
-    SPLIT_TRIGGER_OPEN_OPACITY,
-    SPLIT_TRIGGER_RADII
-} from '@/constants/button'
+import { BUTTON, SPLIT_TRIGGER_RADIUS } from '@/constants/components'
+import { OPACITY, PROGRESS_RANGE } from '@/constants/theme'
 
 export function SplitButtonTrigger({ menuVisible, onPress, openProgress, testID }) {
     const { colors } = useTheme()
 
-    const animatedStyle = useAnimatedStyle(() => ({
-        borderTopLeftRadius: interpolate(openProgress.value, [0, 1], [SPLIT_TRIGGER_RADII.left, SPLIT_TRIGGER_RADII.open]),
-        borderBottomLeftRadius: interpolate(openProgress.value, [0, 1], [SPLIT_TRIGGER_RADII.left, SPLIT_TRIGGER_RADII.open]),
-        borderTopRightRadius: interpolate(openProgress.value, [0, 1], [SPLIT_TRIGGER_RADII.right, SPLIT_TRIGGER_RADII.open]),
-        borderBottomRightRadius: interpolate(openProgress.value, [0, 1], [SPLIT_TRIGGER_RADII.right, SPLIT_TRIGGER_RADII.open]),
-        opacity: interpolate(openProgress.value, [0, 1], [1, SPLIT_TRIGGER_OPEN_OPACITY])
-    }))
+    const animatedStyle = useAnimatedStyle(() => {
+        const radius = (closed) => interpolate(
+            openProgress.value,
+            PROGRESS_RANGE,
+            [closed, SPLIT_TRIGGER_RADIUS.open]
+        )
+
+        return {
+            borderTopLeftRadius: radius(SPLIT_TRIGGER_RADIUS.inner),
+            borderBottomLeftRadius: radius(SPLIT_TRIGGER_RADIUS.inner),
+            borderTopRightRadius: radius(SPLIT_TRIGGER_RADIUS.outer),
+            borderBottomRightRadius: radius(SPLIT_TRIGGER_RADIUS.outer),
+            opacity: interpolate(openProgress.value, PROGRESS_RANGE, [1, OPACITY.emphasized])
+        }
+    })
 
     return (
         <View style={styles.menu}>
@@ -47,8 +52,8 @@ export function SplitButtonTrigger({ menuVisible, onPress, openProgress, testID 
 
 const styles = StyleSheet.create({
     menu: {
-        width: BUTTON_SIZE,
-        height: BUTTON_SIZE,
+        width: BUTTON.size,
+        height: BUTTON.size,
         overflow: 'hidden'
     },
     touchable: {

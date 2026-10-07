@@ -19,8 +19,8 @@ import { useStorageEffect } from '@/hooks/use-storage-effect'
 import { FolderCode } from '@/icons/folder-code'
 import { Settings } from '@/icons/settings'
 
-import { DEFAULT_DRAWER_VIEW, DRAWER_VIEWS } from '@/constants/drawer-views'
-import { SPACING } from '@/constants/spacing'
+import { DEFAULT_DRAWER_VIEW, DRAWER_VIEWS, DRAWER_ACTIONS } from '@/constants/drawer-views'
+import { SPACING } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'
 import { ROUTES } from '@/constants/routes'
 import { TEST_IDS } from '@/constants/test-ids'
@@ -45,7 +45,7 @@ export function DrawerItems({ navigation }) {
     })
 
     const closeDrawer = useCallback(() => {
-        navigation.dispatch({ type: 'CLOSE_DRAWER' })
+        navigation.dispatch({ type: DRAWER_ACTIONS.CLOSE })
     }, [navigation])
 
     const onOpenRepositories = useCallback(() => router.push(ROUTES.REPOSITORIES), [])

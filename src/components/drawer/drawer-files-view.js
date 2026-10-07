@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next'
 
 import { DrawerList } from './drawer-list'
 import { DrawerFileItem } from './drawer-file-item'
-import { Typography } from '../typography'
+import { Typography } from '@/components/typography'
 
 import { useAttachmentFiles } from '@/hooks/use-attachment-files'
 import { useOpenFile } from '@/hooks/use-open-file'
 
 import { FILE_KINDS } from '@/constants/file-types'
+import { OPACITY } from '@/constants/theme'
 
 export function DrawerFilesView({ closeDrawer }) {
     const { t } = useTranslation()
@@ -34,13 +35,12 @@ export function DrawerFilesView({ closeDrawer }) {
     ), [onOpenFile])
 
     const empty = useMemo(() => (
-        <Typography opacity={0.6}>{t('drawer.files_empty')}</Typography>
+        <Typography opacity={OPACITY.secondary}>{t('drawer.files_empty')}</Typography>
     ), [t])
 
     return (
         <DrawerList
             data={rows}
-            keyExtractor={(row) => row.id}
             renderItem={renderItem}
             ListEmptyComponent={empty}
         />

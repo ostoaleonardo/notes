@@ -2,7 +2,7 @@ import { StyleSheet, TextInput } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
 import { TRANSPARENT } from '@/constants/themes'
-import { FONTS } from '@/constants/fonts'
+import { FONTS, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
 
 export function LargeInput({ value, onChangeText, placeholder, modal, ...props }) {
     const { colors } = useTheme()
@@ -30,7 +30,7 @@ export function LargeInput({ value, onChangeText, placeholder, modal, ...props }
 const styles = StyleSheet.create({
     input: {
         flexGrow: 1,
-        fontSize: 24,
+        fontSize: TYPOGRAPHY_SIZE_VARIANTS.title,
         fontFamily: FONTS.nType82Headline
     }
 })

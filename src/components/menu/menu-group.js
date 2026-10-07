@@ -2,17 +2,17 @@ import { View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
 import { TRANSPARENT } from '@/constants/themes'
-import { RADIUS } from '@/constants/radius'
+import { RADIUS, BORDER_WIDTH } from '@/constants/theme'
 
 export function MenuGroup({ children, first = true, last = true }) {
     const { colors } = useTheme()
-    const topRadius = first ? RADIUS.outer : RADIUS.inner
-    const bottomRadius = last ? RADIUS.outer : RADIUS.inner
+    const topRadius = first ? RADIUS.lg : RADIUS.md
+    const bottomRadius = last ? RADIUS.lg : RADIUS.md
 
     return (
         <View
             style={{
-                borderWidth: 1,
+                borderWidth: BORDER_WIDTH.thin,
                 overflow: 'hidden',
                 borderTopLeftRadius: topRadius,
                 borderTopRightRadius: topRadius,

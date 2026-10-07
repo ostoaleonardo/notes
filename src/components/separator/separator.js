@@ -1,6 +1,8 @@
 import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
+import { OPACITY, BORDER_WIDTH } from '@/constants/theme'
+
 export function Separator({ style }) {
     const { colors } = useTheme()
 
@@ -17,7 +19,7 @@ export function Separator({ style }) {
 
 const styles = StyleSheet.create({
     base: {
-        height: 1,
-        opacity: 0.1
+        height: BORDER_WIDTH.thin,
+        opacity: OPACITY.divider
     }
 })

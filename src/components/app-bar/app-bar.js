@@ -5,21 +5,23 @@ import { useTranslation } from 'react-i18next'
 import { ArrowBack } from '@/icons/arrow-back'
 import { Menu } from '@/icons/menu'
 
-import { FONTS } from '@/constants/fonts'
+import { FONTS } from '@/constants/theme'
 import { ROUTES } from '@/constants/routes'
 import { TEST_IDS } from '@/constants/test-ids'
+import { DRAWER_ACTIONS } from '@/constants/drawer-views'
+import { APP_BAR_MODES } from '@/constants/app-bar'
 
-export function AppBar({ title, trailing, mode = 'back' }) {
+export function AppBar({ title, trailing, mode = APP_BAR_MODES.BACK }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
 
     const navigation = useNavigation()
     const goBack = () => (router.canGoBack() ? router.back() : router.replace(ROUTES.HOME))
-    const openDrawer = () => navigation.dispatch({ type: 'OPEN_DRAWER' })
+    const openDrawer = () => navigation.dispatch({ type: DRAWER_ACTIONS.OPEN })
 
     return (
         <Appbar.Header style={{ backgroundColor: colors.background }}>
-            {mode === 'back' && (
+            {mode === APP_BAR_MODES.BACK && (
                 <Tooltip title={t('button.back')}>
                     <Appbar.Action
                         animated={false}
@@ -31,7 +33,7 @@ export function AppBar({ title, trailing, mode = 'back' }) {
                 </Tooltip>
             )}
 
-            {mode === 'menu' && (
+            {mode === APP_BAR_MODES.MENU && (
                 <Tooltip title={t('drawer.open')}>
                     <Appbar.Action
                         animated={false}

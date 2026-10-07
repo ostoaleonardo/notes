@@ -1,11 +1,11 @@
 import { StyleSheet, View } from 'react-native'
 import { TouchableRipple, useTheme } from 'react-native-paper'
 
-import { AnimatedView } from '../animated/animated-view'
-import { Typography } from '../typography'
+import { AnimatedView } from '@/components/animated/animated-view'
+import { Typography } from '@/components/typography'
 
-import { BUTTON_SIZE } from '@/constants/button'
-import { SPACING } from '@/constants/spacing'
+import { BUTTON, SPLIT_TRIGGER_RADIUS } from '@/constants/components'
+import { SPACING } from '@/constants/theme'
 
 export function SplitButtonPrimary({ icon: Icon, label, onPress, testID }) {
     const { colors } = useTheme()
@@ -41,10 +41,10 @@ export function SplitButtonPrimary({ icon: Icon, label, onPress, testID }) {
 
 const styles = StyleSheet.create({
     primary: {
-        height: BUTTON_SIZE,
-        borderRadius: 4,
-        borderTopLeftRadius: 22,
-        borderBottomLeftRadius: 22,
+        height: BUTTON.size,
+        borderRadius: SPLIT_TRIGGER_RADIUS.inner,
+        borderTopLeftRadius: SPLIT_TRIGGER_RADIUS.outer,
+        borderBottomLeftRadius: SPLIT_TRIGGER_RADIUS.outer,
         overflow: 'hidden'
     },
     touchable: {

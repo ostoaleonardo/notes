@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react'
 import { Snackbar, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { Typography } from '../typography'
+import { Typography } from '@/components/typography'
 
-import { RADIUS } from '@/constants/radius'
-import { SPACING } from '@/constants/spacing'
+import { RADIUS, SPACING } from '@/constants/theme'
 
 let listener = null
 let currentMessage = null
@@ -40,10 +39,10 @@ export function GlobalSnackbarHost() {
             onDismiss={onDismiss}
             wrapperStyle={{
                 paddingHorizontal: SPACING.sm,
-                paddingBottom: bottom + 8
+                paddingBottom: bottom + SPACING.sm
             }}
             style={{
-                borderRadius: RADIUS.inner,
+                borderRadius: RADIUS.md,
                 backgroundColor: colors.surface
             }}
         >

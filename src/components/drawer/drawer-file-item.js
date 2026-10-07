@@ -3,10 +3,9 @@ import { Pressable, StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
 import { AnimatedView } from '@/components/animated/animated-view'
-import { Typography } from '../typography'
+import { Typography } from '@/components/typography'
 
-import { RADIUS } from '@/constants/radius'
-import { SPACING } from '@/constants/spacing'
+import { RADIUS, SPACING, OPACITY } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'
 
 export const DrawerFileItem = memo(function DrawerFileItem({ file, onOpenFile }) {
@@ -26,7 +25,7 @@ export const DrawerFileItem = memo(function DrawerFileItem({ file, onOpenFile })
                     {!!file.folder && (
                         <Typography
                             variant='caption'
-                            opacity={0.5}
+                            opacity={OPACITY.muted}
                             numberOfLines={1}
                         >
                             {file.folder}
@@ -41,7 +40,7 @@ export const DrawerFileItem = memo(function DrawerFileItem({ file, onOpenFile })
                 >
                     <Typography
                         variant='caption'
-                        opacity={0.7}
+                        opacity={OPACITY.pressed}
                     >
                         {file.extension}
                     </Typography>
@@ -64,7 +63,7 @@ const styles = StyleSheet.create({
     },
     badge: {
         paddingHorizontal: SPACING.sm,
-        paddingVertical: 2,
-        borderRadius: RADIUS.segment
+        paddingVertical: SPACING.xxxs,
+        borderRadius: RADIUS.sm
     }
 })

@@ -2,8 +2,8 @@ import { memo } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 
 import { AnimatedView } from '@/components/animated/animated-view'
-import { Typography } from '../typography'
-import { SPACING } from '@/constants/spacing'
+import { Typography } from '@/components/typography'
+import { SPACING } from '@/constants/theme'
 
 export const DrawerNoteItem = memo(function DrawerNoteItem({ note, depth, active, onOpenNote }) {
     return (

@@ -2,12 +2,13 @@ import { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Tooltip, TouchableRipple, useTheme } from 'react-native-paper'
 
-import { AnimatedView } from '../animated/animated-view'
-import { Typography } from '../typography'
+import { AnimatedView } from '@/components/animated/animated-view'
+import { Typography } from '@/components/typography'
 
 import { useSegmentedCornerStyle } from '@/hooks/use-segmented-corner-style'
 
-import { BUTTON_DISABLED_OPACITY, BUTTON_SIZE, ICON_TOGGLE } from '@/constants/button'
+import { BUTTON, ICON_TOGGLE } from '@/constants/components'
+import { OPACITY } from '@/constants/theme'
 
 export function IconToggle({
     icon: Icon,
@@ -35,7 +36,7 @@ export function IconToggle({
                 style={[
                     styles.container,
                     animatedStyle,
-                    { backgroundColor, opacity: disabled ? BUTTON_DISABLED_OPACITY : 1 }
+                    { backgroundColor, opacity: disabled ? OPACITY.disabled : 1 }
                 ]}
             >
                 <TouchableRipple
@@ -73,13 +74,13 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     },
     touchable: {
-        width: BUTTON_SIZE,
-        height: BUTTON_SIZE,
+        width: BUTTON.size,
+        height: BUTTON.size,
         alignItems: 'center',
         justifyContent: 'center'
     },
     touchableLabel: {
-        height: BUTTON_SIZE,
+        height: BUTTON.size,
         paddingHorizontal: ICON_TOGGLE.labelPaddingHorizontal,
         alignItems: 'center',
         justifyContent: 'center'

@@ -1,13 +1,13 @@
 import { View, StyleSheet } from 'react-native'
 import { Tooltip, TouchableRipple, useTheme } from 'react-native-paper'
 
-import { AnimatedView } from '../animated/animated-view'
-import { Typography } from '../typography'
+import { AnimatedView } from '@/components/animated/animated-view'
+import { Typography } from '@/components/typography'
 
 import { useSegmentedCornerStyle } from '@/hooks/use-segmented-corner-style'
 
-import { BUTTON_SIZE } from '@/constants/button'
-import { SPACING } from '@/constants/spacing'
+import { BUTTON } from '@/constants/components'
+import { SPACING, OPACITY, ICON_SIZE, BORDER_WIDTH } from '@/constants/theme'
 
 export function FilterToggle({
     icon: Icon,
@@ -27,7 +27,7 @@ export function FilterToggle({
     const colorStyle = pill ? {
         backgroundColor: selected ? colors.onBackground : colors.surfaceVariant
     } : {
-        borderWidth: 1,
+        borderWidth: BORDER_WIDTH.thin,
         borderColor: colors.outline,
         backgroundColor: selected ? colors.onBackground : 'transparent'
     }
@@ -52,7 +52,7 @@ export function FilterToggle({
                     accessibilityLabel={label}
                 >
                     <View style={styles.content}>
-                        {Icon && <Icon color={contentColor} width={16} height={16} />}
+                        {Icon && <Icon color={contentColor} width={ICON_SIZE.md} height={ICON_SIZE.md} />}
                         <Typography variant='caption' color={contentColor}>
                             {label}
                         </Typography>
@@ -68,14 +68,14 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     },
     disabled: {
-        opacity: 0.4
+        opacity: OPACITY.disabled
     },
     touchable: {
         paddingVertical: SPACING.xs,
         paddingHorizontal: SPACING.md
     },
     touchablePill: {
-        height: BUTTON_SIZE,
+        height: BUTTON.size,
         paddingVertical: 0,
         paddingHorizontal: SPACING.lg,
         justifyContent: 'center'

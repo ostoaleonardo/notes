@@ -4,8 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { DrawerIconButton } from './drawer-icon-button'
 
-import { ICON_SIZE } from '@/constants/icon-size'
-import { SPACING } from '@/constants/spacing'
+import { ICON_SIZE, SPACING } from '@/constants/theme'
 
 export function DrawerToolbar({ children }) {
     const insets = useSafeAreaInsets()
@@ -28,7 +27,7 @@ export function DrawerToolbarButton({ accessibilityLabel, style, ...props }) {
     return (
         <Tooltip title={accessibilityLabel}>
             <DrawerIconButton
-                size={ICON_SIZE.md}
+                size={ICON_SIZE.xl}
                 style={[styles.button, style]}
                 accessibilityLabel={accessibilityLabel}
                 {...props}

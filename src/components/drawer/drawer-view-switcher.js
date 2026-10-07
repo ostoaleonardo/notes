@@ -5,7 +5,7 @@ import { useTheme } from 'react-native-paper'
 
 import { MenuContainer } from '@/components/menu/menu-container'
 import { MenuItem } from '@/components/menu/menu-item'
-import { Typography } from '../typography'
+import { Typography } from '@/components/typography'
 
 import { useMenuAction } from '@/hooks/use-menu-action'
 
@@ -13,13 +13,11 @@ import { Check } from '@/icons/check'
 import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
 import { KeyboardArrowUp } from '@/icons/keyboard-arrow-up'
 
-import { BUTTON_SIZE } from '@/constants/button'
+import { BUTTON } from '@/constants/components'
 import { DRAWER_VIEWS, DRAWER_VIEW_LABELS } from '@/constants/drawer-views'
 import { TRANSPARENT } from '@/constants/themes'
-import { RADIUS } from '@/constants/radius'
-import { SPACING } from '@/constants/spacing'
+import { RADIUS, SPACING, ICON_SIZE, OPACITY } from '@/constants/theme'
 import { TEST_IDS } from '@/constants/test-ids'
-import { ICON_SIZE } from '@/constants/icon-size'
 
 const VIEW_OPTIONS = Object.values(DRAWER_VIEWS)
 
@@ -42,7 +40,7 @@ export const DrawerViewSwitcher = memo(function DrawerViewSwitcher({ view, onCha
                     style={({ pressed }) => [
                         styles.pill,
                         {
-                            opacity: pressed ? 0.7 : 1,
+                            opacity: pressed ? OPACITY.pressed : 1,
                             backgroundColor: colors.onBackground + TRANSPARENT[10]
                         }
                     ]}
@@ -54,8 +52,8 @@ export const DrawerViewSwitcher = memo(function DrawerViewSwitcher({ view, onCha
                         {t(DRAWER_VIEW_LABELS[view])}
                     </Typography>
                     <Chevron
-                        width={ICON_SIZE.sm}
-                        height={ICON_SIZE.sm}
+                        width={ICON_SIZE.md}
+                        height={ICON_SIZE.md}
                         color={colors.onBackground}
                     />
                 </Pressable>
@@ -78,12 +76,12 @@ export const DrawerViewSwitcher = memo(function DrawerViewSwitcher({ view, onCha
 const styles = StyleSheet.create({
     pill: {
         gap: SPACING.sm,
-        height: BUTTON_SIZE,
+        height: BUTTON.size,
         paddingStart: SPACING.lg,
         paddingEnd: SPACING.md,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        borderRadius: RADIUS.pill
+        borderRadius: RADIUS.xl
     }
 })

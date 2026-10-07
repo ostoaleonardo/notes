@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { AddTemplate } from '@/screens/dialogs/add-template'
 import { AddTemplateFolder } from '@/screens/dialogs/add-template-folder'
-import { DrawerToolbar, DrawerToolbarButton } from './drawer-toolbar'
-import { DrawerList } from './drawer-list'
+import { DrawerView } from './drawer-view'
 import { DrawerNoteItem } from './drawer-note-item'
 import { DrawerTemplateFolderItem } from './drawer-template-folder-item'
 import { openEditor } from './drawer-open-editor'
@@ -22,6 +21,7 @@ import { ExpandAll } from '@/icons/expand-all'
 
 import { REPOSITORY_ACTIONS } from '@/constants/repository-actions'
 import { TEMPLATE_FOLDER_KEY_PREFIX, TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
+import { DRAWER_ITEM_TYPES, DRAWER_TOOLBAR_KEYS } from '@/constants/drawer-views'
 
 export function DrawerTemplatesView({ closeDrawer }) {
     const { t } = useTranslation()
@@ -87,7 +87,7 @@ export function DrawerTemplatesView({ closeDrawer }) {
             accessibilityLabel: t('repositories.add_subfolder')
         },
         {
-            key: 'toggle-all',
+            key: DRAWER_TOOLBAR_KEYS.TOGGLE_ALL,
             icon: anyCollapsed ? ExpandAll : CollapseAll,
             onPress: onToggleCollapseAll,
             accessibilityLabel: t(anyCollapsed ? 'drawer.expand_all' : 'drawer.collapse_all')
@@ -95,7 +95,7 @@ export function DrawerTemplatesView({ closeDrawer }) {
     ], [t, anyCollapsed, onToggleCollapseAll])
 
     const renderItem = useCallback(({ item }) => {
-        if (item.type === 'folder') {
+        if (item.type === DRAWER_ITEM_TYPES.FOLDER) {
             return (
                 <DrawerTemplateFolderItem
                     folder={item}
@@ -118,22 +118,11 @@ export function DrawerTemplatesView({ closeDrawer }) {
     }, [t, activeFilename, onOpenTemplate, onFolderAction])
 
     return (
-        <>
-            <DrawerList
-                data={rows}
-                keyExtractor={(row) => row.id}
-                renderItem={renderItem}
-            />
-
-            <DrawerToolbar>
-                {toolbarItems.map(({ key, ...item }) => (
-                    <DrawerToolbarButton
-                        key={key}
-                        {...item}
-                    />
-                ))}
-            </DrawerToolbar>
-
+        <DrawerView
+            data={rows}
+            renderItem={renderItem}
+            toolbarItems={toolbarItems}
+        >
             <AddTemplate
                 visible={addTemplateFolderPath !== null}
                 folder={addTemplateFolderPath || ''}
@@ -144,6 +133,6 @@ export function DrawerTemplatesView({ closeDrawer }) {
                 parent={addSubfolderParent || ''}
                 onDismiss={onDismissAddSubfolder}
             />
-        </>
+        </DrawerView>
     )
 }

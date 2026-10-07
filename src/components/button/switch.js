@@ -4,10 +4,11 @@ import { useTheme } from 'react-native-paper'
 
 import { useAnimatedProgress } from '@/hooks/use-animated-progress'
 
-import { SWITCH_TRACK, SWITCH_THUMB, SWITCH_HIT_SLOP } from '@/constants/switch'
+import { SWITCH } from '@/constants/components'
+import { OPACITY, PROGRESS_RANGE } from '@/constants/theme'
 
-const OFF_INSET = (SWITCH_TRACK.height - SWITCH_THUMB.off) / 2
-const ON_INSET = (SWITCH_TRACK.height - SWITCH_THUMB.on) / 2
+const OFF_INSET = (SWITCH.track.height - SWITCH.thumb.off) / 2
+const ON_INSET = (SWITCH.track.height - SWITCH.thumb.on) / 2
 
 export function Switch({ value, onValueChange, disabled = false, accessibilityLabel }) {
     const { colors } = useTheme()
@@ -15,22 +16,22 @@ export function Switch({ value, onValueChange, disabled = false, accessibilityLa
 
     const trackStyle = useAnimatedStyle(() => ({
         borderColor: colors.outline,
-        backgroundColor: interpolateColor(progress.value, [0, 1], [colors.surfaceVariant, colors.tertiary]),
-        borderWidth: interpolate(progress.value, [0, 1], [SWITCH_TRACK.borderWidth, 0])
+        backgroundColor: interpolateColor(progress.value, PROGRESS_RANGE, [colors.surfaceVariant, colors.tertiary]),
+        borderWidth: interpolate(progress.value, PROGRESS_RANGE, [SWITCH.track.borderWidth, 0])
     }))
 
     const thumbStyle = useAnimatedStyle(() => {
-        const size = interpolate(progress.value, [0, 1], [SWITCH_THUMB.off, SWITCH_THUMB.on])
+        const size = interpolate(progress.value, PROGRESS_RANGE, [SWITCH.thumb.off, SWITCH.thumb.on])
 
         return {
             width: size,
             height: size,
             borderRadius: size / 2,
-            marginLeft: interpolate(progress.value, [0, 1], [
-                OFF_INSET - SWITCH_TRACK.borderWidth,
-                SWITCH_TRACK.width - SWITCH_THUMB.on - ON_INSET
+            marginLeft: interpolate(progress.value, PROGRESS_RANGE, [
+                OFF_INSET - SWITCH.track.borderWidth,
+                SWITCH.track.width - SWITCH.thumb.on - ON_INSET
             ]),
-            backgroundColor: interpolateColor(progress.value, [0, 1], [colors.onSurfaceVariant, colors.surface])
+            backgroundColor: interpolateColor(progress.value, PROGRESS_RANGE, [colors.onSurfaceVariant, colors.surface])
         }
     })
 
@@ -41,7 +42,7 @@ export function Switch({ value, onValueChange, disabled = false, accessibilityLa
             accessibilityRole='switch'
             accessibilityState={{ checked: value, disabled }}
             accessibilityLabel={accessibilityLabel}
-            hitSlop={SWITCH_HIT_SLOP}
+            hitSlop={SWITCH.hitSlop}
             style={disabled && styles.disabled}
         >
             <Animated.View style={[styles.track, trackStyle]}>
@@ -53,13 +54,13 @@ export function Switch({ value, onValueChange, disabled = false, accessibilityLa
 
 const styles = StyleSheet.create({
     track: {
-        width: SWITCH_TRACK.width,
-        height: SWITCH_TRACK.height,
-        borderRadius: SWITCH_TRACK.height / 2,
+        width: SWITCH.track.width,
+        height: SWITCH.track.height,
+        borderRadius: SWITCH.track.height / 2,
         flexDirection: 'row',
         alignItems: 'center'
     },
     disabled: {
-        opacity: 0.4
+        opacity: OPACITY.disabled
     }
 })

@@ -1,13 +1,13 @@
 import { Pressable, StyleSheet, View } from 'react-native'
 
-import { Typography } from '../typography'
+import { Typography } from '@/components/typography'
 import { DrawerIconButton } from './drawer-icon-button'
 
 import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
 import { KeyboardArrowUp } from '@/icons/keyboard-arrow-up'
 
-import { BUTTON_SIZE } from '@/constants/button'
-import { SPACING } from '@/constants/spacing'
+import { BUTTON } from '@/constants/components'
+import { SPACING, OPACITY } from '@/constants/theme'
 
 export function DrawerTreeRow({
     label,
@@ -45,7 +45,7 @@ export function DrawerTreeRow({
                 </Typography>
                 {count !== undefined && (
                     <Typography
-                        opacity={0.5}
+                        opacity={OPACITY.muted}
                         variant='caption'
                         styleProps={styles.count}
                     >
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     regular: {
-        minHeight: BUTTON_SIZE
+        minHeight: BUTTON.size
     },
     content: {
         flex: 1,

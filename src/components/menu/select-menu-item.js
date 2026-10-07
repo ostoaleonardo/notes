@@ -7,7 +7,7 @@ import { MenuItem } from './menu-item'
 import { Check } from '@/icons/check'
 
 import { TRANSPARENT } from '@/constants/themes'
-import { SPACING } from '@/constants/spacing'
+import { SPACING } from '@/constants/theme'
 
 export function SelectMenuItem({ selected, style, contentStyle, ...props }) {
     const { colors } = useTheme()

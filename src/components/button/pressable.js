@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
 import { Button } from 'react-native-paper'
 
-import { FONTS } from '@/constants/fonts'
+import { FONTS, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
 
 export function Pressable({ children, ...props }) {
     return (
@@ -18,7 +18,7 @@ export function Pressable({ children, ...props }) {
 
 const styles = StyleSheet.create({
     label: {
-        fontSize: 12,
+        fontSize: TYPOGRAPHY_SIZE_VARIANTS.caption,
         fontFamily: FONTS.azeretLight
     }
 })

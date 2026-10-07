@@ -4,7 +4,8 @@ import { Button } from 'react-native-paper'
 import { DialogModal } from './dialog'
 import { Typography } from './typography'
 
-import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/dialog'
+import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
+import { OPACITY } from '@/constants/theme'
 
 export function ConfirmDialog({ title, message, confirmLabel, visible, onDismiss, onConfirm }) {
     const { t } = useTranslation()
@@ -37,7 +38,7 @@ export function ConfirmDialog({ title, message, confirmLabel, visible, onDismiss
                 </Button>
             ]}
         >
-            <Typography opacity={0.6}>
+            <Typography opacity={OPACITY.secondary}>
                 {message}
             </Typography>
         </DialogModal>

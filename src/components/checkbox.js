@@ -4,6 +4,8 @@ import { useTheme } from 'react-native-paper'
 import { Check } from '@/icons/check'
 
 import { TRANSPARENT } from '@/constants/themes'
+import { CHECKBOX } from '@/constants/components'
+import { BORDER_WIDTH } from '@/constants/theme'
 
 export function Checkbox({ checked }) {
     const { colors } = useTheme()
@@ -21,8 +23,8 @@ export function Checkbox({ checked }) {
         >
             {checked && (
                 <Check
-                    width={20}
-                    height={20}
+                    width={CHECKBOX.size}
+                    height={CHECKBOX.size}
                     color={colors.background}
                 />
             )}
@@ -32,10 +34,10 @@ export function Checkbox({ checked }) {
 
 const styles = StyleSheet.create({
     check: {
-        width: 20,
-        height: 20,
-        borderWidth: 1,
-        borderRadius: 5,
+        width: CHECKBOX.size,
+        height: CHECKBOX.size,
+        borderWidth: BORDER_WIDTH.thin,
+        borderRadius: CHECKBOX.radius,
         alignItems: 'center',
         justifyContent: 'center'
     }

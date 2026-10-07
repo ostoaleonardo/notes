@@ -6,8 +6,8 @@ import { SmallInput } from './small-input'
 
 import { Search } from '@/icons/search'
 
-import { RADIUS } from '@/constants/radius'
-import { SPACING } from '@/constants/spacing'
+import { RADIUS, SPACING, ICON_SIZE } from '@/constants/theme'
+import { SEARCH_INPUT } from '@/constants/components'
 
 export function SearchInput({
     value,
@@ -29,8 +29,8 @@ export function SearchInput({
 
             <View style={styles.icon}>
                 <Search
-                    width={24}
-                    height={24}
+                    width={ICON_SIZE.xxl}
+                    height={ICON_SIZE.xxl}
                     color={colors.onSurfaceVariant}
                 />
             </View>
@@ -42,11 +42,11 @@ const styles = StyleSheet.create({
     container: {
         margin: SPACING.lg,
         flexDirection: 'row',
-        borderRadius: RADIUS.outer
+        borderRadius: RADIUS.lg
     },
     icon: {
-        width: 48,
-        height: 48,
+        width: SEARCH_INPUT.actionSize,
+        height: SEARCH_INPUT.actionSize,
         alignItems: 'center',
         justifyContent: 'center'
     }

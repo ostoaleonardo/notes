@@ -3,6 +3,8 @@ import { StyleSheet, View } from 'react-native'
 
 import { FilterToggle } from './filter-toggle'
 
+import { SPACING } from '@/constants/theme'
+
 export function FilterToggleGroup({ buttons, pill = false, equalWidth = false }) {
     const [widths, setWidths] = useState({})
 
@@ -37,7 +39,7 @@ export function FilterToggleGroup({ buttons, pill = false, equalWidth = false })
 
 const styles = StyleSheet.create({
     group: {
-        gap: 2,
+        gap: SPACING.xxxs,
         flexDirection: 'row',
         justifyContent: 'center'
     }

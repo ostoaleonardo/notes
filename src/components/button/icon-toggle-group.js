@@ -3,7 +3,7 @@ import { useTheme } from 'react-native-paper'
 
 import { IconToggle } from './icon-toggle'
 
-import { GROUP_GAP } from '@/constants/button'
+import { BUTTON } from '@/constants/components'
 
 export function IconToggleGroup({ buttons, background }) {
     const { colors } = useTheme()
@@ -25,7 +25,7 @@ export function IconToggleGroup({ buttons, background }) {
 
 const styles = StyleSheet.create({
     group: {
-        gap: GROUP_GAP,
+        gap: BUTTON.groupGap,
         flexDirection: 'row'
     }
 })

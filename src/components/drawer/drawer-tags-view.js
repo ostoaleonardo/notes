@@ -2,14 +2,14 @@ import { memo, useCallback, useMemo, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
-import { Typography } from '../typography'
-import { DrawerList } from './drawer-list'
-import { DrawerToolbar, DrawerToolbarButton } from './drawer-toolbar'
+import { Typography } from '@/components/typography'
+import { DrawerView } from './drawer-view'
 import { DrawerTreeRow } from './drawer-tree-row'
 
 import { useNotes } from '@/hooks/use-notes'
 import { useStorage } from '@/hooks/use-storage'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
+import { toggleInSet } from '@/utils/toggle-in-set'
 import { buildTagTree, collectTagKeys, flattenTagTree } from '@/utils/drawer-tags'
 
 import { ArrowDownward } from '@/icons/arrow-downward'
@@ -19,7 +19,8 @@ import { ExpandAll } from '@/icons/expand-all'
 import { SortByAlpha } from '@/icons/sort-by-alpha'
 
 import { DEFAULT_TAG_SORT, TAG_SORT_LABELS, TAG_SORTS } from '@/constants/tags'
-import { SPACING } from '@/constants/spacing'
+import { SPACING, OPACITY } from '@/constants/theme'
+import { DRAWER_TOOLBAR_KEYS } from '@/constants/drawer-views'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 const TagRow = memo(function TagRow({ tagKey, name, depth, count, hasChildren, expanded, onToggle }) {
@@ -35,6 +36,18 @@ const TagRow = memo(function TagRow({ tagKey, name, depth, count, hasChildren, e
         />
     )
 })
+
+function TagsEmpty() {
+    const { t } = useTranslation()
+
+    return (
+        <View style={styles.empty}>
+            <Typography opacity={OPACITY.muted}>
+                {t('message.tags.empty')}
+            </Typography>
+        </View>
+    )
+}
 
 export function DrawerTagsView() {
     const { t } = useTranslation()
@@ -80,7 +93,7 @@ export function DrawerTagsView() {
             sortItem('sort-name', [SortByAlpha, SortByAlpha], TAG_SORTS.NAME_ASC, TAG_SORTS.NAME_DESC),
             sortItem('sort-usage', [ArrowDownward, ArrowUpward], TAG_SORTS.COUNT_DESC, TAG_SORTS.COUNT_ASC),
             {
-                key: 'toggle-all',
+                key: DRAWER_TOOLBAR_KEYS.TOGGLE_ALL,
                 icon: anyExpanded ? CollapseAll : ExpandAll,
                 onPress: onToggleCollapseAll,
                 accessibilityLabel: t(anyExpanded ? 'drawer.collapse_all' : 'drawer.expand_all')
@@ -88,13 +101,7 @@ export function DrawerTagsView() {
         ]
     }, [sort, onChangeSort, anyExpanded, onToggleCollapseAll, t])
 
-    const onToggleTag = useCallback((key) => {
-        setExpandedTags((current) => {
-            const next = new Set(current)
-            if (!next.delete(key)) next.add(key)
-            return next
-        })
-    }, [])
+    const onToggleTag = useCallback((key) => setExpandedTags((current) => toggleInSet(current, key)), [])
 
     const renderItem = useCallback(({ item }) => {
         return (
@@ -111,35 +118,18 @@ export function DrawerTagsView() {
     }, [onToggleTag])
 
     return (
-        <>
-            <DrawerList
-                data={rows}
-                keyExtractor={(row) => row.id}
-                renderItem={renderItem}
-                ListEmptyComponent={(
-                    <View style={styles.empty}>
-                        <Typography opacity={0.5}>
-                            {t('message.tags.empty')}
-                        </Typography>
-                    </View>
-                )}
-            />
-
-            <DrawerToolbar>
-                {toolbarItems.map(({ key, ...item }) => (
-                    <DrawerToolbarButton
-                        key={key}
-                        {...item}
-                    />
-                ))}
-            </DrawerToolbar>
-        </>
+        <DrawerView
+            data={rows}
+            renderItem={renderItem}
+            toolbarItems={toolbarItems}
+            ListEmptyComponent={TagsEmpty}
+        />
     )
 }
 
 const styles = StyleSheet.create({
     inactive: {
-        opacity: 0.4
+        opacity: OPACITY.disabled
     },
     empty: {
         paddingVertical: SPACING.lg,

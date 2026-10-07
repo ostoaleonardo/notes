@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
-import { MenuContainer } from '../menu/menu-container'
-import { SelectMenuItem } from '../menu/select-menu-item'
+import { MenuContainer } from '@/components/menu/menu-container'
+import { SelectMenuItem } from '@/components/menu/select-menu-item'
 import { DrawerToolbarButton } from './drawer-toolbar'
 
 import { useMenuAction } from '@/hooks/use-menu-action'

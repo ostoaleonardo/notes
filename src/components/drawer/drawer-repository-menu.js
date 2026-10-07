@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { MenuItem } from '../menu/menu-item'
+import { MenuItem } from '@/components/menu/menu-item'
 
 import { Delete } from '@/icons/delete'
 import { Edit } from '@/icons/edit'

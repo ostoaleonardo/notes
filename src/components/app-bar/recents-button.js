@@ -4,6 +4,8 @@ import { Badge, IconButton, Tooltip, useTheme } from 'react-native-paper'
 
 import { NoteStack } from '@/icons/note-stack'
 
+import { BADGE } from '@/constants/components'
+
 export function RecentsButton({ onPress, testID, count = 0 }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
@@ -21,12 +23,12 @@ export function RecentsButton({ onPress, testID, count = 0 }) {
 
                 {count > 0 && (
                     <Badge
-                        size={16}
+                        size={BADGE.size}
                         style={{
                             position: 'absolute',
                             color: colors.onTertiary,
                             backgroundColor: colors.tertiary,
-                            top: 6
+                            top: BADGE.top
                         }}
                     >
                         {count}

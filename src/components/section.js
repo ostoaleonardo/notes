@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 
 import { Typography } from './typography'
-import { SPACING } from '@/constants/spacing'
+import { SPACING, OPACITY } from '@/constants/theme'
 
 export function Section({ title, children, containerStyle, contentStyle, visible = true }) {
     if (!visible) return null
@@ -16,7 +16,7 @@ export function Section({ title, children, containerStyle, contentStyle, visible
             {title && (
                 <View style={styles.title}>
                     <Typography
-                        opacity={0.6}
+                        opacity={OPACITY.secondary}
                         uppercase={true}
                         variant='caption'
                     >

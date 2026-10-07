@@ -1,9 +1,8 @@
 import { StyleSheet } from 'react-native'
 import { RadioButton, useTheme } from 'react-native-paper'
 
-import { FONTS } from '@/constants/fonts'
+import { FONTS, TYPOGRAPHY_SIZE_VARIANTS, SPACING } from '@/constants/theme'
 import { getGroupedRadius } from '@/utils/grouped-card-style'
-import { SPACING } from '@/constants/spacing'
 
 export function RadioButtonItem({ isFirst, isLast, ...props }) {
     const { colors } = useTheme()
@@ -24,7 +23,7 @@ export function RadioButtonItem({ isFirst, isLast, ...props }) {
 
 const styles = StyleSheet.create({
     title: {
-        fontSize: 14,
+        fontSize: TYPOGRAPHY_SIZE_VARIANTS.paragraph,
         paddingHorizontal: SPACING.lg,
         fontFamily: FONTS.azeretLight
     }

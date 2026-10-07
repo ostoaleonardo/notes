@@ -1,7 +1,9 @@
 import { StyleSheet, View } from 'react-native'
 import Animated, { LinearTransition } from 'react-native-reanimated'
 
-import { Typography } from '../typography'
+import { Typography } from '@/components/typography'
+
+import { OPACITY } from '@/constants/theme'
 
 export function AnimatedList({ emptyLabel, gap = 16, contentContainerStyle, ...props }) {
     return (
@@ -14,7 +16,7 @@ export function AnimatedList({ emptyLabel, gap = 16, contentContainerStyle, ...p
             ListEmptyComponent={() => (
                 <View style={styles.empty}>
                     <Typography
-                        opacity={0.5}
+                        opacity={OPACITY.muted}
                         variant='caption'
                         textAlign='center'
                     >
@@ -29,7 +31,7 @@ export function AnimatedList({ emptyLabel, gap = 16, contentContainerStyle, ...p
 
 const styles = StyleSheet.create({
     base: {
-        width: '100%',
+        width: '100%'
     },
     list: {
         flexGrow: 1

@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
-import { MenuContainer } from '../menu/menu-container'
+import { MenuContainer } from '@/components/menu/menu-container'
 import { SplitButtonPrimary } from './split-button-primary'
 import { SplitButtonTrigger } from './split-button-trigger'
 
-import { GROUP_GAP } from '@/constants/button'
+import { BUTTON } from '@/constants/components'
 import { useAnimatedProgress } from '@/hooks/use-animated-progress'
 
 export const SplitButton = ({
@@ -57,7 +57,7 @@ export const SplitButton = ({
 
 const styles = StyleSheet.create({
     container: {
-        gap: GROUP_GAP,
+        gap: BUTTON.groupGap,
         flexDirection: 'row',
         alignItems: 'center'
     }

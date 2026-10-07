@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Keyboard } from 'react-native'
 import { Dialog, Portal } from 'react-native-paper'
 
-import { FONTS } from '@/constants/fonts'
+import { FONTS, TYPOGRAPHY_SIZE_VARIANTS, OPACITY } from '@/constants/theme'
 
 export function DialogModal({ title, visible, onDismiss, children, actions }) {
     const [bottom, setBottom] = useState(0)
@@ -37,8 +37,8 @@ export function DialogModal({ title, visible, onDismiss, children, actions }) {
             >
                 <Dialog.Title
                     style={{
-                        fontSize: 12,
-                        opacity: 0.5,
+                        fontSize: TYPOGRAPHY_SIZE_VARIANTS.caption,
+                        opacity: OPACITY.muted,
                         textTransform: 'uppercase',
                         fontFamily: FONTS.azeretMedium
                     }}
