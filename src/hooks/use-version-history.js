@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
+import { useMenuAction } from './use-menu-action'
 import { useNoteVersions } from './use-note-versions'
 
 import { VERSION_SNAPSHOT_INTERVAL } from '@/constants/default-values'
@@ -8,10 +9,7 @@ export function useVersionHistory({ location, latestContent }) {
     const { commitVersion } = useNoteVersions()
 
     const folderUri = location?.folderUri
-    const [visible, setVisible] = useState(false)
-
-    const onOpen = useCallback(() => setVisible(true), [])
-    const onClose = useCallback(() => setVisible(false), [])
+    const { visible, onOpen, onClose } = useMenuAction()
 
     const commitLatest = useRef(null)
     commitLatest.current = () => {

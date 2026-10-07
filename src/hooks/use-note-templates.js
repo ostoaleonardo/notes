@@ -7,6 +7,7 @@ import { useTemplatesList } from './use-templates-list'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { TEMPLATE_INSERT_SEPARATOR } from '@/constants/template-placeholders'
+import { LOG_MESSAGES } from '@/constants/log-messages'
 import { logError } from '@/utils/log-error'
 
 export function useNoteTemplates({ latestContent, setNote }) {
@@ -29,7 +30,7 @@ export function useNoteTemplates({ latestContent, setNote }) {
             await addTemplate(title.trim() || t('placeholder.title'), content)
             showSnackbar(t('templates.saved'))
         } catch (error) {
-            logError('error saving template', error)
+            logError(LOG_MESSAGES.ERROR_SAVING_TEMPLATE, error)
             showSnackbar(t('templates.save_failed'))
         }
     }, [addTemplate, latestContent, t])

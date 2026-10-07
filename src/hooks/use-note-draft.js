@@ -24,7 +24,20 @@ export function useNoteDraft(pathRef) {
         rawFrontmatter
     })
 
+    const editorProps = {
+        title, setTitle,
+        note, setNote,
+        tags, setTags,
+        properties, setProperties,
+        modifiedAt,
+        repositoryId,
+        filename,
+        invalidFrontmatter, setInvalidFrontmatter,
+        rawFrontmatter, setRawFrontmatter
+    }
+
     return {
+        editorProps,
         title, setTitle,
         note, setNote,
         tags, setTags,

@@ -5,6 +5,8 @@ import { resolveUrl } from './use-resolved-preview-markdown'
 import { extractEmbedImageNames } from '@/utils/embeds'
 import { logError } from '@/utils/log-error'
 
+import { LOG_MESSAGES } from '@/constants/log-messages'
+
 const EMPTY_MAP = new Map()
 
 export const useEmbedImageMap = (value, enabled) => {
@@ -31,7 +33,7 @@ export const useEmbedImageMap = (value, enabled) => {
         Promise.all(missing.map(async (name) => {
             const uri = uris.get(name)
             if (uri) cache.set(name, await resolveUrl(uri))
-        })).catch((error) => logError('error resolving embedded images', error)).then(() => {
+        })).catch((error) => logError(LOG_MESSAGES.ERROR_RESOLVING_EMBEDDED_IMAGES, error)).then(() => {
             if (cancelled) return
             const names = namesKey.split('\n')
             setMap(new Map(names.map((name) => [name, cache.get(name) ?? null])))

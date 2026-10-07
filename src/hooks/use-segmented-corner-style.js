@@ -2,7 +2,8 @@ import { interpolate, useAnimatedStyle } from 'react-native-reanimated'
 
 import { useAnimatedProgress } from './use-animated-progress'
 
-import { GROUP_CORNERS, RADIUS } from '@/constants/radius'
+import { GROUP_CORNERS } from '@/constants/components'
+import { RADIUS, PROGRESS_RANGE } from '@/constants/theme'
 
 export function useSegmentedCornerStyle(position, active) {
     const { left, right } = GROUP_CORNERS[position]
@@ -10,9 +11,9 @@ export function useSegmentedCornerStyle(position, active) {
     const progress = useAnimatedProgress(active)
 
     return useAnimatedStyle(() => ({
-        borderTopLeftRadius: interpolate(progress.value, [0, 1], [left, RADIUS.pill]),
-        borderBottomLeftRadius: interpolate(progress.value, [0, 1], [left, RADIUS.pill]),
-        borderTopRightRadius: interpolate(progress.value, [0, 1], [right, RADIUS.pill]),
-        borderBottomRightRadius: interpolate(progress.value, [0, 1], [right, RADIUS.pill])
+        borderTopLeftRadius: interpolate(progress.value, PROGRESS_RANGE, [left, RADIUS.xl]),
+        borderBottomLeftRadius: interpolate(progress.value, PROGRESS_RANGE, [left, RADIUS.xl]),
+        borderTopRightRadius: interpolate(progress.value, PROGRESS_RANGE, [right, RADIUS.xl]),
+        borderBottomRightRadius: interpolate(progress.value, PROGRESS_RANGE, [right, RADIUS.xl])
     }))
 }

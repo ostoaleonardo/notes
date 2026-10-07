@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useSharedValue, withTiming } from 'react-native-reanimated'
 
-import { ANIMATION_DURATION } from '@/constants/animation'
+import { ANIMATION_DURATION } from '@/constants/theme'
 
 export function useAnimatedProgress(active, duration = ANIMATION_DURATION) {
     const progress = useSharedValue(active ? 1 : 0)

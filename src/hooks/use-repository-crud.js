@@ -7,6 +7,9 @@ import { withBusy } from '@/utils/with-busy'
 import { resolveAttachmentTarget } from '@/utils/attachments'
 import { FREE_SUBFOLDERS_PER_REPOSITORY } from '@/constants/default-values'
 import { TEMPLATES_FOLDER_NAME } from '@/constants/file-storage'
+import { REPOSITORY_RESULTS } from '@/constants/repository-results'
+import { PICKER_ERROR_CODES } from '@/constants/picker-errors'
+import { LOG_MESSAGES } from '@/constants/log-messages'
 import { logError } from '@/utils/log-error'
 
 export function useRepositoryCrud({
@@ -44,7 +47,7 @@ export function useRepositoryCrud({
             const directory = await Directory.pickDirectoryAsync()
 
             if (repositories.some((repository) => repository.uri === directory.uri)) {
-                return 'duplicate'
+                return REPOSITORY_RESULTS.DUPLICATE
             }
 
             const repository = buildRepository(directory)
@@ -57,10 +60,10 @@ export function useRepositoryCrud({
 
             return { ...repository, welcomeNotePath }
         } catch (error) {
-            if (error.code === 'ERR_PICKER_CANCELLED') return null
+            if (error.code === PICKER_ERROR_CODES.CANCELLED) return null
 
-            logError('error picking repository', error)
-            return 'error'
+            logError(LOG_MESSAGES.ERROR_PICKING_REPOSITORY, error)
+            return REPOSITORY_RESULTS.ERROR
         }
     }), [
         repositories,
@@ -90,7 +93,7 @@ export function useRepositoryCrud({
     }, [pro, repositories])
 
     const addSubfolder = useCallback(async (parentId, name) => {
-        if (!canAddSubfolder(parentId)) return 'pro_required'
+        if (!canAddSubfolder(parentId)) return REPOSITORY_RESULTS.PRO_REQUIRED
 
         const parent = repositories.find((repository) => repository.id === parentId)
         if (!parent) return null
@@ -135,7 +138,15 @@ export function useRepositoryCrud({
 
             return templatesDirectory.uri
         })
-    }, [getRootRepository, findDirectory, getOrCreateTemplatesFolder, seedTemplates, persistRepositories, repositories, busyRef])
+    }, [
+        getRootRepository,
+        findDirectory,
+        getOrCreateTemplatesFolder,
+        seedTemplates,
+        persistRepositories,
+        repositories,
+        busyRef
+    ])
 
     const ensureImagesFolder = useCallback((repository) => {
         const root = getRootRepository(repository)
@@ -165,7 +176,7 @@ export function useRepositoryCrud({
         return withBusy(busyRef, async () => {
             try {
                 const parent = repositories.find((r) => r.id === repository.parentId)
-                if (!parent) return 'error'
+                if (!parent) return REPOSITORY_RESULTS.ERROR
 
                 const sanitized = sanitizeFilename(alias)
                 const paths = buildRepositoryPaths(repositories)
@@ -185,8 +196,8 @@ export function useRepositoryCrud({
 
                 return renamedRepository
             } catch (error) {
-                logError('error renaming repository folder', error)
-                return 'error'
+                logError(LOG_MESSAGES.ERROR_RENAMING_REPOSITORY_FOLDER, error)
+                return REPOSITORY_RESULTS.ERROR
             }
         })
     }, [
@@ -229,7 +240,7 @@ export function useRepositoryCrud({
         if (!repository) return null
 
         if (activeRepository && isAncestorOf(id, activeRepository)) {
-            return 'active'
+            return REPOSITORY_RESULTS.ACTIVE
         }
 
         return withBusy(busyRef, async () => {

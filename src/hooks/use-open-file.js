@@ -10,6 +10,7 @@ import { logError } from '@/utils/log-error'
 
 import { FILE_KINDS } from '@/constants/file-types'
 import { ROUTES } from '@/constants/routes'
+import { LOG_MESSAGES } from '@/constants/log-messages'
 
 export const useOpenFile = () => {
     const { t } = useTranslation()
@@ -34,7 +35,7 @@ export const useOpenFile = () => {
             new File(file.uri).copy(copy)
             await Sharing.shareAsync(copy.uri, { mimeType: file.mimeType })
         } catch (error) {
-            logError('error opening file', error)
+            logError(LOG_MESSAGES.ERROR_OPENING_FILE, error)
             showSnackbar(t('message.files.open_failed'))
         }
     }, [t])

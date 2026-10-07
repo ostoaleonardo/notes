@@ -3,7 +3,7 @@ import { getLocales } from 'expo-localization'
 import { useStorage } from './use-storage'
 import i18next from '@/i18n/i18next'
 
-import { LANGUAGES } from '@/constants/languages'
+import { DEFAULT_LANGUAGE, LANGUAGES } from '@/constants/languages'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 const SUPPORTED_LANGUAGES = LANGUAGES.map(({ code }) => code)
@@ -16,7 +16,7 @@ export function useLanguage() {
         const locales = getLocales()
         const { languageCode } = locales[0]
 
-        return SUPPORTED_LANGUAGES.includes(languageCode) ? languageCode : 'en'
+        return SUPPORTED_LANGUAGES.includes(languageCode) ? languageCode : DEFAULT_LANGUAGE
     }
 
     const changeLanguage = (lan) => {

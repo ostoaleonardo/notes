@@ -1,6 +1,7 @@
-import { useContext } from 'react'
+import { useCallback, useContext, useMemo } from 'react'
 
 import { useStorage } from './use-storage'
+import { toggleInSet } from '@/utils/toggle-in-set'
 import { UtilsContext } from '@/context/utils-context'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
@@ -13,57 +14,50 @@ export const useUtils = () => {
 
     const { setItem } = useStorage()
 
-    const updatePinned = (pinned) => {
-        setPinned(pinned)
+    const updatePinned = useCallback((next) => {
+        setPinned(next)
         setItem(
             STORAGE_KEYS.PINNED,
-            JSON.stringify(Array.from(pinned))
+            JSON.stringify(Array.from(next))
         )
-    }
+    }, [setPinned, setItem])
 
-    const onPinned = (id) => {
-        const next = new Set(pinned)
+    const onPinned = useCallback(
+        (id) => updatePinned(toggleInSet(pinned, id)),
+        [pinned, updatePinned]
+    )
 
-        if (next.has(id)) {
-            next.delete(id)
-        } else {
-            next.add(id)
-        }
-
-        updatePinned(next)
-    }
-
-    const updateCollapsedFolders = (collapsedFolders) => {
-        setCollapsedFolders(collapsedFolders)
+    const updateCollapsedFolders = useCallback((next) => {
+        setCollapsedFolders(next)
         setItem(
             STORAGE_KEYS.COLLAPSED_FOLDERS,
-            JSON.stringify(Array.from(collapsedFolders))
+            JSON.stringify(Array.from(next))
         )
-    }
+    }, [setCollapsedFolders, setItem])
 
-    const toggleFolder = (id) => {
-        const next = new Set(collapsedFolders)
+    const toggleFolder = useCallback(
+        (id) => updateCollapsedFolders(toggleInSet(collapsedFolders, id)),
+        [collapsedFolders, updateCollapsedFolders]
+    )
 
-        if (next.has(id)) {
-            next.delete(id)
-        } else {
-            next.add(id)
-        }
+    const collapseAll = useCallback(
+        (ids) => updateCollapsedFolders(new Set(ids)),
+        [updateCollapsedFolders]
+    )
 
-        updateCollapsedFolders(next)
-    }
+    const expandAll = useCallback(
+        () => updateCollapsedFolders(new Set()),
+        [updateCollapsedFolders]
+    )
 
-    const collapseAll = (ids) => updateCollapsedFolders(new Set(ids))
-    const expandAll = () => updateCollapsedFolders(new Set())
-
-    const setFoldersCollapsed = (ids, collapsed) => {
+    const setFoldersCollapsed = useCallback((ids, collapsed) => {
         const next = new Set(collapsedFolders)
 
         ids.forEach((id) => (collapsed ? next.add(id) : next.delete(id)))
         updateCollapsedFolders(next)
-    }
+    }, [collapsedFolders, updateCollapsedFolders])
 
-    return {
+    return useMemo(() => ({
         pinned,
         collapsedFolders,
         updatePinned,
@@ -72,5 +66,14 @@ export const useUtils = () => {
         collapseAll,
         expandAll,
         setFoldersCollapsed
-    }
+    }), [
+        pinned,
+        collapsedFolders,
+        updatePinned,
+        onPinned,
+        toggleFolder,
+        collapseAll,
+        expandAll,
+        setFoldersCollapsed
+    ])
 }

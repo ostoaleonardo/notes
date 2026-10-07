@@ -9,6 +9,7 @@ import { showSnackbar } from '@/components/snackbar/snackbar-host'
 import { readDeleteBehavior } from '@/utils/delete-note-files'
 
 import { DEFAULT_DELETE_BEHAVIOR } from '@/constants/delete-behavior'
+import { LOG_MESSAGES } from '@/constants/log-messages'
 import { logError } from '@/utils/log-error'
 
 export function useNoteDelete(id, busyRef) {
@@ -33,7 +34,7 @@ export function useNoteDelete(id, busyRef) {
             router.back()
         } catch (error) {
             if (busyRef) busyRef.current = false
-            logError('error deleting note', error)
+            logError(LOG_MESSAGES.ERROR_DELETING_NOTE, error)
             showSnackbar(t('notes.delete_failed'))
         }
     }, [deleteNote, busyRef, id, t])

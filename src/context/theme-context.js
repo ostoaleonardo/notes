@@ -9,7 +9,7 @@ import { useStorage } from '@/hooks/use-storage'
 import { revertAccentOnProRevoke } from '@/utils/accent'
 
 import { THEMES, ACCENT_COLORS } from '@/constants/themes'
-import { FREE_ACCENT } from '@/constants/theme-options'
+import { FREE_ACCENT, THEME_MODES } from '@/constants/theme-options'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export const ThemeContext = createContext()
@@ -47,7 +47,7 @@ export function ThemeProvider({ initialTheme, children }) {
     }, [pro, setItem])
 
     useEffect(() => {
-        const theme = mode !== 'system' ? mode : colorScheme
+        const theme = mode !== THEME_MODES.SYSTEM ? mode : colorScheme
         setName(theme)
 
         if (accent && theme) {
@@ -89,7 +89,7 @@ export function ThemeProvider({ initialTheme, children }) {
                     {children}
                 </Host>
             </PaperProvider>
-            <StatusBar style={name === 'light' ? 'dark' : 'light'} />
+            <StatusBar style={name === THEME_MODES.LIGHT ? THEME_MODES.DARK : THEME_MODES.LIGHT} />
         </ThemeContext.Provider>
     )
 }

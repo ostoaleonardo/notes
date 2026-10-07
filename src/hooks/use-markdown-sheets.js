@@ -2,6 +2,8 @@ import { useCallback } from 'react'
 
 import { useBottomSheet } from './use-bottom-sheet'
 
+import { MARKDOWN_ACTIONS } from '@/constants/markdown-actions'
+
 export function useMarkdownSheets(action) {
     const linkSheet = useBottomSheet()
     const tableSheet = useBottomSheet()
@@ -12,17 +14,17 @@ export function useMarkdownSheets(action) {
     const { onOpen: openImage } = imageSheet
 
     const onRunAction = useCallback((actionName) => {
-        if (actionName === 'link') {
+        if (actionName === MARKDOWN_ACTIONS.LINK) {
             openLink()
             return
         }
 
-        if (actionName === 'table') {
+        if (actionName === MARKDOWN_ACTIONS.TABLE) {
             openTable()
             return
         }
 
-        if (actionName === 'image') {
+        if (actionName === MARKDOWN_ACTIONS.IMAGE) {
             openImage()
             return
         }

@@ -7,6 +7,8 @@ import { getUniqueFilename, sanitizeFilename, stripNoteExtension } from '@/utils
 import { joinTemplatePath, splitTemplatePath } from '@/utils/template-path'
 import { notifyTemplatesChanged } from '@/utils/templates-events'
 
+import { TEMPLATE_FILE_EXTENSION_PATTERN } from '@/constants/markdown-patterns'
+
 export function useTemplates() {
     const { activeRepository, ensureTemplatesFolder } = useRepositories()
     const {
@@ -118,7 +120,7 @@ export function useTemplates() {
     const importTemplate = useCallback(async (fileUri, name, folder = '') => {
         const file = new File(fileUri)
         const content = await file.text()
-        const title = (name || file.name).replace(/\.(md|markdown|txt)$/i, '')
+        const title = (name || file.name).replace(TEMPLATE_FILE_EXTENSION_PATTERN, '')
 
         return addTemplate(title, content, folder)
     }, [addTemplate])

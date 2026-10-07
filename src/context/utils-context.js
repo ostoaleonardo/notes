@@ -1,6 +1,6 @@
 import { createContext, useEffect, useMemo, useState } from 'react'
 
-import { useStorage } from '../hooks/use-storage'
+import { useStorage } from '@/hooks/use-storage'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 

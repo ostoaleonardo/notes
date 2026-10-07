@@ -4,10 +4,13 @@ import { File } from 'expo-file-system'
 import { useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 
-import { useNotes } from '../hooks/use-notes'
+import { useNotes } from '@/hooks/use-notes'
 import { extractProperties, readFrontmatterTags, parseFrontmatter } from '@/utils/frontmatter'
 
 import { ROUTES } from '@/constants/routes'
+import { MARKDOWN_FILE_NAME_PATTERN } from '@/constants/markdown-patterns'
+import { FILE_URI_SCHEMES } from '@/constants/file-uri-schemes'
+import { LOG_MESSAGES } from '@/constants/log-messages'
 import { logError } from '@/utils/log-error'
 
 export const ImportContext = createContext()
@@ -25,7 +28,7 @@ export function ImportProvider({ children }) {
 
             const file = new File(url)
             const { frontmatter, body } = parseFrontmatter(await file.text())
-            const match = (name || file.name).match(/^(.+)\.(md|markdown)$/i)
+            const match = (name || file.name).match(MARKDOWN_FILE_NAME_PATTERN)
             const title = match ? match[1] : t('notes.untitled')
             const tags = readFrontmatterTags(frontmatter)
 
@@ -38,7 +41,7 @@ export function ImportProvider({ children }) {
 
             router.push(ROUTES.HOME)
         } catch (error) {
-            logError('error importing markdown file', error)
+            logError(LOG_MESSAGES.ERROR_IMPORTING_MARKDOWN_FILE, error)
         } finally {
             setImporting(false)
         }
@@ -48,7 +51,7 @@ export function ImportProvider({ children }) {
         const handleUrl = (url) => {
             if (loading) return
             if (!url) return
-            if (!url.startsWith('content://') && !url.startsWith('file://')) return
+            if (!url.startsWith(FILE_URI_SCHEMES.CONTENT) && !url.startsWith(FILE_URI_SCHEMES.FILE)) return
 
             importFile(url)
         }

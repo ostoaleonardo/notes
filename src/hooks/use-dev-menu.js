@@ -18,6 +18,7 @@ import { buildNoteFileContent, parseFrontmatter } from '@/utils/frontmatter'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { MIME_TYPES } from '@/constants/mime-types'
 import { NOTE_FILE_EXTENSION } from '@/constants/file-storage'
+import { LOG_MESSAGES } from '@/constants/log-messages'
 import {
     TREE_BRANCHING,
     NOTES_PER_FOLDER,
@@ -88,7 +89,6 @@ export function useDevMenu() {
 
         await setItem(STORAGE_KEYS.NOTES, JSON.stringify(notes))
         await setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(legacyTags))
-        console.debug('seeded legacy dump')
     }
 
     const seedFolderNotes = (uri, label) => {
@@ -127,7 +127,7 @@ export function useDevMenu() {
 
             DevSettings.reload()
         } catch (error) {
-            logError('error generating repository tree', error)
+            logError(LOG_MESSAGES.ERROR_GENERATING_REPOSITORY_TREE, error)
         }
     }
 

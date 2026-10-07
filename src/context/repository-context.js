@@ -1,8 +1,9 @@
 import { createContext, useEffect, useMemo, useRef, useState } from 'react'
 
-import { useStorage } from '../hooks/use-storage'
+import { useStorage } from '@/hooks/use-storage'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { LOG_MESSAGES } from '@/constants/log-messages'
 import { logError } from '@/utils/log-error'
 
 export const RepositoryContext = createContext()
@@ -26,7 +27,7 @@ export function RepositoryProvider({ children }) {
                 if (repositories) setRepositories(JSON.parse(repositories))
                 if (activeRepositoryId) setActiveRepositoryId(activeRepositoryId)
             } catch (error) {
-                logError('Error loading repositories:', error)
+                logError(LOG_MESSAGES.ERROR_LOADING_REPOSITORIES, error)
             } finally {
                 setLoading(false)
             }

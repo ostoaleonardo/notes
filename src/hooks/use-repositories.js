@@ -8,7 +8,7 @@ import { useRepositoryTree } from './use-repository-tree'
 import { useRepositoryTreeOps } from './use-repository-tree-ops'
 import { useRepositoryCrud } from './use-repository-crud'
 import { useRepositorySync } from './use-repository-sync'
-import { RepositoryContext } from '../context/repository-context'
+import { RepositoryContext } from '@/context/repository-context'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 

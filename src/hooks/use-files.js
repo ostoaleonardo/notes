@@ -21,6 +21,9 @@ import {
 } from '@/constants/export'
 import { logError } from '@/utils/log-error'
 
+import { PICKER_ERROR_CODES } from '@/constants/picker-errors'
+import { LOG_MESSAGES } from '@/constants/log-messages'
+
 export function useFiles() {
     const { t } = useTranslation()
     const { getNote, notes, notePaths } = useNotes()
@@ -83,9 +86,9 @@ export function useFiles() {
 
             showSnackbar(t('message.notes.exported'))
         } catch (error) {
-            if (error.code === 'ERR_PICKER_CANCELLED') return
+            if (error.code === PICKER_ERROR_CODES.CANCELLED) return
 
-            logError('error', error)
+            logError(LOG_MESSAGES.ERROR_SHARING_NOTE, error)
             showSnackbar(t('message.notes.export_failed'))
         }
     }
@@ -102,7 +105,7 @@ export function useFiles() {
 
             await Sharing.shareAsync(file.uri, { mimeType: EXPORT_MIME_TYPES[format] })
         } catch (error) {
-            logError('error', error)
+            logError(LOG_MESSAGES.ERROR_SHARING_NOTE, error)
             showSnackbar(t('message.notes.share_failed'))
         }
     }

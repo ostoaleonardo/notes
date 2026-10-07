@@ -54,15 +54,19 @@ export function useWikiLinkRenameConfirm() {
         return { savedNote, path, filename, createdAt, updatedAt }
     }
 
+    const propagatePending = ({ targetPath, newTitle, notesSnapshot, notePaths }) => (
+        propagateWikiLinkRename(targetPath, newTitle, notesSnapshot, notePaths)
+    )
+
     const onDismiss = () => setPending(null)
 
     const onConfirmOnce = () => {
-        if (pending) propagateWikiLinkRename(pending.targetPath, pending.newTitle, pending.notesSnapshot, pending.notePaths)
+        if (pending) propagatePending(pending)
         setPending(null)
     }
 
     const onConfirmAlways = async () => {
-        if (pending) propagateWikiLinkRename(pending.targetPath, pending.newTitle, pending.notesSnapshot, pending.notePaths)
+        if (pending) propagatePending(pending)
         setAlwaysUpdate(true)
         await setItem(STORAGE_KEYS.ALWAYS_UPDATE_WIKI_LINKS, STORAGE_BOOLEAN.TRUE)
         setPending(null)

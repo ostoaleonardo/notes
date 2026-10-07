@@ -5,6 +5,8 @@ import { File } from 'expo-file-system'
 import { bytesToBase64 } from '@/utils/base64'
 import { logError } from '@/utils/log-error'
 
+import { LOG_MESSAGES } from '@/constants/log-messages'
+
 const NO_FONTS = {}
 
 const resolveFontDataUrl = async (module, mimeType) => {
@@ -24,7 +26,7 @@ export const createAssetFontsHook = (fontModules, mimeType) => {
                 .then((urls) => Object.fromEntries(entries.map(([name], index) => [name, urls[index]])))
                 .catch((error) => {
                     fontsPromise = null
-                    logError('error loading editor fonts', error)
+                    logError(LOG_MESSAGES.ERROR_LOADING_EDITOR_FONTS, error)
                     return NO_FONTS
                 })
         }

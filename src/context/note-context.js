@@ -1,14 +1,15 @@
 import { createContext, useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 
-import { useOnForeground } from '../hooks/use-on-foreground'
-import { useRepositoryData } from '../hooks/use-repository-data'
-import { useRepositories } from '../hooks/use-repositories'
-import { useUtils } from '../hooks/use-utils'
-import { useRecentNotes } from '../hooks/use-recent-notes'
+import { useOnForeground } from '@/hooks/use-on-foreground'
+import { useRepositoryData } from '@/hooks/use-repository-data'
+import { useRepositories } from '@/hooks/use-repositories'
+import { useUtils } from '@/hooks/use-utils'
+import { useRecentNotes } from '@/hooks/use-recent-notes'
 import { collectTags } from '@/utils/note-tags'
 import { getNotePaths } from '@/utils/note-path'
 
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
+import { LOG_MESSAGES } from '@/constants/log-messages'
 import { logError } from '@/utils/log-error'
 
 export const NoteContext = createContext()
@@ -59,7 +60,7 @@ export function NoteProvider({ children }) {
             setNotes(loaded)
             pruneStaleFavoritesRef.current(loaded)
         } catch (error) {
-            logError('error loading notes', error)
+            logError(LOG_MESSAGES.ERROR_LOADING_NOTES, error)
         } finally {
             if (showLoading) setLoading(false)
         }

@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFileStorage } from './use-file-storage'
-import { loadRepositoryData } from '../utils/load-repository-data'
+import { loadRepositoryData } from '@/utils/load-repository-data'
 import { storage } from '@/utils/storage'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 

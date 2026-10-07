@@ -6,6 +6,7 @@ import { useExclusiveQueue } from './use-exclusive-queue'
 import { useMemoByDeps } from './use-memo-by-deps'
 
 import { AUTOSAVE_DELAY } from '@/constants/default-values'
+import { LOG_MESSAGES } from '@/constants/log-messages'
 import { logError } from '@/utils/log-error'
 
 export function useAutosave(
@@ -24,7 +25,7 @@ export function useAutosave(
         try {
             await runExclusive(onSaveRef.current)
         } catch (error) {
-            logError('error autosaving note', error)
+            logError(LOG_MESSAGES.ERROR_AUTOSAVING_NOTE, error)
             showSnackbar(t('notes.save_failed'))
         }
     }, [t, runExclusive])
