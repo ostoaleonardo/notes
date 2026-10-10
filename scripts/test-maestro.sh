@@ -2,6 +2,7 @@
 export PATH="$PATH:$HOME/.maestro/bin"
 
 adb reverse tcp:8081 tcp:8081 || true
+bash "$(dirname "$0")/reset-maestro-state.sh" || true
 maestro test "${@:-.maestro}"
 status=$?
 
