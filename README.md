@@ -23,12 +23,13 @@
 -   <samp>Embeds of notes, headings, blocks and images with a button to open the original note, and autocomplete for links and block ids.<samp>
 -   <samp>Backlinks, unlinked mentions and automatic link updates when you rename a note or a heading.<samp>
 -   <samp>Outline of the note's headings and a panel of outgoing links.<samp>
+-   <samp>Orphan notes and unresolved links views in the drawer, with one tap to create a missing note.<samp>
 -   <samp>Attachments: images, audio, video and PDFs.<samp>
 -   <samp>Nested tags, advanced search (negation, <code>OR</code>, phrases, regex, <code>line:</code>, <code>task:</code>, property queries, date ranges and the <code>tag:</code>, <code>path:</code>, <code>is:pinned</code>, <code>has:image</code> operators), saved and recent searches.<samp>
 -   <samp>Find and replace text inside a note, and indent or outdent list items from the toolbar, which groups headings, lists and inserts into compact menus.<samp>
--   <samp>Templates with placeholders and a daily note.<samp>
+-   <samp>Templates with placeholders, a daily note and a default folder for new notes.<samp>
 -   <samp>Sort notes by name, modification date or creation date.<samp>
--   <samp>Pin, duplicate, export (Markdown, HTML and PDF) and share notes.<samp>
+-   <samp>Pin, duplicate, move between folders, export (Markdown, HTML and PDF) and share notes.<samp>
 -   <samp>Multiple repositories (folders on your device) with subfolders.<samp>
 -   <samp>Version history to restore previous edits.<samp>
 -   <samp>Import existing Markdown notes.<samp>
