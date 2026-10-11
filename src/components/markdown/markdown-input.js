@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 import MarkdownDomEditor from './markdown-dom-editor'
 
-import { ConfirmDialog } from '@/components/confirm-dialog'
+import { MissingNoteDialog } from '@/components/missing-note-dialog'
 
 import { useEditorDisplay } from '@/hooks/use-editor-display'
 import { useDomFonts } from '@/hooks/use-dom-fonts'
@@ -206,11 +206,8 @@ export const MarkdownInput = ({
                 dom={dom}
             />
 
-            <ConfirmDialog
-                visible={!!missingNote.missing}
-                title={t('message.wiki_links.missing.title')}
-                message={t('message.wiki_links.missing.message', { title: missingNote.missing?.title })}
-                confirmLabel={t('button.create')}
+            <MissingNoteDialog
+                missing={missingNote.missing}
                 onDismiss={missingNote.dismiss}
                 onConfirm={missingNote.create}
             />

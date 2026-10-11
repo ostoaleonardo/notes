@@ -9,7 +9,7 @@ import { buildRepositoryPaths } from '@/utils/note-path'
 
 export function useMissingNote() {
     const { saveNote } = useNotes()
-    const { repositories } = useRepositories()
+    const { repositories, activeRepositoryTree } = useRepositories()
 
     const [missing, setMissing] = useState(null)
 
@@ -19,7 +19,7 @@ export function useMissingNote() {
         const now = getDate()
         const repositoryPaths = buildRepositoryPaths(repositories)
 
-        const targetRepository = repositories.find((repository) => (
+        const targetRepository = activeRepositoryTree.find((repository) => (
             (repositoryPaths.get(repository.id) || '') === missing.path
         ))
 
@@ -32,7 +32,7 @@ export function useMissingNote() {
         }, targetRepository?.id)
 
         router.push(getEditorPath(path))
-    }, [missing, repositories, saveNote])
+    }, [missing, repositories, activeRepositoryTree, saveNote])
 
     return { missing, setMissing, dismiss, create }
 }

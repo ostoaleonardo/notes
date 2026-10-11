@@ -17,7 +17,10 @@ jest.mock('../use-notes', () => ({
     useNotes: () => ({ saveNote: mockSaveNote })
 }))
 jest.mock('../use-repositories', () => ({
-    useRepositories: () => ({ repositories: mockRepositories })
+    useRepositories: () => ({
+        repositories: mockRepositories,
+        activeRepositoryTree: mockRepositories
+    })
 }))
 
 beforeEach(() => {

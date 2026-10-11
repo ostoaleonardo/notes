@@ -11,6 +11,8 @@ import { DrawerTagsView } from './drawer-tags-view'
 import { DrawerToolbar } from './drawer-toolbar'
 import { DrawerTemplatesView } from './drawer-templates-view'
 import { DrawerFilesView } from './drawer-files-view'
+import { DrawerOrphansView } from './drawer-orphans-view'
+import { DrawerUnresolvedView } from './drawer-unresolved-view'
 import { DrawerViewSwitcher } from './drawer-view-switcher'
 
 import { useStorage } from '@/hooks/use-storage'
@@ -30,7 +32,9 @@ const VIEW_COMPONENTS = {
     [DRAWER_VIEWS.NOTES]: DrawerNotesView,
     [DRAWER_VIEWS.TEMPLATES]: DrawerTemplatesView,
     [DRAWER_VIEWS.TAGS]: DrawerTagsView,
-    [DRAWER_VIEWS.FILES]: DrawerFilesView
+    [DRAWER_VIEWS.FILES]: DrawerFilesView,
+    [DRAWER_VIEWS.ORPHANS]: DrawerOrphansView,
+    [DRAWER_VIEWS.UNRESOLVED]: DrawerUnresolvedView
 }
 
 export function DrawerItems({ navigation }) {
