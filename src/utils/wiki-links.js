@@ -170,7 +170,14 @@ export const findBacklinks = (targetPath, notes, notePaths = new Map()) => (
     })
 )
 
-export const renameWikiLinksForNote = (content, targetPath, newTitle, notes, notePaths = new Map()) => {
+export const renameWikiLinksForNote = (
+    content,
+    targetPath,
+    newTitle,
+    notes,
+    notePaths = new Map(),
+    resolvePaths = notePaths
+) => {
     if (!content) return content
 
     const folderPath = notePaths.get(targetPath) || ''
@@ -181,7 +188,7 @@ export const renameWikiLinksForNote = (content, targetPath, newTitle, notes, not
     const qualifiedTitle = isAmbiguous ? `${folderPath}/${newTitle}` : newTitle
 
     return content.replace(WIKI_LINK_PATTERN, (match, linkText, alias) => {
-        const { note, target, anchor } = resolveWikiLink(linkText, notes, notePaths)
+        const { note, target, anchor } = resolveWikiLink(linkText, notes, resolvePaths)
         if (note?.path !== targetPath) return match
         if (normalizeName(parseWikiLinkText(target).title) !== normalizeName(note.title || '')) return match
 

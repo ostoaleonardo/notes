@@ -1,8 +1,9 @@
 appId: com.monospace.notes
 ---
-- tapOn:
-    id: editor-menu
-- waitForAnimationToEnd
+- runFlow:
+    file: open-editor-menu.yml
+    env:
+      ITEM: BORRAR
 - tapOn:
     id: menu-item
     text: BORRAR

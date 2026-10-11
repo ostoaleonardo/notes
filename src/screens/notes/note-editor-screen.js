@@ -2,6 +2,7 @@ import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { OutgoingLinksSheet } from './outgoing-links-sheet'
+import { MoveNoteSheet } from './move-note-sheet'
 import { OutlineSheet } from './outline-sheet'
 import { TemplatePickerSheet } from './template-picker-sheet'
 import { TagsSheet } from './tags-sheet'
@@ -14,6 +15,7 @@ import { useBottomSheet } from '@/hooks/use-bottom-sheet'
 import { useEditorChrome } from '@/hooks/use-editor-chrome'
 import { useLanguage } from '@/hooks/use-language'
 import { useNoteDelete } from '@/hooks/use-note-delete'
+import { useNoteMove } from '@/hooks/use-note-move'
 import { useNoteMode } from '@/hooks/use-note-mode'
 import { useNoteSharing } from '@/hooks/use-note-sharing'
 import { useNoteTemplates } from '@/hooks/use-note-templates'
@@ -51,7 +53,8 @@ export const NoteEditorScreen = ({
     initialMode = EDITOR_MODES.READ,
     anchor,
     flush,
-    busyRef
+    busyRef,
+    onMoved
 }) => {
     const { t } = useTranslation()
     const { currentLanguage } = useLanguage()
@@ -164,6 +167,7 @@ export const NoteEditorScreen = ({
     }, [])
     const { dialog: sharingDialog, onConfirmExport, onConfirmShare } = useNoteSharing({ id, flush })
     const noteDelete = useNoteDelete(id, busyRef)
+    const noteMove = useNoteMove({ id, busyRef, flush, onMoved })
 
     const { words, characters } = countWords(note)
 
@@ -231,6 +235,7 @@ export const NoteEditorScreen = ({
         onOpenDeleteDialog: noteDelete.onOpen,
         onOpenOutline: outlineSheet.onOpen,
         onOpenOutgoingLinks: outgoingLinksSheet.onOpen,
+        onOpenMove: noteMove.sheet.onOpen,
         onToggleShowBacklinks
     }), [
         showBacklinks,
@@ -238,6 +243,7 @@ export const NoteEditorScreen = ({
         noteDelete.onOpen,
         outlineSheet.onOpen,
         outgoingLinksSheet.onOpen,
+        noteMove.sheet.onOpen,
         onToggleShowBacklinks
     ])
 
@@ -267,6 +273,12 @@ export const NoteEditorScreen = ({
                         sheet={outgoingLinksSheet}
                         contentRef={latestContent}
                         selfPath={id}
+                    />
+
+                    <MoveNoteSheet
+                        sheet={noteMove.sheet}
+                        repositoryId={repositoryId}
+                        onSelect={noteMove.onSelect}
                     />
 
                     <TagsSheet

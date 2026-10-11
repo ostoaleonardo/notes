@@ -1,7 +1,9 @@
 import {
     createNote,
     getRepositoryUri,
+    persistNoteMove,
     persistNoteUpdate,
+    planMovedNoteLinks,
     planNoteUpdate,
     planWikiLinkRename,
     withOptimisticUpdate,
@@ -414,5 +416,106 @@ describe('with optimistic update', () => {
         )).rejects.toThrow('boom')
 
         expect(state.value).toEqual([1])
+    })
+})
+
+describe('persist note move', () => {
+    const MOVE_REPOSITORIES = [
+        { id: 'root', uri: 'file:///root', alias: 'Root' },
+        { id: 'child', uri: 'file:///root/Child', alias: 'Child', parentId: 'root' },
+        { id: 'other', uri: 'file:///other', alias: 'Other' }
+    ]
+
+    const createMoveStorage = (destinationNames = []) => ({
+        listMarkdownFiles: jest.fn(() => destinationNames.map((name) => ({ name }))),
+        moveNoteFiles: jest.fn(async () => 'Idea.md'),
+        renameVersions: jest.fn(async () => {}),
+        findFile: jest.fn(() => ({ uri: 'file:///root/Child/Idea.md', lastModified: 99 }))
+    })
+
+    const NOTE = { path: 'root::Idea.md', filename: 'Idea.md', title: 'Idea', repositoryId: 'root' }
+
+    test('moves the file and its version history to the destination folder', async () => {
+        const storage = createMoveStorage()
+
+        await persistNoteMove({ note: NOTE, destinationId: 'child', repositories: MOVE_REPOSITORIES }, storage)
+
+        expect(storage.moveNoteFiles).toHaveBeenCalledWith('file:///root', 'Idea.md', 'file:///root/Child')
+        expect(storage.renameVersions).toHaveBeenCalledWith('file:///root', 'Idea.md', 'Child/Idea.md')
+    })
+
+    test('returns the new location of the note', async () => {
+        const result = await persistNoteMove(
+            { note: NOTE, destinationId: 'child', repositories: MOVE_REPOSITORIES },
+            createMoveStorage()
+        )
+
+        expect(result).toEqual({
+            repositoryId: 'child',
+            filename: 'Idea.md',
+            path: 'child::Idea.md',
+            fileUri: 'file:///root/Child/Idea.md',
+            updatedAt: 99
+        })
+    })
+
+    test('throws a duplicate-title error when the destination has the same filename', async () => {
+        const storage = createMoveStorage(['Idea.md'])
+
+        await expect(
+            persistNoteMove({ note: NOTE, destinationId: 'child', repositories: MOVE_REPOSITORIES }, storage)
+        ).rejects.toMatchObject({ code: 'DUPLICATE_TITLE' })
+        expect(storage.moveNoteFiles).not.toHaveBeenCalled()
+    })
+
+    test('refuses to move a note to a different repository tree', async () => {
+        const storage = createMoveStorage()
+
+        await expect(
+            persistNoteMove({ note: NOTE, destinationId: 'other', repositories: MOVE_REPOSITORIES }, storage)
+        ).rejects.toThrow()
+        expect(storage.moveNoteFiles).not.toHaveBeenCalled()
+    })
+})
+
+describe('plan moved note links', () => {
+    const REPOSITORIES_WITH_FOLDER = [
+        { id: 'root', uri: 'file:///root', alias: 'Root' },
+        { id: 'child', uri: 'file:///root/Child', alias: 'Child', parentId: 'root' }
+    ]
+
+    const moved = { path: 'root::Idea.md', title: 'Idea', repositoryId: 'root', note: '' }
+    const twin = { path: 'child::Idea.md', title: 'Idea', repositoryId: 'child', note: '' }
+    const linker = { path: 'root::Index.md', title: 'Index', repositoryId: 'root', note: 'See [[Idea]]' }
+    const NOTES = [moved, twin, linker]
+    const NOTE_PATHS = new Map([['root::Idea.md', ''], ['child::Idea.md', 'Child'], ['root::Index.md', '']])
+
+    test('qualifies links with the new folder when the title exists elsewhere', () => {
+        const plan = planMovedNoteLinks({
+            note: moved,
+            destinationId: 'child',
+            notes: NOTES,
+            notePaths: NOTE_PATHS,
+            repositories: REPOSITORIES_WITH_FOLDER,
+            currentNotes: NOTES
+        })
+
+        expect(plan.changedNotes).toHaveLength(1)
+        expect(plan.changedNotes[0].note).toBe('See [[Child/Idea|Idea]]')
+    })
+
+    test('leaves links alone when the title is unique', () => {
+        const unique = [moved, linker]
+
+        const plan = planMovedNoteLinks({
+            note: moved,
+            destinationId: 'child',
+            notes: unique,
+            notePaths: new Map([['root::Idea.md', ''], ['root::Index.md', '']]),
+            repositories: REPOSITORIES_WITH_FOLDER,
+            currentNotes: unique
+        })
+
+        expect(plan.changedNotes).toEqual([])
     })
 })

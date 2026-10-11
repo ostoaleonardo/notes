@@ -13,6 +13,7 @@ import { getDate } from '@/utils/date'
 import { getEditorPath } from '@/utils/editor-path'
 import { buildDuplicateNote } from '@/utils/duplicate-note'
 
+import { Folder } from '@/icons/folder'
 import { FormatListBulleted } from '@/icons/format-list-bulleted'
 import { Keep } from '@/icons/keep'
 import { KeepFilled } from '@/icons/keep-filled'
@@ -27,6 +28,7 @@ export const useNoteActionsMenu = ({
     onOpenVersionHistory,
     onOpenOutline,
     onOpenOutgoingLinks,
+    onOpenMove,
     onOpenSharingDialog,
     onOpenDeleteDialog,
     showBacklinks,
@@ -108,6 +110,15 @@ export const useNoteActionsMenu = ({
                     title={t('button.duplicate')}
                     icon={NoteStack}
                     action={onDuplicate}
+                    onTrigger={onTrigger}
+                />
+            ),
+            slug && (
+                <ActionMenuItem
+                    key='move'
+                    title={t('button.move')}
+                    icon={Folder}
+                    action={onOpenMove}
                     onTrigger={onTrigger}
                 />
             ),

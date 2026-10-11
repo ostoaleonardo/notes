@@ -178,6 +178,15 @@ export default function EditNote() {
         setModifiedAt(updatedAt || createdAt)
     }
 
+    const onMoved = ({ path, filename, repositoryId, updatedAt }) => {
+        pathRef.current = path
+        setFilename(filename)
+        setRepositoryId(repositoryId)
+        setModifiedAt(updatedAt)
+        registerCurrent(path)
+        router.setParams({ slug: path })
+    }
+
     const markSaved = (savedContent) => {
         const renames = findHeadingRenames(originalNoteRef.current || '', savedContent || '')
         if (renames.length) {
@@ -250,6 +259,7 @@ export default function EditNote() {
                 id={pathRef.current}
                 flush={flush}
                 busyRef={isSavingRef}
+                onMoved={onMoved}
                 {...editorProps}
                 onTitleBlur={onTitleBlur}
                 onRestoreVersion={onRestoreVersion}

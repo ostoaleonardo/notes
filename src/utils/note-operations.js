@@ -1,6 +1,6 @@
 import { getUniqueFilename, isTitleTaken } from '@/utils/note-filename'
 import { logError } from '@/utils/log-error'
-import { buildNotePath } from '@/utils/note-path'
+import { buildNotePath, buildRepositoryPaths } from '@/utils/note-path'
 import { buildNoteFileContent, decomposeNoteFileContent } from '@/utils/frontmatter'
 import { commitNoteVersion } from '@/utils/note-versions'
 import { planExternalSync, toSyncShape } from '@/utils/external-note-sync'
@@ -197,4 +197,52 @@ export const writeChangedNotes = (changedNotes, repositories, fileStorage) => {
     })
 
     return failed
+}
+
+export const persistNoteMove = async ({ note, destinationId, repositories }, fileStorage) => {
+    const sourceUri = getRepositoryUri(repositories, note.repositoryId)
+    const destinationUri = getRepositoryUri(repositories, destinationId)
+    const from = getVersionLocation(repositories, note.repositoryId)
+    const to = getVersionLocation(repositories, destinationId)
+
+    if (!sourceUri || !destinationUri || !from || !to || from.rootUri !== to.rootUri) {
+        throw new Error('The note cannot be moved to that folder')
+    }
+
+    if (listNoteNames(fileStorage, destinationUri).includes(note.filename)) {
+        const error = new Error('A note with this title already exists in that folder')
+        error.code = DUPLICATE_TITLE_ERROR
+        throw error
+    }
+
+    await fileStorage.moveNoteFiles(sourceUri, note.filename, destinationUri)
+
+    await fileStorage.renameVersions(
+        to.rootUri,
+        buildVersionKey(from.folderPath, note.filename),
+        buildVersionKey(to.folderPath, note.filename)
+    )
+
+    const times = readFileTimes(fileStorage.findFile(destinationUri, note.filename))
+
+    return {
+        repositoryId: destinationId,
+        filename: note.filename,
+        path: buildNotePath(destinationId, note.filename),
+        fileUri: times.fileUri,
+        updatedAt: times.updatedAt
+    }
+}
+
+export const planMovedNoteLinks = ({ note, destinationId, notes, notePaths, repositories, currentNotes }) => {
+    const destinationPath = buildRepositoryPaths(repositories).get(destinationId) || ''
+    const qualifyPaths = new Map(notePaths).set(note.path, destinationPath)
+
+    return planWikiLinkRename({
+        targetPath: note.path,
+        notes,
+        notePaths,
+        currentNotes,
+        rewrite: (content) => renameWikiLinksForNote(content, note.path, note.title, notes, qualifyPaths, notePaths)
+    })
 }

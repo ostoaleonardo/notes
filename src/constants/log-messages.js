@@ -2,6 +2,7 @@ export const LOG_MESSAGES = {
     ERROR_AUTOSAVING_NOTE: 'error autosaving note',
     ERROR_CHECKING_PRO_PURCHASE: 'error checking pro purchase',
     ERROR_DELETING_NOTE: 'error deleting note',
+    ERROR_MOVING_NOTE: 'error moving note',
     ERROR_DELETING_TEMPLATE: 'error deleting template',
     ERROR_GENERATING_REPOSITORY_TREE: 'error generating repository tree',
     ERROR_IMPORTING_MARKDOWN_FILE: 'error importing markdown file',

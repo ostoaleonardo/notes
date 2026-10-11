@@ -1,0 +1,10 @@
+appId: com.monospace.notes
+---
+- repeat:
+    while:
+      notVisible: ${ITEM}
+    times: 3
+    commands:
+      - tapOn:
+          id: editor-menu
+      - waitForAnimationToEnd

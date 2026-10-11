@@ -1,0 +1,31 @@
+appId: com.monospace.notes
+---
+- runFlow: subflows/create-fixture-note.yml
+- runFlow:
+    file: subflows/open-note.yml
+    env:
+      NOTE: Untitled
+- assertVisible: Alpha
+- waitForAnimationToEnd
+- runFlow:
+    file: subflows/open-editor-menu.yml
+    env:
+      ITEM: MOVER A
+- tapOn: MOVER A
+- waitForAnimationToEnd
+- assertVisible: Cerrar hoja
+- assertVisible: maestro-folder
+- tapOn: maestro-folder
+- waitForAnimationToEnd
+- assertNotVisible: Cerrar hoja
+- runFlow:
+    file: subflows/open-editor-menu.yml
+    env:
+      ITEM: MOVER A
+- tapOn: MOVER A
+- waitForAnimationToEnd
+- assertVisible: Cerrar hoja
+- tapOn: migrated
+- waitForAnimationToEnd
+- assertNotVisible: Cerrar hoja
+- runFlow: subflows/delete-note.yml

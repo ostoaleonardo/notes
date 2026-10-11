@@ -10,7 +10,9 @@ import { getVersionLocation } from '@/utils/note-version-location'
 import {
     createNote,
     getRepositoryUri,
+    persistNoteMove,
     persistNoteUpdate,
+    planMovedNoteLinks,
     planNoteUpdate,
     planWikiLinkRename,
     withOptimisticUpdate,
@@ -156,6 +158,25 @@ export function useNotes() {
         )
     }
 
+    const moveNote = async (path, destinationId) => {
+        const note = notesByPath.get(path)
+        if (!note || note.repositoryId === destinationId) return null
+
+        const moved = await persistNoteMove({ note, destinationId, repositories }, fileStorage)
+
+        await applyLinkRewrite(planMovedNoteLinks({
+            note,
+            destinationId,
+            notes: currentNotesRef.current,
+            notePaths,
+            repositories,
+            currentNotes: currentNotesRef.current
+        }))
+        setNotes((prev) => prev.map((n) => (n.path === path ? { ...n, ...moved } : n)))
+
+        return moved
+    }
+
     const getNote = (path) => {
         return notesByPath.get(path) || {}
     }
@@ -173,6 +194,7 @@ export function useNotes() {
         getNote,
         saveNote,
         deleteNote,
+        moveNote,
         deleteAll,
         updateNote,
         propagateWikiLinkRename,
