@@ -1,0 +1,39 @@
+appId: com.monospace.notes
+---
+- launchApp
+- waitForAnimationToEnd
+- tapOn:
+    id: app-bar-menu
+- waitForAnimationToEnd
+- tapOn:
+    id: drawer-settings
+- waitForAnimationToEnd
+- scrollUntilVisible:
+    element: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*
+- tapOn: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*
+- waitForAnimationToEnd
+- tapOn: maestro-folder
+- waitForAnimationToEnd
+- tapOn:
+    id: app-bar-back
+- runFlow:
+    file: subflows/create-note.yml
+    env:
+      TITLE: maestro-default
+- inputText: default folder check
+- hideKeyboard
+- waitForAnimationToEnd
+- runFlow: subflows/delete-note.yml
+- tapOn:
+    id: app-bar-menu
+- waitForAnimationToEnd
+- tapOn:
+    id: drawer-settings
+- waitForAnimationToEnd
+- scrollUntilVisible:
+    element: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*
+- tapOn: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*
+- waitForAnimationToEnd
+- tapOn: Raíz del repositorio
+- waitForAnimationToEnd
+- assertVisible: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*Raíz del repositorio

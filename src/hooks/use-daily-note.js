@@ -9,6 +9,7 @@ import { useFileStorage } from './use-file-storage'
 import { getDate } from '@/utils/date'
 import { getDailyNoteTitle, planDailyNote } from '@/utils/daily-note'
 import { renderTemplate } from '@/utils/render-template'
+import { scopedStorageKey } from '@/utils/scoped-storage-key'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
@@ -27,8 +28,8 @@ export function useDailyNote() {
         busy.current = true
 
         try {
-            const folderKey = `${STORAGE_KEYS.DAILY_NOTE_FOLDER}:${activeRepository.id}`
-            const templateKey = `${STORAGE_KEYS.DAILY_NOTE_TEMPLATE}:${activeRepository.id}`
+            const folderKey = scopedStorageKey(STORAGE_KEYS.DAILY_NOTE_FOLDER, activeRepository.id)
+            const templateKey = scopedStorageKey(STORAGE_KEYS.DAILY_NOTE_TEMPLATE, activeRepository.id)
             const [folderId, templateFilename] = await Promise.all([getItem(folderKey), getItem(templateKey)])
 
             const title = getDailyNoteTitle()

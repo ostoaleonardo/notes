@@ -9,7 +9,7 @@ import { IconToggleGroup } from '@/components/button/icon-toggle-group'
 
 import { useCurrentNote } from '@/hooks/use-current-note'
 import { useRecentNotes } from '@/hooks/use-recent-notes'
-import { useRepositories } from '@/hooks/use-repositories'
+import { useDefaultNoteFolder } from '@/hooks/use-default-note-folder'
 import { useNotes } from '@/hooks/use-notes'
 import { useTemplatesList } from '@/hooks/use-templates-list'
 import { useUtils } from '@/hooks/use-utils'
@@ -31,7 +31,7 @@ export function RecentNotes({ onClose, home = false }) {
     const { notes } = useNotes()
     const { currentId } = useCurrentNote()
     const { pinned, updatePinned } = useUtils()
-    const { activeRepositoryTree } = useRepositories()
+    const defaultFolderId = useDefaultNoteFolder()
     const { templates } = useTemplatesList()
     const { recent, removeRecent, clearRecent } = useRecentNotes()
 
@@ -68,7 +68,7 @@ export function RecentNotes({ onClose, home = false }) {
         onClose()
         router.push({
             pathname: ROUTES.ADD_NOTE,
-            params: { repositoryId: activeRepositoryTree[0]?.id }
+            params: { repositoryId: defaultFolderId }
         })
     }
 

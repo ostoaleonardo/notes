@@ -28,6 +28,7 @@ export const STORAGE_KEYS = {
     EDITOR_INLINE_TITLE: 'editor-inline-title',
     DELETE_BEHAVIOR: 'delete-behavior',
     DAILY_NOTE_FOLDER: 'daily-note-folder',
+    DEFAULT_NOTE_FOLDER: 'default-note-folder',
     DAILY_NOTE_TEMPLATE: 'daily-note-template',
 
     CURRENT_NOTE: 'current-note',

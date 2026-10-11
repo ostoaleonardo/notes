@@ -11,11 +11,11 @@ import { AppBar } from '@/components/app-bar/app-bar'
 
 import { useBottomSheet } from '@/hooks/use-bottom-sheet'
 import { useCurrentNote } from '@/hooks/use-current-note'
+import { useDefaultNoteFolder } from '@/hooks/use-default-note-folder'
 import { useImportMarkdown } from '@/hooks/use-import-markdown'
 import { useNotes } from '@/hooks/use-notes'
 import { usePro } from '@/hooks/use-pro'
 import { useRecentNotes } from '@/hooks/use-recent-notes'
-import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
 import { useUtils } from '@/hooks/use-utils'
 import { getRecentIds } from '@/utils/recent-ids'
@@ -32,10 +32,9 @@ export default function Home() {
     const { listTemplates } = useTemplates()
     const { importFile } = useImportMarkdown()
     const { registerCurrent } = useCurrentNote()
-    const { activeRepositoryTree } = useRepositories()
 
     const [templates, setTemplates] = useState([])
-    const rootId = activeRepositoryTree[0]?.id
+    const defaultFolderId = useDefaultNoteFolder()
 
     const recentCount = useMemo(
         () => getRecentIds(pinned, recent, notes, templates).length,
@@ -62,7 +61,7 @@ export default function Home() {
     const onCreateNote = () => {
         router.push({
             pathname: ROUTES.ADD_NOTE,
-            params: { repositoryId: rootId }
+            params: { repositoryId: defaultFolderId }
         })
     }
 

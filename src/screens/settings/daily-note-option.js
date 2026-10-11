@@ -6,29 +6,28 @@ import { SelectOption } from './select-option'
 
 import { useStorage } from '@/hooks/use-storage'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
+import { useFolderSetting } from '@/hooks/use-folder-setting'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
+import { scopedStorageKey } from '@/utils/scoped-storage-key'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { MENU, SETTINGS_LIST } from '@/constants/components'
+import { SETTINGS_LIST } from '@/constants/components'
 
 export function DailyNoteOption() {
     const { t } = useTranslation()
     const { setItem } = useStorage()
-    const { activeRepository, getDescendants } = useRepositories()
+    const { activeRepository } = useRepositories()
     const { listTemplates } = useTemplates()
 
-    const [dailyFolder, setDailyFolder] = useState('')
     const [dailyTemplate, setDailyTemplate] = useState('')
     const [templates, setTemplates] = useState([])
 
-    const folderStorageKey = activeRepository ? `${STORAGE_KEYS.DAILY_NOTE_FOLDER}:${activeRepository.id}` : null
-    const templateStorageKey = activeRepository ? `${STORAGE_KEYS.DAILY_NOTE_TEMPLATE}:${activeRepository.id}` : null
+    const folder = useFolderSetting(STORAGE_KEYS.DAILY_NOTE_FOLDER, t('settings.daily_note.folder.root'))
 
-    useEffect(() => setDailyFolder(''), [folderStorageKey])
-    useStorageEffect(folderStorageKey, (value) => {
-        if (value) setDailyFolder(value)
-    })
+    const templateStorageKey = activeRepository
+        ? scopedStorageKey(STORAGE_KEYS.DAILY_NOTE_TEMPLATE, activeRepository.id)
+        : null
 
     useEffect(() => setDailyTemplate(''), [templateStorageKey])
     useStorageEffect(templateStorageKey, (value) => {
@@ -44,28 +43,10 @@ export function DailyNoteOption() {
         return () => { cancelled = true }
     }, [activeRepository, listTemplates])
 
-    const onSelectFolder = (id) => {
-        setDailyFolder(id)
-        if (folderStorageKey) setItem(folderStorageKey, id)
-    }
-
     const onSelectTemplate = (filename) => {
         setDailyTemplate(filename)
         if (templateStorageKey) setItem(templateStorageKey, filename)
     }
-
-    const descendants = useMemo(() => (
-        activeRepository ? getDescendants(activeRepository.id) : []
-    ), [activeRepository, getDescendants])
-
-    const folderItems = useMemo(() => [
-        { value: '', title: t('settings.daily_note.folder.root') },
-        ...descendants.map((repository) => ({
-            value: repository.id,
-            title: repository.alias,
-            contentStyle: { paddingLeft: repository.depth * MENU.itemIndent }
-        }))
-    ], [descendants, t])
 
     const templateItems = useMemo(() => [
         { value: '', title: t('settings.daily_note.template.none') },
@@ -75,17 +56,16 @@ export function DailyNoteOption() {
         }))
     ], [templates, t])
 
-    const selectedRepository = descendants.find((repository) => repository.id === dailyFolder)
     const selectedTemplate = templates.find((template) => template.filename === dailyTemplate)
 
     return (
         <View style={styles.group}>
             <SelectOption
                 title={t('settings.daily_note.folder.title')}
-                description={selectedRepository ? selectedRepository.alias : t('settings.daily_note.folder.root')}
-                items={folderItems}
-                selectedValue={dailyFolder}
-                onSelect={onSelectFolder}
+                description={folder.description}
+                items={folder.items}
+                selectedValue={folder.selectedValue}
+                onSelect={folder.onSelect}
                 isFirst={true}
             />
             <SelectOption

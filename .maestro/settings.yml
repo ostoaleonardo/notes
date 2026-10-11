@@ -24,6 +24,17 @@ appId: com.monospace.notes
 - tapOn: Mover a la carpeta .trash
 - waitForAnimationToEnd
 - scrollUntilVisible:
+    element: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*
+- tapOn: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*
+- waitForAnimationToEnd
+- tapOn: maestro-folder
+- waitForAnimationToEnd
+- assertVisible: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*maestro-folder
+- tapOn: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*
+- waitForAnimationToEnd
+- tapOn: Raíz del repositorio
+- waitForAnimationToEnd
+- scrollUntilVisible:
     element: TAMAÑO DE TABULACIÓN.*
 - assertVisible: ANCHO DE LÍNEA.*
 - tapOn: TAMAÑO DE TABULACIÓN.*

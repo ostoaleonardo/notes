@@ -12,6 +12,7 @@ import { useNotes } from '@/hooks/use-notes'
 import { useWikiLinkRenameConfirm } from '@/hooks/use-wiki-link-rename-confirm'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
+import { useDefaultNoteFolder } from '@/hooks/use-default-note-folder'
 import { getUniqueTitle } from '@/utils/note-filename'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
@@ -19,6 +20,9 @@ import { EDITOR_MODES } from '@/constants/editor-modes'
 export default function Note() {
     const { t } = useTranslation()
     const { activeRepository } = useRepositories()
+    const defaultFolderId = useDefaultNoteFolder()
+    const defaultFolderRef = useRef(defaultFolderId)
+    defaultFolderRef.current = defaultFolderId
     const { notes, saveNote, updateNote } = useNotes()
     const { repositoryId: targetRepositoryId } = useLocalSearchParams()
 
@@ -57,7 +61,7 @@ export default function Note() {
     initDraftRef.current = () => {
         firstRender.current = false
 
-        const resolvedRepositoryId = targetRepositoryId || activeRepository.id
+        const resolvedRepositoryId = targetRepositoryId || defaultFolderRef.current || activeRepository.id
         setRepositoryId(resolvedRepositoryId)
 
         const titlesInRepository = notesRef.current
@@ -68,6 +72,12 @@ export default function Note() {
         autoTitleRef.current = autoTitle
         setTitle(autoTitle)
     }
+
+    useEffect(() => {
+        if (targetRepositoryId || isSaved.current || !defaultFolderId) return
+
+        setRepositoryId(defaultFolderId)
+    }, [targetRepositoryId, defaultFolderId, setRepositoryId])
 
     useFocusEffect(
         useCallback(() => initDraftRef.current(), [])

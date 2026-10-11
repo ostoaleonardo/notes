@@ -12,6 +12,7 @@ import { WikiLinksOption } from '@/screens/settings/wiki-links-option'
 import { AttachmentsOption } from '@/screens/settings/attachments-option'
 import { SelectOptionList } from '@/screens/settings/select-option-list'
 import { DailyNoteOption } from '@/screens/settings/daily-note-option'
+import { DefaultNoteFolderOption } from '@/screens/settings/default-note-folder-option'
 import { Scroll } from '@/components/animated/scroll'
 import { Section } from '@/components/section'
 
@@ -54,7 +55,8 @@ export default function Settings() {
                     containerStyle={styles.section}
                     contentStyle={styles.items}
                 >
-                    <SelectOptionList options={NOTES_SELECT_OPTIONS} />
+                    <SelectOptionList options={NOTES_SELECT_OPTIONS} isLast={false} />
+                    <DefaultNoteFolderOption isLast={true} />
                 </Section>
 
                 <Section
