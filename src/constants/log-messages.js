@@ -4,7 +4,7 @@ export const LOG_MESSAGES = {
     ERROR_DELETING_NOTE: 'error deleting note',
     ERROR_MOVING_NOTE: 'error moving note',
     ERROR_DELETING_TEMPLATE: 'error deleting template',
-    ERROR_GENERATING_REPOSITORY_TREE: 'error generating repository tree',
+    ERROR_GENERATING_TEST_DATA: 'error generating test data',
     ERROR_IMPORTING_MARKDOWN_FILE: 'error importing markdown file',
     ERROR_KEEPING_EXTERNAL_TEXT: 'error keeping external text',
     ERROR_LISTING_DIRECTORY: 'error listing directory',

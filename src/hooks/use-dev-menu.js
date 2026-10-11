@@ -14,36 +14,18 @@ import { getWelcomeNote } from '@/utils/welcome-note'
 import { sanitizeFilename } from '@/utils/note-filename'
 import { getVersionLocation } from '@/utils/note-version-location'
 import { buildNoteFileContent, parseFrontmatter } from '@/utils/frontmatter'
+import { buildDevTestPlan } from '@/utils/dev-test-data'
+import { buildNotePath } from '@/utils/note-path'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { MIME_TYPES } from '@/constants/mime-types'
 import { NOTE_FILE_EXTENSION } from '@/constants/file-storage'
 import { LOG_MESSAGES } from '@/constants/log-messages'
-import {
-    TREE_BRANCHING,
-    NOTES_PER_FOLDER,
-    LEGACY_SEED_IMAGE_FILENAME,
-    LEGACY_SEED_IMAGE_BASE64
-} from '@/constants/dev-menu'
-import {
-    SYNTAX_IMAGE_FILENAME,
-    SYNTAX_IMAGE_BASE64,
-    SYNTAX_LINKED_TITLE,
-    SYNTAX_LINKED_TAGS,
-    SYNTAX_LINKED_PROPERTIES,
-    SYNTAX_LINKED_BODY,
-    SYNTAX_EMBED_TITLE,
-    SYNTAX_EMBED_TAGS,
-    SYNTAX_EMBED_BODY,
-    SYNTAX_MAIN_TITLE,
-    SYNTAX_MAIN_TAGS,
-    SYNTAX_MAIN_PROPERTIES,
-    SYNTAX_MAIN_BODY
-} from '@/constants/syntax-note'
+import { LEGACY_SEED_IMAGE_FILENAME, LEGACY_SEED_IMAGE_BASE64 } from '@/constants/dev-menu'
+import { DEV_TEST_PINNED_TITLES } from '@/constants/dev-test-data'
 import { logError } from '@/utils/log-error'
 
 export function useDevMenu() {
-    const { setItem } = useStorage()
+    const { getItem, setItem } = useStorage()
     const { pro, setPro } = usePro()
 
     const {
@@ -51,7 +33,9 @@ export function useDevMenu() {
         findFile,
         clearRepository,
         createSubdirectory,
+        findDirectory,
         getOrCreateTemplatesFolder,
+        getOrCreateImagesFolder,
         getOrCreateNotesFolder,
         deleteDirectory
     } = useFileStorage()
@@ -60,8 +44,7 @@ export function useDevMenu() {
         repositories,
         activeRepository,
         activeRepositoryId,
-        buildRepository,
-        ensureImagesFolder
+        buildRepository
     } = useRepositories()
 
     const resetApp = async () => {
@@ -91,43 +74,88 @@ export function useDevMenu() {
         await setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(legacyTags))
     }
 
-    const seedFolderNotes = (uri, label) => {
-        for (let i = 1; i <= NOTES_PER_FOLDER; i++) {
-            writeNoteFile(uri, `${label} note ${i}.md`, `# ${label} note ${i}\n\nExample content.`)
-        }
+    const writeTestNotes = (notes, uriByFolder) => {
+        notes.forEach(({ folder, title, tags, properties, body }) => {
+            writeNoteFile(
+                uriByFolder.get(folder.join('/')),
+                `${sanitizeFilename(title)}${NOTE_FILE_EXTENSION}`,
+                buildNoteFileContent({ tags, properties }, body)
+            )
+        })
     }
 
-    const generateRepositoryTree = async () => {
+    const writeTestTemplates = (templates, rootUri) => {
+        const templatesUri = getOrCreateTemplatesFolder(rootUri).uri
+
+        templates.forEach(({ folder, filename, content }) => {
+            const uri = folder.reduce((parentUri, name) => (
+                (findDirectory(parentUri, name) || createSubdirectory(parentUri, name)).uri
+            ), templatesUri)
+
+            writeNoteFile(uri, filename, content)
+        })
+    }
+
+    const writeTestFiles = (files, rootUri) => {
+        const imagesUri = getOrCreateImagesFolder(rootUri).uri
+
+        files.forEach(({ filename, mimeType, base64, text }) => {
+            if (findFile(imagesUri, filename)) return
+
+            const file = new Directory(imagesUri).createFile(filename, mimeType)
+            file.write(text ?? Uint8Array.from(atob(base64), (char) => char.charCodeAt(0)))
+        })
+    }
+
+    const generateTestData = async () => {
         try {
-            const directory = await Directory.pickDirectoryAsync()
+            const plan = buildDevTestPlan()
+            const generated = []
 
-            if (repositories.some((repository) => repository.uri === directory.uri)) return
+            let root = activeRepository
+            if (!root) {
+                const directory = await Directory.pickDirectoryAsync()
+                if (repositories.some((repository) => repository.uri === directory.uri)) return
 
-            const root = buildRepository(directory, null, true)
-            seedFolderNotes(root.uri, root.alias)
-
-            const generated = [root]
-
-            for (let f = 1; f <= TREE_BRANCHING; f++) {
-                const folderDirectory = createSubdirectory(directory.uri, `Folder ${f}`)
-                const folder = buildRepository(folderDirectory, root.id, false)
-                seedFolderNotes(folder.uri, folder.alias)
-                generated.push(folder)
-
-                for (let s = 1; s <= TREE_BRANCHING; s++) {
-                    const subfolderDirectory = createSubdirectory(folderDirectory.uri, `Subfolder ${f}.${s}`)
-                    const subfolder = buildRepository(subfolderDirectory, folder.id, false)
-                    seedFolderNotes(subfolder.uri, subfolder.alias)
-                    generated.push(subfolder)
-                }
+                root = buildRepository(directory, null, true)
+                generated.push(root)
             }
 
-            await setItem(STORAGE_KEYS.REPOSITORIES, JSON.stringify([...repositories, ...generated]))
+            const uriByFolder = new Map([['', root.uri]])
+            const repositoryByFolder = new Map([['', root]])
+
+            plan.folders.forEach((folder) => {
+                const parentKey = folder.slice(0, -1).join('/')
+                const parentUri = uriByFolder.get(parentKey)
+                const name = folder.at(-1)
+
+                const directory = findDirectory(parentUri, name) || createSubdirectory(parentUri, name)
+                const existing = repositories.find((repository) => repository.uri === directory.uri)
+                const repository = existing || buildRepository(directory, repositoryByFolder.get(parentKey).id, false)
+                if (!existing) generated.push(repository)
+
+                uriByFolder.set(folder.join('/'), repository.uri)
+                repositoryByFolder.set(folder.join('/'), repository)
+            })
+
+            writeTestNotes(plan.notes, uriByFolder)
+            writeTestTemplates(plan.templates, root.uri)
+            writeTestFiles(plan.files, root.uri)
+
+            const pinned = new Set(JSON.parse((await getItem(STORAGE_KEYS.PINNED)) || '[]'))
+            DEV_TEST_PINNED_TITLES.forEach((title) => {
+                pinned.add(buildNotePath(root.id, `${sanitizeFilename(title)}${NOTE_FILE_EXTENSION}`))
+            })
+            await setItem(STORAGE_KEYS.PINNED, JSON.stringify([...pinned]))
+
+            if (generated.length) {
+                await setItem(STORAGE_KEYS.REPOSITORIES, JSON.stringify([...repositories, ...generated]))
+            }
             if (!activeRepositoryId) await setItem(STORAGE_KEYS.ACTIVE_REPOSITORY, root.id)
 
             DevSettings.reload()
         } catch (error) {
-            logError(LOG_MESSAGES.ERROR_GENERATING_REPOSITORY_TREE, error)
+            logError(LOG_MESSAGES.ERROR_GENERATING_TEST_DATA, error)
         }
     }
 
@@ -142,50 +170,6 @@ export function useDevMenu() {
         const previous = existing ? parseFrontmatter(await existing.text()).frontmatter : null
 
         writeNoteFile(uri, filename, buildNoteFileContent({ tags: previous?.tags || [] }, content))
-
-        DevSettings.reload()
-    }
-
-    const createSyntaxNote = () => {
-        if (!activeRepository) return
-
-        const uri = activeRepository.uri
-
-        const notes = [
-            {
-                title: SYNTAX_LINKED_TITLE,
-                tags: SYNTAX_LINKED_TAGS,
-                properties: SYNTAX_LINKED_PROPERTIES,
-                body: SYNTAX_LINKED_BODY
-            },
-            {
-                title: SYNTAX_EMBED_TITLE,
-                tags: SYNTAX_EMBED_TAGS,
-                body: SYNTAX_EMBED_BODY
-            },
-            {
-                title: SYNTAX_MAIN_TITLE,
-                tags: SYNTAX_MAIN_TAGS,
-                properties: SYNTAX_MAIN_PROPERTIES,
-                body: SYNTAX_MAIN_BODY
-            }
-        ]
-
-        notes.forEach(({ title, tags, properties, body }) => {
-            writeNoteFile(
-                uri,
-                `${sanitizeFilename(title)}${NOTE_FILE_EXTENSION}`,
-                buildNoteFileContent({ tags, properties }, body)
-            )
-        })
-
-        const imagesUri = ensureImagesFolder(activeRepository)
-
-        if (!findFile(imagesUri, SYNTAX_IMAGE_FILENAME)) {
-            new Directory(imagesUri)
-                .createFile(SYNTAX_IMAGE_FILENAME, MIME_TYPES.PNG)
-                .write(Uint8Array.from(atob(SYNTAX_IMAGE_BASE64), (char) => char.charCodeAt(0)))
-        }
 
         DevSettings.reload()
     }
@@ -205,18 +189,13 @@ export function useDevMenu() {
                 shouldCollapse: true
             },
             {
-                name: 'Generate repository with folders and subfolders',
-                callback: generateRepositoryTree,
+                name: 'Generate test data (folders, notes, tags, templates, files, links)',
+                callback: generateTestData,
                 shouldCollapse: true
             },
             {
                 name: 'Create/replace welcome note',
                 callback: createWelcomeNote,
-                shouldCollapse: true
-            },
-            {
-                name: 'Create/replace syntax test notes',
-                callback: createSyntaxNote,
                 shouldCollapse: true
             },
             {
