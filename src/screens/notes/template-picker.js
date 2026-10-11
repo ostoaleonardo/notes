@@ -15,7 +15,7 @@ export function TemplatePicker({ title, templates, onSelect }) {
 
     const cards = useMemo(() => templates.map((template) => ({
         id: template.filename,
-        title: t(`templates.${template.name}`, template.name),
+        title: t(`templates.names.${template.name}`, template.name),
         preview: getPreviewNote(renderTemplate(template.content, { title, language: currentLanguage }))
     })), [templates, title, currentLanguage, t])
 

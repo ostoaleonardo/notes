@@ -109,7 +109,7 @@ export function DrawerTemplatesView({ closeDrawer }) {
                 depth={item.depth}
                 note={{
                     path: item.template.filename,
-                    title: t(`templates.${item.template.name}`, item.template.name)
+                    title: t(`templates.names.${item.template.name}`, item.template.name)
                 }}
                 active={item.template.filename === activeFilename}
                 onOpenNote={onOpenTemplate}

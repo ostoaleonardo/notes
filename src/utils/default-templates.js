@@ -12,44 +12,44 @@ export const getDefaultTemplates = () => {
         {
             filename: DEFAULT_TEMPLATE_FILES.JOURNAL,
             content:
-                `## ${t('templates.journal_mood')}\n${item}\n\n` +
-                `## ${t('templates.journal_gratitude')}\n- ${item}\n\n` +
-                `## ${t('templates.journal_highlight')}\n${item}\n\n` +
-                `## ${t('templates.journal_reflection')}\n${item}\n\n` +
-                `## ${t('templates.journal_tomorrow')}\n- [ ] ${item}\n`
+                `## ${t('templates.journal.mood')}\n${item}\n\n` +
+                `## ${t('templates.journal.gratitude')}\n- ${item}\n\n` +
+                `## ${t('templates.journal.highlight')}\n${item}\n\n` +
+                `## ${t('templates.journal.reflection')}\n${item}\n\n` +
+                `## ${t('templates.journal.tomorrow')}\n- [ ] ${item}\n`
         },
         {
             filename: DEFAULT_TEMPLATE_FILES.CHECKLIST,
             content: header +
-                `## ${t('templates.checklist_urgent')}\n- [ ] ${item}\n\n` +
-                `## ${t('templates.checklist_week')}\n- [ ] ${item}\n\n` +
-                `## ${t('templates.checklist_someday')}\n- [ ] ${item}\n`
+                `## ${t('templates.checklist.urgent')}\n- [ ] ${item}\n\n` +
+                `## ${t('templates.checklist.week')}\n- [ ] ${item}\n\n` +
+                `## ${t('templates.checklist.someday')}\n- [ ] ${item}\n`
         },
         {
             filename: DEFAULT_TEMPLATE_FILES.MEETING,
             content: header +
-                `## ${t('templates.meeting_attendees')}\n- ${item}\n\n` +
-                `## ${t('templates.meeting_objective')}\n${item}\n\n` +
-                `## ${t('templates.meeting_agenda')}\n1. ${item}\n\n` +
-                `## ${t('templates.meeting_notes')}\n${item}\n\n` +
-                `## ${t('templates.meeting_decisions')}\n- ${item}\n\n` +
-                `## ${t('templates.meeting_next_steps')}\n- [ ] ${item}\n`
+                `## ${t('templates.meeting.attendees')}\n- ${item}\n\n` +
+                `## ${t('templates.meeting.objective')}\n${item}\n\n` +
+                `## ${t('templates.meeting.agenda')}\n1. ${item}\n\n` +
+                `## ${t('templates.meeting.notes')}\n${item}\n\n` +
+                `## ${t('templates.meeting.decisions')}\n- ${item}\n\n` +
+                `## ${t('templates.meeting.next_steps')}\n- [ ] ${item}\n`
         },
         {
             filename: DEFAULT_TEMPLATE_FILES.IDEAS,
             content: header +
-                `## ${t('templates.ideas_main')}\n${item}\n\n` +
-                `## ${t('templates.ideas_pros')}\n- ${item}\n\n` +
-                `## ${t('templates.ideas_cons')}\n- ${item}\n\n` +
-                `## ${t('templates.ideas_next_steps')}\n- [ ] ${item}\n`
+                `## ${t('templates.ideas.main')}\n${item}\n\n` +
+                `## ${t('templates.ideas.pros')}\n- ${item}\n\n` +
+                `## ${t('templates.ideas.cons')}\n- ${item}\n\n` +
+                `## ${t('templates.ideas.next_steps')}\n- [ ] ${item}\n`
         },
         {
             filename: DEFAULT_TEMPLATE_FILES.GOALS,
             content: header +
-                `## ${t('templates.goals_objective')}\n${item}\n\n` +
-                `## ${t('templates.goals_why')}\n${item}\n\n` +
-                `## ${t('templates.goals_steps')}\n- [ ] ${item}\n- [ ] ${item}\n\n` +
-                `## ${t('templates.goals_deadline')}\n${item}\n`
+                `## ${t('templates.goals.objective')}\n${item}\n\n` +
+                `## ${t('templates.goals.why')}\n${item}\n\n` +
+                `## ${t('templates.goals.steps')}\n- [ ] ${item}\n- [ ] ${item}\n\n` +
+                `## ${t('templates.goals.deadline')}\n${item}\n`
         }
     ]
 }

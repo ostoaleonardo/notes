@@ -45,7 +45,7 @@ export function RecentNotes({ onClose, home = false }) {
 
                 return {
                     id,
-                    title: t(`templates.${template.name}`, template.name),
+                    title: t(`templates.names.${template.name}`, template.name),
                     preview: getPreviewNote(template.content),
                     pinned: pinned.has(id),
                     active: id === currentId

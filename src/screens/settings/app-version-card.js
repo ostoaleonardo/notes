@@ -15,8 +15,8 @@ export function AppVersionCard() {
 
     return (
         <Option
-            title={t('settings.updates')}
-            description={t('settings.version') + ' ' + nativeApplicationVersion}
+            title={t('settings.about.updates')}
+            description={t('settings.about.version') + ' ' + nativeApplicationVersion}
             rightContent={<OpenInNew color={colors.onBackground} />}
             onPress={() => Linking.openURL(LINKS.GOOGLE_PLAY)}
             isLast={true}

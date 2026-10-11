@@ -59,7 +59,7 @@ export function DailyNoteOption() {
     ), [activeRepository, getDescendants])
 
     const folderItems = useMemo(() => [
-        { value: '', title: t('settings.daily_note_folder_root') },
+        { value: '', title: t('settings.daily_note.folder.root') },
         ...descendants.map((repository) => ({
             value: repository.id,
             title: repository.alias,
@@ -68,10 +68,10 @@ export function DailyNoteOption() {
     ], [descendants, t])
 
     const templateItems = useMemo(() => [
-        { value: '', title: t('settings.daily_note_template_none') },
+        { value: '', title: t('settings.daily_note.template.none') },
         ...templates.map((template) => ({
             value: template.filename,
-            title: t(`templates.${template.name}`, template.name)
+            title: t(`templates.names.${template.name}`, template.name)
         }))
     ], [templates, t])
 
@@ -81,18 +81,18 @@ export function DailyNoteOption() {
     return (
         <View style={styles.group}>
             <SelectOption
-                title={t('settings.daily_note_folder')}
-                description={selectedRepository ? selectedRepository.alias : t('settings.daily_note_folder_root')}
+                title={t('settings.daily_note.folder.title')}
+                description={selectedRepository ? selectedRepository.alias : t('settings.daily_note.folder.root')}
                 items={folderItems}
                 selectedValue={dailyFolder}
                 onSelect={onSelectFolder}
                 isFirst={true}
             />
             <SelectOption
-                title={t('settings.daily_note_template')}
+                title={t('settings.daily_note.template.title')}
                 description={selectedTemplate
-                    ? t(`templates.${selectedTemplate.name}`, selectedTemplate.name)
-                    : t('settings.daily_note_template_none')}
+                    ? t(`templates.names.${selectedTemplate.name}`, selectedTemplate.name)
+                    : t('settings.daily_note.template.none')}
                 items={templateItems}
                 selectedValue={dailyTemplate}
                 onSelect={onSelectTemplate}

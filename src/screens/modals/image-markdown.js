@@ -65,12 +65,12 @@ export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
         } catch (error) {
             if (error.code === PICKER_ERROR_CODES.PERMISSION_REJECTED) {
                 setCameraPermission(await getCameraPermission())
-                showSnackbar(t('markdown.camera_permission_denied'))
+                showSnackbar(t('markdown.camera_permission.denied'))
                 return
             }
 
             logError(LOG_MESSAGES.ERROR_PICKING_IMAGE, error)
-            showSnackbar(t('markdown.image_pick_failed'))
+            showSnackbar(t('markdown.image.pick_failed'))
             return
         }
 
@@ -88,7 +88,7 @@ export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
             setImageSize(null)
         } catch (error) {
             logError(LOG_MESSAGES.ERROR_SAVING_PICKED_IMAGE, error)
-            showSnackbar(t('markdown.image_save_failed'))
+            showSnackbar(t('markdown.image.save_failed'))
         }
     }
 
@@ -117,10 +117,10 @@ export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
                         <View style={styles.permissionContent}>
                             <View style={styles.permissionText}>
                                 <Typography bold uppercase color={colors.tertiary} variant='caption'>
-                                    {t('markdown.camera_permission_title')}
+                                    {t('markdown.camera_permission.title')}
                                 </Typography>
                                 <Typography opacity={OPACITY.pressed} variant='caption' styleProps={styles.permissionMessage}>
-                                    {t('markdown.camera_permission_message')}
+                                    {t('markdown.camera_permission.message')}
                                 </Typography>
                             </View>
                             <Camera color={colors.tertiary} width={ICON_SIZE.lg} height={ICON_SIZE.lg} />
@@ -130,7 +130,7 @@ export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
             )}
 
             {!isDeviceImage && (
-                <SheetField title={t('markdown.image_url')}>
+                <SheetField title={t('markdown.image.url')}>
                     <LargeInput
                         value={url}
                         onChangeText={setUrl}
@@ -158,11 +158,11 @@ export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
                 </View>
             )}
 
-            <SheetField title={t('markdown.image_alt')}>
+            <SheetField title={t('markdown.image.alt')}>
                 <LargeInput
                     value={title}
                     onChangeText={setTitle}
-                    placeholder={t('markdown.image_alt_placeholder')}
+                    placeholder={t('markdown.image.alt_placeholder')}
                 />
             </SheetField>
 
@@ -171,12 +171,12 @@ export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
                     buttons={[
                         {
                             icon: Camera,
-                            label: t('markdown.image_camera'),
+                            label: t('markdown.image.camera'),
                             onPress: () => onPickImage(IMAGE_SOURCES.CAMERA)
                         },
                         {
                             icon: Picture,
-                            label: t('markdown.image_gallery'),
+                            label: t('markdown.image.gallery'),
                             onPress: () => onPickImage(IMAGE_SOURCES.GALLERY)
                         },
                         {

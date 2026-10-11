@@ -99,7 +99,7 @@ export default function EditTemplate() {
             router.back()
         } catch (error) {
             logError(LOG_MESSAGES.ERROR_DELETING_TEMPLATE, error)
-            showSnackbar(t('templates.delete_failed'))
+            showSnackbar(t('templates.delete.failed'))
         }
     }
 
@@ -123,7 +123,7 @@ export default function EditTemplate() {
                 return
             }
 
-            const displayName = t(`templates.${template.name}`, template.name)
+            const displayName = t(`templates.names.${template.name}`, template.name)
 
             setName(displayName)
             setContent(template.content)
@@ -183,8 +183,8 @@ export default function EditTemplate() {
 
                     <ConfirmDialog
                         visible={deleteDialogVisible}
-                        title={t('templates.delete_title')}
-                        message={t('templates.delete_message')}
+                        title={t('templates.delete.title')}
+                        message={t('templates.delete.message')}
                         confirmLabel={t('button.delete')}
                         onDismiss={onCloseDeleteDialog}
                         onConfirm={onConfirmDelete}

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SelectOption } from './select-option'
@@ -11,6 +11,7 @@ export function StorageSelectOption({
     translationKey,
     values,
     defaultValue,
+    translateValues = true,
     isFirst,
     isLast
 }) {
@@ -23,10 +24,15 @@ export function StorageSelectOption({
         if (values.includes(value)) setCurrent(value)
     })
 
+    const getValueLabel = useCallback(
+        (value) => translateValues ? t(`${translationKey}.${value}`) : String(value),
+        [translateValues, translationKey, t]
+    )
+
     const items = useMemo(() => values.map((value) => ({
         value,
-        title: t(`settings.${translationKey}_${value}`)
-    })), [values, translationKey, t])
+        title: getValueLabel(value)
+    })), [values, getValueLabel])
 
     const onSelect = (value) => {
         setCurrent(value)
@@ -35,8 +41,8 @@ export function StorageSelectOption({
 
     return (
         <SelectOption
-            title={t(`settings.${translationKey}`)}
-            description={t(`settings.${translationKey}_${current}`)}
+            title={t(`${translationKey}.title`)}
+            description={getValueLabel(current)}
             items={items}
             selectedValue={current}
             onSelect={onSelect}

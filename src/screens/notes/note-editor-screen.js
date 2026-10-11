@@ -123,7 +123,7 @@ export const NoteEditorScreen = ({
         namePlaceholder: t('properties.name_placeholder'),
         valuePlaceholder: t('properties.value_placeholder'),
         types: Object.fromEntries(
-            EDITABLE_PROPERTY_TYPES.map((type) => [type, t(`properties.type_${type}`)])
+            EDITABLE_PROPERTY_TYPES.map((type) => [type, t(`properties.type.${type}`)])
         )
     }), [t])
 
@@ -142,8 +142,8 @@ export const NoteEditorScreen = ({
         label: t('title.tags'),
         visible: propertiesVisible,
         invalid,
-        invalidTitle: t('tags.invalid_properties_title'),
-        invalidDescription: t('tags.invalid_properties_description')
+        invalidTitle: t('tags.invalid_properties.title'),
+        invalidDescription: t('tags.invalid_properties.description')
     }), [tags, allTags, rows, suggestions, propertyLabels, t, propertiesVisible, invalid])
 
     const searchField = useMemo(() => ({
@@ -293,8 +293,8 @@ export const NoteEditorScreen = ({
 
                     <ConfirmDialog
                         visible={noteDelete.visible}
-                        title={t('notes.delete_title')}
-                        message={t(`notes.delete_message_${noteDelete.behavior}`)}
+                        title={t('notes.delete.title')}
+                        message={t(`notes.delete.message.${noteDelete.behavior}`)}
                         confirmLabel={t('button.delete')}
                         onDismiss={noteDelete.onClose}
                         onConfirm={noteDelete.onConfirm}

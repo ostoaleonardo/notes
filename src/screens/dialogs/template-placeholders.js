@@ -17,12 +17,12 @@ export function TemplatePlaceholders({ visible, onDismiss }) {
     const examples = {
         date: renderTemplate('{{date}}'),
         time: renderTemplate('{{time}}'),
-        title: t('templates.placeholder_title_example')
+        title: t('templates.placeholders.title_example')
     }
 
     return (
         <DialogModal
-            title={t('templates.placeholders_title')}
+            title={t('templates.placeholders.heading')}
             visible={visible}
             onDismiss={onDismiss}
             actions={
@@ -44,13 +44,13 @@ export function TemplatePlaceholders({ visible, onDismiss }) {
                             opacity={OPACITY.secondary}
                             variant='caption'
                         >
-                            {t(`templates.placeholder_${key}`)}
+                            {t(`templates.placeholders.${key}`)}
                         </Typography>
                         <Typography
                             opacity={OPACITY.disabled}
                             variant='caption'
                         >
-                            {t('templates.placeholder_example', { value: examples[key] })}
+                            {t('templates.placeholders.example', { value: examples[key] })}
                         </Typography>
                     </View>
                 ))}

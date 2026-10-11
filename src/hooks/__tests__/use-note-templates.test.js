@@ -65,7 +65,7 @@ describe('save note as template', () => {
         await act(async () => result.current.onSaveAsTemplate())
 
         expect(mockAddTemplate).toHaveBeenCalledWith('My note', 'latest')
-        expect(showSnackbar).toHaveBeenCalledWith('templates.saved')
+        expect(showSnackbar).toHaveBeenCalledWith('templates.save.success')
     })
 
     test('falls back to the placeholder title when the title is blank', async () => {
@@ -82,7 +82,7 @@ describe('save note as template', () => {
 
         await act(async () => result.current.onSaveAsTemplate())
 
-        expect(showSnackbar).toHaveBeenCalledWith('templates.save_failed')
+        expect(showSnackbar).toHaveBeenCalledWith('templates.save.failed')
     })
 })
 

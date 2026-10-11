@@ -19,8 +19,8 @@ export function ForgetRepository({ visible, onDismiss, repositoryId }) {
 
     return (
         <ConfirmDialog
-            title={t('repositories.forget')}
-            message={t('repositories.forget_message')}
+            title={t('repositories.forget.title')}
+            message={t('repositories.forget.message')}
             confirmLabel={t('button.forget')}
             visible={visible}
             onDismiss={onDismiss}

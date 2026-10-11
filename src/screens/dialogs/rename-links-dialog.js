@@ -13,7 +13,7 @@ export function RenameLinksDialog({ visible, linksCount, onDismiss, onConfirmOnc
 
     return (
         <DialogModal
-            title={t('message.wiki_links.rename_title')}
+            title={t('message.wiki_links.rename.title')}
             visible={visible}
             onDismiss={onDismiss}
             actions={[
@@ -49,7 +49,7 @@ export function RenameLinksDialog({ visible, linksCount, onDismiss, onConfirmOnc
             ]}
         >
             <Typography opacity={OPACITY.secondary}>
-                {t('message.wiki_links.rename_message', { count: linksCount })}
+                {t('message.wiki_links.rename.message', { count: linksCount })}
             </Typography>
         </DialogModal>
     )

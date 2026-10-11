@@ -30,7 +30,7 @@ export function RenameRepository({ visible, onDismiss, repositoryId }) {
         onDismiss()
 
         if (result === REPOSITORY_RESULTS.ERROR) {
-            ToastAndroid.show(t('repositories.rename_failed'), ToastAndroid.SHORT)
+            ToastAndroid.show(t('repositories.rename.failed'), ToastAndroid.SHORT)
             return
         }
 
@@ -39,7 +39,7 @@ export function RenameRepository({ visible, onDismiss, repositoryId }) {
 
     return (
         <DialogModal
-            title={t(isFolder ? 'repositories.edit_folder' : 'repositories.rename')}
+            title={t(isFolder ? 'repositories.edit_folder' : 'repositories.rename.title')}
             visible={visible}
             onDismiss={onDismiss}
             actions={

@@ -35,7 +35,7 @@ export function useNoteDelete(id, busyRef) {
         } catch (error) {
             if (busyRef) busyRef.current = false
             logError(LOG_MESSAGES.ERROR_DELETING_NOTE, error)
-            showSnackbar(t('notes.delete_failed'))
+            showSnackbar(t('notes.delete.failed'))
         }
     }, [deleteNote, busyRef, id, t])
 

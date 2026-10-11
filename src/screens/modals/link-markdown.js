@@ -27,7 +27,7 @@ export function LinkMarkdown({ onClose, onInsert }) {
 
     return (
         <SheetForm>
-            <SheetField title={t('markdown.link_title')}>
+            <SheetField title={t('markdown.link.title')}>
                 <LargeInput
                     value={title}
                     onChangeText={setTitle}
@@ -35,7 +35,7 @@ export function LinkMarkdown({ onClose, onInsert }) {
                 />
             </SheetField>
 
-            <SheetField title={t('markdown.link_url')}>
+            <SheetField title={t('markdown.link.url')}>
                 <LargeInput
                     value={url}
                     onChangeText={setUrl}

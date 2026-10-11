@@ -10,9 +10,9 @@ export const TAG_SORTS = {
 }
 export const DEFAULT_TAG_SORT = TAG_SORTS.NAME_ASC
 export const TAG_SORT_LABELS = {
-    [TAG_SORTS.NAME_ASC]: 'drawer.sort_name_asc',
-    [TAG_SORTS.NAME_DESC]: 'drawer.sort_name_desc',
-    [TAG_SORTS.COUNT_DESC]: 'drawer.sort_count_desc',
-    [TAG_SORTS.COUNT_ASC]: 'drawer.sort_count_asc'
+    [TAG_SORTS.NAME_ASC]: 'drawer.sort.name_asc',
+    [TAG_SORTS.NAME_DESC]: 'drawer.sort.name_desc',
+    [TAG_SORTS.COUNT_DESC]: 'drawer.sort.count_desc',
+    [TAG_SORTS.COUNT_ASC]: 'drawer.sort.count_asc'
 }
 export const INLINE_TAG_CLASS = 'cm-inline-tag'

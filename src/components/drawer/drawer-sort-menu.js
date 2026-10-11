@@ -26,7 +26,7 @@ export function DrawerSortMenu({ sort, onChange }) {
                     icon={SortByAlpha}
                     onPress={onOpen}
                     testID={TEST_IDS.DRAWER_SORT}
-                    accessibilityLabel={t('drawer.sort_notes')}
+                    accessibilityLabel={t('drawer.sort.title')}
                 />
             }
         >

@@ -95,6 +95,6 @@ describe('confirm delete', () => {
         await act(async () => result.current.onConfirm())
 
         expect(router.back).not.toHaveBeenCalled()
-        expect(showSnackbar).toHaveBeenCalledWith('notes.delete_failed')
+        expect(showSnackbar).toHaveBeenCalledWith('notes.delete.failed')
     })
 })

@@ -17,13 +17,13 @@ export function Intro() {
                     textAlign='center'
                     styleProps={{ fontFamily: FONTS.nType82Headline }}
                 >
-                    {t('notes.intro_title')}
+                    {t('notes.intro.title')}
                 </Typography>
                 <Typography
                     opacity={OPACITY.secondary}
                     textAlign='center'
                 >
-                    {t('notes.intro_subtitle')}
+                    {t('notes.intro.subtitle')}
                 </Typography>
             </View>
         </AnimatedView>

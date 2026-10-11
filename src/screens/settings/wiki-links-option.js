@@ -34,25 +34,25 @@ export function WikiLinksOption() {
         <>
             <Option
                 isFirst={true}
-                title={t('settings.use_wikilinks')}
-                description={t('settings.use_wikilinks_description')}
+                title={t('settings.links.wikilinks.title')}
+                description={t('settings.links.wikilinks.description')}
                 rightContent={(
                     <Switch
                         value={useWikilinks}
                         onValueChange={onToggleFormat}
-                        accessibilityLabel={t('settings.use_wikilinks')}
+                        accessibilityLabel={t('settings.links.wikilinks.title')}
                     />
                 )}
             />
             <Option
                 isLast={true}
-                title={t('settings.auto_update_links')}
-                description={t('settings.auto_update_links_description')}
+                title={t('settings.links.auto_update.title')}
+                description={t('settings.links.auto_update.description')}
                 rightContent={(
                     <Switch
                         value={autoUpdateLinks}
                         onValueChange={onToggleAutoUpdate}
-                        accessibilityLabel={t('settings.auto_update_links')}
+                        accessibilityLabel={t('settings.links.auto_update.title')}
                     />
                 )}
             />

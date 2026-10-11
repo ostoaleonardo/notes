@@ -21,8 +21,8 @@ export default function RepositoryGate() {
 
     return (
         <MessageScreen
-            title={t('repositories.choose_title')}
-            message={t('repositories.choose_message')}
+            title={t('repositories.choose.title')}
+            message={t('repositories.choose.message')}
         >
             <Pressable
                 compact={true}
@@ -30,7 +30,7 @@ export default function RepositoryGate() {
                 loading={activeRepository && loading}
                 disabled={activeRepository && loading}
             >
-                {t('repositories.choose_button')}
+                {t('repositories.choose.button')}
             </Pressable>
         </MessageScreen>
     )

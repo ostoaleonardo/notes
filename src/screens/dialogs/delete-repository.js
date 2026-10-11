@@ -20,7 +20,7 @@ export function DeleteRepository({ visible, onDismiss, repositoryId }) {
         const result = await removeRepository(repositoryId)
 
         if (result === REPOSITORY_RESULTS.ACTIVE) {
-            ToastAndroid.show(t('repositories.cannot_delete_active'), ToastAndroid.SHORT)
+            ToastAndroid.show(t('repositories.delete.active_error'), ToastAndroid.SHORT)
             return
         }
 
@@ -29,8 +29,8 @@ export function DeleteRepository({ visible, onDismiss, repositoryId }) {
 
     return (
         <ConfirmDialog
-            title={t(isFolder ? 'repositories.delete_folder' : 'repositories.delete')}
-            message={t(isFolder ? 'repositories.delete_folder_message' : 'repositories.delete_message')}
+            title={t(isFolder ? 'repositories.delete.folder_title' : 'repositories.delete.title')}
+            message={t(isFolder ? 'repositories.delete.folder_message' : 'repositories.delete.message')}
             confirmLabel={t('button.delete')}
             visible={visible}
             onDismiss={onDismiss}

@@ -208,8 +208,8 @@ export const MarkdownInput = ({
 
             <ConfirmDialog
                 visible={!!missingNote.missing}
-                title={t('message.wiki_links.missing_title')}
-                message={t('message.wiki_links.missing_message', { title: missingNote.missing?.title })}
+                title={t('message.wiki_links.missing.title')}
+                message={t('message.wiki_links.missing.message', { title: missingNote.missing?.title })}
                 confirmLabel={t('button.create')}
                 onDismiss={missingNote.dismiss}
                 onConfirm={missingNote.create}

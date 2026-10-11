@@ -16,14 +16,14 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export const STARTUP_SELECT_OPTION = {
     storageKey: STORAGE_KEYS.STARTUP_BEHAVIOR,
-    translationKey: 'startup_behavior',
+    translationKey: 'settings.notes.startup',
     values: Object.values(STARTUP_BEHAVIORS),
     defaultValue: STARTUP_BEHAVIORS.LAST_OPENED
 }
 
 export const DELETE_BEHAVIOR_SELECT_OPTION = {
     storageKey: STORAGE_KEYS.DELETE_BEHAVIOR,
-    translationKey: 'delete_behavior',
+    translationKey: 'settings.notes.delete',
     values: Object.values(DELETE_BEHAVIORS),
     defaultValue: DEFAULT_DELETE_BEHAVIOR
 }
@@ -33,37 +33,38 @@ export const NOTES_SELECT_OPTIONS = [STARTUP_SELECT_OPTION, DELETE_BEHAVIOR_SELE
 export const EDITOR_SELECT_OPTIONS = [
     {
         storageKey: STORAGE_KEYS.EDITOR_FONT_SIZE,
-        translationKey: 'editor_font_size',
+        translationKey: 'settings.editor.font_size',
         values: Object.keys(EDITOR_FONT_SIZES),
         defaultValue: DEFAULT_EDITOR_FONT_SIZE
     },
     {
         storageKey: STORAGE_KEYS.EDITOR_LINE_WIDTH,
-        translationKey: 'editor_line_width',
+        translationKey: 'settings.editor.line_width',
         values: Object.keys(EDITOR_LINE_WIDTHS),
         defaultValue: DEFAULT_EDITOR_LINE_WIDTH
     },
     {
         storageKey: STORAGE_KEYS.EDITOR_TAB_SIZE,
-        translationKey: 'editor_tab_size',
+        translationKey: 'settings.editor.tab_size',
         values: Object.keys(EDITOR_TAB_SIZES),
+        translateValues: false,
         defaultValue: DEFAULT_EDITOR_TAB_SIZE
     },
     {
         storageKey: STORAGE_KEYS.EDITOR_LINE_NUMBERS,
-        translationKey: 'editor_line_numbers',
+        translationKey: 'settings.editor.line_numbers',
         values: Object.keys(EDITOR_TOGGLE),
         defaultValue: DEFAULT_EDITOR_LINE_NUMBERS
     },
     {
         storageKey: STORAGE_KEYS.EDITOR_SPELLCHECK,
-        translationKey: 'editor_spellcheck',
+        translationKey: 'settings.editor.spellcheck',
         values: Object.keys(EDITOR_TOGGLE),
         defaultValue: DEFAULT_EDITOR_SPELLCHECK
     },
     {
         storageKey: STORAGE_KEYS.EDITOR_INLINE_TITLE,
-        translationKey: 'editor_inline_title',
+        translationKey: 'settings.editor.inline_title',
         values: Object.keys(EDITOR_TOGGLE),
         defaultValue: DEFAULT_EDITOR_INLINE_TITLE
     }

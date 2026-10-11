@@ -46,7 +46,7 @@ export function AttachmentsOption() {
 
     const locationItems = useMemo(() => LOCATIONS.map((value) => ({
         value,
-        title: t(`settings.attachment_location_${value}`)
+        title: t(`settings.attachments.location.${value}`)
     })), [t])
 
     const onSelectLocation = (value) => {
@@ -69,8 +69,8 @@ export function AttachmentsOption() {
     return (
         <View style={styles.group}>
             <SelectOption
-                title={t('settings.attachment_location')}
-                description={t(`settings.attachment_location_${location}`)}
+                title={t('settings.attachments.location.title')}
+                description={t(`settings.attachments.location.${location}`)}
                 items={locationItems}
                 selectedValue={location}
                 onSelect={onSelectLocation}
@@ -80,7 +80,7 @@ export function AttachmentsOption() {
 
             {showFolder && (
                 <Option
-                    title={t('settings.attachment_folder')}
+                    title={t('settings.attachments.folder')}
                     description={folderName}
                     rightContent={<ArrowForward color={colors.onBackground} />}
                     onPress={onOpenDialog}
@@ -89,7 +89,7 @@ export function AttachmentsOption() {
             )}
 
             <DialogModal
-                title={t('settings.attachment_folder')}
+                title={t('settings.attachments.folder')}
                 visible={dialogVisible}
                 onDismiss={() => setDialogVisible(false)}
                 actions={(

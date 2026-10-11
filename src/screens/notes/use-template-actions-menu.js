@@ -25,7 +25,7 @@ export const useTemplateActionsMenu = ({
             common.code,
             <ActionMenuItem
                 key='placeholders'
-                title={t('templates.view_placeholders')}
+                title={t('templates.placeholders.view')}
                 icon={Shapes}
                 action={onOpenPlaceholders}
                 onTrigger={onTrigger}

@@ -28,10 +28,10 @@ export function useNoteTemplates({ latestContent, setNote }) {
 
         try {
             await addTemplate(title.trim() || t('placeholder.title'), content)
-            showSnackbar(t('templates.saved'))
+            showSnackbar(t('templates.save.success'))
         } catch (error) {
             logError(LOG_MESSAGES.ERROR_SAVING_TEMPLATE, error)
-            showSnackbar(t('templates.save_failed'))
+            showSnackbar(t('templates.save.failed'))
         }
     }, [addTemplate, latestContent, t])
 

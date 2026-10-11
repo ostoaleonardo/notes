@@ -38,19 +38,19 @@ export const RepositoryMenu = memo(function RepositoryMenu({ onRename, onForget,
             }
         >
             <ActionMenuItem
-                title={t('repositories.rename')}
+                title={t('repositories.rename.title')}
                 icon={Edit}
                 action={onRename}
                 onTrigger={trigger}
             />
             <ActionMenuItem
-                title={t('repositories.forget')}
+                title={t('repositories.forget.title')}
                 icon={Close}
                 action={onForget}
                 onTrigger={trigger}
             />
             <MenuItem
-                title={t('repositories.delete')}
+                title={t('repositories.delete.title')}
                 leadingIcon={deleteIcon}
                 onPress={onPressDelete}
             />

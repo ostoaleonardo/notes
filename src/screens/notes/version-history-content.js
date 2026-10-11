@@ -222,8 +222,8 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
 
             <ConfirmDialog
                 visible={restoreDialogVisible}
-                title={t('message.version_history.restore_title')}
-                message={t('message.version_history.restore_message')}
+                title={t('message.version_history.restore.title')}
+                message={t('message.version_history.restore.message')}
                 confirmLabel={t('button.restore')}
                 onDismiss={onCloseRestore}
                 onConfirm={onConfirmRestore}

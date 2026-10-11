@@ -14,13 +14,13 @@ describe('build table labels', () => {
     })
 
     test('translates axis actions with the table menu namespace', () => {
-        expect(labels.row_insert_before).toBe('label:table_menu.row_insert_before')
-        expect(labels.col_align_center).toBe('label:table_menu.col_align_center')
+        expect(labels.row_insert_before).toBe('label:table_menu.row.insert_before')
+        expect(labels.col_align_center).toBe('label:table_menu.col.align_center')
     })
 
     test('creates one label per menu group', () => {
         Object.values(TABLE_MENU_GROUPS).forEach((group) => {
-            expect(labels[`group_${group}`]).toBe(`label:table_menu.group_${group}`)
+            expect(labels[`group_${group}`]).toBe(`label:table_menu.group.${group}`)
         })
     })
 })

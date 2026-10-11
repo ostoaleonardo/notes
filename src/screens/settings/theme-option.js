@@ -34,12 +34,12 @@ export function ThemeOption() {
 
     return (
         <Option
-            title={t('settings.theme')}
+            title={t('settings.general.theme')}
             description={t('theme.choose')}
             isLast={true}
         >
             <ColorSection
-                title={t('settings.themes')}
+                title={t('settings.general.themes')}
                 names={THEME_OPTIONS}
                 options={THEME_COLORS}
                 isActive={(color) => mode === color}
@@ -48,7 +48,7 @@ export function ThemeOption() {
                 containerStyle={{ marginTop: SPACING.lg }}
             />
             <ColorSection
-                title={t('settings.accent')}
+                title={t('settings.general.accent')}
                 names={ACCENT_OPTIONS}
                 options={ACCENT_COLORS}
                 isActive={(color) => accent === color}

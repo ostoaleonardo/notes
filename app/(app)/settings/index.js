@@ -35,12 +35,12 @@ export default function Settings() {
         <View style={{ flex: 1 }}>
             <Scroll contentContainerStyle={styles.scroll}>
                 <Section
-                    title={t('settings.general')}
+                    title={t('settings.general.title')}
                     containerStyle={styles.section}
                     contentStyle={styles.items}
                 >
                     <Option
-                        title={t('settings.language')}
+                        title={t('settings.general.language')}
                         description={t('language')}
                         rightContent={<ArrowForward color={colors.onBackground} />}
                         onPress={languagesSheet.onOpen}
@@ -50,7 +50,7 @@ export default function Settings() {
                 </Section>
 
                 <Section
-                    title={t('settings.notes')}
+                    title={t('settings.notes.title')}
                     containerStyle={styles.section}
                     contentStyle={styles.items}
                 >
@@ -58,7 +58,7 @@ export default function Settings() {
                 </Section>
 
                 <Section
-                    title={t('settings.editor')}
+                    title={t('settings.editor.title')}
                     containerStyle={styles.section}
                     contentStyle={styles.items}
                 >
@@ -66,7 +66,7 @@ export default function Settings() {
                 </Section>
 
                 <Section
-                    title={t('settings.daily_note')}
+                    title={t('settings.daily_note.title')}
                     containerStyle={styles.section}
                     contentStyle={styles.items}
                 >
@@ -74,7 +74,7 @@ export default function Settings() {
                 </Section>
 
                 <Section
-                    title={t('settings.files_links')}
+                    title={t('settings.links.title')}
                     containerStyle={styles.section}
                     contentStyle={styles.items}
                 >
@@ -82,7 +82,7 @@ export default function Settings() {
                 </Section>
 
                 <Section
-                    title={t('settings.attachments')}
+                    title={t('settings.attachments.title')}
                     containerStyle={styles.section}
                     contentStyle={styles.items}
                 >
@@ -97,15 +97,15 @@ export default function Settings() {
                     contentStyle={styles.items}
                 >
                     <Option
-                        title={t('settings.github')}
-                        description={t('settings.features')}
+                        title={t('settings.about.github')}
+                        description={t('settings.about.features')}
                         rightContent={<OpenInNew color={colors.onBackground} />}
                         onPress={() => Linking.openURL(LINKS.GITHUB)}
                         isFirst={true}
                     />
                     <Option
-                        title={t('settings.contribute')}
-                        description={t('settings.translate')}
+                        title={t('settings.about.contribute')}
+                        description={t('settings.about.translate')}
                         rightContent={<OpenInNew color={colors.onBackground} />}
                         onPress={() => Linking.openURL(LINKS.TRANSLATIONS)}
                     />

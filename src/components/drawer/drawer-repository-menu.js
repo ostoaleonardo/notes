@@ -13,7 +13,7 @@ const MENU_ITEMS = [
     { action: REPOSITORY_ACTIONS.CREATE_NOTE, label: 'repositories.create_note', icon: Plus },
     { action: REPOSITORY_ACTIONS.ADD_SUBFOLDER, label: 'repositories.add_subfolder', icon: Folder },
     { action: REPOSITORY_ACTIONS.EDIT_FOLDER, label: 'repositories.edit_folder', icon: Edit },
-    { action: REPOSITORY_ACTIONS.DELETE, label: 'repositories.delete_folder', icon: Delete }
+    { action: REPOSITORY_ACTIONS.DELETE, label: 'repositories.delete.folder_title', icon: Delete }
 ]
 
 export function DrawerRepositoryMenu({ actions, createLabelKey, onAction }) {
