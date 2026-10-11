@@ -2,6 +2,13 @@ appId: com.monospace.notes
 ---
 - launchApp
 - runFlow: subflows/open-drawer.yml
+- runFlow:
+    when:
+      visible: Expandir todo
+    commands:
+      - tapOn:
+          id: drawer-toggle-all
+      - waitForAnimationToEnd
 - assertVisible: Colapsar todo
 - tapOn:
       id: drawer-toggle-all
