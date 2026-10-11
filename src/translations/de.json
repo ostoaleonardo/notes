@@ -1,24 +1,208 @@
 {
 	"language": "Deutsch",
+	"notes": {
+		"untitled": "Ohne Titel",
+		"create": "Notiz erstellen",
+		"intro": {
+			"title": "Keine Notiz geöffnet",
+			"subtitle": "Wähle eine Notiz im Menü oder starte oben in deinem Repository eine neue."
+		},
+		"copy_suffix": "(Kopie)",
+		"go_home": "Start",
+		"delete": {
+			"title": "Notiz löschen",
+			"failed": "Diese Notiz konnte nicht gelöscht werden",
+			"message": {
+				"vault-trash": "Die Notiz wird in den versteckten Ordner .trash deines Repositorys verschoben. Sie wird in der App nicht mehr angezeigt, kann aber mit einem Dateimanager wiederhergestellt werden.",
+				"permanent": "Diese Notiz wird endgültig gelöscht und kann nicht wiederhergestellt werden."
+			}
+		},
+		"save_failed": "Diese Notiz konnte nicht gespeichert werden",
+		"title_duplicated": "Eine Notiz mit diesem Namen existiert bereits",
+		"title_breaks_links": "Die Zeichen # ^ [ ] verhindern, dass Links zu dieser Notiz in Obsidian funktionieren",
+		"migration_notice": "Migration mit Problemen abgeschlossen: {{renamed}} Notizen wurden umbenannt und {{images}} Bilder konnten nicht wiederhergestellt werden."
+	},
+	"tags": {
+		"invalid_properties": {
+			"title": "Ungültige Eigenschaften",
+			"description": "Der Eigenschaftenblock konnte nicht gelesen werden."
+		}
+	},
+	"properties": {
+		"add": "Eigenschaft hinzufügen",
+		"remove": "Eigenschaft entfernen",
+		"name_placeholder": "Name der Eigenschaft",
+		"value_placeholder": "Kein Wert",
+		"type": {
+			"text": "Text",
+			"number": "Zahl",
+			"list": "Liste",
+			"checkbox": "Kontrollkästchen",
+			"date": "Datum",
+			"datetime": "Datum und Uhrzeit"
+		}
+	},
+	"repositories": {
+		"open": "Öffnen",
+		"rename": {
+			"title": "Repository umbenennen",
+			"failed": "Dieser Ordner konnte nicht umbenannt werden"
+		},
+		"forget": {
+			"title": "Repository vergessen",
+			"message": "Das Repository wird aus der Liste entfernt, ohne dass etwas von deinem Gerät gelöscht wird."
+		},
+		"delete": {
+			"title": "Repository löschen",
+			"message": "Dieses Repository, seine Unterordner und alle darin enthaltenen Notizen werden dauerhaft von deinem Gerät gelöscht.",
+			"folder_title": "Ordner löschen",
+			"folder_message": "Dieser Ordner, seine Unterordner und alle darin enthaltenen Notizen werden dauerhaft von deinem Gerät gelöscht.",
+			"active_error": "Wechsle zu einem anderen Repository, bevor du dieses löschst"
+		},
+		"choose": {
+			"title": "Repository auswählen",
+			"message": "Wähle einen Ordner auf deinem Gerät, in dem deine Notizen gespeichert werden.",
+			"button": "Ordner auswählen"
+		},
+		"pro_required": "Mit Pro verfügbar",
+		"already_added": "Dieses Repository wurde bereits hinzugefügt",
+		"create_note": "Notiz hier erstellen",
+		"add_subfolder": "Unterordner hinzufügen",
+		"edit_folder": "Ordner bearbeiten",
+		"no_folders": "Noch keine Unterordner",
+		"add_failed": "Dieses Repository konnte nicht hinzugefügt werden"
+	},
 	"title": {
 		"notes": "Notizen",
 		"tags": "Tags",
+		"repositories": "Repositorys",
+		"templates": "Vorlagen",
 		"settings": "Einstellungen",
 		"about": "Über die App",
-		"version_history": "Versionsverlauf"
+		"import": "Notiz importieren",
+		"version_history": "Versionsverlauf",
+		"backlinks": "Backlinks",
+		"outline": "Gliederung",
+		"outgoing_links": "Ausgehende Links",
+		"unlinked_mentions": "Nicht verlinkte Erwähnungen"
 	},
 	"date": {
 		"updated": "Aktualisiert:"
 	},
 	"settings": {
-		"language": "Sprache",
-		"theme": "Farbthema",
-		"github": "GitHub Repository",
-		"features": "Probleme melden, beitragen oder neue Funktionen anfordern.",
-		"contribute": "Zur Übersetzung beitragen",
-		"translate": "Uns helfen, die App in deine Sprache zu Übersetzen.",
-		"updates": "Software-Aktualisierung",
-		"version": "Version"
+		"general": {
+			"title": "Allgemein",
+			"language": "Sprache",
+			"theme": "Farbthema",
+			"themes": "Design",
+			"accent": "Akzentfarbe"
+		},
+		"pro": "Auf Pro upgraden",
+		"about": {
+			"github": "GitHub Repository",
+			"features": "Probleme melden, beitragen oder neue Funktionen anfordern.",
+			"contribute": "Zur Übersetzung beitragen",
+			"translate": "Uns helfen, die App in deine Sprache zu Übersetzen.",
+			"updates": "Software-Aktualisierung",
+			"version": "Version"
+		},
+		"notes": {
+			"title": "Notizen",
+			"startup": {
+				"title": "Beim Start öffnen",
+				"last": "Zuletzt geöffnete Notiz",
+				"new": "Neue Notiz",
+				"home": "Start",
+				"daily": "Tägliche Notiz"
+			},
+			"delete": {
+				"title": "Beim Löschen",
+				"vault-trash": "In den Ordner .trash verschieben",
+				"permanent": "Dauerhaft löschen"
+			}
+		},
+		"editor": {
+			"title": "Editor",
+			"font_size": {
+				"title": "Schriftgröße",
+				"small": "Klein",
+				"default": "Standard",
+				"large": "Groß",
+				"extra_large": "Sehr groß"
+			},
+			"line_width": {
+				"title": "Zeilenbreite",
+				"full": "Volle Breite",
+				"wide": "Breit",
+				"narrow": "Schmal"
+			},
+			"tab_size": {
+				"title": "Tabulatorbreite"
+			},
+			"line_numbers": {
+				"title": "Zeilennummern (Code-Modus)",
+				"on": "An",
+				"off": "Aus"
+			},
+			"spellcheck": {
+				"title": "Rechtschreibprüfung und Autokorrektur",
+				"on": "An",
+				"off": "Aus"
+			},
+			"inline_title": {
+				"title": "Titel im Text",
+				"on": "An",
+				"off": "Aus"
+			}
+		},
+		"daily_note": {
+			"title": "Tägliche Notiz",
+			"folder": {
+				"title": "Speicherort der täglichen Notiz",
+				"root": "Stammordner"
+			},
+			"template": {
+				"title": "Vorlage für die tägliche Notiz",
+				"none": "Keine"
+			}
+		},
+		"attachments": {
+			"title": "Anhänge",
+			"location": {
+				"title": "Speicherort für neue Anhänge",
+				"vault": "Stammordner des Repositorys",
+				"same": "Neben jeder Notiz",
+				"subfolder": "Unterordner neben jeder Notiz",
+				"folder": "Ein gemeinsamer Ordner"
+			},
+			"folder": "Name des Anhangsordners"
+		},
+		"links": {
+			"title": "Links",
+			"wikilinks": {
+				"title": "[[Wikilinks]] verwenden",
+				"description": "Deaktivieren, um beim Verlinken von Notizen stattdessen Markdown-Links zu erzeugen."
+			},
+			"auto_update": {
+				"title": "Interne Links automatisch aktualisieren",
+				"description": "Deaktivieren, um vor dem Aktualisieren der Links nach dem Umbenennen einer Notiz gefragt zu werden."
+			}
+		}
+	},
+	"pro": {
+		"get": "Pro-Version holen",
+		"pro": "Pro-Version",
+		"features": "Schalte alle Funktionen frei und unterstütze die Entwicklung der App.",
+		"success": "Danke für deinen Kauf!",
+		"restore": "Kauf wiederherstellen",
+		"purchased": "Du hast die Pro-Version bereits gekauft.",
+		"messages": {
+			"success": "Kauf erfolgreich",
+			"available": "Dieser Artikel ist nicht zum Kauf verfügbar",
+			"services": "Google-Play-Dienste sind nicht verfügbar",
+			"support": "Bitte kontaktiere den Support",
+			"no_purchased": "Kein früherer Kauf gefunden"
+		}
 	},
 	"theme": {
 		"light": "Licht",
@@ -26,26 +210,174 @@
 		"system": "System",
 		"choose": "Wähle ein Farbthema für die App."
 	},
+	"accent": {
+		"red": "Rot",
+		"yellow": "Gelb",
+		"blue": "Blau"
+	},
 	"button": {
 		"edit": "Bearbeiten",
+		"code": "Code",
 		"back": "Zurück",
 		"delete": "Beseitigen",
 		"update": "Aktualisieren",
+		"pin": "Anheften",
+		"unpin": "Lösen",
+		"show_backlinks": "Backlinks anzeigen",
+		"hide_backlinks": "Backlinks ausblenden",
+		"link_mention": "Verlinken",
+		"export": "Exportieren",
+		"share": "Teilen",
+		"export_share": "Exportieren / Teilen",
+		"duplicate": "Duplizieren",
+		"save_as_template": "Als Vorlage speichern",
+		"insert": "Einfügen",
+		"cancel": "Abbrechen",
+		"more": "Mehr",
+		"forget": "Vergessen",
+		"create": "Erstellen",
+		"close": "Schließen",
+		"preview": "Lesen",
 		"close_all": "Schließen",
+		"find": "Suchen",
+		"replace": "Ersetzen",
+		"replace_all": "Alle ersetzen",
+		"previous": "Vorheriger Treffer",
+		"next": "Nächster Treffer",
 		"undo": "Rückgängig",
 		"redo": "Wiederholen",
-		"restore": "Wiederherstellen"
+		"try_again": "Erneut versuchen",
+		"restore": "Wiederherstellen",
+		"dont_update": "Nicht aktualisieren",
+		"update_once": "Einmal aktualisieren",
+		"update_always": "Immer aktualisieren"
+	},
+	"count": {
+		"notes_one": "{{count}} Notiz",
+		"notes_other": "{{count}} Notizen",
+		"folders_one": "{{count}} Ordner",
+		"folders_other": "{{count}} Ordner",
+		"words_one": "{{count}} Wort",
+		"words_other": "{{count}} Wörter",
+		"characters_one": "{{count}} Zeichen",
+		"characters_other": "{{count}} Zeichen"
+	},
+	"markdown": {
+		"link": {
+			"title": "Titel",
+			"url": "URL"
+		},
+		"image": {
+			"alt": "Alternativtext",
+			"alt_placeholder": "Bildbeschreibung",
+			"url": "URL",
+			"camera": "Foto aufnehmen",
+			"gallery": "Aus der Galerie wählen",
+			"pick_failed": "Die Bildauswahl konnte nicht geöffnet werden.",
+			"save_failed": "Das Bild konnte nicht im Anhangsordner gespeichert werden."
+		},
+		"camera_permission": {
+			"title": "Kameraberechtigung",
+			"message": "Aktiviere sie, um Fotos direkt in der App aufzunehmen.",
+			"denied": "Aktiviere den Kamerazugriff in den Systemeinstellungen, um Fotos aufzunehmen."
+		}
+	},
+	"table_menu": {
+		"group": {
+			"insert": "Einfügen",
+			"move": "Verschieben",
+			"align": "Ausrichten"
+		},
+		"row": {
+			"insert_before": "Oberhalb",
+			"insert_after": "Unterhalb",
+			"move_before": "Nach oben",
+			"move_after": "Nach unten",
+			"duplicate": "Duplizieren",
+			"delete": "Löschen"
+		},
+		"col": {
+			"insert_before": "Links",
+			"insert_after": "Rechts",
+			"move_before": "Nach links",
+			"move_after": "Nach rechts",
+			"align_left": "Links",
+			"align_center": "Zentriert",
+			"align_right": "Rechts",
+			"duplicate": "Duplizieren",
+			"delete": "Löschen"
+		}
+	},
+	"markdown_group": {
+		"heading": "Überschriften",
+		"list": "Listen",
+		"insert": "Einfügen"
+	},
+	"markdown_action": {
+		"h0": "Keine Überschrift",
+		"bold": "Fett",
+		"italic": "Kursiv",
+		"strike": "Durchgestrichen",
+		"h1": "Überschrift 1",
+		"h2": "Überschrift 2",
+		"h3": "Überschrift 3",
+		"h4": "Überschrift 4",
+		"h5": "Überschrift 5",
+		"h6": "Überschrift 6",
+		"quote": "Zitat",
+		"code": "Code",
+		"hr": "Horizontale Linie",
+		"image": "Bild einfügen",
+		"link": "Link einfügen",
+		"wiki-link": "Notizlink einfügen",
+		"table": "Tabelle einfügen",
+		"list-bullet": "Aufzählungsliste",
+		"list-ordered": "Nummerierte Liste",
+		"list-checklist": "Checkliste",
+		"outdent": "Einzug verringern",
+		"indent": "Einzug vergrößern",
+		"fold": "Abschnitt einklappen",
+		"insert-date": "Datum einfügen",
+		"insert-time": "Uhrzeit einfügen",
+		"insert-title": "Titel einfügen"
 	},
 	"message": {
 		"notes": {
 			"empty": "Du hast noch keine Notizen",
-			"no_recent": "Keine kürzlichen oder angehefteten Notizen"
+			"exported": "Datei erfolgreich exportiert",
+			"no_recent": "Keine kürzlichen oder angehefteten Notizen",
+			"export_failed": "Die Datei konnte nicht exportiert werden",
+			"share_failed": "Die Datei konnte nicht geteilt werden"
+		},
+		"files": {
+			"open_failed": "Die Datei konnte nicht geöffnet werden"
+		},
+		"outline": {
+			"empty": "Diese Notiz hat keine Überschriften"
+		},
+		"outgoing_links": {
+			"empty": "Diese Notiz enthält keine Links zu anderen Notizen"
 		},
 		"tags": {
 			"empty": "Du hast noch keine Tags"
 		},
 		"version_history": {
-			"empty": "Noch keine Versionen gespeichert"
+			"empty": "Noch keine Versionen gespeichert",
+			"restore": {
+				"title": "Version wiederherstellen",
+				"message": "Der aktuelle Inhalt wird durch diese Version ersetzt. Nicht gespeicherte Änderungen gehen verloren."
+			}
+		},
+		"wiki_links": {
+			"rename": {
+				"title": "Links aktualisieren",
+				"message_one": "Möchtest du den internen Link auf diese Notiz aktualisieren?",
+				"message_other": "Möchtest du die {{count}} internen Links auf diese Notiz aktualisieren?"
+			},
+			"missing": {
+				"title": "Notiz nicht gefunden",
+				"message": "Es gibt keine Notiz mit dem Titel „{{title}}“. Möchtest du sie erstellen?"
+			}
 		}
 	},
 	"placeholder": {
@@ -53,6 +385,47 @@
 		"note": "Schreib deine Notiz hier..."
 	},
 	"drawer": {
-		"tags": "Tags"
+		"repositories": "Repositorys",
+		"templates": "Vorlagen",
+		"tags": "Tags",
+		"search": "Notizen durchsuchen",
+		"collapse_all": "Alle einklappen",
+		"daily_note": "Tägliche Notiz",
+		"expand_all": "Alle ausklappen",
+		"open": "Menü öffnen",
+		"notes": "Notizen",
+		"files": "Dateien",
+		"files_empty": "In diesem Repository gibt es noch keine Anhänge",
+		"change_view": "Ansicht ändern",
+		"sort": {
+			"title": "Notizen sortieren",
+			"name_asc": "Name (A - Z)",
+			"name_desc": "Name (Z - A)",
+			"count_desc": "Nutzung (hoch - niedrig)",
+			"count_asc": "Nutzung (niedrig - hoch)",
+			"modified_desc": "Geändert (neu - alt)",
+			"modified_asc": "Geändert (alt - neu)",
+			"created_desc": "Erstellt (neu - alt)",
+			"created_asc": "Erstellt (alt - neu)"
+		}
+	},
+	"search": {
+		"recent": "Zuletzt",
+		"saved": "Gespeichert",
+		"pinned": "Angeheftet",
+		"has_image": "Bilder",
+		"in_content": "Inhalt",
+		"save": "Speichern",
+		"unsave": "Entfernen"
+	},
+	"error_boundary": {
+		"title": "Etwas ist schiefgelaufen",
+		"message": "Es ist ein unerwartetes Problem aufgetreten. Bitte versuche es erneut."
+	},
+	"export": {
+		"title": "Exportieren oder teilen als",
+		"markdown": "Markdown",
+		"html": "HTML",
+		"pdf": "PDF"
 	}
 }

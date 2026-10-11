@@ -1,24 +1,208 @@
 {
 	"language": "日本語",
+	"notes": {
+		"untitled": "無題",
+		"create": "メモを作成",
+		"intro": {
+			"title": "開いているメモはありません",
+			"subtitle": "サイドメニューからメモを選ぶか、リポジトリの先頭で新しいメモを作成してください。"
+		},
+		"copy_suffix": "(コピー)",
+		"go_home": "ホーム",
+		"delete": {
+			"title": "メモを削除",
+			"failed": "このメモを削除できませんでした",
+			"message": {
+				"vault-trash": "メモはリポジトリの非表示の .trash フォルダに移動されます。アプリには表示されなくなりますが、ファイルマネージャーで復元できます。",
+				"permanent": "このメモは完全に削除され、復元できません。"
+			}
+		},
+		"save_failed": "このメモを保存できませんでした",
+		"title_duplicated": "この名前のメモはすでに存在します",
+		"title_breaks_links": "# ^ [ ] の文字を使うと、Obsidian でこのメモへのリンクが機能しなくなります",
+		"migration_notice": "移行は問題を残して完了しました。{{renamed}} 件のメモの名前が変更され、{{images}} 枚の画像を復元できませんでした。"
+	},
+	"tags": {
+		"invalid_properties": {
+			"title": "無効なプロパティ",
+			"description": "プロパティブロックを解析できませんでした。"
+		}
+	},
+	"properties": {
+		"add": "プロパティを追加",
+		"remove": "プロパティを削除",
+		"name_placeholder": "プロパティ名",
+		"value_placeholder": "値なし",
+		"type": {
+			"text": "テキスト",
+			"number": "数値",
+			"list": "リスト",
+			"checkbox": "チェックボックス",
+			"date": "日付",
+			"datetime": "日付と時刻"
+		}
+	},
+	"repositories": {
+		"open": "開く",
+		"rename": {
+			"title": "リポジトリの名前を変更",
+			"failed": "このフォルダの名前を変更できませんでした"
+		},
+		"forget": {
+			"title": "リポジトリを一覧から外す",
+			"message": "端末のデータは削除せず、リポジトリをリストから外します。"
+		},
+		"delete": {
+			"title": "リポジトリを削除",
+			"message": "このリポジトリ、サブフォルダ、およびすべてのメモが端末から完全に削除されます。",
+			"folder_title": "フォルダを削除",
+			"folder_message": "このフォルダ、サブフォルダ、およびすべてのメモが端末から完全に削除されます。",
+			"active_error": "このリポジトリを削除する前に、別のリポジトリに切り替えてください"
+		},
+		"choose": {
+			"title": "リポジトリを選択",
+			"message": "メモを保存する端末内のフォルダを選択してください。",
+			"button": "フォルダを選択"
+		},
+		"pro_required": "Pro で利用可能",
+		"already_added": "このリポジトリはすでに追加されています",
+		"create_note": "ここにメモを作成",
+		"add_subfolder": "サブフォルダを追加",
+		"edit_folder": "フォルダを編集",
+		"no_folders": "サブフォルダはまだありません",
+		"add_failed": "このリポジトリを追加できませんでした"
+	},
 	"title": {
 		"notes": "メモ",
 		"tags": "タグ",
+		"repositories": "リポジトリ",
+		"templates": "テンプレート",
 		"settings": "設定",
 		"about": "このアプリについて",
-		"version_history": "バージョン履歴"
+		"import": "メモをインポート",
+		"version_history": "バージョン履歴",
+		"backlinks": "バックリンク",
+		"outline": "アウトライン",
+		"outgoing_links": "発リンク",
+		"unlinked_mentions": "リンクされていない言及"
 	},
 	"date": {
 		"updated": "更新日時:"
 	},
 	"settings": {
-		"language": "言語",
-		"theme": "カラーテーマ",
-		"github": "GitHub リポジトリ",
-		"features": "問題の報告、貢献または新しい機能の要望。",
-		"contribute": "翻訳に貢献する",
-		"translate": "アプリの翻訳に協力してくれませんか。",
-		"updates": "アプリをアップデート",
-		"version": "バージョン"
+		"general": {
+			"title": "一般",
+			"language": "言語",
+			"theme": "カラーテーマ",
+			"themes": "テーマ",
+			"accent": "アクセントカラー"
+		},
+		"pro": "Pro にアップグレード",
+		"about": {
+			"github": "GitHub リポジトリ",
+			"features": "問題の報告、貢献または新しい機能の要望。",
+			"contribute": "翻訳に貢献する",
+			"translate": "アプリの翻訳に協力してくれませんか。",
+			"updates": "アプリをアップデート",
+			"version": "バージョン"
+		},
+		"notes": {
+			"title": "メモ",
+			"startup": {
+				"title": "起動時に開く",
+				"last": "最後に開いたメモ",
+				"new": "新規メモ",
+				"home": "ホーム",
+				"daily": "デイリーノート"
+			},
+			"delete": {
+				"title": "削除時",
+				"vault-trash": ".trash フォルダに移動",
+				"permanent": "完全に削除"
+			}
+		},
+		"editor": {
+			"title": "エディター",
+			"font_size": {
+				"title": "フォントサイズ",
+				"small": "小",
+				"default": "標準",
+				"large": "大",
+				"extra_large": "特大"
+			},
+			"line_width": {
+				"title": "行の幅",
+				"full": "全幅",
+				"wide": "広め",
+				"narrow": "狭め"
+			},
+			"tab_size": {
+				"title": "タブサイズ"
+			},
+			"line_numbers": {
+				"title": "行番号(コードモード)",
+				"on": "オン",
+				"off": "オフ"
+			},
+			"spellcheck": {
+				"title": "スペルチェックと自動修正",
+				"on": "オン",
+				"off": "オフ"
+			},
+			"inline_title": {
+				"title": "インラインタイトル",
+				"on": "オン",
+				"off": "オフ"
+			}
+		},
+		"daily_note": {
+			"title": "デイリーノート",
+			"folder": {
+				"title": "デイリーノートの保存場所",
+				"root": "ルートフォルダ"
+			},
+			"template": {
+				"title": "デイリーノートのテンプレート",
+				"none": "なし"
+			}
+		},
+		"attachments": {
+			"title": "添付ファイル",
+			"location": {
+				"title": "新しい添付ファイルの保存先",
+				"vault": "リポジトリのルート",
+				"same": "各メモの隣",
+				"subfolder": "各メモの隣のサブフォルダ",
+				"folder": "共有フォルダ1つ"
+			},
+			"folder": "添付ファイルフォルダの名前"
+		},
+		"links": {
+			"title": "リンク",
+			"wikilinks": {
+				"title": "[[ウィキリンク]]を使用",
+				"description": "オフにすると、メモをリンクする際に代わりに Markdown リンクが生成されます。"
+			},
+			"auto_update": {
+				"title": "内部リンクを自動的に更新",
+				"description": "オフにすると、メモの名前を変更した後にリンクを更新する前に確認されます。"
+			}
+		}
+	},
+	"pro": {
+		"get": "Pro 版を入手",
+		"pro": "Pro 版",
+		"features": "すべての機能のロックを解除して、アプリの開発を支援しましょう。",
+		"success": "ご購入ありがとうございます!",
+		"restore": "購入を復元",
+		"purchased": "Pro 版はすでに購入済みです。",
+		"messages": {
+			"success": "購入が完了しました",
+			"available": "この商品は購入できません",
+			"services": "Google Play 開発者サービスを利用できません",
+			"support": "サポートにお問い合わせください",
+			"no_purchased": "過去の購入が見つかりません"
+		}
 	},
 	"theme": {
 		"light": "ライト",
@@ -26,26 +210,174 @@
 		"system": "システム",
 		"choose": "アプリのカラーテーマを選択してください。"
 	},
+	"accent": {
+		"red": "赤",
+		"yellow": "黄",
+		"blue": "青"
+	},
 	"button": {
 		"edit": "編集",
+		"code": "コード",
 		"back": "戻る",
 		"delete": "削除",
 		"update": "更新",
+		"pin": "ピン留め",
+		"unpin": "ピン留め解除",
+		"show_backlinks": "バックリンクを表示",
+		"hide_backlinks": "バックリンクを非表示",
+		"link_mention": "リンク",
+		"export": "エクスポート",
+		"share": "共有",
+		"export_share": "エクスポート / 共有",
+		"duplicate": "複製",
+		"save_as_template": "テンプレートとして保存",
+		"insert": "挿入",
+		"cancel": "キャンセル",
+		"more": "その他",
+		"forget": "リストから外す",
+		"create": "作成",
+		"close": "閉じる",
+		"preview": "閲覧",
 		"close_all": "閉じる",
+		"find": "検索",
+		"replace": "置換",
+		"replace_all": "すべて置換",
+		"previous": "前の一致",
+		"next": "次の一致",
 		"undo": "元に戻す",
 		"redo": "やり直す",
-		"restore": "復元"
+		"try_again": "再試行",
+		"restore": "復元",
+		"dont_update": "更新しない",
+		"update_once": "今回のみ更新",
+		"update_always": "常に更新"
+	},
+	"count": {
+		"notes_one": "{{count}} 件のメモ",
+		"notes_other": "{{count}} 件のメモ",
+		"folders_one": "{{count}} 個のフォルダ",
+		"folders_other": "{{count}} 個のフォルダ",
+		"words_one": "{{count}} 語",
+		"words_other": "{{count}} 語",
+		"characters_one": "{{count}} 文字",
+		"characters_other": "{{count}} 文字"
+	},
+	"markdown": {
+		"link": {
+			"title": "タイトル",
+			"url": "URL"
+		},
+		"image": {
+			"alt": "代替テキスト",
+			"alt_placeholder": "画像の説明",
+			"url": "URL",
+			"camera": "写真を撮る",
+			"gallery": "ギャラリーから選択",
+			"pick_failed": "画像ピッカーを開けませんでした。",
+			"save_failed": "画像を添付ファイルフォルダに保存できませんでした。"
+		},
+		"camera_permission": {
+			"title": "カメラの権限",
+			"message": "アプリから写真を撮るにはオンにしてください。",
+			"denied": "写真を撮るには、システム設定でカメラへのアクセスを有効にしてください。"
+		}
+	},
+	"table_menu": {
+		"group": {
+			"insert": "挿入",
+			"move": "移動",
+			"align": "配置"
+		},
+		"row": {
+			"insert_before": "上",
+			"insert_after": "下",
+			"move_before": "上へ",
+			"move_after": "下へ",
+			"duplicate": "複製",
+			"delete": "削除"
+		},
+		"col": {
+			"insert_before": "左",
+			"insert_after": "右",
+			"move_before": "左へ",
+			"move_after": "右へ",
+			"align_left": "左揃え",
+			"align_center": "中央揃え",
+			"align_right": "右揃え",
+			"duplicate": "複製",
+			"delete": "削除"
+		}
+	},
+	"markdown_group": {
+		"heading": "見出し",
+		"list": "リスト",
+		"insert": "挿入"
+	},
+	"markdown_action": {
+		"h0": "見出しなし",
+		"bold": "太字",
+		"italic": "斜体",
+		"strike": "取り消し線",
+		"h1": "見出し 1",
+		"h2": "見出し 2",
+		"h3": "見出し 3",
+		"h4": "見出し 4",
+		"h5": "見出し 5",
+		"h6": "見出し 6",
+		"quote": "引用",
+		"code": "コード",
+		"hr": "水平線",
+		"image": "画像を挿入",
+		"link": "リンクを挿入",
+		"wiki-link": "メモへのリンクを挿入",
+		"table": "表を挿入",
+		"list-bullet": "箇条書きリスト",
+		"list-ordered": "番号付きリスト",
+		"list-checklist": "チェックリスト",
+		"outdent": "インデントを減らす",
+		"indent": "インデントを増やす",
+		"fold": "セクションを折りたたむ",
+		"insert-date": "日付を挿入",
+		"insert-time": "時刻を挿入",
+		"insert-title": "タイトルを挿入"
 	},
 	"message": {
 		"notes": {
 			"empty": "まだメモはありません",
-			"no_recent": "最近使ったノートもピン留めもありません"
+			"exported": "ファイルをエクスポートしました",
+			"no_recent": "最近使ったノートもピン留めもありません",
+			"export_failed": "ファイルをエクスポートできませんでした",
+			"share_failed": "ファイルを共有できませんでした"
+		},
+		"files": {
+			"open_failed": "ファイルを開けませんでした"
+		},
+		"outline": {
+			"empty": "このメモには見出しがありません"
+		},
+		"outgoing_links": {
+			"empty": "このメモには他のメモへのリンクがありません"
 		},
 		"tags": {
 			"empty": "まだタグはありません"
 		},
 		"version_history": {
-			"empty": "まだバージョンが保存されていません"
+			"empty": "まだバージョンが保存されていません",
+			"restore": {
+				"title": "バージョンを復元",
+				"message": "現在の内容がこのバージョンに置き換えられます。保存されていない変更は失われます。"
+			}
+		},
+		"wiki_links": {
+			"rename": {
+				"title": "リンクを更新",
+				"message_one": "このメモを指す内部リンクを更新しますか?",
+				"message_other": "このメモを指す {{count}} 件の内部リンクを更新しますか?"
+			},
+			"missing": {
+				"title": "メモが見つかりません",
+				"message": "「{{title}}」というタイトルのメモはありません。作成しますか?"
+			}
 		}
 	},
 	"placeholder": {
@@ -53,6 +385,47 @@
 		"note": "ここにメモを入力してください..."
 	},
 	"drawer": {
-		"tags": "タグ"
+		"repositories": "リポジトリ",
+		"templates": "テンプレート",
+		"tags": "タグ",
+		"search": "メモを検索",
+		"collapse_all": "すべて折りたたむ",
+		"daily_note": "デイリーノート",
+		"expand_all": "すべて展開",
+		"open": "メニューを開く",
+		"notes": "メモ",
+		"files": "ファイル",
+		"files_empty": "このリポジトリにはまだ添付ファイルがありません",
+		"change_view": "表示を変更",
+		"sort": {
+			"title": "メモを並べ替え",
+			"name_asc": "名前(A - Z)",
+			"name_desc": "名前(Z - A)",
+			"count_desc": "使用頻度(高 - 低)",
+			"count_asc": "使用頻度(低 - 高)",
+			"modified_desc": "更新日(新しい - 古い)",
+			"modified_asc": "更新日(古い - 新しい)",
+			"created_desc": "作成日(新しい - 古い)",
+			"created_asc": "作成日(古い - 新しい)"
+		}
+	},
+	"search": {
+		"recent": "最近",
+		"saved": "保存済み",
+		"pinned": "ピン留め済み",
+		"has_image": "画像",
+		"in_content": "内容",
+		"save": "保存",
+		"unsave": "削除"
+	},
+	"error_boundary": {
+		"title": "問題が発生しました",
+		"message": "予期しない問題が発生しました。もう一度お試しください。"
+	},
+	"export": {
+		"title": "エクスポートまたは共有する形式",
+		"markdown": "Markdown",
+		"html": "HTML",
+		"pdf": "PDF"
 	}
 }

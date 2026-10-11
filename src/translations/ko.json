@@ -1,24 +1,208 @@
 {
 	"language": "한국어",
+	"notes": {
+		"untitled": "제목 없음",
+		"create": "노트 만들기",
+		"intro": {
+			"title": "열려 있는 노트가 없습니다",
+			"subtitle": "사이드 메뉴에서 노트를 선택하거나 저장소 맨 위에서 새 노트를 만드세요."
+		},
+		"copy_suffix": "(사본)",
+		"go_home": "홈",
+		"delete": {
+			"title": "노트 삭제",
+			"failed": "이 노트를 삭제할 수 없습니다",
+			"message": {
+				"vault-trash": "노트가 저장소의 숨겨진 .trash 폴더로 이동됩니다. 앱에는 더 이상 표시되지 않지만 파일 관리자로 복구할 수 있습니다.",
+				"permanent": "이 노트는 영구적으로 삭제되며 복구할 수 없습니다."
+			}
+		},
+		"save_failed": "이 노트를 저장할 수 없습니다",
+		"title_duplicated": "이 이름의 노트가 이미 있습니다",
+		"title_breaks_links": "# ^ [ ] 문자를 사용하면 Obsidian에서 이 노트로의 링크가 작동하지 않습니다",
+		"migration_notice": "마이그레이션이 문제와 함께 완료되었습니다. 노트 {{renamed}}개의 이름이 변경되었고 이미지 {{images}}개를 복구하지 못했습니다."
+	},
+	"tags": {
+		"invalid_properties": {
+			"title": "잘못된 속성",
+			"description": "속성 블록을 해석할 수 없습니다."
+		}
+	},
+	"properties": {
+		"add": "속성 추가",
+		"remove": "속성 제거",
+		"name_placeholder": "속성 이름",
+		"value_placeholder": "값 없음",
+		"type": {
+			"text": "텍스트",
+			"number": "숫자",
+			"list": "목록",
+			"checkbox": "체크박스",
+			"date": "날짜",
+			"datetime": "날짜 및 시간"
+		}
+	},
+	"repositories": {
+		"open": "열기",
+		"rename": {
+			"title": "저장소 이름 변경",
+			"failed": "이 폴더의 이름을 변경할 수 없습니다"
+		},
+		"forget": {
+			"title": "저장소 목록에서 제거",
+			"message": "기기에서는 아무것도 삭제하지 않고 목록에서만 저장소를 제거합니다."
+		},
+		"delete": {
+			"title": "저장소 삭제",
+			"message": "이 저장소와 하위 폴더, 그 안의 모든 노트가 기기에서 영구적으로 삭제됩니다.",
+			"folder_title": "폴더 삭제",
+			"folder_message": "이 폴더와 하위 폴더, 그 안의 모든 노트가 기기에서 영구적으로 삭제됩니다.",
+			"active_error": "이 저장소를 삭제하기 전에 다른 저장소로 전환하세요"
+		},
+		"choose": {
+			"title": "저장소 선택",
+			"message": "노트를 저장할 기기의 폴더를 선택하세요.",
+			"button": "폴더 선택"
+		},
+		"pro_required": "Pro에서 사용 가능",
+		"already_added": "이미 추가된 저장소입니다",
+		"create_note": "여기에 노트 만들기",
+		"add_subfolder": "하위 폴더 추가",
+		"edit_folder": "폴더 편집",
+		"no_folders": "아직 하위 폴더가 없습니다",
+		"add_failed": "이 저장소를 추가할 수 없습니다"
+	},
 	"title": {
 		"notes": "노트",
 		"tags": "태그",
+		"repositories": "저장소",
+		"templates": "템플릿",
 		"settings": "설정",
 		"about": "이 앱에 대하여",
-		"version_history": "버전 기록"
+		"import": "노트 가져오기",
+		"version_history": "버전 기록",
+		"backlinks": "백링크",
+		"outline": "개요",
+		"outgoing_links": "나가는 링크",
+		"unlinked_mentions": "링크되지 않은 언급"
 	},
 	"date": {
 		"updated": "업데이트일자:"
 	},
 	"settings": {
-		"language": "언어",
-		"theme": "테마 색상",
-		"github": "GitHub 리포지토리",
-		"features": "이슈 보고, 기여 또는 새로운 기능 요청하기",
-		"contribute": "번역 재능기부",
-		"translate": "더 많은 앱 사용자들을 위해 번역에 동참하세요.",
-		"updates": "소프트웨어 업데이트",
-		"version": "버전"
+		"general": {
+			"title": "일반",
+			"language": "언어",
+			"theme": "테마 색상",
+			"themes": "테마",
+			"accent": "강조 색상"
+		},
+		"pro": "Pro로 업그레이드",
+		"about": {
+			"github": "GitHub 리포지토리",
+			"features": "이슈 보고, 기여 또는 새로운 기능 요청하기",
+			"contribute": "번역 재능기부",
+			"translate": "더 많은 앱 사용자들을 위해 번역에 동참하세요.",
+			"updates": "소프트웨어 업데이트",
+			"version": "버전"
+		},
+		"notes": {
+			"title": "노트",
+			"startup": {
+				"title": "시작 시 열기",
+				"last": "마지막으로 연 노트",
+				"new": "새 노트",
+				"home": "홈",
+				"daily": "데일리 노트"
+			},
+			"delete": {
+				"title": "삭제 시",
+				"vault-trash": ".trash 폴더로 이동",
+				"permanent": "영구 삭제"
+			}
+		},
+		"editor": {
+			"title": "편집기",
+			"font_size": {
+				"title": "글꼴 크기",
+				"small": "작게",
+				"default": "기본",
+				"large": "크게",
+				"extra_large": "매우 크게"
+			},
+			"line_width": {
+				"title": "줄 너비",
+				"full": "전체 너비",
+				"wide": "넓게",
+				"narrow": "좁게"
+			},
+			"tab_size": {
+				"title": "탭 크기"
+			},
+			"line_numbers": {
+				"title": "줄 번호 (코드 모드)",
+				"on": "켜짐",
+				"off": "꺼짐"
+			},
+			"spellcheck": {
+				"title": "맞춤법 검사 및 자동 수정",
+				"on": "켜짐",
+				"off": "꺼짐"
+			},
+			"inline_title": {
+				"title": "인라인 제목",
+				"on": "켜짐",
+				"off": "꺼짐"
+			}
+		},
+		"daily_note": {
+			"title": "데일리 노트",
+			"folder": {
+				"title": "데일리 노트 위치",
+				"root": "루트 폴더"
+			},
+			"template": {
+				"title": "데일리 노트 템플릿",
+				"none": "없음"
+			}
+		},
+		"attachments": {
+			"title": "첨부 파일",
+			"location": {
+				"title": "새 첨부 파일을 저장할 위치",
+				"vault": "저장소 루트",
+				"same": "각 노트 옆",
+				"subfolder": "각 노트 옆의 하위 폴더",
+				"folder": "공유 폴더 하나"
+			},
+			"folder": "첨부 파일 폴더 이름"
+		},
+		"links": {
+			"title": "링크",
+			"wikilinks": {
+				"title": "[[위키링크]] 사용",
+				"description": "끄면 노트를 연결할 때 대신 Markdown 링크가 생성됩니다."
+			},
+			"auto_update": {
+				"title": "내부 링크 자동 업데이트",
+				"description": "끄면 노트 이름을 변경한 후 링크를 업데이트하기 전에 확인 메시지가 표시됩니다."
+			}
+		}
+	},
+	"pro": {
+		"get": "Pro 버전 구입",
+		"pro": "Pro 버전",
+		"features": "모든 기능을 잠금 해제하고 앱 개발을 응원해 주세요.",
+		"success": "구매해 주셔서 감사합니다!",
+		"restore": "구매 복원",
+		"purchased": "이미 Pro 버전을 구매하셨습니다.",
+		"messages": {
+			"success": "구매 성공",
+			"available": "이 항목은 구매할 수 없습니다",
+			"services": "Google Play 서비스를 사용할 수 없습니다",
+			"support": "지원팀에 문의하세요",
+			"no_purchased": "이전 구매 내역을 찾을 수 없습니다"
+		}
 	},
 	"theme": {
 		"light": "밝은 테마",
@@ -26,26 +210,174 @@
 		"system": "시스템",
 		"choose": "테마 색상을 선택하세요."
 	},
+	"accent": {
+		"red": "빨강",
+		"yellow": "노랑",
+		"blue": "파랑"
+	},
 	"button": {
 		"edit": "수정",
+		"code": "코드",
 		"back": "뒤로 가기",
 		"delete": "삭제",
 		"update": "업데이트",
+		"pin": "고정",
+		"unpin": "고정 해제",
+		"show_backlinks": "백링크 표시",
+		"hide_backlinks": "백링크 숨기기",
+		"link_mention": "연결",
+		"export": "내보내기",
+		"share": "공유",
+		"export_share": "내보내기 / 공유",
+		"duplicate": "복제",
+		"save_as_template": "템플릿으로 저장",
+		"insert": "삽입",
+		"cancel": "취소",
+		"more": "더보기",
+		"forget": "제거",
+		"create": "만들기",
+		"close": "닫기",
+		"preview": "읽기",
 		"close_all": "닫기",
+		"find": "찾기",
+		"replace": "바꾸기",
+		"replace_all": "모두 바꾸기",
+		"previous": "이전 일치 항목",
+		"next": "다음 일치 항목",
 		"undo": "실행 취소",
 		"redo": "다시 실행",
-		"restore": "복원"
+		"try_again": "다시 시도",
+		"restore": "복원",
+		"dont_update": "업데이트 안 함",
+		"update_once": "한 번만 업데이트",
+		"update_always": "항상 업데이트"
+	},
+	"count": {
+		"notes_one": "노트 {{count}}개",
+		"notes_other": "노트 {{count}}개",
+		"folders_one": "폴더 {{count}}개",
+		"folders_other": "폴더 {{count}}개",
+		"words_one": "단어 {{count}}개",
+		"words_other": "단어 {{count}}개",
+		"characters_one": "문자 {{count}}개",
+		"characters_other": "문자 {{count}}개"
+	},
+	"markdown": {
+		"link": {
+			"title": "제목",
+			"url": "URL"
+		},
+		"image": {
+			"alt": "대체 텍스트",
+			"alt_placeholder": "이미지 설명",
+			"url": "URL",
+			"camera": "사진 찍기",
+			"gallery": "갤러리에서 선택",
+			"pick_failed": "이미지 선택기를 열 수 없습니다.",
+			"save_failed": "이미지를 첨부 파일 폴더에 저장할 수 없습니다."
+		},
+		"camera_permission": {
+			"title": "카메라 권한",
+			"message": "앱에서 사진을 찍으려면 켜 주세요.",
+			"denied": "사진을 찍으려면 시스템 설정에서 카메라 접근을 허용하세요."
+		}
+	},
+	"table_menu": {
+		"group": {
+			"insert": "삽입",
+			"move": "이동",
+			"align": "정렬"
+		},
+		"row": {
+			"insert_before": "위에",
+			"insert_after": "아래에",
+			"move_before": "위로",
+			"move_after": "아래로",
+			"duplicate": "복제",
+			"delete": "삭제"
+		},
+		"col": {
+			"insert_before": "왼쪽에",
+			"insert_after": "오른쪽에",
+			"move_before": "왼쪽으로",
+			"move_after": "오른쪽으로",
+			"align_left": "왼쪽",
+			"align_center": "가운데",
+			"align_right": "오른쪽",
+			"duplicate": "복제",
+			"delete": "삭제"
+		}
+	},
+	"markdown_group": {
+		"heading": "제목",
+		"list": "목록",
+		"insert": "삽입"
+	},
+	"markdown_action": {
+		"h0": "제목 없음",
+		"bold": "굵게",
+		"italic": "기울임",
+		"strike": "취소선",
+		"h1": "제목 1",
+		"h2": "제목 2",
+		"h3": "제목 3",
+		"h4": "제목 4",
+		"h5": "제목 5",
+		"h6": "제목 6",
+		"quote": "인용",
+		"code": "코드",
+		"hr": "가로줄",
+		"image": "이미지 삽입",
+		"link": "링크 삽입",
+		"wiki-link": "노트 링크 삽입",
+		"table": "표 삽입",
+		"list-bullet": "글머리 기호 목록",
+		"list-ordered": "번호 매기기 목록",
+		"list-checklist": "체크리스트",
+		"outdent": "들여쓰기 줄이기",
+		"indent": "들여쓰기 늘리기",
+		"fold": "섹션 접기",
+		"insert-date": "날짜 삽입",
+		"insert-time": "시간 삽입",
+		"insert-title": "제목 삽입"
 	},
 	"message": {
 		"notes": {
 			"empty": "노트가 아직 없습니다.",
-			"no_recent": "최근 또는 고정된 노트가 없습니다"
+			"exported": "파일을 내보냈습니다",
+			"no_recent": "최근 또는 고정된 노트가 없습니다",
+			"export_failed": "파일을 내보낼 수 없습니다",
+			"share_failed": "파일을 공유할 수 없습니다"
+		},
+		"files": {
+			"open_failed": "파일을 열 수 없습니다"
+		},
+		"outline": {
+			"empty": "이 노트에는 제목이 없습니다"
+		},
+		"outgoing_links": {
+			"empty": "이 노트에는 다른 노트로의 링크가 없습니다"
 		},
 		"tags": {
 			"empty": "태그가 아직 없습니다."
 		},
 		"version_history": {
-			"empty": "저장된 버전이 없습니다"
+			"empty": "저장된 버전이 없습니다",
+			"restore": {
+				"title": "버전 복원",
+				"message": "현재 내용이 이 버전으로 바뀝니다. 저장하지 않은 변경 사항은 사라집니다."
+			}
+		},
+		"wiki_links": {
+			"rename": {
+				"title": "링크 업데이트",
+				"message_one": "이 노트를 가리키는 내부 링크를 업데이트하시겠습니까?",
+				"message_other": "이 노트를 가리키는 내부 링크 {{count}}개를 업데이트하시겠습니까?"
+			},
+			"missing": {
+				"title": "노트를 찾을 수 없습니다",
+				"message": "\"{{title}}\" 제목의 노트가 없습니다. 만들까요?"
+			}
 		}
 	},
 	"placeholder": {
@@ -53,6 +385,47 @@
 		"note": "노트 내용을 입력하세요..."
 	},
 	"drawer": {
-		"tags": "태그"
+		"repositories": "저장소",
+		"templates": "템플릿",
+		"tags": "태그",
+		"search": "노트 검색",
+		"collapse_all": "모두 접기",
+		"daily_note": "데일리 노트",
+		"expand_all": "모두 펼치기",
+		"open": "메뉴 열기",
+		"notes": "노트",
+		"files": "파일",
+		"files_empty": "이 저장소에는 아직 첨부 파일이 없습니다",
+		"change_view": "보기 변경",
+		"sort": {
+			"title": "노트 정렬",
+			"name_asc": "이름 (가 - 하)",
+			"name_desc": "이름 (하 - 가)",
+			"count_desc": "사용량 (높음 - 낮음)",
+			"count_asc": "사용량 (낮음 - 높음)",
+			"modified_desc": "수정일 (최신 - 오래된 순)",
+			"modified_asc": "수정일 (오래된 - 최신 순)",
+			"created_desc": "생성일 (최신 - 오래된 순)",
+			"created_asc": "생성일 (오래된 - 최신 순)"
+		}
+	},
+	"search": {
+		"recent": "최근",
+		"saved": "저장됨",
+		"pinned": "고정됨",
+		"has_image": "이미지",
+		"in_content": "내용",
+		"save": "저장",
+		"unsave": "제거"
+	},
+	"error_boundary": {
+		"title": "문제가 발생했습니다",
+		"message": "예기치 않은 문제가 발생했습니다. 다시 시도해 주세요."
+	},
+	"export": {
+		"title": "다음 형식으로 내보내기 또는 공유",
+		"markdown": "Markdown",
+		"html": "HTML",
+		"pdf": "PDF"
 	}
 }

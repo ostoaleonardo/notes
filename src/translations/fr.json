@@ -1,24 +1,208 @@
 {
 	"language": "Français",
+	"notes": {
+		"untitled": "Sans titre",
+		"create": "Créer une note",
+		"intro": {
+			"title": "Aucune note ouverte",
+			"subtitle": "Choisissez une note dans le menu, ou créez-en une nouvelle en haut de votre dépôt."
+		},
+		"copy_suffix": "(copie)",
+		"go_home": "Accueil",
+		"delete": {
+			"title": "Supprimer la note",
+			"failed": "Impossible de supprimer cette note",
+			"message": {
+				"vault-trash": "La note sera déplacée dans le dossier caché .trash de votre dépôt. Elle n'apparaîtra plus dans l'application, mais vous pourrez la récupérer avec un gestionnaire de fichiers.",
+				"permanent": "Cette note sera supprimée définitivement et ne pourra pas être récupérée."
+			}
+		},
+		"save_failed": "Impossible d'enregistrer cette note",
+		"title_duplicated": "Une note portant ce nom existe déjà",
+		"title_breaks_links": "Les caractères # ^ [ ] empêchent les liens vers cette note de fonctionner dans Obsidian",
+		"migration_notice": "Migration terminée avec des problèmes : {{renamed}} notes ont été renommées et {{images}} images n'ont pas pu être récupérées."
+	},
+	"tags": {
+		"invalid_properties": {
+			"title": "Propriétés non valides",
+			"description": "Le bloc de propriétés n'a pas pu être analysé."
+		}
+	},
+	"properties": {
+		"add": "Ajouter une propriété",
+		"remove": "Supprimer la propriété",
+		"name_placeholder": "Nom de la propriété",
+		"value_placeholder": "Aucune valeur",
+		"type": {
+			"text": "Texte",
+			"number": "Nombre",
+			"list": "Liste",
+			"checkbox": "Case à cocher",
+			"date": "Date",
+			"datetime": "Date et heure"
+		}
+	},
+	"repositories": {
+		"open": "Ouvrir",
+		"rename": {
+			"title": "Renommer le dépôt",
+			"failed": "Impossible de renommer ce dossier"
+		},
+		"forget": {
+			"title": "Oublier le dépôt",
+			"message": "Le dépôt sera retiré de la liste sans rien supprimer de votre appareil."
+		},
+		"delete": {
+			"title": "Supprimer le dépôt",
+			"message": "Ce dépôt, ses sous-dossiers et toutes leurs notes seront définitivement supprimés de votre appareil.",
+			"folder_title": "Supprimer le dossier",
+			"folder_message": "Ce dossier, ses sous-dossiers et toutes leurs notes seront définitivement supprimés de votre appareil.",
+			"active_error": "Passez à un autre dépôt avant de supprimer celui-ci"
+		},
+		"choose": {
+			"title": "Choisir un dépôt",
+			"message": "Sélectionnez un dossier sur votre appareil où seront enregistrées vos notes.",
+			"button": "Choisir un dossier"
+		},
+		"pro_required": "Disponible avec Pro",
+		"already_added": "Ce dépôt a déjà été ajouté",
+		"create_note": "Créer une note ici",
+		"add_subfolder": "Ajouter un sous-dossier",
+		"edit_folder": "Modifier le dossier",
+		"no_folders": "Aucun sous-dossier pour le moment",
+		"add_failed": "Impossible d'ajouter ce dépôt"
+	},
 	"title": {
 		"notes": "Notes",
 		"tags": "Étiquettes",
+		"repositories": "Dépôts",
+		"templates": "Modèles",
 		"settings": "Paramètres",
 		"about": "À propos de l'app",
-		"version_history": "Historique des versions"
+		"import": "Importer une note",
+		"version_history": "Historique des versions",
+		"backlinks": "Rétroliens",
+		"outline": "Plan",
+		"outgoing_links": "Liens sortants",
+		"unlinked_mentions": "Mentions non liées"
 	},
 	"date": {
 		"updated": "Mis à jour :"
 	},
 	"settings": {
-		"language": "Langue",
-		"theme": "Thème",
-		"github": "Répertoire GitHub",
-		"features": "Signalez des problèmes, contribuez ou demandez de nouvelles fonctionnalités.",
-		"contribute": "Contribuer à la traduction de l'application",
-		"translate": "Aidez-nous à traduire l'application dans votre langue.",
-		"updates": "Mise à jour de l'application",
-		"version": "Version"
+		"general": {
+			"title": "Général",
+			"language": "Langue",
+			"theme": "Thème",
+			"themes": "Thème",
+			"accent": "Couleur d'accent"
+		},
+		"pro": "Passer à Pro",
+		"about": {
+			"github": "Répertoire GitHub",
+			"features": "Signalez des problèmes, contribuez ou demandez de nouvelles fonctionnalités.",
+			"contribute": "Contribuer à la traduction de l'application",
+			"translate": "Aidez-nous à traduire l'application dans votre langue.",
+			"updates": "Mise à jour de l'application",
+			"version": "Version"
+		},
+		"notes": {
+			"title": "Notes",
+			"startup": {
+				"title": "Ouvrir au démarrage",
+				"last": "Dernière note ouverte",
+				"new": "Nouvelle note",
+				"home": "Accueil",
+				"daily": "Note quotidienne"
+			},
+			"delete": {
+				"title": "À la suppression",
+				"vault-trash": "Déplacer vers le dossier .trash",
+				"permanent": "Supprimer définitivement"
+			}
+		},
+		"editor": {
+			"title": "Éditeur",
+			"font_size": {
+				"title": "Taille de police",
+				"small": "Petite",
+				"default": "Par défaut",
+				"large": "Grande",
+				"extra_large": "Très grande"
+			},
+			"line_width": {
+				"title": "Largeur de ligne",
+				"full": "Pleine largeur",
+				"wide": "Large",
+				"narrow": "Étroite"
+			},
+			"tab_size": {
+				"title": "Taille de tabulation"
+			},
+			"line_numbers": {
+				"title": "Numéros de ligne (mode Code)",
+				"on": "Activé",
+				"off": "Désactivé"
+			},
+			"spellcheck": {
+				"title": "Correction orthographique et automatique",
+				"on": "Activée",
+				"off": "Désactivée"
+			},
+			"inline_title": {
+				"title": "Titre intégré",
+				"on": "Activé",
+				"off": "Désactivé"
+			}
+		},
+		"daily_note": {
+			"title": "Note quotidienne",
+			"folder": {
+				"title": "Emplacement de la note quotidienne",
+				"root": "Racine du dépôt"
+			},
+			"template": {
+				"title": "Modèle de la note quotidienne",
+				"none": "Aucun"
+			}
+		},
+		"attachments": {
+			"title": "Pièces jointes",
+			"location": {
+				"title": "Où enregistrer les nouvelles pièces jointes",
+				"vault": "Racine du dépôt",
+				"same": "À côté de chaque note",
+				"subfolder": "Sous-dossier à côté de chaque note",
+				"folder": "Un dossier partagé"
+			},
+			"folder": "Nom du dossier des pièces jointes"
+		},
+		"links": {
+			"title": "Liens",
+			"wikilinks": {
+				"title": "Utiliser les [[Wikilinks]]",
+				"description": "Désactivez pour générer des liens Markdown à la place lors du lien entre notes."
+			},
+			"auto_update": {
+				"title": "Mettre à jour automatiquement les liens internes",
+				"description": "Désactivez pour qu'on vous demande avant de mettre à jour les liens après le renommage d'une note."
+			}
+		}
+	},
+	"pro": {
+		"get": "Obtenir la version Pro",
+		"pro": "Version Pro",
+		"features": "Débloquez toutes les fonctionnalités et soutenez le développement de l'application.",
+		"success": "Merci pour votre achat !",
+		"restore": "Restaurer l'achat",
+		"purchased": "Vous avez déjà acheté la version Pro.",
+		"messages": {
+			"success": "Achat réussi",
+			"available": "Cet article n'est pas disponible à l'achat",
+			"services": "Les services Google Play ne sont pas disponibles",
+			"support": "Veuillez contacter le support",
+			"no_purchased": "Aucun achat précédent trouvé"
+		}
 	},
 	"theme": {
 		"light": "Clair",
@@ -26,26 +210,174 @@
 		"system": "Système",
 		"choose": "Choisissez un thème pour votre application."
 	},
+	"accent": {
+		"red": "Rouge",
+		"yellow": "Jaune",
+		"blue": "Bleu"
+	},
 	"button": {
 		"edit": "Éditer",
+		"code": "Code",
 		"back": "Retour",
 		"delete": "Supprimer",
 		"update": "Actualiser",
+		"pin": "Épingler",
+		"unpin": "Désépingler",
+		"show_backlinks": "Afficher les rétroliens",
+		"hide_backlinks": "Masquer les rétroliens",
+		"link_mention": "Lier",
+		"export": "Exporter",
+		"share": "Partager",
+		"export_share": "Exporter / Partager",
+		"duplicate": "Dupliquer",
+		"save_as_template": "Enregistrer comme modèle",
+		"insert": "Insérer",
+		"cancel": "Annuler",
+		"more": "Plus",
+		"forget": "Oublier",
+		"create": "Créer",
+		"close": "Fermer",
+		"preview": "Lire",
 		"close_all": "Fermer",
+		"find": "Rechercher",
+		"replace": "Remplacer",
+		"replace_all": "Tout remplacer",
+		"previous": "Résultat précédent",
+		"next": "Résultat suivant",
 		"undo": "Annuler",
 		"redo": "Rétablir",
-		"restore": "Restaurer"
+		"try_again": "Réessayer",
+		"restore": "Restaurer",
+		"dont_update": "Ne pas mettre à jour",
+		"update_once": "Mettre à jour une fois",
+		"update_always": "Toujours mettre à jour"
+	},
+	"count": {
+		"notes_one": "{{count}} note",
+		"notes_other": "{{count}} notes",
+		"folders_one": "{{count}} dossier",
+		"folders_other": "{{count}} dossiers",
+		"words_one": "{{count}} mot",
+		"words_other": "{{count}} mots",
+		"characters_one": "{{count}} caractère",
+		"characters_other": "{{count}} caractères"
+	},
+	"markdown": {
+		"link": {
+			"title": "Titre",
+			"url": "URL"
+		},
+		"image": {
+			"alt": "Texte alternatif",
+			"alt_placeholder": "Description de l'image",
+			"url": "URL",
+			"camera": "Prendre une photo",
+			"gallery": "Choisir dans la galerie",
+			"pick_failed": "Impossible d'ouvrir le sélecteur d'images.",
+			"save_failed": "Impossible d'enregistrer l'image dans votre dossier de pièces jointes."
+		},
+		"camera_permission": {
+			"title": "Autorisation de l'appareil photo",
+			"message": "Activez-la pour prendre des photos depuis l'application.",
+			"denied": "Activez l'accès à l'appareil photo dans les paramètres système pour prendre des photos."
+		}
+	},
+	"table_menu": {
+		"group": {
+			"insert": "Insérer",
+			"move": "Déplacer",
+			"align": "Aligner"
+		},
+		"row": {
+			"insert_before": "Au-dessus",
+			"insert_after": "En dessous",
+			"move_before": "Vers le haut",
+			"move_after": "Vers le bas",
+			"duplicate": "Dupliquer",
+			"delete": "Supprimer"
+		},
+		"col": {
+			"insert_before": "À gauche",
+			"insert_after": "À droite",
+			"move_before": "Vers la gauche",
+			"move_after": "Vers la droite",
+			"align_left": "À gauche",
+			"align_center": "Centré",
+			"align_right": "À droite",
+			"duplicate": "Dupliquer",
+			"delete": "Supprimer"
+		}
+	},
+	"markdown_group": {
+		"heading": "Titres",
+		"list": "Listes",
+		"insert": "Insérer"
+	},
+	"markdown_action": {
+		"h0": "Aucun titre",
+		"bold": "Gras",
+		"italic": "Italique",
+		"strike": "Barré",
+		"h1": "Titre 1",
+		"h2": "Titre 2",
+		"h3": "Titre 3",
+		"h4": "Titre 4",
+		"h5": "Titre 5",
+		"h6": "Titre 6",
+		"quote": "Citation",
+		"code": "Code",
+		"hr": "Ligne horizontale",
+		"image": "Insérer une image",
+		"link": "Insérer un lien",
+		"wiki-link": "Insérer un lien vers une note",
+		"table": "Insérer un tableau",
+		"list-bullet": "Liste à puces",
+		"list-ordered": "Liste numérotée",
+		"list-checklist": "Liste de tâches",
+		"outdent": "Diminuer le retrait",
+		"indent": "Augmenter le retrait",
+		"fold": "Réduire la section",
+		"insert-date": "Insérer la date",
+		"insert-time": "Insérer l'heure",
+		"insert-title": "Insérer le titre"
 	},
 	"message": {
 		"notes": {
 			"empty": "Vous n'avez pas encore de notes",
-			"no_recent": "Aucune note récente ou épinglée"
+			"exported": "Fichier exporté avec succès",
+			"no_recent": "Aucune note récente ou épinglée",
+			"export_failed": "Impossible d'exporter le fichier",
+			"share_failed": "Impossible de partager le fichier"
+		},
+		"files": {
+			"open_failed": "Impossible d'ouvrir le fichier"
+		},
+		"outline": {
+			"empty": "Cette note n'a aucun titre"
+		},
+		"outgoing_links": {
+			"empty": "Cette note ne contient aucun lien vers d'autres notes"
 		},
 		"tags": {
 			"empty": "Vous n'avez pas encore d'étiquettes"
 		},
 		"version_history": {
-			"empty": "Aucune version enregistrée"
+			"empty": "Aucune version enregistrée",
+			"restore": {
+				"title": "Restaurer la version",
+				"message": "Le contenu actuel sera remplacé par cette version. Les modifications non enregistrées seront perdues."
+			}
+		},
+		"wiki_links": {
+			"rename": {
+				"title": "Mettre à jour les liens",
+				"message_one": "Voulez-vous mettre à jour le lien interne pointant vers cette note ?",
+				"message_other": "Voulez-vous mettre à jour les {{count}} liens internes pointant vers cette note ?"
+			},
+			"missing": {
+				"title": "Note introuvable",
+				"message": "Il n'existe aucune note intitulée « {{title}} ». Voulez-vous la créer ?"
+			}
 		}
 	},
 	"placeholder": {
@@ -53,6 +385,47 @@
 		"note": "Tapez votre note ici..."
 	},
 	"drawer": {
-		"tags": "Étiquettes"
+		"repositories": "Dépôts",
+		"templates": "Modèles",
+		"tags": "Étiquettes",
+		"search": "Rechercher des notes",
+		"collapse_all": "Tout réduire",
+		"daily_note": "Note quotidienne",
+		"expand_all": "Tout développer",
+		"open": "Ouvrir le menu",
+		"notes": "Notes",
+		"files": "Fichiers",
+		"files_empty": "Aucune pièce jointe dans ce dépôt pour le moment",
+		"change_view": "Changer de vue",
+		"sort": {
+			"title": "Trier les notes",
+			"name_asc": "Nom (A - Z)",
+			"name_desc": "Nom (Z - A)",
+			"count_desc": "Utilisation (élevée - faible)",
+			"count_asc": "Utilisation (faible - élevée)",
+			"modified_desc": "Modifiée (récente - ancienne)",
+			"modified_asc": "Modifiée (ancienne - récente)",
+			"created_desc": "Créée (récente - ancienne)",
+			"created_asc": "Créée (ancienne - récente)"
+		}
+	},
+	"search": {
+		"recent": "Récentes",
+		"saved": "Enregistrées",
+		"pinned": "Épinglées",
+		"has_image": "Images",
+		"in_content": "Contenu",
+		"save": "Enregistrer",
+		"unsave": "Retirer"
+	},
+	"error_boundary": {
+		"title": "Une erreur s'est produite",
+		"message": "Un problème inattendu est survenu. Veuillez réessayer."
+	},
+	"export": {
+		"title": "Exporter ou partager en",
+		"markdown": "Markdown",
+		"html": "HTML",
+		"pdf": "PDF"
 	}
 }

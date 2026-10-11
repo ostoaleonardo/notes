@@ -1,24 +1,208 @@
 {
 	"language": "Svenska",
+	"notes": {
+		"untitled": "Namnlös",
+		"create": "Skapa en anteckning",
+		"intro": {
+			"title": "Ingen anteckning öppen",
+			"subtitle": "Välj en anteckning i menyn eller skapa en ny högst upp i ditt förråd."
+		},
+		"copy_suffix": "(kopia)",
+		"go_home": "Hem",
+		"delete": {
+			"title": "Radera anteckning",
+			"failed": "Det gick inte att radera anteckningen",
+			"message": {
+				"vault-trash": "Anteckningen flyttas till den dolda mappen .trash i ditt förråd. Den visas inte längre i appen, men du kan fortfarande återställa den med en filhanterare.",
+				"permanent": "Den här anteckningen raderas för alltid och kan inte återställas."
+			}
+		},
+		"save_failed": "Det gick inte att spara anteckningen",
+		"title_duplicated": "Det finns redan en anteckning med det här namnet",
+		"title_breaks_links": "Tecknen # ^ [ ] gör att länkar till den här anteckningen slutar fungera i Obsidian",
+		"migration_notice": "Migreringen slutfördes med problem: {{renamed}} anteckningar döptes om och {{images}} bilder kunde inte återställas."
+	},
+	"tags": {
+		"invalid_properties": {
+			"title": "Ogiltiga egenskaper",
+			"description": "Egenskapsblocket kunde inte tolkas."
+		}
+	},
+	"properties": {
+		"add": "Lägg till egenskap",
+		"remove": "Ta bort egenskap",
+		"name_placeholder": "Egenskapens namn",
+		"value_placeholder": "Inget värde",
+		"type": {
+			"text": "Text",
+			"number": "Nummer",
+			"list": "Lista",
+			"checkbox": "Kryssruta",
+			"date": "Datum",
+			"datetime": "Datum och tid"
+		}
+	},
+	"repositories": {
+		"open": "Öppna",
+		"rename": {
+			"title": "Byt namn på förråd",
+			"failed": "Det gick inte att byta namn på mappen"
+		},
+		"forget": {
+			"title": "Glöm förråd",
+			"message": "Förrådet tas bort från listan utan att något raderas från din enhet."
+		},
+		"delete": {
+			"title": "Radera förråd",
+			"message": "Det här förrådet, dess undermappar och alla deras anteckningar raderas permanent från din enhet.",
+			"folder_title": "Radera mapp",
+			"folder_message": "Den här mappen, dess undermappar och alla deras anteckningar raderas permanent från din enhet.",
+			"active_error": "Byt till ett annat förråd innan du raderar det här"
+		},
+		"choose": {
+			"title": "Välj ett förråd",
+			"message": "Välj en mapp på din enhet där dina anteckningar ska sparas.",
+			"button": "Välj mapp"
+		},
+		"pro_required": "Tillgängligt med Pro",
+		"already_added": "Det här förrådet har redan lagts till",
+		"create_note": "Skapa anteckning här",
+		"add_subfolder": "Lägg till undermapp",
+		"edit_folder": "Redigera mapp",
+		"no_folders": "Inga undermappar än",
+		"add_failed": "Det gick inte att lägga till förrådet"
+	},
 	"title": {
 		"notes": "Anteckningar",
 		"tags": "Taggar",
+		"repositories": "Förråd",
+		"templates": "Mallar",
 		"settings": "Inställningar",
 		"about": "Om appen",
-		"version_history": "Versionshistorik"
+		"import": "Importera anteckning",
+		"version_history": "Versionshistorik",
+		"backlinks": "Bakåtlänkar",
+		"outline": "Disposition",
+		"outgoing_links": "Utgående länkar",
+		"unlinked_mentions": "Olänkade omnämnanden"
 	},
 	"date": {
 		"updated": "Uppdaterad:"
 	},
 	"settings": {
-		"language": "Språk",
-		"theme": "Färgtema",
-		"github": "GitHub datakälla",
-		"features": "Anmäl problem, bidra eller önska nya funktioner.",
-		"contribute": "Bidra till översättning",
-		"translate": "Hjälp oss översätta appen till ditt språk.",
-		"updates": "Mjukvaruuppdatering",
-		"version": "Version"
+		"general": {
+			"title": "Allmänt",
+			"language": "Språk",
+			"theme": "Färgtema",
+			"themes": "Tema",
+			"accent": "Accentfärg"
+		},
+		"pro": "Uppgradera till Pro",
+		"about": {
+			"github": "GitHub datakälla",
+			"features": "Anmäl problem, bidra eller önska nya funktioner.",
+			"contribute": "Bidra till översättning",
+			"translate": "Hjälp oss översätta appen till ditt språk.",
+			"updates": "Mjukvaruuppdatering",
+			"version": "Version"
+		},
+		"notes": {
+			"title": "Anteckningar",
+			"startup": {
+				"title": "Öppna vid start",
+				"last": "Senast öppnade anteckning",
+				"new": "Ny anteckning",
+				"home": "Hem",
+				"daily": "Dagsanteckning"
+			},
+			"delete": {
+				"title": "Vid radering",
+				"vault-trash": "Flytta till mappen .trash",
+				"permanent": "Radera permanent"
+			}
+		},
+		"editor": {
+			"title": "Redigerare",
+			"font_size": {
+				"title": "Teckenstorlek",
+				"small": "Liten",
+				"default": "Standard",
+				"large": "Stor",
+				"extra_large": "Extra stor"
+			},
+			"line_width": {
+				"title": "Radbredd",
+				"full": "Full bredd",
+				"wide": "Bred",
+				"narrow": "Smal"
+			},
+			"tab_size": {
+				"title": "Tabbstorlek"
+			},
+			"line_numbers": {
+				"title": "Radnummer (kodläge)",
+				"on": "På",
+				"off": "Av"
+			},
+			"spellcheck": {
+				"title": "Stavningskontroll och autokorrigering",
+				"on": "På",
+				"off": "Av"
+			},
+			"inline_title": {
+				"title": "Inbäddad titel",
+				"on": "På",
+				"off": "Av"
+			}
+		},
+		"daily_note": {
+			"title": "Dagsanteckning",
+			"folder": {
+				"title": "Plats för dagsanteckning",
+				"root": "Rotmapp"
+			},
+			"template": {
+				"title": "Mall för dagsanteckning",
+				"none": "Ingen"
+			}
+		},
+		"attachments": {
+			"title": "Bilagor",
+			"location": {
+				"title": "Var nya bilagor ska sparas",
+				"vault": "Förrådets rot",
+				"same": "Bredvid varje anteckning",
+				"subfolder": "Undermapp bredvid varje anteckning",
+				"folder": "En delad mapp"
+			},
+			"folder": "Namn på bilagemappen"
+		},
+		"links": {
+			"title": "Länkar",
+			"wikilinks": {
+				"title": "Använd [[Wikilänkar]]",
+				"description": "Stäng av för att skapa Markdown-länkar i stället när du länkar anteckningar."
+			},
+			"auto_update": {
+				"title": "Uppdatera interna länkar automatiskt",
+				"description": "Stäng av för att bli tillfrågad innan länkar uppdateras efter att en anteckning döpts om."
+			}
+		}
+	},
+	"pro": {
+		"get": "Skaffa Pro-versionen",
+		"pro": "Pro-version",
+		"features": "Lås upp alla funktioner och stöd utvecklingen av appen.",
+		"success": "Tack för ditt köp!",
+		"restore": "Återställ köp",
+		"purchased": "Du har redan köpt Pro-versionen.",
+		"messages": {
+			"success": "Köpet lyckades",
+			"available": "Den här artikeln är inte tillgänglig för köp",
+			"services": "Google Play-tjänster är inte tillgängliga",
+			"support": "Kontakta supporten",
+			"no_purchased": "Inget tidigare köp hittades"
+		}
 	},
 	"theme": {
 		"light": "Ljust",
@@ -26,26 +210,174 @@
 		"system": "System",
 		"choose": "Välj färgtema för appen."
 	},
+	"accent": {
+		"red": "Röd",
+		"yellow": "Gul",
+		"blue": "Blå"
+	},
 	"button": {
 		"edit": "Redigera",
+		"code": "Kod",
 		"back": "Bakåt",
 		"delete": "Radera",
 		"update": "Uppdatera",
+		"pin": "Fäst",
+		"unpin": "Lossa",
+		"show_backlinks": "Visa bakåtlänkar",
+		"hide_backlinks": "Dölj bakåtlänkar",
+		"link_mention": "Länka",
+		"export": "Exportera",
+		"share": "Dela",
+		"export_share": "Exportera / Dela",
+		"duplicate": "Duplicera",
+		"save_as_template": "Spara som mall",
+		"insert": "Infoga",
+		"cancel": "Avbryt",
+		"more": "Mer",
+		"forget": "Glöm",
+		"create": "Skapa",
+		"close": "Stäng",
+		"preview": "Läs",
 		"close_all": "Stäng",
+		"find": "Sök",
+		"replace": "Ersätt",
+		"replace_all": "Ersätt alla",
+		"previous": "Föregående träff",
+		"next": "Nästa träff",
 		"undo": "Ångra",
 		"redo": "Gör om",
-		"restore": "Återställ"
+		"try_again": "Försök igen",
+		"restore": "Återställ",
+		"dont_update": "Uppdatera inte",
+		"update_once": "Uppdatera en gång",
+		"update_always": "Uppdatera alltid"
+	},
+	"count": {
+		"notes_one": "{{count}} anteckning",
+		"notes_other": "{{count}} anteckningar",
+		"folders_one": "{{count}} mapp",
+		"folders_other": "{{count}} mappar",
+		"words_one": "{{count}} ord",
+		"words_other": "{{count}} ord",
+		"characters_one": "{{count}} tecken",
+		"characters_other": "{{count}} tecken"
+	},
+	"markdown": {
+		"link": {
+			"title": "Titel",
+			"url": "URL"
+		},
+		"image": {
+			"alt": "Alternativ text",
+			"alt_placeholder": "Bildbeskrivning",
+			"url": "URL",
+			"camera": "Ta foto",
+			"gallery": "Välj från galleriet",
+			"pick_failed": "Det gick inte att öppna bildväljaren.",
+			"save_failed": "Det gick inte att spara bilden i din bilagemapp."
+		},
+		"camera_permission": {
+			"title": "Kamerabehörighet",
+			"message": "Aktivera den för att ta foton från appen.",
+			"denied": "Aktivera kameraåtkomst i systeminställningarna för att ta foton."
+		}
+	},
+	"table_menu": {
+		"group": {
+			"insert": "Infoga",
+			"move": "Flytta",
+			"align": "Justera"
+		},
+		"row": {
+			"insert_before": "Ovanför",
+			"insert_after": "Under",
+			"move_before": "Upp",
+			"move_after": "Ned",
+			"duplicate": "Duplicera",
+			"delete": "Radera"
+		},
+		"col": {
+			"insert_before": "Vänster",
+			"insert_after": "Höger",
+			"move_before": "Åt vänster",
+			"move_after": "Åt höger",
+			"align_left": "Vänster",
+			"align_center": "Centrerad",
+			"align_right": "Höger",
+			"duplicate": "Duplicera",
+			"delete": "Radera"
+		}
+	},
+	"markdown_group": {
+		"heading": "Rubriker",
+		"list": "Listor",
+		"insert": "Infoga"
+	},
+	"markdown_action": {
+		"h0": "Ingen rubrik",
+		"bold": "Fetstil",
+		"italic": "Kursiv",
+		"strike": "Genomstruken",
+		"h1": "Rubrik 1",
+		"h2": "Rubrik 2",
+		"h3": "Rubrik 3",
+		"h4": "Rubrik 4",
+		"h5": "Rubrik 5",
+		"h6": "Rubrik 6",
+		"quote": "Citat",
+		"code": "Kod",
+		"hr": "Horisontell linje",
+		"image": "Infoga bild",
+		"link": "Infoga länk",
+		"wiki-link": "Infoga anteckningslänk",
+		"table": "Infoga tabell",
+		"list-bullet": "Punktlista",
+		"list-ordered": "Numrerad lista",
+		"list-checklist": "Checklista",
+		"outdent": "Minska indrag",
+		"indent": "Öka indrag",
+		"fold": "Fäll ihop avsnitt",
+		"insert-date": "Infoga datum",
+		"insert-time": "Infoga tid",
+		"insert-title": "Infoga titel"
 	},
 	"message": {
 		"notes": {
 			"empty": "Du har inte skapat någon anteckning än",
-			"no_recent": "Inga senaste eller fästa anteckningar"
+			"exported": "Filen exporterades",
+			"no_recent": "Inga senaste eller fästa anteckningar",
+			"export_failed": "Det gick inte att exportera filen",
+			"share_failed": "Det gick inte att dela filen"
+		},
+		"files": {
+			"open_failed": "Det gick inte att öppna filen"
+		},
+		"outline": {
+			"empty": "Den här anteckningen har inga rubriker"
+		},
+		"outgoing_links": {
+			"empty": "Den här anteckningen har inga länkar till andra anteckningar"
 		},
 		"tags": {
 			"empty": "Du har inte skapat några taggar än"
 		},
 		"version_history": {
-			"empty": "Inga versioner sparade än"
+			"empty": "Inga versioner sparade än",
+			"restore": {
+				"title": "Återställ version",
+				"message": "Det nuvarande innehållet ersätts med den här versionen. Osparade ändringar går förlorade."
+			}
+		},
+		"wiki_links": {
+			"rename": {
+				"title": "Uppdatera länkar",
+				"message_one": "Vill du uppdatera den interna länken som pekar på den här anteckningen?",
+				"message_other": "Vill du uppdatera de {{count}} interna länkarna som pekar på den här anteckningen?"
+			},
+			"missing": {
+				"title": "Anteckningen hittades inte",
+				"message": "Det finns ingen anteckning med titeln \"{{title}}\". Vill du skapa den?"
+			}
 		}
 	},
 	"placeholder": {
@@ -53,6 +385,47 @@
 		"note": "Skriv här..."
 	},
 	"drawer": {
-		"tags": "Taggar"
+		"repositories": "Förråd",
+		"templates": "Mallar",
+		"tags": "Taggar",
+		"search": "Sök anteckningar",
+		"collapse_all": "Fäll ihop alla",
+		"daily_note": "Dagsanteckning",
+		"expand_all": "Fäll ut alla",
+		"open": "Öppna menyn",
+		"notes": "Anteckningar",
+		"files": "Filer",
+		"files_empty": "Inga bilagor i det här förrådet än",
+		"change_view": "Byt vy",
+		"sort": {
+			"title": "Sortera anteckningar",
+			"name_asc": "Namn (A - Ö)",
+			"name_desc": "Namn (Ö - A)",
+			"count_desc": "Användning (hög - låg)",
+			"count_asc": "Användning (låg - hög)",
+			"modified_desc": "Ändrad (ny - gammal)",
+			"modified_asc": "Ändrad (gammal - ny)",
+			"created_desc": "Skapad (ny - gammal)",
+			"created_asc": "Skapad (gammal - ny)"
+		}
+	},
+	"search": {
+		"recent": "Senaste",
+		"saved": "Sparade",
+		"pinned": "Fästa",
+		"has_image": "Bilder",
+		"in_content": "Innehåll",
+		"save": "Spara",
+		"unsave": "Ta bort"
+	},
+	"error_boundary": {
+		"title": "Något gick fel",
+		"message": "Ett oväntat problem uppstod. Försök igen."
+	},
+	"export": {
+		"title": "Exportera eller dela som",
+		"markdown": "Markdown",
+		"html": "HTML",
+		"pdf": "PDF"
 	}
 }

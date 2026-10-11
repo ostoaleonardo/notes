@@ -1,24 +1,208 @@
 {
 	"language": "Türkçe",
+	"notes": {
+		"untitled": "Başlıksız",
+		"create": "Not oluştur",
+		"intro": {
+			"title": "Açık not yok",
+			"subtitle": "Menüden bir not seç ya da deponun en üstünden yeni bir not başlat."
+		},
+		"copy_suffix": "(kopya)",
+		"go_home": "Ana sayfa",
+		"delete": {
+			"title": "Notu sil",
+			"failed": "Bu not silinemedi",
+			"message": {
+				"vault-trash": "Not, deponun gizli .trash klasörüne taşınacak. Uygulamada artık görünmeyecek, ancak bir dosya yöneticisiyle yine de kurtarabilirsin.",
+				"permanent": "Bu not sonsuza dek silinecek ve geri getirilemeyecek."
+			}
+		},
+		"save_failed": "Bu not kaydedilemedi",
+		"title_duplicated": "Bu adda bir not zaten var",
+		"title_breaks_links": "# ^ [ ] karakterleri, bu nota giden bağlantıların Obsidian'da çalışmasını engeller",
+		"migration_notice": "Taşıma sorunlarla tamamlandı: {{renamed}} not yeniden adlandırıldı ve {{images}} görsel kurtarılamadı."
+	},
+	"tags": {
+		"invalid_properties": {
+			"title": "Geçersiz özellikler",
+			"description": "Özellikler bloğu ayrıştırılamadı."
+		}
+	},
+	"properties": {
+		"add": "Özellik ekle",
+		"remove": "Özelliği kaldır",
+		"name_placeholder": "Özellik adı",
+		"value_placeholder": "Değer yok",
+		"type": {
+			"text": "Metin",
+			"number": "Sayı",
+			"list": "Liste",
+			"checkbox": "Onay kutusu",
+			"date": "Tarih",
+			"datetime": "Tarih ve saat"
+		}
+	},
+	"repositories": {
+		"open": "Aç",
+		"rename": {
+			"title": "Depoyu yeniden adlandır",
+			"failed": "Bu klasör yeniden adlandırılamadı"
+		},
+		"forget": {
+			"title": "Depoyu unut",
+			"message": "Bu işlem, cihazından hiçbir şey silmeden depoyu listeden kaldırır."
+		},
+		"delete": {
+			"title": "Depoyu sil",
+			"message": "Bu işlem, bu depoyu, alt klasörlerini ve içindeki tüm notları cihazından kalıcı olarak siler.",
+			"folder_title": "Klasörü sil",
+			"folder_message": "Bu işlem, bu klasörü, alt klasörlerini ve içindeki tüm notları cihazından kalıcı olarak siler.",
+			"active_error": "Bu depoyu silmeden önce başka bir depoya geç"
+		},
+		"choose": {
+			"title": "Bir depo seç",
+			"message": "Notlarının kaydedileceği bir klasörü cihazından seç.",
+			"button": "Klasör seç"
+		},
+		"pro_required": "Pro ile kullanılabilir",
+		"already_added": "Bu depo zaten eklenmiş",
+		"create_note": "Burada not oluştur",
+		"add_subfolder": "Alt klasör ekle",
+		"edit_folder": "Klasörü düzenle",
+		"no_folders": "Henüz alt klasör yok",
+		"add_failed": "Bu depo eklenemedi"
+	},
 	"title": {
 		"notes": "Notlar",
 		"tags": "Etiketler",
+		"repositories": "Depolar",
+		"templates": "Şablonlar",
 		"settings": "Ayarlar",
 		"about": "Uygulama hakkında",
-		"version_history": "Sürüm geçmişi"
+		"import": "Not içe aktar",
+		"version_history": "Sürüm geçmişi",
+		"backlinks": "Geri bağlantılar",
+		"outline": "Ana hatlar",
+		"outgoing_links": "Giden bağlantılar",
+		"unlinked_mentions": "Bağlantısız anmalar"
 	},
 	"date": {
 		"updated": "Güncellendi:"
 	},
 	"settings": {
-		"language": "Dil",
-		"theme": "Renk teması",
-		"github": "GitHub deposu",
-		"features": "Sorunları bildirin, katkıda bulunun veya yeni özellikler talep edin.",
-		"contribute": "Dil çevirisine katkıda bulunun",
-		"translate": "Uygulamayı kendi dilinize çevirmemize yardımcı olun.",
-		"updates": "Yazılım güncellemesi",
-		"version": "Versiyon"
+		"general": {
+			"title": "Genel",
+			"language": "Dil",
+			"theme": "Renk teması",
+			"themes": "Tema",
+			"accent": "Vurgu rengi"
+		},
+		"pro": "Pro'ya yükselt",
+		"about": {
+			"github": "GitHub deposu",
+			"features": "Sorunları bildirin, katkıda bulunun veya yeni özellikler talep edin.",
+			"contribute": "Dil çevirisine katkıda bulunun",
+			"translate": "Uygulamayı kendi dilinize çevirmemize yardımcı olun.",
+			"updates": "Yazılım güncellemesi",
+			"version": "Versiyon"
+		},
+		"notes": {
+			"title": "Notlar",
+			"startup": {
+				"title": "Açılışta aç",
+				"last": "Son açılan not",
+				"new": "Yeni not",
+				"home": "Ana sayfa",
+				"daily": "Günlük not"
+			},
+			"delete": {
+				"title": "Silerken",
+				"vault-trash": ".trash klasörüne taşı",
+				"permanent": "Kalıcı olarak sil"
+			}
+		},
+		"editor": {
+			"title": "Düzenleyici",
+			"font_size": {
+				"title": "Yazı boyutu",
+				"small": "Küçük",
+				"default": "Varsayılan",
+				"large": "Büyük",
+				"extra_large": "Çok büyük"
+			},
+			"line_width": {
+				"title": "Satır genişliği",
+				"full": "Tam genişlik",
+				"wide": "Geniş",
+				"narrow": "Dar"
+			},
+			"tab_size": {
+				"title": "Sekme boyutu"
+			},
+			"line_numbers": {
+				"title": "Satır numaraları (Kod modu)",
+				"on": "Açık",
+				"off": "Kapalı"
+			},
+			"spellcheck": {
+				"title": "Yazım denetimi ve otomatik düzeltme",
+				"on": "Açık",
+				"off": "Kapalı"
+			},
+			"inline_title": {
+				"title": "Satır içi başlık",
+				"on": "Açık",
+				"off": "Kapalı"
+			}
+		},
+		"daily_note": {
+			"title": "Günlük not",
+			"folder": {
+				"title": "Günlük not konumu",
+				"root": "Kök klasör"
+			},
+			"template": {
+				"title": "Günlük not şablonu",
+				"none": "Yok"
+			}
+		},
+		"attachments": {
+			"title": "Ekler",
+			"location": {
+				"title": "Yeni ekler nereye kaydedilsin",
+				"vault": "Depo kökü",
+				"same": "Her notun yanına",
+				"subfolder": "Her notun yanında alt klasör",
+				"folder": "Ortak tek klasör"
+			},
+			"folder": "Ek klasörü adı"
+		},
+		"links": {
+			"title": "Bağlantılar",
+			"wikilinks": {
+				"title": "[[Wikilinks]] kullan",
+				"description": "Notları bağlarken bunun yerine Markdown bağlantıları oluşturmak için kapat."
+			},
+			"auto_update": {
+				"title": "İç bağlantıları otomatik güncelle",
+				"description": "Bir notu yeniden adlandırdıktan sonra bağlantıları güncellemeden önce sorulmasını istiyorsan kapat."
+			}
+		}
+	},
+	"pro": {
+		"get": "Pro sürümünü edin",
+		"pro": "Pro sürümü",
+		"features": "Tüm özelliklerin kilidini aç ve uygulamanın geliştirilmesini destekle.",
+		"success": "Satın alma için teşekkürler!",
+		"restore": "Satın almayı geri yükle",
+		"purchased": "Pro sürümünü zaten satın aldın.",
+		"messages": {
+			"success": "Satın alma başarılı",
+			"available": "Bu öğe satın alınamıyor",
+			"services": "Google Play hizmetleri kullanılamıyor",
+			"support": "Lütfen destek ile iletişime geç",
+			"no_purchased": "Önceki bir satın alma bulunamadı"
+		}
 	},
 	"theme": {
 		"light": "Açık",
@@ -26,26 +210,174 @@
 		"system": "Sistem",
 		"choose": "Uygulama için bir renk teması seçin."
 	},
+	"accent": {
+		"red": "Kırmızı",
+		"yellow": "Sarı",
+		"blue": "Mavi"
+	},
 	"button": {
 		"edit": "Düzenle",
+		"code": "Kod",
 		"back": "Geri",
 		"delete": "Sil",
 		"update": "Güncelle",
+		"pin": "Sabitle",
+		"unpin": "Sabitlemeyi kaldır",
+		"show_backlinks": "Geri bağlantıları göster",
+		"hide_backlinks": "Geri bağlantıları gizle",
+		"link_mention": "Bağla",
+		"export": "Dışa aktar",
+		"share": "Paylaş",
+		"export_share": "Dışa aktar / Paylaş",
+		"duplicate": "Çoğalt",
+		"save_as_template": "Şablon olarak kaydet",
+		"insert": "Ekle",
+		"cancel": "İptal",
+		"more": "Daha fazla",
+		"forget": "Unut",
+		"create": "Oluştur",
+		"close": "Kapat",
+		"preview": "Oku",
 		"close_all": "Kapat",
+		"find": "Bul",
+		"replace": "Değiştir",
+		"replace_all": "Tümünü değiştir",
+		"previous": "Önceki eşleşme",
+		"next": "Sonraki eşleşme",
 		"undo": "Geri al",
 		"redo": "Yinele",
-		"restore": "Geri yükle"
+		"try_again": "Tekrar dene",
+		"restore": "Geri yükle",
+		"dont_update": "Güncelleme",
+		"update_once": "Bir kez güncelle",
+		"update_always": "Her zaman güncelle"
+	},
+	"count": {
+		"notes_one": "{{count}} not",
+		"notes_other": "{{count}} not",
+		"folders_one": "{{count}} klasör",
+		"folders_other": "{{count}} klasör",
+		"words_one": "{{count}} kelime",
+		"words_other": "{{count}} kelime",
+		"characters_one": "{{count}} karakter",
+		"characters_other": "{{count}} karakter"
+	},
+	"markdown": {
+		"link": {
+			"title": "Başlık",
+			"url": "URL"
+		},
+		"image": {
+			"alt": "Alternatif metin",
+			"alt_placeholder": "Görsel açıklaması",
+			"url": "URL",
+			"camera": "Fotoğraf çek",
+			"gallery": "Galeriden seç",
+			"pick_failed": "Görsel seçici açılamadı.",
+			"save_failed": "Görsel ekler klasörüne kaydedilemedi."
+		},
+		"camera_permission": {
+			"title": "Kamera izni",
+			"message": "Uygulamadan fotoğraf çekebilmek için aç.",
+			"denied": "Fotoğraf çekmek için sistem ayarlarında kamera erişimini aç."
+		}
+	},
+	"table_menu": {
+		"group": {
+			"insert": "Ekle",
+			"move": "Taşı",
+			"align": "Hizala"
+		},
+		"row": {
+			"insert_before": "Üstüne",
+			"insert_after": "Altına",
+			"move_before": "Yukarı",
+			"move_after": "Aşağı",
+			"duplicate": "Çoğalt",
+			"delete": "Sil"
+		},
+		"col": {
+			"insert_before": "Sola",
+			"insert_after": "Sağa",
+			"move_before": "Sola",
+			"move_after": "Sağa",
+			"align_left": "Sola",
+			"align_center": "Ortaya",
+			"align_right": "Sağa",
+			"duplicate": "Çoğalt",
+			"delete": "Sil"
+		}
+	},
+	"markdown_group": {
+		"heading": "Başlıklar",
+		"list": "Listeler",
+		"insert": "Ekle"
+	},
+	"markdown_action": {
+		"h0": "Başlık yok",
+		"bold": "Kalın",
+		"italic": "İtalik",
+		"strike": "Üstü çizili",
+		"h1": "Başlık 1",
+		"h2": "Başlık 2",
+		"h3": "Başlık 3",
+		"h4": "Başlık 4",
+		"h5": "Başlık 5",
+		"h6": "Başlık 6",
+		"quote": "Alıntı",
+		"code": "Kod",
+		"hr": "Yatay çizgi",
+		"image": "Görsel ekle",
+		"link": "Bağlantı ekle",
+		"wiki-link": "Not bağlantısı ekle",
+		"table": "Tablo ekle",
+		"list-bullet": "Madde işaretli liste",
+		"list-ordered": "Numaralı liste",
+		"list-checklist": "Kontrol listesi",
+		"outdent": "Girintiyi azalt",
+		"indent": "Girintiyi artır",
+		"fold": "Bölümü daralt",
+		"insert-date": "Tarih ekle",
+		"insert-time": "Saat ekle",
+		"insert-title": "Başlık ekle"
 	},
 	"message": {
 		"notes": {
 			"empty": "Henüz hiç notunuz yok",
-			"no_recent": "Son kullanılan veya sabitlenmiş not yok"
+			"exported": "Dosya başarıyla dışa aktarıldı",
+			"no_recent": "Son kullanılan veya sabitlenmiş not yok",
+			"export_failed": "Dosya dışa aktarılamadı",
+			"share_failed": "Dosya paylaşılamadı"
+		},
+		"files": {
+			"open_failed": "Dosya açılamadı"
+		},
+		"outline": {
+			"empty": "Bu notta başlık yok"
+		},
+		"outgoing_links": {
+			"empty": "Bu notta diğer notlara bağlantı yok"
 		},
 		"tags": {
 			"empty": "Henüz herhangi bir etiketiniz yok"
 		},
 		"version_history": {
-			"empty": "Henüz kaydedilmiş sürüm yok"
+			"empty": "Henüz kaydedilmiş sürüm yok",
+			"restore": {
+				"title": "Sürümü geri yükle",
+				"message": "Bu işlem mevcut içeriği bu sürümle değiştirecek. Kaydedilmemiş değişiklikler kaybolacak."
+			}
+		},
+		"wiki_links": {
+			"rename": {
+				"title": "Bağlantıları güncelle",
+				"message_one": "Bu nota işaret eden iç bağlantıyı güncellemek istiyor musun?",
+				"message_other": "Bu nota işaret eden {{count}} iç bağlantıyı güncellemek istiyor musun?"
+			},
+			"missing": {
+				"title": "Not bulunamadı",
+				"message": "\"{{title}}\" başlıklı bir not yok. Oluşturmak istiyor musun?"
+			}
 		}
 	},
 	"placeholder": {
@@ -53,6 +385,47 @@
 		"note": "Notunuzu buraya yazın..."
 	},
 	"drawer": {
-		"tags": "Etiketler"
+		"repositories": "Depolar",
+		"templates": "Şablonlar",
+		"tags": "Etiketler",
+		"search": "Notlarda ara",
+		"collapse_all": "Tümünü daralt",
+		"daily_note": "Günlük not",
+		"expand_all": "Tümünü genişlet",
+		"open": "Menüyü aç",
+		"notes": "Notlar",
+		"files": "Dosyalar",
+		"files_empty": "Bu depoda henüz ek yok",
+		"change_view": "Görünümü değiştir",
+		"sort": {
+			"title": "Notları sırala",
+			"name_asc": "Ad (A - Z)",
+			"name_desc": "Ad (Z - A)",
+			"count_desc": "Kullanım (çok - az)",
+			"count_asc": "Kullanım (az - çok)",
+			"modified_desc": "Değiştirilme (yeni - eski)",
+			"modified_asc": "Değiştirilme (eski - yeni)",
+			"created_desc": "Oluşturulma (yeni - eski)",
+			"created_asc": "Oluşturulma (eski - yeni)"
+		}
+	},
+	"search": {
+		"recent": "Son",
+		"saved": "Kayıtlı",
+		"pinned": "Sabitlenmiş",
+		"has_image": "Görseller",
+		"in_content": "İçerik",
+		"save": "Kaydet",
+		"unsave": "Kaldır"
+	},
+	"error_boundary": {
+		"title": "Bir şeyler ters gitti",
+		"message": "Beklenmedik bir sorunla karşılaştık. Lütfen tekrar dene."
+	},
+	"export": {
+		"title": "Şu biçimde dışa aktar veya paylaş",
+		"markdown": "Markdown",
+		"html": "HTML",
+		"pdf": "PDF"
 	}
 }

@@ -3,55 +3,73 @@
 	"notes": {
 		"untitled": "Sin título",
 		"create": "Crear una nota",
-		"intro_title": "No hay notas abiertas",
-		"intro_subtitle": "Elige una nota desde el menú lateral, o crea una nueva en la raíz de tu repositorio.",
+		"intro": {
+			"title": "No hay notas abiertas",
+			"subtitle": "Elige una nota desde el menú lateral, o crea una nueva en la raíz de tu repositorio."
+		},
 		"copy_suffix": "(copia)",
 		"go_home": "Inicio",
-		"delete_title": "Borrar nota",
+		"delete": {
+			"title": "Borrar nota",
+			"failed": "No se pudo borrar esta nota",
+			"message": {
+				"vault-trash": "La nota se moverá a la carpeta oculta .trash de tu repositorio. Dejará de aparecer en la app, pero podrás recuperarla con un administrador de archivos.",
+				"permanent": "Esta nota se eliminará para siempre y no se podrá recuperar."
+			}
+		},
 		"save_failed": "No se pudo guardar esta nota",
-		"delete_failed": "No se pudo borrar esta nota",
 		"title_duplicated": "Ya existe una nota con este nombre",
 		"title_breaks_links": "Los caracteres # ^ [ ] hacen que los enlaces a esta nota no funcionen en Obsidian",
-		"delete_message_vault-trash": "La nota se moverá a la carpeta oculta .trash de tu repositorio. Dejará de aparecer en la app, pero podrás recuperarla con un administrador de archivos.",
-		"delete_message_permanent": "Esta nota se eliminará para siempre y no se podrá recuperar.",
 		"migration_notice": "La migración terminó con avisos: {{renamed}} notas se renombraron y {{images}} imágenes no se pudieron recuperar."
 	},
 	"tags": {
-		"invalid_properties_title": "Propiedades inválidas",
-		"invalid_properties_description": "El bloque de propiedades no se pudo interpretar."
+		"invalid_properties": {
+			"title": "Propiedades inválidas",
+			"description": "El bloque de propiedades no se pudo interpretar."
+		}
 	},
 	"properties": {
 		"add": "Añadir propiedad",
 		"remove": "Quitar propiedad",
 		"name_placeholder": "Nombre de la propiedad",
 		"value_placeholder": "Sin valor",
-		"type_text": "Texto",
-		"type_number": "Número",
-		"type_list": "Lista",
-		"type_checkbox": "Casilla",
-		"type_date": "Fecha",
-		"type_datetime": "Fecha y hora"
+		"type": {
+			"text": "Texto",
+			"number": "Número",
+			"list": "Lista",
+			"checkbox": "Casilla",
+			"date": "Fecha",
+			"datetime": "Fecha y hora"
+		}
 	},
 	"repositories": {
 		"open": "Abrir",
-		"rename": "Renombrar repositorio",
-		"forget": "Olvidar repositorio",
-		"forget_message": "Esto quitará el repositorio de la lista sin eliminar nada de tu dispositivo.",
-		"delete": "Eliminar repositorio",
-		"delete_message": "Esto eliminará permanentemente este repositorio, sus subcarpetas y todas sus notas del dispositivo.",
-		"choose_title": "Elige un repositorio",
-		"choose_message": "Selecciona una carpeta en tu dispositivo donde se guardarán tus notas.",
-		"choose_button": "Elegir carpeta",
+		"rename": {
+			"title": "Renombrar repositorio",
+			"failed": "No se pudo renombrar esta carpeta"
+		},
+		"forget": {
+			"title": "Olvidar repositorio",
+			"message": "Esto quitará el repositorio de la lista sin eliminar nada de tu dispositivo."
+		},
+		"delete": {
+			"title": "Eliminar repositorio",
+			"message": "Esto eliminará permanentemente este repositorio, sus subcarpetas y todas sus notas del dispositivo.",
+			"folder_title": "Eliminar carpeta",
+			"folder_message": "Esto eliminará permanentemente esta carpeta, sus subcarpetas y todas sus notas del dispositivo.",
+			"active_error": "Cambia a otro repositorio antes de eliminar este"
+		},
+		"choose": {
+			"title": "Elige un repositorio",
+			"message": "Selecciona una carpeta en tu dispositivo donde se guardarán tus notas.",
+			"button": "Elegir carpeta"
+		},
 		"pro_required": "Disponible con Pro",
 		"already_added": "Este repositorio ya fue agregado",
 		"create_note": "Crear nota aquí",
 		"add_subfolder": "Agregar subcarpeta",
 		"edit_folder": "Editar carpeta",
 		"no_folders": "Todavía no hay subcarpetas",
-		"delete_folder": "Eliminar carpeta",
-		"delete_folder_message": "Esto eliminará permanentemente esta carpeta, sus subcarpetas y todas sus notas del dispositivo.",
-		"cannot_delete_active": "Cambia a otro repositorio antes de eliminar este",
-		"rename_failed": "No se pudo renombrar esta carpeta",
 		"add_failed": "No se pudo agregar este repositorio"
 	},
 	"title": {
@@ -72,67 +90,104 @@
 		"updated": "Actualizado:"
 	},
 	"settings": {
-		"general": "General",
-		"language": "Idioma",
-		"theme": "Tema de color",
-		"themes": "Tema",
-		"accent": "Color de acento",
-		"github": "Repositorio de GitHub",
-		"features": "Reporta problemas, contribuye o solicita nuevas funciones.",
-		"contribute": "Contribuir a la traducción",
-		"translate": "Ayúdanos a traducir la aplicación a tu idioma.",
-		"updates": "Actualización de software",
-		"version": "Versión",
+		"general": {
+			"title": "General",
+			"language": "Idioma",
+			"theme": "Tema de color",
+			"themes": "Tema",
+			"accent": "Color de acento"
+		},
+		"about": {
+			"github": "Repositorio de GitHub",
+			"features": "Reporta problemas, contribuye o solicita nuevas funciones.",
+			"contribute": "Contribuir a la traducción",
+			"translate": "Ayúdanos a traducir la aplicación a tu idioma.",
+			"updates": "Actualización de software",
+			"version": "Versión"
+		},
 		"pro": "Actualizar a Pro",
-		"notes": "Notas",
-		"startup_behavior": "Abrir al iniciar",
-		"startup_behavior_last": "Última nota abierta",
-		"startup_behavior_new": "Nueva nota",
-		"startup_behavior_home": "Inicio",
-		"startup_behavior_daily": "Nota diaria",
-		"editor_font_size": "Tamaño de fuente",
-		"editor_font_size_small": "Pequeño",
-		"editor_font_size_default": "Predeterminado",
-		"editor_font_size_large": "Grande",
-		"editor_font_size_extra_large": "Muy grande",
-		"editor_line_width": "Ancho de línea",
-		"editor_line_width_full": "Ancho completo",
-		"editor_line_width_wide": "Ancho",
-		"editor_line_width_narrow": "Estrecho",
-		"editor_tab_size": "Tamaño de tabulación",
-		"editor_tab_size_2": "2",
-		"editor_tab_size_4": "4",
-		"editor_tab_size_8": "8",
-		"editor_line_numbers": "Números de línea (modo Código)",
-		"editor_line_numbers_on": "Activado",
-		"editor_line_numbers_off": "Desactivado",
-		"editor_spellcheck": "Revisión ortográfica y autocorrección",
-		"editor_spellcheck_on": "Activado",
-		"editor_spellcheck_off": "Desactivado",
-		"editor_inline_title": "Título en línea",
-		"editor_inline_title_on": "Activado",
-		"editor_inline_title_off": "Desactivado",
-		"daily_note": "Nota diaria",
-		"daily_note_folder": "Ubicación de la nota diaria",
-		"daily_note_folder_root": "Raíz del repositorio",
-		"daily_note_template": "Plantilla de la nota diaria",
-		"daily_note_template_none": "Ninguna",
-		"attachment_location": "Dónde guardar los adjuntos nuevos",
-		"attachment_location_vault": "Raíz del repositorio",
-		"attachment_location_same": "Junto a cada nota",
-		"attachment_location_subfolder": "Subcarpeta junto a cada nota",
-		"attachment_location_folder": "Una carpeta compartida",
-		"attachment_folder": "Nombre de la carpeta de adjuntos",
-		"files_links": "Enlaces",
-		"attachments": "Adjuntos",
-		"use_wikilinks": "Usar [[Wikilinks]]",
-		"use_wikilinks_description": "Desactívalo para generar enlaces de Markdown en su lugar al enlazar notas.",
-		"auto_update_links": "Actualizar enlaces internos automáticamente",
-		"auto_update_links_description": "Desactívalo para que se te pregunte antes de actualizar los enlaces al renombrar una nota.",
-		"delete_behavior": "Al eliminar",
-		"delete_behavior_vault-trash": "Mover a la carpeta .trash",
-		"delete_behavior_permanent": "Eliminar permanentemente",
-		"editor": "Editor"
+		"notes": {
+			"title": "Notas",
+			"startup": {
+				"title": "Abrir al iniciar",
+				"last": "Última nota abierta",
+				"new": "Nueva nota",
+				"home": "Inicio",
+				"daily": "Nota diaria"
+			},
+			"delete": {
+				"title": "Al eliminar",
+				"vault-trash": "Mover a la carpeta .trash",
+				"permanent": "Eliminar permanentemente"
+			}
+		},
+		"editor": {
+			"title": "Editor",
+			"font_size": {
+				"title": "Tamaño de fuente",
+				"small": "Pequeño",
+				"default": "Predeterminado",
+				"large": "Grande",
+				"extra_large": "Muy grande"
+			},
+			"line_width": {
+				"title": "Ancho de línea",
+				"full": "Ancho completo",
+				"wide": "Ancho",
+				"narrow": "Estrecho"
+			},
+			"tab_size": {
+				"title": "Tamaño de tabulación"
+			},
+			"line_numbers": {
+				"title": "Números de línea (modo Código)",
+				"on": "Activado",
+				"off": "Desactivado"
+			},
+			"spellcheck": {
+				"title": "Revisión ortográfica y autocorrección",
+				"on": "Activado",
+				"off": "Desactivado"
+			},
+			"inline_title": {
+				"title": "Título en línea",
+				"on": "Activado",
+				"off": "Desactivado"
+			}
+		},
+		"daily_note": {
+			"title": "Nota diaria",
+			"folder": {
+				"title": "Ubicación de la nota diaria",
+				"root": "Raíz del repositorio"
+			},
+			"template": {
+				"title": "Plantilla de la nota diaria",
+				"none": "Ninguna"
+			}
+		},
+		"attachments": {
+			"title": "Adjuntos",
+			"location": {
+				"title": "Dónde guardar los adjuntos nuevos",
+				"vault": "Raíz del repositorio",
+				"same": "Junto a cada nota",
+				"subfolder": "Subcarpeta junto a cada nota",
+				"folder": "Una carpeta compartida"
+			},
+			"folder": "Nombre de la carpeta de adjuntos"
+		},
+		"links": {
+			"title": "Enlaces",
+			"wikilinks": {
+				"title": "Usar [[Wikilinks]]",
+				"description": "Desactívalo para generar enlaces de Markdown en su lugar al enlazar notas."
+			},
+			"auto_update": {
+				"title": "Actualizar enlaces internos automáticamente",
+				"description": "Desactívalo para que se te pregunte antes de actualizar los enlaces al renombrar una nota."
+			}
+		}
 	},
 	"pro": {
 		"get": "Obtener versión Pro",
@@ -208,38 +263,50 @@
 		"characters_other": "{{count}} caracteres"
 	},
 	"markdown": {
-		"link_title": "Título",
-		"link_url": "URL",
-		"image_alt": "Texto alternativo",
-		"image_alt_placeholder": "Descripción de la imagen",
-		"image_url": "URL",
-		"image_camera": "Tomar foto",
-		"image_gallery": "Elegir de la galería",
-		"camera_permission_title": "Permiso de cámara",
-		"camera_permission_message": "Actívalo para tomar fotos desde la app.",
-		"camera_permission_denied": "Activa el permiso de cámara en los ajustes del sistema para tomar fotos.",
-		"image_pick_failed": "No se pudo abrir el selector de imágenes.",
-		"image_save_failed": "No se pudo guardar la imagen en la carpeta de adjuntos."
+		"link": {
+			"title": "Título",
+			"url": "URL"
+		},
+		"image": {
+			"alt": "Texto alternativo",
+			"alt_placeholder": "Descripción de la imagen",
+			"url": "URL",
+			"camera": "Tomar foto",
+			"gallery": "Elegir de la galería",
+			"pick_failed": "No se pudo abrir el selector de imágenes.",
+			"save_failed": "No se pudo guardar la imagen en la carpeta de adjuntos."
+		},
+		"camera_permission": {
+			"title": "Permiso de cámara",
+			"message": "Actívalo para tomar fotos desde la app.",
+			"denied": "Activa el permiso de cámara en los ajustes del sistema para tomar fotos."
+		}
 	},
 	"table_menu": {
-		"group_insert": "Insertar",
-		"group_move": "Mover",
-		"group_align": "Alinear",
-		"row_insert_before": "Arriba",
-		"row_insert_after": "Abajo",
-		"row_move_before": "Arriba",
-		"row_move_after": "Abajo",
-		"row_duplicate": "Duplicar",
-		"row_delete": "Eliminar",
-		"col_insert_before": "Izquierda",
-		"col_insert_after": "Derecha",
-		"col_move_before": "Izquierda",
-		"col_move_after": "Derecha",
-		"col_align_left": "Izquierda",
-		"col_align_center": "Centro",
-		"col_align_right": "Derecha",
-		"col_duplicate": "Duplicar",
-		"col_delete": "Eliminar"
+		"group": {
+			"insert": "Insertar",
+			"move": "Mover",
+			"align": "Alinear"
+		},
+		"row": {
+			"insert_before": "Arriba",
+			"insert_after": "Abajo",
+			"move_before": "Arriba",
+			"move_after": "Abajo",
+			"duplicate": "Duplicar",
+			"delete": "Eliminar"
+		},
+		"col": {
+			"insert_before": "Izquierda",
+			"insert_after": "Derecha",
+			"move_before": "Izquierda",
+			"move_after": "Derecha",
+			"align_left": "Izquierda",
+			"align_center": "Centro",
+			"align_right": "Derecha",
+			"duplicate": "Duplicar",
+			"delete": "Eliminar"
+		}
 	},
 	"markdown_group": {
 		"heading": "Encabezados",
@@ -296,15 +363,21 @@
 		},
 		"version_history": {
 			"empty": "Aún no hay versiones guardadas",
-			"restore_title": "Restaurar versión",
-			"restore_message": "Esto reemplazará el contenido actual por el de esta versión. Los cambios sin guardar se perderán."
+			"restore": {
+				"title": "Restaurar versión",
+				"message": "Esto reemplazará el contenido actual por el de esta versión. Los cambios sin guardar se perderán."
+			}
 		},
 		"wiki_links": {
-			"rename_title": "Actualizar enlaces",
-			"rename_message_one": "¿Quiere actualizar el enlace interno que apunta a esta nota?",
-			"rename_message_other": "¿Quiere actualizar los {{count}} enlaces internos que apuntan a esta nota?",
-			"missing_title": "Nota no encontrada",
-			"missing_message": "No existe una nota titulada \"{{title}}\". ¿Quiere crearla?"
+			"rename": {
+				"title": "Actualizar enlaces",
+				"message_one": "¿Quiere actualizar el enlace interno que apunta a esta nota?",
+				"message_other": "¿Quiere actualizar los {{count}} enlaces internos que apuntan a esta nota?"
+			},
+			"missing": {
+				"title": "Nota no encontrada",
+				"message": "No existe una nota titulada \"{{title}}\". ¿Quiere crearla?"
+			}
 		}
 	},
 	"placeholder": {
@@ -324,59 +397,79 @@
 		"files": "Archivos",
 		"files_empty": "Aún no hay archivos adjuntos en este repositorio",
 		"change_view": "Cambiar vista",
-		"sort_name_asc": "Nombre (A - Z)",
-		"sort_name_desc": "Nombre (Z - A)",
-		"sort_count_desc": "Uso (mayor - menor)",
-		"sort_count_asc": "Uso (menor - mayor)",
-		"sort_notes": "Ordenar notas",
-		"sort_modified_desc": "Editada (nueva - antigua)",
-		"sort_modified_asc": "Editada (antigua - nueva)",
-		"sort_created_desc": "Creada (nueva - antigua)",
-		"sort_created_asc": "Creada (antigua - nueva)"
+		"sort": {
+			"title": "Ordenar notas",
+			"name_asc": "Nombre (A - Z)",
+			"name_desc": "Nombre (Z - A)",
+			"count_desc": "Uso (mayor - menor)",
+			"count_asc": "Uso (menor - mayor)",
+			"modified_desc": "Editada (nueva - antigua)",
+			"modified_asc": "Editada (antigua - nueva)",
+			"created_desc": "Creada (nueva - antigua)",
+			"created_asc": "Creada (antigua - nueva)"
+		}
 	},
 	"templates": {
-		"journal": "Diario",
-		"journal_mood": "Cómo me siento hoy",
-		"journal_gratitude": "Agradecimientos",
-		"journal_highlight": "Lo más destacado de hoy",
-		"journal_reflection": "Reflexión",
-		"journal_tomorrow": "Plan de mañana",
+		"names": {
+			"journal": "Diario",
+			"checklist": "Checklist",
+			"meeting": "Reunión",
+			"ideas": "Lluvia de ideas",
+			"goals": "Objetivo"
+		},
+		"journal": {
+			"mood": "Cómo me siento hoy",
+			"gratitude": "Agradecimientos",
+			"highlight": "Lo más destacado de hoy",
+			"reflection": "Reflexión",
+			"tomorrow": "Plan de mañana"
+		},
 		"item_placeholder": "Escribe aquí...",
-		"checklist": "Checklist",
-		"checklist_urgent": "Urgente",
-		"checklist_week": "Esta semana",
-		"checklist_someday": "Algún día",
-		"meeting": "Reunión",
-		"meeting_attendees": "Asistentes",
-		"meeting_objective": "Objetivo",
-		"meeting_agenda": "Agenda",
-		"meeting_notes": "Notas",
-		"meeting_decisions": "Decisiones",
-		"meeting_next_steps": "Próximos pasos",
-		"ideas": "Lluvia de ideas",
-		"ideas_main": "Idea principal",
-		"ideas_pros": "A favor",
-		"ideas_cons": "En contra",
-		"ideas_next_steps": "Próximos pasos",
-		"goals": "Objetivo",
-		"goals_objective": "Objetivo",
-		"goals_why": "Por qué importa",
-		"goals_steps": "Pasos",
-		"goals_deadline": "Plazo",
+		"checklist": {
+			"urgent": "Urgente",
+			"week": "Esta semana",
+			"someday": "Algún día"
+		},
+		"meeting": {
+			"attendees": "Asistentes",
+			"objective": "Objetivo",
+			"agenda": "Agenda",
+			"notes": "Notas",
+			"decisions": "Decisiones",
+			"next_steps": "Próximos pasos"
+		},
+		"ideas": {
+			"main": "Idea principal",
+			"pros": "A favor",
+			"cons": "En contra",
+			"next_steps": "Próximos pasos"
+		},
+		"goals": {
+			"objective": "Objetivo",
+			"why": "Por qué importa",
+			"steps": "Pasos",
+			"deadline": "Plazo"
+		},
 		"new": "Nueva plantilla",
 		"import": "Importar plantilla",
-		"saved": "Plantilla guardada",
-		"save_failed": "No se pudo guardar la plantilla",
-		"delete_failed": "No se pudo borrar la plantilla",
-		"view_placeholders": "Ver variables disponibles",
-		"placeholders_title": "Variables disponibles",
-		"placeholder_date": "Fecha actual",
-		"placeholder_time": "Hora actual",
-		"placeholder_title": "Título de la nota",
-		"placeholder_example": "ej. {{value}}",
-		"placeholder_title_example": "Notas de la reunión",
-		"delete_title": "Borrar plantilla",
-		"delete_message": "Esto eliminará permanentemente esta plantilla del dispositivo."
+		"save": {
+			"success": "Plantilla guardada",
+			"failed": "No se pudo guardar la plantilla"
+		},
+		"delete": {
+			"title": "Borrar plantilla",
+			"failed": "No se pudo borrar la plantilla",
+			"message": "Esto eliminará permanentemente esta plantilla del dispositivo."
+		},
+		"placeholders": {
+			"title": "Título de la nota",
+			"view": "Ver variables disponibles",
+			"heading": "Variables disponibles",
+			"date": "Fecha actual",
+			"time": "Hora actual",
+			"example": "ej. {{value}}",
+			"title_example": "Notas de la reunión"
+		}
 	},
 	"search": {
 		"recent": "Recientes",
@@ -400,50 +493,80 @@
 	"welcome": {
 		"title": "Bienvenida",
 		"intro": "Esta es tu primera nota. Un repaso corto de lo nuevo, sección por sección.",
-		"style_heading": "✨ Dale estilo y estructura a tu texto",
-		"style_bullet_bold": "**Negrita**: agrega ** alrededor de la palabra para resaltarla con más fuerza.",
-		"style_bullet_italic": "*Cursiva*: agrega * alrededor de la palabra para darle un énfasis más suave.",
-		"style_bullet_strike": "~~Tachado~~: agrega ~~ alrededor de la palabra para marcarla como descartada.",
-		"style_bullet_code": "`Código`: agrega ` alrededor de la palabra para mostrarla con formato de código.",
-		"style_footer": "**¿Prefieres no escribir los símbolos?** Usa los íconos de la barra inferior.",
-		"organize_bullet_quote": "**Cita**: agrega > al inicio de la línea para destacar un fragmento importante.",
-		"organize_bullet_task": "**Lista de tareas**: agrega - [ ] al inicio de la línea para marcar pendientes.",
-		"organize_bullet_table": "**Tabla**: agrega | entre cada columna para ordenar datos en filas y columnas.",
-		"organize_quote_example": "Así se ve una cita destacada.",
-		"organize_task_example": "Marca esto cuando lo termines",
-		"organize_table_col1": "Función",
-		"organize_table_col2": "Cómo se escribe",
-		"organize_table_row1_1": "Encabezado",
-		"organize_table_row1_2": "# o ##",
-		"organize_table_row2_1": "Enlace",
-		"organize_table_row2_2": "[texto](URL)",
-		"organize_table_row3_1": "Separador",
-		"organize_table_row3_2": "---",
-		"attachments_heading": "📎 Adjunta archivos",
-		"attachments_bullet_image": "**Vista previa**: escribe `![[foto.png]]` para mostrar un archivo compatible dentro de la nota.",
-		"attachments_bullet_link": "**Otros archivos**: escribe `[[documento.pdf]]` para obtener un chip que lo abre en otra app.",
-		"attachments_footer": "Encuentra todos los archivos adjuntos en la vista **Archivos** del menú lateral.",
-		"tools_heading": "🧰 Más herramientas",
-		"tools_tags_title": "Etiquetas",
-		"tools_tags_body": "Organiza tus notas por tema y encuéntralas rápido.",
-		"tools_templates_title": "Plantillas",
-		"tools_templates_body": "Crea notas nuevas con una estructura lista para usar.",
-		"tools_history_title": "Historial de versiones",
-		"tools_history_body": "Vuelve a una versión anterior de tu nota.",
-		"tools_export_title": "Exportar",
-		"tools_export_body": "Guarda tu nota como archivo Markdown.",
-		"tools_share_title": "Compartir",
-		"tools_share_body": "Envíala directo a otra app.",
-		"tools_daily_title": "Nota diaria",
-		"tools_daily_body": "Toca el botón de calendario del menú lateral para abrir la nota de hoy. Elige su carpeta y plantilla en Ajustes.",
-		"pro_heading": "⭐ Saca más provecho con Pro",
-		"pro_intro": "La versión Pro te da:",
-		"pro_versions_title": "Historial de versiones completo",
-		"pro_versions_body": "Sin límite, para volver a cualquier punto de tu nota.",
-		"pro_subfolders_title": "Subcarpetas",
-		"pro_subfolders_body": "Todas las que necesites para organizar tus repositorios.",
-		"pro_accents_title": "Colores de acento",
-		"pro_accents_body": "Personalízalos para darle tu toque a la app.",
-		"pro_cta": "💡 Puedes probarlo cuando quieras desde Ajustes."
+		"style": {
+			"heading": "✨ Dale estilo y estructura a tu texto",
+			"bold": "**Negrita**: agrega ** alrededor de la palabra para resaltarla con más fuerza.",
+			"italic": "*Cursiva*: agrega * alrededor de la palabra para darle un énfasis más suave.",
+			"strike": "~~Tachado~~: agrega ~~ alrededor de la palabra para marcarla como descartada.",
+			"code": "`Código`: agrega ` alrededor de la palabra para mostrarla con formato de código.",
+			"footer": "**¿Prefieres no escribir los símbolos?** Usa los íconos de la barra inferior."
+		},
+		"organize": {
+			"quote": "**Cita**: agrega > al inicio de la línea para destacar un fragmento importante.",
+			"task": "**Lista de tareas**: agrega - [ ] al inicio de la línea para marcar pendientes.",
+			"table": {
+				"bullet": "**Tabla**: agrega | entre cada columna para ordenar datos en filas y columnas.",
+				"col1": "Función",
+				"col2": "Cómo se escribe",
+				"row1_1": "Encabezado",
+				"row1_2": "# o ##",
+				"row2_1": "Enlace",
+				"row2_2": "[texto](URL)",
+				"row3_1": "Separador",
+				"row3_2": "---"
+			},
+			"quote_example": "Así se ve una cita destacada.",
+			"task_example": "Marca esto cuando lo termines"
+		},
+		"attachments": {
+			"heading": "📎 Adjunta archivos",
+			"image": "**Vista previa**: escribe `![[foto.png]]` para mostrar un archivo compatible dentro de la nota.",
+			"link": "**Otros archivos**: escribe `[[documento.pdf]]` para obtener un chip que lo abre en otra app.",
+			"footer": "Encuentra todos los archivos adjuntos en la vista **Archivos** del menú lateral."
+		},
+		"tools": {
+			"heading": "🧰 Más herramientas",
+			"tags": {
+				"title": "Etiquetas",
+				"body": "Organiza tus notas por tema y encuéntralas rápido."
+			},
+			"templates": {
+				"title": "Plantillas",
+				"body": "Crea notas nuevas con una estructura lista para usar."
+			},
+			"history": {
+				"title": "Historial de versiones",
+				"body": "Vuelve a una versión anterior de tu nota."
+			},
+			"export": {
+				"title": "Exportar",
+				"body": "Guarda tu nota como archivo Markdown."
+			},
+			"share": {
+				"title": "Compartir",
+				"body": "Envíala directo a otra app."
+			},
+			"daily": {
+				"title": "Nota diaria",
+				"body": "Toca el botón de calendario del menú lateral para abrir la nota de hoy. Elige su carpeta y plantilla en Ajustes."
+			}
+		},
+		"pro": {
+			"heading": "⭐ Saca más provecho con Pro",
+			"intro": "La versión Pro te da:",
+			"versions": {
+				"title": "Historial de versiones completo",
+				"body": "Sin límite, para volver a cualquier punto de tu nota."
+			},
+			"subfolders": {
+				"title": "Subcarpetas",
+				"body": "Todas las que necesites para organizar tus repositorios."
+			},
+			"accents": {
+				"title": "Colores de acento",
+				"body": "Personalízalos para darle tu toque a la app."
+			},
+			"cta": "💡 Puedes probarlo cuando quieras desde Ajustes."
+		}
 	}
 }

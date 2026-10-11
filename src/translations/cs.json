@@ -1,24 +1,208 @@
 {
 	"language": "Čeština",
+	"notes": {
+		"untitled": "Bez názvu",
+		"create": "Vytvořit poznámku",
+		"intro": {
+			"title": "Žádná otevřená poznámka",
+			"subtitle": "Vyber poznámku z postranního menu nebo založ novou nahoře ve svém úložišti."
+		},
+		"copy_suffix": "(kopie)",
+		"go_home": "Domů",
+		"delete": {
+			"title": "Smazat poznámku",
+			"failed": "Tuto poznámku se nepodařilo smazat",
+			"message": {
+				"vault-trash": "Poznámka bude přesunuta do skryté složky .trash ve tvém úložišti. V aplikaci se již nezobrazí, ale stále ji můžeš obnovit pomocí správce souborů.",
+				"permanent": "Tato poznámka bude navždy smazána a nepůjde obnovit."
+			}
+		},
+		"save_failed": "Tuto poznámku se nepodařilo uložit",
+		"title_duplicated": "Poznámka s tímto názvem již existuje",
+		"title_breaks_links": "Znaky # ^ [ ] způsobí, že odkazy na tuto poznámku přestanou v Obsidianu fungovat",
+		"migration_notice": "Migrace skončila s problémy: přejmenováno bylo {{renamed}} poznámek a {{images}} obrázků se nepodařilo obnovit."
+	},
+	"tags": {
+		"invalid_properties": {
+			"title": "Neplatné vlastnosti",
+			"description": "Blok vlastností se nepodařilo zpracovat."
+		}
+	},
+	"properties": {
+		"add": "Přidat vlastnost",
+		"remove": "Odebrat vlastnost",
+		"name_placeholder": "Název vlastnosti",
+		"value_placeholder": "Bez hodnoty",
+		"type": {
+			"text": "Text",
+			"number": "Číslo",
+			"list": "Seznam",
+			"checkbox": "Zaškrtávací políčko",
+			"date": "Datum",
+			"datetime": "Datum a čas"
+		}
+	},
+	"repositories": {
+		"open": "Otevřít",
+		"rename": {
+			"title": "Přejmenovat úložiště",
+			"failed": "Tuto složku se nepodařilo přejmenovat"
+		},
+		"forget": {
+			"title": "Zapomenout úložiště",
+			"message": "Úložiště bude odebráno ze seznamu, aniž by se z tvého zařízení cokoli smazalo."
+		},
+		"delete": {
+			"title": "Smazat úložiště",
+			"message": "Toto úložiště, jeho podsložky a všechny jejich poznámky budou trvale smazány z tvého zařízení.",
+			"folder_title": "Smazat složku",
+			"folder_message": "Tato složka, její podsložky a všechny jejich poznámky budou trvale smazány z tvého zařízení.",
+			"active_error": "Před smazáním tohoto úložiště přepni na jiné"
+		},
+		"choose": {
+			"title": "Vyber úložiště",
+			"message": "Vyber složku v zařízení, do které se budou ukládat tvé poznámky.",
+			"button": "Vybrat složku"
+		},
+		"pro_required": "K dispozici s verzí Pro",
+		"already_added": "Toto úložiště již bylo přidáno",
+		"create_note": "Vytvořit poznámku zde",
+		"add_subfolder": "Přidat podsložku",
+		"edit_folder": "Upravit složku",
+		"no_folders": "Zatím žádné podsložky",
+		"add_failed": "Toto úložiště se nepodařilo přidat"
+	},
 	"title": {
 		"notes": "Poznámky",
 		"tags": "Štítky",
+		"repositories": "Úložiště",
+		"templates": "Šablony",
 		"settings": "Nastavení",
 		"about": "O aplikaci",
-		"version_history": "Historie verzí"
+		"import": "Importovat poznámku",
+		"version_history": "Historie verzí",
+		"backlinks": "Zpětné odkazy",
+		"outline": "Osnova",
+		"outgoing_links": "Odchozí odkazy",
+		"unlinked_mentions": "Nepropojené zmínky"
 	},
 	"date": {
 		"updated": "Upraveno:"
 	},
 	"settings": {
-		"language": "Jazyk",
-		"theme": "Barevné schéma",
-		"github": "GitHub repozitář",
-		"features": "Hlášení chyb, požadavek na nové funkce, přispění.",
-		"contribute": "Přispějte překladem",
-		"translate": "Pomozte nám přeložit aplikaci do vašeho jazyka.",
-		"updates": "Aktualiazce softwaru",
-		"version": "Verze"
+		"general": {
+			"title": "Obecné",
+			"language": "Jazyk",
+			"theme": "Barevné schéma",
+			"themes": "Motiv",
+			"accent": "Akcentní barva"
+		},
+		"pro": "Přejít na Pro",
+		"about": {
+			"github": "GitHub repozitář",
+			"features": "Hlášení chyb, požadavek na nové funkce, přispění.",
+			"contribute": "Přispějte překladem",
+			"translate": "Pomozte nám přeložit aplikaci do vašeho jazyka.",
+			"updates": "Aktualiazce softwaru",
+			"version": "Verze"
+		},
+		"notes": {
+			"title": "Poznámky",
+			"startup": {
+				"title": "Otevřít při spuštění",
+				"last": "Naposledy otevřená poznámka",
+				"new": "Nová poznámka",
+				"home": "Domů",
+				"daily": "Denní poznámka"
+			},
+			"delete": {
+				"title": "Při smazání",
+				"vault-trash": "Přesunout do složky .trash",
+				"permanent": "Smazat trvale"
+			}
+		},
+		"editor": {
+			"title": "Editor",
+			"font_size": {
+				"title": "Velikost písma",
+				"small": "Malá",
+				"default": "Výchozí",
+				"large": "Velká",
+				"extra_large": "Extra velká"
+			},
+			"line_width": {
+				"title": "Šířka řádku",
+				"full": "Plná šířka",
+				"wide": "Široká",
+				"narrow": "Úzká"
+			},
+			"tab_size": {
+				"title": "Velikost tabulátoru"
+			},
+			"line_numbers": {
+				"title": "Čísla řádků (režim Kód)",
+				"on": "Zapnuto",
+				"off": "Vypnuto"
+			},
+			"spellcheck": {
+				"title": "Kontrola pravopisu a automatické opravy",
+				"on": "Zapnuto",
+				"off": "Vypnuto"
+			},
+			"inline_title": {
+				"title": "Vložený název",
+				"on": "Zapnuto",
+				"off": "Vypnuto"
+			}
+		},
+		"daily_note": {
+			"title": "Denní poznámka",
+			"folder": {
+				"title": "Umístění denní poznámky",
+				"root": "Kořenová složka"
+			},
+			"template": {
+				"title": "Šablona denní poznámky",
+				"none": "Žádná"
+			}
+		},
+		"attachments": {
+			"title": "Přílohy",
+			"location": {
+				"title": "Kam ukládat nové přílohy",
+				"vault": "Kořen úložiště",
+				"same": "Vedle každé poznámky",
+				"subfolder": "Podsložka vedle každé poznámky",
+				"folder": "Jedna sdílená složka"
+			},
+			"folder": "Název složky příloh"
+		},
+		"links": {
+			"title": "Odkazy",
+			"wikilinks": {
+				"title": "Používat [[Wikilinks]]",
+				"description": "Vypni, pokud se mají při propojování poznámek vytvářet odkazy Markdown."
+			},
+			"auto_update": {
+				"title": "Automaticky aktualizovat interní odkazy",
+				"description": "Vypni, pokud chceš, aby se tě aplikace zeptala před aktualizací odkazů po přejmenování poznámky."
+			}
+		}
+	},
+	"pro": {
+		"get": "Získat verzi Pro",
+		"pro": "Verze Pro",
+		"features": "Odemkni všechny funkce a podpoř vývoj aplikace.",
+		"success": "Děkujeme za nákup!",
+		"restore": "Obnovit nákup",
+		"purchased": "Verzi Pro jsi již koupil(a).",
+		"messages": {
+			"success": "Nákup proběhl úspěšně",
+			"available": "Tuto položku nelze koupit",
+			"services": "Služby Google Play nejsou dostupné",
+			"support": "Obrať se prosím na podporu",
+			"no_purchased": "Nebyl nalezen žádný předchozí nákup"
+		}
 	},
 	"theme": {
 		"light": "Světlý",
@@ -26,26 +210,184 @@
 		"system": "Podle systému",
 		"choose": "Vyberte barvu aplikace."
 	},
+	"accent": {
+		"red": "Červená",
+		"yellow": "Žlutá",
+		"blue": "Modrá"
+	},
 	"button": {
 		"edit": "Upravit",
+		"code": "Kód",
 		"back": "Zpět",
 		"delete": "Smazat",
 		"update": "Aktualizovat",
+		"pin": "Připnout",
+		"unpin": "Odepnout",
+		"show_backlinks": "Zobrazit zpětné odkazy",
+		"hide_backlinks": "Skrýt zpětné odkazy",
+		"link_mention": "Propojit",
+		"export": "Exportovat",
+		"share": "Sdílet",
+		"export_share": "Exportovat / Sdílet",
+		"duplicate": "Duplikovat",
+		"save_as_template": "Uložit jako šablonu",
+		"insert": "Vložit",
+		"cancel": "Zrušit",
+		"more": "Více",
+		"forget": "Zapomenout",
+		"create": "Vytvořit",
+		"close": "Zavřít",
+		"preview": "Číst",
 		"close_all": "Zavřít",
+		"find": "Najít",
+		"replace": "Nahradit",
+		"replace_all": "Nahradit vše",
+		"previous": "Předchozí shoda",
+		"next": "Další shoda",
 		"undo": "Zpět",
 		"redo": "Znovu",
-		"restore": "Obnovit"
+		"try_again": "Zkusit znovu",
+		"restore": "Obnovit",
+		"dont_update": "Neaktualizovat",
+		"update_once": "Aktualizovat jednou",
+		"update_always": "Vždy aktualizovat"
+	},
+	"count": {
+		"notes_one": "{{count}} poznámka",
+		"notes_other": "{{count}} poznámek",
+		"folders_one": "{{count}} složka",
+		"folders_other": "{{count}} složek",
+		"words_one": "{{count}} slovo",
+		"words_other": "{{count}} slov",
+		"characters_one": "{{count}} znak",
+		"characters_other": "{{count}} znaků",
+		"notes_few": "{{count}} poznámky",
+		"notes_many": "{{count}} poznámky",
+		"folders_few": "{{count}} složky",
+		"folders_many": "{{count}} složky",
+		"words_few": "{{count}} slova",
+		"words_many": "{{count}} slova",
+		"characters_few": "{{count}} znaky",
+		"characters_many": "{{count}} znaku"
+	},
+	"markdown": {
+		"link": {
+			"title": "Název",
+			"url": "URL"
+		},
+		"image": {
+			"alt": "Alternativní text",
+			"alt_placeholder": "Popis obrázku",
+			"url": "URL",
+			"camera": "Pořídit fotku",
+			"gallery": "Vybrat z galerie",
+			"pick_failed": "Výběr obrázku se nepodařilo otevřít.",
+			"save_failed": "Obrázek se nepodařilo uložit do složky příloh."
+		},
+		"camera_permission": {
+			"title": "Oprávnění k fotoaparátu",
+			"message": "Zapni ho, abys mohl(a) fotit přímo z aplikace.",
+			"denied": "Pro pořizování fotek povol přístup k fotoaparátu v nastavení systému."
+		}
+	},
+	"table_menu": {
+		"group": {
+			"insert": "Vložit",
+			"move": "Přesunout",
+			"align": "Zarovnat"
+		},
+		"row": {
+			"insert_before": "Nad",
+			"insert_after": "Pod",
+			"move_before": "Nahoru",
+			"move_after": "Dolů",
+			"duplicate": "Duplikovat",
+			"delete": "Smazat"
+		},
+		"col": {
+			"insert_before": "Vlevo",
+			"insert_after": "Vpravo",
+			"move_before": "Doleva",
+			"move_after": "Doprava",
+			"align_left": "Vlevo",
+			"align_center": "Na střed",
+			"align_right": "Vpravo",
+			"duplicate": "Duplikovat",
+			"delete": "Smazat"
+		}
+	},
+	"markdown_group": {
+		"heading": "Nadpisy",
+		"list": "Seznamy",
+		"insert": "Vložit"
+	},
+	"markdown_action": {
+		"h0": "Bez nadpisu",
+		"bold": "Tučně",
+		"italic": "Kurzíva",
+		"strike": "Přeškrtnuté",
+		"h1": "Nadpis 1",
+		"h2": "Nadpis 2",
+		"h3": "Nadpis 3",
+		"h4": "Nadpis 4",
+		"h5": "Nadpis 5",
+		"h6": "Nadpis 6",
+		"quote": "Citace",
+		"code": "Kód",
+		"hr": "Vodorovná čára",
+		"image": "Vložit obrázek",
+		"link": "Vložit odkaz",
+		"wiki-link": "Vložit odkaz na poznámku",
+		"table": "Vložit tabulku",
+		"list-bullet": "Odrážkový seznam",
+		"list-ordered": "Číslovaný seznam",
+		"list-checklist": "Kontrolní seznam",
+		"outdent": "Zmenšit odsazení",
+		"indent": "Zvětšit odsazení",
+		"fold": "Sbalit sekci",
+		"insert-date": "Vložit datum",
+		"insert-time": "Vložit čas",
+		"insert-title": "Vložit název"
 	},
 	"message": {
 		"notes": {
 			"empty": "Nejsou tu žádné poznámky",
-			"no_recent": "Žádné nedávné ani připnuté poznámky"
+			"exported": "Soubor byl úspěšně exportován",
+			"no_recent": "Žádné nedávné ani připnuté poznámky",
+			"export_failed": "Soubor se nepodařilo exportovat",
+			"share_failed": "Soubor se nepodařilo sdílet"
+		},
+		"files": {
+			"open_failed": "Soubor se nepodařilo otevřít"
+		},
+		"outline": {
+			"empty": "Tato poznámka nemá žádné nadpisy"
+		},
+		"outgoing_links": {
+			"empty": "Tato poznámka neobsahuje žádné odkazy na jiné poznámky"
 		},
 		"tags": {
 			"empty": "Nejsou tu žádné štítky"
 		},
 		"version_history": {
-			"empty": "Zatím žádné uložené verze"
+			"empty": "Zatím žádné uložené verze",
+			"restore": {
+				"title": "Obnovit verzi",
+				"message": "Aktuální obsah bude nahrazen touto verzí. Neuložené změny budou ztraceny."
+			}
+		},
+		"wiki_links": {
+			"rename": {
+				"title": "Aktualizovat odkazy",
+				"message_one": "Chceš aktualizovat interní odkaz směřující na tuto poznámku?",
+				"message_other": "Chceš aktualizovat {{count}} interních odkazů směřujících na tuto poznámku?",
+				"message_few": "Chceš aktualizovat {{count}} interní odkazy směřující na tuto poznámku?",
+				"message_many": "Chceš aktualizovat {{count}} interního odkazu směřujícího na tuto poznámku?"
+			},
+			"missing": {
+				"title": "Poznámka nenalezena",
+				"message": "Neexistuje žádná poznámka s názvem „{{title}}“. Chceš ji vytvořit?"
+			}
 		}
 	},
 	"placeholder": {
@@ -53,6 +395,47 @@
 		"note": "Zde napište poznámku..."
 	},
 	"drawer": {
-		"tags": "Štítky"
+		"repositories": "Úložiště",
+		"templates": "Šablony",
+		"tags": "Štítky",
+		"search": "Hledat poznámky",
+		"collapse_all": "Sbalit vše",
+		"daily_note": "Denní poznámka",
+		"expand_all": "Rozbalit vše",
+		"open": "Otevřít menu",
+		"notes": "Poznámky",
+		"files": "Soubory",
+		"files_empty": "V tomto úložišti zatím nejsou žádné přílohy",
+		"change_view": "Změnit zobrazení",
+		"sort": {
+			"title": "Seřadit poznámky",
+			"name_asc": "Název (A - Z)",
+			"name_desc": "Název (Z - A)",
+			"count_desc": "Využití (vysoké - nízké)",
+			"count_asc": "Využití (nízké - vysoké)",
+			"modified_desc": "Změněno (nové - staré)",
+			"modified_asc": "Změněno (staré - nové)",
+			"created_desc": "Vytvořeno (nové - staré)",
+			"created_asc": "Vytvořeno (staré - nové)"
+		}
+	},
+	"search": {
+		"recent": "Nedávné",
+		"saved": "Uložené",
+		"pinned": "Připnuté",
+		"has_image": "Obrázky",
+		"in_content": "Obsah",
+		"save": "Uložit",
+		"unsave": "Odebrat"
+	},
+	"error_boundary": {
+		"title": "Něco se pokazilo",
+		"message": "Narazili jsme na neočekávaný problém. Zkus to prosím znovu."
+	},
+	"export": {
+		"title": "Exportovat nebo sdílet jako",
+		"markdown": "Markdown",
+		"html": "HTML",
+		"pdf": "PDF"
 	}
 }

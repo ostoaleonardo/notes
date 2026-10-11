@@ -3,55 +3,73 @@
 	"notes": {
 		"untitled": "Untitled",
 		"create": "Create a note",
-		"intro_title": "No notes open",
-		"intro_subtitle": "Pick a note from the drawer, or start a new one at the top of your repository.",
+		"intro": {
+			"title": "No notes open",
+			"subtitle": "Pick a note from the drawer, or start a new one at the top of your repository."
+		},
 		"copy_suffix": "(copy)",
 		"go_home": "Home",
-		"delete_title": "Delete note",
+		"delete": {
+			"title": "Delete note",
+			"failed": "Couldn't delete this note",
+			"message": {
+				"vault-trash": "The note will be moved to the hidden .trash folder of your repository. It won't show up in the app anymore, but you can still recover it with a file manager.",
+				"permanent": "This note will be deleted forever and can't be recovered."
+			}
+		},
 		"save_failed": "Couldn't save this note",
-		"delete_failed": "Couldn't delete this note",
 		"title_duplicated": "A note with this name already exists",
 		"title_breaks_links": "The characters # ^ [ ] stop links to this note from working in Obsidian",
-		"delete_message_vault-trash": "The note will be moved to the hidden .trash folder of your repository. It won't show up in the app anymore, but you can still recover it with a file manager.",
-		"delete_message_permanent": "This note will be deleted forever and can't be recovered.",
 		"migration_notice": "Migration finished with issues: {{renamed}} notes were renamed and {{images}} images couldn't be recovered."
 	},
 	"tags": {
-		"invalid_properties_title": "Invalid properties",
-		"invalid_properties_description": "The properties block couldn't be parsed."
+		"invalid_properties": {
+			"title": "Invalid properties",
+			"description": "The properties block couldn't be parsed."
+		}
 	},
 	"properties": {
 		"add": "Add property",
 		"remove": "Remove property",
 		"name_placeholder": "Property name",
 		"value_placeholder": "No value",
-		"type_text": "Text",
-		"type_number": "Number",
-		"type_list": "List",
-		"type_checkbox": "Checkbox",
-		"type_date": "Date",
-		"type_datetime": "Date and time"
+		"type": {
+			"text": "Text",
+			"number": "Number",
+			"list": "List",
+			"checkbox": "Checkbox",
+			"date": "Date",
+			"datetime": "Date and time"
+		}
 	},
 	"repositories": {
 		"open": "Open",
-		"rename": "Rename repository",
-		"forget": "Forget repository",
-		"forget_message": "This will remove the repository from the list without deleting anything from your device.",
-		"delete": "Delete repository",
-		"delete_message": "This will permanently delete this repository, its subfolders, and all their notes from your device.",
-		"choose_title": "Choose a repository",
-		"choose_message": "Select a folder on your device where your notes will be saved.",
-		"choose_button": "Choose folder",
+		"rename": {
+			"title": "Rename repository",
+			"failed": "Couldn't rename this folder"
+		},
+		"forget": {
+			"title": "Forget repository",
+			"message": "This will remove the repository from the list without deleting anything from your device."
+		},
+		"delete": {
+			"title": "Delete repository",
+			"message": "This will permanently delete this repository, its subfolders, and all their notes from your device.",
+			"folder_title": "Delete folder",
+			"folder_message": "This will permanently delete this folder, its subfolders, and all their notes from your device.",
+			"active_error": "Switch to another repository before deleting this one"
+		},
+		"choose": {
+			"title": "Choose a repository",
+			"message": "Select a folder on your device where your notes will be saved.",
+			"button": "Choose folder"
+		},
 		"pro_required": "Available with Pro",
 		"already_added": "This repository has already been added",
 		"create_note": "Create note here",
 		"add_subfolder": "Add subfolder",
 		"edit_folder": "Edit folder",
 		"no_folders": "No subfolders yet",
-		"delete_folder": "Delete folder",
-		"delete_folder_message": "This will permanently delete this folder, its subfolders, and all their notes from your device.",
-		"cannot_delete_active": "Switch to another repository before deleting this one",
-		"rename_failed": "Couldn't rename this folder",
 		"add_failed": "Couldn't add this repository"
 	},
 	"title": {
@@ -72,67 +90,104 @@
 		"updated": "Updated:"
 	},
 	"settings": {
-		"general": "General",
-		"language": "Language",
-		"theme": "Color theme",
-		"themes": "Theme",
-		"accent": "Accent color",
+		"general": {
+			"title": "General",
+			"language": "Language",
+			"theme": "Color theme",
+			"themes": "Theme",
+			"accent": "Accent color"
+		},
 		"pro": "Upgrade to Pro",
-		"github": "GitHub repository",
-		"features": "Report issues, contribute or request new features.",
-		"contribute": "Contribute to the translation",
-		"translate": "Help us translate the app to your language.",
-		"updates": "Software update",
-		"version": "Version",
-		"notes": "Notes",
-		"startup_behavior": "Open on startup",
-		"startup_behavior_last": "Last note opened",
-		"startup_behavior_new": "New note",
-		"startup_behavior_home": "Home",
-		"startup_behavior_daily": "Daily note",
-		"editor_font_size": "Font size",
-		"editor_font_size_small": "Small",
-		"editor_font_size_default": "Default",
-		"editor_font_size_large": "Large",
-		"editor_font_size_extra_large": "Extra large",
-		"editor_line_width": "Line width",
-		"editor_line_width_full": "Full width",
-		"editor_line_width_wide": "Wide",
-		"editor_line_width_narrow": "Narrow",
-		"editor_tab_size": "Tab size",
-		"editor_tab_size_2": "2",
-		"editor_tab_size_4": "4",
-		"editor_tab_size_8": "8",
-		"editor_line_numbers": "Line numbers (Code mode)",
-		"editor_line_numbers_on": "On",
-		"editor_line_numbers_off": "Off",
-		"editor_spellcheck": "Spellcheck and autocorrect",
-		"editor_spellcheck_on": "On",
-		"editor_spellcheck_off": "Off",
-		"editor_inline_title": "Inline title",
-		"editor_inline_title_on": "On",
-		"editor_inline_title_off": "Off",
-		"daily_note": "Daily note",
-		"daily_note_folder": "Daily note location",
-		"daily_note_folder_root": "Vault root",
-		"daily_note_template": "Daily note template",
-		"daily_note_template_none": "None",
-		"attachment_location": "Where to save new attachments",
-		"attachment_location_vault": "Repository root",
-		"attachment_location_same": "Next to each note",
-		"attachment_location_subfolder": "Subfolder beside each note",
-		"attachment_location_folder": "One shared folder",
-		"attachment_folder": "Attachment folder name",
-		"files_links": "Links",
-		"attachments": "Attachments",
-		"use_wikilinks": "Use [[Wikilinks]]",
-		"use_wikilinks_description": "Turn off to generate Markdown links instead when linking notes.",
-		"auto_update_links": "Automatically update internal links",
-		"auto_update_links_description": "Turn off to be asked before updating links after renaming a note.",
-		"delete_behavior": "On delete",
-		"delete_behavior_vault-trash": "Move to .trash folder",
-		"delete_behavior_permanent": "Delete permanently",
-		"editor": "Editor"
+		"about": {
+			"github": "GitHub repository",
+			"features": "Report issues, contribute or request new features.",
+			"contribute": "Contribute to the translation",
+			"translate": "Help us translate the app to your language.",
+			"updates": "Software update",
+			"version": "Version"
+		},
+		"notes": {
+			"title": "Notes",
+			"startup": {
+				"title": "Open on startup",
+				"last": "Last note opened",
+				"new": "New note",
+				"home": "Home",
+				"daily": "Daily note"
+			},
+			"delete": {
+				"title": "On delete",
+				"vault-trash": "Move to .trash folder",
+				"permanent": "Delete permanently"
+			}
+		},
+		"editor": {
+			"title": "Editor",
+			"font_size": {
+				"title": "Font size",
+				"small": "Small",
+				"default": "Default",
+				"large": "Large",
+				"extra_large": "Extra large"
+			},
+			"line_width": {
+				"title": "Line width",
+				"full": "Full width",
+				"wide": "Wide",
+				"narrow": "Narrow"
+			},
+			"tab_size": {
+				"title": "Tab size"
+			},
+			"line_numbers": {
+				"title": "Line numbers (Code mode)",
+				"on": "On",
+				"off": "Off"
+			},
+			"spellcheck": {
+				"title": "Spellcheck and autocorrect",
+				"on": "On",
+				"off": "Off"
+			},
+			"inline_title": {
+				"title": "Inline title",
+				"on": "On",
+				"off": "Off"
+			}
+		},
+		"daily_note": {
+			"title": "Daily note",
+			"folder": {
+				"title": "Daily note location",
+				"root": "Vault root"
+			},
+			"template": {
+				"title": "Daily note template",
+				"none": "None"
+			}
+		},
+		"attachments": {
+			"title": "Attachments",
+			"location": {
+				"title": "Where to save new attachments",
+				"vault": "Repository root",
+				"same": "Next to each note",
+				"subfolder": "Subfolder beside each note",
+				"folder": "One shared folder"
+			},
+			"folder": "Attachment folder name"
+		},
+		"links": {
+			"title": "Links",
+			"wikilinks": {
+				"title": "Use [[Wikilinks]]",
+				"description": "Turn off to generate Markdown links instead when linking notes."
+			},
+			"auto_update": {
+				"title": "Automatically update internal links",
+				"description": "Turn off to be asked before updating links after renaming a note."
+			}
+		}
 	},
 	"pro": {
 		"get": "Get Version Pro",
@@ -208,38 +263,50 @@
 		"characters_other": "{{count}} characters"
 	},
 	"markdown": {
-		"link_title": "Title",
-		"link_url": "URL",
-		"image_alt": "Alt text",
-		"image_alt_placeholder": "Image description",
-		"image_url": "URL",
-		"image_camera": "Take photo",
-		"image_gallery": "Choose from gallery",
-		"camera_permission_title": "Camera permission",
-		"camera_permission_message": "Turn it on to take photos from the app.",
-		"camera_permission_denied": "Enable camera access in system settings to take photos.",
-		"image_pick_failed": "Could not open the image picker.",
-		"image_save_failed": "Could not save the image to your attachments folder."
+		"link": {
+			"title": "Title",
+			"url": "URL"
+		},
+		"image": {
+			"alt": "Alt text",
+			"alt_placeholder": "Image description",
+			"url": "URL",
+			"camera": "Take photo",
+			"gallery": "Choose from gallery",
+			"pick_failed": "Could not open the image picker.",
+			"save_failed": "Could not save the image to your attachments folder."
+		},
+		"camera_permission": {
+			"title": "Camera permission",
+			"message": "Turn it on to take photos from the app.",
+			"denied": "Enable camera access in system settings to take photos."
+		}
 	},
 	"table_menu": {
-		"group_insert": "Insert",
-		"group_move": "Move",
-		"group_align": "Align",
-		"row_insert_before": "Above",
-		"row_insert_after": "Below",
-		"row_move_before": "Up",
-		"row_move_after": "Down",
-		"row_duplicate": "Duplicate",
-		"row_delete": "Delete",
-		"col_insert_before": "Left",
-		"col_insert_after": "Right",
-		"col_move_before": "Left",
-		"col_move_after": "Right",
-		"col_align_left": "Left",
-		"col_align_center": "Center",
-		"col_align_right": "Right",
-		"col_duplicate": "Duplicate",
-		"col_delete": "Delete"
+		"group": {
+			"insert": "Insert",
+			"move": "Move",
+			"align": "Align"
+		},
+		"row": {
+			"insert_before": "Above",
+			"insert_after": "Below",
+			"move_before": "Up",
+			"move_after": "Down",
+			"duplicate": "Duplicate",
+			"delete": "Delete"
+		},
+		"col": {
+			"insert_before": "Left",
+			"insert_after": "Right",
+			"move_before": "Left",
+			"move_after": "Right",
+			"align_left": "Left",
+			"align_center": "Center",
+			"align_right": "Right",
+			"duplicate": "Duplicate",
+			"delete": "Delete"
+		}
 	},
 	"markdown_group": {
 		"heading": "Headings",
@@ -296,15 +363,21 @@
 		},
 		"version_history": {
 			"empty": "No versions saved yet",
-			"restore_title": "Restore version",
-			"restore_message": "This will replace the current content with this version. Unsaved changes will be lost."
+			"restore": {
+				"title": "Restore version",
+				"message": "This will replace the current content with this version. Unsaved changes will be lost."
+			}
 		},
 		"wiki_links": {
-			"rename_title": "Update links",
-			"rename_message_one": "Do you want to update the internal link pointing to this note?",
-			"rename_message_other": "Do you want to update the {{count}} internal links pointing to this note?",
-			"missing_title": "Note not found",
-			"missing_message": "There's no note titled \"{{title}}\". Do you want to create it?"
+			"rename": {
+				"title": "Update links",
+				"message_one": "Do you want to update the internal link pointing to this note?",
+				"message_other": "Do you want to update the {{count}} internal links pointing to this note?"
+			},
+			"missing": {
+				"title": "Note not found",
+				"message": "There's no note titled \"{{title}}\". Do you want to create it?"
+			}
 		}
 	},
 	"placeholder": {
@@ -324,59 +397,79 @@
 		"files": "Files",
 		"files_empty": "No attachments in this repository yet",
 		"change_view": "Change view",
-		"sort_name_asc": "Name (A - Z)",
-		"sort_name_desc": "Name (Z - A)",
-		"sort_count_desc": "Usage (high - low)",
-		"sort_count_asc": "Usage (low - high)",
-		"sort_notes": "Sort notes",
-		"sort_modified_desc": "Modified (new - old)",
-		"sort_modified_asc": "Modified (old - new)",
-		"sort_created_desc": "Created (new - old)",
-		"sort_created_asc": "Created (old - new)"
+		"sort": {
+			"title": "Sort notes",
+			"name_asc": "Name (A - Z)",
+			"name_desc": "Name (Z - A)",
+			"count_desc": "Usage (high - low)",
+			"count_asc": "Usage (low - high)",
+			"modified_desc": "Modified (new - old)",
+			"modified_asc": "Modified (old - new)",
+			"created_desc": "Created (new - old)",
+			"created_asc": "Created (old - new)"
+		}
 	},
 	"templates": {
-		"journal": "Journal",
-		"journal_mood": "How I'm feeling today",
-		"journal_gratitude": "Grateful for",
-		"journal_highlight": "Today's highlight",
-		"journal_reflection": "Reflection",
-		"journal_tomorrow": "Tomorrow's plan",
+		"names": {
+			"journal": "Journal",
+			"checklist": "Checklist",
+			"meeting": "Meeting",
+			"ideas": "Brainstorm",
+			"goals": "Goal"
+		},
+		"journal": {
+			"mood": "How I'm feeling today",
+			"gratitude": "Grateful for",
+			"highlight": "Today's highlight",
+			"reflection": "Reflection",
+			"tomorrow": "Tomorrow's plan"
+		},
 		"item_placeholder": "Write here...",
-		"checklist": "Checklist",
-		"checklist_urgent": "Urgent",
-		"checklist_week": "This week",
-		"checklist_someday": "Someday",
-		"meeting": "Meeting",
-		"meeting_attendees": "Attendees",
-		"meeting_objective": "Objective",
-		"meeting_agenda": "Agenda",
-		"meeting_notes": "Notes",
-		"meeting_decisions": "Decisions",
-		"meeting_next_steps": "Next steps",
-		"ideas": "Brainstorm",
-		"ideas_main": "Main idea",
-		"ideas_pros": "Pros",
-		"ideas_cons": "Cons",
-		"ideas_next_steps": "Next steps",
-		"goals": "Goal",
-		"goals_objective": "Objective",
-		"goals_why": "Why it matters",
-		"goals_steps": "Steps",
-		"goals_deadline": "Deadline",
+		"checklist": {
+			"urgent": "Urgent",
+			"week": "This week",
+			"someday": "Someday"
+		},
+		"meeting": {
+			"attendees": "Attendees",
+			"objective": "Objective",
+			"agenda": "Agenda",
+			"notes": "Notes",
+			"decisions": "Decisions",
+			"next_steps": "Next steps"
+		},
+		"ideas": {
+			"main": "Main idea",
+			"pros": "Pros",
+			"cons": "Cons",
+			"next_steps": "Next steps"
+		},
+		"goals": {
+			"objective": "Objective",
+			"why": "Why it matters",
+			"steps": "Steps",
+			"deadline": "Deadline"
+		},
 		"new": "New template",
 		"import": "Import template",
-		"saved": "Template saved",
-		"save_failed": "Couldn't save the template",
-		"delete_failed": "Couldn't delete the template",
-		"view_placeholders": "View available variables",
-		"placeholders_title": "Available variables",
-		"placeholder_date": "Current date",
-		"placeholder_time": "Current time",
-		"placeholder_title": "Note title",
-		"placeholder_example": "e.g. {{value}}",
-		"placeholder_title_example": "Meeting notes",
-		"delete_title": "Delete template",
-		"delete_message": "This will permanently delete this template from your device."
+		"save": {
+			"success": "Template saved",
+			"failed": "Couldn't save the template"
+		},
+		"delete": {
+			"title": "Delete template",
+			"failed": "Couldn't delete the template",
+			"message": "This will permanently delete this template from your device."
+		},
+		"placeholders": {
+			"title": "Note title",
+			"view": "View available variables",
+			"heading": "Available variables",
+			"date": "Current date",
+			"time": "Current time",
+			"example": "e.g. {{value}}",
+			"title_example": "Meeting notes"
+		}
 	},
 	"search": {
 		"recent": "Recent",
@@ -400,50 +493,80 @@
 	"welcome": {
 		"title": "Welcome",
 		"intro": "This is your first note. A quick tour of what's new, section by section.",
-		"style_heading": "✨ Style and structure your text",
-		"style_bullet_bold": "**Bold**: add ** around the word to make it stand out more.",
-		"style_bullet_italic": "*Italic*: add * around the word for a softer emphasis.",
-		"style_bullet_strike": "~~Strikethrough~~: add ~~ around the word to mark it as discarded.",
-		"style_bullet_code": "`Code`: add ` around the word to show it in code format.",
-		"style_footer": "**Would rather not type the symbols?** Use the icons in the bottom bar.",
-		"organize_bullet_quote": "**Quote**: add > at the start of the line to highlight an important part.",
-		"organize_bullet_task": "**To-do list**: add - [ ] at the start of the line to mark something pending.",
-		"organize_bullet_table": "**Table**: add | between each column to sort data into rows and columns.",
-		"organize_quote_example": "This is what a highlighted quote looks like.",
-		"organize_task_example": "Check this off once you're done",
-		"organize_table_col1": "Feature",
-		"organize_table_col2": "How to write it",
-		"organize_table_row1_1": "Heading",
-		"organize_table_row1_2": "# or ##",
-		"organize_table_row2_1": "Link",
-		"organize_table_row2_2": "[text](URL)",
-		"organize_table_row3_1": "Divider",
-		"organize_table_row3_2": "---",
-		"attachments_heading": "📎 Attach files",
-		"attachments_bullet_image": "**Preview**: write `![[photo.png]]` to show a supported file right inside the note.",
-		"attachments_bullet_link": "**Other files**: write `[[document.pdf]]` to get a chip that opens it in another app.",
-		"attachments_footer": "Find every attached file in the **Files** view of the side menu.",
-		"tools_heading": "🧰 More tools",
-		"tools_tags_title": "Tags",
-		"tools_tags_body": "Organize your notes by topic and find them fast.",
-		"tools_templates_title": "Templates",
-		"tools_templates_body": "Create new notes with a ready-to-use structure.",
-		"tools_history_title": "Version history",
-		"tools_history_body": "Go back to an earlier version of your note.",
-		"tools_export_title": "Export",
-		"tools_export_body": "Save your note as a Markdown file.",
-		"tools_share_title": "Share",
-		"tools_share_body": "Send it straight to another app.",
-		"tools_daily_title": "Daily note",
-		"tools_daily_body": "Tap the calendar button in the drawer to open today's note. Pick its folder and template in Settings.",
-		"pro_heading": "⭐ Get more out of Pro",
-		"pro_intro": "The Pro version gives you:",
-		"pro_versions_title": "Full version history",
-		"pro_versions_body": "Unlimited, so you can go back to any point in your note.",
-		"pro_subfolders_title": "Subfolders",
-		"pro_subfolders_body": "As many as you need to organize your repositories.",
-		"pro_accents_title": "Accent colors",
-		"pro_accents_body": "Customize them to make the app feel like yours.",
-		"pro_cta": "💡 You can try it anytime from Settings."
+		"style": {
+			"heading": "✨ Style and structure your text",
+			"bold": "**Bold**: add ** around the word to make it stand out more.",
+			"italic": "*Italic*: add * around the word for a softer emphasis.",
+			"strike": "~~Strikethrough~~: add ~~ around the word to mark it as discarded.",
+			"code": "`Code`: add ` around the word to show it in code format.",
+			"footer": "**Would rather not type the symbols?** Use the icons in the bottom bar."
+		},
+		"organize": {
+			"quote": "**Quote**: add > at the start of the line to highlight an important part.",
+			"task": "**To-do list**: add - [ ] at the start of the line to mark something pending.",
+			"table": {
+				"bullet": "**Table**: add | between each column to sort data into rows and columns.",
+				"col1": "Feature",
+				"col2": "How to write it",
+				"row1_1": "Heading",
+				"row1_2": "# or ##",
+				"row2_1": "Link",
+				"row2_2": "[text](URL)",
+				"row3_1": "Divider",
+				"row3_2": "---"
+			},
+			"quote_example": "This is what a highlighted quote looks like.",
+			"task_example": "Check this off once you're done"
+		},
+		"attachments": {
+			"heading": "📎 Attach files",
+			"image": "**Preview**: write `![[photo.png]]` to show a supported file right inside the note.",
+			"link": "**Other files**: write `[[document.pdf]]` to get a chip that opens it in another app.",
+			"footer": "Find every attached file in the **Files** view of the side menu."
+		},
+		"tools": {
+			"heading": "🧰 More tools",
+			"tags": {
+				"title": "Tags",
+				"body": "Organize your notes by topic and find them fast."
+			},
+			"templates": {
+				"title": "Templates",
+				"body": "Create new notes with a ready-to-use structure."
+			},
+			"history": {
+				"title": "Version history",
+				"body": "Go back to an earlier version of your note."
+			},
+			"export": {
+				"title": "Export",
+				"body": "Save your note as a Markdown file."
+			},
+			"share": {
+				"title": "Share",
+				"body": "Send it straight to another app."
+			},
+			"daily": {
+				"title": "Daily note",
+				"body": "Tap the calendar button in the drawer to open today's note. Pick its folder and template in Settings."
+			}
+		},
+		"pro": {
+			"heading": "⭐ Get more out of Pro",
+			"intro": "The Pro version gives you:",
+			"versions": {
+				"title": "Full version history",
+				"body": "Unlimited, so you can go back to any point in your note."
+			},
+			"subfolders": {
+				"title": "Subfolders",
+				"body": "As many as you need to organize your repositories."
+			},
+			"accents": {
+				"title": "Accent colors",
+				"body": "Customize them to make the app feel like yours."
+			},
+			"cta": "💡 You can try it anytime from Settings."
+		}
 	}
 }

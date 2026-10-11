@@ -1,24 +1,208 @@
 {
 	"language": "Português",
+	"notes": {
+		"untitled": "Sem título",
+		"create": "Criar uma nota",
+		"intro": {
+			"title": "Nenhuma nota aberta",
+			"subtitle": "Escolha uma nota no menu lateral ou crie uma nova no topo do seu repositório."
+		},
+		"copy_suffix": "(cópia)",
+		"go_home": "Início",
+		"delete": {
+			"title": "Excluir nota",
+			"failed": "Não foi possível excluir esta nota",
+			"message": {
+				"vault-trash": "A nota será movida para a pasta oculta .trash do seu repositório. Ela não aparecerá mais no app, mas você ainda poderá recuperá-la com um gerenciador de arquivos.",
+				"permanent": "Esta nota será excluída para sempre e não poderá ser recuperada."
+			}
+		},
+		"save_failed": "Não foi possível salvar esta nota",
+		"title_duplicated": "Já existe uma nota com este nome",
+		"title_breaks_links": "Os caracteres # ^ [ ] impedem que os links para esta nota funcionem no Obsidian",
+		"migration_notice": "Migração concluída com problemas: {{renamed}} notas foram renomeadas e {{images}} imagens não puderam ser recuperadas."
+	},
+	"tags": {
+		"invalid_properties": {
+			"title": "Propriedades inválidas",
+			"description": "Não foi possível interpretar o bloco de propriedades."
+		}
+	},
+	"properties": {
+		"add": "Adicionar propriedade",
+		"remove": "Remover propriedade",
+		"name_placeholder": "Nome da propriedade",
+		"value_placeholder": "Sem valor",
+		"type": {
+			"text": "Texto",
+			"number": "Número",
+			"list": "Lista",
+			"checkbox": "Caixa de seleção",
+			"date": "Data",
+			"datetime": "Data e hora"
+		}
+	},
+	"repositories": {
+		"open": "Abrir",
+		"rename": {
+			"title": "Renomear repositório",
+			"failed": "Não foi possível renomear esta pasta"
+		},
+		"forget": {
+			"title": "Esquecer repositório",
+			"message": "Isso removerá o repositório da lista sem excluir nada do seu dispositivo."
+		},
+		"delete": {
+			"title": "Excluir repositório",
+			"message": "Isso excluirá permanentemente este repositório, suas subpastas e todas as notas delas do seu dispositivo.",
+			"folder_title": "Excluir pasta",
+			"folder_message": "Isso excluirá permanentemente esta pasta, suas subpastas e todas as notas delas do seu dispositivo.",
+			"active_error": "Mude para outro repositório antes de excluir este"
+		},
+		"choose": {
+			"title": "Escolha um repositório",
+			"message": "Selecione uma pasta no seu dispositivo onde suas notas serão salvas.",
+			"button": "Escolher pasta"
+		},
+		"pro_required": "Disponível com o Pro",
+		"already_added": "Este repositório já foi adicionado",
+		"create_note": "Criar nota aqui",
+		"add_subfolder": "Adicionar subpasta",
+		"edit_folder": "Editar pasta",
+		"no_folders": "Ainda não há subpastas",
+		"add_failed": "Não foi possível adicionar este repositório"
+	},
 	"title": {
 		"notes": "Notas",
 		"tags": "Etiquetas",
+		"repositories": "Repositórios",
+		"templates": "Modelos",
 		"settings": "Configurações",
 		"about": "Sobre o aplicativo",
-		"version_history": "Histórico de versões"
+		"import": "Importar nota",
+		"version_history": "Histórico de versões",
+		"backlinks": "Backlinks",
+		"outline": "Estrutura de tópicos",
+		"outgoing_links": "Links de saída",
+		"unlinked_mentions": "Menções sem link"
 	},
 	"date": {
 		"updated": "Atualizado:"
 	},
 	"settings": {
-		"language": "Idioma",
-		"theme": "Cor do tema",
-		"github": "Repositório no GitHub",
-		"features": "Relatar problemas, contribuir ou solicitar novas funcionalidades.",
-		"contribute": "Contribua com a tradução",
-		"translate": "Nos ajude a traduzir o aplicativo para o seu idioma.",
-		"updates": "Atualizações",
-		"version": "Versão"
+		"general": {
+			"title": "Geral",
+			"language": "Idioma",
+			"theme": "Cor do tema",
+			"themes": "Tema",
+			"accent": "Cor de destaque"
+		},
+		"pro": "Fazer upgrade para o Pro",
+		"about": {
+			"github": "Repositório no GitHub",
+			"features": "Relatar problemas, contribuir ou solicitar novas funcionalidades.",
+			"contribute": "Contribua com a tradução",
+			"translate": "Nos ajude a traduzir o aplicativo para o seu idioma.",
+			"updates": "Atualizações",
+			"version": "Versão"
+		},
+		"notes": {
+			"title": "Notas",
+			"startup": {
+				"title": "Abrir ao iniciar",
+				"last": "Última nota aberta",
+				"new": "Nova nota",
+				"home": "Início",
+				"daily": "Nota diária"
+			},
+			"delete": {
+				"title": "Ao excluir",
+				"vault-trash": "Mover para a pasta .trash",
+				"permanent": "Excluir permanentemente"
+			}
+		},
+		"editor": {
+			"title": "Editor",
+			"font_size": {
+				"title": "Tamanho da fonte",
+				"small": "Pequeno",
+				"default": "Padrão",
+				"large": "Grande",
+				"extra_large": "Extra grande"
+			},
+			"line_width": {
+				"title": "Largura da linha",
+				"full": "Largura total",
+				"wide": "Larga",
+				"narrow": "Estreita"
+			},
+			"tab_size": {
+				"title": "Tamanho da tabulação"
+			},
+			"line_numbers": {
+				"title": "Números de linha (modo Código)",
+				"on": "Ativado",
+				"off": "Desativado"
+			},
+			"spellcheck": {
+				"title": "Verificação ortográfica e correção automática",
+				"on": "Ativada",
+				"off": "Desativada"
+			},
+			"inline_title": {
+				"title": "Título em linha",
+				"on": "Ativado",
+				"off": "Desativado"
+			}
+		},
+		"daily_note": {
+			"title": "Nota diária",
+			"folder": {
+				"title": "Local da nota diária",
+				"root": "Raiz do repositório"
+			},
+			"template": {
+				"title": "Modelo da nota diária",
+				"none": "Nenhum"
+			}
+		},
+		"attachments": {
+			"title": "Anexos",
+			"location": {
+				"title": "Onde salvar novos anexos",
+				"vault": "Raiz do repositório",
+				"same": "Ao lado de cada nota",
+				"subfolder": "Subpasta ao lado de cada nota",
+				"folder": "Uma pasta compartilhada"
+			},
+			"folder": "Nome da pasta de anexos"
+		},
+		"links": {
+			"title": "Links",
+			"wikilinks": {
+				"title": "Usar [[Wikilinks]]",
+				"description": "Desative para gerar links Markdown ao vincular notas."
+			},
+			"auto_update": {
+				"title": "Atualizar links internos automaticamente",
+				"description": "Desative para ser perguntado antes de atualizar os links após renomear uma nota."
+			}
+		}
+	},
+	"pro": {
+		"get": "Obter a versão Pro",
+		"pro": "Versão Pro",
+		"features": "Desbloqueie todos os recursos e apoie o desenvolvimento do app.",
+		"success": "Obrigado pela sua compra!",
+		"restore": "Restaurar compra",
+		"purchased": "Você já comprou a versão Pro.",
+		"messages": {
+			"success": "Compra realizada com sucesso",
+			"available": "Este item não está disponível para compra",
+			"services": "Os serviços do Google Play não estão disponíveis",
+			"support": "Entre em contato com o suporte",
+			"no_purchased": "Nenhuma compra anterior encontrada"
+		}
 	},
 	"theme": {
 		"light": "Claro",
@@ -26,26 +210,174 @@
 		"system": "Sistema",
 		"choose": "Escolha uma cor para o tema do aplicativo."
 	},
+	"accent": {
+		"red": "Vermelho",
+		"yellow": "Amarelo",
+		"blue": "Azul"
+	},
 	"button": {
 		"edit": "Editar",
+		"code": "Código",
 		"back": "Voltar",
 		"delete": "Excluir",
 		"update": "Atualizar",
+		"pin": "Fixar",
+		"unpin": "Desafixar",
+		"show_backlinks": "Mostrar backlinks",
+		"hide_backlinks": "Ocultar backlinks",
+		"link_mention": "Vincular",
+		"export": "Exportar",
+		"share": "Compartilhar",
+		"export_share": "Exportar / Compartilhar",
+		"duplicate": "Duplicar",
+		"save_as_template": "Salvar como modelo",
+		"insert": "Inserir",
+		"cancel": "Cancelar",
+		"more": "Mais",
+		"forget": "Esquecer",
+		"create": "Criar",
+		"close": "Fechar",
+		"preview": "Ler",
 		"close_all": "Fechar",
+		"find": "Localizar",
+		"replace": "Substituir",
+		"replace_all": "Substituir tudo",
+		"previous": "Resultado anterior",
+		"next": "Próximo resultado",
 		"undo": "Desfazer",
 		"redo": "Refazer",
-		"restore": "Restaurar"
+		"try_again": "Tentar novamente",
+		"restore": "Restaurar",
+		"dont_update": "Não atualizar",
+		"update_once": "Atualizar uma vez",
+		"update_always": "Sempre atualizar"
+	},
+	"count": {
+		"notes_one": "{{count}} nota",
+		"notes_other": "{{count}} notas",
+		"folders_one": "{{count}} pasta",
+		"folders_other": "{{count}} pastas",
+		"words_one": "{{count}} palavra",
+		"words_other": "{{count}} palavras",
+		"characters_one": "{{count}} caractere",
+		"characters_other": "{{count}} caracteres"
+	},
+	"markdown": {
+		"link": {
+			"title": "Título",
+			"url": "URL"
+		},
+		"image": {
+			"alt": "Texto alternativo",
+			"alt_placeholder": "Descrição da imagem",
+			"url": "URL",
+			"camera": "Tirar foto",
+			"gallery": "Escolher da galeria",
+			"pick_failed": "Não foi possível abrir o seletor de imagens.",
+			"save_failed": "Não foi possível salvar a imagem na pasta de anexos."
+		},
+		"camera_permission": {
+			"title": "Permissão da câmera",
+			"message": "Ative para tirar fotos pelo app.",
+			"denied": "Ative o acesso à câmera nas configurações do sistema para tirar fotos."
+		}
+	},
+	"table_menu": {
+		"group": {
+			"insert": "Inserir",
+			"move": "Mover",
+			"align": "Alinhar"
+		},
+		"row": {
+			"insert_before": "Acima",
+			"insert_after": "Abaixo",
+			"move_before": "Para cima",
+			"move_after": "Para baixo",
+			"duplicate": "Duplicar",
+			"delete": "Excluir"
+		},
+		"col": {
+			"insert_before": "Esquerda",
+			"insert_after": "Direita",
+			"move_before": "Para a esquerda",
+			"move_after": "Para a direita",
+			"align_left": "Esquerda",
+			"align_center": "Centro",
+			"align_right": "Direita",
+			"duplicate": "Duplicar",
+			"delete": "Excluir"
+		}
+	},
+	"markdown_group": {
+		"heading": "Títulos",
+		"list": "Listas",
+		"insert": "Inserir"
+	},
+	"markdown_action": {
+		"h0": "Sem título",
+		"bold": "Negrito",
+		"italic": "Itálico",
+		"strike": "Tachado",
+		"h1": "Título 1",
+		"h2": "Título 2",
+		"h3": "Título 3",
+		"h4": "Título 4",
+		"h5": "Título 5",
+		"h6": "Título 6",
+		"quote": "Citação",
+		"code": "Código",
+		"hr": "Linha horizontal",
+		"image": "Inserir imagem",
+		"link": "Inserir link",
+		"wiki-link": "Inserir link de nota",
+		"table": "Inserir tabela",
+		"list-bullet": "Lista com marcadores",
+		"list-ordered": "Lista numerada",
+		"list-checklist": "Lista de verificação",
+		"outdent": "Diminuir recuo",
+		"indent": "Aumentar recuo",
+		"fold": "Recolher seção",
+		"insert-date": "Inserir data",
+		"insert-time": "Inserir hora",
+		"insert-title": "Inserir título"
 	},
 	"message": {
 		"notes": {
 			"empty": "Nenhuma nota adicionada",
-			"no_recent": "Nenhuma nota recente ou fixada"
+			"exported": "Arquivo exportado com sucesso",
+			"no_recent": "Nenhuma nota recente ou fixada",
+			"export_failed": "Não foi possível exportar o arquivo",
+			"share_failed": "Não foi possível compartilhar o arquivo"
+		},
+		"files": {
+			"open_failed": "Não foi possível abrir o arquivo"
+		},
+		"outline": {
+			"empty": "Esta nota não tem títulos"
+		},
+		"outgoing_links": {
+			"empty": "Esta nota não tem links para outras notas"
 		},
 		"tags": {
 			"empty": "Nenhuma etiqueta adicionada"
 		},
 		"version_history": {
-			"empty": "Nenhuma versão salva ainda"
+			"empty": "Nenhuma versão salva ainda",
+			"restore": {
+				"title": "Restaurar versão",
+				"message": "Isso substituirá o conteúdo atual por esta versão. As alterações não salvas serão perdidas."
+			}
+		},
+		"wiki_links": {
+			"rename": {
+				"title": "Atualizar links",
+				"message_one": "Deseja atualizar o link interno que aponta para esta nota?",
+				"message_other": "Deseja atualizar os {{count}} links internos que apontam para esta nota?"
+			},
+			"missing": {
+				"title": "Nota não encontrada",
+				"message": "Não há nenhuma nota com o título \"{{title}}\". Deseja criá-la?"
+			}
 		}
 	},
 	"placeholder": {
@@ -53,6 +385,47 @@
 		"note": "Digite a sua nota aqui..."
 	},
 	"drawer": {
-		"tags": "Etiquetas"
+		"repositories": "Repositórios",
+		"templates": "Modelos",
+		"tags": "Etiquetas",
+		"search": "Buscar notas",
+		"collapse_all": "Recolher tudo",
+		"daily_note": "Nota diária",
+		"expand_all": "Expandir tudo",
+		"open": "Abrir menu",
+		"notes": "Notas",
+		"files": "Arquivos",
+		"files_empty": "Ainda não há anexos neste repositório",
+		"change_view": "Alterar visualização",
+		"sort": {
+			"title": "Ordenar notas",
+			"name_asc": "Nome (A - Z)",
+			"name_desc": "Nome (Z - A)",
+			"count_desc": "Uso (alto - baixo)",
+			"count_asc": "Uso (baixo - alto)",
+			"modified_desc": "Modificada (nova - antiga)",
+			"modified_asc": "Modificada (antiga - nova)",
+			"created_desc": "Criada (nova - antiga)",
+			"created_asc": "Criada (antiga - nova)"
+		}
+	},
+	"search": {
+		"recent": "Recentes",
+		"saved": "Salvas",
+		"pinned": "Fixadas",
+		"has_image": "Imagens",
+		"in_content": "Conteúdo",
+		"save": "Salvar",
+		"unsave": "Remover"
+	},
+	"error_boundary": {
+		"title": "Algo deu errado",
+		"message": "Encontramos um problema inesperado. Tente novamente."
+	},
+	"export": {
+		"title": "Exportar ou compartilhar como",
+		"markdown": "Markdown",
+		"html": "HTML",
+		"pdf": "PDF"
 	}
 }

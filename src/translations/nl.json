@@ -1,50 +1,383 @@
 {
 	"language": "Nederlands",
+	"notes": {
+		"untitled": "Naamloos",
+		"create": "Notitie maken",
+		"intro": {
+			"title": "Geen notities geopend",
+			"subtitle": "Kies een notitie in het menu of begin bovenaan je repository met een nieuwe."
+		},
+		"copy_suffix": "(kopie)",
+		"go_home": "Start",
+		"delete": {
+			"title": "Notitie verwijderen",
+			"failed": "Deze notitie kon niet worden verwijderd",
+			"message": {
+				"vault-trash": "De notitie wordt verplaatst naar de verborgen map .trash van je repository. Ze verschijnt niet meer in de app, maar je kunt haar nog herstellen met een bestandsbeheerder.",
+				"permanent": "Deze notitie wordt definitief verwijderd en kan niet worden hersteld."
+			}
+		},
+		"save_failed": "Deze notitie kon niet worden opgeslagen",
+		"title_duplicated": "Er bestaat al een notitie met deze naam",
+		"title_breaks_links": "De tekens # ^ [ ] zorgen ervoor dat links naar deze notitie niet meer werken in Obsidian",
+		"migration_notice": "Migratie voltooid met problemen: {{renamed}} notities zijn hernoemd en {{images}} afbeeldingen konden niet worden hersteld."
+	},
+	"tags": {
+		"invalid_properties": {
+			"title": "Ongeldige eigenschappen",
+			"description": "Het eigenschappenblok kon niet worden gelezen."
+		}
+	},
+	"properties": {
+		"add": "Eigenschap toevoegen",
+		"remove": "Eigenschap verwijderen",
+		"name_placeholder": "Naam van eigenschap",
+		"value_placeholder": "Geen waarde",
+		"type": {
+			"text": "Tekst",
+			"number": "Getal",
+			"list": "Lijst",
+			"checkbox": "Selectievakje",
+			"date": "Datum",
+			"datetime": "Datum en tijd"
+		}
+	},
+	"repositories": {
+		"open": "Openen",
+		"rename": {
+			"title": "Repository hernoemen",
+			"failed": "Deze map kon niet worden hernoemd"
+		},
+		"forget": {
+			"title": "Repository vergeten",
+			"message": "Hiermee wordt de repository uit de lijst verwijderd zonder iets van je apparaat te wissen."
+		},
+		"delete": {
+			"title": "Repository verwijderen",
+			"message": "Hiermee worden deze repository, de submappen en alle bijbehorende notities definitief van je apparaat verwijderd.",
+			"folder_title": "Map verwijderen",
+			"folder_message": "Hiermee worden deze map, de submappen en alle bijbehorende notities definitief van je apparaat verwijderd.",
+			"active_error": "Schakel over naar een andere repository voordat je deze verwijdert"
+		},
+		"choose": {
+			"title": "Kies een repository",
+			"message": "Selecteer een map op je apparaat waarin je notities worden opgeslagen.",
+			"button": "Map kiezen"
+		},
+		"pro_required": "Beschikbaar met Pro",
+		"already_added": "Deze repository is al toegevoegd",
+		"create_note": "Hier een notitie maken",
+		"add_subfolder": "Submap toevoegen",
+		"edit_folder": "Map bewerken",
+		"no_folders": "Nog geen submappen",
+		"add_failed": "Deze repository kon niet worden toegevoegd"
+	},
 	"title": {
 		"notes": "Notities",
 		"tags": "Labels",
+		"repositories": "Repositories",
+		"templates": "Sjablonen",
 		"settings": "Instellingen",
 		"about": "Over de app",
-		"version_history": "Versiegeschiedenis"
+		"import": "Notitie importeren",
+		"version_history": "Versiegeschiedenis",
+		"backlinks": "Backlinks",
+		"outline": "Overzicht",
+		"outgoing_links": "Uitgaande links",
+		"unlinked_mentions": "Niet-gekoppelde vermeldingen"
 	},
 	"date": {
 		"updated": "Gewijzigd:"
 	},
 	"settings": {
-		"language": "Taal",
-		"theme": "Thema",
-		"github": "GitHub repository",
-		"features": "Meld problemen, draag bij of stuur verzoeken voor nieuwe functies.",
-		"contribute": "Draag bij aan vertalingen",
-		"translate": "Help ons de app te vertalen naar jouw taal.",
-		"updates": "Software bijwerken",
-		"version": "Versie"
+		"general": {
+			"title": "Algemeen",
+			"language": "Taal",
+			"theme": "Thema",
+			"themes": "Thema",
+			"accent": "Accentkleur"
+		},
+		"pro": "Upgraden naar Pro",
+		"about": {
+			"github": "GitHub repository",
+			"features": "Meld problemen, draag bij of stuur verzoeken voor nieuwe functies.",
+			"contribute": "Draag bij aan vertalingen",
+			"translate": "Help ons de app te vertalen naar jouw taal.",
+			"updates": "Software bijwerken",
+			"version": "Versie"
+		},
+		"notes": {
+			"title": "Notities",
+			"startup": {
+				"title": "Openen bij opstarten",
+				"last": "Laatst geopende notitie",
+				"new": "Nieuwe notitie",
+				"home": "Start",
+				"daily": "Dagelijkse notitie"
+			},
+			"delete": {
+				"title": "Bij verwijderen",
+				"vault-trash": "Verplaatsen naar map .trash",
+				"permanent": "Definitief verwijderen"
+			}
+		},
+		"editor": {
+			"title": "Editor",
+			"font_size": {
+				"title": "Lettergrootte",
+				"small": "Klein",
+				"default": "Standaard",
+				"large": "Groot",
+				"extra_large": "Extra groot"
+			},
+			"line_width": {
+				"title": "Regelbreedte",
+				"full": "Volledige breedte",
+				"wide": "Breed",
+				"narrow": "Smal"
+			},
+			"tab_size": {
+				"title": "Tabgrootte"
+			},
+			"line_numbers": {
+				"title": "Regelnummers (Codemodus)",
+				"on": "Aan",
+				"off": "Uit"
+			},
+			"spellcheck": {
+				"title": "Spellingcontrole en autocorrectie",
+				"on": "Aan",
+				"off": "Uit"
+			},
+			"inline_title": {
+				"title": "Inline titel",
+				"on": "Aan",
+				"off": "Uit"
+			}
+		},
+		"daily_note": {
+			"title": "Dagelijkse notitie",
+			"folder": {
+				"title": "Locatie van dagelijkse notitie",
+				"root": "Hoofdmap"
+			},
+			"template": {
+				"title": "Sjabloon voor dagelijkse notitie",
+				"none": "Geen"
+			}
+		},
+		"attachments": {
+			"title": "Bijlagen",
+			"location": {
+				"title": "Waar nieuwe bijlagen worden opgeslagen",
+				"vault": "Hoofdmap van de repository",
+				"same": "Naast elke notitie",
+				"subfolder": "Submap naast elke notitie",
+				"folder": "Eén gedeelde map"
+			},
+			"folder": "Naam van de bijlagenmap"
+		},
+		"links": {
+			"title": "Links",
+			"wikilinks": {
+				"title": "[[Wikilinks]] gebruiken",
+				"description": "Schakel uit om in plaats daarvan Markdown-links te maken bij het koppelen van notities."
+			},
+			"auto_update": {
+				"title": "Interne links automatisch bijwerken",
+				"description": "Schakel uit om eerst gevraagd te worden voordat links worden bijgewerkt na het hernoemen van een notitie."
+			}
+		}
+	},
+	"pro": {
+		"get": "Pro-versie nemen",
+		"pro": "Pro-versie",
+		"features": "Ontgrendel alle functies en steun de ontwikkeling van de app.",
+		"success": "Bedankt voor je aankoop!",
+		"restore": "Aankoop herstellen",
+		"purchased": "Je hebt de Pro-versie al gekocht.",
+		"messages": {
+			"success": "Aankoop geslaagd",
+			"available": "Dit item is niet beschikbaar voor aankoop",
+			"services": "Google Play-services zijn niet beschikbaar",
+			"support": "Neem contact op met de support",
+			"no_purchased": "Geen eerdere aankoop gevonden"
+		}
 	},
 	"theme": {
 		"light": "Licht",
 		"dark": "Donker",
-		"system": "Systeem"
+		"system": "Systeem",
+		"choose": "Kies een kleurthema voor de app."
+	},
+	"accent": {
+		"red": "Rood",
+		"yellow": "Geel",
+		"blue": "Blauw"
 	},
 	"button": {
 		"edit": "Bewerken",
+		"code": "Code",
 		"back": "Terug",
 		"delete": "Verwijderen",
 		"update": "Bijwerken",
+		"pin": "Vastpinnen",
+		"unpin": "Losmaken",
+		"show_backlinks": "Backlinks tonen",
+		"hide_backlinks": "Backlinks verbergen",
+		"link_mention": "Koppelen",
+		"export": "Exporteren",
+		"share": "Delen",
+		"export_share": "Exporteren / Delen",
+		"duplicate": "Dupliceren",
+		"save_as_template": "Opslaan als sjabloon",
+		"insert": "Invoegen",
+		"cancel": "Annuleren",
+		"more": "Meer",
+		"forget": "Vergeten",
+		"create": "Maken",
+		"close": "Sluiten",
+		"preview": "Lezen",
 		"close_all": "Sluiten",
+		"find": "Zoeken",
+		"replace": "Vervangen",
+		"replace_all": "Alles vervangen",
+		"previous": "Vorige overeenkomst",
+		"next": "Volgende overeenkomst",
 		"undo": "Ongedaan maken",
 		"redo": "Opnieuw",
-		"restore": "Herstellen"
+		"try_again": "Opnieuw proberen",
+		"restore": "Herstellen",
+		"dont_update": "Niet bijwerken",
+		"update_once": "Eenmalig bijwerken",
+		"update_always": "Altijd bijwerken"
+	},
+	"count": {
+		"notes_one": "{{count}} notitie",
+		"notes_other": "{{count}} notities",
+		"folders_one": "{{count}} map",
+		"folders_other": "{{count}} mappen",
+		"words_one": "{{count}} woord",
+		"words_other": "{{count}} woorden",
+		"characters_one": "{{count}} teken",
+		"characters_other": "{{count}} tekens"
+	},
+	"markdown": {
+		"link": {
+			"title": "Titel",
+			"url": "URL"
+		},
+		"image": {
+			"alt": "Alternatieve tekst",
+			"alt_placeholder": "Beschrijving van de afbeelding",
+			"url": "URL",
+			"camera": "Foto maken",
+			"gallery": "Kiezen uit galerij",
+			"pick_failed": "De afbeeldingskiezer kon niet worden geopend.",
+			"save_failed": "De afbeelding kon niet worden opgeslagen in je bijlagenmap."
+		},
+		"camera_permission": {
+			"title": "Cameratoestemming",
+			"message": "Schakel dit in om foto's te maken vanuit de app.",
+			"denied": "Schakel cameratoegang in via de systeeminstellingen om foto's te maken."
+		}
+	},
+	"table_menu": {
+		"group": {
+			"insert": "Invoegen",
+			"move": "Verplaatsen",
+			"align": "Uitlijnen"
+		},
+		"row": {
+			"insert_before": "Erboven",
+			"insert_after": "Eronder",
+			"move_before": "Omhoog",
+			"move_after": "Omlaag",
+			"duplicate": "Dupliceren",
+			"delete": "Verwijderen"
+		},
+		"col": {
+			"insert_before": "Links",
+			"insert_after": "Rechts",
+			"move_before": "Naar links",
+			"move_after": "Naar rechts",
+			"align_left": "Links",
+			"align_center": "Gecentreerd",
+			"align_right": "Rechts",
+			"duplicate": "Dupliceren",
+			"delete": "Verwijderen"
+		}
+	},
+	"markdown_group": {
+		"heading": "Koppen",
+		"list": "Lijsten",
+		"insert": "Invoegen"
+	},
+	"markdown_action": {
+		"h0": "Geen kop",
+		"bold": "Vet",
+		"italic": "Cursief",
+		"strike": "Doorgehaald",
+		"h1": "Kop 1",
+		"h2": "Kop 2",
+		"h3": "Kop 3",
+		"h4": "Kop 4",
+		"h5": "Kop 5",
+		"h6": "Kop 6",
+		"quote": "Citaat",
+		"code": "Code",
+		"hr": "Horizontale lijn",
+		"image": "Afbeelding invoegen",
+		"link": "Link invoegen",
+		"wiki-link": "Notitielink invoegen",
+		"table": "Tabel invoegen",
+		"list-bullet": "Lijst met opsommingstekens",
+		"list-ordered": "Genummerde lijst",
+		"list-checklist": "Controlelijst",
+		"outdent": "Inspringing verkleinen",
+		"indent": "Inspringing vergroten",
+		"fold": "Sectie samenvouwen",
+		"insert-date": "Datum invoegen",
+		"insert-time": "Tijd invoegen",
+		"insert-title": "Titel invoegen"
 	},
 	"message": {
 		"notes": {
 			"empty": "Je hebt nog geen notities",
-			"no_recent": "Geen recente of vastgezette notities"
+			"exported": "Bestand succesvol geëxporteerd",
+			"no_recent": "Geen recente of vastgezette notities",
+			"export_failed": "Het bestand kon niet worden geëxporteerd",
+			"share_failed": "Het bestand kon niet worden gedeeld"
+		},
+		"files": {
+			"open_failed": "Het bestand kon niet worden geopend"
+		},
+		"outline": {
+			"empty": "Deze notitie heeft geen koppen"
+		},
+		"outgoing_links": {
+			"empty": "Deze notitie bevat geen links naar andere notities"
 		},
 		"tags": {
 			"empty": "Je hebt nog geen labels"
 		},
 		"version_history": {
-			"empty": "Nog geen versies opgeslagen"
+			"empty": "Nog geen versies opgeslagen",
+			"restore": {
+				"title": "Versie herstellen",
+				"message": "Hiermee wordt de huidige inhoud vervangen door deze versie. Niet-opgeslagen wijzigingen gaan verloren."
+			}
+		},
+		"wiki_links": {
+			"rename": {
+				"title": "Links bijwerken",
+				"message_one": "Wil je de interne link naar deze notitie bijwerken?",
+				"message_other": "Wil je de {{count}} interne links naar deze notitie bijwerken?"
+			},
+			"missing": {
+				"title": "Notitie niet gevonden",
+				"message": "Er is geen notitie met de titel \"{{title}}\". Wil je die maken?"
+			}
 		}
 	},
 	"placeholder": {
@@ -52,6 +385,47 @@
 		"note": "Typ uw notitie hier..."
 	},
 	"drawer": {
-		"tags": "Labels"
+		"repositories": "Repositories",
+		"templates": "Sjablonen",
+		"tags": "Labels",
+		"search": "Notities zoeken",
+		"collapse_all": "Alles samenvouwen",
+		"daily_note": "Dagelijkse notitie",
+		"expand_all": "Alles uitvouwen",
+		"open": "Menu openen",
+		"notes": "Notities",
+		"files": "Bestanden",
+		"files_empty": "Nog geen bijlagen in deze repository",
+		"change_view": "Weergave wijzigen",
+		"sort": {
+			"title": "Notities sorteren",
+			"name_asc": "Naam (A - Z)",
+			"name_desc": "Naam (Z - A)",
+			"count_desc": "Gebruik (hoog - laag)",
+			"count_asc": "Gebruik (laag - hoog)",
+			"modified_desc": "Gewijzigd (nieuw - oud)",
+			"modified_asc": "Gewijzigd (oud - nieuw)",
+			"created_desc": "Gemaakt (nieuw - oud)",
+			"created_asc": "Gemaakt (oud - nieuw)"
+		}
+	},
+	"search": {
+		"recent": "Recent",
+		"saved": "Opgeslagen",
+		"pinned": "Vastgepind",
+		"has_image": "Afbeeldingen",
+		"in_content": "Inhoud",
+		"save": "Opslaan",
+		"unsave": "Verwijderen"
+	},
+	"error_boundary": {
+		"title": "Er is iets misgegaan",
+		"message": "Er is een onverwacht probleem opgetreden. Probeer het opnieuw."
+	},
+	"export": {
+		"title": "Exporteren of delen als",
+		"markdown": "Markdown",
+		"html": "HTML",
+		"pdf": "PDF"
 	}
 }
