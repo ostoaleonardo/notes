@@ -3,7 +3,7 @@ import { Linking, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 
-import { LanguagesSheet } from '@/screens/settings/languages-sheet'
+import { LanguageOption } from '@/screens/settings/language-option'
 import { ProSection } from '@/screens/settings/pro-section'
 import { ThemeOption } from '@/screens/settings/theme-option'
 import { AppVersionCard } from '@/screens/settings/app-version-card'
@@ -16,9 +16,6 @@ import { DefaultNoteFolderOption } from '@/screens/settings/default-note-folder-
 import { Scroll } from '@/components/animated/scroll'
 import { Section } from '@/components/section'
 
-import { useBottomSheet } from '@/hooks/use-bottom-sheet'
-
-import { ArrowForward } from '@/icons/arrow-forward'
 import { OpenInNew } from '@/icons/open-in-new'
 
 import { LINKS } from '@/constants/links'
@@ -30,8 +27,6 @@ export default function Settings() {
     const { t } = useTranslation()
     const { colors } = useTheme()
 
-    const languagesSheet = useBottomSheet()
-
     return (
         <View style={{ flex: 1 }}>
             <Scroll contentContainerStyle={styles.scroll}>
@@ -40,13 +35,7 @@ export default function Settings() {
                     containerStyle={styles.section}
                     contentStyle={styles.items}
                 >
-                    <Option
-                        title={t('settings.general.language')}
-                        description={t('language')}
-                        rightContent={<ArrowForward color={colors.onBackground} />}
-                        onPress={languagesSheet.onOpen}
-                        isFirst={true}
-                    />
+                    <LanguageOption isFirst={true} />
                     <ThemeOption />
                 </Section>
 
@@ -114,7 +103,6 @@ export default function Settings() {
                     <AppVersionCard />
                 </Section>
 
-                <LanguagesSheet sheet={languagesSheet} />
             </Scroll>
         </View>
     )

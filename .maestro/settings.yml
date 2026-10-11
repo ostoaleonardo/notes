@@ -12,10 +12,10 @@ appId: com.monospace.notes
 - assertVisible: TEMA DE COLOR
 - tapOn: IDIOMA.*
 - waitForAnimationToEnd
-- assertVisible: Cerrar hoja
-- tapOn: Cerrar hoja
+- assertVisible: ENGLISH
+- tapOn: ESPAÑOL
 - waitForAnimationToEnd
-- assertNotVisible: Cerrar hoja
+- assertNotVisible: ENGLISH
 - scrollUntilVisible:
     element: AL ELIMINAR.*
 - tapOn: AL ELIMINAR.*
