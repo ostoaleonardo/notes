@@ -20,7 +20,11 @@
 		"save_failed": "このメモを保存できませんでした",
 		"title_duplicated": "この名前のメモはすでに存在します",
 		"title_breaks_links": "# ^ [ ] の文字を使うと、Obsidian でこのメモへのリンクが機能しなくなります",
-		"migration_notice": "移行は問題を残して完了しました。{{renamed}} 件のメモの名前が変更され、{{images}} 枚の画像を復元できませんでした。"
+		"migration_notice": "移行は問題を残して完了しました。{{renamed}} 件のメモの名前が変更され、{{images}} 枚の画像を復元できませんでした。",
+		"move": {
+			"failed": "このメモを移動できませんでした",
+			"duplicate": "そのフォルダには同じ名前のメモがすでにあります"
+		}
 	},
 	"tags": {
 		"invalid_properties": {
@@ -119,6 +123,10 @@
 				"title": "削除時",
 				"vault-trash": ".trash フォルダに移動",
 				"permanent": "完全に削除"
+			},
+			"default_folder": {
+				"title": "新規メモの既定の保存場所",
+				"root": "リポジトリのルート"
 			}
 		},
 		"editor": {
@@ -250,7 +258,8 @@
 		"restore": "復元",
 		"dont_update": "更新しない",
 		"update_once": "今回のみ更新",
-		"update_always": "常に更新"
+		"update_always": "常に更新",
+		"move": "移動先"
 	},
 	"count": {
 		"notes_one": "{{count}} 件のメモ",
@@ -378,6 +387,12 @@
 				"title": "メモが見つかりません",
 				"message": "「{{title}}」というタイトルのメモはありません。作成しますか?"
 			}
+		},
+		"orphans": {
+			"empty": "孤立したメモはありません"
+		},
+		"unresolved": {
+			"empty": "未解決のリンクはありません"
 		}
 	},
 	"placeholder": {
@@ -407,7 +422,9 @@
 			"modified_asc": "更新日(古い - 新しい)",
 			"created_desc": "作成日(新しい - 古い)",
 			"created_asc": "作成日(古い - 新しい)"
-		}
+		},
+		"orphans": "孤立したメモ",
+		"unresolved": "未解決のリンク"
 	},
 	"search": {
 		"recent": "最近",

@@ -20,7 +20,11 @@
 		"save_failed": "Det gick inte att spara anteckningen",
 		"title_duplicated": "Det finns redan en anteckning med det här namnet",
 		"title_breaks_links": "Tecknen # ^ [ ] gör att länkar till den här anteckningen slutar fungera i Obsidian",
-		"migration_notice": "Migreringen slutfördes med problem: {{renamed}} anteckningar döptes om och {{images}} bilder kunde inte återställas."
+		"migration_notice": "Migreringen slutfördes med problem: {{renamed}} anteckningar döptes om och {{images}} bilder kunde inte återställas.",
+		"move": {
+			"failed": "Det gick inte att flytta anteckningen",
+			"duplicate": "Det finns redan en anteckning med det här namnet i mappen"
+		}
 	},
 	"tags": {
 		"invalid_properties": {
@@ -119,6 +123,10 @@
 				"title": "Vid radering",
 				"vault-trash": "Flytta till mappen .trash",
 				"permanent": "Radera permanent"
+			},
+			"default_folder": {
+				"title": "Standardplats för nya anteckningar",
+				"root": "Förrådets rot"
 			}
 		},
 		"editor": {
@@ -250,7 +258,8 @@
 		"restore": "Återställ",
 		"dont_update": "Uppdatera inte",
 		"update_once": "Uppdatera en gång",
-		"update_always": "Uppdatera alltid"
+		"update_always": "Uppdatera alltid",
+		"move": "Flytta till"
 	},
 	"count": {
 		"notes_one": "{{count}} anteckning",
@@ -378,6 +387,12 @@
 				"title": "Anteckningen hittades inte",
 				"message": "Det finns ingen anteckning med titeln \"{{title}}\". Vill du skapa den?"
 			}
+		},
+		"orphans": {
+			"empty": "Inga föräldralösa anteckningar"
+		},
+		"unresolved": {
+			"empty": "Inga olösta länkar"
 		}
 	},
 	"placeholder": {
@@ -407,7 +422,9 @@
 			"modified_asc": "Ändrad (gammal - ny)",
 			"created_desc": "Skapad (ny - gammal)",
 			"created_asc": "Skapad (gammal - ny)"
-		}
+		},
+		"orphans": "Föräldralösa anteckningar",
+		"unresolved": "Olösta länkar"
 	},
 	"search": {
 		"recent": "Senaste",

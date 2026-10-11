@@ -20,7 +20,11 @@
 		"save_failed": "Bu not kaydedilemedi",
 		"title_duplicated": "Bu adda bir not zaten var",
 		"title_breaks_links": "# ^ [ ] karakterleri, bu nota giden bağlantıların Obsidian'da çalışmasını engeller",
-		"migration_notice": "Taşıma sorunlarla tamamlandı: {{renamed}} not yeniden adlandırıldı ve {{images}} görsel kurtarılamadı."
+		"migration_notice": "Taşıma sorunlarla tamamlandı: {{renamed}} not yeniden adlandırıldı ve {{images}} görsel kurtarılamadı.",
+		"move": {
+			"failed": "Bu not taşınamadı",
+			"duplicate": "Bu klasörde bu adda bir not zaten var"
+		}
 	},
 	"tags": {
 		"invalid_properties": {
@@ -119,6 +123,10 @@
 				"title": "Silerken",
 				"vault-trash": ".trash klasörüne taşı",
 				"permanent": "Kalıcı olarak sil"
+			},
+			"default_folder": {
+				"title": "Yeni notlar için varsayılan konum",
+				"root": "Depo kökü"
 			}
 		},
 		"editor": {
@@ -250,7 +258,8 @@
 		"restore": "Geri yükle",
 		"dont_update": "Güncelleme",
 		"update_once": "Bir kez güncelle",
-		"update_always": "Her zaman güncelle"
+		"update_always": "Her zaman güncelle",
+		"move": "Şuraya taşı"
 	},
 	"count": {
 		"notes_one": "{{count}} not",
@@ -378,6 +387,12 @@
 				"title": "Not bulunamadı",
 				"message": "\"{{title}}\" başlıklı bir not yok. Oluşturmak istiyor musun?"
 			}
+		},
+		"orphans": {
+			"empty": "Yetim not yok"
+		},
+		"unresolved": {
+			"empty": "Çözümlenmemiş bağlantı yok"
 		}
 	},
 	"placeholder": {
@@ -407,7 +422,9 @@
 			"modified_asc": "Değiştirilme (eski - yeni)",
 			"created_desc": "Oluşturulma (yeni - eski)",
 			"created_asc": "Oluşturulma (eski - yeni)"
-		}
+		},
+		"orphans": "Yetim notlar",
+		"unresolved": "Çözümlenmemiş bağlantılar"
 	},
 	"search": {
 		"recent": "Son",

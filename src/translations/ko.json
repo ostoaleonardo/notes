@@ -20,7 +20,11 @@
 		"save_failed": "이 노트를 저장할 수 없습니다",
 		"title_duplicated": "이 이름의 노트가 이미 있습니다",
 		"title_breaks_links": "# ^ [ ] 문자를 사용하면 Obsidian에서 이 노트로의 링크가 작동하지 않습니다",
-		"migration_notice": "마이그레이션이 문제와 함께 완료되었습니다. 노트 {{renamed}}개의 이름이 변경되었고 이미지 {{images}}개를 복구하지 못했습니다."
+		"migration_notice": "마이그레이션이 문제와 함께 완료되었습니다. 노트 {{renamed}}개의 이름이 변경되었고 이미지 {{images}}개를 복구하지 못했습니다.",
+		"move": {
+			"failed": "이 노트를 이동할 수 없습니다",
+			"duplicate": "해당 폴더에 같은 이름의 노트가 이미 있습니다"
+		}
 	},
 	"tags": {
 		"invalid_properties": {
@@ -119,6 +123,10 @@
 				"title": "삭제 시",
 				"vault-trash": ".trash 폴더로 이동",
 				"permanent": "영구 삭제"
+			},
+			"default_folder": {
+				"title": "새 노트의 기본 위치",
+				"root": "저장소 루트"
 			}
 		},
 		"editor": {
@@ -250,7 +258,8 @@
 		"restore": "복원",
 		"dont_update": "업데이트 안 함",
 		"update_once": "한 번만 업데이트",
-		"update_always": "항상 업데이트"
+		"update_always": "항상 업데이트",
+		"move": "이동할 위치"
 	},
 	"count": {
 		"notes_one": "노트 {{count}}개",
@@ -378,6 +387,12 @@
 				"title": "노트를 찾을 수 없습니다",
 				"message": "\"{{title}}\" 제목의 노트가 없습니다. 만들까요?"
 			}
+		},
+		"orphans": {
+			"empty": "고아 노트가 없습니다"
+		},
+		"unresolved": {
+			"empty": "해결되지 않은 링크가 없습니다"
 		}
 	},
 	"placeholder": {
@@ -407,7 +422,9 @@
 			"modified_asc": "수정일 (오래된 - 최신 순)",
 			"created_desc": "생성일 (최신 - 오래된 순)",
 			"created_asc": "생성일 (오래된 - 최신 순)"
-		}
+		},
+		"orphans": "고아 노트",
+		"unresolved": "해결되지 않은 링크"
 	},
 	"search": {
 		"recent": "최근",

@@ -20,7 +20,11 @@
 		"save_failed": "Impossible d'enregistrer cette note",
 		"title_duplicated": "Une note portant ce nom existe déjà",
 		"title_breaks_links": "Les caractères # ^ [ ] empêchent les liens vers cette note de fonctionner dans Obsidian",
-		"migration_notice": "Migration terminée avec des problèmes : {{renamed}} notes ont été renommées et {{images}} images n'ont pas pu être récupérées."
+		"migration_notice": "Migration terminée avec des problèmes : {{renamed}} notes ont été renommées et {{images}} images n'ont pas pu être récupérées.",
+		"move": {
+			"failed": "Impossible de déplacer cette note",
+			"duplicate": "Une note portant ce nom existe déjà dans ce dossier"
+		}
 	},
 	"tags": {
 		"invalid_properties": {
@@ -119,6 +123,10 @@
 				"title": "À la suppression",
 				"vault-trash": "Déplacer vers le dossier .trash",
 				"permanent": "Supprimer définitivement"
+			},
+			"default_folder": {
+				"title": "Emplacement par défaut des nouvelles notes",
+				"root": "Racine du dépôt"
 			}
 		},
 		"editor": {
@@ -250,7 +258,8 @@
 		"restore": "Restaurer",
 		"dont_update": "Ne pas mettre à jour",
 		"update_once": "Mettre à jour une fois",
-		"update_always": "Toujours mettre à jour"
+		"update_always": "Toujours mettre à jour",
+		"move": "Déplacer vers"
 	},
 	"count": {
 		"notes_one": "{{count}} note",
@@ -378,6 +387,12 @@
 				"title": "Note introuvable",
 				"message": "Il n'existe aucune note intitulée « {{title}} ». Voulez-vous la créer ?"
 			}
+		},
+		"orphans": {
+			"empty": "Aucune note orpheline"
+		},
+		"unresolved": {
+			"empty": "Aucun lien non résolu"
 		}
 	},
 	"placeholder": {
@@ -407,7 +422,9 @@
 			"modified_asc": "Modifiée (ancienne - récente)",
 			"created_desc": "Créée (récente - ancienne)",
 			"created_asc": "Créée (ancienne - récente)"
-		}
+		},
+		"orphans": "Notes orphelines",
+		"unresolved": "Liens non résolus"
 	},
 	"search": {
 		"recent": "Récentes",

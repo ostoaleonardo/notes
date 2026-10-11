@@ -20,7 +20,11 @@
 		"save_failed": "Diese Notiz konnte nicht gespeichert werden",
 		"title_duplicated": "Eine Notiz mit diesem Namen existiert bereits",
 		"title_breaks_links": "Die Zeichen # ^ [ ] verhindern, dass Links zu dieser Notiz in Obsidian funktionieren",
-		"migration_notice": "Migration mit Problemen abgeschlossen: {{renamed}} Notizen wurden umbenannt und {{images}} Bilder konnten nicht wiederhergestellt werden."
+		"migration_notice": "Migration mit Problemen abgeschlossen: {{renamed}} Notizen wurden umbenannt und {{images}} Bilder konnten nicht wiederhergestellt werden.",
+		"move": {
+			"failed": "Diese Notiz konnte nicht verschoben werden",
+			"duplicate": "In diesem Ordner existiert bereits eine Notiz mit diesem Namen"
+		}
 	},
 	"tags": {
 		"invalid_properties": {
@@ -119,6 +123,10 @@
 				"title": "Beim Löschen",
 				"vault-trash": "In den Ordner .trash verschieben",
 				"permanent": "Dauerhaft löschen"
+			},
+			"default_folder": {
+				"title": "Standardort für neue Notizen",
+				"root": "Stammordner des Repositorys"
 			}
 		},
 		"editor": {
@@ -250,7 +258,8 @@
 		"restore": "Wiederherstellen",
 		"dont_update": "Nicht aktualisieren",
 		"update_once": "Einmal aktualisieren",
-		"update_always": "Immer aktualisieren"
+		"update_always": "Immer aktualisieren",
+		"move": "Verschieben nach"
 	},
 	"count": {
 		"notes_one": "{{count}} Notiz",
@@ -378,6 +387,12 @@
 				"title": "Notiz nicht gefunden",
 				"message": "Es gibt keine Notiz mit dem Titel „{{title}}“. Möchtest du sie erstellen?"
 			}
+		},
+		"orphans": {
+			"empty": "Keine verwaisten Notizen"
+		},
+		"unresolved": {
+			"empty": "Keine nicht aufgelösten Links"
 		}
 	},
 	"placeholder": {
@@ -407,7 +422,9 @@
 			"modified_asc": "Geändert (alt - neu)",
 			"created_desc": "Erstellt (neu - alt)",
 			"created_asc": "Erstellt (alt - neu)"
-		}
+		},
+		"orphans": "Verwaiste Notizen",
+		"unresolved": "Nicht aufgelöste Links"
 	},
 	"search": {
 		"recent": "Zuletzt",

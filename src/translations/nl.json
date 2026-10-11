@@ -20,7 +20,11 @@
 		"save_failed": "Deze notitie kon niet worden opgeslagen",
 		"title_duplicated": "Er bestaat al een notitie met deze naam",
 		"title_breaks_links": "De tekens # ^ [ ] zorgen ervoor dat links naar deze notitie niet meer werken in Obsidian",
-		"migration_notice": "Migratie voltooid met problemen: {{renamed}} notities zijn hernoemd en {{images}} afbeeldingen konden niet worden hersteld."
+		"migration_notice": "Migratie voltooid met problemen: {{renamed}} notities zijn hernoemd en {{images}} afbeeldingen konden niet worden hersteld.",
+		"move": {
+			"failed": "Deze notitie kon niet worden verplaatst",
+			"duplicate": "In die map bestaat al een notitie met deze naam"
+		}
 	},
 	"tags": {
 		"invalid_properties": {
@@ -119,6 +123,10 @@
 				"title": "Bij verwijderen",
 				"vault-trash": "Verplaatsen naar map .trash",
 				"permanent": "Definitief verwijderen"
+			},
+			"default_folder": {
+				"title": "Standaardlocatie voor nieuwe notities",
+				"root": "Hoofdmap van de repository"
 			}
 		},
 		"editor": {
@@ -250,7 +258,8 @@
 		"restore": "Herstellen",
 		"dont_update": "Niet bijwerken",
 		"update_once": "Eenmalig bijwerken",
-		"update_always": "Altijd bijwerken"
+		"update_always": "Altijd bijwerken",
+		"move": "Verplaatsen naar"
 	},
 	"count": {
 		"notes_one": "{{count}} notitie",
@@ -378,6 +387,12 @@
 				"title": "Notitie niet gevonden",
 				"message": "Er is geen notitie met de titel \"{{title}}\". Wil je die maken?"
 			}
+		},
+		"orphans": {
+			"empty": "Geen verweesde notities"
+		},
+		"unresolved": {
+			"empty": "Geen onopgeloste links"
 		}
 	},
 	"placeholder": {
@@ -407,7 +422,9 @@
 			"modified_asc": "Gewijzigd (oud - nieuw)",
 			"created_desc": "Gemaakt (nieuw - oud)",
 			"created_asc": "Gemaakt (oud - nieuw)"
-		}
+		},
+		"orphans": "Verweesde notities",
+		"unresolved": "Onopgeloste links"
 	},
 	"search": {
 		"recent": "Recent",

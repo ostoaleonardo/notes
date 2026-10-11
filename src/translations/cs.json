@@ -20,7 +20,11 @@
 		"save_failed": "Tuto poznámku se nepodařilo uložit",
 		"title_duplicated": "Poznámka s tímto názvem již existuje",
 		"title_breaks_links": "Znaky # ^ [ ] způsobí, že odkazy na tuto poznámku přestanou v Obsidianu fungovat",
-		"migration_notice": "Migrace skončila s problémy: přejmenováno bylo {{renamed}} poznámek a {{images}} obrázků se nepodařilo obnovit."
+		"migration_notice": "Migrace skončila s problémy: přejmenováno bylo {{renamed}} poznámek a {{images}} obrázků se nepodařilo obnovit.",
+		"move": {
+			"failed": "Tuto poznámku se nepodařilo přesunout",
+			"duplicate": "Poznámka s tímto názvem v dané složce již existuje"
+		}
 	},
 	"tags": {
 		"invalid_properties": {
@@ -119,6 +123,10 @@
 				"title": "Při smazání",
 				"vault-trash": "Přesunout do složky .trash",
 				"permanent": "Smazat trvale"
+			},
+			"default_folder": {
+				"title": "Výchozí umístění nových poznámek",
+				"root": "Kořen úložiště"
 			}
 		},
 		"editor": {
@@ -250,7 +258,8 @@
 		"restore": "Obnovit",
 		"dont_update": "Neaktualizovat",
 		"update_once": "Aktualizovat jednou",
-		"update_always": "Vždy aktualizovat"
+		"update_always": "Vždy aktualizovat",
+		"move": "Přesunout do"
 	},
 	"count": {
 		"notes_one": "{{count}} poznámka",
@@ -388,6 +397,12 @@
 				"title": "Poznámka nenalezena",
 				"message": "Neexistuje žádná poznámka s názvem „{{title}}“. Chceš ji vytvořit?"
 			}
+		},
+		"orphans": {
+			"empty": "Žádné osamocené poznámky"
+		},
+		"unresolved": {
+			"empty": "Žádné nevyřešené odkazy"
 		}
 	},
 	"placeholder": {
@@ -417,7 +432,9 @@
 			"modified_asc": "Změněno (staré - nové)",
 			"created_desc": "Vytvořeno (nové - staré)",
 			"created_asc": "Vytvořeno (staré - nové)"
-		}
+		},
+		"orphans": "Osamocené poznámky",
+		"unresolved": "Nevyřešené odkazy"
 	},
 	"search": {
 		"recent": "Nedávné",
