@@ -4,12 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 
 import { MenuContainer } from '@/components/menu/menu-container'
-import { MenuItem } from '@/components/menu/menu-item'
+import { SelectMenuItem } from '@/components/menu/select-menu-item'
 import { Typography } from '@/components/typography'
 
 import { useMenuAction } from '@/hooks/use-menu-action'
 
-import { Check } from '@/icons/check'
 import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
 import { KeyboardArrowUp } from '@/icons/keyboard-arrow-up'
 
@@ -60,12 +59,10 @@ export const DrawerViewSwitcher = memo(function DrawerViewSwitcher({ view, onCha
             )}
         >
             {VIEW_OPTIONS.map((option) => (
-                <MenuItem
+                <SelectMenuItem
                     key={option}
                     title={t(DRAWER_VIEW_LABELS[option])}
-                    trailingIcon={option === view
-                        ? (props) => <Check {...props} />
-                        : undefined}
+                    selected={option === view}
                     onPress={() => trigger(() => onChange(option))}
                 />
             ))}
