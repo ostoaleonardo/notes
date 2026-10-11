@@ -1,7 +1,8 @@
 import { Menu, useTheme } from 'react-native-paper'
 
+import { MENU } from '@/constants/components'
 import { TRANSPARENT } from '@/constants/themes'
-import { RADIUS, SPACING, BORDER_WIDTH } from '@/constants/theme'
+import { RADIUS, BORDER_WIDTH } from '@/constants/theme'
 
 export function MenuContainer({
     anchor,
@@ -14,11 +15,12 @@ export function MenuContainer({
     const { colors } = useTheme()
 
     const contentStyle = grouped ? {
-        gap: SPACING.xxs,
-        padding: SPACING.xs,
+        gap: MENU.groupGap,
         backgroundColor: TRANSPARENT.color
     } : {
         borderWidth: BORDER_WIDTH.thin,
+        paddingVertical: MENU.paddingVertical,
+        paddingHorizontal: MENU.paddingHorizontal,
         overflow: 'hidden',
         borderRadius: RADIUS.lg,
         backgroundColor: colors.surface,

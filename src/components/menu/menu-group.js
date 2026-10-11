@@ -1,6 +1,7 @@
 import { View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
+import { MENU } from '@/constants/components'
 import { TRANSPARENT } from '@/constants/themes'
 import { RADIUS, BORDER_WIDTH } from '@/constants/theme'
 
@@ -13,6 +14,8 @@ export function MenuGroup({ children, first = true, last = true }) {
         <View
             style={{
                 borderWidth: BORDER_WIDTH.thin,
+                paddingVertical: MENU.paddingVertical,
+                paddingHorizontal: MENU.paddingHorizontal,
                 overflow: 'hidden',
                 borderTopLeftRadius: topRadius,
                 borderTopRightRadius: topRadius,

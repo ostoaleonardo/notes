@@ -6,8 +6,8 @@ import { MenuItem } from './menu-item'
 
 import { Check } from '@/icons/check'
 
+import { MENU } from '@/constants/components'
 import { TRANSPARENT } from '@/constants/themes'
-import { SPACING } from '@/constants/theme'
 
 export function SelectMenuItem({ selected, style, contentStyle, ...props }) {
     const { colors } = useTheme()
@@ -31,6 +31,6 @@ const styles = StyleSheet.create({
     item: {
         flexGrow: 1,
         flexShrink: 1,
-        marginRight: SPACING.md
+        marginRight: MENU.titleToTrailing
     }
 })

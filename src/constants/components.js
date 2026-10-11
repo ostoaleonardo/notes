@@ -55,7 +55,15 @@ export const SEARCH_INPUT = {
 
 export const MENU = {
     maxHeight: 280,
-    itemIndent: SPACING.lg
+    itemIndent: SPACING.lg,
+    paddingHorizontal: SPACING.xxs,
+    paddingVertical: SPACING.xxxs / 2,
+    groupGap: SPACING.xxxs,
+    itemGap: SPACING.xxxs / 2,
+    itemRadius: 12,
+    iconSize: ICON_SIZE.lg,
+    iconToTitle: SPACING.xxs,
+    titleToTrailing: SPACING.xxs
 }
 
 export const SHEET = {
