@@ -174,9 +174,11 @@ export const RELATIONS_SHEET = {
     blobSize: 52
 }
 
+const DRAWER_ITEM_HEIGHT = 40
+
 export const DRAWER_ITEM = {
-    minHeight: 40,
-    radius: RADIUS.lg,
+    minHeight: DRAWER_ITEM_HEIGHT,
+    radius: DRAWER_ITEM_HEIGHT / 2,
     gap: SPACING.md,
     paddingHorizontal: SPACING.md,
     rowGap: 0,
