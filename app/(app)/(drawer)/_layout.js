@@ -12,6 +12,7 @@ export default function DrawerLayout() {
         <Drawer
             screenOptions={{
                 headerShown: false,
+                drawerType: 'slide',
                 drawerStyle: getScreenContentStyle(colors),
                 sceneStyle: getScreenContentStyle(colors)
             }}
