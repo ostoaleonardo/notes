@@ -8,6 +8,7 @@ import { levelRowStyles } from './drawer-level-styles'
 import { ArrowBack } from '@/icons/arrow-back'
 
 import { DRAWER_ITEM } from '@/constants/components'
+import { RADIUS } from '@/constants/theme'
 
 export const DrawerLevelHeader = memo(function DrawerLevelHeader({
     repository,
@@ -56,6 +57,6 @@ const styles = StyleSheet.create({
     back: {
         flex: 1,
         overflow: 'hidden',
-        borderRadius: DRAWER_ITEM.radius
+        borderRadius: RADIUS.xl
     }
 })

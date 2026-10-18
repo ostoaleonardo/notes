@@ -6,6 +6,7 @@ import { Typography } from '@/components/typography'
 import { levelRowStyles } from './drawer-level-styles'
 
 import { DRAWER_ITEM } from '@/constants/components'
+import { RADIUS } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'
 
 export const DrawerLevelNote = memo(function DrawerLevelNote({ note, active, onOpenNote }) {
@@ -41,7 +42,7 @@ export const DrawerLevelNote = memo(function DrawerLevelNote({ note, active, onO
 const styles = StyleSheet.create({
     container: {
         overflow: 'hidden',
-        borderRadius: DRAWER_ITEM.radius,
+        borderRadius: RADIUS.xl,
         marginBottom: DRAWER_ITEM.rowGap
     }
 })

@@ -3,11 +3,13 @@ import { Path, Svg } from 'react-native-svg'
 
 import { NODE_STYLE } from '@/constants/components'
 import { CONNECTION_NODE_KINDS } from '@/constants/connections'
+import { RADIUS } from '@/constants/theme'
 
 const DASH = '4 3'
 
 const buildFilePath = (width, height) => {
-    const { fileCorner: corner, fileRadius: radius } = NODE_STYLE
+    const { fileCorner: corner } = NODE_STYLE
+    const radius = RADIUS.sm
 
     return `M0 ${radius}Q0 0 ${radius} 0H${width - corner}L${width} ${corner}V${height}H0Z`
 }
@@ -18,13 +20,13 @@ const getRadius = (kind, width, height) => {
             return { borderRadius: Math.min(width, height) / 2 }
         case CONNECTION_NODE_KINDS.FOLDER:
             return {
-                borderTopLeftRadius: NODE_STYLE.folderRadius.top,
-                borderTopRightRadius: NODE_STYLE.folderRadius.rest,
-                borderBottomLeftRadius: NODE_STYLE.folderRadius.rest,
-                borderBottomRightRadius: NODE_STYLE.folderRadius.rest
+                borderTopLeftRadius: RADIUS.sm,
+                borderTopRightRadius: RADIUS.lg,
+                borderBottomLeftRadius: RADIUS.lg,
+                borderBottomRightRadius: RADIUS.lg
             }
         default:
-            return { borderRadius: Math.min(NODE_STYLE.noteRadius, height / 2) }
+            return { borderRadius: Math.min(RADIUS.lg, height / 2) }
     }
 }
 
@@ -65,8 +67,8 @@ export function EntityShape({
         height: tab.height,
         backgroundColor: fill,
         borderColor: stroke,
-        borderTopLeftRadius: tab.radius,
-        borderTopRightRadius: tab.radius
+        borderTopLeftRadius: RADIUS.sm,
+        borderTopRightRadius: RADIUS.sm
     }
 
     return (

@@ -9,9 +9,8 @@ import { Typography } from '@/components/typography'
 import { ArrowBack } from '@/icons/arrow-back'
 import { ArrowForward } from '@/icons/arrow-forward'
 
-import { HERO_CARD } from '@/constants/components'
 import { FOCUS } from '@/constants/connections'
-import { SPACING } from '@/constants/theme'
+import { RADIUS, SPACING } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'
 
 export const FocusPager = memo(function FocusPager({ page, pages, onTurn }) {
@@ -48,7 +47,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         alignSelf: 'center',
-        borderRadius: HERO_CARD.cardRadius
+        borderRadius: RADIUS.xl
     },
     label: {
         minWidth: FOCUS.pagerLabelWidth,

@@ -29,8 +29,7 @@ export const ICON_TOGGLE = {
 }
 
 export const CHECKBOX = {
-    size: 20,
-    radius: RADIUS.sm
+    size: 20
 }
 
 export const SWITCH = {
@@ -59,7 +58,6 @@ export const SEARCH_INPUT = {
 
 export const FILLED_INPUT = {
     minHeight: 56,
-    topRadius: RADIUS.xs,
     paddingHorizontal: SPACING.lg,
     paddingTop: SPACING.xs,
     paddingBottom: SPACING.sm,
@@ -120,11 +118,8 @@ export const TAG_CHIP = {
 }
 
 export const NODE_STYLE = {
-    noteRadius: 18,
-    folderRadius: { top: 6, rest: 14 },
-    folderTab: { width: 40, height: 9, offset: -8, radius: 7 },
+    folderTab: { width: 40, height: 9, offset: -8 },
     fileCorner: 11,
-    fileRadius: 6,
     borderWidth: 1,
     dashedWidth: 1.5,
     iconSize: ICON_SIZE.md,
@@ -153,10 +148,8 @@ export const EDGE_STYLE = {
 export const HERO_CARD = {
     heroRing: 92,
     heroStroke: 8,
-    heroRadius: 32,
     heroTextSize: 34,
-    heroTitleSize: 21,
-    cardRadius: 28
+    heroTitleSize: 21
 }
 
 export const ORIGIN_TILE = {
@@ -164,8 +157,7 @@ export const ORIGIN_TILE = {
     labelSize: 11,
     countSize: 10,
     height: 92,
-    folderHeight: 84,
-    radius: 22
+    folderHeight: 84
 }
 
 export const RELATIONS_SHEET = {
@@ -174,11 +166,8 @@ export const RELATIONS_SHEET = {
     blobSize: 52
 }
 
-const DRAWER_ITEM_HEIGHT = 40
-
 export const DRAWER_ITEM = {
-    minHeight: DRAWER_ITEM_HEIGHT,
-    radius: DRAWER_ITEM_HEIGHT / 2,
+    minHeight: 40,
     gap: SPACING.md,
     paddingHorizontal: SPACING.md,
     rowGap: 0,

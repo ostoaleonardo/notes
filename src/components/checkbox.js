@@ -5,7 +5,7 @@ import { Check } from '@/icons/check'
 
 import { TRANSPARENT } from '@/constants/themes'
 import { CHECKBOX } from '@/constants/components'
-import { BORDER_WIDTH } from '@/constants/theme'
+import { BORDER_WIDTH, RADIUS } from '@/constants/theme'
 
 export function Checkbox({ checked }) {
     const { colors } = useTheme()
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         width: CHECKBOX.size,
         height: CHECKBOX.size,
         borderWidth: BORDER_WIDTH.thin,
-        borderRadius: CHECKBOX.radius,
+        borderRadius: RADIUS.sm,
         alignItems: 'center',
         justifyContent: 'center'
     }

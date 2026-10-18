@@ -11,7 +11,7 @@ import { useMenuAnchor } from '@/hooks/use-menu-anchor'
 import { ChevronRight } from '@/icons/chevron-right'
 
 import { DRAWER_ITEM } from '@/constants/components'
-import { OPACITY } from '@/constants/theme'
+import { OPACITY, RADIUS } from '@/constants/theme'
 
 export const DrawerLevelFolder = memo(function DrawerLevelFolder({
     repository,
@@ -59,7 +59,7 @@ export const DrawerLevelFolder = memo(function DrawerLevelFolder({
 const styles = StyleSheet.create({
     container: {
         overflow: 'hidden',
-        borderRadius: DRAWER_ITEM.radius,
+        borderRadius: RADIUS.xl,
         marginBottom: DRAWER_ITEM.rowGap
     }
 })

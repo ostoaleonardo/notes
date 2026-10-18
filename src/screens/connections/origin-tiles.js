@@ -10,7 +10,7 @@ import { Typography } from '@/components/typography'
 
 import { ORIGIN_TILE } from '@/constants/components'
 import { CONNECTION_TYPES, CONNECTION_TYPE_LABELS } from '@/constants/connections'
-import { ICON_SIZE, OPACITY, SPACING } from '@/constants/theme'
+import { ICON_SIZE, OPACITY, RADIUS, SPACING } from '@/constants/theme'
 
 const TILE_COLUMNS = ORIGIN_TILE.columns
 
@@ -37,7 +37,7 @@ const Tile = memo(function Tile({ type, count, selected, width, onPress }) {
                 height={height}
                 fill={selected ? colors.tertiary : colors.surfaceVariant}
                 stroke='transparent'
-                radius={isSquare ? { borderRadius: ORIGIN_TILE.radius } : undefined}
+                radius={isSquare ? { borderRadius: RADIUS.xl } : undefined}
                 style={styles.tile}
             >
                 <EntityIcon

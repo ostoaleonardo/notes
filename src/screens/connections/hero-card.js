@@ -6,7 +6,7 @@ import { ProgressRing } from '@/components/progress-ring'
 import { Typography } from '@/components/typography'
 
 import { HERO_CARD } from '@/constants/components'
-import { SPACING } from '@/constants/theme'
+import { RADIUS, SPACING } from '@/constants/theme'
 
 export const HeroCard = memo(function HeroCard({
     progress,
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         padding: SPACING.xl,
         flexDirection: 'row',
         alignItems: 'center',
-        borderRadius: HERO_CARD.heroRadius
+        borderRadius: RADIUS.xl
     },
     text: {
         flex: 1,
