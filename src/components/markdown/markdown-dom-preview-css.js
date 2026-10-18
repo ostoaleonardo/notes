@@ -80,7 +80,9 @@ export const buildPreviewCss = ({ colors, typography }) => {
         transition: background-color 400ms ease;
     }
     .markdown-preview a { color: ${linkTextColor}; text-decoration: underline; }
-    .markdown-preview .wiki-link { color: ${linkTextColor}; text-decoration: underline; font-weight: bold; }
+    .markdown-preview .wiki-link {
+        color: ${linkTextColor}; text-decoration: underline; font-weight: bold;
+    }
     .markdown-preview .tag { color: ${linkTextColor}; text-decoration: none; font-weight: bold; }
     .markdown-preview .${FILE_LINK_CLASS} {
         display: inline-block; padding: 0 8px; border-radius: ${RADIUS.sm}px; text-decoration: none;
@@ -91,7 +93,9 @@ export const buildPreviewCss = ({ colors, typography }) => {
         background-color: currentColor; opacity: ${OPACITY.secondary}; -webkit-mask: ${ATTACH_FILE_MASK} center / contain no-repeat;
         mask: ${ATTACH_FILE_MASK} center / contain no-repeat;
     }
-    .markdown-preview .wiki-link-broken { color: ${textColor}; opacity: ${OPACITY.secondary}; text-decoration: underline dashed; }
+    .markdown-preview .wiki-link-broken {
+        color: ${textColor}; opacity: ${OPACITY.secondary}; text-decoration: underline dashed;
+    }
     .markdown-preview blockquote {
         margin: 0.4em 0; padding: 0.2em 0.8em;
         background-color: ${quoteBackgroundColor}; border-left: 4px solid ${linkColor};

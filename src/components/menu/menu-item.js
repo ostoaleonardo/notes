@@ -4,7 +4,7 @@ import { Menu, useTheme } from 'react-native-paper'
 
 import { MENU } from '@/constants/components'
 import { TRANSPARENT } from '@/constants/themes'
-import { FONTS, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
+import { FONTS, RADIUS, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
 
 const useSizedIcon = (icon, style) => useCallback(
     (props) => createElement(
@@ -37,7 +37,7 @@ export function MenuItem({ leadingIcon, trailingIcon, contentStyle, ...props }) 
 const styles = StyleSheet.create({
     item: {
         overflow: 'hidden',
-        borderRadius: MENU.itemRadius,
+        borderRadius: RADIUS.lg,
         marginVertical: MENU.itemGap
     },
     icon: {

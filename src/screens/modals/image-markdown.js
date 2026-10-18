@@ -115,14 +115,27 @@ export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
                     <TouchableRipple accessibilityRole='button' onPress={onRequestCameraPermission}>
                         <View style={styles.permissionContent}>
                             <View style={styles.permissionText}>
-                                <Typography bold uppercase color={colors.accentText} variant='bodySmall'>
+                                <Typography
+                                    bold
+                                    uppercase
+                                    color={colors.accentText}
+                                    variant='bodySmall'
+                                >
                                     {t('markdown.camera_permission.title')}
                                 </Typography>
-                                <Typography opacity={OPACITY.pressed} variant='bodySmall' styleProps={styles.permissionMessage}>
+                                <Typography
+                                    opacity={OPACITY.pressed}
+                                    variant='bodySmall'
+                                    styleProps={styles.permissionMessage}
+                                >
                                     {t('markdown.camera_permission.message')}
                                 </Typography>
                             </View>
-                            <Camera color={colors.accentText} width={ICON_SIZE.lg} height={ICON_SIZE.lg} />
+                            <Camera
+                                color={colors.accentText}
+                                width={ICON_SIZE.lg}
+                                height={ICON_SIZE.lg}
+                            />
                         </View>
                     </TouchableRipple>
                 </View>

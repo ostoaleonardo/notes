@@ -73,7 +73,6 @@ export const MENU = {
     paddingVertical: SPACING.xxxs / 2,
     groupGap: SPACING.xxxs,
     itemGap: SPACING.xxxs / 2,
-    itemRadius: 12,
     iconSize: ICON_SIZE.lg,
     iconToTitle: SPACING.xxs,
     titleToTrailing: SPACING.xxs

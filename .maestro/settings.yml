@@ -11,6 +11,12 @@ appId: com.monospace.notes
     id: app-bar-back
 - assertVisible: GENERAL
 - assertVisible: TEMA DE COLOR
+- assertVisible: FUENTE DE TÍTULOS.*
+- tapOn: Fuente 2
+- waitForAnimationToEnd
+- assertVisible: Fuente 2
+- tapOn: Fuente 1
+- waitForAnimationToEnd
 - tapOn: IDIOMA.*
 - waitForAnimationToEnd
 - assertVisible: ENGLISH

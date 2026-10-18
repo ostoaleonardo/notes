@@ -10,7 +10,13 @@ import { useAnimatedBorderRadius } from '@/hooks/use-animated-border-radius'
 import { COLOR_OPTION } from '@/constants/components'
 import { OPACITY, RADIUS, SPACING, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
 
-export const FontOption = memo(function FontOption({ fontFamily, preview, active, onPress, children }) {
+export const FontOption = memo(function FontOption({
+    fontFamily,
+    preview,
+    active,
+    onPress,
+    children
+}) {
     const { colors } = useTheme()
 
     const animatedStyle = useAnimatedBorderRadius(
