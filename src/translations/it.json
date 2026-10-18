@@ -99,7 +99,13 @@
 			"language": "Lingua",
 			"theme": "Colore tema",
 			"themes": "Tema",
-			"accent": "Colore di risalto"
+			"accent": "Colore di risalto",
+			"heading_font": {
+				"title": "Carattere dei titoli",
+				"ntype82": "Carattere 1",
+				"geist": "Carattere 2",
+				"description": "Carattere usato per i titoli"
+			}
 		},
 		"pro": "Passa a Pro",
 		"about": {

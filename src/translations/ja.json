@@ -99,7 +99,13 @@
 			"language": "言語",
 			"theme": "カラーテーマ",
 			"themes": "テーマ",
-			"accent": "アクセントカラー"
+			"accent": "アクセントカラー",
+			"heading_font": {
+				"title": "見出しフォント",
+				"ntype82": "フォント 1",
+				"geist": "フォント 2",
+				"description": "見出しに使うフォント"
+			}
 		},
 		"pro": "Pro にアップグレード",
 		"about": {

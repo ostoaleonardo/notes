@@ -156,11 +156,9 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
                             exiting={FadeOut}
                         >
                             <Typography
+                                heading
                                 variant='headlineSmall'
-                                styleProps={{
-                                    paddingLeft: SPACING.sm,
-                                    fontFamily: FONTS.nType82Headline
-                                }}
+                                styleProps={styles.historyTitle}
                             >
                                 {t('title.version_history')}
                             </Typography>
@@ -235,6 +233,9 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
 const styles = StyleSheet.create({
     container: {
         flex: 1
+    },
+    historyTitle: {
+        paddingLeft: SPACING.sm
     },
     header: {
         flexDirection: 'row',

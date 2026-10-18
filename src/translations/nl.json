@@ -99,7 +99,13 @@
 			"language": "Taal",
 			"theme": "Thema",
 			"themes": "Thema",
-			"accent": "Accentkleur"
+			"accent": "Accentkleur",
+			"heading_font": {
+				"title": "Lettertype voor titels",
+				"ntype82": "Lettertype 1",
+				"geist": "Lettertype 2",
+				"description": "Lettertype voor titels"
+			}
 		},
 		"pro": "Upgraden naar Pro",
 		"about": {

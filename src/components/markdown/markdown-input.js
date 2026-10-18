@@ -9,6 +9,7 @@ import MarkdownDomEditor from './markdown-dom-editor'
 import { MissingNoteDialog } from '@/components/missing-note-dialog'
 
 import { useEditorDisplay } from '@/hooks/use-editor-display'
+import { useHeadingFont } from '@/hooks/use-heading-font'
 import { useDomFonts } from '@/hooks/use-dom-fonts'
 import { useKatexFonts } from '@/hooks/use-katex-fonts'
 import { useTags } from '@/hooks/use-tags'
@@ -31,7 +32,7 @@ import { toggleTask } from '@/utils/tasks'
 import { buildTableLabels } from '@/utils/table-labels'
 
 import { ROUTES } from '@/constants/routes'
-import { BODY_FONT_FAMILY, HEADING_FONT_FAMILY } from '@/constants/theme'
+import { BODY_FONT_FAMILY } from '@/constants/theme'
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { LINK_TYPES } from '@/constants/link-types'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
@@ -149,6 +150,7 @@ export const MarkdownInput = ({
     }), [mode])
 
     const { fontSize, maxWidth, lineNumbers, spellcheck, tabSize, inlineTitle } = useEditorDisplay()
+    const { fontFamily: headingFont } = useHeadingFont()
 
     const theme = useMemo(() => ({
         colors,
@@ -156,9 +158,9 @@ export const MarkdownInput = ({
         typography: {
             fontSize,
             fontFamily: BODY_FONT_FAMILY,
-            headingFontFamily: HEADING_FONT_FAMILY
+            headingFontFamily: `${headingFont}, system-ui, sans-serif`
         }
-    }), [colors, fontSize, maxWidth])
+    }), [colors, fontSize, maxWidth, headingFont])
 
     return (
         <>

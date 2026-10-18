@@ -1,11 +1,14 @@
 import { StyleSheet, Text } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
+import { useHeadingFont } from '@/hooks/use-heading-font'
+
 import { FONTS, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
 
 export function Typography({
     children,
     bold,
+    heading,
     uppercase,
     color,
     opacity,
@@ -16,6 +19,7 @@ export function Typography({
     ...props
 }) {
     const { colors } = useTheme()
+    const { fontFamily: headingFontFamily } = useHeadingFont()
     const fontVariant = fontSize || TYPOGRAPHY_SIZE_VARIANTS[variant]
 
     return (
@@ -28,6 +32,7 @@ export function Typography({
                 textAlign && { textAlign },
                 uppercase && styles.uppercase,
                 bold ? styles.bold : styles.regular,
+                heading && { fontFamily: headingFontFamily },
                 styleProps
             ]}
             {...props}

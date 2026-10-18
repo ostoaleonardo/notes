@@ -99,7 +99,13 @@
 			"language": "언어",
 			"theme": "테마 색상",
 			"themes": "테마",
-			"accent": "강조 색상"
+			"accent": "강조 색상",
+			"heading_font": {
+				"title": "제목 글꼴",
+				"ntype82": "글꼴 1",
+				"geist": "글꼴 2",
+				"description": "제목에 사용하는 글꼴"
+			}
 		},
 		"pro": "Pro로 업그레이드",
 		"about": {

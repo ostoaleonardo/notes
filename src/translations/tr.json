@@ -99,7 +99,13 @@
 			"language": "Dil",
 			"theme": "Renk teması",
 			"themes": "Tema",
-			"accent": "Vurgu rengi"
+			"accent": "Vurgu rengi",
+			"heading_font": {
+				"title": "Başlık yazı tipi",
+				"ntype82": "Yazı tipi 1",
+				"geist": "Yazı tipi 2",
+				"description": "Başlıklarda kullanılan yazı tipi"
+			}
 		},
 		"pro": "Pro'ya yükselt",
 		"about": {

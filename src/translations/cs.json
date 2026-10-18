@@ -99,7 +99,13 @@
 			"language": "Jazyk",
 			"theme": "Barevné schéma",
 			"themes": "Motiv",
-			"accent": "Akcentní barva"
+			"accent": "Akcentní barva",
+			"heading_font": {
+				"title": "Písmo nadpisů",
+				"ntype82": "Písmo 1",
+				"geist": "Písmo 2",
+				"description": "Písmo používané pro nadpisy"
+			}
 		},
 		"pro": "Přejít na Pro",
 		"about": {

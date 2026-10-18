@@ -5,6 +5,7 @@ import { useTheme } from 'react-native-paper'
 
 import { LanguageOption } from '@/screens/settings/language-option'
 import { ProSection } from '@/screens/settings/pro-section'
+import { HeadingFontOption } from '@/screens/settings/heading-font-option'
 import { ThemeOption } from '@/screens/settings/theme-option'
 import { AppVersionCard } from '@/screens/settings/app-version-card'
 import { Option } from '@/screens/settings/option'
@@ -36,6 +37,7 @@ export default function Settings() {
                     contentStyle={styles.items}
                 >
                     <LanguageOption isFirst={true} />
+                    <HeadingFontOption />
                     <ThemeOption />
                 </Section>
 

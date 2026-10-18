@@ -1,11 +1,14 @@
 import { StyleSheet, TextInput } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
+import { useHeadingFont } from '@/hooks/use-heading-font'
+
 import { TRANSPARENT } from '@/constants/themes'
-import { FONTS, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
+import { TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
 
 export function LargeInput({ value, onChangeText, placeholder, modal, ...props }) {
     const { colors } = useTheme()
+    const { fontFamily } = useHeadingFont()
 
     const InputComponent = TextInput
 
@@ -15,6 +18,7 @@ export function LargeInput({ value, onChangeText, placeholder, modal, ...props }
             value={value}
             style={{
                 ...styles.input,
+                fontFamily,
                 color: colors.onBackground
             }}
             placeholder={placeholder}
@@ -30,7 +34,6 @@ export function LargeInput({ value, onChangeText, placeholder, modal, ...props }
 const styles = StyleSheet.create({
     input: {
         flexGrow: 1,
-        fontSize: TYPOGRAPHY_SIZE_VARIANTS.headlineSmall,
-        fontFamily: FONTS.nType82Headline
+        fontSize: TYPOGRAPHY_SIZE_VARIANTS.headlineSmall
     }
 })

@@ -99,7 +99,13 @@
 			"language": "Language",
 			"theme": "Color theme",
 			"themes": "Theme",
-			"accent": "Accent color"
+			"accent": "Accent color",
+			"heading_font": {
+				"title": "Heading font",
+				"ntype82": "Font 1",
+				"geist": "Font 2",
+				"description": "Font used for titles"
+			}
 		},
 		"pro": "Upgrade to Pro",
 		"about": {

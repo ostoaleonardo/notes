@@ -99,7 +99,13 @@
 			"language": "Idioma",
 			"theme": "Tema de color",
 			"themes": "Tema",
-			"accent": "Color de acento"
+			"accent": "Color de acento",
+			"heading_font": {
+				"title": "Fuente de títulos",
+				"ntype82": "Fuente 1",
+				"geist": "Fuente 2",
+				"description": "Fuente usada en los títulos"
+			}
 		},
 		"about": {
 			"github": "Repositorio de GitHub",

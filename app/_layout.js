@@ -9,6 +9,7 @@ import { useLanguage } from '@/hooks/use-language'
 import { usePurchasedPro } from '@/hooks/use-purchased-pro'
 import { useStorage } from '@/hooks/use-storage'
 import { ProProvider } from '@/context/pro-context'
+import { HeadingFontProvider } from '@/context/heading-font-provider'
 import { ThemeProvider } from '@/context/theme-context'
 import Providers from './providers'
 
@@ -58,9 +59,11 @@ export default function MainLayout() {
     return (
         <ProProvider isPro={isPro}>
             <ThemeProvider initialTheme={initialTheme}>
-                <Providers>
-                    <Slot />
-                </Providers>
+                <HeadingFontProvider>
+                    <Providers>
+                        <Slot />
+                    </Providers>
+                </HeadingFontProvider>
             </ThemeProvider>
         </ProProvider>
     )

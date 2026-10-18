@@ -99,7 +99,13 @@
 			"language": "Idioma",
 			"theme": "Cor do tema",
 			"themes": "Tema",
-			"accent": "Cor de destaque"
+			"accent": "Cor de destaque",
+			"heading_font": {
+				"title": "Fonte dos títulos",
+				"ntype82": "Fonte 1",
+				"geist": "Fonte 2",
+				"description": "Fonte usada nos títulos"
+			}
 		},
 		"pro": "Fazer upgrade para o Pro",
 		"about": {

@@ -6,7 +6,7 @@ import { ProgressRing } from '@/components/progress-ring'
 import { Typography } from '@/components/typography'
 
 import { HERO_CARD } from '@/constants/components'
-import { FONTS, SPACING } from '@/constants/theme'
+import { SPACING } from '@/constants/theme'
 
 export const HeroCard = memo(function HeroCard({
     progress,
@@ -34,13 +34,13 @@ export const HeroCard = memo(function HeroCard({
                 stroke={HERO_CARD.heroStroke}
                 progress={progress}
             >
-                <Typography fontSize={valueSize} styleProps={styles.font}>
+                <Typography heading fontSize={valueSize}>
                     {value}
                 </Typography>
             </ProgressRing>
 
             <View style={styles.text}>
-                <Typography fontSize={HERO_CARD.heroTitleSize} styleProps={styles.font}>
+                <Typography heading fontSize={HERO_CARD.heroTitleSize}>
                     {title}
                 </Typography>
                 {children}
@@ -60,8 +60,5 @@ const styles = StyleSheet.create({
     text: {
         flex: 1,
         gap: SPACING.xs
-    },
-    font: {
-        fontFamily: FONTS.nType82Headline
     }
 })

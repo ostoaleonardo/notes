@@ -99,7 +99,13 @@
 			"language": "Langue",
 			"theme": "Thème",
 			"themes": "Thème",
-			"accent": "Couleur d'accent"
+			"accent": "Couleur d'accent",
+			"heading_font": {
+				"title": "Police des titres",
+				"ntype82": "Police 1",
+				"geist": "Police 2",
+				"description": "Police utilisée pour les titres"
+			}
 		},
 		"pro": "Passer à Pro",
 		"about": {

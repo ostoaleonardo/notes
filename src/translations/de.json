@@ -99,7 +99,13 @@
 			"language": "Sprache",
 			"theme": "Farbthema",
 			"themes": "Design",
-			"accent": "Akzentfarbe"
+			"accent": "Akzentfarbe",
+			"heading_font": {
+				"title": "Überschriftenschrift",
+				"ntype82": "Schrift 1",
+				"geist": "Schrift 2",
+				"description": "Schrift für Überschriften"
+			}
 		},
 		"pro": "Auf Pro upgraden",
 		"about": {

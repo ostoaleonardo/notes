@@ -99,7 +99,13 @@
 			"language": "Språk",
 			"theme": "Färgtema",
 			"themes": "Tema",
-			"accent": "Accentfärg"
+			"accent": "Accentfärg",
+			"heading_font": {
+				"title": "Rubrikfont",
+				"ntype82": "Typsnitt 1",
+				"geist": "Typsnitt 2",
+				"description": "Typsnitt för rubriker"
+			}
 		},
 		"pro": "Uppgradera till Pro",
 		"about": {

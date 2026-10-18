@@ -23,7 +23,7 @@ import {
     CONNECTION_TYPES,
     CONNECTION_TYPE_LABELS
 } from '@/constants/connections'
-import { FONTS, ICON_SIZE, OPACITY, SPACING } from '@/constants/theme'
+import { ICON_SIZE, OPACITY, SPACING } from '@/constants/theme'
 import { TEST_IDS } from '@/constants/test-ids'
 
 const { ROOT } = CONNECTION_TYPES
@@ -91,9 +91,9 @@ export const RelationsSheet = memo(function RelationsSheet({
                         />
                         <View style={styles.titles}>
                             <Typography
+                                heading
                                 numberOfLines={1}
                                 fontSize={RELATIONS_SHEET.titleSize}
-                                styleProps={styles.title}
                             >
                                 {entity.type === CONNECTION_TYPES.TAG ? `#${title}` : title}
                             </Typography>
@@ -173,9 +173,6 @@ const styles = StyleSheet.create({
     titles: {
         flex: 1,
         gap: SPACING.xxs
-    },
-    title: {
-        fontFamily: FONTS.nType82Headline
     },
     tabsScroll: {
         flexGrow: 0,
