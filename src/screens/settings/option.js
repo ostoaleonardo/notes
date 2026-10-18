@@ -13,7 +13,8 @@ export function Option({
     children,
     onPress,
     isFirst,
-    isLast
+    isLast,
+    background
 }) {
     const { colors } = useTheme()
 
@@ -24,7 +25,7 @@ export function Option({
             style={{
                 ...styles.container,
                 ...(children ? styles.stacked : styles.inline),
-                backgroundColor: colors.surface,
+                backgroundColor: background ?? colors.surface,
                 ...getGroupedRadius(isFirst, isLast)
             }}
         >

@@ -6,6 +6,7 @@ export const BUTTON = {
 }
 
 export const GROUP_CORNERS = {
+    only: { left: RADIUS.xl, right: RADIUS.xl },
     first: { left: RADIUS.xl, right: RADIUS.sm },
     middle: { left: RADIUS.sm, right: RADIUS.sm },
     last: { left: RADIUS.sm, right: RADIUS.xl }
@@ -21,7 +22,10 @@ export const ICON_TOGGLE = {
     iconSize: ICON_SIZE.lg,
     iconSizeWithLabel: ICON_SIZE.md,
     labelPaddingHorizontal: SPACING.lg,
-    gap: SPACING.xs
+    labelPaddingTotal: SPACING.lg * 2,
+    gap: SPACING.xs,
+    measureOffset: 1000,
+    expandDuration: 150
 }
 
 export const CHECKBOX = {
@@ -96,4 +100,65 @@ export const DIALOG_BUTTON_LABEL_STYLE = {
     paddingHorizontal: SPACING.sm,
     textTransform: 'uppercase',
     fontFamily: FONTS.azeretLight
+}
+
+export const TAG_CHIP = {
+    height: 22,
+    fontSize: 11,
+    paddingHorizontal: SPACING.md
+}
+
+export const NODE_STYLE = {
+    noteRadius: 18,
+    folderRadius: { top: 6, rest: 14 },
+    folderTab: { width: 40, height: 9, offset: -8, radius: 7 },
+    fileCorner: 11,
+    fileRadius: 6,
+    borderWidth: 1,
+    dashedWidth: 1.5,
+    iconSize: ICON_SIZE.md,
+    rootIconSize: ICON_SIZE.xxl,
+    textSize: 11,
+    paddingHorizontal: SPACING.md,
+    gap: SPACING.xs,
+    dimOpacity: 0.26,
+    haloInner: 8,
+    haloOuter: 18
+}
+
+export const BADGE_STYLE = {
+    size: 18,
+    offset: 6,
+    iconSize: ICON_SIZE.sm
+}
+
+export const EDGE_STYLE = {
+    width: 1.5,
+    hotWidth: 2.5,
+    opacity: 0.22,
+    relationDash: [5, 4]
+}
+
+export const HERO_CARD = {
+    heroRing: 92,
+    heroStroke: 8,
+    heroRadius: 32,
+    heroTextSize: 34,
+    heroTitleSize: 21,
+    cardRadius: 28
+}
+
+export const ORIGIN_TILE = {
+    columns: 4,
+    labelSize: 11,
+    countSize: 10,
+    height: 92,
+    folderHeight: 84,
+    radius: 22
+}
+
+export const RELATIONS_SHEET = {
+    listMaxRatio: 0.5,
+    titleSize: 20,
+    blobSize: 52
 }

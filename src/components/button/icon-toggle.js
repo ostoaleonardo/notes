@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Tooltip, TouchableRipple, useTheme } from 'react-native-paper'
 
 import { AnimatedView } from '@/components/animated/animated-view'
 import { Typography } from '@/components/typography'
 
+import { useExpandingWidth } from '@/hooks/use-expanding-width'
 import { useSegmentedCornerStyle } from '@/hooks/use-segmented-corner-style'
 
 import { BUTTON, ICON_TOGGLE } from '@/constants/components'
@@ -17,25 +18,67 @@ export function IconToggle({
     onPress,
     position = 'middle',
     showLabel = false,
+    expandable = false,
+    iconSize: iconSizeOverride,
+    selected = false,
+    minWidth,
+    onWidth,
     background,
     color,
     disabled = false
 }) {
     const { colors } = useTheme()
-    const backgroundColor = background ?? colors.surfaceVariant
-    const contentColor = color ?? colors.onBackground
+    const backgroundColor = selected ? colors.onBackground : background ?? colors.surfaceVariant
+    const contentColor = selected ? colors.background : color ?? colors.onBackground
 
-    const iconSize = showLabel ? ICON_TOGGLE.iconSizeWithLabel : ICON_TOGGLE.iconSize
+    const iconSize = iconSizeOverride ??
+        (showLabel ? ICON_TOGGLE.iconSizeWithLabel : ICON_TOGGLE.iconSize)
 
     const [pressed, setPressed] = useState(false)
-    const animatedStyle = useSegmentedCornerStyle(position, pressed)
+    const onPressIn = useCallback(() => setPressed(true), [])
+    const onPressOut = useCallback(() => setPressed(false), [])
+
+    const onContentLayout = useCallback((event) => {
+        onWidth?.(label, event.nativeEvent.layout.width + ICON_TOGGLE.labelPaddingTotal)
+    }, [label, onWidth])
+
+    const releaseDuration = expandable ? 0 : undefined
+    const animatedStyle = useSegmentedCornerStyle(position, pressed || selected, releaseDuration)
+    const expanding = useExpandingWidth(showLabel, expandable, label)
+
+    const renderContent = (extra) => (
+        <>
+            {Icon && (
+                <Icon
+                    color={contentColor}
+                    width={iconSize}
+                    height={iconSize}
+                />
+            )}
+            {extra && (
+                <Typography numberOfLines={1} variant='caption' color={contentColor}>
+                    {label}
+                </Typography>
+            )}
+        </>
+    )
+
+    const touchableStyle = expandable
+        ? styles.touchableExpandable
+        : showLabel ? [styles.touchableLabel, { minWidth }] : styles.touchable
+
+    const contentStyle = expandable && showLabel && expanding.contentWidth !== null
+        ? [styles.content, styles.contentFixed, { width: expanding.contentWidth }]
+        : styles.content
 
     return (
         <Tooltip title={label}>
             <AnimatedView
+                {...(expandable && { layout: undefined })}
                 style={[
                     styles.container,
                     animatedStyle,
+                    expandable && expanding.style,
                     { backgroundColor, opacity: disabled ? OPACITY.disabled : 1 }
                 ]}
             >
@@ -44,26 +87,33 @@ export function IconToggle({
                     disabled={disabled}
                     testID={testID}
                     onPress={onPress}
-                    onPressIn={() => setPressed(true)}
-                    onPressOut={() => setPressed(false)}
-                    style={showLabel ? styles.touchableLabel : styles.touchable}
+                    onPressIn={onPressIn}
+                    onPressOut={onPressOut}
+                    style={touchableStyle}
                     accessibilityLabel={label}
                 >
-                    <View style={styles.content}>
-                        {Icon && (
-                            <Icon
-                                color={contentColor}
-                                width={iconSize}
-                                height={iconSize}
-                            />
-                        )}
-                        {showLabel && (
-                            <Typography variant='caption' color={contentColor}>
-                                {label}
-                            </Typography>
-                        )}
+                    <View
+                        style={contentStyle}
+                        onLayout={expandable ? undefined : onContentLayout}
+                    >
+                        {renderContent(showLabel)}
                     </View>
                 </TouchableRipple>
+
+                {expanding.needsMeasure && (
+                    <View
+                        pointerEvents='none'
+                        importantForAccessibility='no-hide-descendants'
+                        style={styles.measurer}
+                    >
+                        <View
+                            style={styles.content}
+                            onLayout={expanding.onMeasure}
+                        >
+                            {renderContent(true)}
+                        </View>
+                    </View>
+                )}
             </AnimatedView>
         </Tooltip>
     )
@@ -85,9 +135,24 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
+    touchableExpandable: {
+        height: BUTTON.size,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     content: {
         gap: ICON_TOGGLE.gap,
         flexDirection: 'row',
         alignItems: 'center'
+    },
+    contentFixed: {
+        flexShrink: 0
+    },
+    measurer: {
+        width: ICON_TOGGLE.measureOffset,
+        left: -ICON_TOGGLE.measureOffset,
+        opacity: 0,
+        position: 'absolute',
+        flexDirection: 'row'
     }
 })
