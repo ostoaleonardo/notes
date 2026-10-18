@@ -3,9 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
-import { LargeInput } from '@/components/input/large-input'
 import { Pressable } from '@/components/button/pressable'
-import { SheetField, SheetForm } from '@/components/modal/sheet-form'
+import { SheetForm, SheetInput } from '@/components/modal/sheet-form'
 import { INPUT_EXAMPLES } from '@/constants/input-examples'
 
 export function LinkMarkdown({ onClose, onInsert }) {
@@ -26,22 +25,20 @@ export function LinkMarkdown({ onClose, onInsert }) {
     }
 
     return (
-        <SheetForm>
-            <SheetField title={t('markdown.link.title')}>
-                <LargeInput
-                    value={title}
-                    onChangeText={setTitle}
-                    placeholder={INPUT_EXAMPLES.LINK_TITLE}
-                />
-            </SheetField>
+        <SheetForm title={t('markdown_action.link')}>
+            <SheetInput
+                label={t('markdown.link.title')}
+                value={title}
+                onChangeText={setTitle}
+                placeholder={INPUT_EXAMPLES.LINK_TITLE}
+            />
 
-            <SheetField title={t('markdown.link.url')}>
-                <LargeInput
-                    value={url}
-                    onChangeText={setUrl}
-                    placeholder={INPUT_EXAMPLES.LINK_URL}
-                />
-            </SheetField>
+            <SheetInput
+                label={t('markdown.link.url')}
+                value={url}
+                onChangeText={setUrl}
+                placeholder={INPUT_EXAMPLES.LINK_URL}
+            />
 
             <View style={styles.buttons}>
                 <Pressable

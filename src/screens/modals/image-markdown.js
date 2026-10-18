@@ -5,9 +5,8 @@ import { useTranslation } from 'react-i18next'
 import { Linking, StyleSheet, View } from 'react-native'
 import { TouchableRipple, useTheme } from 'react-native-paper'
 
-import { LargeInput } from '@/components/input/large-input'
 import { IconToggleGroup } from '@/components/button/icon-toggle-group'
-import { SHEET_FIELD_STYLE, SheetField, SheetForm } from '@/components/modal/sheet-form'
+import { SheetForm, SheetInput } from '@/components/modal/sheet-form'
 import { Typography } from '@/components/typography'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
@@ -105,7 +104,7 @@ export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
     }
 
     return (
-        <SheetForm>
+        <SheetForm title={t('markdown_action.image')}>
             {cameraPermission && !cameraPermission.granted && (
                 <View
                     style={[
@@ -116,10 +115,10 @@ export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
                     <TouchableRipple accessibilityRole='button' onPress={onRequestCameraPermission}>
                         <View style={styles.permissionContent}>
                             <View style={styles.permissionText}>
-                                <Typography bold uppercase color={colors.tertiary} variant='caption'>
+                                <Typography bold uppercase color={colors.tertiary} variant='bodySmall'>
                                     {t('markdown.camera_permission.title')}
                                 </Typography>
-                                <Typography opacity={OPACITY.pressed} variant='caption' styleProps={styles.permissionMessage}>
+                                <Typography opacity={OPACITY.pressed} variant='bodySmall' styleProps={styles.permissionMessage}>
                                     {t('markdown.camera_permission.message')}
                                 </Typography>
                             </View>
@@ -130,17 +129,16 @@ export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
             )}
 
             {!isDeviceImage && (
-                <SheetField title={t('markdown.image.url')}>
-                    <LargeInput
-                        value={url}
-                        onChangeText={setUrl}
-                        placeholder={INPUT_EXAMPLES.IMAGE_URL}
-                    />
-                </SheetField>
+                <SheetInput
+                    label={t('markdown.image.url')}
+                    value={url}
+                    onChangeText={setUrl}
+                    placeholder={INPUT_EXAMPLES.IMAGE_URL}
+                />
             )}
 
             {hasPreview && (
-                <View style={SHEET_FIELD_STYLE}>
+                <View style={styles.previewField}>
                     <View
                         style={{
                             ...styles.preview,
@@ -158,13 +156,12 @@ export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
                 </View>
             )}
 
-            <SheetField title={t('markdown.image.alt')}>
-                <LargeInput
-                    value={title}
-                    onChangeText={setTitle}
-                    placeholder={t('markdown.image.alt_placeholder')}
-                />
-            </SheetField>
+            <SheetInput
+                label={t('markdown.image.alt')}
+                value={title}
+                onChangeText={setTitle}
+                placeholder={t('markdown.image.alt_placeholder')}
+            />
 
             <View style={styles.buttons}>
                 <IconToggleGroup
@@ -209,6 +206,9 @@ const styles = StyleSheet.create({
     },
     permissionMessage: {
         marginTop: SPACING.xxs
+    },
+    previewField: {
+        paddingHorizontal: SPACING.lg
     },
     preview: {
         width: '100%',

@@ -1,31 +1,46 @@
 import { StyleSheet, View } from 'react-native'
 
-import { Section } from '@/components/section'
+import { FilledInput } from '@/components/input/filled-input'
+import { Typography } from '@/components/typography'
 
-import { SPACING } from '@/constants/theme'
+import { FONTS, SPACING } from '@/constants/theme'
 
-export function SheetForm({ children }) {
-    return <View style={styles.container}>{children}</View>
-}
-
-export function SheetField({ title, children }) {
+export function SheetForm({ title, children }) {
     return (
-        <Section
-            title={title}
-            contentStyle={styles.field}
-        >
+        <View style={styles.container}>
+            {title && (
+                <Typography
+                    variant='titleLarge'
+                    styleProps={styles.title}
+                >
+                    {title}
+                </Typography>
+            )}
+
             {children}
-        </Section>
+        </View>
     )
 }
 
-export const SHEET_FIELD_STYLE = { paddingHorizontal: SPACING.lg }
+export function SheetInput(props) {
+    return (
+        <View style={styles.field}>
+            <FilledInput {...props} />
+        </View>
+    )
+}
 
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        gap: SPACING.xxl,
-        paddingVertical: SPACING.xxl
+        gap: SPACING.xl,
+        paddingBottom: SPACING.xxl
     },
-    field: SHEET_FIELD_STYLE
+    title: {
+        paddingHorizontal: SPACING.lg,
+        fontFamily: FONTS.geistMedium
+    },
+    field: {
+        paddingHorizontal: SPACING.lg
+    }
 })

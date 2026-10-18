@@ -57,6 +57,17 @@ export const SEARCH_INPUT = {
     actionSize: 48
 }
 
+export const FILLED_INPUT = {
+    minHeight: 56,
+    topRadius: RADIUS.xs,
+    paddingHorizontal: SPACING.lg,
+    paddingTop: SPACING.xs,
+    paddingBottom: SPACING.sm,
+    labelGap: SPACING.xxxs,
+    indicatorIdle: 1,
+    indicatorFocused: 2
+}
+
 export const MENU = {
     maxHeight: 280,
     itemIndent: SPACING.lg,

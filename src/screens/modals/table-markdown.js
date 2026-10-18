@@ -70,7 +70,7 @@ export function TableMarkdown({ onClose, onInsert }) {
         <View style={styles.container}>
             <Typography
                 bold
-                variant='subtitle'
+                variant='titleLarge'
                 textAlign='center'
             >
                 {selected.cols} x {selected.rows}
@@ -111,7 +111,8 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         gap: SPACING.lg,
-        padding: SPACING.xxl,
+        paddingHorizontal: SPACING.xxl,
+        paddingBottom: SPACING.xxl,
         alignItems: 'center'
     },
     row: {
