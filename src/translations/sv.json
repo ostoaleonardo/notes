@@ -422,9 +422,52 @@
 			"modified_asc": "Ändrad (gammal - ny)",
 			"created_desc": "Skapad (ny - gammal)",
 			"created_asc": "Skapad (gammal - ny)"
+		}
+	},
+	"connections": {
+		"title": "Kopplingar",
+		"orphans": "olänkade",
+		"unresolved": "trasiga",
+		"not_found": "Finns inte ännu",
+		"no_relations": "Inga relationer ännu",
+		"open": "Öppna",
+		"types": {
+			"root": "Förråd",
+			"note": "Anteckning",
+			"missing": "Saknad anteckning",
+			"folder": "Mapp",
+			"file": "Fil",
+			"tag": "Tagg"
 		},
-		"orphans": "Föräldralösa anteckningar",
-		"unresolved": "Olösta länkar"
+		"tabs": {
+			"out": "Utgående",
+			"in": "Inkommande",
+			"files": "Filer",
+			"notes": "Anteckningar",
+			"folders": "Mappar",
+			"tags": "Taggar",
+			"related": "Relaterade"
+		},
+		"pager": {
+			"previous": "Föregående sida",
+			"next": "Nästa sida"
+		},
+		"origin": {
+			"change": "Ändra ursprung",
+			"filter": "Filtrera",
+			"empty": "Inget hittades"
+		},
+		"pending": {
+			"title": "Väntande",
+			"orphans": {
+				"title": "Olänkade anteckningar",
+				"description": "Anteckningar utan inkommande eller utgående länkar"
+			},
+			"unresolved": {
+				"title": "Trasiga länkar",
+				"description": "Länkar som pekar på anteckningar som inte finns"
+			}
+		}
 	},
 	"search": {
 		"recent": "Senaste",

@@ -23,7 +23,7 @@
 -   <samp>Embeds of notes, headings, blocks and images with a button to open the original note, and autocomplete for links and block ids.<samp>
 -   <samp>Backlinks, unlinked mentions and automatic link updates when you rename a note or a heading.<samp>
 -   <samp>Outline of the note's headings and a panel of outgoing links.<samp>
--   <samp>Orphan notes and unresolved links views in the drawer, with one tap to create a missing note.<samp>
+-   <samp>Connections: navigate your repository one node at a time, with the current note, folder, tag or file at the center, its contents or linked notes around it, breadcrumbs, a relations sheet and a pending list of unlinked notes and broken links with one tap to create a missing note.<samp>
 -   <samp>Attachments: images, audio, video and PDFs.<samp>
 -   <samp>Nested tags, advanced search (negation, <code>OR</code>, phrases, regex, <code>line:</code>, <code>task:</code>, property queries, date ranges and the <code>tag:</code>, <code>path:</code>, <code>is:pinned</code>, <code>has:image</code> operators), saved and recent searches.<samp>
 -   <samp>Find and replace text inside a note, and indent or outdent list items from the toolbar, which groups headings, lists and inserts into compact menus.<samp>

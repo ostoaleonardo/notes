@@ -422,9 +422,52 @@
 			"modified_asc": "수정일 (오래된 - 최신 순)",
 			"created_desc": "생성일 (최신 - 오래된 순)",
 			"created_asc": "생성일 (오래된 - 최신 순)"
+		}
+	},
+	"connections": {
+		"title": "연결",
+		"orphans": "미연결",
+		"unresolved": "끊김",
+		"not_found": "아직 없음",
+		"no_relations": "아직 관계가 없습니다",
+		"open": "열기",
+		"types": {
+			"root": "저장소",
+			"note": "노트",
+			"missing": "없는 노트",
+			"folder": "폴더",
+			"file": "파일",
+			"tag": "태그"
 		},
-		"orphans": "고아 노트",
-		"unresolved": "해결되지 않은 링크"
+		"tabs": {
+			"out": "나가는",
+			"in": "들어오는",
+			"files": "파일",
+			"notes": "노트",
+			"folders": "폴더",
+			"tags": "태그",
+			"related": "관련"
+		},
+		"pager": {
+			"previous": "이전 페이지",
+			"next": "다음 페이지"
+		},
+		"origin": {
+			"change": "기준점 변경",
+			"filter": "필터",
+			"empty": "결과 없음"
+		},
+		"pending": {
+			"title": "대기 중",
+			"orphans": {
+				"title": "연결되지 않은 노트",
+				"description": "들어오거나 나가는 링크가 없는 노트"
+			},
+			"unresolved": {
+				"title": "끊어진 링크",
+				"description": "존재하지 않는 노트를 가리키는 링크"
+			}
+		}
 	},
 	"search": {
 		"recent": "최근",

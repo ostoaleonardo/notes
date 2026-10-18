@@ -422,9 +422,52 @@
 			"modified_asc": "Değiştirilme (eski - yeni)",
 			"created_desc": "Oluşturulma (yeni - eski)",
 			"created_asc": "Oluşturulma (eski - yeni)"
+		}
+	},
+	"connections": {
+		"title": "Bağlantılar",
+		"orphans": "bağlantısız",
+		"unresolved": "bozuk",
+		"not_found": "Henüz yok",
+		"no_relations": "Henüz ilişki yok",
+		"open": "Aç",
+		"types": {
+			"root": "Depo",
+			"note": "Not",
+			"missing": "Eksik not",
+			"folder": "Klasör",
+			"file": "Dosya",
+			"tag": "Etiket"
 		},
-		"orphans": "Yetim notlar",
-		"unresolved": "Çözümlenmemiş bağlantılar"
+		"tabs": {
+			"out": "Giden",
+			"in": "Gelen",
+			"files": "Dosyalar",
+			"notes": "Notlar",
+			"folders": "Klasörler",
+			"tags": "Etiketler",
+			"related": "İlgili"
+		},
+		"pager": {
+			"previous": "Önceki sayfa",
+			"next": "Sonraki sayfa"
+		},
+		"origin": {
+			"change": "Kaynağı değiştir",
+			"filter": "Filtrele",
+			"empty": "Sonuç bulunamadı"
+		},
+		"pending": {
+			"title": "Bekleyenler",
+			"orphans": {
+				"title": "Bağlantısız notlar",
+				"description": "Gelen veya giden bağlantısı olmayan notlar"
+			},
+			"unresolved": {
+				"title": "Bozuk bağlantılar",
+				"description": "Var olmayan notlara işaret eden bağlantılar"
+			}
+		}
 	},
 	"search": {
 		"recent": "Son",

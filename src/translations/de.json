@@ -422,9 +422,52 @@
 			"modified_asc": "Geändert (alt - neu)",
 			"created_desc": "Erstellt (neu - alt)",
 			"created_asc": "Erstellt (alt - neu)"
+		}
+	},
+	"connections": {
+		"title": "Verbindungen",
+		"orphans": "unverknüpft",
+		"unresolved": "defekt",
+		"not_found": "Existiert noch nicht",
+		"no_relations": "Noch keine Beziehungen",
+		"open": "Öffnen",
+		"types": {
+			"root": "Repository",
+			"note": "Notiz",
+			"missing": "Fehlende Notiz",
+			"folder": "Ordner",
+			"file": "Datei",
+			"tag": "Tag"
 		},
-		"orphans": "Verwaiste Notizen",
-		"unresolved": "Nicht aufgelöste Links"
+		"tabs": {
+			"out": "Ausgehend",
+			"in": "Eingehend",
+			"files": "Dateien",
+			"notes": "Notizen",
+			"folders": "Ordner",
+			"tags": "Tags",
+			"related": "Verwandt"
+		},
+		"pager": {
+			"previous": "Vorherige Seite",
+			"next": "Nächste Seite"
+		},
+		"origin": {
+			"change": "Ursprung ändern",
+			"filter": "Filtern",
+			"empty": "Nichts gefunden"
+		},
+		"pending": {
+			"title": "Offen",
+			"orphans": {
+				"title": "Unverknüpfte Notizen",
+				"description": "Notizen ohne ein- oder ausgehende Links"
+			},
+			"unresolved": {
+				"title": "Defekte Links",
+				"description": "Links, die auf nicht vorhandene Notizen zeigen"
+			}
+		}
 	},
 	"search": {
 		"recent": "Zuletzt",

@@ -422,9 +422,52 @@
 			"modified_asc": "更新日(古い - 新しい)",
 			"created_desc": "作成日(新しい - 古い)",
 			"created_asc": "作成日(古い - 新しい)"
+		}
+	},
+	"connections": {
+		"title": "つながり",
+		"orphans": "未接続",
+		"unresolved": "リンク切れ",
+		"not_found": "まだ存在しません",
+		"no_relations": "関連はまだありません",
+		"open": "開く",
+		"types": {
+			"root": "リポジトリ",
+			"note": "メモ",
+			"missing": "存在しないメモ",
+			"folder": "フォルダー",
+			"file": "ファイル",
+			"tag": "タグ"
 		},
-		"orphans": "孤立したメモ",
-		"unresolved": "未解決のリンク"
+		"tabs": {
+			"out": "発リンク",
+			"in": "被リンク",
+			"files": "ファイル",
+			"notes": "メモ",
+			"folders": "フォルダー",
+			"tags": "タグ",
+			"related": "関連"
+		},
+		"pager": {
+			"previous": "前のページ",
+			"next": "次のページ"
+		},
+		"origin": {
+			"change": "起点を変更",
+			"filter": "絞り込み",
+			"empty": "見つかりません"
+		},
+		"pending": {
+			"title": "保留中",
+			"orphans": {
+				"title": "未接続のメモ",
+				"description": "リンクの出入りがないメモ"
+			},
+			"unresolved": {
+				"title": "リンク切れ",
+				"description": "存在しないメモを指すリンク"
+			}
+		}
 	},
 	"search": {
 		"recent": "最近",

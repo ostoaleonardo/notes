@@ -3,6 +3,7 @@ appId: com.monospace.notes
 - launchApp
 - tapOn:
     id: app-bar-menu
+- waitForAnimationToEnd
 - tapOn:
     id: drawer-settings
 - waitForAnimationToEnd

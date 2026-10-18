@@ -7,5 +7,7 @@ export const ROUTES = {
     DAILY_NOTE: '/notes/daily',
     EDIT_NOTE: '/notes/',
     EDIT_TEMPLATE: '/templates/',
-    SETTINGS: '/settings'
+    SETTINGS: '/settings',
+    CONNECTIONS: '/connections',
+    CONNECTIONS_PENDING: '/connections/pending'
 }

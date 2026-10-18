@@ -422,9 +422,52 @@
 			"modified_asc": "Modified (old - new)",
 			"created_desc": "Created (new - old)",
 			"created_asc": "Created (old - new)"
+		}
+	},
+	"connections": {
+		"title": "Connections",
+		"orphans": "unlinked",
+		"unresolved": "broken",
+		"not_found": "Doesn't exist yet",
+		"no_relations": "No relations yet",
+		"open": "Open",
+		"types": {
+			"root": "Repository",
+			"note": "Note",
+			"missing": "Missing note",
+			"folder": "Folder",
+			"file": "File",
+			"tag": "Tag"
 		},
-		"orphans": "Orphan notes",
-		"unresolved": "Unresolved links"
+		"tabs": {
+			"out": "Outgoing",
+			"in": "Incoming",
+			"files": "Files",
+			"notes": "Notes",
+			"folders": "Folders",
+			"tags": "Tags",
+			"related": "Related"
+		},
+		"pager": {
+			"previous": "Previous page",
+			"next": "Next page"
+		},
+		"origin": {
+			"change": "Change origin",
+			"filter": "Filter",
+			"empty": "Nothing found"
+		},
+		"pending": {
+			"title": "Pending",
+			"orphans": {
+				"title": "Unlinked notes",
+				"description": "Notes with no links in or out"
+			},
+			"unresolved": {
+				"title": "Broken links",
+				"description": "Links that point to notes that don't exist"
+			}
+		}
 	},
 	"templates": {
 		"names": {

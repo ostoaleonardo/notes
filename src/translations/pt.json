@@ -422,9 +422,52 @@
 			"modified_asc": "Modificada (antiga - nova)",
 			"created_desc": "Criada (nova - antiga)",
 			"created_asc": "Criada (antiga - nova)"
+		}
+	},
+	"connections": {
+		"title": "Conexões",
+		"orphans": "sem conexão",
+		"unresolved": "quebrados",
+		"not_found": "Ainda não existe",
+		"no_relations": "Ainda não há relações",
+		"open": "Abrir",
+		"types": {
+			"root": "Repositório",
+			"note": "Nota",
+			"missing": "Nota inexistente",
+			"folder": "Pasta",
+			"file": "Arquivo",
+			"tag": "Etiqueta"
 		},
-		"orphans": "Notas órfãs",
-		"unresolved": "Links não resolvidos"
+		"tabs": {
+			"out": "Saída",
+			"in": "Entrada",
+			"files": "Arquivos",
+			"notes": "Notas",
+			"folders": "Pastas",
+			"tags": "Etiquetas",
+			"related": "Relacionadas"
+		},
+		"pager": {
+			"previous": "Página anterior",
+			"next": "Próxima página"
+		},
+		"origin": {
+			"change": "Alterar origem",
+			"filter": "Filtrar",
+			"empty": "Nada encontrado"
+		},
+		"pending": {
+			"title": "Pendentes",
+			"orphans": {
+				"title": "Notas sem conexão",
+				"description": "Notas sem links de entrada nem de saída"
+			},
+			"unresolved": {
+				"title": "Links quebrados",
+				"description": "Links que apontam para notas que não existem"
+			}
+		}
 	},
 	"search": {
 		"recent": "Recentes",

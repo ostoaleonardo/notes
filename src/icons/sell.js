@@ -1,0 +1,11 @@
+import { Path } from 'react-native-svg'
+
+import { SELL_ICON_PATH } from '@/constants/icon-paths'
+
+import { IconSvg } from './icon-svg'
+
+export const Sell = (props) => (
+    <IconSvg {...props}>
+        <Path d={SELL_ICON_PATH} />
+    </IconSvg>
+)

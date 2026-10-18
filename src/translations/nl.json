@@ -422,9 +422,52 @@
 			"modified_asc": "Gewijzigd (oud - nieuw)",
 			"created_desc": "Gemaakt (nieuw - oud)",
 			"created_asc": "Gemaakt (oud - nieuw)"
+		}
+	},
+	"connections": {
+		"title": "Verbindingen",
+		"orphans": "losstaand",
+		"unresolved": "defect",
+		"not_found": "Bestaat nog niet",
+		"no_relations": "Nog geen relaties",
+		"open": "Openen",
+		"types": {
+			"root": "Repository",
+			"note": "Notitie",
+			"missing": "Ontbrekende notitie",
+			"folder": "Map",
+			"file": "Bestand",
+			"tag": "Label"
 		},
-		"orphans": "Verweesde notities",
-		"unresolved": "Onopgeloste links"
+		"tabs": {
+			"out": "Uitgaand",
+			"in": "Inkomend",
+			"files": "Bestanden",
+			"notes": "Notities",
+			"folders": "Mappen",
+			"tags": "Labels",
+			"related": "Gerelateerd"
+		},
+		"pager": {
+			"previous": "Vorige pagina",
+			"next": "Volgende pagina"
+		},
+		"origin": {
+			"change": "Oorsprong wijzigen",
+			"filter": "Filteren",
+			"empty": "Niets gevonden"
+		},
+		"pending": {
+			"title": "In behandeling",
+			"orphans": {
+				"title": "Losstaande notities",
+				"description": "Notities zonder inkomende of uitgaande links"
+			},
+			"unresolved": {
+				"title": "Defecte links",
+				"description": "Links die naar niet-bestaande notities verwijzen"
+			}
+		}
 	},
 	"search": {
 		"recent": "Recent",

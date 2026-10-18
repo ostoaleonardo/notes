@@ -422,9 +422,52 @@
 			"modified_asc": "Modificata (vecchia - recente)",
 			"created_desc": "Creata (recente - vecchia)",
 			"created_asc": "Creata (vecchia - recente)"
+		}
+	},
+	"connections": {
+		"title": "Connessioni",
+		"orphans": "scollegate",
+		"unresolved": "rotti",
+		"not_found": "Non esiste ancora",
+		"no_relations": "Ancora nessuna relazione",
+		"open": "Apri",
+		"types": {
+			"root": "Repository",
+			"note": "Nota",
+			"missing": "Nota mancante",
+			"folder": "Cartella",
+			"file": "File",
+			"tag": "Tag"
 		},
-		"orphans": "Note orfane",
-		"unresolved": "Link non risolti"
+		"tabs": {
+			"out": "In uscita",
+			"in": "In entrata",
+			"files": "File",
+			"notes": "Note",
+			"folders": "Cartelle",
+			"tags": "Tag",
+			"related": "Correlati"
+		},
+		"pager": {
+			"previous": "Pagina precedente",
+			"next": "Pagina successiva"
+		},
+		"origin": {
+			"change": "Cambia origine",
+			"filter": "Filtra",
+			"empty": "Nessun risultato"
+		},
+		"pending": {
+			"title": "In sospeso",
+			"orphans": {
+				"title": "Note scollegate",
+				"description": "Note senza link in entrata né in uscita"
+			},
+			"unresolved": {
+				"title": "Link rotti",
+				"description": "Link che puntano a note inesistenti"
+			}
+		}
 	},
 	"search": {
 		"recent": "Recenti",

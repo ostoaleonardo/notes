@@ -1,5 +1,5 @@
 import { buildDevTestPlan, listDevFolders } from '../dev-test-data'
-import { buildLinkGraph, findOrphanNotes, listUnresolvedLinks } from '../link-graph'
+import { buildConnectionModel, summarizeConnections } from '../connection-model'
 import { NOTES_PER_FOLDER, TREE_BRANCHING } from '@/constants/dev-menu'
 
 const toNotes = (plan) => plan.notes.map((entry) => {
@@ -55,10 +55,12 @@ describe('dev test plan', () => {
 
     describe('link features', () => {
         const notes = toNotes(plan)
-        const graph = buildLinkGraph(notes, toNotePaths(notes))
+        const summary = summarizeConnections(
+            buildConnectionModel({ notes, notePaths: toNotePaths(notes), files: [] })
+        )
 
         test('has orphan notes and keeps linked notes out of that list', () => {
-            const titles = findOrphanNotes(notes, graph).map((note) => note.title)
+            const titles = summary.orphans.map((note) => note.title)
 
             expect(titles).toEqual(expect.arrayContaining(['Orphan A', 'Orphan B', 'Orphan deep']))
             expect(titles).not.toContain('Linked A')
@@ -67,12 +69,10 @@ describe('dev test plan', () => {
         })
 
         test('has unresolved links, one of them referenced by two notes', () => {
-            const unresolved = listUnresolvedLinks(graph)
+            const ghost = summary.unresolved.find((link) => link.title === 'Ghost note')
 
-            expect(unresolved).toEqual(expect.arrayContaining([
-                { id: 'missing:ghost note', title: 'Ghost note', count: 2 },
-                expect.objectContaining({ title: 'Missing idea' })
-            ]))
+            expect(ghost.sources).toHaveLength(2)
+            expect(summary.unresolved.map((link) => link.title)).toContain('Missing idea')
         })
     })
 })

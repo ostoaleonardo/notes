@@ -1,0 +1,46 @@
+appId: com.monospace.notes
+---
+- launchApp
+- extendedWaitUntil:
+      visible:
+          id: app-bar-menu
+      timeout: 45000
+- tapOn:
+      id: app-bar-menu
+- waitForAnimationToEnd
+- tapOn:
+      id: drawer-connections
+- waitForAnimationToEnd
+- assertVisible: Conexiones
+- assertVisible:
+      id: connections-focus-center
+- tapOn:
+      id: connections-focus-center
+- waitForAnimationToEnd
+- assertVisible: Repositorio.*
+- assertVisible: Carpetas.*
+- tapOn: Etiquetas.*
+- waitForAnimationToEnd
+- assertVisible: Etiquetas.*
+- back
+- waitForAnimationToEnd
+- tapOn:
+      id: connections-pending
+- waitForAnimationToEnd
+- assertVisible: Pendientes
+- tapOn: Orphan A
+- waitForAnimationToEnd
+- assertVisible: Editar
+- back
+- waitForAnimationToEnd
+- assertVisible: Pendientes
+- tapOn:
+      id: app-bar-back
+- waitForAnimationToEnd
+- tapOn:
+      id: connections-search
+- waitForAnimationToEnd
+- assertVisible: NOTA
+- assertVisible: ETIQUETA
+- assertVisible: ARCHIVO
+- assertVisible: CARPETA

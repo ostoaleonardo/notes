@@ -91,6 +91,15 @@ export default function AppLayout() {
                             header: (props) => <AppBar title={props.options.title} />
                         }}
                     />
+                    <Stack.Screen name='connections/index' />
+                    <Stack.Screen
+                        name='connections/pending'
+                        options={{
+                            headerShown: true,
+                            title: t('connections.pending.title'),
+                            header: (props) => <AppBar title={props.options.title} />
+                        }}
+                    />
                     <Stack.Screen
                         name='image-viewer'
                         options={{

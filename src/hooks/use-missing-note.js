@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { router } from 'expo-router'
 
 import { useNotes } from './use-notes'
@@ -34,5 +34,8 @@ export function useMissingNote() {
         router.push(getEditorPath(path))
     }, [missing, repositories, activeRepositoryTree, saveNote])
 
-    return { missing, setMissing, dismiss, create }
+    return useMemo(
+        () => ({ missing, setMissing, dismiss, create }),
+        [missing, dismiss, create]
+    )
 }

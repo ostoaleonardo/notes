@@ -1,7 +1,6 @@
 import { router } from 'expo-router'
 import { useCallback, useMemo, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 
@@ -11,8 +10,6 @@ import { DrawerTagsView } from './drawer-tags-view'
 import { DrawerToolbar } from './drawer-toolbar'
 import { DrawerTemplatesView } from './drawer-templates-view'
 import { DrawerFilesView } from './drawer-files-view'
-import { DrawerOrphansView } from './drawer-orphans-view'
-import { DrawerUnresolvedView } from './drawer-unresolved-view'
 import { DrawerViewSwitcher } from './drawer-view-switcher'
 
 import { useStorage } from '@/hooks/use-storage'
@@ -20,10 +17,10 @@ import { useStorageEffect } from '@/hooks/use-storage-effect'
 
 import { FolderCode } from '@/icons/folder-code'
 import { Settings } from '@/icons/settings'
+import { Shapes } from '@/icons/shapes'
 
 import { DEFAULT_DRAWER_VIEW, DRAWER_VIEWS, DRAWER_ACTIONS } from '@/constants/drawer-views'
 import { SPACING } from '@/constants/theme'
-import { TRANSPARENT } from '@/constants/themes'
 import { ROUTES } from '@/constants/routes'
 import { TEST_IDS } from '@/constants/test-ids'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
@@ -32,14 +29,11 @@ const VIEW_COMPONENTS = {
     [DRAWER_VIEWS.NOTES]: DrawerNotesView,
     [DRAWER_VIEWS.TEMPLATES]: DrawerTemplatesView,
     [DRAWER_VIEWS.TAGS]: DrawerTagsView,
-    [DRAWER_VIEWS.FILES]: DrawerFilesView,
-    [DRAWER_VIEWS.ORPHANS]: DrawerOrphansView,
-    [DRAWER_VIEWS.UNRESOLVED]: DrawerUnresolvedView
+    [DRAWER_VIEWS.FILES]: DrawerFilesView
 }
 
 export function DrawerItems({ navigation }) {
     const { t } = useTranslation()
-    const { colors } = useTheme()
     const { setItem } = useStorage()
     const insets = useSafeAreaInsets()
     const [view, setView] = useState(null)
@@ -54,6 +48,7 @@ export function DrawerItems({ navigation }) {
 
     const onOpenRepositories = useCallback(() => router.push(ROUTES.REPOSITORIES), [])
     const onOpenSettings = useCallback(() => router.push(ROUTES.SETTINGS), [])
+    const onOpenConnections = useCallback(() => router.push(ROUTES.CONNECTIONS), [])
 
     const onChangeView = useCallback((next) => {
         setView(next)
@@ -61,6 +56,12 @@ export function DrawerItems({ navigation }) {
     }, [setItem])
 
     const footerItems = useMemo(() => [
+        {
+            icon: Shapes,
+            onPress: onOpenConnections,
+            testID: TEST_IDS.DRAWER_CONNECTIONS,
+            label: t('connections.title')
+        },
         {
             icon: FolderCode,
             onPress: onOpenRepositories,
@@ -73,7 +74,7 @@ export function DrawerItems({ navigation }) {
             testID: TEST_IDS.DRAWER_SETTINGS,
             label: t('title.settings')
         }
-    ], [onOpenRepositories, onOpenSettings, t])
+    ], [onOpenConnections, onOpenRepositories, onOpenSettings, t])
 
     const ActiveView = VIEW_COMPONENTS[view]
 
@@ -92,10 +93,7 @@ export function DrawerItems({ navigation }) {
                                 />
                             )}
                         </View>
-                        <IconToggleGroup
-                            buttons={footerItems}
-                            background={colors.onBackground + TRANSPARENT[10]}
-                        />
+                        <IconToggleGroup buttons={footerItems} />
                     </View>
                 </DrawerToolbar>
             </View>

@@ -15,5 +15,10 @@ export const TEST_IDS = {
     HOME_IMPORT: 'home-import',
     EDITOR_MODE_TOGGLE: 'editor-mode-toggle',
     EDITOR_MENU: 'editor-menu',
+    DRAWER_CONNECTIONS: 'drawer-connections',
+    CONNECTIONS_SEARCH: 'connections-search',
+    CONNECTIONS_PENDING: 'connections-pending',
+    CONNECTIONS_FOCUS_CENTER: 'connections-focus-center',
+    CONNECTIONS_RELATIONS_PRIMARY: 'connections-relations-primary',
     TOOLBAR_PREFIX: 'toolbar-'
 }

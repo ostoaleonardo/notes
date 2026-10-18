@@ -432,9 +432,52 @@
 			"modified_asc": "Změněno (staré - nové)",
 			"created_desc": "Vytvořeno (nové - staré)",
 			"created_asc": "Vytvořeno (staré - nové)"
+		}
+	},
+	"connections": {
+		"title": "Propojení",
+		"orphans": "nepropojené",
+		"unresolved": "nefunkční",
+		"not_found": "Zatím neexistuje",
+		"no_relations": "Zatím žádné vazby",
+		"open": "Otevřít",
+		"types": {
+			"root": "Úložiště",
+			"note": "Poznámka",
+			"missing": "Chybějící poznámka",
+			"folder": "Složka",
+			"file": "Soubor",
+			"tag": "Štítek"
 		},
-		"orphans": "Osamocené poznámky",
-		"unresolved": "Nevyřešené odkazy"
+		"tabs": {
+			"out": "Odchozí",
+			"in": "Příchozí",
+			"files": "Soubory",
+			"notes": "Poznámky",
+			"folders": "Složky",
+			"tags": "Štítky",
+			"related": "Související"
+		},
+		"pager": {
+			"previous": "Předchozí stránka",
+			"next": "Další stránka"
+		},
+		"origin": {
+			"change": "Změnit výchozí bod",
+			"filter": "Filtrovat",
+			"empty": "Nic nenalezeno"
+		},
+		"pending": {
+			"title": "Čeká",
+			"orphans": {
+				"title": "Nepropojené poznámky",
+				"description": "Poznámky bez příchozích a odchozích odkazů"
+			},
+			"unresolved": {
+				"title": "Nefunkční odkazy",
+				"description": "Odkazy na neexistující poznámky"
+			}
+		}
 	},
 	"search": {
 		"recent": "Nedávné",

@@ -422,9 +422,52 @@
 			"modified_asc": "Modifiée (ancienne - récente)",
 			"created_desc": "Créée (récente - ancienne)",
 			"created_asc": "Créée (ancienne - récente)"
+		}
+	},
+	"connections": {
+		"title": "Connexions",
+		"orphans": "isolées",
+		"unresolved": "cassés",
+		"not_found": "N'existe pas encore",
+		"no_relations": "Aucune relation pour l'instant",
+		"open": "Ouvrir",
+		"types": {
+			"root": "Dépôt",
+			"note": "Note",
+			"missing": "Note manquante",
+			"folder": "Dossier",
+			"file": "Fichier",
+			"tag": "Étiquette"
 		},
-		"orphans": "Notes orphelines",
-		"unresolved": "Liens non résolus"
+		"tabs": {
+			"out": "Sortants",
+			"in": "Entrants",
+			"files": "Fichiers",
+			"notes": "Notes",
+			"folders": "Dossiers",
+			"tags": "Étiquettes",
+			"related": "Associées"
+		},
+		"pager": {
+			"previous": "Page précédente",
+			"next": "Page suivante"
+		},
+		"origin": {
+			"change": "Changer d'origine",
+			"filter": "Filtrer",
+			"empty": "Aucun résultat"
+		},
+		"pending": {
+			"title": "En attente",
+			"orphans": {
+				"title": "Notes isolées",
+				"description": "Notes sans lien entrant ni sortant"
+			},
+			"unresolved": {
+				"title": "Liens cassés",
+				"description": "Liens qui pointent vers des notes inexistantes"
+			}
+		}
 	},
 	"search": {
 		"recent": "Récentes",
