@@ -38,7 +38,6 @@ import {
 } from '@/constants/drawer-views'
 import { ANIMATION_DURATION } from '@/constants/theme'
 
-
 export function DrawerNotesView({ closeDrawer, drawerOpen }) {
     const { t } = useTranslation()
     const { notes } = useNotes()
@@ -53,6 +52,7 @@ export function DrawerNotesView({ closeDrawer, drawerOpen }) {
     const [deleteId, setDeleteId] = useState('')
 
     const direction = useRef(LEVEL_DIRECTIONS.FORWARD)
+    const listRef = useRef(null)
 
     const notesByRepository = useMemo(() => {
         const map = new Map()
@@ -79,6 +79,10 @@ export function DrawerNotesView({ closeDrawer, drawerOpen }) {
         direction.current = next
         setDrawerFolderId(id)
     }, [setDrawerFolderId])
+
+    useEffect(() => {
+        if (drawerOpen) listRef.current?.scrollToOffset({ offset: 0, animated: false })
+    }, [drawerOpen])
 
     const onEnterFolder = useCallback((id) => {
         goToFolder(id, LEVEL_DIRECTIONS.FORWARD)
@@ -237,6 +241,7 @@ export function DrawerNotesView({ closeDrawer, drawerOpen }) {
             toolbarItems={toolbarItems}
             toolbarExtra={toolbarExtra}
             listKey={folderId}
+            listRef={listRef}
             listEntering={Entering.duration(ANIMATION_DURATION)}
         >
             <RenameRepository

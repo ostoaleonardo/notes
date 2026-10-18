@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { AddTemplate } from '@/screens/dialogs/add-template'
 import { AddTemplateFolder } from '@/screens/dialogs/add-template-folder'
 import { DrawerView } from './drawer-view'
-import { DrawerNoteItem } from './drawer-note-item'
+import { DrawerLevelNote } from './drawer-level-note'
 import { DrawerTemplateFolderItem } from './drawer-template-folder-item'
 import { openEditor } from './drawer-open-editor'
 
@@ -105,7 +105,7 @@ export function DrawerTemplatesView({ closeDrawer }) {
         }
 
         return (
-            <DrawerNoteItem
+            <DrawerLevelNote
                 depth={item.depth}
                 note={{
                     path: item.template.filename,

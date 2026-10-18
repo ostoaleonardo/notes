@@ -5,7 +5,12 @@ import { REPOSITORY_ACTIONS } from '@/constants/repository-actions'
 
 const ALL_ACTIONS = Object.values(REPOSITORY_ACTIONS)
 
-export function DrawerFolderActions({ menu, onAction }) {
+export function DrawerFolderActions({
+    menu,
+    actions = ALL_ACTIONS,
+    createLabelKey,
+    onAction
+}) {
     return (
         <MenuContainer
             visible={menu.visible}
@@ -13,7 +18,8 @@ export function DrawerFolderActions({ menu, onAction }) {
             anchor={menu.anchor}
         >
             <DrawerRepositoryMenu
-                actions={ALL_ACTIONS}
+                actions={actions}
+                createLabelKey={createLabelKey}
                 onAction={(action) => menu.trigger(() => onAction(action))}
             />
         </MenuContainer>

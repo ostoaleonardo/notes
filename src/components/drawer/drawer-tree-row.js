@@ -1,13 +1,14 @@
-import { Pressable, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import { TouchableRipple, useTheme } from 'react-native-paper'
 
 import { Typography } from '@/components/typography'
-import { DrawerIconButton } from './drawer-icon-button'
+import { levelRowStyles } from './drawer-level-styles'
 
+import { ChevronRight } from '@/icons/chevron-right'
 import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
-import { KeyboardArrowUp } from '@/icons/keyboard-arrow-up'
 
-import { BUTTON } from '@/constants/components'
-import { SPACING, OPACITY } from '@/constants/theme'
+import { DRAWER_ITEM } from '@/constants/components'
+import { OPACITY, RADIUS, SPACING } from '@/constants/theme'
 
 export function DrawerTreeRow({
     label,
@@ -17,73 +18,57 @@ export function DrawerTreeRow({
     count,
     bold,
     uppercase,
-    compact,
     onPress,
-    trailing
+    onLongPress
 }) {
+    const { colors } = useTheme()
+
+    const Chevron = collapsed ? ChevronRight : KeyboardArrowDown
+    const paddingStart = DRAWER_ITEM.paddingHorizontal + depth * SPACING.lg
+
     return (
-        <View style={[styles.container, !compact && styles.regular, { paddingLeft: depth * SPACING.lg }]}>
-            <Pressable
+        <View style={styles.container}>
+            <TouchableRipple
                 accessibilityRole='button'
-                onPress={onPress}
-                style={styles.content}
                 accessibilityState={expandable ? { expanded: !collapsed } : undefined}
+                onPress={onPress}
+                onLongPress={onLongPress}
+                style={[levelRowStyles.touch, { paddingStart }]}
             >
-                <DrawerIconButton
-                    pointerEvents='none'
-                    importantForAccessibility='no'
-                    icon={collapsed ? KeyboardArrowUp : KeyboardArrowDown}
-                    style={[styles.chevron, !expandable && styles.hidden]}
-                />
-                <Typography
-                    bold={bold}
-                    uppercase={uppercase}
-                    numberOfLines={1}
-                    styleProps={styles.label}
-                >
-                    {label}
-                </Typography>
-                {count !== undefined && (
+                <View style={levelRowStyles.content}>
                     <Typography
-                        opacity={OPACITY.muted}
-                        variant='bodySmall'
-                        styleProps={styles.count}
+                        bold={bold}
+                        uppercase={uppercase}
+                        numberOfLines={1}
+                        styleProps={levelRowStyles.label}
                     >
-                        {count}
+                        {label}
                     </Typography>
-                )}
-            </Pressable>
-            {trailing}
+                    {count !== undefined && (
+                        <Typography opacity={OPACITY.muted} variant='bodySmall'>
+                            {count}
+                        </Typography>
+                    )}
+                    <View style={levelRowStyles.slot}>
+                        {expandable && (
+                            <Chevron
+                                color={colors.onBackground}
+                                opacity={OPACITY.muted}
+                                width={DRAWER_ITEM.iconSize}
+                                height={DRAWER_ITEM.iconSize}
+                            />
+                        )}
+                    </View>
+                </View>
+            </TouchableRipple>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-    },
-    regular: {
-        minHeight: BUTTON.size
-    },
-    content: {
-        flex: 1,
-        gap: SPACING.sm,
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    chevron: {
-        margin: 0
-    },
-    hidden: {
-        opacity: 0
-    },
-    label: {
-        flexShrink: 1
-    },
-    count: {
-        marginStart: 'auto',
-        marginEnd: SPACING.lg
+        overflow: 'hidden',
+        borderRadius: RADIUS.xl,
+        marginBottom: DRAWER_ITEM.rowGap
     }
 })

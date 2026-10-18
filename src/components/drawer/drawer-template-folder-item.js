@@ -1,8 +1,10 @@
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
+import { View } from 'react-native'
 
-import { AnimatedView } from '@/components/animated/animated-view'
-import { DrawerRepositoryRow } from './drawer-repository-row'
+import { DrawerFolderActions } from './drawer-folder-actions'
+import { DrawerTreeRow } from './drawer-tree-row'
 
+import { useMenuAnchor } from '@/hooks/use-menu-anchor'
 import { useUtils } from '@/hooks/use-utils'
 
 import { TEMPLATE_FOLDER_ACTIONS } from '@/constants/repository-actions'
@@ -12,20 +14,30 @@ export const DrawerTemplateFolderItem = memo(function DrawerTemplateFolderItem({
     onAction
 }) {
     const { toggleFolder } = useUtils()
+    const menu = useMenuAnchor()
+
+    const onPress = useCallback(() => toggleFolder(folder.id), [toggleFolder, folder.id])
+
+    const handleAction = useCallback((action) => {
+        onAction(action, folder.path)
+    }, [onAction, folder.path])
 
     return (
-        <AnimatedView>
-            <DrawerRepositoryRow
-                alias={folder.name}
-                isRoot={false}
-                active={false}
-                isCollapsed={folder.isCollapsed}
+        <View ref={menu.rowRef} collapsable={false}>
+            <DrawerTreeRow
+                uppercase
+                label={folder.name}
                 depth={folder.depth}
+                collapsed={folder.isCollapsed}
+                onPress={onPress}
+                onLongPress={menu.onPressRow}
+            />
+            <DrawerFolderActions
+                menu={menu}
                 actions={TEMPLATE_FOLDER_ACTIONS}
                 createLabelKey='templates.new'
-                onPress={() => toggleFolder(folder.id)}
-                onAction={(action) => onAction(action, folder.path)}
+                onAction={handleAction}
             />
-        </AnimatedView>
+        </View>
     )
 })

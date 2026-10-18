@@ -2,13 +2,30 @@ appId: com.monospace.notes
 ---
 - launchApp
 - runFlow: subflows/open-drawer.yml
+- longPressOn: "(?i)folder 3"
+- waitForAnimationToEnd
+- tapOn:
+      id: menu-item
+      index: 1
+- waitForAnimationToEnd
+- assertVisible:
+      id: modal-backdrop
+- tapOn:
+      id: modal-backdrop
+- waitForAnimationToEnd
 - tapOn: "(?i)folder 1"
 - waitForAnimationToEnd
 - assertVisible: "(?i)subfolder 1.1"
+- assertVisible:
+      id: drawer-edit-folder
+- assertVisible:
+      id: drawer-delete-folder
 - back
 - waitForAnimationToEnd
 - assertVisible: "(?i)folder 2"
 - assertNotVisible: "(?i)subfolder 1.1"
+- assertNotVisible:
+      id: drawer-edit-folder
 - tapOn:
       id: drawer-sort
 - waitForAnimationToEnd

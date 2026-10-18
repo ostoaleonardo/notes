@@ -11,6 +11,7 @@ export function DrawerView({
     toolbarExtra,
     ListEmptyComponent,
     listKey,
+    listRef,
     listEntering,
     children
 }) {
@@ -22,6 +23,7 @@ export function DrawerView({
                 style={styles.list}
             >
                 <DrawerList
+                    ref={listRef}
                     data={data}
                     renderItem={renderItem}
                     ListEmptyComponent={ListEmptyComponent}

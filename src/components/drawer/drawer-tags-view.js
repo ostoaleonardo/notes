@@ -26,7 +26,6 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 const TagRow = memo(function TagRow({ tagKey, name, depth, count, hasChildren, expanded, onToggle }) {
     return (
         <DrawerTreeRow
-            compact={true}
             label={name}
             depth={depth}
             count={count}
