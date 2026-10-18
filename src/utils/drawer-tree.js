@@ -26,12 +26,11 @@ export const findFolderNode = (tree, folderId) => {
 export const resolveLevel = (tree, folderId) => findFolderNode(tree, folderId) || tree[0] || null
 
 export const buildLevelRows = ({ repository, notes, subfolders }) => [
-    {
+    ...(repository.parentId ? [{
         type: DRAWER_ITEM_TYPES.LEVEL,
         id: 'level:' + repository.id,
-        repository,
-        isRoot: !repository.parentId
-    },
+        repository
+    }] : []),
     ...subfolders.map((node) => ({
         type: DRAWER_ITEM_TYPES.REPOSITORY,
         id: 'repository:' + node.repository.id,

@@ -79,11 +79,10 @@ describe('resolve the level to show', () => {
 describe('build the rows of one level', () => {
     const tree = buildRepositoryTree(MOCK_REPOSITORY_LIST, MOCK_NOTES_BY_REPOSITORY)
 
-    test('lists the header, then the subfolders, then the notes', () => {
+    test('lists the subfolders first and then the notes at the root, without a header', () => {
         const rows = buildLevelRows(findFolderNode(tree, 'root'))
 
         expect(rows.map((row) => row.id)).toEqual([
-            'level:root',
             'repository:child-b',
             'repository:child-a',
             'note:note-apple',
@@ -91,16 +90,10 @@ describe('build the rows of one level', () => {
         ])
     })
 
-    test('flags the header of the root folder', () => {
-        const rows = buildLevelRows(findFolderNode(tree, 'root'))
-
-        expect(rows[0].isRoot).toBe(true)
-    })
-
-    test('does not flag the header of a nested folder as root', () => {
+    test('starts a nested folder with its header', () => {
         const rows = buildLevelRows(findFolderNode(tree, 'child-a'))
 
-        expect(rows[0].isRoot).toBe(false)
+        expect(rows[0].id).toBe('level:child-a')
     })
 
     test('only includes the direct children of the folder', () => {
@@ -109,9 +102,15 @@ describe('build the rows of one level', () => {
         expect(rows.map((row) => row.id)).toEqual(['level:child-a', 'repository:grandchild'])
     })
 
-    test('shows only the header for an empty folder', () => {
+    test('shows only the header for an empty nested folder', () => {
         const rows = buildLevelRows(findFolderNode(tree, 'child-b'))
 
         expect(rows.map((row) => row.id)).toEqual(['level:child-b'])
+    })
+
+    test('shows nothing for an empty root', () => {
+        const rows = buildLevelRows({ repository: { id: 'empty' }, notes: [], subfolders: [] })
+
+        expect(rows).toEqual([])
     })
 })

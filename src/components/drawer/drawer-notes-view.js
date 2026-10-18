@@ -214,7 +214,6 @@ export function DrawerNotesView({ closeDrawer, drawerOpen }) {
             return (
                 <DrawerLevelHeader
                     repository={item.repository}
-                    isRoot={item.isRoot}
                     onBack={onUpLevel}
                 />
             )
