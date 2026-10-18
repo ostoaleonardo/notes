@@ -38,7 +38,7 @@ export function Option({
                 {description && (
                     <Typography
                         opacity={OPACITY.muted}
-                        variant='caption'
+                        variant='bodySmall'
                     >
                         {description}
                     </Typography>

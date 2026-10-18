@@ -53,7 +53,7 @@ export function FilterToggle({
                 >
                     <View style={styles.content}>
                         {Icon && <Icon color={contentColor} width={ICON_SIZE.md} height={ICON_SIZE.md} />}
-                        <Typography variant='caption' color={contentColor}>
+                        <Typography variant='bodySmall' color={contentColor}>
                             {label}
                         </Typography>
                     </View>

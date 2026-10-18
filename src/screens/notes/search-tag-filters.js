@@ -23,7 +23,7 @@ export function SearchTagFilters({ query, setQuery, tags, parsed }) {
             <View style={styles.carousel}>
                 <Typography
                     opacity={OPACITY.muted}
-                    variant='caption'
+                    variant='bodySmall'
                 >
                     {tags.length === 0 ? t('message.tags.empty') : t('title.tags') + ':'}
                 </Typography>

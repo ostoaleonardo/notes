@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     base: {
         flex: 1,
         padding: 0,
-        fontSize: TYPOGRAPHY_SIZE_VARIANTS.paragraph,
+        fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodyMedium,
         textAlignVertical: 'center',
         fontFamily: FONTS.azeretLight
     }

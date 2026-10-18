@@ -38,7 +38,7 @@ export function SearchResults({ results, aliasById, onOpenResult }) {
                                 {aliasById.has(item.repositoryId) && (
                                     <Typography
                                         opacity={OPACITY.muted}
-                                        variant='caption'
+                                        variant='bodySmall'
                                     >
                                         {aliasById.get(item.repositoryId)}
                                     </Typography>

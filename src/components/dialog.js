@@ -37,7 +37,7 @@ export function DialogModal({ title, visible, onDismiss, children, actions }) {
             >
                 <Dialog.Title
                     style={{
-                        fontSize: TYPOGRAPHY_SIZE_VARIANTS.caption,
+                        fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodySmall,
                         opacity: OPACITY.muted,
                         textTransform: 'uppercase',
                         fontFamily: FONTS.azeretMedium

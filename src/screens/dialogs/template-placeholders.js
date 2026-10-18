@@ -42,13 +42,13 @@ export function TemplatePlaceholders({ visible, onDismiss }) {
                         </Typography>
                         <Typography
                             opacity={OPACITY.secondary}
-                            variant='caption'
+                            variant='bodySmall'
                         >
                             {t(`templates.placeholders.${key}`)}
                         </Typography>
                         <Typography
                             opacity={OPACITY.disabled}
-                            variant='caption'
+                            variant='bodySmall'
                         >
                             {t('templates.placeholders.example', { value: examples[key] })}
                         </Typography>

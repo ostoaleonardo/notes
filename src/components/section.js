@@ -18,7 +18,7 @@ export function Section({ title, children, containerStyle, contentStyle, visible
                     <Typography
                         opacity={OPACITY.secondary}
                         uppercase={true}
-                        variant='caption'
+                        variant='bodySmall'
                     >
                         {title}
                     </Typography>

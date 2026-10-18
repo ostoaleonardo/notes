@@ -46,7 +46,7 @@ export function DrawerTreeRow({
                 {count !== undefined && (
                     <Typography
                         opacity={OPACITY.muted}
-                        variant='caption'
+                        variant='bodySmall'
                         styleProps={styles.count}
                     >
                         {count}

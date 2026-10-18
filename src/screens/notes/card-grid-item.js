@@ -53,7 +53,7 @@ export const CardGridItem = memo(function CardGridItem({
             </Pressable>
 
             <Typography
-                variant='caption'
+                variant='bodySmall'
                 textAlign='center'
                 numberOfLines={1}
             >

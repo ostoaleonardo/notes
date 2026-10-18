@@ -11,7 +11,7 @@ export function Typography({
     opacity,
     textAlign,
     fontSize,
-    variant = 'paragraph',
+    variant = 'bodyMedium',
     styleProps,
     ...props
 }) {

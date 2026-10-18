@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
         marginLeft: 0
     },
     title: {
-        fontSize: TYPOGRAPHY_SIZE_VARIANTS.caption,
+        fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodySmall,
         textTransform: 'uppercase',
         fontFamily: FONTS.azeretLight
     }

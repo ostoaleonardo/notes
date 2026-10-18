@@ -56,7 +56,7 @@ export function IconToggle({
                 />
             )}
             {extra && (
-                <Typography numberOfLines={1} variant='caption' color={contentColor}>
+                <Typography numberOfLines={1} variant='bodySmall' color={contentColor}>
                     {label}
                 </Typography>
             )}

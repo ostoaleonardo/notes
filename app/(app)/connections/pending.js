@@ -86,7 +86,7 @@ export default function ConnectionsPending() {
                 value={total}
                 title={t(`connections.pending.${tab}.title`)}
             >
-                <Typography variant='caption' opacity={OPACITY.secondary}>
+                <Typography variant='bodySmall' opacity={OPACITY.secondary}>
                     {t(`connections.pending.${tab}.description`)}
                 </Typography>
             </HeroCard>

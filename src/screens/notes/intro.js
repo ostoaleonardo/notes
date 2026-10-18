@@ -13,7 +13,7 @@ export function Intro() {
         <AnimatedView style={styles.container}>
             <View style={{ gap: SPACING.lg }}>
                 <Typography
-                    fontSize={TYPOGRAPHY_SIZE_VARIANTS.display}
+                    fontSize={TYPOGRAPHY_SIZE_VARIANTS.headlineLarge}
                     textAlign='center'
                     styleProps={{ fontFamily: FONTS.nType82Headline }}
                 >

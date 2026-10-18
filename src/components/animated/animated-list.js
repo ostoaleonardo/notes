@@ -17,7 +17,7 @@ export function AnimatedList({ emptyLabel, gap = 16, contentContainerStyle, ...p
                 <View style={styles.empty}>
                     <Typography
                         opacity={OPACITY.muted}
-                        variant='caption'
+                        variant='bodySmall'
                         textAlign='center'
                     >
                         {emptyLabel}

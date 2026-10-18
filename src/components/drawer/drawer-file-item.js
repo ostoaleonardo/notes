@@ -24,7 +24,7 @@ export const DrawerFileItem = memo(function DrawerFileItem({ file, onOpenFile })
                     </Typography>
                     {!!file.folder && (
                         <Typography
-                            variant='caption'
+                            variant='bodySmall'
                             opacity={OPACITY.muted}
                             numberOfLines={1}
                         >
@@ -39,7 +39,7 @@ export const DrawerFileItem = memo(function DrawerFileItem({ file, onOpenFile })
                     ]}
                 >
                     <Typography
-                        variant='caption'
+                        variant='bodySmall'
                         opacity={OPACITY.pressed}
                     >
                         {file.extension}

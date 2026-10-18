@@ -18,7 +18,7 @@ export function Pressable({ children, ...props }) {
 
 const styles = StyleSheet.create({
     label: {
-        fontSize: TYPOGRAPHY_SIZE_VARIANTS.caption,
+        fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodySmall,
         fontFamily: FONTS.azeretLight
     }
 })

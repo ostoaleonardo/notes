@@ -1,3 +1,5 @@
+import { MD3LightTheme } from 'react-native-paper'
+
 export const SPACING = {
     xxxs: 2,
     xxs: 4,
@@ -63,20 +65,17 @@ export const ICON_FILL = 'currentColor'
 export const FONTS = {
     azeretLight: 'AzeretMono-Light',
     azeretMedium: 'AzeretMono-Medium',
-    nType82Headline: 'NType82-Headline'
+    nType82Headline: 'NType82-Headline',
+    geistMedium: 'Geist-Medium'
 }
 
 export const MONOSPACE_FONT_FAMILY = 'ui-monospace, monospace'
 export const BODY_FONT_FAMILY = `${FONTS.azeretLight}, ${MONOSPACE_FONT_FAMILY}`
 export const HEADING_FONT_FAMILY = `${FONTS.nType82Headline}, system-ui, sans-serif`
 
-export const TYPOGRAPHY_SIZE_VARIANTS = {
-    display: 32,
-    title: 24,
-    subtitle: 16,
-    paragraph: 14,
-    caption: 12
-}
+export const TYPOGRAPHY_SIZE_VARIANTS = Object.fromEntries(
+    Object.entries(MD3LightTheme.fonts).map(([variant, font]) => [variant, font.fontSize])
+)
 
 export const DOM_FONT_SIZE = {
     caption: '12px',

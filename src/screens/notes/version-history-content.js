@@ -43,7 +43,7 @@ const VersionItem = memo(function VersionItem({ version, first, last, onSelect }
                     <Typography bold numberOfLines={1}>
                         {version.title}
                     </Typography>
-                    <Typography opacity={OPACITY.muted} variant='caption'>
+                    <Typography opacity={OPACITY.muted} variant='bodySmall'>
                         {getFormattedDate(version.createdAt, currentLanguage)}
                     </Typography>
                 </View>
@@ -145,7 +145,7 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
                             entering={FadeIn}
                             exiting={FadeOut}
                         >
-                            <Typography opacity={OPACITY.muted} variant='caption'>
+                            <Typography opacity={OPACITY.muted} variant='bodySmall'>
                                 {getFormattedDate(selected.createdAt, currentLanguage)}
                             </Typography>
                         </AnimatedView>
@@ -156,7 +156,7 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
                             exiting={FadeOut}
                         >
                             <Typography
-                                variant='title'
+                                variant='headlineSmall'
                                 styleProps={{
                                     paddingLeft: SPACING.sm,
                                     fontFamily: FONTS.nType82Headline
@@ -273,6 +273,6 @@ const styles = StyleSheet.create({
     },
     diffText: {
         fontFamily: FONTS.azeretLight,
-        fontSize: TYPOGRAPHY_SIZE_VARIANTS.caption
+        fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodySmall
     }
 })

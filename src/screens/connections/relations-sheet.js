@@ -98,7 +98,7 @@ export const RelationsSheet = memo(function RelationsSheet({
                                 {entity.type === CONNECTION_TYPES.TAG ? `#${title}` : title}
                             </Typography>
                             <Typography
-                                variant='caption'
+                                variant='bodySmall'
                                 numberOfLines={1}
                                 opacity={OPACITY.secondary}
                             >

@@ -30,7 +30,7 @@ export function LargeInput({ value, onChangeText, placeholder, modal, ...props }
 const styles = StyleSheet.create({
     input: {
         flexGrow: 1,
-        fontSize: TYPOGRAPHY_SIZE_VARIANTS.title,
+        fontSize: TYPOGRAPHY_SIZE_VARIANTS.headlineSmall,
         fontFamily: FONTS.nType82Headline
     }
 })

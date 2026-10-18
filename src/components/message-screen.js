@@ -9,7 +9,7 @@ export function MessageScreen({ title, message, color, style, children }) {
         <View style={[styles.container, style]}>
             <View style={styles.text}>
                 <Typography
-                    fontSize={TYPOGRAPHY_SIZE_VARIANTS.display}
+                    fontSize={TYPOGRAPHY_SIZE_VARIANTS.headlineLarge}
                     color={color}
                     textAlign='center'
                     styleProps={{ fontFamily: FONTS.nType82Headline }}

@@ -95,14 +95,14 @@ export const RepositoryItem = memo(function RepositoryItem({
                         {repository.alias}
                     </Typography>
                     <Typography
-                        variant='caption'
+                        variant='bodySmall'
                         opacity={OPACITY.disabled}
                     >
                         {getRepositoryPath(repository.uri)}
                     </Typography>
 
                     <Typography
-                        variant='caption'
+                        variant='bodySmall'
                         opacity={active ? OPACITY.emphasized : OPACITY.muted}
                     >
                         {count}, {t('count.folders', { count: folderCount })}
@@ -130,7 +130,7 @@ export const RepositoryItem = memo(function RepositoryItem({
                 <View style={styles.structure}>
                     {descendantsWithCounts.length === 0 ? (
                         <Typography
-                            variant='caption'
+                            variant='bodySmall'
                             opacity={OPACITY.disabled}
                         >
                             {t('repositories.no_folders')}
@@ -141,11 +141,11 @@ export const RepositoryItem = memo(function RepositoryItem({
                                 key={descendant.id}
                                 style={{ paddingLeft: descendant.depth * SPACING.lg }}
                             >
-                                <Typography variant='caption'>
+                                <Typography variant='bodySmall'>
                                     {descendant.alias}
                                 </Typography>
                                 <Typography
-                                    variant='caption'
+                                    variant='bodySmall'
                                     opacity={OPACITY.disabled}
                                 >
                                     {t('count.notes', { count: descendant.noteCount })}, {t('count.folders', { count: descendant.folderCount })}
