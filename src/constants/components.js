@@ -173,3 +173,14 @@ export const RELATIONS_SHEET = {
     titleSize: 20,
     blobSize: 52
 }
+
+export const DRAWER_ITEM = {
+    minHeight: 40,
+    radius: RADIUS.lg,
+    gap: SPACING.md,
+    paddingHorizontal: SPACING.md,
+    rowGap: 0,
+    sectionGap: SPACING.sm,
+    iconSize: ICON_SIZE.lg,
+    slotSize: 32
+}

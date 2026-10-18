@@ -9,7 +9,8 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 export const useUtils = () => {
     const {
         pinned, setPinned,
-        collapsedFolders, setCollapsedFolders
+        collapsedFolders, setCollapsedFolders,
+        drawerFolderId, setDrawerFolderId
     } = useContext(UtilsContext)
 
     const { setItem } = useStorage()
@@ -60,6 +61,8 @@ export const useUtils = () => {
     return useMemo(() => ({
         pinned,
         collapsedFolders,
+        drawerFolderId,
+        setDrawerFolderId,
         updatePinned,
         onPinned,
         toggleFolder,
@@ -69,6 +72,8 @@ export const useUtils = () => {
     }), [
         pinned,
         collapsedFolders,
+        drawerFolderId,
+        setDrawerFolderId,
         updatePinned,
         onPinned,
         toggleFolder,

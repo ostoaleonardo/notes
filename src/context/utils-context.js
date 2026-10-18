@@ -9,6 +9,7 @@ export const UtilsContext = createContext()
 export function UtilsProvider({ children }) {
     const [pinned, setPinned] = useState(new Set())
     const [collapsedFolders, setCollapsedFolders] = useState(new Set())
+    const [drawerFolderId, setDrawerFolderId] = useState(null)
 
     const { getItem } = useStorage()
 
@@ -28,8 +29,10 @@ export function UtilsProvider({ children }) {
         pinned,
         setPinned,
         collapsedFolders,
-        setCollapsedFolders
-    }), [pinned, collapsedFolders])
+        setCollapsedFolders,
+        drawerFolderId,
+        setDrawerFolderId
+    }), [pinned, collapsedFolders, drawerFolderId])
 
     return (
         <UtilsContext.Provider value={value}>

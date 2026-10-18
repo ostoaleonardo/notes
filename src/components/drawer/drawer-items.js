@@ -19,7 +19,12 @@ import { FolderCode } from '@/icons/folder-code'
 import { Settings } from '@/icons/settings'
 import { Shapes } from '@/icons/shapes'
 
-import { DEFAULT_DRAWER_VIEW, DRAWER_VIEWS, DRAWER_ACTIONS } from '@/constants/drawer-views'
+import {
+    DEFAULT_DRAWER_VIEW,
+    DRAWER_ACTIONS,
+    DRAWER_HISTORY_TYPE,
+    DRAWER_VIEWS
+} from '@/constants/drawer-views'
 import { SPACING } from '@/constants/theme'
 import { ROUTES } from '@/constants/routes'
 import { TEST_IDS } from '@/constants/test-ids'
@@ -32,7 +37,7 @@ const VIEW_COMPONENTS = {
     [DRAWER_VIEWS.FILES]: DrawerFilesView
 }
 
-export function DrawerItems({ navigation }) {
+export function DrawerItems({ navigation, state }) {
     const { t } = useTranslation()
     const { setItem } = useStorage()
     const insets = useSafeAreaInsets()
@@ -77,10 +82,11 @@ export function DrawerItems({ navigation }) {
     ], [onOpenConnections, onOpenRepositories, onOpenSettings, t])
 
     const ActiveView = VIEW_COMPONENTS[view]
+    const drawerOpen = state.history.some((entry) => entry.type === DRAWER_HISTORY_TYPE)
 
     return (
         <>
-            {ActiveView && <ActiveView closeDrawer={closeDrawer} />}
+            {ActiveView && <ActiveView closeDrawer={closeDrawer} drawerOpen={drawerOpen} />}
 
             <View style={{ paddingTop: SPACING.lg, paddingBottom: insets.bottom }}>
                 <DrawerToolbar>

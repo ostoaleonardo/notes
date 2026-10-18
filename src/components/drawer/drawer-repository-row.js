@@ -1,13 +1,5 @@
-import { useTranslation } from 'react-i18next'
-
-import { MenuContainer } from '@/components/menu/menu-container'
-import { DrawerIconButton } from './drawer-icon-button'
-import { DrawerRepositoryMenu } from './drawer-repository-menu'
+import { DrawerFolderMenu } from './drawer-folder-menu'
 import { DrawerTreeRow } from './drawer-tree-row'
-
-import { useMenuAction } from '@/hooks/use-menu-action'
-
-import { MoreVert } from '@/icons/more-vert'
 
 import { REPOSITORY_ACTIONS } from '@/constants/repository-actions'
 
@@ -24,9 +16,6 @@ export function DrawerRepositoryRow({
     onPress,
     onAction
 }) {
-    const { t } = useTranslation()
-    const { visible, onOpen, onClose, trigger } = useMenuAction()
-
     return (
         <DrawerTreeRow
             uppercase={true}
@@ -36,23 +25,11 @@ export function DrawerRepositoryRow({
             bold={isRoot && active}
             onPress={onPress}
             trailing={!isRoot && (
-                <MenuContainer
-                    visible={visible}
-                    onClose={onClose}
-                    anchor={
-                        <DrawerIconButton
-                            onPress={onOpen}
-                            icon={MoreVert}
-                            accessibilityLabel={t('button.more')}
-                        />
-                    }
-                >
-                    <DrawerRepositoryMenu
-                        actions={actions}
-                        createLabelKey={createLabelKey}
-                        onAction={(action) => trigger(() => onAction(action))}
-                    />
-                </MenuContainer>
+                <DrawerFolderMenu
+                    actions={actions}
+                    createLabelKey={createLabelKey}
+                    onAction={onAction}
+                />
             )}
         />
     )

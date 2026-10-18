@@ -2,22 +2,13 @@ appId: com.monospace.notes
 ---
 - launchApp
 - runFlow: subflows/open-drawer.yml
-- runFlow:
-    when:
-      visible: Expandir todo
-    commands:
-      - tapOn:
-          id: drawer-toggle-all
-      - waitForAnimationToEnd
-- assertVisible: Colapsar todo
-- tapOn:
-      id: drawer-toggle-all
+- tapOn: "(?i)folder 1"
 - waitForAnimationToEnd
-- assertVisible: Expandir todo
-- tapOn:
-      id: drawer-toggle-all
+- assertVisible: "(?i)subfolder 1.1"
+- back
 - waitForAnimationToEnd
-- assertVisible: Colapsar todo
+- assertVisible: "(?i)folder 2"
+- assertNotVisible: "(?i)subfolder 1.1"
 - tapOn:
       id: drawer-sort
 - waitForAnimationToEnd

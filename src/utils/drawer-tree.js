@@ -12,16 +12,34 @@ export const buildRepositoryTree = (flatList, notesByRepository, sort, parentId 
         }))
 )
 
-export const flattenDrawerTree = (tree, collapsedFolders, depth = 0) => (
-    tree.flatMap(({ repository, notes, subfolders }) => {
-        const isCollapsed = collapsedFolders.has(repository.id)
-        const row = { type: DRAWER_ITEM_TYPES.REPOSITORY, id: 'repository:' + repository.id, repository, depth, isCollapsed }
+export const findFolderNode = (tree, folderId) => {
+    for (const node of tree) {
+        if (node.repository.id === folderId) return node
 
-        if (isCollapsed) return [row]
+        const found = findFolderNode(node.subfolders, folderId)
+        if (found) return found
+    }
 
-        const noteRows = notes.map((note) => ({ type: DRAWER_ITEM_TYPES.NOTE, id: 'note:' + note.path, note, depth: depth + 1 }))
-        const subfolderRows = flattenDrawerTree(subfolders, collapsedFolders, depth + 1)
+    return null
+}
 
-        return [row, ...noteRows, ...subfolderRows]
-    })
-)
+export const resolveLevel = (tree, folderId) => findFolderNode(tree, folderId) || tree[0] || null
+
+export const buildLevelRows = ({ repository, notes, subfolders }) => [
+    {
+        type: DRAWER_ITEM_TYPES.LEVEL,
+        id: 'level:' + repository.id,
+        repository,
+        isRoot: !repository.parentId
+    },
+    ...subfolders.map((node) => ({
+        type: DRAWER_ITEM_TYPES.REPOSITORY,
+        id: 'repository:' + node.repository.id,
+        repository: node.repository
+    })),
+    ...notes.map((note) => ({
+        type: DRAWER_ITEM_TYPES.NOTE,
+        id: 'note:' + note.path,
+        note
+    }))
+]

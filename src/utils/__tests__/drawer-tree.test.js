@@ -1,4 +1,9 @@
-import { buildRepositoryTree, flattenDrawerTree } from '../drawer-tree'
+import {
+    buildLevelRows,
+    buildRepositoryTree,
+    findFolderNode,
+    resolveLevel
+} from '../drawer-tree'
 import { NOTE_SORTS } from '@/constants/note-sort'
 import { MOCK_NOTES_BY_REPOSITORY, MOCK_REPOSITORY_LIST } from '../__fixtures__/drawer-tree'
 
@@ -35,43 +40,78 @@ describe('build repository tree', () => {
     })
 })
 
-describe('flatten drawer tree', () => {
-    test('interleaves repository and note rows in tree order when nothing is collapsed', () => {
-        const tree = buildRepositoryTree(MOCK_REPOSITORY_LIST, MOCK_NOTES_BY_REPOSITORY)
-        const rows = flattenDrawerTree(tree, new Set())
+describe('find a folder node', () => {
+    const tree = buildRepositoryTree(MOCK_REPOSITORY_LIST, MOCK_NOTES_BY_REPOSITORY)
+
+    test('finds the root folder', () => {
+        expect(findFolderNode(tree, 'root').repository.id).toBe('root')
+    })
+
+    test('finds a deeply nested folder', () => {
+        expect(findFolderNode(tree, 'grandchild').repository.id).toBe('grandchild')
+    })
+
+    test('returns nothing for an unknown folder', () => {
+        expect(findFolderNode(tree, 'missing')).toBeNull()
+    })
+})
+
+describe('resolve the level to show', () => {
+    const tree = buildRepositoryTree(MOCK_REPOSITORY_LIST, MOCK_NOTES_BY_REPOSITORY)
+
+    test('returns the requested folder', () => {
+        expect(resolveLevel(tree, 'child-a').repository.id).toBe('child-a')
+    })
+
+    test('falls back to the root when the folder no longer exists', () => {
+        expect(resolveLevel(tree, 'deleted').repository.id).toBe('root')
+    })
+
+    test('falls back to the root when no folder is selected', () => {
+        expect(resolveLevel(tree, null).repository.id).toBe('root')
+    })
+
+    test('returns nothing when there are no repositories', () => {
+        expect(resolveLevel([], 'root')).toBeNull()
+    })
+})
+
+describe('build the rows of one level', () => {
+    const tree = buildRepositoryTree(MOCK_REPOSITORY_LIST, MOCK_NOTES_BY_REPOSITORY)
+
+    test('lists the header, then the subfolders, then the notes', () => {
+        const rows = buildLevelRows(findFolderNode(tree, 'root'))
 
         expect(rows.map((row) => row.id)).toEqual([
-            'repository:root',
-            'note:note-apple',
-            'note:note-zebra',
+            'level:root',
             'repository:child-b',
             'repository:child-a',
-            'repository:grandchild',
-            'note:note-nested'
-        ])
-    })
-
-    test('assigns depth based on nesting level', () => {
-        const tree = buildRepositoryTree(MOCK_REPOSITORY_LIST, MOCK_NOTES_BY_REPOSITORY)
-        const rows = flattenDrawerTree(tree, new Set())
-
-        const grandchild = rows.find((row) => row.id === 'repository:grandchild')
-        const nestedNote = rows.find((row) => row.id === 'note:note-nested')
-
-        expect(grandchild.depth).toBe(2)
-        expect(nestedNote.depth).toBe(3)
-    })
-
-    test('omits notes and subfolders of a collapsed folder', () => {
-        const tree = buildRepositoryTree(MOCK_REPOSITORY_LIST, MOCK_NOTES_BY_REPOSITORY)
-        const rows = flattenDrawerTree(tree, new Set(['child-a']))
-
-        expect(rows.map((row) => row.id)).toEqual([
-            'repository:root',
             'note:note-apple',
-            'note:note-zebra',
-            'repository:child-b',
-            'repository:child-a'
+            'note:note-zebra'
         ])
+    })
+
+    test('flags the header of the root folder', () => {
+        const rows = buildLevelRows(findFolderNode(tree, 'root'))
+
+        expect(rows[0].isRoot).toBe(true)
+    })
+
+    test('does not flag the header of a nested folder as root', () => {
+        const rows = buildLevelRows(findFolderNode(tree, 'child-a'))
+
+        expect(rows[0].isRoot).toBe(false)
+    })
+
+    test('only includes the direct children of the folder', () => {
+        const rows = buildLevelRows(findFolderNode(tree, 'child-a'))
+
+        expect(rows.map((row) => row.id)).toEqual(['level:child-a', 'repository:grandchild'])
+    })
+
+    test('shows only the header for an empty folder', () => {
+        const rows = buildLevelRows(findFolderNode(tree, 'child-b'))
+
+        expect(rows.map((row) => row.id)).toEqual(['level:child-b'])
     })
 })

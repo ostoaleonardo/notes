@@ -17,12 +17,22 @@ export const DEFAULT_DRAWER_VIEW = DRAWER_VIEWS.NOTES
 export const DRAWER_ITEM_TYPES = {
     REPOSITORY: 'repository',
     NOTE: 'note',
+    LEVEL: 'level',
     TEMPLATE: 'template',
     FOLDER: 'folder'
 }
 
 export const DRAWER_TOOLBAR_KEYS = {
-    TOGGLE_ALL: 'toggle-all'
+    TOGGLE_ALL: 'toggle-all',
+    EDIT_FOLDER: 'edit-folder',
+    DELETE_FOLDER: 'delete-folder'
+}
+
+export const DRAWER_HISTORY_TYPE = 'drawer'
+
+export const LEVEL_DIRECTIONS = {
+    FORWARD: 'forward',
+    BACK: 'back'
 }
 
 export const DRAWER_ACTIONS = {
