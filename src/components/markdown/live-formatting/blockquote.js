@@ -56,7 +56,7 @@ export const blockquoteTheme = ({ colors }) => ({
         borderLeft: `4px solid ${colors.tertiary}`,
         paddingLeft: '0.6em'
     },
-    '.cm-live-accent-mark': { color: colors.tertiary, fontWeight: 'bold' },
+    '.cm-live-accent-mark': { color: colors.accentText, fontWeight: 'bold' },
     ...calloutTheme(),
     [`.${CALLOUT_LIVE_TITLE_CLASS}`]: { fontWeight: 'bold' }
 })

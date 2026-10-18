@@ -56,7 +56,7 @@ export const tableTheme = ({ colors, typography }) => {
         },
         [`th.${TABLE_CLASSES.CELL}`]: { fontWeight: 'bold' },
         [`.${TABLE_CLASSES.CELL}:focus`]: { boxShadow: `inset 0 0 0 2px ${accent}` },
-        [`.${TABLE_CLASSES.CELL} a`]: { color: accent },
+        [`.${TABLE_CLASSES.CELL} a`]: { color: colors.accentText },
         [`.${TABLE_CLASSES.CELL} code`]: {
             backgroundColor: colors.codeBackground,
             ...INLINE_CODE_STYLE,

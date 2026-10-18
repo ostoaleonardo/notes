@@ -82,8 +82,8 @@ export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntr
 const ATTACH_FILE_MASK = buildIconMaskUrl(ATTACH_FILE_ICON_PATH)
 
 export const wikiLinksTheme = ({ colors }) => ({
-    '.cm-live-wikilink': { color: colors.tertiary, fontWeight: 'bold' },
-    [`.${EMBED_LIVE_CLASS}`]: { color: colors.tertiary, fontWeight: 'bold', fontStyle: 'italic' },
+    '.cm-live-wikilink': { color: colors.accentText, fontWeight: 'bold' },
+    [`.${EMBED_LIVE_CLASS}`]: { color: colors.accentText, fontWeight: 'bold', fontStyle: 'italic' },
     [`.${FILE_LINK_LIVE_CLASS}`]: {
         color: colors.onBackground,
         padding: '1px 6px',
@@ -106,7 +106,7 @@ export const wikiLinksTheme = ({ colors }) => ({
     },
     '.cm-live-wikilink-broken': {
         color: colors.onBackground,
-        opacity: OPACITY.muted,
+        opacity: OPACITY.secondary,
         textDecoration: 'underline dashed'
     }
 })

@@ -43,7 +43,7 @@ export const htmlTheme = ({ colors, typography }) => ({
     '.cm-live-block th, .cm-live-block td': { border: `1px solid ${colors.codeBackground}`, padding: '4px 8px' },
     '.cm-live-block code': { backgroundColor: colors.codeBackground, ...INLINE_CODE_STYLE, fontFamily: 'monospace' },
     '.cm-live-block img': { maxWidth: '100%', borderRadius: '8px' },
-    '.cm-live-block a': { color: colors.tertiary },
+    '.cm-live-block a': { color: colors.accentText },
     '.cm-live-block h1, .cm-live-block h2, .cm-live-block h3, .cm-live-block h4, .cm-live-block h5, .cm-live-block h6': {
         fontWeight: 'bold', fontFamily: typography.headingFontFamily
     },

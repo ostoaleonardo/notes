@@ -87,7 +87,7 @@ export const RelationsSheet = memo(function RelationsSheet({
                             size={RELATIONS_SHEET.blobSize}
                             iconSize={ICON_SIZE.xxl}
                             fill={colors.tertiary}
-                            color={entity.type === ROOT ? colors.onTertiary : colors.tertiary}
+                            color={entity.type === ROOT ? colors.onTertiary : colors.accentText}
                         />
                         <View style={styles.titles}>
                             <Typography

@@ -9,13 +9,13 @@ import { TRANSPARENT } from '@/constants/themes'
 
 export const buildEditorTheme = ({ colors, typography }) => {
     const derived = buildDerivedColors(colors)
-    const { onBackground, tertiary, selection, placeholder, surface } = derived
+    const { onBackground, tertiary, accentText, selection, placeholder, surface } = derived
     const { fontSize, fontFamily } = typography
 
     return EditorView.theme({
         '&': { width: '100%', fontSize: `${fontSize}px`, backgroundColor: 'transparent' },
         '.cm-content': {
-            fontFamily, color: onBackground, caretColor: tertiary, overflowWrap: 'anywhere',
+            fontFamily, color: onBackground, caretColor: accentText, overflowWrap: 'anywhere',
             paddingLeft: '16px', paddingRight: '16px', paddingTop: '8px'
         },
         '.cm-line': { overflowWrap: 'anywhere', padding: 0 },
@@ -28,7 +28,7 @@ export const buildEditorTheme = ({ colors, typography }) => {
         '.cm-gutters': { display: 'none' },
         '&.cm-focused': { outline: 'none' },
         '.cm-placeholder': { color: placeholder },
-        [`.${INLINE_TAG_CLASS}`]: { color: tertiary, fontWeight: 'bold' },
+        [`.${INLINE_TAG_CLASS}`]: { color: accentText, fontWeight: 'bold' },
         '.cm-searchMatch': { backgroundColor: `${tertiary}40 !important` },
         '.cm-searchMatch-selected': { backgroundColor: `${tertiary}80 !important` },
         '.cm-tooltip.cm-tooltip-autocomplete': {
@@ -48,7 +48,7 @@ export const buildEditorTheme = ({ colors, typography }) => {
         },
         '.cm-foldPlaceholder': {
             backgroundColor: `${surface} !important`, border: 'none !important',
-            color: `${tertiary} !important`, borderRadius: '4px', padding: '0 6px', fontFamily
+            color: `${accentText} !important`, borderRadius: '4px', padding: '0 6px', fontFamily
         },
         ...buildLiveFormattingTheme({ colors: derived, typography })
     })

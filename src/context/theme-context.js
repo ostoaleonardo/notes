@@ -7,6 +7,7 @@ import { Host } from '@expo/ui'
 import { usePro } from '@/hooks/use-pro'
 import { useStorage } from '@/hooks/use-storage'
 import { revertAccentOnProRevoke } from '@/utils/accent'
+import { getReadableAccent } from '@/utils/accent-contrast'
 
 import { THEMES, ACCENT_COLORS } from '@/constants/themes'
 import { FREE_ACCENT, THEME_MODES } from '@/constants/theme-options'
@@ -60,13 +61,19 @@ export function ThemeProvider({ initialTheme, children }) {
 
     const updateTheme = (mode, accent) => {
         const { background, onBackground } = ACCENT_COLORS[accent]
+        const { colors } = THEMES[mode]
 
         return {
             ...THEMES[mode],
             colors: {
-                ...THEMES[mode].colors,
+                ...colors,
                 tertiary: background,
-                onTertiary: onBackground
+                onTertiary: onBackground,
+                accentText: getReadableAccent({
+                    accent: background,
+                    surfaces: [colors.background, colors.surface, colors.surfaceVariant],
+                    toward: colors.onBackground
+                })
             }
         }
     }

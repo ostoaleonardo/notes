@@ -51,6 +51,7 @@ export default {
     'expo-localization',
     'expo-image-picker',
     './plugins/with-markdown-intent',
+    './plugins/with-text-handle-color',
     [
       'expo-build-properties', {
         android: {

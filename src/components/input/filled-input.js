@@ -22,7 +22,7 @@ export function FilledInput({ label, onFocus, onBlur, ...props }) {
         onBlur?.(event)
     }, [onBlur])
 
-    const accent = focused ? colors.tertiary : colors.onBackground + TRANSPARENT[50]
+    const accent = focused ? colors.accentText : colors.onBackground + TRANSPARENT[50]
 
     return (
         <View
@@ -39,7 +39,7 @@ export function FilledInput({ label, onFocus, onBlur, ...props }) {
         >
             <Typography
                 variant='bodySmall'
-                color={focused ? colors.tertiary : colors.onBackground}
+                color={focused ? colors.accentText : colors.onBackground}
                 opacity={focused ? 1 : OPACITY.secondary}
             >
                 {label}
@@ -49,8 +49,8 @@ export function FilledInput({ label, onFocus, onBlur, ...props }) {
                 multiline
                 {...props}
                 style={[styles.input, { color: colors.onBackground }]}
-                cursorColor={colors.tertiary}
-                selectionHandleColor={colors.tertiary}
+                cursorColor={colors.accentText}
+                selectionHandleColor={colors.accentText}
                 selectionColor={colors.tertiary + TRANSPARENT[30]}
                 placeholderTextColor={colors.onBackground + TRANSPARENT[40]}
                 onFocus={handleFocus}

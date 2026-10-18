@@ -29,7 +29,7 @@ export function ProgressRing({ size, stroke, progress, children }) {
                     fill='none'
                     strokeWidth={stroke}
                     strokeLinecap='round'
-                    stroke={colors.tertiary}
+                    stroke={colors.accentText}
                     strokeDasharray={circumference}
                     strokeDashoffset={circumference * (1 - progress)}
                 />

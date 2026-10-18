@@ -58,6 +58,7 @@ const darkTheme = {
 
         tertiary: COLORS.base.accent,
         onTertiary: COLORS.dark.onBackground,
+        accentText: COLORS.dark.onBackground,
 
         background: COLORS.dark.background,
         onBackground: COLORS.dark.onBackground,
@@ -93,6 +94,7 @@ const lightTheme = {
 
         tertiary: COLORS.base.accent,
         onTertiary: COLORS.base.white,
+        accentText: COLORS.light.onBackground,
 
         background: COLORS.light.background,
         onBackground: COLORS.light.onBackground,

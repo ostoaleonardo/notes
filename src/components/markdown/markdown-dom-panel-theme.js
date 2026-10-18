@@ -60,7 +60,7 @@ export const buildChipStyle = ({ colors, typography }) => ({
     boxSizing: 'border-box',
     borderRadius: '999px',
     backgroundColor: colors.tertiary + TRANSPARENT[20],
-    color: colors.tertiary,
+    color: colors.accentText,
     fontFamily: typography.fontFamily,
     fontSize: DOM_FONT_SIZE.small,
     lineHeight: DOM_FONT_SIZE.small,

@@ -14,7 +14,7 @@ import { TRANSPARENT } from '@/constants/themes'
 const Crumb = memo(function Crumb({ entity, title, index, active, onJump }) {
     const { colors } = useTheme()
 
-    const color = active ? colors.tertiary : colors.onBackground
+    const color = active ? colors.accentText : colors.onBackground
     const onPress = useCallback(() => onJump(index), [onJump, index])
 
     return (

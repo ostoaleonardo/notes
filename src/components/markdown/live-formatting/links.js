@@ -34,5 +34,5 @@ export const decorateLink = (node, { selection, ranges }) => {
 }
 
 export const linksTheme = ({ colors }) => ({
-    '.cm-live-link': { color: colors.tertiary, textDecoration: 'underline' }
+    '.cm-live-link': { color: colors.accentText, textDecoration: 'underline' }
 })

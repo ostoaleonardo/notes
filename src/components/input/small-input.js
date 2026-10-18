@@ -20,7 +20,7 @@ export function SmallInput({ background, ...props }) {
                     color: colors.onBackground
                 }}
                 cursorColor={colors.onBackground}
-                selectionHandleColor={colors.tertiary}
+                selectionHandleColor={colors.accentText}
                 selectionColor={colors.onBackground + TRANSPARENT[20]}
                 placeholderTextColor={colors.onBackground + TRANSPARENT[40]}
                 {...props}

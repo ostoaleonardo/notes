@@ -19,8 +19,8 @@ export const getNodePalette = ({ kind, missing }, colors, selected = false) => {
             return {
                 fill: selected ? selectedFill : colors.surfaceVariant,
                 stroke: selected ? accent : colors.surfaceVariant,
-                text: selected ? accent : colors.onBackground,
-                icon: selected ? accent : colors.onBackground
+                text: selected ? colors.accentText : colors.onBackground,
+                icon: selected ? colors.accentText : colors.onBackground
             }
         case CONNECTION_NODE_KINDS.FILE:
             return {

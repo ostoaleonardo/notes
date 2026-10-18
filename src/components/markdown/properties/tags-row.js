@@ -76,7 +76,7 @@ const TagInput = ({ tags, allTags, autoFocus, onAddTag }) => {
 export const TagsRow = ({ tags, allTags, tagsKey, autoFocus, onRemoveTag, onAddTag, onTagPress }) => {
     const theme = useContext(ThemeContext)
     const { colors, typography } = theme
-    const { tertiary } = colors
+    const { accentText } = colors
 
     return (
         <div style={buildPropertyEntryStyle()}>
@@ -91,7 +91,7 @@ export const TagsRow = ({ tags, allTags, tagsKey, autoFocus, onRemoveTag, onAddT
                         <DomIcon
                             path={CLOSE_ICON_PATH}
                             size={ICON_SIZE.xs}
-                            color={tertiary}
+                            color={accentText}
                             style={{ opacity: OPACITY.pressed }}
                             onClick={() => onRemoveTag(tag)}
                         />

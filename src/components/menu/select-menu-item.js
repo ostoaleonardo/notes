@@ -13,8 +13,8 @@ export function SelectMenuItem({ selected, style, contentStyle, ...props }) {
     const { colors } = useTheme()
 
     const renderCheck = useCallback(
-        (iconProps) => <Check {...iconProps} color={colors.tertiary} />,
-        [colors.tertiary]
+        (iconProps) => <Check {...iconProps} color={colors.accentText} />,
+        [colors.accentText]
     )
 
     return (
