@@ -1,5 +1,4 @@
 import { View } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import { router, useFocusEffect } from 'expo-router'
 import * as DocumentPicker from 'expo-document-picker'
 import { useCallback, useEffect, useEffectEvent, useMemo, useState } from 'react'
@@ -22,9 +21,9 @@ import { getRecentIds } from '@/utils/recent-ids'
 
 import { ROUTES } from '@/constants/routes'
 import { APP_BAR_MODES } from '@/constants/app-bar'
+import { APP_NAME, APP_NAME_PRO_SUFFIX } from '@/constants/app-name'
 
 export default function Home() {
-    const { t } = useTranslation()
     const { notes } = useNotes()
     const { pinned } = useUtils()
     const { pro } = usePro()
@@ -76,7 +75,7 @@ export default function Home() {
         <View style={{ flex: 1 }}>
             <AppBar
                 mode={APP_BAR_MODES.MENU}
-                title={t('title.notes') + (pro ? ' (Pro)' : '')}
+                title={APP_NAME + (pro ? APP_NAME_PRO_SUFFIX : '')}
             />
 
             <Intro />

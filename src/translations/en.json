@@ -77,7 +77,6 @@
 		"add_failed": "Couldn't add this repository"
 	},
 	"title": {
-		"notes": "Notes",
 		"tags": "Tags",
 		"repositories": "Repositories",
 		"templates": "Templates",

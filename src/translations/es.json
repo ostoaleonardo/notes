@@ -77,7 +77,6 @@
 		"add_failed": "No se pudo agregar este repositorio"
 	},
 	"title": {
-		"notes": "Notas",
 		"tags": "Etiquetas",
 		"repositories": "Repositorios",
 		"templates": "Plantillas",

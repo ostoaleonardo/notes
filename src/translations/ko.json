@@ -77,7 +77,6 @@
 		"add_failed": "이 저장소를 추가할 수 없습니다"
 	},
 	"title": {
-		"notes": "노트",
 		"tags": "태그",
 		"repositories": "저장소",
 		"templates": "템플릿",

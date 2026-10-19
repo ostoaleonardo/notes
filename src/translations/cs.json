@@ -77,7 +77,6 @@
 		"add_failed": "Toto úložiště se nepodařilo přidat"
 	},
 	"title": {
-		"notes": "Poznámky",
 		"tags": "Štítky",
 		"repositories": "Úložiště",
 		"templates": "Šablony",

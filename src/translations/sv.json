@@ -77,7 +77,6 @@
 		"add_failed": "Det gick inte att lägga till förrådet"
 	},
 	"title": {
-		"notes": "Anteckningar",
 		"tags": "Taggar",
 		"repositories": "Förråd",
 		"templates": "Mallar",
