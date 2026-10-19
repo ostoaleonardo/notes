@@ -11,8 +11,6 @@ export const EntityRow = memo(function EntityRow({
     entity,
     title,
     caption,
-    isFirst,
-    isLast,
     background,
     onPress
 }) {
@@ -23,8 +21,6 @@ export const EntityRow = memo(function EntityRow({
         <Option
             title={title}
             description={caption}
-            isFirst={isFirst}
-            isLast={isLast}
             background={background}
             onPress={handlePress}
             rightContent={(

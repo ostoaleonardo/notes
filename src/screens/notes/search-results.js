@@ -6,6 +6,7 @@ import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 import { EntityRow } from '@/screens/connections/entity-row'
 import { AnimatedList } from '@/components/animated/animated-list'
 import { AnimatedView } from '@/components/animated/animated-view'
+import { GroupedList } from '@/components/grouped-list'
 
 import { makeEntity } from '@/utils/connection-model'
 
@@ -22,14 +23,15 @@ export function SearchResults({ results, aliasById, onOpenResult }) {
 
     return (
         <View style={styles.container}>
-            <AnimatedList
+            <GroupedList
+                component={AnimatedList}
                 gap={SPACING.xxxs}
                 data={results}
                 keyExtractor={getNotePath}
                 emptyLabel={t('message.notes.empty')}
                 keyboardShouldPersistTaps='handled'
                 contentContainerStyle={styles.list}
-                renderItem={({ item, index }) => (
+                renderItem={({ item }) => (
                     <AnimatedView
                         entering={FadeInUp}
                         exiting={FadeOutUp}
@@ -38,8 +40,6 @@ export function SearchResults({ results, aliasById, onOpenResult }) {
                             entity={makeEntity(CONNECTION_TYPES.NOTE, item.path)}
                             title={item.title || t('notes.untitled')}
                             caption={aliasById.get(item.repositoryId)}
-                            isFirst={index === 0}
-                            isLast={index === results.length - 1}
                             background={colors.surfaceVariant}
                             onPress={onPress}
                         />

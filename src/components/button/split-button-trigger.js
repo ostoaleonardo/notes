@@ -5,11 +5,20 @@ import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated
 import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
 import { KeyboardArrowUp } from '@/icons/keyboard-arrow-up'
 
+import { useGroupPosition } from '@/hooks/use-group-position'
+import { getSegmentCorners } from '@/utils/group-position'
+
 import { BUTTON, SPLIT_TRIGGER_RADIUS } from '@/constants/components'
 import { OPACITY, PROGRESS_RANGE } from '@/constants/theme'
 
 export function SplitButtonTrigger({ menuVisible, onPress, openProgress, testID }) {
     const { colors } = useTheme()
+    const position = useGroupPosition()
+    const { left, right } = getSegmentCorners(
+        position,
+        SPLIT_TRIGGER_RADIUS.outer,
+        SPLIT_TRIGGER_RADIUS.inner
+    )
 
     const animatedStyle = useAnimatedStyle(() => {
         const radius = (closed) => interpolate(
@@ -19,10 +28,10 @@ export function SplitButtonTrigger({ menuVisible, onPress, openProgress, testID 
         )
 
         return {
-            borderTopLeftRadius: radius(SPLIT_TRIGGER_RADIUS.inner),
-            borderBottomLeftRadius: radius(SPLIT_TRIGGER_RADIUS.inner),
-            borderTopRightRadius: radius(SPLIT_TRIGGER_RADIUS.outer),
-            borderBottomRightRadius: radius(SPLIT_TRIGGER_RADIUS.outer),
+            borderTopLeftRadius: radius(left),
+            borderBottomLeftRadius: radius(left),
+            borderTopRightRadius: radius(right),
+            borderBottomRightRadius: radius(right),
             opacity: interpolate(openProgress.value, PROGRESS_RANGE, [1, OPACITY.emphasized])
         }
     })

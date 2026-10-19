@@ -14,13 +14,12 @@ export function FilterToggle({
     label,
     selected,
     onPress,
-    position = 'middle',
     pill = false,
     minWidth,
     disabled = false
 }) {
     const { colors } = useTheme()
-    const animatedStyle = useSegmentedCornerStyle(position, selected)
+    const animatedStyle = useSegmentedCornerStyle(selected)
 
     const contentColor = selected ? colors.background : colors.onBackground
 

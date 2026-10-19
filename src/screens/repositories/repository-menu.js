@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { IconButton, Tooltip, useTheme } from 'react-native-paper'
 
 import { MenuContainer } from '@/components/menu/menu-container'
+import { MenuGroup } from '@/components/menu/menu-group'
 import { MenuItem } from '@/components/menu/menu-item'
 import { ActionMenuItem } from '@/components/menu/action-menu-item'
 
@@ -37,23 +38,25 @@ export const RepositoryMenu = memo(function RepositoryMenu({ onRename, onForget,
                 </Tooltip>
             }
         >
-            <ActionMenuItem
-                title={t('repositories.rename.title')}
-                icon={Edit}
-                action={onRename}
-                onTrigger={trigger}
-            />
-            <ActionMenuItem
-                title={t('repositories.forget.title')}
-                icon={Close}
-                action={onForget}
-                onTrigger={trigger}
-            />
-            <MenuItem
-                title={t('repositories.delete.title')}
-                leadingIcon={deleteIcon}
-                onPress={onPressDelete}
-            />
+            <MenuGroup>
+                <ActionMenuItem
+                    title={t('repositories.rename.title')}
+                    icon={Edit}
+                    action={onRename}
+                    onTrigger={trigger}
+                />
+                <ActionMenuItem
+                    title={t('repositories.forget.title')}
+                    icon={Close}
+                    action={onForget}
+                    onTrigger={trigger}
+                />
+                <MenuItem
+                    title={t('repositories.delete.title')}
+                    leadingIcon={deleteIcon}
+                    onPress={onPressDelete}
+                />
+            </MenuGroup>
         </MenuContainer>
     )
 })

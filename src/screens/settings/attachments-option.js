@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
 import { Button, useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
 import { Option } from './option'
 import { SelectOption } from './select-option'
 import { DialogModal } from '@/components/dialog'
+import { PositionGroup } from '@/components/position-group'
 import { LargeInput } from '@/components/input/large-input'
 
 import { useStorage } from '@/hooks/use-storage'
@@ -22,7 +22,6 @@ import {
 } from '@/constants/attachments'
 import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { SPACING } from '@/constants/theme'
 
 const LOCATIONS = Object.values(ATTACHMENT_LOCATIONS)
 
@@ -68,26 +67,25 @@ export function AttachmentsOption() {
     }
 
     return (
-        <View style={styles.group}>
-            <SelectOption
-                title={t('settings.attachments.location.title')}
-                description={t(`settings.attachments.location.${location}`)}
-                items={locationItems}
-                selectedValue={location}
-                onSelect={onSelectLocation}
-                isFirst={true}
-                isLast={!showFolder}
-            />
-
-            {showFolder && (
-                <Option
-                    title={t('settings.attachments.folder')}
-                    description={folderName}
-                    rightContent={<ArrowForward color={colors.onBackground} />}
-                    onPress={onOpenDialog}
-                    isLast={true}
+        <>
+            <PositionGroup>
+                <SelectOption
+                    title={t('settings.attachments.location.title')}
+                    description={t(`settings.attachments.location.${location}`)}
+                    items={locationItems}
+                    selectedValue={location}
+                    onSelect={onSelectLocation}
                 />
-            )}
+
+                {showFolder && (
+                    <Option
+                        title={t('settings.attachments.folder')}
+                        description={folderName}
+                        rightContent={<ArrowForward color={colors.onBackground} />}
+                        onPress={onOpenDialog}
+                    />
+                )}
+            </PositionGroup>
 
             <DialogModal
                 title={t('settings.attachments.folder')}
@@ -110,12 +108,6 @@ export function AttachmentsOption() {
                     onChangeText={setDraft}
                 />
             </DialogModal>
-        </View>
+        </>
     )
 }
-
-const styles = StyleSheet.create({
-    group: {
-        gap: SPACING.xxxs
-    }
-})

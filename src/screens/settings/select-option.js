@@ -3,6 +3,7 @@ import { useTheme } from 'react-native-paper'
 
 import { Option } from './option'
 import { MenuContainer } from '@/components/menu/menu-container'
+import { MenuGroup } from '@/components/menu/menu-group'
 import { SelectMenuItem } from '@/components/menu/select-menu-item'
 
 import { useMenuAnchor } from '@/hooks/use-menu-anchor'
@@ -16,9 +17,7 @@ export function SelectOption({
     description,
     items,
     selectedValue,
-    onSelect,
-    isFirst,
-    isLast
+    onSelect
 }) {
     const { colors } = useTheme()
     const menu = useMenuAnchor()
@@ -40,8 +39,6 @@ export function SelectOption({
                     description={description}
                     rightContent={<ArrowForward color={colors.onBackground} />}
                     onPress={menu.onPressRow}
-                    isFirst={isFirst}
-                    isLast={isLast}
                 />
             </View>
 
@@ -50,13 +47,15 @@ export function SelectOption({
                 onClose={menu.onClose}
                 anchor={menu.anchor}
             >
-                <FlatList
-                    data={items}
-                    renderItem={renderItem}
-                    keyExtractor={getItemKey}
-                    style={styles.menuList}
-                    extraData={selectedValue}
-                />
+                <MenuGroup>
+                    <FlatList
+                        data={items}
+                        renderItem={renderItem}
+                        keyExtractor={getItemKey}
+                        style={styles.menuList}
+                        extraData={selectedValue}
+                    />
+                </MenuGroup>
             </MenuContainer>
         </View>
     )

@@ -133,20 +133,18 @@ export function ProSection() {
                         : <ArrowForward color={colors.onBackground} />
                 }
                 onPress={pro ? null : purcharsePro}
-                isFirst={true}
-                isLast={pro}
             />
-            <Option
-                visible={!pro}
-                title={t('pro.restore')}
-                description={t('pro.purchased')}
-                rightContent={
-                    loading ? <ActivityIndicator size='small' color={colors.onBackground} />
-                        : <ArrowForward color={colors.onBackground} />
-                }
-                onPress={restorePurchases}
-                isLast={true}
-            />
+            {!pro && (
+                <Option
+                    title={t('pro.restore')}
+                    description={t('pro.purchased')}
+                    rightContent={
+                        loading ? <ActivityIndicator size='small' color={colors.onBackground} />
+                            : <ArrowForward color={colors.onBackground} />
+                    }
+                    onPress={restorePurchases}
+                />
+            )}
         </Section>
     )
 }

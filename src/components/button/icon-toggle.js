@@ -16,7 +16,6 @@ export function IconToggle({
     label,
     testID,
     onPress,
-    position = 'middle',
     showLabel = false,
     expandable = false,
     iconSize: iconSizeOverride,
@@ -43,7 +42,7 @@ export function IconToggle({
     }, [label, onWidth])
 
     const releaseDuration = expandable ? 0 : undefined
-    const animatedStyle = useSegmentedCornerStyle(position, pressed || selected, releaseDuration)
+    const animatedStyle = useSegmentedCornerStyle(pressed || selected, releaseDuration)
     const expanding = useExpandingWidth(showLabel, expandable, label)
 
     const renderContent = (extra) => (

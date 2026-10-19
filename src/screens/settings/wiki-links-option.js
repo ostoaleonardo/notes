@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Option } from './option'
+import { PositionGroup } from '@/components/position-group'
 import { Switch } from '@/components/button/switch'
 
 import { useStorage } from '@/hooks/use-storage'
@@ -31,9 +32,8 @@ export function WikiLinksOption() {
     }
 
     return (
-        <>
+        <PositionGroup>
             <Option
-                isFirst={true}
                 title={t('settings.links.wikilinks.title')}
                 description={t('settings.links.wikilinks.description')}
                 rightContent={(
@@ -45,7 +45,6 @@ export function WikiLinksOption() {
                 )}
             />
             <Option
-                isLast={true}
                 title={t('settings.links.auto_update.title')}
                 description={t('settings.links.auto_update.description')}
                 rightContent={(
@@ -56,6 +55,6 @@ export function WikiLinksOption() {
                     />
                 )}
             />
-        </>
+        </PositionGroup>
     )
 }

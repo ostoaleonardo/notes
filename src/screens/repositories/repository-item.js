@@ -9,6 +9,7 @@ import { Separator } from '@/components/separator/separator'
 import { Typography } from '@/components/typography'
 
 import { useFileStorage } from '@/hooks/use-file-storage'
+import { useGroupPosition } from '@/hooks/use-group-position'
 import { useRepositories } from '@/hooks/use-repositories'
 import { getGroupedRadius } from '@/utils/grouped-card-style'
 import { getRepositoryNoteCount } from '@/utils/repository-note-counts'
@@ -24,14 +25,13 @@ export const RepositoryItem = memo(function RepositoryItem({
     onOpen,
     onRename,
     onForget,
-    onDelete,
-    isFirst,
-    isLast
+    onDelete
 }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { getDescendants } = useRepositories()
     const { listMarkdownFiles } = useFileStorage()
+    const position = useGroupPosition()
 
     const [expanded, setExpanded] = useState(false)
     const onToggleExpanded = useCallback(() => setExpanded((prev) => !prev), [])
@@ -78,7 +78,7 @@ export const RepositoryItem = memo(function RepositoryItem({
             style={{
                 ...styles.container,
                 backgroundColor: colors.surface,
-                ...getGroupedRadius(isFirst, isLast)
+                ...getGroupedRadius(position)
             }}
         >
             <View style={styles.row}>

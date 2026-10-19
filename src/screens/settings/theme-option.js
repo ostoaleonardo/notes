@@ -36,7 +36,6 @@ export function ThemeOption() {
         <Option
             title={t('settings.general.theme')}
             description={t('theme.choose')}
-            isLast={true}
         >
             <ColorSection
                 title={t('settings.general.themes')}

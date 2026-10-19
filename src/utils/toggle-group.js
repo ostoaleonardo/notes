@@ -1,12 +1,5 @@
 import { ICON_TOGGLE } from '@/constants/components'
 
-export const getPosition = (index, total) => {
-    if (total === 1) return 'only'
-    if (index === 0) return 'first'
-
-    return index === total - 1 ? 'last' : 'middle'
-}
-
 export const expandSelected = (buttons) => buttons.map((button) => ({
     ...button,
     expandable: true,

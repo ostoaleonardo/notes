@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { SelectOption } from './select-option'
+import { PositionGroup } from '@/components/position-group'
 
 import { useStorage } from '@/hooks/use-storage'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
@@ -12,7 +12,6 @@ import { useTemplates } from '@/hooks/use-templates'
 import { scopedStorageKey } from '@/utils/scoped-storage-key'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { SPACING } from '@/constants/theme'
 
 export function DailyNoteOption() {
     const { t } = useTranslation()
@@ -59,14 +58,13 @@ export function DailyNoteOption() {
     const selectedTemplate = templates.find((template) => template.filename === dailyTemplate)
 
     return (
-        <View style={styles.group}>
+        <PositionGroup>
             <SelectOption
                 title={t('settings.daily_note.folder.title')}
                 description={folder.description}
                 items={folder.items}
                 selectedValue={folder.selectedValue}
                 onSelect={folder.onSelect}
-                isFirst={true}
             />
             <SelectOption
                 title={t('settings.daily_note.template.title')}
@@ -76,14 +74,7 @@ export function DailyNoteOption() {
                 items={templateItems}
                 selectedValue={dailyTemplate}
                 onSelect={onSelectTemplate}
-                isLast={true}
             />
-        </View>
+        </PositionGroup>
     )
 }
-
-const styles = StyleSheet.create({
-    group: {
-        gap: SPACING.xxxs
-    }
-})

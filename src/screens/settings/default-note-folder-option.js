@@ -6,7 +6,7 @@ import { useFolderSetting } from '@/hooks/use-folder-setting'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
-export function DefaultNoteFolderOption({ isFirst, isLast }) {
+export function DefaultNoteFolderOption() {
     const { t } = useTranslation()
     const folder = useFolderSetting(
         STORAGE_KEYS.DEFAULT_NOTE_FOLDER,
@@ -20,8 +20,6 @@ export function DefaultNoteFolderOption({ isFirst, isLast }) {
             items={folder.items}
             selectedValue={folder.selectedValue}
             onSelect={folder.onSelect}
-            isFirst={isFirst}
-            isLast={isLast}
         />
     )
 }

@@ -8,7 +8,9 @@ import { AnimatedView } from '@/components/animated/animated-view'
 import { Pressable } from '@/components/button/pressable'
 import { Typography } from '@/components/typography'
 import { ConfirmDialog } from '@/components/confirm-dialog'
+import { GroupedList } from '@/components/grouped-list'
 
+import { useGroupPosition } from '@/hooks/use-group-position'
 import { useLanguage } from '@/hooks/use-language'
 import { useNoteVersions } from '@/hooks/use-note-versions'
 import { diffLines } from '@/utils/diff-lines'
@@ -25,8 +27,9 @@ import { FREE_VERSION_HISTORY_LIMIT } from '@/constants/default-values'
 
 const getDiffColor = (type) => (type === DIFF_TYPES.ADDED ? DIFF_ADDED_COLOR : DIFF_REMOVED_COLOR)
 
-const VersionItem = memo(function VersionItem({ version, first, last, onSelect }) {
+const VersionItem = memo(function VersionItem({ version, onSelect }) {
     const { colors } = useTheme()
+    const position = useGroupPosition()
     const { currentLanguage } = useLanguage()
     const onPress = useCallback(() => onSelect(version), [onSelect, version])
 
@@ -37,7 +40,7 @@ const VersionItem = memo(function VersionItem({ version, first, last, onSelect }
                     style={{
                         ...styles.item,
                         backgroundColor: colors.surface,
-                        ...getGroupedRadius(first, last)
+                        ...getGroupedRadius(position)
                     }}
                 >
                     <Typography bold numberOfLines={1}>
@@ -113,14 +116,12 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
         )
     }, [colors.onBackground])
 
-    const renderVersionItem = useCallback(({ item: version, index }) => (
+    const renderVersionItem = useCallback(({ item: version }) => (
         <VersionItem
             version={version}
-            first={index === 0}
-            last={index === ordered.length - 1}
             onSelect={setSelected}
         />
-    ), [ordered.length])
+    ), [])
 
     const onBack = useCallback(() => setSelected(null), [])
     const onOpenRestore = useCallback(() => setRestoreDialogVisible(true), [])
@@ -207,7 +208,7 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
                     )}
 
                     {!loading && ordered.length > 0 && (
-                        <FlatList
+                        <GroupedList
                             data={ordered}
                             keyExtractor={(version) => version.id}
                             showsVerticalScrollIndicator={false}

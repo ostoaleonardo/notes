@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 
 import { MenuContainer } from '@/components/menu/menu-container'
+import { MenuGroup } from '@/components/menu/menu-group'
 import { SelectMenuItem } from '@/components/menu/select-menu-item'
 import { Typography } from '@/components/typography'
 
@@ -58,14 +59,16 @@ export const DrawerViewSwitcher = memo(function DrawerViewSwitcher({ view, onCha
                 </Pressable>
             )}
         >
-            {VIEW_OPTIONS.map((option) => (
-                <SelectMenuItem
-                    key={option}
-                    title={t(DRAWER_VIEW_LABELS[option])}
-                    selected={option === view}
-                    onPress={() => trigger(() => onChange(option))}
-                />
-            ))}
+            <MenuGroup>
+                {VIEW_OPTIONS.map((option) => (
+                    <SelectMenuItem
+                        key={option}
+                        title={t(DRAWER_VIEW_LABELS[option])}
+                        selected={option === view}
+                        onPress={() => trigger(() => onChange(option))}
+                    />
+                ))}
+            </MenuGroup>
         </MenuContainer>
     )
 })

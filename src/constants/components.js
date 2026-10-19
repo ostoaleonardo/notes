@@ -5,11 +5,9 @@ export const BUTTON = {
     groupGap: SPACING.xxxs
 }
 
-export const GROUP_CORNERS = {
-    only: { left: RADIUS.xl, right: RADIUS.xl },
-    first: { left: RADIUS.xl, right: RADIUS.sm },
-    middle: { left: RADIUS.sm, right: RADIUS.sm },
-    last: { left: RADIUS.sm, right: RADIUS.xl }
+export const SEGMENT_RADIUS = {
+    outer: RADIUS.xl,
+    inner: RADIUS.sm
 }
 
 export const SPLIT_TRIGGER_RADIUS = {

@@ -11,7 +11,7 @@ import { AppVersionCard } from '@/screens/settings/app-version-card'
 import { Option } from '@/screens/settings/option'
 import { WikiLinksOption } from '@/screens/settings/wiki-links-option'
 import { AttachmentsOption } from '@/screens/settings/attachments-option'
-import { SelectOptionList } from '@/screens/settings/select-option-list'
+import { StorageSelectOption } from '@/screens/settings/storage-select-option'
 import { DailyNoteOption } from '@/screens/settings/daily-note-option'
 import { DefaultNoteFolderOption } from '@/screens/settings/default-note-folder-option'
 import { Scroll } from '@/components/animated/scroll'
@@ -35,7 +35,7 @@ export default function Settings() {
                     containerStyle={styles.section}
                     contentStyle={styles.items}
                 >
-                    <LanguageOption isFirst={true} />
+                    <LanguageOption />
                     <HeadingFontOption />
                     <ThemeOption />
                 </Section>
@@ -45,8 +45,13 @@ export default function Settings() {
                     containerStyle={styles.section}
                     contentStyle={styles.items}
                 >
-                    <SelectOptionList options={NOTES_SELECT_OPTIONS} isLast={false} />
-                    <DefaultNoteFolderOption isLast={true} />
+                    {NOTES_SELECT_OPTIONS.map((option) => (
+                        <StorageSelectOption
+                            key={option.storageKey}
+                            {...option}
+                        />
+                    ))}
+                    <DefaultNoteFolderOption />
                 </Section>
 
                 <Section
@@ -54,7 +59,12 @@ export default function Settings() {
                     containerStyle={styles.section}
                     contentStyle={styles.items}
                 >
-                    <SelectOptionList options={EDITOR_SELECT_OPTIONS} />
+                    {EDITOR_SELECT_OPTIONS.map((option) => (
+                        <StorageSelectOption
+                            key={option.storageKey}
+                            {...option}
+                        />
+                    ))}
                 </Section>
 
                 <Section
@@ -93,7 +103,6 @@ export default function Settings() {
                         description={t('settings.about.features')}
                         rightContent={<OpenInNew color={colors.onBackground} />}
                         onPress={() => Linking.openURL(LINKS.GITHUB)}
-                        isFirst={true}
                     />
                     <Option
                         title={t('settings.about.contribute')}

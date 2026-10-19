@@ -100,11 +100,7 @@ export const MarkdownModeToggle = ({
             onPress={onPrimaryPress}
         >
             {groups.map((group, index) => (
-                <MenuGroup
-                    key={index}
-                    first={index === 0}
-                    last={index === groups.length - 1}
-                >
+                <MenuGroup key={index}>
                     {group}
                 </MenuGroup>
             ))}

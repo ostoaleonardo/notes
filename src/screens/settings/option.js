@@ -3,6 +3,7 @@ import { useTheme } from 'react-native-paper'
 
 import { Typography } from '@/components/typography'
 
+import { useGroupPosition } from '@/hooks/use-group-position'
 import { getGroupedRadius } from '@/utils/grouped-card-style'
 import { SPACING, OPACITY } from '@/constants/theme'
 
@@ -12,12 +13,11 @@ export function Option({
     rightContent,
     children,
     onPress,
-    isFirst,
-    isLast,
     background,
     uppercase = true
 }) {
     const { colors } = useTheme()
+    const groupPosition = useGroupPosition()
 
     return (
         <Pressable
@@ -27,7 +27,7 @@ export function Option({
                 ...styles.container,
                 ...(children ? styles.stacked : styles.inline),
                 backgroundColor: background ?? colors.surface,
-                ...getGroupedRadius(isFirst, isLast)
+                ...getGroupedRadius(groupPosition)
             }}
         >
             <View style={styles.left}>

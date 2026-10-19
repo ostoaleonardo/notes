@@ -1,8 +1,12 @@
-import { RADIUS } from '@/constants/theme'
+import { getStackedCorners } from './group-position'
 
-export const getGroupedRadius = (isFirst, isLast) => ({
-    borderTopLeftRadius: isFirst ? RADIUS.lg : 0,
-    borderTopRightRadius: isFirst ? RADIUS.lg : 0,
-    borderBottomLeftRadius: isLast ? RADIUS.lg : 0,
-    borderBottomRightRadius: isLast ? RADIUS.lg : 0
-})
+export const getGroupedRadius = (position, inner) => {
+    const { top, bottom } = getStackedCorners(position, inner)
+
+    return {
+        borderTopLeftRadius: top,
+        borderTopRightRadius: top,
+        borderBottomLeftRadius: bottom,
+        borderBottomRightRadius: bottom
+    }
+}

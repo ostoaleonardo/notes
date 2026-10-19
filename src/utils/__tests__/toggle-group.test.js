@@ -1,16 +1,5 @@
-import { expandSelected, getMinWidth, getPosition } from '../toggle-group'
+import { expandSelected, getMinWidth } from '../toggle-group'
 import { ICON_TOGGLE } from '@/constants/components'
-
-describe('position of a button in the group', () => {
-    test('is only when the group has a single button', () => {
-        expect(getPosition(0, 1)).toBe('only')
-    })
-
-    test('marks the first, middle and last buttons', () => {
-        expect([0, 1, 2].map((index) => getPosition(index, 3)))
-            .toEqual(['first', 'middle', 'last'])
-    })
-})
 
 describe('expand the selected button', () => {
     const buttons = [

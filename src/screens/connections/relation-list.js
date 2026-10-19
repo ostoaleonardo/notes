@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { useTheme } from 'react-native-paper'
 
+import { GroupedList } from '@/components/grouped-list'
 import { EntityRow } from './entity-row'
 
 import { SPACING } from '@/constants/theme'
@@ -18,20 +19,19 @@ export const RelationList = memo(function RelationList({
 }) {
     const { colors } = useTheme()
 
-    const renderItem = useCallback(({ item, index }) => (
+    const renderItem = useCallback(({ item }) => (
         <EntityRow
             entity={item}
             title={getTitle(item)}
             caption={getCaption?.(item)}
-            isFirst={index === 0}
-            isLast={index === entities.length - 1}
             background={colors.surfaceVariant}
             onPress={onSelect}
         />
-    ), [entities.length, colors, getTitle, getCaption, onSelect])
+    ), [colors, getTitle, getCaption, onSelect])
 
     return (
-        <FlatList
+        <GroupedList
+            component={FlatList}
             data={entities}
             renderItem={renderItem}
             keyExtractor={keyOf}

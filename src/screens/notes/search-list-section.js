@@ -24,13 +24,11 @@ export function SearchListSection({
             title={title}
             contentStyle={styles.items}
         >
-            {items.map((item, index) => (
+            {items.map((item) => (
                 <View key={keyExtractor(item)} style={styles.row}>
                     <Option
                         uppercase={false}
                         title={getLabel(item)}
-                        isFirst={index === 0}
-                        isLast={index === items.length - 1}
                         background={colors.surfaceVariant}
                         onPress={() => onSelect(item)}
                         rightContent={renderTrailing?.(item) ?? (

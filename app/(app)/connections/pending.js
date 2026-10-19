@@ -8,6 +8,7 @@ import { CreateNoteDialog } from '@/screens/connections/create-note-dialog'
 import { EntityRow } from '@/screens/connections/entity-row'
 import { HeroCard } from '@/screens/connections/hero-card'
 import { IconToggleGroup } from '@/components/button/icon-toggle-group'
+import { GroupedList } from '@/components/grouped-list'
 import { Typography } from '@/components/typography'
 
 import { useConnectionModel } from '@/hooks/use-connection-model'
@@ -69,15 +70,13 @@ export default function ConnectionsPending() {
         else setMissing({ title: entityTitle(entity, model), path: '' })
     }, [setMissing, model])
 
-    const renderItem = useCallback(({ item, index }) => (
+    const renderItem = useCallback(({ item }) => (
         <EntityRow
             entity={item}
             title={entityTitle(item, model)}
-            isFirst={index === 0}
-            isLast={index === rows.length - 1}
             onPress={onPressEntity}
         />
-    ), [rows.length, model, onPressEntity])
+    ), [model, onPressEntity])
 
     const header = (
         <View style={styles.header}>
@@ -103,7 +102,8 @@ export default function ConnectionsPending() {
 
     return (
         <View style={styles.screen}>
-            <FlatList
+            <GroupedList
+                component={FlatList}
                 data={rows}
                 renderItem={renderItem}
                 keyExtractor={entityKey}
@@ -112,7 +112,10 @@ export default function ConnectionsPending() {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.list}
                 ListEmptyComponent={(
-                    <Typography opacity={OPACITY.secondary} styleProps={styles.empty}>
+                    <Typography
+                        opacity={OPACITY.secondary}
+                        styleProps={styles.empty}
+                    >
                         {t(isOrphans ? 'message.orphans.empty' : 'message.unresolved.empty')}
                     </Typography>
                 )}

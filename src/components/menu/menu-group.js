@@ -1,14 +1,16 @@
 import { View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
+import { useGroupPosition } from '@/hooks/use-group-position'
+import { getGroupedRadius } from '@/utils/grouped-card-style'
+
 import { MENU } from '@/constants/components'
 import { TRANSPARENT } from '@/constants/themes'
 import { RADIUS, BORDER_WIDTH } from '@/constants/theme'
 
-export function MenuGroup({ children, first = true, last = true }) {
+export function MenuGroup({ children }) {
     const { colors } = useTheme()
-    const topRadius = first ? RADIUS.lg : RADIUS.md
-    const bottomRadius = last ? RADIUS.lg : RADIUS.md
+    const position = useGroupPosition()
 
     return (
         <View
@@ -17,10 +19,7 @@ export function MenuGroup({ children, first = true, last = true }) {
                 paddingVertical: MENU.paddingVertical,
                 paddingHorizontal: MENU.paddingHorizontal,
                 overflow: 'hidden',
-                borderTopLeftRadius: topRadius,
-                borderTopRightRadius: topRadius,
-                borderBottomLeftRadius: bottomRadius,
-                borderBottomRightRadius: bottomRadius,
+                ...getGroupedRadius(position, RADIUS.md),
                 borderColor: colors.onBackground + TRANSPARENT[5],
                 backgroundColor: colors.surface
             }}

@@ -8,7 +8,7 @@ import { LANGUAGES } from '@/constants/languages'
 
 const LANGUAGE_ITEMS = LANGUAGES.map(({ code, name }) => ({ value: code, title: name }))
 
-export function LanguageOption({ isFirst, isLast }) {
+export function LanguageOption() {
     const { t } = useTranslation()
     const { currentLanguage, changeLanguage } = useLanguage()
 
@@ -19,8 +19,6 @@ export function LanguageOption({ isFirst, isLast }) {
             items={LANGUAGE_ITEMS}
             selectedValue={currentLanguage}
             onSelect={changeLanguage}
-            isFirst={isFirst}
-            isLast={isLast}
         />
     )
 }

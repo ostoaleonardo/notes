@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 import { FilterToggle } from './filter-toggle'
+import { PositionGroup } from '@/components/position-group'
 
 import { SPACING } from '@/constants/theme'
 
@@ -20,19 +21,20 @@ export function FilterToggleGroup({ buttons, pill = false, equalWidth = false })
 
     return (
         <View style={styles.group}>
-            {buttons.map((button, index) => (
-                <View
-                    key={button.label}
-                    onLayout={equalWidth ? (event) => onButtonLayout(button.label, event) : undefined}
-                >
-                    <FilterToggle
-                        position={index === 0 ? 'first' : index === buttons.length - 1 ? 'last' : 'middle'}
-                        pill={pill}
-                        minWidth={maxWidth}
-                        {...button}
-                    />
-                </View>
-            ))}
+            <PositionGroup>
+                {buttons.map((button) => (
+                    <View
+                        key={button.label}
+                        onLayout={equalWidth ? (event) => onButtonLayout(button.label, event) : undefined}
+                    >
+                        <FilterToggle
+                            pill={pill}
+                            minWidth={maxWidth}
+                            {...button}
+                        />
+                    </View>
+                ))}
+            </PositionGroup>
         </View>
     )
 }

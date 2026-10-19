@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
 import { MenuContainer } from '@/components/menu/menu-container'
+import { MenuGroup } from '@/components/menu/menu-group'
 import { SelectMenuItem } from '@/components/menu/select-menu-item'
 import { DrawerToolbarButton } from './drawer-toolbar'
 
@@ -30,14 +31,16 @@ export function DrawerSortMenu({ sort, onChange }) {
                 />
             }
         >
-            {SORT_OPTIONS.map((option) => (
-                <SelectMenuItem
-                    key={option}
-                    selected={option === sort}
-                    title={t(NOTE_SORT_LABELS[option])}
-                    onPress={() => trigger(() => onChange(option))}
-                />
-            ))}
+            <MenuGroup>
+                {SORT_OPTIONS.map((option) => (
+                    <SelectMenuItem
+                        key={option}
+                        selected={option === sort}
+                        title={t(NOTE_SORT_LABELS[option])}
+                        onPress={() => trigger(() => onChange(option))}
+                    />
+                ))}
+            </MenuGroup>
         </MenuContainer>
     )
 }

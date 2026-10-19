@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 import { MenuContainer } from '@/components/menu/menu-container'
+import { PositionGroup } from '@/components/position-group'
 import { SplitButtonPrimary } from './split-button-primary'
 import { SplitButtonTrigger } from './split-button-trigger'
 
@@ -28,29 +29,30 @@ export const SplitButton = ({
 
     return (
         <View style={styles.container}>
-            <SplitButtonPrimary
-                icon={icon}
-                label={label}
-                onPress={onPress}
-                testID={primaryTestID}
-            />
+            <PositionGroup>
+                <SplitButtonPrimary
+                    icon={icon}
+                    label={label}
+                    onPress={onPress}
+                    testID={primaryTestID}
+                />
 
-            <MenuContainer
-                grouped
-                position='top'
-                visible={menuVisible}
-                onClose={closeMenu}
-                anchor={
-                    <SplitButtonTrigger
-                        onPress={openMenu}
-                        testID={triggerTestID}
-                        menuVisible={menuVisible}
-                        openProgress={openProgress}
-                    />
-                }
-            >
-                {children}
-            </MenuContainer>
+                <MenuContainer
+                    position='top'
+                    visible={menuVisible}
+                    onClose={closeMenu}
+                    anchor={
+                        <SplitButtonTrigger
+                            onPress={openMenu}
+                            testID={triggerTestID}
+                            menuVisible={menuVisible}
+                            openProgress={openProgress}
+                        />
+                    }
+                >
+                    {children}
+                </MenuContainer>
+            </PositionGroup>
         </View>
     )
 }

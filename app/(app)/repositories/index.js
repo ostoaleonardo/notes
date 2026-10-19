@@ -9,6 +9,7 @@ import { ForgetRepository } from '@/screens/dialogs/forget-repository'
 import { RenameRepository } from '@/screens/dialogs/rename-repository'
 import { AnimatedList } from '@/components/animated/animated-list'
 import { FloatingButton } from '@/components/button/floating-button'
+import { GroupedList } from '@/components/grouped-list'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { useFileStorage } from '@/hooks/use-file-storage'
@@ -80,7 +81,7 @@ export default function Repositories() {
     const onDismissForget = useCallback(() => setForgetId(''), [])
     const onDismissDelete = useCallback(() => setDeleteId(''), [])
 
-    const renderItem = useCallback(({ item, index }) => (
+    const renderItem = useCallback(({ item }) => (
         <RepositoryItem
             repository={item}
             count={t('count.notes', { count: counts[item.id] || 0 })}
@@ -89,14 +90,13 @@ export default function Repositories() {
             onRename={setRenameId}
             onForget={setForgetId}
             onDelete={setDeleteId}
-            isFirst={index === 0}
-            isLast={index === rootRepositories.length - 1}
         />
-    ), [t, counts, activeRepositoryId, onOpen, rootRepositories.length])
+    ), [t, counts, activeRepositoryId, onOpen])
 
     return (
         <View style={{ flex: 1 }}>
-            <AnimatedList
+            <GroupedList
+                component={AnimatedList}
                 contentContainerStyle={{ paddingHorizontal: SPACING.lg }}
                 gap={SPACING.xxxs}
                 data={rootRepositories}

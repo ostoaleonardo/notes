@@ -11,9 +11,7 @@ export function StorageSelectOption({
     translationKey,
     values,
     defaultValue,
-    translateValues = true,
-    isFirst,
-    isLast
+    translateValues = true
 }) {
     const { t } = useTranslation()
     const { setItem } = useStorage()
@@ -46,8 +44,6 @@ export function StorageSelectOption({
             items={items}
             selectedValue={current}
             onSelect={onSelect}
-            isFirst={isFirst}
-            isLast={isLast}
         />
     )
 }

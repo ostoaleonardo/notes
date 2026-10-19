@@ -14,7 +14,7 @@ import { SPACING } from '@/constants/theme'
 
 const TRANSLATION_KEY = 'settings.general.heading_font'
 
-export function HeadingFontOption({ isFirst, isLast }) {
+export function HeadingFontOption() {
     const { t } = useTranslation()
     const { setItem } = useStorage()
     const { fontKey, setFontKey } = useHeadingFont()
@@ -28,8 +28,6 @@ export function HeadingFontOption({ isFirst, isLast }) {
         <Option
             title={t(`${TRANSLATION_KEY}.title`)}
             description={t(`${TRANSLATION_KEY}.description`)}
-            isFirst={isFirst}
-            isLast={isLast}
         >
             <View style={styles.options}>
                 {Object.entries(HEADING_FONT_FAMILIES).map(([value, family]) => (

@@ -1,9 +1,16 @@
 import { StyleSheet, View } from 'react-native'
 
+import { PositionGroup } from './position-group'
 import { Typography } from './typography'
 import { SPACING, OPACITY } from '@/constants/theme'
 
-export function Section({ title, children, containerStyle, contentStyle, visible = true }) {
+export function Section({
+    title,
+    children,
+    containerStyle,
+    contentStyle,
+    visible = true
+}) {
     if (!visible) return null
 
     return (
@@ -16,9 +23,9 @@ export function Section({ title, children, containerStyle, contentStyle, visible
             {title && (
                 <View style={styles.title}>
                     <Typography
-                        opacity={OPACITY.secondary}
                         uppercase={true}
                         variant='bodySmall'
+                        opacity={OPACITY.secondary}
                     >
                         {title}
                     </Typography>
@@ -31,7 +38,9 @@ export function Section({ title, children, containerStyle, contentStyle, visible
                     ...contentStyle
                 }}
             >
-                {children}
+                <PositionGroup>
+                    {children}
+                </PositionGroup>
             </View>
         </View>
     )
