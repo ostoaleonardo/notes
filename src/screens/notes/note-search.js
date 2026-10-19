@@ -1,8 +1,7 @@
 import { useCallback, useDeferredValue, useEffect, useMemo, useState } from 'react'
 import { router } from 'expo-router'
 import { randomUUID } from 'expo-crypto'
-import { StyleSheet, View } from 'react-native'
-import { Divider } from 'react-native-paper'
+import { Keyboard, Pressable, StyleSheet, View } from 'react-native'
 
 import { SearchFilters } from './search-filters'
 import { SearchResults } from './search-results'
@@ -53,11 +52,13 @@ export function NoteSearch({ onClose, initialQuery = '' }) {
 
     const parsed = useMemo(() => parseSearchQuery(query), [query])
 
-    const deferredParsed = useDeferredValue(parsed)
+    const deferredQuery = useDeferredValue(query)
+    const deferredParsed = useMemo(() => parseSearchQuery(deferredQuery), [deferredQuery])
+    const hasResultsQuery = deferredQuery.trim() !== ''
 
     const results = useMemo(() => (
-        trimmedQuery ? filterNotes(notes, deferredParsed, { pinned, notePaths }) : []
-    ), [trimmedQuery, deferredParsed, notes, pinned, notePaths])
+        hasResultsQuery ? filterNotes(notes, deferredParsed, { pinned, notePaths }) : []
+    ), [hasResultsQuery, deferredParsed, notes, pinned, notePaths])
 
     const saveRecent = useCallback((term) => {
         if (!term) return
@@ -86,9 +87,8 @@ export function NoteSearch({ onClose, initialQuery = '' }) {
     }, [saved, setItem])
 
     return (
-        <View style={styles.container}>
+        <Pressable accessible={false} style={styles.container} onPress={Keyboard.dismiss}>
             <SearchInput
-                autoFocus
                 value={query}
                 onChangeText={setQuery}
             />
@@ -103,9 +103,7 @@ export function NoteSearch({ onClose, initialQuery = '' }) {
                     onToggleSave={onToggleSaveSearch}
                 />
 
-                <Divider />
-
-                {trimmedQuery ? (
+                {hasResultsQuery ? (
                     <SearchResults
                         results={results}
                         aliasById={aliasById}
@@ -118,7 +116,6 @@ export function NoteSearch({ onClose, initialQuery = '' }) {
                             onSelect={setQuery}
                             onDelete={onDeleteSavedSearch}
                         />
-                        {saved.length > 0 && recent.length > 0 && <Divider />}
                         <RecentSearches
                             recent={recent}
                             onSelect={setQuery}
@@ -126,7 +123,7 @@ export function NoteSearch({ onClose, initialQuery = '' }) {
                     </View>
                 )}
             </View>
-        </View>
+        </Pressable>
     )
 }
 
@@ -135,11 +132,10 @@ const styles = StyleSheet.create({
         flex: 1
     },
     suggestions: {
-        gap: SPACING.xxl
+        gap: SPACING.xl
     },
     actions: {
         flex: 1,
-        gap: SPACING.xxl,
-        paddingTop: SPACING.sm
+        gap: SPACING.xl
     }
 })

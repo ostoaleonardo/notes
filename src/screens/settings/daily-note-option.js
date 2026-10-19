@@ -12,7 +12,7 @@ import { useTemplates } from '@/hooks/use-templates'
 import { scopedStorageKey } from '@/utils/scoped-storage-key'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { SETTINGS_LIST } from '@/constants/components'
+import { SPACING } from '@/constants/theme'
 
 export function DailyNoteOption() {
     const { t } = useTranslation()
@@ -84,6 +84,6 @@ export function DailyNoteOption() {
 
 const styles = StyleSheet.create({
     group: {
-        gap: SETTINGS_LIST.itemGap
+        gap: SPACING.xxxs
     }
 })

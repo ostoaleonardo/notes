@@ -10,8 +10,7 @@ import { useMenuAnchor } from '@/hooks/use-menu-anchor'
 
 import { ChevronRight } from '@/icons/chevron-right'
 
-import { DRAWER_ITEM } from '@/constants/components'
-import { OPACITY, RADIUS } from '@/constants/theme'
+import { OPACITY, RADIUS, ICON_SIZE } from '@/constants/theme'
 
 export const DrawerLevelFolder = memo(function DrawerLevelFolder({
     repository,
@@ -44,8 +43,8 @@ export const DrawerLevelFolder = memo(function DrawerLevelFolder({
                             <ChevronRight
                                 color={colors.onBackground}
                                 opacity={OPACITY.muted}
-                                width={DRAWER_ITEM.iconSize}
-                                height={DRAWER_ITEM.iconSize}
+                                width={ICON_SIZE.lg}
+                                height={ICON_SIZE.lg}
                             />
                         </View>
                     </View>
@@ -59,7 +58,6 @@ export const DrawerLevelFolder = memo(function DrawerLevelFolder({
 const styles = StyleSheet.create({
     container: {
         overflow: 'hidden',
-        borderRadius: RADIUS.xl,
-        marginBottom: DRAWER_ITEM.rowGap
+        borderRadius: RADIUS.xl
     }
 })

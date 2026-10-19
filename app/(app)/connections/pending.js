@@ -20,7 +20,7 @@ import { buildPendingRows } from '@/utils/pending-rows'
 import { Link } from '@/icons/link'
 import { LinkOff } from '@/icons/link-off'
 
-import { ICON_TOGGLE, SETTINGS_LIST } from '@/constants/components'
+import { ICON_TOGGLE } from '@/constants/components'
 import { CONNECTION_TYPES, PENDING_TABS, PENDING_TAB_PARAM } from '@/constants/connections'
 import { OPACITY, SPACING } from '@/constants/theme'
 
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     separator: {
-        height: SETTINGS_LIST.itemGap
+        height: SPACING.xxxs
     },
     empty: {
         paddingHorizontal: SPACING.sm

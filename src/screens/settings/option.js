@@ -14,7 +14,8 @@ export function Option({
     onPress,
     isFirst,
     isLast,
-    background
+    background,
+    uppercase = true
 }) {
     const { colors } = useTheme()
 
@@ -30,9 +31,7 @@ export function Option({
             }}
         >
             <View style={styles.left}>
-                <Typography
-                    uppercase
-                >
+                <Typography uppercase={uppercase}>
                     {title}
                 </Typography>
                 {description && (

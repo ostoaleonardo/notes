@@ -7,8 +7,7 @@ import { levelRowStyles } from './drawer-level-styles'
 
 import { ArrowBack } from '@/icons/arrow-back'
 
-import { DRAWER_ITEM } from '@/constants/components'
-import { RADIUS } from '@/constants/theme'
+import { RADIUS, ICON_SIZE, SPACING } from '@/constants/theme'
 
 export const DrawerLevelHeader = memo(function DrawerLevelHeader({
     repository,
@@ -28,8 +27,8 @@ export const DrawerLevelHeader = memo(function DrawerLevelHeader({
                         <View style={levelRowStyles.slot}>
                             <ArrowBack
                                 color={colors.onBackground}
-                                width={DRAWER_ITEM.iconSize}
-                                height={DRAWER_ITEM.iconSize}
+                                width={ICON_SIZE.lg}
+                                height={ICON_SIZE.lg}
                             />
                         </View>
                         <Typography
@@ -52,7 +51,7 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: DRAWER_ITEM.sectionGap
+        marginBottom: SPACING.sm
     },
     back: {
         flex: 1,

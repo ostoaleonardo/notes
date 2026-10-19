@@ -20,7 +20,6 @@ import { Section } from '@/components/section'
 import { OpenInNew } from '@/icons/open-in-new'
 
 import { LINKS } from '@/constants/links'
-import { SETTINGS_LIST } from '@/constants/components'
 import { SPACING } from '@/constants/theme'
 import { EDITOR_SELECT_OPTIONS, NOTES_SELECT_OPTIONS } from '@/constants/settings-select-options'
 
@@ -120,6 +119,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: SPACING.lg
     },
     items: {
-        gap: SETTINGS_LIST.itemGap
+        gap: SPACING.xxxs
     }
 })

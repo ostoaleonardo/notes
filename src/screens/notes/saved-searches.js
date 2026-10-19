@@ -1,31 +1,37 @@
 import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet } from 'react-native'
-import { IconButton } from 'react-native-paper'
+import { Pressable } from 'react-native'
+import { useTheme } from 'react-native-paper'
 
 import { SearchListSection } from './search-list-section'
 
 import { Close } from '@/icons/close'
 import { Search } from '@/icons/search'
-import { SPACING, ICON_SIZE } from '@/constants/theme'
+import { ICON_SIZE, SPACING } from '@/constants/theme'
 
-const closeIcon = (props) => <Close {...props} />
 const getEntryKey = (entry) => entry.id
 const getEntryLabel = (entry) => entry.query
 
 export const SavedSearches = memo(function SavedSearches({ saved, onSelect, onDelete }) {
     const { t } = useTranslation()
+    const { colors } = useTheme()
 
     const onSelectEntry = useCallback((entry) => onSelect(entry.query), [onSelect])
 
     const renderTrailing = useCallback((entry) => (
-        <IconButton
-            size={ICON_SIZE.md}
-            onPress={() => onDelete(entry.id)}
-            icon={closeIcon}
+        <Pressable
+            accessibilityRole='button'
             accessibilityLabel={t('button.delete')}
-        />
-    ), [onDelete, t])
+            hitSlop={SPACING.md}
+            onPress={() => onDelete(entry.id)}
+        >
+            <Close
+                width={ICON_SIZE.lg}
+                height={ICON_SIZE.lg}
+                color={colors.onBackground}
+            />
+        </Pressable>
+    ), [onDelete, t, colors.onBackground])
 
     return (
         <SearchListSection
@@ -35,18 +41,7 @@ export const SavedSearches = memo(function SavedSearches({ saved, onSelect, onDe
             icon={Search}
             getLabel={getEntryLabel}
             onSelect={onSelectEntry}
-            itemStyle={styles.item}
-            labelStyle={styles.label}
             renderTrailing={renderTrailing}
         />
     )
-})
-
-const styles = StyleSheet.create({
-    item: {
-        paddingLeft: SPACING.lg
-    },
-    label: {
-        flex: 1
-    }
 })

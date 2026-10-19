@@ -1,16 +1,17 @@
 import { StyleSheet } from 'react-native'
 
 import { DRAWER_ITEM } from '@/constants/components'
+import { SPACING } from '@/constants/theme'
 
 export const levelRowStyles = StyleSheet.create({
     touch: {
         flex: 1,
         minHeight: DRAWER_ITEM.minHeight,
         justifyContent: 'center',
-        paddingStart: DRAWER_ITEM.paddingHorizontal
+        paddingStart: SPACING.md
     },
     touchEnd: {
-        paddingEnd: DRAWER_ITEM.paddingHorizontal
+        paddingEnd: SPACING.md
     },
     touchStart: {
         paddingStart: 0
@@ -23,7 +24,7 @@ export const levelRowStyles = StyleSheet.create({
         justifyContent: 'center'
     },
     content: {
-        gap: DRAWER_ITEM.gap,
+        gap: SPACING.md,
         flexDirection: 'row',
         alignItems: 'center'
     },

@@ -1,50 +1,48 @@
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { TouchableRipple } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 
+import { EntityRow } from '@/screens/connections/entity-row'
 import { AnimatedList } from '@/components/animated/animated-list'
 import { AnimatedView } from '@/components/animated/animated-view'
-import { Typography } from '@/components/typography'
-import { SPACING, OPACITY, RADIUS } from '@/constants/theme'
+
+import { makeEntity } from '@/utils/connection-model'
+
+import { CONNECTION_TYPES } from '@/constants/connections'
+import { SPACING } from '@/constants/theme'
+
+const getNotePath = (note) => note.path
 
 export function SearchResults({ results, aliasById, onOpenResult }) {
     const { t } = useTranslation()
+    const { colors } = useTheme()
+
+    const onPress = (entity) => onOpenResult(entity.id)
 
     return (
         <View style={styles.container}>
             <AnimatedList
                 gap={SPACING.xxxs}
                 data={results}
-                keyExtractor={(note) => note.path}
+                keyExtractor={getNotePath}
                 emptyLabel={t('message.notes.empty')}
-                keyboardShouldPersistTaps='always'
-                renderItem={({ item }) => (
+                keyboardShouldPersistTaps='handled'
+                contentContainerStyle={styles.list}
+                renderItem={({ item, index }) => (
                     <AnimatedView
                         entering={FadeInUp}
                         exiting={FadeOutUp}
                     >
-                        <TouchableRipple
-                            accessibilityRole='button'
-                            onPress={() => onOpenResult(item.path)}
-                        >
-                            <View style={styles.item}>
-                                <Typography
-                                    bold={true}
-                                    numberOfLines={1}
-                                >
-                                    {item.title || t('notes.untitled')}
-                                </Typography>
-                                {aliasById.has(item.repositoryId) && (
-                                    <Typography
-                                        opacity={OPACITY.muted}
-                                        variant='bodySmall'
-                                    >
-                                        {aliasById.get(item.repositoryId)}
-                                    </Typography>
-                                )}
-                            </View>
-                        </TouchableRipple>
+                        <EntityRow
+                            entity={makeEntity(CONNECTION_TYPES.NOTE, item.path)}
+                            title={item.title || t('notes.untitled')}
+                            caption={aliasById.get(item.repositoryId)}
+                            isFirst={index === 0}
+                            isLast={index === results.length - 1}
+                            background={colors.surfaceVariant}
+                            onPress={onPress}
+                        />
                     </AnimatedView>
                 )}
             />
@@ -54,12 +52,10 @@ export function SearchResults({ results, aliasById, onOpenResult }) {
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        gap: SPACING.lg
+        width: '100%'
     },
-    item: {
-        borderRadius: RADIUS.md,
-        paddingVertical: SPACING.sm,
-        paddingHorizontal: SPACING.lg
+    list: {
+        paddingHorizontal: SPACING.lg,
+        paddingBottom: SPACING.lg
     }
 })

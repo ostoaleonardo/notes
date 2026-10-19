@@ -5,7 +5,7 @@ import { useTheme } from 'react-native-paper'
 import { Typography } from '@/components/typography'
 
 import { FILLED_INPUT } from '@/constants/components'
-import { FONTS, OPACITY, RADIUS, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
+import { FONTS, OPACITY, RADIUS, TYPOGRAPHY_SIZE_VARIANTS, BORDER_WIDTH, SPACING } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'
 
 export function FilledInput({ label, onFocus, onBlur, ...props }) {
@@ -32,8 +32,8 @@ export function FilledInput({ label, onFocus, onBlur, ...props }) {
                     backgroundColor: colors.surfaceVariant,
                     borderBottomColor: accent,
                     borderBottomWidth: focused
-                        ? FILLED_INPUT.indicatorFocused
-                        : FILLED_INPUT.indicatorIdle
+                        ? BORDER_WIDTH.thick
+                        : BORDER_WIDTH.thin
                 }
             ]}
         >
@@ -64,10 +64,10 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         minHeight: FILLED_INPUT.minHeight,
-        gap: FILLED_INPUT.labelGap,
-        paddingTop: FILLED_INPUT.paddingTop,
-        paddingBottom: FILLED_INPUT.paddingBottom,
-        paddingHorizontal: FILLED_INPUT.paddingHorizontal,
+        gap: SPACING.xxxs,
+        paddingTop: SPACING.xs,
+        paddingBottom: SPACING.sm,
+        paddingHorizontal: SPACING.lg,
         borderTopLeftRadius: RADIUS.xs,
         borderTopRightRadius: RADIUS.xs
     },

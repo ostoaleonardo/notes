@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     },
     filters: {
         gap: SPACING.xxs,
-        paddingHorizontal: SPACING.sm,
+        paddingHorizontal: SPACING.lg,
         alignItems: 'center',
         flexDirection: 'row'
     }

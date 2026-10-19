@@ -57,13 +57,7 @@ export const SEARCH_INPUT = {
 }
 
 export const FILLED_INPUT = {
-    minHeight: 56,
-    paddingHorizontal: SPACING.lg,
-    paddingTop: SPACING.xs,
-    paddingBottom: SPACING.sm,
-    labelGap: SPACING.xxxs,
-    indicatorIdle: 1,
-    indicatorFocused: 2
+    minHeight: 56
 }
 
 export const MENU = {
@@ -95,25 +89,11 @@ export const CARD_GRID = {
     padding: SPACING.lg
 }
 
-export const SETTINGS_LIST = {
-    itemGap: 3
-}
-
-export const EMPTY_STATE = {
-    paddingTop: 64
-}
-
 export const DIALOG_BUTTON_LABEL_STYLE = {
     fontSize: 12,
     paddingHorizontal: SPACING.sm,
     textTransform: 'uppercase',
     fontFamily: FONTS.azeretLight
-}
-
-export const TAG_CHIP = {
-    height: 22,
-    fontSize: 11,
-    paddingHorizontal: SPACING.md
 }
 
 export const NODE_STYLE = {
@@ -167,10 +147,5 @@ export const RELATIONS_SHEET = {
 
 export const DRAWER_ITEM = {
     minHeight: 40,
-    gap: SPACING.md,
-    paddingHorizontal: SPACING.md,
-    rowGap: 0,
-    sectionGap: SPACING.sm,
-    iconSize: ICON_SIZE.lg,
     slotSize: 32
 }

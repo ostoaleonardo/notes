@@ -7,8 +7,7 @@ import { levelRowStyles } from './drawer-level-styles'
 import { ChevronRight } from '@/icons/chevron-right'
 import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
 
-import { DRAWER_ITEM } from '@/constants/components'
-import { OPACITY, RADIUS, SPACING } from '@/constants/theme'
+import { OPACITY, RADIUS, SPACING, ICON_SIZE } from '@/constants/theme'
 
 export function DrawerTreeRow({
     label,
@@ -24,7 +23,7 @@ export function DrawerTreeRow({
     const { colors } = useTheme()
 
     const Chevron = collapsed ? ChevronRight : KeyboardArrowDown
-    const paddingStart = DRAWER_ITEM.paddingHorizontal + depth * SPACING.lg
+    const paddingStart = SPACING.md + depth * SPACING.lg
 
     return (
         <View style={styles.container}>
@@ -54,8 +53,8 @@ export function DrawerTreeRow({
                             <Chevron
                                 color={colors.onBackground}
                                 opacity={OPACITY.muted}
-                                width={DRAWER_ITEM.iconSize}
-                                height={DRAWER_ITEM.iconSize}
+                                width={ICON_SIZE.lg}
+                                height={ICON_SIZE.lg}
                             />
                         )}
                     </View>
@@ -68,7 +67,6 @@ export function DrawerTreeRow({
 const styles = StyleSheet.create({
     container: {
         overflow: 'hidden',
-        borderRadius: RADIUS.xl,
-        marginBottom: DRAWER_ITEM.rowGap
+        borderRadius: RADIUS.xl
     }
 })

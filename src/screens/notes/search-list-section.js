@@ -1,9 +1,10 @@
 import { StyleSheet, View } from 'react-native'
-import { TouchableRipple, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 
 import { Section } from '@/components/section'
-import { Typography } from '@/components/typography'
-import { SPACING, OPACITY, ICON_SIZE } from '@/constants/theme'
+import { Option } from '@/screens/settings/option'
+
+import { ICON_SIZE, SPACING } from '@/constants/theme'
 
 export function SearchListSection({
     title,
@@ -12,9 +13,7 @@ export function SearchListSection({
     icon: Icon,
     getLabel,
     onSelect,
-    renderTrailing,
-    itemStyle,
-    labelStyle
+    renderTrailing
 }) {
     const { colors } = useTheme()
 
@@ -23,42 +22,37 @@ export function SearchListSection({
     return (
         <Section
             title={title}
-            containerStyle={styles.container}
+            contentStyle={styles.items}
         >
-            {items.map((item) => (
-                <TouchableRipple
-                    accessibilityRole='button'
-                    key={keyExtractor(item)}
-                    onPress={() => onSelect(item)}
-                >
-                    <View style={[styles.item, itemStyle]}>
-                        <Icon
-                            width={ICON_SIZE.md}
-                            height={ICON_SIZE.md}
-                            color={colors.onBackground}
-                            opacity={OPACITY.muted}
-                        />
-                        <Typography
-                            numberOfLines={1}
-                            styleProps={labelStyle}
-                        >
-                            {getLabel(item)}
-                        </Typography>
-                        {renderTrailing?.(item)}
-                    </View>
-                </TouchableRipple>
+            {items.map((item, index) => (
+                <View key={keyExtractor(item)} style={styles.row}>
+                    <Option
+                        uppercase={false}
+                        title={getLabel(item)}
+                        isFirst={index === 0}
+                        isLast={index === items.length - 1}
+                        background={colors.surfaceVariant}
+                        onPress={() => onSelect(item)}
+                        rightContent={renderTrailing?.(item) ?? (
+                            <Icon
+                                width={ICON_SIZE.lg}
+                                height={ICON_SIZE.lg}
+                                color={colors.onBackground}
+                            />
+                        )}
+                    />
+                </View>
             ))}
         </Section>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        width: '100%'
+    items: {
+        gap: SPACING.xxxs,
+        paddingHorizontal: SPACING.lg
     },
-    item: {
-        gap: SPACING.md,
-        flexDirection: 'row',
-        alignItems: 'center'
+    row: {
+        width: '100%'
     }
 })

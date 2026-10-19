@@ -1,24 +1,22 @@
 import { memo, useCallback, useMemo, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
+import { Keyboard, Pressable, StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { OriginTiles } from './origin-tiles'
 import { RelationList } from './relation-list'
 import { FreshSheet } from '@/components/modal/fresh-sheet'
-import { SmallInput } from '@/components/input/small-input'
+import { SearchInput } from '@/components/input/search-input'
 import { Typography } from '@/components/typography'
 
 import { describeEntity } from '@/utils/connection-caption'
 import { listOriginOptions } from '@/utils/connection-model'
 
-import { SEARCH_INPUT, SHEET } from '@/constants/components'
+import { SHEET } from '@/constants/components'
 import { CONNECTION_TYPES, ORIGIN_TYPES } from '@/constants/connections'
 import { OPACITY, SPACING } from '@/constants/theme'
 
 function OriginContent({ model, getTitle, onSelect }) {
     const { t } = useTranslation()
-    const { colors } = useTheme()
     const [type, setType] = useState(CONNECTION_TYPES.NOTE)
     const [query, setQuery] = useState('')
 
@@ -39,7 +37,7 @@ function OriginContent({ model, getTitle, onSelect }) {
     const getCaption = useCallback((entity) => describeEntity(entity, model, t), [model, t])
 
     return (
-        <View style={styles.container}>
+        <Pressable accessible={false} style={styles.container} onPress={Keyboard.dismiss}>
             <OriginTiles
                 types={ORIGIN_TYPES}
                 counts={counts}
@@ -47,28 +45,25 @@ function OriginContent({ model, getTitle, onSelect }) {
                 onSelect={setType}
             />
 
-            <View style={styles.search}>
-                <SmallInput
-                    background={colors.surfaceVariant}
-                    value={query}
-                    onChangeText={setQuery}
-                    placeholder={t('connections.origin.filter')}
-                />
-            </View>
+            <SearchInput
+                value={query}
+                onChangeText={setQuery}
+                label={t('connections.origin.filter')}
+            />
 
             <RelationList
                 entities={items}
                 getTitle={getTitle}
                 getCaption={getCaption}
                 onSelect={onSelect}
-                keyboardShouldPersistTaps='always'
+                keyboardShouldPersistTaps='handled'
                 ListEmptyComponent={(
                     <Typography opacity={OPACITY.muted} styleProps={styles.empty}>
                         {t('connections.origin.empty')}
                     </Typography>
                 )}
             />
-        </View>
+        </Pressable>
     )
 }
 
@@ -83,12 +78,6 @@ export const OriginSheet = memo(function OriginSheet({ sheet, model, getTitle, o
 const styles = StyleSheet.create({
     container: {
         flex: 1
-    },
-    search: {
-        flexDirection: 'row',
-        height: SEARCH_INPUT.actionSize,
-        marginHorizontal: SPACING.lg,
-        marginBottom: SPACING.md
     },
     empty: {
         paddingHorizontal: SPACING.sm

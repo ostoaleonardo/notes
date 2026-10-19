@@ -53,7 +53,10 @@ export function FilterToggle({
                 >
                     <View style={styles.content}>
                         {Icon && <Icon color={contentColor} width={ICON_SIZE.md} height={ICON_SIZE.md} />}
-                        <Typography variant='bodySmall' color={contentColor}>
+                        <Typography
+                            variant='labelLarge'
+                            color={contentColor}
+                        >
                             {label}
                         </Typography>
                     </View>
@@ -77,7 +80,7 @@ const styles = StyleSheet.create({
     touchablePill: {
         height: BUTTON.size,
         paddingVertical: 0,
-        paddingHorizontal: SPACING.lg,
+        paddingHorizontal: SPACING.md,
         justifyContent: 'center'
     },
     content: {

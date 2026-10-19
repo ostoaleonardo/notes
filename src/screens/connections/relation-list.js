@@ -5,7 +5,6 @@ import { useTheme } from 'react-native-paper'
 
 import { EntityRow } from './entity-row'
 
-import { SETTINGS_LIST } from '@/constants/components'
 import { SPACING } from '@/constants/theme'
 
 const keyOf = (entity) => `${entity.type}:${entity.id}`
@@ -52,6 +51,6 @@ const styles = StyleSheet.create({
         paddingBottom: SPACING.lg
     },
     separator: {
-        height: SETTINGS_LIST.itemGap
+        height: SPACING.xxxs
     }
 })

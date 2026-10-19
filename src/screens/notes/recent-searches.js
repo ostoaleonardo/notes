@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next'
-import { StyleSheet } from 'react-native'
 
 import { SearchListSection } from './search-list-section'
 
 import { History } from '@/icons/history'
-import { SPACING, RADIUS } from '@/constants/theme'
+
+const getTerm = (term) => term
 
 export function RecentSearches({ recent, onSelect }) {
     const { t } = useTranslation()
@@ -13,19 +13,10 @@ export function RecentSearches({ recent, onSelect }) {
         <SearchListSection
             title={t('search.recent')}
             items={recent}
-            keyExtractor={(term) => term}
+            keyExtractor={getTerm}
             icon={History}
-            getLabel={(term) => term}
+            getLabel={getTerm}
             onSelect={onSelect}
-            itemStyle={styles.item}
         />
     )
 }
-
-const styles = StyleSheet.create({
-    item: {
-        borderRadius: RADIUS.md,
-        paddingVertical: SPACING.sm,
-        paddingHorizontal: SPACING.lg
-    }
-})

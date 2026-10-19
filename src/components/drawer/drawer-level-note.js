@@ -5,7 +5,6 @@ import { TouchableRipple, useTheme } from 'react-native-paper'
 import { Typography } from '@/components/typography'
 import { levelRowStyles } from './drawer-level-styles'
 
-import { DRAWER_ITEM } from '@/constants/components'
 import { RADIUS, SPACING } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'
 
@@ -20,7 +19,7 @@ export const DrawerLevelNote = memo(function DrawerLevelNote({
     const onPress = useCallback(() => onOpenNote(note.path), [onOpenNote, note.path])
 
     const color = active ? colors.accentText : colors.onBackground
-    const paddingStart = DRAWER_ITEM.paddingHorizontal + depth * SPACING.lg
+    const paddingStart = SPACING.md + depth * SPACING.lg
 
     return (
         <View
@@ -53,7 +52,6 @@ export const DrawerLevelNote = memo(function DrawerLevelNote({
 const styles = StyleSheet.create({
     container: {
         overflow: 'hidden',
-        borderRadius: RADIUS.xl,
-        marginBottom: DRAWER_ITEM.rowGap
+        borderRadius: RADIUS.xl
     }
 })

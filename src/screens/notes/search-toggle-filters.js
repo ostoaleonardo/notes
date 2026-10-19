@@ -27,9 +27,9 @@ export function SearchToggleFilters({ query, setQuery, parsed, saved, onToggleSa
             <Tooltip title={t('search.in_content')}>
                 <IconButton
                     size={ICON_SIZE.md}
-                    mode={parsed.inContent ? 'contained' : 'outlined'}
+                    mode='contained'
                     iconColor={parsed.inContent ? colors.background : colors.onBackground}
-                    containerColor={parsed.inContent ? colors.onBackground : undefined}
+                    containerColor={parsed.inContent ? colors.onBackground : colors.surfaceVariant}
                     onPress={() => setQuery(toggleContentQualifier(query))}
                     icon={(props) => <NoteStack width={ICON_SIZE.md} height={ICON_SIZE.md} {...props} />}
                     accessibilityLabel={t('search.in_content')}
@@ -37,6 +37,7 @@ export function SearchToggleFilters({ query, setQuery, parsed, saved, onToggleSa
             </Tooltip>
 
             <FilterToggleGroup
+                pill={true}
                 buttons={[
                     {
                         icon: Picture,
