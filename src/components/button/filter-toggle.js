@@ -4,6 +4,7 @@ import { Tooltip, TouchableRipple, useTheme } from 'react-native-paper'
 import { AnimatedView } from '@/components/animated/animated-view'
 import { Typography } from '@/components/typography'
 
+import { usePressed } from '@/hooks/use-pressed'
 import { useSegmentedCornerStyle } from '@/hooks/use-segmented-corner-style'
 
 import { BUTTON } from '@/constants/components'
@@ -19,7 +20,8 @@ export function FilterToggle({
     disabled = false
 }) {
     const { colors } = useTheme()
-    const animatedStyle = useSegmentedCornerStyle(selected)
+    const { pressed, onPressIn, onPressOut } = usePressed()
+    const animatedStyle = useSegmentedCornerStyle(pressed || selected)
 
     const contentColor = selected ? colors.background : colors.onBackground
 
@@ -47,6 +49,8 @@ export function FilterToggle({
                     accessibilityState={{ selected: !!selected }}
                     disabled={disabled}
                     onPress={onPress}
+                    onPressIn={onPressIn}
+                    onPressOut={onPressOut}
                     style={[styles.touchable, pill && styles.touchablePill]}
                     accessibilityLabel={label}
                 >

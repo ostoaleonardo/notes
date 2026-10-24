@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
@@ -9,6 +9,7 @@ import { PositionGroup } from '@/components/position-group'
 import { Typography } from '@/components/typography'
 
 import { useGroupedCornerStyle } from '@/hooks/use-grouped-corner-style'
+import { usePressed } from '@/hooks/use-pressed'
 
 import { MARKDOWN_GROUPS } from '@/constants/markdown-controls'
 import { SPACING } from '@/constants/theme'
@@ -17,7 +18,7 @@ import { TRANSPARENT } from '@/constants/themes'
 const GroupItem = memo(function GroupItem({ action, Icon, onSelect }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
-    const [pressed, setPressed] = useState(false)
+    const { pressed, onPressIn, onPressOut } = usePressed()
     const cornerStyle = useGroupedCornerStyle(pressed)
 
     return (
@@ -25,8 +26,8 @@ const GroupItem = memo(function GroupItem({ action, Icon, onSelect }) {
             <Pressable
                 accessibilityRole='button'
                 onPress={() => onSelect(action)}
-                onPressIn={() => setPressed(true)}
-                onPressOut={() => setPressed(false)}
+                onPressIn={onPressIn}
+                onPressOut={onPressOut}
                 android_ripple={{ color: colors.onBackground + TRANSPARENT[10] }}
                 style={styles.item}
             >

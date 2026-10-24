@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Tooltip, TouchableRipple, useTheme } from 'react-native-paper'
 
@@ -6,6 +6,7 @@ import { AnimatedView } from '@/components/animated/animated-view'
 import { Typography } from '@/components/typography'
 
 import { useExpandingWidth } from '@/hooks/use-expanding-width'
+import { usePressed } from '@/hooks/use-pressed'
 import { useSegmentedCornerStyle } from '@/hooks/use-segmented-corner-style'
 
 import { BUTTON, ICON_TOGGLE } from '@/constants/components'
@@ -33,9 +34,7 @@ export function IconToggle({
     const iconSize = iconSizeOverride ??
         (showLabel ? ICON_TOGGLE.iconSizeWithLabel : ICON_TOGGLE.iconSize)
 
-    const [pressed, setPressed] = useState(false)
-    const onPressIn = useCallback(() => setPressed(true), [])
-    const onPressOut = useCallback(() => setPressed(false), [])
+    const { pressed, onPressIn, onPressOut } = usePressed()
 
     const onContentLayout = useCallback((event) => {
         onWidth?.(label, event.nativeEvent.layout.width + ICON_TOGGLE.labelPaddingTotal)

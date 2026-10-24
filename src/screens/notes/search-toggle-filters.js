@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
-import { IconButton, Tooltip, useTheme } from 'react-native-paper'
 
+import { IconToggleGroup } from '@/components/button/icon-toggle-group'
 import { FilterToggleGroup } from '@/components/button/filter-toggle-group'
 
 import { togglePinnedQualifier, toggleImageQualifier, toggleContentQualifier } from '@/utils/search-query'
@@ -16,7 +16,6 @@ import { ICON_SIZE } from '@/constants/theme'
 
 export function SearchToggleFilters({ query, setQuery, parsed, saved, onToggleSave }) {
     const { t } = useTranslation()
-    const { colors } = useTheme()
 
     const trimmedQuery = query.trim()
     const canSave = !!trimmedQuery
@@ -24,17 +23,17 @@ export function SearchToggleFilters({ query, setQuery, parsed, saved, onToggleSa
 
     return (
         <>
-            <Tooltip title={t('search.in_content')}>
-                <IconButton
-                    size={ICON_SIZE.md}
-                    mode='contained'
-                    iconColor={parsed.inContent ? colors.background : colors.onBackground}
-                    containerColor={parsed.inContent ? colors.onBackground : colors.surfaceVariant}
-                    onPress={() => setQuery(toggleContentQualifier(query))}
-                    icon={(props) => <NoteStack width={ICON_SIZE.md} height={ICON_SIZE.md} {...props} />}
-                    accessibilityLabel={t('search.in_content')}
-                />
-            </Tooltip>
+            <IconToggleGroup
+                buttons={[
+                    {
+                        icon: NoteStack,
+                        label: t('search.in_content'),
+                        iconSize: ICON_SIZE.md,
+                        selected: parsed.inContent,
+                        onPress: () => setQuery(toggleContentQualifier(query))
+                    }
+                ]}
+            />
 
             <FilterToggleGroup
                 pill={true}
