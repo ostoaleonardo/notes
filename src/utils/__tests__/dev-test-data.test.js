@@ -44,7 +44,15 @@ describe('dev test plan', () => {
     test('provides every attachment that the notes embed', () => {
         const filenames = plan.files.map((file) => file.filename)
 
-        ;['dev-image.png', 'dev-image-2.png', 'sample.pdf', 'sample.txt', 'sample.mp3', 'sample.mp4', 'syntax-sample.png']
+        ;[
+            'dev-image.png',
+            'dev-image-2.png',
+            'sample.pdf',
+            'sample.txt',
+            'sample.mp3',
+            'sample.mp4',
+            'syntax-sample.png'
+        ]
             .forEach((name) => expect(filenames).toContain(name))
     })
 

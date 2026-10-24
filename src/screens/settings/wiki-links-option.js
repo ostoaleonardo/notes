@@ -18,7 +18,10 @@ export function WikiLinksOption() {
     const [autoUpdateLinks, setAutoUpdateLinks] = useState(false)
     const [useWikilinks, setUseWikilinks] = useState(true)
 
-    useStorageEffect(STORAGE_KEYS.ALWAYS_UPDATE_WIKI_LINKS, (value) => setAutoUpdateLinks(value === STORAGE_BOOLEAN.TRUE))
+    useStorageEffect(
+        STORAGE_KEYS.ALWAYS_UPDATE_WIKI_LINKS,
+        (value) => setAutoUpdateLinks(value === STORAGE_BOOLEAN.TRUE)
+    )
     useStorageEffect(STORAGE_KEYS.LINK_FORMAT, (value) => setUseWikilinks(value !== WIKI_LINK_FORMATS.MARKDOWN))
 
     const onToggleAutoUpdate = (value) => {

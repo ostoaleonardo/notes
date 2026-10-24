@@ -136,7 +136,9 @@ export { mediaMapFacet, tableLabelsFacet }
 export const liveFormatting = StateField.define({
     create: (state) => buildLiveFormattingDecorations(state),
     update: (decorations, tr) => (
-        tr.docChanged || tr.selection || tr.reconfigured ? buildLiveFormattingDecorations(tr.state) : decorations.map(tr.changes)
+        tr.docChanged || tr.selection || tr.reconfigured
+            ? buildLiveFormattingDecorations(tr.state)
+            : decorations.map(tr.changes)
     ),
     provide: (field) => [
         EditorView.decorations.from(field),

@@ -7,7 +7,13 @@ import { ModalSheet } from '@/components/modal/modal-sheet'
 
 import { MARKDOWN_ACTIONS } from '@/constants/markdown-actions'
 
-export const MarkdownInsertSheets = memo(function MarkdownInsertSheets({ linkSheet, tableSheet, imageSheet, repositoryId, action }) {
+export const MarkdownInsertSheets = memo(function MarkdownInsertSheets({
+    linkSheet,
+    tableSheet,
+    imageSheet,
+    repositoryId,
+    action
+}) {
     return (
         <>
             <ModalSheet
@@ -41,7 +47,10 @@ export const MarkdownInsertSheets = memo(function MarkdownInsertSheets({ linkShe
                 <ImageMarkdown
                     onClose={imageSheet.onClose}
                     repositoryId={repositoryId}
-                    onInsert={(payload) => action.run(payload.embed ? MARKDOWN_ACTIONS.IMAGE_EMBED : MARKDOWN_ACTIONS.IMAGE, payload)}
+                    onInsert={(payload) => action.run(
+                        payload.embed ? MARKDOWN_ACTIONS.IMAGE_EMBED : MARKDOWN_ACTIONS.IMAGE,
+                        payload
+                    )}
                 />
             </ModalSheet>
         </>

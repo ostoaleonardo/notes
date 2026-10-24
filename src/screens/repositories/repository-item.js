@@ -148,7 +148,9 @@ export const RepositoryItem = memo(function RepositoryItem({
                                     variant='bodySmall'
                                     opacity={OPACITY.disabled}
                                 >
-                                    {t('count.notes', { count: descendant.noteCount })}, {t('count.folders', { count: descendant.folderCount })}
+                                    {t('count.notes', { count: descendant.noteCount })}
+                                    {', '}
+                                    {t('count.folders', { count: descendant.folderCount })}
                                 </Typography>
                             </View>
                         ))

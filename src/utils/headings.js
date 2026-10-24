@@ -6,7 +6,9 @@ import { WHITESPACE_RUN_PATTERN } from '@/constants/markdown-patterns'
 import { getCodeRanges, isInsideRanges, mapOutsideCode } from '@/utils/outside-code'
 import { resolveWikiLink } from '@/utils/wiki-links'
 
-export const normalizeHeading = (text) => text.normalize('NFC').replace(WHITESPACE_RUN_PATTERN, ' ').trim().toLowerCase()
+export const normalizeHeading = (text) => (
+    text.normalize('NFC').replace(WHITESPACE_RUN_PATTERN, ' ').trim().toLowerCase()
+)
 
 export const findHeadings = (text) => {
     const codeRanges = getCodeRanges(text)
