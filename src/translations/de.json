@@ -488,9 +488,9 @@
 		"message": "Es ist ein unerwartetes Problem aufgetreten. Bitte versuche es erneut."
 	},
 	"export": {
-		"title": "Exportieren oder teilen als",
 		"markdown": "Markdown",
 		"html": "HTML",
-		"pdf": "PDF"
+		"pdf": "PDF",
+		"save_to_device": "Auf dem Gerät speichern"
 	}
 }

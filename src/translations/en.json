@@ -550,10 +550,10 @@
 		"message": "We ran into an unexpected problem. Please try again."
 	},
 	"export": {
-		"title": "Export or share as",
 		"markdown": "Markdown",
 		"html": "HTML",
-		"pdf": "PDF"
+		"pdf": "PDF",
+		"save_to_device": "Save to device"
 	},
 	"welcome": {
 		"title": "Welcome",

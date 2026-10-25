@@ -488,9 +488,9 @@
 		"message": "Un problème inattendu est survenu. Veuillez réessayer."
 	},
 	"export": {
-		"title": "Exporter ou partager en",
 		"markdown": "Markdown",
 		"html": "HTML",
-		"pdf": "PDF"
+		"pdf": "PDF",
+		"save_to_device": "Enregistrer sur l'appareil"
 	}
 }

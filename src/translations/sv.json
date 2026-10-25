@@ -488,9 +488,9 @@
 		"message": "Ett oväntat problem uppstod. Försök igen."
 	},
 	"export": {
-		"title": "Exportera eller dela som",
 		"markdown": "Markdown",
 		"html": "HTML",
-		"pdf": "PDF"
+		"pdf": "PDF",
+		"save_to_device": "Spara på enheten"
 	}
 }

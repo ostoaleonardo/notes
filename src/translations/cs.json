@@ -498,9 +498,9 @@
 		"message": "Narazili jsme na neočekávaný problém. Zkus to prosím znovu."
 	},
 	"export": {
-		"title": "Exportovat nebo sdílet jako",
 		"markdown": "Markdown",
 		"html": "HTML",
-		"pdf": "PDF"
+		"pdf": "PDF",
+		"save_to_device": "Uložit do zařízení"
 	}
 }

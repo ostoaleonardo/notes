@@ -6,7 +6,7 @@ import { MoveNoteSheet } from './move-note-sheet'
 import { OutlineSheet } from './outline-sheet'
 import { TemplatePickerSheet } from './template-picker-sheet'
 import { EditorShell } from './editor-shell'
-import { ExportFormat } from '@/screens/dialogs/export-format'
+import { ExportSheet } from '@/screens/dialogs/export-sheet'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { MarkdownInput } from '@/components/markdown/markdown-input'
 
@@ -163,7 +163,7 @@ export const NoteEditorScreen = ({
     const onJumpToAnchor = useCallback((value) => {
         setJump((prev) => ({ anchor: value, nonce: (prev?.nonce ?? 0) + 1 }))
     }, [])
-    const { dialog: sharingDialog, onConfirmExport, onConfirmShare } = useNoteSharing({ id, flush })
+    const { sheet: sharingSheet, onConfirmExport, onConfirmShare } = useNoteSharing({ id, flush })
     const noteDelete = useNoteDelete(id, busyRef)
     const noteMove = useNoteMove({ id, busyRef, flush, onMoved })
 
@@ -228,7 +228,7 @@ export const NoteEditorScreen = ({
 
     const toggleProps = useMemo(() => ({
         showBacklinks,
-        onOpenSharingDialog: sharingDialog.onOpen,
+        onOpenSharingDialog: sharingSheet.onOpen,
         onOpenDeleteDialog: noteDelete.onOpen,
         onOpenOutline: outlineSheet.onOpen,
         onOpenOutgoingLinks: outgoingLinksSheet.onOpen,
@@ -236,7 +236,7 @@ export const NoteEditorScreen = ({
         onToggleShowBacklinks
     }), [
         showBacklinks,
-        sharingDialog.onOpen,
+        sharingSheet.onOpen,
         noteDelete.onOpen,
         outlineSheet.onOpen,
         outgoingLinksSheet.onOpen,
@@ -286,10 +286,8 @@ export const NoteEditorScreen = ({
                         onSaveAsTemplate={noteTemplates.onSaveAsTemplate}
                     />
 
-                    <ExportFormat
-                        title={t('export.title')}
-                        visible={sharingDialog.visible}
-                        onDismiss={sharingDialog.onClose}
+                    <ExportSheet
+                        sheet={sharingSheet}
                         onExport={onConfirmExport}
                         onShare={onConfirmShare}
                     />

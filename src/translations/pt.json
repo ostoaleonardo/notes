@@ -488,9 +488,9 @@
 		"message": "Encontramos um problema inesperado. Tente novamente."
 	},
 	"export": {
-		"title": "Exportar ou compartilhar como",
 		"markdown": "Markdown",
 		"html": "HTML",
-		"pdf": "PDF"
+		"pdf": "PDF",
+		"save_to_device": "Salvar no dispositivo"
 	}
 }

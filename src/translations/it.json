@@ -488,9 +488,9 @@
 		"message": "Si è verificato un problema imprevisto. Riprova."
 	},
 	"export": {
-		"title": "Esporta o condividi come",
 		"markdown": "Markdown",
 		"html": "HTML",
-		"pdf": "PDF"
+		"pdf": "PDF",
+		"save_to_device": "Salva sul dispositivo"
 	}
 }

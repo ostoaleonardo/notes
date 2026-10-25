@@ -47,13 +47,15 @@ describe('note sharing', () => {
         )
     })
 
-    test('opens and closes the dialog', async () => {
+    test('opens and closes the sheet', async () => {
         const { result } = await setup()
+        const sheetRef = { present: jest.fn(), close: jest.fn() }
+        result.current.sheet.ref.current = sheetRef
 
-        await act(async () => result.current.dialog.onOpen())
-        expect(result.current.dialog.visible).toBe(true)
+        await act(async () => result.current.sheet.onOpen())
+        expect(sheetRef.present).toHaveBeenCalledTimes(1)
 
-        await act(async () => result.current.dialog.onClose())
-        expect(result.current.dialog.visible).toBe(false)
+        await act(async () => result.current.sheet.onClose())
+        expect(sheetRef.close).toHaveBeenCalledTimes(1)
     })
 })

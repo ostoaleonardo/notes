@@ -488,9 +488,9 @@
 		"message": "Er is een onverwacht probleem opgetreden. Probeer het opnieuw."
 	},
 	"export": {
-		"title": "Exporteren of delen als",
 		"markdown": "Markdown",
 		"html": "HTML",
-		"pdf": "PDF"
+		"pdf": "PDF",
+		"save_to_device": "Opslaan op apparaat"
 	}
 }

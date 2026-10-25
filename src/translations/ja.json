@@ -488,9 +488,9 @@
 		"message": "予期しない問題が発生しました。もう一度お試しください。"
 	},
 	"export": {
-		"title": "エクスポートまたは共有する形式",
 		"markdown": "Markdown",
 		"html": "HTML",
-		"pdf": "PDF"
+		"pdf": "PDF",
+		"save_to_device": "端末に保存"
 	}
 }

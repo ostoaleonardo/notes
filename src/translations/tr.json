@@ -488,9 +488,9 @@
 		"message": "Beklenmedik bir sorunla karşılaştık. Lütfen tekrar dene."
 	},
 	"export": {
-		"title": "Şu biçimde dışa aktar veya paylaş",
 		"markdown": "Markdown",
 		"html": "HTML",
-		"pdf": "PDF"
+		"pdf": "PDF",
+		"save_to_device": "Cihaza kaydet"
 	}
 }

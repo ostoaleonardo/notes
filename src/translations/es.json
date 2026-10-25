@@ -550,10 +550,10 @@
 		"message": "Ocurrió un problema inesperado. Inténtalo de nuevo."
 	},
 	"export": {
-		"title": "Exportar o compartir como",
 		"markdown": "Markdown",
 		"html": "HTML",
-		"pdf": "PDF"
+		"pdf": "PDF",
+		"save_to_device": "Guardar en el dispositivo"
 	},
 	"welcome": {
 		"title": "Bienvenida",

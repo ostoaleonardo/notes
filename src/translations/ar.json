@@ -508,9 +508,9 @@
 		"message": "واجهنا مشكلة غير متوقعة. يُرجى المحاولة مرة أخرى."
 	},
 	"export": {
-		"title": "تصدير أو مشاركة بصيغة",
 		"markdown": "Markdown",
 		"html": "HTML",
-		"pdf": "PDF"
+		"pdf": "PDF",
+		"save_to_device": "حفظ على الجهاز"
 	}
 }

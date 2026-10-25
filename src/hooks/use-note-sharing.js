@@ -1,12 +1,12 @@
 import { useCallback } from 'react'
 
+import { useBottomSheet } from './use-bottom-sheet'
 import { useFiles } from './use-files'
-import { useMenuAction } from './use-menu-action'
 
 export function useNoteSharing({ id, flush }) {
     const { exportFile, shareFile } = useFiles()
 
-    const dialog = useMenuAction()
+    const sheet = useBottomSheet()
 
     const onConfirmExport = useCallback(async (format) => {
         await flush()
@@ -19,7 +19,7 @@ export function useNoteSharing({ id, flush }) {
     }, [flush, shareFile, id])
 
     return {
-        dialog,
+        sheet,
         onConfirmExport,
         onConfirmShare
     }
