@@ -5,6 +5,7 @@ import { useTheme } from 'react-native-paper'
 import Animated from 'react-native-reanimated'
 
 import { ModalBottomSheet } from '@/components/modal/modal-bottom-sheet'
+import { SheetTitle } from '@/components/modal/sheet-title'
 import { PositionGroup } from '@/components/position-group'
 import { Typography } from '@/components/typography'
 
@@ -41,6 +42,7 @@ const GroupItem = memo(function GroupItem({ action, Icon, onSelect }) {
 })
 
 export const MarkdownGroupSheet = memo(function MarkdownGroupSheet({ sheet, group, onSelect }) {
+    const { t } = useTranslation()
     const items = MARKDOWN_GROUPS[group]?.items
 
     return (
@@ -49,6 +51,8 @@ export const MarkdownGroupSheet = memo(function MarkdownGroupSheet({ sheet, grou
             ref={sheet.ref}
             onClose={sheet.onClose}
         >
+            {group && <SheetTitle>{t(`markdown_group.${group}`)}</SheetTitle>}
+
             <View style={styles.list}>
                 <PositionGroup>
                     {items?.map(({ action, Icon }) => (

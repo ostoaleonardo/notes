@@ -1,5 +1,6 @@
 import { memo, useCallback } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 
 import { ListSheet } from '@/components/modal/list-sheet'
@@ -47,6 +48,7 @@ const MoveNoteItem = memo(function MoveNoteItem({ item, current, onPress }) {
 })
 
 export const MoveNoteSheet = memo(function MoveNoteSheet({ sheet, repositoryId, onSelect }) {
+    const { t } = useTranslation()
     const { activeRepositoryTree } = useRepositories()
 
     const renderItem = useCallback(({ item }) => (
@@ -60,6 +62,7 @@ export const MoveNoteSheet = memo(function MoveNoteSheet({ sheet, repositoryId, 
     return (
         <ListSheet
             sheet={sheet}
+            title={t('button.move')}
             data={activeRepositoryTree}
             renderItem={renderItem}
             keyExtractor={getFolderKey}

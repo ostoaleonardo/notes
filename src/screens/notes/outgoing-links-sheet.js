@@ -52,6 +52,7 @@ export const OutgoingLinksSheet = memo(function OutgoingLinksSheet({ sheet, cont
     return (
         <ListSheet
             sheet={sheet}
+            title={t('title.outgoing_links')}
             data={links}
             renderItem={renderItem}
             keyExtractor={getLinkKey}

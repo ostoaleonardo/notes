@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 
 import { Button } from '@/components/button/button'
+import { SheetTitle } from '@/components/modal/sheet-title'
 import { Typography } from '@/components/typography'
 
 import { MAX_TABLE_COLS, MAX_TABLE_ROWS, TABLE_CELL_SIZE, TABLE_CELL_GAP } from '@/constants/table'
@@ -68,11 +69,9 @@ export function TableMarkdown({ onClose, onInsert }) {
 
     return (
         <View style={styles.container}>
-            <Typography
-                bold
-                variant='titleLarge'
-                textAlign='center'
-            >
+            <SheetTitle>{t('markdown_action.table')}</SheetTitle>
+
+            <Typography textAlign='center'>
                 {selected.cols} x {selected.rows}
             </Typography>
 

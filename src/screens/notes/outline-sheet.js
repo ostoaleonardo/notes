@@ -75,6 +75,7 @@ export const OutlineSheet = memo(function OutlineSheet({ sheet, contentRef, onSe
     return (
         <ListSheet
             sheet={sheet}
+            title={t('title.outline')}
             data={items}
             renderItem={renderItem}
             keyExtractor={getOutlineKey}

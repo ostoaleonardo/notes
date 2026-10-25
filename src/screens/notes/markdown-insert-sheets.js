@@ -32,6 +32,7 @@ export const MarkdownInsertSheets = memo(function MarkdownInsertSheets({
                 ref={tableSheet.ref}
                 onClose={tableSheet.onClose}
                 enablePanDownToClose={false}
+                dismissOnClickOutside
             >
                 <TableMarkdown
                     onClose={tableSheet.onClose}

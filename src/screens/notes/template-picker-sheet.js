@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { TemplatePicker } from './template-picker'
 import { Button } from '@/components/button/button'
 import { ModalBottomSheet } from '@/components/modal/modal-bottom-sheet'
+import { SheetTitle } from '@/components/modal/sheet-title'
 
 import { SPACING } from '@/constants/theme'
 
@@ -30,6 +31,8 @@ export const TemplatePickerSheet = memo(function TemplatePickerSheet({
             ref={sheet.ref}
             onClose={sheet.onClose}
         >
+            <SheetTitle>{t('title.templates')}</SheetTitle>
+
             <TemplatePicker
                 title={title}
                 templates={templates}

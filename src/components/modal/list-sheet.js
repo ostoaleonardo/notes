@@ -4,12 +4,14 @@ import { FlatList } from 'react-native-gesture-handler'
 import { EmptyMessage } from './empty-message'
 import { GroupedList, GroupSeparator } from '@/components/grouped-list'
 import { ModalBottomSheet } from './modal-bottom-sheet'
+import { SheetTitle } from './sheet-title'
 
 import { SHEET } from '@/constants/components'
 import { SPACING } from '@/constants/theme'
 
 export function ListSheet({
     sheet,
+    title,
     onChange,
     data,
     renderItem,
@@ -27,6 +29,8 @@ export function ListSheet({
             enableDynamicSizing={isEmpty}
             snapPoints={isEmpty ? undefined : SHEET.snapPoints.tall}
         >
+            {title && <SheetTitle>{title}</SheetTitle>}
+
             {isEmpty ? (
                 <EmptyMessage style={styles.empty}>
                     {emptyMessage}
