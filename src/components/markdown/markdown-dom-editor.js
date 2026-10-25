@@ -328,6 +328,8 @@ const MarkdownDomEditor = ({
                 style={{ display: mode === EDITOR_MODES.READ ? 'block' : 'none' }}
                 dangerouslySetInnerHTML={{ __html: html }}
             />
+
+            <div style={{ flexShrink: 0, height: stableTheme.layout?.bottomInset ?? 0 }} />
         </div>
     )
 }

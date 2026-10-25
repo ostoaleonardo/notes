@@ -33,7 +33,8 @@ import { toggleTask } from '@/utils/tasks'
 import { buildTableLabels } from '@/utils/table-labels'
 
 import { ROUTES } from '@/constants/routes'
-import { BODY_FONT_FAMILY } from '@/constants/theme'
+import { BUTTON } from '@/constants/components'
+import { BODY_FONT_FAMILY, SPACING } from '@/constants/theme'
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { LINK_TYPES } from '@/constants/link-types'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
@@ -155,7 +156,7 @@ export const MarkdownInput = ({
 
     const theme = useMemo(() => ({
         colors,
-        layout: { maxWidth },
+        layout: { maxWidth, bottomInset: BUTTON.size + SPACING.lg * 2 },
         typography: {
             fontSize,
             fontFamily: BODY_FONT_FAMILY,

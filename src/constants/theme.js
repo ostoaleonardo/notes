@@ -88,3 +88,8 @@ export const INLINE_CODE_STYLE = {
     borderRadius: '4px',
     padding: '0.1em 0.3em'
 }
+
+export const BLUR = {
+    method: 'dimezisBlurViewSdk31Plus',
+    intensity: 80
+}

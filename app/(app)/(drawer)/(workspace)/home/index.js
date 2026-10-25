@@ -1,4 +1,3 @@
-import { View } from 'react-native'
 import { router, useFocusEffect } from 'expo-router'
 import * as DocumentPicker from 'expo-document-picker'
 import { useCallback, useEffect, useEffectEvent, useMemo, useState } from 'react'
@@ -7,6 +6,7 @@ import { Intro } from '@/screens/notes/intro'
 import { NoteToolbarSheets } from '@/screens/notes/note-toolbar-sheets'
 import { HomeToolbar } from '@/screens/notes/home-toolbar'
 import { AppBar } from '@/components/app-bar/app-bar'
+import { BlurTarget, BlurTargetProvider } from '@/components/blur/blur-target'
 
 import { useBottomSheet } from '@/hooks/use-bottom-sheet'
 import { useCurrentNote } from '@/hooks/use-current-note'
@@ -72,13 +72,15 @@ export default function Home() {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <BlurTargetProvider style={{ flex: 1 }}>
             <AppBar
                 mode={APP_BAR_MODES.MENU}
                 title={APP_NAME + (pro ? APP_NAME_PRO_SUFFIX : '')}
             />
 
-            <Intro />
+            <BlurTarget style={{ flex: 1 }}>
+                <Intro />
+            </BlurTarget>
 
             <HomeToolbar
                 onCreateNote={onCreateNote}
@@ -93,6 +95,6 @@ export default function Home() {
                 recentsSheet={recentsSheet}
                 searchSheet={searchSheet}
             />
-        </View>
+        </BlurTargetProvider>
     )
 }

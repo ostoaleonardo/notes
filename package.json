@@ -30,6 +30,7 @@
     "expo": "~57.0.31",
     "expo-application": "~57.0.3",
     "expo-asset": "~57.0.15",
+    "expo-blur": "~57.0.3",
     "expo-build-properties": "~57.0.22",
     "expo-constants": "~57.0.3",
     "expo-crypto": "~57.0.4",

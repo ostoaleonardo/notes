@@ -1,12 +1,13 @@
 import { memo, useCallback, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { IconButton, Tooltip, useTheme } from 'react-native-paper'
+import { IconButton, Tooltip } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
 
 import { AnimatedView } from '@/components/animated/animated-view'
 import { Scroll } from '@/components/animated/scroll'
 import { Divider } from '@/components/divider/divider'
+import { ToolbarSurface } from '@/components/toolbar-surface'
 
 import { MarkdownGroupSheet } from './markdown-group-sheet'
 
@@ -36,8 +37,6 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
     canRedo
 }) {
     const { t } = useTranslation()
-    const { colors } = useTheme()
-
     const groupSheet = useBottomSheet()
     const [group, setGroup] = useState(null)
     const { onOpen: openGroup, onClose: closeGroup } = groupSheet
@@ -101,6 +100,7 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
     }) => (
         <Tooltip key={key} title={t(label)}>
             <IconButton
+                style={styles.button}
                 onPress={onPress}
                 testID={TEST_IDS.TOOLBAR_PREFIX + key}
                 icon={(props) => <Icon {...props} />}
@@ -111,16 +111,11 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
     )
 
     return (
-        <View
-            style={{
-                ...styles.container,
-                borderTopColor: colors.outline,
-                backgroundColor: colors.background
-            }}
-        >
+        <ToolbarSurface>
             <Scroll
                 key={formatting ? 'formatting' : 'idle'}
                 horizontal
+                style={styles.scroll}
                 overScrollMode='never'
                 keyboardShouldPersistTaps='always'
                 contentContainerStyle={styles.scrollContent}
@@ -176,23 +171,24 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
                 group={group}
                 onSelect={onSelectGroupItem}
             />
-        </View>
+        </ToolbarSurface>
     )
 })
 
 const styles = StyleSheet.create({
-    container: {
-        borderTopWidth: 1
+    button: {
+        margin: SPACING.xxxs
+    },
+    scroll: {
+        flexGrow: 0
     },
     row: {
         flexDirection: 'row',
         alignItems: 'center'
     },
     scrollContent: {
-        flexGrow: 1,
         alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: SPACING.xxs
+        justifyContent: 'center'
     },
     divider: {
         width: DIVIDER.thickness,

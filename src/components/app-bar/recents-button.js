@@ -6,7 +6,7 @@ import { NoteStack } from '@/icons/note-stack'
 
 import { BADGE } from '@/constants/components'
 
-export function RecentsButton({ onPress, testID, count = 0 }) {
+export function RecentsButton({ onPress, testID, buttonStyle, count = 0 }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const label = t('search.recent')
@@ -15,6 +15,7 @@ export function RecentsButton({ onPress, testID, count = 0 }) {
         <Tooltip title={label}>
             <View>
                 <IconButton
+                    style={buttonStyle}
                     onPress={onPress}
                     testID={testID}
                     icon={(props) => <NoteStack {...props} />}
