@@ -26,14 +26,14 @@ export const FocusNode = memo(function FocusNode({
     relation,
     onPress
 }) {
-    const { colors } = useTheme()
+    const { colors, dark } = useTheme()
 
     const kind = center ? CONNECTION_NODE_KINDS.ROOT : getShapeKind(entity)
     const size = center
         ? { width: FOCUS.centerSize, height: FOCUS.centerSize }
         : { width: FOCUS.satelliteWidth, height: FOCUS.satelliteHeight }
     const missing = entity.type === CONNECTION_TYPES.MISSING
-    const palette = getNodePalette({ kind, missing: missing && !center }, colors)
+    const palette = getNodePalette({ kind, missing: missing && !center }, colors, { dark })
     const haloStyle = useMemo(() => (
         center ? { boxShadow: getRootHalo(colors) } : null
     ), [center, colors])

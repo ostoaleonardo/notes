@@ -2,7 +2,12 @@ import { GRAPH_NODE } from '@/constants/connections'
 import { CONNECTION_NODE_KINDS } from '@/constants/connections'
 import { TRANSPARENT } from '@/constants/themes'
 
-export const getNodePalette = ({ kind, missing }, colors, selected = false) => {
+export const getNodePalette = (
+    { kind, missing },
+    colors,
+    { selected = false, dark = true } = {}
+) => {
+    const raised = dark ? colors.surfaceVariant : colors.surface
     const subtle = colors.onBackground + TRANSPARENT[10]
     const accent = colors.tertiary
     const selectedFill = accent + TRANSPARENT[30]
@@ -17,14 +22,14 @@ export const getNodePalette = ({ kind, missing }, colors, selected = false) => {
             }
         case CONNECTION_NODE_KINDS.FOLDER:
             return {
-                fill: selected ? selectedFill : colors.surfaceVariant,
-                stroke: selected ? accent : colors.surfaceVariant,
+                fill: selected ? selectedFill : raised,
+                stroke: selected ? accent : subtle,
                 text: selected ? colors.accentText : colors.onBackground,
                 icon: selected ? colors.accentText : colors.onBackground
             }
         case CONNECTION_NODE_KINDS.FILE:
             return {
-                fill: selected ? selectedFill : colors.surfaceVariant,
+                fill: selected ? selectedFill : raised,
                 stroke: selected ? accent : subtle,
                 text: colors.onBackground,
                 icon: colors.onBackground
