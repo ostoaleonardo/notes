@@ -169,7 +169,7 @@ Simple notes that stay on your phone.
 
 <img align="right" width="220" alt="Export" src="docs/screenshots/export.png" />
 
-- Export or share as Markdown, HTML or PDF.
+- Pick Markdown, HTML or PDF, then share it or save it to your device.
 - Import the notes you already have.
 - Open text files from other apps.
 - Add images, audio, video and PDFs.

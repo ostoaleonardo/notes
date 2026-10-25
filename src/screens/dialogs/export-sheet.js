@@ -11,27 +11,19 @@ import { PositionGroup } from '@/components/position-group'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
 import { usePro } from '@/hooks/use-pro'
-import { useStorage } from '@/hooks/use-storage'
-import { useStorageEffect } from '@/hooks/use-storage-effect'
 
 import { Folder } from '@/icons/folder'
 import { Share } from '@/icons/share'
 
 import { EXPORT_FORMATS, PRO_EXPORT_FORMATS } from '@/constants/export'
-import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { ICON_SIZE, SPACING } from '@/constants/theme'
 
 export const ExportSheet = memo(function ExportSheet({ sheet, onExport, onShare }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { pro } = usePro()
-    const { setItem } = useStorage()
 
     const [format, setFormat] = useState(EXPORT_FORMATS.MARKDOWN)
-
-    useStorageEffect(STORAGE_KEYS.EXPORT_FORMAT, (stored) => {
-        if (stored && (pro || !PRO_EXPORT_FORMATS.includes(stored))) setFormat(stored)
-    })
 
     const select = useCallback((value) => {
         if (!pro && PRO_EXPORT_FORMATS.includes(value)) {
@@ -40,8 +32,7 @@ export const ExportSheet = memo(function ExportSheet({ sheet, onExport, onShare 
         }
 
         setFormat(value)
-        setItem(STORAGE_KEYS.EXPORT_FORMAT, value)
-    }, [pro, setItem, t])
+    }, [pro, t])
 
     const run = useCallback((action) => {
         sheet.onClose()
