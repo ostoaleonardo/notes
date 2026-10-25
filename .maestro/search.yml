@@ -10,7 +10,8 @@ appId: com.monospace.notes
 - assertVisible: RECIENTES
 - tapOn: Buscar notas
 - inputText: maestro-fix
-- hideKeyboard
+- tapOn:
+    point: 50%,70%
 - waitForAnimationToEnd
 - assertNotVisible: RECIENTES
 - back
