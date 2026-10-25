@@ -84,21 +84,3 @@ describe('corner radii by axis', () => {
         expect(radii.topRight).toBe(RADIUS.sm)
     })
 })
-
-describe('card corner radii', () => {
-    test('keeps square corners between cards', () => {
-        expect(getCornerRadii('middle', GROUP_AXES.CARD)).toEqual({
-            topLeft: 0,
-            topRight: 0,
-            bottomLeft: 0,
-            bottomRight: 0
-        })
-    })
-
-    test('rounds only the outer edges of the first card', () => {
-        const radii = getCornerRadii('first', GROUP_AXES.CARD)
-
-        expect(radii.topLeft).toBe(RADIUS.lg)
-        expect(radii.bottomLeft).toBe(0)
-    })
-})
