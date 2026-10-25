@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { useTranslation } from 'react-i18next'
 
 import { TagOption } from '@/screens/notes/tag-option'
 import { Typography } from '@/components/typography'
-import { Separator } from '@/components/separator/separator'
+import { GroupedList } from '@/components/grouped-list'
 
 import { useTags } from '@/hooks/use-tags'
 import { hasTag, isSameTag } from '@/utils/tag-names'
@@ -31,13 +31,13 @@ export function Tags({ tags, setTags }) {
     ), [tags, onToggleTag])
 
     return (
-        <FlatList
-            alignItems='center'
+        <GroupedList
+            component={FlatList}
             data={allTags}
             keyExtractor={(name) => name}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: SPACING.lg }}
-            ItemSeparatorComponent={<Separator style={{ marginHorizontal: SPACING.xxl }} />}
+            contentContainerStyle={styles.list}
+            ItemSeparatorComponent={Separator}
             renderItem={renderItem}
             ListEmptyComponent={() => (
                 <View style={{ paddingTop: SPACING.xxxxl }}>
@@ -51,3 +51,15 @@ export function Tags({ tags, setTags }) {
         />
     )
 }
+
+const Separator = () => <View style={styles.separator} />
+
+const styles = StyleSheet.create({
+    list: {
+        paddingHorizontal: SPACING.lg,
+        paddingBottom: SPACING.lg
+    },
+    separator: {
+        height: SPACING.xxxs
+    }
+})
