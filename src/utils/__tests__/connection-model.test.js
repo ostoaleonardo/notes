@@ -7,8 +7,6 @@ import {
     listOriginOptions,
     listRelations,
     makeEntity,
-    parseEntityKey,
-    entityKey,
     summarizeConnections
 } from '../connection-model'
 import {
@@ -148,18 +146,6 @@ describe('entity helpers', () => {
         expect(entityExists(makeEntity(FOLDER, 'Projects/Deep'), model)).toBe(true)
         expect(entityExists(makeEntity(FOLDER, 'Nowhere'), model)).toBe(false)
         expect(entityExists(makeEntity(TAG, 'nothing'), model)).toBe(false)
-    })
-})
-
-describe('parse entity key', () => {
-    test('round trips keys that contain separators', () => {
-        const entity = makeEntity(NOTE, 'r::Index.md')
-
-        expect(parseEntityKey(entityKey(entity))).toEqual(entity)
-    })
-
-    test('rejects text without a type', () => {
-        expect(parseEntityKey('nothing')).toBeNull()
     })
 })
 

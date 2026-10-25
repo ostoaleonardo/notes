@@ -1,3 +1,4 @@
+import { BADGE } from './components'
 import { ICON_SIZE, SPACING } from './theme'
 
 export const CONNECTION_TYPES = {
@@ -112,7 +113,7 @@ export const GRAPH_NODE = {
 }
 
 export const GRAPH_BADGE = {
-    size: 18,
+    size: BADGE.size,
     offset: 6,
     iconSize: ICON_SIZE.sm
 }

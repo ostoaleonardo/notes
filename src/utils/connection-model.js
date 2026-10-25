@@ -20,12 +20,6 @@ export const makeEntity = (type, id) => ({ type, id })
 
 export const entityKey = (entity) => `${entity.type}:${entity.id}`
 
-export const parseEntityKey = (key) => {
-    const index = key.indexOf(':')
-
-    return index < 0 ? null : makeEntity(key.slice(0, index), key.slice(index + 1))
-}
-
 export const ROOT_ENTITY = makeEntity(ROOT, ROOT_ENTITY_ID)
 
 export const splitFolder = (folder) => folder.split(FOLDER_SEPARATOR).filter(Boolean)

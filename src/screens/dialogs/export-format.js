@@ -3,7 +3,7 @@ import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
 import { DialogModal } from '@/components/dialog'
-import { FilterToggleGroup } from '@/components/button/filter-toggle-group'
+import { IconToggleGroup } from '@/components/button/icon-toggle-group'
 
 import { usePro } from '@/hooks/use-pro'
 
@@ -54,9 +54,9 @@ export function ExportFormat({ title, visible, onDismiss, onExport, onShare }) {
                 </Button>
             ]}
         >
-            <FilterToggleGroup
-                pill
-                equalWidth
+            <IconToggleGroup
+                chip
+                style={{ justifyContent: 'center' }}
                 buttons={[
                     {
                         label: t('export.html'),

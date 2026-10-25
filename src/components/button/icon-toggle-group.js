@@ -9,7 +9,14 @@ import { expandSelected as expandButtons, getMinWidth } from '@/utils/toggle-gro
 
 import { BUTTON } from '@/constants/components'
 
-export function IconToggleGroup({ buttons, background, expandSelected = false }) {
+export function IconToggleGroup({
+    buttons,
+    background,
+    style,
+    chip = false,
+    equalWidth = true,
+    expandSelected = false
+}) {
     const { colors } = useTheme()
     const [widths, setWidths] = useState({})
 
@@ -23,14 +30,15 @@ export function IconToggleGroup({ buttons, background, expandSelected = false })
         expandSelected ? expandButtons(buttons) : buttons
     ), [buttons, expandSelected])
 
-    const minWidth = getMinWidth(items, widths)
+    const minWidth = equalWidth ? getMinWidth(items, widths) : undefined
 
     return (
-        <View style={styles.group}>
+        <View style={[styles.group, style]}>
             <PositionGroup>
                 {items.map((button) => (
                     <IconToggle
                         key={button.label}
+                        chip={chip}
                         background={background ?? colors.surfaceVariant}
                         color={colors.onBackground}
                         minWidth={minWidth}

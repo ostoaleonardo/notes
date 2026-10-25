@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
 import { IconToggleGroup } from '@/components/button/icon-toggle-group'
-import { FilterToggleGroup } from '@/components/button/filter-toggle-group'
 
 import { togglePinnedQualifier, toggleImageQualifier, toggleContentQualifier } from '@/utils/search-query'
 
@@ -35,8 +34,9 @@ export function SearchToggleFilters({ query, setQuery, parsed, saved, onToggleSa
                 ]}
             />
 
-            <FilterToggleGroup
-                pill={true}
+            <IconToggleGroup
+                chip
+                equalWidth={false}
                 buttons={[
                     {
                         icon: Picture,

@@ -19,7 +19,8 @@ export function IconToggle({
     label,
     testID,
     onPress,
-    showLabel = false,
+    showLabel: showLabelProp = false,
+    chip = false,
     expandable = false,
     iconSize: iconSizeOverride,
     selected = false,
@@ -30,6 +31,8 @@ export function IconToggle({
     disabled = false
 }) {
     const { colors } = useTheme()
+    const showLabel = chip || showLabelProp
+    const labelPadding = chip ? ICON_TOGGLE.chipPaddingHorizontal : ICON_TOGGLE.labelPaddingHorizontal
     const backgroundColor = selected ? colors.onBackground : background ?? colors.surfaceVariant
     const contentColor = selected ? colors.background : color ?? colors.onBackground
 
@@ -39,8 +42,8 @@ export function IconToggle({
     const { pressed, onPressIn, onPressOut } = usePressed()
 
     const onContentLayout = useCallback((event) => {
-        onWidth?.(label, event.nativeEvent.layout.width + ICON_TOGGLE.labelPaddingTotal)
-    }, [label, onWidth])
+        onWidth?.(label, event.nativeEvent.layout.width + labelPadding * 2)
+    }, [label, labelPadding, onWidth])
 
     const releaseDuration = expandable ? 0 : undefined
     const animatedStyle = useGroupCornerStyle(GROUP_AXES.SEGMENTED, pressed || selected, releaseDuration)
@@ -56,7 +59,11 @@ export function IconToggle({
                 />
             )}
             {extra && (
-                <Typography numberOfLines={1} variant='bodySmall' color={contentColor}>
+                <Typography
+                    numberOfLines={1}
+                    variant={chip ? 'labelLarge' : 'bodySmall'}
+                    color={contentColor}
+                >
                     {label}
                 </Typography>
             )}
@@ -65,7 +72,9 @@ export function IconToggle({
 
     const touchableStyle = expandable
         ? styles.touchableExpandable
-        : showLabel ? [styles.touchableLabel, { minWidth }] : styles.touchable
+        : showLabel
+            ? [styles.touchableLabel, { minWidth, paddingHorizontal: labelPadding }]
+            : styles.touchable
 
     const contentStyle = expandable && showLabel && expanding.contentWidth !== null
         ? [styles.content, styles.contentFixed, { width: expanding.contentWidth }]
@@ -84,6 +93,7 @@ export function IconToggle({
             >
                 <TouchableRipple
                     accessibilityRole='button'
+                    accessibilityState={{ selected: !!selected }}
                     disabled={disabled}
                     testID={testID}
                     onPress={onPress}

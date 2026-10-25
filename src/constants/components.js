@@ -21,6 +21,7 @@ export const ICON_TOGGLE = {
     iconSizeWithLabel: ICON_SIZE.md,
     labelPaddingHorizontal: SPACING.lg,
     labelPaddingTotal: SPACING.lg * 2,
+    chipPaddingHorizontal: SPACING.md,
     gap: SPACING.xs,
     measureOffset: 1000,
     expandDuration: 150
