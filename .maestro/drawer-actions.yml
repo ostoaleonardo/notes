@@ -13,6 +13,8 @@ appId: com.monospace.notes
 - tapOn:
       id: modal-backdrop
 - waitForAnimationToEnd
+- hideKeyboard
+- waitForAnimationToEnd
 - tapOn: "(?i)folder 1"
 - waitForAnimationToEnd
 - assertVisible: "(?i)subfolder 1.1"
@@ -46,6 +48,8 @@ appId: com.monospace.notes
     id: modal-backdrop
 - tapOn:
       id: modal-backdrop
+- waitForAnimationToEnd
+- hideKeyboard
 - waitForAnimationToEnd
 - assertNotVisible:
     id: modal-backdrop
