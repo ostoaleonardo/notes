@@ -33,7 +33,7 @@ export const SECTION_ICONS = {
     [CONNECTION_SECTIONS.RELATED_TAGS]: Sell
 }
 
-export const getEntityIcon = (entity, title = '') => {
+const getEntityIcon = (entity, title = '') => {
     const isImage = entity.type === CONNECTION_TYPES.FILE && getFileKind(title) === FILE_KINDS.IMAGE
     if (isImage) return Picture
 

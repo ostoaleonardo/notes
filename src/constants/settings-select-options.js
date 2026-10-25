@@ -14,14 +14,14 @@ import {
 import { STARTUP_BEHAVIORS } from '@/constants/startup-behavior'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
-export const STARTUP_SELECT_OPTION = {
+const STARTUP_SELECT_OPTION = {
     storageKey: STORAGE_KEYS.STARTUP_BEHAVIOR,
     translationKey: 'settings.notes.startup',
     values: Object.values(STARTUP_BEHAVIORS),
     defaultValue: STARTUP_BEHAVIORS.LAST_OPENED
 }
 
-export const DELETE_BEHAVIOR_SELECT_OPTION = {
+const DELETE_BEHAVIOR_SELECT_OPTION = {
     storageKey: STORAGE_KEYS.DELETE_BEHAVIOR,
     translationKey: 'settings.notes.delete',
     values: Object.values(DELETE_BEHAVIORS),

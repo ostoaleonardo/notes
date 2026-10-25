@@ -50,10 +50,6 @@ export const COLOR_OPTION = {
     width: `${100 / 3}%`
 }
 
-export const SEARCH_INPUT = {
-    actionSize: 48
-}
-
 export const FILLED_INPUT = {
     minHeight: 56
 }

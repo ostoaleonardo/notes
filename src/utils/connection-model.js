@@ -51,7 +51,7 @@ const uniqueEntities = (entities) => {
     })
 }
 
-export const getNoteTitle = (note) => note.title || stripNoteExtension(note.filename)
+const getNoteTitle = (note) => note.title || stripNoteExtension(note.filename)
 
 export const findFileReferences = (content, files) => {
     const found = new Map()
