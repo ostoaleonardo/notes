@@ -58,13 +58,13 @@ export default function MainLayout() {
 
     return (
         <ProProvider isPro={isPro}>
-            <ThemeProvider initialTheme={initialTheme}>
-                <HeadingFontProvider>
+            <HeadingFontProvider>
+                <ThemeProvider initialTheme={initialTheme}>
                     <Providers>
                         <Slot />
                     </Providers>
-                </HeadingFontProvider>
-            </ThemeProvider>
+                </ThemeProvider>
+            </HeadingFontProvider>
         </ProProvider>
     )
 }
