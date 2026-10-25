@@ -24,7 +24,7 @@ import { useShowProperties } from '@/hooks/use-show-properties'
 import { useTags } from '@/hooks/use-tags'
 import { useTagSearchSeed } from '@/hooks/use-tag-search-seed'
 import { useVersionHistory } from '@/hooks/use-version-history'
-import { buildNoteMetaLabel } from '@/utils/note-meta-label'
+import { buildNoteMetaLines } from '@/utils/note-meta-label'
 import { countWords } from '@/utils/word-count'
 import {
     applyPropertyChange,
@@ -171,13 +171,14 @@ export const NoteEditorScreen = ({
 
     const { words, characters } = countWords(note)
 
-    const metaLabel = useMemo(() => (
-        buildNoteMetaLabel({
+    const metaLines = useMemo(() => (
+        buildNoteMetaLines({
             showDate: mode === EDITOR_MODES.READ,
             language: currentLanguage,
             timestamp: modifiedAt,
             dateLabel: t('date.updated'),
             words,
+            characters,
             wordsLabel: t('count.words', { count: words }),
             charactersLabel: t('count.characters', { count: characters })
         })
@@ -193,8 +194,8 @@ export const NoteEditorScreen = ({
     const titleField = useMemo(() => ({
         title,
         titlePlaceholder: t('placeholder.title'),
-        metaLabel
-    }), [title, t, metaLabel])
+        metaLines
+    }), [title, t, metaLines])
 
     const latestContent = useRef({ noteId: filename, title, content: note })
     latestContent.current = { noteId: filename, title, content: note }

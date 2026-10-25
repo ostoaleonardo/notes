@@ -8,6 +8,8 @@ import {
     buildInvalidPropertiesDescriptionStyle,
     buildInvalidPropertiesTitleStyle,
     buildMetaLabelStyle,
+    buildMetaLineStyle,
+    buildMetaTokenStyle,
     buildTitleSectionStyle,
     buildTitleTextareaStyle
 } from './markdown-dom-panel-theme'
@@ -50,14 +52,22 @@ const AutoGrowTitle = ({ value, onChange, onBlur, placeholder }) => {
     )
 }
 
-const MetaLabel = ({ label }) => {
+const MetaLines = ({ lines }) => {
     const theme = useContext(ThemeContext)
 
-    if (!label) return null
+    if (!lines?.length) return null
 
     return (
         <div style={buildMetaLabelStyle(theme)}>
-            {label}
+            {lines.map((line, lineIndex) => (
+                <div key={lineIndex} style={buildMetaLineStyle()}>
+                    {line.map((item, index) => (
+                        <span key={index} style={buildMetaTokenStyle(theme, item.type)}>
+                            {item.value}
+                        </span>
+                    ))}
+                </div>
+            ))}
         </div>
     )
 }
@@ -79,7 +89,7 @@ export const TitleSection = ({
     onTitleBlur,
     titlePlaceholder,
     showTitle = true,
-    metaLabel,
+    metaLines,
     propertiesPanel,
     onToggleProperties,
     addPropertyRequest,
@@ -115,7 +125,7 @@ export const TitleSection = ({
                         placeholder={titlePlaceholder}
                     />
                 )}
-                <MetaLabel label={metaLabel} />
+                <MetaLines lines={metaLines} />
                 {invalid ? (
                     <InvalidPropertiesBanner
                         title={invalidTitle}
