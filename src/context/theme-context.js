@@ -60,8 +60,10 @@ export function ThemeProvider({ initialTheme, children }) {
     }, [mode, accent, colorScheme])
 
     const updateTheme = (mode, accent) => {
-        const { background, onBackground } = ACCENT_COLORS[accent]
         const { colors } = THEMES[mode]
+        const { background, onBackground } = accent === FREE_ACCENT
+            ? { background: colors.onBackground, onBackground: colors.background }
+            : ACCENT_COLORS[accent]
 
         return {
             ...THEMES[mode],
