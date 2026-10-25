@@ -10,6 +10,7 @@ import { MissingNoteDialog } from '@/components/missing-note-dialog'
 
 import { useEditorDisplay } from '@/hooks/use-editor-display'
 import { useHeadingFont } from '@/hooks/use-heading-font'
+import { toCssHeadingFamily } from '@/utils/heading-font'
 import { useDomFonts } from '@/hooks/use-dom-fonts'
 import { useKatexFonts } from '@/hooks/use-katex-fonts'
 import { useTags } from '@/hooks/use-tags'
@@ -158,7 +159,7 @@ export const MarkdownInput = ({
         typography: {
             fontSize,
             fontFamily: BODY_FONT_FAMILY,
-            headingFontFamily: `${headingFont}, system-ui, sans-serif`
+            headingFontFamily: toCssHeadingFamily(headingFont)
         }
     }), [colors, fontSize, maxWidth, headingFont])
 

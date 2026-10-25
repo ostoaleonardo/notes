@@ -5,6 +5,7 @@ import * as Print from 'expo-print'
 
 import { useNotes } from './use-notes'
 import { useImageUris } from './use-image-uris'
+import { useHeadingFont } from './use-heading-font'
 import { resolveUrl } from './use-resolved-preview-markdown'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 import { buildFileContent } from '@/utils/note-operations'
@@ -28,6 +29,7 @@ export function useFiles() {
     const { t } = useTranslation()
     const { getNote, notes, notePaths } = useNotes()
     const listImageUris = useImageUris()
+    const { fontFamily: headingFont } = useHeadingFont()
 
     const buildHtml = async (note) => {
         const names = extractEmbedImageNames(note.note || '')
@@ -49,7 +51,7 @@ export function useFiles() {
             localUrls.map(async (url) => [url, await resolveUrl(url)])
         ))
 
-        return getNoteAsHtml(note, { ...context, imageUrls })
+        return getNoteAsHtml(note, { ...context, imageUrls, headingFont })
     }
 
     const getFileData = async (note, format) => {

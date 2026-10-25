@@ -6,7 +6,9 @@ import { sanitizeHtml } from '@/utils/sanitize-html'
 import { escapeHtml, unwrapWikiLinks } from '@/utils/wiki-links'
 
 import { COLORS, THEMES } from '@/constants/themes'
-import { FONTS, HEADING_FONT_FAMILY } from '@/constants/theme'
+import { FONTS } from '@/constants/theme'
+import { DEFAULT_HEADING_FONT } from '@/constants/heading-fonts'
+import { getHeadingFontFamily, toCssHeadingFamily } from '@/utils/heading-font'
 import { EXPORT_FONT_SIZE, EXPORT_CONTENT_SECURITY_POLICY } from '@/constants/export'
 
 const NO_IMAGES = () => null
@@ -23,13 +25,20 @@ export const getExportMarkdown = (note, { notes = [], notePaths, getImageUrl = N
     return unwrapWikiLinks(embedded)
 }
 
-export const getNoteAsHtml = (note, { imageUrls = NO_URLS, ...context } = {}) => {
+export const getNoteAsHtml = (
+    note,
+    {
+        imageUrls = NO_URLS,
+        headingFont = getHeadingFontFamily(DEFAULT_HEADING_FONT),
+        ...context
+    } = {}
+) => {
     const css = buildPreviewCss({
         colors: THEMES.light.colors,
         typography: {
             fontSize: EXPORT_FONT_SIZE,
             fontFamily: FONTS.azeretLight,
-            headingFontFamily: HEADING_FONT_FAMILY
+            headingFontFamily: toCssHeadingFamily(headingFont)
         }
     })
 

@@ -1,4 +1,9 @@
-import { getHeadingFontFamily, isHeadingFontKey, resolveHeadingFontKey } from '../heading-font'
+import {
+    getHeadingFontFamily,
+    isHeadingFontKey,
+    resolveHeadingFontKey,
+    toCssHeadingFamily
+} from '../heading-font'
 import { DEFAULT_HEADING_FONT, HEADING_FONT_KEYS } from '@/constants/heading-fonts'
 import { FONTS } from '@/constants/theme'
 
@@ -31,5 +36,11 @@ describe('resolve the heading font', () => {
 
     test('returns the default family when the key is invalid', () => {
         expect(getHeadingFontFamily('comic')).toBe(FONTS.nType82Headline)
+    })
+})
+
+describe('css heading family', () => {
+    test('adds the system fallback after the chosen font', () => {
+        expect(toCssHeadingFamily(FONTS.geistMedium)).toBe(`${FONTS.geistMedium}, system-ui, sans-serif`)
     })
 })

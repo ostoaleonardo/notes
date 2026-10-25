@@ -71,7 +71,7 @@ export const FONTS = {
 
 export const MONOSPACE_FONT_FAMILY = 'ui-monospace, monospace'
 export const BODY_FONT_FAMILY = `${FONTS.azeretLight}, ${MONOSPACE_FONT_FAMILY}`
-export const HEADING_FONT_FAMILY = `${FONTS.nType82Headline}, system-ui, sans-serif`
+export const HEADING_FONT_FALLBACK = 'system-ui, sans-serif'
 
 export const TYPOGRAPHY_SIZE_VARIANTS = Object.fromEntries(
     Object.entries(MD3LightTheme.fonts).map(([variant, font]) => [variant, font.fontSize])
