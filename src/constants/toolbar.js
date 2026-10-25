@@ -3,7 +3,6 @@ export const TOOLBAR_BUTTON_KEYS = {
     REDO: 'redo',
     SEARCH: 'search',
     RECENT: 'recent',
-    TAGS: 'tags',
     TEMPLATES: 'templates'
 }
 

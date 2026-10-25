@@ -11,12 +11,6 @@ appId: com.monospace.notes
 - tapOn: Cerrar hoja
 - waitForAnimationToEnd
 - tapOn:
-    id: toolbar-tags
-- waitForAnimationToEnd
-- assertVisible: Cerrar hoja
-- tapOn: Cerrar hoja
-- waitForAnimationToEnd
-- tapOn:
     id: toolbar-templates
 - waitForAnimationToEnd
 - assertVisible: GUARDAR COMO PLANTILLA

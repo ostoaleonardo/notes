@@ -5,7 +5,6 @@ import { OutgoingLinksSheet } from './outgoing-links-sheet'
 import { MoveNoteSheet } from './move-note-sheet'
 import { OutlineSheet } from './outline-sheet'
 import { TemplatePickerSheet } from './template-picker-sheet'
-import { TagsSheet } from './tags-sheet'
 import { EditorShell } from './editor-shell'
 import { ExportFormat } from '@/screens/dialogs/export-format'
 import { ConfirmDialog } from '@/components/confirm-dialog'
@@ -154,7 +153,6 @@ export const NoteEditorScreen = ({
         replace: search.replaceText
     }), [search.searchQuery, search.replaceText])
 
-    const tagsSheet = useBottomSheet()
     const outlineSheet = useBottomSheet()
     const outgoingLinksSheet = useBottomSheet()
 
@@ -219,12 +217,10 @@ export const NoteEditorScreen = ({
     }, [onRestoreVersion, setTitle, setNote, closeVersionHistory])
 
     const actions = useMemo(() => ({
-        onOpenTags: tagsSheet.onOpen,
         onOpenTemplates: noteTemplates.onOpen,
         onOpenRecents: recentsSheet.onOpen,
         onOpenSearch
     }), [
-        tagsSheet.onOpen,
         noteTemplates.onOpen,
         recentsSheet.onOpen,
         onOpenSearch
@@ -280,12 +276,6 @@ export const NoteEditorScreen = ({
                         sheet={noteMove.sheet}
                         repositoryId={repositoryId}
                         onSelect={noteMove.onSelect}
-                    />
-
-                    <TagsSheet
-                        sheet={tagsSheet}
-                        tags={tags}
-                        setTags={setTags}
                     />
 
                     <TemplatePickerSheet

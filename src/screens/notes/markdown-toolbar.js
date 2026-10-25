@@ -17,7 +17,6 @@ import { NoteStack } from '@/icons/note-stack'
 import { Redo } from '@/icons/redo'
 import { Search } from '@/icons/search'
 import { Shapes } from '@/icons/shapes'
-import { Tag } from '@/icons/tag'
 import { Undo } from '@/icons/undo'
 
 import { MARKDOWN_CONTROLS, MARKDOWN_GROUPS } from '@/constants/markdown-controls'
@@ -80,12 +79,6 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
             label: 'search.recent',
             icon: NoteStack,
             onPress: actions?.onOpenRecents
-        },
-        scope !== TEMPLATE_SCOPE && {
-            key: TOOLBAR_BUTTON_KEYS.TAGS,
-            label: 'title.tags',
-            icon: Tag,
-            onPress: actions?.onOpenTags
         },
         scope !== TEMPLATE_SCOPE && {
             key: TOOLBAR_BUTTON_KEYS.TEMPLATES,
