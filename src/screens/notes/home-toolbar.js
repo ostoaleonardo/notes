@@ -7,7 +7,8 @@ import { RecentsButton } from '@/components/app-bar/recents-button'
 import { Plus } from '@/icons/plus'
 import { Search } from '@/icons/search'
 import { UploadFile } from '@/icons/upload-file'
-import { SPACING } from '@/constants/theme'
+import { TRANSPARENT } from '@/constants/themes'
+import { BORDER_WIDTH, RADIUS, SPACING } from '@/constants/theme'
 import { TEST_IDS } from '@/constants/test-ids'
 
 export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, onOpenSearch, recentCount }) {
@@ -18,8 +19,8 @@ export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, onOpenS
         <View
             style={{
                 ...styles.toolbar,
-                borderTopColor: colors.outline,
-                backgroundColor: colors.background
+                borderColor: colors.onBackground + TRANSPARENT[10],
+                backgroundColor: colors.surface + TRANSPARENT[80]
             }}
         >
             <Tooltip title={t('notes.create')}>
@@ -60,10 +61,12 @@ export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, onOpenS
 
 const styles = StyleSheet.create({
     toolbar: {
-        paddingHorizontal: SPACING.xxs,
+        alignSelf: 'center',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        borderTopWidth: 1
+        marginBottom: SPACING.lg,
+        borderRadius: RADIUS.full,
+        borderWidth: BORDER_WIDTH.thin
     }
 })

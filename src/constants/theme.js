@@ -18,7 +18,8 @@ export const RADIUS = {
     sm: 6,
     md: 8,
     lg: 16,
-    xl: 24
+    xl: 24,
+    full: 999
 }
 
 export const ICON_SIZE = {
