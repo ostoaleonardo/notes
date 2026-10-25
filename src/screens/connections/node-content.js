@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { EntityIcon } from './entity-icon'
 import { Typography } from '@/components/typography'
 
-import { NODE_STYLE } from '@/constants/components'
+import { GRAPH_NODE } from '@/constants/connections'
 import { CONNECTION_NODE_KINDS } from '@/constants/connections'
 
 export function NodeContent({ kind, entity, title, palette, lines = 1 }) {
@@ -14,14 +14,14 @@ export function NodeContent({ kind, entity, title, palette, lines = 1 }) {
             <EntityIcon
                 entity={entity}
                 title={title}
-                width={isRoot ? NODE_STYLE.rootIconSize : NODE_STYLE.iconSize}
-                height={isRoot ? NODE_STYLE.rootIconSize : NODE_STYLE.iconSize}
+                width={isRoot ? GRAPH_NODE.rootIconSize : GRAPH_NODE.iconSize}
+                height={isRoot ? GRAPH_NODE.rootIconSize : GRAPH_NODE.iconSize}
                 color={palette.icon}
             />
             <Typography
                 uppercase
                 numberOfLines={isRoot ? 2 : lines}
-                fontSize={NODE_STYLE.textSize}
+                fontSize={GRAPH_NODE.textSize}
                 color={palette.text}
                 bold={isRoot}
                 textAlign={isRoot ? 'center' : undefined}
@@ -36,15 +36,15 @@ export function NodeContent({ kind, entity, title, palette, lines = 1 }) {
 const styles = StyleSheet.create({
     content: {
         flex: 1,
-        gap: NODE_STYLE.gap,
+        gap: GRAPH_NODE.gap,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingHorizontal: NODE_STYLE.paddingHorizontal
+        paddingHorizontal: GRAPH_NODE.paddingHorizontal
     },
     rootContent: {
         flexDirection: 'column',
-        paddingHorizontal: NODE_STYLE.gap
+        paddingHorizontal: GRAPH_NODE.gap
     },
     title: {
         flexShrink: 1

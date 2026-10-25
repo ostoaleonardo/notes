@@ -1,4 +1,4 @@
-import { NODE_STYLE } from '@/constants/components'
+import { GRAPH_NODE } from '@/constants/connections'
 import { CONNECTION_NODE_KINDS } from '@/constants/connections'
 import { TRANSPARENT } from '@/constants/themes'
 
@@ -40,6 +40,6 @@ export const getNodePalette = ({ kind, missing }, colors, selected = false) => {
 }
 
 export const getRootHalo = (colors) => [
-    { spreadDistance: NODE_STYLE.haloInner, color: colors.tertiary + TRANSPARENT[20] },
-    { spreadDistance: NODE_STYLE.haloOuter, color: colors.tertiary + TRANSPARENT[5] }
+    { spreadDistance: GRAPH_NODE.haloInner, color: colors.tertiary + TRANSPARENT[20] },
+    { spreadDistance: GRAPH_NODE.haloOuter, color: colors.tertiary + TRANSPARENT[5] }
 ].map((layer) => ({ offsetX: 0, offsetY: 0, blurRadius: 0, ...layer }))

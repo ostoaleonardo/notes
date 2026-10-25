@@ -8,7 +8,7 @@ import { EntityShape } from './entity-shape'
 import { getShapeKind } from './entity-badge'
 import { Typography } from '@/components/typography'
 
-import { ORIGIN_TILE } from '@/constants/components'
+import { ORIGIN_TILE } from '@/constants/connections'
 import { CONNECTION_TYPES, CONNECTION_TYPE_LABELS } from '@/constants/connections'
 import { ICON_SIZE, OPACITY, RADIUS, SPACING } from '@/constants/theme'
 

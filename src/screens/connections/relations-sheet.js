@@ -17,7 +17,8 @@ import { describeEntity } from '@/utils/connection-caption'
 import { entityKey, listRelations } from '@/utils/connection-model'
 import { findSectionById, resolveSection, sectionId } from '@/utils/section-tabs'
 
-import { DIALOG_BUTTON_LABEL_STYLE, ICON_TOGGLE, RELATIONS_SHEET } from '@/constants/components'
+import { DIALOG_BUTTON_LABEL_STYLE, ICON_TOGGLE } from '@/constants/components'
+import { RELATIONS_SHEET } from '@/constants/connections'
 import {
     CONNECTION_TAB_LABELS,
     CONNECTION_TYPES,

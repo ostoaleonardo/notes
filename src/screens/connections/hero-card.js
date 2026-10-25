@@ -5,13 +5,13 @@ import { useTheme } from 'react-native-paper'
 import { ProgressRing } from '@/components/progress-ring'
 import { Typography } from '@/components/typography'
 
-import { HERO_CARD } from '@/constants/components'
+import { SUMMARY_CARD } from '@/constants/connections'
 import { RADIUS, SPACING } from '@/constants/theme'
 
 export const HeroCard = memo(function HeroCard({
     progress,
     value,
-    valueSize = HERO_CARD.heroTextSize,
+    valueSize = SUMMARY_CARD.heroTextSize,
     title,
     testID,
     accessibilityLabel,
@@ -30,8 +30,8 @@ export const HeroCard = memo(function HeroCard({
             style={[styles.card, { backgroundColor: colors.surface }]}
         >
             <ProgressRing
-                size={HERO_CARD.heroRing}
-                stroke={HERO_CARD.heroStroke}
+                size={SUMMARY_CARD.heroRing}
+                stroke={SUMMARY_CARD.heroStroke}
                 progress={progress}
             >
                 <Typography heading fontSize={valueSize}>
@@ -40,7 +40,7 @@ export const HeroCard = memo(function HeroCard({
             </ProgressRing>
 
             <View style={styles.text}>
-                <Typography heading fontSize={HERO_CARD.heroTitleSize}>
+                <Typography heading fontSize={SUMMARY_CARD.heroTitleSize}>
                     {title}
                 </Typography>
                 {children}

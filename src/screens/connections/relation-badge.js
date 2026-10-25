@@ -6,7 +6,7 @@ import { SECTION_ICONS } from './entity-icon'
 
 import { Link } from '@/icons/link'
 
-import { BADGE_STYLE, NODE_STYLE } from '@/constants/components'
+import { GRAPH_BADGE, GRAPH_NODE } from '@/constants/connections'
 import { CONNECTION_SECTIONS, RELATION_BADGES } from '@/constants/connections'
 
 const BADGE_ICONS = {
@@ -26,16 +26,16 @@ export const RelationBadge = memo(function RelationBadge({ node, badge, dimmed }
             style={[
                 styles.badge,
                 {
-                    left: node.x - BADGE_STYLE.offset,
-                    top: node.y - BADGE_STYLE.offset,
+                    left: node.x - GRAPH_BADGE.offset,
+                    top: node.y - GRAPH_BADGE.offset,
                     backgroundColor: colors.tertiary,
-                    opacity: dimmed ? NODE_STYLE.dimOpacity : 1
+                    opacity: dimmed ? GRAPH_NODE.dimOpacity : 1
                 }
             ]}
         >
             <Icon
-                width={BADGE_STYLE.iconSize}
-                height={BADGE_STYLE.iconSize}
+                width={GRAPH_BADGE.iconSize}
+                height={GRAPH_BADGE.iconSize}
                 color={colors.onTertiary}
             />
         </View>
@@ -45,10 +45,10 @@ export const RelationBadge = memo(function RelationBadge({ node, badge, dimmed }
 const styles = StyleSheet.create({
     badge: {
         position: 'absolute',
-        width: BADGE_STYLE.size,
-        height: BADGE_STYLE.size,
+        width: GRAPH_BADGE.size,
+        height: GRAPH_BADGE.size,
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: BADGE_STYLE.size / 2
+        borderRadius: GRAPH_BADGE.size / 2
     }
 })

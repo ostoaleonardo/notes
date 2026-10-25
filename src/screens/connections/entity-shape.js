@@ -1,14 +1,14 @@
 import { StyleSheet, View } from 'react-native'
 import { Path, Svg } from 'react-native-svg'
 
-import { NODE_STYLE } from '@/constants/components'
+import { GRAPH_NODE } from '@/constants/connections'
 import { CONNECTION_NODE_KINDS } from '@/constants/connections'
 import { RADIUS } from '@/constants/theme'
 
 const DASH = '4 3'
 
 const buildFilePath = (width, height) => {
-    const { fileCorner: corner } = NODE_STYLE
+    const { fileCorner: corner } = GRAPH_NODE
     const radius = RADIUS.sm
 
     return `M0 ${radius}Q0 0 ${radius} 0H${width - corner}L${width} ${corner}V${height}H0Z`
@@ -41,7 +41,7 @@ export function EntityShape({
     style,
     children
 }) {
-    const strokeWidth = dashed ? NODE_STYLE.dashedWidth : NODE_STYLE.borderWidth
+    const strokeWidth = dashed ? GRAPH_NODE.dashedWidth : GRAPH_NODE.borderWidth
 
     if (kind === CONNECTION_NODE_KINDS.FILE) {
         return (
@@ -60,7 +60,7 @@ export function EntityShape({
         )
     }
 
-    const { folderTab: tab } = NODE_STYLE
+    const { folderTab: tab } = GRAPH_NODE
     const tabStyle = {
         top: tab.offset,
         width: tab.width,
@@ -96,9 +96,9 @@ export function EntityShape({
 
 const styles = StyleSheet.create({
     tab: {
-        left: -NODE_STYLE.borderWidth,
+        left: -GRAPH_NODE.borderWidth,
         position: 'absolute',
-        borderWidth: NODE_STYLE.borderWidth,
+        borderWidth: GRAPH_NODE.borderWidth,
         borderBottomWidth: 0
     }
 })

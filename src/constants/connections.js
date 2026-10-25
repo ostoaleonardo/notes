@@ -1,4 +1,4 @@
-import { SPACING } from './theme'
+import { ICON_SIZE, SPACING } from './theme'
 
 export const CONNECTION_TYPES = {
     ROOT: 'root',
@@ -94,4 +94,53 @@ export const FOCUS = {
     crumbMaxWidth: 140,
     pagerLabelWidth: 56,
     crumbGap: SPACING.xs
+}
+
+export const GRAPH_NODE = {
+    folderTab: { width: 40, height: 9, offset: -8 },
+    fileCorner: 11,
+    borderWidth: 1,
+    dashedWidth: 1.5,
+    iconSize: ICON_SIZE.md,
+    rootIconSize: ICON_SIZE.xxl,
+    textSize: 11,
+    paddingHorizontal: SPACING.md,
+    gap: SPACING.xs,
+    dimOpacity: 0.26,
+    haloInner: 8,
+    haloOuter: 18
+}
+
+export const GRAPH_BADGE = {
+    size: 18,
+    offset: 6,
+    iconSize: ICON_SIZE.sm
+}
+
+export const GRAPH_EDGE = {
+    width: 1.5,
+    hotWidth: 2.5,
+    opacity: 0.22,
+    relationDash: [5, 4]
+}
+
+export const SUMMARY_CARD = {
+    heroRing: 92,
+    heroStroke: 8,
+    heroTextSize: 34,
+    heroTitleSize: 21
+}
+
+export const ORIGIN_TILE = {
+    columns: 4,
+    labelSize: 11,
+    countSize: 10,
+    height: 92,
+    folderHeight: 84
+}
+
+export const RELATIONS_SHEET = {
+    listMaxRatio: 0.5,
+    titleSize: 20,
+    blobSize: 52
 }
