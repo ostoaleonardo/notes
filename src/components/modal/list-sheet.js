@@ -1,12 +1,12 @@
-import { useMemo } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 
+import { EmptyMessage } from './empty-message'
+import { GroupedList, GroupSeparator } from '@/components/grouped-list'
 import { ModalBottomSheet } from './modal-bottom-sheet'
-import { Typography } from '@/components/typography'
 
-import { OPACITY, SPACING } from '@/constants/theme'
 import { SHEET } from '@/constants/components'
+import { SPACING } from '@/constants/theme'
 
 export function ListSheet({
     sheet,
@@ -16,39 +16,43 @@ export function ListSheet({
     keyExtractor,
     emptyMessage
 }) {
-    const empty = useMemo(() => (
-        <View style={styles.empty}>
-            <Typography opacity={OPACITY.muted}>
-                {emptyMessage}
-            </Typography>
-        </View>
-    ), [emptyMessage])
+    const isEmpty = data.length === 0
 
     return (
         <ModalBottomSheet
+            key={isEmpty ? 'empty' : 'list'}
             ref={sheet.ref}
             onClose={sheet.onClose}
             onChange={onChange}
-            snapPoints={SHEET.snapPoints.tall}
+            enableDynamicSizing={isEmpty}
+            snapPoints={isEmpty ? undefined : SHEET.snapPoints.tall}
         >
-            <FlatList
-                data={data}
-                keyExtractor={keyExtractor}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.list}
-                renderItem={renderItem}
-                ListEmptyComponent={empty}
-            />
+            {isEmpty ? (
+                <EmptyMessage style={styles.empty}>
+                    {emptyMessage}
+                </EmptyMessage>
+            ) : (
+                <GroupedList
+                    component={FlatList}
+                    data={data}
+                    keyExtractor={keyExtractor}
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={styles.list}
+                    ItemSeparatorComponent={GroupSeparator}
+                    renderItem={renderItem}
+                />
+            )}
         </ModalBottomSheet>
     )
 }
 
 const styles = StyleSheet.create({
     list: {
+        paddingHorizontal: SPACING.lg,
         paddingBottom: SPACING.lg
     },
     empty: {
-        paddingTop: SHEET.topPadding,
-        alignItems: 'center'
+        paddingVertical: SPACING.xxxl,
+        paddingHorizontal: SPACING.lg
     }
 })

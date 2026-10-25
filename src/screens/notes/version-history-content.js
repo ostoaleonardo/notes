@@ -6,6 +6,7 @@ import { FadeIn, FadeInRight, FadeOut, FadeOutRight } from 'react-native-reanima
 
 import { AnimatedView } from '@/components/animated/animated-view'
 import { Button } from '@/components/button/button'
+import { EmptyMessage } from '@/components/modal/empty-message'
 import { Typography } from '@/components/typography'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { GroupedList } from '@/components/grouped-list'
@@ -74,7 +75,11 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
     const [restoreDialogVisible, setRestoreDialogVisible] = useState(false)
 
     const loadVersions = useEffectEvent(() => {
-        if (!location || !noteId) return
+        if (!location || !noteId) {
+            setVersions([])
+            setLoading(false)
+            return
+        }
 
         setLoading(true)
         getVersions(location, noteId, pro ? Infinity : FREE_VERSION_HISTORY_LIMIT).then((result) => {
@@ -202,9 +207,9 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
             ) : (
                 <>
                     {!loading && ordered.length === 0 && (
-                        <Typography opacity={OPACITY.muted}>
+                        <EmptyMessage style={styles.empty}>
                             {t('message.version_history.empty')}
-                        </Typography>
+                        </EmptyMessage>
                     )}
 
                     {!loading && ordered.length > 0 && (
@@ -233,6 +238,9 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1
+    },
+    empty: {
         flex: 1
     },
     historyTitle: {
