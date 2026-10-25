@@ -33,6 +33,7 @@ export const LIST_TYPES = {
 }
 
 export const LIST_INDENT = '    '
+export const NEW_CHECKBOX = '[ ] '
 
 export const WRAP_MARKERS = {
     BOLD: '**',

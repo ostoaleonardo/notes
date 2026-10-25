@@ -2,7 +2,7 @@ import { View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
 import { useGroupPosition } from '@/hooks/use-group-position'
-import { getGroupedRadius } from '@/utils/group-position'
+import { getStackedRadiusStyle } from '@/utils/group-position'
 
 import { MENU } from '@/constants/components'
 import { TRANSPARENT } from '@/constants/themes'
@@ -19,7 +19,7 @@ export function MenuGroup({ children }) {
                 paddingVertical: MENU.paddingVertical,
                 paddingHorizontal: MENU.paddingHorizontal,
                 overflow: 'hidden',
-                ...getGroupedRadius(position, RADIUS.md),
+                ...getStackedRadiusStyle(position, RADIUS.md),
                 borderColor: colors.onBackground + TRANSPARENT[5],
                 backgroundColor: colors.surface
             }}

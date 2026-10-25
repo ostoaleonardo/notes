@@ -4,7 +4,7 @@ import { TouchableRipple, useTheme } from 'react-native-paper'
 import { Typography } from '@/components/typography'
 
 import { useGroupPosition } from '@/hooks/use-group-position'
-import { getGroupedRadius } from '@/utils/group-position'
+import { getStackedRadiusStyle } from '@/utils/group-position'
 
 import { TRANSPARENT } from '@/constants/themes'
 import { SPACING, OPACITY } from '@/constants/theme'
@@ -26,7 +26,7 @@ export function ListItem({
             style={[
                 styles.card,
                 { backgroundColor: background ?? colors.surface },
-                getGroupedRadius(position)
+                getStackedRadiusStyle(position)
             ]}
         >
             <TouchableRipple

@@ -1,11 +1,11 @@
 import {
-    GROUP_AXES,
     getCornerRadii,
     getGroupPosition,
-    getGroupedRadius,
+    getStackedRadiusStyle,
     getSegmentCorners,
     getStackedCorners
 } from '../group-position'
+import { GROUP_AXES } from '@/constants/group-position'
 import { RADIUS } from '@/constants/theme'
 
 describe('position of an item in a group', () => {
@@ -43,7 +43,7 @@ describe('stacked corners of a grouped item', () => {
     })
 
     test('applies the corners to every side of the card', () => {
-        expect(getGroupedRadius('first')).toEqual({
+        expect(getStackedRadiusStyle('first')).toEqual({
             borderTopLeftRadius: RADIUS.lg,
             borderTopRightRadius: RADIUS.lg,
             borderBottomLeftRadius: 0,
@@ -81,6 +81,6 @@ describe('corner radii by axis', () => {
         const radii = getCornerRadii('first', GROUP_AXES.SEGMENTED)
 
         expect(radii.topLeft).toBe(RADIUS.xl)
-        expect(radii.topRight).toBe(RADIUS.sm)
+        expect(radii.topRight).toBe(RADIUS.md)
     })
 })

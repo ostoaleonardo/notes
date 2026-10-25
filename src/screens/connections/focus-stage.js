@@ -13,8 +13,6 @@ import { layoutFocusRing } from '@/utils/focus-navigation'
 import { FOCUS } from '@/constants/connections'
 import { OPACITY, SPACING } from '@/constants/theme'
 
-const SWIPE_ACTIVE = 20
-
 export const FocusStage = memo(function FocusStage({
     focus,
     focusTitle,
@@ -46,8 +44,8 @@ export const FocusStage = memo(function FocusStage({
     const swipe = useMemo(() => (
         Gesture.Pan()
             .runOnJS(true)
-            .activeOffsetX([-SWIPE_ACTIVE, SWIPE_ACTIVE])
-            .failOffsetY([-SWIPE_ACTIVE, SWIPE_ACTIVE])
+            .activeOffsetX([-FOCUS.swipeActive, FOCUS.swipeActive])
+            .failOffsetY([-FOCUS.swipeActive, FOCUS.swipeActive])
             .onEnd((event) => {
                 if (Math.abs(event.translationX) < FOCUS.swipeThreshold) return
 

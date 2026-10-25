@@ -3,7 +3,7 @@ import { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-nati
 
 import { getTargetWidth } from '@/utils/expanding-width'
 
-import { BUTTON, ICON_TOGGLE } from '@/constants/components'
+import { CONTROL_SIZE, ICON_TOGGLE } from '@/constants/components'
 
 const UNSET = -1
 
@@ -14,7 +14,7 @@ const EXPAND_TIMING = {
 
 export function useExpandingWidth(expanded, enabled, label) {
     const [measured, setMeasured] = useState({ label: null, width: null })
-    const width = useSharedValue(enabled && !expanded ? BUTTON.size : UNSET)
+    const width = useSharedValue(enabled && !expanded ? CONTROL_SIZE.small : UNSET)
 
     const isMeasured = measured.label === label
     const contentWidth = isMeasured ? measured.width : null

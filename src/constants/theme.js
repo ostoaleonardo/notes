@@ -61,6 +61,7 @@ export const ANIMATION_DURATION = 200
 export const PROGRESS_RANGE = [0, 1]
 
 export const ICON_VIEW_BOX = '0 -960 960 960'
+export const SVG_NAMESPACE = 'http://www.w3.org/2000/svg'
 export const ICON_FILL = 'currentColor'
 
 export const FONTS = {

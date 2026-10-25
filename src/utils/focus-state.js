@@ -1,14 +1,6 @@
 import { ROOT_ENTITY, entityKey, entityExists } from '@/utils/connection-model'
 
-import { CONNECTION_TYPES, HISTORY_LIMIT } from '@/constants/connections'
-
-export const FOCUS_ACTIONS = {
-    ENTER: 'enter',
-    UP: 'up',
-    JUMP: 'jump',
-    PAGE: 'page',
-    ORIGIN: 'origin'
-}
+import { CONNECTION_TYPES, FOCUS_ACTIONS, HISTORY_LIMIT } from '@/constants/connections'
 
 export const INITIAL_FOCUS_STATE = { trail: [ROOT_ENTITY], page: 0 }
 

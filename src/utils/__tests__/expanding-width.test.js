@@ -1,13 +1,13 @@
 import { getTargetWidth } from '../expanding-width'
-import { BUTTON, ICON_TOGGLE } from '@/constants/components'
+import { CONTROL_SIZE, ICON_TOGGLE } from '@/constants/components'
 
 describe('target width of an expanding button', () => {
     test('collapses to the square button size', () => {
-        expect(getTargetWidth(false, 120)).toBe(BUTTON.size)
+        expect(getTargetWidth(false, 120)).toBe(CONTROL_SIZE.small)
     })
 
     test('collapses even before the content is measured', () => {
-        expect(getTargetWidth(false, null)).toBe(BUTTON.size)
+        expect(getTargetWidth(false, null)).toBe(CONTROL_SIZE.small)
     })
 
     test('expands to the content plus the label padding', () => {

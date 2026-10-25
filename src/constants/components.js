@@ -5,9 +5,19 @@ export const BUTTON = {
     groupGap: SPACING.xxxs
 }
 
+export const CONTROL_SIZE = {
+    small: 40,
+    touch: 48
+}
+
+export const CONTROL_HIT_SLOP = {
+    top: (CONTROL_SIZE.touch - CONTROL_SIZE.small) / 2,
+    bottom: (CONTROL_SIZE.touch - CONTROL_SIZE.small) / 2
+}
+
 export const SEGMENT_RADIUS = {
     outer: RADIUS.xl,
-    inner: RADIUS.sm
+    inner: RADIUS.md
 }
 
 export const SPLIT_TRIGGER_RADIUS = {

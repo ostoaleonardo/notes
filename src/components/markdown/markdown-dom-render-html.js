@@ -11,23 +11,15 @@ import { findInlineTags } from '@/utils/inline-tags'
 
 import { TAG_LINK_SCHEME } from '@/constants/tags'
 import { WIKI_LINK_SCHEME } from '@/constants/wiki-links'
-import { FILE_LINK_SCHEME } from '@/constants/file-links'
 import { PREVIEW_TABLE_SCROLL_CLASS } from '@/constants/table-widget'
 import { MARKDOWN_IT_TOKENS } from '@/constants/markdown-it-tokens'
+import { ALLOWED_URI_REGEXP } from '@/constants/html-sanitize'
 
 const md = new MarkdownIt({ html: true, linkify: true, breaks: true })
     .use(taskLists, { enabled: true })
     .use(texmath, { engine: katex, delimiters: 'dollars' })
     .use(footnote)
     .use(markdownItExtras)
-
-const wikiLinkProtocol = WIKI_LINK_SCHEME.split(':')[0]
-const tagLinkProtocol = TAG_LINK_SCHEME.split(':')[0]
-const fileLinkProtocol = FILE_LINK_SCHEME.split(':')[0]
-const ALLOWED_URI_REGEXP = new RegExp(
-    `^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|${wikiLinkProtocol}|${tagLinkProtocol}|${fileLinkProtocol}):|[^a-z]|[a-z+.\\-]+(?:[^a-z+.\\-:]|$))`,
-    'i'
-)
 
 const defaultLinkOpen = md.renderer.rules.link_open
     || ((tokens, idx, options, env, self) => self.renderToken(tokens, idx, options))

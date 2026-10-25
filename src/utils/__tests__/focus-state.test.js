@@ -1,11 +1,11 @@
-import { INITIAL_FOCUS_STATE, FOCUS_ACTIONS, focusReducer, validTrail } from '../focus-state'
+import { INITIAL_FOCUS_STATE, focusReducer, validTrail } from '../focus-state'
 import { ROOT_ENTITY, buildConnectionModel, makeEntity } from '../connection-model'
 import {
     MOCK_CONNECTION_FILES,
     MOCK_CONNECTION_NOTES,
     MOCK_CONNECTION_NOTE_PATHS
 } from '../__fixtures__/connections'
-import { CONNECTION_TYPES, HISTORY_LIMIT } from '@/constants/connections'
+import { CONNECTION_TYPES, FOCUS_ACTIONS, HISTORY_LIMIT } from '@/constants/connections'
 
 const folder = makeEntity(CONNECTION_TYPES.FOLDER, 'Projects')
 const note = makeEntity(CONNECTION_TYPES.NOTE, 'p::Beta.md')

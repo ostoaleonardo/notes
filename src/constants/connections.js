@@ -76,7 +76,16 @@ export const RELATION_BADGES = {
     FILES: 'files'
 }
 
+export const FOCUS_ACTIONS = {
+    ENTER: 'enter',
+    UP: 'up',
+    JUMP: 'jump',
+    PAGE: 'page',
+    ORIGIN: 'origin'
+}
+
 export const FOCUS = {
+    swipeActive: 20,
     pageSize: 6,
     centerSize: 112,
     satelliteWidth: 120,
@@ -102,6 +111,7 @@ export const GRAPH_NODE = {
     fileCorner: 11,
     borderWidth: 1,
     dashedWidth: 1.5,
+    dashPattern: '4 3',
     iconSize: ICON_SIZE.md,
     rootIconSize: ICON_SIZE.xxl,
     textSize: 11,

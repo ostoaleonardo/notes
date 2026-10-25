@@ -1,12 +1,10 @@
-import { TEMPLATE_FOLDER_KEY_PREFIX } from '@/constants/tabs'
+import { TEMPLATE_FOLDER_KEY_PREFIX, TEMPLATE_PATH_SEPARATOR } from '@/constants/tabs'
 import { DRAWER_ITEM_TYPES } from '@/constants/drawer-views'
 
-const SEPARATOR = '/'
-
-export const joinTemplatePath = (dir, name) => (dir ? dir + SEPARATOR + name : name)
+export const joinTemplatePath = (dir, name) => (dir ? dir + TEMPLATE_PATH_SEPARATOR + name : name)
 
 export const splitTemplatePath = (path) => {
-    const index = path.lastIndexOf(SEPARATOR)
+    const index = path.lastIndexOf(TEMPLATE_PATH_SEPARATOR)
 
     return index < 0
         ? { dir: '', base: path }

@@ -2,9 +2,9 @@ import { useCallback, useMemo, useReducer } from 'react'
 
 import { buildPathTree } from '@/utils/connection-tree'
 import { buildTreeIndex, getSatellites, paginate } from '@/utils/focus-navigation'
-import { FOCUS_ACTIONS, INITIAL_FOCUS_STATE, focusReducer, validTrail } from '@/utils/focus-state'
+import { INITIAL_FOCUS_STATE, focusReducer, validTrail } from '@/utils/focus-state'
 
-import { FOCUS } from '@/constants/connections'
+import { FOCUS, FOCUS_ACTIONS } from '@/constants/connections'
 
 export function useFocusNavigation(model) {
     const [state, dispatch] = useReducer(focusReducer, INITIAL_FOCUS_STATE)

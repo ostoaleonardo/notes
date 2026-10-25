@@ -9,9 +9,8 @@ import { useExpandingWidth } from '@/hooks/use-expanding-width'
 import { usePressed } from '@/hooks/use-pressed'
 import { useGroupCornerStyle } from '@/hooks/use-group-corner-style'
 
-import { GROUP_AXES } from '@/utils/group-position'
-
-import { BUTTON, ICON_TOGGLE } from '@/constants/components'
+import { CONTROL_HIT_SLOP, CONTROL_SIZE, ICON_TOGGLE } from '@/constants/components'
+import { GROUP_AXES } from '@/constants/group-position'
 import { OPACITY } from '@/constants/theme'
 
 export function ToggleButton({
@@ -92,6 +91,7 @@ export function ToggleButton({
                 ]}
             >
                 <TouchableRipple
+                    hitSlop={CONTROL_HIT_SLOP}
                     accessibilityRole='button'
                     accessibilityState={{ selected: !!selected }}
                     disabled={disabled}
@@ -134,19 +134,19 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     },
     touchable: {
-        width: BUTTON.size,
-        height: BUTTON.size,
+        width: CONTROL_SIZE.small,
+        height: CONTROL_SIZE.small,
         alignItems: 'center',
         justifyContent: 'center'
     },
     touchableLabel: {
-        height: BUTTON.size,
+        height: CONTROL_SIZE.small,
         paddingHorizontal: ICON_TOGGLE.labelPaddingHorizontal,
         alignItems: 'center',
         justifyContent: 'center'
     },
     touchableExpandable: {
-        height: BUTTON.size,
+        height: CONTROL_SIZE.small,
         alignItems: 'center',
         justifyContent: 'center'
     },

@@ -1,17 +1,6 @@
 import { SEGMENT_RADIUS } from '@/constants/components'
+import { GROUP_AXES, GROUP_POSITIONS } from '@/constants/group-position'
 import { RADIUS } from '@/constants/theme'
-
-export const GROUP_AXES = {
-    STACKED: 'stacked',
-    SEGMENTED: 'segmented'
-}
-
-export const GROUP_POSITIONS = {
-    ONLY: 'only',
-    FIRST: 'first',
-    MIDDLE: 'middle',
-    LAST: 'last'
-}
 
 export const getGroupPosition = (index, total) => {
     if (total <= 1) return GROUP_POSITIONS.ONLY
@@ -30,7 +19,7 @@ export const getStackedCorners = (position, inner = 0) => ({
     bottom: position === GROUP_POSITIONS.LAST || position === GROUP_POSITIONS.ONLY ? RADIUS.lg : inner
 })
 
-export const getGroupedRadius = (position, inner) => {
+export const getStackedRadiusStyle = (position, inner) => {
     const { top, bottom } = getStackedCorners(position, inner)
 
     return {

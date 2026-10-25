@@ -5,8 +5,6 @@ import { GRAPH_NODE } from '@/constants/connections'
 import { CONNECTION_NODE_KINDS } from '@/constants/connections'
 import { RADIUS } from '@/constants/theme'
 
-const DASH = '4 3'
-
 const buildFilePath = (width, height) => {
     const { fileCorner: corner } = GRAPH_NODE
     const radius = RADIUS.sm
@@ -52,7 +50,7 @@ export function EntityShape({
                         fill={fill}
                         stroke={stroke}
                         strokeWidth={strokeWidth}
-                        strokeDasharray={dashed ? DASH : undefined}
+                        strokeDasharray={dashed ? GRAPH_NODE.dashPattern : undefined}
                     />
                 </Svg>
                 {children}

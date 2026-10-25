@@ -6,6 +6,7 @@ export const HEADING_FONT_KEYS = {
 }
 
 export const HEADING_FONT_PREVIEW = 'Aa'
+export const HEADING_FONT_TRANSLATION_KEY = 'settings.general.heading_font'
 
 export const DEFAULT_HEADING_FONT = HEADING_FONT_KEYS.NTYPE82
 

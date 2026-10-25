@@ -8,11 +8,13 @@ import { ListItem } from '../../components/list-item'
 import { useHeadingFont } from '@/hooks/use-heading-font'
 import { useStorage } from '@/hooks/use-storage'
 
-import { HEADING_FONT_FAMILIES, HEADING_FONT_PREVIEW } from '@/constants/heading-fonts'
+import {
+    HEADING_FONT_FAMILIES,
+    HEADING_FONT_PREVIEW,
+    HEADING_FONT_TRANSLATION_KEY
+} from '@/constants/heading-fonts'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { SPACING } from '@/constants/theme'
-
-const TRANSLATION_KEY = 'settings.general.heading_font'
 
 export function HeadingFontOption() {
     const { t } = useTranslation()
@@ -26,8 +28,8 @@ export function HeadingFontOption() {
 
     return (
         <ListItem
-            title={t(`${TRANSLATION_KEY}.title`)}
-            description={t(`${TRANSLATION_KEY}.description`)}
+            title={t(`${HEADING_FONT_TRANSLATION_KEY}.title`)}
+            description={t(`${HEADING_FONT_TRANSLATION_KEY}.description`)}
         >
             <View style={styles.options}>
                 {Object.entries(HEADING_FONT_FAMILIES).map(([value, family]) => (
@@ -38,7 +40,7 @@ export function HeadingFontOption() {
                         active={fontKey === value}
                         onPress={() => onSelect(value)}
                     >
-                        {t(`${TRANSLATION_KEY}.${value}`)}
+                        {t(`${HEADING_FONT_TRANSLATION_KEY}.${value}`)}
                     </FontOption>
                 ))}
             </View>

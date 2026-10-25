@@ -1,17 +1,15 @@
 import { TABLE_AXES } from '@/constants/table'
 import { TABLE_CLASSES } from '@/constants/table-widget'
-import { ICON_FILL, ICON_VIEW_BOX } from '@/constants/theme'
-
-const SVG_NS = 'http://www.w3.org/2000/svg'
+import { ICON_FILL, ICON_VIEW_BOX, SVG_NAMESPACE } from '@/constants/theme'
 
 export const buildSvg = (path, size) => {
-    const svg = document.createElementNS(SVG_NS, 'svg')
+    const svg = document.createElementNS(SVG_NAMESPACE, 'svg')
     svg.setAttribute('width', size)
     svg.setAttribute('height', size)
     svg.setAttribute('viewBox', ICON_VIEW_BOX)
     svg.setAttribute('fill', ICON_FILL)
 
-    const shape = document.createElementNS(SVG_NS, 'path')
+    const shape = document.createElementNS(SVG_NAMESPACE, 'path')
     shape.setAttribute('d', path)
     svg.appendChild(shape)
 

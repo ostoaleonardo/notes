@@ -12,7 +12,7 @@ import { Typography } from '@/components/typography'
 import { useGroupCornerStyle } from '@/hooks/use-group-corner-style'
 import { usePressed } from '@/hooks/use-pressed'
 
-import { GROUP_AXES } from '@/utils/group-position'
+import { GROUP_AXES } from '@/constants/group-position'
 
 import { MARKDOWN_GROUPS } from '@/constants/markdown-controls'
 import { SPACING } from '@/constants/theme'
