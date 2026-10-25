@@ -1,10 +1,14 @@
-import { Pressable, StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
+import { StyleSheet, View } from 'react-native'
+import { TouchableRipple, useTheme } from 'react-native-paper'
+import Animated from 'react-native-reanimated'
 
 import { Typography } from '@/components/typography'
 
-import { useGroupPosition } from '@/hooks/use-group-position'
-import { getGroupedRadius } from '@/utils/group-position'
+import { useGroupCornerStyle } from '@/hooks/use-group-corner-style'
+import { usePressed } from '@/hooks/use-pressed'
+import { GROUP_AXES } from '@/utils/group-position'
+
+import { TRANSPARENT } from '@/constants/themes'
 import { SPACING, OPACITY } from '@/constants/theme'
 
 export function Option({
@@ -17,39 +21,51 @@ export function Option({
     uppercase = true
 }) {
     const { colors } = useTheme()
-    const groupPosition = useGroupPosition()
+    const { pressed, onPressIn, onPressOut } = usePressed()
+    const cornerStyle = useGroupCornerStyle(GROUP_AXES.CARD, pressed)
 
     return (
-        <Pressable
-            accessibilityRole='button'
-            onPress={onPress}
-            style={{
-                ...styles.container,
-                ...(children ? styles.stacked : styles.inline),
-                backgroundColor: background ?? colors.surface,
-                ...getGroupedRadius(groupPosition)
-            }}
+        <Animated.View
+            style={[
+                styles.card,
+                { backgroundColor: background ?? colors.surface },
+                cornerStyle
+            ]}
         >
-            <View style={styles.left}>
-                <Typography uppercase={uppercase}>
-                    {title}
-                </Typography>
-                {description && (
-                    <Typography
-                        opacity={OPACITY.muted}
-                        variant='bodySmall'
-                    >
-                        {description}
-                    </Typography>
-                )}
-            </View>
-            {rightContent}
-            {children}
-        </Pressable>
+            <TouchableRipple
+                accessibilityRole='button'
+                onPress={onPress}
+                onPressIn={onPressIn}
+                onPressOut={onPressOut}
+                rippleColor={colors.onBackground + TRANSPARENT[10]}
+                style={[styles.container, children ? styles.stacked : styles.inline]}
+            >
+                <>
+                    <View style={styles.left}>
+                        <Typography uppercase={uppercase}>
+                            {title}
+                        </Typography>
+                        {description && (
+                            <Typography
+                                opacity={OPACITY.muted}
+                                variant='bodySmall'
+                            >
+                                {description}
+                            </Typography>
+                        )}
+                    </View>
+                    {rightContent}
+                    {children}
+                </>
+            </TouchableRipple>
+        </Animated.View>
     )
 }
 
 const styles = StyleSheet.create({
+    card: {
+        overflow: 'hidden'
+    },
     container: {
         gap: SPACING.lg,
         padding: SPACING.lg

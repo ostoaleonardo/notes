@@ -3,7 +3,8 @@ import { RADIUS } from '@/constants/theme'
 
 export const GROUP_AXES = {
     STACKED: 'stacked',
-    SEGMENTED: 'segmented'
+    SEGMENTED: 'segmented',
+    CARD: 'card'
 }
 
 export const GROUP_POSITIONS = {
@@ -48,7 +49,8 @@ export const getCornerRadii = (position, axis) => {
         return { topLeft: left, bottomLeft: left, topRight: right, bottomRight: right }
     }
 
-    const { top, bottom } = getStackedCorners(position, RADIUS.md)
+    const inner = axis === GROUP_AXES.CARD ? 0 : RADIUS.md
+    const { top, bottom } = getStackedCorners(position, inner)
 
     return { topLeft: top, topRight: top, bottomLeft: bottom, bottomRight: bottom }
 }
