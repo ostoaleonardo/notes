@@ -42,7 +42,8 @@ const EXPORT_CONTENT_SECURITY_POLICY_DIRECTIVES = [
     "object-src 'none'",
     "frame-src 'none'",
     "base-uri 'none'",
-    "form-action 'none'"
+    "form-action 'none'",
+    'font-src data:'
 ]
 
 export const EXPORT_CONTENT_SECURITY_POLICY = EXPORT_CONTENT_SECURITY_POLICY_DIRECTIVES.join('; ')

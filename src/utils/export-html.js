@@ -1,3 +1,4 @@
+import { fontFacesCss } from '@/components/markdown/markdown-dom-fonts'
 import { buildPreviewCss } from '@/components/markdown/markdown-dom-preview-css'
 import { renderMarkdownRaw } from '@/components/markdown/markdown-dom-render-html'
 import { resolveEmbeds } from '@/utils/embeds'
@@ -30,6 +31,7 @@ export const getNoteAsHtml = (
     {
         imageUrls = NO_URLS,
         headingFont = getHeadingFontFamily(DEFAULT_HEADING_FONT),
+        fonts,
         ...context
     } = {}
 ) => {
@@ -54,6 +56,7 @@ export const getNoteAsHtml = (
 <title>${escapeHtml(note.title)}</title>
 <style>
     body { background: ${COLORS.light.foreground}; margin: 0; }
+    ${fontFacesCss(fonts)}
     ${css}
 </style>
 </head>
