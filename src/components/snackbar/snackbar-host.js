@@ -45,7 +45,7 @@ export function GlobalSnackbarHost() {
             style={{
                 borderRadius: RADIUS.md,
                 borderWidth: BORDER_WIDTH.thin,
-                borderColor: colors.onBackground + TRANSPARENT[20],
+                borderColor: colors.onBackground + TRANSPARENT[50],
                 backgroundColor: colors.surface
             }}
         >
