@@ -51,9 +51,14 @@ export function DrawerItems({ navigation, state }) {
         navigation.dispatch({ type: DRAWER_ACTIONS.CLOSE })
     }, [navigation])
 
-    const onOpenRepositories = useCallback(() => router.push(ROUTES.REPOSITORIES), [])
-    const onOpenSettings = useCallback(() => router.push(ROUTES.SETTINGS), [])
-    const onOpenConnections = useCallback(() => router.push(ROUTES.CONNECTIONS), [])
+    const openRoute = useCallback((route) => {
+        closeDrawer()
+        router.push(route)
+    }, [closeDrawer])
+
+    const onOpenRepositories = useCallback(() => openRoute(ROUTES.REPOSITORIES), [openRoute])
+    const onOpenSettings = useCallback(() => openRoute(ROUTES.SETTINGS), [openRoute])
+    const onOpenConnections = useCallback(() => openRoute(ROUTES.CONNECTIONS), [openRoute])
 
     const onChangeView = useCallback((next) => {
         setView(next)

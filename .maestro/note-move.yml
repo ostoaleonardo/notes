@@ -14,6 +14,8 @@ appId: com.monospace.notes
 - tapOn: MOVER A
 - waitForAnimationToEnd
 - assertVisible: Cerrar hoja
+- scrollUntilVisible:
+    element: maestro-folder
 - assertVisible: maestro-folder
 - tapOn: maestro-folder
 - waitForAnimationToEnd

@@ -34,6 +34,8 @@ appId: com.monospace.notes
     element: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*
 - tapOn: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*
 - waitForAnimationToEnd
+- scrollUntilVisible:
+    element: maestro-folder
 - tapOn: maestro-folder
 - waitForAnimationToEnd
 - assertVisible: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*maestro-folder
