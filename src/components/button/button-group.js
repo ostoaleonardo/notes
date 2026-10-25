@@ -30,7 +30,8 @@ export function ButtonGroup({
         expandSelected ? expandButtons(buttons) : buttons
     ), [buttons, expandSelected])
 
-    const minWidth = equalWidth ? getMinWidth(items, widths) : undefined
+    const labeled = chip ? items.map((button) => ({ ...button, showLabel: true })) : items
+    const minWidth = equalWidth ? getMinWidth(labeled, widths) : undefined
 
     return (
         <View style={[styles.group, style]}>
