@@ -8,8 +8,10 @@ import { ModalSheet } from '@/components/modal/modal-sheet'
 import { PositionGroup } from '@/components/position-group'
 import { Typography } from '@/components/typography'
 
-import { useGroupedCornerStyle } from '@/hooks/use-grouped-corner-style'
+import { useGroupCornerStyle } from '@/hooks/use-group-corner-style'
 import { usePressed } from '@/hooks/use-pressed'
+
+import { GROUP_AXES } from '@/utils/group-position'
 
 import { MARKDOWN_GROUPS } from '@/constants/markdown-controls'
 import { SPACING } from '@/constants/theme'
@@ -19,7 +21,7 @@ const GroupItem = memo(function GroupItem({ action, Icon, onSelect }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { pressed, onPressIn, onPressOut } = usePressed()
-    const cornerStyle = useGroupedCornerStyle(pressed)
+    const cornerStyle = useGroupCornerStyle(GROUP_AXES.STACKED, pressed)
 
     return (
         <Animated.View style={[styles.card, { backgroundColor: colors.surfaceVariant }, cornerStyle]}>

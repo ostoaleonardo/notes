@@ -11,7 +11,7 @@ import { Typography } from '@/components/typography'
 import { useFileStorage } from '@/hooks/use-file-storage'
 import { useGroupPosition } from '@/hooks/use-group-position'
 import { useRepositories } from '@/hooks/use-repositories'
-import { getGroupedRadius } from '@/utils/grouped-card-style'
+import { getGroupedRadius } from '@/utils/group-position'
 import { getRepositoryNoteCount } from '@/utils/repository-note-counts'
 import { getRepositoryPath } from '@/utils/repository-path'
 

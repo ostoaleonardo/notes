@@ -1,5 +1,11 @@
-import { getGroupPosition, getSegmentCorners, getStackedCorners } from '../group-position'
-import { getGroupedRadius } from '../grouped-card-style'
+import {
+    GROUP_AXES,
+    getCornerRadii,
+    getGroupPosition,
+    getGroupedRadius,
+    getSegmentCorners,
+    getStackedCorners
+} from '../group-position'
 import { RADIUS } from '@/constants/theme'
 
 describe('position of an item in a group', () => {
@@ -58,5 +64,23 @@ describe('segment corners of a grouped button', () => {
 
     test('rounds both sides of a lone button', () => {
         expect(getSegmentCorners('only', 20, 4)).toEqual({ left: 20, right: 20 })
+    })
+})
+
+describe('corner radii by axis', () => {
+    test('stacked uses the medium radius between items', () => {
+        expect(getCornerRadii('middle', GROUP_AXES.STACKED)).toEqual({
+            topLeft: RADIUS.md,
+            topRight: RADIUS.md,
+            bottomLeft: RADIUS.md,
+            bottomRight: RADIUS.md
+        })
+    })
+
+    test('segmented rounds the outer side of the first button', () => {
+        const radii = getCornerRadii('first', GROUP_AXES.SEGMENTED)
+
+        expect(radii.topLeft).toBe(RADIUS.xl)
+        expect(radii.topRight).toBe(RADIUS.sm)
     })
 })

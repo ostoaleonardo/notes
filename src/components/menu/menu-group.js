@@ -2,7 +2,7 @@ import { View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
 import { useGroupPosition } from '@/hooks/use-group-position'
-import { getGroupedRadius } from '@/utils/grouped-card-style'
+import { getGroupedRadius } from '@/utils/group-position'
 
 import { MENU } from '@/constants/components'
 import { TRANSPARENT } from '@/constants/themes'

@@ -15,7 +15,7 @@ import { useLanguage } from '@/hooks/use-language'
 import { useNoteVersions } from '@/hooks/use-note-versions'
 import { diffLines } from '@/utils/diff-lines'
 import { getFormattedDate } from '@/utils/formatted-date'
-import { getGroupedRadius } from '@/utils/grouped-card-style'
+import { getGroupedRadius } from '@/utils/group-position'
 
 import { ArrowBack } from '@/icons/arrow-back'
 import { Close } from '@/icons/close'

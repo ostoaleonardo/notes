@@ -8,7 +8,7 @@ import { CreateNoteDialog } from '@/screens/connections/create-note-dialog'
 import { EntityRow } from '@/screens/connections/entity-row'
 import { HeroCard } from '@/screens/connections/hero-card'
 import { IconToggleGroup } from '@/components/button/icon-toggle-group'
-import { GroupedList } from '@/components/grouped-list'
+import { GroupedList, GroupSeparator } from '@/components/grouped-list'
 import { Typography } from '@/components/typography'
 
 import { useConnectionModel } from '@/hooks/use-connection-model'
@@ -26,8 +26,6 @@ import { CONNECTION_TYPES, PENDING_TABS, PENDING_TAB_PARAM } from '@/constants/c
 import { OPACITY, SPACING } from '@/constants/theme'
 
 const { NOTE } = CONNECTION_TYPES
-
-const Separator = () => <View style={styles.separator} />
 
 export default function ConnectionsPending() {
     const { t } = useTranslation()
@@ -108,7 +106,7 @@ export default function ConnectionsPending() {
                 renderItem={renderItem}
                 keyExtractor={entityKey}
                 ListHeaderComponent={header}
-                ItemSeparatorComponent={Separator}
+                ItemSeparatorComponent={GroupSeparator}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.list}
                 ListEmptyComponent={(
@@ -140,9 +138,6 @@ const styles = StyleSheet.create({
     tabs: {
         flexGrow: 1,
         justifyContent: 'center'
-    },
-    separator: {
-        height: SPACING.xxxs
     },
     empty: {
         paddingHorizontal: SPACING.sm

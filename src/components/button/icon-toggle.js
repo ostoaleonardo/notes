@@ -7,7 +7,9 @@ import { Typography } from '@/components/typography'
 
 import { useExpandingWidth } from '@/hooks/use-expanding-width'
 import { usePressed } from '@/hooks/use-pressed'
-import { useSegmentedCornerStyle } from '@/hooks/use-segmented-corner-style'
+import { useGroupCornerStyle } from '@/hooks/use-group-corner-style'
+
+import { GROUP_AXES } from '@/utils/group-position'
 
 import { BUTTON, ICON_TOGGLE } from '@/constants/components'
 import { OPACITY } from '@/constants/theme'
@@ -41,7 +43,7 @@ export function IconToggle({
     }, [label, onWidth])
 
     const releaseDuration = expandable ? 0 : undefined
-    const animatedStyle = useSegmentedCornerStyle(pressed || selected, releaseDuration)
+    const animatedStyle = useGroupCornerStyle(GROUP_AXES.SEGMENTED, pressed || selected, releaseDuration)
     const expanding = useExpandingWidth(showLabel, expandable, label)
 
     const renderContent = (extra) => (

@@ -5,7 +5,9 @@ import { AnimatedView } from '@/components/animated/animated-view'
 import { Typography } from '@/components/typography'
 
 import { usePressed } from '@/hooks/use-pressed'
-import { useSegmentedCornerStyle } from '@/hooks/use-segmented-corner-style'
+import { useGroupCornerStyle } from '@/hooks/use-group-corner-style'
+
+import { GROUP_AXES } from '@/utils/group-position'
 
 import { BUTTON } from '@/constants/components'
 import { SPACING, OPACITY, ICON_SIZE, BORDER_WIDTH } from '@/constants/theme'
@@ -21,7 +23,7 @@ export function FilterToggle({
 }) {
     const { colors } = useTheme()
     const { pressed, onPressIn, onPressOut } = usePressed()
-    const animatedStyle = useSegmentedCornerStyle(pressed || selected)
+    const animatedStyle = useGroupCornerStyle(GROUP_AXES.SEGMENTED, pressed || selected)
 
     const contentColor = selected ? colors.background : colors.onBackground
 

@@ -4,7 +4,7 @@ import { useTheme } from 'react-native-paper'
 import { Typography } from '@/components/typography'
 
 import { useGroupPosition } from '@/hooks/use-group-position'
-import { getGroupedRadius } from '@/utils/grouped-card-style'
+import { getGroupedRadius } from '@/utils/group-position'
 import { SPACING, OPACITY } from '@/constants/theme'
 
 export function Option({

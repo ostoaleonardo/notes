@@ -1,9 +1,9 @@
 import { memo, useCallback } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { useTheme } from 'react-native-paper'
 
-import { GroupedList } from '@/components/grouped-list'
+import { GroupedList, GroupSeparator } from '@/components/grouped-list'
 import { EntityRow } from './entity-row'
 
 import { SPACING } from '@/constants/theme'
@@ -37,20 +37,15 @@ export const RelationList = memo(function RelationList({
             keyExtractor={keyOf}
             contentContainerStyle={styles.list}
             showsVerticalScrollIndicator={false}
-            ItemSeparatorComponent={Separator}
+            ItemSeparatorComponent={GroupSeparator}
             {...props}
         />
     )
 })
 
-const Separator = () => <View style={styles.separator} />
-
 const styles = StyleSheet.create({
     list: {
         paddingHorizontal: SPACING.lg,
         paddingBottom: SPACING.lg
-    },
-    separator: {
-        height: SPACING.xxxs
     }
 })
