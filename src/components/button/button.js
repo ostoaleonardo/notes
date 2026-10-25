@@ -1,18 +1,18 @@
 import { StyleSheet } from 'react-native'
-import { Button } from 'react-native-paper'
+import { Button as PaperButton } from 'react-native-paper'
 
 import { FONTS, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
 
-export function Pressable({ children, ...props }) {
+export function Button({ children, ...props }) {
     return (
-        <Button
+        <PaperButton
             uppercase
             mode='contained'
             labelStyle={styles.label}
             {...props}
         >
             {children}
-        </Button>
+        </PaperButton>
     )
 }
 

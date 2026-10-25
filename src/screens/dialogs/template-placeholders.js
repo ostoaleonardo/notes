@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native'
 import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
-import { DialogModal } from '@/components/dialog'
+import { Dialog } from '@/components/dialog'
 import { Typography } from '@/components/typography'
 
 import { renderTemplate } from '@/utils/render-template'
@@ -21,7 +21,7 @@ export function TemplatePlaceholders({ visible, onDismiss }) {
     }
 
     return (
-        <DialogModal
+        <Dialog
             title={t('templates.placeholders.heading')}
             visible={visible}
             onDismiss={onDismiss}
@@ -55,7 +55,7 @@ export function TemplatePlaceholders({ visible, onDismiss }) {
                     </View>
                 ))}
             </View>
-        </DialogModal>
+        </Dialog>
     )
 }
 

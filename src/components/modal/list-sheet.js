@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 
-import { ModalSheet } from './modal-sheet'
+import { ModalBottomSheet } from './modal-bottom-sheet'
 import { Typography } from '@/components/typography'
 
 import { OPACITY, SPACING } from '@/constants/theme'
@@ -25,7 +25,7 @@ export function ListSheet({
     ), [emptyMessage])
 
     return (
-        <ModalSheet
+        <ModalBottomSheet
             ref={sheet.ref}
             onClose={sheet.onClose}
             onChange={onChange}
@@ -39,7 +39,7 @@ export function ListSheet({
                 renderItem={renderItem}
                 ListEmptyComponent={empty}
             />
-        </ModalSheet>
+        </ModalBottomSheet>
     )
 }
 

@@ -2,7 +2,7 @@ import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Button } from 'react-native-paper'
 
-import { DialogModal } from '@/components/dialog'
+import { Dialog } from '@/components/dialog'
 import { Typography } from '@/components/typography'
 
 import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
@@ -12,7 +12,7 @@ export function RenameLinksDialog({ visible, linksCount, onDismiss, onConfirmOnc
     const { t } = useTranslation()
 
     return (
-        <DialogModal
+        <Dialog
             title={t('message.wiki_links.rename.title')}
             visible={visible}
             onDismiss={onDismiss}
@@ -51,6 +51,6 @@ export function RenameLinksDialog({ visible, linksCount, onDismiss, onConfirmOnc
             <Typography opacity={OPACITY.secondary}>
                 {t('message.wiki_links.rename.message', { count: linksCount })}
             </Typography>
-        </DialogModal>
+        </Dialog>
     )
 }

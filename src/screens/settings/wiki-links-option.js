@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Option } from './option'
+import { ListItem } from '../../components/list-item'
 import { PositionGroup } from '@/components/position-group'
 import { Switch } from '@/components/button/switch'
 
@@ -36,7 +36,7 @@ export function WikiLinksOption() {
 
     return (
         <PositionGroup>
-            <Option
+            <ListItem
                 title={t('settings.links.wikilinks.title')}
                 description={t('settings.links.wikilinks.description')}
                 rightContent={(
@@ -47,7 +47,7 @@ export function WikiLinksOption() {
                     />
                 )}
             />
-            <Option
+            <ListItem
                 title={t('settings.links.auto_update.title')}
                 description={t('settings.links.auto_update.description')}
                 rightContent={(

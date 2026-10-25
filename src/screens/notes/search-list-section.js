@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
 import { Section } from '@/components/section'
-import { Option } from '@/screens/settings/option'
+import { ListItem } from '@/components/list-item'
 
 import { ICON_SIZE, SPACING } from '@/constants/theme'
 
@@ -26,7 +26,7 @@ export function SearchListSection({
         >
             {items.map((item) => (
                 <View key={keyExtractor(item)} style={styles.row}>
-                    <Option
+                    <ListItem
                         uppercase={false}
                         title={getLabel(item)}
                         background={colors.surfaceVariant}

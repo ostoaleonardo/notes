@@ -5,7 +5,7 @@ import { IconButton, TouchableRipple, useTheme } from 'react-native-paper'
 import { FadeIn, FadeInRight, FadeOut, FadeOutRight } from 'react-native-reanimated'
 
 import { AnimatedView } from '@/components/animated/animated-view'
-import { Pressable } from '@/components/button/pressable'
+import { Button } from '@/components/button/button'
 import { Typography } from '@/components/typography'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { GroupedList } from '@/components/grouped-list'
@@ -173,13 +173,13 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
                             entering={FadeInRight}
                             exiting={FadeOutRight}
                         >
-                            <Pressable
+                            <Button
                                 compact={true}
                                 mode='contained'
                                 onPress={onOpenRestore}
                             >
                                 {t('button.restore')}
-                            </Pressable>
+                            </Button>
                         </AnimatedView>
                     )}
 

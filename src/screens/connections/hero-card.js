@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
-import { ProgressRing } from '@/components/progress-ring'
+import { CircularProgressIndicator } from '@/components/circular-progress-indicator'
 import { Typography } from '@/components/typography'
 
 import { SUMMARY_CARD } from '@/constants/connections'
@@ -29,7 +29,7 @@ export const HeroCard = memo(function HeroCard({
             onPress={onPress}
             style={[styles.card, { backgroundColor: colors.surface }]}
         >
-            <ProgressRing
+            <CircularProgressIndicator
                 size={SUMMARY_CARD.heroRing}
                 stroke={SUMMARY_CARD.heroStroke}
                 progress={progress}
@@ -37,7 +37,7 @@ export const HeroCard = memo(function HeroCard({
                 <Typography heading fontSize={valueSize}>
                     {value}
                 </Typography>
-            </ProgressRing>
+            </CircularProgressIndicator>
 
             <View style={styles.text}>
                 <Typography heading fontSize={SUMMARY_CARD.heroTitleSize}>

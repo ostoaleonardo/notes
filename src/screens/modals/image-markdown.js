@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Linking, StyleSheet, View } from 'react-native'
 import { TouchableRipple, useTheme } from 'react-native-paper'
 
-import { IconToggleGroup } from '@/components/button/icon-toggle-group'
+import { ButtonGroup } from '@/components/button/button-group'
 import { SheetForm, SheetInput } from '@/components/modal/sheet-form'
 import { Typography } from '@/components/typography'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
@@ -177,7 +177,7 @@ export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
             />
 
             <View style={styles.buttons}>
-                <IconToggleGroup
+                <ButtonGroup
                     buttons={[
                         {
                             icon: Camera,

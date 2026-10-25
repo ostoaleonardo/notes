@@ -3,7 +3,7 @@ import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { SPACING, RADIUS } from '@/constants/theme'
 
-export function FloatingButton({ icon, label, onPress }) {
+export function FloatingActionButton({ icon, label, onPress }) {
     const { colors } = useTheme()
 
     const style = {

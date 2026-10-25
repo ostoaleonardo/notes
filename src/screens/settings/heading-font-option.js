@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { FontOption } from './font-option'
-import { Option } from './option'
+import { ListItem } from '../../components/list-item'
 
 import { useHeadingFont } from '@/hooks/use-heading-font'
 import { useStorage } from '@/hooks/use-storage'
@@ -25,7 +25,7 @@ export function HeadingFontOption() {
     }, [setFontKey, setItem])
 
     return (
-        <Option
+        <ListItem
             title={t(`${TRANSLATION_KEY}.title`)}
             description={t(`${TRANSLATION_KEY}.description`)}
         >
@@ -42,7 +42,7 @@ export function HeadingFontOption() {
                     </FontOption>
                 ))}
             </View>
-        </Option>
+        </ListItem>
     )
 }
 

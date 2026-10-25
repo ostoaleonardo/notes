@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 
 import { SmallInput } from '@/components/input/small-input'
-import { IconToggleGroup } from '@/components/button/icon-toggle-group'
+import { ButtonGroup } from '@/components/button/button-group'
 
 import { Close } from '@/icons/close'
 import { DoneAll } from '@/icons/done-all'
@@ -56,7 +56,7 @@ export function MarkdownSearchBar({ search, action }) {
                     onChangeText={setSearchQuery}
                     placeholder={t('button.find')}
                 />
-                <IconToggleGroup
+                <ButtonGroup
                     buttons={[
                         {
                             icon: KeyboardArrowUp,
@@ -94,7 +94,7 @@ export function MarkdownSearchBar({ search, action }) {
                         onChangeText={setReplaceText}
                         placeholder={t('button.replace')}
                     />
-                    <IconToggleGroup
+                    <ButtonGroup
                         buttons={[
                             {
                                 icon: FindReplace,

@@ -4,7 +4,7 @@ import { useTheme } from 'react-native-paper'
 
 import { TRANSPARENT } from '@/constants/themes'
 
-export function ProgressRing({ size, stroke, progress, children }) {
+export function CircularProgressIndicator({ size, stroke, progress, children }) {
     const { colors } = useTheme()
 
     const radius = (size - stroke) / 2

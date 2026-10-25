@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { OriginTiles } from './origin-tiles'
 import { RelationList } from './relation-list'
 import { FreshSheet } from '@/components/modal/fresh-sheet'
-import { SearchInput } from '@/components/input/search-input'
+import { SearchBar } from '@/components/input/search-bar'
 import { Typography } from '@/components/typography'
 
 import { describeEntity } from '@/utils/connection-caption'
@@ -45,7 +45,7 @@ function OriginContent({ model, getTitle, onSelect }) {
                 onSelect={setType}
             />
 
-            <SearchInput
+            <SearchBar
                 value={query}
                 onChangeText={setQuery}
                 label={t('connections.origin.filter')}

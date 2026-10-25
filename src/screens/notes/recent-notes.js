@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native'
 import { IconButton } from 'react-native-paper'
 
 import { CardGrid } from './card-grid'
-import { IconToggleGroup } from '@/components/button/icon-toggle-group'
+import { ButtonGroup } from '@/components/button/button-group'
 
 import { useCurrentNote } from '@/hooks/use-current-note'
 import { useRecentNotes } from '@/hooks/use-recent-notes'
@@ -155,7 +155,7 @@ export function RecentNotes({ onClose, home = false }) {
             />
 
             <View style={styles.actions}>
-                <IconToggleGroup buttons={actionButtons} />
+                <ButtonGroup buttons={actionButtons} />
             </View>
         </View>
     )

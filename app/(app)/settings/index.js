@@ -8,7 +8,7 @@ import { ProSection } from '@/screens/settings/pro-section'
 import { HeadingFontOption } from '@/screens/settings/heading-font-option'
 import { ThemeOption } from '@/screens/settings/theme-option'
 import { AppVersionCard } from '@/screens/settings/app-version-card'
-import { Option } from '@/screens/settings/option'
+import { ListItem } from '@/components/list-item'
 import { WikiLinksOption } from '@/screens/settings/wiki-links-option'
 import { AttachmentsOption } from '@/screens/settings/attachments-option'
 import { StorageSelectOption } from '@/screens/settings/storage-select-option'
@@ -98,13 +98,13 @@ export default function Settings() {
                     containerStyle={styles.section}
                     contentStyle={styles.items}
                 >
-                    <Option
+                    <ListItem
                         title={t('settings.about.github')}
                         description={t('settings.about.features')}
                         rightContent={<OpenInNew color={colors.onBackground} />}
                         onPress={() => Linking.openURL(LINKS.GITHUB)}
                     />
-                    <Option
+                    <ListItem
                         title={t('settings.about.contribute')}
                         description={t('settings.about.translate')}
                         rightContent={<OpenInNew color={colors.onBackground} />}

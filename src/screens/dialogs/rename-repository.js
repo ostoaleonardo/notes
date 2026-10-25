@@ -2,7 +2,7 @@ import { ToastAndroid } from 'react-native'
 import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
-import { DialogModal } from '@/components/dialog'
+import { Dialog } from '@/components/dialog'
 import { LargeInput } from '@/components/input/large-input'
 
 import { useEditDialogInput } from '@/hooks/use-dialog-input'
@@ -38,7 +38,7 @@ export function RenameRepository({ visible, onDismiss, repositoryId }) {
     }
 
     return (
-        <DialogModal
+        <Dialog
             title={t(isFolder ? 'repositories.edit_folder' : 'repositories.rename.title')}
             visible={visible}
             onDismiss={onDismiss}
@@ -59,6 +59,6 @@ export function RenameRepository({ visible, onDismiss, repositoryId }) {
                 placeholder={placeholder}
                 onChangeText={setAlias}
             />
-        </DialogModal>
+        </Dialog>
     )
 }

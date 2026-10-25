@@ -7,8 +7,8 @@ import { useTranslation } from 'react-i18next'
 import { EntityBadge } from './entity-badge'
 import { RelationList } from './relation-list'
 import { SECTION_ICONS } from './entity-icon'
-import { IconToggleGroup } from '@/components/button/icon-toggle-group'
-import { ModalSheet } from '@/components/modal/modal-sheet'
+import { ButtonGroup } from '@/components/button/button-group'
+import { ModalBottomSheet } from '@/components/modal/modal-bottom-sheet'
 import { Typography } from '@/components/typography'
 
 import { useDelayedValue } from '@/hooks/use-delayed-value'
@@ -75,7 +75,7 @@ export const RelationsSheet = memo(function RelationsSheet({
     const maxHeight = height * RELATIONS_SHEET.listMaxRatio
 
     return (
-        <ModalSheet
+        <ModalBottomSheet
             ref={sheet.ref}
             contentContainerStyle={styles.sheet}
         >
@@ -115,7 +115,7 @@ export const RelationsSheet = memo(function RelationsSheet({
                             style={styles.tabsScroll}
                             contentContainerStyle={styles.tabs}
                         >
-                            <IconToggleGroup expandSelected buttons={tabs} />
+                            <ButtonGroup expandSelected buttons={tabs} />
                         </ScrollView>
                     )}
 
@@ -153,7 +153,7 @@ export const RelationsSheet = memo(function RelationsSheet({
                     )}
                 </View>
             )}
-        </ModalSheet>
+        </ModalBottomSheet>
     )
 })
 

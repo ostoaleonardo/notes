@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 import Animated from 'react-native-reanimated'
 
-import { ModalSheet } from '@/components/modal/modal-sheet'
+import { ModalBottomSheet } from '@/components/modal/modal-bottom-sheet'
 import { PositionGroup } from '@/components/position-group'
 import { Typography } from '@/components/typography'
 
@@ -44,7 +44,7 @@ export const MarkdownGroupSheet = memo(function MarkdownGroupSheet({ sheet, grou
     const items = MARKDOWN_GROUPS[group]?.items
 
     return (
-        <ModalSheet
+        <ModalBottomSheet
             enableDynamicSizing
             ref={sheet.ref}
             onClose={sheet.onClose}
@@ -61,7 +61,7 @@ export const MarkdownGroupSheet = memo(function MarkdownGroupSheet({ sheet, grou
                     ))}
                 </PositionGroup>
             </View>
-        </ModalSheet>
+        </ModalBottomSheet>
     )
 })
 

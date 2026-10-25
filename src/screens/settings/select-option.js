@@ -1,8 +1,8 @@
 import { FlatList, StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
-import { Option } from './option'
-import { MenuContainer } from '@/components/menu/menu-container'
+import { ListItem } from '../../components/list-item'
+import { Menu } from '@/components/menu/menu'
 import { MenuGroup } from '@/components/menu/menu-group'
 import { SelectMenuItem } from '@/components/menu/select-menu-item'
 
@@ -34,7 +34,7 @@ export function SelectOption({
     return (
         <View>
             <View ref={menu.rowRef} collapsable={false}>
-                <Option
+                <ListItem
                     title={title}
                     description={description}
                     rightContent={<ArrowForward color={colors.onBackground} />}
@@ -42,7 +42,7 @@ export function SelectOption({
                 />
             </View>
 
-            <MenuContainer
+            <Menu
                 visible={menu.visible}
                 onClose={menu.onClose}
                 anchor={menu.anchor}
@@ -56,7 +56,7 @@ export function SelectOption({
                         extraData={selectedValue}
                     />
                 </MenuGroup>
-            </MenuContainer>
+            </Menu>
         </View>
     )
 }

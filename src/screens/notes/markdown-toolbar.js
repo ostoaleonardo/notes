@@ -6,7 +6,7 @@ import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
 
 import { AnimatedView } from '@/components/animated/animated-view'
 import { Scroll } from '@/components/animated/scroll'
-import { Separator } from '@/components/separator/separator'
+import { Divider } from '@/components/divider/divider'
 
 import { MarkdownGroupSheet } from './markdown-group-sheet'
 
@@ -134,7 +134,7 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
                         {controls.map(({ action, group: groupKey, Icon, divider }, index) => {
                             if (divider) {
                                 return (
-                                    <Separator
+                                    <Divider
                                         key={index}
                                         style={styles.divider}
                                     />

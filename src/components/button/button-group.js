@@ -2,14 +2,14 @@ import { useCallback, useMemo, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
-import { IconToggle } from './icon-toggle'
+import { ToggleButton } from './toggle-button'
 import { PositionGroup } from '@/components/position-group'
 
 import { expandSelected as expandButtons, getMinWidth } from '@/utils/toggle-group'
 
 import { BUTTON } from '@/constants/components'
 
-export function IconToggleGroup({
+export function ButtonGroup({
     buttons,
     background,
     style,
@@ -36,7 +36,7 @@ export function IconToggleGroup({
         <View style={[styles.group, style]}>
             <PositionGroup>
                 {items.map((button) => (
-                    <IconToggle
+                    <ToggleButton
                         key={button.label}
                         chip={chip}
                         background={background ?? colors.surfaceVariant}

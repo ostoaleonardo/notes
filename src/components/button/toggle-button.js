@@ -14,7 +14,7 @@ import { GROUP_AXES } from '@/utils/group-position'
 import { BUTTON, ICON_TOGGLE } from '@/constants/components'
 import { OPACITY } from '@/constants/theme'
 
-export function IconToggle({
+export function ToggleButton({
     icon: Icon,
     label,
     testID,

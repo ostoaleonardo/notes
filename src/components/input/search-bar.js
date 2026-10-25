@@ -12,7 +12,7 @@ import { TRANSPARENT } from '@/constants/themes'
 const renderSearch = ({ size, color }) => <Search width={size} height={size} color={color} />
 const renderClear = ({ size, color }) => <Close width={size} height={size} color={color} />
 
-export function SearchInput({ label, value, onChangeText, ...props }) {
+export function SearchBar({ label, value, onChangeText, ...props }) {
     const { t } = useTranslation()
     const { colors, fonts } = useTheme()
 

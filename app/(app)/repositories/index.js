@@ -8,7 +8,7 @@ import { DeleteRepository } from '@/screens/dialogs/delete-repository'
 import { ForgetRepository } from '@/screens/dialogs/forget-repository'
 import { RenameRepository } from '@/screens/dialogs/rename-repository'
 import { AnimatedList } from '@/components/animated/animated-list'
-import { FloatingButton } from '@/components/button/floating-button'
+import { FloatingActionButton } from '@/components/button/floating-action-button'
 import { GroupedList } from '@/components/grouped-list'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
@@ -105,7 +105,7 @@ export default function Repositories() {
                 renderItem={renderItem}
             />
 
-            <FloatingButton
+            <FloatingActionButton
                 icon={<Folder />}
                 label={t('repositories.choose.button')}
                 onPress={onAddRepository}

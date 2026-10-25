@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
-import { Option } from './option'
+import { ListItem } from '../../components/list-item'
 import { ColorOption } from './color-option'
 import { Section } from '@/components/section'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
@@ -33,7 +33,7 @@ export function ThemeOption() {
     }
 
     return (
-        <Option
+        <ListItem
             title={t('settings.general.theme')}
             description={t('theme.choose')}
         >
@@ -54,7 +54,7 @@ export function ThemeOption() {
                 onPress={onToggleAccent}
                 getLabel={(color) => t(`accent.${color}`)}
             />
-        </Option>
+        </ListItem>
     )
 }
 

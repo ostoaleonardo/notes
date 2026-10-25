@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { MenuContainer } from '@/components/menu/menu-container'
+import { Menu } from '@/components/menu/menu'
 import { MenuGroup } from '@/components/menu/menu-group'
 import { SelectMenuItem } from '@/components/menu/select-menu-item'
 import { DrawerToolbarButton } from './drawer-toolbar'
@@ -19,7 +19,7 @@ export function DrawerSortMenu({ sort, onChange }) {
     const { visible, onOpen, onClose, trigger } = useMenuAction()
 
     return (
-        <MenuContainer
+        <Menu
             visible={visible}
             onClose={onClose}
             anchor={
@@ -41,6 +41,6 @@ export function DrawerSortMenu({ sort, onChange }) {
                     />
                 ))}
             </MenuGroup>
-        </MenuContainer>
+        </Menu>
     )
 }

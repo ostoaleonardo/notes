@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useColorScheme } from 'react-native'
 
 import { MessageScreen } from './message-screen'
-import { Pressable } from '@/components/button/pressable'
+import { Button } from '@/components/button/button'
 import { logError } from '@/utils/log-error'
 
 import { COLORS } from '@/constants/themes'
@@ -25,13 +25,13 @@ export function ErrorBoundary({ error, retry }) {
             color={colors.onBackground}
             style={{ backgroundColor: colors.background }}
         >
-            <Pressable
+            <Button
                 onPress={retry}
                 buttonColor={colors.onBackground}
                 textColor={colors.background}
             >
                 {t('button.try_again')}
-            </Pressable>
+            </Button>
         </MessageScreen>
     )
 }

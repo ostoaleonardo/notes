@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { LinkMarkdown } from '@/screens/modals/link-markdown'
 import { TableMarkdown } from '@/screens/modals/table-markdown'
 import { ImageMarkdown } from '@/screens/modals/image-markdown'
-import { ModalSheet } from '@/components/modal/modal-sheet'
+import { ModalBottomSheet } from '@/components/modal/modal-bottom-sheet'
 
 import { MARKDOWN_ACTIONS } from '@/constants/markdown-actions'
 
@@ -16,7 +16,7 @@ export const MarkdownInsertSheets = memo(function MarkdownInsertSheets({
 }) {
     return (
         <>
-            <ModalSheet
+            <ModalBottomSheet
                 enableDynamicSizing
                 ref={linkSheet.ref}
                 onClose={linkSheet.onClose}
@@ -25,9 +25,9 @@ export const MarkdownInsertSheets = memo(function MarkdownInsertSheets({
                     onClose={linkSheet.onClose}
                     onInsert={(payload) => action.run(MARKDOWN_ACTIONS.LINK, payload)}
                 />
-            </ModalSheet>
+            </ModalBottomSheet>
 
-            <ModalSheet
+            <ModalBottomSheet
                 enableDynamicSizing
                 ref={tableSheet.ref}
                 onClose={tableSheet.onClose}
@@ -37,9 +37,9 @@ export const MarkdownInsertSheets = memo(function MarkdownInsertSheets({
                     onClose={tableSheet.onClose}
                     onInsert={(payload) => action.run(MARKDOWN_ACTIONS.TABLE, payload)}
                 />
-            </ModalSheet>
+            </ModalBottomSheet>
 
-            <ModalSheet
+            <ModalBottomSheet
                 enableDynamicSizing
                 ref={imageSheet.ref}
                 onClose={imageSheet.onClose}
@@ -52,7 +52,7 @@ export const MarkdownInsertSheets = memo(function MarkdownInsertSheets({
                         payload
                     )}
                 />
-            </ModalSheet>
+            </ModalBottomSheet>
         </>
     )
 })

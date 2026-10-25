@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
-import { IconToggleGroup } from '@/components/button/icon-toggle-group'
+import { ButtonGroup } from '@/components/button/button-group'
 import { Typography } from '@/components/typography'
 
 import { ArrowBack } from '@/icons/arrow-back'
@@ -33,9 +33,9 @@ export const FocusPager = memo(function FocusPager({ page, pages, onTurn }) {
 
     return (
         <View style={[styles.pager, { backgroundColor: colors.surface + TRANSPARENT[90] }]}>
-            <IconToggleGroup buttons={previous} />
+            <ButtonGroup buttons={previous} />
             <Typography styleProps={styles.label}>{`${page + 1} / ${pages}`}</Typography>
-            <IconToggleGroup buttons={next} />
+            <ButtonGroup buttons={next} />
         </View>
     )
 })

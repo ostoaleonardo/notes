@@ -1,11 +1,11 @@
-import { Menu } from 'react-native-paper'
+import { Menu as PaperMenu } from 'react-native-paper'
 
 import { PositionGroup } from '@/components/position-group'
 
 import { MENU } from '@/constants/components'
 import { TRANSPARENT } from '@/constants/themes'
 
-export function MenuContainer({
+export function Menu({
     anchor,
     visible,
     onClose,
@@ -13,7 +13,7 @@ export function MenuContainer({
     children
 }) {
     return (
-        <Menu
+        <PaperMenu
             elevation={0}
             anchor={anchor}
             visible={visible}
@@ -27,6 +27,6 @@ export function MenuContainer({
             <PositionGroup>
                 {children}
             </PositionGroup>
-        </Menu>
+        </PaperMenu>
     )
 }

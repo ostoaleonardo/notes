@@ -1,7 +1,7 @@
 import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
-import { DialogModal } from '@/components/dialog'
+import { Dialog } from '@/components/dialog'
 import { LargeInput } from '@/components/input/large-input'
 
 import { useCreateDialogInput } from '@/hooks/use-dialog-input'
@@ -26,7 +26,7 @@ export function NameDialog({ visible, onDismiss, title, onSubmit, extraActions =
     }
 
     return (
-        <DialogModal
+        <Dialog
             title={title}
             visible={visible}
             onDismiss={onDismiss}
@@ -49,6 +49,6 @@ export function NameDialog({ visible, onDismiss, title, onSubmit, extraActions =
                 placeholder={title}
                 onChangeText={setName}
             />
-        </DialogModal>
+        </Dialog>
     )
 }

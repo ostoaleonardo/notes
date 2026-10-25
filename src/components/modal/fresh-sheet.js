@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useState } from 'react'
 
-import { ModalSheet } from './modal-sheet'
+import { ModalBottomSheet } from './modal-bottom-sheet'
 
 export function FreshSheet({ sheet, snapPoints, children }) {
     const [openCount, setOpenCount] = useState(0)
@@ -10,7 +10,7 @@ export function FreshSheet({ sheet, snapPoints, children }) {
     }, [])
 
     return (
-        <ModalSheet
+        <ModalBottomSheet
             ref={sheet.ref}
             onClose={sheet.onClose}
             snapPoints={snapPoints}
@@ -19,6 +19,6 @@ export function FreshSheet({ sheet, snapPoints, children }) {
             <Fragment key={openCount}>
                 {children}
             </Fragment>
-        </ModalSheet>
+        </ModalBottomSheet>
     )
 }

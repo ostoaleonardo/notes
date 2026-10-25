@@ -3,7 +3,7 @@ import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { nativeApplicationVersion } from 'expo-application'
 
-import { Option } from './option'
+import { ListItem } from '../../components/list-item'
 
 import { OpenInNew } from '@/icons/open-in-new'
 
@@ -14,7 +14,7 @@ export function AppVersionCard() {
     const { colors } = useTheme()
 
     return (
-        <Option
+        <ListItem
             title={t('settings.about.updates')}
             description={t('settings.about.version') + ' ' + nativeApplicationVersion}
             rightContent={<OpenInNew color={colors.onBackground} />}

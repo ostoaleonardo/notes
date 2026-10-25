@@ -3,7 +3,7 @@ import { useTheme } from 'react-native-paper'
 
 import { OPACITY, BORDER_WIDTH } from '@/constants/theme'
 
-export function Separator({ style }) {
+export function Divider({ style }) {
     const { colors } = useTheme()
 
     return (

@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 
-import { IconToggleGroup } from '@/components/button/icon-toggle-group'
+import { ButtonGroup } from '@/components/button/button-group'
 import { DrawerNotesView } from './drawer-notes-view'
 import { DrawerTagsView } from './drawer-tags-view'
 import { DrawerToolbar } from './drawer-toolbar'
@@ -104,7 +104,7 @@ export function DrawerItems({ navigation, state }) {
                                 />
                             )}
                         </View>
-                        <IconToggleGroup buttons={footerItems} />
+                        <ButtonGroup buttons={footerItems} />
                     </View>
                 </DrawerToolbar>
             </View>

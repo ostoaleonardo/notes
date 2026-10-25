@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { IconToggleGroup } from '@/components/button/icon-toggle-group'
+import { ButtonGroup } from '@/components/button/button-group'
 
 import { togglePinnedQualifier, toggleImageQualifier, toggleContentQualifier } from '@/utils/search-query'
 
@@ -22,7 +22,7 @@ export function SearchToggleFilters({ query, setQuery, parsed, saved, onToggleSa
 
     return (
         <>
-            <IconToggleGroup
+            <ButtonGroup
                 buttons={[
                     {
                         icon: NoteStack,
@@ -34,7 +34,7 @@ export function SearchToggleFilters({ query, setQuery, parsed, saved, onToggleSa
                 ]}
             />
 
-            <IconToggleGroup
+            <ButtonGroup
                 chip
                 equalWidth={false}
                 buttons={[

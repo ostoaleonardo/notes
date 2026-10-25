@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
-import { MenuContainer } from '@/components/menu/menu-container'
+import { Menu } from '@/components/menu/menu'
 import { PositionGroup } from '@/components/position-group'
 import { SplitButtonPrimary } from './split-button-primary'
 import { SplitButtonTrigger } from './split-button-trigger'
@@ -37,7 +37,7 @@ export const SplitButton = ({
                     testID={primaryTestID}
                 />
 
-                <MenuContainer
+                <Menu
                     position='top'
                     visible={menuVisible}
                     onClose={closeMenu}
@@ -51,7 +51,7 @@ export const SplitButton = ({
                     }
                 >
                     {children}
-                </MenuContainer>
+                </Menu>
             </PositionGroup>
         </View>
     )

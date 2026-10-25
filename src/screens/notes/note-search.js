@@ -7,7 +7,7 @@ import { SearchFilters } from './search-filters'
 import { SearchResults } from './search-results'
 import { RecentSearches } from './recent-searches'
 import { SavedSearches } from './saved-searches'
-import { SearchInput } from '@/components/input/search-input'
+import { SearchBar } from '@/components/input/search-bar'
 
 import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'
@@ -88,7 +88,7 @@ export function NoteSearch({ onClose, initialQuery = '' }) {
 
     return (
         <Pressable accessible={false} style={styles.container} onPress={Keyboard.dismiss}>
-            <SearchInput
+            <SearchBar
                 value={query}
                 onChangeText={setQuery}
             />

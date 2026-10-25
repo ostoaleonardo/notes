@@ -3,7 +3,7 @@ import { BottomSheetModal, BottomSheetView } from '@expo/ui/community/bottom-she
 
 import { SPACING } from '@/constants/theme'
 
-export const ModalSheet = ({
+export const ModalBottomSheet = ({
     ref,
     onClose,
     children,

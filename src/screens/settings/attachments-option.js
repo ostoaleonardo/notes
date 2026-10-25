@@ -2,9 +2,9 @@ import { useMemo, useState } from 'react'
 import { Button, useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
-import { Option } from './option'
+import { ListItem } from '../../components/list-item'
 import { SelectOption } from './select-option'
-import { DialogModal } from '@/components/dialog'
+import { Dialog } from '@/components/dialog'
 import { PositionGroup } from '@/components/position-group'
 import { LargeInput } from '@/components/input/large-input'
 
@@ -78,7 +78,7 @@ export function AttachmentsOption() {
                 />
 
                 {showFolder && (
-                    <Option
+                    <ListItem
                         title={t('settings.attachments.folder')}
                         description={folderName}
                         rightContent={<ArrowForward color={colors.onBackground} />}
@@ -87,7 +87,7 @@ export function AttachmentsOption() {
                 )}
             </PositionGroup>
 
-            <DialogModal
+            <Dialog
                 title={t('settings.attachments.folder')}
                 visible={dialogVisible}
                 onDismiss={() => setDialogVisible(false)}
@@ -107,7 +107,7 @@ export function AttachmentsOption() {
                     placeholder={DEFAULT_ATTACHMENT_FOLDER}
                     onChangeText={setDraft}
                 />
-            </DialogModal>
+            </Dialog>
         </>
     )
 }

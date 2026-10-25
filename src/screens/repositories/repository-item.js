@@ -5,7 +5,7 @@ import { IconButton, Tooltip, useTheme } from 'react-native-paper'
 
 import { RepositoryMenu } from './repository-menu'
 import { AnimatedView } from '@/components/animated/animated-view'
-import { Separator } from '@/components/separator/separator'
+import { Divider } from '@/components/divider/divider'
 import { Typography } from '@/components/typography'
 
 import { useFileStorage } from '@/hooks/use-file-storage'
@@ -124,7 +124,7 @@ export const RepositoryItem = memo(function RepositoryItem({
                 />
             </View>
 
-            {expanded && <Separator />}
+            {expanded && <Divider />}
 
             {expanded && (
                 <View style={styles.structure}>

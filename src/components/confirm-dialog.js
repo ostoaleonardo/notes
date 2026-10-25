@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Button } from 'react-native-paper'
 
-import { DialogModal } from './dialog'
+import { Dialog } from './dialog'
 import { Typography } from './typography'
 
 import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
@@ -16,7 +16,7 @@ export function ConfirmDialog({ title, message, confirmLabel, visible, onDismiss
     }
 
     return (
-        <DialogModal
+        <Dialog
             title={title}
             visible={visible}
             onDismiss={onDismiss}
@@ -41,6 +41,6 @@ export function ConfirmDialog({ title, message, confirmLabel, visible, onDismiss
             <Typography opacity={OPACITY.secondary}>
                 {message}
             </Typography>
-        </DialogModal>
+        </Dialog>
     )
 }

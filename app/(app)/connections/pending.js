@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { CreateNoteDialog } from '@/screens/connections/create-note-dialog'
 import { EntityRow } from '@/screens/connections/entity-row'
 import { HeroCard } from '@/screens/connections/hero-card'
-import { IconToggleGroup } from '@/components/button/icon-toggle-group'
+import { ButtonGroup } from '@/components/button/button-group'
 import { GroupedList, GroupSeparator } from '@/components/grouped-list'
 import { Typography } from '@/components/typography'
 
@@ -93,7 +93,7 @@ export default function ConnectionsPending() {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.tabs}
             >
-                <IconToggleGroup expandSelected buttons={tabs} />
+                <ButtonGroup expandSelected buttons={tabs} />
             </ScrollView>
         </View>
     )

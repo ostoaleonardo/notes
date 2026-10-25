@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Keyboard } from 'react-native'
-import { Dialog, Portal } from 'react-native-paper'
+import { Dialog as PaperDialog, Portal } from 'react-native-paper'
 
 import { FONTS, TYPOGRAPHY_SIZE_VARIANTS, OPACITY } from '@/constants/theme'
 
-export function DialogModal({ title, visible, onDismiss, children, actions }) {
+export function Dialog({ title, visible, onDismiss, children, actions }) {
     const [bottom, setBottom] = useState(0)
 
     useEffect(() => {
@@ -30,12 +30,12 @@ export function DialogModal({ title, visible, onDismiss, children, actions }) {
 
     return (
         <Portal>
-            <Dialog
+            <PaperDialog
                 visible={visible}
                 onDismiss={onDismiss}
                 style={{ bottom }}
             >
-                <Dialog.Title
+                <PaperDialog.Title
                     style={{
                         fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodySmall,
                         opacity: OPACITY.muted,
@@ -44,14 +44,14 @@ export function DialogModal({ title, visible, onDismiss, children, actions }) {
                     }}
                 >
                     {title}
-                </Dialog.Title>
-                <Dialog.Content>
+                </PaperDialog.Title>
+                <PaperDialog.Content>
                     {children}
-                </Dialog.Content>
-                <Dialog.Actions>
+                </PaperDialog.Content>
+                <PaperDialog.Actions>
                     {actions}
-                </Dialog.Actions>
-            </Dialog>
+                </PaperDialog.Actions>
+            </PaperDialog>
         </Portal>
     )
 }

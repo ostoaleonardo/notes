@@ -9,7 +9,7 @@ import { getGroupedRadius } from '@/utils/group-position'
 import { TRANSPARENT } from '@/constants/themes'
 import { SPACING, OPACITY } from '@/constants/theme'
 
-export function Option({
+export function ListItem({
     title,
     description,
     rightContent,

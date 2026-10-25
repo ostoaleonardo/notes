@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconButton, Tooltip, useTheme } from 'react-native-paper'
 
-import { MenuContainer } from '@/components/menu/menu-container'
+import { Menu } from '@/components/menu/menu'
 import { MenuGroup } from '@/components/menu/menu-group'
 import { MenuItem } from '@/components/menu/menu-item'
 import { ActionMenuItem } from '@/components/menu/action-menu-item'
@@ -25,7 +25,7 @@ export const RepositoryMenu = memo(function RepositoryMenu({ onRename, onForget,
     const onPressDelete = useCallback(() => trigger(onDelete), [trigger, onDelete])
 
     return (
-        <MenuContainer
+        <Menu
             visible={visible}
             onClose={onClose}
             anchor={
@@ -57,6 +57,6 @@ export const RepositoryMenu = memo(function RepositoryMenu({ onRename, onForget,
                     onPress={onPressDelete}
                 />
             </MenuGroup>
-        </MenuContainer>
+        </Menu>
     )
 })

@@ -3,7 +3,7 @@ import { Pressable, StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 
-import { MenuContainer } from '@/components/menu/menu-container'
+import { Menu } from '@/components/menu/menu'
 import { MenuGroup } from '@/components/menu/menu-group'
 import { SelectMenuItem } from '@/components/menu/select-menu-item'
 import { Typography } from '@/components/typography'
@@ -28,7 +28,7 @@ export const DrawerViewSwitcher = memo(function DrawerViewSwitcher({ view, onCha
     const Chevron = visible ? KeyboardArrowDown : KeyboardArrowUp
 
     return (
-        <MenuContainer
+        <Menu
             visible={visible}
             onClose={onClose}
             anchor={(
@@ -69,7 +69,7 @@ export const DrawerViewSwitcher = memo(function DrawerViewSwitcher({ view, onCha
                     />
                 ))}
             </MenuGroup>
-        </MenuContainer>
+        </Menu>
     )
 })
 

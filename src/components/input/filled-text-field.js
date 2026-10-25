@@ -8,7 +8,7 @@ import { FILLED_INPUT } from '@/constants/components'
 import { FONTS, OPACITY, RADIUS, TYPOGRAPHY_SIZE_VARIANTS, BORDER_WIDTH, SPACING } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'
 
-export function FilledInput({ label, onFocus, onBlur, ...props }) {
+export function FilledTextField({ label, onFocus, onBlur, ...props }) {
     const { colors } = useTheme()
     const [focused, setFocused] = useState(false)
 

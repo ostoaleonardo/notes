@@ -1,4 +1,4 @@
-import { MenuContainer } from '@/components/menu/menu-container'
+import { Menu } from '@/components/menu/menu'
 import { MenuGroup } from '@/components/menu/menu-group'
 import { DrawerRepositoryMenu } from './drawer-repository-menu'
 
@@ -13,7 +13,7 @@ export function DrawerFolderActions({
     onAction
 }) {
     return (
-        <MenuContainer
+        <Menu
             visible={menu.visible}
             onClose={menu.onClose}
             anchor={menu.anchor}
@@ -25,6 +25,6 @@ export function DrawerFolderActions({
                     onAction={(action) => menu.trigger(() => onAction(action))}
                 />
             </MenuGroup>
-        </MenuContainer>
+        </Menu>
     )
 }

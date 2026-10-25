@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
-import { DialogModal } from '@/components/dialog'
-import { IconToggleGroup } from '@/components/button/icon-toggle-group'
+import { Dialog } from '@/components/dialog'
+import { ButtonGroup } from '@/components/button/button-group'
 
 import { usePro } from '@/hooks/use-pro'
 
@@ -22,7 +22,7 @@ export function ExportFormat({ title, visible, onDismiss, onExport, onShare }) {
     }
 
     return (
-        <DialogModal
+        <Dialog
             title={title}
             visible={visible}
             onDismiss={onDismiss}
@@ -54,7 +54,7 @@ export function ExportFormat({ title, visible, onDismiss, onExport, onShare }) {
                 </Button>
             ]}
         >
-            <IconToggleGroup
+            <ButtonGroup
                 chip
                 style={{ justifyContent: 'center' }}
                 buttons={[
@@ -77,6 +77,6 @@ export function ExportFormat({ title, visible, onDismiss, onExport, onShare }) {
                     }
                 ]}
             />
-        </DialogModal>
+        </Dialog>
     )
 }

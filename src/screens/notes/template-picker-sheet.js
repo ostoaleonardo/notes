@@ -4,8 +4,8 @@ import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
 import { TemplatePicker } from './template-picker'
-import { Pressable } from '@/components/button/pressable'
-import { ModalSheet } from '@/components/modal/modal-sheet'
+import { Button } from '@/components/button/button'
+import { ModalBottomSheet } from '@/components/modal/modal-bottom-sheet'
 
 import { SPACING } from '@/constants/theme'
 
@@ -25,7 +25,7 @@ export const TemplatePickerSheet = memo(function TemplatePickerSheet({
     }
 
     return (
-        <ModalSheet
+        <ModalBottomSheet
             enableDynamicSizing
             ref={sheet.ref}
             onClose={sheet.onClose}
@@ -36,7 +36,7 @@ export const TemplatePickerSheet = memo(function TemplatePickerSheet({
                 onSelect={onSelect}
             />
 
-            <Pressable
+            <Button
                 compact={true}
                 onPress={onSave}
                 style={styles.save}
@@ -44,8 +44,8 @@ export const TemplatePickerSheet = memo(function TemplatePickerSheet({
                 textColor={colors.onBackground}
             >
                 {t('button.save_as_template')}
-            </Pressable>
-        </ModalSheet>
+            </Button>
+        </ModalBottomSheet>
     )
 })
 

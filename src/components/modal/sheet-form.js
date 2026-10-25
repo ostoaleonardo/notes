@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 
-import { FilledInput } from '@/components/input/filled-input'
+import { FilledTextField } from '@/components/input/filled-text-field'
 import { Typography } from '@/components/typography'
 
 import { SPACING } from '@/constants/theme'
@@ -26,7 +26,7 @@ export function SheetForm({ title, children }) {
 export function SheetInput(props) {
     return (
         <View style={styles.field}>
-            <FilledInput {...props} />
+            <FilledTextField {...props} />
         </View>
     )
 }

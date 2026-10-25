@@ -3,7 +3,7 @@ import { ErrorCode, finishTransaction, useIAP } from 'expo-iap'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, useTheme } from 'react-native-paper'
 
-import { Option } from './option'
+import { ListItem } from '../../components/list-item'
 import { Section } from '@/components/section'
 import { showSnackbar } from '@/components/snackbar/snackbar-host'
 
@@ -125,7 +125,7 @@ export function ProSection() {
             containerStyle={{ paddingHorizontal: SPACING.lg }}
             contentStyle={{ gap: SPACING.xxxs }}
         >
-            <Option
+            <ListItem
                 title={t(pro ? 'pro.pro' : 'pro.get')}
                 description={t(pro ? 'pro.success' : 'pro.features')}
                 rightContent={
@@ -135,7 +135,7 @@ export function ProSection() {
                 onPress={pro ? null : purcharsePro}
             />
             {!pro && (
-                <Option
+                <ListItem
                     title={t('pro.restore')}
                     description={t('pro.purchased')}
                     rightContent={

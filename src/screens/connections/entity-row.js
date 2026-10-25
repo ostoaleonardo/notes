@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
 import { useTheme } from 'react-native-paper'
 
-import { Option } from '@/screens/settings/option'
+import { ListItem } from '@/components/list-item'
 
 import { EntityIcon } from './entity-icon'
 
@@ -18,7 +18,7 @@ export const EntityRow = memo(function EntityRow({
     const handlePress = useCallback(() => onPress(entity), [onPress, entity])
 
     return (
-        <Option
+        <ListItem
             title={title}
             description={caption}
             background={background}
