@@ -25,6 +25,7 @@ import { Plus } from '@/icons/plus'
 import { ROUTES } from '@/constants/routes'
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 import { SPACING } from '@/constants/theme'
+import { pushOnce } from '@/utils/navigation'
 
 export function RecentNotes({ onClose, home = false }) {
     const { t } = useTranslation()
@@ -66,7 +67,7 @@ export function RecentNotes({ onClose, home = false }) {
 
     const onCreateNote = () => {
         onClose()
-        router.push({
+        pushOnce({
             pathname: ROUTES.ADD_NOTE,
             params: { repositoryId: defaultFolderId }
         })
@@ -78,7 +79,7 @@ export function RecentNotes({ onClose, home = false }) {
         onClose()
 
         const { path, replace } = getEditorNavigation(card.id, currentId)
-        replace ? router.replace(path) : router.push(path)
+        replace ? router.replace(path) : pushOnce(path)
     }, [onClose, currentId])
 
     const onRemove = useCallback((card) => {
@@ -116,13 +117,13 @@ export function RecentNotes({ onClose, home = false }) {
 
         if (currentId) {
             onClose()
-            router.push(ROUTES.HOME)
+            pushOnce(ROUTES.HOME)
         }
     }
 
     const onGoHome = () => {
         onClose()
-        router.push(ROUTES.HOME)
+        pushOnce(ROUTES.HOME)
     }
 
     const actionButtons = [

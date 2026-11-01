@@ -1,4 +1,4 @@
-import { router, useFocusEffect } from 'expo-router'
+import { useFocusEffect } from 'expo-router'
 import * as DocumentPicker from 'expo-document-picker'
 import { useCallback, useEffect, useEffectEvent, useMemo, useState } from 'react'
 
@@ -22,6 +22,8 @@ import { getRecentIds } from '@/utils/recent-ids'
 import { ROUTES } from '@/constants/routes'
 import { APP_BAR_MODES } from '@/constants/app-bar'
 import { APP_NAME, APP_NAME_PRO_SUFFIX } from '@/constants/app-name'
+import { pushOnce } from '@/utils/navigation'
+import { useSingleFlight } from '@/hooks/use-single-flight'
 
 export default function Home() {
     const { notes } = useNotes()
@@ -58,18 +60,18 @@ export default function Home() {
     }, [])
 
     const onCreateNote = () => {
-        router.push({
+        pushOnce({
             pathname: ROUTES.ADD_NOTE,
             params: { repositoryId: defaultFolderId }
         })
     }
 
-    const onImportNote = async () => {
+    const [onImportNote] = useSingleFlight(async () => {
         const result = await DocumentPicker.getDocumentAsync({ type: '*/*' })
         if (result.canceled) return
 
         importFile(result.assets[0].uri, result.assets[0].name)
-    }
+    })
 
     return (
         <BlurTargetProvider style={{ flex: 1 }}>

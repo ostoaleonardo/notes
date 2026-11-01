@@ -523,7 +523,7 @@
 			"deadline": "Plazo"
 		},
 		"new": "Nueva plantilla",
-		"import": "Importar plantilla",
+		"import": "Importar",
 		"save": {
 			"success": "Plantilla guardada",
 			"failed": "No se pudo guardar la plantilla"

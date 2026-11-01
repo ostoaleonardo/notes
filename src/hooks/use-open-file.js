@@ -1,4 +1,3 @@
-import { router } from 'expo-router'
 import { File, Paths } from 'expo-file-system'
 import * as Sharing from 'expo-sharing'
 import { useCallback } from 'react'
@@ -11,6 +10,7 @@ import { logError } from '@/utils/log-error'
 import { FILE_KINDS } from '@/constants/file-types'
 import { ROUTES } from '@/constants/routes'
 import { LOG_MESSAGES } from '@/constants/log-messages'
+import { pushOnce } from '@/utils/navigation'
 
 export const useOpenFile = () => {
     const { t } = useTranslation()
@@ -22,7 +22,7 @@ export const useOpenFile = () => {
         }
 
         if (file.kind === FILE_KINDS.IMAGE) {
-            router.push({
+            pushOnce({
                 pathname: ROUTES.IMAGE_VIEWER,
                 params: { url: encodeURIComponent(file.uri) }
             })

@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { FlatList, ScrollView } from 'react-native-gesture-handler'
-import { router, useLocalSearchParams } from 'expo-router'
+import { useLocalSearchParams } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 
 import { CreateNoteDialog } from '@/screens/connections/create-note-dialog'
@@ -24,6 +24,7 @@ import { LinkOff } from '@/icons/link-off'
 import { ICON_TOGGLE } from '@/constants/components'
 import { CONNECTION_TYPES, PENDING_TABS, PENDING_TAB_PARAM } from '@/constants/connections'
 import { OPACITY, SPACING } from '@/constants/theme'
+import { pushOnce } from '@/utils/navigation'
 
 const { NOTE } = CONNECTION_TYPES
 
@@ -64,7 +65,7 @@ export default function ConnectionsPending() {
     }), [tab, summary, t])
 
     const onPressEntity = useCallback((entity) => {
-        if (entity.type === NOTE) router.push(getEditorPath(entity.id))
+        if (entity.type === NOTE) pushOnce(getEditorPath(entity.id))
         else setMissing({ title: entityTitle(entity, model), path: '' })
     }, [setMissing, model])
 

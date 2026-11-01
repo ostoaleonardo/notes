@@ -1,4 +1,3 @@
-import { router } from 'expo-router'
 import { useCallback, useMemo, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -29,6 +28,7 @@ import { SPACING } from '@/constants/theme'
 import { ROUTES } from '@/constants/routes'
 import { TEST_IDS } from '@/constants/test-ids'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { pushOnce } from '@/utils/navigation'
 
 const VIEW_COMPONENTS = {
     [DRAWER_VIEWS.NOTES]: DrawerNotesView,
@@ -53,7 +53,7 @@ export function DrawerItems({ navigation, state }) {
 
     const openRoute = useCallback((route) => {
         closeDrawer()
-        router.push(route)
+        pushOnce(route)
     }, [closeDrawer])
 
     const onOpenRepositories = useCallback(() => openRoute(ROUTES.REPOSITORIES), [openRoute])

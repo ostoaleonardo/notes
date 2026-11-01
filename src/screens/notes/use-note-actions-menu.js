@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { router, useLocalSearchParams } from 'expo-router'
+import { useLocalSearchParams } from 'expo-router'
 
 import { useCommonActionsMenu } from './use-common-actions-menu'
 import { ActionMenuItem } from '@/ui/menu/action-menu-item'
@@ -21,6 +21,8 @@ import { Link } from '@/icons/link'
 import { NoteStack } from '@/icons/note-stack'
 import { OpenInNew } from '@/icons/open-in-new'
 import { Share as ShareIcon } from '@/icons/share'
+import { pushOnce } from '@/utils/navigation'
+import { useSingleFlight } from '@/hooks/use-single-flight'
 
 export const useNoteActionsMenu = ({
     onTrigger,
@@ -57,7 +59,7 @@ export const useNoteActionsMenu = ({
         updatePinned(next)
     }, [pinned, currentId, updatePinned])
 
-    const onDuplicate = useCallback(async () => {
+    const [onDuplicate] = useSingleFlight(async () => {
         const note = getNote(currentId)
 
         const duplicate = buildDuplicateNote(note, {
@@ -66,8 +68,8 @@ export const useNoteActionsMenu = ({
         })
 
         const { path } = await saveNote(duplicate, note.repositoryId)
-        router.push(getEditorPath(path))
-    }, [getNote, currentId, saveNote, t])
+        pushOnce(getEditorPath(path))
+    })
 
     return [
         [

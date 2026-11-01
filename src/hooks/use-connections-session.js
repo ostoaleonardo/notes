@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from 'react'
-import { router } from 'expo-router'
 
 import { useBottomSheet } from './use-bottom-sheet'
 import { useConnectionLabels } from './use-connection-labels'
@@ -11,6 +10,7 @@ import { getEditorPath } from '@/utils/editor-path'
 
 import { CONNECTION_TYPES, PENDING_TABS, PENDING_TAB_PARAM } from '@/constants/connections'
 import { ROUTES } from '@/constants/routes'
+import { pushOnce } from '@/utils/navigation'
 
 export function useConnectionsSession() {
     const model = useConnectionModel()
@@ -26,7 +26,7 @@ export function useConnectionsSession() {
     const onOpenEntity = useCallback((entity) => {
         relationsSheet.onClose()
 
-        if (entity.type === CONNECTION_TYPES.NOTE) router.push(getEditorPath(entity.id))
+        if (entity.type === CONNECTION_TYPES.NOTE) pushOnce(getEditorPath(entity.id))
         else openFile(model.fileById.get(entity.id))
     }, [relationsSheet, openFile, model])
 
@@ -36,7 +36,7 @@ export function useConnectionsSession() {
     }, [relationsSheet, setMissing, getTitle])
 
     const onOpenPending = useCallback(() => {
-        router.push({
+        pushOnce({
             pathname: ROUTES.CONNECTIONS_PENDING,
             params: { [PENDING_TAB_PARAM]: PENDING_TABS.ORPHANS }
         })

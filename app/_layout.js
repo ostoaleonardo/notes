@@ -6,6 +6,7 @@ import { useColorScheme } from 'react-native'
 import { ErrorBoundary } from '@/components/error-boundary'
 
 import { useLanguage } from '@/hooks/use-language'
+import { useRouteTracker } from '@/hooks/use-route-tracker'
 import { usePurchasedPro } from '@/hooks/use-purchased-pro'
 import { useStorage } from '@/hooks/use-storage'
 import { ProProvider } from '@/context/pro-context'
@@ -27,6 +28,7 @@ export default function MainLayout() {
     const colorScheme = useColorScheme()
     const { initLanguage } = useLanguage()
     const { getItem } = useStorage()
+    useRouteTracker()
 
     const [isReady, setIsReady] = useState(false)
     const [initialTheme, setInitialTheme] = useState({})

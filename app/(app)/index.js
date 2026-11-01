@@ -10,6 +10,7 @@ import { getStartupTarget } from '@/utils/startup-target'
 import { ROUTES } from '@/constants/routes'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { STARTUP_BEHAVIORS } from '@/constants/startup-behavior'
+import { pushOnce } from '@/utils/navigation'
 
 export default function App() {
     const { loading } = useNotes()
@@ -38,7 +39,7 @@ export default function App() {
         if (!targetPath) return
 
         router.replace(ROUTES.HOME)
-        router.push(targetPath)
+        pushOnce(targetPath)
     }, [isReady, startupBehavior, currentId])
 
     if (!isReady) return <Redirect href={ROUTES.REPOSITORY_GATE} />

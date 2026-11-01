@@ -1,5 +1,4 @@
 import { useCallback, useDeferredValue, useEffect, useMemo, useState } from 'react'
-import { router } from 'expo-router'
 import { randomUUID } from 'expo-crypto'
 import { Keyboard, Pressable, StyleSheet, View } from 'react-native'
 
@@ -22,6 +21,7 @@ import { toggleSavedSearch, removeSavedSearch, parseStoredList } from '@/utils/s
 import { RECENT_SEARCHES_LIMIT } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { SPACING } from '@/constants/theme'
+import { pushOnce } from '@/utils/navigation'
 
 export function NoteSearch({ onClose, initialQuery = '' }) {
     const { repositories } = useRepositories()
@@ -71,7 +71,7 @@ export function NoteSearch({ onClose, initialQuery = '' }) {
     const onOpenResult = useCallback((id) => {
         saveRecent(trimmedQuery)
         onClose()
-        router.push(getEditorPath(id))
+        pushOnce(getEditorPath(id))
     }, [saveRecent, trimmedQuery, onClose])
 
     const onToggleSaveSearch = useCallback(() => {

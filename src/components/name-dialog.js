@@ -1,29 +1,33 @@
-import { Button } from 'react-native-paper'
+import { cloneElement } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@/ui/dialog'
+import { Button } from '@/ui/button/button'
 import { FilledTextField } from '@/ui/input/filled-text-field'
 
 import { useCreateDialogInput } from '@/hooks/use-dialog-input'
+import { useSingleFlight } from '@/hooks/use-single-flight'
 import { useHaptics } from '@/hooks/use-haptics'
 
 import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
 import { FEEDBACK_TYPES } from '@/constants/feedback-types'
 
-export function NameDialog({ visible, onDismiss, title, onSubmit, extraActions = [] }) {
+export function NameDialog({ visible, onDismiss, title, onSubmit, busy = false, extraActions = [] }) {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
 
     const [name, setName, disabled] = useCreateDialogInput(visible)
 
-    const onCreate = async () => {
+    const [onCreate, creating] = useSingleFlight(async () => {
         if (disabled) return
 
         const succeeded = await onSubmit(name.trim())
         onDismiss()
 
         if (succeeded !== false) vibrate(FEEDBACK_TYPES.SUCCESS)
-    }
+    })
+
+    const locked = creating || busy
 
     return (
         <Dialog
@@ -31,12 +35,15 @@ export function NameDialog({ visible, onDismiss, title, onSubmit, extraActions =
             visible={visible}
             onDismiss={onDismiss}
             actions={[
-                ...extraActions,
+                ...extraActions.map((action) => cloneElement(action, {
+                    disabled: locked || action.props.disabled
+                })),
                 <Button
                     key='create'
                     mode='contained'
+                    loading={creating}
                     onPress={onCreate}
-                    disabled={disabled}
+                    disabled={disabled || busy}
                     labelStyle={DIALOG_BUTTON_LABEL_STYLE}
                 >
                     {t('button.create')}

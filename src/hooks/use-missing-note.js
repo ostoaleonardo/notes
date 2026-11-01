@@ -1,11 +1,11 @@
 import { useCallback, useMemo, useState } from 'react'
-import { router } from 'expo-router'
 
 import { useNotes } from './use-notes'
 import { useRepositories } from './use-repositories'
 import { getEditorPath } from '@/utils/editor-path'
 import { getDate } from '@/utils/date'
 import { buildRepositoryPaths } from '@/utils/note-path'
+import { pushOnce } from '@/utils/navigation'
 
 export function useMissingNote() {
     const { saveNote } = useNotes()
@@ -31,7 +31,7 @@ export function useMissingNote() {
             updatedAt: now
         }, targetRepository?.id)
 
-        router.push(getEditorPath(path))
+        pushOnce(getEditorPath(path))
     }, [missing, repositories, activeRepositoryTree, saveNote])
 
     return useMemo(

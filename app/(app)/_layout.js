@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import * as SplashScreen from 'expo-splash-screen'
-import { Stack, router } from 'expo-router'
+import { Stack } from 'expo-router'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
@@ -15,6 +15,7 @@ import { useRepositoryReconciliation } from '@/hooks/use-repository-reconciliati
 import { useImportMarkdown } from '@/hooks/use-import-markdown'
 import { getScreenContentStyle } from '@/utils/screen-content-style'
 import { getEditorPath } from '@/utils/editor-path'
+import { pushOnce } from '@/utils/navigation'
 
 export default function AppLayout() {
     const { t } = useTranslation()
@@ -53,7 +54,7 @@ export default function AppLayout() {
 
     useEffect(() => {
         if (showDrawer && pendingWelcomeNoteId) {
-            router.push(getEditorPath(pendingWelcomeNoteId))
+            pushOnce(getEditorPath(pendingWelcomeNoteId))
             clearPendingWelcomeNote()
         }
     }, [

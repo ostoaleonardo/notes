@@ -24,6 +24,7 @@ import { ROUTES } from '@/constants/routes'
 import { FREE_REPOSITORIES_LIMIT } from '@/constants/default-values'
 import { SPACING } from '@/constants/theme'
 import { REPOSITORY_RESULTS } from '@/constants/repository-results'
+import { useSingleFlight } from '@/hooks/use-single-flight'
 
 export default function Repositories() {
     const { t } = useTranslation()
@@ -57,7 +58,7 @@ export default function Repositories() {
 
     const canAddRepository = pro || rootRepositories.length < FREE_REPOSITORIES_LIMIT
 
-    const onAddRepository = useCallback(async () => {
+    const [onAddRepository] = useSingleFlight(async () => {
         if (!canAddRepository) {
             showSnackbar(t('repositories.pro_required'))
             return
@@ -69,7 +70,7 @@ export default function Repositories() {
         } else if (result === REPOSITORY_RESULTS.ERROR) {
             showSnackbar(t('repositories.add_failed'))
         }
-    }, [canAddRepository, addRepository, t])
+    })
 
     const onOpen = useCallback((id) => {
         setActiveRepository(id)

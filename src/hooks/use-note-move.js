@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react'
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useBottomSheet } from './use-bottom-sheet'
@@ -11,6 +11,7 @@ import { replaceInSet } from '@/utils/replace-in-set'
 
 import { DUPLICATE_TITLE_ERROR } from '@/constants/note-errors'
 import { LOG_MESSAGES } from '@/constants/log-messages'
+import { useSingleFlight } from '@/hooks/use-single-flight'
 
 export function useNoteMove({ id, busyRef, flush, onMoved }) {
     const { t } = useTranslation()
@@ -23,7 +24,7 @@ export function useNoteMove({ id, busyRef, flush, onMoved }) {
     const latest = useRef({})
     latest.current = { id, busyRef, flush, onMoved, moveNote, pinned, updatePinned, removeRecent, t }
 
-    const onSelect = useCallback(async (destinationId) => {
+    const [onSelect] = useSingleFlight(async (destinationId) => {
         onClose()
 
         const current = latest.current
@@ -51,7 +52,7 @@ export function useNoteMove({ id, busyRef, flush, onMoved }) {
         } finally {
             if (current.busyRef) current.busyRef.current = false
         }
-    }, [onClose])
+    })
 
     return { sheet, onSelect }
 }

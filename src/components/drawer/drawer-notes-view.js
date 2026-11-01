@@ -1,4 +1,3 @@
-import { router } from 'expo-router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BackHandler } from 'react-native'
 import { SlideInLeft, SlideInRight } from 'react-native-reanimated'
@@ -37,6 +36,8 @@ import {
     LEVEL_DIRECTIONS
 } from '@/constants/drawer-views'
 import { ANIMATION_DURATION } from '@/constants/theme'
+import { pushOnce } from '@/utils/navigation'
+import { useSingleFlight } from '@/hooks/use-single-flight'
 
 export function DrawerNotesView({ closeDrawer, drawerOpen }) {
     const { t } = useTranslation()
@@ -117,7 +118,7 @@ export function DrawerNotesView({ closeDrawer, drawerOpen }) {
     }, [closeDrawer, currentId])
 
     const onCreateNote = useCallback((repositoryId) => {
-        router.push({
+        pushOnce({
             pathname: ROUTES.ADD_NOTE,
             params: { repositoryId }
         })
@@ -131,13 +132,13 @@ export function DrawerNotesView({ closeDrawer, drawerOpen }) {
         if (action === REPOSITORY_ACTIONS.DELETE) return setDeleteId(repositoryId)
     }, [onCreateNote])
 
-    const onOpenDailyNote = useCallback(async () => {
+    const [onOpenDailyNote] = useSingleFlight(async () => {
         const path = await openDailyNote()
         if (!path) return
 
         closeDrawer()
         if (path !== currentId) openEditor(path, currentId)
-    }, [openDailyNote, closeDrawer, currentId])
+    })
 
     const onDismissEdit = useCallback(() => setEditFolderId(''), [])
     const onDismissSubfolder = useCallback(() => setSubfolderParentId(''), [])

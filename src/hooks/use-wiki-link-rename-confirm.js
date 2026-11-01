@@ -5,6 +5,7 @@ import { useStorage } from './use-storage'
 import { findBacklinks, renameWikiLinksForNote } from '@/utils/wiki-links'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { STORAGE_BOOLEAN } from '@/constants/storage-values'
+import { useSingleFlight } from '@/hooks/use-single-flight'
 
 export function useWikiLinkRenameConfirm() {
     const {
@@ -65,12 +66,12 @@ export function useWikiLinkRenameConfirm() {
         setPending(null)
     }
 
-    const onConfirmAlways = async () => {
+    const [onConfirmAlways] = useSingleFlight(async () => {
         if (pending) propagatePending(pending)
         setAlwaysUpdate(true)
         await setItem(STORAGE_KEYS.ALWAYS_UPDATE_WIKI_LINKS, STORAGE_BOOLEAN.TRUE)
         setPending(null)
-    }
+    })
 
     return {
         visible: !!pending,

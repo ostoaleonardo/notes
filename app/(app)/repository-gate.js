@@ -8,16 +8,17 @@ import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'
 
 import { REPOSITORY_RESULTS } from '@/constants/repository-results'
+import { useSingleFlight } from '@/hooks/use-single-flight'
 
 export default function RepositoryGate() {
     const { t } = useTranslation()
     const { loading } = useNotes()
     const { activeRepository, addRepository } = useRepositories()
 
-    const onAddRepository = async () => {
+    const [onAddRepository] = useSingleFlight(async () => {
         const result = await addRepository()
         if (result === REPOSITORY_RESULTS.ERROR) showSnackbar(t('repositories.add_failed'))
-    }
+    })
 
     return (
         <MessageScreen

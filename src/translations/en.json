@@ -523,7 +523,7 @@
 			"deadline": "Deadline"
 		},
 		"new": "New template",
-		"import": "Import template",
+		"import": "Import",
 		"save": {
 			"success": "Template saved",
 			"failed": "Couldn't save the template"

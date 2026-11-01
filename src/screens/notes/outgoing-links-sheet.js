@@ -1,5 +1,4 @@
 import { memo, useCallback, useState } from 'react'
-import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 
@@ -11,6 +10,7 @@ import { getEditorPath } from '@/utils/editor-path'
 import { findOutgoingLinks } from '@/utils/outgoing-links'
 
 import { ArrowForward } from '@/icons/arrow-forward'
+import { pushOnce } from '@/utils/navigation'
 
 const OutgoingLinkItem = memo(function OutgoingLinkItem({ item, onPress }) {
     const { colors } = useTheme()
@@ -39,7 +39,7 @@ export const OutgoingLinksSheet = memo(function OutgoingLinksSheet({ sheet, cont
 
     const onPress = useCallback((path) => {
         sheet.onClose()
-        router.push(getEditorPath(path))
+        pushOnce(getEditorPath(path))
     }, [sheet])
 
     const renderItem = useCallback(({ item }) => (

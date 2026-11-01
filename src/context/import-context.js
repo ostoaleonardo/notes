@@ -1,7 +1,6 @@
 import { createContext, useCallback, useEffect, useMemo, useState } from 'react'
 import * as Linking from 'expo-linking'
 import { File } from 'expo-file-system'
-import { useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 
 import { useNotes } from '@/hooks/use-notes'
@@ -12,11 +11,11 @@ import { MARKDOWN_FILE_NAME_PATTERN } from '@/constants/markdown-patterns'
 import { FILE_URI_SCHEMES } from '@/constants/file-uri-schemes'
 import { LOG_MESSAGES } from '@/constants/log-messages'
 import { logError } from '@/utils/log-error'
+import { pushOnce } from '@/utils/navigation'
 
 export const ImportContext = createContext()
 
 export function ImportProvider({ children }) {
-    const router = useRouter()
     const { t } = useTranslation()
     const { saveNote, loading } = useNotes()
 
@@ -39,13 +38,13 @@ export function ImportProvider({ children }) {
                 properties: extractProperties(frontmatter)
             })
 
-            router.push(ROUTES.HOME)
+            pushOnce(ROUTES.HOME)
         } catch (error) {
             logError(LOG_MESSAGES.ERROR_IMPORTING_MARKDOWN_FILE, error)
         } finally {
             setImporting(false)
         }
-    }, [router, saveNote, t])
+    }, [saveNote, t])
 
     useEffect(() => {
         const handleUrl = (url) => {

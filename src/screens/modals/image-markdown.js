@@ -26,6 +26,7 @@ import { PICKER_ERROR_CODES } from '@/constants/picker-errors'
 import { LOG_MESSAGES } from '@/constants/log-messages'
 import { INPUT_EXAMPLES } from '@/constants/input-examples'
 import { logError } from '@/utils/log-error'
+import { useSingleFlight } from '@/hooks/use-single-flight'
 
 export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
     const { t } = useTranslation()
@@ -56,7 +57,7 @@ export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
         setCameraPermission(await requestCameraPermission())
     }
 
-    const onPickImage = async (type) => {
+    const [onPickImage] = useSingleFlight(async (type) => {
         let asset = null
 
         try {
@@ -89,7 +90,7 @@ export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
             logError(LOG_MESSAGES.ERROR_SAVING_PICKED_IMAGE, error)
             showSnackbar(t('markdown.image.save_failed'))
         }
-    }
+    })
 
     const onAdd = () => {
         if (!url.trim()) return

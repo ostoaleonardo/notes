@@ -1,16 +1,18 @@
-import { router } from 'expo-router'
-import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import * as DocumentPicker from 'expo-document-picker'
+
+import { Button } from '@/ui/button/button'
 
 import { NameDialog } from '@/components/name-dialog'
 
 import { useHaptics } from '@/hooks/use-haptics'
+import { useSingleFlight } from '@/hooks/use-single-flight'
 import { useTemplates } from '@/hooks/use-templates'
 
 import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
 import { FEEDBACK_TYPES } from '@/constants/feedback-types'
 import { ROUTES } from '@/constants/routes'
+import { pushOnce } from '@/utils/navigation'
 
 export function AddTemplate({ visible, onDismiss, folder = '' }) {
     const { t } = useTranslation()
@@ -19,10 +21,10 @@ export function AddTemplate({ visible, onDismiss, folder = '' }) {
 
     const onSubmit = async (name) => {
         const filename = await addTemplate(name, '', folder)
-        router.push(ROUTES.EDIT_TEMPLATE + encodeURIComponent(filename))
+        pushOnce(ROUTES.EDIT_TEMPLATE + encodeURIComponent(filename))
     }
 
-    const onImport = async () => {
+    const [onImport, importing] = useSingleFlight(async () => {
         const result = await DocumentPicker.getDocumentAsync({ type: '*/*' })
         if (result.canceled) return
 
@@ -33,11 +35,13 @@ export function AddTemplate({ visible, onDismiss, folder = '' }) {
         )
         onDismiss()
         vibrate(FEEDBACK_TYPES.SUCCESS)
-    }
+    })
 
     const importAction = (
         <Button
             key='import'
+            mode='text'
+            loading={importing}
             onPress={onImport}
             labelStyle={DIALOG_BUTTON_LABEL_STYLE}
         >
@@ -51,6 +55,7 @@ export function AddTemplate({ visible, onDismiss, folder = '' }) {
             visible={visible}
             onDismiss={onDismiss}
             onSubmit={onSubmit}
+            busy={importing}
             extraActions={[importAction]}
         />
     )

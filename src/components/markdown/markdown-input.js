@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
 import { Linking } from 'react-native'
-import { router } from 'expo-router'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
@@ -40,6 +39,7 @@ import { EDITOR_MODES } from '@/constants/editor-modes'
 import { LINK_TYPES } from '@/constants/link-types'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { WIKI_LINK_FORMATS } from '@/constants/wiki-links'
+import { pushOnce } from '@/utils/navigation'
 
 export const MarkdownInput = ({
     id,
@@ -113,7 +113,7 @@ export const MarkdownInput = ({
                 break
             case LINK_TYPES.NOTE:
                 if (link.id === id && link.anchor) onJumpToAnchor(link.anchor)
-                else router.push(getEditorPath(link.id, link.anchor))
+                else pushOnce(getEditorPath(link.id, link.anchor))
                 break
             case LINK_TYPES.LINK_MENTION:
                 linkMention(link.path)
@@ -134,7 +134,7 @@ export const MarkdownInput = ({
         openFile
     ])
 
-    const onImagePress = useCallback((url) => router.push({
+    const onImagePress = useCallback((url) => pushOnce({
         pathname: ROUTES.IMAGE_VIEWER,
         params: { url: encodeURIComponent(url) }
     }), [])
