@@ -15,9 +15,9 @@ export const getCheckboxColors = (colors) => ({
     checkmarkColor: colors.background
 })
 
-export const getTextFieldColors = (colors) => ({
-    focusedContainerColor: colors.surfaceVariant,
-    unfocusedContainerColor: colors.surfaceVariant,
+export const getTextFieldColors = (colors, containerColor = colors.surfaceVariant) => ({
+    focusedContainerColor: containerColor,
+    unfocusedContainerColor: containerColor,
     focusedTextColor: colors.onBackground,
     unfocusedTextColor: colors.onBackground,
     cursorColor: colors.accentText,

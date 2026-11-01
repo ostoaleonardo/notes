@@ -19,7 +19,7 @@
 		},
 		"save_failed": "Impossible d'enregistrer cette note",
 		"title_duplicated": "Une note portant ce nom existe déjà",
-		"title_breaks_links": "Les caractères # ^ [ ] empêchent les liens vers cette note de fonctionner dans Obsidian",
+		"title_breaks_links": "Les caractères # ^ [ ] empêchent les liens vers cette note de fonctionner",
 		"migration_notice": "Migration terminée avec des problèmes : {{renamed}} notes ont été renommées et {{images}} images n'ont pas pu être récupérées.",
 		"move": {
 			"failed": "Impossible de déplacer cette note",

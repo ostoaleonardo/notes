@@ -19,7 +19,7 @@
 		},
 		"save_failed": "Det gick inte att spara anteckningen",
 		"title_duplicated": "Det finns redan en anteckning med det här namnet",
-		"title_breaks_links": "Tecknen # ^ [ ] gör att länkar till den här anteckningen slutar fungera i Obsidian",
+		"title_breaks_links": "Tecknen # ^ [ ] gör att länkar till den här anteckningen slutar fungera",
 		"migration_notice": "Migreringen slutfördes med problem: {{renamed}} anteckningar döptes om och {{images}} bilder kunde inte återställas.",
 		"move": {
 			"failed": "Det gick inte att flytta anteckningen",

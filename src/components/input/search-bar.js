@@ -1,49 +1,43 @@
-import { useCallback, useMemo } from 'react'
-import { StyleSheet, View } from 'react-native'
-import { TextInput, useTheme } from 'react-native-paper'
+import { useCallback, useRef } from 'react'
+import { Pressable, StyleSheet, View } from 'react-native'
+import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
+
+import { FilledTextField } from '@/ui/input/filled-text-field'
 
 import { Close } from '@/icons/close'
 import { Search } from '@/icons/search'
 
-import { FONTS, SPACING } from '@/constants/theme'
-import { TRANSPARENT } from '@/constants/themes'
+import { ICON_SIZE, SPACING } from '@/constants/theme'
 
-const renderSearch = ({ size, color }) => <Search width={size} height={size} color={color} />
-const renderClear = ({ size, color }) => <Close width={size} height={size} color={color} />
-
-export function SearchBar({ label, value, onChangeText, ...props }) {
+export function SearchBar({ label, value, onChangeText }) {
     const { t } = useTranslation()
-    const { colors, fonts } = useTheme()
+    const { colors } = useTheme()
+    const fieldRef = useRef(null)
 
-    const fontTheme = useMemo(() => ({
-        fonts: {
-            bodyLarge: {
-                ...fonts.bodyLarge,
-                fontFamily: FONTS.azeretLight
-            }
-        }
-    }), [fonts])
-
-    const onClear = useCallback(() => onChangeText(''), [onChangeText])
+    const onClear = useCallback(() => {
+        fieldRef.current?.clear()
+        onChangeText('')
+    }, [onChangeText])
 
     return (
         <View style={styles.container}>
-            <TextInput
-                mode='flat'
+            <FilledTextField
+                ref={fieldRef}
+                multiline={false}
                 label={label ?? t('drawer.search')}
                 value={value}
                 onChangeText={onChangeText}
-                theme={fontTheme}
-                style={{ backgroundColor: colors.surfaceVariant }}
-                textColor={colors.onBackground}
-                cursorColor={colors.accentText}
-                selectionColor={colors.accentText + TRANSPARENT[30]}
-                underlineColor={colors.onBackground + TRANSPARENT[50]}
-                activeUnderlineColor={colors.accentText}
-                left={<TextInput.Icon icon={renderSearch} />}
-                right={value ? <TextInput.Icon icon={renderClear} onPress={onClear} /> : undefined}
-                {...props}
+                startAdornment={(
+                    <View style={styles.icon}>
+                        <Search width={ICON_SIZE.xxl} height={ICON_SIZE.xxl} color={colors.onSurfaceVariant} />
+                    </View>
+                )}
+                endAdornment={value ? (
+                    <Pressable style={styles.icon} onPress={onClear} accessibilityRole='button'>
+                        <Close width={ICON_SIZE.xxl} height={ICON_SIZE.xxl} color={colors.onSurfaceVariant} />
+                    </Pressable>
+                ) : undefined}
             />
         </View>
     )
@@ -53,5 +47,8 @@ const styles = StyleSheet.create({
     container: {
         marginHorizontal: SPACING.lg,
         marginBottom: SPACING.lg
+    },
+    icon: {
+        padding: SPACING.sm
     }
 })

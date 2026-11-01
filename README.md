@@ -173,6 +173,8 @@ Simple notes that stay on your phone.
 - Import the notes you already have.
 - Open text files from other apps.
 - Add images, audio, video and PDFs.
+- Play audio and video inside the note.
+- Preview a PDF page inside the note (turn it on in Settings) with `![[file.pdf#page=2]]`.
 - Take a photo and add it to a note.
 
 <br clear="right" />
@@ -219,7 +221,7 @@ Notes is free. Pro unlocks more.
 
 ## Built with
 
-![Static Badge](https://img.shields.io/badge/Expo-000020?style=flat-square&logo=expo&logoColor=white) ![Static Badge](https://img.shields.io/badge/React_Native-61DAFB?style=flat-square&logo=react&logoColor=black) ![Static Badge](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black) ![Static Badge](https://img.shields.io/badge/Android-3DDC84?style=flat-square&logo=android&logoColor=white)
+![Static Badge](https://img.shields.io/badge/Expo-000020?style=flat-square&logo=expo&logoColor=white) ![Static Badge](https://img.shields.io/badge/React_Native-61DAFB?style=flat-square&logo=react&logoColor=black) ![Static Badge](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black) ![Static Badge](https://img.shields.io/badge/Android-3DDC84?style=flat-square&logo=android&logoColor=white) ![Static Badge](https://img.shields.io/badge/Jetpack_Compose-4285F4?style=flat-square&logo=jetpackcompose&logoColor=white)
 
 ## Contribute
 
@@ -227,7 +229,13 @@ Notes is free. Pro unlocks more.
 2. Install with `npm install`.
 3. Connect your Android phone with a USB cable.
 4. Run `npx expo start`.
-5. Make your changes and open a pull request.
+5. Make your changes. Run `npm run lint` and `npm test`.
+6. Open a pull request.
+
+### Project layout
+
+- `src/ui` has the generic components, hooks and design tokens. It can't import app code, and ESLint enforces it.
+- `src/components` and `src/screens` have what is specific to Notes.
 
 ## Translations
 

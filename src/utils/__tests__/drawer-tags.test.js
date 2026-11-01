@@ -23,7 +23,7 @@ describe('drawer tag rows', () => {
         ])
     })
 
-    test('counts each tag use under its ancestors like Obsidian does', () => {
+    test('counts each tag use under each of its ancestors', () => {
         const tree = buildTagTree([{ path: 'a', tags: ['one', 'one/two', 'three', 'two'] }])
         const rows = flattenTagTree(tree, new Set(['one']))
 

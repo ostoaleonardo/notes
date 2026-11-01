@@ -345,7 +345,7 @@ describe('steady state (no legacy data)', () => {
         expect(await noteFile.text()).toBe(rawContent)
     })
 
-    test('keeps foreign properties and reads comma separated obsidian tags', async () => {
+    test('keeps foreign properties and reads comma separated tags', async () => {
         const storage = createFakeStorage()
         const fileStorage = createFakeFileStorage()
         const rawContent = '---\naliases:\n  - Alias\ntags: one, two\n---\n\ncontent'

@@ -19,7 +19,7 @@
 		},
 		"save_failed": "このメモを保存できませんでした",
 		"title_duplicated": "この名前のメモはすでに存在します",
-		"title_breaks_links": "# ^ [ ] の文字を使うと、Obsidian でこのメモへのリンクが機能しなくなります",
+		"title_breaks_links": "# ^ [ ] の文字を使うと、このメモへのリンクが機能しなくなります",
 		"migration_notice": "移行は問題を残して完了しました。{{renamed}} 件のメモの名前が変更され、{{images}} 枚の画像を復元できませんでした。",
 		"move": {
 			"failed": "このメモを移動できませんでした",

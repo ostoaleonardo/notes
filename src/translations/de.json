@@ -19,7 +19,7 @@
 		},
 		"save_failed": "Diese Notiz konnte nicht gespeichert werden",
 		"title_duplicated": "Eine Notiz mit diesem Namen existiert bereits",
-		"title_breaks_links": "Die Zeichen # ^ [ ] verhindern, dass Links zu dieser Notiz in Obsidian funktionieren",
+		"title_breaks_links": "Die Zeichen # ^ [ ] verhindern, dass Links zu dieser Notiz funktionieren",
 		"migration_notice": "Migration mit Problemen abgeschlossen: {{renamed}} Notizen wurden umbenannt und {{images}} Bilder konnten nicht wiederhergestellt werden.",
 		"move": {
 			"failed": "Diese Notiz konnte nicht verschoben werden",

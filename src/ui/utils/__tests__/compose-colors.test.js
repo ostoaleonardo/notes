@@ -54,6 +54,13 @@ describe('text field colors', () => {
         expect(result.unfocusedContainerColor).toBe(colors.surfaceVariant)
     })
 
+    test('lets the container color be overridden', () => {
+        const result = getTextFieldColors(colors, colors.surface)
+
+        expect(result.focusedContainerColor).toBe(colors.surface)
+        expect(result.unfocusedContainerColor).toBe(colors.surface)
+    })
+
     test('highlights the indicator, label and cursor with the accent text color', () => {
         const result = getTextFieldColors(colors)
 

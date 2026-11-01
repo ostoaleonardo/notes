@@ -1,29 +1,20 @@
-import { StyleSheet, TextInput, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
-import { TRANSPARENT } from '@/ui/tokens/transparent'
-import { RADIUS, SPACING, FONTS, TYPOGRAPHY_SIZE_VARIANTS } from '@/ui/tokens/theme'
+import { FilledTextField } from '@/ui/input/filled-text-field'
 
-export function SmallInput({ background, ...props }) {
+export function SmallInput({ background, value, onChangeText, placeholder, autoFocus }) {
     const { colors } = useTheme()
 
     return (
-        <View
-            style={{
-                ...styles.container,
-                backgroundColor: background || colors.surface
-            }}
-        >
-            <TextInput
-                style={{
-                    ...styles.base,
-                    color: colors.onBackground
-                }}
-                cursorColor={colors.onBackground}
-                selectionHandleColor={colors.accentText}
-                selectionColor={colors.onBackground + TRANSPARENT[20]}
-                placeholderTextColor={colors.onBackground + TRANSPARENT[40]}
-                {...props}
+        <View style={styles.container}>
+            <FilledTextField
+                multiline={false}
+                value={value}
+                autoFocus={autoFocus}
+                placeholder={placeholder}
+                containerColor={background || colors.surface}
+                onChangeText={onChangeText}
             />
         </View>
     )
@@ -32,16 +23,6 @@ export function SmallInput({ background, ...props }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width: '100%',
-        borderRadius: RADIUS.lg,
-        paddingVertical: SPACING.sm,
-        paddingHorizontal: SPACING.lg
-    },
-    base: {
-        flex: 1,
-        padding: 0,
-        fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodyMedium,
-        textAlignVertical: 'center',
-        fontFamily: FONTS.azeretLight
+        width: '100%'
     }
 })

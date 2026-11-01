@@ -2,19 +2,21 @@ diff --git a/node_modules/@expo/ui/src/community/bottom-sheet/BottomSheet.androi
 index ac8ae4a..dba0ae4 100644
 --- a/node_modules/@expo/ui/src/community/bottom-sheet/BottomSheet.android.tsx
 +++ b/node_modules/@expo/ui/src/community/bottom-sheet/BottomSheet.android.tsx
-@@ -61,6 +61,7 @@ export function BottomSheet(props: BottomSheetProps) {
+@@ -61,6 +61,8 @@ export function BottomSheet(props: BottomSheetProps) {
      onClose,
      onDismiss,
      enablePanDownToClose = false,
 +    dismissOnClickOutside = enablePanDownToClose,
++    dismissOnBackPress = enablePanDownToClose,
      enableDynamicSizing = true,
      handleComponent,
      backgroundStyle,
-@@ -197,7 +198,7 @@ export function BottomSheet(props: BottomSheetProps) {
+@@ -197,7 +199,7 @@ export function BottomSheet(props: BottomSheetProps) {
              containerColor={containerColor}
              properties={{
-               shouldDismissOnBackPress: enablePanDownToClose,
+-              shouldDismissOnBackPress: enablePanDownToClose,
 -              shouldDismissOnClickOutside: enablePanDownToClose,
++              shouldDismissOnBackPress: dismissOnBackPress,
 +              shouldDismissOnClickOutside: dismissOnClickOutside,
              }}>
              <RNHostView matchContents={fitToContents}>

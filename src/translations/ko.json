@@ -19,7 +19,7 @@
 		},
 		"save_failed": "이 노트를 저장할 수 없습니다",
 		"title_duplicated": "이 이름의 노트가 이미 있습니다",
-		"title_breaks_links": "# ^ [ ] 문자를 사용하면 Obsidian에서 이 노트로의 링크가 작동하지 않습니다",
+		"title_breaks_links": "# ^ [ ] 문자를 사용하면 이 노트로의 링크가 작동하지 않습니다",
 		"migration_notice": "마이그레이션이 문제와 함께 완료되었습니다. 노트 {{renamed}}개의 이름이 변경되었고 이미지 {{images}}개를 복구하지 못했습니다.",
 		"move": {
 			"failed": "이 노트를 이동할 수 없습니다",

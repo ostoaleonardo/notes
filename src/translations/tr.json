@@ -19,7 +19,7 @@
 		},
 		"save_failed": "Bu not kaydedilemedi",
 		"title_duplicated": "Bu adda bir not zaten var",
-		"title_breaks_links": "# ^ [ ] karakterleri, bu nota giden bağlantıların Obsidian'da çalışmasını engeller",
+		"title_breaks_links": "# ^ [ ] karakterleri, bu nota giden bağlantıların çalışmasını engeller",
 		"migration_notice": "Taşıma sorunlarla tamamlandı: {{renamed}} not yeniden adlandırıldı ve {{images}} görsel kurtarılamadı.",
 		"move": {
 			"failed": "Bu not taşınamadı",

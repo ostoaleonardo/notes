@@ -1,5 +1,6 @@
 import { MIME_TYPES } from '@/constants/mime-types'
 import { SYNTAX_IMAGE_BASE64, SYNTAX_IMAGE_FILENAME } from '@/constants/syntax-note'
+import { SAMPLE_WAV_BASE64 } from '@/constants/dev-test-media'
 
 const lines = (...rows) => rows.join('\n')
 
@@ -183,7 +184,7 @@ export const DEV_TEST_NOTES = [
             '',
             '![[dev-image-2.png|120]]',
             '',
-            '[[sample.pdf]] [[sample.txt]] [[sample.mp3]] [[sample.mp4]]',
+            '[[sample.pdf]] [[sample.txt]] [[sample.wav]] [[sample.mp4]]',
             ''
         )
     },
@@ -250,6 +251,6 @@ export const DEV_TEST_FILES = [
     { filename: 'dev-image-2.png', mimeType: MIME_TYPES.PNG, base64: SYNTAX_IMAGE_BASE64 },
     { filename: 'sample.txt', mimeType: MIME_TYPES.TEXT, text: 'Plain text attachment.' },
     { filename: 'sample.pdf', mimeType: MIME_TYPES.PDF, text: MINIMAL_PDF },
-    { filename: 'sample.mp3', mimeType: MIME_TYPES.MP3, base64: PLACEHOLDER_BYTES_BASE64 },
+    { filename: 'sample.wav', mimeType: MIME_TYPES.WAV, base64: SAMPLE_WAV_BASE64 },
     { filename: 'sample.mp4', mimeType: MIME_TYPES.MP4, base64: PLACEHOLDER_BYTES_BASE64 }
 ]

@@ -49,7 +49,7 @@ describe('dev test plan', () => {
             'dev-image-2.png',
             'sample.pdf',
             'sample.txt',
-            'sample.mp3',
+            'sample.wav',
             'sample.mp4',
             'syntax-sample.png'
         ]

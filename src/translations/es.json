@@ -19,7 +19,7 @@
 		},
 		"save_failed": "No se pudo guardar esta nota",
 		"title_duplicated": "Ya existe una nota con este nombre",
-		"title_breaks_links": "Los caracteres # ^ [ ] hacen que los enlaces a esta nota no funcionen en Obsidian",
+		"title_breaks_links": "Los caracteres # ^ [ ] hacen que los enlaces a esta nota no funcionen",
 		"migration_notice": "La migración terminó con avisos: {{renamed}} notas se renombraron y {{images}} imágenes no se pudieron recuperar.",
 		"move": {
 			"failed": "No se pudo mover esta nota",

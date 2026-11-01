@@ -39,6 +39,8 @@ export const ICON_TOGGLE = {
 
 export const FILLED_INPUT = {
     minHeight: 56,
+    matchContents: { vertical: true },
+    hostStyle: { width: '100%', minHeight: 56 },
     keyboardOptions: { capitalization: 'sentences' }
 }
 
@@ -52,6 +54,12 @@ export const MENU = {
     iconSize: ICON_SIZE.lg,
     iconToTitle: SPACING.xxs,
     titleToTrailing: SPACING.xxs
+}
+
+export const PLAIN_INPUT = {
+    matchContents: { vertical: true },
+    hostStyle: { width: '100%' },
+    keyboardOptions: { capitalization: 'sentences' }
 }
 
 export const SHEET = {

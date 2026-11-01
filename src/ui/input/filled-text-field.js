@@ -1,16 +1,13 @@
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useTheme } from 'react-native-paper'
-import {
-    Host,
-    Text,
-    TextField,
-    useNativeState
-} from '@expo/ui/jetpack-compose'
+import { Host, RNHostView, Text, TextField } from '@expo/ui/jetpack-compose'
+
+import { useTextState } from '@/ui/hooks/use-text-state'
 
 import { getTextFieldColors } from '@/ui/utils/compose-colors'
 
 import { FILLED_INPUT } from '@/ui/tokens/components'
-import { FONTS, TYPOGRAPHY_SIZE_VARIANTS } from '@/ui/tokens/theme'
+import { FONTS } from '@/ui/tokens/theme'
 import { TRANSPARENT } from '@/ui/tokens/transparent'
 
 export function FilledTextField({
@@ -18,33 +15,35 @@ export function FilledTextField({
     value = '',
     onChangeText,
     placeholder,
+    containerColor,
+    startAdornment,
+    endAdornment,
+    ref,
     multiline = true,
     autoFocus = false
 }) {
     const { colors } = useTheme()
-    const text = useNativeState(value)
-    const fieldColors = useMemo(() => getTextFieldColors(colors), [colors])
+    const { text, onFocusChanged } = useTextState(value)
+    const fieldColors = useMemo(() => getTextFieldColors(colors, containerColor), [colors, containerColor])
+
     const textStyle = useMemo(() => ({
         color: colors.onBackground,
-        fontFamily: FONTS.azeretLight,
-        fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodyMedium
+        fontFamily: FONTS.azeretLight
     }), [colors.onBackground])
+
     const labelStyle = useMemo(() => ({
-        fontFamily: FONTS.azeretLight,
-        fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodySmall
+        fontFamily: FONTS.azeretLight
     }), [])
+
     const selectionColors = useMemo(() => ({
         handleColor: colors.accentText,
         backgroundColor: colors.tertiary + TRANSPARENT[30]
     }), [colors.accentText, colors.tertiary])
 
-    useEffect(() => {
-        if (text.value !== value) text.value = value
-    }, [text, value])
-
     return (
-        <Host matchContents={{ vertical: true }} style={FIELD_STYLE}>
+        <Host matchContents={FILLED_INPUT.matchContents} style={FILLED_INPUT.hostStyle}>
             <TextField
+                ref={ref}
                 value={text}
                 colors={fieldColors}
                 textStyle={textStyle}
@@ -52,11 +51,24 @@ export function FilledTextField({
                 singleLine={!multiline}
                 keyboardOptions={FILLED_INPUT.keyboardOptions}
                 textSelectionColors={selectionColors}
+                onFocusChanged={onFocusChanged}
                 onValueChange={onChangeText}
             >
-                <TextField.Label>
-                    <Text style={labelStyle}>{label}</Text>
-                </TextField.Label>
+                {!!startAdornment && (
+                    <TextField.LeadingIcon>
+                        <RNHostView matchContents>{startAdornment}</RNHostView>
+                    </TextField.LeadingIcon>
+                )}
+                {!!endAdornment && (
+                    <TextField.TrailingIcon>
+                        <RNHostView matchContents>{endAdornment}</RNHostView>
+                    </TextField.TrailingIcon>
+                )}
+                {!!label && (
+                    <TextField.Label>
+                        <Text style={labelStyle}>{label}</Text>
+                    </TextField.Label>
+                )}
                 {!!placeholder && (
                     <TextField.Placeholder>
                         <Text style={labelStyle}>{placeholder}</Text>
@@ -66,5 +78,3 @@ export function FilledTextField({
         </Host>
     )
 }
-
-const FIELD_STYLE = { width: '100%', minHeight: FILLED_INPUT.minHeight }

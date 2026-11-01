@@ -19,7 +19,7 @@
 		},
 		"save_failed": "Tuto poznámku se nepodařilo uložit",
 		"title_duplicated": "Poznámka s tímto názvem již existuje",
-		"title_breaks_links": "Znaky # ^ [ ] způsobí, že odkazy na tuto poznámku přestanou v Obsidianu fungovat",
+		"title_breaks_links": "Znaky # ^ [ ] způsobí, že odkazy na tuto poznámku přestanou fungovat",
 		"migration_notice": "Migrace skončila s problémy: přejmenováno bylo {{renamed}} poznámek a {{images}} obrázků se nepodařilo obnovit.",
 		"move": {
 			"failed": "Tuto poznámku se nepodařilo přesunout",

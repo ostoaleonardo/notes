@@ -19,7 +19,7 @@
 		},
 		"save_failed": "Couldn't save this note",
 		"title_duplicated": "A note with this name already exists",
-		"title_breaks_links": "The characters # ^ [ ] stop links to this note from working in Obsidian",
+		"title_breaks_links": "The characters # ^ [ ] stop links to this note from working",
 		"migration_notice": "Migration finished with issues: {{renamed}} notes were renamed and {{images}} images couldn't be recovered.",
 		"move": {
 			"failed": "Couldn't move this note",

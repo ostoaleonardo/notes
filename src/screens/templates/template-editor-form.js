@@ -26,7 +26,7 @@ export const TemplateEditorForm = ({
         <>
             <Section containerStyle={{ paddingHorizontal: SPACING.lg }}>
                 <LargeInput
-                    bold
+                    plain
                     value={name}
                     onChangeText={setName}
                     placeholder={t('placeholder.title')}

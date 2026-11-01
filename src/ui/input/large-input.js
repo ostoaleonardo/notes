@@ -1,39 +1,60 @@
-import { StyleSheet, TextInput } from 'react-native'
+import { useMemo } from 'react'
 import { useTheme } from 'react-native-paper'
 
+import { FilledTextField } from '@/ui/input/filled-text-field'
+import { PlainTextField } from '@/ui/input/plain-text-field'
 import { useHeadingFamily } from '@/ui/hooks/use-heading-family'
 
 import { TRANSPARENT } from '@/ui/tokens/transparent'
 import { TYPOGRAPHY_SIZE_VARIANTS } from '@/ui/tokens/theme'
 
-export function LargeInput({ value, onChangeText, placeholder, modal, ...props }) {
+function PlainLargeInput({ value, onChangeText, placeholder, autoFocus }) {
     const { colors } = useTheme()
     const fontFamily = useHeadingFamily()
 
-    const InputComponent = TextInput
+    const textStyle = useMemo(() => ({
+        color: colors.onBackground,
+        fontFamily,
+        fontSize: TYPOGRAPHY_SIZE_VARIANTS.headlineSmall
+    }), [colors.onBackground, fontFamily])
+    const selectionColors = useMemo(() => ({
+        handleColor: colors.accentText,
+        backgroundColor: colors.onBackground + TRANSPARENT[20]
+    }), [colors.accentText, colors.onBackground])
 
     return (
-        <InputComponent
-            {...props}
+        <PlainTextField
             value={value}
-            style={{
-                ...styles.input,
-                fontFamily,
-                color: colors.onBackground
-            }}
+            autoFocus={autoFocus}
             placeholder={placeholder}
-            onChangeText={onChangeText}
+            textStyle={textStyle}
             cursorColor={colors.onBackground}
-            selectionHandleColor={colors.accentText}
-            selectionColor={colors.onBackground + TRANSPARENT[20]}
-            placeholderTextColor={colors.onBackground + TRANSPARENT[40]}
+            selectionColors={selectionColors}
+            placeholderColor={colors.onBackground + TRANSPARENT[40]}
+            onChangeText={onChangeText}
         />
     )
 }
 
-const styles = StyleSheet.create({
-    input: {
-        flexGrow: 1,
-        fontSize: TYPOGRAPHY_SIZE_VARIANTS.headlineSmall
+export function LargeInput({ plain = false, value, onChangeText, placeholder, autoFocus }) {
+    if (plain) {
+        return (
+            <PlainLargeInput
+                value={value}
+                autoFocus={autoFocus}
+                placeholder={placeholder}
+                onChangeText={onChangeText}
+            />
+        )
     }
-})
+
+    return (
+        <FilledTextField
+            multiline={false}
+            value={value}
+            autoFocus={autoFocus}
+            placeholder={placeholder}
+            onChangeText={onChangeText}
+        />
+    )
+}

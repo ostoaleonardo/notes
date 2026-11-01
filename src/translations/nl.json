@@ -19,7 +19,7 @@
 		},
 		"save_failed": "Deze notitie kon niet worden opgeslagen",
 		"title_duplicated": "Er bestaat al een notitie met deze naam",
-		"title_breaks_links": "De tekens # ^ [ ] zorgen ervoor dat links naar deze notitie niet meer werken in Obsidian",
+		"title_breaks_links": "De tekens # ^ [ ] zorgen ervoor dat links naar deze notitie niet meer werken",
 		"migration_notice": "Migratie voltooid met problemen: {{renamed}} notities zijn hernoemd en {{images}} afbeeldingen konden niet worden hersteld.",
 		"move": {
 			"failed": "Deze notitie kon niet worden verplaatst",
