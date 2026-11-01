@@ -1,61 +1,44 @@
-import { Fragment, memo, useCallback, useRef } from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
-import { TouchableRipple, useTheme } from 'react-native-paper'
+import { Fragment, memo, useCallback, useMemo, useRef } from 'react'
+import { ScrollView, StyleSheet } from 'react-native'
+import { useTheme } from 'react-native-paper'
 
 import { EntityIcon } from './entity-icon'
-import { Typography } from '@/ui/typography'
+import { Chip } from '@/ui/chip'
 
 import { ChevronRight } from '@/icons/chevron-right'
 
 import { FOCUS } from '@/constants/connections'
-import { ICON_SIZE, OPACITY, SPACING } from '@/constants/theme'
+import { ICON_SIZE, SPACING } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'
 
 const Crumb = memo(function Crumb({ entity, title, index, active, onJump }) {
     const { colors } = useTheme()
 
-    const color = active ? colors.accentText : colors.onBackground
-    const onPress = useCallback(() => onJump(index), [onJump, index])
+    const onPress = useCallback(() => {
+        if (!active) onJump(index)
+    }, [active, onJump, index])
+    const chipColors = useMemo(() => ({
+        selectedContainerColor: colors.tertiary + TRANSPARENT[20],
+        selectedLabelColor: colors.accentText
+    }), [colors.tertiary, colors.accentText])
 
     return (
-        <View
-            style={[
-                styles.crumb,
-                {
-                    backgroundColor: active
-                        ? colors.tertiary + TRANSPARENT[20]
-                        : colors.surfaceVariant
-                }
-            ]}
+        <Chip
+            selected={active}
+            colors={chipColors}
+            onPress={onPress}
+            leading={(
+                <EntityIcon
+                    entity={entity}
+                    title={title}
+                    width={ICON_SIZE.md}
+                    height={ICON_SIZE.md}
+                    color={active ? colors.accentText : colors.onBackground}
+                />
+            )}
         >
-            <TouchableRipple
-                accessibilityRole='button'
-                accessibilityLabel={title}
-                disabled={active}
-                onPress={onPress}
-                style={styles.touch}
-            >
-                <>
-                    <EntityIcon
-                        entity={entity}
-                        title={title}
-                        width={ICON_SIZE.md}
-                        height={ICON_SIZE.md}
-                        color={color}
-                    />
-                    <Typography
-                        uppercase
-                        numberOfLines={1}
-                        fontSize={FOCUS.crumbFontSize}
-                        color={color}
-                        opacity={active ? 1 : OPACITY.emphasized}
-                        styleProps={styles.title}
-                    >
-                        {title}
-                    </Typography>
-                </>
-            </TouchableRipple>
-        </View>
+            {title.toLocaleUpperCase()}
+        </Chip>
     )
 })
 
@@ -103,21 +86,5 @@ const styles = StyleSheet.create({
         gap: FOCUS.crumbGap,
         paddingHorizontal: SPACING.lg,
         alignItems: 'center'
-    },
-    crumb: {
-        overflow: 'hidden',
-        maxWidth: FOCUS.crumbMaxWidth,
-        height: FOCUS.crumbHeight,
-        borderRadius: FOCUS.crumbHeight / 2
-    },
-    touch: {
-        gap: SPACING.xs,
-        height: FOCUS.crumbHeight,
-        paddingHorizontal: SPACING.md,
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    title: {
-        flexShrink: 1
     }
 })

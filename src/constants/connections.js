@@ -99,9 +99,6 @@ export const FOCUS = {
     animationDuration: 320,
     exitDuration: 160,
     edgeDelay: 180,
-    crumbHeight: 30,
-    crumbFontSize: 10,
-    crumbMaxWidth: 140,
     pagerLabelWidth: 56,
     crumbGap: SPACING.xs
 }
