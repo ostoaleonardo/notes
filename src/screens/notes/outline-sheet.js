@@ -1,8 +1,9 @@
 import { memo, useCallback, useMemo, useState } from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 
+import { ListItemAction } from '@/ui/button/list-item-action'
 import { ListItem } from '@/ui/list-item'
 import { ListSheet } from '@/ui/modal/list-sheet'
 
@@ -12,7 +13,6 @@ import { buildOutline, findHeadings, getVisibleOutline } from '@/utils/headings'
 import { KeyboardArrowDown } from '@/ui/icons/keyboard-arrow-down'
 
 import { HEADING_OUTLINE_CHEVRON_SIZE, HEADING_OUTLINE_INDENT } from '@/constants/headings'
-import { SPACING } from '@/constants/theme'
 
 const OutlineItem = memo(function OutlineItem({ item, collapsed, onPress, onToggle }) {
     const { t } = useTranslation()
@@ -29,11 +29,9 @@ const OutlineItem = memo(function OutlineItem({ item, collapsed, onPress, onTogg
                 background={colors.surfaceVariant}
                 onPress={handlePress}
                 rightContent={item.hasChildren ? (
-                    <Pressable
-                        accessibilityRole='button'
-                        accessibilityLabel={t(toggleKey)}
+                    <ListItemAction
+                        label={t(toggleKey)}
                         accessibilityState={{ expanded: !collapsed }}
-                        hitSlop={SPACING.md}
                         onPress={handleToggle}
                         style={collapsed && styles.collapsed}
                     >
@@ -42,7 +40,7 @@ const OutlineItem = memo(function OutlineItem({ item, collapsed, onPress, onTogg
                             height={HEADING_OUTLINE_CHEVRON_SIZE}
                             color={colors.onBackground}
                         />
-                    </Pressable>
+                    </ListItemAction>
                 ) : undefined}
             />
         </View>

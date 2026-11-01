@@ -1,13 +1,14 @@
 import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
 import { useTheme } from 'react-native-paper'
+
+import { ListItemAction } from '@/ui/button/list-item-action'
 
 import { SearchListSection } from './search-list-section'
 
 import { Close } from '@/icons/close'
 import { Search } from '@/icons/search'
-import { ICON_SIZE, SPACING } from '@/constants/theme'
+import { ICON_SIZE } from '@/constants/theme'
 
 const getEntryKey = (entry) => entry.id
 const getEntryLabel = (entry) => entry.query
@@ -19,10 +20,8 @@ export const SavedSearches = memo(function SavedSearches({ saved, onSelect, onDe
     const onSelectEntry = useCallback((entry) => onSelect(entry.query), [onSelect])
 
     const renderTrailing = useCallback((entry) => (
-        <Pressable
-            accessibilityRole='button'
-            accessibilityLabel={t('button.delete')}
-            hitSlop={SPACING.md}
+        <ListItemAction
+            label={t('button.delete')}
             onPress={() => onDelete(entry.id)}
         >
             <Close
@@ -30,7 +29,7 @@ export const SavedSearches = memo(function SavedSearches({ saved, onSelect, onDe
                 height={ICON_SIZE.lg}
                 color={colors.onBackground}
             />
-        </Pressable>
+        </ListItemAction>
     ), [onDelete, t, colors.onBackground])
 
     return (
