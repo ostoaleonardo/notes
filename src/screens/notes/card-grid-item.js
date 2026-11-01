@@ -3,8 +3,8 @@ import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
-import { AnimatedView } from '@/components/animated/animated-view'
-import { Typography } from '@/components/typography'
+import { AnimatedView } from '@/ui/animated/animated-view'
+import { Typography } from '@/ui/typography'
 
 import { RADIUS, SPACING, OPACITY, BORDER_WIDTH } from '@/constants/theme'
 import { CARD_PREVIEW_LINES } from '@/constants/note-preview'

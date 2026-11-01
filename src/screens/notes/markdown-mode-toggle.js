@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 
 import { useNoteActionsMenu } from './use-note-actions-menu'
 import { useTemplateActionsMenu } from './use-template-actions-menu'
-import { ActionMenuItem } from '@/components/menu/action-menu-item'
-import { MenuGroup } from '@/components/menu/menu-group'
-import { SplitButton } from '@/components/button/split-button'
+import { ActionMenuItem } from '@/ui/menu/action-menu-item'
+import { MenuGroup } from '@/ui/menu/menu-group'
+import { SplitButton } from '@/ui/button/split-button'
 
 import { useMenuAction } from '@/hooks/use-menu-action'
 

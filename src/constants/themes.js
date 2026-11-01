@@ -1,4 +1,5 @@
 import { MD3DarkTheme, MD3LightTheme } from 'react-native-paper'
+import { TRANSPARENT } from '@/ui/tokens/transparent'
 
 export const COLORS = {
     base: {
@@ -22,22 +23,7 @@ export const COLORS = {
     }
 }
 
-export const TRANSPARENT = {
-    'color': 'transparent',
-    '0': '00',
-    '5': '0d',
-    '10': '1a',
-    '20': '33',
-    '30': '4d',
-    '40': '66',
-    '50': '80',
-    '60': '99',
-    '70': 'b3',
-    '80': 'cc',
-    '90': 'e6',
-    '95': 'f2',
-    '100': 'ff'
-}
+export { TRANSPARENT }
 
 const darkTheme = {
     ...MD3DarkTheme,
@@ -56,7 +42,7 @@ const darkTheme = {
         secondaryContainer: COLORS.dark.foreground,
         onSecondaryContainer: COLORS.dark.onBackground,
 
-        tertiary: COLORS.base.accent,
+        tertiary: COLORS.dark.onBackground,
         onTertiary: COLORS.dark.onBackground,
         accentText: COLORS.dark.onBackground,
 
@@ -92,7 +78,7 @@ const lightTheme = {
         secondaryContainer: COLORS.base.white,
         onSecondaryContainer: COLORS.light.onBackground,
 
-        tertiary: COLORS.base.accent,
+        tertiary: COLORS.light.onBackground,
         onTertiary: COLORS.base.white,
         accentText: COLORS.light.onBackground,
 

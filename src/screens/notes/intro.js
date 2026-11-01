@@ -1,8 +1,8 @@
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
-import { AnimatedView } from '@/components/animated/animated-view'
-import { Typography } from '@/components/typography'
+import { AnimatedView } from '@/ui/animated/animated-view'
+import { Typography } from '@/ui/typography'
 
 import { SPACING, OPACITY, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
 

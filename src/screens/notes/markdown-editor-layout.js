@@ -2,7 +2,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useKeyboardState } from 'react-native-keyboard-controller'
 
 import { MarkdownToolbar } from './markdown-toolbar'
-import { BlurTarget, BlurTargetProvider } from '@/components/blur/blur-target'
+import { BlurTarget, BlurTargetProvider } from '@/ui/blur/blur-target'
 
 export const MarkdownEditorLayout = ({ children, ...controlsProps }) => {
     const { isVisible, height } = useKeyboardState()

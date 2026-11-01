@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useFileStorage } from './use-file-storage'
 import { loadRepositoryData } from '@/utils/load-repository-data'
 import { storage } from '@/utils/storage'
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 
 export function useRepositoryData() {
     const { t } = useTranslation()

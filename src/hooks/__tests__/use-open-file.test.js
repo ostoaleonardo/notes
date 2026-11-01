@@ -3,7 +3,7 @@ import { router } from 'expo-router'
 import * as Sharing from 'expo-sharing'
 
 import { useOpenFile } from '../use-open-file'
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 import { FILE_KINDS } from '@/constants/file-types'
 import { ROUTES } from '@/constants/routes'
 
@@ -20,7 +20,7 @@ jest.mock('expo-router', () => ({
 jest.mock('expo-sharing', () => ({
     shareAsync: jest.fn()
 }))
-jest.mock('@/components/snackbar/snackbar-host', () => ({
+jest.mock('@/ui/snackbar/snackbar-host', () => ({
     showSnackbar: jest.fn()
 }))
 jest.mock('expo-file-system', () => ({

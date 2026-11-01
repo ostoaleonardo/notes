@@ -3,9 +3,9 @@ import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 
-import { Button } from '@/components/button/button'
-import { SheetTitle } from '@/components/modal/sheet-title'
-import { Typography } from '@/components/typography'
+import { Button } from '@/ui/button/button'
+import { SheetTitle } from '@/ui/modal/sheet-title'
+import { Typography } from '@/ui/typography'
 
 import { MAX_TABLE_COLS, MAX_TABLE_ROWS, TABLE_CELL_SIZE, TABLE_CELL_GAP } from '@/constants/table'
 import { SPACING, RADIUS } from '@/constants/theme'

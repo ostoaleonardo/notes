@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react-native'
 
 import { useTitleCommit } from '../use-title-commit'
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 import { DUPLICATE_TITLE_ERROR } from '@/constants/note-errors'
 
 const mockWarnTitleLinks = jest.fn()
@@ -10,7 +10,7 @@ jest.mock('react-i18next', () => ({
     useTranslation: () => ({ t: (key) => key })
 }))
 
-jest.mock('@/components/snackbar/snackbar-host', () => ({
+jest.mock('@/ui/snackbar/snackbar-host', () => ({
     showSnackbar: jest.fn()
 }))
 

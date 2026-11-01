@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ActionMenuItem } from '@/components/menu/action-menu-item'
+import { ActionMenuItem } from '@/ui/menu/action-menu-item'
 
 import { Code } from '@/icons/code'
 import { Commit } from '@/icons/commit'

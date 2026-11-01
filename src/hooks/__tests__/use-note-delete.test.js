@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react-native'
 import { router } from 'expo-router'
 
 import { useNoteDelete } from '../use-note-delete'
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 import { DELETE_BEHAVIORS, DEFAULT_DELETE_BEHAVIOR } from '@/constants/delete-behavior'
 
 const mockDeleteNote = jest.fn()
@@ -14,7 +14,7 @@ jest.mock('expo-router', () => ({
 jest.mock('react-i18next', () => ({
     useTranslation: () => ({ t: (key) => key })
 }))
-jest.mock('@/components/snackbar/snackbar-host', () => ({
+jest.mock('@/ui/snackbar/snackbar-host', () => ({
     showSnackbar: jest.fn()
 }))
 jest.mock('@/utils/log-error', () => ({

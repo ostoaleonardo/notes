@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { router, useLocalSearchParams } from 'expo-router'
 
 import { useCommonActionsMenu } from './use-common-actions-menu'
-import { ActionMenuItem } from '@/components/menu/action-menu-item'
+import { ActionMenuItem } from '@/ui/menu/action-menu-item'
 
 import { useCurrentNote } from '@/hooks/use-current-note'
 import { useNotes } from '@/hooks/use-notes'

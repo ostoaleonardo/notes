@@ -2,8 +2,8 @@ import { StyleSheet, View } from 'react-native'
 import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
-import { Dialog } from '@/components/dialog'
-import { Typography } from '@/components/typography'
+import { Dialog } from '@/ui/dialog'
+import { Typography } from '@/ui/typography'
 
 import { renderTemplate } from '@/utils/render-template'
 

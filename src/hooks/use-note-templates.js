@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useBottomSheet } from './use-bottom-sheet'
 import { useTemplates } from './use-templates'
 import { useTemplatesList } from './use-templates-list'
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 
 import { TEMPLATE_INSERT_SEPARATOR } from '@/constants/template-placeholders'
 import { LOG_MESSAGES } from '@/constants/log-messages'

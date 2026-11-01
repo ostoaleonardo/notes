@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { TouchableRipple, useTheme } from 'react-native-paper'
 
-import { Typography } from '@/components/typography'
+import { Typography } from '@/ui/typography'
 import { levelRowStyles } from './drawer-level-styles'
 
 import { RADIUS, SPACING } from '@/constants/theme'

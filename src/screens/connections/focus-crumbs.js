@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, View } from 'react-native'
 import { TouchableRipple, useTheme } from 'react-native-paper'
 
 import { EntityIcon } from './entity-icon'
-import { Typography } from '@/components/typography'
+import { Typography } from '@/ui/typography'
 
 import { ChevronRight } from '@/icons/chevron-right'
 

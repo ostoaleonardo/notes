@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '@/components/button/button'
-import { MessageScreen } from '@/components/message-screen'
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
+import { Button } from '@/ui/button/button'
+import { MessageScreen } from '@/ui/message-screen'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 
 import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'

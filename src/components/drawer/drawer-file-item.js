@@ -2,8 +2,8 @@ import { memo } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
-import { AnimatedView } from '@/components/animated/animated-view'
-import { Typography } from '@/components/typography'
+import { AnimatedView } from '@/ui/animated/animated-view'
+import { Typography } from '@/ui/typography'
 
 import { RADIUS, SPACING, OPACITY } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'

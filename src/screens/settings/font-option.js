@@ -3,7 +3,7 @@ import Animated from 'react-native-reanimated'
 import { Pressable, StyleSheet } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
-import { Typography } from '@/components/typography'
+import { Typography } from '@/ui/typography'
 
 import { useAnimatedBorderRadius } from '@/hooks/use-animated-border-radius'
 

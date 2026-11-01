@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
-import { ListItem } from '../../components/list-item'
+import { ListItem } from '../../ui/list-item'
 import { ColorOption } from './color-option'
-import { Section } from '@/components/section'
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
+import { Section } from '@/ui/section'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 
 import { useToggleMode } from '@/hooks/use-toggle-mode'
 import { usePro } from '@/hooks/use-pro'

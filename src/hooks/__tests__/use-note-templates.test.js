@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react-native'
 
 import { useNoteTemplates } from '../use-note-templates'
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 import { TEMPLATE_INSERT_SEPARATOR } from '@/constants/template-placeholders'
 
 const mockAddTemplate = jest.fn()
@@ -10,7 +10,7 @@ const mockRefresh = jest.fn()
 jest.mock('react-i18next', () => ({
     useTranslation: () => ({ t: (key) => key })
 }))
-jest.mock('@/components/snackbar/snackbar-host', () => ({
+jest.mock('@/ui/snackbar/snackbar-host', () => ({
     showSnackbar: jest.fn()
 }))
 jest.mock('@/utils/log-error', () => ({

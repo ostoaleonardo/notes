@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 import { useTitleLinkWarning } from './use-title-link-warning'
 
 import { DUPLICATE_TITLE_ERROR } from '@/constants/note-errors'

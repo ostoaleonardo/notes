@@ -4,9 +4,9 @@ import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
 import { TemplatePicker } from './template-picker'
-import { Button } from '@/components/button/button'
-import { ModalBottomSheet } from '@/components/modal/modal-bottom-sheet'
-import { SheetTitle } from '@/components/modal/sheet-title'
+import { Button } from '@/ui/button/button'
+import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
+import { SheetTitle } from '@/ui/modal/sheet-title'
 
 import { SPACING } from '@/constants/theme'
 

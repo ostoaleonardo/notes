@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next'
 
-import { Menu } from '@/components/menu/menu'
-import { MenuGroup } from '@/components/menu/menu-group'
-import { SelectMenuItem } from '@/components/menu/select-menu-item'
+import { Menu } from '@/ui/menu/menu'
+import { MenuGroup } from '@/ui/menu/menu-group'
+import { SelectMenuItem } from '@/ui/menu/select-menu-item'
 import { DrawerToolbarButton } from './drawer-toolbar'
 
 import { useMenuAction } from '@/hooks/use-menu-action'

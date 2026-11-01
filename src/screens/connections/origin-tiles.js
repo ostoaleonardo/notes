@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { EntityIcon } from './entity-icon'
 import { EntityShape } from './entity-shape'
 import { getShapeKind } from './entity-badge'
-import { Typography } from '@/components/typography'
+import { Typography } from '@/ui/typography'
 
 import { ORIGIN_TILE } from '@/constants/connections'
 import { CONNECTION_TYPES, CONNECTION_TYPE_LABELS } from '@/constants/connections'

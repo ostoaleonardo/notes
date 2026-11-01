@@ -2,10 +2,10 @@ import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconButton, Tooltip, useTheme } from 'react-native-paper'
 
-import { Menu } from '@/components/menu/menu'
-import { MenuGroup } from '@/components/menu/menu-group'
-import { MenuItem } from '@/components/menu/menu-item'
-import { ActionMenuItem } from '@/components/menu/action-menu-item'
+import { Menu } from '@/ui/menu/menu'
+import { MenuGroup } from '@/ui/menu/menu-group'
+import { MenuItem } from '@/ui/menu/menu-item'
+import { ActionMenuItem } from '@/ui/menu/action-menu-item'
 
 import { useMenuAction } from '@/hooks/use-menu-action'
 

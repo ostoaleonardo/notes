@@ -1,5 +1,5 @@
 import { NoteSearch } from './note-search'
-import { FreshSheet } from '@/components/modal/fresh-sheet'
+import { FreshSheet } from '@/ui/modal/fresh-sheet'
 
 import { SHEET } from '@/constants/components'
 

@@ -1,11 +1,11 @@
 import { StyleSheet, View } from 'react-native'
 import { TouchableRipple, useTheme } from 'react-native-paper'
 
-import { Typography } from '@/components/typography'
+import { Typography } from '@/ui/typography'
 import { levelRowStyles } from './drawer-level-styles'
 
 import { ChevronRight } from '@/icons/chevron-right'
-import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
+import { KeyboardArrowDown } from '@/ui/icons/keyboard-arrow-down'
 
 import { OPACITY, RADIUS, SPACING, ICON_SIZE } from '@/constants/theme'
 

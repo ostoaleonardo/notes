@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import { Chip, useTheme } from 'react-native-paper'
 
-import { Scroll } from '@/components/animated/scroll'
+import { Scroll } from '@/ui/animated/scroll'
 
 import { toggleTagQualifier } from '@/utils/search-query'
 

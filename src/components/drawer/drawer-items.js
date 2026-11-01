@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 
-import { ButtonGroup } from '@/components/button/button-group'
+import { ButtonGroup } from '@/ui/button/button-group'
 import { DrawerNotesView } from './drawer-notes-view'
 import { DrawerTagsView } from './drawer-tags-view'
 import { DrawerToolbar } from './drawer-toolbar'

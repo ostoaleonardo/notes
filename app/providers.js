@@ -9,7 +9,7 @@ import { NoteProvider } from '@/context/note-context'
 import { RecentNotesProvider } from '@/context/recent-notes-context'
 import { RepositoryProvider } from '@/context/repository-context'
 import { UtilsProvider } from '@/context/utils-context'
-import { GlobalSnackbarHost } from '@/components/snackbar/snackbar-host'
+import { GlobalSnackbarHost } from '@/ui/snackbar/snackbar-host'
 
 export default function Providers({ children }) {
     const { bottom } = useSafeAreaInsets()

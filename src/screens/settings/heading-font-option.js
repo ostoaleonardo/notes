@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { FontOption } from './font-option'
-import { ListItem } from '../../components/list-item'
+import { ListItem } from '../../ui/list-item'
 
 import { useHeadingFont } from '@/hooks/use-heading-font'
 import { useStorage } from '@/hooks/use-storage'

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { router, useLocalSearchParams } from 'expo-router'
 
 import { NoteEditorScreen } from '@/screens/notes/note-editor-screen'
-import { LoadingOverlay } from '@/components/layout'
+import { LoadingOverlay } from '@/ui/layout'
 import { RenameLinksDialog } from '@/screens/dialogs/rename-links-dialog'
 
 import { useAutosave } from '@/hooks/use-autosave'

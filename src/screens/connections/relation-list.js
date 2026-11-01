@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { useTheme } from 'react-native-paper'
 
-import { GroupedList, GroupSeparator } from '@/components/grouped-list'
+import { GroupedList, GroupSeparator } from '@/ui/grouped-list'
 import { EntityRow } from './entity-row'
 
 import { SPACING } from '@/constants/theme'

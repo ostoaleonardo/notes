@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react-native'
 
 import { useRepositoryData } from '../use-repository-data'
 import { loadRepositoryData } from '../../utils/load-repository-data'
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 
 const mockFileStorage = { id: 'file-storage' }
 
@@ -11,7 +11,7 @@ jest.mock('react-i18next', () => ({
         t: (key, options) => `${key}:${options?.renamed}:${options?.images}`
     })
 }))
-jest.mock('@/components/snackbar/snackbar-host', () => ({
+jest.mock('@/ui/snackbar/snackbar-host', () => ({
     showSnackbar: jest.fn()
 }))
 jest.mock('@/utils/storage', () => ({

@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next'
 
-import { ButtonGroup } from '@/components/button/button-group'
+import { ButtonGroup } from '@/ui/button/button-group'
 
 import { togglePinnedQualifier, toggleImageQualifier, toggleContentQualifier } from '@/utils/search-query'
 
-import { Check } from '@/icons/check'
+import { Check } from '@/ui/icons/check'
 import { Keep } from '@/icons/keep'
 import { KeepFilled } from '@/icons/keep-filled'
 import { NoteStack } from '@/icons/note-stack'

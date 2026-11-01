@@ -5,7 +5,7 @@ import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 
 import { FocusEdges } from './focus-edges'
 import { FocusNode } from './focus-node'
-import { Typography } from '@/components/typography'
+import { Typography } from '@/ui/typography'
 
 import { entityKey } from '@/utils/connection-model'
 import { layoutFocusRing } from '@/utils/focus-navigation'

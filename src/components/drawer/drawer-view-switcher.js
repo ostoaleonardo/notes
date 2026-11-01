@@ -3,15 +3,15 @@ import { Pressable, StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 
-import { Menu } from '@/components/menu/menu'
-import { MenuGroup } from '@/components/menu/menu-group'
-import { SelectMenuItem } from '@/components/menu/select-menu-item'
-import { Typography } from '@/components/typography'
+import { Menu } from '@/ui/menu/menu'
+import { MenuGroup } from '@/ui/menu/menu-group'
+import { SelectMenuItem } from '@/ui/menu/select-menu-item'
+import { Typography } from '@/ui/typography'
 
 import { useMenuAction } from '@/hooks/use-menu-action'
 
-import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
-import { KeyboardArrowUp } from '@/icons/keyboard-arrow-up'
+import { KeyboardArrowDown } from '@/ui/icons/keyboard-arrow-down'
+import { KeyboardArrowUp } from '@/ui/icons/keyboard-arrow-up'
 
 import { BUTTON } from '@/constants/components'
 import { DRAWER_VIEWS, DRAWER_VIEW_LABELS } from '@/constants/drawer-views'

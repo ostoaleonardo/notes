@@ -3,7 +3,7 @@ import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { nativeApplicationVersion } from 'expo-application'
 
-import { ListItem } from '../../components/list-item'
+import { ListItem } from '../../ui/list-item'
 
 import { OpenInNew } from '@/icons/open-in-new'
 

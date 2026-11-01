@@ -2,14 +2,14 @@ import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 
-import { SmallInput } from '@/components/input/small-input'
-import { ButtonGroup } from '@/components/button/button-group'
+import { SmallInput } from '@/ui/input/small-input'
+import { ButtonGroup } from '@/ui/button/button-group'
 
 import { Close } from '@/icons/close'
 import { DoneAll } from '@/icons/done-all'
 import { FindReplace } from '@/icons/find-replace'
-import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
-import { KeyboardArrowUp } from '@/icons/keyboard-arrow-up'
+import { KeyboardArrowDown } from '@/ui/icons/keyboard-arrow-down'
+import { KeyboardArrowUp } from '@/ui/icons/keyboard-arrow-up'
 
 import { RADIUS, SPACING } from '@/constants/theme'
 import { MARKDOWN_ACTIONS } from '@/constants/markdown-actions'

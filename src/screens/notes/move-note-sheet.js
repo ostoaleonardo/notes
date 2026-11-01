@@ -3,12 +3,12 @@ import { Pressable, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 
-import { ListSheet } from '@/components/modal/list-sheet'
-import { Typography } from '@/components/typography'
+import { ListSheet } from '@/ui/modal/list-sheet'
+import { Typography } from '@/ui/typography'
 
 import { useRepositories } from '@/hooks/use-repositories'
 
-import { Check } from '@/icons/check'
+import { Check } from '@/ui/icons/check'
 import { Folder } from '@/icons/folder'
 
 import { MENU } from '@/constants/components'

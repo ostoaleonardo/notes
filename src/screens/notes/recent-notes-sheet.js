@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next'
 
 import { RecentNotes } from './recent-notes'
-import { FreshSheet } from '@/components/modal/fresh-sheet'
-import { SheetTitle } from '@/components/modal/sheet-title'
+import { FreshSheet } from '@/ui/modal/fresh-sheet'
+import { SheetTitle } from '@/ui/modal/sheet-title'
 
 export function RecentNotesSheet({ sheet, home = false }) {
     const { t } = useTranslation()

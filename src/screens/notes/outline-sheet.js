@@ -3,13 +3,13 @@ import { Pressable, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 
-import { ListItem } from '@/components/list-item'
-import { ListSheet } from '@/components/modal/list-sheet'
+import { ListItem } from '@/ui/list-item'
+import { ListSheet } from '@/ui/modal/list-sheet'
 
 import { toggleInSet } from '@/utils/toggle-in-set'
 import { buildOutline, findHeadings, getVisibleOutline } from '@/utils/headings'
 
-import { KeyboardArrowDown } from '@/icons/keyboard-arrow-down'
+import { KeyboardArrowDown } from '@/ui/icons/keyboard-arrow-down'
 
 import { HEADING_OUTLINE_CHEVRON_SIZE, HEADING_OUTLINE_INDENT } from '@/constants/headings'
 import { SPACING } from '@/constants/theme'

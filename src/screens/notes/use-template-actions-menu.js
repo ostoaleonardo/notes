@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
 import { useCommonActionsMenu } from './use-common-actions-menu'
-import { ActionMenuItem } from '@/components/menu/action-menu-item'
+import { ActionMenuItem } from '@/ui/menu/action-menu-item'
 
 import { Shapes } from '@/icons/shapes'
 

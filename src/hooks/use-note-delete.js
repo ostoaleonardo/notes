@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useMenuAction } from './use-menu-action'
 import { useNotes } from './use-notes'
 import { useStorage } from './use-storage'
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 import { readDeleteBehavior } from '@/utils/delete-note-files'
 
 import { DEFAULT_DELETE_BEHAVIOR } from '@/constants/delete-behavior'

@@ -4,7 +4,7 @@ import * as Sharing from 'expo-sharing'
 import * as Print from 'expo-print'
 
 import { useFiles } from '../use-files'
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 import { EXPORT_FORMATS } from '@/constants/export'
 
 const mockNote = {
@@ -56,7 +56,7 @@ jest.mock('expo-file-system', () => {
         __createDirectory: createDirectory
     }
 })
-jest.mock('@/components/snackbar/snackbar-host', () => ({
+jest.mock('@/ui/snackbar/snackbar-host', () => ({
     showSnackbar: jest.fn()
 }))
 jest.mock('@/utils/log-error', () => ({

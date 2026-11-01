@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 
 import { HeadingFontContext } from './heading-font-context'
+import { HeadingFamilyContext } from '@/ui/context/heading-family-context'
 
 import { useStorageEffect } from '@/hooks/use-storage-effect'
 import { getHeadingFontFamily, isHeadingFontKey } from '@/utils/heading-font'
@@ -23,7 +24,9 @@ export function HeadingFontProvider({ children }) {
 
     return (
         <HeadingFontContext.Provider value={value}>
-            {children}
+            <HeadingFamilyContext.Provider value={value.fontFamily}>
+                {children}
+            </HeadingFamilyContext.Provider>
         </HeadingFontContext.Provider>
     )
 }

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SelectOption } from './select-option'
-import { PositionGroup } from '@/components/position-group'
+import { PositionGroup } from '@/ui/position-group'
 
 import { useStorage } from '@/hooks/use-storage'
 import { useStorageEffect } from '@/hooks/use-storage-effect'

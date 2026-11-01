@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { DrawerList } from './drawer-list'
 import { DrawerFileItem } from './drawer-file-item'
-import { Typography } from '@/components/typography'
+import { Typography } from '@/ui/typography'
 
 import { useAttachmentFiles } from '@/hooks/use-attachment-files'
 import { useOpenFile } from '@/hooks/use-open-file'

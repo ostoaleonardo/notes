@@ -6,7 +6,7 @@ import { Intro } from '@/screens/notes/intro'
 import { NoteToolbarSheets } from '@/screens/notes/note-toolbar-sheets'
 import { HomeToolbar } from '@/screens/notes/home-toolbar'
 import { AppBar } from '@/components/app-bar/app-bar'
-import { BlurTarget, BlurTargetProvider } from '@/components/blur/blur-target'
+import { BlurTarget, BlurTargetProvider } from '@/ui/blur/blur-target'
 
 import { useBottomSheet } from '@/hooks/use-bottom-sheet'
 import { useCurrentNote } from '@/hooks/use-current-note'

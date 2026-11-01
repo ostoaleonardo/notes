@@ -2,8 +2,8 @@ import { memo } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
-import { CircularProgressIndicator } from '@/components/circular-progress-indicator'
-import { Typography } from '@/components/typography'
+import { CircularProgressIndicator } from '@/ui/circular-progress-indicator'
+import { Typography } from '@/ui/typography'
 
 import { SUMMARY_CARD } from '@/constants/connections'
 import { RADIUS, SPACING } from '@/constants/theme'

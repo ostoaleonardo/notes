@@ -4,9 +4,9 @@ import { useTheme } from 'react-native-paper'
 import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 
 import { EntityRow } from '@/screens/connections/entity-row'
-import { AnimatedList } from '@/components/animated/animated-list'
-import { AnimatedView } from '@/components/animated/animated-view'
-import { GroupedList } from '@/components/grouped-list'
+import { AnimatedList } from '@/ui/animated/animated-list'
+import { AnimatedView } from '@/ui/animated/animated-view'
+import { GroupedList } from '@/ui/grouped-list'
 
 import { makeEntity } from '@/utils/connection-model'
 

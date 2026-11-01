@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { TouchableRipple, useTheme } from 'react-native-paper'
 
-import { Typography } from '@/components/typography'
+import { Typography } from '@/ui/typography'
 import { levelRowStyles } from './drawer-level-styles'
 
 import { ArrowBack } from '@/icons/arrow-back'

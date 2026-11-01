@@ -2,8 +2,8 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useColorScheme } from 'react-native'
 
-import { MessageScreen } from './message-screen'
-import { Button } from '@/components/button/button'
+import { MessageScreen } from '../ui/message-screen'
+import { Button } from '@/ui/button/button'
 import { logError } from '@/utils/log-error'
 
 import { COLORS } from '@/constants/themes'

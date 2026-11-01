@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { LargeInput } from '@/components/input/large-input'
+import { LargeInput } from '@/ui/input/large-input'
 import { MarkdownInput } from '@/components/markdown/markdown-input'
-import { Section } from '@/components/section'
+import { Section } from '@/ui/section'
 import { SPACING } from '@/constants/theme'
 
 export const TemplateEditorForm = ({

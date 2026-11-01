@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native'
 import { IconButton } from 'react-native-paper'
 
 import { CardGrid } from './card-grid'
-import { ButtonGroup } from '@/components/button/button-group'
+import { ButtonGroup } from '@/ui/button/button-group'
 
 import { useCurrentNote } from '@/hooks/use-current-note'
 import { useRecentNotes } from '@/hooks/use-recent-notes'

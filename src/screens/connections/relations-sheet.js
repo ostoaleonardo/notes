@@ -7,9 +7,9 @@ import { useTranslation } from 'react-i18next'
 import { EntityBadge } from './entity-badge'
 import { RelationList } from './relation-list'
 import { SECTION_ICONS } from './entity-icon'
-import { ButtonGroup } from '@/components/button/button-group'
-import { ModalBottomSheet } from '@/components/modal/modal-bottom-sheet'
-import { Typography } from '@/components/typography'
+import { ButtonGroup } from '@/ui/button/button-group'
+import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
+import { Typography } from '@/ui/typography'
 
 import { useDelayedValue } from '@/hooks/use-delayed-value'
 

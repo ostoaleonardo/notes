@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { IconButton, Tooltip } from 'react-native-paper'
 
 import { RecentsButton } from '@/components/app-bar/recents-button'
-import { ToolbarSurface } from '@/components/toolbar-surface'
+import { ToolbarSurface } from '@/ui/toolbar-surface'
 
 import { Plus } from '@/icons/plus'
 import { Search } from '@/icons/search'

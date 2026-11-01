@@ -2,8 +2,8 @@ import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Button } from 'react-native-paper'
 
-import { Dialog } from '@/components/dialog'
-import { Typography } from '@/components/typography'
+import { Dialog } from '@/ui/dialog'
+import { Typography } from '@/ui/typography'
 
 import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
 import { SPACING, OPACITY } from '@/constants/theme'

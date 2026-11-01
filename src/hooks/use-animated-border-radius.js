@@ -1,6 +1,6 @@
 import { interpolate, useAnimatedStyle } from 'react-native-reanimated'
 
-import { useAnimatedProgress } from './use-animated-progress'
+import { useAnimatedProgress } from '../ui/hooks/use-animated-progress'
 
 import { PROGRESS_RANGE } from '@/constants/theme'
 

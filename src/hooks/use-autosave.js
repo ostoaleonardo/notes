@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 import { useExclusiveQueue } from './use-exclusive-queue'
 import { useMemoByDeps } from './use-memo-by-deps'
 

@@ -3,8 +3,8 @@ import { FlatList, StyleSheet, useWindowDimensions } from 'react-native'
 import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 
 import { CardGridItem } from './card-grid-item'
-import { AnimatedView } from '@/components/animated/animated-view'
-import { Typography } from '@/components/typography'
+import { AnimatedView } from '@/ui/animated/animated-view'
+import { Typography } from '@/ui/typography'
 import { CARD_GRID } from '@/constants/components'
 
 import { OPACITY } from '@/constants/theme'

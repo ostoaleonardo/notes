@@ -4,7 +4,7 @@ import * as Sharing from 'expo-sharing'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 
 import { logError } from '@/utils/log-error'
 

@@ -2,8 +2,8 @@ import { ToastAndroid } from 'react-native'
 import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
-import { Dialog } from '@/components/dialog'
-import { LargeInput } from '@/components/input/large-input'
+import { Dialog } from '@/ui/dialog'
+import { LargeInput } from '@/ui/input/large-input'
 
 import { useEditDialogInput } from '@/hooks/use-dialog-input'
 import { useHaptics } from '@/hooks/use-haptics'

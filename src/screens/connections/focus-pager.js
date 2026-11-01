@@ -3,8 +3,8 @@ import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
-import { ButtonGroup } from '@/components/button/button-group'
-import { Typography } from '@/components/typography'
+import { ButtonGroup } from '@/ui/button/button-group'
+import { Typography } from '@/ui/typography'
 
 import { ArrowBack } from '@/icons/arrow-back'
 import { ArrowForward } from '@/icons/arrow-forward'

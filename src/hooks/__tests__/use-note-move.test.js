@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react-native'
 
 import { useNoteMove } from '../use-note-move'
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 import { DUPLICATE_TITLE_ERROR } from '@/constants/note-errors'
 
 const mockMoveNote = jest.fn()
@@ -17,7 +17,7 @@ jest.mock('../use-utils', () => ({
 jest.mock('../use-recent-notes', () => ({
     useRecentNotes: () => ({ removeRecent: mockRemoveRecent })
 }))
-jest.mock('@/components/snackbar/snackbar-host', () => ({
+jest.mock('@/ui/snackbar/snackbar-host', () => ({
     showSnackbar: jest.fn()
 }))
 jest.mock('react-i18next', () => ({

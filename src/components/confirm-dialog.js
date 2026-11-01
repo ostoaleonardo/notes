@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next'
 import { Button } from 'react-native-paper'
 
-import { Dialog } from './dialog'
-import { Typography } from './typography'
+import { Dialog } from '../ui/dialog'
+import { Typography } from '../ui/typography'
 
 import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
 import { OPACITY } from '@/constants/theme'

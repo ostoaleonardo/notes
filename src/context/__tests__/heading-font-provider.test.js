@@ -2,6 +2,7 @@ import { act, renderHook } from '@testing-library/react-native'
 
 import { HeadingFontProvider } from '../heading-font-provider'
 import { useHeadingFont } from '@/hooks/use-heading-font'
+import { useHeadingFamily } from '@/ui/hooks/use-heading-family'
 import { HEADING_FONT_KEYS } from '@/constants/heading-fonts'
 import { FONTS } from '@/constants/theme'
 
@@ -53,5 +54,24 @@ describe('heading font provider', () => {
         await act(async () => result.current.setFontKey(HEADING_FONT_KEYS.GEIST))
 
         expect(result.current.fontFamily).toBe(FONTS.geistMedium)
+    })
+
+    test('gives the ui components the family of the stored font', async () => {
+        mockStored.value = HEADING_FONT_KEYS.GEIST
+
+        const { result } = await renderHook(() => useHeadingFamily(), { wrapper })
+
+        expect(result.current).toBe(FONTS.geistMedium)
+    })
+
+    test('keeps the ui family in sync when another font is selected', async () => {
+        const { result } = await renderHook(
+            () => ({ font: useHeadingFont(), family: useHeadingFamily() }),
+            { wrapper }
+        )
+
+        await act(async () => result.current.font.setFontKey(HEADING_FONT_KEYS.GEIST))
+
+        expect(result.current.family).toBe(FONTS.geistMedium)
     })
 })

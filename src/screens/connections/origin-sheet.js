@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next'
 
 import { OriginTiles } from './origin-tiles'
 import { RelationList } from './relation-list'
-import { FreshSheet } from '@/components/modal/fresh-sheet'
+import { FreshSheet } from '@/ui/modal/fresh-sheet'
 import { SearchBar } from '@/components/input/search-bar'
-import { Typography } from '@/components/typography'
+import { Typography } from '@/ui/typography'
 
 import { describeEntity } from '@/utils/connection-caption'
 import { listOriginOptions } from '@/utils/connection-model'

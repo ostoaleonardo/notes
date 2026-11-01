@@ -3,8 +3,8 @@ import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 
-import { ListItem } from '@/components/list-item'
-import { ListSheet } from '@/components/modal/list-sheet'
+import { ListItem } from '@/ui/list-item'
+import { ListSheet } from '@/ui/modal/list-sheet'
 
 import { useNotes } from '@/hooks/use-notes'
 import { getEditorPath } from '@/utils/editor-path'

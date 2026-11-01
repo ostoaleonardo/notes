@@ -3,16 +3,16 @@ import { ErrorCode, finishTransaction, useIAP } from 'expo-iap'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, useTheme } from 'react-native-paper'
 
-import { ListItem } from '../../components/list-item'
-import { Section } from '@/components/section'
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
+import { ListItem } from '../../ui/list-item'
+import { Section } from '@/ui/section'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 
 import { usePro } from '@/hooks/use-pro'
 import { useStorage } from '@/hooks/use-storage'
 import { findProPurchase } from '@/utils/iap'
 
 import { ArrowForward } from '@/icons/arrow-forward'
-import { Check } from '@/icons/check'
+import { Check } from '@/ui/icons/check'
 
 import { PRODUCT_ID } from '@/constants/iap'
 import { STORAGE_KEYS } from '@/constants/storage-keys'

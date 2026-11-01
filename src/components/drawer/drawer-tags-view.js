@@ -2,7 +2,7 @@ import { memo, useCallback, useMemo, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
-import { Typography } from '@/components/typography'
+import { Typography } from '@/ui/typography'
 import { DrawerView } from './drawer-view'
 import { DrawerTreeRow } from './drawer-tree-row'
 

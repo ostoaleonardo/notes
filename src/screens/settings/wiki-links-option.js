@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ListItem } from '../../components/list-item'
-import { PositionGroup } from '@/components/position-group'
-import { Switch } from '@/components/button/switch'
+import { ListItem } from '../../ui/list-item'
+import { PositionGroup } from '@/ui/position-group'
+import { Switch } from '@/ui/button/switch'
 
 import { useStorage } from '@/hooks/use-storage'
 import { useStorageEffect } from '@/hooks/use-storage-effect'

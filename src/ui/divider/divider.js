@@ -1,0 +1,25 @@
+import { StyleSheet, View } from 'react-native'
+import { useTheme } from 'react-native-paper'
+
+import { OPACITY, BORDER_WIDTH } from '@/ui/tokens/theme'
+
+export function Divider({ style }) {
+    const { colors } = useTheme()
+
+    return (
+        <View
+            style={{
+                ...styles.base,
+                backgroundColor: colors.onBackground,
+                ...style
+            }}
+        />
+    )
+}
+
+const styles = StyleSheet.create({
+    base: {
+        height: BORDER_WIDTH.thin,
+        opacity: OPACITY.divider
+    }
+})

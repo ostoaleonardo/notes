@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next'
 import { useTheme } from 'react-native-paper'
 import Animated from 'react-native-reanimated'
 
-import { ModalBottomSheet } from '@/components/modal/modal-bottom-sheet'
-import { SheetTitle } from '@/components/modal/sheet-title'
-import { PositionGroup } from '@/components/position-group'
-import { Typography } from '@/components/typography'
+import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
+import { SheetTitle } from '@/ui/modal/sheet-title'
+import { PositionGroup } from '@/ui/position-group'
+import { Typography } from '@/ui/typography'
 
-import { useGroupCornerStyle } from '@/hooks/use-group-corner-style'
-import { usePressed } from '@/hooks/use-pressed'
+import { useGroupCornerStyle } from '@/ui/hooks/use-group-corner-style'
+import { usePressed } from '@/ui/hooks/use-pressed'
 
 import { GROUP_AXES } from '@/constants/group-position'
 

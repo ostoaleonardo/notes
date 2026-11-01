@@ -5,7 +5,7 @@ import { useBottomSheet } from './use-bottom-sheet'
 import { useNotes } from './use-notes'
 import { useRecentNotes } from './use-recent-notes'
 import { useUtils } from './use-utils'
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 import { logError } from '@/utils/log-error'
 import { replaceInSet } from '@/utils/replace-in-set'
 

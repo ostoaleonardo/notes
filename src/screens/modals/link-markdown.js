@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
-import { Button } from '@/components/button/button'
-import { SheetForm, SheetInput } from '@/components/modal/sheet-form'
+import { Button } from '@/ui/button/button'
+import { SheetForm, SheetInput } from '@/ui/modal/sheet-form'
 import { INPUT_EXAMPLES } from '@/constants/input-examples'
 
 export function LinkMarkdown({ onClose, onInsert }) {

@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
-import { ButtonGroup } from '@/components/button/button-group'
-import { ListItem } from '@/components/list-item'
-import { ModalBottomSheet } from '@/components/modal/modal-bottom-sheet'
-import { SheetTitle } from '@/components/modal/sheet-title'
-import { PositionGroup } from '@/components/position-group'
-import { showSnackbar } from '@/components/snackbar/snackbar-host'
+import { ButtonGroup } from '@/ui/button/button-group'
+import { ListItem } from '@/ui/list-item'
+import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
+import { SheetTitle } from '@/ui/modal/sheet-title'
+import { PositionGroup } from '@/ui/position-group'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 
 import { usePro } from '@/hooks/use-pro'
 

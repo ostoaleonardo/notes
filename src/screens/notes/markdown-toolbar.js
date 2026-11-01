@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { IconButton, Tooltip } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
 
-import { AnimatedView } from '@/components/animated/animated-view'
-import { Scroll } from '@/components/animated/scroll'
-import { Divider } from '@/components/divider/divider'
-import { ToolbarSurface } from '@/components/toolbar-surface'
+import { AnimatedView } from '@/ui/animated/animated-view'
+import { Scroll } from '@/ui/animated/scroll'
+import { Divider } from '@/ui/divider/divider'
+import { ToolbarSurface } from '@/ui/toolbar-surface'
 
 import { MarkdownGroupSheet } from './markdown-group-sheet'
 

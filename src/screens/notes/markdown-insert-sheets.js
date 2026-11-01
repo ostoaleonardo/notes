@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { LinkMarkdown } from '@/screens/modals/link-markdown'
 import { TableMarkdown } from '@/screens/modals/table-markdown'
 import { ImageMarkdown } from '@/screens/modals/image-markdown'
-import { ModalBottomSheet } from '@/components/modal/modal-bottom-sheet'
+import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
 
 import { MARKDOWN_ACTIONS } from '@/constants/markdown-actions'
 
