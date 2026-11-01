@@ -1,8 +1,9 @@
 import { useEffect, useEffectEvent, useState } from 'react'
 import { ErrorCode, finishTransaction, useIAP } from 'expo-iap'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 
+import { Progress } from '@/ui/progress'
 import { ListItem } from '../../ui/list-item'
 import { Section } from '@/ui/section'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
@@ -139,7 +140,7 @@ export function ProSection() {
                     title={t('pro.restore')}
                     description={t('pro.purchased')}
                     rightContent={
-                        loading ? <ActivityIndicator size='small' color={colors.onBackground} />
+                        loading ? <Progress />
                             : <ArrowForward color={colors.onBackground} />
                     }
                     onPress={restorePurchases}

@@ -1,8 +1,9 @@
 import { memo } from 'react'
-import { View } from 'react-native'
-import { Appbar, Badge, Tooltip, useTheme } from 'react-native-paper'
+import { StyleSheet, View } from 'react-native'
+import { Appbar, Tooltip } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
+import { Badge } from '@/ui/badge'
 import { AppBar } from '@/components/app-bar/app-bar'
 
 import { LinkOff } from '@/icons/link-off'
@@ -17,8 +18,6 @@ export const ConnectionsAppBar = memo(function ConnectionsAppBar({
     onSearch
 }) {
     const { t } = useTranslation()
-    const { colors } = useTheme()
-
     const pendingLabel = t('connections.pending.title')
     const searchLabel = t('connections.origin.change')
 
@@ -38,15 +37,7 @@ export const ConnectionsAppBar = memo(function ConnectionsAppBar({
                             />
 
                             {pendingCount > 0 && (
-                                <Badge
-                                    size={BADGE.size}
-                                    style={{
-                                        position: 'absolute',
-                                        color: colors.onTertiary,
-                                        backgroundColor: colors.tertiary,
-                                        top: BADGE.top
-                                    }}
-                                >
+                                <Badge style={styles.badge}>
                                     {pendingCount}
                                 </Badge>
                             )}
@@ -66,4 +57,12 @@ export const ConnectionsAppBar = memo(function ConnectionsAppBar({
             )}
         />
     )
+})
+
+const styles = StyleSheet.create({
+    badge: {
+        position: 'absolute',
+        top: BADGE.top,
+        right: BADGE.right
+    }
 })

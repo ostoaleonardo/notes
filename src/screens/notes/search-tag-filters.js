@@ -1,15 +1,12 @@
 import { StyleSheet, View } from 'react-native'
-import { Chip, useTheme } from 'react-native-paper'
-
 import { Scroll } from '@/ui/animated/scroll'
+import { Chip } from '@/ui/chip'
 
 import { toggleTagQualifier } from '@/utils/search-query'
 
-import { FONTS, RADIUS, SPACING } from '@/constants/theme'
+import { SPACING } from '@/constants/theme'
 
 export function SearchTagFilters({ query, setQuery, tags, parsed }) {
-    const { colors } = useTheme()
-
     if (tags.length === 0) return null
 
     return (
@@ -26,15 +23,7 @@ export function SearchTagFilters({ query, setQuery, tags, parsed }) {
                     return (
                         <Chip
                             key={tag}
-                            mode='flat'
-                            style={{
-                                borderRadius: RADIUS.xl,
-                                backgroundColor: selected ? colors.onBackground : colors.surfaceVariant
-                            }}
-                            textStyle={{
-                                fontFamily: selected ? FONTS.azeretMedium : FONTS.azeretLight,
-                                ...(selected && { color: colors.background })
-                            }}
+                            selected={selected}
                             onPress={() => setQuery(toggleTagQualifier(query, tag))}
                         >
                             {tag}

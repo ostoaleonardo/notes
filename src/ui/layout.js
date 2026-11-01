@@ -1,5 +1,7 @@
 import { StyleSheet, View } from 'react-native'
-import { ActivityIndicator, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
+
+import { Progress } from '@/ui/progress'
 
 export function LoadingOverlay() {
     const { colors } = useTheme()
@@ -11,7 +13,7 @@ export function LoadingOverlay() {
                 backgroundColor: colors.background
             }}
         >
-            <ActivityIndicator size='small' />
+            <Progress />
         </View>
     )
 }

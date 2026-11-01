@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useTheme } from 'react-native-paper'
-import { Box, CircularProgressIndicator, Text } from '@expo/ui/jetpack-compose'
+import { Box, LoadingIndicator, Text } from '@expo/ui/jetpack-compose'
 import { size } from '@expo/ui/jetpack-compose/modifiers'
 
 import { FONTS, FONT_SIZE, ICON_SIZE } from '@/ui/tokens/theme'
@@ -25,7 +25,7 @@ export function ButtonContent({ children, loading }) {
                 {String(children).toLocaleUpperCase()}
             </Text>
             {loading && (
-                <CircularProgressIndicator
+                <LoadingIndicator
                     color={colors.onBackground}
                     modifiers={spinnerModifiers}
                 />

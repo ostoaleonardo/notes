@@ -4,7 +4,8 @@ import { BORDER_WIDTH, FONT_SIZE, FONTS, ICON_SIZE, SIZE, SPACING } from '@/ui/t
 
 export const BADGE = {
     size: ICON_SIZE.md,
-    top: SPACING.xs
+    top: SPACING.xs,
+    right: SPACING.xs
 }
 
 const COLOR_OPTION_SIZE = SIZE.xxl
