@@ -1,13 +1,14 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { StyleSheet, View, useWindowDimensions } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import { Button, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
 import { EntityBadge } from './entity-badge'
 import { RelationList } from './relation-list'
 import { SECTION_ICONS } from './entity-icon'
 import { ButtonGroup } from '@/ui/button/button-group'
+import { TonalButton } from '@/ui/button/tonal-button'
 import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
 import { Typography } from '@/ui/typography'
 
@@ -17,7 +18,7 @@ import { describeEntity } from '@/utils/connection-caption'
 import { entityKey, listRelations } from '@/utils/connection-model'
 import { findSectionById, resolveSection, sectionId } from '@/utils/section-tabs'
 
-import { DIALOG_BUTTON_LABEL_STYLE, ICON_TOGGLE } from '@/constants/components'
+import { ICON_TOGGLE } from '@/constants/components'
 import { RELATIONS_SHEET } from '@/constants/connections'
 import {
     CONNECTION_TAB_LABELS,
@@ -138,17 +139,12 @@ export const RelationsSheet = memo(function RelationsSheet({
 
                     {primary && (
                         <View style={styles.footer}>
-                            <Button
-                                compact={true}
-                                mode='contained'
-                                buttonColor={colors.surfaceVariant}
-                                textColor={colors.onBackground}
-                                labelStyle={DIALOG_BUTTON_LABEL_STYLE}
+                            <TonalButton
                                 testID={TEST_IDS.CONNECTIONS_RELATIONS_PRIMARY}
                                 onPress={onPrimary}
                             >
                                 {primary.label}
-                            </Button>
+                            </TonalButton>
                         </View>
                     )}
                 </View>

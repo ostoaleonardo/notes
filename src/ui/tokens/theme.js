@@ -13,6 +13,18 @@ export const SPACING = {
     xxxxl: 40
 }
 
+export const SIZE = {
+    xs: 32,
+    sm: 40,
+    md: 44,
+    lg: 48,
+    xl: 56,
+    xxl: 64,
+    xxxl: 160,
+    xxxxl: 220,
+    xxxxxl: 280
+}
+
 export const RADIUS = {
     xs: 4,
     sm: 6,

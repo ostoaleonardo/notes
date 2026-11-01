@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '@/ui/button/button'
+import { FilledButton } from '@/ui/button/filled-button'
 import { MessageScreen } from '@/ui/message-screen'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 
@@ -25,14 +25,12 @@ export default function RepositoryGate() {
             title={t('repositories.choose.title')}
             message={t('repositories.choose.message')}
         >
-            <Button
-                compact={true}
+            <FilledButton
                 onPress={onAddRepository}
-                loading={activeRepository && loading}
-                disabled={activeRepository && loading}
+                loading={!!activeRepository && loading}
             >
                 {t('repositories.choose.button')}
-            </Button>
+            </FilledButton>
         </MessageScreen>
     )
 }

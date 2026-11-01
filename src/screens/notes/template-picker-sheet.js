@@ -1,11 +1,10 @@
 import { memo } from 'react'
 import { StyleSheet } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
 import { TemplatePicker } from './template-picker'
 import { useSingleFlight } from '@/hooks/use-single-flight'
-import { Button } from '@/ui/button/button'
+import { TonalButton } from '@/ui/button/tonal-button'
 import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
 import { SheetTitle } from '@/ui/modal/sheet-title'
 
@@ -19,7 +18,6 @@ export const TemplatePickerSheet = memo(function TemplatePickerSheet({
     onSaveAsTemplate
 }) {
     const { t } = useTranslation()
-    const { colors } = useTheme()
 
     const [onSave, saving] = useSingleFlight(async () => {
         await onSaveAsTemplate()
@@ -40,16 +38,13 @@ export const TemplatePickerSheet = memo(function TemplatePickerSheet({
                 onSelect={onSelect}
             />
 
-            <Button
-                compact={true}
+            <TonalButton
                 loading={saving}
                 onPress={onSave}
                 style={styles.save}
-                buttonColor={colors.surfaceVariant}
-                textColor={colors.onBackground}
             >
                 {t('button.save_as_template')}
-            </Button>
+            </TonalButton>
         </ModalBottomSheet>
     )
 })

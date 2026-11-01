@@ -3,7 +3,7 @@ import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 
-import { Button } from '@/ui/button/button'
+import { TonalButton } from '@/ui/button/tonal-button'
 import { SheetTitle } from '@/ui/modal/sheet-title'
 import { Typography } from '@/ui/typography'
 
@@ -94,14 +94,9 @@ export function TableMarkdown({ onClose, onInsert }) {
                 ))}
             </View>
 
-            <Button
-                mode='contained'
-                buttonColor={colors.surfaceVariant}
-                textColor={colors.onBackground}
-                onPress={onClose}
-            >
+            <TonalButton onPress={onClose}>
                 {t('button.cancel')}
-            </Button>
+            </TonalButton>
         </View>
     )
 }

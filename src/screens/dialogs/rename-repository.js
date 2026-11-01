@@ -54,7 +54,6 @@ export function RenameRepository({ visible, onDismiss, repositoryId }) {
         >
             <FilledTextField
                 autoFocus
-                hosted={false}
                 multiline={false}
                 value={alias}
                 placeholder={placeholder}

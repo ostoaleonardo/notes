@@ -1,15 +1,13 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 
-import { Button } from '@/ui/button/button'
+import { TonalButton } from '@/ui/button/tonal-button'
 import { SheetForm, SheetInput } from '@/ui/modal/sheet-form'
 import { INPUT_EXAMPLES } from '@/constants/input-examples'
 
 export function LinkMarkdown({ onClose, onInsert }) {
     const { t } = useTranslation()
-    const { colors } = useTheme()
 
     const [title, setTitle] = useState('')
     const [url, setUrl] = useState('')
@@ -41,14 +39,9 @@ export function LinkMarkdown({ onClose, onInsert }) {
             />
 
             <View style={styles.buttons}>
-                <Button
-                    mode='contained'
-                    buttonColor={colors.surfaceVariant}
-                    textColor={colors.onBackground}
-                    onPress={onAdd}
-                >
+                <TonalButton onPress={onAdd}>
                     {t('button.insert')}
-                </Button>
+                </TonalButton>
             </View>
         </SheetForm>
     )

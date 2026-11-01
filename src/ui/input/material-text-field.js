@@ -1,8 +1,9 @@
-import { useMemo } from 'react'
+import { useContext, useMemo } from 'react'
 import { useTheme } from 'react-native-paper'
-import { Host, RNHostView, Text } from '@expo/ui/jetpack-compose'
+import { RNHostView, Text } from '@expo/ui/jetpack-compose'
 import { fillMaxWidth } from '@expo/ui/jetpack-compose/modifiers'
 
+import { ComposeContext, ComposeHost } from '@/ui/compose-context'
 import { useTextState } from '@/ui/hooks/use-text-state'
 
 import { getTextFieldColors } from '@/ui/utils/compose-colors'
@@ -24,10 +25,10 @@ export function MaterialTextField({
     endAdornment,
     ref,
     multiline = true,
-    hosted = true,
     autoFocus = false
 }) {
     const { colors } = useTheme()
+    const inCompose = useContext(ComposeContext)
     const { text, onFocusChanged } = useTextState(value)
     const fieldColors = useMemo(() => getTextFieldColors(colors, containerColor), [colors, containerColor])
 
@@ -50,7 +51,7 @@ export function MaterialTextField({
             ref={ref}
             value={text}
             colors={fieldColors}
-            modifiers={hosted ? undefined : FILL_WIDTH}
+            modifiers={inCompose ? FILL_WIDTH : undefined}
             textStyle={textStyle}
             autoFocus={autoFocus}
             singleLine={!multiline}
@@ -82,11 +83,9 @@ export function MaterialTextField({
         </Field>
     )
 
-    if (!hosted) return field
-
     return (
-        <Host matchContents={FILLED_INPUT.matchContents} style={FILLED_INPUT.hostStyle}>
+        <ComposeHost matchContents={FILLED_INPUT.matchContents} style={FILLED_INPUT.hostStyle}>
             {field}
-        </Host>
+        </ComposeHost>
     )
 }

@@ -20,7 +20,7 @@ import { Camera } from '@/icons/camera'
 import { Picture } from '@/icons/picture'
 
 import { TRANSPARENT } from '@/constants/themes'
-import { RADIUS, SPACING, OPACITY, ICON_SIZE } from '@/constants/theme'
+import { ICON_SIZE, OPACITY, RADIUS, SPACING } from '@/constants/theme'
 import { IMAGE_EXTENSION_BY_MIME_TYPE, IMAGE_SOURCES } from '@/constants/image'
 import { PICKER_ERROR_CODES } from '@/constants/picker-errors'
 import { LOG_MESSAGES } from '@/constants/log-messages'

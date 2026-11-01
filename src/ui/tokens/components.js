@@ -1,15 +1,15 @@
-import { ICON_SIZE, RADIUS, SPACING } from './theme'
+import { ICON_SIZE, RADIUS, SIZE, SPACING } from './theme'
 
 export const HIDDEN_OPACITY = 0
 
 export const BUTTON = {
-    size: 44,
+    size: SIZE.md,
     groupGap: SPACING.xxxs
 }
 
 export const CONTROL_SIZE = {
-    small: 40,
-    touch: 48
+    small: SIZE.sm,
+    touch: SIZE.lg
 }
 
 const CONTROL_TOUCH_INSET = (CONTROL_SIZE.touch - CONTROL_SIZE.small) / 2
@@ -48,7 +48,7 @@ export const ICON_TOGGLE = {
     expandDuration: 150
 }
 
-const FILLED_INPUT_MIN_HEIGHT = 56
+const FILLED_INPUT_MIN_HEIGHT = SIZE.xl
 
 export const FILLED_INPUT = {
     minHeight: FILLED_INPUT_MIN_HEIGHT,
@@ -58,12 +58,13 @@ export const FILLED_INPUT = {
 }
 
 export const DIALOG = {
+    properties: { usePlatformDefaultWidth: false },
     matchContents: { vertical: true },
     hostStyle: { position: 'absolute', width: '100%' }
 }
 
 export const MENU = {
-    maxHeight: 280,
+    maxHeight: SIZE.xxxxxl,
     itemIndent: SPACING.lg,
     paddingHorizontal: SPACING.xxs,
     paddingVertical: SPACING.xxxs / 2,
@@ -81,7 +82,7 @@ export const PLAIN_INPUT = {
 }
 
 export const SHEET = {
-    topPadding: 64,
+    topPadding: SIZE.xxl,
     snapPoints: {
         tall: ['50%', '95%'],
         search: ['90%']

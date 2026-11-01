@@ -109,7 +109,6 @@ export function AttachmentsOption() {
             >
                 <FilledTextField
                     autoFocus
-                    hosted={false}
                     multiline={false}
                     value={draft}
                     placeholder={DEFAULT_ATTACHMENT_FOLDER}

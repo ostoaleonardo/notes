@@ -1,4 +1,4 @@
-import { SPACING, RADIUS, OPACITY, Z_INDEX, DOM_FONT_SIZE } from '@/constants/theme'
+import { DOM_FONT_SIZE, OPACITY, RADIUS, SPACING, Z_INDEX } from '@/constants/theme'
 import { META_TOKEN_TYPES } from '@/constants/note-meta'
 import { TRANSPARENT } from '@/constants/themes'
 

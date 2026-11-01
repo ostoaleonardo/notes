@@ -97,6 +97,20 @@ describe('button colors', () => {
         expect(result.disabledContentColor).toBe(colors.onBackground + TINT.placeholder)
     })
 
+    test('tints a tonal button with the surface variant and the text color', () => {
+        const result = getButtonColors(colors, 'tonal')
+
+        expect(result.containerColor).toBe(colors.surfaceVariant)
+        expect(result.contentColor).toBe(colors.onBackground)
+    })
+
+    test('fades a disabled tonal button', () => {
+        const result = getButtonColors(colors, 'tonal')
+
+        expect(result.disabledContainerColor).toBe(colors.onBackground + TINT.fill)
+        expect(result.disabledContentColor).toBe(colors.onBackground + TINT.placeholder)
+    })
+
     test.each(['outlined', 'text'])('leaves the %s button without a container', (variant) => {
         const result = getButtonColors(colors, variant)
 

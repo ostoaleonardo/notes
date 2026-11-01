@@ -7,7 +7,7 @@ import { levelRowStyles } from './drawer-level-styles'
 
 import { ArrowBack } from '@/icons/arrow-back'
 
-import { RADIUS, ICON_SIZE, SPACING } from '@/constants/theme'
+import { ICON_SIZE, RADIUS, SPACING } from '@/constants/theme'
 
 export const DrawerLevelHeader = memo(function DrawerLevelHeader({
     repository,

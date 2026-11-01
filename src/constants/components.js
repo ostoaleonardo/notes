@@ -1,13 +1,13 @@
 export * from '@/ui/tokens/components'
 
-import { BORDER_WIDTH, FONT_SIZE, FONTS, ICON_SIZE, SPACING } from '@/ui/tokens/theme'
+import { BORDER_WIDTH, FONT_SIZE, FONTS, ICON_SIZE, SIZE, SPACING } from '@/ui/tokens/theme'
 
 export const BADGE = {
     size: ICON_SIZE.md,
     top: SPACING.xs
 }
 
-const COLOR_OPTION_SIZE = 64
+const COLOR_OPTION_SIZE = SIZE.xxl
 
 export const COLOR_OPTION = {
     size: COLOR_OPTION_SIZE,
@@ -17,8 +17,8 @@ export const COLOR_OPTION = {
 }
 
 export const CARD_GRID = {
-    cardHeight: 220,
-    cardMinWidth: 160,
+    cardHeight: SIZE.xxxxl,
+    cardMinWidth: SIZE.xxxl,
     previewFontSize: FONT_SIZE.xs,
     rowGap: SPACING.xxl,
     columnGap: SPACING.lg,
@@ -33,6 +33,6 @@ export const DIALOG_BUTTON_LABEL_STYLE = {
 }
 
 export const DRAWER_ITEM = {
-    minHeight: 40,
-    slotSize: 32
+    minHeight: SIZE.sm,
+    slotSize: SIZE.xs
 }

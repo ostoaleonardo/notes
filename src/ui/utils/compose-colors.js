@@ -19,6 +19,15 @@ export const getButtonColors = (colors, variant) => {
     const disabledContainer = colors.onBackground + TINT.fill
     const disabledContent = colors.onBackground + TINT.placeholder
 
+    if (variant === 'tonal') {
+        return {
+            containerColor: colors.surfaceVariant,
+            contentColor: colors.onBackground,
+            disabledContainerColor: disabledContainer,
+            disabledContentColor: disabledContent
+        }
+    }
+
     if (variant === 'filled') {
         return {
             containerColor: colors.onBackground,

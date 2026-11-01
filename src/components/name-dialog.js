@@ -46,7 +46,6 @@ export function NameDialog({ visible, onDismiss, title, onSubmit, busy = false, 
         >
             <FilledTextField
                 autoFocus
-                hosted={false}
                 multiline={false}
                 value={name}
                 placeholder={title}

@@ -5,7 +5,7 @@ import { IconButton, TouchableRipple, useTheme } from 'react-native-paper'
 import { FadeIn, FadeInRight, FadeOut, FadeOutRight } from 'react-native-reanimated'
 
 import { AnimatedView } from '@/ui/animated/animated-view'
-import { Button } from '@/ui/button/button'
+import { FilledButton } from '@/ui/button/filled-button'
 import { EmptyMessage } from '@/ui/modal/empty-message'
 import { Typography } from '@/ui/typography'
 import { ConfirmDialog } from '@/components/confirm-dialog'
@@ -23,7 +23,7 @@ import { Close } from '@/icons/close'
 
 import { DIFF_ADDED_COLOR, DIFF_REMOVED_COLOR, DIFF_TYPES } from '@/constants/diff'
 import { TRANSPARENT } from '@/constants/themes'
-import { FONTS, TYPOGRAPHY_SIZE_VARIANTS, SPACING, OPACITY, RADIUS } from '@/constants/theme'
+import { FONTS, OPACITY, RADIUS, SPACING, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
 import { FREE_VERSION_HISTORY_LIMIT } from '@/constants/default-values'
 
 const getDiffColor = (type) => (type === DIFF_TYPES.ADDED ? DIFF_ADDED_COLOR : DIFF_REMOVED_COLOR)
@@ -178,13 +178,9 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
                             entering={FadeInRight}
                             exiting={FadeOutRight}
                         >
-                            <Button
-                                compact={true}
-                                mode='contained'
-                                onPress={onOpenRestore}
-                            >
+                            <FilledButton onPress={onOpenRestore}>
                                 {t('button.restore')}
-                            </Button>
+                            </FilledButton>
                         </AnimatedView>
                     )}
 
