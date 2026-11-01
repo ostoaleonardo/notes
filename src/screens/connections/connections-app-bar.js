@@ -1,9 +1,9 @@
 import { memo } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Appbar, Tooltip } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
 import { Badge } from '@/ui/badge'
+import { IconButton } from '@/ui/button/icon-button'
 import { AppBar } from '@/components/app-bar/app-bar'
 
 import { LinkOff } from '@/icons/link-off'
@@ -26,33 +26,27 @@ export const ConnectionsAppBar = memo(function ConnectionsAppBar({
             title={t('connections.title')}
             trailing={(
                 <>
-                    <Tooltip title={pendingLabel}>
-                        <View>
-                            <Appbar.Action
-                                animated={false}
-                                onPress={onPending}
-                                testID={TEST_IDS.CONNECTIONS_PENDING}
-                                icon={(props) => <LinkOff {...props} />}
-                                accessibilityLabel={pendingLabel}
-                            />
-
-                            {pendingCount > 0 && (
-                                <Badge style={styles.badge}>
-                                    {pendingCount}
-                                </Badge>
-                            )}
-                        </View>
-                    </Tooltip>
-
-                    <Tooltip title={searchLabel}>
-                        <Appbar.Action
-                            animated={false}
-                            onPress={onSearch}
-                            testID={TEST_IDS.CONNECTIONS_SEARCH}
-                            icon={(props) => <Search {...props} />}
-                            accessibilityLabel={searchLabel}
+                    <View>
+                        <IconButton
+                            icon={LinkOff}
+                            label={pendingLabel}
+                            testID={TEST_IDS.CONNECTIONS_PENDING}
+                            onPress={onPending}
                         />
-                    </Tooltip>
+
+                        {pendingCount > 0 && (
+                            <Badge style={styles.badge}>
+                                {pendingCount}
+                            </Badge>
+                        )}
+                    </View>
+
+                    <IconButton
+                        icon={Search}
+                        label={searchLabel}
+                        testID={TEST_IDS.CONNECTIONS_SEARCH}
+                        onPress={onSearch}
+                    />
                 </>
             )}
         />
