@@ -14,3 +14,15 @@ export const TRANSPARENT = {
     '95': 'f2',
     '100': 'ff'
 }
+
+export const TINT = {
+    hairline: TRANSPARENT[5],
+    ripple: TRANSPARENT[10],
+    border: TRANSPARENT[10],
+    selected: TRANSPARENT[10],
+    fill: TRANSPARENT[20],
+    highlight: TRANSPARENT[30],
+    placeholder: TRANSPARENT[40],
+    indicator: TRANSPARENT[50],
+    label: TRANSPARENT[60]
+}

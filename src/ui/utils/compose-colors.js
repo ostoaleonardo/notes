@@ -1,4 +1,4 @@
-import { TRANSPARENT } from '@/ui/tokens/transparent'
+import { TINT, TRANSPARENT } from '@/ui/tokens/transparent'
 
 export const getSwitchColors = (colors) => ({
     checkedTrackColor: colors.tertiary,
@@ -11,7 +11,7 @@ export const getSwitchColors = (colors) => ({
 
 export const getCheckboxColors = (colors) => ({
     checkedColor: colors.onBackground,
-    uncheckedColor: colors.onBackground + TRANSPARENT[20],
+    uncheckedColor: colors.onBackground + TINT.fill,
     checkmarkColor: colors.background
 })
 
@@ -22,9 +22,9 @@ export const getTextFieldColors = (colors, containerColor = colors.surfaceVarian
     unfocusedTextColor: colors.onBackground,
     cursorColor: colors.accentText,
     focusedIndicatorColor: colors.accentText,
-    unfocusedIndicatorColor: colors.onBackground + TRANSPARENT[50],
+    unfocusedIndicatorColor: colors.onBackground + TINT.indicator,
     focusedLabelColor: colors.accentText,
-    unfocusedLabelColor: colors.onBackground + TRANSPARENT[60],
-    focusedPlaceholderColor: colors.onBackground + TRANSPARENT[40],
-    unfocusedPlaceholderColor: colors.onBackground + TRANSPARENT[40]
+    unfocusedLabelColor: colors.onBackground + TINT.label,
+    focusedPlaceholderColor: colors.onBackground + TINT.placeholder,
+    unfocusedPlaceholderColor: colors.onBackground + TINT.placeholder
 })

@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { Typography } from '@/ui/typography'
 
-import { TRANSPARENT } from '@/ui/tokens/transparent'
+import { TINT } from '@/ui/tokens/transparent'
 import { BORDER_WIDTH, RADIUS, SPACING } from '@/ui/tokens/theme'
 
 let listener = null
@@ -45,7 +45,7 @@ export function GlobalSnackbarHost() {
             style={{
                 borderRadius: RADIUS.md,
                 borderWidth: BORDER_WIDTH.thin,
-                borderColor: colors.onBackground + TRANSPARENT[10],
+                borderColor: colors.onBackground + TINT.border,
                 backgroundColor: colors.surface
             }}
         >

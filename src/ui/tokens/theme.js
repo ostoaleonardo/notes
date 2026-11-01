@@ -31,6 +31,11 @@ export const ICON_SIZE = {
     xxl: 24
 }
 
+export const FONT_SIZE = {
+    xs: 11,
+    sm: 12
+}
+
 export const OPACITY = {
     divider: 0.1,
     disabled: 0.4,

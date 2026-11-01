@@ -10,9 +10,18 @@ export const CONTROL_SIZE = {
     touch: 48
 }
 
-export const CONTROL_HIT_SLOP = {
-    top: (CONTROL_SIZE.touch - CONTROL_SIZE.small) / 2,
-    bottom: (CONTROL_SIZE.touch - CONTROL_SIZE.small) / 2
+const CONTROL_TOUCH_INSET = (CONTROL_SIZE.touch - CONTROL_SIZE.small) / 2
+
+export const HIT_SLOP = {
+    icon: SPACING.md,
+    control: {
+        top: CONTROL_TOUCH_INSET,
+        bottom: CONTROL_TOUCH_INSET
+    }
+}
+
+export const RIPPLE = {
+    iconRadius: ICON_SIZE.lg
 }
 
 export const SEGMENT_RADIUS = {
@@ -37,10 +46,12 @@ export const ICON_TOGGLE = {
     expandDuration: 150
 }
 
+const FILLED_INPUT_MIN_HEIGHT = 56
+
 export const FILLED_INPUT = {
-    minHeight: 56,
+    minHeight: FILLED_INPUT_MIN_HEIGHT,
     matchContents: { vertical: true },
-    hostStyle: { width: '100%', minHeight: 56 },
+    hostStyle: { width: '100%', minHeight: FILLED_INPUT_MIN_HEIGHT },
     keyboardOptions: { capitalization: 'sentences' }
 }
 

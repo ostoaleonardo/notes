@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { Menu, useTheme } from 'react-native-paper'
 
 import { MENU } from '@/ui/tokens/components'
-import { TRANSPARENT } from '@/ui/tokens/transparent'
+import { getRippleColor } from '@/ui/utils/ripple'
 import { FONTS, RADIUS, TYPOGRAPHY_SIZE_VARIANTS } from '@/ui/tokens/theme'
 
 const useSizedIcon = (icon, style) => useCallback(
@@ -24,7 +24,7 @@ export function MenuItem({ leadingIcon, trailingIcon, contentStyle, ...props }) 
         <View style={styles.item}>
             <Menu.Item
                 titleStyle={styles.title}
-                rippleColor={colors.onBackground + TRANSPARENT[10]}
+                rippleColor={getRippleColor(colors)}
                 leadingIcon={leadingIcon ? sizedLeading : undefined}
                 trailingIcon={trailingIcon ? sizedTrailing : undefined}
                 contentStyle={[leadingIcon ? styles.withIcon : styles.withoutIcon, contentStyle]}

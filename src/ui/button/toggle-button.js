@@ -9,7 +9,7 @@ import { useExpandingWidth } from '@/ui/hooks/use-expanding-width'
 import { usePressed } from '@/ui/hooks/use-pressed'
 import { useGroupCornerStyle } from '@/ui/hooks/use-group-corner-style'
 
-import { CONTROL_HIT_SLOP, CONTROL_SIZE, ICON_TOGGLE } from '@/ui/tokens/components'
+import { CONTROL_SIZE, HIT_SLOP, ICON_TOGGLE } from '@/ui/tokens/components'
 import { GROUP_AXES } from '@/ui/tokens/group-position'
 import { OPACITY } from '@/ui/tokens/theme'
 
@@ -91,7 +91,7 @@ export function ToggleButton({
                 ]}
             >
                 <TouchableRipple
-                    hitSlop={CONTROL_HIT_SLOP}
+                    hitSlop={HIT_SLOP.control}
                     accessibilityRole='button'
                     accessibilityState={{ selected: !!selected }}
                     disabled={disabled}

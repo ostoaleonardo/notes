@@ -4,7 +4,7 @@ import { useTheme } from 'react-native-paper'
 
 import { useBlurTarget } from '@/ui/blur/blur-target'
 
-import { TRANSPARENT } from '@/ui/tokens/transparent'
+import { TINT } from '@/ui/tokens/transparent'
 import { BLUR, BORDER_WIDTH, RADIUS, SPACING } from '@/ui/tokens/theme'
 
 export function ToolbarSurface({ children }) {
@@ -26,7 +26,7 @@ export function ToolbarSurface({ children }) {
                     styles.surface, {
                         maxWidth: width - SPACING.lg * 2,
                         backgroundColor: colors.surface,
-                        borderColor: colors.onBackground + TRANSPARENT[10]
+                        borderColor: colors.onBackground + TINT.border
                     }
                 ]}
             >

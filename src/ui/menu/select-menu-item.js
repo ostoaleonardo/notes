@@ -7,7 +7,7 @@ import { MenuItem } from './menu-item'
 import { Check } from '@/ui/icons/check'
 
 import { MENU } from '@/ui/tokens/components'
-import { TRANSPARENT } from '@/ui/tokens/transparent'
+import { TINT } from '@/ui/tokens/transparent'
 
 export function SelectMenuItem({ selected, style, contentStyle, ...props }) {
     const { colors } = useTheme()
@@ -21,7 +21,7 @@ export function SelectMenuItem({ selected, style, contentStyle, ...props }) {
         <MenuItem
             contentStyle={[styles.item, contentStyle]}
             trailingIcon={selected ? renderCheck : undefined}
-            style={selected ? [style, { backgroundColor: colors.tertiary + TRANSPARENT[10] }] : style}
+            style={selected ? [style, { backgroundColor: colors.tertiary + TINT.selected }] : style}
             {...props}
         />
     )

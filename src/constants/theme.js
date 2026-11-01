@@ -1,6 +1,6 @@
 export * from '@/ui/tokens/theme'
 
-import { BORDER_WIDTH, FONTS, ICON_SIZE } from '@/ui/tokens/theme'
+import { BORDER_WIDTH, FONT_SIZE, FONTS, ICON_SIZE } from '@/ui/tokens/theme'
 
 export const Z_INDEX = {
     base: 1,
@@ -22,7 +22,7 @@ export const BODY_FONT_FAMILY = `${FONTS.azeretLight}, ${MONOSPACE_FONT_FAMILY}`
 export const HEADING_FONT_FALLBACK = 'system-ui, sans-serif'
 
 export const DOM_FONT_SIZE = {
-    caption: '12px',
+    caption: `${FONT_SIZE.sm}px`,
     small: '13px',
     body: '14px'
 }

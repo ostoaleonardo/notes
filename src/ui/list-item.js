@@ -6,7 +6,7 @@ import { Typography } from '@/ui/typography'
 import { useGroupPosition } from '@/ui/hooks/use-group-position'
 import { getStackedRadiusStyle } from '@/ui/utils/group-position'
 
-import { TRANSPARENT } from '@/ui/tokens/transparent'
+import { getRippleColor } from '@/ui/utils/ripple'
 import { SPACING, OPACITY } from '@/ui/tokens/theme'
 
 export function ListItem({
@@ -32,7 +32,7 @@ export function ListItem({
             <TouchableRipple
                 accessibilityRole='button'
                 onPress={onPress}
-                rippleColor={colors.onBackground + TRANSPARENT[10]}
+                rippleColor={getRippleColor(colors)}
                 style={[styles.container, children ? styles.stacked : styles.inline]}
             >
                 <>

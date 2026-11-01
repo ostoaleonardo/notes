@@ -5,7 +5,7 @@ import { FilledTextField } from '@/ui/input/filled-text-field'
 import { PlainTextField } from '@/ui/input/plain-text-field'
 import { useHeadingFamily } from '@/ui/hooks/use-heading-family'
 
-import { TRANSPARENT } from '@/ui/tokens/transparent'
+import { TINT } from '@/ui/tokens/transparent'
 import { TYPOGRAPHY_SIZE_VARIANTS } from '@/ui/tokens/theme'
 
 function PlainLargeInput({ value, onChangeText, placeholder, autoFocus }) {
@@ -19,7 +19,7 @@ function PlainLargeInput({ value, onChangeText, placeholder, autoFocus }) {
     }), [colors.onBackground, fontFamily])
     const selectionColors = useMemo(() => ({
         handleColor: colors.accentText,
-        backgroundColor: colors.onBackground + TRANSPARENT[20]
+        backgroundColor: colors.onBackground + TINT.fill
     }), [colors.accentText, colors.onBackground])
 
     return (
@@ -30,7 +30,7 @@ function PlainLargeInput({ value, onChangeText, placeholder, autoFocus }) {
             textStyle={textStyle}
             cursorColor={colors.onBackground}
             selectionColors={selectionColors}
-            placeholderColor={colors.onBackground + TRANSPARENT[40]}
+            placeholderColor={colors.onBackground + TINT.placeholder}
             onChangeText={onChangeText}
         />
     )

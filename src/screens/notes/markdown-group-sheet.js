@@ -16,7 +16,7 @@ import { GROUP_AXES } from '@/constants/group-position'
 
 import { MARKDOWN_GROUPS } from '@/constants/markdown-controls'
 import { SPACING } from '@/constants/theme'
-import { TRANSPARENT } from '@/constants/themes'
+import { getRippleColor } from '@/ui/utils/ripple'
 
 const GroupItem = memo(function GroupItem({ action, Icon, onSelect }) {
     const { t } = useTranslation()
@@ -31,7 +31,7 @@ const GroupItem = memo(function GroupItem({ action, Icon, onSelect }) {
                 onPress={() => onSelect(action)}
                 onPressIn={onPressIn}
                 onPressOut={onPressOut}
-                android_ripple={{ color: colors.onBackground + TRANSPARENT[10] }}
+                android_ripple={{ color: getRippleColor(colors) }}
                 style={styles.item}
             >
                 <Icon color={colors.onBackground} />

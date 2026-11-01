@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native'
 import { Circle, Svg } from 'react-native-svg'
 import { useTheme } from 'react-native-paper'
 
-import { TRANSPARENT } from '@/ui/tokens/transparent'
+import { TINT } from '@/ui/tokens/transparent'
 
 export function CircularProgressIndicator({ size, stroke, progress, children }) {
     const { colors } = useTheme()
@@ -20,7 +20,7 @@ export function CircularProgressIndicator({ size, stroke, progress, children }) 
                     r={radius}
                     fill='none'
                     strokeWidth={stroke}
-                    stroke={colors.onBackground + TRANSPARENT[10]}
+                    stroke={colors.onBackground + TINT.border}
                 />
                 <Circle
                     cx={center}

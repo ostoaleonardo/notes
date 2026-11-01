@@ -2,8 +2,9 @@ import { memo } from 'react'
 import { Pressable } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
-import { TRANSPARENT } from '@/ui/tokens/transparent'
-import { ICON_SIZE, SPACING } from '@/ui/tokens/theme'
+import { getRippleColor } from '@/ui/utils/ripple'
+
+import { HIT_SLOP, RIPPLE } from '@/ui/tokens/components'
 
 export const ListItemAction = memo(function ListItemAction({ label, onPress, children, ...props }) {
     const { colors } = useTheme()
@@ -12,11 +13,11 @@ export const ListItemAction = memo(function ListItemAction({ label, onPress, chi
         <Pressable
             accessibilityRole='button'
             accessibilityLabel={label}
-            hitSlop={SPACING.md}
+            hitSlop={HIT_SLOP.icon}
             android_ripple={{
-                color: colors.onBackground + TRANSPARENT[10],
+                color: getRippleColor(colors),
                 borderless: true,
-                radius: ICON_SIZE.lg
+                radius: RIPPLE.iconRadius
             }}
             onPress={onPress}
             {...props}

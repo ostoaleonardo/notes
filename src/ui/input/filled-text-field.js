@@ -8,7 +8,7 @@ import { getTextFieldColors } from '@/ui/utils/compose-colors'
 
 import { FILLED_INPUT } from '@/ui/tokens/components'
 import { FONTS } from '@/ui/tokens/theme'
-import { TRANSPARENT } from '@/ui/tokens/transparent'
+import { TINT } from '@/ui/tokens/transparent'
 
 export function FilledTextField({
     label,
@@ -37,7 +37,7 @@ export function FilledTextField({
 
     const selectionColors = useMemo(() => ({
         handleColor: colors.accentText,
-        backgroundColor: colors.tertiary + TRANSPARENT[30]
+        backgroundColor: colors.tertiary + TINT.highlight
     }), [colors.accentText, colors.tertiary])
 
     return (

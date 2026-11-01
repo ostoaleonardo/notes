@@ -3,9 +3,9 @@ import Animated, { LinearTransition } from 'react-native-reanimated'
 
 import { Typography } from '@/ui/typography'
 
-import { OPACITY } from '@/ui/tokens/theme'
+import { OPACITY, SPACING } from '@/ui/tokens/theme'
 
-export function AnimatedList({ emptyLabel, gap = 16, contentContainerStyle, ...props }) {
+export function AnimatedList({ emptyLabel, gap = SPACING.lg, contentContainerStyle, ...props }) {
     return (
         <Animated.FlatList
             style={styles.base}

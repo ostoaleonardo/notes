@@ -13,7 +13,7 @@ import { Folder } from '@/icons/folder'
 
 import { MENU } from '@/constants/components'
 import { OPACITY, SPACING, ICON_SIZE } from '@/constants/theme'
-import { TRANSPARENT } from '@/constants/themes'
+import { getRippleColor } from '@/ui/utils/ripple'
 
 const MoveNoteItem = memo(function MoveNoteItem({ item, current, onPress }) {
     const { colors } = useTheme()
@@ -23,7 +23,7 @@ const MoveNoteItem = memo(function MoveNoteItem({ item, current, onPress }) {
             disabled={current}
             accessibilityRole='button'
             onPress={() => onPress(item.id)}
-            android_ripple={{ color: colors.onBackground + TRANSPARENT[10] }}
+            android_ripple={{ color: getRippleColor(colors) }}
             style={[styles.item, { paddingLeft: SPACING.lg + item.depth * MENU.itemIndent }]}
         >
             <Folder
