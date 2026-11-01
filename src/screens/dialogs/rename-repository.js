@@ -3,7 +3,7 @@ import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@/ui/dialog'
-import { LargeInput } from '@/ui/input/large-input'
+import { FilledTextField } from '@/ui/input/filled-text-field'
 
 import { useEditDialogInput } from '@/hooks/use-dialog-input'
 import { useHaptics } from '@/hooks/use-haptics'
@@ -53,8 +53,9 @@ export function RenameRepository({ visible, onDismiss, repositoryId }) {
                 </Button>
             }
         >
-            <LargeInput
+            <FilledTextField
                 autoFocus
+                multiline={false}
                 value={alias}
                 placeholder={placeholder}
                 onChangeText={setAlias}

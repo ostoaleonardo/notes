@@ -7,7 +7,7 @@ import { SelectOption } from './select-option'
 import { StorageSelectOption } from './storage-select-option'
 import { Dialog } from '@/ui/dialog'
 import { PositionGroup } from '@/ui/position-group'
-import { LargeInput } from '@/ui/input/large-input'
+import { FilledTextField } from '@/ui/input/filled-text-field'
 
 import { useStorage } from '@/hooks/use-storage'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
@@ -111,8 +111,9 @@ export function AttachmentsOption() {
                     </Button>
                 )}
             >
-                <LargeInput
+                <FilledTextField
                     autoFocus
+                    multiline={false}
                     value={draft}
                     placeholder={DEFAULT_ATTACHMENT_FOLDER}
                     onChangeText={setDraft}

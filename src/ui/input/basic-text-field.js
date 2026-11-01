@@ -1,12 +1,12 @@
 import { useMemo } from 'react'
-import { BasicTextField, Box, Host, Text } from '@expo/ui/jetpack-compose'
+import { BasicTextField as ComposeBasicTextField, Box, Host, Text } from '@expo/ui/jetpack-compose'
 import { fillMaxWidth } from '@expo/ui/jetpack-compose/modifiers'
 
 import { useTextState } from '@/ui/hooks/use-text-state'
 
 import { PLAIN_INPUT } from '@/ui/tokens/components'
 
-export function PlainTextField({
+export function BasicTextField({
     value = '',
     onChangeText,
     placeholder,
@@ -21,7 +21,7 @@ export function PlainTextField({
 
     return (
         <Host matchContents={PLAIN_INPUT.matchContents} style={PLAIN_INPUT.hostStyle}>
-            <BasicTextField
+            <ComposeBasicTextField
                 value={text}
                 singleLine
                 autoFocus={autoFocus}
@@ -33,19 +33,19 @@ export function PlainTextField({
                 onFocusChanged={onFocusChanged}
                 onValueChange={onChangeText}
             >
-                <BasicTextField.DecorationBox>
+                <ComposeBasicTextField.DecorationBox>
                     <Box>
                         {!!placeholder && (
-                            <BasicTextField.Placeholder>
+                            <ComposeBasicTextField.Placeholder>
                                 <Text color={placeholderColor} style={textStyle}>
                                     {placeholder}
                                 </Text>
-                            </BasicTextField.Placeholder>
+                            </ComposeBasicTextField.Placeholder>
                         )}
-                        <BasicTextField.InnerTextField />
+                        <ComposeBasicTextField.InnerTextField />
                     </Box>
-                </BasicTextField.DecorationBox>
-            </BasicTextField>
+                </ComposeBasicTextField.DecorationBox>
+            </ComposeBasicTextField>
         </Host>
     )
 }

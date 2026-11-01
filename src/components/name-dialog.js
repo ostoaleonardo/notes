@@ -2,7 +2,7 @@ import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@/ui/dialog'
-import { LargeInput } from '@/ui/input/large-input'
+import { FilledTextField } from '@/ui/input/filled-text-field'
 
 import { useCreateDialogInput } from '@/hooks/use-dialog-input'
 import { useHaptics } from '@/hooks/use-haptics'
@@ -43,8 +43,9 @@ export function NameDialog({ visible, onDismiss, title, onSubmit, extraActions =
                 </Button>
             ]}
         >
-            <LargeInput
+            <FilledTextField
                 autoFocus
+                multiline={false}
                 value={name}
                 placeholder={title}
                 onChangeText={setName}

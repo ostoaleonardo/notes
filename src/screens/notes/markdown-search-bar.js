@@ -1,8 +1,9 @@
 import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
+import { useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
 
-import { SmallInput } from '@/ui/input/small-input'
+import { BasicTextField } from '@/ui/input/basic-text-field'
 import { ButtonGroup } from '@/ui/button/button-group'
 
 import { Close } from '@/icons/close'
@@ -11,7 +12,8 @@ import { FindReplace } from '@/icons/find-replace'
 import { KeyboardArrowDown } from '@/ui/icons/keyboard-arrow-down'
 import { KeyboardArrowUp } from '@/ui/icons/keyboard-arrow-up'
 
-import { RADIUS, SPACING } from '@/constants/theme'
+import { FONTS, RADIUS, SPACING } from '@/constants/theme'
+import { TINT } from '@/ui/tokens/transparent'
 import { MARKDOWN_ACTIONS } from '@/constants/markdown-actions'
 
 export function MarkdownSearchBar({ search, action }) {
@@ -27,6 +29,18 @@ export function MarkdownSearchBar({ search, action }) {
         setReplaceText,
         onClose
     } = search
+
+    const textStyle = useMemo(() => ({
+        color: colors.onBackground,
+        fontFamily: FONTS.azeretLight
+    }), [colors.onBackground])
+
+    const selectionColors = useMemo(() => ({
+        handleColor: colors.accentText,
+        backgroundColor: colors.tertiary + TINT.highlight
+    }), [colors.accentText, colors.tertiary])
+
+    const placeholderColor = colors.onBackground + TINT.placeholder
 
     if (!visible) return null
 
@@ -49,13 +63,18 @@ export function MarkdownSearchBar({ search, action }) {
                     borderBottomRightRadius: searchBottomRadius
                 }}
             >
-                <SmallInput
-                    autoFocus
-                    background={colors.surface}
-                    value={searchQuery}
-                    onChangeText={setSearchQuery}
-                    placeholder={t('button.find')}
-                />
+                <View style={styles.input}>
+                    <BasicTextField
+                        autoFocus
+                        value={searchQuery}
+                        textStyle={textStyle}
+                        cursorColor={colors.accentText}
+                        selectionColors={selectionColors}
+                        placeholderColor={placeholderColor}
+                        placeholder={t('button.find')}
+                        onChangeText={setSearchQuery}
+                    />
+                </View>
                 <ButtonGroup
                     buttons={[
                         {
@@ -88,12 +107,17 @@ export function MarkdownSearchBar({ search, action }) {
                         borderBottomRightRadius: RADIUS.lg
                     }}
                 >
-                    <SmallInput
-                        value={replaceText}
-                        background={colors.surface}
-                        onChangeText={setReplaceText}
-                        placeholder={t('button.replace')}
-                    />
+                    <View style={styles.input}>
+                        <BasicTextField
+                            value={replaceText}
+                            textStyle={textStyle}
+                            cursorColor={colors.accentText}
+                            selectionColors={selectionColors}
+                            placeholderColor={placeholderColor}
+                            placeholder={t('button.replace')}
+                            onChangeText={setReplaceText}
+                        />
+                    </View>
                     <ButtonGroup
                         buttons={[
                             {
@@ -128,5 +152,8 @@ const styles = StyleSheet.create({
         paddingVertical: SPACING.xs,
         paddingHorizontal: SPACING.md,
         gap: SPACING.xxs
+    },
+    input: {
+        flex: 1
     }
 })
