@@ -372,7 +372,9 @@
 			"open_failed": "No se pudo abrir el archivo"
 		},
 		"outline": {
-			"empty": "Esta nota no tiene encabezados"
+			"empty": "Esta nota no tiene encabezados",
+			"collapse": "Contraer sección",
+			"expand": "Expandir sección"
 		},
 		"outgoing_links": {
 			"empty": "Esta nota no enlaza a otras notas"

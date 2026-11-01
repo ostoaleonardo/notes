@@ -372,7 +372,9 @@
 			"open_failed": "Couldn't open the file"
 		},
 		"outline": {
-			"empty": "This note has no headings"
+			"empty": "This note has no headings",
+			"collapse": "Collapse section",
+			"expand": "Expand section"
 		},
 		"outgoing_links": {
 			"empty": "This note has no links to other notes"

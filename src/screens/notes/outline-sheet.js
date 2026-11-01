@@ -15,7 +15,9 @@ import { HEADING_OUTLINE_CHEVRON_SIZE, HEADING_OUTLINE_INDENT } from '@/constant
 import { SPACING } from '@/constants/theme'
 
 const OutlineItem = memo(function OutlineItem({ item, collapsed, onPress, onToggle }) {
+    const { t } = useTranslation()
     const { colors } = useTheme()
+    const toggleKey = collapsed ? 'message.outline.expand' : 'message.outline.collapse'
     const handlePress = useCallback(() => onPress(item.index), [onPress, item.index])
     const handleToggle = useCallback(() => onToggle(item.index), [onToggle, item.index])
 
@@ -28,6 +30,9 @@ const OutlineItem = memo(function OutlineItem({ item, collapsed, onPress, onTogg
                 onPress={handlePress}
                 rightContent={item.hasChildren ? (
                     <Pressable
+                        accessibilityRole='button'
+                        accessibilityLabel={t(toggleKey)}
+                        accessibilityState={{ expanded: !collapsed }}
                         hitSlop={SPACING.md}
                         onPress={handleToggle}
                         style={collapsed && styles.collapsed}
