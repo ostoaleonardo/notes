@@ -12,9 +12,10 @@ export function SearchTagFilters({ query, setQuery, tags, parsed }) {
     return (
         <Scroll
             horizontal
+            style={styles.scroll}
             overScrollMode='never'
             keyboardShouldPersistTaps='handled'
-            contentContainerStyle={styles.scroll}
+            contentContainerStyle={styles.content}
         >
             <View style={styles.chips}>
                 {tags.map((tag) => {
@@ -37,6 +38,9 @@ export function SearchTagFilters({ query, setQuery, tags, parsed }) {
 
 const styles = StyleSheet.create({
     scroll: {
+        flexGrow: 0
+    },
+    content: {
         paddingHorizontal: SPACING.lg
     },
     chips: {
