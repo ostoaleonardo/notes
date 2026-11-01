@@ -16,6 +16,8 @@ export const HTML_ESCAPES = {
     '"': '&quot;'
 }
 
+export const BLOCKED_LINK_PROTOCOL_PATTERN = /^(?:vbscript|javascript|file|data(?!:image\/)):/i
+
 export const ALLOWED_URI_REGEXP = new RegExp(
     `^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|${schemeProtocol(WIKI_LINK_SCHEME)}|${schemeProtocol(TAG_LINK_SCHEME)}|${schemeProtocol(FILE_LINK_SCHEME)}):|[^a-z]|[a-z+.\\-]+(?:[^a-z+.\\-:]|$))`,
     'i'

@@ -13,13 +13,15 @@ import { TAG_LINK_SCHEME } from '@/constants/tags'
 import { WIKI_LINK_SCHEME } from '@/constants/wiki-links'
 import { PREVIEW_TABLE_SCROLL_CLASS } from '@/constants/table-widget'
 import { MARKDOWN_IT_TOKENS } from '@/constants/markdown-it-tokens'
-import { ALLOWED_URI_REGEXP } from '@/constants/html-sanitize'
+import { ALLOWED_URI_REGEXP, BLOCKED_LINK_PROTOCOL_PATTERN } from '@/constants/html-sanitize'
 
 const md = new MarkdownIt({ html: true, linkify: true, breaks: true })
     .use(taskLists, { enabled: true })
     .use(texmath, { engine: katex, delimiters: 'dollars' })
     .use(footnote)
     .use(markdownItExtras)
+
+md.validateLink = (url) => !BLOCKED_LINK_PROTOCOL_PATTERN.test(url.trim())
 
 const defaultLinkOpen = md.renderer.rules.link_open
     || ((tokens, idx, options, env, self) => self.renderToken(tokens, idx, options))

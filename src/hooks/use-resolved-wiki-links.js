@@ -1,29 +1,32 @@
 import { useMemo } from 'react'
 
 import { useNotes } from './use-notes'
-import { useImageUris } from './use-image-uris'
+import { useMediaUris } from './use-media-uris'
 import { resolveWikiLinks } from '@/utils/wiki-links'
 import { resolveEmbeds } from '@/utils/embeds'
+import { isEmbeddableMedia } from '@/utils/media-size'
 
 export const useResolvedWikiLinks = (value, selfPath) => {
     const { notes, notePaths } = useNotes()
-    const listImageUris = useImageUris()
+    const listMediaUris = useMediaUris()
 
     return useMemo(() => {
-        let imageUris = null
+        let mediaUris = null
 
-        const getImageUrl = (name) => {
-            imageUris ??= listImageUris()
-            return imageUris.get(name)
+        const getMediaUrl = (name) => {
+            mediaUris ??= listMediaUris()
+            const uri = mediaUris.get(name)
+
+            return uri && isEmbeddableMedia(name, uri) ? uri : undefined
         }
 
         const withEmbeds = resolveEmbeds(value || '', {
             notes,
             notePaths,
-            getImageUrl,
+            getMediaUrl,
             selfPath,
             withOpenLink: true
         })
         return resolveWikiLinks(withEmbeds, notes, notePaths, selfPath)
-    }, [value, selfPath, notes, notePaths, listImageUris])
+    }, [value, selfPath, notes, notePaths, listMediaUris])
 }

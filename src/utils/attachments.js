@@ -5,7 +5,7 @@ import {
     INVALID_FOLDER_NAME_PATTERN
 } from '@/constants/attachments'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { EMBED_IMAGE_PATTERN } from '@/constants/embeds'
+import { EMBED_MEDIA_PATTERN } from '@/constants/embeds'
 import { FILE_KIND_BY_EXTENSION, FILE_MIME_TYPES } from '@/constants/file-types'
 
 export const sanitizeFolderName = (name) => {
@@ -40,13 +40,13 @@ export const resolveAttachmentTarget = ({ location, folderName }, { rootUri, not
     }
 }
 
-export const collectImageUris = (directoryUri, listEntries, found = new Map()) => {
+export const collectMediaUris = (directoryUri, listEntries, found = new Map()) => {
     for (const entry of listEntries(directoryUri)) {
         if (entry.name.startsWith('.')) continue
 
         if (entry.isDirectory) {
-            collectImageUris(entry.uri, listEntries, found)
-        } else if (EMBED_IMAGE_PATTERN.test(entry.name) && !found.has(entry.name)) {
+            collectMediaUris(entry.uri, listEntries, found)
+        } else if (EMBED_MEDIA_PATTERN.test(entry.name) && !found.has(entry.name)) {
             found.set(entry.name, entry.uri)
         }
     }

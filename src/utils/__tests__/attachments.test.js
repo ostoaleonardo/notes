@@ -1,7 +1,7 @@
 import {
     buildFileRows,
     collectFiles,
-    collectImageUris,
+    collectMediaUris,
     findFileByTarget,
     getFileKind,
     readAttachmentSettings,
@@ -87,33 +87,44 @@ describe('attachment settings', () => {
     })
 })
 
-describe('collect image uris', () => {
+describe('collect media uris', () => {
     const tree = {
         root: [
             { name: 'pasted.png', uri: 'root/pasted.png' },
             { name: 'note.md', uri: 'root/note.md' },
+            { name: 'doc.pdf', uri: 'root/doc.pdf' },
             { name: '.trash', uri: 'root/.trash', isDirectory: true },
             { name: 'files', uri: 'root/files', isDirectory: true }
         ],
         'root/.trash': [{ name: 'gone.png', uri: 'root/.trash/gone.png' }],
         'root/files': [
             { name: 'deep.JPG', uri: 'root/files/deep.JPG' },
+            { name: 'song.mp3', uri: 'root/files/song.mp3' },
+            { name: 'clip.webm', uri: 'root/files/clip.webm' },
             { name: 'pasted.png', uri: 'root/files/pasted.png' }
         ]
     }
 
     test('finds images by name anywhere in the vault', () => {
-        const found = collectImageUris('root', (uri) => tree[uri])
+        const found = collectMediaUris('root', (uri) => tree[uri])
 
         expect(found.get('deep.JPG')).toBe('root/files/deep.JPG')
         expect(found.get('pasted.png')).toBe('root/pasted.png')
     })
 
-    test('skips hidden folders and non image files', () => {
-        const found = collectImageUris('root', (uri) => tree[uri])
+    test('finds audio and video files', () => {
+        const found = collectMediaUris('root', (uri) => tree[uri])
+
+        expect(found.get('song.mp3')).toBe('root/files/song.mp3')
+        expect(found.get('clip.webm')).toBe('root/files/clip.webm')
+    })
+
+    test('skips hidden folders and files that cannot be embedded', () => {
+        const found = collectMediaUris('root', (uri) => tree[uri])
 
         expect(found.has('gone.png')).toBe(false)
         expect(found.has('note.md')).toBe(false)
+        expect(found.has('doc.pdf')).toBe(false)
     })
 })
 

@@ -4,10 +4,12 @@ import { isFileLinkTarget } from './file-links'
 import { extractBlock } from './block-refs'
 import { extractSection } from './headings'
 import { buildIconMarkup } from './icon-mask'
+import { getEmbedMediaKind } from './embed-media'
 
 import { BLOCK_ANCHOR_PREFIX } from '@/constants/block-refs'
 import { OPEN_IN_NEW_FILLED_ICON_PATH } from '@/constants/icon-paths'
 import { WIKI_LINK_SCHEME, WIKI_LINK_ANCHOR_SEPARATOR } from '@/constants/wiki-links'
+import { FILE_KINDS } from '@/constants/file-types'
 
 import {
     EMBED_CLASS,
@@ -15,20 +17,28 @@ import {
     EMBED_OPEN_CLASS,
     EMBED_OPEN_ICON_SIZE,
     EMBED_PATTERN,
-    EMBED_IMAGE_PATTERN,
+    EMBED_PLAYER_PRELOAD,
     EMBED_WIDTH_PATTERN,
     EMBED_MAX_DEPTH
 } from '@/constants/embeds'
 
-const buildImage = (name, width, getImageUrl) => {
-    const url = getImageUrl(name)
+const buildMedia = (name, kind, width, getMediaUrl) => {
+    const url = getMediaUrl(name)
     if (!url) return null
 
-    if (width && EMBED_WIDTH_PATTERN.test(width)) {
-        return `<img src="${escapeHtml(url)}" alt="${escapeHtml(name)}" width="${width}">`
+    const src = escapeHtml(url)
+
+    if (kind === FILE_KINDS.AUDIO) {
+        return `<audio controls preload="${EMBED_PLAYER_PRELOAD}" src="${src}"></audio>`
     }
 
-    return `![${name}](${url})`
+    const sized = width && EMBED_WIDTH_PATTERN.test(width) ? ` width="${width}"` : ''
+
+    if (kind === FILE_KINDS.VIDEO) {
+        return `<video controls preload="${EMBED_PLAYER_PRELOAD}" src="${src}"${sized}></video>`
+    }
+
+    return sized ? `<img src="${src}" alt="${escapeHtml(name)}"${sized}>` : `![${name}](${url})`
 }
 
 const buildOpenLink = (note, anchor) => {
@@ -53,8 +63,10 @@ const replaceEmbeds = (value, context, depth, visited) => mapOutsideCode(
         (match, linkText, alias) => {
             const target = linkText.trim()
 
-            if (EMBED_IMAGE_PATTERN.test(target)) {
-                return buildImage(target, alias, context.getImageUrl) ?? match.slice(1)
+            const mediaKind = getEmbedMediaKind(target)
+
+            if (mediaKind) {
+                return buildMedia(target, mediaKind, alias, context.getMediaUrl) ?? match.slice(1)
             }
 
             if (isFileLinkTarget(target)) return match.slice(1)
@@ -74,22 +86,22 @@ const replaceEmbeds = (value, context, depth, visited) => mapOutsideCode(
     )
 )
 
-export const resolveEmbeds = (value, { notes, notePaths = new Map(), getImageUrl, selfPath, withOpenLink = false }) => (
+export const resolveEmbeds = (value, { notes, notePaths = new Map(), getMediaUrl, selfPath, withOpenLink = false }) => (
     replaceEmbeds(
         value,
-        { notes, notePaths, getImageUrl, selfPath, withOpenLink },
+        { notes, notePaths, getMediaUrl, selfPath, withOpenLink },
         0,
         new Set(selfPath ? [selfPath] : [])
     )
 )
 
-export const extractEmbedImageNames = (value) => {
+const extractEmbedNames = (value, accepts) => {
     const names = new Set()
 
     mapOutsideCode(value, (segment) => {
         for (const match of segment.matchAll(EMBED_PATTERN)) {
             const target = match[1].trim()
-            if (EMBED_IMAGE_PATTERN.test(target)) names.add(target)
+            if (accepts(getEmbedMediaKind(target))) names.add(target)
         }
 
         return segment
@@ -97,3 +109,7 @@ export const extractEmbedImageNames = (value) => {
 
     return [...names]
 }
+
+export const extractEmbedImageNames = (value) => extractEmbedNames(value, (kind) => kind === FILE_KINDS.IMAGE)
+
+export const extractEmbedMediaNames = (value) => extractEmbedNames(value, Boolean)

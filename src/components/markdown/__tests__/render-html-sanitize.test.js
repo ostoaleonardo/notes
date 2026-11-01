@@ -23,3 +23,23 @@ describe('render with sanitized html', () => {
         expect(renderMarkdownRaw('<b>x</b>')).toContain('<b>x</b>')
     })
 })
+
+describe('render data urls', () => {
+    test('renders images with data urls of any image type', () => {
+        const html = renderMarkdownRaw('![x](data:image/avif;base64,AAAA)')
+
+        expect(html).toContain('<img src="data:image/avif;base64,AAAA"')
+    })
+
+    test('does not render links to non image data urls', () => {
+        expect(renderMarkdownRaw('[x](data:text/html;base64,AAAA)')).not.toContain('<a')
+    })
+
+    test('does not render javascript links', () => {
+        expect(renderMarkdownRaw('[x](javascript:alert(1))')).not.toContain('<a')
+    })
+
+    test('does not render file links', () => {
+        expect(renderMarkdownRaw('[x](file:///etc/passwd)')).not.toContain('<a')
+    })
+})

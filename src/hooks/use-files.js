@@ -4,7 +4,7 @@ import * as Sharing from 'expo-sharing'
 import * as Print from 'expo-print'
 
 import { useNotes } from './use-notes'
-import { useImageUris } from './use-image-uris'
+import { useMediaUris } from './use-media-uris'
 import { useDomFonts } from './use-dom-fonts'
 import { useHeadingFont } from './use-heading-font'
 import { resolveUrl } from './use-resolved-preview-markdown'
@@ -30,13 +30,13 @@ import { LOG_MESSAGES } from '@/constants/log-messages'
 export function useFiles() {
     const { t } = useTranslation()
     const { getNote, notes, notePaths } = useNotes()
-    const listImageUris = useImageUris()
+    const listMediaUris = useMediaUris()
     const { fontKey, fontFamily: headingFont } = useHeadingFont()
     const domFonts = useDomFonts()
 
     const buildHtml = async (note) => {
         const names = extractEmbedImageNames(note.note || '')
-        const uris = names.length ? listImageUris() : new Map()
+        const uris = names.length ? listMediaUris() : new Map()
         const images = new Map()
 
         await Promise.all(names.map(async (name) => {
@@ -46,7 +46,7 @@ export function useFiles() {
         const context = {
             notes,
             notePaths,
-            getImageUrl: (name) => images.get(name)
+            getMediaUrl: (name) => images.get(name)
         }
         const localUrls = extractLocalUrls(getExportMarkdown(note, context))
             .filter((url) => EXPORT_LOCAL_IMAGE_URL_PATTERN.test(url))

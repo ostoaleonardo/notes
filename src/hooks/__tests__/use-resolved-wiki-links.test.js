@@ -4,13 +4,20 @@ import { useResolvedWikiLinks } from '../use-resolved-wiki-links'
 
 const mockNotes = [{ path: 'repo::Target.md', title: 'Target', note: 'body' }]
 const mockNotePaths = new Map([['repo::Target.md', '']])
-const mockListImageUris = jest.fn(() => new Map([['pic.png', 'file:///pic.png']]))
+const mockListMediaUris = jest.fn(() => new Map([
+    ['pic.png', 'file:///pic.png'],
+    ['song.mp3', 'file:///song.mp3'],
+    ['big.mp4', 'file:///big.mp4']
+]))
 
 jest.mock('../use-notes', () => ({
     useNotes: () => ({ notes: mockNotes, notePaths: mockNotePaths })
 }))
-jest.mock('../use-image-uris', () => ({
-    useImageUris: () => mockListImageUris
+jest.mock('@/utils/media-size', () => ({
+    isEmbeddableMedia: (name) => name !== 'big.mp4'
+}))
+jest.mock('../use-media-uris', () => ({
+    useMediaUris: () => mockListMediaUris
 }))
 
 const setup = (value, selfPath = 'repo::Self.md') => renderHook(
@@ -20,7 +27,7 @@ const setup = (value, selfPath = 'repo::Self.md') => renderHook(
 
 describe('resolved wiki links', () => {
     beforeEach(() => {
-        mockListImageUris.mockClear()
+        mockListMediaUris.mockClear()
     })
 
     test('returns text without links unchanged', async () => {
@@ -45,13 +52,25 @@ describe('resolved wiki links', () => {
     test('does not list images when the text has no embeds', async () => {
         await setup('see [[Target]]')
 
-        expect(mockListImageUris).not.toHaveBeenCalled()
+        expect(mockListMediaUris).not.toHaveBeenCalled()
     })
 
     test('lists images only once for several embeds', async () => {
         await setup('![[pic.png]] and ![[pic.png]]')
 
-        expect(mockListImageUris).toHaveBeenCalledTimes(1)
+        expect(mockListMediaUris).toHaveBeenCalledTimes(1)
+    })
+
+    test('turns an audio embed into a player', async () => {
+        const { result } = await setup('![[song.mp3]]')
+
+        expect(result.current).toBe('<audio controls preload="metadata" src="file:///song.mp3"></audio>')
+    })
+
+    test('falls back to a link for media above the size limit', async () => {
+        const { result } = await setup('![[big.mp4]]')
+
+        expect(result.current).not.toContain('<video')
     })
 
     test('keeps the same result for the same input', async () => {

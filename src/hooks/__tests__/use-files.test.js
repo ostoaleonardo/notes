@@ -73,8 +73,8 @@ jest.mock('../use-notes', () => ({
         notePaths: new Map()
     })
 }))
-jest.mock('../use-image-uris', () => ({
-    useImageUris: () => () => new Map()
+jest.mock('../use-media-uris', () => ({
+    useMediaUris: () => () => new Map()
 }))
 jest.mock('../use-resolved-preview-markdown', () => ({
     resolveUrl: jest.fn()

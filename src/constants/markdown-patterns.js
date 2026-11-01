@@ -3,6 +3,7 @@ export const PREVIEW_LINK_PATTERN = /\[([^\]]*)\]\(([^)]*)\)/g
 export const PREVIEW_MARKER = '⁣'
 
 export const MARKDOWN_IMAGE_PATTERN = /!\[([^\]]*)\]\(((?:file|content):\/\/[^)]+)\)/g
+export const HTML_MEDIA_PATTERN = /(<(?:audio|video)[^>]*\bsrc=["'])((?:file|content):\/\/[^"']+)(["'])/g
 export const HTML_IMAGE_PATTERN = /(<img[^>]*\bsrc=["'])((?:file|content):\/\/[^"']+)(["'])/g
 
 export const TAG_SEPARATOR_PATTERN = /[,\s]+/

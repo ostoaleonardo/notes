@@ -139,6 +139,7 @@ export const buildPreviewCss = ({ colors, typography }) => {
         font-size: ${CUSTOM_TASK_GLYPH_SIZE}; line-height: ${CUSTOM_TASK_BOX_SIZE}; color: ${colors.background};
     }
     .markdown-preview img { max-width: 100%; object-fit: contain; border-radius: 8px; }
+    .markdown-preview audio, .markdown-preview video { display: block; max-width: 100%; border-radius: 8px; margin: 0.4em 0; }
     .markdown-preview hr { border: none; border-top: 1px solid ${thematicBreakColor}; margin: 16px 0; }
     .markdown-preview .${PREVIEW_TABLE_SCROLL_CLASS} {
         overflow-x: auto; margin: 0.6em -${TABLE_BLEED}px; padding: 0 ${TABLE_BLEED}px;

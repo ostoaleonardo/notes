@@ -1,4 +1,4 @@
-import { extractEmbedImageNames, resolveEmbeds } from '../embeds'
+import { extractEmbedImageNames, extractEmbedMediaNames, resolveEmbeds } from '../embeds'
 
 const notes = [
     { path: 'a', title: 'Alpha', note: 'alpha body' },
@@ -7,10 +7,10 @@ const notes = [
     { path: 'd', title: 'Deep', note: '![[Beta]]' }
 ]
 
-const getImageUrl = (name) => (
+const getMediaUrl = (name) => (
     name === 'ghost.png' ? null : `file:///images/${encodeURIComponent(name)}`
 )
-const resolve = (value, selfPath) => resolveEmbeds(value, { notes, getImageUrl, selfPath })
+const resolve = (value, selfPath) => resolveEmbeds(value, { notes, getMediaUrl, selfPath })
 
 describe('resolve embeds', () => {
     test('inlines the body of an embedded note under its title', () => {
@@ -21,7 +21,7 @@ describe('resolve embeds', () => {
     })
 
     test('adds a link to the original note when requested', () => {
-        const result = resolveEmbeds('![[Alpha]]', { notes, getImageUrl, withOpenLink: true })
+        const result = resolveEmbeds('![[Alpha]]', { notes, getMediaUrl, withOpenLink: true })
 
         expect(result).toContain('<a href="wikilink://a" class="embed-open">')
     })
@@ -30,7 +30,7 @@ describe('resolve embeds', () => {
         const withHeading = [{ path: 'h', title: 'Doc', note: '# Intro\ntext' }]
         const result = resolveEmbeds('![[Doc#Intro]]', {
             notes: withHeading,
-            getImageUrl,
+            getMediaUrl,
             withOpenLink: true
         })
 
@@ -103,10 +103,47 @@ describe('extract embed image names', () => {
 })
 
 describe('file embeds', () => {
-    test('turns an embed of a non-image file into a plain link', () => {
-        const result = resolveEmbeds('![[sample.pdf]] and ![[song.wav]]', { notes, getImageUrl })
+    test('turns an embed of a document into a plain link', () => {
+        const result = resolveEmbeds('![[sample.pdf]] and ![[notes.txt]]', { notes, getMediaUrl })
 
-        expect(result).toBe('[[sample.pdf]] and [[song.wav]]')
+        expect(result).toBe('[[sample.pdf]] and [[notes.txt]]')
+    })
+})
+
+describe('media embeds', () => {
+    test('renders an audio player for an audio file', () => {
+        const result = resolve('![[song.wav]]')
+
+        expect(result).toBe('<audio controls preload="metadata" src="file:///images/song.wav"></audio>')
+    })
+
+    test('renders a video player for a video file', () => {
+        const result = resolve('![[clip.mp4]]')
+
+        expect(result).toBe('<video controls preload="metadata" src="file:///images/clip.mp4"></video>')
+    })
+
+    test('applies the width of a video embed', () => {
+        const result = resolve('![[clip.webm|320]]')
+
+        expect(result).toContain('width="320"')
+    })
+
+    test('embeds avif files as images', () => {
+        expect(resolve('![[photo.avif]]')).toBe('![photo.avif](file:///images/photo.avif)')
+    })
+
+    test('falls back to a link when the media file is missing', () => {
+        const result = resolveEmbeds('![[song.mp3]]', { notes, getMediaUrl: () => undefined })
+
+        expect(result).toBe('[[song.mp3]]')
+    })
+
+    test('lists audio and video among the embedded media names', () => {
+        const value = '![[a.png]] ![[b.mp3]] ![[c.mp4]] ![[doc.pdf]] ![[Alpha]]'
+
+        expect(extractEmbedMediaNames(value)).toEqual(['a.png', 'b.mp3', 'c.mp4'])
+        expect(extractEmbedImageNames(value)).toEqual(['a.png'])
     })
 })
 
@@ -114,7 +151,7 @@ describe('block embeds', () => {
     const blockNotes = [
         { path: 'p', title: 'Source', note: 'Intro\n\nKey idea ^idea\n\nOutro' }
     ]
-    const resolveBlock = (value) => resolveEmbeds(value, { notes: blockNotes, getImageUrl })
+    const resolveBlock = (value) => resolveEmbeds(value, { notes: blockNotes, getMediaUrl })
 
     test('embeds only the referenced block', () => {
         const result = resolveBlock('![[Source#^idea]]')
@@ -139,7 +176,7 @@ describe('heading embeds', () => {
     ]
     const resolveSection = (value, selfPath) => resolveEmbeds(
         value,
-        { notes: sectionNotes, getImageUrl, selfPath }
+        { notes: sectionNotes, getMediaUrl, selfPath }
     )
 
     test('embeds the section up to the next heading of the same level', () => {

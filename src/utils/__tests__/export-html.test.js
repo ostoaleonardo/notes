@@ -45,7 +45,7 @@ describe('note as html', () => {
     test('inlines embedded images using the provided urls', () => {
         const html = getNoteAsHtml(
             { title: 'T', note: '![[a.png]]' },
-            { notes, getImageUrl: () => 'data:image/png;base64,AAA' }
+            { notes, getMediaUrl: () => 'data:image/png;base64,AAA' }
         )
 
         expect(html).toContain('![a.png](data:image/png;base64,AAA)')

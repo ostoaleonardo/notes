@@ -12,14 +12,14 @@ import { DEFAULT_HEADING_FONT } from '@/constants/heading-fonts'
 import { getHeadingFontFamily, toCssHeadingFamily } from '@/utils/heading-font'
 import { EXPORT_FONT_SIZE, EXPORT_CONTENT_SECURITY_POLICY } from '@/constants/export'
 
-const NO_IMAGES = () => null
+const NO_MEDIA = () => null
 const NO_URLS = new Map()
 
-export const getExportMarkdown = (note, { notes = [], notePaths, getImageUrl = NO_IMAGES } = {}) => {
+export const getExportMarkdown = (note, { notes = [], notePaths, getMediaUrl = NO_MEDIA } = {}) => {
     const embedded = resolveEmbeds(note.note || '', {
         notes,
         notePaths,
-        getImageUrl,
+        getMediaUrl,
         selfPath: note.path
     })
 

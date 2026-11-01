@@ -15,6 +15,12 @@ describe('extract local urls', () => {
         expect(extractLocalUrls(`<img src="${ONE}" />`)).toEqual([ONE])
     })
 
+    test('collects audio and video urls', () => {
+        const value = `<audio controls src="${ONE}"></audio> <video src='${TWO}'></video>`
+
+        expect(extractLocalUrls(value)).toEqual([ONE, TWO])
+    })
+
     test('removes duplicates', () => {
         expect(extractLocalUrls(`![a](${ONE}) ![b](${ONE})`)).toEqual([ONE])
     })
@@ -35,6 +41,18 @@ describe('replace local image urls', () => {
         const result = replaceLocalImageUrls(`<img src="${ONE}" />`, resolved)
 
         expect(result).toBe(`<img src="${RESOLVED}" />`)
+    })
+
+    test('replaces audio and video urls', () => {
+        const result = replaceLocalImageUrls(`<audio controls src="${ONE}"></audio>`, resolved)
+
+        expect(result).toBe(`<audio controls src="${RESOLVED}"></audio>`)
+    })
+
+    test('asks for the first frame of a video', () => {
+        const result = replaceLocalImageUrls(`<video controls src="${ONE}"></video>`, resolved)
+
+        expect(result).toBe(`<video controls src="${RESOLVED}#t=0.001"></video>`)
     })
 
     test('keeps urls that have no resolution', () => {

@@ -1,15 +1,21 @@
 import { renderHook, waitFor } from '@testing-library/react-native'
 
-import { useEmbedImageMap } from '../use-embed-image-map'
+import { useEmbedMediaMap } from '../use-embed-media-map'
 
-const mockListImageUris = jest.fn()
+const mockListMediaUris = jest.fn()
 
-jest.mock('../use-image-uris', () => ({
-    useImageUris: () => mockListImageUris
+jest.mock('../use-media-uris', () => ({
+    useMediaUris: () => mockListMediaUris
 }))
 
 jest.mock('../use-resolved-preview-markdown', () => ({
     resolveUrl: jest.fn(async (uri) => `data:${uri}`)
+}))
+
+const mockIsEmbeddable = jest.fn(() => true)
+
+jest.mock('@/utils/media-size', () => ({
+    isEmbeddableMedia: (...args) => mockIsEmbeddable(...args)
 }))
 
 jest.mock('@/utils/log-error', () => ({
@@ -17,16 +23,18 @@ jest.mock('@/utils/log-error', () => ({
 }))
 
 const setup = (value, enabled = true) => renderHook(
-    (props) => useEmbedImageMap(props.value, props.enabled),
+    (props) => useEmbedMediaMap(props.value, props.enabled),
     { initialProps: { value, enabled } }
 )
 
-describe('embed image map', () => {
+describe('embed media map', () => {
     beforeEach(() => {
         jest.clearAllMocks()
-        mockListImageUris.mockReturnValue(new Map([
+        mockIsEmbeddable.mockReturnValue(true)
+        mockListMediaUris.mockReturnValue(new Map([
             ['a.png', 'file:///a.png'],
-            ['b.png', 'file:///b.png']
+            ['b.png', 'file:///b.png'],
+            ['song.mp3', 'file:///song.mp3']
         ]))
     })
 
@@ -34,10 +42,10 @@ describe('embed image map', () => {
         const { result } = await setup('![[a.png]]', false)
 
         expect(result.current.size).toBe(0)
-        expect(mockListImageUris).not.toHaveBeenCalled()
+        expect(mockListMediaUris).not.toHaveBeenCalled()
     })
 
-    test('is empty when the note embeds no images', async () => {
+    test('is empty when the note embeds no media', async () => {
         const { result } = await setup('plain text')
 
         expect(result.current.size).toBe(0)
@@ -58,16 +66,32 @@ describe('embed image map', () => {
         expect(result.current.get('missing.png')).toBeNull()
     })
 
+    test('resolves embedded audio to a data url', async () => {
+        const { result } = await setup('![[song.mp3]]')
+
+        await waitFor(() => expect(result.current.size).toBe(1))
+        expect(result.current.get('song.mp3')).toBe('data:file:///song.mp3')
+    })
+
+    test('maps media that is too large to null', async () => {
+        mockIsEmbeddable.mockReturnValue(false)
+
+        const { result } = await setup('![[song.mp3]]')
+
+        await waitFor(() => expect(result.current.has('song.mp3')).toBe(true))
+        expect(result.current.get('song.mp3')).toBeNull()
+    })
+
     test('does not list images again for names it already resolved', async () => {
         const { result, rerender } = await setup('![[a.png]]')
 
         await waitFor(() => expect(result.current.size).toBe(1))
-        mockListImageUris.mockClear()
+        mockListMediaUris.mockClear()
 
         await rerender({ value: '![[a.png]] more text', enabled: true })
         await rerender({ value: '![[a.png]] ![[b.png]]', enabled: true })
 
         await waitFor(() => expect(result.current.size).toBe(2))
-        expect(mockListImageUris).toHaveBeenCalledTimes(1)
+        expect(mockListMediaUris).toHaveBeenCalledTimes(1)
     })
 })

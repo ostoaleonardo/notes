@@ -1,9 +1,10 @@
 import { Decoration, EditorView } from '@codemirror/view'
 
 import { isRangeSelected, overlapsAny } from './utils'
-import { ImageWidget } from './widgets'
+import { ImageWidget, MediaWidget } from './widgets'
 
 import { isSameNoteTarget, resolveWikiLinkTarget } from '@/utils/wiki-links'
+import { getEmbedMediaKind } from '@/utils/embed-media'
 import { getEntryResolverInputs } from '@/utils/note-entries'
 import { buildFileLinkUrl, isFileLinkTarget } from '@/utils/file-links'
 import { buildIconMaskUrl } from '@/utils/icon-mask'
@@ -14,7 +15,8 @@ import { FILE_LINK_LIVE_CLASS } from '@/constants/file-links'
 import { ATTACH_FILE_ICON_PATH } from '@/constants/icon-paths'
 
 import { WIKI_LINK_PATTERN, WIKI_LINK_ANCHOR_SEPARATOR } from '@/constants/wiki-links'
-import { EMBED_IMAGE_PATTERN, EMBED_LIVE_CLASS, EMBED_MARKER } from '@/constants/embeds'
+import { EMBED_LIVE_CLASS, EMBED_MARKER } from '@/constants/embeds'
+import { FILE_KINDS } from '@/constants/file-types'
 
 export const findWikiLinkRanges = (text) => {
     const ranges = []
@@ -48,7 +50,8 @@ export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntr
         if (overlapsAny(from, to, codeRanges)) continue
 
         const resolved = isSameNoteTarget(linkText) || !!resolveWikiLinkTarget(linkText, notes, notePaths)
-        const isEmbedTarget = isEmbed && (resolved || EMBED_IMAGE_PATTERN.test(linkText.trim()))
+        const mediaKind = isEmbed ? getEmbedMediaKind(linkText.trim()) : null
+        const isEmbedTarget = isEmbed && (resolved || !!mediaKind)
         const isFileTarget = !resolved && !isEmbedTarget && isFileLinkTarget(linkText)
         const className = isFileTarget
             ? FILE_LINK_LIVE_CLASS
@@ -59,16 +62,20 @@ export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntr
             continue
         }
 
-        const imageUrl = isEmbed && mediaMap?.get(linkText.trim())
+        const mediaUrl = isEmbed && mediaMap?.get(linkText.trim())
 
-        if (imageUrl) {
-            ranges.push(Decoration.replace({ widget: new ImageWidget(imageUrl, linkText) }).range(from, to))
+        if (mediaUrl) {
+            const widget = mediaKind === FILE_KINDS.IMAGE
+                ? new ImageWidget(mediaUrl, linkText)
+                : new MediaWidget(mediaKind, mediaUrl)
+
+            ranges.push(Decoration.replace({ widget }).range(from, to))
             continue
         }
 
-        const imagePending = isEmbedTarget && !resolved && !mediaMap?.has(linkText.trim())
+        const mediaPending = isEmbedTarget && !resolved && !mediaMap?.has(linkText.trim())
 
-        if (imagePending) {
+        if (mediaPending) {
             ranges.push(Decoration.replace({}).range(from, to))
             continue
         }

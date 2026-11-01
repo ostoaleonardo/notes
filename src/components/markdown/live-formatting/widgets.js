@@ -1,6 +1,9 @@
 import { WidgetType } from '@codemirror/view'
 import DOMPurify from 'dompurify'
 
+import { EMBED_LIVE_MEDIA_CLASS, EMBED_PLAYER_PRELOAD, EMBED_VIDEO_FRAME_FRAGMENT } from '@/constants/embeds'
+import { FILE_KINDS } from '@/constants/file-types'
+
 export class HtmlWidget extends WidgetType {
     constructor(html, className) {
         super()
@@ -45,6 +48,28 @@ export class ImageWidget extends WidgetType {
         img.src = this.src
         img.alt = this.alt
         return img
+    }
+}
+
+export class MediaWidget extends WidgetType {
+    constructor(kind, src) {
+        super()
+        this.kind = kind
+        this.src = src
+    }
+
+    eq(other) {
+        return other.kind === this.kind && other.src === this.src
+    }
+
+    toDOM() {
+        const isAudio = this.kind === FILE_KINDS.AUDIO
+        const player = document.createElement(isAudio ? 'audio' : 'video')
+        player.className = EMBED_LIVE_MEDIA_CLASS
+        player.controls = true
+        player.preload = EMBED_PLAYER_PRELOAD
+        player.src = isAudio ? this.src : this.src + EMBED_VIDEO_FRAME_FRAGMENT
+        return player
     }
 }
 

@@ -21,7 +21,7 @@ import { useMentionLinker } from '@/hooks/use-mention-linker'
 import { useNoteEntries } from '@/hooks/use-note-entries'
 import { useResolvedPreviewMarkdown } from '@/hooks/use-resolved-preview-markdown'
 import { useResolvedWikiLinks } from '@/hooks/use-resolved-wiki-links'
-import { useEmbedImageMap } from '@/hooks/use-embed-image-map'
+import { useEmbedMediaMap } from '@/hooks/use-embed-media-map'
 import { useAttachmentFiles } from '@/hooks/use-attachment-files'
 import { useOpenFile } from '@/hooks/use-open-file'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
@@ -91,8 +91,8 @@ export const MarkdownInput = ({
 
     const valueWithWikiLinks = useResolvedWikiLinks(mode === EDITOR_MODES.READ ? value : '', id)
     const { value: previewValue, mediaMap } = useResolvedPreviewMarkdown(valueWithWikiLinks)
-    const embedImageMap = useEmbedImageMap(value, mode === EDITOR_MODES.LIVE)
-    const mediaMapEntries = useMemo(() => [...mediaMap, ...embedImageMap], [mediaMap, embedImageMap])
+    const embedMediaMap = useEmbedMediaMap(value, mode === EDITOR_MODES.LIVE)
+    const mediaMapEntries = useMemo(() => [...mediaMap, ...embedMediaMap], [mediaMap, embedMediaMap])
 
     const { setMissing } = missingNote
     const listFiles = useAttachmentFiles()

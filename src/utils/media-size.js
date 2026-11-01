@@ -1,0 +1,16 @@
+import { File } from 'expo-file-system'
+
+import { getEmbedMediaKind } from './embed-media'
+
+import { EMBED_MEDIA_MAX_BYTES } from '@/constants/embeds'
+import { FILE_KINDS } from '@/constants/file-types'
+
+export const isEmbeddableMedia = (name, uri) => {
+    if (getEmbedMediaKind(name) === FILE_KINDS.IMAGE) return true
+
+    try {
+        return new File(uri).size <= EMBED_MEDIA_MAX_BYTES
+    } catch {
+        return false
+    }
+}
