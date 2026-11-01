@@ -1,6 +1,8 @@
 import { router, useNavigation } from 'expo-router'
-import { Appbar, Tooltip, useTheme } from 'react-native-paper'
+import { Appbar, useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
+
+import { IconButton } from '@/ui/button/icon-button'
 
 import { useHeadingFont } from '@/hooks/use-heading-font'
 
@@ -24,27 +26,21 @@ export function AppBar({ title, trailing, mode = APP_BAR_MODES.BACK }) {
     return (
         <Appbar.Header style={{ backgroundColor: colors.background }}>
             {mode === APP_BAR_MODES.BACK && (
-                <Tooltip title={t('button.back')}>
-                    <Appbar.Action
-                        animated={false}
-                        onPress={goBack}
-                        testID={TEST_IDS.APP_BAR_BACK}
-                        icon={(props) => <ArrowBack {...props} />}
-                        accessibilityLabel={t('button.back')}
-                    />
-                </Tooltip>
+                <IconButton
+                    icon={ArrowBack}
+                    label={t('button.back')}
+                    testID={TEST_IDS.APP_BAR_BACK}
+                    onPress={goBack}
+                />
             )}
 
             {mode === APP_BAR_MODES.MENU && (
-                <Tooltip title={t('drawer.open')}>
-                    <Appbar.Action
-                        animated={false}
-                        onPress={openDrawer}
-                        testID={TEST_IDS.APP_BAR_MENU}
-                        icon={(props) => <Menu {...props} />}
-                        accessibilityLabel={t('drawer.open')}
-                    />
-                </Tooltip>
+                <IconButton
+                    icon={Menu}
+                    label={t('drawer.open')}
+                    testID={TEST_IDS.APP_BAR_MENU}
+                    onPress={openDrawer}
+                />
             )}
 
             <Appbar.Content
