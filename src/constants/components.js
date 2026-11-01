@@ -37,16 +37,6 @@ export const ICON_TOGGLE = {
     expandDuration: 150
 }
 
-export const CHECKBOX = {
-    size: 20
-}
-
-export const SWITCH = {
-    track: { width: 52, height: 32, borderWidth: BORDER_WIDTH.thick },
-    thumb: { off: 16, on: 24 },
-    hitSlop: SPACING.sm
-}
-
 export const BADGE = {
     size: 16,
     top: SPACING.xs
@@ -62,8 +52,10 @@ export const COLOR_OPTION = {
 }
 
 export const FILLED_INPUT = {
-    minHeight: 56
+    minHeight: 56,
+    keyboardOptions: { capitalization: 'sentences' }
 }
+
 
 export const MENU = {
     maxHeight: 280,

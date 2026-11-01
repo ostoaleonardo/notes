@@ -1,79 +1,70 @@
-import { useCallback, useState } from 'react'
-import { StyleSheet, TextInput, View } from 'react-native'
+import { useEffect, useMemo } from 'react'
 import { useTheme } from 'react-native-paper'
+import {
+    Host,
+    Text,
+    TextField,
+    useNativeState
+} from '@expo/ui/jetpack-compose'
 
-import { Typography } from '@/components/typography'
+import { getTextFieldColors } from '@/utils/compose-colors'
 
 import { FILLED_INPUT } from '@/constants/components'
-import { FONTS, OPACITY, RADIUS, TYPOGRAPHY_SIZE_VARIANTS, BORDER_WIDTH, SPACING } from '@/constants/theme'
+import { FONTS, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'
 
-export function FilledTextField({ label, onFocus, onBlur, ...props }) {
+export function FilledTextField({
+    label,
+    value = '',
+    onChangeText,
+    placeholder,
+    multiline = true,
+    autoFocus = false
+}) {
     const { colors } = useTheme()
-    const [focused, setFocused] = useState(false)
+    const text = useNativeState(value)
+    const fieldColors = useMemo(() => getTextFieldColors(colors), [colors])
+    const textStyle = useMemo(() => ({
+        color: colors.onBackground,
+        fontFamily: FONTS.azeretLight,
+        fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodyMedium
+    }), [colors.onBackground])
+    const labelStyle = useMemo(() => ({
+        fontFamily: FONTS.azeretLight,
+        fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodySmall
+    }), [])
+    const selectionColors = useMemo(() => ({
+        handleColor: colors.accentText,
+        backgroundColor: colors.tertiary + TRANSPARENT[30]
+    }), [colors.accentText, colors.tertiary])
 
-    const handleFocus = useCallback((event) => {
-        setFocused(true)
-        onFocus?.(event)
-    }, [onFocus])
-
-    const handleBlur = useCallback((event) => {
-        setFocused(false)
-        onBlur?.(event)
-    }, [onBlur])
-
-    const accent = focused ? colors.accentText : colors.onBackground + TRANSPARENT[50]
+    useEffect(() => {
+        if (text.value !== value) text.value = value
+    }, [text, value])
 
     return (
-        <View
-            style={[
-                styles.container,
-                {
-                    backgroundColor: colors.surfaceVariant,
-                    borderBottomColor: accent,
-                    borderBottomWidth: focused
-                        ? BORDER_WIDTH.thick
-                        : BORDER_WIDTH.thin
-                }
-            ]}
-        >
-            <Typography
-                variant='bodySmall'
-                color={focused ? colors.accentText : colors.onBackground}
-                opacity={focused ? 1 : OPACITY.secondary}
+        <Host matchContents={{ vertical: true }} style={FIELD_STYLE}>
+            <TextField
+                value={text}
+                colors={fieldColors}
+                textStyle={textStyle}
+                autoFocus={autoFocus}
+                singleLine={!multiline}
+                keyboardOptions={FILLED_INPUT.keyboardOptions}
+                textSelectionColors={selectionColors}
+                onValueChange={onChangeText}
             >
-                {label}
-            </Typography>
-
-            <TextInput
-                multiline
-                {...props}
-                style={[styles.input, { color: colors.onBackground }]}
-                cursorColor={colors.accentText}
-                selectionHandleColor={colors.accentText}
-                selectionColor={colors.tertiary + TRANSPARENT[30]}
-                placeholderTextColor={colors.onBackground + TRANSPARENT[40]}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-            />
-        </View>
+                <TextField.Label>
+                    <Text style={labelStyle}>{label}</Text>
+                </TextField.Label>
+                {!!placeholder && (
+                    <TextField.Placeholder>
+                        <Text style={labelStyle}>{placeholder}</Text>
+                    </TextField.Placeholder>
+                )}
+            </TextField>
+        </Host>
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        minHeight: FILLED_INPUT.minHeight,
-        gap: SPACING.xxxs,
-        paddingTop: SPACING.xs,
-        paddingBottom: SPACING.sm,
-        paddingHorizontal: SPACING.lg,
-        borderTopLeftRadius: RADIUS.xs,
-        borderTopRightRadius: RADIUS.xs
-    },
-    input: {
-        padding: 0,
-        fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodyMedium,
-        fontFamily: FONTS.azeretLight
-    }
-})
+const FIELD_STYLE = { width: '100%', minHeight: FILLED_INPUT.minHeight }

@@ -1,66 +1,28 @@
-import { Pressable, StyleSheet } from 'react-native'
-import Animated, { interpolate, interpolateColor, useAnimatedStyle } from 'react-native-reanimated'
+import { useMemo } from 'react'
 import { useTheme } from 'react-native-paper'
+import { Host, Switch as ComposeSwitch } from '@expo/ui/jetpack-compose'
 
-import { useAnimatedProgress } from '@/hooks/use-animated-progress'
+import { getSwitchColors } from '@/utils/compose-colors'
 
-import { SWITCH } from '@/constants/components'
-import { OPACITY, PROGRESS_RANGE } from '@/constants/theme'
+import { OPACITY } from '@/constants/theme'
 
-const OFF_INSET = (SWITCH.track.height - SWITCH.thumb.off) / 2
-const ON_INSET = (SWITCH.track.height - SWITCH.thumb.on) / 2
-
-export function Switch({ value, onValueChange, disabled = false, accessibilityLabel }) {
+export function Switch({ value, onValueChange, disabled = false }) {
     const { colors } = useTheme()
-    const progress = useAnimatedProgress(value)
-
-    const trackStyle = useAnimatedStyle(() => ({
-        borderColor: colors.outline,
-        backgroundColor: interpolateColor(progress.value, PROGRESS_RANGE, [colors.surfaceVariant, colors.tertiary]),
-        borderWidth: interpolate(progress.value, PROGRESS_RANGE, [SWITCH.track.borderWidth, 0])
-    }))
-
-    const thumbStyle = useAnimatedStyle(() => {
-        const size = interpolate(progress.value, PROGRESS_RANGE, [SWITCH.thumb.off, SWITCH.thumb.on])
-
-        return {
-            width: size,
-            height: size,
-            borderRadius: size / 2,
-            marginLeft: interpolate(progress.value, PROGRESS_RANGE, [
-                OFF_INSET - SWITCH.track.borderWidth,
-                SWITCH.track.width - SWITCH.thumb.on - ON_INSET
-            ]),
-            backgroundColor: interpolateColor(progress.value, PROGRESS_RANGE, [colors.onSurfaceVariant, colors.surface])
-        }
-    })
+    const switchColors = useMemo(() => getSwitchColors(colors), [colors])
 
     return (
-        <Pressable
-            disabled={disabled}
-            onPress={() => onValueChange(!value)}
-            accessibilityRole='switch'
-            accessibilityState={{ checked: value, disabled }}
-            accessibilityLabel={accessibilityLabel}
-            hitSlop={SWITCH.hitSlop}
-            style={disabled && styles.disabled}
+        <Host
+            matchContents
+            style={disabled && {
+                opacity: OPACITY.disabled
+            }}
         >
-            <Animated.View style={[styles.track, trackStyle]}>
-                <Animated.View style={thumbStyle} />
-            </Animated.View>
-        </Pressable>
+            <ComposeSwitch
+                value={value}
+                enabled={!disabled}
+                colors={switchColors}
+                onCheckedChange={onValueChange}
+            />
+        </Host>
     )
 }
-
-const styles = StyleSheet.create({
-    track: {
-        width: SWITCH.track.width,
-        height: SWITCH.track.height,
-        borderRadius: SWITCH.track.height / 2,
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    disabled: {
-        opacity: OPACITY.disabled
-    }
-})

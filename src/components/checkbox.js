@@ -1,44 +1,16 @@
-import { StyleSheet, View } from 'react-native'
+import { useMemo } from 'react'
 import { useTheme } from 'react-native-paper'
+import { Checkbox as ComposeCheckbox, Host } from '@expo/ui/jetpack-compose'
 
-import { Check } from '@/icons/check'
-
-import { TRANSPARENT } from '@/constants/themes'
-import { CHECKBOX } from '@/constants/components'
-import { BORDER_WIDTH, RADIUS } from '@/constants/theme'
+import { getCheckboxColors } from '@/utils/compose-colors'
 
 export function Checkbox({ checked }) {
     const { colors } = useTheme()
-
-    const backgroundColor = checked ? colors.onBackground : TRANSPARENT.color
-    const borderColor = checked ? colors.onBackground : colors.onBackground + TRANSPARENT[20]
+    const checkboxColors = useMemo(() => getCheckboxColors(colors), [colors])
 
     return (
-        <View
-            style={{
-                ...styles.check,
-                backgroundColor,
-                borderColor
-            }}
-        >
-            {checked && (
-                <Check
-                    width={CHECKBOX.size}
-                    height={CHECKBOX.size}
-                    color={colors.background}
-                />
-            )}
-        </View>
+        <Host matchContents pointerEvents='none'>
+            <ComposeCheckbox value={checked} colors={checkboxColors} />
+        </Host>
     )
 }
-
-const styles = StyleSheet.create({
-    check: {
-        width: CHECKBOX.size,
-        height: CHECKBOX.size,
-        borderWidth: BORDER_WIDTH.thin,
-        borderRadius: RADIUS.sm,
-        alignItems: 'center',
-        justifyContent: 'center'
-    }
-})
