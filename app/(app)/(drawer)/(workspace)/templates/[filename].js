@@ -106,13 +106,13 @@ export default function EditTemplate() {
     const onOpenDeleteDialog = useCallback(() => setDeleteDialogVisible(true), [])
     const onCloseDeleteDialog = useCallback(() => setDeleteDialogVisible(false), [])
 
+    const onOpenPlaceholders = useCallback(() => setPlaceholdersVisible(true), [])
+    const onClosePlaceholders = useCallback(() => setPlaceholdersVisible(false), [])
+
     const toggleProps = useMemo(() => ({
         onOpenPlaceholders,
         onOpenDeleteDialog
     }), [onOpenPlaceholders, onOpenDeleteDialog])
-
-    const onOpenPlaceholders = useCallback(() => setPlaceholdersVisible(true), [])
-    const onClosePlaceholders = useCallback(() => setPlaceholdersVisible(false), [])
 
     const loadTemplate = useEffectEvent((isCancelled) => {
         getTemplate(filename).then((template) => {
