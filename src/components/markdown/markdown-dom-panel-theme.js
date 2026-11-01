@@ -6,8 +6,7 @@ export const buildTitleSectionStyle = () => ({
     boxSizing: 'border-box',
     width: '100%',
     paddingLeft: '16px',
-    paddingRight: '16px',
-    paddingTop: '16px'
+    paddingRight: '16px'
 })
 
 export const buildTitleTextareaStyle = ({ colors, typography }) => ({
