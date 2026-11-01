@@ -93,6 +93,7 @@ describe('collect media uris', () => {
             { name: 'pasted.png', uri: 'root/pasted.png' },
             { name: 'note.md', uri: 'root/note.md' },
             { name: 'doc.pdf', uri: 'root/doc.pdf' },
+            { name: 'notes.txt', uri: 'root/notes.txt' },
             { name: '.trash', uri: 'root/.trash', isDirectory: true },
             { name: 'files', uri: 'root/files', isDirectory: true }
         ],
@@ -112,6 +113,12 @@ describe('collect media uris', () => {
         expect(found.get('pasted.png')).toBe('root/pasted.png')
     })
 
+    test('finds pdf files', () => {
+        const found = collectMediaUris('root', (uri) => tree[uri])
+
+        expect(found.get('doc.pdf')).toBe('root/doc.pdf')
+    })
+
     test('finds audio and video files', () => {
         const found = collectMediaUris('root', (uri) => tree[uri])
 
@@ -119,12 +126,12 @@ describe('collect media uris', () => {
         expect(found.get('clip.webm')).toBe('root/files/clip.webm')
     })
 
-    test('skips hidden folders and files that cannot be embedded', () => {
+    test('skips hidden folders and files that cannot be previewed', () => {
         const found = collectMediaUris('root', (uri) => tree[uri])
 
         expect(found.has('gone.png')).toBe(false)
         expect(found.has('note.md')).toBe(false)
-        expect(found.has('doc.pdf')).toBe(false)
+        expect(found.has('notes.txt')).toBe(false)
     })
 })
 

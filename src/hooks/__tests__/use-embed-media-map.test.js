@@ -22,9 +22,9 @@ jest.mock('@/utils/log-error', () => ({
     logError: jest.fn()
 }))
 
-const setup = (value, enabled = true) => renderHook(
-    (props) => useEmbedMediaMap(props.value, props.enabled),
-    { initialProps: { value, enabled } }
+const setup = (value, enabled = true, pdf = false) => renderHook(
+    (props) => useEmbedMediaMap(props.value, props.enabled, props.pdf),
+    { initialProps: { value, enabled, pdf } }
 )
 
 describe('embed media map', () => {
@@ -34,7 +34,8 @@ describe('embed media map', () => {
         mockListMediaUris.mockReturnValue(new Map([
             ['a.png', 'file:///a.png'],
             ['b.png', 'file:///b.png'],
-            ['song.mp3', 'file:///song.mp3']
+            ['song.mp3', 'file:///song.mp3'],
+            ['doc.pdf', 'file:///doc.pdf']
         ]))
     })
 
@@ -71,6 +72,20 @@ describe('embed media map', () => {
 
         await waitFor(() => expect(result.current.size).toBe(1))
         expect(result.current.get('song.mp3')).toBe('data:file:///song.mp3')
+    })
+
+    test('leaves pdf files out unless the pdf preview is on', async () => {
+        const { result } = await setup('![[doc.pdf]]')
+
+        expect(result.current.size).toBe(0)
+        expect(mockListMediaUris).not.toHaveBeenCalled()
+    })
+
+    test('resolves pdf files to data urls when the pdf preview is on', async () => {
+        const { result } = await setup('![[doc.pdf#page=2]]', true, true)
+
+        await waitFor(() => expect(result.current.size).toBe(1))
+        expect(result.current.get('doc.pdf')).toBe('data:file:///doc.pdf')
     })
 
     test('maps media that is too large to null', async () => {

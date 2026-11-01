@@ -10,14 +10,14 @@ import { LOG_MESSAGES } from '@/constants/log-messages'
 
 const EMPTY_MAP = new Map()
 
-export const useEmbedMediaMap = (value, enabled) => {
+export const useEmbedMediaMap = (value, enabled, pdf = false) => {
     const listMediaUris = useMediaUris()
     const [map, setMap] = useState(EMPTY_MAP)
     const cacheRef = useRef(new Map())
 
     const namesKey = useMemo(
-        () => (enabled ? extractEmbedMediaNames(value || '').join('\n') : ''),
-        [value, enabled]
+        () => (enabled ? extractEmbedMediaNames(value || '', { pdf }).join('\n') : ''),
+        [value, enabled, pdf]
     )
 
     useEffect(() => {

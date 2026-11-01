@@ -188,7 +188,12 @@
 				"subfolder": "各メモの隣のサブフォルダ",
 				"folder": "共有フォルダ1つ"
 			},
-			"folder": "添付ファイルフォルダの名前"
+			"folder": "添付ファイルフォルダの名前",
+			"pdf_embed": {
+				"title": "PDFプレビュー",
+				"embedded": "ノート内に表示",
+				"external": "別のアプリで開く"
+			}
 		},
 		"links": {
 			"title": "リンク",

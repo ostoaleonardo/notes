@@ -188,7 +188,12 @@
 				"subfolder": "Undermapp bredvid varje anteckning",
 				"folder": "En delad mapp"
 			},
-			"folder": "Namn på bilagemappen"
+			"folder": "Namn på bilagemappen",
+			"pdf_embed": {
+				"title": "PDF-förhandsvisning",
+				"embedded": "I anteckningen",
+				"external": "Öppna i en annan app"
+			}
 		},
 		"links": {
 			"title": "Länkar",

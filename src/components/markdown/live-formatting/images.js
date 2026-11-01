@@ -5,7 +5,7 @@ import { ImageWidget } from './widgets'
 
 import { IMAGE_NODE_NAMES } from '@/constants/markdown-live-formatting'
 import { LEZER_NODES } from '@/constants/lezer-nodes'
-import { EMBED_LIVE_MEDIA_CLASS } from '@/constants/embeds'
+import { EMBED_LIVE_MEDIA_CLASS, EMBED_LIVE_PDF_CLASS } from '@/constants/embeds'
 
 export const imageNodeNames = IMAGE_NODE_NAMES
 
@@ -27,5 +27,12 @@ export const decorateImage = (node, { doc, selection, ranges, mediaMap }) => {
 
 export const imagesTheme = () => ({
     '.cm-live-image': { maxWidth: '100%', borderRadius: '8px', display: 'block', margin: '0.4em 0' },
-    [`.${EMBED_LIVE_MEDIA_CLASS}`]: { maxWidth: '100%', borderRadius: '8px', display: 'block', margin: '0.4em 0' }
+    [`.${EMBED_LIVE_MEDIA_CLASS}`]: { maxWidth: '100%', borderRadius: '8px', display: 'block', margin: '0.4em 0' },
+    [`.${EMBED_LIVE_PDF_CLASS}`]: {
+        maxWidth: '100%',
+        overflow: 'hidden',
+        borderRadius: '8px',
+        margin: '0.4em 0',
+        cursor: 'pointer'
+    }
 })

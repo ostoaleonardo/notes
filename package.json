@@ -60,6 +60,7 @@
     "markdown-it-footnote": "^4.0.0",
     "markdown-it-task-lists": "^2.1.1",
     "markdown-it-texmath": "^1.0.0",
+    "pdfjs-dist": "3.11.174",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-i18next": "^15.0.2",

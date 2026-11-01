@@ -21,6 +21,12 @@ describe('extract local urls', () => {
         expect(extractLocalUrls(value)).toEqual([ONE, TWO])
     })
 
+    test('collects pdf urls', () => {
+        const value = `<a class="pdf-embed" data-pdf="${ONE}">doc.pdf</a>`
+
+        expect(extractLocalUrls(value)).toEqual([ONE])
+    })
+
     test('removes duplicates', () => {
         expect(extractLocalUrls(`![a](${ONE}) ![b](${ONE})`)).toEqual([ONE])
     })
@@ -47,6 +53,12 @@ describe('replace local image urls', () => {
         const result = replaceLocalImageUrls(`<audio controls src="${ONE}"></audio>`, resolved)
 
         expect(result).toBe(`<audio controls src="${RESOLVED}"></audio>`)
+    })
+
+    test('replaces a pdf url', () => {
+        const result = replaceLocalImageUrls(`<a data-pdf="${ONE}">doc.pdf</a>`, resolved)
+
+        expect(result).toBe(`<a data-pdf="${RESOLVED}">doc.pdf</a>`)
     })
 
     test('asks for the first frame of a video', () => {

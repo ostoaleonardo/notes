@@ -188,7 +188,12 @@
 				"subfolder": "Sottocartella accanto a ogni nota",
 				"folder": "Una cartella condivisa"
 			},
-			"folder": "Nome della cartella degli allegati"
+			"folder": "Nome della cartella degli allegati",
+			"pdf_embed": {
+				"title": "Anteprima PDF",
+				"embedded": "Nella nota",
+				"external": "Apri in un'altra app"
+			}
 		},
 		"links": {
 			"title": "Link",

@@ -21,6 +21,7 @@ import { knownTagsFacet } from './tag-completion'
 import { useCompartment } from './use-compartment'
 import { useLatestRef } from './use-latest-ref'
 import { useEditorSearch } from './use-editor-search'
+import { usePdfEmbeds } from './use-pdf-embeds'
 import { usePreviewClicks } from './use-preview-clicks'
 import { buildInvalidFrontmatterHighlight } from './markdown-dom-invalid-frontmatter'
 import { buildPropertiesTrigger, frontmatterAutoClose } from './markdown-dom-frontmatter'
@@ -251,11 +252,12 @@ const MarkdownDomEditor = ({
     useEditorSearch(viewRef, searchQuery, replaceText)
 
     usePreviewClicks(previewRef, { onLinkPress, onImagePress, onToggleTask, onEdit })
-
     const html = useMemo(
         () => (mode === EDITOR_MODES.READ ? renderMarkdownHtml(previewValue) + (backlinksHtml || '') : ''),
         [mode, previewValue, backlinksHtml]
     )
+
+    usePdfEmbeds(previewRef, html)
 
     const fontsReady = !!fonts && !!katexFonts
 

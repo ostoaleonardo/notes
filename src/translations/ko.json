@@ -188,7 +188,12 @@
 				"subfolder": "각 노트 옆의 하위 폴더",
 				"folder": "공유 폴더 하나"
 			},
-			"folder": "첨부 파일 폴더 이름"
+			"folder": "첨부 파일 폴더 이름",
+			"pdf_embed": {
+				"title": "PDF 미리보기",
+				"embedded": "노트 안에 표시",
+				"external": "다른 앱에서 열기"
+			}
 		},
 		"links": {
 			"title": "링크",

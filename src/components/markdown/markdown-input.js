@@ -22,6 +22,7 @@ import { useNoteEntries } from '@/hooks/use-note-entries'
 import { useResolvedPreviewMarkdown } from '@/hooks/use-resolved-preview-markdown'
 import { useResolvedWikiLinks } from '@/hooks/use-resolved-wiki-links'
 import { useEmbedMediaMap } from '@/hooks/use-embed-media-map'
+import { usePdfEmbed } from '@/hooks/use-pdf-embed'
 import { useAttachmentFiles } from '@/hooks/use-attachment-files'
 import { useOpenFile } from '@/hooks/use-open-file'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
@@ -89,9 +90,10 @@ export const MarkdownInput = ({
     const backlinksHtml = useBacklinksHtml(id, mode === EDITOR_MODES.READ && showBacklinks)
     const missingNote = useMissingNote()
 
-    const valueWithWikiLinks = useResolvedWikiLinks(mode === EDITOR_MODES.READ ? value : '', id)
+    const pdfEmbedded = usePdfEmbed()
+    const valueWithWikiLinks = useResolvedWikiLinks(mode === EDITOR_MODES.READ ? value : '', id, pdfEmbedded)
     const { value: previewValue, mediaMap } = useResolvedPreviewMarkdown(valueWithWikiLinks)
-    const embedMediaMap = useEmbedMediaMap(value, mode === EDITOR_MODES.LIVE)
+    const embedMediaMap = useEmbedMediaMap(value, mode === EDITOR_MODES.LIVE, pdfEmbedded)
     const mediaMapEntries = useMemo(() => [...mediaMap, ...embedMediaMap], [mediaMap, embedMediaMap])
 
     const { setMissing } = missingNote

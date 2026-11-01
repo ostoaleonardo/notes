@@ -1,10 +1,10 @@
 import { Decoration, EditorView } from '@codemirror/view'
 
 import { isRangeSelected, overlapsAny } from './utils'
-import { ImageWidget, MediaWidget } from './widgets'
+import { ImageWidget, MediaWidget, PdfWidget } from './widgets'
 
 import { isSameNoteTarget, resolveWikiLinkTarget } from '@/utils/wiki-links'
-import { getEmbedMediaKind } from '@/utils/embed-media'
+import { parseEmbedMedia } from '@/utils/embed-media'
 import { getEntryResolverInputs } from '@/utils/note-entries'
 import { buildFileLinkUrl, isFileLinkTarget } from '@/utils/file-links'
 import { buildIconMaskUrl } from '@/utils/icon-mask'
@@ -43,6 +43,13 @@ export const findWikiLinkRanges = (text) => {
     return ranges
 }
 
+const buildMediaWidget = ({ name, kind, page }, url, linkText) => {
+    if (kind === FILE_KINDS.IMAGE) return new ImageWidget(url, linkText)
+    if (kind === FILE_KINDS.PDF) return new PdfWidget(url, name, page)
+
+    return new MediaWidget(kind, url)
+}
+
 export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntries, selection, mediaMap }) => {
     const { notes, notePaths } = getEntryResolverInputs(noteEntries)
 
@@ -50,8 +57,10 @@ export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntr
         if (overlapsAny(from, to, codeRanges)) continue
 
         const resolved = isSameNoteTarget(linkText) || !!resolveWikiLinkTarget(linkText, notes, notePaths)
-        const mediaKind = isEmbed ? getEmbedMediaKind(linkText.trim()) : null
-        const isEmbedTarget = isEmbed && (resolved || !!mediaKind)
+        const media = isEmbed ? parseEmbedMedia(linkText.trim()) : null
+        const mediaKind = media?.kind ?? null
+        const isPendingKind = mediaKind && mediaKind !== FILE_KINDS.PDF
+        const isEmbedTarget = isEmbed && (resolved || !!isPendingKind || !!mediaMap?.get(media?.name))
         const isFileTarget = !resolved && !isEmbedTarget && isFileLinkTarget(linkText)
         const className = isFileTarget
             ? FILE_LINK_LIVE_CLASS
@@ -62,18 +71,14 @@ export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntr
             continue
         }
 
-        const mediaUrl = isEmbed && mediaMap?.get(linkText.trim())
+        const mediaUrl = media && mediaMap?.get(media.name)
 
         if (mediaUrl) {
-            const widget = mediaKind === FILE_KINDS.IMAGE
-                ? new ImageWidget(mediaUrl, linkText)
-                : new MediaWidget(mediaKind, mediaUrl)
-
-            ranges.push(Decoration.replace({ widget }).range(from, to))
+            ranges.push(Decoration.replace({ widget: buildMediaWidget(media, mediaUrl, linkText) }).range(from, to))
             continue
         }
 
-        const mediaPending = isEmbedTarget && !resolved && !mediaMap?.has(linkText.trim())
+        const mediaPending = isEmbedTarget && !resolved && !mediaMap?.has(media?.name)
 
         if (mediaPending) {
             ranges.push(Decoration.replace({}).range(from, to))

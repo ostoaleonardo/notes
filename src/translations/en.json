@@ -188,7 +188,12 @@
 				"subfolder": "Subfolder beside each note",
 				"folder": "One shared folder"
 			},
-			"folder": "Attachment folder name"
+			"folder": "Attachment folder name",
+			"pdf_embed": {
+				"title": "PDF preview",
+				"embedded": "Inside the note",
+				"external": "Open in another app"
+			}
 		},
 		"links": {
 			"title": "Links",

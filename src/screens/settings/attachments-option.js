@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { ListItem } from '../../components/list-item'
 import { SelectOption } from './select-option'
+import { StorageSelectOption } from './storage-select-option'
 import { Dialog } from '@/components/dialog'
 import { PositionGroup } from '@/components/position-group'
 import { LargeInput } from '@/components/input/large-input'
@@ -21,9 +22,11 @@ import {
     DEFAULT_ATTACHMENT_LOCATION
 } from '@/constants/attachments'
 import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
+import { PDF_EMBED_MODES, DEFAULT_PDF_EMBED_MODE } from '@/constants/pdf-embed'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 const LOCATIONS = Object.values(ATTACHMENT_LOCATIONS)
+const PDF_EMBED_VALUES = Object.values(PDF_EMBED_MODES)
 
 export function AttachmentsOption() {
     const { t } = useTranslation()
@@ -85,6 +88,13 @@ export function AttachmentsOption() {
                         onPress={onOpenDialog}
                     />
                 )}
+
+                <StorageSelectOption
+                    storageKey={STORAGE_KEYS.PDF_EMBED}
+                    translationKey='settings.attachments.pdf_embed'
+                    values={PDF_EMBED_VALUES}
+                    defaultValue={DEFAULT_PDF_EMBED_MODE}
+                />
             </PositionGroup>
 
             <Dialog

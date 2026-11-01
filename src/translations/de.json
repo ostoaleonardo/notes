@@ -188,7 +188,12 @@
 				"subfolder": "Unterordner neben jeder Notiz",
 				"folder": "Ein gemeinsamer Ordner"
 			},
-			"folder": "Name des Anhangsordners"
+			"folder": "Name des Anhangsordners",
+			"pdf_embed": {
+				"title": "PDF-Vorschau",
+				"embedded": "In der Notiz",
+				"external": "In einer anderen App öffnen"
+			}
 		},
 		"links": {
 			"title": "Links",

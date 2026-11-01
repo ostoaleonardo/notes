@@ -4,10 +4,12 @@ import { isFileLinkTarget } from './file-links'
 import { extractBlock } from './block-refs'
 import { extractSection } from './headings'
 import { buildIconMarkup } from './icon-mask'
-import { getEmbedMediaKind } from './embed-media'
+import { parseEmbedMedia } from './embed-media'
+import { buildFileLinkUrl } from './file-links'
 
 import { BLOCK_ANCHOR_PREFIX } from '@/constants/block-refs'
 import { OPEN_IN_NEW_FILLED_ICON_PATH } from '@/constants/icon-paths'
+import { FILE_LINK_CLASS } from '@/constants/file-links'
 import { WIKI_LINK_SCHEME, WIKI_LINK_ANCHOR_SEPARATOR } from '@/constants/wiki-links'
 import { FILE_KINDS } from '@/constants/file-types'
 
@@ -17,16 +19,23 @@ import {
     EMBED_OPEN_CLASS,
     EMBED_OPEN_ICON_SIZE,
     EMBED_PATTERN,
+    EMBED_PDF_CLASS,
     EMBED_PLAYER_PRELOAD,
     EMBED_WIDTH_PATTERN,
     EMBED_MAX_DEPTH
 } from '@/constants/embeds'
 
-const buildMedia = (name, kind, width, getMediaUrl) => {
+const buildMedia = ({ name, kind, page }, width, getMediaUrl) => {
     const url = getMediaUrl(name)
     if (!url) return null
 
     const src = escapeHtml(url)
+
+    if (kind === FILE_KINDS.PDF) {
+        const classes = `${FILE_LINK_CLASS} ${EMBED_PDF_CLASS}`
+
+        return `<a href="${buildFileLinkUrl(name)}" class="${classes}" data-pdf="${src}" data-page="${page}">${escapeHtml(name)}</a>`
+    }
 
     if (kind === FILE_KINDS.AUDIO) {
         return `<audio controls preload="${EMBED_PLAYER_PRELOAD}" src="${src}"></audio>`
@@ -63,11 +72,9 @@ const replaceEmbeds = (value, context, depth, visited) => mapOutsideCode(
         (match, linkText, alias) => {
             const target = linkText.trim()
 
-            const mediaKind = getEmbedMediaKind(target)
+            const media = parseEmbedMedia(target)
 
-            if (mediaKind) {
-                return buildMedia(target, mediaKind, alias, context.getMediaUrl) ?? match.slice(1)
-            }
+            if (media.kind) return buildMedia(media, alias, context.getMediaUrl) ?? match.slice(1)
 
             if (isFileLinkTarget(target)) return match.slice(1)
 
@@ -100,8 +107,8 @@ const extractEmbedNames = (value, accepts) => {
 
     mapOutsideCode(value, (segment) => {
         for (const match of segment.matchAll(EMBED_PATTERN)) {
-            const target = match[1].trim()
-            if (accepts(getEmbedMediaKind(target))) names.add(target)
+            const { name, kind } = parseEmbedMedia(match[1].trim())
+            if (accepts(kind)) names.add(name)
         }
 
         return segment
@@ -112,4 +119,6 @@ const extractEmbedNames = (value, accepts) => {
 
 export const extractEmbedImageNames = (value) => extractEmbedNames(value, (kind) => kind === FILE_KINDS.IMAGE)
 
-export const extractEmbedMediaNames = (value) => extractEmbedNames(value, Boolean)
+export const extractEmbedMediaNames = (value, { pdf = false } = {}) => (
+    extractEmbedNames(value, (kind) => !!kind && (pdf || kind !== FILE_KINDS.PDF))
+)

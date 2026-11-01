@@ -1,7 +1,18 @@
 import { WidgetType } from '@codemirror/view'
 import DOMPurify from 'dompurify'
 
-import { EMBED_LIVE_MEDIA_CLASS, EMBED_PLAYER_PRELOAD, EMBED_VIDEO_FRAME_FRAGMENT } from '@/constants/embeds'
+import { filePressFacet } from './file-press'
+import { renderPdfPage } from '../pdf-render'
+
+import { buildFileLinkUrl } from '@/utils/file-links'
+
+import {
+    EMBED_LIVE_MEDIA_CLASS,
+    EMBED_LIVE_PDF_CLASS,
+    EMBED_PDF_ESTIMATED_HEIGHT,
+    EMBED_PLAYER_PRELOAD,
+    EMBED_VIDEO_FRAME_FRAGMENT
+} from '@/constants/embeds'
 import { FILE_KINDS } from '@/constants/file-types'
 
 export class HtmlWidget extends WidgetType {
@@ -70,6 +81,41 @@ export class MediaWidget extends WidgetType {
         player.preload = EMBED_PLAYER_PRELOAD
         player.src = isAudio ? this.src : this.src + EMBED_VIDEO_FRAME_FRAGMENT
         return player
+    }
+}
+
+export class PdfWidget extends WidgetType {
+    constructor(src, name, page) {
+        super()
+        this.src = src
+        this.name = name
+        this.page = page
+    }
+
+    eq(other) {
+        return other.src === this.src && other.page === this.page
+    }
+
+    get estimatedHeight() {
+        return EMBED_PDF_ESTIMATED_HEIGHT
+    }
+
+    toDOM(view) {
+        const container = document.createElement('div')
+        container.className = EMBED_LIVE_PDF_CLASS
+        container.dataset.name = this.name
+        container.addEventListener('click', () => {
+            view.state.facet(filePressFacet)?.current?.(buildFileLinkUrl(this.name))
+        })
+
+        renderPdfPage(container, this.src, this.page)
+            .then((canvas) => {
+                container.appendChild(canvas)
+                view.requestMeasure()
+            })
+            .catch(() => { container.textContent = this.name })
+
+        return container
     }
 }
 

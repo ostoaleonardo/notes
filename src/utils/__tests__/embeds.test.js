@@ -103,10 +103,31 @@ describe('extract embed image names', () => {
 })
 
 describe('file embeds', () => {
-    test('turns an embed of a document into a plain link', () => {
-        const result = resolveEmbeds('![[sample.pdf]] and ![[notes.txt]]', { notes, getMediaUrl })
+    test('turns an embed of a text file into a plain link', () => {
+        expect(resolveEmbeds('![[notes.txt]]', { notes, getMediaUrl })).toBe('[[notes.txt]]')
+    })
 
-        expect(result).toBe('[[sample.pdf]] and [[notes.txt]]')
+    test('turns an embed of a pdf without a url into a plain link', () => {
+        const result = resolveEmbeds('![[sample.pdf#page=2]]', { notes, getMediaUrl: () => undefined })
+
+        expect(result).toBe('[[sample.pdf#page=2]]')
+    })
+
+    test('renders a pdf embed as a file link with the pdf and its page', () => {
+        const result = resolve('![[sample.pdf#page=2]]')
+
+        expect(result).toBe(
+            '<a href="filelink://sample.pdf" class="file-link pdf-embed" '
+            + 'data-pdf="file:///images/sample.pdf" data-page="2">sample.pdf</a>'
+        )
+    })
+
+    test('looks up the pdf by its name without the anchor', () => {
+        const lookup = jest.fn(() => 'file:///a.pdf')
+
+        resolveEmbeds('![[a.pdf#page=4]]', { notes, getMediaUrl: lookup })
+
+        expect(lookup).toHaveBeenCalledWith('a.pdf')
     })
 })
 
@@ -137,6 +158,13 @@ describe('media embeds', () => {
         const result = resolveEmbeds('![[song.mp3]]', { notes, getMediaUrl: () => undefined })
 
         expect(result).toBe('[[song.mp3]]')
+    })
+
+    test('lists pdf embeds only when asked', () => {
+        const value = '![[doc.pdf#page=2]] ![[a.png]]'
+
+        expect(extractEmbedMediaNames(value)).toEqual(['a.png'])
+        expect(extractEmbedMediaNames(value, { pdf: true })).toEqual(['doc.pdf', 'a.png'])
     })
 
     test('lists audio and video among the embedded media names', () => {

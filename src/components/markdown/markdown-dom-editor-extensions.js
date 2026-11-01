@@ -10,6 +10,7 @@ import { GFM } from '@lezer/markdown'
 import { wikiLinkCompletionSource, blockCompletionSource, blockIdCreatorFacet } from './wiki-link-completion'
 import { tagCompletionSource } from './tag-completion'
 import { inlineTagExtensions } from './inline-tag-highlight'
+import { filePressFacet } from './live-formatting/file-press'
 import { fileLinkPress } from './live-formatting/wiki-links'
 import { listKeymap } from './markdown-dom-list-keymap'
 import { headingFoldService } from './markdown-dom-fold'
@@ -66,6 +67,7 @@ export const buildEditorExtensions = ({
     markdown({ extensions: GFM }),
     inlineTagExtensions(onTagPressRef),
     fileLinkPress(onLinkPressRef),
+    filePressFacet.of(onLinkPressRef),
     blockIdCreatorFacet.of(onCreateBlockIdRef),
     autocompletion({ override: [wikiLinkCompletionSource, blockCompletionSource, tagCompletionSource] }),
     closeBrackets(),

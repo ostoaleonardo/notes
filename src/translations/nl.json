@@ -188,7 +188,12 @@
 				"subfolder": "Submap naast elke notitie",
 				"folder": "Eén gedeelde map"
 			},
-			"folder": "Naam van de bijlagenmap"
+			"folder": "Naam van de bijlagenmap",
+			"pdf_embed": {
+				"title": "PDF-voorbeeld",
+				"embedded": "In de notitie",
+				"external": "Openen in een andere app"
+			}
 		},
 		"links": {
 			"title": "Links",

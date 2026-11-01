@@ -188,7 +188,12 @@
 				"subfolder": "Podsložka vedle každé poznámky",
 				"folder": "Jedna sdílená složka"
 			},
-			"folder": "Název složky příloh"
+			"folder": "Název složky příloh",
+			"pdf_embed": {
+				"title": "Náhled PDF",
+				"embedded": "V poznámce",
+				"external": "Otevřít v jiné aplikaci"
+			}
 		},
 		"links": {
 			"title": "Odkazy",

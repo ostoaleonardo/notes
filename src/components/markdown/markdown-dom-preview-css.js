@@ -14,7 +14,7 @@ import {
     CALLOUT_TITLE_CLASS,
     CALLOUT_TYPE_CLASS_PREFIX
 } from '@/constants/callouts'
-import { EMBED_CLASS, EMBED_TITLE_CLASS, EMBED_OPEN_CLASS } from '@/constants/embeds'
+import { EMBED_CLASS, EMBED_PDF_CLASS, EMBED_TITLE_CLASS, EMBED_OPEN_CLASS } from '@/constants/embeds'
 import { FILE_LINK_CLASS } from '@/constants/file-links'
 import { BLOCK_HIGHLIGHT_CLASS } from '@/constants/block-refs'
 import { ATTACH_FILE_ICON_PATH } from '@/constants/icon-paths'
@@ -139,6 +139,9 @@ export const buildPreviewCss = ({ colors, typography }) => {
         font-size: ${CUSTOM_TASK_GLYPH_SIZE}; line-height: ${CUSTOM_TASK_BOX_SIZE}; color: ${colors.background};
     }
     .markdown-preview img { max-width: 100%; object-fit: contain; border-radius: 8px; }
+    .markdown-preview a.${EMBED_PDF_CLASS}:not(.${FILE_LINK_CLASS}) {
+        display: block; padding: 0; border: 1px solid ${textColor + TRANSPARENT[5]}; border-radius: 8px; overflow: hidden;
+    }
     .markdown-preview audio, .markdown-preview video { display: block; max-width: 100%; border-radius: 8px; margin: 0.4em 0; }
     .markdown-preview hr { border: none; border-top: 1px solid ${thematicBreakColor}; margin: 16px 0; }
     .markdown-preview .${PREVIEW_TABLE_SCROLL_CLASS} {

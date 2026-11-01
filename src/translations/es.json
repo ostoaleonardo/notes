@@ -188,7 +188,12 @@
 				"subfolder": "Subcarpeta junto a cada nota",
 				"folder": "Una carpeta compartida"
 			},
-			"folder": "Nombre de la carpeta de adjuntos"
+			"folder": "Nombre de la carpeta de adjuntos",
+			"pdf_embed": {
+				"title": "Vista previa de PDF",
+				"embedded": "Dentro de la nota",
+				"external": "Abrir en otra app"
+			}
 		},
 		"links": {
 			"title": "Enlaces",

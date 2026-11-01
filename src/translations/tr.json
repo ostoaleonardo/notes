@@ -188,7 +188,12 @@
 				"subfolder": "Her notun yanında alt klasör",
 				"folder": "Ortak tek klasör"
 			},
-			"folder": "Ek klasörü adı"
+			"folder": "Ek klasörü adı",
+			"pdf_embed": {
+				"title": "PDF önizlemesi",
+				"embedded": "Notun içinde",
+				"external": "Başka bir uygulamada aç"
+			}
 		},
 		"links": {
 			"title": "Bağlantılar",

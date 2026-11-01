@@ -188,7 +188,12 @@
 				"subfolder": "Subpasta ao lado de cada nota",
 				"folder": "Uma pasta compartilhada"
 			},
-			"folder": "Nome da pasta de anexos"
+			"folder": "Nome da pasta de anexos",
+			"pdf_embed": {
+				"title": "Pré-visualização de PDF",
+				"embedded": "Dentro da nota",
+				"external": "Abrir em outro app"
+			}
 		},
 		"links": {
 			"title": "Links",

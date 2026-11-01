@@ -188,7 +188,12 @@
 				"subfolder": "Sous-dossier à côté de chaque note",
 				"folder": "Un dossier partagé"
 			},
-			"folder": "Nom du dossier des pièces jointes"
+			"folder": "Nom du dossier des pièces jointes",
+			"pdf_embed": {
+				"title": "Aperçu des PDF",
+				"embedded": "Dans la note",
+				"external": "Ouvrir dans une autre app"
+			}
 		},
 		"links": {
 			"title": "Liens",
