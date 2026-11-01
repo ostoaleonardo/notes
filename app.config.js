@@ -49,7 +49,7 @@ export default {
     'expo-sharing',
     'expo-status-bar',
     'expo-localization',
-    'expo-image-picker',
+    ['expo-image-picker', { microphonePermission: false }],
     './plugins/with-markdown-intent',
     './plugins/with-text-handle-color',
     [

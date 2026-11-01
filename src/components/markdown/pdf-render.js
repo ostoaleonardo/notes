@@ -21,7 +21,7 @@ export const renderPdfPage = async (container, dataUrl, pageNumber) => {
     if (!bytes) throw new Error('invalid pdf data url')
 
     const pdfjs = await loadPdfjs()
-    const doc = await pdfjs.getDocument({ data: bytes }).promise
+    const doc = await pdfjs.getDocument({ data: bytes, isEvalSupported: false }).promise
 
     try {
         const page = await doc.getPage(Math.min(Math.max(pageNumber, 1), doc.numPages))
