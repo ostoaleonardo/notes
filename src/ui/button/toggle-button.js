@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { View, StyleSheet } from 'react-native'
-import { Tooltip, TouchableRipple, useTheme } from 'react-native-paper'
+import { Tooltip, useTheme } from 'react-native-paper'
 
 import { AnimatedView } from '@/ui/animated/animated-view'
 import { Typography } from '@/ui/typography'
@@ -12,6 +12,7 @@ import { useGroupCornerStyle } from '@/ui/hooks/use-group-corner-style'
 import { CONTROL_SIZE, HIT_SLOP, ICON_TOGGLE } from '@/ui/tokens/components'
 import { GROUP_AXES } from '@/ui/tokens/group-position'
 import { OPACITY } from '@/ui/tokens/theme'
+import { Touchable } from '@/ui/touchable'
 
 export function ToggleButton({
     icon: Icon,
@@ -90,7 +91,7 @@ export function ToggleButton({
                     { backgroundColor, opacity: disabled ? OPACITY.disabled : 1 }
                 ]}
             >
-                <TouchableRipple
+                <Touchable
                     hitSlop={HIT_SLOP.control}
                     accessibilityRole='button'
                     accessibilityState={{ selected: !!selected }}
@@ -108,7 +109,7 @@ export function ToggleButton({
                     >
                         {renderContent(showLabel)}
                     </View>
-                </TouchableRipple>
+                </Touchable>
 
                 {expanding.needsMeasure && (
                     <View

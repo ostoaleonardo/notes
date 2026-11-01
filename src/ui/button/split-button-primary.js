@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native'
-import { TouchableRipple, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 
 import { AnimatedView } from '@/ui/animated/animated-view'
 import { Typography } from '@/ui/typography'
@@ -9,6 +9,7 @@ import { getSegmentCorners } from '@/ui/utils/group-position'
 
 import { BUTTON, SPLIT_TRIGGER_RADIUS } from '@/ui/tokens/components'
 import { SPACING } from '@/ui/tokens/theme'
+import { Touchable } from '@/ui/touchable'
 
 export function SplitButtonPrimary({ icon: Icon, label, onPress, testID }) {
     const { colors } = useTheme()
@@ -30,7 +31,7 @@ export function SplitButtonPrimary({ icon: Icon, label, onPress, testID }) {
                 backgroundColor: colors.onBackground
             }}
         >
-            <TouchableRipple
+            <Touchable
                 accessibilityRole='button'
                 onPress={onPress}
                 testID={testID}
@@ -47,7 +48,7 @@ export function SplitButtonPrimary({ icon: Icon, label, onPress, testID }) {
                         </Typography>
                     )}
                 </View>
-            </TouchableRipple>
+            </Touchable>
         </AnimatedView>
     )
 }

@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native'
-import { TouchableRipple, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 
 import { Typography } from '@/ui/typography'
 import { levelRowStyles } from './drawer-level-styles'
@@ -8,6 +8,7 @@ import { ChevronRight } from '@/icons/chevron-right'
 import { KeyboardArrowDown } from '@/ui/icons/keyboard-arrow-down'
 
 import { OPACITY, RADIUS, SPACING, ICON_SIZE } from '@/constants/theme'
+import { Touchable } from '@/ui/touchable'
 
 export function DrawerTreeRow({
     label,
@@ -27,7 +28,7 @@ export function DrawerTreeRow({
 
     return (
         <View style={styles.container}>
-            <TouchableRipple
+            <Touchable
                 accessibilityRole='button'
                 accessibilityState={expandable ? { expanded: !collapsed } : undefined}
                 onPress={onPress}
@@ -59,7 +60,7 @@ export function DrawerTreeRow({
                         )}
                     </View>
                 </View>
-            </TouchableRipple>
+            </Touchable>
         </View>
     )
 }

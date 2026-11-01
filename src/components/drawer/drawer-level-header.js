@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { TouchableRipple, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 
 import { Typography } from '@/ui/typography'
 import { levelRowStyles } from './drawer-level-styles'
@@ -8,6 +8,7 @@ import { levelRowStyles } from './drawer-level-styles'
 import { ArrowBack } from '@/icons/arrow-back'
 
 import { ICON_SIZE, RADIUS, SPACING } from '@/constants/theme'
+import { Touchable } from '@/ui/touchable'
 
 export const DrawerLevelHeader = memo(function DrawerLevelHeader({
     repository,
@@ -18,7 +19,7 @@ export const DrawerLevelHeader = memo(function DrawerLevelHeader({
     return (
         <View style={styles.container}>
             <View style={styles.back}>
-                <TouchableRipple
+                <Touchable
                     accessibilityRole='button'
                     onPress={onBack}
                     style={[levelRowStyles.touch, levelRowStyles.touchStart]}
@@ -41,7 +42,7 @@ export const DrawerLevelHeader = memo(function DrawerLevelHeader({
                             {repository.alias}
                         </Typography>
                     </View>
-                </TouchableRipple>
+                </Touchable>
             </View>
         </View>
     )

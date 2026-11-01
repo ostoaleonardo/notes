@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FlatList, StyleSheet, View } from 'react-native'
-import { IconButton, TouchableRipple, useTheme } from 'react-native-paper'
+import { IconButton, useTheme } from 'react-native-paper'
 import { FadeIn, FadeInRight, FadeOut, FadeOutRight } from 'react-native-reanimated'
 
 import { AnimatedView } from '@/ui/animated/animated-view'
@@ -25,6 +25,7 @@ import { DIFF_ADDED_COLOR, DIFF_REMOVED_COLOR, DIFF_TYPES } from '@/constants/di
 import { TRANSPARENT } from '@/constants/themes'
 import { FONTS, OPACITY, RADIUS, SPACING, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
 import { FREE_VERSION_HISTORY_LIMIT } from '@/constants/default-values'
+import { Touchable } from '@/ui/touchable'
 
 const getDiffColor = (type) => (type === DIFF_TYPES.ADDED ? DIFF_ADDED_COLOR : DIFF_REMOVED_COLOR)
 
@@ -36,7 +37,7 @@ const VersionItem = memo(function VersionItem({ version, onSelect }) {
 
     return (
         <AnimatedView>
-            <TouchableRipple accessibilityRole='button' onPress={onPress}>
+            <Touchable accessibilityRole='button' onPress={onPress}>
                 <View
                     style={{
                         ...styles.item,
@@ -51,7 +52,7 @@ const VersionItem = memo(function VersionItem({ version, onSelect }) {
                         {getFormattedDate(version.createdAt, currentLanguage)}
                     </Typography>
                 </View>
-            </TouchableRipple>
+            </Touchable>
         </AnimatedView>
     )
 })

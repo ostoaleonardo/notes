@@ -3,7 +3,7 @@ import { Image } from 'expo-image'
 import { randomUUID } from 'expo-crypto'
 import { useTranslation } from 'react-i18next'
 import { Linking, StyleSheet, View } from 'react-native'
-import { TouchableRipple, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 
 import { ButtonGroup } from '@/ui/button/button-group'
 import { SheetForm, SheetInput } from '@/ui/modal/sheet-form'
@@ -27,6 +27,7 @@ import { LOG_MESSAGES } from '@/constants/log-messages'
 import { INPUT_EXAMPLES } from '@/constants/input-examples'
 import { logError } from '@/utils/log-error'
 import { useSingleFlight } from '@/hooks/use-single-flight'
+import { Touchable } from '@/ui/touchable'
 
 export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
     const { t } = useTranslation()
@@ -113,7 +114,7 @@ export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
                         { backgroundColor: colors.tertiary + TRANSPARENT[10] }
                     ]}
                 >
-                    <TouchableRipple accessibilityRole='button' onPress={onRequestCameraPermission}>
+                    <Touchable accessibilityRole='button' onPress={onRequestCameraPermission}>
                         <View style={styles.permissionContent}>
                             <View style={styles.permissionText}>
                                 <Typography
@@ -138,7 +139,7 @@ export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
                                 height={ICON_SIZE.lg}
                             />
                         </View>
-                    </TouchableRipple>
+                    </Touchable>
                 </View>
             )}
 

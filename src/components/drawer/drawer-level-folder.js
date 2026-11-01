@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { TouchableRipple, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 
 import { Typography } from '@/ui/typography'
 import { DrawerFolderActions } from './drawer-folder-actions'
@@ -11,6 +11,7 @@ import { useMenuAnchor } from '@/hooks/use-menu-anchor'
 import { ChevronRight } from '@/icons/chevron-right'
 
 import { OPACITY, RADIUS, ICON_SIZE } from '@/constants/theme'
+import { Touchable } from '@/ui/touchable'
 
 export const DrawerLevelFolder = memo(function DrawerLevelFolder({
     repository,
@@ -29,7 +30,7 @@ export const DrawerLevelFolder = memo(function DrawerLevelFolder({
     return (
         <View>
             <View ref={menu.rowRef} collapsable={false} style={styles.container}>
-                <TouchableRipple
+                <Touchable
                     accessibilityRole='button'
                     onPress={onPress}
                     onLongPress={menu.onPressRow}
@@ -48,7 +49,7 @@ export const DrawerLevelFolder = memo(function DrawerLevelFolder({
                             />
                         </View>
                     </View>
-                </TouchableRipple>
+                </Touchable>
             </View>
             <DrawerFolderActions menu={menu} onAction={handleAction} />
         </View>

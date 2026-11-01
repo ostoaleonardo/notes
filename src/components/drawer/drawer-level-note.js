@@ -1,12 +1,13 @@
 import { memo, useCallback } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { TouchableRipple, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 
 import { Typography } from '@/ui/typography'
 import { levelRowStyles } from './drawer-level-styles'
 
 import { RADIUS, SPACING } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'
+import { Touchable } from '@/ui/touchable'
 
 export const DrawerLevelNote = memo(function DrawerLevelNote({
     note,
@@ -28,7 +29,7 @@ export const DrawerLevelNote = memo(function DrawerLevelNote({
                 { backgroundColor: active ? colors.tertiary + TRANSPARENT[20] : colors.transparent }
             ]}
         >
-            <TouchableRipple
+            <Touchable
                 accessibilityRole='button'
                 accessibilityState={{ selected: !!active }}
                 onPress={onPress}
@@ -44,7 +45,7 @@ export const DrawerLevelNote = memo(function DrawerLevelNote({
                         {note.title}
                     </Typography>
                 </View>
-            </TouchableRipple>
+            </Touchable>
         </View>
     )
 })

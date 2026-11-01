@@ -1,13 +1,13 @@
 import { StyleSheet, View } from 'react-native'
-import { TouchableRipple, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 
 import { Typography } from '@/ui/typography'
 
 import { useGroupPosition } from '@/ui/hooks/use-group-position'
 import { getStackedRadiusStyle } from '@/ui/utils/group-position'
 
-import { getRippleColor } from '@/ui/utils/ripple'
 import { SPACING, OPACITY } from '@/ui/tokens/theme'
+import { Touchable } from '@/ui/touchable'
 
 export function ListItem({
     title,
@@ -29,10 +29,9 @@ export function ListItem({
                 getStackedRadiusStyle(position)
             ]}
         >
-            <TouchableRipple
+            <Touchable
                 accessibilityRole='button'
                 onPress={onPress}
-                rippleColor={getRippleColor(colors)}
                 style={[styles.container, children ? styles.stacked : styles.inline]}
             >
                 <>
@@ -52,7 +51,7 @@ export function ListItem({
                     {rightContent}
                     {children}
                 </>
-            </TouchableRipple>
+            </Touchable>
         </View>
     )
 }

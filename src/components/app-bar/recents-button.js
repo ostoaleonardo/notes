@@ -1,6 +1,8 @@
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Badge, IconButton, Tooltip, useTheme } from 'react-native-paper'
+import { IconButton, Tooltip } from 'react-native-paper'
+
+import { Badge } from '@/ui/badge'
 
 import { NoteStack } from '@/icons/note-stack'
 
@@ -8,7 +10,6 @@ import { BADGE } from '@/constants/components'
 
 export function RecentsButton({ onPress, testID, buttonStyle, count = 0 }) {
     const { t } = useTranslation()
-    const { colors } = useTheme()
     const label = t('search.recent')
 
     return (
@@ -23,15 +24,7 @@ export function RecentsButton({ onPress, testID, buttonStyle, count = 0 }) {
                 />
 
                 {count > 0 && (
-                    <Badge
-                        size={BADGE.size}
-                        style={{
-                            position: 'absolute',
-                            color: colors.onTertiary,
-                            backgroundColor: colors.tertiary,
-                            top: BADGE.top
-                        }}
-                    >
+                    <Badge style={styles.badge}>
                         {count}
                     </Badge>
                 )}
@@ -39,3 +32,11 @@ export function RecentsButton({ onPress, testID, buttonStyle, count = 0 }) {
         </Tooltip>
     )
 }
+
+const styles = StyleSheet.create({
+    badge: {
+        position: 'absolute',
+        top: BADGE.top,
+        right: BADGE.right
+    }
+})
