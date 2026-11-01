@@ -1,57 +1,58 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Keyboard } from 'react-native'
-import { Dialog as PaperDialog, Portal } from 'react-native-paper'
+import { Portal, useTheme } from 'react-native-paper'
+import { AlertDialog, Host, Text } from '@expo/ui/jetpack-compose'
 
-import { FONTS, TYPOGRAPHY_SIZE_VARIANTS, OPACITY } from '@/ui/tokens/theme'
+import { DIALOG } from '@/ui/tokens/components'
+import { FONTS, TYPOGRAPHY_SIZE_VARIANTS } from '@/ui/tokens/theme'
+import { TINT } from '@/ui/tokens/transparent'
 
-export function Dialog({ title, visible, onDismiss, children, actions }) {
-    const [bottom, setBottom] = useState(0)
-
-    useEffect(() => {
-        function onKeyboardChange(e) {
-            if (e?.endCoordinates?.height) {
-                setBottom(e.endCoordinates.height / 2)
-            } else {
-                setBottom(0)
-            }
-        }
-
-        const subscriptions = [
-            Keyboard.addListener('keyboardDidHide', onKeyboardChange),
-            Keyboard.addListener('keyboardDidShow', onKeyboardChange)
-        ]
-
-        return () => subscriptions.forEach((subscription) => subscription.remove())
-    }, [])
+export function Dialog({
+    title,
+    visible,
+    onDismiss,
+    children,
+    confirm,
+    dismiss
+}) {
+    const { colors } = useTheme()
 
     useEffect(() => {
         if (!visible) Keyboard.dismiss()
     }, [visible])
 
+    const dialogColors = useMemo(() => ({
+        containerColor: colors.surface,
+        titleContentColor: colors.onBackground + TINT.label,
+        textContentColor: colors.onBackground
+    }), [colors.surface, colors.onBackground])
+
+    const titleStyle = useMemo(() => ({
+        fontFamily: FONTS.azeretMedium,
+        fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodySmall
+    }), [])
+
+    if (!visible) return null
+
     return (
         <Portal>
-            <PaperDialog
-                visible={visible}
-                onDismiss={onDismiss}
-                style={{ bottom }}
-            >
-                <PaperDialog.Title
-                    style={{
-                        fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodySmall,
-                        opacity: OPACITY.muted,
-                        textTransform: 'uppercase',
-                        fontFamily: FONTS.azeretMedium
-                    }}
+            <Host matchContents={DIALOG.matchContents} style={DIALOG.hostStyle}>
+                <AlertDialog
+                    colors={dialogColors}
+                    onDismissRequest={onDismiss}
                 >
-                    {title}
-                </PaperDialog.Title>
-                <PaperDialog.Content>
-                    {children}
-                </PaperDialog.Content>
-                <PaperDialog.Actions>
-                    {actions}
-                </PaperDialog.Actions>
-            </PaperDialog>
+                    <AlertDialog.Title>
+                        <Text style={titleStyle}>
+                            {title.toLocaleUpperCase()}
+                        </Text>
+                    </AlertDialog.Title>
+                    <AlertDialog.Text>
+                        {children}
+                    </AlertDialog.Text>
+                    {!!confirm && <AlertDialog.ConfirmButton>{confirm}</AlertDialog.ConfirmButton>}
+                    {!!dismiss && <AlertDialog.DismissButton>{dismiss}</AlertDialog.DismissButton>}
+                </AlertDialog>
+            </Host>
         </Portal>
     )
 }

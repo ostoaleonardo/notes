@@ -1,12 +1,16 @@
-import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { Button } from 'react-native-paper'
+import { Column } from '@expo/ui/jetpack-compose'
+import { fillMaxWidth } from '@expo/ui/jetpack-compose/modifiers'
 
 import { Dialog } from '@/ui/dialog'
-import { Typography } from '@/ui/typography'
+import { DialogText } from '@/ui/dialog-text'
+import { FilledButton } from '@/ui/button/filled-button'
+import { OutlinedButton } from '@/ui/button/outlined-button'
 
-import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
-import { SPACING, OPACITY } from '@/constants/theme'
+import { SPACING } from '@/constants/theme'
+
+const COLUMN_MODIFIERS = [fillMaxWidth()]
+const COLUMN_ARRANGEMENT = { spacedBy: SPACING.sm }
 
 export function RenameLinksDialog({ visible, linksCount, onDismiss, onConfirmOnce, onConfirmAlways }) {
     const { t } = useTranslation()
@@ -16,41 +20,24 @@ export function RenameLinksDialog({ visible, linksCount, onDismiss, onConfirmOnc
             title={t('message.wiki_links.rename.title')}
             visible={visible}
             onDismiss={onDismiss}
-            actions={[
-                <View
-                    key='actions'
-                    style={{
-                        width: '100%',
-                        gap: SPACING.sm
-                    }}
-                >
-                    <Button
-                        mode='outlined'
-                        onPress={onDismiss}
-                        labelStyle={DIALOG_BUTTON_LABEL_STYLE}
-                    >
-                        {t('button.dont_update')}
-                    </Button>
-                    <Button
-                        mode='outlined'
-                        onPress={onConfirmOnce}
-                        labelStyle={DIALOG_BUTTON_LABEL_STYLE}
-                    >
-                        {t('button.update_once')}
-                    </Button>
-                    <Button
-                        mode='contained'
-                        onPress={onConfirmAlways}
-                        labelStyle={DIALOG_BUTTON_LABEL_STYLE}
-                    >
-                        {t('button.update_always')}
-                    </Button>
-                </View>
-            ]}
         >
-            <Typography opacity={OPACITY.secondary}>
-                {t('message.wiki_links.rename.message', { count: linksCount })}
-            </Typography>
+            <Column
+                modifiers={COLUMN_MODIFIERS}
+                verticalArrangement={COLUMN_ARRANGEMENT}
+            >
+                <DialogText tone='secondary'>
+                    {t('message.wiki_links.rename.message', { count: linksCount })}
+                </DialogText>
+                <OutlinedButton onPress={onDismiss}>
+                    {t('button.dont_update')}
+                </OutlinedButton>
+                <OutlinedButton onPress={onConfirmOnce}>
+                    {t('button.update_once')}
+                </OutlinedButton>
+                <FilledButton onPress={onConfirmAlways}>
+                    {t('button.update_always')}
+                </FilledButton>
+            </Column>
         </Dialog>
     )
 }

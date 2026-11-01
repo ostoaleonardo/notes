@@ -1,6 +1,11 @@
-import { getCheckboxColors, getSwitchColors, getTextFieldColors } from '../compose-colors'
+import {
+    getButtonColors,
+    getCheckboxColors,
+    getSwitchColors,
+    getTextFieldColors
+} from '../compose-colors'
 
-import { TRANSPARENT } from '@/ui/tokens/transparent'
+import { TINT, TRANSPARENT } from '@/ui/tokens/transparent'
 
 const colors = {
     tertiary: '#f0f2f1',
@@ -74,5 +79,38 @@ describe('text field colors', () => {
 
         expect(result.unfocusedIndicatorColor).toBe(colors.onBackground + TRANSPARENT[50])
         expect(result.unfocusedLabelColor).toBe(colors.onBackground + TRANSPARENT[60])
+    })
+})
+
+describe('button colors', () => {
+    test('fills a filled button with the text color and a contrasting label', () => {
+        const result = getButtonColors(colors, 'filled')
+
+        expect(result.containerColor).toBe(colors.onBackground)
+        expect(result.contentColor).toBe(colors.background)
+    })
+
+    test('fades a disabled filled button', () => {
+        const result = getButtonColors(colors, 'filled')
+
+        expect(result.disabledContainerColor).toBe(colors.onBackground + TINT.fill)
+        expect(result.disabledContentColor).toBe(colors.onBackground + TINT.placeholder)
+    })
+
+    test.each(['outlined', 'text'])('leaves the %s button without a container', (variant) => {
+        const result = getButtonColors(colors, variant)
+
+        expect(result.containerColor).toBe(TRANSPARENT.color)
+        expect(result.disabledContainerColor).toBe(TRANSPARENT.color)
+    })
+
+    test.each(['outlined', 'text'])('writes the %s button label with the text color', (variant) => {
+        expect(getButtonColors(colors, variant).contentColor).toBe(colors.onBackground)
+    })
+
+    test.each(['outlined', 'text'])('fades the %s button label when disabled', (variant) => {
+        const result = getButtonColors(colors, variant)
+
+        expect(result.disabledContentColor).toBe(colors.onBackground + TINT.placeholder)
     })
 })

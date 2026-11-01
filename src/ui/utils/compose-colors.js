@@ -15,6 +15,27 @@ export const getCheckboxColors = (colors) => ({
     checkmarkColor: colors.background
 })
 
+export const getButtonColors = (colors, variant) => {
+    const disabledContainer = colors.onBackground + TINT.fill
+    const disabledContent = colors.onBackground + TINT.placeholder
+
+    if (variant === 'filled') {
+        return {
+            containerColor: colors.onBackground,
+            contentColor: colors.background,
+            disabledContainerColor: disabledContainer,
+            disabledContentColor: disabledContent
+        }
+    }
+
+    return {
+        containerColor: TRANSPARENT.color,
+        contentColor: colors.onBackground,
+        disabledContainerColor: TRANSPARENT.color,
+        disabledContentColor: disabledContent
+    }
+}
+
 export const getTextFieldColors = (colors, containerColor = colors.surfaceVariant) => ({
     focusedContainerColor: containerColor,
     unfocusedContainerColor: containerColor,

@@ -1,15 +1,18 @@
-import { StyleSheet, View } from 'react-native'
-import { Button } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
+import { Column } from '@expo/ui/jetpack-compose'
+import { fillMaxWidth } from '@expo/ui/jetpack-compose/modifiers'
 
 import { Dialog } from '@/ui/dialog'
-import { Typography } from '@/ui/typography'
+import { DialogText } from '@/ui/dialog-text'
+import { TextButton } from '@/ui/button/text-button'
 
 import { renderTemplate } from '@/utils/render-template'
 
-import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
 import { TEMPLATE_PLACEHOLDERS } from '@/constants/template-placeholders'
-import { SPACING, OPACITY } from '@/constants/theme'
+import { SPACING } from '@/constants/theme'
+
+const LIST_MODIFIERS = [fillMaxWidth()]
+const LIST_ARRANGEMENT = { spacedBy: SPACING.md }
 
 export function TemplatePlaceholders({ visible, onDismiss }) {
     const { t } = useTranslation()
@@ -25,42 +28,30 @@ export function TemplatePlaceholders({ visible, onDismiss }) {
             title={t('templates.placeholders.heading')}
             visible={visible}
             onDismiss={onDismiss}
-            actions={
-                <Button
-                    onPress={onDismiss}
-                    labelStyle={DIALOG_BUTTON_LABEL_STYLE}
-                >
+            dismiss={(
+                <TextButton onPress={onDismiss}>
                     {t('button.back')}
-                </Button>
-            }
+                </TextButton>
+            )}
         >
-            <View style={styles.list}>
+            <Column
+                modifiers={LIST_MODIFIERS}
+                verticalArrangement={LIST_ARRANGEMENT}
+            >
                 {TEMPLATE_PLACEHOLDERS.map((key) => (
-                    <View key={key}>
-                        <Typography bold>
+                    <Column key={key}>
+                        <DialogText bold>
                             {`{{${key}}}`}
-                        </Typography>
-                        <Typography
-                            opacity={OPACITY.secondary}
-                            variant='bodySmall'
-                        >
+                        </DialogText>
+                        <DialogText tone='secondary' small>
                             {t(`templates.placeholders.${key}`)}
-                        </Typography>
-                        <Typography
-                            opacity={OPACITY.disabled}
-                            variant='bodySmall'
-                        >
+                        </DialogText>
+                        <DialogText tone='tertiary' small>
                             {t('templates.placeholders.example', { value: examples[key] })}
-                        </Typography>
-                    </View>
+                        </DialogText>
+                    </Column>
                 ))}
-            </View>
+            </Column>
         </Dialog>
     )
 }
-
-const styles = StyleSheet.create({
-    list: {
-        gap: SPACING.md
-    }
-})

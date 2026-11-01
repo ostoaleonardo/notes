@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next'
 
-import { Dialog } from '../ui/dialog'
-import { Button } from '@/ui/button/button'
-import { useSingleFlight } from '@/hooks/use-single-flight'
-import { Typography } from '../ui/typography'
+import { Dialog } from '@/ui/dialog'
+import { FilledButton } from '@/ui/button/filled-button'
+import { TextButton } from '@/ui/button/text-button'
+import { DialogText } from '@/ui/dialog-text'
 
-import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
-import { OPACITY } from '@/constants/theme'
+import { useSingleFlight } from '@/hooks/use-single-flight'
+
 
 export function ConfirmDialog({ title, message, confirmLabel, visible, onDismiss, onConfirm }) {
     const { t } = useTranslation()
@@ -21,29 +21,23 @@ export function ConfirmDialog({ title, message, confirmLabel, visible, onDismiss
             title={title}
             visible={visible}
             onDismiss={onDismiss}
-            actions={[
-                <Button
-                    key='cancel'
-                    mode='text'
-                    onPress={onDismiss}
-                    labelStyle={DIALOG_BUTTON_LABEL_STYLE}
-                >
+            dismiss={(
+                <TextButton onPress={onDismiss}>
                     {t('button.cancel')}
-                </Button>,
-                <Button
-                    key='confirm'
-                    mode='contained'
+                </TextButton>
+            )}
+            confirm={(
+                <FilledButton
                     loading={confirming}
                     onPress={onConfirmPress}
-                    labelStyle={DIALOG_BUTTON_LABEL_STYLE}
                 >
                     {confirmLabel}
-                </Button>
-            ]}
+                </FilledButton>
+            )}
         >
-            <Typography opacity={OPACITY.secondary}>
+            <DialogText tone='secondary'>
                 {message}
-            </Typography>
+            </DialogText>
         </Dialog>
     )
 }

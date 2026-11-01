@@ -57,6 +57,11 @@ export const FILLED_INPUT = {
     keyboardOptions: { capitalization: 'sentences' }
 }
 
+export const DIALOG = {
+    matchContents: { vertical: true },
+    hostStyle: { position: 'absolute', width: '100%' }
+}
+
 export const MENU = {
     maxHeight: 280,
     itemIndent: SPACING.lg,

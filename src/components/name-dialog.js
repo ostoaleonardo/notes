@@ -2,17 +2,16 @@ import { cloneElement } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@/ui/dialog'
-import { Button } from '@/ui/button/button'
+import { FilledButton } from '@/ui/button/filled-button'
 import { FilledTextField } from '@/ui/input/filled-text-field'
 
 import { useCreateDialogInput } from '@/hooks/use-dialog-input'
 import { useSingleFlight } from '@/hooks/use-single-flight'
 import { useHaptics } from '@/hooks/use-haptics'
 
-import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
 import { FEEDBACK_TYPES } from '@/constants/feedback-types'
 
-export function NameDialog({ visible, onDismiss, title, onSubmit, busy = false, extraActions = [] }) {
+export function NameDialog({ visible, onDismiss, title, onSubmit, busy = false, secondaryAction }) {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
 
@@ -34,24 +33,20 @@ export function NameDialog({ visible, onDismiss, title, onSubmit, busy = false, 
             title={title}
             visible={visible}
             onDismiss={onDismiss}
-            actions={[
-                ...extraActions.map((action) => cloneElement(action, {
-                    disabled: locked || action.props.disabled
-                })),
-                <Button
-                    key='create'
-                    mode='contained'
+            dismiss={secondaryAction && cloneElement(secondaryAction, { disabled: locked })}
+            confirm={(
+                <FilledButton
                     loading={creating}
                     onPress={onCreate}
                     disabled={disabled || busy}
-                    labelStyle={DIALOG_BUTTON_LABEL_STYLE}
                 >
                     {t('button.create')}
-                </Button>
-            ]}
+                </FilledButton>
+            )}
         >
             <FilledTextField
                 autoFocus
+                hosted={false}
                 multiline={false}
                 value={name}
                 placeholder={title}

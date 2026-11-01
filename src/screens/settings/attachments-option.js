@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react'
-import { Button, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
 import { ListItem } from '../../ui/list-item'
 import { SelectOption } from './select-option'
 import { StorageSelectOption } from './storage-select-option'
 import { Dialog } from '@/ui/dialog'
+import { FilledButton } from '@/ui/button/filled-button'
 import { PositionGroup } from '@/ui/position-group'
 import { FilledTextField } from '@/ui/input/filled-text-field'
 
@@ -21,7 +22,6 @@ import {
     DEFAULT_ATTACHMENT_FOLDER,
     DEFAULT_ATTACHMENT_LOCATION
 } from '@/constants/attachments'
-import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
 import { PDF_EMBED_MODES, DEFAULT_PDF_EMBED_MODE } from '@/constants/pdf-embed'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
@@ -101,18 +101,15 @@ export function AttachmentsOption() {
                 title={t('settings.attachments.folder')}
                 visible={dialogVisible}
                 onDismiss={() => setDialogVisible(false)}
-                actions={(
-                    <Button
-                        mode='contained'
-                        onPress={onSaveFolder}
-                        labelStyle={DIALOG_BUTTON_LABEL_STYLE}
-                    >
+                confirm={(
+                    <FilledButton onPress={onSaveFolder}>
                         {t('button.update')}
-                    </Button>
+                    </FilledButton>
                 )}
             >
                 <FilledTextField
                     autoFocus
+                    hosted={false}
                     multiline={false}
                     value={draft}
                     placeholder={DEFAULT_ATTACHMENT_FOLDER}

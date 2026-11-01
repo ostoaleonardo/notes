@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import * as DocumentPicker from 'expo-document-picker'
 
-import { Button } from '@/ui/button/button'
+import { TextButton } from '@/ui/button/text-button'
 
 import { NameDialog } from '@/components/name-dialog'
 
@@ -9,7 +9,6 @@ import { useHaptics } from '@/hooks/use-haptics'
 import { useSingleFlight } from '@/hooks/use-single-flight'
 import { useTemplates } from '@/hooks/use-templates'
 
-import { DIALOG_BUTTON_LABEL_STYLE } from '@/constants/components'
 import { FEEDBACK_TYPES } from '@/constants/feedback-types'
 import { ROUTES } from '@/constants/routes'
 import { pushOnce } from '@/utils/navigation'
@@ -38,15 +37,12 @@ export function AddTemplate({ visible, onDismiss, folder = '' }) {
     })
 
     const importAction = (
-        <Button
-            key='import'
-            mode='text'
+        <TextButton
             loading={importing}
             onPress={onImport}
-            labelStyle={DIALOG_BUTTON_LABEL_STYLE}
         >
             {t('templates.import')}
-        </Button>
+        </TextButton>
     )
 
     return (
@@ -56,7 +52,7 @@ export function AddTemplate({ visible, onDismiss, folder = '' }) {
             onDismiss={onDismiss}
             onSubmit={onSubmit}
             busy={importing}
-            extraActions={[importAction]}
+            secondaryAction={importAction}
         />
     )
 }
