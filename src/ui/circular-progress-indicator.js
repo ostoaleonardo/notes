@@ -1,39 +1,41 @@
+import { useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Circle, Svg } from 'react-native-svg'
+import { Box, CircularProgressIndicator as ComposeProgress } from '@expo/ui/jetpack-compose'
+import { size as sizeModifier } from '@expo/ui/jetpack-compose/modifiers'
 
-import { TINT } from '@/ui/tokens/transparent'
+import { ComposeHost } from '@/ui/compose-context'
 import { useTheme } from '@/ui/hooks/use-theme'
+
+import { TINT, TRANSPARENT } from '@/ui/tokens/transparent'
 
 export function CircularProgressIndicator({ size, stroke, progress, children }) {
     const { colors } = useTheme()
-
-    const radius = (size - stroke) / 2
-    const circumference = 2 * Math.PI * radius
-    const center = size / 2
+    const modifiers = useMemo(() => [sizeModifier(size, size)], [size])
 
     return (
         <View style={[styles.container, { width: size, height: size }]}>
-            <Svg width={size} height={size} style={styles.ring}>
-                <Circle
-                    cx={center}
-                    cy={center}
-                    r={radius}
-                    fill='none'
-                    strokeWidth={stroke}
-                    stroke={colors.onBackground + TINT.border}
-                />
-                <Circle
-                    cx={center}
-                    cy={center}
-                    r={radius}
-                    fill='none'
-                    strokeWidth={stroke}
-                    strokeLinecap='round'
-                    stroke={colors.accentText}
-                    strokeDasharray={circumference}
-                    strokeDashoffset={circumference * (1 - progress)}
-                />
-            </Svg>
+            <ComposeHost style={StyleSheet.absoluteFill}>
+                <Box>
+                    <ComposeProgress
+                        progress={1}
+                        color={colors.onBackground + TINT.border}
+                        trackColor={TRANSPARENT.color}
+                        strokeWidth={stroke}
+                        strokeCap='butt'
+                        gapSize={0}
+                        modifiers={modifiers}
+                    />
+                    <ComposeProgress
+                        progress={progress}
+                        color={colors.accentText}
+                        trackColor={TRANSPARENT.color}
+                        strokeWidth={stroke}
+                        strokeCap='round'
+                        gapSize={0}
+                        modifiers={modifiers}
+                    />
+                </Box>
+            </ComposeHost>
             <View style={[StyleSheet.absoluteFill, styles.content]}>{children}</View>
         </View>
     )
@@ -43,9 +45,6 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center'
-    },
-    ring: {
-        transform: [{ rotate: '-90deg' }]
     },
     content: {
         alignItems: 'center',

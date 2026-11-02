@@ -64,6 +64,11 @@ export const FILLED_INPUT = {
     keyboardOptions: { capitalization: 'sentences' }
 }
 
+export const COMPOSE_DIVIDER = {
+    matchContents: { vertical: true },
+    hostStyle: { width: '100%' }
+}
+
 export const SNACKBAR = {
     matchContents: { vertical: true }
 }

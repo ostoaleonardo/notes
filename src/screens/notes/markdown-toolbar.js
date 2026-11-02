@@ -5,7 +5,7 @@ import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
 
 import { AnimatedView } from '@/ui/animated/animated-view'
 import { Scroll } from '@/ui/animated/scroll'
-import { Divider } from '@/ui/divider/divider'
+import { VerticalDivider } from '@/ui/divider/vertical-divider'
 import { ToolbarSurface } from '@/ui/toolbar-surface'
 import { IconButton } from '@/ui/button/icon-button'
 
@@ -121,8 +121,9 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
                         {controls.map(({ action, group: groupKey, Icon, divider }, index) => {
                             if (divider) {
                                 return (
-                                    <Divider
+                                    <VerticalDivider
                                         key={index}
+                                        length={DIVIDER.length}
                                         style={styles.divider}
                                     />
                                 )
@@ -183,8 +184,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     divider: {
-        width: DIVIDER.thickness,
-        height: DIVIDER.length,
         marginHorizontal: SPACING.xxs
     }
 })
