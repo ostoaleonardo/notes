@@ -9,7 +9,7 @@ import { paddingAround } from '@/ui/utils/compose-modifiers'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import { SNACKBAR } from '@/ui/tokens/components'
-import { FONTS, SPACING } from '@/ui/tokens/theme'
+import { FONTS } from '@/ui/tokens/theme'
 
 let showMessage = null
 let currentMessage = null
@@ -25,7 +25,7 @@ export const showSnackbar = (message) => {
 
 export function GlobalSnackbarHost() {
     const { colors } = useTheme()
-    const { bottom } = useSafeAreaInsets()
+    const { left, right, bottom } = useSafeAreaInsets()
     const ref = useRef(null)
 
     const register = useCallback((instance) => {
@@ -37,8 +37,8 @@ export function GlobalSnackbarHost() {
 
     const modifiers = useMemo(() => [
         fillMaxWidth(),
-        paddingAround(SPACING.sm, 0, SPACING.sm, bottom + SPACING.sm)
-    ], [bottom])
+        paddingAround(left, 0, right, bottom)
+    ], [left, right, bottom])
 
     return (
         <ComposeHost
