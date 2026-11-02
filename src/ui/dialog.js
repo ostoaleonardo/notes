@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react'
-import { Keyboard } from 'react-native'
-import { Portal, useTheme } from 'react-native-paper'
+import { Keyboard, Modal } from 'react-native'
+import { useTheme } from 'react-native-paper'
 import { AlertDialog, Host, Text } from '@expo/ui/jetpack-compose'
 import { fillMaxWidth } from '@expo/ui/jetpack-compose/modifiers'
 
@@ -44,7 +44,12 @@ export function Dialog({
     if (!visible) return null
 
     return (
-        <Portal>
+        <Modal
+            visible
+            transparent
+            statusBarTranslucent
+            onRequestClose={onDismiss}
+        >
             <Host matchContents={DIALOG.matchContents} style={DIALOG.hostStyle}>
                 <ComposeContext.Provider value>
                     <AlertDialog
@@ -66,6 +71,6 @@ export function Dialog({
                     </AlertDialog>
                 </ComposeContext.Provider>
             </Host>
-        </Portal>
+        </Modal>
     )
 }
