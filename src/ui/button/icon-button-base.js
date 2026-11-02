@@ -11,11 +11,7 @@ import {
 } from '@expo/ui/jetpack-compose'
 import {
     Shapes,
-    border,
-    clickable,
     clip,
-    matchParentSize,
-    semantics,
     size as sizeModifier,
     testID as testIdModifier
 } from '@expo/ui/jetpack-compose/modifiers'
@@ -25,7 +21,7 @@ import { ComposeIcon } from '@/ui/compose-icon'
 import { getButtonColors } from '@/ui/utils/compose-colors'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { BORDER_WIDTH, FONTS, ICON_SIZE, SIZE } from '@/ui/tokens/theme'
+import { FONTS, ICON_SIZE, SIZE } from '@/ui/tokens/theme'
 import { TINT } from '@/ui/tokens/transparent'
 
 const COMPONENTS = {
@@ -55,7 +51,6 @@ export function IconButtonBase({
     const { tooltip, icon: size, box } = { ...DEFAULT_APPEARANCE, ...appearance }
 
     const Component = COMPONENTS[variant]
-    const outlined = variant === 'outlined'
     const colorVariant = variant
 
     const buttonColors = useMemo(() => getButtonColors(colors, colorVariant), [colors, colorVariant])
@@ -64,13 +59,11 @@ export function IconButtonBase({
         : buttonColors.contentColor
 
     const modifiers = useMemo(() => [
-        semantics({ contentDescription: label }),
-        ...(outlined ? [border(BORDER_WIDTH.thin, colors.outline)] : []),
         ...(testID ? [testIdModifier(testID)] : [])
-    ], [label, outlined, colors.outline, testID])
+    ], [testID])
 
     const area = useMemo(() => [sizeModifier(box, box), clip(Shapes.Circle)], [box])
-    const overlay = useMemo(() => [matchParentSize(), clickable(onPress)], [onPress])
+
     const tooltipStyle = useMemo(() => ({ fontFamily: FONTS.azeretLight }), [])
     const inset = useMemo(() => ({ margin: Math.min(0, box - SIZE.lg) / 2 }), [box])
 
@@ -86,8 +79,8 @@ export function IconButtonBase({
                     icon={Icon}
                     size={size}
                     color={iconColor}
+                    contentDescription={label}
                 />
-                {!disabled && <Box modifiers={overlay} />}
             </Box>
         </Component>
     )
