@@ -8,6 +8,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 import { useExpandingWidth } from '@/ui/hooks/use-expanding-width'
 import { usePressed } from '@/ui/hooks/use-pressed'
 import { useGroupCornerStyle } from '@/ui/hooks/use-group-corner-style'
+import { getControlBackground } from '@/ui/utils/control-background'
 
 import { CONTROL_SIZE, HIT_SLOP, ICON_TOGGLE } from '@/ui/tokens/components'
 import { GROUP_AXES } from '@/ui/tokens/group-position'
@@ -33,7 +34,7 @@ export function ToggleButton({
     const { colors } = useTheme()
     const showLabel = chip || showLabelProp
     const labelPadding = chip ? ICON_TOGGLE.chipPaddingHorizontal : ICON_TOGGLE.labelPaddingHorizontal
-    const backgroundColor = selected ? colors.onBackground : background ?? colors.surfaceVariant
+    const backgroundColor = selected ? colors.onBackground : background ?? getControlBackground(colors)
     const contentColor = selected ? colors.background : color ?? colors.onBackground
 
     const iconSize = iconSizeOverride ??

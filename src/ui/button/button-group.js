@@ -5,6 +5,7 @@ import { ToggleButton } from './toggle-button'
 import { PositionGroup } from '@/ui/position-group'
 import { useTheme } from '@/ui/hooks/use-theme'
 
+import { getControlBackground } from '@/ui/utils/control-background'
 import { expandSelected as expandButtons, getMinWidth } from '@/ui/utils/toggle-group'
 
 import { BUTTON } from '@/ui/tokens/components'
@@ -40,7 +41,7 @@ export function ButtonGroup({
                     <ToggleButton
                         key={button.label}
                         chip={chip}
-                        background={background ?? colors.surfaceVariant}
+                        background={background ?? getControlBackground(colors)}
                         color={colors.onBackground}
                         minWidth={minWidth}
                         onWidth={onWidth}
