@@ -90,6 +90,7 @@ export const MarkdownModeToggle = ({
                 triggerTestID={TEST_IDS.EDITOR_MENU}
                 icon={read ? EditNote : Book}
                 label={t(read ? 'button.edit' : 'button.preview')}
+                triggerLabel={t('button.more')}
                 onPress={onPrimaryPress}
             >
                 {groups.map((group, index) => (

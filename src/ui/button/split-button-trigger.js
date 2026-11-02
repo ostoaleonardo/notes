@@ -12,7 +12,13 @@ import { BUTTON, SPLIT_TRIGGER_RADIUS } from '@/ui/tokens/components'
 import { OPACITY, PROGRESS_RANGE } from '@/ui/tokens/theme'
 import { Touchable } from '@/ui/touchable'
 
-export function SplitButtonTrigger({ menuVisible, onPress, openProgress, testID }) {
+export function SplitButtonTrigger({
+    menuVisible,
+    label,
+    onPress,
+    openProgress,
+    testID
+}) {
     const { colors } = useTheme()
     const position = useGroupPosition()
     const { left, right } = getSegmentCorners(
@@ -48,6 +54,8 @@ export function SplitButtonTrigger({ menuVisible, onPress, openProgress, testID 
             />
             <Touchable
                 accessibilityRole='button'
+                accessibilityLabel={label}
+                accessibilityState={{ expanded: menuVisible }}
                 onPress={onPress}
                 testID={testID}
                 style={styles.touchable}

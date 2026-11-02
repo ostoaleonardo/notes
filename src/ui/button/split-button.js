@@ -12,6 +12,7 @@ import { useAnimatedProgress } from '@/ui/hooks/use-animated-progress'
 export const SplitButton = ({
     icon,
     label,
+    triggerLabel,
     onPress,
     visible: controlledVisible,
     onOpen: controlledOnOpen,
@@ -43,6 +44,7 @@ export const SplitButton = ({
                     anchor={
                         <SplitButtonTrigger
                             onPress={openMenu}
+                            label={triggerLabel}
                             testID={triggerTestID}
                             menuVisible={menuVisible}
                             openProgress={openProgress}
