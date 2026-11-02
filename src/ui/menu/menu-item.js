@@ -24,19 +24,16 @@ export function MenuItem({
     leadingIcon,
     trailingIcon,
     highlight,
-    destructive = false,
     indent = 0,
     disabled = false,
     onPress
 }) {
     const { colors } = useTheme()
 
-    const itemColor = destructive ? colors.error : colors.onBackground
-
     const elementColors = useMemo(() => ({
         textColor: colors.onBackground,
-        trailingIconColor: colors.accentText
-    }), [colors.onBackground, colors.accentText])
+        trailingIconColor: colors.onBackground
+    }), [colors.onBackground])
 
     const modifiers = useMemo(() => {
         const base = [
@@ -67,7 +64,7 @@ export function MenuItem({
         >
             <DropdownMenuItem.Text>
                 <Row horizontalArrangement={ROW_ARRANGEMENT} verticalAlignment='center'>
-                    {!!leadingIcon && renderIcon(leadingIcon, itemColor)}
+                    {!!leadingIcon && renderIcon(leadingIcon, colors.onBackground)}
                     <Text modifiers={textModifiers} style={textStyle}>
                         {title.toLocaleUpperCase()}
                     </Text>
@@ -75,7 +72,7 @@ export function MenuItem({
             </DropdownMenuItem.Text>
             {!!trailingIcon && (
                 <DropdownMenuItem.TrailingIcon>
-                    {renderIcon(trailingIcon, colors.accentText, TRAILING_MODIFIERS)}
+                    {renderIcon(trailingIcon, colors.onBackground, TRAILING_MODIFIERS)}
                 </DropdownMenuItem.TrailingIcon>
             )}
         </DropdownMenuItem>

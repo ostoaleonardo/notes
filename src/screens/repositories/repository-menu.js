@@ -49,7 +49,6 @@ export const RepositoryMenu = memo(function RepositoryMenu({ onRename, onForget,
                 <MenuItem
                     title={t('repositories.delete.title')}
                     leadingIcon={Delete}
-                    destructive
                     onPress={onPressDelete}
                 />
             </MenuGroup>
