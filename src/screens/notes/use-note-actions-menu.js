@@ -19,22 +19,17 @@ import { Folder } from '@/icons/folder'
 import { FormatListBulleted } from '@/icons/format-list-bulleted'
 import { Keep } from '@/icons/keep'
 import { KeepFilled } from '@/icons/keep-filled'
-import { Link } from '@/icons/link'
 import { NoteStack } from '@/icons/note-stack'
-import { OpenInNew } from '@/icons/open-in-new'
 import { Share as ShareIcon } from '@/icons/share'
 
 export const useNoteActionsMenu = ({
     onTrigger,
     onSetMode,
     onOpenVersionHistory,
-    onOpenOutline,
-    onOpenOutgoingLinks,
+    onOpenDetails,
     onOpenMove,
     onOpenSharingDialog,
-    onOpenDeleteDialog,
-    showBacklinks,
-    onToggleShowBacklinks
+    onOpenDeleteDialog
 }) => {
     const { t } = useTranslation()
     const { slug } = useLocalSearchParams()
@@ -75,31 +70,6 @@ export const useNoteActionsMenu = ({
         [
             common.code,
             <ActionMenuItem
-                key='outline'
-                title={t('title.outline')}
-                icon={FormatListBulleted}
-                action={onOpenOutline}
-                onTrigger={onTrigger}
-            />,
-            <ActionMenuItem
-                key='outgoing-links'
-                title={t('title.outgoing_links')}
-                icon={OpenInNew}
-                action={onOpenOutgoingLinks}
-                onTrigger={onTrigger}
-            />,
-            slug && (
-                <ActionMenuItem
-                    key='backlinks'
-                    title={showBacklinks ? t('button.hide_backlinks') : t('button.show_backlinks')}
-                    icon={Link}
-                    action={onToggleShowBacklinks}
-                    onTrigger={onTrigger}
-                />
-            )
-        ].filter(Boolean),
-        [
-            <ActionMenuItem
                 key='pin'
                 title={isPinned ? t('button.unpin') : t('button.pin')}
                 icon={isPinned ? KeepFilled : Keep}
@@ -133,7 +103,13 @@ export const useNoteActionsMenu = ({
                     onTrigger={onTrigger}
                 />
             ),
-            common.versionHistory
+            <ActionMenuItem
+                key='details'
+                title={t('title.details')}
+                icon={FormatListBulleted}
+                action={onOpenDetails}
+                onTrigger={onTrigger}
+            />
         ].filter(Boolean),
         [common.remove]
     ]

@@ -86,6 +86,7 @@
 		"version_history": "버전 기록",
 		"backlinks": "백링크",
 		"outline": "개요",
+		"details": "세부정보",
 		"outgoing_links": "나가는 링크",
 		"unlinked_mentions": "링크되지 않은 언급"
 	},

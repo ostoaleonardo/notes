@@ -57,7 +57,7 @@ export const MarkdownGroupSheet = memo(function MarkdownGroupSheet({ sheet, grou
 
 const styles = StyleSheet.create({
     list: {
-        gap: SPACING.xxs,
+        gap: SPACING.xxxs,
         paddingHorizontal: SPACING.lg
     }
 })
