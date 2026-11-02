@@ -5,6 +5,7 @@ import Animated, { FadeIn, FadeOut } from 'react-native-reanimated'
 
 import { FocusEdges } from './focus-edges'
 import { FocusNode } from './focus-node'
+import { LoadingOverlay } from '@/ui/layout'
 import { Typography } from '@/ui/typography'
 
 import { entityKey } from '@/utils/connection-model'
@@ -20,6 +21,7 @@ export const FocusStage = memo(function FocusStage({
     hasPager,
     getTitle,
     emptyLabel,
+    loading,
     onPressNode,
     onSwipe
 }) {
@@ -54,11 +56,16 @@ export const FocusStage = memo(function FocusStage({
     ), [onSwipe])
 
     const focusKey = entityKey(focus)
+    const ready = !!layout && !loading
 
     return (
         <GestureDetector gesture={swipe}>
             <View style={styles.stage} onLayout={onLayout}>
-                {layout && (
+                {!ready && (
+                    <LoadingOverlay background={false} />
+                )}
+
+                {ready && (
                     <>
                         <Animated.View
                             key={`edges-${focusKey}`}

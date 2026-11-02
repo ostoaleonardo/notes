@@ -50,6 +50,7 @@ const MarkdownDomEditor = ({
     action,
     onFocus,
     onBlur,
+    onReady,
     onLinkPress,
     onTagPress,
     onCreateBlockId,
@@ -85,6 +86,7 @@ const MarkdownDomEditor = ({
     const onHistoryChangeRef = useLatestRef(onHistoryChange)
     const onFocusRef = useLatestRef(onFocus)
     const onBlurRef = useLatestRef(onBlur)
+    const onReadyRef = useLatestRef(onReady)
     const onTagPressRef = useLatestRef(onTagPress)
     const onLinkPressRef = useLatestRef(onLinkPress)
     const onCreateBlockIdRef = useLatestRef(onCreateBlockId)
@@ -202,6 +204,7 @@ const MarkdownDomEditor = ({
         view.dom.addEventListener('blur', handleBlur, true)
 
         viewRef.current = view
+        requestAnimationFrame(() => onReadyRef.current?.())
 
         return () => {
             view.dom.removeEventListener('focus', handleFocus, true)

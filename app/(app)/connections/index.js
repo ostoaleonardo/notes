@@ -3,6 +3,8 @@ import { BackHandler, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 
+import { AppBar } from '@/components/app-bar/app-bar'
+import { LoadingOverlay } from '@/ui/layout'
 import { ConnectionSheets } from '@/screens/connections/connection-sheets'
 import { ConnectionsAppBar } from '@/screens/connections/connections-app-bar'
 import { FocusCrumbs } from '@/screens/connections/focus-crumbs'
@@ -10,17 +12,20 @@ import { FocusPager } from '@/screens/connections/focus-pager'
 import { FocusStage } from '@/screens/connections/focus-stage'
 
 import { useConnectionsSession } from '@/hooks/use-connections-session'
+import { useDeferredReady } from '@/hooks/use-deferred-ready'
 import { useFocusNavigation } from '@/hooks/use-focus-navigation'
+import { useNotes } from '@/hooks/use-notes'
 
 import { CONNECTION_TYPES } from '@/constants/connections'
 import { SPACING } from '@/constants/theme'
 
 const { NOTE, FILE, MISSING } = CONNECTION_TYPES
 
-export default function Connections() {
+function ConnectionsContent() {
     const { t } = useTranslation()
     const insets = useSafeAreaInsets()
 
+    const { loading } = useNotes()
     const session = useConnectionsSession()
     const {
         model,
@@ -97,6 +102,7 @@ export default function Connections() {
                     hasPager={pages > 1}
                     getTitle={getTitle}
                     emptyLabel={t('connections.no_relations')}
+                    loading={loading}
                     onPressNode={onPressNode}
                     onSwipe={turnPage}
                 />
@@ -118,6 +124,20 @@ export default function Connections() {
                 onViewTree={onEnterFromSheet}
                 onSelectOrigin={onSelectOrigin}
             />
+        </View>
+    )
+}
+
+export default function Connections() {
+    const { t } = useTranslation()
+    const ready = useDeferredReady()
+
+    if (ready) return <ConnectionsContent />
+
+    return (
+        <View style={styles.screen}>
+            <AppBar title={t('connections.title')} />
+            <LoadingOverlay background={false} />
         </View>
     )
 }

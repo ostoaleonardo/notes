@@ -1,7 +1,8 @@
 import { useCallback, useMemo, useState } from 'react'
-import { Linking } from 'react-native'
+import { Linking, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
+import { LoadingOverlay } from '@/ui/layout'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import MarkdownDomEditor from './markdown-dom-editor'
@@ -77,6 +78,8 @@ export const MarkdownInput = ({
     const katexFonts = useKatexFonts()
 
     const [linkFormat, setLinkFormat] = useState(WIKI_LINK_FORMATS.WIKILINK)
+    const [ready, setReady] = useState(false)
+    const onReady = useCallback(() => setReady(true), [])
 
     useStorageEffect(STORAGE_KEYS.LINK_FORMAT, (value) => {
         if (value === WIKI_LINK_FORMATS.MARKDOWN) setLinkFormat(WIKI_LINK_FORMATS.MARKDOWN)
@@ -169,49 +172,54 @@ export const MarkdownInput = ({
 
     return (
         <>
-            <MarkdownDomEditor
-                mode={mode}
-                onEdit={onEdit}
-                value={value}
-                previewValue={previewValue}
-                mediaMap={mediaMapEntries}
-                noteEntries={noteEntries}
-                knownTags={knownTags}
-                linkFormat={linkFormat}
-                tableLabels={tableLabels}
-                lineNumbers={lineNumbers}
-                spellcheck={spellcheck}
-                tabSize={tabSize}
-                inlineTitle={inlineTitle}
-                backlinksHtml={backlinksHtml}
-                onChange={onChangeText}
-                onHistoryChange={onHistoryChange}
-                action={action}
-                onFocus={onFocus}
-                onBlur={onBlur}
-                onLinkPress={onLinkPress}
-                onTagPress={onTagPress}
-                onCreateBlockId={onCreateBlockId}
-                onImagePress={onImagePress}
-                onToggleTask={onToggleTask}
-                placeholder={placeholder}
-                titleField={titleField}
-                onTitleChange={onTitleChange}
-                onTitleBlur={onTitleBlur}
-                propertiesPanel={propertiesPanel}
-                onToggleProperties={onToggleProperties}
-                onChangeProperty={onChangeProperty}
-                onRemoveTag={onRemoveTag}
-                onAddTag={onAddTag}
-                search={search}
-                anchor={anchor}
-                headingIndex={headingIndex}
-                jumpNonce={jumpNonce}
-                theme={theme}
-                fonts={fonts}
-                katexFonts={katexFonts}
-                dom={dom}
-            />
+            <View style={styles.editor}>
+                <MarkdownDomEditor
+                    mode={mode}
+                    onEdit={onEdit}
+                    value={value}
+                    previewValue={previewValue}
+                    mediaMap={mediaMapEntries}
+                    noteEntries={noteEntries}
+                    knownTags={knownTags}
+                    linkFormat={linkFormat}
+                    tableLabels={tableLabels}
+                    lineNumbers={lineNumbers}
+                    spellcheck={spellcheck}
+                    tabSize={tabSize}
+                    inlineTitle={inlineTitle}
+                    backlinksHtml={backlinksHtml}
+                    onChange={onChangeText}
+                    onHistoryChange={onHistoryChange}
+                    action={action}
+                    onFocus={onFocus}
+                    onBlur={onBlur}
+                    onReady={onReady}
+                    onLinkPress={onLinkPress}
+                    onTagPress={onTagPress}
+                    onCreateBlockId={onCreateBlockId}
+                    onImagePress={onImagePress}
+                    onToggleTask={onToggleTask}
+                    placeholder={placeholder}
+                    titleField={titleField}
+                    onTitleChange={onTitleChange}
+                    onTitleBlur={onTitleBlur}
+                    propertiesPanel={propertiesPanel}
+                    onToggleProperties={onToggleProperties}
+                    onChangeProperty={onChangeProperty}
+                    onRemoveTag={onRemoveTag}
+                    onAddTag={onAddTag}
+                    search={search}
+                    anchor={anchor}
+                    headingIndex={headingIndex}
+                    jumpNonce={jumpNonce}
+                    theme={theme}
+                    fonts={fonts}
+                    katexFonts={katexFonts}
+                    dom={dom}
+                />
+
+                {!ready && <LoadingOverlay />}
+            </View>
 
             <MissingNoteDialog
                 missing={missingNote.missing}
@@ -221,3 +229,9 @@ export const MarkdownInput = ({
         </>
     )
 }
+
+const styles = StyleSheet.create({
+    editor: {
+        flex: 1
+    }
+})

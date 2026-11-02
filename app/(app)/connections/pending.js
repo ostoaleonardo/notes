@@ -9,11 +9,15 @@ import { EntityRow } from '@/screens/connections/entity-row'
 import { HeroCard } from '@/screens/connections/hero-card'
 import { ButtonGroup } from '@/ui/button/button-group'
 import { GroupedList, GroupSeparator } from '@/ui/grouped-list'
+import { LoadingOverlay } from '@/ui/layout'
 import { Typography } from '@/ui/typography'
 
 import { useConnectionModel } from '@/hooks/use-connection-model'
 import { useDelayedValue } from '@/hooks/use-delayed-value'
+import { useDeferredReady } from '@/hooks/use-deferred-ready'
 import { useMissingNote } from '@/hooks/use-missing-note'
+import { usePagedRows } from '@/hooks/use-paged-rows'
+import { useNotes } from '@/hooks/use-notes'
 import { entityKey, entityTitle, summarizeConnections } from '@/utils/connection-model'
 import { getEditorPath } from '@/utils/editor-path'
 import { buildPendingRows } from '@/utils/pending-rows'
@@ -23,15 +27,21 @@ import { Link } from '@/icons/link'
 import { LinkOff } from '@/icons/link-off'
 
 import { ICON_TOGGLE } from '@/constants/components'
-import { CONNECTION_TYPES, PENDING_TABS, PENDING_TAB_PARAM } from '@/constants/connections'
+import {
+    CONNECTION_TYPES,
+    PENDING_ROWS,
+    PENDING_TABS,
+    PENDING_TAB_PARAM
+} from '@/constants/connections'
 import { OPACITY, SPACING } from '@/constants/theme'
 
 const { NOTE } = CONNECTION_TYPES
 
-export default function ConnectionsPending() {
+function ConnectionsPendingContent() {
     const { t } = useTranslation()
     const params = useLocalSearchParams()
 
+    const { loading } = useNotes()
     const model = useConnectionModel()
     const missingNote = useMissingNote()
     const { setMissing } = missingNote
@@ -45,6 +55,7 @@ export default function ConnectionsPending() {
     const summary = useMemo(() => summarizeConnections(model), [model])
     const listedTab = useDelayedValue(tab, ICON_TOGGLE.expandDuration)
     const rows = useMemo(() => buildPendingRows(listedTab, summary), [listedTab, summary])
+    const paged = usePagedRows(rows, PENDING_ROWS.pageSize)
 
     const isOrphans = tab === PENDING_TABS.ORPHANS
     const total = isOrphans ? summary.orphans.length : summary.unresolved.length
@@ -99,12 +110,20 @@ export default function ConnectionsPending() {
         </View>
     )
 
+    if (loading) return <LoadingOverlay background={false} />
+
     return (
         <View style={styles.screen}>
             <GroupedList
                 component={FlatList}
-                data={rows}
+                data={paged.data}
+                total={paged.total}
                 renderItem={renderItem}
+                onEndReached={paged.onEndReached}
+                onEndReachedThreshold={PENDING_ROWS.endThreshold}
+                initialNumToRender={PENDING_ROWS.initialRender}
+                maxToRenderPerBatch={PENDING_ROWS.batch}
+                windowSize={PENDING_ROWS.windowSize}
                 keyExtractor={entityKey}
                 ListHeaderComponent={header}
                 ItemSeparatorComponent={GroupSeparator}
@@ -123,6 +142,14 @@ export default function ConnectionsPending() {
             <CreateNoteDialog missingNote={missingNote} />
         </View>
     )
+}
+
+export default function ConnectionsPending() {
+    const ready = useDeferredReady()
+
+    if (ready) return <ConnectionsPendingContent />
+
+    return <LoadingOverlay background={false} />
 }
 
 const styles = StyleSheet.create({

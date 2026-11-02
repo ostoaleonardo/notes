@@ -1,19 +1,5 @@
-import { StyleSheet, View } from 'react-native'
-
-import { Progress } from '@/ui/progress'
+import { LoadingOverlay } from '@/ui/layout'
 
 export function DrawerLoading() {
-    return (
-        <View style={styles.loading}>
-            <Progress />
-        </View>
-    )
+    return <LoadingOverlay background={false} />
 }
-
-const styles = StyleSheet.create({
-    loading: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-    }
-})
