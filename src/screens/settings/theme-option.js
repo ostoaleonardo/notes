@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { ListItem } from '../../ui/list-item'
@@ -37,23 +37,24 @@ export function ThemeOption() {
             title={t('settings.general.theme')}
             description={t('theme.choose')}
         >
-            <ColorSection
-                title={t('settings.general.themes')}
-                names={THEME_OPTIONS}
-                options={THEME_COLORS}
-                isActive={(color) => mode === color}
-                onPress={toggleMode}
-                getLabel={(color) => t(`theme.${color}`)}
-                containerStyle={{ marginTop: SPACING.lg }}
-            />
-            <ColorSection
-                title={t('settings.general.accent')}
-                names={ACCENT_OPTIONS}
-                options={ACCENT_COLORS}
-                isActive={(color) => accent === color}
-                onPress={onToggleAccent}
-                getLabel={(color) => t(`accent.${color}`)}
-            />
+            <View style={{ gap: SPACING.xl }}>
+                <ColorSection
+                    title={t('settings.general.themes')}
+                    names={THEME_OPTIONS}
+                    options={THEME_COLORS}
+                    isActive={(color) => mode === color}
+                    onPress={toggleMode}
+                    getLabel={(color) => t(`theme.${color}`)}
+                />
+                <ColorSection
+                    title={t('settings.general.accent')}
+                    names={ACCENT_OPTIONS}
+                    options={ACCENT_COLORS}
+                    isActive={(color) => accent === color}
+                    onPress={onToggleAccent}
+                    getLabel={(color) => t(`accent.${color}`)}
+                />
+            </View>
         </ListItem>
     )
 }
@@ -64,13 +65,11 @@ function ColorSection({
     options,
     isActive,
     onPress,
-    getLabel,
-    containerStyle
+    getLabel
 }) {
     return (
         <Section
             title={title}
-            containerStyle={containerStyle}
             contentStyle={styles.container}
         >
             {names.map((color) => (
@@ -91,7 +90,6 @@ function ColorSection({
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        paddingVertical: SPACING.sm,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-evenly',
