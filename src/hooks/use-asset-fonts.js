@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Asset } from 'expo-asset'
 import { File } from 'expo-file-system'
 
-import { bytesToBase64 } from '@/utils/base64'
 import { logError } from '@/utils/log-error'
 
 import { LOG_MESSAGES } from '@/constants/log-messages'
@@ -11,8 +10,8 @@ const NO_FONTS = {}
 
 const resolveFontDataUrl = async (module, mimeType) => {
     const asset = await Asset.fromModule(module).downloadAsync()
-    const bytes = await new File(asset.localUri).bytes()
-    return `data:${mimeType};base64,${bytesToBase64(bytes)}`
+    const base64 = await new File(asset.localUri).base64()
+    return `data:${mimeType};base64,${base64}`
 }
 
 export const createAssetFontsHook = (fontModules, mimeType) => {
@@ -34,10 +33,12 @@ export const createAssetFontsHook = (fontModules, mimeType) => {
         return fontsPromise
     }
 
-    return function useAssetFonts() {
+    return function useAssetFonts(enabled = true) {
         const [fonts, setFonts] = useState(null)
 
         useEffect(() => {
+            if (!enabled) return undefined
+
             let cancelled = false
 
             loadFonts().then((resolvedFonts) => {
@@ -45,7 +46,7 @@ export const createAssetFontsHook = (fontModules, mimeType) => {
             })
 
             return () => { cancelled = true }
-        }, [])
+        }, [enabled])
 
         return fonts
     }

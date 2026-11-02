@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { File } from 'expo-file-system'
 
-import { bytesToBase64 } from '@/utils/base64'
 import { extractLocalUrls, replaceLocalImageUrls } from '@/utils/local-images'
 
 import { MIME_TYPES } from '@/constants/mime-types'
@@ -12,9 +11,9 @@ const EMPTY_MEDIA_MAP = new Map()
 export const resolveUrl = async (url) => {
     try {
         const file = new File(url)
-        const bytes = await file.bytes()
+        const base64 = await file.base64()
         const mime = file.type || MIME_TYPES.JPEG
-        return `data:${mime};base64,${bytesToBase64(bytes)}`
+        return `data:${mime};base64,${base64}`
     } catch {
         return url
     }

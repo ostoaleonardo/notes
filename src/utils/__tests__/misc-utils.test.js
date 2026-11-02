@@ -1,22 +1,7 @@
-import { bytesToBase64 } from '../base64'
 import { toDateKey } from '../date-key'
 import { getNoteKey } from '../note-key'
 import { buildNotePayload } from '../note-payload'
 import { buildFileLinkUrl, isFileLinkTarget } from '../file-links'
-
-describe('bytes to base64', () => {
-    test('encodes a full group', () => {
-        expect(bytesToBase64(new Uint8Array([77, 97, 110]))).toBe('TWFu')
-    })
-
-    test('pads a two byte remainder', () => {
-        expect(bytesToBase64(new Uint8Array([77, 97]))).toBe('TWE=')
-    })
-
-    test('pads a one byte remainder', () => {
-        expect(bytesToBase64(new Uint8Array([77]))).toBe('TQ==')
-    })
-})
 
 describe('date key', () => {
     test('formats a timestamp as an iso day', () => {

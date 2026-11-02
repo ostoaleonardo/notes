@@ -6,7 +6,7 @@ import {
 } from '../use-resolved-preview-markdown'
 import { MAX_PREVIEW_IMAGE_CACHE } from '@/constants/image'
 
-const mockBytes = jest.fn()
+const mockBase64 = jest.fn()
 
 jest.mock('expo-file-system', () => ({
     File: class {
@@ -15,8 +15,8 @@ jest.mock('expo-file-system', () => ({
             this.type = uri.endsWith('.png') ? 'image/png' : ''
         }
 
-        bytes() {
-            return mockBytes(this.uri)
+        base64() {
+            return mockBase64(this.uri)
         }
     }
 }))
@@ -25,23 +25,23 @@ const flush = () => act(async () => {})
 
 describe('resolve url', () => {
     beforeEach(() => {
-        mockBytes.mockReset()
+        mockBase64.mockReset()
     })
 
     test('returns a data url using the file mime type', async () => {
-        mockBytes.mockResolvedValue(new Uint8Array([77, 97, 110]))
+        mockBase64.mockResolvedValue('TWFu')
 
         expect(await resolveUrl('file:///a.png')).toBe('data:image/png;base64,TWFu')
     })
 
     test('falls back to jpeg when the mime type is unknown', async () => {
-        mockBytes.mockResolvedValue(new Uint8Array([77, 97, 110]))
+        mockBase64.mockResolvedValue('TWFu')
 
         expect(await resolveUrl('file:///a.bin')).toBe('data:image/jpeg;base64,TWFu')
     })
 
     test('returns the original url when the file cannot be read', async () => {
-        mockBytes.mockRejectedValue(new Error('gone'))
+        mockBase64.mockRejectedValue(new Error('gone'))
 
         expect(await resolveUrl('file:///a.png')).toBe('file:///a.png')
     })
@@ -49,8 +49,8 @@ describe('resolve url', () => {
 
 describe('resolved preview markdown', () => {
     beforeEach(() => {
-        mockBytes.mockReset()
-        mockBytes.mockResolvedValue(new Uint8Array([77, 97, 110]))
+        mockBase64.mockReset()
+        mockBase64.mockResolvedValue('TWFu')
     })
 
     test('keeps the value untouched when there are no local images', async () => {
@@ -58,7 +58,7 @@ describe('resolved preview markdown', () => {
 
         expect(result.current.value).toBe('plain text')
         expect(result.current.mediaMap.size).toBe(0)
-        expect(mockBytes).not.toHaveBeenCalled()
+        expect(mockBase64).not.toHaveBeenCalled()
     })
 
     test('replaces local image urls with data urls', async () => {
@@ -81,7 +81,7 @@ describe('resolved preview markdown', () => {
         await rerender({ value: '![a](file:///a.png) more' })
         await flush()
 
-        expect(mockBytes).toHaveBeenCalledTimes(1)
+        expect(mockBase64).toHaveBeenCalledTimes(1)
     })
 
     test('evicts the oldest cached images beyond the cache limit', async () => {
@@ -95,12 +95,12 @@ describe('resolved preview markdown', () => {
             { initialProps: { value: markdown } }
         )
         await flush()
-        mockBytes.mockClear()
+        mockBase64.mockClear()
 
         await rerender({ value: `${markdown}\n` })
         await flush()
 
-        expect(mockBytes).toHaveBeenCalledTimes(1)
-        expect(mockBytes).toHaveBeenCalledWith(urls[0])
+        expect(mockBase64).toHaveBeenCalledTimes(1)
+        expect(mockBase64).toHaveBeenCalledWith(urls[0])
     })
 })
