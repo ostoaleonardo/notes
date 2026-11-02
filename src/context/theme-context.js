@@ -1,8 +1,7 @@
 import { createContext, useEffect, useMemo, useRef, useState } from 'react'
-import { useColorScheme } from 'react-native'
+import { useColorScheme, View } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { StatusBar } from 'expo-status-bar'
-import { Host } from '@expo/ui'
 
 import { usePro } from '@/hooks/use-pro'
 import { useStorage } from '@/hooks/use-storage'
@@ -94,9 +93,9 @@ export function ThemeProvider({ initialTheme, children }) {
     return (
         <ThemeContext.Provider value={value}>
             <PaperProvider theme={theme}>
-                <Host style={{ flex: 1 }}>
+                <View style={{ flex: 1 }}>
                     {children}
-                </Host>
+                </View>
             </PaperProvider>
             <StatusBar style={name === THEME_MODES.LIGHT ? THEME_MODES.DARK : THEME_MODES.LIGHT} />
         </ThemeContext.Provider>
