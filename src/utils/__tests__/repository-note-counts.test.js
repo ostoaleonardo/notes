@@ -1,4 +1,8 @@
-import { getRepositoryNoteCount, getRepositoryNoteCounts } from '../repository-note-counts'
+import {
+    getChildFolderCounts,
+    getRepositoryNoteCount,
+    getRepositoryNoteCounts
+} from '../repository-note-counts'
 
 describe('repository note count', () => {
     test('returns the number of markdown files at the given uri', () => {
@@ -23,5 +27,21 @@ describe('repository note counts', () => {
 
     test('returns an empty object for no repositories', () => {
         expect(getRepositoryNoteCounts([], () => [])).toEqual({})
+    })
+})
+
+describe('child folder counts', () => {
+    test('counts the direct children of each folder', () => {
+        const descendants = [
+            { id: 'a', parentId: 'root' },
+            { id: 'b', parentId: 'a' },
+            { id: 'c', parentId: 'a' }
+        ]
+
+        expect(getChildFolderCounts(descendants)).toEqual({ root: 1, a: 2 })
+    })
+
+    test('returns an empty object when there are no folders', () => {
+        expect(getChildFolderCounts([])).toEqual({})
     })
 })

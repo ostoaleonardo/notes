@@ -5,3 +5,13 @@ export const getRepositoryNoteCounts = (repositories, listMarkdownFiles) => (
         repositories.map((repository) => [repository.id, getRepositoryNoteCount(repository.uri, listMarkdownFiles)])
     )
 )
+
+export const getChildFolderCounts = (descendants) => {
+    const counts = {}
+
+    descendants.forEach(({ parentId }) => {
+        if (parentId) counts[parentId] = (counts[parentId] || 0) + 1
+    })
+
+    return counts
+}

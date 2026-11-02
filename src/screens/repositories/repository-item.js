@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, View } from 'react-native'
 
@@ -8,16 +8,19 @@ import { Divider } from '@/ui/divider/divider'
 import { Typography } from '@/ui/typography'
 import { useTheme } from '@/ui/hooks/use-theme'
 
+import { useDescendantNoteCounts } from '@/hooks/use-descendant-note-counts'
 import { useFileStorage } from '@/hooks/use-file-storage'
 import { useGroupPosition } from '@/ui/hooks/use-group-position'
 import { useRepositories } from '@/hooks/use-repositories'
 import { getStackedRadiusStyle } from '@/ui/utils/group-position'
 import { IconButton } from '@/ui/button/icon-button'
-import { getRepositoryNoteCount } from '@/utils/repository-note-counts'
+import { Progress } from '@/ui/progress'
+import { getChildFolderCounts } from '@/utils/repository-note-counts'
 import { getRepositoryPath } from '@/utils/repository-path'
 
 import { OpenInNew } from '@/icons/open-in-new'
 import { SPACING, OPACITY } from '@/constants/theme'
+import { PENDING_COUNT } from '@/constants/repository-counts'
 
 export const RepositoryItem = memo(function RepositoryItem({
     repository,
@@ -41,36 +44,23 @@ export const RepositoryItem = memo(function RepositoryItem({
     const onPressRename = useCallback(() => onRename(repositoryId), [onRename, repositoryId])
     const onPressForget = useCallback(() => onForget(repositoryId), [onForget, repositoryId])
     const onPressDelete = useCallback(() => onDelete(repositoryId), [onDelete, repositoryId])
-    const noteCountCache = useRef(new Map())
-
-    useEffect(() => {
-        if (!expanded) noteCountCache.current.clear()
-    }, [expanded])
-
     const descendants = useMemo(
         () => getDescendants(repository.id),
         [getDescendants, repository.id]
     )
-    const folderCount = descendants.filter((descendant) => descendant.depth === 0).length
+    const folderCount = useMemo(
+        () => descendants.filter((descendant) => descendant.depth === 0).length,
+        [descendants]
+    )
+    const childFolderCounts = useMemo(
+        () => getChildFolderCounts(descendants),
+        [descendants]
+    )
 
-    const descendantsWithCounts = useMemo(
-        () => (
-            expanded
-                ? descendants.map((descendant) => {
-                    const cache = noteCountCache.current
-                    if (!cache.has(descendant.id)) {
-                        cache.set(descendant.id, getRepositoryNoteCount(descendant.uri, listMarkdownFiles))
-                    }
-
-                    return {
-                        ...descendant,
-                        noteCount: cache.get(descendant.id),
-                        folderCount: descendants.filter((d) => d.parentId === descendant.id).length
-                    }
-                })
-                : []
-        ),
-        [expanded, descendants, listMarkdownFiles]
+    const { counts: noteCounts, loading: loadingCounts } = useDescendantNoteCounts(
+        descendants,
+        listMarkdownFiles,
+        expanded
     )
 
     return (
@@ -126,7 +116,7 @@ export const RepositoryItem = memo(function RepositoryItem({
 
             {expanded && (
                 <View style={styles.structure}>
-                    {descendantsWithCounts.length === 0 ? (
+                    {descendants.length === 0 ? (
                         <Typography
                             variant='bodySmall'
                             opacity={OPACITY.disabled}
@@ -134,7 +124,7 @@ export const RepositoryItem = memo(function RepositoryItem({
                             {t('repositories.no_folders')}
                         </Typography>
                     ) : (
-                        descendantsWithCounts.map((descendant) => (
+                        descendants.map((descendant) => (
                             <View
                                 key={descendant.id}
                                 style={{ paddingLeft: descendant.depth * SPACING.lg }}
@@ -146,12 +136,20 @@ export const RepositoryItem = memo(function RepositoryItem({
                                     variant='bodySmall'
                                     opacity={OPACITY.disabled}
                                 >
-                                    {t('count.notes', { count: descendant.noteCount })}
+                                    {noteCounts[descendant.id] === undefined
+                                        ? PENDING_COUNT
+                                        : t('count.notes', { count: noteCounts[descendant.id] })}
                                     {', '}
-                                    {t('count.folders', { count: descendant.folderCount })}
+                                    {t('count.folders', { count: childFolderCounts[descendant.id] || 0 })}
                                 </Typography>
                             </View>
                         ))
+                    )}
+
+                    {loadingCounts && (
+                        <View style={styles.loader}>
+                            <Progress />
+                        </View>
                     )}
                 </View>
             )}
@@ -177,5 +175,8 @@ const styles = StyleSheet.create({
     structure: {
         paddingHorizontal: SPACING.xl,
         gap: SPACING.md
+    },
+    loader: {
+        alignItems: 'center'
     }
 })
