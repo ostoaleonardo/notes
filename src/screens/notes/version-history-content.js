@@ -5,6 +5,7 @@ import { FadeIn, FadeInRight, FadeOut, FadeOutRight } from 'react-native-reanima
 
 import { AnimatedView } from '@/ui/animated/animated-view'
 import { FilledButton } from '@/ui/button/filled-button'
+import { LoadingOverlay } from '@/ui/layout'
 import { EmptyMessage } from '@/ui/modal/empty-message'
 import { Typography } from '@/ui/typography'
 import { useTheme } from '@/ui/hooks/use-theme'
@@ -96,9 +97,18 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
     }, [location?.folderUri, location?.folderPath, noteId, pro])
 
     const ordered = useMemo(() => [...versions].reverse(), [versions])
-    const diff = useMemo(() => (
-        selected ? diffLines(selected.content, currentContentRef.current.content) : []
-    ), [selected, currentContentRef])
+    const [diff, setDiff] = useState(null)
+
+    useEffect(() => {
+        setDiff(null)
+        if (!selected) return undefined
+
+        const task = requestIdleCallback(() => {
+            setDiff(diffLines(selected.content, currentContentRef.current.content))
+        })
+
+        return () => cancelIdleCallback(task)
+    }, [selected, currentContentRef])
 
     const onCloseHistory = useCallback(() => {
         setSelected(null)
@@ -198,15 +208,21 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
             </View>
 
             {selected ? (
-                <FlatList
-                    data={diff}
-                    keyExtractor={(_, index) => String(index)}
-                    showsVerticalScrollIndicator={false}
-                    style={styles.diff}
-                    renderItem={renderDiffItem}
-                />
+                diff ? (
+                    <FlatList
+                        data={diff}
+                        keyExtractor={(_, index) => String(index)}
+                        showsVerticalScrollIndicator={false}
+                        style={styles.diff}
+                        renderItem={renderDiffItem}
+                    />
+                ) : (
+                    <LoadingOverlay background={false} />
+                )
             ) : (
                 <>
+                    {loading && <LoadingOverlay background={false} />}
+
                     {!loading && ordered.length === 0 && (
                         <EmptyMessage style={styles.empty}>
                             {t('message.version_history.empty')}
@@ -215,6 +231,7 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
 
                     {!loading && ordered.length > 0 && (
                         <GroupedList
+                            paged
                             data={ordered}
                             keyExtractor={(version) => version.id}
                             showsVerticalScrollIndicator={false}

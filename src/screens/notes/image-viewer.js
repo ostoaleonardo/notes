@@ -9,6 +9,7 @@ import { Close } from '@/icons/close'
 import { SPACING, Z_INDEX } from '@/constants/theme'
 import { IMAGE_VIEWER_MAX_SCALE } from '@/constants/image'
 import { TonalIconButton } from '@/ui/button/tonal-icon-button'
+import { LoadingOverlay } from '@/ui/layout'
 import { ICON_BUTTON } from '@/ui/tokens/components'
 import { useTheme } from '@/ui/hooks/use-theme'
 
@@ -43,6 +44,8 @@ export function ImageViewer({ url, onClose }) {
                     right: insets.right + SPACING.sm
                 }}
             />
+
+            {!resolution && <LoadingOverlay background={false} />}
 
             {url && (
                 <ResumableZoom maxScale={resolution ?? IMAGE_VIEWER_MAX_SCALE}>

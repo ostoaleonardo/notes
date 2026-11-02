@@ -15,10 +15,12 @@ export function useConnectionModel() {
     useEffect(() => {
         if (!mounted.current) {
             mounted.current = true
-            return
+            return undefined
         }
 
-        setFiles(listFiles())
+        const task = requestIdleCallback(() => setFiles(listFiles()))
+
+        return () => cancelIdleCallback(task)
     }, [listFiles, notes])
 
     const rootName = activeRepository ? getRootRepository(activeRepository).alias : ''
