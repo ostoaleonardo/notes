@@ -93,7 +93,7 @@ export function DrawerItems({ navigation, state }) {
         <>
             {ActiveView && <ActiveView closeDrawer={closeDrawer} drawerOpen={drawerOpen} />}
 
-            <View style={{ paddingTop: SPACING.lg, paddingBottom: insets.bottom }}>
+            <View style={{ paddingTop: SPACING.md, paddingBottom: insets.bottom }}>
                 <DrawerToolbar>
                     <View style={styles.actions}>
                         <View style={styles.switcher}>

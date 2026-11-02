@@ -1,9 +1,11 @@
 import Animated from 'react-native-reanimated'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 import { DrawerList } from './drawer-list'
 import { DrawerLoading } from './drawer-loading'
 import { DrawerToolbar, DrawerToolbarButton } from './drawer-toolbar'
+
+import { SPACING } from '@/constants/theme'
 
 export function DrawerView({
     data,
@@ -32,15 +34,17 @@ export function DrawerView({
                 />
             </Animated.View>
 
-            <DrawerToolbar>
-                {toolbarItems.map(({ key, ...item }) => (
-                    <DrawerToolbarButton
-                        key={key}
-                        {...item}
-                    />
-                ))}
-                {toolbarExtra}
-            </DrawerToolbar>
+            <View style={styles.toolbar}>
+                <DrawerToolbar>
+                    {toolbarItems.map(({ key, ...item }) => (
+                        <DrawerToolbarButton
+                            key={key}
+                            {...item}
+                        />
+                    ))}
+                    {toolbarExtra}
+                </DrawerToolbar>
+            </View>
 
             {children}
         </>
@@ -50,5 +54,8 @@ export function DrawerView({
 const styles = StyleSheet.create({
     list: {
         flex: 1
+    },
+    toolbar: {
+        paddingTop: SPACING.xs
     }
 })
