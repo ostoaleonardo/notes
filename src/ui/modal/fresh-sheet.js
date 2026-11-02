@@ -12,7 +12,6 @@ export function FreshSheet({ sheet, snapPoints, children }) {
     return (
         <ModalBottomSheet
             ref={sheet.ref}
-            onClose={sheet.onClose}
             snapPoints={snapPoints}
             onChange={onChange}
         >

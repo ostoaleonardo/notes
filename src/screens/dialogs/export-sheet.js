@@ -51,7 +51,6 @@ export const ExportSheet = memo(function ExportSheet({ sheet, onExport, onShare 
         <ModalBottomSheet
             enableDynamicSizing
             ref={sheet.ref}
-            onClose={sheet.onClose}
         >
             <SheetTitle>{t('button.export_share')}</SheetTitle>
 

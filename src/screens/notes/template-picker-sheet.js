@@ -30,7 +30,6 @@ export const TemplatePickerSheet = memo(function TemplatePickerSheet({
         <ModalBottomSheet
             enableDynamicSizing
             ref={sheet.ref}
-            onClose={sheet.onClose}
         >
             <SheetTitle>
                 {t('title.templates')}

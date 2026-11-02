@@ -27,7 +27,6 @@ export function ListSheet({
         <ModalBottomSheet
             key={isEmpty ? 'empty' : 'list'}
             ref={sheet.ref}
-            onClose={sheet.onClose}
             onChange={onChange}
             enableDynamicSizing={isEmpty}
             snapPoints={isEmpty ? undefined : SHEET.snapPoints.tall}

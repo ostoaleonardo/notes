@@ -51,7 +51,6 @@ export const MarkdownGroupSheet = memo(function MarkdownGroupSheet({ sheet, grou
         <ModalBottomSheet
             enableDynamicSizing
             ref={sheet.ref}
-            onClose={sheet.onClose}
         >
             {group && <SheetTitle>{t(`markdown_group.${group}`)}</SheetTitle>}
 

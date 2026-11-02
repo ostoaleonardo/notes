@@ -19,7 +19,6 @@ export const MarkdownInsertSheets = memo(function MarkdownInsertSheets({
             <ModalBottomSheet
                 enableDynamicSizing
                 ref={linkSheet.ref}
-                onClose={linkSheet.onClose}
             >
                 <LinkMarkdown
                     onClose={linkSheet.onClose}
@@ -30,7 +29,6 @@ export const MarkdownInsertSheets = memo(function MarkdownInsertSheets({
             <ModalBottomSheet
                 enableDynamicSizing
                 ref={tableSheet.ref}
-                onClose={tableSheet.onClose}
                 enablePanDownToClose={false}
                 dismissOnClickOutside
                 dismissOnBackPress
@@ -44,7 +42,6 @@ export const MarkdownInsertSheets = memo(function MarkdownInsertSheets({
             <ModalBottomSheet
                 enableDynamicSizing
                 ref={imageSheet.ref}
-                onClose={imageSheet.onClose}
             >
                 <ImageMarkdown
                     onClose={imageSheet.onClose}
