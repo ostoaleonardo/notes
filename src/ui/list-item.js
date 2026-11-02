@@ -4,19 +4,21 @@ import { ListItem as ComposeListItem, RNHostView, Text } from '@expo/ui/jetpack-
 import { Shapes, clickable, clip } from '@expo/ui/jetpack-compose/modifiers'
 
 import { ComposeHost } from '@/ui/compose-context'
+import { ComposeIcon } from '@/ui/compose-icon'
 import { useTheme } from '@/ui/hooks/use-theme'
 import { useGroupPosition } from '@/ui/hooks/use-group-position'
 import { getCornerRadii } from '@/ui/utils/group-position'
 
 import { COMPOSE_LIST_ITEM } from '@/ui/tokens/components'
 import { GROUP_AXES } from '@/ui/tokens/group-position'
-import { FONTS, SPACING, TYPOGRAPHY_SIZE_VARIANTS } from '@/ui/tokens/theme'
+import { FONTS, ICON_SIZE, SPACING, TYPOGRAPHY_SIZE_VARIANTS } from '@/ui/tokens/theme'
 import { TINT, TRANSPARENT } from '@/ui/tokens/transparent'
 
 export function ListItem({
     title,
     description,
     leftContent,
+    leadingIcon,
     rightContent,
     children,
     onPress,
@@ -84,6 +86,15 @@ export function ListItem({
                             {description}
                         </Text>
                     </ComposeListItem.SupportingContent>
+                )}
+                {!!leadingIcon && (
+                    <ComposeListItem.LeadingContent>
+                        <ComposeIcon
+                            icon={leadingIcon}
+                            size={ICON_SIZE.lg}
+                            color={colors.onBackground}
+                        />
+                    </ComposeListItem.LeadingContent>
                 )}
                 {!!leftContent && (
                     <ComposeListItem.LeadingContent>
