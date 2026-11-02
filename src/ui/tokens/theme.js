@@ -74,7 +74,7 @@ export const FONTS = {
     azeretLight: 'AzeretMono-Light',
     azeretMedium: 'AzeretMono-Medium',
     nType82Headline: 'NType82-Headline',
-    geistMedium: 'Geist-Medium'
+    geistRegular: 'Geist-Regular'
 }
 
 export const DEFAULT_HEADING_FAMILY = FONTS.nType82Headline

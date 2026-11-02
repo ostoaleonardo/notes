@@ -41,7 +41,7 @@ export default {
           './assets/fonts/AzeretMono-Medium.ttf',
           './assets/fonts/AzeretMono-Italic.ttf',
           './assets/fonts/NType82-Headline.ttf',
-          './assets/fonts/Geist-Medium.ttf'
+          './assets/fonts/Geist-Regular.ttf'
         ]
       }
     ],

@@ -31,7 +31,7 @@ describe('resolve the heading font', () => {
     })
 
     test('returns the font family of the selected key', () => {
-        expect(getHeadingFontFamily(HEADING_FONT_KEYS.GEIST)).toBe(FONTS.geistMedium)
+        expect(getHeadingFontFamily(HEADING_FONT_KEYS.GEIST)).toBe(FONTS.geistRegular)
     })
 
     test('returns the default family when the key is invalid', () => {
@@ -41,6 +41,6 @@ describe('resolve the heading font', () => {
 
 describe('css heading family', () => {
     test('adds the system fallback after the chosen font', () => {
-        expect(toCssHeadingFamily(FONTS.geistMedium)).toBe(`${FONTS.geistMedium}, system-ui, sans-serif`)
+        expect(toCssHeadingFamily(FONTS.geistRegular)).toBe(`${FONTS.geistRegular}, system-ui, sans-serif`)
     })
 })

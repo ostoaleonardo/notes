@@ -8,6 +8,6 @@ export const fontFacesCss = (fonts) => {
         @font-face { font-family: '${FONTS.azeretLight}'; src: url(${fonts.bodyBold}); font-weight: 700; font-style: normal; }
         @font-face { font-family: '${FONTS.azeretLight}'; src: url(${fonts.bodyItalic}); font-weight: 400; font-style: italic; }
         ${fonts.heading ? `@font-face { font-family: '${FONTS.nType82Headline}'; src: url(${fonts.heading}); }` : ''}
-        ${fonts.headingGeist ? `@font-face { font-family: '${FONTS.geistMedium}'; src: url(${fonts.headingGeist}); }` : ''}
+        ${fonts.headingGeist ? `@font-face { font-family: '${FONTS.geistRegular}'; src: url(${fonts.headingGeist}); }` : ''}
     `
 }

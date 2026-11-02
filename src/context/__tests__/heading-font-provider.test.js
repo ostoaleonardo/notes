@@ -37,7 +37,7 @@ describe('heading font provider', () => {
 
         const { result } = await renderHook(() => useHeadingFont(), { wrapper })
 
-        expect(result.current.fontFamily).toBe(FONTS.geistMedium)
+        expect(result.current.fontFamily).toBe(FONTS.geistRegular)
     })
 
     test('ignores an invalid stored font', async () => {
@@ -53,7 +53,7 @@ describe('heading font provider', () => {
 
         await act(async () => result.current.setFontKey(HEADING_FONT_KEYS.GEIST))
 
-        expect(result.current.fontFamily).toBe(FONTS.geistMedium)
+        expect(result.current.fontFamily).toBe(FONTS.geistRegular)
     })
 
     test('gives the ui components the family of the stored font', async () => {
@@ -61,7 +61,7 @@ describe('heading font provider', () => {
 
         const { result } = await renderHook(() => useHeadingFamily(), { wrapper })
 
-        expect(result.current).toBe(FONTS.geistMedium)
+        expect(result.current).toBe(FONTS.geistRegular)
     })
 
     test('keeps the ui family in sync when another font is selected', async () => {
@@ -72,6 +72,6 @@ describe('heading font provider', () => {
 
         await act(async () => result.current.font.setFontKey(HEADING_FONT_KEYS.GEIST))
 
-        expect(result.current.family).toBe(FONTS.geistMedium)
+        expect(result.current.family).toBe(FONTS.geistRegular)
     })
 })

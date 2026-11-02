@@ -3,5 +3,5 @@ export const FONT_MODULES = {
     bodyBold: require('../../assets/fonts/AzeretMono-Medium.ttf'),
     bodyItalic: require('../../assets/fonts/AzeretMono-Italic.ttf'),
     heading: require('../../assets/fonts/NType82-Headline.ttf'),
-    headingGeist: require('../../assets/fonts/Geist-Medium.ttf')
+    headingGeist: require('../../assets/fonts/Geist-Regular.ttf')
 }
