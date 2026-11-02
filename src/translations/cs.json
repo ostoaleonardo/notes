@@ -432,7 +432,12 @@
 		"open": "Otevřít menu",
 		"notes": "Poznámky",
 		"files": "Soubory",
-		"files_empty": "V tomto úložišti zatím nejsou žádné přílohy",
+		"empty": {
+			"notes": "Zatím žádné poznámky",
+			"templates": "Zatím žádné šablony",
+			"tags": "Zatím žádné štítky",
+			"files": "Zatím žádné soubory"
+		},
 		"change_view": "Změnit zobrazení",
 		"sort": {
 			"title": "Seřadit poznámky",

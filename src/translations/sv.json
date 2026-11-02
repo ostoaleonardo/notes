@@ -422,7 +422,12 @@
 		"open": "Öppna menyn",
 		"notes": "Anteckningar",
 		"files": "Filer",
-		"files_empty": "Inga bilagor i det här förrådet än",
+		"empty": {
+			"notes": "Inga anteckningar än",
+			"templates": "Inga mallar än",
+			"tags": "Inga taggar än",
+			"files": "Inga filer än"
+		},
 		"change_view": "Byt vy",
 		"sort": {
 			"title": "Sortera anteckningar",

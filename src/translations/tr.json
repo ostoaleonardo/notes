@@ -422,7 +422,12 @@
 		"open": "Menüyü aç",
 		"notes": "Notlar",
 		"files": "Dosyalar",
-		"files_empty": "Bu depoda henüz ek yok",
+		"empty": {
+			"notes": "Henüz not yok",
+			"templates": "Henüz şablon yok",
+			"tags": "Henüz etiket yok",
+			"files": "Henüz dosya yok"
+		},
 		"change_view": "Görünümü değiştir",
 		"sort": {
 			"title": "Notları sırala",

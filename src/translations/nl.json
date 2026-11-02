@@ -422,7 +422,12 @@
 		"open": "Menu openen",
 		"notes": "Notities",
 		"files": "Bestanden",
-		"files_empty": "Nog geen bijlagen in deze repository",
+		"empty": {
+			"notes": "Nog geen notities",
+			"templates": "Nog geen sjablonen",
+			"tags": "Nog geen tags",
+			"files": "Nog geen bestanden"
+		},
 		"change_view": "Weergave wijzigen",
 		"sort": {
 			"title": "Notities sorteren",

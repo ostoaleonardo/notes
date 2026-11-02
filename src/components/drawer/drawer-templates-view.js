@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { AddTemplate } from '@/screens/dialogs/add-template'
 import { AddTemplateFolder } from '@/screens/dialogs/add-template-folder'
 import { DrawerView } from './drawer-view'
+import { DrawerTemplatesEmpty } from './drawer-empty'
 import { DrawerLevelNote } from './drawer-level-note'
 import { DrawerTemplateFolderItem } from './drawer-template-folder-item'
 import { openEditor } from './drawer-open-editor'
@@ -28,7 +29,7 @@ export function DrawerTemplatesView({ closeDrawer }) {
     const { currentId } = useCurrentNote()
     const { collapsedFolders, setFoldersCollapsed } = useUtils()
     const { activeRepository } = useRepositories()
-    const { templates, folders, refresh } = useTemplatesList([activeRepository?.id])
+    const { templates, folders, loading, refresh } = useTemplatesList([activeRepository?.id])
     const [addTemplateFolderPath, setAddTemplateFolderPath] = useState(null)
     const [addSubfolderParent, setAddSubfolderParent] = useState(null)
 
@@ -120,6 +121,8 @@ export function DrawerTemplatesView({ closeDrawer }) {
     return (
         <DrawerView
             data={rows}
+            ListEmptyComponent={DrawerTemplatesEmpty}
+            loading={loading}
             renderItem={renderItem}
             toolbarItems={toolbarItems}
         >

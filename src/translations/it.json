@@ -422,7 +422,12 @@
 		"open": "Apri menu",
 		"notes": "Note",
 		"files": "File",
-		"files_empty": "Nessun allegato in questo repository per ora",
+		"empty": {
+			"notes": "Ancora nessuna nota",
+			"templates": "Ancora nessun modello",
+			"tags": "Ancora nessun tag",
+			"files": "Ancora nessun file"
+		},
 		"change_view": "Cambia vista",
 		"sort": {
 			"title": "Ordina note",

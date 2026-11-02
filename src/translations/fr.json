@@ -422,7 +422,12 @@
 		"open": "Ouvrir le menu",
 		"notes": "Notes",
 		"files": "Fichiers",
-		"files_empty": "Aucune pièce jointe dans ce dépôt pour le moment",
+		"empty": {
+			"notes": "Pas encore de notes",
+			"templates": "Pas encore de modèles",
+			"tags": "Pas encore de tags",
+			"files": "Pas encore de fichiers"
+		},
 		"change_view": "Changer de vue",
 		"sort": {
 			"title": "Trier les notes",

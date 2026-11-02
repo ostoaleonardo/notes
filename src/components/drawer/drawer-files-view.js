@@ -1,18 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useCallback, useEffect, useState } from 'react'
 
 import { DrawerList } from './drawer-list'
+import { DrawerFilesEmpty } from './drawer-empty'
 import { DrawerFileItem } from './drawer-file-item'
-import { Typography } from '@/ui/typography'
 
 import { useAttachmentFiles } from '@/hooks/use-attachment-files'
 import { useOpenFile } from '@/hooks/use-open-file'
 
 import { FILE_KINDS } from '@/constants/file-types'
-import { OPACITY } from '@/constants/theme'
-
 export function DrawerFilesView({ closeDrawer }) {
-    const { t } = useTranslation()
     const listFiles = useAttachmentFiles()
     const [rows, setRows] = useState([])
 
@@ -34,15 +30,11 @@ export function DrawerFilesView({ closeDrawer }) {
         />
     ), [onOpenFile])
 
-    const empty = useMemo(() => (
-        <Typography opacity={OPACITY.secondary}>{t('drawer.files_empty')}</Typography>
-    ), [t])
-
     return (
         <DrawerList
             data={rows}
             renderItem={renderItem}
-            ListEmptyComponent={empty}
+            ListEmptyComponent={DrawerFilesEmpty}
         />
     )
 }

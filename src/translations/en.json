@@ -422,7 +422,12 @@
 		"open": "Open drawer",
 		"notes": "Notes",
 		"files": "Files",
-		"files_empty": "No attachments in this repository yet",
+		"empty": {
+			"notes": "No notes yet",
+			"templates": "No templates yet",
+			"tags": "No tags yet",
+			"files": "No files yet"
+		},
 		"change_view": "Change view",
 		"sort": {
 			"title": "Sort notes",

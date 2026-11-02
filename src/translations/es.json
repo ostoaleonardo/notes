@@ -422,7 +422,12 @@
 		"open": "Abrir menú",
 		"notes": "Notas",
 		"files": "Archivos",
-		"files_empty": "Aún no hay archivos adjuntos en este repositorio",
+		"empty": {
+			"notes": "Todavía no hay notas",
+			"templates": "Todavía no hay plantillas",
+			"tags": "Todavía no hay etiquetas",
+			"files": "Todavía no hay archivos"
+		},
 		"change_view": "Cambiar vista",
 		"sort": {
 			"title": "Ordenar notas",

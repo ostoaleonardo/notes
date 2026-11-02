@@ -2,6 +2,7 @@ import Animated from 'react-native-reanimated'
 import { StyleSheet } from 'react-native'
 
 import { DrawerList } from './drawer-list'
+import { DrawerLoading } from './drawer-loading'
 import { DrawerToolbar, DrawerToolbarButton } from './drawer-toolbar'
 
 export function DrawerView({
@@ -10,6 +11,7 @@ export function DrawerView({
     toolbarItems,
     toolbarExtra,
     ListEmptyComponent,
+    loading = false,
     listKey,
     listRef,
     listEntering,
@@ -26,7 +28,7 @@ export function DrawerView({
                     ref={listRef}
                     data={data}
                     renderItem={renderItem}
-                    ListEmptyComponent={ListEmptyComponent}
+                    ListEmptyComponent={loading ? DrawerLoading : ListEmptyComponent}
                 />
             </Animated.View>
 

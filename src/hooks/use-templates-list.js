@@ -8,6 +8,7 @@ export function useTemplatesList(deps = [], { immediate = true } = {}) {
     const { listTemplates, listTemplateFolders } = useTemplates()
     const [templates, setTemplates] = useState([])
     const [folders, setFolders] = useState([])
+    const [loading, setLoading] = useState(true)
     const mountedRef = useRef(true)
     const depsToken = useMemoByDeps(() => ({}), deps)
 
@@ -23,6 +24,7 @@ export function useTemplatesList(deps = [], { immediate = true } = {}) {
 
             setTemplates(result)
             setFolders(folderPaths)
+            setLoading(false)
         })
     ), [listTemplates, listTemplateFolders])
 
@@ -34,5 +36,5 @@ export function useTemplatesList(deps = [], { immediate = true } = {}) {
         if (immediate) refreshRef.current()
     }, [immediate, depsToken])
 
-    return { templates, folders, refresh }
+    return { templates, folders, loading, refresh }
 }

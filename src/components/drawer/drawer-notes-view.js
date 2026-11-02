@@ -7,6 +7,7 @@ import { RenameRepository } from '@/screens/dialogs/rename-repository'
 import { AddSubfolder } from '@/screens/dialogs/add-subfolder'
 import { DeleteRepository } from '@/screens/dialogs/delete-repository'
 import { DrawerView } from './drawer-view'
+import { DrawerNotesEmpty } from './drawer-empty'
 import { DrawerSortMenu } from './drawer-sort-menu'
 import { DrawerLevelNote } from './drawer-level-note'
 import { DrawerLevelFolder } from './drawer-level-folder'
@@ -39,9 +40,14 @@ import {
 } from '@/constants/drawer-views'
 import { ANIMATION_DURATION } from '@/constants/theme'
 
+const ENTERINGS = {
+    [LEVEL_DIRECTIONS.FORWARD]: SlideInRight,
+    [LEVEL_DIRECTIONS.BACK]: SlideInLeft
+}
+
 export function DrawerNotesView({ closeDrawer, drawerOpen }) {
     const { t } = useTranslation()
-    const { notes } = useNotes()
+    const { notes, loading } = useNotes()
     const { currentId } = useCurrentNote()
     const { drawerFolderId, setDrawerFolderId } = useUtils()
     const openDailyNote = useDailyNote()
@@ -52,7 +58,7 @@ export function DrawerNotesView({ closeDrawer, drawerOpen }) {
     const [subfolderParentId, setSubfolderParentId] = useState('')
     const [deleteId, setDeleteId] = useState('')
 
-    const direction = useRef(LEVEL_DIRECTIONS.FORWARD)
+    const direction = useRef(null)
     const listRef = useRef(null)
 
     const notesByRepository = useMemo(() => {
@@ -233,17 +239,19 @@ export function DrawerNotesView({ closeDrawer, drawerOpen }) {
         )
     }, [currentId, onOpenNote, onUpLevel, onEnterFolder, onRepositoryAction])
 
-    const Entering = direction.current === LEVEL_DIRECTIONS.FORWARD ? SlideInRight : SlideInLeft
+    const Entering = ENTERINGS[direction.current]
 
     return (
         <DrawerView
             data={rows}
+            ListEmptyComponent={DrawerNotesEmpty}
+            loading={loading}
             renderItem={renderItem}
             toolbarItems={toolbarItems}
             toolbarExtra={toolbarExtra}
             listKey={folderId}
             listRef={listRef}
-            listEntering={Entering.duration(ANIMATION_DURATION)}
+            listEntering={Entering?.duration(ANIMATION_DURATION)}
         >
             <RenameRepository
                 visible={!!editFolderId}

@@ -1,9 +1,9 @@
 import { memo, useCallback, useMemo, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
-import { Typography } from '@/ui/typography'
 import { DrawerView } from './drawer-view'
+import { DrawerTagsEmpty } from './drawer-empty'
 import { DrawerTreeRow } from './drawer-tree-row'
 
 import { useNotes } from '@/hooks/use-notes'
@@ -19,7 +19,7 @@ import { ExpandAll } from '@/icons/expand-all'
 import { SortByAlpha } from '@/icons/sort-by-alpha'
 
 import { DEFAULT_TAG_SORT, TAG_SORT_LABELS, TAG_SORTS } from '@/constants/tags'
-import { SPACING, OPACITY } from '@/constants/theme'
+import { OPACITY } from '@/constants/theme'
 import { DRAWER_TOOLBAR_KEYS } from '@/constants/drawer-views'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
@@ -36,21 +36,9 @@ const TagRow = memo(function TagRow({ tagKey, name, depth, count, hasChildren, e
     )
 })
 
-function TagsEmpty() {
-    const { t } = useTranslation()
-
-    return (
-        <View style={styles.empty}>
-            <Typography opacity={OPACITY.muted}>
-                {t('message.tags.empty')}
-            </Typography>
-        </View>
-    )
-}
-
 export function DrawerTagsView() {
     const { t } = useTranslation()
-    const { notes } = useNotes()
+    const { notes, loading } = useNotes()
     const { setItem } = useStorage()
     const [sort, setSort] = useState(DEFAULT_TAG_SORT)
     const [expandedTags, setExpandedTags] = useState(() => new Set())
@@ -121,7 +109,8 @@ export function DrawerTagsView() {
             data={rows}
             renderItem={renderItem}
             toolbarItems={toolbarItems}
-            ListEmptyComponent={TagsEmpty}
+            ListEmptyComponent={DrawerTagsEmpty}
+            loading={loading}
         />
     )
 }
@@ -130,8 +119,4 @@ const styles = StyleSheet.create({
     inactive: {
         opacity: OPACITY.disabled
     },
-    empty: {
-        paddingVertical: SPACING.lg,
-        paddingStart: SPACING.sm
-    }
 })

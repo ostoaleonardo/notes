@@ -14,6 +14,7 @@ export function DrawerList(props) {
             showsVerticalScrollIndicator={false}
             style={styles.list}
             contentContainerStyle={{
+                flexGrow: 1,
                 paddingTop: SPACING.md + insets.top,
                 paddingBottom: SPACING.md,
                 paddingStart: SPACING.md + insets.left,

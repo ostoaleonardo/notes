@@ -422,7 +422,12 @@
 		"open": "Abrir menu",
 		"notes": "Notas",
 		"files": "Arquivos",
-		"files_empty": "Ainda não há anexos neste repositório",
+		"empty": {
+			"notes": "Ainda não há notas",
+			"templates": "Ainda não há modelos",
+			"tags": "Ainda não há tags",
+			"files": "Ainda não há arquivos"
+		},
 		"change_view": "Alterar visualização",
 		"sort": {
 			"title": "Ordenar notas",

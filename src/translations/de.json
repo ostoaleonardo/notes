@@ -422,7 +422,12 @@
 		"open": "Menü öffnen",
 		"notes": "Notizen",
 		"files": "Dateien",
-		"files_empty": "In diesem Repository gibt es noch keine Anhänge",
+		"empty": {
+			"notes": "Noch keine Notizen",
+			"templates": "Noch keine Vorlagen",
+			"tags": "Noch keine Tags",
+			"files": "Noch keine Dateien"
+		},
 		"change_view": "Ansicht ändern",
 		"sort": {
 			"title": "Notizen sortieren",
