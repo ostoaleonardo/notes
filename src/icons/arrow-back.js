@@ -9,3 +9,5 @@ export const ArrowBack = (props) => (
         <Path d={ARROW_BACK_ICON_PATH} />
     </IconSvg>
 )
+
+ArrowBack.source = require('./xml/arrow_back_sharp_wght100.xml')

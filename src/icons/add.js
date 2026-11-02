@@ -9,3 +9,5 @@ export const Add = (props) => (
         <Path d={ADD_ICON_PATH} />
     </IconSvg>
 )
+
+Add.source = require('./xml/add_sharp_wght100.xml')

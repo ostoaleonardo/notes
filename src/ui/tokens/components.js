@@ -44,6 +44,12 @@ export const SPLIT_TRIGGER_RADIUS = {
     open: RADIUS.xl
 }
 
+export const MENU_ITEM = {
+    radius: SPACING.md,
+    iconToTitle: SPACING.sm,
+    trailingInset: SPACING.sm
+}
+
 export const ICON_TOGGLE = {
     iconSize: ICON_SIZE.lg,
     iconSizeWithLabel: ICON_SIZE.md,

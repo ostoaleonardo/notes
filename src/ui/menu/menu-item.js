@@ -1,20 +1,24 @@
 import { useMemo } from 'react'
-import { View } from 'react-native'
 import { useTheme } from 'react-native-paper'
-import { DropdownMenuItem, RNHostView, Row, Text } from '@expo/ui/jetpack-compose'
-import { Shapes, background, clip, height, padding } from '@expo/ui/jetpack-compose/modifiers'
+import { DropdownMenuItem, Row, Text } from '@expo/ui/jetpack-compose'
+import { Shapes, background, clip, height, offset, padding } from '@expo/ui/jetpack-compose/modifiers'
+
+import { ComposeIcon } from '@/ui/compose-icon'
+
+import { MENU_ITEM } from '@/ui/tokens/components'
 
 import { FONTS, FONT_SIZE, ICON_SIZE, SIZE, SPACING } from '@/ui/tokens/theme'
 
-const ROW_ARRANGEMENT = { spacedBy: SPACING.sm }
-const ITEM_RADIUS = SPACING.md
+const ROW_ARRANGEMENT = { spacedBy: MENU_ITEM.iconToTitle }
+const TRAILING_MODIFIERS = [offset(MENU_ITEM.trailingInset, 0)]
 
-const renderIcon = (icon, color) => (
-    <RNHostView matchContents>
-        <View pointerEvents='none'>
-            {icon({ color, width: ICON_SIZE.lg, height: ICON_SIZE.lg })}
-        </View>
-    </RNHostView>
+const renderIcon = (icon, color, modifiers) => (
+    <ComposeIcon
+        icon={icon}
+        color={color}
+        size={ICON_SIZE.lg}
+        modifiers={modifiers}
+    />
 )
 
 export function MenuItem({
@@ -22,29 +26,35 @@ export function MenuItem({
     leadingIcon,
     trailingIcon,
     highlight,
+    destructive = false,
     indent = 0,
     disabled = false,
     onPress
 }) {
     const { colors } = useTheme()
 
+    const itemColor = destructive ? colors.error : colors.onBackground
+
     const elementColors = useMemo(() => ({
         textColor: colors.onBackground,
         trailingIconColor: colors.accentText
     }), [colors.onBackground, colors.accentText])
+
     const modifiers = useMemo(() => {
         const base = [
-            padding(0, SPACING.xxxs / 2, 0, SPACING.xxxs / 2),
+            padding(0, SPACING.xxxxs, 0, SPACING.xxxxs),
             height(SIZE.lg),
-            clip(Shapes.RoundedCorner(ITEM_RADIUS))
+            clip(Shapes.RoundedCorner(MENU_ITEM.radius))
         ]
 
         return highlight ? [...base, background(highlight)] : base
     }, [highlight])
+
     const textModifiers = useMemo(
         () => (indent ? [padding(indent, 0, 0, 0)] : undefined),
         [indent]
     )
+
     const textStyle = useMemo(() => ({
         fontFamily: FONTS.azeretLight,
         fontSize: FONT_SIZE.sm
@@ -59,7 +69,7 @@ export function MenuItem({
         >
             <DropdownMenuItem.Text>
                 <Row horizontalArrangement={ROW_ARRANGEMENT} verticalAlignment='center'>
-                    {!!leadingIcon && renderIcon(leadingIcon, colors.onBackground)}
+                    {!!leadingIcon && renderIcon(leadingIcon, itemColor)}
                     <Text modifiers={textModifiers} style={textStyle}>
                         {title.toLocaleUpperCase()}
                     </Text>
@@ -67,7 +77,7 @@ export function MenuItem({
             </DropdownMenuItem.Text>
             {!!trailingIcon && (
                 <DropdownMenuItem.TrailingIcon>
-                    {renderIcon(trailingIcon, colors.accentText)}
+                    {renderIcon(trailingIcon, colors.accentText, TRAILING_MODIFIERS)}
                 </DropdownMenuItem.TrailingIcon>
             )}
         </DropdownMenuItem>

@@ -7,3 +7,5 @@ export const ArrowDownward = (props) => (
         <Path d='M460-760v483.15L228.31-508.54 200-480l280 280 280-280-28.31-28.54L500-276.85V-760h-40Z' />
     </IconSvg>
 )
+
+ArrowDownward.source = require('./xml/arrow_downward_sharp_wght100.xml')

@@ -8,3 +8,5 @@ export const LinkOff = (props) => (
         <Path d='M185-173 215-147 775-787 745-813Z' />
     </IconSvg>
 )
+
+LinkOff.source = require('./xml/link_off_sharp_wght100.xml')

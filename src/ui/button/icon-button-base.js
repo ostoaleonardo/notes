@@ -7,7 +7,6 @@ import {
     FilledTonalIconButton,
     IconButton,
     OutlinedIconButton,
-    RNHostView,
     Text,
     TooltipBox
 } from '@expo/ui/jetpack-compose'
@@ -23,6 +22,7 @@ import {
 } from '@expo/ui/jetpack-compose/modifiers'
 
 import { ComposeHost } from '@/ui/compose-context'
+import { ComposeIcon } from '@/ui/compose-icon'
 import { getButtonColors } from '@/ui/utils/compose-colors'
 
 import { BORDER_WIDTH, FONTS, ICON_SIZE, SIZE } from '@/ui/tokens/theme'
@@ -51,11 +51,13 @@ export function IconButtonBase({
     appearance,
     style
 }) {
+    const { colors } = useTheme()
     const { tooltip, icon: size, box } = { ...DEFAULT_APPEARANCE, ...appearance }
+
     const Component = COMPONENTS[variant]
     const outlined = variant === 'outlined'
     const colorVariant = variant
-    const { colors } = useTheme()
+
     const buttonColors = useMemo(() => getButtonColors(colors, colorVariant), [colors, colorVariant])
     const iconColor = disabled
         ? buttonColors.contentColor + TINT.placeholder
@@ -80,11 +82,11 @@ export function IconButtonBase({
             onClick={onPress}
         >
             <Box contentAlignment='center' modifiers={area}>
-                <RNHostView matchContents>
-                    <View pointerEvents='none'>
-                        <Icon color={iconColor} width={size} height={size} />
-                    </View>
-                </RNHostView>
+                <ComposeIcon
+                    icon={Icon}
+                    size={size}
+                    color={iconColor}
+                />
                 {!disabled && <Box modifiers={overlay} />}
             </Box>
         </Component>
@@ -96,7 +98,9 @@ export function IconButtonBase({
                 {tooltip ? (
                     <TooltipBox>
                         <TooltipBox.PlainTooltip>
-                            <Text style={tooltipStyle}>{label}</Text>
+                            <Text style={tooltipStyle}>
+                                {label}
+                            </Text>
                         </TooltipBox.PlainTooltip>
                         {button}
                     </TooltipBox>

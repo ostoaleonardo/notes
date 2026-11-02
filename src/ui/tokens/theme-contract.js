@@ -7,5 +7,6 @@ export const UI_THEME_COLOR_KEYS = [
     'tertiary',
     'onTertiary',
     'accentText',
-    'outline'
+    'outline',
+    'error'
 ]

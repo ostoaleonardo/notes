@@ -1,6 +1,5 @@
 import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useTheme } from 'react-native-paper'
 
 import { Menu } from '@/ui/menu/menu'
 import { MenuGroup } from '@/ui/menu/menu-group'
@@ -17,11 +16,9 @@ import { MoreVert } from '@/icons/more-vert'
 
 export const RepositoryMenu = memo(function RepositoryMenu({ onRename, onForget, onDelete }) {
     const { t } = useTranslation()
-    const { colors } = useTheme()
 
     const { visible, onOpen, onClose, trigger } = useMenuAction()
 
-    const deleteIcon = useCallback((props) => <Delete {...props} color={colors.error} />, [colors.error])
     const onPressDelete = useCallback(() => trigger(onDelete), [trigger, onDelete])
 
     return (
@@ -51,7 +48,8 @@ export const RepositoryMenu = memo(function RepositoryMenu({ onRename, onForget,
                 />
                 <MenuItem
                     title={t('repositories.delete.title')}
-                    leadingIcon={deleteIcon}
+                    leadingIcon={Delete}
+                    destructive
                     onPress={onPressDelete}
                 />
             </MenuGroup>

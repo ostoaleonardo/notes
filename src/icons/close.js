@@ -9,3 +9,5 @@ export const Close = (props) => (
         <Path d={CLOSE_ICON_PATH} />
     </IconSvg>
 )
+
+Close.source = require('./xml/close_sharp_wght100.xml')

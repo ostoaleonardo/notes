@@ -7,3 +7,5 @@ export const Menu = (props) => (
         <Path d='M160-269.23v-40h640v40H160ZM160-460v-40h640v40H160Zm0-190.77v-40h640v40H160Z' />
     </IconSvg>
 )
+
+Menu.source = require('./xml/menu_sharp_wght100.xml')

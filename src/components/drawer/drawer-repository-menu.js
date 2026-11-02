@@ -21,11 +21,11 @@ export function DrawerRepositoryMenu({ actions, createLabelKey, onAction }) {
 
     return MENU_ITEMS
         .filter((item) => actions.includes(item.action))
-        .map(({ action, label, icon: Icon }) => (
+        .map(({ action, label, icon }) => (
             <MenuItem
                 key={action}
                 title={t(action === REPOSITORY_ACTIONS.CREATE_NOTE ? createLabelKey || label : label)}
-                leadingIcon={(props) => <Icon {...props} />}
+                leadingIcon={icon}
                 onPress={() => onAction(action)}
             />
         ))

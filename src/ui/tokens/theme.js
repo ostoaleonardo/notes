@@ -1,6 +1,7 @@
 import { MD3LightTheme } from 'react-native-paper'
 
 export const SPACING = {
+    xxxxs: 1,
     xxxs: 2,
     xxs: 4,
     xs: 6,

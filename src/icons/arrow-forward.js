@@ -9,3 +9,5 @@ export const ArrowForward = (props) => (
         <Path d={ARROW_FORWARD_ICON_PATH} />
     </IconSvg>
 )
+
+ArrowForward.source = require('./xml/arrow_forward_sharp_wght100.xml')
