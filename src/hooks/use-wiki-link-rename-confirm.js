@@ -61,13 +61,13 @@ export function useWikiLinkRenameConfirm() {
 
     const onDismiss = () => setPending(null)
 
-    const onConfirmOnce = () => {
-        if (pending) propagatePending(pending)
+    const [onConfirmOnce, confirmingOnce] = useSingleFlight(async () => {
+        if (pending) await propagatePending(pending)
         setPending(null)
-    }
+    })
 
-    const [onConfirmAlways] = useSingleFlight(async () => {
-        if (pending) propagatePending(pending)
+    const [onConfirmAlways, confirmingAlways] = useSingleFlight(async () => {
+        if (pending) await propagatePending(pending)
         setAlwaysUpdate(true)
         await setItem(STORAGE_KEYS.ALWAYS_UPDATE_WIKI_LINKS, STORAGE_BOOLEAN.TRUE)
         setPending(null)
@@ -75,6 +75,7 @@ export function useWikiLinkRenameConfirm() {
 
     return {
         visible: !!pending,
+        busy: confirmingOnce || confirmingAlways,
         linksCount: pending?.count || 0,
         saveWithLinkCheck,
         onDismiss,

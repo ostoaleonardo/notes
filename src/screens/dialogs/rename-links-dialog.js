@@ -12,13 +12,21 @@ import { SPACING } from '@/constants/theme'
 const COLUMN_MODIFIERS = [fillMaxWidth()]
 const COLUMN_ARRANGEMENT = { spacedBy: SPACING.sm }
 
-export function RenameLinksDialog({ visible, linksCount, onDismiss, onConfirmOnce, onConfirmAlways }) {
+export function RenameLinksDialog({
+    visible,
+    busy = false,
+    linksCount,
+    onDismiss,
+    onConfirmOnce,
+    onConfirmAlways
+}) {
     const { t } = useTranslation()
 
     return (
         <Dialog
             title={t('message.wiki_links.rename.title')}
             visible={visible}
+            locked={busy}
             onDismiss={onDismiss}
         >
             <Column
@@ -28,13 +36,13 @@ export function RenameLinksDialog({ visible, linksCount, onDismiss, onConfirmOnc
                 <DialogText tone='secondary'>
                     {t('message.wiki_links.rename.message', { count: linksCount })}
                 </DialogText>
-                <OutlinedButton onPress={onDismiss}>
+                <OutlinedButton disabled={busy} onPress={onDismiss}>
                     {t('button.dont_update')}
                 </OutlinedButton>
-                <OutlinedButton onPress={onConfirmOnce}>
+                <OutlinedButton disabled={busy} onPress={onConfirmOnce}>
                     {t('button.update_once')}
                 </OutlinedButton>
-                <FilledButton onPress={onConfirmAlways}>
+                <FilledButton loading={busy} onPress={onConfirmAlways}>
                     {t('button.update_always')}
                 </FilledButton>
             </Column>
