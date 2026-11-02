@@ -12,13 +12,13 @@ const buildFilePath = (width, height) => {
     return `M0 ${radius}Q0 0 ${radius} 0H${width - corner}L${width} ${corner}V${height}H0Z`
 }
 
-const getRadius = (kind, width, height) => {
+const getRadius = (kind, width, height, dashed) => {
     switch (kind) {
         case CONNECTION_NODE_KINDS.ROOT:
             return { borderRadius: Math.min(width, height) / 2 }
         case CONNECTION_NODE_KINDS.FOLDER:
             return {
-                borderTopLeftRadius: RADIUS.sm,
+                borderTopLeftRadius: dashed ? RADIUS.sm : 0,
                 borderTopRightRadius: RADIUS.lg,
                 borderBottomLeftRadius: RADIUS.lg,
                 borderBottomRightRadius: RADIUS.lg
@@ -80,7 +80,7 @@ export function EntityShape({
                     borderWidth: strokeWidth,
                     borderStyle: dashed ? 'dashed' : 'solid'
                 },
-                radius ?? getRadius(kind, width, height),
+                radius ?? getRadius(kind, width, height, dashed),
                 style
             ]}
         >
