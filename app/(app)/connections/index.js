@@ -104,7 +104,7 @@ export default function Connections() {
                 {pages > 1 && (
                     <View
                         pointerEvents='box-none'
-                        style={[styles.pager, { paddingBottom: insets.bottom + SPACING.sm }]}
+                        style={[styles.pager, { paddingBottom: insets.bottom }]}
                     >
                         <FocusPager page={page} pages={pages} onTurn={turnPage} />
                     </View>

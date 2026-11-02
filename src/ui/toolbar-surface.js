@@ -1,5 +1,6 @@
 import { StyleSheet, View, useWindowDimensions } from 'react-native'
 import { BlurView } from 'expo-blur'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useBlurTarget } from '@/ui/blur/blur-target'
 import { useTheme } from '@/ui/hooks/use-theme'
@@ -11,6 +12,7 @@ export function ToolbarSurface({ children }) {
     const { colors, dark } = useTheme()
     const { width } = useWindowDimensions()
     const blurTarget = useBlurTarget()
+    const { bottom } = useSafeAreaInsets()
 
     return (
         <View
@@ -24,6 +26,7 @@ export function ToolbarSurface({ children }) {
                 tint={dark ? 'systemChromeMaterialDark' : 'light'}
                 style={[
                     styles.surface, {
+                        marginBottom: bottom,
                         maxWidth: width - SPACING.lg * 2,
                         backgroundColor: colors.surface,
                         borderColor: colors.onBackground + TINT.border
@@ -48,7 +51,6 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         borderRadius: RADIUS.full,
         borderWidth: BORDER_WIDTH.thin,
-        marginBottom: SPACING.md,
         padding: SPACING.xxxs
     }
 })
