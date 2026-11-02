@@ -86,8 +86,8 @@ export function IconButtonBase({
     )
 
     return (
-        <View style={inset}>
-            <ComposeHost style={style}>
+        <View style={[inset, style]}>
+            <ComposeHost>
                 {tooltip ? (
                     <TooltipBox>
                         <TooltipBox.PlainTooltip>
