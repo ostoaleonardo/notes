@@ -52,7 +52,29 @@ const COMPOSE_ICONS = [
     'share',
     'sort-by-alpha',
     'undo',
-    'upload-file'
+    'upload-file',
+    'attach-file',
+    'checklist',
+    'collapse-content',
+    'data-array',
+    'forma-quote',
+    'format-bold',
+    'format-h1',
+    'format-h2',
+    'format-h3',
+    'format-h4',
+    'format-h5',
+    'format-h6',
+    'format-indent-decrease',
+    'format-indent-increase',
+    'format-italic',
+    'format-list-numbered',
+    'format-strikethrough',
+    'horizontal-rule',
+    'picture',
+    'schedule',
+    'table',
+    'title'
 ].map((name) => name.replace(/-/g, '_'))
 
 const read = (file) => fs.readFileSync(path.join(ROOT, file), 'utf8')

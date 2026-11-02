@@ -7,3 +7,5 @@ export const HorizontalRule = (props) => (
         <Path d='M200-460v-40h560v40H200Z' />
     </IconSvg>
 )
+
+HorizontalRule.source = require('./xml/horizontal_rule_sharp_wght100.xml')

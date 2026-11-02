@@ -7,3 +7,5 @@ export const DataArray = (props) => (
         <Path d='M616.92-200v-40H720v-480H616.92v-40H760v560H616.92ZM200-200v-560h143.08v40H240v480h103.08v40H200Z' />
     </IconSvg>
 )
+
+DataArray.source = require('./xml/data_array_sharp_wght100.xml')

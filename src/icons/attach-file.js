@@ -9,3 +9,5 @@ export const AttachFile = (props) => (
         <Path d={ATTACH_FILE_ICON_PATH} />
     </IconSvg>
 )
+
+AttachFile.source = require('./xml/attach_file_sharp_wght100.xml')
