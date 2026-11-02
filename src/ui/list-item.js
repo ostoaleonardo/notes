@@ -40,7 +40,14 @@ export function ListItem({
             bottomEnd: radii.bottomRight
         }))]),
         ...(onPress ? [clickable(onPress)] : [])
-    ], [stacked, radii.topLeft, radii.topRight, radii.bottomLeft, radii.bottomRight, onPress])
+    ], [
+        stacked,
+        radii.topLeft,
+        radii.topRight,
+        radii.bottomLeft,
+        radii.bottomRight,
+        onPress
+    ])
 
     const listColors = useMemo(() => ({
         containerColor: stacked ? TRANSPARENT.color : container,
@@ -64,7 +71,13 @@ export function ListItem({
         borderTopRightRadius: radii.topRight,
         borderBottomLeftRadius: radii.bottomLeft,
         borderBottomRightRadius: radii.bottomRight
-    }), [container, radii.topLeft, radii.topRight, radii.bottomLeft, radii.bottomRight])
+    }), [
+        container,
+        radii.topLeft,
+        radii.topRight,
+        radii.bottomLeft,
+        radii.bottomRight
+    ])
 
     const row = (
         <ComposeHost
@@ -100,7 +113,6 @@ export function ListItem({
                     <ComposeListItem.LeadingContent>
                         <RNHostView matchContents>
                             {leftContent}
-
                         </RNHostView>
                     </ComposeListItem.LeadingContent>
                 )}
