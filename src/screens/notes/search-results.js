@@ -26,6 +26,7 @@ export function SearchResults({ results, aliasById, onOpenResult }) {
     return (
         <View style={styles.container}>
             <GroupedList
+                paged
                 component={AnimatedList}
                 gap={SPACING.xxxs}
                 data={results}

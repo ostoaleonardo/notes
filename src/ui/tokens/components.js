@@ -64,6 +64,14 @@ export const FILLED_INPUT = {
     keyboardOptions: { capitalization: 'sentences' }
 }
 
+export const LIST_WINDOW = {
+    initial: 12,
+    batch: 8,
+    window: 5,
+    pageSize: 30,
+    endThreshold: 0.5
+}
+
 export const MENU_ALIGN = {
     START: 'start',
     END: 'end'

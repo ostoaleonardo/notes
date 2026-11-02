@@ -39,6 +39,7 @@ export function ListSheet({
                 </EmptyMessage>
             ) : (
                 <GroupedList
+                    paged={true}
                     component={FlatList}
                     data={data}
                     keyExtractor={keyExtractor}

@@ -33,6 +33,7 @@ export const RelationList = memo(function RelationList({
 
     return (
         <GroupedList
+            paged
             component={FlatList}
             data={entities}
             renderItem={renderItem}

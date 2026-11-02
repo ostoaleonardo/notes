@@ -16,7 +16,6 @@ import { useConnectionModel } from '@/hooks/use-connection-model'
 import { useDelayedValue } from '@/hooks/use-delayed-value'
 import { useDeferredReady } from '@/hooks/use-deferred-ready'
 import { useMissingNote } from '@/hooks/use-missing-note'
-import { usePagedRows } from '@/hooks/use-paged-rows'
 import { useNotes } from '@/hooks/use-notes'
 import { entityKey, entityTitle, summarizeConnections } from '@/utils/connection-model'
 import { getEditorPath } from '@/utils/editor-path'
@@ -27,12 +26,7 @@ import { Link } from '@/icons/link'
 import { LinkOff } from '@/icons/link-off'
 
 import { ICON_TOGGLE } from '@/constants/components'
-import {
-    CONNECTION_TYPES,
-    PENDING_ROWS,
-    PENDING_TABS,
-    PENDING_TAB_PARAM
-} from '@/constants/connections'
+import { CONNECTION_TYPES, PENDING_TABS, PENDING_TAB_PARAM } from '@/constants/connections'
 import { OPACITY, SPACING } from '@/constants/theme'
 
 const { NOTE } = CONNECTION_TYPES
@@ -55,7 +49,6 @@ function ConnectionsPendingContent() {
     const summary = useMemo(() => summarizeConnections(model), [model])
     const listedTab = useDelayedValue(tab, ICON_TOGGLE.expandDuration)
     const rows = useMemo(() => buildPendingRows(listedTab, summary), [listedTab, summary])
-    const paged = usePagedRows(rows, PENDING_ROWS.pageSize)
 
     const isOrphans = tab === PENDING_TABS.ORPHANS
     const total = isOrphans ? summary.orphans.length : summary.unresolved.length
@@ -116,14 +109,9 @@ function ConnectionsPendingContent() {
         <View style={styles.screen}>
             <GroupedList
                 component={FlatList}
-                data={paged.data}
-                total={paged.total}
+                data={rows}
+                paged
                 renderItem={renderItem}
-                onEndReached={paged.onEndReached}
-                onEndReachedThreshold={PENDING_ROWS.endThreshold}
-                initialNumToRender={PENDING_ROWS.initialRender}
-                maxToRenderPerBatch={PENDING_ROWS.batch}
-                windowSize={PENDING_ROWS.windowSize}
                 keyExtractor={entityKey}
                 ListHeaderComponent={header}
                 ItemSeparatorComponent={GroupSeparator}
