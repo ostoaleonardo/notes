@@ -23,7 +23,7 @@ export const HIT_SLOP = {
 }
 
 export const ICON_BUTTON = {
-    appBar: { box: SIZE.lg },
+    appBar: { box: SIZE.lg, tooltip: false },
     noTooltip: { tooltip: false },
     drawer: { icon: ICON_SIZE.xl },
     remove: { tooltip: false, icon: ICON_SIZE.md, box: SIZE.xs }
