@@ -64,6 +64,16 @@ export const FILLED_INPUT = {
     keyboardOptions: { capitalization: 'sentences' }
 }
 
+export const MENU_ALIGN = {
+    START: 'start',
+    END: 'end'
+}
+
+export const COMPOSE_LIST_ITEM = {
+    matchContents: { vertical: true },
+    hostStyle: { width: '100%' }
+}
+
 export const COMPOSE_DIVIDER = {
     matchContents: { vertical: true },
     hostStyle: { width: '100%' }

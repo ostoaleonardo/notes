@@ -1,44 +1,29 @@
 import { memo } from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import Animated from 'react-native-reanimated'
 
 import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
 import { SheetTitle } from '@/ui/modal/sheet-title'
+import { ListItem } from '@/ui/list-item'
 import { PositionGroup } from '@/ui/position-group'
-import { Typography } from '@/ui/typography'
 import { useSheetBottomSpacing } from '@/ui/hooks/use-sheet-bottom-spacing'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { useGroupCornerStyle } from '@/ui/hooks/use-group-corner-style'
-import { usePressed } from '@/ui/hooks/use-pressed'
-
-import { GROUP_AXES } from '@/constants/group-position'
-
 import { MARKDOWN_GROUPS } from '@/constants/markdown-controls'
 import { SPACING } from '@/constants/theme'
-import { getRippleColor } from '@/ui/utils/ripple'
 
 const GroupItem = memo(function GroupItem({ action, Icon, onSelect }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
-    const { pressed, onPressIn, onPressOut } = usePressed()
-    const cornerStyle = useGroupCornerStyle(GROUP_AXES.STACKED, pressed)
 
     return (
-        <Animated.View style={[styles.card, { backgroundColor: colors.surfaceVariant }, cornerStyle]}>
-            <Pressable
-                accessibilityRole='button'
-                onPress={() => onSelect(action)}
-                onPressIn={onPressIn}
-                onPressOut={onPressOut}
-                android_ripple={{ color: getRippleColor(colors) }}
-                style={styles.item}
-            >
-                <Icon color={colors.onBackground} />
-                <Typography>{t(`markdown_action.${action}`)}</Typography>
-            </Pressable>
-        </Animated.View>
+        <ListItem
+            uppercase={false}
+            background={colors.surfaceVariant}
+            title={t(`markdown_action.${action}`)}
+            leftContent={<Icon color={colors.onBackground} />}
+            onPress={() => onSelect(action)}
+        />
     )
 })
 
@@ -73,16 +58,6 @@ export const MarkdownGroupSheet = memo(function MarkdownGroupSheet({ sheet, grou
 const styles = StyleSheet.create({
     list: {
         gap: SPACING.xxs,
-        paddingHorizontal: SPACING.lg
-    },
-    card: {
-        overflow: 'hidden'
-    },
-    item: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: SPACING.md,
-        paddingVertical: SPACING.md,
         paddingHorizontal: SPACING.lg
     }
 })

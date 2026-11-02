@@ -1,17 +1,22 @@
+import { useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
+import { ListItem as ComposeListItem, RNHostView, Text } from '@expo/ui/jetpack-compose'
+import { Shapes, clickable, clip } from '@expo/ui/jetpack-compose/modifiers'
 
-import { Typography } from '@/ui/typography'
+import { ComposeHost } from '@/ui/compose-context'
 import { useTheme } from '@/ui/hooks/use-theme'
-
 import { useGroupPosition } from '@/ui/hooks/use-group-position'
-import { getStackedRadiusStyle } from '@/ui/utils/group-position'
+import { getCornerRadii } from '@/ui/utils/group-position'
 
-import { SPACING, OPACITY } from '@/ui/tokens/theme'
-import { Touchable } from '@/ui/touchable'
+import { COMPOSE_LIST_ITEM } from '@/ui/tokens/components'
+import { GROUP_AXES } from '@/ui/tokens/group-position'
+import { FONTS, SPACING, TYPOGRAPHY_SIZE_VARIANTS } from '@/ui/tokens/theme'
+import { TINT, TRANSPARENT } from '@/ui/tokens/transparent'
 
 export function ListItem({
     title,
     description,
+    leftContent,
     rightContent,
     children,
     onPress,
@@ -20,60 +25,103 @@ export function ListItem({
 }) {
     const { colors } = useTheme()
     const position = useGroupPosition()
+    const radii = getCornerRadii(position, GROUP_AXES.STACKED)
+
+    const container = background ?? colors.surface
+    const stacked = !!children
+
+    const modifiers = useMemo(() => [
+        ...(stacked ? [] : [clip(Shapes.RoundedCorner({
+            topStart: radii.topLeft,
+            topEnd: radii.topRight,
+            bottomStart: radii.bottomLeft,
+            bottomEnd: radii.bottomRight
+        }))]),
+        ...(onPress ? [clickable(onPress)] : [])
+    ], [stacked, radii.topLeft, radii.topRight, radii.bottomLeft, radii.bottomRight, onPress])
+
+    const listColors = useMemo(() => ({
+        containerColor: stacked ? TRANSPARENT.color : container,
+        contentColor: colors.onBackground,
+        supportingContentColor: colors.onBackground + TINT.placeholder
+    }), [stacked, container, colors])
+
+    const titleStyle = useMemo(() => ({
+        fontFamily: FONTS.azeretLight,
+        fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodyMedium
+    }), [])
+
+    const descriptionStyle = useMemo(() => ({
+        fontFamily: FONTS.azeretLight,
+        fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodySmall
+    }), [])
+
+    const stackedStyle = useMemo(() => ({
+        backgroundColor: container,
+        borderTopLeftRadius: radii.topLeft,
+        borderTopRightRadius: radii.topRight,
+        borderBottomLeftRadius: radii.bottomLeft,
+        borderBottomRightRadius: radii.bottomRight
+    }), [container, radii.topLeft, radii.topRight, radii.bottomLeft, radii.bottomRight])
+
+    const row = (
+        <ComposeHost
+            matchContents={COMPOSE_LIST_ITEM.matchContents}
+            style={COMPOSE_LIST_ITEM.hostStyle}
+        >
+            <ComposeListItem
+                colors={listColors}
+                modifiers={modifiers}
+            >
+                <ComposeListItem.HeadlineContent>
+                    <Text style={titleStyle}>
+                        {uppercase ? title.toLocaleUpperCase() : title}
+                    </Text>
+                </ComposeListItem.HeadlineContent>
+                {!!description && (
+                    <ComposeListItem.SupportingContent>
+                        <Text style={descriptionStyle}>
+                            {description}
+                        </Text>
+                    </ComposeListItem.SupportingContent>
+                )}
+                {!!leftContent && (
+                    <ComposeListItem.LeadingContent>
+                        <RNHostView matchContents>
+                            {leftContent}
+
+                        </RNHostView>
+                    </ComposeListItem.LeadingContent>
+                )}
+                {!!rightContent && (
+                    <ComposeListItem.TrailingContent>
+                        <RNHostView matchContents>
+                            {rightContent}
+                        </RNHostView>
+                    </ComposeListItem.TrailingContent>
+                )}
+            </ComposeListItem>
+        </ComposeHost>
+    )
+
+    if (!stacked) return row
 
     return (
-        <View
-            style={[
-                styles.card,
-                { backgroundColor: background ?? colors.surface },
-                getStackedRadiusStyle(position)
-            ]}
-        >
-            <Touchable
-                accessibilityRole='button'
-                onPress={onPress}
-                style={[styles.container, children ? styles.stacked : styles.inline]}
-            >
-                <>
-                    <View style={styles.left}>
-                        <Typography uppercase={uppercase}>
-                            {title}
-                        </Typography>
-                        {description && (
-                            <Typography
-                                opacity={OPACITY.muted}
-                                variant='bodySmall'
-                            >
-                                {description}
-                            </Typography>
-                        )}
-                    </View>
-                    {rightContent}
-                    {children}
-                </>
-            </Touchable>
+        <View style={[styles.stacked, stackedStyle]}>
+            {row}
+            <View style={styles.content}>
+                {children}
+            </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    card: {
+    stacked: {
         overflow: 'hidden'
     },
-    container: {
-        gap: SPACING.lg,
-        padding: SPACING.lg
-    },
-    inline: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-    },
-    stacked: {
-        alignItems: 'flex-start'
-    },
-    left: {
-        flex: 1,
-        gap: SPACING.xxs
+    content: {
+        padding: SPACING.lg,
+        paddingTop: 0
     }
 })
