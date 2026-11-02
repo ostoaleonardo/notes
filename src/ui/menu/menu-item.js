@@ -5,12 +5,10 @@ import { Shapes, background, clip, height, offset, padding } from '@expo/ui/jetp
 
 import { ComposeIcon } from '@/ui/compose-icon'
 
-import { MENU_ITEM } from '@/ui/tokens/components'
-
 import { FONTS, FONT_SIZE, ICON_SIZE, SIZE, SPACING } from '@/ui/tokens/theme'
 
-const ROW_ARRANGEMENT = { spacedBy: MENU_ITEM.iconToTitle }
-const TRAILING_MODIFIERS = [offset(MENU_ITEM.trailingInset, 0)]
+const ROW_ARRANGEMENT = { spacedBy: SPACING.sm }
+const TRAILING_MODIFIERS = [offset(SPACING.sm, 0)]
 
 const renderIcon = (icon, color, modifiers) => (
     <ComposeIcon
@@ -44,7 +42,7 @@ export function MenuItem({
         const base = [
             padding(0, SPACING.xxxxs, 0, SPACING.xxxxs),
             height(SIZE.lg),
-            clip(Shapes.RoundedCorner(MENU_ITEM.radius))
+            clip(Shapes.RoundedCorner(SPACING.md))
         ]
 
         return highlight ? [...base, background(highlight)] : base
