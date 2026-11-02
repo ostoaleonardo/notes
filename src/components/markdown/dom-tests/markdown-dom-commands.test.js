@@ -1,6 +1,3 @@
-/**
- * @jest-environment jsdom
- */
 import { EditorState } from '@codemirror/state'
 import { EditorView, keymap } from '@codemirror/view'
 import { defaultKeymap, historyKeymap, history, redoDepth, undoDepth } from '@codemirror/commands'

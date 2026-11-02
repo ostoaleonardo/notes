@@ -55,7 +55,7 @@ export default {
     [
       'expo-build-properties', {
         android: {
-          enableProguardInReleaseBuilds: true,
+          enableMinifyInReleaseBuilds: true,
           enableShrinkResourcesInReleaseBuilds: true,
           kotlinVersion: '2.2.0'
         }

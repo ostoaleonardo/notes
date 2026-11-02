@@ -54,8 +54,7 @@ describe('startup route', () => {
     test('shows the repository gate while there is no active repository', async () => {
         mockState.activeRepository = null
 
-        const app = renderRouter({ index: App, ...screens })
-        await app
+        const app = await renderRouter({ index: App, ...screens })
 
         await waitFor(() => expect(app).toHavePathname('/repository-gate'))
     })
@@ -65,12 +64,10 @@ describe('daily note route', () => {
     test('replaces itself with the editor of the daily note', async () => {
         mockState.dailyPath = '2026-10-04.md'
 
-        const app = renderRouter(
+        const app = await renderRouter(
             { index: () => null, 'notes/daily': DailyNote, ...screens },
             { initialUrl: '/notes/daily' }
         )
-        await app
-        await app
 
         await waitFor(() => expect(app).toHavePathname('/notes/2026-10-04.md'))
     })
@@ -78,8 +75,10 @@ describe('daily note route', () => {
 
 describe('not found route', () => {
     test('sends the user home after the redirect delay', async () => {
-        const app = renderRouter({ '+not-found': NotFound, ...screens }, { initialUrl: '/missing' })
-        await app
+        const app = await renderRouter(
+            { '+not-found': NotFound, ...screens },
+            { initialUrl: '/missing' }
+        )
 
         expect(app).toHavePathname('/missing')
 
