@@ -22,7 +22,7 @@ export function Dialog({
     dismiss,
     locked = false
 }) {
-    const { colors } = useTheme()
+    const { colors, dark } = useTheme()
     const onRequestClose = locked ? noop : onDismiss
 
     useEffect(() => {
@@ -55,6 +55,7 @@ export function Dialog({
             onRequestClose={onRequestClose}
         >
             <Host
+                colorScheme={dark ? 'dark' : 'light'}
                 matchContents={DIALOG.matchContents}
                 style={DIALOG.hostStyle}
             >

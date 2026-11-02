@@ -6,7 +6,7 @@ import { getSwitchColors } from '@/ui/utils/compose-colors'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 export function Switch({ value, onValueChange, accessibilityLabel }) {
-    const { colors } = useTheme()
+    const { colors, dark } = useTheme()
     const switchColors = useMemo(() => getSwitchColors(colors), [colors])
     const onPress = useCallback(() => onValueChange(!value), [onValueChange, value])
 
@@ -18,7 +18,7 @@ export function Switch({ value, onValueChange, accessibilityLabel }) {
             accessibilityLabel={accessibilityLabel}
         >
             <View importantForAccessibility='no-hide-descendants'>
-                <Host matchContents pointerEvents='none'>
+                <Host matchContents colorScheme={dark ? 'dark' : 'light'} pointerEvents='none'>
                     <ComposeSwitch value={value} colors={switchColors} />
                 </Host>
             </View>

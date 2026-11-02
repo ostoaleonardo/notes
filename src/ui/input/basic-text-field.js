@@ -3,6 +3,7 @@ import { BasicTextField as ComposeBasicTextField, Box, Host, Text } from '@expo/
 import { fillMaxWidth } from '@expo/ui/jetpack-compose/modifiers'
 
 import { useTextState } from '@/ui/hooks/use-text-state'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { PLAIN_INPUT } from '@/ui/tokens/components'
 
@@ -16,11 +17,16 @@ export function BasicTextField({
     selectionColors,
     placeholderColor
 }) {
+    const { dark } = useTheme()
     const { text, onFocusChanged } = useTextState(value)
     const modifiers = useMemo(() => [fillMaxWidth()], [])
 
     return (
-        <Host matchContents={PLAIN_INPUT.matchContents} style={PLAIN_INPUT.hostStyle}>
+        <Host
+            colorScheme={dark ? 'dark' : 'light'}
+            matchContents={PLAIN_INPUT.matchContents}
+            style={PLAIN_INPUT.hostStyle}
+        >
             <ComposeBasicTextField
                 value={text}
                 singleLine
