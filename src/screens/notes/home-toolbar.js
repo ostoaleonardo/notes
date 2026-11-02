@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { IconButton, Tooltip } from 'react-native-paper'
 
 import { RecentsButton } from '@/components/app-bar/recents-button'
 import { ToolbarSurface } from '@/ui/toolbar-surface'
+import { IconButton } from '@/ui/button/icon-button'
 
 import { Plus } from '@/icons/plus'
 import { Search } from '@/icons/search'
@@ -17,25 +17,21 @@ export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, onOpenS
     return (
         <ToolbarSurface>
             <View style={styles.row}>
-                <Tooltip title={t('notes.create')}>
-                    <IconButton
-                        style={styles.button}
-                        icon={(props) => <Plus {...props} />}
-                        onPress={onCreateNote}
-                        testID={TEST_IDS.HOME_CREATE_NOTE}
-                        accessibilityLabel={t('notes.create')}
-                    />
-                </Tooltip>
+                <IconButton
+                    style={styles.button}
+                    icon={Plus}
+                    label={t('notes.create')}
+                    testID={TEST_IDS.HOME_CREATE_NOTE}
+                    onPress={onCreateNote}
+                />
 
-                <Tooltip title={t('drawer.search')}>
-                    <IconButton
-                        style={styles.button}
-                        onPress={onOpenSearch}
-                        testID={TEST_IDS.HOME_SEARCH}
-                        icon={(props) => <Search {...props} />}
-                        accessibilityLabel={t('drawer.search')}
-                    />
-                </Tooltip>
+                <IconButton
+                    style={styles.button}
+                    icon={Search}
+                    label={t('drawer.search')}
+                    testID={TEST_IDS.HOME_SEARCH}
+                    onPress={onOpenSearch}
+                />
 
                 <RecentsButton
                     onPress={onOpenRecents}
@@ -44,15 +40,13 @@ export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, onOpenS
                     buttonStyle={styles.button}
                 />
 
-                <Tooltip title={t('title.import')}>
-                    <IconButton
-                        style={styles.button}
-                        onPress={onImportNote}
-                        testID={TEST_IDS.HOME_IMPORT}
-                        icon={(props) => <UploadFile {...props} />}
-                        accessibilityLabel={t('title.import')}
-                    />
-                </Tooltip>
+                <IconButton
+                    style={styles.button}
+                    icon={UploadFile}
+                    label={t('title.import')}
+                    testID={TEST_IDS.HOME_IMPORT}
+                    onPress={onImportNote}
+                />
             </View>
         </ToolbarSurface>
     )

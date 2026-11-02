@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, View } from 'react-native'
-import { IconButton, Tooltip, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 
 import { RepositoryMenu } from './repository-menu'
 import { AnimatedView } from '@/ui/animated/animated-view'
@@ -12,6 +12,7 @@ import { useFileStorage } from '@/hooks/use-file-storage'
 import { useGroupPosition } from '@/ui/hooks/use-group-position'
 import { useRepositories } from '@/hooks/use-repositories'
 import { getStackedRadiusStyle } from '@/ui/utils/group-position'
+import { IconButton } from '@/ui/button/icon-button'
 import { getRepositoryNoteCount } from '@/utils/repository-note-counts'
 import { getRepositoryPath } from '@/utils/repository-path'
 
@@ -35,7 +36,6 @@ export const RepositoryItem = memo(function RepositoryItem({
 
     const [expanded, setExpanded] = useState(false)
     const onToggleExpanded = useCallback(() => setExpanded((prev) => !prev), [])
-    const openIcon = useCallback((props) => <OpenInNew {...props} />, [])
     const repositoryId = repository.id
     const onPressOpen = useCallback(() => onOpen(repositoryId), [onOpen, repositoryId])
     const onPressRename = useCallback(() => onRename(repositoryId), [onRename, repositoryId])
@@ -109,13 +109,11 @@ export const RepositoryItem = memo(function RepositoryItem({
                     </Typography>
                 </Pressable>
 
-                <Tooltip title={t('repositories.open')}>
-                    <IconButton
-                        onPress={onPressOpen}
-                        icon={openIcon}
-                        accessibilityLabel={t('repositories.open')}
-                    />
-                </Tooltip>
+                <IconButton
+                    icon={OpenInNew}
+                    label={t('repositories.open')}
+                    onPress={onPressOpen}
+                />
 
                 <RepositoryMenu
                     onRename={onPressRename}

@@ -17,6 +17,7 @@ import { useMissingNote } from '@/hooks/use-missing-note'
 import { entityKey, entityTitle, summarizeConnections } from '@/utils/connection-model'
 import { getEditorPath } from '@/utils/editor-path'
 import { buildPendingRows } from '@/utils/pending-rows'
+import { pushOnce } from '@/utils/navigation'
 
 import { Link } from '@/icons/link'
 import { LinkOff } from '@/icons/link-off'
@@ -24,7 +25,6 @@ import { LinkOff } from '@/icons/link-off'
 import { ICON_TOGGLE } from '@/constants/components'
 import { CONNECTION_TYPES, PENDING_TABS, PENDING_TAB_PARAM } from '@/constants/connections'
 import { OPACITY, SPACING } from '@/constants/theme'
-import { pushOnce } from '@/utils/navigation'
 
 const { NOTE } = CONNECTION_TYPES
 

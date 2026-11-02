@@ -31,6 +31,7 @@ import { resolveLinkPress } from '@/utils/link-press'
 import { findFileByTarget } from '@/utils/attachments'
 import { toggleTask } from '@/utils/tasks'
 import { buildTableLabels } from '@/utils/table-labels'
+import { pushOnce } from '@/utils/navigation'
 
 import { ROUTES } from '@/constants/routes'
 import { BUTTON } from '@/constants/components'
@@ -39,7 +40,6 @@ import { EDITOR_MODES } from '@/constants/editor-modes'
 import { LINK_TYPES } from '@/constants/link-types'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { WIKI_LINK_FORMATS } from '@/constants/wiki-links'
-import { pushOnce } from '@/utils/navigation'
 
 export const MarkdownInput = ({
     id,

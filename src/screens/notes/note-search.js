@@ -17,11 +17,11 @@ import { filterNotes } from '@/utils/search-filter'
 import { parseSearchQuery } from '@/utils/search-query'
 import { getEditorPath } from '@/utils/editor-path'
 import { toggleSavedSearch, removeSavedSearch, parseStoredList } from '@/utils/saved-searches'
+import { pushOnce } from '@/utils/navigation'
 
 import { RECENT_SEARCHES_LIMIT } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { SPACING } from '@/constants/theme'
-import { pushOnce } from '@/utils/navigation'
 
 export function NoteSearch({ onClose, initialQuery = '' }) {
     const { repositories } = useRepositories()

@@ -16,6 +16,7 @@ import { useFileStorage } from '@/hooks/use-file-storage'
 import { useOnForeground } from '@/hooks/use-on-foreground'
 import { usePro } from '@/hooks/use-pro'
 import { useRepositories } from '@/hooks/use-repositories'
+import { useSingleFlight } from '@/hooks/use-single-flight'
 import { getRepositoryNoteCounts } from '@/utils/repository-note-counts'
 
 import { Folder } from '@/icons/folder'
@@ -24,7 +25,6 @@ import { ROUTES } from '@/constants/routes'
 import { FREE_REPOSITORIES_LIMIT } from '@/constants/default-values'
 import { SPACING } from '@/constants/theme'
 import { REPOSITORY_RESULTS } from '@/constants/repository-results'
-import { useSingleFlight } from '@/hooks/use-single-flight'
 
 export default function Repositories() {
     const { t } = useTranslation()

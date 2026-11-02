@@ -9,10 +9,12 @@ import { ButtonGroup } from '@/ui/button/button-group'
 import { SheetForm, SheetInput } from '@/ui/modal/sheet-form'
 import { Typography } from '@/ui/typography'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
+import { Touchable } from '@/ui/touchable'
 
 import { useFileStorage } from '@/hooks/use-file-storage'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useStorage } from '@/hooks/use-storage'
+import { useSingleFlight } from '@/hooks/use-single-flight'
 import { readAttachmentSettings } from '@/utils/attachments'
 import { getCameraPermission, openImagePicker, requestCameraPermission } from '@/utils/image-picker'
 
@@ -26,8 +28,6 @@ import { PICKER_ERROR_CODES } from '@/constants/picker-errors'
 import { LOG_MESSAGES } from '@/constants/log-messages'
 import { INPUT_EXAMPLES } from '@/constants/input-examples'
 import { logError } from '@/utils/log-error'
-import { useSingleFlight } from '@/hooks/use-single-flight'
-import { Touchable } from '@/ui/touchable'
 
 export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
     const { t } = useTranslation()

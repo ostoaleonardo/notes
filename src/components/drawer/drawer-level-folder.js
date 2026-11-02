@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
 import { Typography } from '@/ui/typography'
+import { Touchable } from '@/ui/touchable'
 import { DrawerFolderActions } from './drawer-folder-actions'
 import { levelRowStyles } from './drawer-level-styles'
 
@@ -11,7 +12,6 @@ import { useMenuAnchor } from '@/hooks/use-menu-anchor'
 import { ChevronRight } from '@/icons/chevron-right'
 
 import { OPACITY, RADIUS, ICON_SIZE } from '@/constants/theme'
-import { Touchable } from '@/ui/touchable'
 
 export const DrawerLevelFolder = memo(function DrawerLevelFolder({
     repository,

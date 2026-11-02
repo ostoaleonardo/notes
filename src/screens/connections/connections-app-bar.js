@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next'
 
 import { Badge } from '@/ui/badge'
 import { IconButton } from '@/ui/button/icon-button'
+
+import { ICON_BUTTON } from '@/ui/tokens/components'
+
 import { AppBar } from '@/components/app-bar/app-bar'
 
 import { LinkOff } from '@/icons/link-off'
@@ -28,6 +31,7 @@ export const ConnectionsAppBar = memo(function ConnectionsAppBar({
                 <>
                     <View>
                         <IconButton
+                            appearance={ICON_BUTTON.appBar}
                             icon={LinkOff}
                             label={pendingLabel}
                             testID={TEST_IDS.CONNECTIONS_PENDING}
@@ -42,6 +46,7 @@ export const ConnectionsAppBar = memo(function ConnectionsAppBar({
                     </View>
 
                     <IconButton
+                        appearance={ICON_BUTTON.appBar}
                         icon={Search}
                         label={searchLabel}
                         testID={TEST_IDS.CONNECTIONS_SEARCH}

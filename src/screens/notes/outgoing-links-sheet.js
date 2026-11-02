@@ -8,9 +8,9 @@ import { ListSheet } from '@/ui/modal/list-sheet'
 import { useNotes } from '@/hooks/use-notes'
 import { getEditorPath } from '@/utils/editor-path'
 import { findOutgoingLinks } from '@/utils/outgoing-links'
+import { pushOnce } from '@/utils/navigation'
 
 import { ArrowForward } from '@/icons/arrow-forward'
-import { pushOnce } from '@/utils/navigation'
 
 const OutgoingLinkItem = memo(function OutgoingLinkItem({ item, onPress }) {
     const { colors } = useTheme()

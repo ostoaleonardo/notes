@@ -3,11 +3,11 @@ import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
 import { Typography } from '@/ui/typography'
+import { Touchable } from '@/ui/touchable'
 import { levelRowStyles } from './drawer-level-styles'
 
 import { RADIUS, SPACING } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'
-import { Touchable } from '@/ui/touchable'
 
 export const DrawerLevelNote = memo(function DrawerLevelNote({
     note,

@@ -6,9 +6,9 @@ import { levelRowStyles } from './drawer-level-styles'
 
 import { ChevronRight } from '@/icons/chevron-right'
 import { KeyboardArrowDown } from '@/ui/icons/keyboard-arrow-down'
+import { Touchable } from '@/ui/touchable'
 
 import { OPACITY, RADIUS, SPACING, ICON_SIZE } from '@/constants/theme'
-import { Touchable } from '@/ui/touchable'
 
 export function DrawerTreeRow({
     label,

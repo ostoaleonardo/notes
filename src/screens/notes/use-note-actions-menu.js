@@ -8,10 +8,12 @@ import { ActionMenuItem } from '@/ui/menu/action-menu-item'
 import { useCurrentNote } from '@/hooks/use-current-note'
 import { useNotes } from '@/hooks/use-notes'
 import { useUtils } from '@/hooks/use-utils'
+import { useSingleFlight } from '@/hooks/use-single-flight'
 import { toggleInSet } from '@/utils/toggle-in-set'
 import { getDate } from '@/utils/date'
 import { getEditorPath } from '@/utils/editor-path'
 import { buildDuplicateNote } from '@/utils/duplicate-note'
+import { pushOnce } from '@/utils/navigation'
 
 import { Folder } from '@/icons/folder'
 import { FormatListBulleted } from '@/icons/format-list-bulleted'
@@ -21,8 +23,6 @@ import { Link } from '@/icons/link'
 import { NoteStack } from '@/icons/note-stack'
 import { OpenInNew } from '@/icons/open-in-new'
 import { Share as ShareIcon } from '@/icons/share'
-import { pushOnce } from '@/utils/navigation'
-import { useSingleFlight } from '@/hooks/use-single-flight'
 
 export const useNoteActionsMenu = ({
     onTrigger,

@@ -1,57 +1,64 @@
-import { useEffect, useState } from 'react'
-import { Snackbar, useTheme } from 'react-native-paper'
+import { useCallback, useMemo, useRef } from 'react'
+import { StyleSheet } from 'react-native'
+import { useTheme } from 'react-native-paper'
+import { Snackbar, SnackbarHost } from '@expo/ui/jetpack-compose'
+import { border, fillMaxWidth } from '@expo/ui/jetpack-compose/modifiers'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { Typography } from '@/ui/typography'
+import { ComposeHost } from '@/ui/compose-context'
+import { paddingAround } from '@/ui/utils/compose-modifiers'
 
+import { BORDER_WIDTH, SPACING } from '@/ui/tokens/theme'
 import { TINT } from '@/ui/tokens/transparent'
-import { BORDER_WIDTH, RADIUS, SPACING } from '@/ui/tokens/theme'
 
-let listener = null
+let showMessage = null
 let currentMessage = null
 
 export const showSnackbar = (message) => {
-    if (message === currentMessage) return
-    listener?.(message)
+    if (!showMessage || message === currentMessage) return
+
+    currentMessage = message
+    showMessage(message).finally(() => {
+        if (currentMessage === message) currentMessage = null
+    })
 }
 
 export function GlobalSnackbarHost() {
     const { colors } = useTheme()
     const { bottom } = useSafeAreaInsets()
-    const [message, setMessage] = useState(null)
+    const ref = useRef(null)
 
-    useEffect(() => {
-        listener = (next) => {
-            currentMessage = next
-            setMessage(next)
-        }
-
-        return () => { listener = null }
+    const register = useCallback((instance) => {
+        ref.current = instance
+        showMessage = instance
+            ? (message) => instance.showSnackbar({ message })
+            : null
     }, [])
 
-    const onDismiss = () => {
-        currentMessage = null
-        setMessage(null)
-    }
+    const modifiers = useMemo(() => [
+        fillMaxWidth(),
+        paddingAround(SPACING.sm, 0, SPACING.sm, bottom + SPACING.sm),
+        border(BORDER_WIDTH.thin, colors.onBackground + TINT.border)
+    ], [bottom, colors.onBackground])
 
     return (
-        <Snackbar
-            visible={!!message}
-            onDismiss={onDismiss}
-            wrapperStyle={{
-                paddingHorizontal: SPACING.sm,
-                paddingBottom: bottom + SPACING.sm
-            }}
-            style={{
-                borderRadius: RADIUS.md,
-                borderWidth: BORDER_WIDTH.thin,
-                borderColor: colors.onBackground + TINT.border,
-                backgroundColor: colors.surface
-            }}
-        >
-            <Typography color={colors.onBackground}>
-                {message}
-            </Typography>
-        </Snackbar>
+        <ComposeHost style={styles.host}>
+            <SnackbarHost ref={register}>
+                <Snackbar
+                    containerColor={colors.surface}
+                    contentColor={colors.onBackground}
+                    modifiers={modifiers}
+                />
+            </SnackbarHost>
+        </ComposeHost>
     )
 }
+
+const styles = StyleSheet.create({
+    host: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0
+    }
+})

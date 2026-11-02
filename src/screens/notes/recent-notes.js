@@ -2,10 +2,10 @@ import { useCallback, useMemo } from 'react'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { IconButton } from 'react-native-paper'
 
 import { CardGrid } from './card-grid'
 import { ButtonGroup } from '@/ui/button/button-group'
+import { FilledIconButton } from '@/ui/button/filled-icon-button'
 
 import { useCurrentNote } from '@/hooks/use-current-note'
 import { useRecentNotes } from '@/hooks/use-recent-notes'
@@ -17,6 +17,7 @@ import { getEditorNavigation } from '@/utils/editor-path'
 import { getPreviewNote } from '@/utils/preview-note'
 import { getRecentIds } from '@/utils/recent-ids'
 import { toggleInSet } from '@/utils/toggle-in-set'
+import { pushOnce } from '@/utils/navigation'
 
 import { Close } from '@/icons/close'
 import { KeepFilled } from '@/icons/keep-filled'
@@ -25,7 +26,7 @@ import { Plus } from '@/icons/plus'
 import { ROUTES } from '@/constants/routes'
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 import { SPACING } from '@/constants/theme'
-import { pushOnce } from '@/utils/navigation'
+import { ICON_BUTTON } from '@/ui/tokens/components'
 
 export function RecentNotes({ onClose, home = false }) {
     const { t } = useTranslation()
@@ -96,19 +97,12 @@ export function RecentNotes({ onClose, home = false }) {
     }, [pinned, updatePinned, removeRecent, onClose])
 
     const renderCardHeader = useCallback((card) => (
-        <IconButton
-            size={SPACING.xxs}
-            mode='contained'
-            onPress={() => onRemove(card)}
+        <FilledIconButton
+            appearance={ICON_BUTTON.remove}
             style={styles.removeButton}
-            icon={(props) => (
-                card.pinned
-                    ? <KeepFilled {...props} />
-                    : <Close {...props} />
-            )}
-            accessibilityLabel={
-                t(card.pinned ? 'button.unpin' : 'button.close')
-            }
+            icon={card.pinned ? KeepFilled : Close}
+            label={t(card.pinned ? 'button.unpin' : 'button.close')}
+            onPress={() => onRemove(card)}
         />
     ), [onRemove, t])
 

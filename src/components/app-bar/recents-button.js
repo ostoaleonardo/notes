@@ -1,8 +1,8 @@
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { IconButton, Tooltip } from 'react-native-paper'
 
 import { Badge } from '@/ui/badge'
+import { IconButton } from '@/ui/button/icon-button'
 
 import { NoteStack } from '@/icons/note-stack'
 
@@ -13,14 +13,13 @@ export function RecentsButton({ onPress, testID, buttonStyle, count = 0 }) {
     const label = t('search.recent')
 
     return (
-        <Tooltip title={label}>
-            <View>
+        <View>
                 <IconButton
                     style={buttonStyle}
-                    onPress={onPress}
+                    icon={NoteStack}
+                    label={label}
                     testID={testID}
-                    icon={(props) => <NoteStack {...props} />}
-                    accessibilityLabel={label}
+                    onPress={onPress}
                 />
 
                 {count > 0 && (
@@ -28,8 +27,7 @@ export function RecentsButton({ onPress, testID, buttonStyle, count = 0 }) {
                         {count}
                     </Badge>
                 )}
-            </View>
-        </Tooltip>
+        </View>
     )
 }
 

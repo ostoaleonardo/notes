@@ -17,13 +17,13 @@ import { usePro } from '@/hooks/use-pro'
 import { useRecentNotes } from '@/hooks/use-recent-notes'
 import { useTemplates } from '@/hooks/use-templates'
 import { useUtils } from '@/hooks/use-utils'
+import { useSingleFlight } from '@/hooks/use-single-flight'
 import { getRecentIds } from '@/utils/recent-ids'
+import { pushOnce } from '@/utils/navigation'
 
 import { ROUTES } from '@/constants/routes'
 import { APP_BAR_MODES } from '@/constants/app-bar'
 import { APP_NAME, APP_NAME_PRO_SUFFIX } from '@/constants/app-name'
-import { pushOnce } from '@/utils/navigation'
-import { useSingleFlight } from '@/hooks/use-single-flight'
 
 export default function Home() {
     const { notes } = useNotes()

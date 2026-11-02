@@ -1,13 +1,13 @@
 import { memo, useCallback, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { IconButton, Tooltip } from 'react-native-paper'
 import { FadeInRight, FadeOutRight } from 'react-native-reanimated'
 
 import { AnimatedView } from '@/ui/animated/animated-view'
 import { Scroll } from '@/ui/animated/scroll'
 import { Divider } from '@/ui/divider/divider'
 import { ToolbarSurface } from '@/ui/toolbar-surface'
+import { IconButton } from '@/ui/button/icon-button'
 
 import { MarkdownGroupSheet } from './markdown-group-sheet'
 
@@ -91,16 +91,15 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
     const renderButton = ({
         key, label, icon: Icon, onPress, disabled
     }) => (
-        <Tooltip key={key} title={t(label)}>
-            <IconButton
-                style={styles.button}
-                onPress={onPress}
-                testID={TEST_IDS.TOOLBAR_PREFIX + key}
-                icon={(props) => <Icon {...props} />}
-                accessibilityLabel={t(label)}
-                disabled={disabled}
-            />
-        </Tooltip>
+        <IconButton
+            key={key}
+            style={styles.button}
+            icon={Icon}
+            label={t(label)}
+            testID={TEST_IDS.TOOLBAR_PREFIX + key}
+            disabled={disabled}
+            onPress={onPress}
+        />
     )
 
     return (

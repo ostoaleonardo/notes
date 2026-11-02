@@ -7,10 +7,10 @@ import { useMissingNote } from './use-missing-note'
 import { useOpenFile } from './use-open-file'
 import { summarizeConnections } from '@/utils/connection-model'
 import { getEditorPath } from '@/utils/editor-path'
+import { pushOnce } from '@/utils/navigation'
 
 import { CONNECTION_TYPES, PENDING_TABS, PENDING_TAB_PARAM } from '@/constants/connections'
 import { ROUTES } from '@/constants/routes'
-import { pushOnce } from '@/utils/navigation'
 
 export function useConnectionsSession() {
     const model = useConnectionModel()

@@ -1,5 +1,5 @@
 import { Image } from 'expo-image'
-import { IconButton, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet, View, useWindowDimensions } from 'react-native'
 import { useTranslation } from 'react-i18next'
@@ -9,6 +9,8 @@ import { Close } from '@/icons/close'
 
 import { SPACING, Z_INDEX } from '@/constants/theme'
 import { IMAGE_VIEWER_MAX_SCALE } from '@/constants/image'
+import { TonalIconButton } from '@/ui/button/tonal-icon-button'
+import { ICON_BUTTON } from '@/ui/tokens/components'
 
 export function ImageViewer({ url, onClose }) {
     const { t } = useTranslation()
@@ -30,12 +32,11 @@ export function ImageViewer({ url, onClose }) {
                 backgroundColor: colors.backdrop
             }}
         >
-            <IconButton
-                mode='contained'
+            <TonalIconButton
+                appearance={ICON_BUTTON.noTooltip}
+                icon={Close}
+                label={t('button.close')}
                 onPress={onClose}
-                icon={(props) => <Close {...props} />}
-                containerColor={colors.surface}
-                accessibilityLabel={t('button.close')}
                 style={{
                     ...styles.close,
                     top: insets.top + SPACING.sm,

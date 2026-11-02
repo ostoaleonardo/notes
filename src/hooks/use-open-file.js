@@ -6,11 +6,11 @@ import { useTranslation } from 'react-i18next'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 
 import { logError } from '@/utils/log-error'
+import { pushOnce } from '@/utils/navigation'
 
 import { FILE_KINDS } from '@/constants/file-types'
 import { ROUTES } from '@/constants/routes'
 import { LOG_MESSAGES } from '@/constants/log-messages'
-import { pushOnce } from '@/utils/navigation'
 
 export const useOpenFile = () => {
     const { t } = useTranslation()

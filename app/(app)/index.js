@@ -6,11 +6,11 @@ import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useStorage } from '@/hooks/use-storage'
 import { getStartupTarget } from '@/utils/startup-target'
+import { pushOnce } from '@/utils/navigation'
 
 import { ROUTES } from '@/constants/routes'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { STARTUP_BEHAVIORS } from '@/constants/startup-behavior'
-import { pushOnce } from '@/utils/navigation'
 
 export default function App() {
     const { loading } = useNotes()

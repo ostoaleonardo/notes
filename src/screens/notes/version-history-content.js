@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FlatList, StyleSheet, View } from 'react-native'
-import { IconButton, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 import { FadeIn, FadeInRight, FadeOut, FadeOutRight } from 'react-native-reanimated'
 
 import { AnimatedView } from '@/ui/animated/animated-view'
@@ -26,6 +26,8 @@ import { TRANSPARENT } from '@/constants/themes'
 import { FONTS, OPACITY, RADIUS, SPACING, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
 import { FREE_VERSION_HISTORY_LIMIT } from '@/constants/default-values'
 import { Touchable } from '@/ui/touchable'
+import { IconButton } from '@/ui/button/icon-button'
+import { ICON_BUTTON } from '@/ui/tokens/components'
 
 const getDiffColor = (type) => (type === DIFF_TYPES.ADDED ? DIFF_ADDED_COLOR : DIFF_REMOVED_COLOR)
 
@@ -140,9 +142,10 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
                 <View style={styles.headerLeft}>
                     {selected && (
                         <IconButton
+                            appearance={ICON_BUTTON.noTooltip}
+                            icon={ArrowBack}
+                            label={t('button.back')}
                             onPress={onBack}
-                            icon={(props) => <ArrowBack {...props} />}
-                            accessibilityLabel={t('button.back')}
                         />
                     )}
 
@@ -186,9 +189,10 @@ export const VersionHistoryContent = memo(function VersionHistoryContent({
                     )}
 
                     <IconButton
+                        appearance={ICON_BUTTON.noTooltip}
+                        icon={Close}
+                        label={t('button.close')}
                         onPress={onCloseHistory}
-                        icon={(props) => <Close {...props} />}
-                        accessibilityLabel={t('button.close')}
                     />
                 </View>
             </View>

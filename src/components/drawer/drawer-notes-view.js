@@ -19,7 +19,9 @@ import { useNoteSort } from '@/hooks/use-note-sort'
 import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useUtils } from '@/hooks/use-utils'
+import { useSingleFlight } from '@/hooks/use-single-flight'
 import { buildLevelRows, buildRepositoryTree, resolveLevel } from '@/utils/drawer-tree'
+import { pushOnce } from '@/utils/navigation'
 
 import { CreateNewFolder } from '@/icons/create-new-folder'
 import { FolderDelete } from '@/icons/folder-delete'
@@ -36,8 +38,6 @@ import {
     LEVEL_DIRECTIONS
 } from '@/constants/drawer-views'
 import { ANIMATION_DURATION } from '@/constants/theme'
-import { pushOnce } from '@/utils/navigation'
-import { useSingleFlight } from '@/hooks/use-single-flight'
 
 export function DrawerNotesView({ closeDrawer, drawerOpen }) {
     const { t } = useTranslation()

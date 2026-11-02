@@ -6,9 +6,9 @@ import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 
 import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'
+import { useSingleFlight } from '@/hooks/use-single-flight'
 
 import { REPOSITORY_RESULTS } from '@/constants/repository-results'
-import { useSingleFlight } from '@/hooks/use-single-flight'
 
 export default function RepositoryGate() {
     const { t } = useTranslation()

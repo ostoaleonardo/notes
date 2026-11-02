@@ -3,12 +3,12 @@ import { StyleSheet, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
 import { Typography } from '@/ui/typography'
+import { Touchable } from '@/ui/touchable'
 import { levelRowStyles } from './drawer-level-styles'
 
 import { ArrowBack } from '@/icons/arrow-back'
 
 import { ICON_SIZE, RADIUS, SPACING } from '@/constants/theme'
-import { Touchable } from '@/ui/touchable'
 
 export const DrawerLevelHeader = memo(function DrawerLevelHeader({
     repository,
