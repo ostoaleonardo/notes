@@ -6,6 +6,7 @@ import { EntityRow } from '@/screens/connections/entity-row'
 import { AnimatedList } from '@/ui/animated/animated-list'
 import { AnimatedView } from '@/ui/animated/animated-view'
 import { GroupedList } from '@/ui/grouped-list'
+import { useSheetBottomSpacing } from '@/ui/hooks/use-sheet-bottom-spacing'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import { makeEntity } from '@/utils/connection-model'
@@ -18,6 +19,7 @@ const getNotePath = (note) => note.path
 export function SearchResults({ results, aliasById, onOpenResult }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
+    const bottom = useSheetBottomSpacing()
 
     const onPress = (entity) => onOpenResult(entity.id)
 
@@ -30,7 +32,7 @@ export function SearchResults({ results, aliasById, onOpenResult }) {
                 keyExtractor={getNotePath}
                 emptyLabel={t('message.notes.empty')}
                 keyboardShouldPersistTaps='handled'
-                contentContainerStyle={styles.list}
+                contentContainerStyle={[styles.list, { paddingBottom: bottom }]}
                 renderItem={({ item }) => (
                     <AnimatedView
                         entering={FadeInUp}
@@ -55,7 +57,6 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     list: {
-        paddingHorizontal: SPACING.lg,
-        paddingBottom: SPACING.lg
+        paddingHorizontal: SPACING.lg
     }
 })

@@ -19,6 +19,6 @@ export function SheetTitle({ children }) {
 const styles = StyleSheet.create({
     title: {
         paddingHorizontal: SPACING.lg,
-        paddingBottom: SPACING.lg
+        paddingBottom: SPACING.md
     }
 })

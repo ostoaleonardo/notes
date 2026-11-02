@@ -6,6 +6,7 @@ import { StyleSheet, View } from 'react-native'
 import { CardGrid } from './card-grid'
 import { ButtonGroup } from '@/ui/button/button-group'
 import { IconButton } from '@/ui/button/icon-button'
+import { useSheetBottomSpacing } from '@/ui/hooks/use-sheet-bottom-spacing'
 
 import { useCurrentNote } from '@/hooks/use-current-note'
 import { useRecentNotes } from '@/hooks/use-recent-notes'
@@ -30,10 +31,12 @@ import { ICON_BUTTON } from '@/ui/tokens/components'
 
 export function RecentNotes({ onClose, home = false }) {
     const { t } = useTranslation()
+    const bottom = useSheetBottomSpacing()
+    const defaultFolderId = useDefaultNoteFolder()
+
     const { notes } = useNotes()
     const { currentId } = useCurrentNote()
     const { pinned, updatePinned } = useUtils()
-    const defaultFolderId = useDefaultNoteFolder()
     const { templates } = useTemplatesList()
     const { recent, removeRecent, clearRecent } = useRecentNotes()
 
@@ -149,7 +152,7 @@ export function RecentNotes({ onClose, home = false }) {
                 emptyMessage={t('message.notes.no_recent')}
             />
 
-            <View style={styles.actions}>
+            <View style={[styles.actions, { paddingBottom: bottom }]}>
                 <ButtonGroup buttons={actionButtons} />
             </View>
         </View>
@@ -162,10 +165,10 @@ const styles = StyleSheet.create({
     },
     actions: {
         width: '100%',
-        paddingVertical: SPACING.xxl,
-        paddingHorizontal: SPACING.lg,
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        paddingTop: SPACING.md,
+        paddingHorizontal: SPACING.lg
     },
     removeButton: {
         alignSelf: 'flex-end'

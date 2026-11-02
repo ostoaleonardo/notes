@@ -7,6 +7,7 @@ import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
 import { SheetTitle } from '@/ui/modal/sheet-title'
 import { PositionGroup } from '@/ui/position-group'
 import { Typography } from '@/ui/typography'
+import { useSheetBottomSpacing } from '@/ui/hooks/use-sheet-bottom-spacing'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import { useGroupCornerStyle } from '@/ui/hooks/use-group-corner-style'
@@ -44,6 +45,7 @@ const GroupItem = memo(function GroupItem({ action, Icon, onSelect }) {
 export const MarkdownGroupSheet = memo(function MarkdownGroupSheet({ sheet, group, onSelect }) {
     const { t } = useTranslation()
     const items = MARKDOWN_GROUPS[group]?.items
+    const bottom = useSheetBottomSpacing()
 
     return (
         <ModalBottomSheet
@@ -53,7 +55,7 @@ export const MarkdownGroupSheet = memo(function MarkdownGroupSheet({ sheet, grou
         >
             {group && <SheetTitle>{t(`markdown_group.${group}`)}</SheetTitle>}
 
-            <View style={styles.list}>
+            <View style={[styles.list, { paddingBottom: bottom }]}>
                 <PositionGroup>
                     {items?.map(({ action, Icon }) => (
                         <GroupItem
@@ -72,8 +74,7 @@ export const MarkdownGroupSheet = memo(function MarkdownGroupSheet({ sheet, grou
 const styles = StyleSheet.create({
     list: {
         gap: SPACING.xxs,
-        paddingHorizontal: SPACING.lg,
-        paddingBottom: SPACING.lg
+        paddingHorizontal: SPACING.lg
     },
     card: {
         overflow: 'hidden'

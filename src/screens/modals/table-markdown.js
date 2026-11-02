@@ -5,6 +5,7 @@ import { StyleSheet, View } from 'react-native'
 import { TonalButton } from '@/ui/button/tonal-button'
 import { SheetTitle } from '@/ui/modal/sheet-title'
 import { Typography } from '@/ui/typography'
+import { useSheetBottomSpacing } from '@/ui/hooks/use-sheet-bottom-spacing'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import { MAX_TABLE_COLS, MAX_TABLE_ROWS, TABLE_CELL_SIZE, TABLE_CELL_GAP } from '@/constants/table'
@@ -31,6 +32,7 @@ const TableRow = memo(function TableRow({ activeCols, activeStyle, inactiveStyle
 export function TableMarkdown({ onClose, onInsert }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
+    const bottom = useSheetBottomSpacing()
 
     const gridRef = useRef(null)
     const origin = useRef({ x: 0, y: 0 })
@@ -68,45 +70,48 @@ export function TableMarkdown({ onClose, onInsert }) {
     }, [onInsert, onClose, selected])
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { paddingBottom: bottom }]}>
             <SheetTitle>{t('markdown_action.table')}</SheetTitle>
 
-            <Typography textAlign='center'>
-                {selected.cols} x {selected.rows}
-            </Typography>
+            <View style={styles.body}>
+                <Typography textAlign='center'>
+                    {selected.cols} x {selected.rows}
+                </Typography>
 
-            <View
-                ref={gridRef}
-                onLayout={onLayout}
-                onStartShouldSetResponder={claimResponder}
-                onMoveShouldSetResponder={claimResponder}
-                onResponderGrant={onTouch}
-                onResponderMove={onTouch}
-                onResponderRelease={onRelease}
-            >
-                {ROW_INDEXES.map((row) => (
-                    <TableRow
-                        key={row}
-                        activeCols={row < selected.rows ? selected.cols : 0}
-                        activeStyle={cellStyles.active}
-                        inactiveStyle={cellStyles.inactive}
-                    />
-                ))}
+                <View
+                    ref={gridRef}
+                    onLayout={onLayout}
+                    onStartShouldSetResponder={claimResponder}
+                    onMoveShouldSetResponder={claimResponder}
+                    onResponderGrant={onTouch}
+                    onResponderMove={onTouch}
+                    onResponderRelease={onRelease}
+                >
+                    {ROW_INDEXES.map((row) => (
+                        <TableRow
+                            key={row}
+                            activeCols={row < selected.rows ? selected.cols : 0}
+                            activeStyle={cellStyles.active}
+                            inactiveStyle={cellStyles.inactive}
+                        />
+                    ))}
+                </View>
+
+                <TonalButton onPress={onClose}>
+                    {t('button.cancel')}
+                </TonalButton>
             </View>
-
-            <TonalButton onPress={onClose}>
-                {t('button.cancel')}
-            </TonalButton>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
+        width: '100%'
+    },
+    body: {
         gap: SPACING.lg,
         paddingHorizontal: SPACING.xxl,
-        paddingBottom: SPACING.xxl,
         alignItems: 'center'
     },
     row: {

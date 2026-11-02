@@ -7,6 +7,7 @@ import { useSingleFlight } from '@/hooks/use-single-flight'
 import { TonalButton } from '@/ui/button/tonal-button'
 import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
 import { SheetTitle } from '@/ui/modal/sheet-title'
+import { useSheetBottomSpacing } from '@/ui/hooks/use-sheet-bottom-spacing'
 
 import { SPACING } from '@/constants/theme'
 
@@ -18,6 +19,7 @@ export const TemplatePickerSheet = memo(function TemplatePickerSheet({
     onSaveAsTemplate
 }) {
     const { t } = useTranslation()
+    const bottom = useSheetBottomSpacing()
 
     const [onSave, saving] = useSingleFlight(async () => {
         await onSaveAsTemplate()
@@ -30,7 +32,9 @@ export const TemplatePickerSheet = memo(function TemplatePickerSheet({
             ref={sheet.ref}
             onClose={sheet.onClose}
         >
-            <SheetTitle>{t('title.templates')}</SheetTitle>
+            <SheetTitle>
+                {t('title.templates')}
+            </SheetTitle>
 
             <TemplatePicker
                 title={title}
@@ -41,7 +45,7 @@ export const TemplatePickerSheet = memo(function TemplatePickerSheet({
             <TonalButton
                 loading={saving}
                 onPress={onSave}
-                style={styles.save}
+                style={[styles.save, { marginBottom: bottom }]}
             >
                 {t('button.save_as_template')}
             </TonalButton>
@@ -52,6 +56,6 @@ export const TemplatePickerSheet = memo(function TemplatePickerSheet({
 const styles = StyleSheet.create({
     save: {
         alignSelf: 'center',
-        marginVertical: SPACING.md
+        marginTop: SPACING.xxs
     }
 })

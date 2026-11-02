@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     empty: {
+        paddingVertical: SPACING.lg,
         paddingHorizontal: SPACING.sm
     }
 })

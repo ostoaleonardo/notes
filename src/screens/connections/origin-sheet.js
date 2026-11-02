@@ -6,14 +6,14 @@ import { OriginTiles } from './origin-tiles'
 import { RelationList } from './relation-list'
 import { FreshSheet } from '@/ui/modal/fresh-sheet'
 import { SearchBar } from '@/components/input/search-bar'
-import { Typography } from '@/ui/typography'
+import { EmptyMessage } from '@/ui/modal/empty-message'
 
 import { describeEntity } from '@/utils/connection-caption'
 import { listOriginOptions } from '@/utils/connection-model'
 
 import { SHEET } from '@/constants/components'
 import { CONNECTION_TYPES, ORIGIN_TYPES } from '@/constants/connections'
-import { OPACITY, SPACING } from '@/constants/theme'
+import { SPACING } from '@/constants/theme'
 
 function OriginContent({ model, getTitle, onSelect }) {
     const { t } = useTranslation()
@@ -58,9 +58,9 @@ function OriginContent({ model, getTitle, onSelect }) {
                 onSelect={onSelect}
                 keyboardShouldPersistTaps='handled'
                 ListEmptyComponent={(
-                    <Typography opacity={OPACITY.muted} styleProps={styles.empty}>
+                    <EmptyMessage style={styles.empty}>
                         {t('connections.origin.empty')}
-                    </Typography>
+                    </EmptyMessage>
                 )}
             />
         </Pressable>
@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     empty: {
+        paddingVertical: SPACING.lg,
         paddingHorizontal: SPACING.sm
     }
 })

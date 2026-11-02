@@ -3,14 +3,20 @@ import { StyleSheet, View } from 'react-native'
 import { FilledTextField } from '@/ui/input/filled-text-field'
 import { SheetTitle } from './sheet-title'
 
+import { useSheetBottomSpacing } from '@/ui/hooks/use-sheet-bottom-spacing'
+
 import { SPACING } from '@/ui/tokens/theme'
 
 export function SheetForm({ title, children }) {
+    const bottom = useSheetBottomSpacing()
+
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { paddingBottom: bottom }]}>
             {title && <SheetTitle>{title}</SheetTitle>}
 
-            {children}
+            <View style={styles.body}>
+                {children}
+            </View>
         </View>
     )
 }
@@ -25,9 +31,10 @@ export function SheetInput(props) {
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        gap: SPACING.md,
-        paddingBottom: SPACING.xxl
+        width: '100%'
+    },
+    body: {
+        gap: SPACING.md
     },
     field: {
         paddingHorizontal: SPACING.lg

@@ -6,6 +6,8 @@ import { GroupedList, GroupSeparator } from '@/ui/grouped-list'
 import { ModalBottomSheet } from './modal-bottom-sheet'
 import { SheetTitle } from './sheet-title'
 
+import { useSheetBottomSpacing } from '@/ui/hooks/use-sheet-bottom-spacing'
+
 import { SHEET } from '@/ui/tokens/components'
 import { SPACING } from '@/ui/tokens/theme'
 
@@ -19,6 +21,7 @@ export function ListSheet({
     emptyMessage
 }) {
     const isEmpty = data.length === 0
+    const bottom = useSheetBottomSpacing()
 
     return (
         <ModalBottomSheet
@@ -41,7 +44,7 @@ export function ListSheet({
                     data={data}
                     keyExtractor={keyExtractor}
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={styles.list}
+                    contentContainerStyle={[styles.list, { paddingBottom: bottom }]}
                     ItemSeparatorComponent={GroupSeparator}
                     renderItem={renderItem}
                 />
@@ -52,8 +55,7 @@ export function ListSheet({
 
 const styles = StyleSheet.create({
     list: {
-        paddingHorizontal: SPACING.lg,
-        paddingBottom: SPACING.lg
+        paddingHorizontal: SPACING.lg
     },
     empty: {
         paddingVertical: SPACING.xxxl,

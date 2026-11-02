@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 
 import { GroupedList, GroupSeparator } from '@/ui/grouped-list'
+import { useSheetBottomSpacing } from '@/ui/hooks/use-sheet-bottom-spacing'
 import { useTheme } from '@/ui/hooks/use-theme'
 import { EntityRow } from './entity-row'
 
@@ -18,6 +19,7 @@ export const RelationList = memo(function RelationList({
     ...props
 }) {
     const { colors } = useTheme()
+    const bottom = useSheetBottomSpacing()
 
     const renderItem = useCallback(({ item }) => (
         <EntityRow
@@ -35,7 +37,7 @@ export const RelationList = memo(function RelationList({
             data={entities}
             renderItem={renderItem}
             keyExtractor={keyOf}
-            contentContainerStyle={styles.list}
+            contentContainerStyle={[styles.list, { paddingBottom: bottom }]}
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={GroupSeparator}
             {...props}
@@ -45,7 +47,6 @@ export const RelationList = memo(function RelationList({
 
 const styles = StyleSheet.create({
     list: {
-        paddingHorizontal: SPACING.lg,
-        paddingBottom: SPACING.lg
+        paddingHorizontal: SPACING.lg
     }
 })
