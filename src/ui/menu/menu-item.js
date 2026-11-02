@@ -1,61 +1,75 @@
-import { createElement, useCallback } from 'react'
-import { StyleSheet, View } from 'react-native'
-import { Menu, useTheme } from 'react-native-paper'
+import { useMemo } from 'react'
+import { View } from 'react-native'
+import { useTheme } from 'react-native-paper'
+import { DropdownMenuItem, RNHostView, Row, Text } from '@expo/ui/jetpack-compose'
+import { Shapes, background, clip, height, padding } from '@expo/ui/jetpack-compose/modifiers'
 
-import { MENU } from '@/ui/tokens/components'
-import { getRippleColor } from '@/ui/utils/ripple'
-import { FONTS, RADIUS, TYPOGRAPHY_SIZE_VARIANTS } from '@/ui/tokens/theme'
+import { FONTS, FONT_SIZE, ICON_SIZE, RADIUS, SIZE, SPACING } from '@/ui/tokens/theme'
 
-const useSizedIcon = (icon, style) => useCallback(
-    (props) => createElement(
-        View,
-        { style: [styles.icon, style] },
-        icon({ ...props, width: MENU.iconSize, height: MENU.iconSize })
-    ),
-    [icon, style]
+const ROW_ARRANGEMENT = { spacedBy: SPACING.sm }
+const SELECTED_RADIUS = SPACING.md
+
+const renderIcon = (icon, color) => (
+    <RNHostView matchContents>
+        <View pointerEvents='none'>
+            {icon({ color, width: ICON_SIZE.lg, height: ICON_SIZE.lg })}
+        </View>
+    </RNHostView>
 )
 
-export function MenuItem({ leadingIcon, trailingIcon, contentStyle, ...props }) {
+export function MenuItem({
+    title,
+    leadingIcon,
+    trailingIcon,
+    highlight,
+    indent = 0,
+    disabled = false,
+    onPress
+}) {
     const { colors } = useTheme()
-    const sizedLeading = useSizedIcon(leadingIcon)
-    const sizedTrailing = useSizedIcon(trailingIcon, styles.trailing)
+
+    const elementColors = useMemo(() => ({
+        textColor: colors.onBackground,
+        trailingIconColor: colors.accentText
+    }), [colors.onBackground, colors.accentText])
+    const modifiers = useMemo(() => {
+        const base = [
+            padding(0, SPACING.xxxs / 2, 0, SPACING.xxxs / 2),
+            height(SIZE.lg),
+            clip(Shapes.RoundedCorner(highlight ? SELECTED_RADIUS : RADIUS.xs))
+        ]
+
+        return highlight ? [...base, background(highlight)] : base
+    }, [highlight])
+    const textModifiers = useMemo(
+        () => (indent ? [padding(indent, 0, 0, 0)] : undefined),
+        [indent]
+    )
+    const textStyle = useMemo(() => ({
+        fontFamily: FONTS.azeretLight,
+        fontSize: FONT_SIZE.sm
+    }), [])
 
     return (
-        <View style={styles.item}>
-            <Menu.Item
-                titleStyle={styles.title}
-                rippleColor={getRippleColor(colors)}
-                leadingIcon={leadingIcon ? sizedLeading : undefined}
-                trailingIcon={trailingIcon ? sizedTrailing : undefined}
-                contentStyle={[leadingIcon ? styles.withIcon : styles.withoutIcon, contentStyle]}
-                {...props}
-            />
-        </View>
+        <DropdownMenuItem
+            enabled={!disabled}
+            modifiers={modifiers}
+            elementColors={elementColors}
+            onClick={onPress}
+        >
+            <DropdownMenuItem.Text>
+                <Row horizontalArrangement={ROW_ARRANGEMENT} verticalAlignment='center'>
+                    {!!leadingIcon && renderIcon(leadingIcon, colors.onBackground)}
+                    <Text modifiers={textModifiers} style={textStyle}>
+                        {title.toLocaleUpperCase()}
+                    </Text>
+                </Row>
+            </DropdownMenuItem.Text>
+            {!!trailingIcon && (
+                <DropdownMenuItem.TrailingIcon>
+                    {renderIcon(trailingIcon, colors.accentText)}
+                </DropdownMenuItem.TrailingIcon>
+            )}
+        </DropdownMenuItem>
     )
 }
-
-const styles = StyleSheet.create({
-    item: {
-        overflow: 'hidden',
-        borderRadius: RADIUS.lg,
-        marginVertical: MENU.itemGap
-    },
-    icon: {
-        flex: 1,
-        justifyContent: 'center'
-    },
-    trailing: {
-        alignItems: 'flex-end'
-    },
-    withIcon: {
-        marginLeft: MENU.iconToTitle
-    },
-    withoutIcon: {
-        marginLeft: 0
-    },
-    title: {
-        fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodySmall,
-        textTransform: 'uppercase',
-        fontFamily: FONTS.azeretLight
-    }
-})

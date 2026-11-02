@@ -7,7 +7,7 @@ import { Touchable } from '@/ui/touchable'
 import { DrawerFolderActions } from './drawer-folder-actions'
 import { levelRowStyles } from './drawer-level-styles'
 
-import { useMenuAnchor } from '@/hooks/use-menu-anchor'
+import { useMenuAction } from '@/hooks/use-menu-action'
 
 import { ChevronRight } from '@/icons/chevron-right'
 
@@ -19,7 +19,7 @@ export const DrawerLevelFolder = memo(function DrawerLevelFolder({
     onAction
 }) {
     const { colors } = useTheme()
-    const menu = useMenuAnchor()
+    const menu = useMenuAction()
 
     const onPress = useCallback(() => onEnter(repository.id), [onEnter, repository.id])
 
@@ -29,11 +29,11 @@ export const DrawerLevelFolder = memo(function DrawerLevelFolder({
 
     return (
         <View>
-            <View ref={menu.rowRef} collapsable={false} style={styles.container}>
+            <View style={styles.container}>
                 <Touchable
                     accessibilityRole='button'
                     onPress={onPress}
-                    onLongPress={menu.onPressRow}
+                    onLongPress={menu.onOpen}
                     style={levelRowStyles.touch}
                 >
                     <View style={levelRowStyles.content}>

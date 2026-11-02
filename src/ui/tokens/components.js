@@ -70,18 +70,6 @@ export const DIALOG = {
     hostStyle: { position: 'absolute', width: '100%' }
 }
 
-export const MENU = {
-    maxHeight: SIZE.xxxxxl,
-    itemIndent: SPACING.lg,
-    paddingHorizontal: SPACING.xxs,
-    paddingVertical: SPACING.xxxs / 2,
-    groupGap: SPACING.xxxs,
-    itemGap: SPACING.xxxs / 2,
-    iconSize: ICON_SIZE.lg,
-    iconToTitle: SPACING.xxs,
-    titleToTrailing: SPACING.xxs
-}
-
 export const PLAIN_INPUT = {
     matchContents: { vertical: true },
     hostStyle: { width: '100%' },

@@ -2,7 +2,7 @@ import { act, renderHook, waitFor } from '@testing-library/react-native'
 
 import { useFolderSetting } from '../use-folder-setting'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { MENU } from '@/constants/components'
+import { SPACING } from '@/constants/theme'
 
 const mockStorage = {
     getItem: jest.fn(),
@@ -38,8 +38,8 @@ describe('folder setting', () => {
 
         expect(result.current.items).toEqual([
             { value: '', title: 'Root label' },
-            { value: 'a', title: 'Alpha', contentStyle: { paddingLeft: 0 } },
-            { value: 'b', title: 'Beta', contentStyle: { paddingLeft: MENU.itemIndent } }
+            { value: 'a', title: 'Alpha', indent: 0 },
+            { value: 'b', title: 'Beta', indent: SPACING.lg }
         ])
     })
 

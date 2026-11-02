@@ -1,32 +1,49 @@
-import { Menu as PaperMenu } from 'react-native-paper'
+import { Children } from 'react'
+import { StyleSheet, View } from 'react-native'
+import { Box, DropdownMenuPopup, Spacer } from '@expo/ui/jetpack-compose'
+import { height } from '@expo/ui/jetpack-compose/modifiers'
 
-import { PositionGroup } from '@/ui/position-group'
+import { ComposeContext, ComposeHost } from '@/ui/compose-context'
+import { MenuGroupContext } from '@/ui/context/menu-group-context'
 
-import { MENU } from '@/ui/tokens/components'
-import { TRANSPARENT } from '@/ui/tokens/transparent'
+import { SPACING } from '@/ui/tokens/theme'
 
-export function Menu({
-    anchor,
-    visible,
-    onClose,
-    position = 'top',
-    children
-}) {
+const gapModifiers = [height(SPACING.xxxs)]
+
+export function Menu({ anchor, visible, onClose, children }) {
+    const groups = Children.toArray(children)
+
     return (
-        <PaperMenu
-            elevation={0}
-            anchor={anchor}
-            visible={visible}
-            onDismiss={onClose}
-            anchorPosition={position}
-            contentStyle={{
-                gap: MENU.groupGap,
-                backgroundColor: TRANSPARENT.color
-            }}
-        >
-            <PositionGroup>
-                {children}
-            </PositionGroup>
-        </PaperMenu>
+        <View style={styles.container}>
+            {anchor}
+            <ComposeHost style={styles.popupAnchor}>
+                <Box>
+                    <DropdownMenuPopup expanded={visible} onDismissRequest={onClose}>
+                        <ComposeContext.Provider value>
+                            {groups.map((group, index) => (
+                                <MenuGroupContext.Provider
+                                    key={group.key}
+                                    value={{ index, count: groups.length }}
+                                >
+                                    {index > 0 && <Spacer modifiers={gapModifiers} />}
+                                    {group}
+                                </MenuGroupContext.Provider>
+                            ))}
+                        </ComposeContext.Provider>
+                    </DropdownMenuPopup>
+                </Box>
+            </ComposeHost>
+        </View>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        alignItems: 'flex-start'
+    },
+    popupAnchor: {
+        position: 'absolute',
+        bottom: 0,
+        start: 0
+    }
+})

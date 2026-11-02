@@ -13,11 +13,7 @@ export function DrawerFolderActions({
     onAction
 }) {
     return (
-        <Menu
-            visible={menu.visible}
-            onClose={menu.onClose}
-            anchor={menu.anchor}
-        >
+        <Menu visible={menu.visible} onClose={menu.onClose}>
             <MenuGroup>
                 <DrawerRepositoryMenu
                     actions={actions}

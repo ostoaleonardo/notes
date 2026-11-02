@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
 import { ListItem } from '../../ui/list-item'
@@ -6,11 +6,9 @@ import { Menu } from '@/ui/menu/menu'
 import { MenuGroup } from '@/ui/menu/menu-group'
 import { SelectMenuItem } from '@/ui/menu/select-menu-item'
 
-import { useMenuAnchor } from '@/hooks/use-menu-anchor'
+import { useMenuAction } from '@/hooks/use-menu-action'
 
 import { ArrowForward } from '@/icons/arrow-forward'
-
-import { MENU } from '@/constants/components'
 
 export function SelectOption({
     title,
@@ -20,51 +18,30 @@ export function SelectOption({
     onSelect
 }) {
     const { colors } = useTheme()
-    const menu = useMenuAnchor()
-
-    const renderItem = ({ item }) => (
-        <SelectMenuItem
-            title={item.title}
-            contentStyle={item.contentStyle}
-            selected={item.value === selectedValue}
-            onPress={() => menu.trigger(() => onSelect(item.value))}
-        />
-    )
+    const menu = useMenuAction()
 
     return (
         <View>
-            <View ref={menu.rowRef} collapsable={false}>
-                <ListItem
-                    title={title}
-                    description={description}
-                    rightContent={<ArrowForward color={colors.onBackground} />}
-                    onPress={menu.onPressRow}
-                />
-            </View>
+            <ListItem
+                title={title}
+                description={description}
+                rightContent={<ArrowForward color={colors.onBackground} />}
+                onPress={menu.onOpen}
+            />
 
-            <Menu
-                visible={menu.visible}
-                onClose={menu.onClose}
-                anchor={menu.anchor}
-            >
+            <Menu visible={menu.visible} onClose={menu.onClose}>
                 <MenuGroup>
-                    <FlatList
-                        data={items}
-                        renderItem={renderItem}
-                        keyExtractor={getItemKey}
-                        style={styles.menuList}
-                        extraData={selectedValue}
-                    />
+                    {items.map((item) => (
+                        <SelectMenuItem
+                            key={item.value}
+                            title={item.title}
+                            indent={item.indent}
+                            selected={item.value === selectedValue}
+                            onPress={() => menu.trigger(() => onSelect(item.value))}
+                        />
+                    ))}
                 </MenuGroup>
             </Menu>
         </View>
     )
 }
-
-const getItemKey = (item) => item.value
-
-const styles = StyleSheet.create({
-    menuList: {
-        maxHeight: MENU.maxHeight
-    }
-})

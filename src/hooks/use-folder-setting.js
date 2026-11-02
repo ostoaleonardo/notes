@@ -5,7 +5,7 @@ import { useStorage } from './use-storage'
 import { useStorageEffect } from './use-storage-effect'
 import { scopedStorageKey } from '@/utils/scoped-storage-key'
 
-import { MENU } from '@/constants/components'
+import { SPACING } from '@/constants/theme'
 
 export function useFolderSetting(storageKey, rootLabel) {
     const { setItem } = useStorage()
@@ -34,7 +34,7 @@ export function useFolderSetting(storageKey, rootLabel) {
         ...descendants.map((repository) => ({
             value: repository.id,
             title: repository.alias,
-            contentStyle: { paddingLeft: repository.depth * MENU.itemIndent }
+            indent: repository.depth * SPACING.lg
         }))
     ], [descendants, rootLabel])
 

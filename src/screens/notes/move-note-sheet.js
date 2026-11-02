@@ -11,7 +11,6 @@ import { useRepositories } from '@/hooks/use-repositories'
 import { Check } from '@/ui/icons/check'
 import { Folder } from '@/icons/folder'
 
-import { MENU } from '@/constants/components'
 import { OPACITY, SPACING, ICON_SIZE } from '@/constants/theme'
 import { getRippleColor } from '@/ui/utils/ripple'
 
@@ -24,7 +23,7 @@ const MoveNoteItem = memo(function MoveNoteItem({ item, current, onPress }) {
             accessibilityRole='button'
             onPress={() => onPress(item.id)}
             android_ripple={{ color: getRippleColor(colors) }}
-            style={[styles.item, { paddingLeft: SPACING.lg + item.depth * MENU.itemIndent }]}
+            style={[styles.item, { paddingLeft: SPACING.lg + item.depth * SPACING.lg }]}
         >
             <Folder
                 width={ICON_SIZE.xxl}

@@ -4,7 +4,7 @@ import { View } from 'react-native'
 import { DrawerFolderActions } from './drawer-folder-actions'
 import { DrawerTreeRow } from './drawer-tree-row'
 
-import { useMenuAnchor } from '@/hooks/use-menu-anchor'
+import { useMenuAction } from '@/hooks/use-menu-action'
 import { useUtils } from '@/hooks/use-utils'
 
 import { TEMPLATE_FOLDER_ACTIONS } from '@/constants/repository-actions'
@@ -14,7 +14,7 @@ export const DrawerTemplateFolderItem = memo(function DrawerTemplateFolderItem({
     onAction
 }) {
     const { toggleFolder } = useUtils()
-    const menu = useMenuAnchor()
+    const menu = useMenuAction()
 
     const onPress = useCallback(() => toggleFolder(folder.id), [toggleFolder, folder.id])
 
@@ -23,14 +23,14 @@ export const DrawerTemplateFolderItem = memo(function DrawerTemplateFolderItem({
     }, [onAction, folder.path])
 
     return (
-        <View ref={menu.rowRef} collapsable={false}>
+        <View>
             <DrawerTreeRow
                 uppercase
                 label={folder.name}
                 depth={folder.depth}
                 collapsed={folder.isCollapsed}
                 onPress={onPress}
-                onLongPress={menu.onPressRow}
+                onLongPress={menu.onOpen}
             />
             <DrawerFolderActions
                 menu={menu}

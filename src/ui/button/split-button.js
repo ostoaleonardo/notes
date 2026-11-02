@@ -38,7 +38,6 @@ export const SplitButton = ({
                 />
 
                 <Menu
-                    position='top'
                     visible={menuVisible}
                     onClose={closeMenu}
                     anchor={

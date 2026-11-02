@@ -1,30 +1,28 @@
-import { View } from 'react-native'
+import { useContext } from 'react'
 import { useTheme } from 'react-native-paper'
+import { DropdownMenuGroup } from '@expo/ui/jetpack-compose'
+import { padding } from '@expo/ui/jetpack-compose/modifiers'
 
-import { useGroupPosition } from '@/ui/hooks/use-group-position'
-import { getStackedRadiusStyle } from '@/ui/utils/group-position'
+import { MenuGroupContext } from '@/ui/context/menu-group-context'
 
-import { MENU } from '@/ui/tokens/components'
-import { TINT } from '@/ui/tokens/transparent'
-import { RADIUS, BORDER_WIDTH } from '@/ui/tokens/theme'
+import { SPACING } from '@/ui/tokens/theme'
+
+const modifiers = [
+    padding(SPACING.xxs, SPACING.xxxs / 2, SPACING.xxs, SPACING.xxxs / 2)
+]
 
 export function MenuGroup({ children }) {
     const { colors } = useTheme()
-    const position = useGroupPosition()
+    const shapes = useContext(MenuGroupContext)
 
     return (
-        <View
-            style={{
-                borderWidth: BORDER_WIDTH.thin,
-                paddingVertical: MENU.paddingVertical,
-                paddingHorizontal: MENU.paddingHorizontal,
-                overflow: 'hidden',
-                ...getStackedRadiusStyle(position, RADIUS.md),
-                borderColor: colors.onBackground + TINT.hairline,
-                backgroundColor: colors.surface
-            }}
+        <DropdownMenuGroup
+            shapes={shapes}
+            containerColor={colors.surface}
+            shadowElevation={0}
+            modifiers={modifiers}
         >
             {children}
-        </View>
+        </DropdownMenuGroup>
     )
 }
