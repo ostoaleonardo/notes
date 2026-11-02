@@ -21,20 +21,14 @@ describe('note meta lines while reading', () => {
         const lines = buildNoteMetaLines(reading)
 
         expect(lines).toHaveLength(1)
-        expect(lines[0][0]).toEqual({ type: 'text', value: 'Updated' })
-    })
-
-    test('keeps the date as text and puts only the time in a chip', () => {
-        const [line] = buildNoteMetaLines(reading)
-
-        expect(line.map((item) => item.type)).toEqual(['text', 'text', 'filled'])
+        expect(lines[0][0]).toBe('Updated')
     })
 
     test('formats the date and the time separately', () => {
         const [line] = buildNoteMetaLines(reading)
 
-        expect(line[1].value).toBe('Oct 24, 2026')
-        expect(line[2].value).toMatch(/8:31/)
+        expect(line[1]).toBe('Oct 24, 2026')
+        expect(line[2]).toMatch(/8:31/)
     })
 })
 
@@ -44,11 +38,6 @@ describe('note meta lines while editing', () => {
     })
 
     test('shows only the counts', () => {
-        expect(buildNoteMetaLines(editing)).toEqual([[
-            { type: 'filled', value: '6' },
-            { type: 'text', value: 'words' },
-            { type: 'filled', value: '31' },
-            { type: 'text', value: 'characters' }
-        ]])
+        expect(buildNoteMetaLines(editing)).toEqual([['6 words', '31 characters']])
     })
 })

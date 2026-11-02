@@ -1,5 +1,4 @@
 import { DOM_FONT_SIZE, OPACITY, RADIUS, SPACING, Z_INDEX } from '@/constants/theme'
-import { META_TOKEN_TYPES } from '@/constants/note-meta'
 import { TRANSPARENT } from '@/constants/themes'
 
 export const buildTitleSectionStyle = () => ({
@@ -44,23 +43,11 @@ export const buildMetaLineStyle = () => ({
     gap: SPACING.xs
 })
 
-const META_TOKEN_STYLES = {
-    [META_TOKEN_TYPES.TEXT]: ({ colors }) => ({ opacity: OPACITY.secondary, color: colors.onBackground }),
-    [META_TOKEN_TYPES.FILLED]: ({ colors }) => ({
-        color: colors.background,
-        backgroundColor: colors.onBackground
-    })
-}
-
-export const buildMetaTokenStyle = (theme, type) => {
-    const chip = type !== META_TOKEN_TYPES.TEXT
-
-    return {
-        lineHeight: 1.4,
-        ...(chip && { padding: '0 7px', borderRadius: '999px' }),
-        ...META_TOKEN_STYLES[type](theme)
-    }
-}
+export const buildMetaTokenStyle = ({ colors }) => ({
+    lineHeight: 1.4,
+    opacity: OPACITY.secondary,
+    color: colors.onBackground
+})
 
 export const buildPropertiesToggleStyle = ({ colors }) => ({
     display: 'flex',

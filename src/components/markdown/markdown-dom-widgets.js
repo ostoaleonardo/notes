@@ -62,8 +62,8 @@ const MetaLines = ({ lines }) => {
             {lines.map((line, lineIndex) => (
                 <div key={lineIndex} style={buildMetaLineStyle()}>
                     {line.map((item, index) => (
-                        <span key={index} style={buildMetaTokenStyle(theme, item.type)}>
-                            {item.value}
+                        <span key={index} style={buildMetaTokenStyle(theme)}>
+                            {item}
                         </span>
                     ))}
                 </div>
