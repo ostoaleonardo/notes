@@ -15,7 +15,8 @@ import { MenuGroupContext } from '@/ui/context/menu-group-context'
 import { BORDER_WIDTH, RADIUS, SPACING } from '@/ui/tokens/theme'
 import { TINT } from '@/ui/tokens/transparent'
 
-const spacing = padding(SPACING.xxs, SPACING.xxxs / 2, SPACING.xxs, SPACING.xxxs / 2)
+const INSET = SPACING.xxs - BORDER_WIDTH.thin
+const spacing = padding(INSET, 0, INSET, 0)
 
 const getCorners = ({ index, count }, inset) => {
     const outer = RADIUS.lg - inset
@@ -34,7 +35,9 @@ const getCorners = ({ index, count }, inset) => {
 export function MenuGroup({ children }) {
     const { colors } = useTheme()
     const { maxHeight, index, count } = useContext(MenuGroupContext)
+
     const shapes = useMemo(() => ({ index, count }), [index, count])
+
     const modifiers = useMemo(() => {
         const content = maxHeight ? [height(maxHeight), verticalScroll(), spacing] : [spacing]
 
