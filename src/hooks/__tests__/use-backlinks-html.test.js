@@ -1,10 +1,11 @@
-import { renderHook } from '@testing-library/react-native'
+import { act, renderHook } from '@testing-library/react-native'
 
 import { useBacklinksHtml } from '../use-backlinks-html'
 
 const mockNotes = [
     { path: 'r::Target.md', title: 'Target', note: '' },
-    { path: 'r::Source.md', title: 'Source', note: 'see [[Target]]' }
+    { path: 'r::Source.md', title: 'Source', note: 'see [[Target]]' },
+    { path: 'r::Mention.md', title: 'Mention', note: 'about Target here' }
 ]
 
 jest.mock('react-i18next', () => ({
@@ -35,5 +36,18 @@ describe('backlinks html', () => {
         const { result } = await renderHook(() => useBacklinksHtml('r::Source.md', true))
 
         expect(result.current).toBe('')
+    })
+
+    test('adds the unlinked mentions after the idle callback', async () => {
+        const { result } = await renderHook(() => useBacklinksHtml('r::Target.md', true))
+
+        expect(result.current).not.toContain('title.unlinked_mentions')
+
+        await act(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 10))
+        })
+
+        expect(result.current).toContain('title.unlinked_mentions')
+        expect(result.current).toContain('Mention')
     })
 })

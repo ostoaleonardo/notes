@@ -112,6 +112,9 @@
       {
         "displayName": "native",
         "preset": "jest-expo",
+        "setupFiles": [
+          "<rootDir>/jest/setup-idle-callback.js"
+        ],
         "testPathIgnorePatterns": [
           "/node_modules/",
           "/dom-tests/"
