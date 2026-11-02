@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { View, StyleSheet } from 'react-native'
-import { Tooltip, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 
 import { AnimatedView } from '@/ui/animated/animated-view'
 import { Typography } from '@/ui/typography'
@@ -81,52 +81,50 @@ export function ToggleButton({
         : styles.content
 
     return (
-        <Tooltip title={label}>
-            <AnimatedView
-                {...(expandable && { layout: undefined })}
-                style={[
-                    styles.container,
-                    animatedStyle,
-                    expandable && expanding.style,
-                    { backgroundColor, opacity: disabled ? OPACITY.disabled : 1 }
-                ]}
+        <AnimatedView
+            {...(expandable && { layout: undefined })}
+            style={[
+                styles.container,
+                animatedStyle,
+                expandable && expanding.style,
+                { backgroundColor, opacity: disabled ? OPACITY.disabled : 1 }
+            ]}
+        >
+            <Touchable
+                hitSlop={HIT_SLOP.control}
+                accessibilityRole='button'
+                accessibilityState={{ selected: !!selected }}
+                disabled={disabled}
+                testID={testID}
+                onPress={onPress}
+                onPressIn={onPressIn}
+                onPressOut={onPressOut}
+                style={touchableStyle}
+                accessibilityLabel={label}
             >
-                <Touchable
-                    hitSlop={HIT_SLOP.control}
-                    accessibilityRole='button'
-                    accessibilityState={{ selected: !!selected }}
-                    disabled={disabled}
-                    testID={testID}
-                    onPress={onPress}
-                    onPressIn={onPressIn}
-                    onPressOut={onPressOut}
-                    style={touchableStyle}
-                    accessibilityLabel={label}
+                <View
+                    style={contentStyle}
+                    onLayout={expandable ? undefined : onContentLayout}
+                >
+                    {renderContent(showLabel)}
+                </View>
+            </Touchable>
+
+            {expanding.needsMeasure && (
+                <View
+                    pointerEvents='none'
+                    importantForAccessibility='no-hide-descendants'
+                    style={styles.measurer}
                 >
                     <View
-                        style={contentStyle}
-                        onLayout={expandable ? undefined : onContentLayout}
+                        style={styles.content}
+                        onLayout={expanding.onMeasure}
                     >
-                        {renderContent(showLabel)}
+                        {renderContent(true)}
                     </View>
-                </Touchable>
-
-                {expanding.needsMeasure && (
-                    <View
-                        pointerEvents='none'
-                        importantForAccessibility='no-hide-descendants'
-                        style={styles.measurer}
-                    >
-                        <View
-                            style={styles.content}
-                            onLayout={expanding.onMeasure}
-                        >
-                            {renderContent(true)}
-                        </View>
-                    </View>
-                )}
-            </AnimatedView>
-        </Tooltip>
+                </View>
+            )}
+        </AnimatedView>
     )
 }
 
