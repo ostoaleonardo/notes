@@ -33,7 +33,7 @@ jest.mock('expo-file-system', () => {
         open() {
             const uri = this.uri
             return {
-                writeBytes: (bytes) => {
+                writeBytesSync: (bytes) => {
                     const entry = registry.get(uri)
                     registry.set(uri, { ...entry, content: new TextDecoder().decode(bytes) })
                 },

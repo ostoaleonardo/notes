@@ -118,7 +118,7 @@ const writeVerified = (file, content) => {
     for (let attempt = 0; attempt < WRITE_ATTEMPTS; attempt++) {
         const handle = file.open(FileMode.Truncate)
         try {
-            handle.writeBytes(bytes)
+            handle.writeBytesSync(bytes)
         } finally {
             handle.close()
         }

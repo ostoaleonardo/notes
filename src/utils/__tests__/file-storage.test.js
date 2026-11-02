@@ -65,7 +65,7 @@ jest.mock('expo-file-system', () => {
 
         open() {
             return {
-                writeBytes: (bytes) => {
+                writeBytesSync: (bytes) => {
                     const corrupt = mockState.corruptWrites > 0
                     if (corrupt) mockState.corruptWrites--
                     mockFs.get(this.uri).bytes = corrupt ? bytes.slice(1) : bytes
