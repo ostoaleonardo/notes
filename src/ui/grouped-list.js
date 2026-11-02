@@ -8,8 +8,14 @@ import { SPACING } from '@/ui/tokens/theme'
 
 export const GroupSeparator = () => <View style={styles.separator} />
 
-export function GroupedList({ component: List = FlatList, data, renderItem, ...props }) {
-    const total = data?.length ?? 0
+export function GroupedList({
+    component: List = FlatList,
+    data,
+    total: totalOverride,
+    renderItem,
+    ...props
+}) {
+    const total = totalOverride ?? data?.length ?? 0
 
     const renderGroupedItem = useCallback((info) => (
         <GroupPositionContext.Provider value={getGroupPosition(info.index, total)}>

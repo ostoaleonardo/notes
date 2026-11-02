@@ -152,3 +152,11 @@ export const RELATIONS_SHEET = {
     titleSize: 20,
     blobSize: 52
 }
+
+export const PENDING_ROWS = {
+    pageSize: 30,
+    initialRender: 12,
+    batch: 8,
+    windowSize: 5,
+    endThreshold: 0.5
+}
