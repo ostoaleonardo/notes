@@ -52,6 +52,7 @@ export default {
     ['expo-image-picker', { microphonePermission: false }],
     './plugins/with-markdown-intent',
     './plugins/with-text-handle-color',
+    './plugins/with-release-permissions',
     [
       'expo-build-properties', {
         android: {
