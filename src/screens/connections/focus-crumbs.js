@@ -1,9 +1,9 @@
 import { Fragment, memo, useCallback, useMemo, useRef } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
-import { useTheme } from 'react-native-paper'
 
 import { EntityIcon } from './entity-icon'
 import { Chip } from '@/ui/chip'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { ChevronRight } from '@/icons/chevron-right'
 

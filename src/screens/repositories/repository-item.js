@@ -1,12 +1,12 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 
 import { RepositoryMenu } from './repository-menu'
 import { AnimatedView } from '@/ui/animated/animated-view'
 import { Divider } from '@/ui/divider/divider'
 import { Typography } from '@/ui/typography'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { useFileStorage } from '@/hooks/use-file-storage'
 import { useGroupPosition } from '@/ui/hooks/use-group-position'

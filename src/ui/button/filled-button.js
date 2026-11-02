@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
-import { useTheme } from 'react-native-paper'
 import { Button } from '@expo/ui/jetpack-compose'
 import { testID as testIdModifier } from '@expo/ui/jetpack-compose/modifiers'
 
 import { ButtonContent } from '@/ui/button/button-content'
 import { ComposeHost } from '@/ui/compose-context'
 import { getButtonColors } from '@/ui/utils/compose-colors'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 export function FilledButton({
     children,

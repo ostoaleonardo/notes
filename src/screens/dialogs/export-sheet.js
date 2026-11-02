@@ -1,7 +1,6 @@
 import { memo, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 
 import { ButtonGroup } from '@/ui/button/button-group'
 import { ListItem } from '@/ui/list-item'
@@ -9,6 +8,7 @@ import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
 import { SheetTitle } from '@/ui/modal/sheet-title'
 import { PositionGroup } from '@/ui/position-group'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { usePro } from '@/hooks/use-pro'
 

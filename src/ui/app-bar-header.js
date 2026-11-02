@@ -1,8 +1,8 @@
 import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { Typography } from '@/ui/typography'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { SIZE, SPACING } from '@/ui/tokens/theme'
 

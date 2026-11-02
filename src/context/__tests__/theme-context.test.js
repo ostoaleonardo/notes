@@ -14,9 +14,6 @@ jest.mock('react-native/Libraries/Utilities/useColorScheme', () => ({
     __esModule: true,
     default: () => mockColorScheme
 }))
-jest.mock('react-native-paper', () => ({
-    PaperProvider: ({ children }) => children
-}))
 jest.mock('expo-status-bar', () => ({
     StatusBar: () => null
 }))

@@ -1,13 +1,13 @@
 import { memo } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { useTheme } from 'react-native-paper'
 import Animated from 'react-native-reanimated'
 
 import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
 import { SheetTitle } from '@/ui/modal/sheet-title'
 import { PositionGroup } from '@/ui/position-group'
 import { Typography } from '@/ui/typography'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { useGroupCornerStyle } from '@/ui/hooks/use-group-corner-style'
 import { usePressed } from '@/ui/hooks/use-pressed'

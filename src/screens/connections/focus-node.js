@@ -1,7 +1,8 @@
 import { memo, useCallback, useMemo } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import Animated, { FadeOut, LinearTransition, ZoomIn } from 'react-native-reanimated'
+
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { getShapeKind } from './entity-badge'
 import { EntityShape } from './entity-shape'

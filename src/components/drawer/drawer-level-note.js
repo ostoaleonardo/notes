@@ -1,9 +1,9 @@
 import { memo, useCallback } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 
 import { Typography } from '@/ui/typography'
 import { Touchable } from '@/ui/touchable'
+import { useTheme } from '@/ui/hooks/use-theme'
 import { levelRowStyles } from './drawer-level-styles'
 
 import { RADIUS, SPACING } from '@/constants/theme'

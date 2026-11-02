@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
-import { useTheme } from 'react-native-paper'
 import { Checkbox as ComposeCheckbox, Host } from '@expo/ui/jetpack-compose'
 
 import { getCheckboxColors } from '@/ui/utils/compose-colors'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 export function Checkbox({ checked }) {
     const { colors } = useTheme()

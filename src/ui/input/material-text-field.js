@@ -1,10 +1,10 @@
 import { useContext, useMemo } from 'react'
-import { useTheme } from 'react-native-paper'
 import { RNHostView, Text } from '@expo/ui/jetpack-compose'
 import { fillMaxWidth } from '@expo/ui/jetpack-compose/modifiers'
 
 import { ComposeContext, ComposeHost } from '@/ui/compose-context'
 import { useTextState } from '@/ui/hooks/use-text-state'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { getTextFieldColors } from '@/ui/utils/compose-colors'
 

@@ -1,11 +1,11 @@
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
-import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 
 import { TonalButton } from '@/ui/button/tonal-button'
 import { SheetTitle } from '@/ui/modal/sheet-title'
 import { Typography } from '@/ui/typography'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { MAX_TABLE_COLS, MAX_TABLE_ROWS, TABLE_CELL_SIZE, TABLE_CELL_GAP } from '@/constants/table'
 import { SPACING, RADIUS } from '@/constants/theme'

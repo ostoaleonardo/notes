@@ -1,10 +1,10 @@
 import { memo, useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
 import { ButtonGroup } from '@/ui/button/button-group'
 import { Typography } from '@/ui/typography'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { ArrowBack } from '@/icons/arrow-back'
 import { ArrowForward } from '@/icons/arrow-forward'

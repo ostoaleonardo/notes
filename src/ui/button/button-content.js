@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
-import { useTheme } from 'react-native-paper'
 import { Box, LoadingIndicator, Text } from '@expo/ui/jetpack-compose'
 import { size } from '@expo/ui/jetpack-compose/modifiers'
 
 import { FONTS, FONT_SIZE, ICON_SIZE } from '@/ui/tokens/theme'
 import { TRANSPARENT } from '@/ui/tokens/transparent'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 export function ButtonContent({ children, loading }) {
     const { colors } = useTheme()

@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 
 import { ToggleButton } from './toggle-button'
 import { PositionGroup } from '@/ui/position-group'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { expandSelected as expandButtons, getMinWidth } from '@/ui/utils/toggle-group'
 

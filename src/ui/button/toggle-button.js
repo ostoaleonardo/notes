@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
 import { View, StyleSheet } from 'react-native'
-import { useTheme } from 'react-native-paper'
 
 import { AnimatedView } from '@/ui/animated/animated-view'
 import { Typography } from '@/ui/typography'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { useExpandingWidth } from '@/ui/hooks/use-expanding-width'
 import { usePressed } from '@/ui/hooks/use-pressed'

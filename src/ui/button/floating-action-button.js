@@ -1,7 +1,7 @@
 import React from 'react'
 import { Pressable, StyleSheet } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import { SPACING, RADIUS } from '@/ui/tokens/theme'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 export function FloatingActionButton({ icon, label, onPress }) {
     const { colors } = useTheme()

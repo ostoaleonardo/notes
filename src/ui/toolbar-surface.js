@@ -1,8 +1,8 @@
 import { StyleSheet, View, useWindowDimensions } from 'react-native'
 import { BlurView } from 'expo-blur'
-import { useTheme } from 'react-native-paper'
 
 import { useBlurTarget } from '@/ui/blur/blur-target'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { TINT } from '@/ui/tokens/transparent'
 import { BLUR, BORDER_WIDTH, RADIUS, SPACING } from '@/ui/tokens/theme'

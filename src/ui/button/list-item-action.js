@@ -1,8 +1,8 @@
 import { memo } from 'react'
 import { Pressable } from 'react-native'
-import { useTheme } from 'react-native-paper'
 
 import { getRippleColor } from '@/ui/utils/ripple'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { HIT_SLOP, RIPPLE } from '@/ui/tokens/components'
 

@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
-import { useTheme } from 'react-native-paper'
 import { Text } from '@expo/ui/jetpack-compose'
 
 import { FONTS, FONT_SIZE } from '@/ui/tokens/theme'
 import { TINT } from '@/ui/tokens/transparent'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 const TONES = {
     primary: '',

@@ -1,10 +1,10 @@
 import { memo, useCallback } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { useTheme } from 'react-native-paper'
 
 import { ListSheet } from '@/ui/modal/list-sheet'
 import { Typography } from '@/ui/typography'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { useRepositories } from '@/hooks/use-repositories'
 

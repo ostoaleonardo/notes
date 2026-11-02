@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
-import { useTheme } from 'react-native-paper'
 import { Badge as ComposeBadge, Text } from '@expo/ui/jetpack-compose'
 
 import { ComposeHost } from '@/ui/compose-context'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { FONTS, FONT_SIZE } from '@/ui/tokens/theme'
 

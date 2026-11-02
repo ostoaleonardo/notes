@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 import * as SplashScreen from 'expo-splash-screen'
 import { Stack } from 'expo-router'
-import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
 import { LoadingOverlay } from '@/ui/layout'
+import { useTheme } from '@/ui/hooks/use-theme'
 import { AppBar } from '@/components/app-bar/app-bar'
 
 import { useNotes } from '@/hooks/use-notes'

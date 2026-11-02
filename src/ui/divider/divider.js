@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 
 import { OPACITY, BORDER_WIDTH } from '@/ui/tokens/theme'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 export function Divider({ style }) {
     const { colors } = useTheme()

@@ -1,9 +1,9 @@
 import { useCallback, useRef } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
 import { FilledTextField } from '@/ui/input/filled-text-field'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { Close } from '@/icons/close'
 import { Search } from '@/icons/search'

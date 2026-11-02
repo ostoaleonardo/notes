@@ -1,7 +1,8 @@
-import { useTheme } from 'react-native-paper'
 import { Drawer } from 'react-native-drawer-layout'
 import { StyleSheet, useWindowDimensions, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { useTheme } from '@/ui/hooks/use-theme'
 
 export function VersionHistoryPanel({ visible, onOpen, onClose, swipeEnabled, panelContent, children }) {
     const { colors } = useTheme()

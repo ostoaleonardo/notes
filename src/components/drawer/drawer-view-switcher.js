@@ -1,12 +1,12 @@
 import { memo } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { useTheme } from 'react-native-paper'
 
 import { Menu } from '@/ui/menu/menu'
 import { MenuGroup } from '@/ui/menu/menu-group'
 import { SelectMenuItem } from '@/ui/menu/select-menu-item'
 import { Typography } from '@/ui/typography'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { useMenuAction } from '@/hooks/use-menu-action'
 

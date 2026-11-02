@@ -1,8 +1,8 @@
 import { StyleSheet, View } from 'react-native'
 import { Circle, Svg } from 'react-native-svg'
-import { useTheme } from 'react-native-paper'
 
 import { TINT } from '@/ui/tokens/transparent'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 export function CircularProgressIndicator({ size, stroke, progress, children }) {
     const { colors } = useTheme()

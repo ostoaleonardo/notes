@@ -1,7 +1,8 @@
 import { memo } from 'react'
 import { StyleSheet } from 'react-native'
 import { Line, Svg } from 'react-native-svg'
-import { useTheme } from 'react-native-paper'
+
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { GRAPH_EDGE } from '@/constants/connections'
 

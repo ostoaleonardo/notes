@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import { Pressable } from 'react-native'
-import { useTheme } from 'react-native-paper'
 
 import { getRippleColor } from '@/ui/utils/ripple'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 export function Touchable({ borderless = false, children, ...props }) {
     const { colors } = useTheme()

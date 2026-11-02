@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 
 import { Typography } from '@/ui/typography'
+import { useTheme } from '@/ui/hooks/use-theme'
 import { levelRowStyles } from './drawer-level-styles'
 
 import { ChevronRight } from '@/icons/chevron-right'

@@ -1,7 +1,7 @@
-import { useTheme } from 'react-native-paper'
 import { BottomSheetModal, BottomSheetView } from '@expo/ui/community/bottom-sheet'
 
 import { SPACING } from '@/ui/tokens/theme'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 export const ModalBottomSheet = ({
     ref,

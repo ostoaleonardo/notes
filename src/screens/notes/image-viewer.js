@@ -1,5 +1,4 @@
 import { Image } from 'expo-image'
-import { useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StyleSheet, View, useWindowDimensions } from 'react-native'
 import { useTranslation } from 'react-i18next'
@@ -11,6 +10,7 @@ import { SPACING, Z_INDEX } from '@/constants/theme'
 import { IMAGE_VIEWER_MAX_SCALE } from '@/constants/image'
 import { TonalIconButton } from '@/ui/button/tonal-icon-button'
 import { ICON_BUTTON } from '@/ui/tokens/components'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 export function ImageViewer({ url, onClose }) {
     const { t } = useTranslation()

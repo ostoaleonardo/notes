@@ -1,12 +1,12 @@
 import { useCallback, useMemo, useRef } from 'react'
 import { StyleSheet } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import { Snackbar, SnackbarHost } from '@expo/ui/jetpack-compose'
 import { border, fillMaxWidth } from '@expo/ui/jetpack-compose/modifiers'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { ComposeHost } from '@/ui/compose-context'
 import { paddingAround } from '@/ui/utils/compose-modifiers'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { BORDER_WIDTH, SPACING } from '@/ui/tokens/theme'
 import { TINT } from '@/ui/tokens/transparent'

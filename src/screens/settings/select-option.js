@@ -1,10 +1,10 @@
 import { View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 
 import { ListItem } from '../../ui/list-item'
 import { Menu } from '@/ui/menu/menu'
 import { MenuGroup } from '@/ui/menu/menu-group'
 import { SelectMenuItem } from '@/ui/menu/select-menu-item'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { useMenuAction } from '@/hooks/use-menu-action'
 

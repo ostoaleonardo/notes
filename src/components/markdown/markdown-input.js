@@ -1,7 +1,8 @@
 import { useCallback, useMemo, useState } from 'react'
 import { Linking } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
+
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import MarkdownDomEditor from './markdown-dom-editor'
 

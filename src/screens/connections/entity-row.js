@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
-import { useTheme } from 'react-native-paper'
 
 import { ListItem } from '@/ui/list-item'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { EntityIcon } from './entity-icon'
 

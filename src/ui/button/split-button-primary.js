@@ -1,8 +1,8 @@
 import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 
 import { AnimatedView } from '@/ui/animated/animated-view'
 import { Typography } from '@/ui/typography'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { useGroupPosition } from '@/ui/hooks/use-group-position'
 import { getSegmentCorners } from '@/ui/utils/group-position'

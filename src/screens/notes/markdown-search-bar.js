@@ -1,10 +1,10 @@
-import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 import { BasicTextField } from '@/ui/input/basic-text-field'
 import { ButtonGroup } from '@/ui/button/button-group'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { Close } from '@/icons/close'
 import { DoneAll } from '@/icons/done-all'

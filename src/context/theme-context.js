@@ -1,10 +1,11 @@
 import { createContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useColorScheme, View } from 'react-native'
-import { PaperProvider } from 'react-native-paper'
 import { StatusBar } from 'expo-status-bar'
 
 import { usePro } from '@/hooks/use-pro'
 import { useStorage } from '@/hooks/use-storage'
+import { ThemeContext as UiThemeContext } from '@/ui/context/theme-context'
+
 import { revertAccentOnProRevoke } from '@/utils/accent'
 import { getReadableAccent } from '@/utils/accent-contrast'
 
@@ -19,10 +20,10 @@ export function ThemeProvider({ initialTheme, children }) {
     const { setItem } = useStorage()
     const { pro } = usePro()
 
-    const [mode, setMode] = useState('')
-    const [name, setName] = useState('')
-    const [theme, setTheme] = useState({})
-    const [accent, setAccent] = useState('')
+    const [mode, setMode] = useState(initialTheme.mode)
+    const [name, setName] = useState(initialTheme.name)
+    const [theme, setTheme] = useState(initialTheme.theme)
+    const [accent, setAccent] = useState(initialTheme.accent || FREE_ACCENT)
     const proRef = useRef(false)
     const accentRef = useRef(accent)
     accentRef.current = accent
@@ -92,11 +93,11 @@ export function ThemeProvider({ initialTheme, children }) {
 
     return (
         <ThemeContext.Provider value={value}>
-            <PaperProvider theme={theme}>
+            <UiThemeContext.Provider value={theme}>
                 <View style={{ flex: 1 }}>
                     {children}
                 </View>
-            </PaperProvider>
+            </UiThemeContext.Provider>
             <StatusBar style={name === THEME_MODES.LIGHT ? THEME_MODES.DARK : THEME_MODES.LIGHT} />
         </ThemeContext.Provider>
     )

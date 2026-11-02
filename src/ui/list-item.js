@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 
 import { Typography } from '@/ui/typography'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { useGroupPosition } from '@/ui/hooks/use-group-position'
 import { getStackedRadiusStyle } from '@/ui/utils/group-position'

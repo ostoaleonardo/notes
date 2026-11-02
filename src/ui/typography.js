@@ -1,7 +1,7 @@
 import { StyleSheet, Text } from 'react-native'
-import { useTheme } from 'react-native-paper'
 
 import { useHeadingFamily } from '@/ui/hooks/use-heading-family'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { FONTS, TYPOGRAPHY_SIZE_VARIANTS } from '@/ui/tokens/theme'
 

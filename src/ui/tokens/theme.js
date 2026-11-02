@@ -1,5 +1,3 @@
-import { MD3LightTheme } from 'react-native-paper'
-
 export const SPACING = {
     xxxxs: 1,
     xxxs: 2,
@@ -81,9 +79,23 @@ export const FONTS = {
 
 export const DEFAULT_HEADING_FAMILY = FONTS.nType82Headline
 
-export const TYPOGRAPHY_SIZE_VARIANTS = Object.fromEntries(
-    Object.entries(MD3LightTheme.fonts).map(([variant, font]) => [variant, font.fontSize])
-)
+export const TYPOGRAPHY_SIZE_VARIANTS = {
+    displayLarge: 57,
+    displayMedium: 45,
+    displaySmall: 36,
+    headlineLarge: 32,
+    headlineMedium: 28,
+    headlineSmall: 24,
+    titleLarge: 22,
+    titleMedium: 16,
+    titleSmall: 14,
+    labelLarge: 14,
+    labelMedium: 12,
+    labelSmall: 11,
+    bodyLarge: 16,
+    bodyMedium: 14,
+    bodySmall: 12
+}
 
 export const BLUR = {
     method: 'dimezisBlurViewSdk31Plus',

@@ -1,8 +1,8 @@
 import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 
 import { Section } from '@/ui/section'
 import { ListItem } from '@/ui/list-item'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { ICON_SIZE, SPACING } from '@/constants/theme'
 

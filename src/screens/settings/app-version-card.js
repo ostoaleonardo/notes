@@ -1,7 +1,8 @@
 import { Linking } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 import { nativeApplicationVersion } from 'expo-application'
+
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { ListItem } from '../../ui/list-item'
 

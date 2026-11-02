@@ -1,9 +1,9 @@
 import { memo, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useTheme } from 'react-native-paper'
 
 import { ListItem } from '@/ui/list-item'
 import { ListSheet } from '@/ui/modal/list-sheet'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { useNotes } from '@/hooks/use-notes'
 import { getEditorPath } from '@/utils/editor-path'

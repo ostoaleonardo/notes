@@ -1,13 +1,13 @@
 import { memo, useCallback, useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FlatList, StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import { FadeIn, FadeInRight, FadeOut, FadeOutRight } from 'react-native-reanimated'
 
 import { AnimatedView } from '@/ui/animated/animated-view'
 import { FilledButton } from '@/ui/button/filled-button'
 import { EmptyMessage } from '@/ui/modal/empty-message'
 import { Typography } from '@/ui/typography'
+import { useTheme } from '@/ui/hooks/use-theme'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { GroupedList } from '@/ui/grouped-list'
 

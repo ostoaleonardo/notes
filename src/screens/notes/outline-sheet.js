@@ -1,11 +1,11 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { useTheme } from 'react-native-paper'
 
 import { ListItemAction } from '@/ui/button/list-item-action'
 import { ListItem } from '@/ui/list-item'
 import { ListSheet } from '@/ui/modal/list-sheet'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { toggleInSet } from '@/utils/toggle-in-set'
 import { buildOutline, findHeadings, getVisibleOutline } from '@/utils/headings'

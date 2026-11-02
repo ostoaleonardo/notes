@@ -1,5 +1,4 @@
 import { useContext, useMemo } from 'react'
-import { useTheme } from 'react-native-paper'
 import { DropdownMenuGroup } from '@expo/ui/jetpack-compose'
 import {
     Shapes,
@@ -11,6 +10,7 @@ import {
 } from '@expo/ui/jetpack-compose/modifiers'
 
 import { MenuGroupContext } from '@/ui/context/menu-group-context'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { BORDER_WIDTH, RADIUS, SPACING } from '@/ui/tokens/theme'
 import { TINT } from '@/ui/tokens/transparent'

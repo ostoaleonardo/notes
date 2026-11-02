@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
-import { useTheme } from 'react-native-paper'
 import { DropdownMenuItem, Row, Text } from '@expo/ui/jetpack-compose'
 import { Shapes, background, clip, height, offset, padding } from '@expo/ui/jetpack-compose/modifiers'
 
 import { ComposeIcon } from '@/ui/compose-icon'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { FONTS, FONT_SIZE, ICON_SIZE, SIZE, SPACING } from '@/ui/tokens/theme'
 

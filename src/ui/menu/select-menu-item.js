@@ -1,8 +1,8 @@
-import { useTheme } from 'react-native-paper'
 
 import { MenuItem } from './menu-item'
 
 import { Check } from '@/ui/icons/check'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { TINT } from '@/ui/tokens/transparent'
 

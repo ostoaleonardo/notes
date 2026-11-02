@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 
 import { EntityRow } from '@/screens/connections/entity-row'
 import { AnimatedList } from '@/ui/animated/animated-list'
 import { AnimatedView } from '@/ui/animated/animated-view'
 import { GroupedList } from '@/ui/grouped-list'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { makeEntity } from '@/utils/connection-model'
 

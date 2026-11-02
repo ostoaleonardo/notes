@@ -1,9 +1,9 @@
 import { memo } from 'react'
 import Animated from 'react-native-reanimated'
 import { Pressable, StyleSheet } from 'react-native'
-import { useTheme } from 'react-native-paper'
 
 import { Typography } from '@/ui/typography'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { useAnimatedBorderRadius } from '@/hooks/use-animated-border-radius'
 

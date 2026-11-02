@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
 import { ListItem } from '../../ui/list-item'
@@ -9,6 +8,7 @@ import { Dialog } from '@/ui/dialog'
 import { FilledButton } from '@/ui/button/filled-button'
 import { PositionGroup } from '@/ui/position-group'
 import { FilledTextField } from '@/ui/input/filled-text-field'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { useStorage } from '@/hooks/use-storage'
 import { useStorageEffect } from '@/hooks/use-storage-effect'

@@ -1,7 +1,6 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { StyleSheet, View, useWindowDimensions } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import { useTheme } from 'react-native-paper'
 import { useTranslation } from 'react-i18next'
 
 import { EntityBadge } from './entity-badge'
@@ -11,6 +10,7 @@ import { ButtonGroup } from '@/ui/button/button-group'
 import { TonalButton } from '@/ui/button/tonal-button'
 import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
 import { Typography } from '@/ui/typography'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { useDelayedValue } from '@/hooks/use-delayed-value'
 

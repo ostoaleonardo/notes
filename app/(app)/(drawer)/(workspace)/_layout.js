@@ -1,5 +1,6 @@
 import { Stack } from 'expo-router'
-import { useTheme } from 'react-native-paper'
+
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { getScreenContentStyle } from '@/utils/screen-content-style'
 

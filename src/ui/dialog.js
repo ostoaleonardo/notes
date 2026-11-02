@@ -1,11 +1,11 @@
 import { useEffect, useMemo } from 'react'
 import { Keyboard, Modal } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import { AlertDialog, Host, Text } from '@expo/ui/jetpack-compose'
 import { fillMaxWidth } from '@expo/ui/jetpack-compose/modifiers'
 
 import { ComposeContext } from '@/ui/compose-context'
 import { paddingHorizontal } from '@/ui/utils/compose-modifiers'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { DIALOG } from '@/ui/tokens/components'
 import { FONTS, TYPOGRAPHY_SIZE_VARIANTS, SPACING } from '@/ui/tokens/theme'
@@ -50,7 +50,10 @@ export function Dialog({
             statusBarTranslucent
             onRequestClose={onDismiss}
         >
-            <Host matchContents={DIALOG.matchContents} style={DIALOG.hostStyle}>
+            <Host
+                matchContents={DIALOG.matchContents}
+                style={DIALOG.hostStyle}
+            >
                 <ComposeContext.Provider value>
                     <AlertDialog
                         colors={dialogColors}

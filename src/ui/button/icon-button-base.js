@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import { View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import {
     Box,
     FilledIconButton,
@@ -24,6 +23,7 @@ import {
 import { ComposeHost } from '@/ui/compose-context'
 import { ComposeIcon } from '@/ui/compose-icon'
 import { getButtonColors } from '@/ui/utils/compose-colors'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { BORDER_WIDTH, FONTS, ICON_SIZE, SIZE } from '@/ui/tokens/theme'
 import { TINT } from '@/ui/tokens/transparent'

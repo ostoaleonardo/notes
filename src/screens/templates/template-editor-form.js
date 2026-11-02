@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useTheme } from 'react-native-paper'
 
 import { BasicTextField } from '@/ui/input/basic-text-field'
 import { useHeadingFamily } from '@/ui/hooks/use-heading-family'
+import { useTheme } from '@/ui/hooks/use-theme'
 import { MarkdownInput } from '@/components/markdown/markdown-input'
 import { Section } from '@/ui/section'
 import { SPACING, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'

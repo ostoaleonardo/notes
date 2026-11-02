@@ -1,9 +1,9 @@
 import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
 
 import { KeyboardArrowDown } from '@/ui/icons/keyboard-arrow-down'
 import { KeyboardArrowUp } from '@/ui/icons/keyboard-arrow-up'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { useGroupPosition } from '@/ui/hooks/use-group-position'
 import { getSegmentCorners } from '@/ui/utils/group-position'

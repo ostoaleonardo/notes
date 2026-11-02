@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
-import { useTheme } from 'react-native-paper'
 import { LoadingIndicator } from '@expo/ui/jetpack-compose'
 import { size } from '@expo/ui/jetpack-compose/modifiers'
 
 import { ComposeHost } from '@/ui/compose-context'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { ICON_SIZE } from '@/ui/tokens/theme'
 

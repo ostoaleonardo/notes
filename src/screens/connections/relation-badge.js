@@ -1,6 +1,7 @@
 import { memo } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
+
+import { useTheme } from '@/ui/hooks/use-theme'
 
 import { SECTION_ICONS } from './entity-icon'
 

@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from 'react'
 import { Pressable, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 import { Host, Switch as ComposeSwitch } from '@expo/ui/jetpack-compose'
 
 import { getSwitchColors } from '@/ui/utils/compose-colors'
+import { useTheme } from '@/ui/hooks/use-theme'
 
 export function Switch({ value, onValueChange, accessibilityLabel }) {
     const { colors } = useTheme()
