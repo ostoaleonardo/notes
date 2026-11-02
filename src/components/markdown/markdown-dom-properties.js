@@ -14,7 +14,7 @@ import {
 import {
     KEYBOARD_ARROW_DOWN_ICON_PATH,
     KEYBOARD_ARROW_UP_ICON_PATH,
-    PLUS_ICON_PATH
+    ADD_ICON_PATH
 } from '@/constants/icon-paths'
 import { ICON_SIZE } from '@/constants/theme'
 import { PROPERTY_TYPES } from '@/constants/properties'
@@ -114,7 +114,7 @@ export const PropertiesPanel = ({
                             onClick={onOpenDraft}
                             style={buildPropertyAddButtonStyle(theme)}
                         >
-                            <DomIcon path={PLUS_ICON_PATH} size={ICON_SIZE.sm} color={onBackground} />
+                            <DomIcon path={ADD_ICON_PATH} size={ICON_SIZE.sm} color={onBackground} />
                             {labels.add}
                         </button>
                     )}

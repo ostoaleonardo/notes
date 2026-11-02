@@ -1,11 +1,11 @@
 import { Path } from 'react-native-svg'
 
-import { PLUS_ICON_PATH } from '@/constants/icon-paths'
+import { ADD_ICON_PATH } from '@/constants/icon-paths'
 
 import { IconSvg } from '@/ui/icons/icon-svg'
 
-export const Plus = (props) => (
+export const Add = (props) => (
     <IconSvg {...props}>
-        <Path d={PLUS_ICON_PATH} />
+        <Path d={ADD_ICON_PATH} />
     </IconSvg>
 )

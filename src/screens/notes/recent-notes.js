@@ -21,7 +21,7 @@ import { pushOnce } from '@/utils/navigation'
 
 import { Close } from '@/icons/close'
 import { KeepFilled } from '@/icons/keep-filled'
-import { Plus } from '@/icons/plus'
+import { Add } from '@/icons/add'
 
 import { ROUTES } from '@/constants/routes'
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
@@ -122,7 +122,7 @@ export function RecentNotes({ onClose, home = false }) {
 
     const actionButtons = [
         {
-            icon: Plus,
+            icon: Add,
             label: t('notes.create'),
             onPress: onCreateNote
         },

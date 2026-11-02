@@ -15,7 +15,7 @@ import { useUtils } from '@/hooks/use-utils'
 import { flattenTemplateTree } from '@/utils/template-path'
 
 import { CreateNewFolder } from '@/icons/create-new-folder'
-import { Plus } from '@/icons/plus'
+import { Add } from '@/icons/add'
 import { CollapseAll } from '@/icons/collapse-all'
 import { ExpandAll } from '@/icons/expand-all'
 
@@ -76,7 +76,7 @@ export function DrawerTemplatesView({ closeDrawer }) {
     const toolbarItems = useMemo(() => [
         {
             key: 'new-template',
-            icon: Plus,
+            icon: Add,
             onPress: () => setAddTemplateFolderPath(''),
             accessibilityLabel: t('templates.new')
         },

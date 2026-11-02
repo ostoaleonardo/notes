@@ -5,7 +5,7 @@ import { RecentsButton } from '@/components/app-bar/recents-button'
 import { ToolbarSurface } from '@/ui/toolbar-surface'
 import { IconButton } from '@/ui/button/icon-button'
 
-import { Plus } from '@/icons/plus'
+import { Add } from '@/icons/add'
 import { Search } from '@/icons/search'
 import { UploadFile } from '@/icons/upload-file'
 import { SPACING } from '@/constants/theme'
@@ -19,7 +19,7 @@ export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, onOpenS
             <View style={styles.row}>
                 <IconButton
                     style={styles.button}
-                    icon={Plus}
+                    icon={Add}
                     label={t('notes.create')}
                     testID={TEST_IDS.HOME_CREATE_NOTE}
                     onPress={onCreateNote}

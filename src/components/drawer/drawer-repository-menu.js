@@ -5,12 +5,12 @@ import { MenuItem } from '@/ui/menu/menu-item'
 import { Delete } from '@/icons/delete'
 import { Edit } from '@/icons/edit'
 import { Folder } from '@/icons/folder'
-import { Plus } from '@/icons/plus'
+import { Add } from '@/icons/add'
 
 import { REPOSITORY_ACTIONS } from '@/constants/repository-actions'
 
 const MENU_ITEMS = [
-    { action: REPOSITORY_ACTIONS.CREATE_NOTE, label: 'repositories.create_note', icon: Plus },
+    { action: REPOSITORY_ACTIONS.CREATE_NOTE, label: 'repositories.create_note', icon: Add },
     { action: REPOSITORY_ACTIONS.ADD_SUBFOLDER, label: 'repositories.add_subfolder', icon: Folder },
     { action: REPOSITORY_ACTIONS.EDIT_FOLDER, label: 'repositories.edit_folder', icon: Edit },
     { action: REPOSITORY_ACTIONS.DELETE, label: 'repositories.delete.folder_title', icon: Delete }

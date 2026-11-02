@@ -26,7 +26,7 @@ import { pushOnce } from '@/utils/navigation'
 import { CreateNewFolder } from '@/icons/create-new-folder'
 import { FolderDelete } from '@/icons/folder-delete'
 import { FolderManaged } from '@/icons/folder-managed'
-import { Plus } from '@/icons/plus'
+import { Add } from '@/icons/add'
 import { CalendarToday } from '@/icons/calendar-today'
 
 import { REPOSITORY_ACTIONS } from '@/constants/repository-actions'
@@ -153,7 +153,7 @@ export function DrawerNotesView({ closeDrawer, drawerOpen }) {
         {
             key: 'create-note',
             testID: TEST_IDS.DRAWER_CREATE_NOTE,
-            icon: Plus,
+            icon: Add,
             onPress: onCreateFolderNote,
             accessibilityLabel: t('repositories.create_note')
         },

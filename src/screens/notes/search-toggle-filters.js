@@ -9,7 +9,7 @@ import { Keep } from '@/icons/keep'
 import { KeepFilled } from '@/icons/keep-filled'
 import { NoteStack } from '@/icons/note-stack'
 import { Picture } from '@/icons/picture'
-import { Plus } from '@/icons/plus'
+import { Add } from '@/icons/add'
 
 import { ICON_SIZE } from '@/constants/theme'
 
@@ -51,7 +51,7 @@ export function SearchToggleFilters({ query, setQuery, parsed, saved, onToggleSa
                         onPress: () => setQuery(togglePinnedQualifier(query))
                     },
                     {
-                        icon: isSaved ? Check : Plus,
+                        icon: isSaved ? Check : Add,
                         label: t(isSaved ? 'search.unsave' : 'search.save'),
                         selected: isSaved,
                         disabled: !canSave,
