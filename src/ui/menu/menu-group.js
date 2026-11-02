@@ -1,19 +1,52 @@
-import { useContext } from 'react'
+import { useContext, useMemo } from 'react'
 import { useTheme } from 'react-native-paper'
 import { DropdownMenuGroup } from '@expo/ui/jetpack-compose'
-import { padding } from '@expo/ui/jetpack-compose/modifiers'
+import {
+    Shapes,
+    background,
+    clip,
+    height,
+    padding,
+    verticalScroll
+} from '@expo/ui/jetpack-compose/modifiers'
 
 import { MenuGroupContext } from '@/ui/context/menu-group-context'
 
-import { SPACING } from '@/ui/tokens/theme'
+import { BORDER_WIDTH, RADIUS, SPACING } from '@/ui/tokens/theme'
+import { TINT } from '@/ui/tokens/transparent'
 
-const modifiers = [
-    padding(SPACING.xxs, SPACING.xxxs / 2, SPACING.xxs, SPACING.xxxs / 2)
-]
+const spacing = padding(SPACING.xxs, SPACING.xxxs / 2, SPACING.xxs, SPACING.xxxs / 2)
+
+const getCorners = ({ index, count }, inset) => {
+    const outer = RADIUS.lg - inset
+    const inner = RADIUS.md - inset
+    const top = index === 0 ? outer : inner
+    const bottom = index === count - 1 ? outer : inner
+
+    return {
+        topStart: top,
+        topEnd: top,
+        bottomStart: bottom,
+        bottomEnd: bottom
+    }
+}
 
 export function MenuGroup({ children }) {
     const { colors } = useTheme()
-    const shapes = useContext(MenuGroupContext)
+    const { maxHeight, index, count } = useContext(MenuGroupContext)
+    const shapes = useMemo(() => ({ index, count }), [index, count])
+    const modifiers = useMemo(() => {
+        const content = maxHeight ? [height(maxHeight), verticalScroll(), spacing] : [spacing]
+
+        return [
+            clip(Shapes.RoundedCorner(getCorners(shapes, 0))),
+            background(colors.onBackground + TINT.hairline),
+            padding(BORDER_WIDTH.thin, BORDER_WIDTH.thin, BORDER_WIDTH.thin, BORDER_WIDTH.thin),
+            clip(Shapes.RoundedCorner(getCorners(shapes, BORDER_WIDTH.thin))),
+            background(colors.surface),
+            ...content
+        ]
+    }, [maxHeight, shapes, colors.onBackground, colors.surface])
 
     return (
         <DropdownMenuGroup

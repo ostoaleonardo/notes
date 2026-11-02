@@ -10,7 +10,7 @@ import { SPACING } from '@/ui/tokens/theme'
 
 const gapModifiers = [height(SPACING.xxxs)]
 
-export function Menu({ anchor, visible, onClose, children }) {
+export function Menu({ anchor, visible, onClose, maxHeight, children }) {
     const groups = Children.toArray(children)
 
     return (
@@ -23,7 +23,7 @@ export function Menu({ anchor, visible, onClose, children }) {
                             {groups.map((group, index) => (
                                 <MenuGroupContext.Provider
                                     key={group.key}
-                                    value={{ index, count: groups.length }}
+                                    value={{ index, count: groups.length, maxHeight }}
                                 >
                                     {index > 0 && <Spacer modifiers={gapModifiers} />}
                                     {group}
@@ -44,6 +44,6 @@ const styles = StyleSheet.create({
     popupAnchor: {
         position: 'absolute',
         bottom: 0,
-        start: 0
+        end: 0
     }
 })

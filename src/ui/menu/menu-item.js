@@ -4,10 +4,10 @@ import { useTheme } from 'react-native-paper'
 import { DropdownMenuItem, RNHostView, Row, Text } from '@expo/ui/jetpack-compose'
 import { Shapes, background, clip, height, padding } from '@expo/ui/jetpack-compose/modifiers'
 
-import { FONTS, FONT_SIZE, ICON_SIZE, RADIUS, SIZE, SPACING } from '@/ui/tokens/theme'
+import { FONTS, FONT_SIZE, ICON_SIZE, SIZE, SPACING } from '@/ui/tokens/theme'
 
 const ROW_ARRANGEMENT = { spacedBy: SPACING.sm }
-const SELECTED_RADIUS = SPACING.md
+const ITEM_RADIUS = SPACING.md
 
 const renderIcon = (icon, color) => (
     <RNHostView matchContents>
@@ -36,7 +36,7 @@ export function MenuItem({
         const base = [
             padding(0, SPACING.xxxs / 2, 0, SPACING.xxxs / 2),
             height(SIZE.lg),
-            clip(Shapes.RoundedCorner(highlight ? SELECTED_RADIUS : RADIUS.xs))
+            clip(Shapes.RoundedCorner(ITEM_RADIUS))
         ]
 
         return highlight ? [...base, background(highlight)] : base

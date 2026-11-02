@@ -10,6 +10,8 @@ import { useMenuAction } from '@/hooks/use-menu-action'
 
 import { ArrowForward } from '@/icons/arrow-forward'
 
+import { SIZE } from '@/constants/theme'
+
 export function SelectOption({
     title,
     description,
@@ -19,6 +21,7 @@ export function SelectOption({
 }) {
     const { colors } = useTheme()
     const menu = useMenuAction()
+    const maxHeight = items.length * SIZE.lg > SIZE.xxxxxl ? SIZE.xxxxxl : undefined
 
     return (
         <View>
@@ -29,7 +32,7 @@ export function SelectOption({
                 onPress={menu.onOpen}
             />
 
-            <Menu visible={menu.visible} onClose={menu.onClose}>
+            <Menu visible={menu.visible} onClose={menu.onClose} maxHeight={maxHeight}>
                 <MenuGroup>
                     {items.map((item) => (
                         <SelectMenuItem
