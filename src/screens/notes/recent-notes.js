@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native'
 
 import { CardGrid } from './card-grid'
 import { ButtonGroup } from '@/ui/button/button-group'
-import { FilledIconButton } from '@/ui/button/filled-icon-button'
+import { IconButton } from '@/ui/button/icon-button'
 
 import { useCurrentNote } from '@/hooks/use-current-note'
 import { useRecentNotes } from '@/hooks/use-recent-notes'
@@ -97,7 +97,7 @@ export function RecentNotes({ onClose, home = false }) {
     }, [pinned, updatePinned, removeRecent, onClose])
 
     const renderCardHeader = useCallback((card) => (
-        <FilledIconButton
+        <IconButton
             appearance={ICON_BUTTON.remove}
             style={styles.removeButton}
             icon={card.pinned ? KeepFilled : Close}

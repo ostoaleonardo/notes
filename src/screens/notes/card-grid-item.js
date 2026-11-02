@@ -9,6 +9,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 import { RADIUS, SPACING, OPACITY, BORDER_WIDTH } from '@/constants/theme'
 import { CARD_PREVIEW_LINES } from '@/constants/note-preview'
 import { CARD_GRID } from '@/constants/components'
+import { TINT } from '@/ui/tokens/transparent'
 
 export const CardGridItem = memo(function CardGridItem({
     card,
@@ -32,17 +33,16 @@ export const CardGridItem = memo(function CardGridItem({
                 onPress={() => onOpen(card)}
                 style={{
                     ...styles.card,
-                    borderColor: colors.outline,
-                    backgroundColor: card.active ? colors.onBackground : colors.surface
+                    borderColor: card.active ? colors.onBackground + TINT.indicator : colors.outline,
+                    backgroundColor: colors.surface
                 }}
             >
                 {renderHeader && renderHeader(card)}
 
                 <Typography
-                    opacity={OPACITY.secondary}
+                    opacity={OPACITY.strong}
                     fontSize={CARD_GRID.previewFontSize}
                     numberOfLines={previewLines}
-                    color={card.active ? colors.background : undefined}
                     styleProps={{
                         paddingVertical: SPACING.sm,
                         paddingHorizontal: SPACING.md
@@ -53,6 +53,7 @@ export const CardGridItem = memo(function CardGridItem({
             </Pressable>
 
             <Typography
+                bold={card.active}
                 variant='bodySmall'
                 textAlign='center'
                 numberOfLines={1}
@@ -66,7 +67,7 @@ export const CardGridItem = memo(function CardGridItem({
 const styles = StyleSheet.create({
     card: {
         height: CARD_GRID.cardHeight,
-        borderWidth: BORDER_WIDTH.thin,
+        borderWidth: BORDER_WIDTH.thick,
         flexDirection: 'column',
         borderRadius: RADIUS.lg,
         overflow: 'hidden'
