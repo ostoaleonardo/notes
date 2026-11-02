@@ -6,17 +6,18 @@ import { height } from '@expo/ui/jetpack-compose/modifiers'
 import { ComposeContext, ComposeHost } from '@/ui/compose-context'
 import { MenuGroupContext } from '@/ui/context/menu-group-context'
 
+import { MENU_ALIGN } from '@/ui/tokens/components'
 import { SPACING } from '@/ui/tokens/theme'
 
 const gapModifiers = [height(SPACING.xxxs)]
 
-export function Menu({ anchor, visible, onClose, maxHeight, children }) {
+export function Menu({ anchor, visible, onClose, maxHeight, align = MENU_ALIGN.END, children }) {
     const groups = Children.toArray(children)
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, align === MENU_ALIGN.START && styles.hug]}>
             {anchor}
-            <ComposeHost style={styles.popupAnchor}>
+            <ComposeHost style={[styles.popupAnchor, { [align]: 0 }]}>
                 <Box>
                     <DropdownMenuPopup expanded={visible} onDismissRequest={onClose}>
                         <ComposeContext.Provider value>
@@ -41,9 +42,11 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'flex-start'
     },
+    hug: {
+        alignSelf: 'flex-start'
+    },
     popupAnchor: {
         position: 'absolute',
-        bottom: 0,
-        end: 0
+        bottom: 0
     }
 })

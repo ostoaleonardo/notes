@@ -14,6 +14,7 @@ import { KeyboardArrowDown } from '@/ui/icons/keyboard-arrow-down'
 import { KeyboardArrowUp } from '@/ui/icons/keyboard-arrow-up'
 
 import { BUTTON } from '@/constants/components'
+import { MENU_ALIGN } from '@/ui/tokens/components'
 import { DRAWER_VIEWS, DRAWER_VIEW_LABELS } from '@/constants/drawer-views'
 import { TRANSPARENT } from '@/constants/themes'
 import { RADIUS, SPACING, ICON_SIZE, OPACITY } from '@/constants/theme'
@@ -29,6 +30,7 @@ export const DrawerViewSwitcher = memo(function DrawerViewSwitcher({ view, onCha
 
     return (
         <Menu
+            align={MENU_ALIGN.START}
             visible={visible}
             onClose={onClose}
             anchor={(
