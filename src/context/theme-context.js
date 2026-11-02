@@ -1,6 +1,7 @@
 import { createContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useColorScheme, View } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
+import * as SystemUI from 'expo-system-ui'
 
 import { usePro } from '@/hooks/use-pro'
 import { useStorage } from '@/hooks/use-storage'
@@ -79,6 +80,12 @@ export function ThemeProvider({ initialTheme, children }) {
             }
         }
     }
+
+    const backgroundColor = theme?.colors?.background
+
+    useEffect(() => {
+        if (backgroundColor) SystemUI.setBackgroundColorAsync(backgroundColor)
+    }, [backgroundColor])
 
     const value = useMemo(() => ({
         mode,
