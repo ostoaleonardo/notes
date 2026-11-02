@@ -40,6 +40,7 @@ import { BUTTON } from '@/constants/components'
 import { BODY_FONT_FAMILY, SPACING } from '@/constants/theme'
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { LINK_TYPES } from '@/constants/link-types'
+import { MATH_DELIMITER } from '@/constants/markdown-math'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { WIKI_LINK_FORMATS } from '@/constants/wiki-links'
 
@@ -75,7 +76,8 @@ export const MarkdownInput = ({
     const { tags: knownTags } = useTags()
 
     const fonts = useDomFonts()
-    const katexFonts = useKatexFonts()
+    const hasMath = useMemo(() => !!value && value.includes(MATH_DELIMITER), [value])
+    const katexFonts = useKatexFonts(hasMath)
 
     const [linkFormat, setLinkFormat] = useState(WIKI_LINK_FORMATS.WIKILINK)
     const [ready, setReady] = useState(false)
