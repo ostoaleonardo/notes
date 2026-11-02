@@ -21,3 +21,93 @@ index ac8ae4a..dba0ae4 100644
              }}>
              <RNHostView matchContents={fitToContents}>
                {/* With matchContents, RNHostView lays the hosted view out at its own size, so `width` gives it
+diff --git a/node_modules/@expo/ui/android/src/main/java/expo/modules/ui/SnackbarView.kt b/node_modules/@expo/ui/android/src/main/java/expo/modules/ui/SnackbarView.kt
+index 9fcdf59..e70ecce 100644
+--- a/node_modules/@expo/ui/android/src/main/java/expo/modules/ui/SnackbarView.kt
++++ b/node_modules/@expo/ui/android/src/main/java/expo/modules/ui/SnackbarView.kt
+@@ -6,6 +6,7 @@ import android.annotation.SuppressLint
+ import android.content.Context
+ import android.graphics.Color
+ import androidx.compose.material3.ExperimentalMaterial3Api
++import androidx.compose.material3.MaterialTheme
+ import androidx.compose.material3.Snackbar
+ import androidx.compose.material3.SnackbarDefaults
+ import androidx.compose.material3.SnackbarDuration
+@@ -39,6 +40,7 @@ data class SnackbarViewProps(
+   val actionContentColor: MutableState<Color?> = mutableStateOf(null),
+   val dismissActionContentColor: MutableState<Color?> = mutableStateOf(null),
+   val actionOnNewLine: MutableState<Boolean> = mutableStateOf(false),
++  val fontFamily: MutableState<String?> = mutableStateOf(null),
+   val modifiers: MutableState<ModifierList> = mutableStateOf(emptyList())
+ ) : ComposeProps
+ 
+@@ -109,22 +111,36 @@ fun FunctionalComposableScope.SnackbarHostContent(
+     }
+   }
+ 
+-  SnackbarHost(
+-    hostState = hostState,
+-    modifier = ModifierRegistry.applyModifiers(props.modifiers, appContext, composableScope, globalEventDispatcher)
+-  ) { data ->
+-    Snackbar(
+-      snackbarData = data,
+-      modifier = snackbarConfig?.let {
+-        ModifierRegistry.applyModifiers(it.props.modifiers.value, appContext, composableScope, globalEventDispatcher)
+-      } ?: androidx.compose.ui.Modifier,
+-      actionOnNewLine = snackbarConfig?.props?.actionOnNewLine?.value ?: false,
+-      containerColor = snackbarConfig?.props?.containerColor?.value.composeOrNull ?: SnackbarDefaults.color,
+-      contentColor = snackbarConfig?.props?.contentColor?.value.composeOrNull ?: SnackbarDefaults.contentColor,
+-      actionContentColor = snackbarConfig?.props?.actionContentColor?.value.composeOrNull
+-        ?: SnackbarDefaults.actionContentColor,
+-      dismissActionContentColor = snackbarConfig?.props?.dismissActionContentColor?.value.composeOrNull
+-        ?: SnackbarDefaults.dismissActionContentColor
+-    )
++  val fontFamily = resolveFontFamily(snackbarConfig?.props?.fontFamily?.value, view.context)
++  val typography = MaterialTheme.typography
++
++  MaterialTheme(
++    typography = if (fontFamily == null) {
++      typography
++    } else {
++      typography.copy(
++        bodyMedium = typography.bodyMedium.copy(fontFamily = fontFamily),
++        labelLarge = typography.labelLarge.copy(fontFamily = fontFamily)
++      )
++    }
++  ) {
++    SnackbarHost(
++      hostState = hostState,
++      modifier = ModifierRegistry.applyModifiers(props.modifiers, appContext, composableScope, globalEventDispatcher)
++    ) { data ->
++      Snackbar(
++        snackbarData = data,
++        modifier = snackbarConfig?.let {
++          ModifierRegistry.applyModifiers(it.props.modifiers.value, appContext, composableScope, globalEventDispatcher)
++        } ?: androidx.compose.ui.Modifier,
++        actionOnNewLine = snackbarConfig?.props?.actionOnNewLine?.value ?: false,
++        containerColor = snackbarConfig?.props?.containerColor?.value.composeOrNull ?: SnackbarDefaults.color,
++        contentColor = snackbarConfig?.props?.contentColor?.value.composeOrNull ?: SnackbarDefaults.contentColor,
++        actionContentColor = snackbarConfig?.props?.actionContentColor?.value.composeOrNull
++          ?: SnackbarDefaults.actionContentColor,
++        dismissActionContentColor = snackbarConfig?.props?.dismissActionContentColor?.value.composeOrNull
++          ?: SnackbarDefaults.dismissActionContentColor
++      )
++    }
+   }
+ }
+diff --git a/node_modules/@expo/ui/src/jetpack-compose/Snackbar/index.tsx b/node_modules/@expo/ui/src/jetpack-compose/Snackbar/index.tsx
+index f5f681e..34a1245 100644
+--- a/node_modules/@expo/ui/src/jetpack-compose/Snackbar/index.tsx
++++ b/node_modules/@expo/ui/src/jetpack-compose/Snackbar/index.tsx
+@@ -28,6 +28,11 @@ export interface SnackbarProps {
+    * @default false
+    */
+   actionOnNewLine?: boolean;
++
++  /**
++   * The font family used for the message and the action label.
++   */
++  fontFamily?: string;
+   /**
+    * Modifiers for the component.
+    */

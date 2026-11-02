@@ -1,15 +1,15 @@
 import { useCallback, useMemo, useRef } from 'react'
 import { StyleSheet } from 'react-native'
 import { Snackbar, SnackbarHost } from '@expo/ui/jetpack-compose'
-import { border, fillMaxWidth } from '@expo/ui/jetpack-compose/modifiers'
+import { fillMaxWidth } from '@expo/ui/jetpack-compose/modifiers'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { ComposeHost } from '@/ui/compose-context'
 import { paddingAround } from '@/ui/utils/compose-modifiers'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { BORDER_WIDTH, SPACING } from '@/ui/tokens/theme'
-import { TINT } from '@/ui/tokens/transparent'
+import { SNACKBAR } from '@/ui/tokens/components'
+import { FONTS, SPACING } from '@/ui/tokens/theme'
 
 let showMessage = null
 let currentMessage = null
@@ -37,15 +37,18 @@ export function GlobalSnackbarHost() {
 
     const modifiers = useMemo(() => [
         fillMaxWidth(),
-        paddingAround(SPACING.sm, 0, SPACING.sm, bottom + SPACING.sm),
-        border(BORDER_WIDTH.thin, colors.onBackground + TINT.border)
-    ], [bottom, colors.onBackground])
+        paddingAround(SPACING.sm, 0, SPACING.sm, bottom + SPACING.sm)
+    ], [bottom])
 
     return (
-        <ComposeHost style={styles.host}>
+        <ComposeHost
+            matchContents={SNACKBAR.matchContents}
+            style={styles.host}
+        >
             <SnackbarHost ref={register}>
                 <Snackbar
                     containerColor={colors.surface}
+                    fontFamily={FONTS.azeretLight}
                     contentColor={colors.onBackground}
                     modifiers={modifiers}
                 />

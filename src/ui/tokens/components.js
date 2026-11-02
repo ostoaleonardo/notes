@@ -64,6 +64,10 @@ export const FILLED_INPUT = {
     keyboardOptions: { capitalization: 'sentences' }
 }
 
+export const SNACKBAR = {
+    matchContents: { vertical: true }
+}
+
 export const DIALOG = {
     properties: { usePlatformDefaultWidth: false },
     matchContents: { vertical: true },

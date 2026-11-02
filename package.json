@@ -2,6 +2,13 @@
   "name": "notes",
   "version": "1.0.0",
   "main": "expo-router/entry",
+  "expo": {
+    "autolinking": {
+      "android": {
+        "buildFromSource": ["expo-ui"]
+      }
+    }
+  },
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
