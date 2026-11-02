@@ -372,7 +372,9 @@
 			"open_failed": "Het bestand kon niet worden geopend"
 		},
 		"outline": {
-			"empty": "Deze notitie heeft geen koppen"
+			"empty": "Deze notitie heeft geen koppen",
+			"collapse": "Sectie samenvouwen",
+			"expand": "Sectie uitvouwen"
 		},
 		"outgoing_links": {
 			"empty": "Deze notitie bevat geen links naar andere notities"

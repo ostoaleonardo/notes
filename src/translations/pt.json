@@ -372,7 +372,9 @@
 			"open_failed": "Não foi possível abrir o arquivo"
 		},
 		"outline": {
-			"empty": "Esta nota não tem títulos"
+			"empty": "Esta nota não tem títulos",
+			"collapse": "Recolher seção",
+			"expand": "Expandir seção"
 		},
 		"outgoing_links": {
 			"empty": "Esta nota não tem links para outras notas"

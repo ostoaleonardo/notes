@@ -372,7 +372,9 @@
 			"open_failed": "Impossible d'ouvrir le fichier"
 		},
 		"outline": {
-			"empty": "Cette note n'a aucun titre"
+			"empty": "Cette note n'a aucun titre",
+			"collapse": "Réduire la section",
+			"expand": "Développer la section"
 		},
 		"outgoing_links": {
 			"empty": "Cette note ne contient aucun lien vers d'autres notes"

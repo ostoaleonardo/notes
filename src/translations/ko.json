@@ -372,7 +372,9 @@
 			"open_failed": "파일을 열 수 없습니다"
 		},
 		"outline": {
-			"empty": "이 노트에는 제목이 없습니다"
+			"empty": "이 노트에는 제목이 없습니다",
+			"collapse": "섹션 접기",
+			"expand": "섹션 펼치기"
 		},
 		"outgoing_links": {
 			"empty": "이 노트에는 다른 노트로의 링크가 없습니다"

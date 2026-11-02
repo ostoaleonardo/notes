@@ -372,7 +372,9 @@
 			"open_failed": "Det gick inte att öppna filen"
 		},
 		"outline": {
-			"empty": "Den här anteckningen har inga rubriker"
+			"empty": "Den här anteckningen har inga rubriker",
+			"collapse": "Fäll ihop avsnitt",
+			"expand": "Fäll ut avsnitt"
 		},
 		"outgoing_links": {
 			"empty": "Den här anteckningen har inga länkar till andra anteckningar"

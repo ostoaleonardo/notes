@@ -380,7 +380,9 @@
 			"open_failed": "Soubor se nepodařilo otevřít"
 		},
 		"outline": {
-			"empty": "Tato poznámka nemá žádné nadpisy"
+			"empty": "Tato poznámka nemá žádné nadpisy",
+			"collapse": "Sbalit sekci",
+			"expand": "Rozbalit sekci"
 		},
 		"outgoing_links": {
 			"empty": "Tato poznámka neobsahuje žádné odkazy na jiné poznámky"

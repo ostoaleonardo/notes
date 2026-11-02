@@ -372,7 +372,9 @@
 			"open_failed": "Die Datei konnte nicht geöffnet werden"
 		},
 		"outline": {
-			"empty": "Diese Notiz hat keine Überschriften"
+			"empty": "Diese Notiz hat keine Überschriften",
+			"collapse": "Abschnitt einklappen",
+			"expand": "Abschnitt ausklappen"
 		},
 		"outgoing_links": {
 			"empty": "Diese Notiz enthält keine Links zu anderen Notizen"

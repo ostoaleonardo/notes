@@ -372,7 +372,9 @@
 			"open_failed": "Dosya açılamadı"
 		},
 		"outline": {
-			"empty": "Bu notta başlık yok"
+			"empty": "Bu notta başlık yok",
+			"collapse": "Bölümü daralt",
+			"expand": "Bölümü genişlet"
 		},
 		"outgoing_links": {
 			"empty": "Bu notta diğer notlara bağlantı yok"
