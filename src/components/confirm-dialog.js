@@ -21,8 +21,9 @@ export function ConfirmDialog({ title, message, confirmLabel, visible, onDismiss
             title={title}
             visible={visible}
             onDismiss={onDismiss}
+            locked={confirming}
             dismiss={(
-                <TextButton onPress={onDismiss}>
+                <TextButton disabled={confirming} onPress={onDismiss}>
                     {t('button.cancel')}
                 </TextButton>
             )}

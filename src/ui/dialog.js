@@ -11,15 +11,19 @@ import { DIALOG } from '@/ui/tokens/components'
 import { FONTS, TYPOGRAPHY_SIZE_VARIANTS, SPACING } from '@/ui/tokens/theme'
 import { TINT } from '@/ui/tokens/transparent'
 
+const noop = () => {}
+
 export function Dialog({
     title,
     visible,
     onDismiss,
     children,
     confirm,
-    dismiss
+    dismiss,
+    locked = false
 }) {
     const { colors } = useTheme()
+    const onRequestClose = locked ? noop : onDismiss
 
     useEffect(() => {
         if (!visible) Keyboard.dismiss()
@@ -48,7 +52,7 @@ export function Dialog({
             visible
             transparent
             statusBarTranslucent
-            onRequestClose={onDismiss}
+            onRequestClose={onRequestClose}
         >
             <Host
                 matchContents={DIALOG.matchContents}
@@ -59,7 +63,7 @@ export function Dialog({
                         colors={dialogColors}
                         modifiers={modifiers}
                         properties={DIALOG.properties}
-                        onDismissRequest={onDismiss}
+                        onDismissRequest={onRequestClose}
                     >
                         <AlertDialog.Title>
                             <Text style={titleStyle}>

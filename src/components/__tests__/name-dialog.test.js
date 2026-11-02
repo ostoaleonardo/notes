@@ -5,6 +5,7 @@ import { NameDialog } from '../name-dialog'
 let mockName = 'Plan'
 let mockConfirmProps = {}
 let mockSecondaryProps = {}
+let mockCancelProps = {}
 
 jest.mock('@/hooks/use-dialog-input', () => ({
     useCreateDialogInput: () => [mockName, jest.fn(), !mockName.trim()]
@@ -20,6 +21,12 @@ jest.mock('@/ui/dialog', () => ({
 }))
 jest.mock('@/ui/input/filled-text-field', () => ({
     FilledTextField: () => null
+}))
+jest.mock('@/ui/button/text-button', () => ({
+    TextButton: (props) => {
+        mockCancelProps = props
+        return null
+    }
 }))
 jest.mock('@/ui/button/filled-button', () => ({
     FilledButton: (props) => {
@@ -48,6 +55,7 @@ describe('name dialog', () => {
         mockName = 'Plan'
         mockConfirmProps = {}
         mockSecondaryProps = {}
+        mockCancelProps = {}
     })
 
     test('submits the trimmed name only once when create is pressed twice', async () => {
@@ -119,5 +127,33 @@ describe('name dialog', () => {
         await setup({ busy: true })
 
         expect(mockConfirmProps.disabled).toBe(true)
+    })
+
+    test('shows a cancel button that dismisses the dialog', async () => {
+        const onDismiss = jest.fn()
+        await setup({ onDismiss })
+
+        mockCancelProps.onPress()
+
+        expect(onDismiss).toHaveBeenCalledTimes(1)
+    })
+
+    test('locks the cancel button while creating', async () => {
+        const gate = deferred()
+        await setup({ onSubmit: () => gate.promise })
+        expect(mockCancelProps.disabled).toBe(false)
+
+        let running
+        await act(async () => { running = mockConfirmProps.onPress() })
+        expect(mockCancelProps.disabled).toBe(true)
+
+        gate.resolve()
+        await act(async () => { await running })
+    })
+
+    test('replaces the cancel button with the secondary action', async () => {
+        await setup({ secondaryAction: <Secondary /> })
+
+        expect(mockCancelProps).toEqual({})
     })
 })

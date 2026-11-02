@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@/ui/dialog'
 import { FilledButton } from '@/ui/button/filled-button'
+import { TextButton } from '@/ui/button/text-button'
 import { FilledTextField } from '@/ui/input/filled-text-field'
 
 import { useCreateDialogInput } from '@/hooks/use-dialog-input'
@@ -33,7 +34,12 @@ export function NameDialog({ visible, onDismiss, title, onSubmit, busy = false, 
             title={title}
             visible={visible}
             onDismiss={onDismiss}
-            dismiss={secondaryAction && cloneElement(secondaryAction, { disabled: locked })}
+            locked={locked}
+            dismiss={secondaryAction ? cloneElement(secondaryAction, { disabled: locked }) : (
+                <TextButton disabled={locked} onPress={onDismiss}>
+                    {t('button.cancel')}
+                </TextButton>
+            )}
             confirm={(
                 <FilledButton
                     loading={creating}
@@ -47,6 +53,7 @@ export function NameDialog({ visible, onDismiss, title, onSubmit, busy = false, 
             <FilledTextField
                 autoFocus
                 multiline={false}
+                disabled={locked}
                 value={name}
                 placeholder={title}
                 onChangeText={setName}

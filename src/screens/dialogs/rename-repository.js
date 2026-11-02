@@ -42,6 +42,7 @@ export function RenameRepository({ visible, onDismiss, repositoryId }) {
             title={t(isFolder ? 'repositories.edit_folder' : 'repositories.rename.title')}
             visible={visible}
             onDismiss={onDismiss}
+            locked={updating}
             confirm={(
                 <FilledButton
                     loading={updating}
@@ -55,6 +56,7 @@ export function RenameRepository({ visible, onDismiss, repositoryId }) {
             <FilledTextField
                 autoFocus
                 multiline={false}
+                disabled={updating}
                 value={alias}
                 placeholder={placeholder}
                 onChangeText={setAlias}

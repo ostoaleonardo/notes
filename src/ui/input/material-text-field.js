@@ -25,6 +25,7 @@ export function MaterialTextField({
     endAdornment,
     ref,
     multiline = true,
+    disabled = false,
     autoFocus = false
 }) {
     const { colors } = useTheme()
@@ -53,6 +54,7 @@ export function MaterialTextField({
             colors={fieldColors}
             modifiers={inCompose ? FILL_WIDTH : undefined}
             textStyle={textStyle}
+            enabled={!disabled}
             autoFocus={autoFocus}
             singleLine={!multiline}
             keyboardOptions={FILLED_INPUT.keyboardOptions}
