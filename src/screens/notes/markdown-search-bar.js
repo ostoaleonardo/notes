@@ -16,7 +16,7 @@ import { FONTS, RADIUS, SPACING } from '@/constants/theme'
 import { TINT } from '@/ui/tokens/transparent'
 import { MARKDOWN_ACTIONS } from '@/constants/markdown-actions'
 
-export function MarkdownSearchBar({ search, action }) {
+export function MarkdownSearchBar({ search, action, canReplace }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
 
@@ -27,6 +27,7 @@ export function MarkdownSearchBar({ search, action }) {
         setSearchQuery,
         replaceText,
         setReplaceText,
+        onToggleReplace,
         onClose
     } = search
 
@@ -77,6 +78,12 @@ export function MarkdownSearchBar({ search, action }) {
                 </View>
                 <ButtonGroup
                     buttons={[
+                        ...(canReplace ? [{
+                            icon: FindReplace,
+                            label: t('button.replace'),
+                            selected: replaceVisible,
+                            onPress: onToggleReplace
+                        }] : []),
                         {
                             icon: KeyboardArrowUp,
                             label: t('button.previous'),

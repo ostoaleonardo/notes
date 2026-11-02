@@ -11,10 +11,7 @@ export function useMarkdownSearch() {
         setReplaceVisible(false)
     }, [])
 
-    const onOpenReplace = useCallback(() => {
-        setVisible(true)
-        setReplaceVisible(true)
-    }, [])
+    const onToggleReplace = useCallback(() => setReplaceVisible((current) => !current), [])
 
     const onClose = useCallback(() => {
         setVisible(false)
@@ -31,7 +28,7 @@ export function useMarkdownSearch() {
         replaceText,
         setReplaceText,
         onOpenSearch,
-        onOpenReplace,
+        onToggleReplace,
         onClose
     }
 }

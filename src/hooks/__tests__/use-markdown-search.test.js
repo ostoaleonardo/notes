@@ -15,16 +15,23 @@ describe('open search', () => {
     })
 })
 
-describe('open replace', () => {
-    test('shows both the search and replace fields', async () => {
+describe('toggle replace', () => {
+    test('shows and hides the replace field', async () => {
         const { result } = await renderHook(() => useMarkdownSearch())
 
         await act(() => {
-            result.current.onOpenReplace()
+            result.current.onOpenSearch()
+            result.current.onToggleReplace()
+        })
+
+        expect(result.current.replaceVisible).toBe(true)
+
+        await act(() => {
+            result.current.onToggleReplace()
         })
 
         expect(result.current.visible).toBe(true)
-        expect(result.current.replaceVisible).toBe(true)
+        expect(result.current.replaceVisible).toBe(false)
     })
 })
 
@@ -33,7 +40,8 @@ describe('close', () => {
         const { result } = await renderHook(() => useMarkdownSearch())
 
         await act(() => {
-            result.current.onOpenReplace()
+            result.current.onOpenSearch()
+            result.current.onToggleReplace()
             result.current.setSearchQuery('todo')
             result.current.setReplaceText('done')
         })

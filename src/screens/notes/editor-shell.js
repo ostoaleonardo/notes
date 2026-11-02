@@ -10,6 +10,7 @@ import { AppBar } from '@/components/app-bar/app-bar'
 import { usePro } from '@/hooks/use-pro'
 
 import { APP_BAR_MODES } from '@/constants/app-bar'
+import { EDITOR_MODES } from '@/constants/editor-modes'
 
 export function EditorShell({
     mode,
@@ -65,6 +66,7 @@ export function EditorShell({
             <MarkdownSearchBar
                 search={chrome.search}
                 action={chrome.action}
+                canReplace={mode !== EDITOR_MODES.READ}
             />
 
             <MarkdownEditorLayout
