@@ -155,7 +155,7 @@ private fun PinnedTile(state: WidgetState) {
         } else {
             Column {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    WidgetIcon(R.drawable.widget_keep, state.muted(), WidgetMetrics.BAR_ICON)
+                    WidgetIcon(R.drawable.widget_keep, state.text(), WidgetMetrics.BAR_ICON)
                     Spacer(GlanceModifier.width((WidgetMetrics.GAP / 2).dp))
                     WidgetText(
                         state.labels.pinned.uppercase(),

@@ -38,7 +38,9 @@ export function WidgetsProvider({ children }) {
     useStorageEffect(STORAGE_KEYS.WIDGET_GLASS_ALPHA, (value) => {
         const stored = Number(value)
 
-        if (value && Number.isFinite(stored)) setAlpha(stored)
+        if (value && Number.isFinite(stored)) {
+            setAlpha(Math.min(WIDGET_GLASS_ALPHA.max, Math.max(WIDGET_GLASS_ALPHA.min, stored)))
+        }
     })
 
     useEffect(() => {
