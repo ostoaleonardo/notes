@@ -103,6 +103,11 @@ export const PLAIN_INPUT = {
     keyboardOptions: { capitalization: 'sentences' }
 }
 
+export const SLIDER = {
+    matchContents: { vertical: true },
+    hostStyle: { width: '100%' }
+}
+
 export const SHEET = {
     topPadding: SIZE.xxl,
     snapPoints: {

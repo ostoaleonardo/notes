@@ -1,5 +1,5 @@
 import { isDevice } from 'expo-device'
-import { Linking, StyleSheet, View } from 'react-native'
+import { Linking, Platform, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { LanguageOption } from '@/screens/settings/language-option'
@@ -9,6 +9,7 @@ import { ThemeOption } from '@/screens/settings/theme-option'
 import { AppVersionCard } from '@/screens/settings/app-version-card'
 import { ListItem } from '@/ui/list-item'
 import { useTheme } from '@/ui/hooks/use-theme'
+import { WidgetsOption } from '@/screens/settings/widgets-option'
 import { WikiLinksOption } from '@/screens/settings/wiki-links-option'
 import { AttachmentsOption } from '@/screens/settings/attachments-option'
 import { StorageSelectOption } from '@/screens/settings/storage-select-option'
@@ -82,6 +83,16 @@ export default function Settings() {
                 >
                     <WikiLinksOption />
                 </Section>
+
+                {Platform.OS === 'android' && (
+                    <Section
+                        title={t('settings.widgets.title')}
+                        containerStyle={styles.section}
+                        contentStyle={styles.items}
+                    >
+                        <WidgetsOption />
+                    </Section>
+                )}
 
                 <Section
                     title={t('settings.attachments.title')}

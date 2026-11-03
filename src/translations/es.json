@@ -206,6 +206,14 @@
 				"title": "Actualizar enlaces internos automáticamente",
 				"description": "Desactívalo para que se te pregunte antes de actualizar los enlaces al renombrar una nota."
 			}
+		},
+		"widgets": {
+			"title": "Widgets",
+			"glass": {
+				"title": "Efecto cristal",
+				"description": "Fondo translúcido en los widgets",
+				"opacity": "Opacidad"
+			}
 		}
 	},
 	"pro": {

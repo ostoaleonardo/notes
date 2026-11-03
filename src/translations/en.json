@@ -206,6 +206,14 @@
 				"title": "Automatically update internal links",
 				"description": "Turn off to be asked before updating links after renaming a note."
 			}
+		},
+		"widgets": {
+			"title": "Widgets",
+			"glass": {
+				"title": "Glass effect",
+				"description": "Translucent widget background",
+				"opacity": "Opacity"
+			}
 		}
 	},
 	"pro": {

@@ -206,6 +206,14 @@
 				"title": "Atualizar links internos automaticamente",
 				"description": "Desative para ser perguntado antes de atualizar os links após renomear uma nota."
 			}
+		},
+		"widgets": {
+			"title": "Widgets",
+			"glass": {
+				"title": "Efeito vidro",
+				"description": "Fundo translúcido nos widgets",
+				"opacity": "Opacidade"
+			}
 		}
 	},
 	"pro": {

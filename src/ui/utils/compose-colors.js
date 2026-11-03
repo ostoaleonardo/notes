@@ -9,6 +9,12 @@ export const getSwitchColors = (colors) => ({
     uncheckedBorderColor: colors.outline
 })
 
+export const getSliderColors = (colors) => ({
+    thumbColor: colors.tertiary,
+    activeTrackColor: colors.tertiary,
+    inactiveTrackColor: colors.surfaceVariant
+})
+
 export const getCheckboxColors = (colors) => ({
     checkedColor: colors.onBackground,
     uncheckedColor: colors.onBackground + TINT.fill,
