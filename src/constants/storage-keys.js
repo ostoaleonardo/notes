@@ -17,6 +17,8 @@ export const STORAGE_KEYS = {
     ALWAYS_UPDATE_WIKI_LINKS: 'always-update-wiki-links',
     LINK_FORMAT: 'link-format',
     HEADING_FONT: 'heading-font',
+    WIDGET_GLASS: 'widget-glass',
+    WIDGET_GLASS_ALPHA: 'widget-glass-alpha',
     PDF_EMBED: 'pdf-embed',
     ATTACHMENT_LOCATION: 'attachment-location',
     ATTACHMENT_FOLDER: 'attachment-folder',

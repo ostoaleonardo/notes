@@ -9,6 +9,7 @@ import { NoteProvider } from '@/context/note-context'
 import { RecentNotesProvider } from '@/context/recent-notes-context'
 import { RepositoryProvider } from '@/context/repository-context'
 import { UtilsProvider } from '@/context/utils-context'
+import { WidgetsProvider } from '@/context/widgets-provider'
 import { GlobalSnackbarHost } from '@/ui/snackbar/snackbar-host'
 
 export default function Providers({ children }) {
@@ -21,13 +22,15 @@ export default function Providers({ children }) {
                     <RecentNotesProvider>
                         <NoteProvider>
                             <CurrentNoteProvider>
-                                <ImportProvider>
-                                    <KeyboardProvider>
-                                        <BottomSheetModalProvider>
-                                            {children}
-                                        </BottomSheetModalProvider>
-                                    </KeyboardProvider>
-                                </ImportProvider>
+                                <WidgetsProvider>
+                                    <ImportProvider>
+                                        <KeyboardProvider>
+                                            <BottomSheetModalProvider>
+                                                {children}
+                                            </BottomSheetModalProvider>
+                                        </KeyboardProvider>
+                                    </ImportProvider>
+                                </WidgetsProvider>
                             </CurrentNoteProvider>
                         </NoteProvider>
                     </RecentNotesProvider>
