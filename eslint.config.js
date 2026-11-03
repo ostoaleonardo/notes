@@ -60,6 +60,12 @@ module.exports = [
         }
     },
     {
+        files: ['widgets/**/*.js'],
+        languageOptions: {
+            globals: Object.fromEntries(['Spacer'].map((name) => [name, 'readonly']))
+        }
+    },
+    {
         files: ['**/__tests__/**', '**/*.test.js'],
         languageOptions: { globals: globals.jest }
     }
