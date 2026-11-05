@@ -37,7 +37,6 @@ export const SplitButton = ({
                     onPress={onPress}
                     testID={primaryTestID}
                 />
-
                 <Menu
                     visible={menuVisible}
                     onClose={closeMenu}

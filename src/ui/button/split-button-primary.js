@@ -41,7 +41,6 @@ export function SplitButtonPrimary({ icon: Icon, label, onPress, testID }) {
                     <Icon color={colors.background} />
                     {label && (
                         <Typography
-                            bold={true}
                             color={colors.background}
                         >
                             {label}
