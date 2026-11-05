@@ -84,6 +84,14 @@ export default function Settings() {
                     <WikiLinksOption />
                 </Section>
 
+                <Section
+                    title={t('settings.attachments.title')}
+                    containerStyle={styles.section}
+                    contentStyle={styles.items}
+                >
+                    <AttachmentsOption />
+                </Section>
+
                 {Platform.OS === 'android' && (
                     <Section
                         title={t('settings.widgets.title')}
@@ -93,14 +101,6 @@ export default function Settings() {
                         <WidgetsOption />
                     </Section>
                 )}
-
-                <Section
-                    title={t('settings.attachments.title')}
-                    containerStyle={styles.section}
-                    contentStyle={styles.items}
-                >
-                    <AttachmentsOption />
-                </Section>
 
                 {isDevice && <ProSection />}
 
