@@ -159,7 +159,7 @@
 				"off": "Desactivado"
 			},
 			"spellcheck": {
-				"title": "Revisión ortográfica y autocorrección",
+				"title": "Revisión ortográfica",
 				"on": "Activado",
 				"off": "Desactivado"
 			},
@@ -167,6 +167,9 @@
 				"title": "Título en línea",
 				"on": "Activado",
 				"off": "Desactivado"
+			},
+			"autocorrect": {
+				"title": "Autocorrección"
 			}
 		},
 		"daily_note": {

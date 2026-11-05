@@ -13,6 +13,7 @@ import { WidgetsOption } from '@/screens/settings/widgets-option'
 import { WikiLinksOption } from '@/screens/settings/wiki-links-option'
 import { AttachmentsOption } from '@/screens/settings/attachments-option'
 import { StorageSelectOption } from '@/screens/settings/storage-select-option'
+import { StorageSwitchOption } from '@/screens/settings/storage-switch-option'
 import { DailyNoteOption } from '@/screens/settings/daily-note-option'
 import { DefaultNoteFolderOption } from '@/screens/settings/default-note-folder-option'
 import { Scroll } from '@/ui/animated/scroll'
@@ -60,11 +61,10 @@ export default function Settings() {
                     containerStyle={styles.section}
                     contentStyle={styles.items}
                 >
-                    {EDITOR_SELECT_OPTIONS.map((option) => (
-                        <StorageSelectOption
-                            key={option.storageKey}
-                            {...option}
-                        />
+                    {EDITOR_SELECT_OPTIONS.map(({ toggle, ...option }) => (
+                        toggle
+                            ? <StorageSwitchOption key={option.storageKey} {...option} />
+                            : <StorageSelectOption key={option.storageKey} {...option} />
                     ))}
                 </Section>
 

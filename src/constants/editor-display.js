@@ -27,5 +27,6 @@ export const EDITOR_TAB_SIZES = {
 
 export const DEFAULT_EDITOR_LINE_NUMBERS = 'off'
 export const DEFAULT_EDITOR_SPELLCHECK = 'on'
+export const DEFAULT_EDITOR_AUTOCORRECT = 'on'
 export const DEFAULT_EDITOR_TAB_SIZE = '4'
 export const DEFAULT_EDITOR_INLINE_TITLE = 'on'

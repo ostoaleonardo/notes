@@ -160,7 +160,7 @@ export const MarkdownInput = ({
         style: { flex: 1 }
     }), [mode])
 
-    const { fontSize, maxWidth, lineNumbers, spellcheck, tabSize, inlineTitle } = useEditorDisplay()
+    const { fontSize, maxWidth, lineNumbers, spellcheck, autocorrect, tabSize, inlineTitle } = useEditorDisplay()
     const { fontFamily: headingFont } = useHeadingFont()
 
     const theme = useMemo(() => ({
@@ -188,6 +188,7 @@ export const MarkdownInput = ({
                     tableLabels={tableLabels}
                     lineNumbers={lineNumbers}
                     spellcheck={spellcheck}
+                    autocorrect={autocorrect}
                     tabSize={tabSize}
                     inlineTitle={inlineTitle}
                     backlinksHtml={backlinksHtml}

@@ -28,6 +28,7 @@ export const STORAGE_KEYS = {
     EDITOR_LINE_WIDTH: 'editor-line-width',
     EDITOR_LINE_NUMBERS: 'editor-line-numbers',
     EDITOR_SPELLCHECK: 'editor-spellcheck',
+    EDITOR_AUTOCORRECT: 'editor-autocorrect',
     EDITOR_TAB_SIZE: 'editor-tab-size',
     EDITOR_INLINE_TITLE: 'editor-inline-title',
     DELETE_BEHAVIOR: 'delete-behavior',

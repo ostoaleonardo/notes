@@ -1,5 +1,6 @@
 import { DEFAULT_DELETE_BEHAVIOR, DELETE_BEHAVIORS } from '@/constants/delete-behavior'
 import {
+    DEFAULT_EDITOR_AUTOCORRECT,
     DEFAULT_EDITOR_FONT_SIZE,
     DEFAULT_EDITOR_INLINE_TITLE,
     DEFAULT_EDITOR_LINE_NUMBERS,
@@ -54,18 +55,28 @@ export const EDITOR_SELECT_OPTIONS = [
         storageKey: STORAGE_KEYS.EDITOR_LINE_NUMBERS,
         translationKey: 'settings.editor.line_numbers',
         values: Object.keys(EDITOR_TOGGLE),
+        toggle: true,
         defaultValue: DEFAULT_EDITOR_LINE_NUMBERS
     },
     {
         storageKey: STORAGE_KEYS.EDITOR_SPELLCHECK,
         translationKey: 'settings.editor.spellcheck',
         values: Object.keys(EDITOR_TOGGLE),
+        toggle: true,
         defaultValue: DEFAULT_EDITOR_SPELLCHECK
+    },
+    {
+        storageKey: STORAGE_KEYS.EDITOR_AUTOCORRECT,
+        translationKey: 'settings.editor.autocorrect',
+        values: Object.keys(EDITOR_TOGGLE),
+        toggle: true,
+        defaultValue: DEFAULT_EDITOR_AUTOCORRECT
     },
     {
         storageKey: STORAGE_KEYS.EDITOR_INLINE_TITLE,
         translationKey: 'settings.editor.inline_title',
         values: Object.keys(EDITOR_TOGGLE),
+        toggle: true,
         defaultValue: DEFAULT_EDITOR_INLINE_TITLE
     }
 ]

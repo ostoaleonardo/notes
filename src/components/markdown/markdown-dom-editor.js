@@ -42,6 +42,7 @@ const MarkdownDomEditor = ({
     tableLabels,
     lineNumbers,
     spellcheck,
+    autocorrect,
     tabSize,
     inlineTitle,
     backlinksHtml,
@@ -115,21 +116,24 @@ const MarkdownDomEditor = ({
         viewRef,
         () => EditorView.contentAttributes.of({
             spellcheck: String(spellcheck),
-            autocorrect: spellcheck ? 'on' : 'off',
-            autocapitalize: spellcheck ? 'sentences' : 'off'
+            autocorrect: autocorrect ? 'on' : 'off',
+            autocapitalize: autocorrect ? 'sentences' : 'off'
         }),
-        [spellcheck]
+        [spellcheck, autocorrect]
     )
+
     const indentExtension = useCompartment(
         viewRef,
         () => [indentUnit.of(' '.repeat(tabSize)), EditorState.tabSize.of(tabSize)],
         [tabSize]
     )
+
     const liveFormattingExtension = useCompartment(
         viewRef,
         () => (mode === EDITOR_MODES.LIVE ? [liveFormatting] : []),
         [mode]
     )
+
     const invalidFrontmatterExtension = useCompartment(
         viewRef,
         () => buildInvalidFrontmatterHighlight(colors.errorContainer),
@@ -147,7 +151,9 @@ const MarkdownDomEditor = ({
         () => buildEditorTheme(stableTheme),
         [stableTheme]
     )
+
     const bottomInset = stableTheme.layout?.bottomInset ?? 0
+
     const scrollMarginsExtension = useCompartment(
         viewRef,
         () => EditorView.scrollMargins.of(() => ({ bottom: bottomInset })),
@@ -205,9 +211,11 @@ const MarkdownDomEditor = ({
         const handleFocus = () => {
             onFocusRef.current?.()
         }
+
         const handleBlur = () => {
             onBlurRef.current?.()
         }
+
         view.dom.addEventListener('focus', handleFocus, true)
         view.dom.addEventListener('blur', handleBlur, true)
 
@@ -239,10 +247,12 @@ const MarkdownDomEditor = ({
             lastEmitted: lastEmittedValueRef.current,
             pendingEmitted: pendingEmittedRef.current
         })
+
         if (!shouldApply) return
 
         const newValue = value || ''
         lastEmittedValueRef.current = value
+
         view.dispatch({
             changes: { from: 0, to: view.state.doc.length, insert: newValue },
             selection: { anchor: Math.min(view.state.selection.main.head, newValue.length) }

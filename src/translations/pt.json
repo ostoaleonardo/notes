@@ -159,7 +159,7 @@
 				"off": "Desativado"
 			},
 			"spellcheck": {
-				"title": "Verificação ortográfica e correção automática",
+				"title": "Verificação ortográfica",
 				"on": "Ativada",
 				"off": "Desativada"
 			},
@@ -167,6 +167,9 @@
 				"title": "Título em linha",
 				"on": "Ativado",
 				"off": "Desativado"
+			},
+			"autocorrect": {
+				"title": "Correção automática"
 			}
 		},
 		"daily_note": {

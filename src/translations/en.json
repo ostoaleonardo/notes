@@ -159,7 +159,7 @@
 				"off": "Off"
 			},
 			"spellcheck": {
-				"title": "Spellcheck and autocorrect",
+				"title": "Spellcheck",
 				"on": "On",
 				"off": "Off"
 			},
@@ -167,6 +167,9 @@
 				"title": "Inline title",
 				"on": "On",
 				"off": "Off"
+			},
+			"autocorrect": {
+				"title": "Autocorrect"
 			}
 		},
 		"daily_note": {
