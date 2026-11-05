@@ -12,8 +12,8 @@ import { SplitButton } from '@/ui/button/split-button'
 import { useBottomSheet } from '@/hooks/use-bottom-sheet'
 import { useMenuAction } from '@/hooks/use-menu-action'
 
-import { Book } from '@/icons/book'
 import { EditNote } from '@/icons/edit-note'
+import { Notes } from '@/icons/notes'
 import { Search } from '@/icons/search'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
@@ -88,7 +88,7 @@ export const MarkdownModeToggle = ({
                 visible={visible}
                 primaryTestID={TEST_IDS.EDITOR_MODE_TOGGLE}
                 triggerTestID={TEST_IDS.EDITOR_MENU}
-                icon={read ? EditNote : Book}
+                icon={read ? EditNote : Notes}
                 label={t(read ? 'button.edit' : 'button.preview')}
                 triggerLabel={t('button.more')}
                 onPress={onPrimaryPress}
