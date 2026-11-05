@@ -97,6 +97,7 @@
 		"general": {
 			"title": "General",
 			"language": "Idioma",
+			"language_system": "Predeterminado del sistema",
 			"theme": "Tema de color",
 			"themes": "Tema",
 			"accent": "Color de acento",

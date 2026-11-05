@@ -2,6 +2,7 @@ import * as SplashScreen from 'expo-splash-screen'
 import { Slot } from 'expo-router'
 import { useEffect, useEffectEvent, useState } from 'react'
 import { useColorScheme } from 'react-native'
+import { useLocales } from 'expo-localization'
 
 import { ErrorBoundary } from '@/components/error-boundary'
 
@@ -26,7 +27,8 @@ export { ErrorBoundary }
 
 export default function MainLayout() {
     const colorScheme = useColorScheme()
-    const { initLanguage } = useLanguage()
+    const { initLanguage, syncSystemLanguage } = useLanguage()
+    const locales = useLocales()
     const { getItem } = useStorage()
     useRouteTracker()
 
@@ -43,6 +45,14 @@ export default function MainLayout() {
     useEffect(() => {
         init()
     }, [])
+
+    const syncLanguage = useEffectEvent(() => {
+        syncSystemLanguage()
+    })
+
+    useEffect(() => {
+        syncLanguage()
+    }, [locales])
 
     const initTheme = async () => {
         const accent = await getItem(STORAGE_KEYS.ACCENT) || FREE_ACCENT

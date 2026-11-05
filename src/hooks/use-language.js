@@ -2,38 +2,37 @@ import { getLocales } from 'expo-localization'
 
 import { useStorage } from './use-storage'
 import i18next from '@/i18n/i18next'
+import { getSystemLanguage, isSupportedLanguage, resolveLanguage } from '@/utils/language'
 
-import { DEFAULT_LANGUAGE, LANGUAGES } from '@/constants/languages'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-
-const SUPPORTED_LANGUAGES = LANGUAGES.map(({ code }) => code)
 
 export function useLanguage() {
     const { setItem, getItem } = useStorage()
     const currentLanguage = i18next.language
 
-    const getLanguage = () => {
-        const locales = getLocales()
-        const { languageCode } = locales[0]
-
-        return SUPPORTED_LANGUAGES.includes(languageCode) ? languageCode : DEFAULT_LANGUAGE
+    const applyLanguage = (selected) => {
+        i18next.changeLanguage(resolveLanguage(selected, getSystemLanguage(getLocales())))
     }
 
-    const changeLanguage = (lan) => {
-        i18next.changeLanguage(lan)
-        setItem(STORAGE_KEYS.LANGUAGE, lan)
+    const changeLanguage = (selected) => {
+        applyLanguage(selected)
+        setItem(STORAGE_KEYS.LANGUAGE, selected)
     }
 
     const initLanguage = async () => {
-        const userLanguage = await getItem(STORAGE_KEYS.LANGUAGE)
-        const defaultLanguage = getLanguage()
+        applyLanguage(await getItem(STORAGE_KEYS.LANGUAGE))
+    }
 
-        changeLanguage(userLanguage || defaultLanguage)
+    const syncSystemLanguage = async () => {
+        const selected = await getItem(STORAGE_KEYS.LANGUAGE)
+
+        if (!isSupportedLanguage(selected)) applyLanguage(selected)
     }
 
     return {
         currentLanguage,
         initLanguage,
-        changeLanguage
+        changeLanguage,
+        syncSystemLanguage
     }
 }

@@ -62,3 +62,4 @@ export const LANGUAGES = [
 ]
 
 export const DEFAULT_LANGUAGE = 'en'
+export const SYSTEM_LANGUAGE = 'system'
