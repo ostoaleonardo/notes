@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { ListItem as ComposeListItem, RNHostView, Text } from '@expo/ui/jetpack-compose'
-import { Shapes, clickable, clip } from '@expo/ui/jetpack-compose/modifiers'
+import { Column, ListItem as ComposeListItem, RNHostView, Text } from '@expo/ui/jetpack-compose'
+import { Shapes, clickable, clip, padding } from '@expo/ui/jetpack-compose/modifiers'
 
 import { ComposeHost } from '@/ui/compose-context'
 import { ComposeIcon } from '@/ui/compose-icon'
@@ -55,6 +55,12 @@ export function ListItem({
         supportingContentColor: colors.onBackground + TINT.placeholder
     }), [stacked, container, colors])
 
+    const textModifiers = useMemo(() => (
+        description
+            ? [padding(0, COMPOSE_LIST_ITEM.textPadding, 0, COMPOSE_LIST_ITEM.textPadding)]
+            : []
+    ), [description])
+
     const titleStyle = useMemo(() => ({
         fontFamily: FONTS.azeretLight,
         fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodyMedium
@@ -89,17 +95,20 @@ export function ListItem({
                 modifiers={modifiers}
             >
                 <ComposeListItem.HeadlineContent>
-                    <Text style={titleStyle}>
-                        {uppercase ? title.toLocaleUpperCase() : title}
-                    </Text>
-                </ComposeListItem.HeadlineContent>
-                {!!description && (
-                    <ComposeListItem.SupportingContent>
-                        <Text style={descriptionStyle}>
-                            {description}
+                    <Column modifiers={textModifiers}>
+                        <Text style={titleStyle}>
+                            {uppercase ? title.toLocaleUpperCase() : title}
                         </Text>
-                    </ComposeListItem.SupportingContent>
-                )}
+                        {!!description && (
+                            <Text
+                                color={listColors.supportingContentColor}
+                                style={descriptionStyle}
+                            >
+                                {description}
+                            </Text>
+                        )}
+                    </Column>
+                </ComposeListItem.HeadlineContent>
                 {!!leadingIcon && (
                     <ComposeListItem.LeadingContent>
                         <ComposeIcon

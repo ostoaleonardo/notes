@@ -79,7 +79,8 @@ export const MENU_ALIGN = {
 
 export const COMPOSE_LIST_ITEM = {
     matchContents: { vertical: true },
-    hostStyle: { width: '100%' }
+    hostStyle: { width: '100%' },
+    textPadding: 13
 }
 
 export const COMPOSE_DIVIDER = {
