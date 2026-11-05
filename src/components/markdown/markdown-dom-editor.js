@@ -147,6 +147,13 @@ const MarkdownDomEditor = ({
         () => buildEditorTheme(stableTheme),
         [stableTheme]
     )
+    const bottomInset = stableTheme.layout?.bottomInset ?? 0
+    const scrollMarginsExtension = useCompartment(
+        viewRef,
+        () => EditorView.scrollMargins.of(() => ({ bottom: bottomInset })),
+        [bottomInset]
+    )
+
     const placeholderCompartment = useCompartment(
         viewRef,
         () => buildBlankPlaceholder(placeholder),
@@ -177,6 +184,7 @@ const MarkdownDomEditor = ({
                     invalidFrontmatterExtension,
                     frontmatterExtension,
                     placeholderCompartment,
+                    scrollMarginsExtension,
                     themeExtension
                 ],
                 onTagPressRef,
