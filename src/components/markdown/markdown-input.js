@@ -12,8 +12,8 @@ import { MissingNoteDialog } from '@/components/missing-note-dialog'
 import { useEditorDisplay } from '@/hooks/use-editor-display'
 import { useHeadingFont } from '@/hooks/use-heading-font'
 import { toCssHeadingFamily } from '@/utils/heading-font'
-import { useDomFonts } from '@/hooks/use-dom-fonts'
-import { useKatexFonts } from '@/hooks/use-katex-fonts'
+import { loadDomFonts } from '@/hooks/use-dom-fonts'
+import { loadKatexFonts } from '@/hooks/use-katex-fonts'
 import { useTags } from '@/hooks/use-tags'
 import { useBacklinksHtml } from '@/hooks/use-backlinks-html'
 import { useMissingNote } from '@/hooks/use-missing-note'
@@ -40,7 +40,7 @@ import { BUTTON } from '@/constants/components'
 import { BODY_FONT_FAMILY, SPACING } from '@/constants/theme'
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { LINK_TYPES } from '@/constants/link-types'
-import { MATH_DELIMITER, NO_KATEX_FONTS } from '@/constants/markdown-math'
+import { MATH_DELIMITER } from '@/constants/markdown-math'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { WIKI_LINK_FORMATS } from '@/constants/wiki-links'
 
@@ -75,10 +75,7 @@ export const MarkdownInput = ({
     const { colors } = useTheme()
     const { tags: knownTags } = useTags()
 
-    const fonts = useDomFonts()
     const hasMath = useMemo(() => !!value && value.includes(MATH_DELIMITER), [value])
-    const loadedKatexFonts = useKatexFonts(hasMath)
-    const katexFonts = hasMath ? loadedKatexFonts : NO_KATEX_FONTS
 
     const [linkFormat, setLinkFormat] = useState(WIKI_LINK_FORMATS.WIKILINK)
     const [ready, setReady] = useState(false)
@@ -217,8 +214,9 @@ export const MarkdownInput = ({
                     headingIndex={headingIndex}
                     jumpNonce={jumpNonce}
                     theme={theme}
-                    fonts={fonts}
-                    katexFonts={katexFonts}
+                    hasMath={hasMath}
+                    loadFonts={loadDomFonts}
+                    loadKatexFonts={loadKatexFonts}
                     dom={dom}
                 />
 

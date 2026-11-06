@@ -14,10 +14,10 @@ const resolveFontDataUrl = async (module, mimeType) => {
     return `data:${mimeType};base64,${base64}`
 }
 
-export const createAssetFontsHook = (fontModules, mimeType) => {
+export const createAssetFontsLoader = (fontModules, mimeType) => {
     let fontsPromise = null
 
-    const loadFonts = () => {
+    return () => {
         if (!fontsPromise) {
             const entries = Object.entries(fontModules)
 
@@ -32,6 +32,10 @@ export const createAssetFontsHook = (fontModules, mimeType) => {
 
         return fontsPromise
     }
+}
+
+export const createAssetFontsHook = (fontModules, mimeType) => {
+    const loadFonts = createAssetFontsLoader(fontModules, mimeType)
 
     return function useAssetFonts(enabled = true) {
         const [fonts, setFonts] = useState(null)

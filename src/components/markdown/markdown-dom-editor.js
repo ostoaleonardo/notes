@@ -29,6 +29,7 @@ import { buildBlankPlaceholder } from './markdown-dom-placeholder'
 import { scrollToEditorTarget, scrollToPreviewTarget } from './markdown-dom-anchor-target'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
+import { NO_KATEX_FONTS } from '@/constants/markdown-math'
 
 const MarkdownDomEditor = ({
     mode,
@@ -58,8 +59,9 @@ const MarkdownDomEditor = ({
     onImagePress,
     onToggleTask,
     theme,
-    fonts,
-    katexFonts,
+    hasMath,
+    loadFonts,
+    loadKatexFonts,
     placeholder = '',
     titleField,
     onTitleChange,
@@ -78,6 +80,21 @@ const MarkdownDomEditor = ({
     const themeKey = JSON.stringify(theme)
     const stableTheme = useMemo(() => JSON.parse(themeKey), [themeKey])
     const { colors } = stableTheme
+
+    const [fonts, setFonts] = useState(null)
+    const [loadedKatexFonts, setLoadedKatexFonts] = useState(null)
+    const katexFonts = hasMath ? loadedKatexFonts : NO_KATEX_FONTS
+
+    const fetchFonts = useEffectEvent(() => loadFonts().then(setFonts))
+    const fetchKatexFonts = useEffectEvent(() => loadKatexFonts().then(setLoadedKatexFonts))
+
+    useEffect(() => {
+        fetchFonts()
+    }, [])
+
+    useEffect(() => {
+        if (hasMath) fetchKatexFonts()
+    }, [hasMath])
 
     const containerRef = useRef(null)
     const previewRef = useRef(null)
