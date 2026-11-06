@@ -4,7 +4,6 @@ import { StyleSheet, View } from 'react-native'
 
 import { ButtonGroup } from '@/ui/button/button-group'
 import { ListItem } from '@/ui/list-item'
-import { useSheetBottomSpacing } from '@/ui/hooks/use-sheet-bottom-spacing'
 import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
 import { SheetTitle } from '@/ui/modal/sheet-title'
 import { PositionGroup } from '@/ui/position-group'
@@ -17,12 +16,11 @@ import { Folder } from '@/icons/folder'
 import { Share } from '@/icons/share'
 
 import { EXPORT_FORMATS, PRO_EXPORT_FORMATS } from '@/constants/export'
-import { ICON_SIZE, SPACING } from '@/constants/theme'
+import { ICON_SIZE, BOTTOM_GAP, SPACING } from '@/constants/theme'
 
 export const ExportSheet = memo(function ExportSheet({ sheet, onExport, onShare }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
-    const bottom = useSheetBottomSpacing()
     const { pro } = usePro()
 
     const [format, setFormat] = useState(EXPORT_FORMATS.MARKDOWN)
@@ -64,7 +62,7 @@ export const ExportSheet = memo(function ExportSheet({ sheet, onExport, onShare 
                 }))}
             />
 
-            <View style={[styles.rows, { paddingBottom: bottom }]}>
+            <View style={[styles.rows, { paddingBottom: BOTTOM_GAP }]}>
                 <PositionGroup>
                     <ListItem
                         uppercase={false}

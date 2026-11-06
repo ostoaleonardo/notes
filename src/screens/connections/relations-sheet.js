@@ -11,7 +11,6 @@ import { TonalButton } from '@/ui/button/tonal-button'
 import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
 import { EmptyMessage } from '@/ui/modal/empty-message'
 import { Typography } from '@/ui/typography'
-import { useSheetBottomSpacing } from '@/ui/hooks/use-sheet-bottom-spacing'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import { useDelayedValue } from '@/hooks/use-delayed-value'
@@ -27,7 +26,7 @@ import {
     CONNECTION_TYPES,
     CONNECTION_TYPE_LABELS
 } from '@/constants/connections'
-import { ICON_SIZE, OPACITY, SPACING } from '@/constants/theme'
+import { ICON_SIZE, OPACITY, BOTTOM_GAP, SPACING } from '@/constants/theme'
 import { TEST_IDS } from '@/constants/test-ids'
 
 const { ROOT } = CONNECTION_TYPES
@@ -43,7 +42,6 @@ export const RelationsSheet = memo(function RelationsSheet({
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { height } = useWindowDimensions()
-    const bottom = useSheetBottomSpacing()
     const [tabState, setTabState] = useState({ id: null, key: null })
 
     const id = entity ? entityKey(entity) : null
@@ -84,7 +82,7 @@ export const RelationsSheet = memo(function RelationsSheet({
             contentContainerStyle={styles.sheet}
         >
             {entity && (
-                <View style={[styles.container, !primary && !listed && { paddingBottom: bottom }]}>
+                <View style={[styles.container, !primary && !listed && { paddingBottom: BOTTOM_GAP }]}>
                     <View style={styles.header}>
                         <EntityBadge
                             entity={entity}
@@ -141,7 +139,7 @@ export const RelationsSheet = memo(function RelationsSheet({
                     </View>
 
                     {primary && (
-                        <View style={[styles.footer, { paddingBottom: bottom }]}>
+                        <View style={[styles.footer, { paddingBottom: BOTTOM_GAP }]}>
                             <TonalButton
                                 testID={TEST_IDS.CONNECTIONS_RELATIONS_PRIMARY}
                                 onPress={onPrimary}

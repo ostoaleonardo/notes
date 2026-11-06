@@ -6,11 +6,10 @@ import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
 import { SheetTitle } from '@/ui/modal/sheet-title'
 import { ListItem } from '@/ui/list-item'
 import { PositionGroup } from '@/ui/position-group'
-import { useSheetBottomSpacing } from '@/ui/hooks/use-sheet-bottom-spacing'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import { MARKDOWN_GROUPS } from '@/constants/markdown-controls'
-import { SPACING } from '@/constants/theme'
+import { BOTTOM_GAP, SPACING } from '@/constants/theme'
 
 const GroupItem = memo(function GroupItem({ action, Icon, onSelect }) {
     const { t } = useTranslation()
@@ -30,7 +29,6 @@ const GroupItem = memo(function GroupItem({ action, Icon, onSelect }) {
 export const MarkdownGroupSheet = memo(function MarkdownGroupSheet({ sheet, group, onSelect }) {
     const { t } = useTranslation()
     const items = MARKDOWN_GROUPS[group]?.items
-    const bottom = useSheetBottomSpacing()
 
     return (
         <ModalBottomSheet
@@ -39,7 +37,7 @@ export const MarkdownGroupSheet = memo(function MarkdownGroupSheet({ sheet, grou
         >
             {group && <SheetTitle>{t(`markdown_group.${group}`)}</SheetTitle>}
 
-            <View style={[styles.list, { paddingBottom: bottom }]}>
+            <View style={[styles.list, { paddingBottom: BOTTOM_GAP }]}>
                 <PositionGroup>
                     {items?.map(({ action, Icon }) => (
                         <GroupItem

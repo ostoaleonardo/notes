@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 
 import { TonalButton } from '@/ui/button/tonal-button'
+import { SheetActions } from '@/ui/modal/sheet-actions'
 import { SheetTitle } from '@/ui/modal/sheet-title'
 import { Typography } from '@/ui/typography'
-import { useSheetBottomSpacing } from '@/ui/hooks/use-sheet-bottom-spacing'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import { MAX_TABLE_COLS, MAX_TABLE_ROWS, TABLE_CELL_SIZE, TABLE_CELL_GAP } from '@/constants/table'
@@ -32,7 +32,6 @@ const TableRow = memo(function TableRow({ activeCols, activeStyle, inactiveStyle
 export function TableMarkdown({ onClose, onInsert }) {
     const { t } = useTranslation()
     const { colors } = useTheme()
-    const bottom = useSheetBottomSpacing()
 
     const gridRef = useRef(null)
     const origin = useRef({ x: 0, y: 0 })
@@ -70,7 +69,7 @@ export function TableMarkdown({ onClose, onInsert }) {
     }, [onInsert, onClose, selected])
 
     return (
-        <View style={[styles.container, { paddingBottom: bottom }]}>
+        <View style={styles.container}>
             <SheetTitle>{t('markdown_action.table')}</SheetTitle>
 
             <View style={styles.body}>
@@ -96,11 +95,13 @@ export function TableMarkdown({ onClose, onInsert }) {
                         />
                     ))}
                 </View>
+            </View>
 
+            <SheetActions>
                 <TonalButton onPress={onClose}>
                     {t('button.cancel')}
                 </TonalButton>
-            </View>
+            </SheetActions>
         </View>
     )
 }

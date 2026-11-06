@@ -7,7 +7,6 @@ import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
 import { SheetTitle } from '@/ui/modal/sheet-title'
 import { PositionGroup } from '@/ui/position-group'
 import { Switch } from '@/ui/button/switch'
-import { useSheetBottomSpacing } from '@/ui/hooks/use-sheet-bottom-spacing'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import { Commit } from '@/icons/commit'
@@ -15,7 +14,7 @@ import { FormatListBulleted } from '@/icons/format-list-bulleted'
 import { Link } from '@/icons/link'
 import { OpenInNew } from '@/icons/open-in-new'
 
-import { ANIMATION_DURATION, SPACING } from '@/constants/theme'
+import { ANIMATION_DURATION, BOTTOM_GAP, SPACING } from '@/constants/theme'
 
 const DetailRow = memo(function DetailRow({ title, icon, onPress, rightContent }) {
     const { colors } = useTheme()
@@ -42,7 +41,6 @@ export const NoteDetailsSheet = memo(function NoteDetailsSheet({
     onToggleShowBacklinks
 }) {
     const { t } = useTranslation()
-    const bottom = useSheetBottomSpacing()
 
     const run = useCallback((action) => () => {
         sheet.onClose()
@@ -56,7 +54,7 @@ export const NoteDetailsSheet = memo(function NoteDetailsSheet({
         >
             <SheetTitle>{t('title.details')}</SheetTitle>
 
-            <View style={[styles.list, { paddingBottom: bottom }]}>
+            <View style={[styles.list, { paddingBottom: BOTTOM_GAP }]}>
                 <PositionGroup>
                     <DetailRow
                         title={t('title.outline')}

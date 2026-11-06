@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, View } from 'react-native'
 
 import { TonalButton } from '@/ui/button/tonal-button'
+import { SheetActions } from '@/ui/modal/sheet-actions'
 import { SheetForm, SheetInput } from '@/ui/modal/sheet-form'
 import { INPUT_EXAMPLES } from '@/constants/input-examples'
 
@@ -23,7 +23,16 @@ export function LinkMarkdown({ onClose, onInsert }) {
     }
 
     return (
-        <SheetForm title={t('markdown_action.link')}>
+        <SheetForm
+            title={t('markdown_action.link')}
+            footer={(
+                <SheetActions>
+                    <TonalButton onPress={onAdd}>
+                        {t('button.insert')}
+                    </TonalButton>
+                </SheetActions>
+            )}
+        >
             <SheetInput
                 label={t('markdown.link.title')}
                 value={title}
@@ -37,20 +46,6 @@ export function LinkMarkdown({ onClose, onInsert }) {
                 onChangeText={setUrl}
                 placeholder={INPUT_EXAMPLES.LINK_URL}
             />
-
-            <View style={styles.buttons}>
-                <TonalButton onPress={onAdd}>
-                    {t('button.insert')}
-                </TonalButton>
-            </View>
         </SheetForm>
     )
 }
-
-const styles = StyleSheet.create({
-    buttons: {
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'center'
-    }
-})

@@ -8,7 +8,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 import { getControlBackground } from '@/ui/utils/control-background'
 import { expandSelected as expandButtons, getMinWidth } from '@/ui/utils/toggle-group'
 
-import { BUTTON } from '@/ui/tokens/components'
+import { BUTTON, CONTROL_TOUCH_INSET } from '@/ui/tokens/components'
 
 export function ButtonGroup({
     buttons,
@@ -56,6 +56,7 @@ export function ButtonGroup({
 const styles = StyleSheet.create({
     group: {
         gap: BUTTON.groupGap,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginVertical: CONTROL_TOUCH_INSET
     }
 })

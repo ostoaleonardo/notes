@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Linking, StyleSheet, View } from 'react-native'
 
 import { ButtonGroup } from '@/ui/button/button-group'
+import { SheetActions } from '@/ui/modal/sheet-actions'
 import { SheetForm, SheetInput } from '@/ui/modal/sheet-form'
 import { Typography } from '@/ui/typography'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
@@ -106,7 +107,32 @@ export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
     }
 
     return (
-        <SheetForm title={t('markdown_action.image')}>
+        <SheetForm
+            title={t('markdown_action.image')}
+            footer={(
+                <SheetActions>
+                    <ButtonGroup
+                        buttons={[
+                            {
+                                icon: Camera,
+                                label: t('markdown.image.camera'),
+                                onPress: () => onPickImage(IMAGE_SOURCES.CAMERA)
+                            },
+                            {
+                                icon: Picture,
+                                label: t('markdown.image.gallery'),
+                                onPress: () => onPickImage(IMAGE_SOURCES.GALLERY)
+                            },
+                            {
+                                showLabel: true,
+                                label: t('button.insert'),
+                                onPress: onAdd
+                            }
+                        ]}
+                    />
+                </SheetActions>
+            )}
+        >
             {cameraPermission && !cameraPermission.granted && (
                 <View
                     style={[
@@ -177,28 +203,6 @@ export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
                 onChangeText={setTitle}
                 placeholder={t('markdown.image.alt_placeholder')}
             />
-
-            <View style={styles.buttons}>
-                <ButtonGroup
-                    buttons={[
-                        {
-                            icon: Camera,
-                            label: t('markdown.image.camera'),
-                            onPress: () => onPickImage(IMAGE_SOURCES.CAMERA)
-                        },
-                        {
-                            icon: Picture,
-                            label: t('markdown.image.gallery'),
-                            onPress: () => onPickImage(IMAGE_SOURCES.GALLERY)
-                        },
-                        {
-                            showLabel: true,
-                            label: t('button.insert'),
-                            onPress: onAdd
-                        }
-                    ]}
-                />
-            </View>
         </SheetForm>
     )
 }
@@ -233,12 +237,5 @@ const styles = StyleSheet.create({
     image: {
         width: '100%',
         height: '100%'
-    },
-    buttons: {
-        width: '100%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: SPACING.lg
     }
 })

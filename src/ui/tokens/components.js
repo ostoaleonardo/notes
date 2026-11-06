@@ -12,7 +12,7 @@ export const CONTROL_SIZE = {
     touch: SIZE.lg
 }
 
-const CONTROL_TOUCH_INSET = (CONTROL_SIZE.touch - CONTROL_SIZE.small) / 2
+export const CONTROL_TOUCH_INSET = (CONTROL_SIZE.touch - CONTROL_SIZE.small) / 2
 
 export const HIT_SLOP = {
     icon: SPACING.md,
