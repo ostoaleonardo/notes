@@ -53,6 +53,7 @@ export default {
     './plugins/with-markdown-intent',
     './plugins/with-text-handle-color',
     './plugins/with-release-permissions',
+    './plugins/with-transparent-navigation-bar',
     [
       './plugins/with-native-widgets',
       {
