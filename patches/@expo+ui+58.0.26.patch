@@ -111,3 +111,27 @@ index f5f681e..34a1245 100644
    /**
     * Modifiers for the component.
     */
+diff --git a/node_modules/@expo/ui/build/community/bottom-sheet/BottomSheet.android.js b/node_modules/@expo/ui/build/community/bottom-sheet/BottomSheet.android.js
+index cafa206..8b12676 100644
+--- a/node_modules/@expo/ui/build/community/bottom-sheet/BottomSheet.android.js
++++ b/node_modules/@expo/ui/build/community/bottom-sheet/BottomSheet.android.js
+@@ -37,7 +37,7 @@ function findNearestSnapPointIndex(snapPoints, position) {
+  * @remarks Supports two snap states: partially expanded (~50%) and fully expanded.
+  * `snapToIndex(0)` maps to partial, `snapToIndex(lastIndex)` maps to expanded.
+  */ export function BottomSheet(props) {
+-    const { ref, snapPoints: snapPointsProp, index: indexProp = 0, onChange, onClose, onDismiss, enablePanDownToClose = false, enableDynamicSizing = true, handleComponent, backgroundStyle, children } = props;
++    const { ref, snapPoints: snapPointsProp, index: indexProp = 0, onChange, onClose, onDismiss, enablePanDownToClose = false, dismissOnClickOutside = enablePanDownToClose, dismissOnBackPress = enablePanDownToClose, enableDynamicSizing = true, handleComponent, backgroundStyle, children } = props;
+     const { width } = useWindowDimensions();
+     const hasMultipleSnapPoints = snapPointsProp != null && snapPointsProp.length > 1;
+     const fitToContents = enableDynamicSizing && (!snapPointsProp || snapPointsProp.length === 0);
+@@ -182,8 +182,8 @@ function findNearestSnapPointIndex(snapPoints, position) {
+                     sheetGesturesEnabled: enablePanDownToClose,
+                     containerColor: containerColor,
+                     properties: {
+-                        shouldDismissOnBackPress: enablePanDownToClose,
+-                        shouldDismissOnClickOutside: enablePanDownToClose
++                        shouldDismissOnBackPress: dismissOnBackPress,
++                        shouldDismissOnClickOutside: dismissOnClickOutside
+                     },
+                     children: /*#__PURE__*/ _jsx(RNHostView, {
+                         matchContents: fitToContents,
