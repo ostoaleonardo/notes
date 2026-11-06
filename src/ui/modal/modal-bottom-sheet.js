@@ -1,3 +1,4 @@
+import { StyleSheet } from 'react-native'
 import { BottomSheetModal, BottomSheetView } from '@expo/ui/community/bottom-sheet'
 
 import { SPACING } from '@/ui/tokens/theme'
@@ -24,11 +25,10 @@ export const ModalBottomSheet = ({
             {...prop}
         >
             <BottomSheetView
-                style={{
-                    flex: 1,
-                    paddingTop: SPACING.xxxl,
-                    ...contentContainerStyle
-                }}
+                style={StyleSheet.flatten([
+                    { flex: 1, paddingTop: SPACING.xxxl },
+                    contentContainerStyle
+                ])}
             >
                 {children}
             </BottomSheetView>

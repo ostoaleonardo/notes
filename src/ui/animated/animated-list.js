@@ -9,7 +9,7 @@ export function AnimatedList({ emptyLabel, gap = SPACING.lg, contentContainerSty
     return (
         <Animated.FlatList
             style={styles.base}
-            contentContainerStyle={{ ...styles.list, gap, ...contentContainerStyle }}
+            contentContainerStyle={StyleSheet.flatten([styles.list, { gap }, contentContainerStyle])}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             itemLayoutAnimation={LinearTransition}

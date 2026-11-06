@@ -15,10 +15,7 @@ export function Section({
 
     return (
         <View
-            style={{
-                ...styles.container,
-                ...containerStyle
-            }}
+            style={StyleSheet.flatten([styles.container, containerStyle])}
         >
             {title && (
                 <View style={styles.title}>
@@ -33,10 +30,7 @@ export function Section({
             )}
 
             <View
-                style={{
-                    ...styles.content,
-                    ...contentStyle
-                }}
+                style={StyleSheet.flatten([styles.content, contentStyle])}
             >
                 <PositionGroup>
                     {children}
