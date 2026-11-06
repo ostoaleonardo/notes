@@ -12,6 +12,8 @@ export const SPACING = {
     xxxxl: 40
 }
 
+export const BOTTOM_GAP = SPACING.sm
+
 export const SIZE = {
     xs: 32,
     sm: 40,

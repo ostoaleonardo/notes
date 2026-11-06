@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { Linking, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { LoadingOverlay } from '@/ui/layout'
 import { useTheme } from '@/ui/hooks/use-theme'
@@ -73,6 +74,7 @@ export const MarkdownInput = ({
 }) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
+    const { bottom } = useSafeAreaInsets()
     const { tags: knownTags } = useTags()
 
     const hasMath = useMemo(() => !!value && value.includes(MATH_DELIMITER), [value])
@@ -162,13 +164,13 @@ export const MarkdownInput = ({
 
     const theme = useMemo(() => ({
         colors,
-        layout: { maxWidth, bottomInset: BUTTON.size + SPACING.lg * 2 },
+        layout: { maxWidth, bottomInset: BUTTON.size + SPACING.lg * 2 + bottom },
         typography: {
             fontSize,
             fontFamily: BODY_FONT_FAMILY,
             headingFontFamily: toCssHeadingFamily(headingFont)
         }
-    }), [colors, fontSize, maxWidth, headingFont])
+    }), [colors, fontSize, maxWidth, headingFont, bottom])
 
     return (
         <>

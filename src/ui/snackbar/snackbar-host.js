@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { ComposeHost } from '@/ui/compose-context'
 import { paddingAround } from '@/ui/utils/compose-modifiers'
+import { useBottomSpacing } from '@/ui/hooks/use-bottom-spacing'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import { SNACKBAR } from '@/ui/tokens/components'
@@ -25,7 +26,8 @@ export const showSnackbar = (message) => {
 
 export function GlobalSnackbarHost() {
     const { colors } = useTheme()
-    const { left, right, bottom } = useSafeAreaInsets()
+    const { left, right } = useSafeAreaInsets()
+    const bottomSpacing = useBottomSpacing()
     const ref = useRef(null)
 
     const register = useCallback((instance) => {
@@ -37,8 +39,8 @@ export function GlobalSnackbarHost() {
 
     const modifiers = useMemo(() => [
         fillMaxWidth(),
-        paddingAround(left, 0, right, bottom)
-    ], [left, right, bottom])
+        paddingAround(left, 0, right, bottomSpacing)
+    ], [left, right, bottomSpacing])
 
     return (
         <ComposeHost

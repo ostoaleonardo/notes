@@ -1,6 +1,7 @@
 import { isDevice } from 'expo-device'
 import { Linking, Platform, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { LanguageOption } from '@/screens/settings/language-option'
 import { ProSection } from '@/screens/settings/pro-section'
@@ -28,10 +29,11 @@ import { EDITOR_SELECT_OPTIONS, NOTES_SELECT_OPTIONS } from '@/constants/setting
 export default function Settings() {
     const { t } = useTranslation()
     const { colors } = useTheme()
+    const { bottom } = useSafeAreaInsets()
 
     return (
         <View style={{ flex: 1 }}>
-            <Scroll contentContainerStyle={styles.scroll}>
+            <Scroll contentContainerStyle={[styles.scroll, { paddingBottom: SPACING.xxl + bottom }]}>
                 <Section
                     title={t('settings.general.title')}
                     containerStyle={styles.section}

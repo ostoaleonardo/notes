@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { BackHandler, StyleSheet, View } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { AppBar } from '@/components/app-bar/app-bar'
 import { LoadingOverlay } from '@/ui/layout'
@@ -17,7 +17,7 @@ import { useFocusNavigation } from '@/hooks/use-focus-navigation'
 import { useNotes } from '@/hooks/use-notes'
 
 import { CONNECTION_TYPES } from '@/constants/connections'
-import { SPACING } from '@/constants/theme'
+import { BOTTOM_GAP, SPACING } from '@/constants/theme'
 
 const { NOTE, FILE, MISSING } = CONNECTION_TYPES
 
@@ -110,9 +110,13 @@ function ConnectionsContent() {
                 {pages > 1 && (
                     <View
                         pointerEvents='box-none'
-                        style={[styles.pager, { paddingBottom: insets.bottom }]}
+                        style={[styles.pager, { paddingBottom: insets.bottom + BOTTOM_GAP }]}
                     >
-                        <FocusPager page={page} pages={pages} onTurn={turnPage} />
+                        <FocusPager
+                            page={page}
+                            pages={pages}
+                            onTurn={turnPage}
+                        />
                     </View>
                 )}
             </View>

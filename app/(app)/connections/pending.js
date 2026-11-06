@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { FlatList, ScrollView } from 'react-native-gesture-handler'
 import { useLocalSearchParams } from 'expo-router'
 import { useTranslation } from 'react-i18next'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { CreateNoteDialog } from '@/screens/connections/create-note-dialog'
 import { EntityRow } from '@/screens/connections/entity-row'
@@ -33,6 +34,7 @@ const { NOTE } = CONNECTION_TYPES
 
 function ConnectionsPendingContent() {
     const { t } = useTranslation()
+    const { bottom } = useSafeAreaInsets()
     const params = useLocalSearchParams()
 
     const { loading } = useNotes()
@@ -116,7 +118,7 @@ function ConnectionsPendingContent() {
                 ListHeaderComponent={header}
                 ItemSeparatorComponent={GroupSeparator}
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.list}
+                contentContainerStyle={[styles.list, { paddingBottom: SPACING.lg + bottom }]}
                 ListEmptyComponent={(
                     <Typography
                         opacity={OPACITY.secondary}

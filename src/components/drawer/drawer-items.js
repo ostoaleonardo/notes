@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 
 import { ButtonGroup } from '@/ui/button/button-group'
+import { useBottomSpacing } from '@/ui/hooks/use-bottom-spacing'
 import { DrawerNotesView } from './drawer-notes-view'
 import { DrawerTagsView } from './drawer-tags-view'
 import { DrawerToolbar } from './drawer-toolbar'
@@ -40,7 +40,7 @@ const VIEW_COMPONENTS = {
 export function DrawerItems({ navigation, state }) {
     const { t } = useTranslation()
     const { setItem } = useStorage()
-    const insets = useSafeAreaInsets()
+    const bottomSpacing = useBottomSpacing()
     const [view, setView] = useState(null)
 
     useStorageEffect(STORAGE_KEYS.DRAWER_VIEW, (stored) => {
@@ -93,7 +93,7 @@ export function DrawerItems({ navigation, state }) {
         <>
             {ActiveView && <ActiveView closeDrawer={closeDrawer} drawerOpen={drawerOpen} />}
 
-            <View style={{ paddingTop: SPACING.md, paddingBottom: insets.bottom }}>
+            <View style={{ paddingTop: SPACING.md, paddingBottom: bottomSpacing }}>
                 <DrawerToolbar>
                     <View style={styles.actions}>
                         <View style={styles.switcher}>

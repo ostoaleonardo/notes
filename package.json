@@ -116,7 +116,8 @@
         "displayName": "native",
         "preset": "jest-expo",
         "setupFiles": [
-          "<rootDir>/jest/setup-idle-callback.js"
+          "<rootDir>/jest/setup-idle-callback.js",
+          "<rootDir>/jest/setup-keyboard-controller.js"
         ],
         "testPathIgnorePatterns": [
           "/node_modules/",

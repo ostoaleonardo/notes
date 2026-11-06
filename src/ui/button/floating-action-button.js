@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { StyleSheet } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { FloatingActionButton as ComposeFab, Icon as ComposeIcon } from '@expo/ui/jetpack-compose'
 import { Shapes, clip } from '@expo/ui/jetpack-compose/modifiers'
 
@@ -10,13 +11,14 @@ import { RADIUS, SPACING } from '@/ui/tokens/theme'
 
 export function FloatingActionButton({ icon, label, onPress }) {
     const { colors } = useTheme()
+    const { bottom } = useSafeAreaInsets()
 
     const modifiers = useMemo(() => [
         clip(Shapes.RoundedCorner(RADIUS.lg))
     ], [])
 
     return (
-        <ComposeHost style={styles.container}>
+        <ComposeHost style={[styles.container, { bottom: bottom + SPACING.lg }]}>
             <ComposeFab
                 containerColor={colors.tertiary}
                 modifiers={modifiers}
@@ -37,7 +39,6 @@ export function FloatingActionButton({ icon, label, onPress }) {
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
-        bottom: SPACING.lg,
         right: SPACING.lg
     }
 })

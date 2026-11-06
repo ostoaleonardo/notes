@@ -1,9 +1,8 @@
 import { StyleSheet, View, useWindowDimensions } from 'react-native'
 import { BlurView } from 'expo-blur'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useKeyboardState } from 'react-native-keyboard-controller'
 
 import { useBlurTarget } from '@/ui/blur/blur-target'
+import { useBottomSpacing } from '@/ui/hooks/use-bottom-spacing'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import { TINT } from '@/ui/tokens/transparent'
@@ -11,10 +10,9 @@ import { BLUR, BORDER_WIDTH, RADIUS, SPACING } from '@/ui/tokens/theme'
 
 export function ToolbarSurface({ children }) {
     const { colors, dark } = useTheme()
-    const { bottom } = useSafeAreaInsets()
     const { width } = useWindowDimensions()
+    const bottomSpacing = useBottomSpacing()
 
-    const keyboardVisible = useKeyboardState((state) => state.isVisible)
     const blurTarget = useBlurTarget()
 
     return (
@@ -32,7 +30,7 @@ export function ToolbarSurface({ children }) {
                         maxWidth: width - SPACING.xxl,
                         backgroundColor: colors.surface,
                         borderColor: colors.onBackground + TINT.border,
-                        marginBottom: keyboardVisible ? SPACING.sm : bottom
+                        marginBottom: bottomSpacing
                     }
                 ]}
             >

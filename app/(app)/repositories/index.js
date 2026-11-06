@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { View } from 'react-native'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { RepositoryItem } from '@/screens/repositories/repository-item'
 import { DeleteRepository } from '@/screens/dialogs/delete-repository'
@@ -28,6 +29,7 @@ import { REPOSITORY_RESULTS } from '@/constants/repository-results'
 
 export default function Repositories() {
     const { t } = useTranslation()
+    const { bottom } = useSafeAreaInsets()
     const { pro } = usePro()
     const { listMarkdownFiles } = useFileStorage()
 
@@ -98,7 +100,7 @@ export default function Repositories() {
         <View style={{ flex: 1 }}>
             <GroupedList
                 component={AnimatedList}
-                contentContainerStyle={{ paddingHorizontal: SPACING.lg }}
+                contentContainerStyle={{ paddingHorizontal: SPACING.lg, paddingBottom: bottom }}
                 gap={SPACING.xxxs}
                 data={rootRepositories}
                 keyExtractor={keyExtractor}
