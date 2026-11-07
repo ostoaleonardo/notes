@@ -76,8 +76,9 @@ export function useNoteDraft(pathRef, initial = {}) {
         properties, setProperties: setters.properties,
         repositoryId,
         filename,
-        invalidFrontmatter, setInvalidFrontmatter: setters.invalidFrontmatter,
-        rawFrontmatter, setRawFrontmatter: setters.rawFrontmatter
+        invalidFrontmatter,
+        rawFrontmatter,
+        update
     }
 
     return {

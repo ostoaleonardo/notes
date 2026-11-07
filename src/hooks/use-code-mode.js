@@ -2,34 +2,25 @@ import { useCallback, useState } from 'react'
 
 import { buildNoteFileContent, decomposeNoteFileContent } from '@/utils/frontmatter'
 
-export function useCodeMode({
-    note,
-    tags,
-    properties,
-    invalidFrontmatter,
-    rawFrontmatter,
-    setNote,
-    setTags,
-    setProperties,
-    setInvalidFrontmatter,
-    setRawFrontmatter
-}) {
+export function useCodeMode({ content, update }) {
     const [codeBuffer, setCodeBuffer] = useState('')
 
     const enter = useCallback(() => {
-        setCodeBuffer(buildNoteFileContent({ tags, properties, invalidFrontmatter, rawFrontmatter }, note))
-    }, [tags, properties, invalidFrontmatter, rawFrontmatter, note])
+        setCodeBuffer(buildNoteFileContent(content, content.note))
+    }, [content])
 
     const onChange = useCallback((value) => {
-        const decomposed = decomposeNoteFileContent(value)
+        const { body, tags, properties, invalidFrontmatter, rawFrontmatter } = decomposeNoteFileContent(value)
 
         setCodeBuffer(value)
-        setNote(decomposed.body)
-        setInvalidFrontmatter(decomposed.invalidFrontmatter)
-        setRawFrontmatter(decomposed.rawFrontmatter)
-        if (decomposed.tags) setTags(decomposed.tags)
-        if (decomposed.properties) setProperties(decomposed.properties)
-    }, [setNote, setTags, setProperties, setInvalidFrontmatter, setRawFrontmatter])
+        update({
+            note: body,
+            invalidFrontmatter,
+            rawFrontmatter,
+            ...(tags && { tags }),
+            ...(properties && { properties })
+        })
+    }, [update])
 
     return { codeBuffer, enter, onChange }
 }

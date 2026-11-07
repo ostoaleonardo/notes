@@ -12,30 +12,20 @@ import { MarkdownInput } from '@/components/markdown/markdown-input'
 
 import { useBottomSheet } from '@/hooks/use-bottom-sheet'
 import { useEditorChrome } from '@/hooks/use-editor-chrome'
-import { useLanguage } from '@/hooks/use-language'
 import { useNoteDelete } from '@/hooks/use-note-delete'
 import { useNoteMove } from '@/hooks/use-note-move'
+import { useEditorJump } from '@/hooks/use-editor-jump'
 import { useNoteMode } from '@/hooks/use-note-mode'
-import { useNoteModifiedAt } from '@/hooks/use-note-modified-at'
+import { usePropertiesPanel } from '@/hooks/use-properties-panel'
+import { useTitleField } from '@/hooks/use-title-field'
 import { useNoteSharing } from '@/hooks/use-note-sharing'
 import { useNoteTemplates } from '@/hooks/use-note-templates'
 import { useRepositories } from '@/hooks/use-repositories'
-import { useShowProperties } from '@/hooks/use-show-properties'
-import { useTags } from '@/hooks/use-tags'
 import { useTagSearchSeed } from '@/hooks/use-tag-search-seed'
 import { useVersionHistory } from '@/hooks/use-version-history'
-import { buildNoteMetaLines } from '@/utils/note-meta-label'
-import { countWords } from '@/utils/word-count'
-import {
-    applyPropertyChange,
-    buildPropertyRows,
-    buildPropertySuggestions
-} from '@/utils/properties'
-import { hasTag, isValidTagName, sanitizeTagName } from '@/utils/tag-names'
 import { getVersionLocation } from '@/utils/note-version-location'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
-import { EDITABLE_PROPERTY_TYPES } from '@/constants/properties'
 
 export const NoteEditorScreen = ({
     id,
@@ -47,8 +37,9 @@ export const NoteEditorScreen = ({
     note, setNote,
     tags, setTags,
     properties, setProperties,
-    invalidFrontmatter, setInvalidFrontmatter,
-    rawFrontmatter, setRawFrontmatter,
+    invalidFrontmatter,
+    rawFrontmatter,
+    update,
     initialMode = EDITOR_MODES.READ,
     anchor,
     flush,
@@ -56,7 +47,6 @@ export const NoteEditorScreen = ({
     onMoved
 }) => {
     const { t } = useTranslation()
-    const { currentLanguage } = useLanguage()
     const { repositories } = useRepositories()
     const location = useMemo(
         () => getVersionLocation(repositories, repositoryId),
@@ -75,78 +65,38 @@ export const NoteEditorScreen = ({
         onHistoryChange
     } = chrome
 
-    const { propertiesVisible, onToggleProperties } = useShowProperties()
-
     const { seed: searchSeed, onOpenSearch, onTagPress } = useTagSearchSeed(searchSheet.onOpen)
 
-    const onRemoveTag = useCallback((name) => {
-        setTags((prev) => prev.filter((tag) => tag !== name))
-    }, [setTags])
-
-    const onAddTag = useCallback((name) => {
-        const clean = sanitizeTagName(name)
-        if (!isValidTagName(clean)) return
-
-        setTags((prev) => hasTag(prev, clean) ? prev : [...prev, clean])
-    }, [setTags])
-
-    const onChangeProperty = useCallback((change) => {
-        setProperties((prev) => applyPropertyChange(prev, change))
-    }, [setProperties])
-
-    const { tags: allTags } = useTags()
+    const content = useMemo(() => ({
+        note,
+        tags,
+        properties,
+        invalidFrontmatter,
+        rawFrontmatter
+    }), [note, tags, properties, invalidFrontmatter, rawFrontmatter])
 
     const {
         mode,
         onSetMode,
         editorValue,
         onEditorChange
-    } = useNoteMode({
-        initialMode,
-        note,
-        tags,
-        properties,
-        invalidFrontmatter,
-        rawFrontmatter,
-        setNote,
-        setTags,
-        setProperties,
-        setInvalidFrontmatter,
-        setRawFrontmatter
-    })
+    } = useNoteMode({ initialMode, content, update, setNote })
 
     const onEdit = useCallback(() => onSetMode(EDITOR_MODES.LIVE), [onSetMode])
 
-    const invalid = mode !== EDITOR_MODES.CODE && !!invalidFrontmatter
-
-    const propertyLabels = useMemo(() => ({
-        add: t('properties.add'),
-        remove: t('properties.remove'),
-        namePlaceholder: t('properties.name_placeholder'),
-        valuePlaceholder: t('properties.value_placeholder'),
-        types: Object.fromEntries(
-            EDITABLE_PROPERTY_TYPES.map((type) => [type, t(`properties.type.${type}`)])
-        )
-    }), [t])
-
-    const rows = useMemo(() => buildPropertyRows(properties), [properties])
-
-    const suggestions = useMemo(() => (
-        buildPropertySuggestions({ properties, tags })
-    ), [properties, tags])
-
-    const propertiesPanel = useMemo(() => ({
+    const {
+        propertiesPanel,
+        onAddTag,
+        onRemoveTag,
+        onChangeProperty,
+        onToggleProperties
+    } = usePropertiesPanel({
         tags,
-        allTags,
-        rows,
-        suggestions,
-        labels: propertyLabels,
-        label: t('title.tags'),
-        visible: propertiesVisible,
-        invalid,
-        invalidTitle: t('tags.invalid_properties.title'),
-        invalidDescription: t('tags.invalid_properties.description')
-    }), [tags, allTags, rows, suggestions, propertyLabels, t, propertiesVisible, invalid])
+        properties,
+        setTags,
+        setProperties,
+        invalid: mode !== EDITOR_MODES.CODE && !!invalidFrontmatter
+    })
 
     const searchField = useMemo(() => ({
         query: search.searchQuery,
@@ -156,45 +106,12 @@ export const NoteEditorScreen = ({
     const outlineSheet = useBottomSheet()
     const outgoingLinksSheet = useBottomSheet()
 
-    const [jump, setJump] = useState(null)
-    const onSelectHeading = useCallback((index) => {
-        setJump((prev) => ({ index, nonce: (prev?.nonce ?? 0) + 1 }))
-    }, [])
-    const onJumpToAnchor = useCallback((value) => {
-        setJump((prev) => ({ anchor: value, nonce: (prev?.nonce ?? 0) + 1 }))
-    }, [])
+    const jump = useEditorJump(anchor)
     const { sheet: sharingSheet, onConfirmExport, onConfirmShare } = useNoteSharing({ id, flush })
     const noteDelete = useNoteDelete(id, busyRef)
     const noteMove = useNoteMove({ id, busyRef, flush, onMoved })
 
-    const modifiedAt = useNoteModifiedAt(id)
-    const { words, characters } = countWords(note)
-
-    const metaLines = useMemo(() => (
-        buildNoteMetaLines({
-            showDate: mode === EDITOR_MODES.READ,
-            language: currentLanguage,
-            timestamp: modifiedAt,
-            dateLabel: t('date.updated'),
-            words,
-            characters,
-            wordsLabel: t('count.words', { count: words }),
-            charactersLabel: t('count.characters', { count: characters })
-        })
-    ), [
-        t,
-        mode,
-        words,
-        modifiedAt,
-        characters,
-        currentLanguage
-    ])
-
-    const titleField = useMemo(() => ({
-        title,
-        titlePlaceholder: t('placeholder.title'),
-        metaLines
-    }), [title, t, metaLines])
+    const titleField = useTitleField({ id, title, note, mode })
 
     const latestContent = useRef({ noteId: filename, title, content: note })
     latestContent.current = { noteId: filename, title, content: note }
@@ -257,7 +174,7 @@ export const NoteEditorScreen = ({
                     <OutlineSheet
                         sheet={outlineSheet}
                         contentRef={latestContent}
-                        onSelect={onSelectHeading}
+                        onSelect={jump.onSelectHeading}
                     />
 
                     <OutgoingLinksSheet
@@ -318,10 +235,10 @@ export const NoteEditorScreen = ({
                 onFocus={onFocus}
                 placeholder={t('placeholder.note')}
                 action={action}
-                anchor={jump ? jump.anchor : anchor}
-                onJumpToAnchor={onJumpToAnchor}
-                headingIndex={jump?.index}
-                jumpNonce={jump?.nonce}
+                anchor={jump.anchor}
+                onJumpToAnchor={jump.onJumpToAnchor}
+                headingIndex={jump.headingIndex}
+                jumpNonce={jump.jumpNonce}
                 showBacklinks={showBacklinks}
             />
         </EditorShell>

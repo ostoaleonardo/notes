@@ -16,7 +16,8 @@ jest.mock('../use-code-mode', () => ({
 const setup = async (overrides = {}) => {
     const props = {
         initialMode: EDITOR_MODES.READ,
-        note: 'body',
+        content: { note: 'body' },
+        update: jest.fn(),
         setNote: jest.fn(),
         ...overrides
     }

@@ -4,10 +4,10 @@ import { useCodeMode } from './use-code-mode'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
 
-export function useNoteMode({ initialMode, note, setNote, ...codeModeParams }) {
+export function useNoteMode({ initialMode, content, update, setNote }) {
     const [mode, setMode] = useState(initialMode)
 
-    const codeMode = useCodeMode({ note, setNote, ...codeModeParams })
+    const codeMode = useCodeMode({ content, update })
     const { enter } = codeMode
 
     const onSetMode = useCallback((nextMode) => {
@@ -23,7 +23,7 @@ export function useNoteMode({ initialMode, note, setNote, ...codeModeParams }) {
     return {
         mode,
         onSetMode,
-        editorValue: isCodeMode ? codeMode.codeBuffer : note,
+        editorValue: isCodeMode ? codeMode.codeBuffer : content.note,
         onEditorChange: isCodeMode ? codeMode.onChange : setNote
     }
 }

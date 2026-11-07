@@ -4,16 +4,15 @@ import { useCodeMode } from '../use-code-mode'
 
 const setup = async (overrides = {}) => {
     const props = {
-        note: 'Body',
-        tags: ['one'],
-        properties: {},
-        invalidFrontmatter: null,
-        setNote: jest.fn(),
-        setTags: jest.fn(),
-        setProperties: jest.fn(),
-        setInvalidFrontmatter: jest.fn(),
-        setRawFrontmatter: jest.fn(),
-        ...overrides
+        content: {
+            note: 'Body',
+            tags: ['one'],
+            properties: {},
+            invalidFrontmatter: null,
+            rawFrontmatter: null,
+            ...overrides
+        },
+        update: jest.fn()
     }
 
     const rendered = await renderHook(() => useCodeMode(props))
@@ -62,15 +61,19 @@ describe('enter code mode', () => {
 })
 
 describe('edit in code mode', () => {
-    test('propagates body and tags to the note state on every change', async () => {
+    test('propagates body and tags to the note state in a single update', async () => {
         const { result, props } = await setup()
 
         await act(async () => result.current.onChange('---\ntags: [two]\n---\n\nEdited'))
 
-        expect(props.setNote).toHaveBeenCalledWith('Edited')
-        expect(props.setTags).toHaveBeenCalledWith(['two'])
-        expect(props.setInvalidFrontmatter).toHaveBeenCalledWith(null)
-        expect(props.setRawFrontmatter).toHaveBeenCalledWith('tags: [two]')
+        expect(props.update).toHaveBeenCalledTimes(1)
+        expect(props.update).toHaveBeenCalledWith({
+            note: 'Edited',
+            tags: ['two'],
+            properties: {},
+            invalidFrontmatter: null,
+            rawFrontmatter: 'tags: [two]'
+        })
         expect(result.current.codeBuffer).toBe('---\ntags: [two]\n---\n\nEdited')
     })
 
@@ -81,7 +84,7 @@ describe('edit in code mode', () => {
             result.current.onChange('---\naliases: [Alias]\ntags: [two]\n---\n\nEdited')
         )
 
-        expect(props.setProperties).toHaveBeenCalledWith({ aliases: ['Alias'] })
+        expect(props.update.mock.calls[0][0].properties).toEqual({ aliases: ['Alias'] })
     })
 
     test('keeps the tags and stores the raw block when the yaml is invalid', async () => {
@@ -89,9 +92,11 @@ describe('edit in code mode', () => {
 
         await act(async () => result.current.onChange('---\ntags: [two\n---\n\nEdited'))
 
-        expect(props.setTags).not.toHaveBeenCalled()
-        expect(props.setProperties).not.toHaveBeenCalled()
-        expect(props.setInvalidFrontmatter).toHaveBeenCalledWith('tags: [two')
-        expect(props.setNote).toHaveBeenCalledWith('Edited')
+        const changes = props.update.mock.calls[0][0]
+
+        expect(changes).not.toHaveProperty('tags')
+        expect(changes).not.toHaveProperty('properties')
+        expect(changes.invalidFrontmatter).toBe('tags: [two')
+        expect(changes.note).toBe('Edited')
     })
 })
