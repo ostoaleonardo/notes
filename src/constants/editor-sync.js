@@ -1,0 +1,1 @@
+export const DOM_EMITTED_VALUES_LIMIT = 16

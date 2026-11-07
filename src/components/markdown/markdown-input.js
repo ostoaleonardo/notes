@@ -1,48 +1,30 @@
 import { memo, useCallback, useMemo, useState } from 'react'
-import { Linking, View } from 'react-native'
+import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { LoadingOverlay } from '@/ui/layout'
-import { useTheme } from '@/ui/hooks/use-theme'
 
 import RawMarkdownDomEditor from './markdown-dom-editor'
 
 import { MissingNoteDialog } from '@/components/missing-note-dialog'
 
-import { useEditorDisplay } from '@/hooks/use-editor-display'
-import { useHeadingFont } from '@/hooks/use-heading-font'
-import { toCssHeadingFamily } from '@/utils/heading-font'
 import { loadDomFonts } from '@/hooks/use-dom-fonts'
 import { loadKatexFonts } from '@/hooks/use-katex-fonts'
 import { useTags } from '@/hooks/use-tags'
 import { useStableCallback } from '@/hooks/use-stable-callback'
 import { useStableValue } from '@/hooks/use-stable-value'
-import { useBacklinksHtml } from '@/hooks/use-backlinks-html'
-import { useMissingNote } from '@/hooks/use-missing-note'
 import { useBlockIdCreator } from '@/hooks/use-block-id-creator'
-import { useMentionLinker } from '@/hooks/use-mention-linker'
+import { useDomValue } from '@/hooks/use-dom-value'
+import { useEditorLinkHandlers } from '@/hooks/use-editor-link-handlers'
+import { useEditorPreview } from '@/hooks/use-editor-preview'
+import { useEditorTheme } from '@/hooks/use-editor-theme'
 import { useNoteEntries } from '@/hooks/use-note-entries'
-import { useResolvedPreviewMarkdown } from '@/hooks/use-resolved-preview-markdown'
-import { useResolvedWikiLinks } from '@/hooks/use-resolved-wiki-links'
-import { useEmbedMediaMap } from '@/hooks/use-embed-media-map'
-import { usePdfEmbed } from '@/hooks/use-pdf-embed'
-import { useAttachmentFiles } from '@/hooks/use-attachment-files'
-import { useOpenFile } from '@/hooks/use-open-file'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
 
-import { getEditorPath } from '@/utils/editor-path'
-import { resolveLinkPress } from '@/utils/link-press'
-import { findFileByTarget } from '@/utils/attachments'
 import { toggleTask } from '@/utils/tasks'
 import { buildTableLabels } from '@/utils/table-labels'
-import { pushOnce } from '@/utils/navigation'
 
-import { ROUTES } from '@/constants/routes'
-import { BUTTON } from '@/constants/components'
-import { BODY_FONT_FAMILY, SPACING } from '@/constants/theme'
 import { EDITOR_MODES } from '@/constants/editor-modes'
-import { LINK_TYPES } from '@/constants/link-types'
 import { MATH_DELIMITER } from '@/constants/markdown-math'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { WIKI_LINK_FORMATS } from '@/constants/wiki-links'
@@ -77,8 +59,6 @@ export const MarkdownInput = ({
     showBacklinks = true
 }) => {
     const { t } = useTranslation()
-    const { colors } = useTheme()
-    const { bottom } = useSafeAreaInsets()
     const { tags: knownTags } = useTags()
 
     const hasMath = useMemo(() => !!value && value.includes(MATH_DELIMITER), [value])
@@ -96,58 +76,9 @@ export const MarkdownInput = ({
         entry.id === id ? { ...entry, unlabeled: [] } : entry
     )), [allNoteEntries, id])
     const onCreateBlockId = useBlockIdCreator()
-    const linkMention = useMentionLinker(id)
-    const backlinksHtml = useBacklinksHtml(id, mode === EDITOR_MODES.READ && showBacklinks)
-    const missingNote = useMissingNote()
 
-    const pdfEmbedded = usePdfEmbed()
-    const valueWithWikiLinks = useResolvedWikiLinks(mode === EDITOR_MODES.READ ? value : '', id, pdfEmbedded)
-    const { value: previewValue, mediaMap } = useResolvedPreviewMarkdown(valueWithWikiLinks)
-    const embedMediaMap = useEmbedMediaMap(value, mode === EDITOR_MODES.LIVE, pdfEmbedded)
-    const mediaMapEntries = useMemo(() => [...mediaMap, ...embedMediaMap], [mediaMap, embedMediaMap])
-
-    const { setMissing } = missingNote
-    const listFiles = useAttachmentFiles()
-    const openFile = useOpenFile()
-
-    const onLinkPress = useCallback((url) => {
-        const link = resolveLinkPress(url)
-        if (!link) return
-
-        switch (link.type) {
-            case LINK_TYPES.TAG:
-                onTagPress?.(link.tag)
-                break
-            case LINK_TYPES.MISSING_NOTE:
-                setMissing(link.missing)
-                break
-            case LINK_TYPES.NOTE:
-                if (link.id === id && link.anchor) onJumpToAnchor(link.anchor)
-                else pushOnce(getEditorPath(link.id, link.anchor))
-                break
-            case LINK_TYPES.LINK_MENTION:
-                linkMention(link.path)
-                break
-            case LINK_TYPES.FILE:
-                openFile(findFileByTarget(listFiles(), link.target))
-                break
-            default:
-                Linking.openURL(link.url)
-        }
-    }, [
-        id,
-        onJumpToAnchor,
-        onTagPress,
-        setMissing,
-        linkMention,
-        listFiles,
-        openFile
-    ])
-
-    const onImagePress = useCallback((url) => pushOnce({
-        pathname: ROUTES.IMAGE_VIEWER,
-        params: { url: encodeURIComponent(url) }
-    }), [])
+    const { previewValue, mediaMapEntries, backlinksHtml } = useEditorPreview({ id, mode, value, showBacklinks })
+    const { onLinkPress, onImagePress, missingNote } = useEditorLinkHandlers({ id, onTagPress, onJumpToAnchor })
 
     const onToggleTask = useCallback((index) => {
         onChangeText(toggleTask(value, index))
@@ -163,18 +94,8 @@ export const MarkdownInput = ({
         style: { flex: 1 }
     }), [mode])
 
-    const { fontSize, maxWidth, lineNumbers, spellcheck, autocorrect, tabSize, inlineTitle } = useEditorDisplay()
-    const { fontFamily: headingFont } = useHeadingFont()
-
-    const theme = useMemo(() => ({
-        colors,
-        layout: { maxWidth, bottomInset: BUTTON.size + SPACING.lg * 2 + bottom },
-        typography: {
-            fontSize,
-            fontFamily: BODY_FONT_FAMILY,
-            headingFontFamily: toCssHeadingFamily(headingFont)
-        }
-    }), [colors, fontSize, maxWidth, headingFont, bottom])
+    const { theme, display } = useEditorTheme()
+    const { domValue, valueNonce, onDomChange } = useDomValue(value, onChangeText)
 
     const stableNoteEntries = useStableValue(noteEntries)
     const stableKnownTags = useStableValue(knownTags)
@@ -188,20 +109,21 @@ export const MarkdownInput = ({
                 <MarkdownDomEditor
                     mode={mode}
                     onEdit={onEdit}
-                    value={value}
+                    value={domValue}
+                    valueNonce={valueNonce}
                     previewValue={previewValue}
                     mediaMap={mediaMapEntries}
                     noteEntries={stableNoteEntries}
                     knownTags={stableKnownTags}
                     linkFormat={linkFormat}
                     tableLabels={tableLabels}
-                    lineNumbers={lineNumbers}
-                    spellcheck={spellcheck}
-                    autocorrect={autocorrect}
-                    tabSize={tabSize}
-                    inlineTitle={inlineTitle}
+                    lineNumbers={display.lineNumbers}
+                    spellcheck={display.spellcheck}
+                    autocorrect={display.autocorrect}
+                    tabSize={display.tabSize}
+                    inlineTitle={display.inlineTitle}
                     backlinksHtml={backlinksHtml}
-                    onChange={onChangeText}
+                    onChange={onDomChange}
                     onHistoryChange={onHistoryChange}
                     action={action}
                     onFocus={onFocus}

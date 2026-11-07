@@ -2,40 +2,30 @@
 
 import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 import { EditorState } from '@codemirror/state'
-import { EditorView, lineNumbers as cmLineNumbers } from '@codemirror/view'
-import { indentUnit } from '@codemirror/language'
+import { EditorView } from '@codemirror/view'
 
-import { fontFacesCss } from './markdown-dom-fonts'
-import { katexFontFacesCss } from './markdown-dom-katex-fonts'
 import { katexCss } from './markdown-dom-katex-css'
 import { TitleSection } from './markdown-dom-widgets'
-import { buildEditorTheme } from './markdown-dom-theme'
 import { buildPreviewCss } from './markdown-dom-preview-css'
 import { renderMarkdownHtml } from './markdown-dom-render-html'
 import { runAction } from './markdown-dom-commands'
 import { buildEditorExtensions, buildUpdateListener } from './markdown-dom-editor-extensions'
 import { shouldApplyExternalValue } from './markdown-dom-external-value'
-import { liveFormatting, mediaMapFacet, tableLabelsFacet } from './live-formatting/live-formatting'
-import { noteEntriesFacet, wikiLinkFormatFacet } from './wiki-link-completion'
-import { knownTagsFacet } from './tag-completion'
-import { useCompartment } from './use-compartment'
-import { useStableValue } from '@/hooks/use-stable-value'
+import { useEditorCompartments } from './use-editor-compartments'
+import { useEditorFonts } from './use-editor-fonts'
 import { useLatestRef } from './use-latest-ref'
 import { useEditorSearch } from './use-editor-search'
 import { usePdfEmbeds } from './use-pdf-embeds'
 import { usePreviewClicks } from './use-preview-clicks'
-import { buildInvalidFrontmatterHighlight } from './markdown-dom-invalid-frontmatter'
-import { buildPropertiesTrigger, frontmatterAutoClose } from './markdown-dom-frontmatter'
-import { buildBlankPlaceholder } from './markdown-dom-placeholder'
 import { scrollToEditorTarget, scrollToPreviewTarget } from './markdown-dom-anchor-target'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
-import { NO_KATEX_FONTS } from '@/constants/markdown-math'
 
 const MarkdownDomEditor = ({
     mode,
     onEdit,
     value,
+    valueNonce,
     previewValue,
     mediaMap,
     noteEntries,
@@ -80,22 +70,8 @@ const MarkdownDomEditor = ({
     const { query: searchQuery, replace: replaceText } = search || {}
     const themeKey = JSON.stringify(theme)
     const stableTheme = useMemo(() => JSON.parse(themeKey), [themeKey])
-    const { colors } = stableTheme
 
-    const [fonts, setFonts] = useState(null)
-    const [loadedKatexFonts, setLoadedKatexFonts] = useState(null)
-    const katexFonts = hasMath ? loadedKatexFonts : NO_KATEX_FONTS
-
-    const fetchFonts = useEffectEvent(() => loadFonts().then(setFonts))
-    const fetchKatexFonts = useEffectEvent(() => loadKatexFonts().then(setLoadedKatexFonts))
-
-    useEffect(() => {
-        fetchFonts()
-    }, [])
-
-    useEffect(() => {
-        if (hasMath) fetchKatexFonts()
-    }, [hasMath])
+    const { fontsReady, fontsCss } = useEditorFonts({ loadFonts, loadKatexFonts, hasMath })
 
     const containerRef = useRef(null)
     const previewRef = useRef(null)
@@ -118,76 +94,21 @@ const MarkdownDomEditor = ({
     const lastEmittedValueRef = useRef(value)
     const pendingEmittedRef = useRef(new Set())
 
-    const stableMediaMap = useStableValue(mediaMap)
-    const stableNoteEntries = useStableValue(noteEntries)
-    const stableKnownTags = useStableValue(knownTags)
-    const stableTableLabels = useStableValue(tableLabels)
-
-    const mediaMapValue = useMemo(() => new Map(stableMediaMap || []), [stableMediaMap])
-
-    const mediaMapExtension = useCompartment(viewRef, () => mediaMapFacet.of(mediaMapValue), [mediaMapValue])
-    const noteEntriesExtension = useCompartment(viewRef, () => noteEntriesFacet.of(stableNoteEntries || []), [stableNoteEntries])
-    const knownTagsExtension = useCompartment(viewRef, () => knownTagsFacet.of(stableKnownTags || []), [stableKnownTags])
-    const linkFormatExtension = useCompartment(viewRef, () => wikiLinkFormatFacet.of(linkFormat), [linkFormat])
-    const tableLabelsExtension = useCompartment(viewRef, () => tableLabelsFacet.of(stableTableLabels || {}), [stableTableLabels])
-    const lineNumbersExtension = useCompartment(
-        viewRef,
-        () => (mode === EDITOR_MODES.CODE && lineNumbers ? [cmLineNumbers()] : []),
-        [mode, lineNumbers]
-    )
-    const spellcheckExtension = useCompartment(
-        viewRef,
-        () => EditorView.contentAttributes.of({
-            spellcheck: String(spellcheck),
-            autocorrect: autocorrect ? 'on' : 'off',
-            autocapitalize: autocorrect ? 'sentences' : 'off'
-        }),
-        [spellcheck, autocorrect]
-    )
-
-    const indentExtension = useCompartment(
-        viewRef,
-        () => [indentUnit.of(' '.repeat(tabSize)), EditorState.tabSize.of(tabSize)],
-        [tabSize]
-    )
-
-    const liveFormattingExtension = useCompartment(
-        viewRef,
-        () => (mode === EDITOR_MODES.LIVE ? [liveFormatting] : []),
-        [mode]
-    )
-
-    const invalidFrontmatterExtension = useCompartment(
-        viewRef,
-        () => buildInvalidFrontmatterHighlight(colors.errorContainer),
-        [colors.errorContainer]
-    )
-
-    const frontmatterExtension = useCompartment(
-        viewRef,
-        () => (mode === EDITOR_MODES.CODE ? frontmatterAutoClose : buildPropertiesTrigger(onAddPropertyRef)),
-        [mode]
-    )
-
-    const themeExtension = useCompartment(
-        viewRef,
-        () => buildEditorTheme(stableTheme),
-        [stableTheme]
-    )
-
-    const bottomInset = stableTheme.layout?.bottomInset ?? 0
-
-    const scrollMarginsExtension = useCompartment(
-        viewRef,
-        () => EditorView.scrollMargins.of(() => ({ bottom: bottomInset })),
-        [bottomInset]
-    )
-
-    const placeholderCompartment = useCompartment(
-        viewRef,
-        () => buildBlankPlaceholder(placeholder),
-        [placeholder]
-    )
+    const dynamicExtensions = useEditorCompartments(viewRef, {
+        mode,
+        mediaMap,
+        noteEntries,
+        knownTags,
+        linkFormat,
+        tableLabels,
+        lineNumbers,
+        spellcheck,
+        autocorrect,
+        tabSize,
+        placeholder,
+        stableTheme,
+        onAddPropertyRef
+    })
 
     const initEditor = useEffectEvent(() => {
         document.documentElement.style.height = '100%'
@@ -200,22 +121,7 @@ const MarkdownDomEditor = ({
         const state = EditorState.create({
             doc: value || '',
             extensions: buildEditorExtensions({
-                dynamic: [
-                    mediaMapExtension,
-                    noteEntriesExtension,
-                    knownTagsExtension,
-                    linkFormatExtension,
-                    tableLabelsExtension,
-                    liveFormattingExtension,
-                    lineNumbersExtension,
-                    spellcheckExtension,
-                    indentExtension,
-                    invalidFrontmatterExtension,
-                    frontmatterExtension,
-                    placeholderCompartment,
-                    scrollMarginsExtension,
-                    themeExtension
-                ],
+                dynamic: dynamicExtensions,
                 onTagPressRef,
                 onLinkPressRef,
                 onCreateBlockIdRef,
@@ -280,7 +186,7 @@ const MarkdownDomEditor = ({
             changes: { from: 0, to: view.state.doc.length, insert: newValue },
             selection: { anchor: Math.min(view.state.selection.main.head, newValue.length) }
         })
-    }, [value])
+    }, [value, valueNonce])
 
     const runPendingAction = useEffectEvent(() => {
         const view = viewRef.current
@@ -303,8 +209,6 @@ const MarkdownDomEditor = ({
 
     usePdfEmbeds(previewRef, html)
 
-    const fontsReady = !!fonts && !!katexFonts
-
     const scrollToTarget = useEffectEvent(() => {
         if ((!anchor && headingIndex == null) || !fontsReady) return
 
@@ -317,10 +221,6 @@ const MarkdownDomEditor = ({
     useEffect(() => {
         scrollToTarget()
     }, [anchor, headingIndex, jumpNonce, html, fontsReady])
-
-    const fontsCss = useMemo(() => (
-        fontFacesCss(fonts) + katexFontFacesCss(katexFonts)
-    ), [fonts, katexFonts])
 
     const previewCss = useMemo(() => buildPreviewCss(stableTheme), [stableTheme])
 
