@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { act, renderHook } from '@testing-library/react-native'
 
-import { useNotes } from '../use-notes'
+import { useNotesController } from '../use-notes-controller'
 import { MOCK_REPO_URI } from '../__fixtures__/constants'
 import {
     MOCK_DUPLICATE_TITLE_DRAFT,
@@ -77,7 +77,7 @@ const renderNotesHook = (initialNotes = []) => {
         )
     }
 
-    return renderHook(() => useNotes(), { wrapper: Wrapper })
+    return renderHook(() => useNotesController(), { wrapper: Wrapper })
 }
 
 beforeEach(() => {

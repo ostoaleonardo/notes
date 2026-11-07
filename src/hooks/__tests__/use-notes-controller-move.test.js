@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { act, renderHook } from '@testing-library/react-native'
 
-import { useNotes } from '../use-notes'
+import { useNotesController } from '../use-notes-controller'
 import { NoteContext } from '@/context/note-context'
 import { parseFrontmatter } from '@/utils/frontmatter'
 
@@ -84,7 +84,7 @@ const renderNotesHook = (initialNotes, notePaths) => {
         )
     }
 
-    return renderHook(() => useNotes(), { wrapper: Wrapper })
+    return renderHook(() => useNotesController(), { wrapper: Wrapper })
 }
 
 describe('move note', () => {

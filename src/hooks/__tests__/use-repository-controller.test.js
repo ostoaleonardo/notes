@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { act, renderHook } from '@testing-library/react-native'
 
-import { useRepositories } from '../use-repositories'
-import { RepositoryContext } from '@/context/repository-context'
+import { useRepositoryController } from '../use-repository-controller'
+import { RepositoryStateContext } from '@/context/repository-state-context'
 
 let mockPro = false
 let mockUuidCounter = 0
@@ -46,7 +46,7 @@ const renderRepositoriesHook = (initialRepositories = [], activeRepositoryId = '
         const [activeId, setActiveId] = useState(activeRepositoryId)
 
         return (
-            <RepositoryContext.Provider
+            <RepositoryStateContext.Provider
                 value={{
                     repositories,
                     setRepositories,
@@ -59,11 +59,11 @@ const renderRepositoriesHook = (initialRepositories = [], activeRepositoryId = '
                 }}
             >
                 {children}
-            </RepositoryContext.Provider>
+            </RepositoryStateContext.Provider>
         )
     }
 
-    return renderHook(() => useRepositories(), { wrapper: Wrapper })
+    return renderHook(() => useRepositoryController(), { wrapper: Wrapper })
 }
 
 beforeEach(() => {

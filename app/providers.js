@@ -5,6 +5,7 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { CurrentNoteProvider } from '@/context/current-note-context'
 import { ImportProvider } from '@/context/import-context'
 import { NoteProvider } from '@/context/note-context'
+import { NotesApiProvider } from '@/context/notes-api-context'
 import { RecentNotesProvider } from '@/context/recent-notes-context'
 import { RepositoryProvider } from '@/context/repository-context'
 import { UtilsProvider } from '@/context/utils-context'
@@ -18,17 +19,19 @@ export default function Providers({ children }) {
                 <RepositoryProvider>
                     <RecentNotesProvider>
                         <NoteProvider>
-                            <CurrentNoteProvider>
-                                <WidgetsProvider>
-                                    <ImportProvider>
-                                        <KeyboardProvider>
-                                            <BottomSheetModalProvider>
-                                                {children}
-                                            </BottomSheetModalProvider>
-                                        </KeyboardProvider>
-                                    </ImportProvider>
-                                </WidgetsProvider>
-                            </CurrentNoteProvider>
+                            <NotesApiProvider>
+                                <CurrentNoteProvider>
+                                    <WidgetsProvider>
+                                        <ImportProvider>
+                                            <KeyboardProvider>
+                                                <BottomSheetModalProvider>
+                                                    {children}
+                                                </BottomSheetModalProvider>
+                                            </KeyboardProvider>
+                                        </ImportProvider>
+                                    </WidgetsProvider>
+                                </CurrentNoteProvider>
+                            </NotesApiProvider>
                         </NoteProvider>
                     </RecentNotesProvider>
                 </RepositoryProvider>

@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { renderHook, waitFor } from '@testing-library/react-native'
 
-import { RepositoryContext, RepositoryProvider } from '../repository-context'
+import { RepositoryStateContext, RepositoryStateProvider } from '../repository-state-context'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 const mockStorage = {
@@ -16,11 +16,11 @@ const stubStorage = (values) => {
     mockStorage.getItem.mockImplementation(async (key) => values[key] ?? null)
 }
 
-const setup = () => renderHook(() => useContext(RepositoryContext), {
-    wrapper: RepositoryProvider
+const setup = () => renderHook(() => useContext(RepositoryStateContext), {
+    wrapper: RepositoryStateProvider
 })
 
-describe('repository context', () => {
+describe('repository state context', () => {
     beforeEach(() => {
         jest.clearAllMocks()
         jest.spyOn(console, 'warn').mockImplementation(() => {})
