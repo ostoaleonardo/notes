@@ -19,6 +19,7 @@ import { liveFormatting, mediaMapFacet, tableLabelsFacet } from './live-formatti
 import { noteEntriesFacet, wikiLinkFormatFacet } from './wiki-link-completion'
 import { knownTagsFacet } from './tag-completion'
 import { useCompartment } from './use-compartment'
+import { useStableValue } from '@/hooks/use-stable-value'
 import { useLatestRef } from './use-latest-ref'
 import { useEditorSearch } from './use-editor-search'
 import { usePdfEmbeds } from './use-pdf-embeds'
@@ -117,13 +118,18 @@ const MarkdownDomEditor = ({
     const lastEmittedValueRef = useRef(value)
     const pendingEmittedRef = useRef(new Set())
 
-    const mediaMapValue = useMemo(() => new Map(mediaMap || []), [mediaMap])
+    const stableMediaMap = useStableValue(mediaMap)
+    const stableNoteEntries = useStableValue(noteEntries)
+    const stableKnownTags = useStableValue(knownTags)
+    const stableTableLabels = useStableValue(tableLabels)
+
+    const mediaMapValue = useMemo(() => new Map(stableMediaMap || []), [stableMediaMap])
 
     const mediaMapExtension = useCompartment(viewRef, () => mediaMapFacet.of(mediaMapValue), [mediaMapValue])
-    const noteEntriesExtension = useCompartment(viewRef, () => noteEntriesFacet.of(noteEntries || []), [noteEntries])
-    const knownTagsExtension = useCompartment(viewRef, () => knownTagsFacet.of(knownTags || []), [knownTags])
+    const noteEntriesExtension = useCompartment(viewRef, () => noteEntriesFacet.of(stableNoteEntries || []), [stableNoteEntries])
+    const knownTagsExtension = useCompartment(viewRef, () => knownTagsFacet.of(stableKnownTags || []), [stableKnownTags])
     const linkFormatExtension = useCompartment(viewRef, () => wikiLinkFormatFacet.of(linkFormat), [linkFormat])
-    const tableLabelsExtension = useCompartment(viewRef, () => tableLabelsFacet.of(tableLabels || {}), [tableLabels])
+    const tableLabelsExtension = useCompartment(viewRef, () => tableLabelsFacet.of(stableTableLabels || {}), [stableTableLabels])
     const lineNumbersExtension = useCompartment(
         viewRef,
         () => (mode === EDITOR_MODES.CODE && lineNumbers ? [cmLineNumbers()] : []),

@@ -1,12 +1,12 @@
-import { useCallback, useMemo, useState } from 'react'
-import { Linking, StyleSheet, View } from 'react-native'
+import { memo, useCallback, useMemo, useState } from 'react'
+import { Linking, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { LoadingOverlay } from '@/ui/layout'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import MarkdownDomEditor from './markdown-dom-editor'
+import RawMarkdownDomEditor from './markdown-dom-editor'
 
 import { MissingNoteDialog } from '@/components/missing-note-dialog'
 
@@ -16,6 +16,8 @@ import { toCssHeadingFamily } from '@/utils/heading-font'
 import { loadDomFonts } from '@/hooks/use-dom-fonts'
 import { loadKatexFonts } from '@/hooks/use-katex-fonts'
 import { useTags } from '@/hooks/use-tags'
+import { useStableCallback } from '@/hooks/use-stable-callback'
+import { useStableValue } from '@/hooks/use-stable-value'
 import { useBacklinksHtml } from '@/hooks/use-backlinks-html'
 import { useMissingNote } from '@/hooks/use-missing-note'
 import { useBlockIdCreator } from '@/hooks/use-block-id-creator'
@@ -44,6 +46,8 @@ import { LINK_TYPES } from '@/constants/link-types'
 import { MATH_DELIMITER } from '@/constants/markdown-math'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { WIKI_LINK_FORMATS } from '@/constants/wiki-links'
+
+const MarkdownDomEditor = memo(RawMarkdownDomEditor)
 
 export const MarkdownInput = ({
     id,
@@ -172,17 +176,23 @@ export const MarkdownInput = ({
         }
     }), [colors, fontSize, maxWidth, headingFont, bottom])
 
+    const stableNoteEntries = useStableValue(noteEntries)
+    const stableKnownTags = useStableValue(knownTags)
+    const stableTitleField = useStableValue(titleField)
+    const stablePropertiesPanel = useStableValue(propertiesPanel)
+    const stableOnTitleBlur = useStableCallback(onTitleBlur)
+
     return (
         <>
-            <View style={styles.editor}>
+            <View style={{ flex: 1 }}>
                 <MarkdownDomEditor
                     mode={mode}
                     onEdit={onEdit}
                     value={value}
                     previewValue={previewValue}
                     mediaMap={mediaMapEntries}
-                    noteEntries={noteEntries}
-                    knownTags={knownTags}
+                    noteEntries={stableNoteEntries}
+                    knownTags={stableKnownTags}
                     linkFormat={linkFormat}
                     tableLabels={tableLabels}
                     lineNumbers={lineNumbers}
@@ -203,10 +213,10 @@ export const MarkdownInput = ({
                     onImagePress={onImagePress}
                     onToggleTask={onToggleTask}
                     placeholder={placeholder}
-                    titleField={titleField}
+                    titleField={stableTitleField}
                     onTitleChange={onTitleChange}
-                    onTitleBlur={onTitleBlur}
-                    propertiesPanel={propertiesPanel}
+                    onTitleBlur={stableOnTitleBlur}
+                    propertiesPanel={stablePropertiesPanel}
                     onToggleProperties={onToggleProperties}
                     onChangeProperty={onChangeProperty}
                     onRemoveTag={onRemoveTag}
@@ -233,9 +243,3 @@ export const MarkdownInput = ({
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    editor: {
-        flex: 1
-    }
-})
