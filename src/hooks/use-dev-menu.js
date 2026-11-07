@@ -34,18 +34,15 @@ import { logError } from '@/utils/log-error'
 // require.context only accepts literal arguments
 const devData = require.context('../../dev-data', true, /\.(md|png|txt|pdf|wav|mp4)$/)
 
-const readDevAsset = async (module) => {
-    const asset = await Asset.fromModule(module).downloadAsync()
-    return new File(asset.localUri)
-}
+const fetchDevAsset = (module) => fetch(Asset.fromModule(module).uri.replaceAll(' ', '%20'))
 
 const loadDevData = () => Promise.all(devData.keys().map(async (key) => {
     const entry = parseDevDataKey(key)
-    const file = await readDevAsset(devData(key))
+    const response = await fetchDevAsset(devData(key))
 
     return entry.kind === DEV_DATA_KINDS.ATTACHMENTS
-        ? { ...entry, bytes: await file.bytes() }
-        : { ...entry, content: await file.text() }
+        ? { ...entry, bytes: new Uint8Array(await response.arrayBuffer()) }
+        : { ...entry, content: await response.text() }
 }))
 
 export function useDevMenu() {
