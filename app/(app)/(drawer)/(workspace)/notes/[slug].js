@@ -1,4 +1,4 @@
-import { useEffect, useEffectEvent, useRef, useState } from 'react'
+import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { router, useLocalSearchParams } from 'expo-router'
 
@@ -17,18 +17,21 @@ import { useNoteVersions } from '@/hooks/use-note-versions'
 import { getVersionLocation } from '@/utils/note-version-location'
 import { logError } from '@/utils/log-error'
 import { findHeadingRenames, renameHeadingLinks } from '@/utils/headings'
-import { planExternalSync } from '@/utils/external-note-sync'
+import { planExternalSync, toSyncShape } from '@/utils/external-note-sync'
+import { fromSavedSnapshot, isDraftSaved, toDraft, toSavedSnapshot } from '@/utils/note-draft'
 
 import { ANCHOR_PARAM } from '@/constants/block-refs'
 import { ROUTES } from '@/constants/routes'
 import { LOG_MESSAGES } from '@/constants/log-messages'
 
-const tagsEqual = (a, b) => a.length === b.length && a.every((tag, i) => tag === b[i])
-
 export default function EditNote() {
     const { t } = useTranslation()
-    const { slug, [ANCHOR_PARAM]: anchor } = useLocalSearchParams()
+    const { commitVersion } = useNoteVersions()
     const { registerCurrent } = useCurrentNote()
+    const { slug, [ANCHOR_PARAM]: anchor } = useLocalSearchParams()
+    const { repositories, loading: repositoriesLoading } = useRepositories()
+    const { saveWithLinkCheck, ...renameDialogProps } = useWikiLinkRenameConfirm()
+
     const {
         notes,
         notePaths,
@@ -37,70 +40,43 @@ export default function EditNote() {
         propagateHeadingRename,
         loading: notesLoading
     } = useNotes()
-    const { repositories, loading: repositoriesLoading } = useRepositories()
-    const { commitVersion } = useNoteVersions()
 
-    const { saveWithLinkCheck, ...renameDialogProps } = useWikiLinkRenameConfirm()
 
     const pathRef = useRef(slug)
     const isSavingRef = useRef(false)
     useRegisterCurrent(slug)
 
     const [loading, setLoading] = useState(true)
+    const [initial] = useState(() => {
+        const stored = notesLoading || repositoriesLoading ? null : getNote(slug)
+
+        return stored && toDraft(stored, t('notes.untitled'))
+    })
 
     const {
         editorProps,
+        update,
         title, setTitle,
         note, setNote,
-        tags, setTags,
-        properties, setProperties,
-        setModifiedAt,
+        tags,
+        properties,
         repositoryId, setRepositoryId,
         filename, setFilename,
-        invalidFrontmatter, setInvalidFrontmatter,
-        rawFrontmatter, setRawFrontmatter,
+        invalidFrontmatter,
+        rawFrontmatter,
         buildPayload
-    } = useNoteDraft(pathRef)
+    } = useNoteDraft(pathRef, initial ?? undefined)
 
-    const originalTitleRef = useRef(null)
-    const originalNoteRef = useRef(null)
-    const originalTagsRef = useRef(null)
-    const originalPropertiesRef = useRef(null)
-    const originalInvalidFrontmatterRef = useRef(null)
-    const originalRawFrontmatterRef = useRef(null)
+    const savedTitleRef = useRef(null)
+    const savedRef = useRef(null)
 
     const loadNote = useEffectEvent(() => {
-        const {
-            title = '',
-            note: content = '',
-            tags = [],
-            properties = {},
-            createdAt = '',
-            updatedAt = '',
-            repositoryId = '',
-            filename = '',
-            invalidFrontmatter = null,
-            rawFrontmatter = null
-        } = getNote(pathRef.current)
+        const loaded = toDraft(getNote(pathRef.current), t('notes.untitled'))
 
-        const resolvedTitle = title || t('notes.untitled')
+        update(loaded)
 
-        setTitle(resolvedTitle)
-        setNote(content)
-        setTags(tags)
-        setProperties(properties)
-        setModifiedAt(updatedAt || createdAt)
-        setRepositoryId(repositoryId)
-        setFilename(filename)
-        setInvalidFrontmatter(invalidFrontmatter)
-        setRawFrontmatter(rawFrontmatter)
-
-        originalTitleRef.current = resolvedTitle
-        originalNoteRef.current = content
-        originalTagsRef.current = tags
-        originalPropertiesRef.current = JSON.stringify(properties)
-        originalInvalidFrontmatterRef.current = invalidFrontmatter
-        originalRawFrontmatterRef.current = rawFrontmatter
+        savedTitleRef.current = loaded.title
+        savedRef.current = toSavedSnapshot(loaded)
         setLoading(false)
     })
 
@@ -125,40 +101,19 @@ export default function EditNote() {
         const incoming = notes.find((n) => n.path === pathRef.current)
         const synced = planExternalSync({
             draft: { note, tags, properties, invalidFrontmatter, rawFrontmatter },
-            original: {
-                note: originalNoteRef.current,
-                tags: originalTagsRef.current,
-                properties: JSON.parse(originalPropertiesRef.current),
-                invalidFrontmatter: originalInvalidFrontmatterRef.current,
-                rawFrontmatter: originalRawFrontmatterRef.current
-            },
-            incoming: incoming && {
-                note: incoming.note,
-                tags: incoming.tags ?? [],
-                properties: incoming.properties ?? {},
-                invalidFrontmatter: incoming.invalidFrontmatter ?? null,
-                rawFrontmatter: incoming.rawFrontmatter ?? null
-            }
+            original: fromSavedSnapshot(savedRef.current),
+            incoming: incoming && toSyncShape(incoming)
         })
         if (!synced) return
 
-        setNote(synced.draft.note)
-        setTags(synced.draft.tags)
-        setProperties(synced.draft.properties)
-        setInvalidFrontmatter(synced.draft.invalidFrontmatter)
-        setRawFrontmatter(synced.draft.rawFrontmatter)
-        setModifiedAt(incoming.updatedAt || incoming.createdAt)
-        originalNoteRef.current = synced.original.note
-        originalTagsRef.current = synced.original.tags
-        originalPropertiesRef.current = JSON.stringify(synced.original.properties)
-        originalInvalidFrontmatterRef.current = synced.original.invalidFrontmatter
-        originalRawFrontmatterRef.current = synced.original.rawFrontmatter
+        update(synced.draft)
+        savedRef.current = toSavedSnapshot(synced.original)
 
         if (synced.lostExternalText) {
             commitVersion(
                 getVersionLocation(repositories, repositoryId),
                 filename,
-                originalTitleRef.current,
+                savedTitleRef.current,
                 synced.original.note
             ).catch((error) => logError(LOG_MESSAGES.ERROR_KEEPING_EXTERNAL_TEXT, error))
         }
@@ -168,27 +123,24 @@ export default function EditNote() {
         syncExternalChanges()
     }, [notes])
 
-    const applySaved = ({ path, filename, createdAt, updatedAt }) => {
+    const applySaved = ({ path, filename }) => {
         if (path !== pathRef.current) {
             pathRef.current = path
             setFilename(filename)
             registerCurrent(path)
         }
-
-        setModifiedAt(updatedAt || createdAt)
     }
 
-    const onMoved = ({ path, filename, repositoryId, updatedAt }) => {
+    const onMoved = ({ path, filename, repositoryId }) => {
         pathRef.current = path
         setFilename(filename)
         setRepositoryId(repositoryId)
-        setModifiedAt(updatedAt)
         registerCurrent(path)
         router.setParams({ slug: path })
     }
 
     const markSaved = (savedContent) => {
-        const renames = findHeadingRenames(originalNoteRef.current || '', savedContent || '')
+        const renames = findHeadingRenames(savedRef.current.note || '', savedContent || '')
         if (renames.length) {
             propagateHeadingRename(pathRef.current, renames, notes, notePaths)
 
@@ -198,25 +150,21 @@ export default function EditNote() {
             }
         }
 
-        originalNoteRef.current = savedContent
-        originalTagsRef.current = tags
-        originalPropertiesRef.current = JSON.stringify(properties)
-        originalInvalidFrontmatterRef.current = invalidFrontmatter
-        originalRawFrontmatterRef.current = rawFrontmatter
+        savedRef.current = toSavedSnapshot({
+            note: savedContent,
+            tags,
+            properties,
+            invalidFrontmatter,
+            rawFrontmatter
+        })
     }
 
-    const noteExists = notes.some((n) => n.path === pathRef.current)
+    const noteExists = useMemo(() => notes.some((n) => n.path === pathRef.current), [notes])
 
     const { flush, runExclusive } = useAutosave(async () => {
-        if (
-            note === originalNoteRef.current &&
-            tagsEqual(tags, originalTagsRef.current) &&
-            JSON.stringify(properties) === originalPropertiesRef.current &&
-            invalidFrontmatter === originalInvalidFrontmatterRef.current &&
-            rawFrontmatter === originalRawFrontmatterRef.current
-        ) return
+        if (isDraftSaved({ note, tags, properties, invalidFrontmatter, rawFrontmatter }, savedRef.current)) return
 
-        const payload = buildPayload(originalTitleRef.current)
+        const payload = buildPayload(savedTitleRef.current)
 
         isSavingRef.current = true
 
@@ -240,7 +188,7 @@ export default function EditNote() {
     const { onTitleBlur, onRestoreVersion } = useTitleCommit({
         title,
         note,
-        titleRef: originalTitleRef,
+        titleRef: savedTitleRef,
         busyRef: isSavingRef,
         setTitle,
         setNote,
@@ -251,7 +199,7 @@ export default function EditNote() {
         onSaved: markSaved
     })
 
-    if (loading) return <LoadingOverlay />
+    if (loading && !initial) return <LoadingOverlay />
 
     return (
         <>

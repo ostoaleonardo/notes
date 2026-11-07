@@ -16,6 +16,7 @@ import { useLanguage } from '@/hooks/use-language'
 import { useNoteDelete } from '@/hooks/use-note-delete'
 import { useNoteMove } from '@/hooks/use-note-move'
 import { useNoteMode } from '@/hooks/use-note-mode'
+import { useNoteModifiedAt } from '@/hooks/use-note-modified-at'
 import { useNoteSharing } from '@/hooks/use-note-sharing'
 import { useNoteTemplates } from '@/hooks/use-note-templates'
 import { useRepositories } from '@/hooks/use-repositories'
@@ -48,7 +49,6 @@ export const NoteEditorScreen = ({
     properties, setProperties,
     invalidFrontmatter, setInvalidFrontmatter,
     rawFrontmatter, setRawFrontmatter,
-    modifiedAt,
     initialMode = EDITOR_MODES.READ,
     anchor,
     flush,
@@ -167,6 +167,7 @@ export const NoteEditorScreen = ({
     const noteDelete = useNoteDelete(id, busyRef)
     const noteMove = useNoteMove({ id, busyRef, flush, onMoved })
 
+    const modifiedAt = useNoteModifiedAt(id)
     const { words, characters } = countWords(note)
 
     const metaLines = useMemo(() => (

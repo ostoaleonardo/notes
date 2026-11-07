@@ -14,26 +14,27 @@ import { useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useDefaultNoteFolder } from '@/hooks/use-default-note-folder'
 import { getUniqueTitle } from '@/utils/note-filename'
+import { isDraftSaved, toSavedSnapshot } from '@/utils/note-draft'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
 
 export default function Note() {
     const { t } = useTranslation()
     const { activeRepository } = useRepositories()
-    const defaultFolderId = useDefaultNoteFolder()
-    const defaultFolderRef = useRef(defaultFolderId)
-    defaultFolderRef.current = defaultFolderId
     const { notes, saveNote, updateNote } = useNotes()
     const { repositoryId: targetRepositoryId } = useLocalSearchParams()
-
     const { saveWithLinkCheck, ...renameDialogProps } = useWikiLinkRenameConfirm()
+    const defaultFolderId = useDefaultNoteFolder()
+
+    const defaultFolderRef = useRef(defaultFolderId)
+    defaultFolderRef.current = defaultFolderId
 
     const isSaved = useRef(false)
     const pathRef = useRef('')
     const notesRef = useRef(notes)
     const autoTitleRef = useRef('')
     const savedTitleRef = useRef('')
-    const savedSignatureRef = useRef('')
+    const savedRef = useRef(null)
     const firstRender = useRef(true)
 
     const [path, setPath] = useState('')
@@ -41,12 +42,14 @@ export default function Note() {
 
     const {
         editorProps,
-        title, setTitle,
-        note, setNote,
+        title,
+        setTitle,
+        note,
+        setNote,
         tags,
         properties,
-        setModifiedAt,
-        repositoryId, setRepositoryId,
+        repositoryId,
+        setRepositoryId,
         setFilename,
         invalidFrontmatter,
         rawFrontmatter,
@@ -87,10 +90,11 @@ export default function Note() {
         pathRef.current = saved.path
         setPath(saved.path)
         setFilename(saved.filename)
-        setModifiedAt(saved.updatedAt || saved.createdAt)
     }
 
     const { flush, runExclusive } = useAutosave(async () => {
+        const content = { note, tags, properties, invalidFrontmatter, rawFrontmatter }
+
         if (!isSaved.current) {
             const payload = buildPayload(title)
             const saved = await saveNote(payload, repositoryId)
@@ -98,15 +102,16 @@ export default function Note() {
             applySaved(saved)
             isSaved.current = true
             savedTitleRef.current = payload.title
-            savedSignatureRef.current = JSON.stringify([note, tags, properties, invalidFrontmatter, rawFrontmatter])
+            savedRef.current = toSavedSnapshot(content)
             return
         }
 
-        const signature = JSON.stringify([note, tags, properties, invalidFrontmatter, rawFrontmatter])
-        if (signature === savedSignatureRef.current) return
+        if (isDraftSaved(content, savedRef.current)) return
+
+        const snapshot = toSavedSnapshot(content)
 
         applySaved(await updateNote(buildPayload(savedTitleRef.current)))
-        savedSignatureRef.current = signature
+        savedRef.current = snapshot
     }, [
         title,
         note,
