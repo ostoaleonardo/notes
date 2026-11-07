@@ -12,6 +12,7 @@ import { useTemplates } from '@/hooks/use-templates'
 import { scopedStorageKey } from '@/utils/scoped-storage-key'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { getSettingTestId } from '@/utils/test-ids'
 
 export const DailyNoteOption = () => {
     const { t } = useTranslation()
@@ -65,6 +66,7 @@ export const DailyNoteOption = () => {
                 items={folder.items}
                 selectedValue={folder.selectedValue}
                 onSelect={folder.onSelect}
+                testID={getSettingTestId(STORAGE_KEYS.DAILY_NOTE_FOLDER)}
             />
             <SelectOption
                 title={t('settings.daily_note.template.title')}
@@ -74,6 +76,7 @@ export const DailyNoteOption = () => {
                 items={templateItems}
                 selectedValue={dailyTemplate}
                 onSelect={onSelectTemplate}
+                testID={getSettingTestId(STORAGE_KEYS.DAILY_NOTE_TEMPLATE)}
             />
         </PositionGroup>
     )

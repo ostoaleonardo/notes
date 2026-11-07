@@ -26,6 +26,7 @@ import { ROUTES } from '@/constants/routes'
 import { FREE_REPOSITORIES_LIMIT } from '@/constants/default-values'
 import { SPACING } from '@/constants/theme'
 import { REPOSITORY_RESULTS } from '@/constants/repository-results'
+import { TEST_IDS } from '@/constants/test-ids'
 
 export default function Repositories() {
     const { t } = useTranslation()
@@ -112,6 +113,7 @@ export default function Repositories() {
                 icon={Folder}
                 label={t('repositories.choose.button')}
                 onPress={onAddRepository}
+                testID={TEST_IDS.REPOSITORIES_ADD}
             />
 
             <RenameRepository

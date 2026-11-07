@@ -11,6 +11,7 @@ export const FontOption = memo(({
     preview,
     active,
     onPress,
+    testID,
     children
 }) => {
     const { colors } = useTheme()
@@ -19,6 +20,7 @@ export const FontOption = memo(({
         <SwatchOption
             active={active}
             onPress={onPress}
+            testID={testID}
             swatchStyle={{ backgroundColor: active ? colors.tertiary : colors.surfaceVariant }}
             swatch={(
                 <Typography

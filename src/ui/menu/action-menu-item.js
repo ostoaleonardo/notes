@@ -6,6 +6,7 @@ export const ActionMenuItem = memo(({
     title,
     icon,
     action,
+    testID,
     onTrigger
 }) => {
     const onPress = useCallback(() => onTrigger(action), [onTrigger, action])
@@ -14,6 +15,7 @@ export const ActionMenuItem = memo(({
         <MenuItem
             title={title}
             leadingIcon={icon}
+            testID={testID}
             onPress={onPress}
         />
     )

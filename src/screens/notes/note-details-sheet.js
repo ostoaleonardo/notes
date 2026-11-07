@@ -14,11 +14,13 @@ import { Link } from '@/icons/link'
 import { OpenInNew } from '@/icons/open-in-new'
 
 import { ANIMATION_DURATION } from '@/constants/theme'
+import { TEST_IDS } from '@/constants/test-ids'
 
 const DetailRow = memo(({
     title,
     icon,
     onPress,
+    testID,
     rightContent
 }) => {
     const { colors } = useTheme()
@@ -31,6 +33,7 @@ const DetailRow = memo(({
             onPress={onPress}
             rightContent={rightContent}
             leadingIcon={icon}
+            testID={testID}
         />
     )
 })
@@ -61,17 +64,20 @@ export const NoteDetailsSheet = memo(({
             <SheetGroup>
                 <DetailRow
                     title={t('title.outline')}
+                    testID={TEST_IDS.DETAILS_OUTLINE}
                     icon={FormatListBulleted}
                     onPress={run(onOpenOutline)}
                 />
                 <DetailRow
                     title={t('title.outgoing_links')}
+                    testID={TEST_IDS.DETAILS_OUTGOING_LINKS}
                     icon={OpenInNew}
                     onPress={run(onOpenOutgoingLinks)}
                 />
                 {hasSlug && (
                     <DetailRow
                         title={t('button.show_backlinks')}
+                        testID={TEST_IDS.DETAILS_BACKLINKS}
                         icon={Link}
                         onPress={onToggleShowBacklinks}
                         rightContent={(
@@ -85,6 +91,7 @@ export const NoteDetailsSheet = memo(({
                 )}
                 <DetailRow
                     title={t('title.version_history')}
+                    testID={TEST_IDS.DETAILS_VERSION_HISTORY}
                     icon={Commit}
                     onPress={run(onOpenVersionHistory)}
                 />

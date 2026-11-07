@@ -13,6 +13,7 @@ import {
     buildTitleSectionStyle,
     buildTitleTextareaStyle
 } from './markdown-dom-panel-theme'
+import { TEST_IDS } from '@/constants/test-ids'
 
 const AutoGrowTitle = ({
     value,
@@ -39,6 +40,7 @@ const AutoGrowTitle = ({
 
     return (
         <textarea
+            id={TEST_IDS.EDITOR_TITLE}
             rows={1}
             ref={ref}
             value={localValue}
@@ -63,7 +65,10 @@ const MetaLines = ({ lines }) => {
     if (!lines?.length) return null
 
     return (
-        <div style={buildMetaLabelStyle(theme)}>
+        <div
+            id={TEST_IDS.EDITOR_META}
+            style={buildMetaLabelStyle(theme)}
+        >
             {lines.map((line, lineIndex) => (
                 <div key={lineIndex} style={buildMetaLineStyle()}>
                     {line.map((item, index) => (

@@ -8,6 +8,7 @@ import { Folder } from '@/icons/folder'
 import { Add } from '@/icons/add'
 
 import { REPOSITORY_ACTIONS } from '@/constants/repository-actions'
+import { getMenuItemTestId } from '@/ui/utils/test-ids'
 
 const MENU_ITEMS = [
     { action: REPOSITORY_ACTIONS.CREATE_NOTE, label: 'repositories.create_note', icon: Add },
@@ -28,6 +29,7 @@ export const DrawerRepositoryMenu = ({
         .map(({ action, label, icon }) => (
             <MenuItem
                 key={action}
+                testID={getMenuItemTestId(action)}
                 title={t(action === REPOSITORY_ACTIONS.CREATE_NOTE ? createLabelKey || label : label)}
                 leadingIcon={icon}
                 onPress={() => onAction(action)}

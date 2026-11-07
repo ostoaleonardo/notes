@@ -9,6 +9,7 @@ import { isSupportedLanguage } from '@/utils/language'
 
 import { LANGUAGES, SYSTEM_LANGUAGE } from '@/constants/languages'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { getSettingTestId } from '@/utils/test-ids'
 
 export const LanguageOption = () => {
     const { t } = useTranslation()
@@ -40,6 +41,7 @@ export const LanguageOption = () => {
             items={items}
             selectedValue={selected}
             onSelect={onSelect}
+            testID={getSettingTestId(STORAGE_KEYS.LANGUAGE)}
         />
     )
 }

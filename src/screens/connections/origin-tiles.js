@@ -11,6 +11,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 import { ORIGIN_TILE } from '@/constants/connections'
 import { CONNECTION_TYPES, CONNECTION_TYPE_LABELS } from '@/constants/connections'
 import { ICON_SIZE, OPACITY, RADIUS, SPACING } from '@/constants/theme'
+import { TEST_IDS } from '@/constants/test-ids'
 
 const TILE_COLUMNS = ORIGIN_TILE.columns
 
@@ -35,6 +36,7 @@ const Tile = memo(({
         <Pressable
             accessibilityRole='button'
             accessibilityLabel={label}
+            testID={TEST_IDS.ORIGIN_TILE_PREFIX + type}
             onPress={handlePress}
         >
             <EntityShape

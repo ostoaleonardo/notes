@@ -19,6 +19,7 @@ import { DRAWER_VIEWS, DRAWER_VIEW_LABELS } from '@/constants/drawer-views'
 import { TRANSPARENT } from '@/constants/themes'
 import { RADIUS, SPACING, ICON_SIZE, OPACITY } from '@/constants/theme'
 import { TEST_IDS } from '@/constants/test-ids'
+import { getMenuItemTestId } from '@/ui/utils/test-ids'
 
 const VIEW_OPTIONS = Object.values(DRAWER_VIEWS)
 
@@ -65,6 +66,7 @@ export const DrawerViewSwitcher = memo(({ view, onChange }) => {
                 {VIEW_OPTIONS.map((option) => (
                     <SelectMenuItem
                         key={option}
+                        testID={getMenuItemTestId(option)}
                         title={t(DRAWER_VIEW_LABELS[option])}
                         selected={option === view}
                         onPress={() => trigger(() => onChange(option))}

@@ -20,6 +20,7 @@ import { usePreviewClicks } from './use-preview-clicks'
 import { scrollToEditorTarget, scrollToPreviewTarget } from './markdown-dom-anchor-target'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
+import { TEST_IDS } from '@/constants/test-ids'
 
 export default function MarkdownDomEditor({
     mode,
@@ -269,6 +270,7 @@ export default function MarkdownDomEditor({
             />
 
             <div
+                id={TEST_IDS.EDITOR_PREVIEW}
                 ref={previewRef}
                 className='markdown-preview'
                 style={{ display: mode === EDITOR_MODES.READ ? 'block' : 'none' }}

@@ -1,6 +1,7 @@
 import { useCallback, useDeferredValue, useEffect, useMemo, useState } from 'react'
 import { randomUUID } from 'expo-crypto'
 import { Keyboard, Pressable, StyleSheet, View } from 'react-native'
+import { useTranslation } from 'react-i18next'
 
 import { SearchFilters } from './search-filters'
 import { SearchResults } from './search-results'
@@ -22,13 +23,15 @@ import { pushOnce } from '@/utils/navigation'
 import { RECENT_SEARCHES_LIMIT } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { SPACING } from '@/constants/theme'
+import { TEST_IDS } from '@/constants/test-ids'
 
 export const NoteSearch = ({ onClose, initialQuery = '' }) => {
-    const { repositories } = useRepositories()
-    const { notes, notePaths } = useNotes()
+    const { t } = useTranslation()
     const { tags } = useTags()
     const { pinned } = useUtils()
+    const { notes, notePaths } = useNotes()
     const { getItem, setItem } = useStorage()
+    const { repositories } = useRepositories()
 
     const [query, setQuery] = useState(initialQuery)
     const [recent, setRecent] = useState([])
@@ -91,6 +94,8 @@ export const NoteSearch = ({ onClose, initialQuery = '' }) => {
             <SearchBar
                 value={query}
                 onChangeText={setQuery}
+                label={t('drawer.search')}
+                testID={TEST_IDS.SEARCH_INPUT}
             />
 
             <View style={styles.actions}>
@@ -110,7 +115,10 @@ export const NoteSearch = ({ onClose, initialQuery = '' }) => {
                         onOpenResult={onOpenResult}
                     />
                 ) : (
-                    <View style={styles.suggestions}>
+                    <View
+                        testID={TEST_IDS.SEARCH_SUGGESTIONS}
+                        style={styles.suggestions}
+                    >
                         <SavedSearches
                             saved={saved}
                             onSelect={setQuery}

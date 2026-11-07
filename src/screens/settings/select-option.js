@@ -11,12 +11,14 @@ import { useMenuAction } from '@/hooks/use-menu-action'
 import { ArrowForward } from '@/icons/arrow-forward'
 
 import { SIZE } from '@/constants/theme'
+import { getMenuItemTestId } from '@/ui/utils/test-ids'
 
 export const SelectOption = ({
     title,
     description,
     items,
     selectedValue,
+    testID,
     onSelect
 }) => {
     const { colors } = useTheme()
@@ -30,6 +32,7 @@ export const SelectOption = ({
                 description={description}
                 rightContent={<ArrowForward color={colors.onBackground} />}
                 onPress={menu.onOpen}
+                testID={testID}
             />
 
             <Menu visible={menu.visible} onClose={menu.onClose} maxHeight={maxHeight}>
@@ -37,6 +40,7 @@ export const SelectOption = ({
                     {items.map((item) => (
                         <SelectMenuItem
                             key={item.value}
+                            testID={getMenuItemTestId(item.value)}
                             title={item.title}
                             indent={item.indent}
                             selected={item.value === selectedValue}

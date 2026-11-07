@@ -11,6 +11,7 @@ import { SortByAlpha } from '@/icons/sort-by-alpha'
 
 import { NOTE_SORT_LABELS } from '@/constants/note-sort'
 import { TEST_IDS } from '@/constants/test-ids'
+import { getMenuItemTestId } from '@/ui/utils/test-ids'
 
 const SORT_OPTIONS = Object.keys(NOTE_SORT_LABELS)
 
@@ -35,6 +36,7 @@ export const DrawerSortMenu = ({ sort, onChange }) => {
                 {SORT_OPTIONS.map((option) => (
                     <SelectMenuItem
                         key={option}
+                        testID={getMenuItemTestId(option)}
                         selected={option === sort}
                         title={t(NOTE_SORT_LABELS[option])}
                         onPress={() => trigger(() => onChange(option))}

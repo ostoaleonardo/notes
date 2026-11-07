@@ -13,6 +13,7 @@ export const SwatchOption = ({
     onPress,
     swatch,
     swatchStyle,
+    testID,
     children
 }) => {
     const animatedStyle = useAnimatedBorderRadius(
@@ -22,6 +23,7 @@ export const SwatchOption = ({
     return (
         <Pressable
             onPress={onPress}
+            testID={testID}
             accessibilityRole='button'
             accessibilityState={{ selected: !!active }}
             style={styles.container}

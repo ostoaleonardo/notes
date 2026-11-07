@@ -4,6 +4,7 @@ import { useCommonActionsMenu } from './use-common-actions-menu'
 import { ActionMenuItem } from '@/ui/menu/action-menu-item'
 
 import { Shapes } from '@/icons/shapes'
+import { getMenuItemTestId } from '@/ui/utils/test-ids'
 
 export const useTemplateActionsMenu = ({
     onTrigger,
@@ -25,6 +26,7 @@ export const useTemplateActionsMenu = ({
             common.code,
             <ActionMenuItem
                 key='placeholders'
+                testID={getMenuItemTestId('placeholders')}
                 title={t('templates.placeholders.view')}
                 icon={Shapes}
                 action={onOpenPlaceholders}

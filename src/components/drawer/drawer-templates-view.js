@@ -23,6 +23,7 @@ import { ExpandAll } from '@/icons/expand-all'
 import { REPOSITORY_ACTIONS } from '@/constants/repository-actions'
 import { TEMPLATE_FOLDER_KEY_PREFIX, TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 import { DRAWER_ITEM_TYPES, DRAWER_TOOLBAR_KEYS } from '@/constants/drawer-views'
+import { TEST_IDS } from '@/constants/test-ids'
 
 export const DrawerTemplatesView = ({ closeDrawer }) => {
     const { t } = useTranslation()
@@ -77,6 +78,7 @@ export const DrawerTemplatesView = ({ closeDrawer }) => {
     const toolbarItems = useMemo(() => [
         {
             key: 'new-template',
+            testID: TEST_IDS.DRAWER_NEW_TEMPLATE,
             icon: Add,
             onPress: () => setAddTemplateFolderPath(''),
             accessibilityLabel: t('templates.new')

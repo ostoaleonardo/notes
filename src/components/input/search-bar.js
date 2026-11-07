@@ -1,6 +1,5 @@
 import { useCallback, useRef } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
-import { useTranslation } from 'react-i18next'
 
 import { FilledTextField } from '@/ui/input/filled-text-field'
 import { useTheme } from '@/ui/hooks/use-theme'
@@ -13,9 +12,9 @@ import { ICON_SIZE, SPACING } from '@/constants/theme'
 export const SearchBar = ({
     label,
     value,
+    testID,
     onChangeText
 }) => {
-    const { t } = useTranslation()
     const { colors } = useTheme()
     const fieldRef = useRef(null)
 
@@ -28,8 +27,9 @@ export const SearchBar = ({
         <View style={styles.container}>
             <FilledTextField
                 ref={fieldRef}
+                testID={testID}
                 multiline={false}
-                label={label ?? t('drawer.search')}
+                label={label}
                 value={value}
                 onChangeText={onChangeText}
                 startAdornment={(

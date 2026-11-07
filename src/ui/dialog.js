@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { cloneElement, useEffect, useMemo } from 'react'
 import { Keyboard, Modal } from 'react-native'
 import { AlertDialog, Host, Text } from '@expo/ui/jetpack-compose'
 import { fillMaxWidth } from '@expo/ui/jetpack-compose/modifiers'
@@ -8,6 +8,7 @@ import { paddingHorizontal } from '@/ui/utils/compose-modifiers'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import { DIALOG } from '@/ui/tokens/components'
+import { UI_TEST_IDS } from '@/ui/tokens/test-ids'
 import { FONTS, TYPOGRAPHY_SIZE_VARIANTS, SPACING } from '@/ui/tokens/theme'
 import { TINT } from '@/ui/tokens/transparent'
 
@@ -74,8 +75,16 @@ export const Dialog = ({
                         <AlertDialog.Text>
                             {children}
                         </AlertDialog.Text>
-                        {!!confirm && <AlertDialog.ConfirmButton>{confirm}</AlertDialog.ConfirmButton>}
-                        {!!dismiss && <AlertDialog.DismissButton>{dismiss}</AlertDialog.DismissButton>}
+                        {!!confirm && (
+                            <AlertDialog.ConfirmButton>
+                                {cloneElement(confirm, { testID: UI_TEST_IDS.DIALOG_CONFIRM })}
+                            </AlertDialog.ConfirmButton>
+                        )}
+                        {!!dismiss && (
+                            <AlertDialog.DismissButton>
+                                {cloneElement(dismiss, { testID: UI_TEST_IDS.DIALOG_CANCEL })}
+                            </AlertDialog.DismissButton>
+                        )}
                     </AlertDialog>
                 </ComposeContext.Provider>
             </Host>

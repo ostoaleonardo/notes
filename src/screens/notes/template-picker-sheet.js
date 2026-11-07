@@ -7,6 +7,7 @@ import { TonalButton } from '@/ui/button/tonal-button'
 import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
 import { SheetActions } from '@/ui/modal/sheet-actions'
 import { SheetTitle } from '@/ui/modal/sheet-title'
+import { TEST_IDS } from '@/constants/test-ids'
 
 export const TemplatePickerSheet = memo(({
     sheet,
@@ -41,6 +42,7 @@ export const TemplatePickerSheet = memo(({
                 <TonalButton
                     loading={saving}
                     onPress={onSave}
+                    testID={TEST_IDS.TEMPLATE_SAVE}
                 >
                     {t('button.save_as_template')}
                 </TonalButton>

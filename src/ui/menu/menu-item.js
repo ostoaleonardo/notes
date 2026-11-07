@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { DropdownMenuItem, Row, Text } from '@expo/ui/jetpack-compose'
-import { Shapes, background, clip, height, offset, padding } from '@expo/ui/jetpack-compose/modifiers'
+import { Shapes, background, clip, height, offset, padding, testID as testIdModifier } from '@expo/ui/jetpack-compose/modifiers'
 
 import { ComposeIcon } from '@/ui/compose-icon'
 import { useTheme } from '@/ui/hooks/use-theme'
@@ -26,6 +26,7 @@ export const MenuItem = ({
     highlight,
     indent = 0,
     disabled = false,
+    testID,
     onPress
 }) => {
     const { colors } = useTheme()
@@ -46,8 +47,11 @@ export const MenuItem = ({
     }, [highlight])
 
     const textModifiers = useMemo(
-        () => (indent ? [padding(indent, 0, 0, 0)] : undefined),
-        [indent]
+        () => [
+            ...(testID ? [testIdModifier(testID)] : []),
+            ...(indent ? [padding(indent, 0, 0, 0)] : [])
+        ],
+        [indent, testID]
     )
 
     const textStyle = useMemo(() => ({

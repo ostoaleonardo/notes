@@ -64,6 +64,7 @@ export const RelationsSheet = memo(({
             icon: SECTION_ICONS[section.key],
             label: `${t(CONNECTION_TAB_LABELS[section.key])} ${section.entities.length}`,
             selected: active,
+            testID: TEST_IDS.RELATIONS_TAB_PREFIX + section.key,
             onPress: () => setTabState({ id, key: section.key })
         }
     }), [relations, current, id, t])

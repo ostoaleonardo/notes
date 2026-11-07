@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react'
 import { RNHostView, Text } from '@expo/ui/jetpack-compose'
-import { fillMaxWidth } from '@expo/ui/jetpack-compose/modifiers'
+import { fillMaxWidth, testID as testIdModifier } from '@expo/ui/jetpack-compose/modifiers'
 
 import { ComposeContext, ComposeHost } from '@/ui/compose-context'
 import { useTextState } from '@/ui/hooks/use-text-state'
@@ -26,7 +26,8 @@ export const MaterialTextField = ({
     ref,
     multiline = true,
     disabled = false,
-    autoFocus = false
+    autoFocus = false,
+    testID
 }) => {
     const { colors } = useTheme()
     const inCompose = useContext(ComposeContext)
@@ -34,6 +35,11 @@ export const MaterialTextField = ({
     const fieldColors = useMemo(() => getTextFieldColors(colors, containerColor), [colors, containerColor])
 
     const { textStyle, selectionColors } = useTextFieldStyle()
+
+    const modifiers = useMemo(() => {
+        const list = [...(inCompose ? FILL_WIDTH : []), ...(testID ? [testIdModifier(testID)] : [])]
+        return list.length ? list : undefined
+    }, [inCompose, testID])
 
     const labelStyle = useMemo(() => ({
         fontFamily: FONTS.azeretLight
@@ -44,7 +50,7 @@ export const MaterialTextField = ({
             ref={ref}
             value={text}
             colors={fieldColors}
-            modifiers={inCompose ? FILL_WIDTH : undefined}
+            modifiers={modifiers}
             textStyle={textStyle}
             enabled={!disabled}
             autoFocus={autoFocus}

@@ -5,6 +5,7 @@ import { SelectOption } from './select-option'
 import { useFolderSetting } from '@/hooks/use-folder-setting'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { getSettingTestId } from '@/utils/test-ids'
 
 export const DefaultNoteFolderOption = () => {
     const { t } = useTranslation()
@@ -20,6 +21,7 @@ export const DefaultNoteFolderOption = () => {
             items={folder.items}
             selectedValue={folder.selectedValue}
             onSelect={folder.onSelect}
+            testID={getSettingTestId(STORAGE_KEYS.DEFAULT_NOTE_FOLDER)}
         />
     )
 }

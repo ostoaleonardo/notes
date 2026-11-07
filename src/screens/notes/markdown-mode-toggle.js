@@ -19,6 +19,7 @@ import { Search } from '@/icons/search'
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { TEMPLATE_SCOPE } from '@/constants/toolbar'
 import { TEST_IDS } from '@/constants/test-ids'
+import { getMenuItemTestId } from '@/ui/utils/test-ids'
 
 export const MarkdownModeToggle = ({
     mode,
@@ -66,6 +67,7 @@ export const MarkdownModeToggle = ({
     const searchGroup = !isFocused && [
         <ActionMenuItem
             key='find'
+            testID={getMenuItemTestId('find')}
             title={t('button.find')}
             icon={Search}
             action={search.onOpenSearch}

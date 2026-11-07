@@ -22,6 +22,7 @@ import { DEFAULT_TAG_SORT, TAG_SORT_LABELS, TAG_SORTS } from '@/constants/tags'
 import { OPACITY } from '@/constants/theme'
 import { DRAWER_TOOLBAR_KEYS } from '@/constants/drawer-views'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { TEST_IDS } from '@/constants/test-ids'
 
 const TagRow = memo(({
     tagKey,
@@ -72,11 +73,12 @@ export const DrawerTagsView = () => {
     const anyExpanded = expandedTags.size > 0
 
     const toolbarItems = useMemo(() => {
-        const sortItem = (key, [firstIcon, secondIcon], first, second) => {
+        const sortItem = (key, testID, [firstIcon, secondIcon], first, second) => {
             const next = sort === first ? second : first
 
             return {
                 key,
+                testID,
                 icon: sort === second ? secondIcon : firstIcon,
                 style: sort !== first && sort !== second && styles.inactive,
                 onPress: () => onChangeSort(next),
@@ -85,8 +87,8 @@ export const DrawerTagsView = () => {
         }
 
         return [
-            sortItem('sort-name', [SortByAlpha, SortByAlpha], TAG_SORTS.NAME_ASC, TAG_SORTS.NAME_DESC),
-            sortItem('sort-usage', [ArrowDownward, ArrowUpward], TAG_SORTS.COUNT_DESC, TAG_SORTS.COUNT_ASC),
+            sortItem('sort-name', undefined, [SortByAlpha, SortByAlpha], TAG_SORTS.NAME_ASC, TAG_SORTS.NAME_DESC),
+            sortItem('sort-usage', TEST_IDS.DRAWER_TAG_SORT_USAGE, [ArrowDownward, ArrowUpward], TAG_SORTS.COUNT_DESC, TAG_SORTS.COUNT_ASC),
             {
                 key: DRAWER_TOOLBAR_KEYS.TOGGLE_ALL,
                 icon: anyExpanded ? CollapseAll : ExpandAll,

@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Column, ListItem as ComposeListItem, RNHostView, Text } from '@expo/ui/jetpack-compose'
-import { Shapes, clickable, clip, padding } from '@expo/ui/jetpack-compose/modifiers'
+import { Shapes, clickable, clip, padding, testID as testIdModifier } from '@expo/ui/jetpack-compose/modifiers'
 
 import { ComposeHost } from '@/ui/compose-context'
 import { ComposeIcon } from '@/ui/compose-icon'
@@ -13,6 +13,7 @@ import { COMPOSE_LIST_ITEM } from '@/ui/tokens/components'
 import { GROUP_AXES } from '@/ui/tokens/group-position'
 import { FONTS, ICON_SIZE, SPACING, TYPOGRAPHY_SIZE_VARIANTS } from '@/ui/tokens/theme'
 import { TINT, TRANSPARENT } from '@/ui/tokens/transparent'
+import { UI_TEST_IDS } from '@/ui/tokens/test-ids'
 
 export const ListItem = ({
     title,
@@ -23,6 +24,7 @@ export const ListItem = ({
     children,
     onPress,
     background,
+    testID,
     uppercase = true
 }) => {
     const { colors } = useTheme()
@@ -61,6 +63,12 @@ export const ListItem = ({
             : []
     ), [description])
 
+    const titleModifiers = useMemo(() => (testID ? [testIdModifier(testID)] : undefined), [testID])
+    const descriptionModifiers = useMemo(
+        () => (testID ? [testIdModifier(testID + UI_TEST_IDS.VALUE_SUFFIX)] : undefined),
+        [testID]
+    )
+
     const titleStyle = useMemo(() => ({
         fontFamily: FONTS.azeretLight,
         fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodyMedium
@@ -96,11 +104,15 @@ export const ListItem = ({
             >
                 <ComposeListItem.HeadlineContent>
                     <Column modifiers={textModifiers}>
-                        <Text style={titleStyle}>
+                        <Text
+                            modifiers={titleModifiers}
+                            style={titleStyle}
+                        >
                             {uppercase ? title.toLocaleUpperCase() : title}
                         </Text>
                         {!!description && (
                             <Text
+                                modifiers={descriptionModifiers}
                                 color={listColors.supportingContentColor}
                                 style={descriptionStyle}
                             >

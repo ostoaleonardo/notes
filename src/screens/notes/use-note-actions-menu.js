@@ -21,6 +21,7 @@ import { Keep } from '@/icons/keep'
 import { KeepFilled } from '@/icons/keep-filled'
 import { NoteStack } from '@/icons/note-stack'
 import { Share as ShareIcon } from '@/icons/share'
+import { getMenuItemTestId } from '@/ui/utils/test-ids'
 
 export const useNoteActionsMenu = ({
     onTrigger,
@@ -71,6 +72,7 @@ export const useNoteActionsMenu = ({
             common.code,
             <ActionMenuItem
                 key='pin'
+                testID={getMenuItemTestId('pin')}
                 title={isPinned ? t('button.unpin') : t('button.pin')}
                 icon={isPinned ? KeepFilled : Keep}
                 action={toggleKeep}
@@ -79,6 +81,7 @@ export const useNoteActionsMenu = ({
             slug && (
                 <ActionMenuItem
                     key='duplicate'
+                    testID={getMenuItemTestId('duplicate')}
                     title={t('button.duplicate')}
                     icon={NoteStack}
                     action={onDuplicate}
@@ -88,6 +91,7 @@ export const useNoteActionsMenu = ({
             slug && (
                 <ActionMenuItem
                     key='move'
+                    testID={getMenuItemTestId('move')}
                     title={t('button.move')}
                     icon={Folder}
                     action={onOpenMove}
@@ -97,6 +101,7 @@ export const useNoteActionsMenu = ({
             slug && (
                 <ActionMenuItem
                     key='sharing'
+                    testID={getMenuItemTestId('sharing')}
                     title={t('button.export_share')}
                     icon={ShareIcon}
                     action={onOpenSharingDialog}
@@ -105,6 +110,7 @@ export const useNoteActionsMenu = ({
             ),
             <ActionMenuItem
                 key='details'
+                testID={getMenuItemTestId('details')}
                 title={t('title.details')}
                 icon={FormatListBulleted}
                 action={onOpenDetails}

@@ -12,6 +12,7 @@ import { Check } from '@/ui/icons/check'
 import { Folder } from '@/icons/folder'
 
 import { SPACING, ICON_SIZE } from '@/constants/theme'
+import { TEST_IDS } from '@/constants/test-ids'
 
 const MoveNoteItem = memo(({
     item,
@@ -26,6 +27,7 @@ const MoveNoteItem = memo(({
             background={colors.surfaceVariant}
             title={item.alias}
             onPress={current ? undefined : () => onPress(item.id)}
+            testID={TEST_IDS.MOVE_TARGET}
             leftContent={(
                 <View style={{ marginLeft: item.depth * SPACING.lg }}>
                     <Folder

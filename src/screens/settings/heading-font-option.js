@@ -15,6 +15,7 @@ import {
 } from '@/constants/heading-fonts'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { SPACING } from '@/constants/theme'
+import { TEST_IDS } from '@/constants/test-ids'
 
 export const HeadingFontOption = () => {
     const { t } = useTranslation()
@@ -39,6 +40,7 @@ export const HeadingFontOption = () => {
                         preview={HEADING_FONT_PREVIEW}
                         active={fontKey === value}
                         onPress={() => onSelect(value)}
+                        testID={TEST_IDS.HEADING_FONT_PREFIX + value}
                     >
                         {t(`${HEADING_FONT_TRANSLATION_KEY}.${value}`)}
                     </FontOption>

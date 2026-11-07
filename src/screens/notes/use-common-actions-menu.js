@@ -8,6 +8,7 @@ import { Commit } from '@/icons/commit'
 import { Delete } from '@/icons/delete'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
+import { getMenuItemTestId } from '@/ui/utils/test-ids'
 
 export const useCommonActionsMenu = ({
     onTrigger,
@@ -23,6 +24,7 @@ export const useCommonActionsMenu = ({
         code: (
             <ActionMenuItem
                 key='code'
+                testID={getMenuItemTestId('code')}
                 title={t('button.code')}
                 icon={Code}
                 action={onOpenCode}
@@ -32,6 +34,7 @@ export const useCommonActionsMenu = ({
         versionHistory: (
             <ActionMenuItem
                 key='version-history'
+                testID={getMenuItemTestId('version-history')}
                 title={t('title.version_history')}
                 icon={Commit}
                 action={onOpenVersionHistory}
@@ -41,6 +44,7 @@ export const useCommonActionsMenu = ({
         remove: (
             <ActionMenuItem
                 key='delete'
+                testID={getMenuItemTestId('delete')}
                 title={t('button.delete')}
                 icon={Delete}
                 action={onOpenDeleteDialog}

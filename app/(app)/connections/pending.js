@@ -29,6 +29,7 @@ import { LinkOff } from '@/icons/link-off'
 import { ICON_TOGGLE } from '@/constants/components'
 import { CONNECTION_TYPES, PENDING_TABS, PENDING_TAB_PARAM } from '@/constants/connections'
 import { OPACITY, SPACING } from '@/constants/theme'
+import { TEST_IDS } from '@/constants/test-ids'
 
 const { NOTE } = CONNECTION_TYPES
 
@@ -66,6 +67,7 @@ const ConnectionsPendingContent = () => {
             icon,
             label: `${count} ${t(`connections.${legend}`)}`,
             selected: active,
+            testID: TEST_IDS.PENDING_TAB_PREFIX + value,
             onPress: () => setTab(value)
         }
     }), [tab, summary, t])
