@@ -1,4 +1,11 @@
 export const TREE_BRANCHING = 3
 export const NOTES_PER_FOLDER = 3
+export const DEV_TEST_PINNED_TITLES = ['Test index', 'Linked A']
+export const DEV_DATA_KEY_PREFIX = './'
+export const DEV_DATA_KINDS = {
+    NOTES: 'notes',
+    TEMPLATES: 'templates',
+    ATTACHMENTS: 'attachments'
+}
 export const LEGACY_SEED_IMAGE_FILENAME = 'legacy-seed-image.png'
 export const LEGACY_SEED_IMAGE_BASE64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='

@@ -1,14 +1,57 @@
-import { buildDevTestPlan, listDevFolders } from '../dev-test-data'
+import fs from 'fs'
+import path from 'path'
+
+import { buildDevTestPlan, groupDevData, listDevFolders, parseDevDataKey } from '../dev-test-data'
 import { buildConnectionModel, summarizeConnections } from '../connection-model'
+import { parseFrontmatter } from '../frontmatter'
 import { NOTES_PER_FOLDER, TREE_BRANCHING } from '@/constants/dev-menu'
 
-const toNotes = (plan) => plan.notes.map((entry) => {
-    const folder = entry.folder.join('/')
+const DEV_DATA_DIR = path.join(process.cwd(), 'dev-data')
 
-    return { path: `${folder}::${entry.title}`, title: entry.title, note: entry.body, folder }
+const readDevData = () => (
+    fs.readdirSync(DEV_DATA_DIR, { recursive: true })
+        .filter((relative) => fs.statSync(path.join(DEV_DATA_DIR, relative)).isFile())
+        .map((relative) => {
+            const entry = parseDevDataKey(`./${relative.split(path.sep).join('/')}`)
+            const content = fs.readFileSync(path.join(DEV_DATA_DIR, relative), 'utf8')
+
+            return { ...entry, content }
+        })
+)
+
+const getTitle = (filename) => filename.replace(/\.md$/, '')
+
+const toNotes = (plan) => plan.notes.map(({ folder, filename, content }) => {
+    const folderPath = folder.join('/')
+
+    return {
+        path: `${folderPath}::${filename}`,
+        title: getTitle(filename),
+        note: parseFrontmatter(content).body,
+        properties: parseFrontmatter(content).frontmatter,
+        folder: folderPath
+    }
 })
 
 const toNotePaths = (notes) => new Map(notes.map((note) => [note.path, note.folder]))
+
+describe('parse dev data key', () => {
+    test('splits the kind, the folder and the filename', () => {
+        expect(parseDevDataKey('./notes/Folder 1/Subfolder 1.1/Orphan deep.md')).toEqual({
+            kind: 'notes',
+            folder: ['Folder 1', 'Subfolder 1.1'],
+            filename: 'Orphan deep.md'
+        })
+    })
+
+    test('keeps root files without a folder', () => {
+        expect(parseDevDataKey('./attachments/sample.pdf')).toEqual({
+            kind: 'attachments',
+            folder: [],
+            filename: 'sample.pdf'
+        })
+    })
+})
 
 describe('list dev folders', () => {
     test('creates every folder with its subfolders', () => {
@@ -21,44 +64,48 @@ describe('list dev folders', () => {
 })
 
 describe('dev test plan', () => {
-    const plan = buildDevTestPlan()
+    const plan = buildDevTestPlan(groupDevData(readDevData()))
 
-    test('never repeats a title inside the same folder', () => {
-        const keys = plan.notes.map((entry) => `${entry.folder.join('/')}::${entry.title}`)
+    test('never repeats a filename inside the same folder', () => {
+        const keys = plan.notes.map(({ folder, filename }) => `${folder.join('/')}::${filename}`)
 
         expect(new Set(keys).size).toBe(keys.length)
     })
 
-    test('writes only into folders that exist in the plan', () => {
+    test('creates every folder before the notes written into it', () => {
         const known = new Set(['', ...plan.folders.map((folder) => folder.join('/'))])
 
-        plan.notes.forEach((entry) => expect(known.has(entry.folder.join('/'))).toBe(true))
+        plan.notes.forEach(({ folder }) => expect(known.has(folder.join('/'))).toBe(true))
     })
 
-    test('seeds generic notes in the root and in every folder', () => {
-        const generic = plan.notes.filter((entry) => / note \d+$/.test(entry.title))
+    test('lists parent folders before their children', () => {
+        const order = plan.folders.map((folder) => folder.join('/'))
 
-        expect(generic).toHaveLength((plan.folders.length + 1) * NOTES_PER_FOLDER)
+        plan.folders.forEach((folder, index) => {
+            if (folder.length > 1) expect(order.indexOf(folder.slice(0, -1).join('/'))).toBeLessThan(index)
+        })
+    })
+
+    test('seeds generic notes in the root and in every generated folder', () => {
+        const generic = plan.notes.filter(({ filename }) => / note \d+\.md$/.test(filename))
+
+        expect(generic).toHaveLength((listDevFolders().length + 1) * NOTES_PER_FOLDER)
     })
 
     test('provides every attachment that the notes embed', () => {
-        const filenames = plan.files.map((file) => file.filename)
+        const filenames = new Set(plan.files.map(({ filename }) => filename))
+        const embedded = plan.notes
+            .flatMap(({ content }) => [...content.matchAll(/!?\[\[([^\]|#]+\.(?:png|pdf|txt|wav|mp4))/g)])
+            .map((match) => match[1])
+            .filter((filename) => filename !== 'missing-file.pdf')
 
-        ;[
-            'dev-image.png',
-            'dev-image-2.png',
-            'sample.pdf',
-            'sample.txt',
-            'sample.wav',
-            'sample.mp4',
-            'syntax-sample.png'
-        ]
-            .forEach((name) => expect(filenames).toContain(name))
+        expect(embedded.length).toBeGreaterThan(0)
+        embedded.forEach((filename) => expect(filenames).toContain(filename))
     })
 
     test('includes a nested template folder and a root template', () => {
-        expect(plan.templates.some((template) => template.folder.length === 0)).toBe(true)
-        expect(plan.templates.some((template) => template.folder.length > 0)).toBe(true)
+        expect(plan.templates.some(({ folder }) => folder.length === 0)).toBe(true)
+        expect(plan.templates.some(({ folder }) => folder.length > 0)).toBe(true)
     })
 
     describe('link features', () => {

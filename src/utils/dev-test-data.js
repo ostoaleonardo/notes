@@ -1,41 +1,18 @@
-import {
-    SYNTAX_LINKED_TITLE,
-    SYNTAX_LINKED_TAGS,
-    SYNTAX_LINKED_PROPERTIES,
-    SYNTAX_LINKED_BODY,
-    SYNTAX_EMBED_TITLE,
-    SYNTAX_EMBED_TAGS,
-    SYNTAX_EMBED_BODY,
-    SYNTAX_MAIN_TITLE,
-    SYNTAX_MAIN_TAGS,
-    SYNTAX_MAIN_PROPERTIES,
-    SYNTAX_MAIN_BODY
-} from '@/constants/syntax-note'
-import { DEV_TEST_FILES, DEV_TEST_NOTES, DEV_TEST_TEMPLATES } from '@/constants/dev-test-data'
-import { NOTES_PER_FOLDER, TREE_BRANCHING } from '@/constants/dev-menu'
+import { buildNoteFileContent } from '@/utils/frontmatter'
 
-const SYNTAX_NOTES = [
-    {
-        folder: [],
-        title: SYNTAX_LINKED_TITLE,
-        tags: SYNTAX_LINKED_TAGS,
-        properties: SYNTAX_LINKED_PROPERTIES,
-        body: SYNTAX_LINKED_BODY
-    },
-    {
-        folder: [],
-        title: SYNTAX_EMBED_TITLE,
-        tags: SYNTAX_EMBED_TAGS,
-        body: SYNTAX_EMBED_BODY
-    },
-    {
-        folder: [],
-        title: SYNTAX_MAIN_TITLE,
-        tags: SYNTAX_MAIN_TAGS,
-        properties: SYNTAX_MAIN_PROPERTIES,
-        body: SYNTAX_MAIN_BODY
-    }
-]
+import { NOTE_FILE_EXTENSION } from '@/constants/file-storage'
+import {
+    DEV_DATA_KEY_PREFIX,
+    DEV_DATA_KINDS,
+    NOTES_PER_FOLDER,
+    TREE_BRANCHING
+} from '@/constants/dev-menu'
+
+export const parseDevDataKey = (key) => {
+    const [kind, ...segments] = key.replace(DEV_DATA_KEY_PREFIX, '').split('/')
+
+    return { kind, folder: segments.slice(0, -1), filename: segments.at(-1) }
+}
 
 export const listDevFolders = (branching = TREE_BRANCHING) => {
     const folders = []
@@ -59,24 +36,50 @@ const buildFolderNotes = (folder, label, notesPerFolder) => (
 
         return {
             folder,
-            title,
-            tags: [`folders/${label}`],
-            body: `# ${title}\n\nExample content.${link}\n`
+            filename: `${title}${NOTE_FILE_EXTENSION}`,
+            content: buildNoteFileContent(
+                { tags: [`folders/${label}`] },
+                `# ${title}\n\nExample content.${link}\n`
+            )
         }
     })
 )
 
-export const buildDevTestPlan = (branching = TREE_BRANCHING, notesPerFolder = NOTES_PER_FOLDER) => {
-    const folders = listDevFolders(branching)
+const withAncestors = (folders) => {
+    const keys = new Map()
 
-    const folderNotes = [[], ...folders].flatMap((folder) => (
+    folders.forEach((folder) => {
+        folder.forEach((_, index) => {
+            const path = folder.slice(0, index + 1)
+            keys.set(path.join('/'), path)
+        })
+    })
+
+    return [...keys.values()].sort((a, b) => a.length - b.length)
+}
+
+export const groupDevData = (entries) => ({
+    notes: entries.filter(({ kind }) => kind === DEV_DATA_KINDS.NOTES),
+    templates: entries.filter(({ kind }) => kind === DEV_DATA_KINDS.TEMPLATES),
+    files: entries.filter(({ kind }) => kind === DEV_DATA_KINDS.ATTACHMENTS)
+})
+
+export const buildDevTestPlan = (
+    { notes, templates, files },
+    branching = TREE_BRANCHING,
+    notesPerFolder = NOTES_PER_FOLDER
+) => {
+    const generatedFolders = listDevFolders(branching)
+    const folders = withAncestors([...generatedFolders, ...notes.map(({ folder }) => folder)])
+
+    const folderNotes = [[], ...generatedFolders].flatMap((folder) => (
         buildFolderNotes(folder, folder.at(-1) ?? 'Root', notesPerFolder)
     ))
 
     return {
         folders,
-        notes: [...DEV_TEST_NOTES, ...SYNTAX_NOTES, ...folderNotes],
-        templates: DEV_TEST_TEMPLATES,
-        files: DEV_TEST_FILES
+        notes: [...notes, ...folderNotes],
+        templates,
+        files
     }
 }

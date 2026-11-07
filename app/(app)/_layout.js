@@ -8,7 +8,6 @@ import { useTheme } from '@/ui/hooks/use-theme'
 import { AppBar } from '@/components/app-bar/app-bar'
 
 import { useNotes } from '@/hooks/use-notes'
-import { useDevMenu } from '@/hooks/use-dev-menu'
 import { useNavigationReadiness } from '@/hooks/use-navigation-readiness'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useRepositoryReconciliation } from '@/hooks/use-repository-reconciliation'
@@ -16,6 +15,8 @@ import { useImportMarkdown } from '@/hooks/use-import-markdown'
 import { getScreenContentStyle } from '@/utils/screen-content-style'
 import { getEditorPath } from '@/utils/editor-path'
 import { pushOnce } from '@/utils/navigation'
+
+const useDevMenu = __DEV__ ? require('@/hooks/use-dev-menu').useDevMenu : () => {}
 
 export default function AppLayout() {
     const { t } = useTranslation()

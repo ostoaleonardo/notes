@@ -1,6 +1,7 @@
 import { useEffect, useEffectEvent } from 'react'
 import { DevSettings } from 'react-native'
 import { registerDevMenuItems } from 'expo-dev-menu'
+import { Asset } from 'expo-asset'
 import { Directory, File, Paths } from 'expo-file-system'
 import legacyNotes from '../../legacy/notes.json'
 import legacyTags from '../../legacy/categories.json'
@@ -14,16 +15,38 @@ import { getWelcomeNote } from '@/utils/welcome-note'
 import { sanitizeFilename } from '@/utils/note-filename'
 import { getVersionLocation } from '@/utils/note-version-location'
 import { buildNoteFileContent, parseFrontmatter } from '@/utils/frontmatter'
-import { buildDevTestPlan } from '@/utils/dev-test-data'
+import { buildDevTestPlan, groupDevData, parseDevDataKey } from '@/utils/dev-test-data'
+import { getFileMimeType } from '@/utils/attachments'
 import { buildNotePath } from '@/utils/note-path'
 import { invalidateMediaIndex } from '@/utils/media-index'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { NOTE_FILE_EXTENSION } from '@/constants/file-storage'
 import { LOG_MESSAGES } from '@/constants/log-messages'
-import { LEGACY_SEED_IMAGE_FILENAME, LEGACY_SEED_IMAGE_BASE64 } from '@/constants/dev-menu'
-import { DEV_TEST_PINNED_TITLES } from '@/constants/dev-test-data'
+import {
+    DEV_DATA_KINDS,
+    DEV_TEST_PINNED_TITLES,
+    LEGACY_SEED_IMAGE_BASE64,
+    LEGACY_SEED_IMAGE_FILENAME
+} from '@/constants/dev-menu'
 import { logError } from '@/utils/log-error'
+
+// require.context only accepts literal arguments
+const devData = require.context('../../dev-data', true, /\.(md|png|txt|pdf|wav|mp4)$/)
+
+const readDevAsset = async (module) => {
+    const asset = await Asset.fromModule(module).downloadAsync()
+    return new File(asset.localUri)
+}
+
+const loadDevData = () => Promise.all(devData.keys().map(async (key) => {
+    const entry = parseDevDataKey(key)
+    const file = await readDevAsset(devData(key))
+
+    return entry.kind === DEV_DATA_KINDS.ATTACHMENTS
+        ? { ...entry, bytes: await file.bytes() }
+        : { ...entry, content: await file.text() }
+}))
 
 export function useDevMenu() {
     const { getItem, setItem } = useStorage()
@@ -76,12 +99,8 @@ export function useDevMenu() {
     }
 
     const writeTestNotes = (notes, uriByFolder) => {
-        notes.forEach(({ folder, title, tags, properties, body }) => {
-            writeNoteFile(
-                uriByFolder.get(folder.join('/')),
-                `${sanitizeFilename(title)}${NOTE_FILE_EXTENSION}`,
-                buildNoteFileContent({ tags, properties }, body)
-            )
+        notes.forEach(({ folder, filename, content }) => {
+            writeNoteFile(uriByFolder.get(folder.join('/')), filename, content)
         })
     }
 
@@ -100,11 +119,10 @@ export function useDevMenu() {
     const writeTestFiles = (files, rootUri) => {
         const imagesUri = getOrCreateImagesFolder(rootUri).uri
 
-        files.forEach(({ filename, mimeType, base64, text }) => {
+        files.forEach(({ filename, bytes }) => {
             if (findFile(imagesUri, filename)) return
 
-            const file = new Directory(imagesUri).createFile(filename, mimeType)
-            file.write(text ?? Uint8Array.from(atob(base64), (char) => char.charCodeAt(0)))
+            new Directory(imagesUri).createFile(filename, getFileMimeType(filename)).write(bytes)
         })
 
         invalidateMediaIndex()
@@ -112,7 +130,7 @@ export function useDevMenu() {
 
     const generateTestData = async () => {
         try {
-            const plan = buildDevTestPlan()
+            const plan = buildDevTestPlan(groupDevData(await loadDevData()))
             const generated = []
 
             let root = activeRepository
@@ -167,7 +185,7 @@ export function useDevMenu() {
 
         const uri = activeRepository.uri
         const { title, content } = getWelcomeNote()
-        const filename = `${sanitizeFilename(title)}.md`
+        const filename = `${sanitizeFilename(title)}${NOTE_FILE_EXTENSION}`
 
         const existing = findFile(uri, filename)
         const previous = existing ? parseFrontmatter(await existing.text()).frontmatter : null
@@ -178,8 +196,6 @@ export function useDevMenu() {
     }
 
     const registerItems = useEffectEvent(() => {
-        if (!__DEV__) return
-
         registerDevMenuItems([
             {
                 name: 'Reset app (no repository selected)',

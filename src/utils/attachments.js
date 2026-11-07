@@ -58,6 +58,8 @@ const getFileExtension = (filename) => (
     filename.slice(filename.lastIndexOf('.') + 1).toLowerCase()
 )
 
+export const getFileMimeType = (filename) => FILE_MIME_TYPES[getFileExtension(filename)]
+
 export const getFileKind = (filename) => (
     filename.includes('.') ? FILE_KIND_BY_EXTENSION[getFileExtension(filename)] ?? null : null
 )
@@ -86,7 +88,7 @@ export const buildFileRows = (files) => (
             name: filename.slice(0, filename.lastIndexOf('.')),
             extension: getFileExtension(filename).toUpperCase(),
             kind: getFileKind(filename),
-            mimeType: FILE_MIME_TYPES[getFileExtension(filename)]
+            mimeType: getFileMimeType(filename)
         }))
         .sort((a, b) => a.name.localeCompare(b.name) || a.folder.localeCompare(b.folder))
 )
