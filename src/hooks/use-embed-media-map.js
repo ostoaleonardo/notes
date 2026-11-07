@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 
 import { useMediaUris } from './use-media-uris'
 import { resolveUrl } from './use-resolved-preview-markdown'
@@ -15,9 +15,11 @@ export const useEmbedMediaMap = (value, enabled, pdf = false) => {
     const [map, setMap] = useState(EMPTY_MAP)
     const cacheRef = useRef(new Map())
 
+    const deferredValue = useDeferredValue(value)
+
     const namesKey = useMemo(
-        () => (enabled ? extractEmbedMediaNames(value || '', { pdf }).join('\n') : ''),
-        [value, enabled, pdf]
+        () => (enabled ? extractEmbedMediaNames(deferredValue || '', { pdf }).join('\n') : ''),
+        [deferredValue, enabled, pdf]
     )
 
     useEffect(() => {
