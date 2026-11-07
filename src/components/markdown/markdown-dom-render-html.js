@@ -102,3 +102,14 @@ export const renderMarkdownHtml = (text) => (
 export const renderInlineHtml = (text) => (
     DOMPurify.sanitize(md.renderInline(text || '', { tags: true }), { ALLOWED_URI_REGEXP })
 )
+
+let lastRead = { text: null, html: '' }
+
+export const renderReadHtml = (text) => {
+    if (!text) return ''
+    if (lastRead.text === text) return lastRead.html
+
+    lastRead = { text, html: renderMarkdownHtml(text) }
+
+    return lastRead.html
+}

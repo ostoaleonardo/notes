@@ -7,7 +7,7 @@ import { EditorView } from '@codemirror/view'
 import { katexCss } from './markdown-dom-katex-css'
 import { TitleSection } from './markdown-dom-widgets'
 import { buildPreviewCss } from './markdown-dom-preview-css'
-import { renderMarkdownHtml } from './markdown-dom-render-html'
+import { renderReadHtml } from './markdown-dom-render-html'
 import { runAction } from './markdown-dom-commands'
 import { buildEditorExtensions, buildUpdateListener } from './markdown-dom-editor-extensions'
 import { shouldApplyExternalValue } from './markdown-dom-external-value'
@@ -203,7 +203,7 @@ const MarkdownDomEditor = ({
 
     usePreviewClicks(previewRef, { onLinkPress, onImagePress, onToggleTask, onEdit })
     const html = useMemo(
-        () => (mode === EDITOR_MODES.READ ? renderMarkdownHtml(previewValue) + (backlinksHtml || '') : ''),
+        () => (mode === EDITOR_MODES.READ ? renderReadHtml(previewValue) + (backlinksHtml || '') : ''),
         [mode, previewValue, backlinksHtml]
     )
 
