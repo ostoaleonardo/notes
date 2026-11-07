@@ -3,7 +3,8 @@
   "entry": [
     "app/**/*.js",
     "plugins/*.js",
-    "scripts/*.js"
+    "scripts/*.js",
+    "src/hooks/use-dev-menu.js"
   ],
   "project": [
     "src/**/*.js",

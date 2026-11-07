@@ -1,6 +1,6 @@
 export * from '@/ui/tokens/components'
 
-import { BORDER_WIDTH, FONT_SIZE, FONTS, ICON_SIZE, SIZE, SPACING } from '@/ui/tokens/theme'
+import { BORDER_WIDTH, FONT_SIZE, ICON_SIZE, SIZE, SPACING } from '@/ui/tokens/theme'
 
 export const BADGE = {
     size: ICON_SIZE.md,
@@ -24,13 +24,6 @@ export const CARD_GRID = {
     rowGap: SPACING.xxl,
     columnGap: SPACING.lg,
     padding: SPACING.lg
-}
-
-export const DIALOG_BUTTON_LABEL_STYLE = {
-    fontSize: FONT_SIZE.sm,
-    paddingHorizontal: SPACING.sm,
-    textTransform: 'uppercase',
-    fontFamily: FONTS.azeretLight
 }
 
 export const DRAWER_ITEM = {

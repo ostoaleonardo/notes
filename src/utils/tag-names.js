@@ -7,7 +7,7 @@ import {
 } from '@/constants/markdown-patterns'
 import { TAG_PATH_SEPARATOR, TAG_WORD_JOINER } from '@/constants/tags'
 
-export const tagKey = (name) => name.toLowerCase()
+const tagKey = (name) => name.toLowerCase()
 
 export const isSameTag = (a, b) => tagKey(a) === tagKey(b)
 

@@ -1,7 +1,5 @@
 import { ICON_SIZE, RADIUS, SIZE, SPACING } from './theme'
 
-export const HIDDEN_OPACITY = 0
-
 export const BUTTON = {
     size: SIZE.md,
     groupGap: SPACING.xxxs
