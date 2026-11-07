@@ -198,9 +198,6 @@ export const NoteEditorScreen = ({
     const latestContent = useRef({ noteId: filename, title, content: note })
     latestContent.current = { noteId: filename, title, content: note }
 
-    const versionHistory = useVersionHistory({ location, latestContent })
-    const { onClose: closeVersionHistory } = versionHistory
-
     const noteTemplates = useNoteTemplates({ latestContent, setNote })
 
     const onToggleShowBacklinks = useCallback(() => setShowBacklinks((prev) => !prev), [])
@@ -212,9 +209,9 @@ export const NoteEditorScreen = ({
             setTitle(version.title)
             setNote(version.content)
         }
+    }, [onRestoreVersion, setTitle, setNote])
 
-        closeVersionHistory()
-    }, [onRestoreVersion, setTitle, setNote, closeVersionHistory])
+    const versionHistory = useVersionHistory({ location, latestContent, onRestore })
 
     const actions = useMemo(() => ({
         onOpenTemplates: noteTemplates.onOpen,
@@ -249,11 +246,7 @@ export const NoteEditorScreen = ({
             mode={mode}
             chrome={chrome}
             actions={actions}
-            noteId={filename}
-            location={location}
             onSetMode={onSetMode}
-            contentRef={latestContent}
-            onRestore={onRestore}
             toggleProps={toggleProps}
             repositoryId={repositoryId}
             initialSearch={searchSeed}

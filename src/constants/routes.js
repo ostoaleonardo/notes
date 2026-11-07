@@ -3,6 +3,7 @@ export const ROUTES = {
     REPOSITORY_GATE: '/repository-gate',
     REPOSITORIES: '/repositories',
     IMAGE_VIEWER: '/image-viewer',
+    VERSION_HISTORY: '/version-history',
     ADD_NOTE: '/notes/new',
     DAILY_NOTE: '/notes/daily',
     EDIT_NOTE: '/notes/',

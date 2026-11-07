@@ -73,14 +73,12 @@ export default function EditTemplate() {
     const latestContent = useRef({ noteId: versionNoteId, title: name, content })
     latestContent.current = { noteId: versionNoteId, title: name, content }
 
-    const versionHistory = useVersionHistory({ location, latestContent })
-    const { onClose: closeVersionHistory } = versionHistory
-
     const onRestoreVersion = useCallback((version) => {
         setName(version.title)
         setContent(version.content)
-        closeVersionHistory()
-    }, [closeVersionHistory])
+    }, [])
+
+    const versionHistory = useVersionHistory({ location, latestContent, onRestore: onRestoreVersion })
 
     const editorActions = useMemo(() => ({
         onOpenRecents: recentsSheet.onOpen,
@@ -168,10 +166,6 @@ export default function EditTemplate() {
             chrome={chrome}
             onSetMode={setMode}
             actions={editorActions}
-            noteId={versionNoteId}
-            location={location}
-            contentRef={latestContent}
-            onRestore={onRestoreVersion}
             toggleProps={toggleProps}
             versionHistory={versionHistory}
             sheets={(

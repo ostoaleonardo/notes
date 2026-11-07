@@ -102,6 +102,19 @@ export default function AppLayout() {
                         }}
                     />
                     <Stack.Screen
+                        name='version-history'
+                        options={{
+                            headerShown: true,
+                            title: t('title.version_history'),
+                            header: (props) => (
+                                <AppBar
+                                    title={props.options.title}
+                                    trailing={props.options.headerRight?.({})}
+                                />
+                            )
+                        }}
+                    />
+                    <Stack.Screen
                         name='image-viewer'
                         options={{
                             presentation: 'transparentModal',

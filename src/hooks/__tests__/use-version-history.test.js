@@ -2,14 +2,19 @@ import { act, renderHook } from '@testing-library/react-native'
 
 import { useVersionHistory } from '../use-version-history'
 
-import { VERSION_SNAPSHOT_INTERVAL } from '@/constants/default-values'
+import { VERSION_SNAPSHOT_INTERVAL, VERSION_UNMOUNT_COMMIT_DELAY } from '@/constants/default-values'
 
 const mockCommitVersion = jest.fn()
+const mockOpenVersionHistory = jest.fn()
 const LOCATION = {
     rootUri: 'uri',
     folderUri: 'uri',
     folderPath: ''
 }
+
+jest.mock('@/utils/version-history-session', () => ({
+    openVersionHistory: (...args) => mockOpenVersionHistory(...args)
+}))
 
 jest.mock('../use-note-versions', () => ({
     useNoteVersions: () => ({ commitVersion: mockCommitVersion })
@@ -24,25 +29,26 @@ afterEach(() => {
     jest.useRealTimers()
 })
 
-describe('visibility', () => {
-    test('onOpen and onClose toggle the panel', async () => {
+describe('open history', () => {
+    test('opens the history screen with the note session', async () => {
         const latestContent = { current: { noteId: 'note-1', title: 'Title', content: 'Content' } }
+        const onRestore = jest.fn()
 
         const { result } = await renderHook(() => useVersionHistory({
-            location: LOCATION, latestContent
+            location: LOCATION, latestContent, onRestore
         }))
 
         await act(() => {
             result.current.onOpen()
         })
 
-        expect(result.current.visible).toBe(true)
+        const session = mockOpenVersionHistory.mock.calls[0][0]
+        session.onRestore({ title: 'Old' })
 
-        await act(() => {
-            result.current.onClose()
-        })
-
-        expect(result.current.visible).toBe(false)
+        expect(session.noteId).toBe('note-1')
+        expect(session.location).toBe(LOCATION)
+        expect(session.contentRef).toBe(latestContent)
+        expect(onRestore).toHaveBeenCalledWith({ title: 'Old' })
     })
 })
 
@@ -56,6 +62,12 @@ describe('commit on unmount', () => {
 
         await unmount()
 
+        expect(mockCommitVersion).not.toHaveBeenCalled()
+
+        await act(() => {
+            jest.advanceTimersByTime(VERSION_UNMOUNT_COMMIT_DELAY)
+        })
+
         expect(mockCommitVersion).toHaveBeenCalledWith(LOCATION, 'note-1', 'Title', 'Content')
     })
 
@@ -67,6 +79,7 @@ describe('commit on unmount', () => {
         }))
 
         await unmount()
+        jest.advanceTimersByTime(VERSION_UNMOUNT_COMMIT_DELAY)
 
         expect(mockCommitVersion).not.toHaveBeenCalled()
     })
@@ -79,6 +92,7 @@ describe('commit on unmount', () => {
         }))
 
         await unmount()
+        jest.advanceTimersByTime(VERSION_UNMOUNT_COMMIT_DELAY)
 
         expect(mockCommitVersion).not.toHaveBeenCalled()
     })
@@ -93,6 +107,7 @@ describe('commit on unmount', () => {
         latestContent.current = { noteId: 'note-1', title: 'Title', content: 'Second' }
 
         await unmount()
+        jest.advanceTimersByTime(VERSION_UNMOUNT_COMMIT_DELAY)
 
         expect(mockCommitVersion).toHaveBeenCalledWith(LOCATION, 'note-1', 'Title', 'Second')
     })

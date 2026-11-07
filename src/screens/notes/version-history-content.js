@@ -1,306 +1,68 @@
-import { memo, useCallback, useEffect, useEffectEvent, useMemo, useState } from 'react'
+import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { FlatList, StyleSheet, View } from 'react-native'
-import { FadeIn, FadeInRight, FadeOut, FadeOutRight } from 'react-native-reanimated'
+import { StyleSheet } from 'react-native'
 
-import { AnimatedView } from '@/ui/animated/animated-view'
-import { FilledButton } from '@/ui/button/filled-button'
+import { VersionDiff } from './version-diff'
+import { VersionItem } from './version-item'
 import { LoadingOverlay } from '@/ui/layout'
 import { EmptyMessage } from '@/ui/modal/empty-message'
-import { Typography } from '@/ui/typography'
-import { useTheme } from '@/ui/hooks/use-theme'
-import { ConfirmDialog } from '@/components/confirm-dialog'
 import { GroupedList } from '@/ui/grouped-list'
 
-import { useGroupPosition } from '@/ui/hooks/use-group-position'
-import { useLanguage } from '@/hooks/use-language'
-import { useNoteVersions } from '@/hooks/use-note-versions'
-import { diffLines } from '@/utils/diff-lines'
-import { getFormattedDate } from '@/utils/formatted-date'
-import { getStackedRadiusStyle } from '@/ui/utils/group-position'
+import { useVersionList } from '@/hooks/use-version-list'
 
-import { ArrowBack } from '@/icons/arrow-back'
-import { Close } from '@/icons/close'
+import { SPACING } from '@/constants/theme'
 
-import { DIFF_ADDED_COLOR, DIFF_REMOVED_COLOR, DIFF_TYPES } from '@/constants/diff'
-import { TRANSPARENT } from '@/constants/themes'
-import { FONTS, OPACITY, RADIUS, SPACING, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
-import { FREE_VERSION_HISTORY_LIMIT } from '@/constants/default-values'
-import { Touchable } from '@/ui/touchable'
-import { IconButton } from '@/ui/button/icon-button'
-import { ICON_BUTTON } from '@/ui/tokens/components'
+const keyExtractor = (version) => version.id
 
-const getDiffColor = (type) => (type === DIFF_TYPES.ADDED ? DIFF_ADDED_COLOR : DIFF_REMOVED_COLOR)
-
-const VersionItem = memo(function VersionItem({ version, onSelect }) {
-    const { colors } = useTheme()
-    const position = useGroupPosition()
-    const { currentLanguage } = useLanguage()
-    const onPress = useCallback(() => onSelect(version), [onSelect, version])
-
-    return (
-        <AnimatedView>
-            <Touchable accessibilityRole='button' onPress={onPress}>
-                <View
-                    style={{
-                        ...styles.item,
-                        backgroundColor: colors.surface,
-                        ...getStackedRadiusStyle(position)
-                    }}
-                >
-                    <Typography bold numberOfLines={1}>
-                        {version.title}
-                    </Typography>
-                    <Typography opacity={OPACITY.muted} variant='bodySmall'>
-                        {getFormattedDate(version.createdAt, currentLanguage)}
-                    </Typography>
-                </View>
-            </Touchable>
-        </AnimatedView>
-    )
-})
-
-export const VersionHistoryContent = memo(function VersionHistoryContent({
+export function VersionHistoryContent({
     location,
     noteId,
     currentContentRef,
-    pro,
-    onRestore,
-    onClose
+    selected,
+    onSelect
 }) {
     const { t } = useTranslation()
-    const { colors } = useTheme()
-    const { currentLanguage } = useLanguage()
-    const { getVersions } = useNoteVersions()
+    const { versions, loading } = useVersionList({ location, noteId })
 
-    const [versions, setVersions] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [selected, setSelected] = useState(null)
-    const [restoreDialogVisible, setRestoreDialogVisible] = useState(false)
-
-    const loadVersions = useEffectEvent(() => {
-        if (!location || !noteId) {
-            setVersions([])
-            setLoading(false)
-            return
-        }
-
-        setLoading(true)
-        getVersions(location, noteId, pro ? Infinity : FREE_VERSION_HISTORY_LIMIT).then((result) => {
-            setVersions(result)
-            setLoading(false)
-        })
-    })
-
-    useEffect(() => {
-        loadVersions()
-    }, [location?.folderUri, location?.folderPath, noteId, pro])
-
-    const ordered = useMemo(() => [...versions].reverse(), [versions])
-    const [diff, setDiff] = useState(null)
-
-    useEffect(() => {
-        setDiff(null)
-        if (!selected) return undefined
-
-        const task = requestIdleCallback(() => {
-            setDiff(diffLines(selected.content, currentContentRef.current.content))
-        })
-
-        return () => cancelIdleCallback(task)
-    }, [selected, currentContentRef])
-
-    const onCloseHistory = useCallback(() => {
-        setSelected(null)
-        onClose()
-    }, [onClose])
-
-    const renderDiffItem = useCallback(({ item: entry }) => {
-        const isChanged = entry.type !== DIFF_TYPES.UNCHANGED
-        const prefix = entry.type === DIFF_TYPES.ADDED ? '+ ' : entry.type === DIFF_TYPES.REMOVED ? '- ' : '  '
-        const background = isChanged
-            ? getDiffColor(entry.type) + TRANSPARENT[20]
-            : 'transparent'
-
-        return (
-            <View style={{ ...styles.diffLine, backgroundColor: background }}>
-                <Typography
-                    color={isChanged ? getDiffColor(entry.type) : colors.onBackground}
-                    styleProps={styles.diffText}
-                >
-                    {prefix + entry.line}
-                </Typography>
-            </View>
-        )
-    }, [colors.onBackground])
-
-    const renderVersionItem = useCallback(({ item: version }) => (
+    const renderItem = useCallback(({ item: version }) => (
         <VersionItem
             version={version}
-            onSelect={setSelected}
+            onSelect={onSelect}
         />
-    ), [])
+    ), [onSelect])
 
-    const onBack = useCallback(() => setSelected(null), [])
-    const onOpenRestore = useCallback(() => setRestoreDialogVisible(true), [])
-    const onCloseRestore = useCallback(() => setRestoreDialogVisible(false), [])
-    const onConfirmRestore = useCallback(() => onRestore(selected), [onRestore, selected])
+    if (selected) return (
+        <VersionDiff
+            version={selected}
+            currentContentRef={currentContentRef}
+        />
+    )
+
+    if (loading) return <LoadingOverlay />
+
+    if (versions.length === 0) {
+        return (
+            <EmptyMessage style={{ flex: 1 }}>
+                {t('message.version_history.empty')}
+            </EmptyMessage>
+        )
+    }
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <View style={styles.headerLeft}>
-                    {selected && (
-                        <IconButton
-                            appearance={ICON_BUTTON.noTooltip}
-                            icon={ArrowBack}
-                            label={t('button.back')}
-                            onPress={onBack}
-                        />
-                    )}
-
-                    {selected ? (
-                        <AnimatedView
-                            key='date'
-                            entering={FadeIn}
-                            exiting={FadeOut}
-                        >
-                            <Typography opacity={OPACITY.muted} variant='bodySmall'>
-                                {getFormattedDate(selected.createdAt, currentLanguage)}
-                            </Typography>
-                        </AnimatedView>
-                    ) : (
-                        <AnimatedView
-                            key='title'
-                            entering={FadeIn}
-                            exiting={FadeOut}
-                        >
-                            <Typography
-                                heading
-                                variant='headlineSmall'
-                                styleProps={styles.historyTitle}
-                            >
-                                {t('title.version_history')}
-                            </Typography>
-                        </AnimatedView>
-                    )}
-                </View>
-
-                <View style={styles.headerRight}>
-                    {selected && (
-                        <AnimatedView
-                            entering={FadeInRight}
-                            exiting={FadeOutRight}
-                        >
-                            <FilledButton onPress={onOpenRestore}>
-                                {t('button.restore')}
-                            </FilledButton>
-                        </AnimatedView>
-                    )}
-
-                    <IconButton
-                        appearance={ICON_BUTTON.noTooltip}
-                        icon={Close}
-                        label={t('button.close')}
-                        onPress={onCloseHistory}
-                    />
-                </View>
-            </View>
-
-            {selected ? (
-                diff ? (
-                    <FlatList
-                        data={diff}
-                        keyExtractor={(_, index) => String(index)}
-                        showsVerticalScrollIndicator={false}
-                        style={styles.diff}
-                        renderItem={renderDiffItem}
-                    />
-                ) : (
-                    <LoadingOverlay background={false} />
-                )
-            ) : (
-                <>
-                    {loading && <LoadingOverlay background={false} />}
-
-                    {!loading && ordered.length === 0 && (
-                        <EmptyMessage style={styles.empty}>
-                            {t('message.version_history.empty')}
-                        </EmptyMessage>
-                    )}
-
-                    {!loading && ordered.length > 0 && (
-                        <GroupedList
-                            paged
-                            data={ordered}
-                            keyExtractor={(version) => version.id}
-                            showsVerticalScrollIndicator={false}
-                            contentContainerStyle={styles.list}
-                            renderItem={renderVersionItem}
-                        />
-                    )}
-                </>
-            )}
-
-            <ConfirmDialog
-                visible={restoreDialogVisible}
-                title={t('message.version_history.restore.title')}
-                message={t('message.version_history.restore.message')}
-                confirmLabel={t('button.restore')}
-                onDismiss={onCloseRestore}
-                onConfirm={onConfirmRestore}
-            />
-        </View>
+        <GroupedList
+            paged={true}
+            data={versions}
+            keyExtractor={keyExtractor}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.list}
+            renderItem={renderItem}
+        />
     )
-})
+}
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1
-    },
-    empty: {
-        flex: 1
-    },
-    historyTitle: {
-        paddingLeft: SPACING.sm
-    },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: SPACING.lg,
-        marginBottom: SPACING.lg
-    },
-    headerLeft: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: SPACING.sm
-    },
-    headerRight: {
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
     list: {
         gap: SPACING.xxxs,
         paddingHorizontal: SPACING.lg
-    },
-    item: {
-        minWidth: '100%',
-        padding: SPACING.xl
-    },
-    diff: {
-        flex: 1,
-        marginHorizontal: SPACING.lg,
-        borderRadius: RADIUS.md,
-        overflow: 'hidden',
-        marginBottom: SPACING.lg
-    },
-    diffLine: {
-        paddingVertical: SPACING.xxxs,
-        paddingHorizontal: SPACING.xxs
-    },
-    diffText: {
-        fontFamily: FONTS.azeretLight,
-        fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodySmall
     }
 })

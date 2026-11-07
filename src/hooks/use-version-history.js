@@ -1,28 +1,36 @@
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
-import { useMenuAction } from './use-menu-action'
 import { useNoteVersions } from './use-note-versions'
+import { openVersionHistory } from '@/utils/version-history-session'
 
-import { VERSION_SNAPSHOT_INTERVAL } from '@/constants/default-values'
+import { VERSION_SNAPSHOT_INTERVAL, VERSION_UNMOUNT_COMMIT_DELAY } from '@/constants/default-values'
 
-export function useVersionHistory({ location, latestContent }) {
+export function useVersionHistory({ location, latestContent, onRestore }) {
     const { commitVersion } = useNoteVersions()
 
     const folderUri = location?.folderUri
-    const { visible, onOpen, onClose } = useMenuAction()
 
-    const commitLatest = useRef(null)
-    commitLatest.current = () => {
-        const { noteId, title, content } = latestContent.current
+    const commitSnapshot = useRef(null)
+    commitSnapshot.current = ({ noteId, title, content }) => {
         if (!noteId) return
 
         commitVersion(location, noteId, title, content)
     }
 
+    const readLatest = useRef(null)
+    readLatest.current = () => latestContent.current
+
+    const commitLatest = useRef(null)
+    commitLatest.current = () => commitSnapshot.current(readLatest.current())
+
     useEffect(() => {
         if (!folderUri) return
 
-        return () => commitLatest.current()
+        return () => {
+            const snapshot = readLatest.current()
+
+            setTimeout(() => commitSnapshot.current(snapshot), VERSION_UNMOUNT_COMMIT_DELAY)
+        }
     }, [folderUri])
 
     useEffect(() => {
@@ -32,5 +40,17 @@ export function useVersionHistory({ location, latestContent }) {
         return () => clearInterval(interval)
     }, [folderUri])
 
-    return { visible, onOpen, onClose }
+    const onRestoreRef = useRef(onRestore)
+    onRestoreRef.current = onRestore
+
+    const onOpen = useCallback(() => {
+        openVersionHistory({
+            location,
+            noteId: latestContent.current.noteId,
+            contentRef: latestContent,
+            onRestore: (version) => onRestoreRef.current?.(version)
+        })
+    }, [location, latestContent])
+
+    return { onOpen }
 }

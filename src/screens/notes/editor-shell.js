@@ -1,13 +1,9 @@
-import { VersionHistoryPanel } from './version-history-panel'
-import { VersionHistoryContent } from './version-history-content'
 import { MarkdownEditorLayout } from './markdown-editor-layout'
 import { MarkdownModeToggle } from './markdown-mode-toggle'
 import { MarkdownSearchBar } from './markdown-search-bar'
 import { MarkdownInsertSheets } from './markdown-insert-sheets'
 import { NoteToolbarSheets } from './note-toolbar-sheets'
 import { AppBar } from '@/components/app-bar/app-bar'
-
-import { usePro } from '@/hooks/use-pro'
 
 import { APP_BAR_MODES } from '@/constants/app-bar'
 import { EDITOR_MODES } from '@/constants/editor-modes'
@@ -19,35 +15,14 @@ export function EditorShell({
     chrome,
     actions,
     versionHistory,
-    noteId,
-    location,
-    contentRef,
-    onRestore,
     toggleProps,
     repositoryId,
     initialSearch,
     sheets,
     children
 }) {
-    const { pro } = usePro()
-
     return (
-        <VersionHistoryPanel
-            visible={versionHistory.visible}
-            onOpen={versionHistory.onOpen}
-            onClose={versionHistory.onClose}
-            swipeEnabled={pro}
-            panelContent={(
-                <VersionHistoryContent
-                    pro={pro}
-                    noteId={noteId}
-                    location={location}
-                    currentContentRef={contentRef}
-                    onRestore={onRestore}
-                    onClose={versionHistory.onClose}
-                />
-            )}
-        >
+        <>
             <AppBar
                 mode={APP_BAR_MODES.MENU}
                 trailing={(
@@ -96,6 +71,6 @@ export function EditorShell({
                 searchSheet={chrome.searchSheet}
                 initialSearch={initialSearch}
             />
-        </VersionHistoryPanel>
+        </>
     )
 }
