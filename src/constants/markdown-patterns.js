@@ -11,6 +11,7 @@ export const TAG_SEPARATOR_PATTERN = /[,\s]+/
 export const LEADING_HASH_PATTERN = /^#/
 export const INLINE_TAG_PATTERN = /(^|\s)#([^\s!-,.:-@[-^`{-~]+)/g
 export const WHITESPACE_RUN_PATTERN = /\s+/g
+export const WORD_PATTERN = /\S+/g
 export const INVALID_TAG_CHAR_PATTERN = /[!-,.:-@[-^`{-~]/g
 export const TAG_TYPING_PATTERN = /#[^\s!-,.:-@[-^`{-~]*/
 export const TRAILING_SLASHES_PATTERN = /\/+$/
