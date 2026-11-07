@@ -1,6 +1,6 @@
 import { waitFor, renderHook } from '@testing-library/react-native'
 
-import { useEditorDisplay } from '../use-editor-display'
+import { resetEditorDisplayCache, useEditorDisplay } from '../use-editor-display'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import {
     EDITOR_FONT_SIZES,
@@ -12,7 +12,7 @@ import {
 } from '@/constants/editor-display'
 
 const mockStorage = {
-    getItem: jest.fn()
+    multiGet: jest.fn()
 }
 
 jest.mock('../use-storage', () => ({
@@ -20,12 +20,15 @@ jest.mock('../use-storage', () => ({
 }))
 
 const stubStorage = (values) => {
-    mockStorage.getItem.mockImplementation(async (key) => values[key] ?? null)
+    mockStorage.multiGet.mockImplementation(async (keys) => (
+        keys.map((key) => [key, values[key] ?? null])
+    ))
 }
 
 describe('editor display options', () => {
     beforeEach(() => {
         jest.clearAllMocks()
+        resetEditorDisplayCache()
     })
 
     test('resolves the defaults when nothing is stored', async () => {
@@ -63,5 +66,26 @@ describe('editor display options', () => {
         const { result } = await renderHook(() => useEditorDisplay())
 
         expect(result.current.fontSize).toBe(EDITOR_FONT_SIZES[DEFAULT_EDITOR_FONT_SIZE])
+    })
+
+    test('starts from the last known values on the next mount', async () => {
+        stubStorage({ [STORAGE_KEYS.EDITOR_FONT_SIZE]: 'large' })
+        const first = await renderHook(() => useEditorDisplay())
+        await waitFor(() => expect(first.result.current.fontSize).toBe(EDITOR_FONT_SIZES.large))
+
+        const { result } = await renderHook(() => useEditorDisplay())
+
+        expect(result.current.fontSize).toBe(EDITOR_FONT_SIZES.large)
+    })
+
+    test('keeps the same object when the stored values do not change', async () => {
+        stubStorage({ [STORAGE_KEYS.EDITOR_FONT_SIZE]: 'large' })
+        const { result, rerender } = await renderHook(() => useEditorDisplay())
+        await waitFor(() => expect(result.current.fontSize).toBe(EDITOR_FONT_SIZES.large))
+        const display = result.current
+
+        await rerender({})
+
+        expect(result.current).toBe(display)
     })
 })

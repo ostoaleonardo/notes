@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { useStorageEffect } from './use-storage-effect'
+import { useStorage } from './use-storage'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import {
@@ -17,24 +17,49 @@ import {
     EDITOR_TOGGLE
 } from '@/constants/editor-display'
 
-const useOption = (storageKey, options, defaultValue) => {
-    const [current, setCurrent] = useState(defaultValue)
+const OPTIONS = [
+    ['fontSize', STORAGE_KEYS.EDITOR_FONT_SIZE, EDITOR_FONT_SIZES, DEFAULT_EDITOR_FONT_SIZE],
+    ['maxWidth', STORAGE_KEYS.EDITOR_LINE_WIDTH, EDITOR_LINE_WIDTHS, DEFAULT_EDITOR_LINE_WIDTH],
+    ['lineNumbers', STORAGE_KEYS.EDITOR_LINE_NUMBERS, EDITOR_TOGGLE, DEFAULT_EDITOR_LINE_NUMBERS],
+    ['spellcheck', STORAGE_KEYS.EDITOR_SPELLCHECK, EDITOR_TOGGLE, DEFAULT_EDITOR_SPELLCHECK],
+    ['autocorrect', STORAGE_KEYS.EDITOR_AUTOCORRECT, EDITOR_TOGGLE, DEFAULT_EDITOR_AUTOCORRECT],
+    ['tabSize', STORAGE_KEYS.EDITOR_TAB_SIZE, EDITOR_TAB_SIZES, DEFAULT_EDITOR_TAB_SIZE],
+    ['inlineTitle', STORAGE_KEYS.EDITOR_INLINE_TITLE, EDITOR_TOGGLE, DEFAULT_EDITOR_INLINE_TITLE]
+]
 
-    useStorageEffect(storageKey, (value) => {
-        if (value in options) setCurrent(value)
-    })
+const KEYS = OPTIONS.map(([, key]) => key)
 
-    return options[current]
+let lastKnown = null
+
+export const resetEditorDisplayCache = () => {
+    lastKnown = null
 }
 
-export function useEditorDisplay() {
-    const fontSize = useOption(STORAGE_KEYS.EDITOR_FONT_SIZE, EDITOR_FONT_SIZES, DEFAULT_EDITOR_FONT_SIZE)
-    const maxWidth = useOption(STORAGE_KEYS.EDITOR_LINE_WIDTH, EDITOR_LINE_WIDTHS, DEFAULT_EDITOR_LINE_WIDTH)
-    const lineNumbers = useOption(STORAGE_KEYS.EDITOR_LINE_NUMBERS, EDITOR_TOGGLE, DEFAULT_EDITOR_LINE_NUMBERS)
-    const spellcheck = useOption(STORAGE_KEYS.EDITOR_SPELLCHECK, EDITOR_TOGGLE, DEFAULT_EDITOR_SPELLCHECK)
-    const autocorrect = useOption(STORAGE_KEYS.EDITOR_AUTOCORRECT, EDITOR_TOGGLE, DEFAULT_EDITOR_AUTOCORRECT)
-    const tabSize = useOption(STORAGE_KEYS.EDITOR_TAB_SIZE, EDITOR_TAB_SIZES, DEFAULT_EDITOR_TAB_SIZE)
-    const inlineTitle = useOption(STORAGE_KEYS.EDITOR_INLINE_TITLE, EDITOR_TOGGLE, DEFAULT_EDITOR_INLINE_TITLE)
+const resolveDisplay = (stored) => Object.fromEntries(OPTIONS.map(([name, key, options, fallback]) => {
+    const value = stored[key]
 
-    return { fontSize, maxWidth, lineNumbers, spellcheck, autocorrect, tabSize, inlineTitle }
+    return [name, options[value in options ? value : fallback]]
+}))
+
+const isSameDisplay = (a, b) => OPTIONS.every(([name]) => Object.is(a[name], b[name]))
+
+export function useEditorDisplay() {
+    const { multiGet } = useStorage()
+    const [display, setDisplay] = useState(() => lastKnown ?? resolveDisplay({}))
+
+    useEffect(() => {
+        let cancelled = false
+
+        multiGet(KEYS).then((entries) => {
+            if (cancelled) return
+
+            const next = resolveDisplay(Object.fromEntries(entries))
+            lastKnown = next
+            setDisplay((current) => (isSameDisplay(current, next) ? current : next))
+        })
+
+        return () => { cancelled = true }
+    }, [multiGet])
+
+    return display
 }
