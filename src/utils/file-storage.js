@@ -2,6 +2,7 @@ import { Directory, File, FileMode } from 'expo-file-system'
 
 import { getUniqueFilename, stripNoteExtension } from '@/utils/note-filename'
 import { buildVersionKey } from '@/utils/note-version-location'
+import { invalidateMediaIndex } from '@/utils/media-index'
 
 import {
     NOTE_FILE_EXTENSION,
@@ -74,6 +75,7 @@ const listSubdirectories = (directoryUri) => (
 
 const deleteDirectory = (directoryUri) => {
     new Directory(directoryUri).delete()
+    invalidateMediaIndex()
 }
 
 const directoryExists = (directoryUri) => new Directory(directoryUri).exists
@@ -100,6 +102,7 @@ const renameDirectory = async (directoryUri, parentUri, newName) => {
     }
 
     directory.delete()
+    invalidateMediaIndex()
 
     return newDirectory.uri
 }
@@ -109,6 +112,7 @@ const copyImageFile = async (sourceUri, directoryUri, filename) => {
     const bytes = await source.bytes()
     const file = new Directory(directoryUri).createFile(filename, source.type || MIME_TYPES.JPEG)
     file.write(bytes)
+    invalidateMediaIndex()
     return file
 }
 

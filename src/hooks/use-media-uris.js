@@ -1,13 +1,13 @@
 import { useCallback } from 'react'
 
 import { useRepositories } from './use-repositories'
-import { collectMediaUris } from '@/utils/attachments'
+import { getMediaIndex } from '@/utils/media-index'
 import { listDirectoryEntries } from '@/utils/list-directory-entries'
 
 export const useMediaUris = () => {
     const { activeRepository, getRootRepository } = useRepositories()
 
     return useCallback(() => (
-        collectMediaUris(getRootRepository(activeRepository).uri, listDirectoryEntries)
+        getMediaIndex(getRootRepository(activeRepository).uri, listDirectoryEntries)
     ), [activeRepository, getRootRepository])
 }

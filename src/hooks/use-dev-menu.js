@@ -16,6 +16,7 @@ import { getVersionLocation } from '@/utils/note-version-location'
 import { buildNoteFileContent, parseFrontmatter } from '@/utils/frontmatter'
 import { buildDevTestPlan } from '@/utils/dev-test-data'
 import { buildNotePath } from '@/utils/note-path'
+import { invalidateMediaIndex } from '@/utils/media-index'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { NOTE_FILE_EXTENSION } from '@/constants/file-storage'
@@ -105,6 +106,8 @@ export function useDevMenu() {
             const file = new Directory(imagesUri).createFile(filename, mimeType)
             file.write(text ?? Uint8Array.from(atob(base64), (char) => char.charCodeAt(0)))
         })
+
+        invalidateMediaIndex()
     }
 
     const generateTestData = async () => {
