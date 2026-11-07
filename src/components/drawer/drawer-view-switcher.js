@@ -22,7 +22,7 @@ import { TEST_IDS } from '@/constants/test-ids'
 
 const VIEW_OPTIONS = Object.values(DRAWER_VIEWS)
 
-export const DrawerViewSwitcher = memo(function DrawerViewSwitcher({ view, onChange }) {
+export const DrawerViewSwitcher = memo(({ view, onChange }) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { visible, onOpen, onClose, trigger } = useMenuAction()

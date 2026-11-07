@@ -4,7 +4,7 @@ import { Typography } from '@/ui/typography'
 
 import { OPACITY } from '@/ui/tokens/theme'
 
-export function EmptyMessage({ children, style }) {
+export const EmptyMessage = ({ children, style }) => {
     return (
         <View style={[styles.container, style]}>
             <Typography

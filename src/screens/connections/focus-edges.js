@@ -6,13 +6,13 @@ import { useTheme } from '@/ui/hooks/use-theme'
 
 import { GRAPH_EDGE } from '@/constants/connections'
 
-export const FocusEdges = memo(function FocusEdges({
+export const FocusEdges = memo(({
     width,
     height,
     center,
     positions,
     relations
-}) {
+}) => {
     const { colors } = useTheme()
 
     return (

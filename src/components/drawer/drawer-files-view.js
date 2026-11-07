@@ -8,7 +8,7 @@ import { useAttachmentFiles } from '@/hooks/use-attachment-files'
 import { useOpenFile } from '@/hooks/use-open-file'
 
 import { FILE_KINDS } from '@/constants/file-types'
-export function DrawerFilesView({ closeDrawer }) {
+export const DrawerFilesView = ({ closeDrawer }) => {
     const listFiles = useAttachmentFiles()
     const [rows, setRows] = useState([])
 

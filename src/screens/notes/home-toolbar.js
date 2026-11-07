@@ -11,7 +11,13 @@ import { UploadFile } from '@/icons/upload-file'
 import { SPACING } from '@/constants/theme'
 import { TEST_IDS } from '@/constants/test-ids'
 
-export function HomeToolbar({ onCreateNote, onImportNote, onOpenRecents, onOpenSearch, recentCount }) {
+export const HomeToolbar = ({
+    onCreateNote,
+    onImportNote,
+    onOpenRecents,
+    onOpenSearch,
+    recentCount
+}) => {
     const { t } = useTranslation()
 
     return (

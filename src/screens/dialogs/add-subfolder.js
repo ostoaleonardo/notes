@@ -7,7 +7,11 @@ import { useRepositories } from '@/hooks/use-repositories'
 
 import { REPOSITORY_RESULTS } from '@/constants/repository-results'
 
-export function AddSubfolder({ visible, onDismiss, parentId }) {
+export const AddSubfolder = ({
+    visible,
+    onDismiss,
+    parentId
+}) => {
     const { t } = useTranslation()
     const { addSubfolder } = useRepositories()
 

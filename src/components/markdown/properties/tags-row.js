@@ -18,7 +18,12 @@ import { PROPERTY_TYPES, PROPERTY_TYPE_ICON_PATHS } from '@/constants/properties
 import { KEYBOARD_KEYS } from '@/constants/keyboard-keys'
 import { filterTagSuggestions } from '@/utils/tag-names'
 
-const TagInput = ({ tags, allTags, autoFocus, onAddTag }) => {
+const TagInput = ({
+    tags,
+    allTags,
+    autoFocus,
+    onAddTag
+}) => {
     const theme = useContext(ThemeContext)
     const [text, setText] = useState('')
     const [focused, setFocused] = useState(false)
@@ -73,7 +78,15 @@ const TagInput = ({ tags, allTags, autoFocus, onAddTag }) => {
     )
 }
 
-export const TagsRow = ({ tags, allTags, tagsKey, autoFocus, onRemoveTag, onAddTag, onTagPress }) => {
+export const TagsRow = ({
+    tags,
+    allTags,
+    tagsKey,
+    autoFocus,
+    onRemoveTag,
+    onAddTag,
+    onTagPress
+}) => {
     const theme = useContext(ThemeContext)
     const { colors, typography } = theme
     const { accentText } = colors

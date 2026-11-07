@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { CONTROL_TOUCH_INSET } from '@/ui/tokens/components'
 import { BOTTOM_GAP, SPACING } from '@/ui/tokens/theme'
 
-export function SheetActions({ children }) {
+export const SheetActions = ({ children }) => {
     return (
         <View style={styles.actions}>
             {children}

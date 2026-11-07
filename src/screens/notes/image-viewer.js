@@ -13,7 +13,7 @@ import { LoadingOverlay } from '@/ui/layout'
 import { ICON_BUTTON } from '@/ui/tokens/components'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-export function ImageViewer({ url, onClose }) {
+export const ImageViewer = ({ url, onClose }) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { width, height } = useWindowDimensions()

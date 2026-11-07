@@ -10,7 +10,7 @@ import { SheetTitle } from './sheet-title'
 import { SHEET } from '@/ui/tokens/components'
 import { BOTTOM_GAP, SPACING } from '@/ui/tokens/theme'
 
-export function ListSheet({
+export const ListSheet = ({
     sheet,
     title,
     onChange,
@@ -18,7 +18,7 @@ export function ListSheet({
     renderItem,
     keyExtractor,
     emptyMessage
-}) {
+}) => {
     const isEmpty = data.length === 0
 
     return (

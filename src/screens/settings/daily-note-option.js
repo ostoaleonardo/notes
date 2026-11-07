@@ -13,7 +13,7 @@ import { scopedStorageKey } from '@/utils/scoped-storage-key'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
-export function DailyNoteOption() {
+export const DailyNoteOption = () => {
     const { t } = useTranslation()
     const { setItem } = useStorage()
     const { activeRepository } = useRepositories()

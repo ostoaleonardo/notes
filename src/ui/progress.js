@@ -7,7 +7,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 
 import { ICON_SIZE } from '@/ui/tokens/theme'
 
-export function Progress({ dimension = ICON_SIZE.xxl }) {
+export const Progress = ({ dimension = ICON_SIZE.xxl }) => {
     const { colors } = useTheme()
     const modifiers = useMemo(() => [size(dimension, dimension)], [dimension])
 

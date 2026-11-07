@@ -32,7 +32,7 @@ const getCorners = ({ index, count }, inset) => {
     }
 }
 
-export function MenuGroup({ children }) {
+export const MenuGroup = ({ children }) => {
     const { colors } = useTheme()
     const { maxHeight, index, count } = useContext(MenuGroupContext)
 

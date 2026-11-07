@@ -13,11 +13,11 @@ import { ChevronRight } from '@/icons/chevron-right'
 
 import { OPACITY, RADIUS, ICON_SIZE } from '@/constants/theme'
 
-export const DrawerLevelFolder = memo(function DrawerLevelFolder({
+export const DrawerLevelFolder = memo(({
     repository,
     onEnter,
     onAction
-}) {
+}) => {
     const { colors } = useTheme()
     const menu = useMenuAction()
 

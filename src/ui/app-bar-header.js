@@ -6,7 +6,11 @@ import { useTheme } from '@/ui/hooks/use-theme'
 
 import { SIZE, SPACING } from '@/ui/tokens/theme'
 
-export function AppBarHeader({ leading, title = '', trailing }) {
+export const AppBarHeader = ({
+    leading,
+    title = '',
+    trailing
+}) => {
     const { colors } = useTheme()
     const { top } = useSafeAreaInsets()
 

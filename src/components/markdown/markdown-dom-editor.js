@@ -21,7 +21,7 @@ import { scrollToEditorTarget, scrollToPreviewTarget } from './markdown-dom-anch
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
 
-const MarkdownDomEditor = ({
+export default function MarkdownDomEditor({
     mode,
     onEdit,
     value,
@@ -66,7 +66,7 @@ const MarkdownDomEditor = ({
     anchor,
     headingIndex,
     jumpNonce
-}) => {
+}) {
     const { query: searchQuery, replace: replaceText } = search || {}
     const themeKey = JSON.stringify(theme)
     const stableTheme = useMemo(() => JSON.parse(themeKey), [themeKey])
@@ -279,5 +279,3 @@ const MarkdownDomEditor = ({
         </div>
     )
 }
-
-export default MarkdownDomEditor

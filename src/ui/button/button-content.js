@@ -6,7 +6,7 @@ import { FONTS, FONT_SIZE, ICON_SIZE } from '@/ui/tokens/theme'
 import { TRANSPARENT } from '@/ui/tokens/transparent'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-export function ButtonContent({ children, loading }) {
+export const ButtonContent = ({ children, loading }) => {
     const { colors } = useTheme()
 
     const textStyle = useMemo(() => ({

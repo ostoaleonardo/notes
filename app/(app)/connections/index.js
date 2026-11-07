@@ -21,7 +21,7 @@ import { BOTTOM_GAP, SPACING } from '@/constants/theme'
 
 const { NOTE, FILE, MISSING } = CONNECTION_TYPES
 
-function ConnectionsContent() {
+const ConnectionsContent = () => {
     const { t } = useTranslation()
     const insets = useSafeAreaInsets()
 

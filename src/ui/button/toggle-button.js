@@ -15,7 +15,7 @@ import { GROUP_AXES } from '@/ui/tokens/group-position'
 import { OPACITY } from '@/ui/tokens/theme'
 import { Touchable } from '@/ui/touchable'
 
-export function ToggleButton({
+export const ToggleButton = ({
     icon: Icon,
     label,
     testID,
@@ -30,7 +30,7 @@ export function ToggleButton({
     background,
     color,
     disabled = false
-}) {
+}) => {
     const { colors } = useTheme()
     const showLabel = chip || showLabelProp
     const labelPadding = chip ? ICON_TOGGLE.chipPaddingHorizontal : ICON_TOGGLE.labelPaddingHorizontal

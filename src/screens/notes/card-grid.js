@@ -9,7 +9,13 @@ import { CARD_GRID } from '@/constants/components'
 
 import { OPACITY } from '@/constants/theme'
 
-export function CardGrid({ cards, onOpen, renderHeader, previewLines, emptyMessage }) {
+export const CardGrid = ({
+    cards,
+    onOpen,
+    renderHeader,
+    previewLines,
+    emptyMessage
+}) => {
     const { width: windowWidth } = useWindowDimensions()
 
     const columns = useMemo(() => {

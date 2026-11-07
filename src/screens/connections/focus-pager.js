@@ -13,7 +13,11 @@ import { FOCUS } from '@/constants/connections'
 import { RADIUS, SPACING } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'
 
-export const FocusPager = memo(function FocusPager({ page, pages, onTurn }) {
+export const FocusPager = memo(({
+    page,
+    pages,
+    onTurn
+}) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
 

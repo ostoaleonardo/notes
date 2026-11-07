@@ -14,7 +14,7 @@ import { layoutFocusRing } from '@/utils/focus-navigation'
 import { FOCUS } from '@/constants/connections'
 import { OPACITY, SPACING } from '@/constants/theme'
 
-export const FocusStage = memo(function FocusStage({
+export const FocusStage = memo(({
     focus,
     focusTitle,
     satellites,
@@ -24,7 +24,7 @@ export const FocusStage = memo(function FocusStage({
     loading,
     onPressNode,
     onSwipe
-}) {
+}) => {
     const [size, setSize] = useState(null)
 
     const onLayout = useCallback((event) => {

@@ -14,7 +14,7 @@ import { SPACING } from '@/constants/theme'
 const LIST_MODIFIERS = [fillMaxWidth()]
 const LIST_ARRANGEMENT = { spacedBy: SPACING.md }
 
-export function TemplatePlaceholders({ visible, onDismiss }) {
+export const TemplatePlaceholders = ({ visible, onDismiss }) => {
     const { t } = useTranslation()
 
     const examples = {

@@ -8,7 +8,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 import { TINT } from '@/ui/tokens/transparent'
 import { BLUR, BORDER_WIDTH, RADIUS, SPACING } from '@/ui/tokens/theme'
 
-export function ToolbarSurface({ children }) {
+export const ToolbarSurface = ({ children }) => {
     const { colors, dark } = useTheme()
     const { width } = useWindowDimensions()
     const bottomSpacing = useBottomSpacing()

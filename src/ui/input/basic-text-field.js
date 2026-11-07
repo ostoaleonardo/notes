@@ -7,7 +7,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 
 import { PLAIN_INPUT } from '@/ui/tokens/components'
 
-export function BasicTextField({
+export const BasicTextField = ({
     value = '',
     onChangeText,
     placeholder,
@@ -16,7 +16,7 @@ export function BasicTextField({
     cursorColor,
     selectionColors,
     placeholderColor
-}) {
+}) => {
     const { dark } = useTheme()
     const { text, onFocusChanged } = useTextState(value)
     const modifiers = useMemo(() => [fillMaxWidth()], [])

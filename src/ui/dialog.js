@@ -13,7 +13,7 @@ import { TINT } from '@/ui/tokens/transparent'
 
 const noop = () => {}
 
-export function Dialog({
+export const Dialog = ({
     title,
     visible,
     onDismiss,
@@ -21,7 +21,7 @@ export function Dialog({
     confirm,
     dismiss,
     locked = false
-}) {
+}) => {
     const { colors, dark } = useTheme()
     const onRequestClose = locked ? noop : onDismiss
 

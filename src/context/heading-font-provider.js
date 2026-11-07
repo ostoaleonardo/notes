@@ -9,7 +9,7 @@ import { getHeadingFontFamily, isHeadingFontKey } from '@/utils/heading-font'
 import { DEFAULT_HEADING_FONT } from '@/constants/heading-fonts'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
-export function HeadingFontProvider({ children }) {
+export const HeadingFontProvider = ({ children }) => {
     const [fontKey, setFontKey] = useState(DEFAULT_HEADING_FONT)
 
     useStorageEffect(STORAGE_KEYS.HEADING_FONT, (value) => {

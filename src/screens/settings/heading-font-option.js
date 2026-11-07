@@ -16,7 +16,7 @@ import {
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { SPACING } from '@/constants/theme'
 
-export function HeadingFontOption() {
+export const HeadingFontOption = () => {
     const { t } = useTranslation()
     const { setItem } = useStorage()
     const { fontKey, setFontKey } = useHeadingFont()

@@ -8,7 +8,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 import { RADIUS, SPACING, OPACITY } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'
 
-export const DrawerFileItem = memo(function DrawerFileItem({ file, onOpenFile }) {
+export const DrawerFileItem = memo(({ file, onOpenFile }) => {
     const { colors } = useTheme()
 
     return (

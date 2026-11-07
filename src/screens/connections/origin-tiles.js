@@ -14,7 +14,13 @@ import { ICON_SIZE, OPACITY, RADIUS, SPACING } from '@/constants/theme'
 
 const TILE_COLUMNS = ORIGIN_TILE.columns
 
-const Tile = memo(function Tile({ type, count, selected, width, onPress }) {
+const Tile = memo(({
+    type,
+    count,
+    selected,
+    width,
+    onPress
+}) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
 
@@ -68,7 +74,12 @@ const Tile = memo(function Tile({ type, count, selected, width, onPress }) {
     )
 })
 
-export const OriginTiles = memo(function OriginTiles({ types, counts, selected, onSelect }) {
+export const OriginTiles = memo(({
+    types,
+    counts,
+    selected,
+    onSelect
+}) => {
     const { width } = useWindowDimensions()
 
     const tileWidth = (width - SPACING.lg * 2 - SPACING.sm * (TILE_COLUMNS - 1)) / TILE_COLUMNS

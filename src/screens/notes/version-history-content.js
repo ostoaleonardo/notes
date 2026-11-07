@@ -14,13 +14,13 @@ import { SPACING } from '@/constants/theme'
 
 const keyExtractor = (version) => version.id
 
-export function VersionHistoryContent({
+export const VersionHistoryContent = ({
     location,
     noteId,
     currentContentRef,
     selected,
     onSelect
-}) {
+}) => {
     const { t } = useTranslation()
     const { versions, loading } = useVersionList({ location, noteId })
 

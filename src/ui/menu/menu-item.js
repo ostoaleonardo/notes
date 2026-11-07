@@ -19,7 +19,7 @@ const renderIcon = (icon, color, modifiers) => (
     />
 )
 
-export function MenuItem({
+export const MenuItem = ({
     title,
     leadingIcon,
     trailingIcon,
@@ -27,7 +27,7 @@ export function MenuItem({
     indent = 0,
     disabled = false,
     onPress
-}) {
+}) => {
     const { colors } = useTheme()
 
     const elementColors = useMemo(() => ({

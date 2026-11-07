@@ -1,6 +1,6 @@
 import { MissingNoteDialog } from '@/components/missing-note-dialog'
 
-export function CreateNoteDialog({ missingNote }) {
+export const CreateNoteDialog = ({ missingNote }) => {
     return (
         <MissingNoteDialog
             missing={missingNote.missing}

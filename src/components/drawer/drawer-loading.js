@@ -1,5 +1,5 @@
 import { LoadingOverlay } from '@/ui/layout'
 
-export function DrawerLoading() {
+export const DrawerLoading = () => {
     return <LoadingOverlay background={false} />
 }

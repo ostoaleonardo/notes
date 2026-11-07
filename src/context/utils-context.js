@@ -6,7 +6,7 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export const UtilsContext = createContext()
 
-export function UtilsProvider({ children }) {
+export const UtilsProvider = ({ children }) => {
     const [pinned, setPinned] = useState(new Set())
     const [collapsedFolders, setCollapsedFolders] = useState(new Set())
     const [drawerFolderId, setDrawerFolderId] = useState(null)

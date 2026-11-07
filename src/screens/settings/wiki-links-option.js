@@ -11,7 +11,7 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { STORAGE_BOOLEAN } from '@/constants/storage-values'
 import { WIKI_LINK_FORMATS } from '@/constants/wiki-links'
 
-export function WikiLinksOption() {
+export const WikiLinksOption = () => {
     const { t } = useTranslation()
     const { setItem } = useStorage()
 

@@ -13,7 +13,11 @@ import { ICON_SIZE } from '@/constants/theme'
 const getEntryKey = (entry) => entry.id
 const getEntryLabel = (entry) => entry.query
 
-export const SavedSearches = memo(function SavedSearches({ saved, onSelect, onDelete }) {
+export const SavedSearches = memo(({
+    saved,
+    onSelect,
+    onDelete
+}) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
 

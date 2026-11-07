@@ -4,7 +4,15 @@ import { ThemeContext } from '@/components/markdown/markdown-dom-theme-context'
 
 import { ICON_FILL, ICON_SIZE, ICON_VIEW_BOX, OPACITY } from '@/constants/theme'
 
-export const DomIcon = ({ path, size = ICON_SIZE.md, color, style, onClick }) => (
+const SECONDARY_STYLE = { opacity: OPACITY.secondary }
+
+export const DomIcon = ({
+    path,
+    size = ICON_SIZE.md,
+    color,
+    style,
+    onClick
+}) => (
     <svg
         width={size}
         height={size}
@@ -21,5 +29,11 @@ export const PropertyIcon = ({ path }) => {
     const theme = useContext(ThemeContext)
     const { colors } = theme
 
-    return <DomIcon path={path} color={colors.onBackground} style={{ opacity: OPACITY.secondary }} />
+    return (
+        <DomIcon
+            path={path}
+            color={colors.onBackground}
+            style={SECONDARY_STYLE}
+        />
+    )
 }

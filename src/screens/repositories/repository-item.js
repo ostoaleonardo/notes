@@ -22,7 +22,7 @@ import { OpenInNew } from '@/icons/open-in-new'
 import { SPACING, OPACITY } from '@/constants/theme'
 import { PENDING_COUNT } from '@/constants/repository-counts'
 
-export const RepositoryItem = memo(function RepositoryItem({
+export const RepositoryItem = memo(({
     repository,
     count,
     active,
@@ -30,7 +30,7 @@ export const RepositoryItem = memo(function RepositoryItem({
     onRename,
     onForget,
     onDelete
-}) {
+}) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { getDescendants } = useRepositories()

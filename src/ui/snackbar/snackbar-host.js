@@ -24,7 +24,7 @@ export const showSnackbar = (message) => {
     })
 }
 
-export function GlobalSnackbarHost() {
+export const GlobalSnackbarHost = () => {
     const { colors } = useTheme()
     const { left, right } = useSafeAreaInsets()
     const bottomSpacing = useBottomSpacing()

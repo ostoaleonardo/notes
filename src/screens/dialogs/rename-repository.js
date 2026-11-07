@@ -13,7 +13,11 @@ import { useRepositories } from '@/hooks/use-repositories'
 import { FEEDBACK_TYPES } from '@/constants/feedback-types'
 import { REPOSITORY_RESULTS } from '@/constants/repository-results'
 
-export function RenameRepository({ visible, onDismiss, repositoryId }) {
+export const RenameRepository = ({
+    visible,
+    onDismiss,
+    repositoryId
+}) => {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
     const { repositories, renameRepository } = useRepositories()

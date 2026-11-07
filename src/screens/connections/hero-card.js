@@ -8,7 +8,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 import { SUMMARY_CARD } from '@/constants/connections'
 import { RADIUS, SPACING } from '@/constants/theme'
 
-export const HeroCard = memo(function HeroCard({
+export const HeroCard = memo(({
     progress,
     value,
     valueSize = SUMMARY_CARD.heroTextSize,
@@ -17,7 +17,7 @@ export const HeroCard = memo(function HeroCard({
     accessibilityLabel,
     onPress,
     children
-}) {
+}) => {
     const { colors } = useTheme()
 
     return (

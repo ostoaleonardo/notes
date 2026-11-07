@@ -3,7 +3,7 @@ import { FreshSheet } from '@/ui/modal/fresh-sheet'
 
 import { SHEET } from '@/constants/components'
 
-export function NoteSearchSheet({ sheet, initialQuery }) {
+export const NoteSearchSheet = ({ sheet, initialQuery }) => {
     return (
         <FreshSheet
             sheet={sheet}

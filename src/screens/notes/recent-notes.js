@@ -28,7 +28,7 @@ import { ROUTES } from '@/constants/routes'
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 import { ICON_BUTTON } from '@/ui/tokens/components'
 
-export function RecentNotes({ onClose, home = false }) {
+export const RecentNotes = ({ onClose, home = false }) => {
     const { t } = useTranslation()
     const defaultFolderId = useDefaultNoteFolder()
 

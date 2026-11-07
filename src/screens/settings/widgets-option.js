@@ -13,7 +13,7 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { STORAGE_BOOLEAN } from '@/constants/storage-values'
 import { WIDGET_GLASS_ALPHA } from '@/constants/widgets'
 
-export function WidgetsOption() {
+export const WidgetsOption = () => {
     const { t } = useTranslation()
     const { setItem } = useStorage()
     const { glass, setGlass, alpha, setAlpha } = useWidgetGlass()

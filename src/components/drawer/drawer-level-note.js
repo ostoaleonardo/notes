@@ -9,12 +9,12 @@ import { levelRowStyles } from './drawer-level-styles'
 import { RADIUS, SPACING } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'
 
-export const DrawerLevelNote = memo(function DrawerLevelNote({
+export const DrawerLevelNote = memo(({
     note,
     depth = 0,
     active,
     onOpenNote
-}) {
+}) => {
     const { colors } = useTheme()
 
     const onPress = useCallback(() => onOpenNote(note.path), [onOpenNote, note.path])

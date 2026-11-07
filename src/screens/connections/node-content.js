@@ -6,7 +6,13 @@ import { Typography } from '@/ui/typography'
 import { GRAPH_NODE } from '@/constants/connections'
 import { CONNECTION_NODE_KINDS } from '@/constants/connections'
 
-export function NodeContent({ kind, entity, title, palette, lines = 1 }) {
+export const NodeContent = ({
+    kind,
+    entity,
+    title,
+    palette,
+    lines = 1
+}) => {
     const isRoot = kind === CONNECTION_NODE_KINDS.ROOT
 
     return (

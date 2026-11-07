@@ -13,7 +13,7 @@ import { getFormattedDate } from '@/utils/formatted-date'
 
 import { OPACITY, SPACING } from '@/constants/theme'
 
-export const VersionItem = memo(function VersionItem({ version, onSelect }) {
+export const VersionItem = memo(({ version, onSelect }) => {
     const { colors } = useTheme()
     const { currentLanguage } = useLanguage()
     const position = useGroupPosition()

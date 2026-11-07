@@ -8,7 +8,12 @@ import { NoteStack } from '@/icons/note-stack'
 
 import { BADGE } from '@/constants/components'
 
-export function RecentsButton({ onPress, testID, buttonStyle, count = 0 }) {
+export const RecentsButton = ({
+    onPress,
+    testID,
+    buttonStyle,
+    count = 0
+}) => {
     const { t } = useTranslation()
     const label = t('search.recent')
 

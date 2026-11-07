@@ -4,7 +4,7 @@ import { Typography } from '@/ui/typography'
 
 import { SPACING } from '@/ui/tokens/theme'
 
-export function SheetTitle({ children }) {
+export const SheetTitle = ({ children }) => {
     return (
         <Typography
             heading

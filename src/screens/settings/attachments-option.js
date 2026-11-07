@@ -28,7 +28,7 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 const LOCATIONS = Object.values(ATTACHMENT_LOCATIONS)
 const PDF_EMBED_VALUES = Object.values(PDF_EMBED_MODES)
 
-export function AttachmentsOption() {
+export const AttachmentsOption = () => {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { setItem } = useStorage()

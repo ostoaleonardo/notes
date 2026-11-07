@@ -14,7 +14,7 @@ import { logError } from '@/utils/log-error'
 
 export const NoteContext = createContext()
 
-export function NoteProvider({ children }) {
+export const NoteProvider = ({ children }) => {
     const [notes, setNotes] = useState([])
     const [loading, setLoading] = useState(true)
 

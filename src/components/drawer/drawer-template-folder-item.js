@@ -9,10 +9,10 @@ import { useUtils } from '@/hooks/use-utils'
 
 import { TEMPLATE_FOLDER_ACTIONS } from '@/constants/repository-actions'
 
-export const DrawerTemplateFolderItem = memo(function DrawerTemplateFolderItem({
+export const DrawerTemplateFolderItem = memo(({
     folder,
     onAction
-}) {
+}) => {
     const { toggleFolder } = useUtils()
     const menu = useMenuAction()
 

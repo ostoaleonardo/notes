@@ -37,7 +37,7 @@ const VIEW_COMPONENTS = {
     [DRAWER_VIEWS.FILES]: DrawerFilesView
 }
 
-export function DrawerItems({ navigation, state }) {
+export const DrawerItems = ({ navigation, state }) => {
     const { t } = useTranslation()
     const { setItem } = useStorage()
     const bottomSpacing = useBottomSpacing()

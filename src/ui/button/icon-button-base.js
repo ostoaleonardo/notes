@@ -37,7 +37,7 @@ const DEFAULT_APPEARANCE = {
     box: SIZE.sm
 }
 
-export function IconButtonBase({
+export const IconButtonBase = ({
     variant,
     icon: Icon,
     label,
@@ -46,7 +46,7 @@ export function IconButtonBase({
     disabled = false,
     appearance,
     style
-}) {
+}) => {
     const { colors } = useTheme()
     const { tooltip, icon: size, box } = { ...DEFAULT_APPEARANCE, ...appearance }
 

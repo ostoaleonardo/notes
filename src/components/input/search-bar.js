@@ -10,7 +10,11 @@ import { Search } from '@/icons/search'
 
 import { ICON_SIZE, SPACING } from '@/constants/theme'
 
-export function SearchBar({ label, value, onChangeText }) {
+export const SearchBar = ({
+    label,
+    value,
+    onChangeText
+}) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const fieldRef = useRef(null)

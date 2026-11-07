@@ -6,7 +6,7 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export const CurrentNoteContext = createContext()
 
-export function CurrentNoteProvider({ children }) {
+export const CurrentNoteProvider = ({ children }) => {
     const [currentId, setCurrentId] = useState('')
 
     const { getItem } = useStorage()

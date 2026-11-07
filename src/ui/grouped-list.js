@@ -12,7 +12,7 @@ export const GroupSeparator = () => <View style={styles.separator} />
 
 const NO_ROWS = []
 
-export function GroupedList({
+export const GroupedList = ({
     component: List = FlatList,
     data,
     paged = false,
@@ -20,7 +20,7 @@ export function GroupedList({
     renderItem,
     onEndReached,
     ...props
-}) {
+}) => {
     const rows = data ?? NO_ROWS
     const page = usePagedRows(rows, paged ? LIST_WINDOW.pageSize : Infinity)
     const total = totalOverride ?? rows.length

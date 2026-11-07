@@ -12,7 +12,7 @@ import { pushOnce } from '@/utils/navigation'
 
 import { ArrowForward } from '@/icons/arrow-forward'
 
-const OutgoingLinkItem = memo(function OutgoingLinkItem({ item, onPress }) {
+const OutgoingLinkItem = memo(({ item, onPress }) => {
     const { colors } = useTheme()
     const resolved = !!item.path
     const handlePress = useCallback(() => onPress(item.path), [onPress, item.path])
@@ -28,7 +28,11 @@ const OutgoingLinkItem = memo(function OutgoingLinkItem({ item, onPress }) {
     )
 })
 
-export const OutgoingLinksSheet = memo(function OutgoingLinksSheet({ sheet, contentRef, selfPath }) {
+export const OutgoingLinksSheet = memo(({
+    sheet,
+    contentRef,
+    selfPath
+}) => {
     const { t } = useTranslation()
     const { notes, notePaths } = useNotes()
     const [links, setLinks] = useState([])

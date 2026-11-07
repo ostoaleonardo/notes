@@ -8,7 +8,12 @@ import { useTheme } from '@/ui/hooks/use-theme'
 
 import { TINT, TRANSPARENT } from '@/ui/tokens/transparent'
 
-export function CircularProgressIndicator({ size, stroke, progress, children }) {
+export const CircularProgressIndicator = ({
+    size,
+    stroke,
+    progress,
+    children
+}) => {
     const { colors } = useTheme()
     const modifiers = useMemo(() => [sizeModifier(size, size)], [size])
 

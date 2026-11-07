@@ -40,7 +40,11 @@ const getEntityIcon = (entity, title = '') => {
     return TYPE_ICONS[entity.type]
 }
 
-export function EntityIcon({ entity, title, ...props }) {
+export const EntityIcon = ({
+    entity,
+    title,
+    ...props
+}) => {
     const Icon = getEntityIcon(entity, title)
 
     return <Icon {...props} />

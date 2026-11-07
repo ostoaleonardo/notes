@@ -6,7 +6,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 
 import { ICON_SIZE, SPACING } from '@/constants/theme'
 
-export function SearchListSection({
+export const SearchListSection = ({
     title,
     items,
     keyExtractor,
@@ -14,7 +14,7 @@ export function SearchListSection({
     getLabel,
     onSelect,
     renderTrailing
-}) {
+}) => {
     const { colors } = useTheme()
 
     if (items.length === 0) return null

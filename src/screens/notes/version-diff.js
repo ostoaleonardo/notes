@@ -21,7 +21,7 @@ const getDiffColor = (type) => (type === DIFF_TYPES.ADDED ? DIFF_ADDED_COLOR : D
 
 const keyExtractor = (_, index) => String(index)
 
-export const VersionDiff = memo(function VersionDiff({ version, currentContentRef }) {
+export const VersionDiff = memo(({ version, currentContentRef }) => {
     const { colors } = useTheme()
     const diff = useVersionDiff(version, currentContentRef)
 

@@ -11,7 +11,7 @@ import { COLORS, THEMES } from '@/constants/themes'
 import { THEME_MODES } from '@/constants/theme-options'
 import { LOG_MESSAGES } from '@/constants/log-messages'
 
-export function ErrorBoundary({ error, retry }) {
+export const ErrorBoundary = ({ error, retry }) => {
     const { t } = useTranslation()
     const scheme = useColorScheme() === THEME_MODES.LIGHT ? THEME_MODES.LIGHT : THEME_MODES.DARK
     const colors = COLORS[scheme]

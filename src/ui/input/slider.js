@@ -6,7 +6,14 @@ import { useTheme } from '@/ui/hooks/use-theme'
 
 import { SLIDER } from '@/ui/tokens/components'
 
-export function Slider({ value, min, max, steps, onValueChange, onValueChangeFinished }) {
+export const Slider = ({
+    value,
+    min,
+    max,
+    steps,
+    onValueChange,
+    onValueChangeFinished
+}) => {
     const { colors, dark } = useTheme()
     const sliderColors = useMemo(() => getSliderColors(colors), [colors])
 

@@ -7,13 +7,13 @@ import { EntityIcon } from './entity-icon'
 
 import { ICON_SIZE } from '@/constants/theme'
 
-export const EntityRow = memo(function EntityRow({
+export const EntityRow = memo(({
     entity,
     title,
     caption,
     background,
     onPress
-}) {
+}) => {
     const { colors } = useTheme()
     const handlePress = useCallback(() => onPress(entity), [onPress, entity])
 

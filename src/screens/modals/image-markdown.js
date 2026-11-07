@@ -30,7 +30,11 @@ import { LOG_MESSAGES } from '@/constants/log-messages'
 import { INPUT_EXAMPLES } from '@/constants/input-examples'
 import { logError } from '@/utils/log-error'
 
-export function ImageMarkdown({ onClose, onInsert, repositoryId }) {
+export const ImageMarkdown = ({
+    onClose,
+    onInsert,
+    repositoryId
+}) => {
     const { t } = useTranslation()
     const { copyImageFile } = useFileStorage()
     const { getItem } = useStorage()

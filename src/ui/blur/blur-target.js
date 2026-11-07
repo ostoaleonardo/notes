@@ -6,7 +6,7 @@ const BlurTargetContext = createContext(null)
 
 export const useBlurTarget = () => useContext(BlurTargetContext)
 
-export function BlurTargetProvider({ children, style }) {
+export const BlurTargetProvider = ({ children, style }) => {
     const targetRef = useRef(null)
 
     return (
@@ -18,7 +18,7 @@ export function BlurTargetProvider({ children, style }) {
     )
 }
 
-export function BlurTarget({ children, style }) {
+export const BlurTarget = ({ children, style }) => {
     const targetRef = useBlurTarget()
 
     return (

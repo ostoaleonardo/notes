@@ -17,7 +17,11 @@ const BADGE_ICONS = {
     [RELATION_BADGES.BOTH]: Link
 }
 
-export const RelationBadge = memo(function RelationBadge({ node, badge, dimmed }) {
+export const RelationBadge = memo(({
+    node,
+    badge,
+    dimmed
+}) => {
     const { colors } = useTheme()
     const Icon = BADGE_ICONS[badge]
 

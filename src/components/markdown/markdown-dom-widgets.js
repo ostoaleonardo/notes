@@ -14,7 +14,12 @@ import {
     buildTitleTextareaStyle
 } from './markdown-dom-panel-theme'
 
-const AutoGrowTitle = ({ value, onChange, onBlur, placeholder }) => {
+const AutoGrowTitle = ({
+    value,
+    onChange,
+    onBlur,
+    placeholder
+}) => {
     const theme = useContext(ThemeContext)
     const ref = useRef(null)
     const hasFocusRef = useRef(false)

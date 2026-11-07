@@ -12,13 +12,13 @@ import { ArrowForward } from '@/icons/arrow-forward'
 
 import { SIZE } from '@/constants/theme'
 
-export function SelectOption({
+export const SelectOption = ({
     title,
     description,
     items,
     selectedValue,
     onSelect
-}) {
+}) => {
     const { colors } = useTheme()
     const menu = useMenuAction()
     const maxHeight = items.length * SIZE.lg > SIZE.xxxxxl ? SIZE.xxxxxl : undefined

@@ -6,7 +6,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 
 import { FONTS, FONT_SIZE } from '@/ui/tokens/theme'
 
-export function Badge({ children, style }) {
+export const Badge = ({ children, style }) => {
     const { colors } = useTheme()
     const textStyle = useMemo(() => ({
         fontFamily: FONTS.azeretMedium,

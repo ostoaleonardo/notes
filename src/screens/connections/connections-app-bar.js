@@ -15,11 +15,11 @@ import { Search } from '@/icons/search'
 import { BADGE } from '@/constants/components'
 import { TEST_IDS } from '@/constants/test-ids'
 
-export const ConnectionsAppBar = memo(function ConnectionsAppBar({
+export const ConnectionsAppBar = memo(({
     pendingCount,
     onPending,
     onSearch
-}) {
+}) => {
     const { t } = useTranslation()
     const pendingLabel = t('connections.pending.title')
     const searchLabel = t('connections.origin.change')

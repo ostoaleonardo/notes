@@ -11,13 +11,13 @@ import { CARD_PREVIEW_LINES } from '@/constants/note-preview'
 import { CARD_GRID } from '@/constants/components'
 import { TINT } from '@/ui/tokens/transparent'
 
-export const CardGridItem = memo(function CardGridItem({
+export const CardGridItem = memo(({
     card,
     cellStyle,
     onOpen,
     renderHeader,
     previewLines = CARD_PREVIEW_LINES
-}) {
+}) => {
     const { colors } = useTheme()
 
     return (

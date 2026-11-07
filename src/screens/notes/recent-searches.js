@@ -6,7 +6,7 @@ import { History } from '@/icons/history'
 
 const getTerm = (term) => term
 
-export function RecentSearches({ recent, onSelect }) {
+export const RecentSearches = ({ recent, onSelect }) => {
     const { t } = useTranslation()
 
     return (

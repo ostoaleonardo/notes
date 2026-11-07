@@ -10,13 +10,13 @@ import { BOTTOM_GAP, SPACING } from '@/constants/theme'
 
 const keyOf = (entity) => `${entity.type}:${entity.id}`
 
-export const RelationList = memo(function RelationList({
+export const RelationList = memo(({
     entities,
     getTitle,
     getCaption,
     onSelect,
     ...props
-}) {
+}) => {
     const { colors } = useTheme()
 
     const renderItem = useCallback(({ item }) => (

@@ -4,7 +4,7 @@ import { RecentNotes } from './recent-notes'
 import { FreshSheet } from '@/ui/modal/fresh-sheet'
 import { SheetTitle } from '@/ui/modal/sheet-title'
 
-export function RecentNotesSheet({ sheet, home = false }) {
+export const RecentNotesSheet = ({ sheet, home = false }) => {
     const { t } = useTranslation()
 
     return (

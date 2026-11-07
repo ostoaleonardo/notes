@@ -6,7 +6,12 @@ import { useTheme } from '@/ui/hooks/use-theme'
 
 import { HIT_SLOP, RIPPLE } from '@/ui/tokens/components'
 
-export const ListItemAction = memo(function ListItemAction({ label, onPress, children, ...props }) {
+export const ListItemAction = memo(({
+    label,
+    onPress,
+    children,
+    ...props
+}) => {
     const { colors } = useTheme()
 
     return (

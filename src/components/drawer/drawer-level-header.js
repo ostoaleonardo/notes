@@ -10,10 +10,10 @@ import { ArrowBack } from '@/icons/arrow-back'
 
 import { ICON_SIZE, RADIUS, SPACING } from '@/constants/theme'
 
-export const DrawerLevelHeader = memo(function DrawerLevelHeader({
+export const DrawerLevelHeader = memo(({
     repository,
     onBack
-}) {
+}) => {
     const { colors } = useTheme()
 
     return (

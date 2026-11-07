@@ -6,7 +6,12 @@ import { toggleTagQualifier } from '@/utils/search-query'
 
 import { SPACING } from '@/constants/theme'
 
-export function SearchTagFilters({ query, setQuery, tags, parsed }) {
+export const SearchTagFilters = ({
+    query,
+    setQuery,
+    tags,
+    parsed
+}) => {
     if (tags.length === 0) return null
 
     return (

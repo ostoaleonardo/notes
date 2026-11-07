@@ -10,14 +10,14 @@ import { expandSelected as expandButtons, getMinWidth } from '@/ui/utils/toggle-
 
 import { BUTTON, CONTROL_TOUCH_INSET } from '@/ui/tokens/components'
 
-export function ButtonGroup({
+export const ButtonGroup = ({
     buttons,
     background,
     style,
     chip = false,
     equalWidth = true,
     expandSelected = false
-}) {
+}) => {
     const { colors } = useTheme()
     const [widths, setWidths] = useState({})
 

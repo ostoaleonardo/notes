@@ -11,7 +11,14 @@ import { SPACING } from '@/ui/tokens/theme'
 
 const gapModifiers = [height(SPACING.xxxs)]
 
-export function Menu({ anchor, visible, onClose, maxHeight, align = MENU_ALIGN.END, children }) {
+export const Menu = ({
+    anchor,
+    visible,
+    onClose,
+    maxHeight,
+    align = MENU_ALIGN.END,
+    children
+}) => {
     const groups = Children.toArray(children)
 
     return (

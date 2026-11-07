@@ -10,7 +10,7 @@ import { Touchable } from '@/ui/touchable'
 
 import { OPACITY, RADIUS, SPACING, ICON_SIZE } from '@/constants/theme'
 
-export function DrawerTreeRow({
+export const DrawerTreeRow = ({
     label,
     depth,
     collapsed,
@@ -20,7 +20,7 @@ export function DrawerTreeRow({
     uppercase,
     onPress,
     onLongPress
-}) {
+}) => {
     const { colors } = useTheme()
 
     const Chevron = collapsed ? ChevronRight : KeyboardArrowDown

@@ -26,7 +26,7 @@ import { DIVIDER, SPACING } from '@/constants/theme'
 import { TEST_IDS } from '@/constants/test-ids'
 import { MARKDOWN_ACTIONS } from '@/constants/markdown-actions'
 
-export const MarkdownToolbar = memo(function MarkdownToolbar({
+export const MarkdownToolbar = memo(({
     mode,
     isFocused,
     scope,
@@ -34,7 +34,7 @@ export const MarkdownToolbar = memo(function MarkdownToolbar({
     actions,
     canUndo,
     canRedo
-}) {
+}) => {
     const { t } = useTranslation()
     const groupSheet = useBottomSheet()
     const [group, setGroup] = useState(null)

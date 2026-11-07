@@ -7,7 +7,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 import { FONTS } from '@/ui/tokens/theme'
 import { TRANSPARENT } from '@/ui/tokens/transparent'
 
-export function Chip({
+export const Chip = ({
     children,
     leading,
     colors: overrides,
@@ -15,7 +15,7 @@ export function Chip({
     enabled = true,
     style,
     onPress
-}) {
+}) => {
     const { colors } = useTheme()
 
     const chipColors = useMemo(() => ({

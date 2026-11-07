@@ -20,7 +20,7 @@ import { WIDGET_GLASS_ALPHA, WIDGET_UPDATE_DELAY_MS } from '@/constants/widgets'
 
 const IS_ANDROID = Platform.OS === 'android'
 
-export function WidgetsProvider({ children }) {
+export const WidgetsProvider = ({ children }) => {
     const { t } = useTranslation()
     const { mode } = useContext(ThemeContext)
 

@@ -4,13 +4,13 @@ import { CreateNoteDialog } from './create-note-dialog'
 import { OriginSheet } from './origin-sheet'
 import { RelationsSheet } from './relations-sheet'
 
-export const ConnectionSheets = memo(function ConnectionSheets({
+export const ConnectionSheets = memo(({
     session,
     entity,
     primary,
     onViewTree,
     onSelectOrigin
-}) {
+}) => {
     const { model, getTitle, missingNote, relationsSheet, originSheet } = session
 
     return (

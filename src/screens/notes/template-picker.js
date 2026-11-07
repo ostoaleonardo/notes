@@ -9,7 +9,11 @@ import { renderTemplate } from '@/utils/render-template'
 
 import { TEMPLATE_CARD_PREVIEW_LINES } from '@/constants/note-preview'
 
-export function TemplatePicker({ title, templates, onSelect }) {
+export const TemplatePicker = ({
+    title,
+    templates,
+    onSelect
+}) => {
     const { t } = useTranslation()
     const { currentLanguage } = useLanguage()
 

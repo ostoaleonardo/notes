@@ -6,13 +6,13 @@ import { SelectOption } from './select-option'
 import { useStorage } from '@/hooks/use-storage'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
 
-export function StorageSelectOption({
+export const StorageSelectOption = ({
     storageKey,
     translationKey,
     values,
     defaultValue,
     translateValues = true
-}) {
+}) => {
     const { t } = useTranslation()
     const { setItem } = useStorage()
 

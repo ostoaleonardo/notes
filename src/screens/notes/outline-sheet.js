@@ -14,7 +14,12 @@ import { KeyboardArrowDown } from '@/ui/icons/keyboard-arrow-down'
 
 import { HEADING_OUTLINE_CHEVRON_SIZE, HEADING_OUTLINE_INDENT } from '@/constants/headings'
 
-const OutlineItem = memo(function OutlineItem({ item, collapsed, onPress, onToggle }) {
+const OutlineItem = memo(({
+    item,
+    collapsed,
+    onPress,
+    onToggle
+}) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const toggleKey = collapsed ? 'message.outline.expand' : 'message.outline.collapse'
@@ -47,7 +52,11 @@ const OutlineItem = memo(function OutlineItem({ item, collapsed, onPress, onTogg
     )
 })
 
-export const OutlineSheet = memo(function OutlineSheet({ sheet, contentRef, onSelect }) {
+export const OutlineSheet = memo(({
+    sheet,
+    contentRef,
+    onSelect
+}) => {
     const { t } = useTranslation()
     const [outline, setOutline] = useState([])
     const [collapsed, setCollapsed] = useState(() => new Set())

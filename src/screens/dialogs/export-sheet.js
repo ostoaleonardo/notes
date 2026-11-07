@@ -18,7 +18,11 @@ import { Share } from '@/icons/share'
 import { EXPORT_FORMATS, PRO_EXPORT_FORMATS } from '@/constants/export'
 import { ICON_SIZE, BOTTOM_GAP, SPACING } from '@/constants/theme'
 
-export const ExportSheet = memo(function ExportSheet({ sheet, onExport, onShare }) {
+export const ExportSheet = memo(({
+    sheet,
+    onExport,
+    onShare
+}) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { pro } = usePro()

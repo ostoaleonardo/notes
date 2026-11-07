@@ -14,7 +14,11 @@ import { TEST_IDS } from '@/constants/test-ids'
 import { DRAWER_ACTIONS } from '@/constants/drawer-views'
 import { APP_BAR_MODES } from '@/constants/app-bar'
 
-export function AppBar({ title, trailing, mode = APP_BAR_MODES.BACK }) {
+export const AppBar = ({
+    title,
+    trailing,
+    mode = APP_BAR_MODES.BACK
+}) => {
     const { t } = useTranslation()
 
     const navigation = useNavigation()

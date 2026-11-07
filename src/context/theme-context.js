@@ -16,7 +16,7 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export const ThemeContext = createContext()
 
-export function ThemeProvider({ initialTheme, children }) {
+export const ThemeProvider = ({ initialTheme, children }) => {
     const colorScheme = useColorScheme()
     const { setItem } = useStorage()
     const { pro } = usePro()

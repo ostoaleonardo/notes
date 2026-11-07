@@ -4,7 +4,13 @@ import { Typography } from '@/ui/typography'
 
 import { SPACING, OPACITY, TYPOGRAPHY_SIZE_VARIANTS } from '@/ui/tokens/theme'
 
-export function MessageScreen({ title, message, color, style, children }) {
+export const MessageScreen = ({
+    title,
+    message,
+    color,
+    style,
+    children
+}) => {
     return (
         <View style={[styles.container, style]}>
             <View style={styles.text}>

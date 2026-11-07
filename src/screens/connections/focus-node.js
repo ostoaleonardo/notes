@@ -19,14 +19,14 @@ import { TEST_IDS } from '@/constants/test-ids'
 
 const BADGE_ORIGIN = { x: 0, y: 0 }
 
-export const FocusNode = memo(function FocusNode({
+export const FocusNode = memo(({
     entity,
     title,
     position,
     center = false,
     relation,
     onPress
-}) {
+}) => {
     const { colors, dark } = useTheme()
 
     const kind = center ? CONNECTION_NODE_KINDS.ROOT : getShapeKind(entity)

@@ -6,7 +6,11 @@ import { buildPropertyMenuItemStyle } from '@/components/markdown/markdown-dom-p
 
 import { keepFocus } from '@/utils/keep-focus'
 
-export const PropertyMenuItem = ({ iconPath, label, onSelect }) => {
+export const PropertyMenuItem = ({
+    iconPath,
+    label,
+    onSelect
+}) => {
     const theme = useContext(ThemeContext)
 
     return (

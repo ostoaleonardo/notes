@@ -4,7 +4,11 @@ import { NameDialog } from '@/components/name-dialog'
 
 import { useTemplates } from '@/hooks/use-templates'
 
-export function AddTemplateFolder({ visible, onDismiss, parent = '' }) {
+export const AddTemplateFolder = ({
+    visible,
+    onDismiss,
+    parent = ''
+}) => {
     const { t } = useTranslation()
     const { addTemplateFolder } = useTemplates()
 

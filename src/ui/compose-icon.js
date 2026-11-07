@@ -1,6 +1,12 @@
 import { Icon } from '@expo/ui/jetpack-compose'
 
-export function ComposeIcon({ icon, color, size, modifiers, contentDescription }) {
+export const ComposeIcon = ({
+    icon,
+    color,
+    size,
+    modifiers,
+    contentDescription
+}) => {
     if (__DEV__ && !icon.source) throw new Error('ComposeIcon needs an icon with a source')
 
     return (

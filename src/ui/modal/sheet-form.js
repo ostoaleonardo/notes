@@ -5,7 +5,11 @@ import { SheetTitle } from './sheet-title'
 
 import { SPACING } from '@/ui/tokens/theme'
 
-export function SheetForm({ title, footer, children }) {
+export const SheetForm = ({
+    title,
+    footer,
+    children
+}) => {
     return (
         <View style={styles.container}>
             {title && <SheetTitle>{title}</SheetTitle>}
@@ -19,7 +23,7 @@ export function SheetForm({ title, footer, children }) {
     )
 }
 
-export function SheetInput(props) {
+export const SheetInput = (props) => {
     return (
         <View style={styles.field}>
             <FilledTextField {...props} />

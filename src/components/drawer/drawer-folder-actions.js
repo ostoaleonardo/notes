@@ -6,12 +6,12 @@ import { REPOSITORY_ACTIONS } from '@/constants/repository-actions'
 
 const ALL_ACTIONS = Object.values(REPOSITORY_ACTIONS)
 
-export function DrawerFolderActions({
+export const DrawerFolderActions = ({
     menu,
     actions = ALL_ACTIONS,
     createLabelKey,
     onAction
-}) {
+}) => {
     return (
         <Menu visible={menu.visible} onClose={menu.onClose}>
             <MenuGroup>

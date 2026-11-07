@@ -15,7 +15,7 @@ import { pushOnce } from '@/utils/navigation'
 
 export const ImportContext = createContext()
 
-export function ImportProvider({ children }) {
+export const ImportProvider = ({ children }) => {
     const { t } = useTranslation()
     const { saveNote, loading } = useNotes()
 

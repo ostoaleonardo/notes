@@ -8,7 +8,14 @@ import { DialogText } from '@/ui/dialog-text'
 import { useSingleFlight } from '@/hooks/use-single-flight'
 
 
-export function ConfirmDialog({ title, message, confirmLabel, visible, onDismiss, onConfirm }) {
+export const ConfirmDialog = ({
+    title,
+    message,
+    confirmLabel,
+    visible,
+    onDismiss,
+    onConfirm
+}) => {
     const { t } = useTranslation()
 
     const [onConfirmPress, confirming] = useSingleFlight(async () => {

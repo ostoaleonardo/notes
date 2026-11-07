@@ -5,7 +5,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 
 import { SIZE } from '@/ui/tokens/theme'
 
-export function LoadingOverlay({ background = true }) {
+export const LoadingOverlay = ({ background = true }) => {
     const { colors } = useTheme()
 
     return (

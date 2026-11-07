@@ -12,7 +12,14 @@ import { useHaptics } from '@/hooks/use-haptics'
 
 import { FEEDBACK_TYPES } from '@/constants/feedback-types'
 
-export function NameDialog({ visible, onDismiss, title, onSubmit, busy = false, secondaryAction }) {
+export const NameDialog = ({
+    visible,
+    onDismiss,
+    title,
+    onSubmit,
+    busy = false,
+    secondaryAction
+}) => {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
 

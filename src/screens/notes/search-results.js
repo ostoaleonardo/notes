@@ -15,7 +15,11 @@ import { BOTTOM_GAP, SPACING } from '@/constants/theme'
 
 const getNotePath = (note) => note.path
 
-export function SearchResults({ results, aliasById, onOpenResult }) {
+export const SearchResults = ({
+    results,
+    aliasById,
+    onOpenResult
+}) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
 

@@ -5,7 +5,12 @@ import { Typography } from '@/ui/typography'
 
 import { OPACITY, SPACING } from '@/ui/tokens/theme'
 
-export function AnimatedList({ emptyLabel, gap = SPACING.lg, contentContainerStyle, ...props }) {
+export const AnimatedList = ({
+    emptyLabel,
+    gap = SPACING.lg,
+    contentContainerStyle,
+    ...props
+}) => {
     return (
         <Animated.FlatList
             style={styles.base}

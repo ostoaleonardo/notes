@@ -2,7 +2,7 @@ import { createContext, useEffect, useMemo, useState } from 'react'
 
 export const ProContext = createContext()
 
-export function ProProvider({ isPro = false, children }) {
+export const ProProvider = ({ isPro = false, children }) => {
     const [pro, setPro] = useState(false)
 
     useEffect(() => {

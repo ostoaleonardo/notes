@@ -13,7 +13,13 @@ import { Add } from '@/icons/add'
 
 import { ICON_SIZE } from '@/constants/theme'
 
-export function SearchToggleFilters({ query, setQuery, parsed, saved, onToggleSave }) {
+export const SearchToggleFilters = ({
+    query,
+    setQuery,
+    parsed,
+    saved,
+    onToggleSave
+}) => {
     const { t } = useTranslation()
 
     const trimmedQuery = query.trim()

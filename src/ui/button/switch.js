@@ -5,7 +5,11 @@ import { Host, Switch as ComposeSwitch } from '@expo/ui/jetpack-compose'
 import { getSwitchColors } from '@/ui/utils/compose-colors'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-export function Switch({ value, onValueChange, accessibilityLabel }) {
+export const Switch = ({
+    value,
+    onValueChange,
+    accessibilityLabel
+}) => {
     const { colors, dark } = useTheme()
     const switchColors = useMemo(() => getSwitchColors(colors), [colors])
     const onPress = useCallback(() => onValueChange(!value), [onValueChange, value])

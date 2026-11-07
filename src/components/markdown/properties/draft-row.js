@@ -22,7 +22,14 @@ import { KEYBOARD_KEYS } from '@/constants/keyboard-keys'
 import { getDefaultPropertyValue, isValidPropertyName } from '@/utils/properties'
 import { keepFocus } from '@/utils/keep-focus'
 
-export const DraftRow = ({ keys, suggestions, labels, onChangeProperty, onAddTags, onClose }) => {
+export const DraftRow = ({
+    keys,
+    suggestions,
+    labels,
+    onChangeProperty,
+    onAddTags,
+    onClose
+}) => {
     const theme = useContext(ThemeContext)
     const [type, setType] = useState(PROPERTY_TYPES.TEXT)
     const [typeMenuOpen, setTypeMenuOpen] = useState(false)
@@ -118,7 +125,13 @@ export const DraftRow = ({ keys, suggestions, labels, onChangeProperty, onAddTag
     )
 }
 
-const DraftNameInput = ({ keys, placeholder, onQueryChange, onSubmit, onClose }) => {
+const DraftNameInput = ({
+    keys,
+    placeholder,
+    onQueryChange,
+    onSubmit,
+    onClose
+}) => {
     const theme = useContext(ThemeContext)
     const [text, setText] = useState('')
 

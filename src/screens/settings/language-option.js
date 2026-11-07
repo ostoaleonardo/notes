@@ -10,7 +10,7 @@ import { isSupportedLanguage } from '@/utils/language'
 import { LANGUAGES, SYSTEM_LANGUAGE } from '@/constants/languages'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
-export function LanguageOption() {
+export const LanguageOption = () => {
     const { t } = useTranslation()
     const { changeLanguage } = useLanguage()
     const [selected, setSelected] = useState(SYSTEM_LANGUAGE)

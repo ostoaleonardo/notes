@@ -21,7 +21,7 @@ import { SPACING } from '@/constants/theme'
 import { LOG_MESSAGES } from '@/constants/log-messages'
 import { logError } from '@/utils/log-error'
 
-export function ProSection() {
+export const ProSection = () => {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { setItem } = useStorage()

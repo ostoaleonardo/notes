@@ -10,7 +10,7 @@ import { OpenInNew } from '@/icons/open-in-new'
 
 import { LINKS } from '@/constants/links'
 
-export function AppVersionCard() {
+export const AppVersionCard = () => {
     const { t } = useTranslation()
     const { colors } = useTheme()
 

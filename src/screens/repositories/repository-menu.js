@@ -14,7 +14,11 @@ import { Delete } from '@/icons/delete'
 import { Edit } from '@/icons/edit'
 import { MoreVert } from '@/icons/more-vert'
 
-export const RepositoryMenu = memo(function RepositoryMenu({ onRename, onForget, onDelete }) {
+export const RepositoryMenu = memo(({
+    onRename,
+    onForget,
+    onDelete
+}) => {
     const { t } = useTranslation()
 
     const { visible, onOpen, onClose, trigger } = useMenuAction()

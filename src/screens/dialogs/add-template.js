@@ -13,7 +13,11 @@ import { FEEDBACK_TYPES } from '@/constants/feedback-types'
 import { ROUTES } from '@/constants/routes'
 import { pushOnce } from '@/utils/navigation'
 
-export function AddTemplate({ visible, onDismiss, folder = '' }) {
+export const AddTemplate = ({
+    visible,
+    onDismiss,
+    folder = ''
+}) => {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
     const { addTemplate, importTemplate } = useTemplates()

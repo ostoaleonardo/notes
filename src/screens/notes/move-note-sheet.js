@@ -13,7 +13,11 @@ import { Folder } from '@/icons/folder'
 
 import { SPACING, ICON_SIZE } from '@/constants/theme'
 
-const MoveNoteItem = memo(function MoveNoteItem({ item, current, onPress }) {
+const MoveNoteItem = memo(({
+    item,
+    current,
+    onPress
+}) => {
     const { colors } = useTheme()
 
     return (
@@ -42,7 +46,11 @@ const MoveNoteItem = memo(function MoveNoteItem({ item, current, onPress }) {
     )
 })
 
-export const MoveNoteSheet = memo(function MoveNoteSheet({ sheet, repositoryId, onSelect }) {
+export const MoveNoteSheet = memo(({
+    sheet,
+    repositoryId,
+    onSelect
+}) => {
     const { t } = useTranslation()
     const { activeRepositoryTree } = useRepositories()
 

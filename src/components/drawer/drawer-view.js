@@ -7,7 +7,7 @@ import { DrawerToolbar, DrawerToolbarButton } from './drawer-toolbar'
 
 import { SPACING } from '@/constants/theme'
 
-export function DrawerView({
+export const DrawerView = ({
     data,
     renderItem,
     toolbarItems,
@@ -18,7 +18,7 @@ export function DrawerView({
     listRef,
     listEntering,
     children
-}) {
+}) => {
     return (
         <>
             <Animated.View

@@ -7,7 +7,7 @@ import { COMPOSE_DIVIDER } from '@/ui/tokens/components'
 import { BORDER_WIDTH } from '@/ui/tokens/theme'
 import { TINT } from '@/ui/tokens/transparent'
 
-export function Divider() {
+export const Divider = () => {
     const { colors } = useTheme()
 
     return (

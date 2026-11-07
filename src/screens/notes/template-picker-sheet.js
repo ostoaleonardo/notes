@@ -8,13 +8,13 @@ import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
 import { SheetActions } from '@/ui/modal/sheet-actions'
 import { SheetTitle } from '@/ui/modal/sheet-title'
 
-export const TemplatePickerSheet = memo(function TemplatePickerSheet({
+export const TemplatePickerSheet = memo(({
     sheet,
     title,
     templates,
     onSelect,
     onSaveAsTemplate
-}) {
+}) => {
     const { t } = useTranslation()
 
     const [onSave, saving] = useSingleFlight(async () => {

@@ -2,7 +2,11 @@ import { useTranslation } from 'react-i18next'
 
 import { ConfirmDialog } from '@/components/confirm-dialog'
 
-export function MissingNoteDialog({ missing, onDismiss, onConfirm }) {
+export const MissingNoteDialog = ({
+    missing,
+    onDismiss,
+    onConfirm
+}) => {
     const { t } = useTranslation()
 
     return (

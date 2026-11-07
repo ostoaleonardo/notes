@@ -5,7 +5,7 @@ import { SPACING } from '@/constants/theme'
 
 const getRowId = (row) => row.id
 
-export function DrawerList(props) {
+export const DrawerList = (props) => {
     const insets = useSafeAreaInsets()
 
     return (

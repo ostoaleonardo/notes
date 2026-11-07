@@ -16,7 +16,11 @@ const MENU_ITEMS = [
     { action: REPOSITORY_ACTIONS.DELETE, label: 'repositories.delete.folder_title', icon: Delete }
 ]
 
-export function DrawerRepositoryMenu({ actions, createLabelKey, onAction }) {
+export const DrawerRepositoryMenu = ({
+    actions,
+    createLabelKey,
+    onAction
+}) => {
     const { t } = useTranslation()
 
     return MENU_ITEMS

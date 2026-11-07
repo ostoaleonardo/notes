@@ -8,7 +8,7 @@ import { AppBar } from '@/components/app-bar/app-bar'
 import { APP_BAR_MODES } from '@/constants/app-bar'
 import { EDITOR_MODES } from '@/constants/editor-modes'
 
-export function EditorShell({
+export const EditorShell = ({
     mode,
     onSetMode,
     scope,
@@ -20,7 +20,7 @@ export function EditorShell({
     initialSearch,
     sheets,
     children
-}) {
+}) => {
     return (
         <>
             <AppBar

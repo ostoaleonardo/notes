@@ -9,7 +9,11 @@ import { useTheme } from '@/ui/hooks/use-theme'
 
 import { RADIUS, SPACING } from '@/ui/tokens/theme'
 
-export function FloatingActionButton({ icon, label, onPress }) {
+export const FloatingActionButton = ({
+    icon,
+    label,
+    onPress
+}) => {
     const { colors } = useTheme()
     const { bottom } = useSafeAreaInsets()
 

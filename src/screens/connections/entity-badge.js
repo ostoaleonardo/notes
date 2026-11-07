@@ -14,7 +14,15 @@ const SHAPE_BY_TYPE = {
 
 export const getShapeKind = (entity) => SHAPE_BY_TYPE[entity.type] ?? CONNECTION_NODE_KINDS.NOTE
 
-export function EntityBadge({ entity, title, size, iconSize, fill, color, selected = false }) {
+export const EntityBadge = ({
+    entity,
+    title,
+    size,
+    iconSize,
+    fill,
+    color,
+    selected = false
+}) => {
     const isTag = entity.type === CONNECTION_TYPES.TAG
     const isRoot = entity.type === CONNECTION_TYPES.ROOT
     const background = isRoot || selected ? fill : fill + TRANSPARENT[20]

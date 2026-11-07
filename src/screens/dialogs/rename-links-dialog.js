@@ -12,14 +12,14 @@ import { SPACING } from '@/constants/theme'
 const COLUMN_MODIFIERS = [fillMaxWidth()]
 const COLUMN_ARRANGEMENT = { spacedBy: SPACING.sm }
 
-export function RenameLinksDialog({
+export const RenameLinksDialog = ({
     visible,
     busy = false,
     linksCount,
     onDismiss,
     onConfirmOnce,
     onConfirmAlways
-}) {
+}) => {
     const { t } = useTranslation()
 
     return (

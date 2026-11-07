@@ -7,7 +7,11 @@ import { useRepositories } from '@/hooks/use-repositories'
 
 import { FEEDBACK_TYPES } from '@/constants/feedback-types'
 
-export function ForgetRepository({ visible, onDismiss, repositoryId }) {
+export const ForgetRepository = ({
+    visible,
+    onDismiss,
+    repositoryId
+}) => {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
     const { forgetRepository } = useRepositories()

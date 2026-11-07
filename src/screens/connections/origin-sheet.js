@@ -15,7 +15,11 @@ import { SHEET } from '@/constants/components'
 import { CONNECTION_TYPES, ORIGIN_TYPES } from '@/constants/connections'
 import { SPACING } from '@/constants/theme'
 
-function OriginContent({ model, getTitle, onSelect }) {
+const OriginContent = ({
+    model,
+    getTitle,
+    onSelect
+}) => {
     const { t } = useTranslation()
     const [type, setType] = useState(CONNECTION_TYPES.NOTE)
     const [query, setQuery] = useState('')
@@ -67,7 +71,12 @@ function OriginContent({ model, getTitle, onSelect }) {
     )
 }
 
-export const OriginSheet = memo(function OriginSheet({ sheet, model, getTitle, onSelect }) {
+export const OriginSheet = memo(({
+    sheet,
+    model,
+    getTitle,
+    onSelect
+}) => {
     return (
         <FreshSheet sheet={sheet} snapPoints={SHEET.snapPoints.search}>
             <OriginContent model={model} getTitle={getTitle} onSelect={onSelect} />

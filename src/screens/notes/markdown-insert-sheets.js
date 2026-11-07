@@ -7,13 +7,13 @@ import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
 
 import { MARKDOWN_ACTIONS } from '@/constants/markdown-actions'
 
-export const MarkdownInsertSheets = memo(function MarkdownInsertSheets({
+export const MarkdownInsertSheets = memo(({
     linkSheet,
     tableSheet,
     imageSheet,
     repositoryId,
     action
-}) {
+}) => {
     return (
         <>
             <ModalBottomSheet

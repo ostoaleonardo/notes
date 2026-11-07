@@ -16,7 +16,11 @@ const COL_INDEXES = Array.from({ length: MAX_TABLE_COLS }, (_, index) => index)
 
 const claimResponder = () => true
 
-const TableRow = memo(function TableRow({ activeCols, activeStyle, inactiveStyle }) {
+const TableRow = memo(({
+    activeCols,
+    activeStyle,
+    inactiveStyle
+}) => {
     return (
         <View style={styles.row}>
             {COL_INDEXES.map((col) => (
@@ -29,7 +33,7 @@ const TableRow = memo(function TableRow({ activeCols, activeStyle, inactiveStyle
     )
 })
 
-export function TableMarkdown({ onClose, onInsert }) {
+export const TableMarkdown = ({ onClose, onInsert }) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
 

@@ -11,7 +11,12 @@ const TONES = {
     tertiary: TINT.placeholder
 }
 
-export function DialogText({ children, tone = 'primary', bold = false, small = false }) {
+export const DialogText = ({
+    children,
+    tone = 'primary',
+    bold = false,
+    small = false
+}) => {
     const { colors } = useTheme()
 
     const style = useMemo(() => ({

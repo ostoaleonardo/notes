@@ -14,7 +14,7 @@ import { GROUP_AXES } from '@/ui/tokens/group-position'
 import { FONTS, ICON_SIZE, SPACING, TYPOGRAPHY_SIZE_VARIANTS } from '@/ui/tokens/theme'
 import { TINT, TRANSPARENT } from '@/ui/tokens/transparent'
 
-export function ListItem({
+export const ListItem = ({
     title,
     description,
     leftContent,
@@ -24,7 +24,7 @@ export function ListItem({
     onPress,
     background,
     uppercase = true
-}) {
+}) => {
     const { colors } = useTheme()
     const position = useGroupPosition()
     const radii = getCornerRadii(position, GROUP_AXES.STACKED)

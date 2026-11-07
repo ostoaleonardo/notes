@@ -14,7 +14,7 @@ import { TEST_IDS } from '@/constants/test-ids'
 
 const SORT_OPTIONS = Object.keys(NOTE_SORT_LABELS)
 
-export function DrawerSortMenu({ sort, onChange }) {
+export const DrawerSortMenu = ({ sort, onChange }) => {
     const { t } = useTranslation()
     const { visible, onOpen, onClose, trigger } = useMenuAction()
 

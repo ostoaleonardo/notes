@@ -6,7 +6,7 @@ import { SheetActions } from '@/ui/modal/sheet-actions'
 import { SheetForm, SheetInput } from '@/ui/modal/sheet-form'
 import { INPUT_EXAMPLES } from '@/constants/input-examples'
 
-export function LinkMarkdown({ onClose, onInsert }) {
+export const LinkMarkdown = ({ onClose, onInsert }) => {
     const { t } = useTranslation()
 
     const [title, setTitle] = useState('')

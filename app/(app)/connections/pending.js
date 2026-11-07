@@ -32,7 +32,7 @@ import { OPACITY, SPACING } from '@/constants/theme'
 
 const { NOTE } = CONNECTION_TYPES
 
-function ConnectionsPendingContent() {
+const ConnectionsPendingContent = () => {
     const { t } = useTranslation()
     const { bottom } = useSafeAreaInsets()
     const params = useLocalSearchParams()

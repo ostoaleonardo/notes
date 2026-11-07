@@ -23,7 +23,7 @@ import { RECENT_SEARCHES_LIMIT } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { SPACING } from '@/constants/theme'
 
-export function NoteSearch({ onClose, initialQuery = '' }) {
+export const NoteSearch = ({ onClose, initialQuery = '' }) => {
     const { repositories } = useRepositories()
     const { notes, notePaths } = useNotes()
     const { tags } = useTags()

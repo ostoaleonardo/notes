@@ -11,7 +11,13 @@ import { FOCUS } from '@/constants/connections'
 import { ICON_SIZE, SPACING } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'
 
-const Crumb = memo(function Crumb({ entity, title, index, active, onJump }) {
+const Crumb = memo(({
+    entity,
+    title,
+    index,
+    active,
+    onJump
+}) => {
     const { colors } = useTheme()
 
     const onPress = useCallback(() => {
@@ -42,7 +48,11 @@ const Crumb = memo(function Crumb({ entity, title, index, active, onJump }) {
     )
 })
 
-export const FocusCrumbs = memo(function FocusCrumbs({ trail, getTitle, onJump }) {
+export const FocusCrumbs = memo(({
+    trail,
+    getTitle,
+    onJump
+}) => {
     const { colors } = useTheme()
     const scroll = useRef(null)
 

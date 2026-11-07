@@ -12,7 +12,11 @@ import { EDITOR_TOGGLE } from '@/constants/editor-display'
 const ON = 'on'
 const OFF = 'off'
 
-export function StorageSwitchOption({ storageKey, translationKey, defaultValue }) {
+export const StorageSwitchOption = ({
+    storageKey,
+    translationKey,
+    defaultValue
+}) => {
     const { t } = useTranslation()
     const { setItem } = useStorage()
 

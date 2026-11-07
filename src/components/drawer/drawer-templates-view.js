@@ -24,7 +24,7 @@ import { REPOSITORY_ACTIONS } from '@/constants/repository-actions'
 import { TEMPLATE_FOLDER_KEY_PREFIX, TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 import { DRAWER_ITEM_TYPES, DRAWER_TOOLBAR_KEYS } from '@/constants/drawer-views'
 
-export function DrawerTemplatesView({ closeDrawer }) {
+export const DrawerTemplatesView = ({ closeDrawer }) => {
     const { t } = useTranslation()
     const { currentId } = useCurrentNote()
     const { collapsedFolders, setFoldersCollapsed } = useUtils()

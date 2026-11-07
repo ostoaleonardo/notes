@@ -6,7 +6,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 
 import { TINT } from '@/ui/tokens/transparent'
 
-export function SelectMenuItem({ selected, ...props }) {
+export const SelectMenuItem = ({ selected, ...props }) => {
     const { colors } = useTheme()
 
     return (

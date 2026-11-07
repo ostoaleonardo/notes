@@ -4,13 +4,13 @@ import { PositionGroup } from './position-group'
 import { Typography } from './typography'
 import { SPACING, OPACITY } from '@/ui/tokens/theme'
 
-export function Section({
+export const Section = ({
     title,
     children,
     containerStyle,
     contentStyle,
     visible = true
-}) {
+}) => {
     if (!visible) return null
 
     return (

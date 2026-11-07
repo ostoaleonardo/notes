@@ -5,7 +5,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 
 import { FONTS, TYPOGRAPHY_SIZE_VARIANTS } from '@/ui/tokens/theme'
 
-export function Typography({
+export const Typography = ({
     children,
     bold,
     heading,
@@ -17,7 +17,7 @@ export function Typography({
     variant = 'bodyMedium',
     styleProps,
     ...props
-}) {
+}) => {
     const { colors } = useTheme()
     const headingFontFamily = useHeadingFamily()
     const fontVariant = fontSize || TYPOGRAPHY_SIZE_VARIANTS[variant]

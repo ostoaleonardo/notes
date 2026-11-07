@@ -26,7 +26,12 @@ import {
     parsePropertyValue
 } from '@/utils/properties'
 
-const ValueInput = ({ type, value, placeholder, onCommit }) => {
+const ValueInput = ({
+    type,
+    value,
+    placeholder,
+    onCommit
+}) => {
     const theme = useContext(ThemeContext)
     const { text, setText, hasFocusRef } = useSyncedText(formatPropertyValue(type, value))
 
@@ -47,7 +52,14 @@ const ValueInput = ({ type, value, placeholder, onCommit }) => {
     )
 }
 
-const NameInput = ({ name, keys, autoFocus, placeholder, onSubmit, onDiscard }) => {
+const NameInput = ({
+    name,
+    keys,
+    autoFocus,
+    placeholder,
+    onSubmit,
+    onDiscard
+}) => {
     const theme = useContext(ThemeContext)
     const { text, setText, hasFocusRef } = useSyncedText(name)
 
@@ -83,7 +95,11 @@ const NameInput = ({ name, keys, autoFocus, placeholder, onSubmit, onDiscard }) 
     )
 }
 
-const PropertyValue = ({ row, placeholder, onChange }) => {
+const PropertyValue = ({
+    row,
+    placeholder,
+    onChange
+}) => {
     const theme = useContext(ThemeContext)
     const { colors } = theme
 
@@ -118,7 +134,12 @@ const PropertyValue = ({ row, placeholder, onChange }) => {
     )
 }
 
-export const PropertyRow = ({ row, keys, labels, onChangeProperty }) => {
+export const PropertyRow = ({
+    row,
+    keys,
+    labels,
+    onChangeProperty
+}) => {
     const theme = useContext(ThemeContext)
     const { colors } = theme
 

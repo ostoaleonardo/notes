@@ -31,14 +31,14 @@ import { TEST_IDS } from '@/constants/test-ids'
 
 const { ROOT } = CONNECTION_TYPES
 
-export const RelationsSheet = memo(function RelationsSheet({
+export const RelationsSheet = memo(({
     sheet,
     entity,
     model,
     getTitle,
     onViewTree,
     primary
-}) {
+}) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { height } = useWindowDimensions()

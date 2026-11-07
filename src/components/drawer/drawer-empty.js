@@ -5,7 +5,7 @@ import { Typography } from '@/ui/typography'
 
 import { OPACITY, SPACING } from '@/constants/theme'
 
-export function DrawerEmpty({ messageKey }) {
+export const DrawerEmpty = ({ messageKey }) => {
     const { t } = useTranslation()
 
     return (
@@ -17,19 +17,19 @@ export function DrawerEmpty({ messageKey }) {
     )
 }
 
-export function DrawerNotesEmpty() {
+export const DrawerNotesEmpty = () => {
     return <DrawerEmpty messageKey='drawer.empty.notes' />
 }
 
-export function DrawerTemplatesEmpty() {
+export const DrawerTemplatesEmpty = () => {
     return <DrawerEmpty messageKey='drawer.empty.templates' />
 }
 
-export function DrawerTagsEmpty() {
+export const DrawerTagsEmpty = () => {
     return <DrawerEmpty messageKey='drawer.empty.tags' />
 }
 
-export function DrawerFilesEmpty() {
+export const DrawerFilesEmpty = () => {
     return <DrawerEmpty messageKey='drawer.empty.files' />
 }
 

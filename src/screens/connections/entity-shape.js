@@ -28,7 +28,7 @@ const getRadius = (kind, width, height, dashed) => {
     }
 }
 
-export function EntityShape({
+export const EntityShape = ({
     kind,
     width,
     height,
@@ -38,7 +38,7 @@ export function EntityShape({
     radius,
     style,
     children
-}) {
+}) => {
     const strokeWidth = dashed ? GRAPH_NODE.dashedWidth : GRAPH_NODE.borderWidth
 
     if (kind === CONNECTION_NODE_KINDS.FILE) {

@@ -4,7 +4,14 @@ import { SearchTagFilters } from './search-tag-filters'
 import { SearchToggleFilters } from './search-toggle-filters'
 import { SPACING } from '@/constants/theme'
 
-export function SearchFilters({ query, setQuery, tags, saved, parsed, onToggleSave }) {
+export const SearchFilters = ({
+    query,
+    setQuery,
+    tags,
+    saved,
+    parsed,
+    onToggleSave
+}) => {
     return (
         <View style={styles.container}>
             <SearchTagFilters

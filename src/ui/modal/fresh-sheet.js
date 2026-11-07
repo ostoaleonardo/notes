@@ -2,7 +2,11 @@ import { Fragment, useCallback, useState } from 'react'
 
 import { ModalBottomSheet } from './modal-bottom-sheet'
 
-export function FreshSheet({ sheet, snapPoints, children }) {
+export const FreshSheet = ({
+    sheet,
+    snapPoints,
+    children
+}) => {
     const [openCount, setOpenCount] = useState(0)
 
     const onChange = useCallback((index) => {

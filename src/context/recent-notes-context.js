@@ -6,7 +6,7 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export const RecentNotesContext = createContext()
 
-export function RecentNotesProvider({ children }) {
+export const RecentNotesProvider = ({ children }) => {
     const { getItem, setItem } = useStorage()
     const [recent, setRecent] = useState([])
 

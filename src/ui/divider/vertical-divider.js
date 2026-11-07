@@ -8,7 +8,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 import { BORDER_WIDTH } from '@/ui/tokens/theme'
 import { TINT } from '@/ui/tokens/transparent'
 
-export function VerticalDivider({ length, style }) {
+export const VerticalDivider = ({ length, style }) => {
     const { colors } = useTheme()
     const modifiers = useMemo(() => [fillMaxHeight()], [])
     const hostStyle = useMemo(() => [{ width: BORDER_WIDTH.thin, height: length }, style], [length, style])

@@ -14,7 +14,7 @@ import { ACCENT_COLORS, THEME_COLORS } from '@/constants/themes'
 import { ACCENT_OPTIONS, THEME_OPTIONS } from '@/constants/theme-options'
 import { SPACING } from '@/constants/theme'
 
-export function ThemeOption() {
+export const ThemeOption = () => {
     const { t } = useTranslation()
     const { pro } = usePro()
 
@@ -59,14 +59,14 @@ export function ThemeOption() {
     )
 }
 
-function ColorSection({
+const ColorSection = ({
     title,
     names,
     options,
     isActive,
     onPress,
     getLabel
-}) {
+}) => {
     return (
         <Section
             title={title}

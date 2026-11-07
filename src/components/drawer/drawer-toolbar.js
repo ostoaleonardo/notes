@@ -6,7 +6,7 @@ import { IconButton } from '@/ui/button/icon-button'
 import { SPACING } from '@/constants/theme'
 import { ICON_BUTTON } from '@/ui/tokens/components'
 
-export function DrawerToolbar({ children }) {
+export const DrawerToolbar = ({ children }) => {
     const insets = useSafeAreaInsets()
 
     return (
@@ -23,7 +23,11 @@ export function DrawerToolbar({ children }) {
     )
 }
 
-export function DrawerToolbarButton({ accessibilityLabel, style, ...props }) {
+export const DrawerToolbarButton = ({
+    accessibilityLabel,
+    style,
+    ...props
+}) => {
     return (
         <IconButton
             appearance={ICON_BUTTON.drawer}

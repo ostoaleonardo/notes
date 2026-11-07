@@ -23,7 +23,15 @@ import { OPACITY } from '@/constants/theme'
 import { DRAWER_TOOLBAR_KEYS } from '@/constants/drawer-views'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
-const TagRow = memo(function TagRow({ tagKey, name, depth, count, hasChildren, expanded, onToggle }) {
+const TagRow = memo(({
+    tagKey,
+    name,
+    depth,
+    count,
+    hasChildren,
+    expanded,
+    onToggle
+}) => {
     return (
         <DrawerTreeRow
             label={name}
@@ -36,7 +44,7 @@ const TagRow = memo(function TagRow({ tagKey, name, depth, count, hasChildren, e
     )
 })
 
-export function DrawerTagsView() {
+export const DrawerTagsView = () => {
     const { t } = useTranslation()
     const { notes, loading } = useNotes()
     const { setItem } = useStorage()

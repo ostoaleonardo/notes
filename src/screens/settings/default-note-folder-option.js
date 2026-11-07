@@ -6,7 +6,7 @@ import { useFolderSetting } from '@/hooks/use-folder-setting'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
-export function DefaultNoteFolderOption() {
+export const DefaultNoteFolderOption = () => {
     const { t } = useTranslation()
     const folder = useFolderSetting(
         STORAGE_KEYS.DEFAULT_NOTE_FOLDER,
