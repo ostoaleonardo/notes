@@ -5,7 +5,11 @@ appId: com.monospace.notes
     env:
       TITLE: maestro-pair
 - inputText: '*'
-- assertVisible: '.*\b2 CARACTERES'
+- assertVisible:
+    id: editor-meta
+    text: '1\D+2\D+'
 - pressKey: Backspace
-- assertNotVisible: '.*CARACTERES'
+- assertNotVisible:
+    id: editor-meta
+    text: '1\D+2\D+'
 - runFlow: subflows/delete-note.yml

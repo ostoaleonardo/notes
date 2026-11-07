@@ -1,10 +1,15 @@
 appId: com.monospace.notes
 ---
 - launchApp
+- extendedWaitUntil:
+    visible:
+      id: app-bar-menu
+    timeout: 30000
 - tapOn:
     id: home-create-note
 - waitForAnimationToEnd
-- tapOn: Sin título
+- tapOn:
+    id: editor-title
 - eraseText: 30
 - inputText: ${TITLE}
 - hideKeyboard

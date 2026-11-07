@@ -1,0 +1,10 @@
+appId: com.monospace.notes
+---
+- tapOn:
+    id: editor-menu
+- waitForAnimationToEnd
+- tapOn:
+    id: menu-item-details
+- waitForAnimationToEnd
+- assertVisible:
+    id: details-outline

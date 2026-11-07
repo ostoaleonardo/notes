@@ -1,24 +1,23 @@
 appId: com.monospace.notes
 ---
 - runFlow: subflows/create-fixture-note.yml
+- assertNotVisible:
+    id: editor-preview
 - tapOn:
     id: editor-mode-toggle
 - waitForAnimationToEnd
 - assertVisible:
-    id: editor-mode-toggle
-    text: Editar
+    id: editor-preview
 - tapOn:
     id: editor-mode-toggle
 - waitForAnimationToEnd
-- assertVisible:
-    id: editor-mode-toggle
-    text: Lectura
+- assertNotVisible:
+    id: editor-preview
 - tapOn:
     id: editor-menu
 - waitForAnimationToEnd
 - tapOn:
-    id: menu-item
-    text: CÓDIGO
+    id: menu-item-code
 - waitForAnimationToEnd
 - assertVisible: '(?s).*# Alpha.*## Beta.*- one.*- two.*'
 - runFlow: subflows/delete-note.yml

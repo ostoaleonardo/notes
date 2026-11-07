@@ -1,0 +1,9 @@
+appId: com.monospace.notes
+---
+- tapOn:
+    id: app-bar-menu
+- waitForAnimationToEnd
+- scrollUntilVisible:
+    element: ${NOTE}
+- tapOn: ${NOTE}
+- waitForAnimationToEnd

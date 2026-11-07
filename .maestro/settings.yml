@@ -1,6 +1,10 @@
 appId: com.monospace.notes
 ---
 - launchApp
+- extendedWaitUntil:
+    visible:
+      id: app-bar-menu
+    timeout: 30000
 - tapOn:
     id: app-bar-menu
 - waitForAnimationToEnd
@@ -9,57 +13,82 @@ appId: com.monospace.notes
 - waitForAnimationToEnd
 - assertVisible:
     id: app-bar-back
-- assertVisible: GENERAL
-- assertVisible: TEMA DE COLOR
-- assertVisible: FUENTE DE TÍTULOS.*
-- tapOn: Fuente 2
+- assertVisible:
+    id: setting-language
+- tapOn:
+    id: heading-font-geist
 - waitForAnimationToEnd
-- assertVisible: Fuente 2
-- tapOn: Fuente 1
+- tapOn:
+    id: heading-font-ntype82
 - waitForAnimationToEnd
-- tapOn: IDIOMA.*
+- tapOn:
+    id: setting-language
 - waitForAnimationToEnd
-- assertVisible: ENGLISH
-- tapOn: ESPAÑOL
+- assertVisible:
+    id: menu-item-en
+- back
 - waitForAnimationToEnd
-- assertNotVisible: ENGLISH
+- assertNotVisible:
+    id: menu-item-en
 - scrollUntilVisible:
-    element: AL ELIMINAR.*
-- tapOn: AL ELIMINAR.*
+    element:
+      id: setting-delete-behavior
+- tapOn:
+    id: setting-delete-behavior
 - waitForAnimationToEnd
-- assertVisible: Mover a la carpeta .trash
-- tapOn: Mover a la carpeta .trash
-- waitForAnimationToEnd
-- scrollUntilVisible:
-    element: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*
-- tapOn: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*
-- waitForAnimationToEnd
-- scrollUntilVisible:
-    element: maestro-folder
-- tapOn: maestro-folder
-- waitForAnimationToEnd
-- assertVisible: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*maestro-folder
-- tapOn: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*
-- waitForAnimationToEnd
-- tapOn: Raíz del repositorio
+- tapOn:
+    id: menu-item-vault-trash
 - waitForAnimationToEnd
 - scrollUntilVisible:
-    element: TAMAÑO DE TABULACIÓN.*
-- assertVisible: ANCHO DE LÍNEA.*
-- tapOn: TAMAÑO DE TABULACIÓN.*
+    element:
+      id: setting-default-note-folder
+- tapOn:
+    id: setting-default-note-folder
 - waitForAnimationToEnd
-- tapOn: '8'
+- runFlow:
+    file: subflows/select-folder-in-menu.yml
+    env:
+      FOLDER: maestro-folder
+- assertVisible:
+    id: setting-default-note-folder-value
+    text: '.*maestro-folder.*'
+- tapOn:
+    id: setting-default-note-folder
 - waitForAnimationToEnd
-- assertVisible: TAMAÑO DE TABULACIÓN.*
-- tapOn: TAMAÑO DE TABULACIÓN.*
+- tapOn:
+    id: menu-item-
 - waitForAnimationToEnd
-- tapOn: '4'
+- assertNotVisible:
+    id: setting-default-note-folder-value
+    text: '.*maestro-folder.*'
+- scrollUntilVisible:
+    element:
+      id: setting-editor-tab-size
+- assertVisible:
+    id: setting-editor-line-width
+- tapOn:
+    id: setting-editor-tab-size
+- waitForAnimationToEnd
+- tapOn:
+    id: menu-item-8
+- waitForAnimationToEnd
+- assertVisible:
+    id: setting-editor-tab-size-value
+    text: '8'
+- tapOn:
+    id: setting-editor-tab-size
+- waitForAnimationToEnd
+- tapOn:
+    id: menu-item-4
 - waitForAnimationToEnd
 - scrollUntilVisible:
-    element: UBICACIÓN DE LA NOTA DIARIA.*
-- tapOn: UBICACIÓN DE LA NOTA DIARIA.*
+    element:
+      id: setting-daily-note-folder
+- tapOn:
+    id: setting-daily-note-folder
 - waitForAnimationToEnd
-- tapOn: Raíz del repositorio
+- tapOn:
+    id: menu-item-
 - waitForAnimationToEnd
 - tapOn:
     id: app-bar-back

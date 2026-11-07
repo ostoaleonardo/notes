@@ -1,6 +1,10 @@
 appId: com.monospace.notes
 ---
 - launchApp
+- extendedWaitUntil:
+    visible:
+      id: app-bar-menu
+    timeout: 30000
 - assertVisible:
     id: home-create-note
 - assertVisible:

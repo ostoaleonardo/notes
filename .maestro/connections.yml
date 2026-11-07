@@ -11,36 +11,48 @@ appId: com.monospace.notes
 - tapOn:
       id: drawer-connections
 - waitForAnimationToEnd
-- assertVisible: Conexiones
 - assertVisible:
       id: connections-focus-center
 - tapOn:
       id: connections-focus-center
 - waitForAnimationToEnd
-- assertVisible: Repositorio.*
-- assertVisible: Carpetas.*
-- tapOn: Etiquetas.*
+- assertVisible:
+      id: sheet
+- assertVisible:
+      id: relations-tab-folders
+- tapOn:
+      id: relations-tab-tags
 - waitForAnimationToEnd
-- assertVisible: Etiquetas.*
+- assertVisible:
+      id: relations-tab-tags
 - back
 - waitForAnimationToEnd
 - tapOn:
       id: connections-pending
 - waitForAnimationToEnd
-- assertVisible: Pendientes
-- tapOn: Orphan A
+- assertVisible:
+      id: pending-tab-orphans
+- scrollUntilVisible:
+      element: "(?i)orphan a"
+- tapOn: "(?i)orphan a"
 - waitForAnimationToEnd
-- assertVisible: Editar
+- assertVisible:
+      id: editor-mode-toggle
 - back
 - waitForAnimationToEnd
-- assertVisible: Pendientes
+- assertVisible:
+      id: app-bar-back
 - tapOn:
       id: app-bar-back
 - waitForAnimationToEnd
 - tapOn:
       id: connections-search
 - waitForAnimationToEnd
-- assertVisible: NOTA
-- assertVisible: ETIQUETA
-- assertVisible: ARCHIVO
-- assertVisible: CARPETA
+- assertVisible:
+      id: origin-tile-note
+- assertVisible:
+      id: origin-tile-tag
+- assertVisible:
+      id: origin-tile-file
+- assertVisible:
+      id: origin-tile-folder

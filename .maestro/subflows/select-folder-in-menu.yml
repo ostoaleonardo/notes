@@ -1,0 +1,17 @@
+appId: com.monospace.notes
+---
+- repeat:
+    while:
+      notVisible:
+        id: menu-item-.*
+        text: "(?i)${FOLDER}"
+    times: 8
+    commands:
+      - swipe:
+          start: 75%,45%
+          end: 75%,25%
+          duration: 400
+- tapOn:
+    id: menu-item-.*
+    text: "(?i)${FOLDER}"
+- waitForAnimationToEnd

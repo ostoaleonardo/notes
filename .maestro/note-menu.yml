@@ -1,38 +1,37 @@
 appId: com.monospace.notes
 ---
 - runFlow: subflows/create-fixture-note.yml
+- runFlow: subflows/open-note-details.yml
 - tapOn:
-    id: editor-menu
+    id: details-outline
 - waitForAnimationToEnd
-- tapOn:
-    id: menu-item
-    text: ESQUEMA
-- waitForAnimationToEnd
-- assertVisible: Cerrar hoja
+- assertVisible:
+    id: sheet
 - assertVisible: Alpha
 - assertVisible: Beta
-- tapOn: Cerrar hoja
+- back
 - waitForAnimationToEnd
-- assertNotVisible: Cerrar hoja
+- assertNotVisible:
+    id: sheet
+- runFlow: subflows/open-note-details.yml
 - tapOn:
+    id: details-outgoing-links
+- waitForAnimationToEnd
+- assertVisible:
+    id: sheet
+- back
+- waitForAnimationToEnd
+- runFlow: subflows/open-note-details.yml
+- tapOn:
+    id: details-version-history
+- waitForAnimationToEnd
+- assertVisible:
+    id: app-bar-back
+- assertNotVisible:
     id: editor-menu
-- waitForAnimationToEnd
 - tapOn:
-    id: menu-item
-    text: ENLACES SALIENTES
+    id: app-bar-back
 - waitForAnimationToEnd
-- assertVisible: Cerrar hoja
-- tapOn: Cerrar hoja
-- waitForAnimationToEnd
-- tapOn:
+- assertVisible:
     id: editor-menu
-- waitForAnimationToEnd
-- tapOn:
-    id: menu-item
-    text: HISTORIAL DE VERSIONES
-- waitForAnimationToEnd
-- assertVisible: Historial de versiones
-- tapOn: Cerrar
-- waitForAnimationToEnd
-- assertNotVisible: Historial de versiones
 - runFlow: subflows/delete-note.yml

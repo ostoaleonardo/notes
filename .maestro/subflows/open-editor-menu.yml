@@ -2,7 +2,8 @@ appId: com.monospace.notes
 ---
 - repeat:
     while:
-      notVisible: ${ITEM}
+      notVisible:
+        id: ${ITEM}
     times: 3
     commands:
       - tapOn:

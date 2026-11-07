@@ -1,7 +1,10 @@
 appId: com.monospace.notes
 ---
 - launchApp
-- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible:
+      id: app-bar-menu
+    timeout: 30000
 - tapOn:
     id: app-bar-menu
 - waitForAnimationToEnd
@@ -9,13 +12,15 @@ appId: com.monospace.notes
     id: drawer-settings
 - waitForAnimationToEnd
 - scrollUntilVisible:
-    element: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*
-- tapOn: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*
+    element:
+      id: setting-default-note-folder
+- tapOn:
+    id: setting-default-note-folder
 - waitForAnimationToEnd
-- scrollUntilVisible:
-    element: maestro-folder
-- tapOn: maestro-folder
-- waitForAnimationToEnd
+- runFlow:
+    file: subflows/select-folder-in-menu.yml
+    env:
+      FOLDER: maestro-folder
 - tapOn:
     id: app-bar-back
 - runFlow:
@@ -33,9 +38,14 @@ appId: com.monospace.notes
     id: drawer-settings
 - waitForAnimationToEnd
 - scrollUntilVisible:
-    element: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*
-- tapOn: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*
+    element:
+      id: setting-default-note-folder
+- tapOn:
+    id: setting-default-note-folder
 - waitForAnimationToEnd
-- tapOn: Raíz del repositorio
+- tapOn:
+    id: menu-item-
 - waitForAnimationToEnd
-- assertVisible: UBICACIÓN PREDETERMINADA DE LAS NOTAS NUEVAS.*Raíz del repositorio
+- assertNotVisible:
+    id: setting-default-note-folder-value
+    text: '.*maestro-folder.*'

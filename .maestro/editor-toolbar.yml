@@ -7,16 +7,21 @@ appId: com.monospace.notes
 - tapOn:
     id: toolbar-recent
 - waitForAnimationToEnd
-- assertVisible: Cerrar hoja
-- tapOn: Cerrar hoja
+- assertVisible:
+    id: sheet
+- back
 - waitForAnimationToEnd
+- assertNotVisible:
+    id: sheet
 - tapOn:
     id: toolbar-templates
 - waitForAnimationToEnd
-- assertVisible: GUARDAR COMO PLANTILLA
-- tapOn: Cerrar hoja
+- assertVisible:
+    id: template-save
+- back
 - waitForAnimationToEnd
-- assertNotVisible: Cerrar hoja
+- assertNotVisible:
+    id: sheet
 - assertVisible:
     id: toolbar-undo
 - runFlow: subflows/delete-note.yml

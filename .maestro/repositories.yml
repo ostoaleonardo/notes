@@ -1,6 +1,10 @@
 appId: com.monospace.notes
 ---
 - launchApp
+- extendedWaitUntil:
+    visible:
+      id: app-bar-menu
+    timeout: 30000
 - tapOn:
     id: app-bar-menu
 - tapOn:
@@ -8,14 +12,19 @@ appId: com.monospace.notes
 - waitForAnimationToEnd
 - assertVisible:
     id: app-bar-back
-- assertVisible: Elegir carpeta
-- tapOn: Más opciones
+- assertVisible:
+    id: repositories-add
+- tapOn:
+    id: repository-menu
 - waitForAnimationToEnd
 - assertVisible:
-    id: menu-item
-- tapOn: Close menu
+    id: menu-item-rename
+- back
 - waitForAnimationToEnd
-- assertVisible: Elegir carpeta
+- assertNotVisible:
+    id: menu-item-rename
+- assertVisible:
+    id: repositories-add
 - tapOn:
     id: app-bar-back
 - assertVisible:

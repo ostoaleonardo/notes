@@ -1,20 +1,31 @@
 appId: com.monospace.notes
 ---
 - launchApp
+- extendedWaitUntil:
+    visible:
+      id: app-bar-menu
+    timeout: 30000
 - runFlow: subflows/open-drawer.yml
 - longPressOn: "(?i)folder 3"
 - waitForAnimationToEnd
 - tapOn:
-      id: menu-item
+      id: menu-item-.*
       index: 1
 - waitForAnimationToEnd
 - assertVisible:
-      id: modal-backdrop
+      id: dialog-cancel
 - tapOn:
-      id: modal-backdrop
+      id: dialog-cancel
 - waitForAnimationToEnd
 - hideKeyboard
 - waitForAnimationToEnd
+- runFlow:
+      when:
+          notVisible: "(?i)folder 1"
+      commands:
+          - tapOn:
+                id: app-bar-menu
+          - waitForAnimationToEnd
 - tapOn: "(?i)folder 1"
 - waitForAnimationToEnd
 - assertVisible: "(?i)subfolder 1.1"
@@ -32,26 +43,34 @@ appId: com.monospace.notes
       id: drawer-sort
 - waitForAnimationToEnd
 - assertVisible:
-      id: menu-item
+      id: menu-item-.*
 - tapOn:
-      id: menu-item
+      id: menu-item-.*
       index: 1
 - waitForAnimationToEnd
 - assertNotVisible:
-      id: menu-item
+      id: menu-item-.*
 - assertVisible:
       id: drawer-sort
 - tapOn:
       id: drawer-add-subfolder
 - waitForAnimationToEnd
 - assertVisible:
-    id: modal-backdrop
+      id: dialog-cancel
 - tapOn:
-      id: modal-backdrop
+      id: dialog-cancel
 - waitForAnimationToEnd
 - hideKeyboard
 - waitForAnimationToEnd
 - assertNotVisible:
-    id: modal-backdrop
+      id: dialog-cancel
+- runFlow:
+      when:
+          notVisible:
+              id: drawer-sort
+      commands:
+          - tapOn:
+                id: app-bar-menu
+          - waitForAnimationToEnd
 - assertVisible:
       id: drawer-sort

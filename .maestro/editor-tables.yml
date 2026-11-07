@@ -8,8 +8,7 @@ appId: com.monospace.notes
     id: editor-menu
 - waitForAnimationToEnd
 - tapOn:
-    id: menu-item
-    text: CÓDIGO
+    id: menu-item-code
 - waitForAnimationToEnd
 - inputText: '| a | b |'
 - pressKey: Enter
@@ -31,8 +30,7 @@ appId: com.monospace.notes
     id: editor-menu
 - waitForAnimationToEnd
 - tapOn:
-    id: menu-item
-    text: CÓDIGO
+    id: menu-item-code
 - waitForAnimationToEnd
 - assertVisible: '(?s).*\| 1 \| 2 \|\n+hello.*'
 - runFlow: subflows/delete-note.yml

@@ -1,29 +1,36 @@
 appId: com.monospace.notes
 ---
 - launchApp
+- extendedWaitUntil:
+    visible:
+      id: app-bar-menu
+    timeout: 30000
 - runFlow: subflows/open-drawer.yml
 - assertVisible:
       id: drawer-daily-note
 - runFlow:
       file: subflows/switch-view.yml
       env:
-          VIEW: PLANTILLAS
-- assertVisible: Nueva plantilla
+          VIEW: templates
+- assertVisible:
+      id: drawer-new-template
 - assertNotVisible:
       id: drawer-daily-note
 - runFlow:
       file: subflows/switch-view.yml
       env:
-          VIEW: ETIQUETAS
-- assertVisible: Uso \(mayor - menor\)
+          VIEW: tags
+- assertVisible:
+      id: drawer-tag-sort-usage
 - runFlow:
       file: subflows/switch-view.yml
       env:
-          VIEW: ARCHIVOS
-- assertNotVisible: Uso \(mayor - menor\)
+          VIEW: files
+- assertNotVisible:
+      id: drawer-tag-sort-usage
 - runFlow:
       file: subflows/switch-view.yml
       env:
-          VIEW: NOTAS
+          VIEW: notes
 - assertVisible:
       id: drawer-daily-note

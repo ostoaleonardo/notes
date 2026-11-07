@@ -1,10 +1,15 @@
 appId: com.monospace.notes
 ---
 - launchApp
+- extendedWaitUntil:
+    visible:
+      id: app-bar-menu
+    timeout: 30000
 - tapOn:
     id: home-create-note
 - waitForAnimationToEnd
-- tapOn: Sin título
+- tapOn:
+    id: editor-title
 - eraseText: 20
 - inputText: maestro-temp
 - hideKeyboard
@@ -17,11 +22,9 @@ appId: com.monospace.notes
     id: editor-menu
 - waitForAnimationToEnd
 - tapOn:
-    id: menu-item
-    text: BORRAR
+    id: menu-item-delete
 - tapOn:
-    id: button
-    text: BORRAR
+    id: dialog-confirm
 - waitForAnimationToEnd
 - assertVisible:
     id: home-create-note

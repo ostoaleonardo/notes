@@ -7,13 +7,23 @@ appId: com.monospace.notes
 - tapOn:
     id: toolbar-search
 - waitForAnimationToEnd
-- assertVisible: RECIENTES
-- tapOn: Buscar notas
+- assertVisible:
+    id: search-suggestions
+- tapOn:
+    id: search-input
 - inputText: maestro-fix
 - tapOn:
     point: 50%,70%
 - waitForAnimationToEnd
-- assertNotVisible: RECIENTES
+- assertNotVisible:
+    id: search-suggestions
 - back
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      visible:
+        id: search-input
+    commands:
+      - back
 - waitForAnimationToEnd
 - runFlow: subflows/delete-note.yml
