@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next'
-import { useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 import { BasicTextField } from '@/ui/input/basic-text-field'
 import { ButtonGroup } from '@/ui/button/button-group'
 import { useTheme } from '@/ui/hooks/use-theme'
+import { useTextFieldStyle } from '@/ui/hooks/use-text-field-style'
 
 import { Close } from '@/icons/close'
 import { DoneAll } from '@/icons/done-all'
@@ -12,11 +12,15 @@ import { FindReplace } from '@/icons/find-replace'
 import { KeyboardArrowDown } from '@/ui/icons/keyboard-arrow-down'
 import { KeyboardArrowUp } from '@/ui/icons/keyboard-arrow-up'
 
-import { FONTS, RADIUS, SPACING } from '@/constants/theme'
+import { RADIUS, SPACING } from '@/constants/theme'
 import { TINT } from '@/ui/tokens/transparent'
 import { MARKDOWN_ACTIONS } from '@/constants/markdown-actions'
 
-export function MarkdownSearchBar({ search, action, canReplace }) {
+export const MarkdownSearchBar = ({
+    search,
+    action,
+    canReplace
+}) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
 
@@ -31,15 +35,7 @@ export function MarkdownSearchBar({ search, action, canReplace }) {
         onClose
     } = search
 
-    const textStyle = useMemo(() => ({
-        color: colors.onBackground,
-        fontFamily: FONTS.azeretLight
-    }), [colors.onBackground])
-
-    const selectionColors = useMemo(() => ({
-        handleColor: colors.accentText,
-        backgroundColor: colors.tertiary + TINT.highlight
-    }), [colors.accentText, colors.tertiary])
+    const { textStyle, selectionColors } = useTextFieldStyle()
 
     const placeholderColor = colors.onBackground + TINT.placeholder
 

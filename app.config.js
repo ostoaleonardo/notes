@@ -1,3 +1,15 @@
+const SMALL_WIDGET_SIZE = {
+  minWidth: '40dp',
+  minHeight: '40dp',
+  targetCellWidth: 2,
+  targetCellHeight: 1,
+  minResizeWidth: '40dp',
+  minResizeHeight: '40dp',
+  maxResizeWidth: '180dp',
+  maxResizeHeight: '190dp',
+  resizeMode: 'horizontal|vertical'
+}
+
 export default {
   name: 'Notes',
   slug: 'notes',
@@ -62,29 +74,13 @@ export default {
             name: 'NewNote',
             label: 'New note',
             description: 'Create a note from the home screen',
-            minWidth: '40dp',
-            minHeight: '40dp',
-            targetCellWidth: 2,
-            targetCellHeight: 1,
-            minResizeWidth: '40dp',
-            minResizeHeight: '40dp',
-            maxResizeWidth: '180dp',
-            maxResizeHeight: '190dp',
-            resizeMode: 'horizontal|vertical'
+            ...SMALL_WIDGET_SIZE
           },
           {
             name: 'DailyNote',
             label: 'Daily note',
             description: "Open today's note",
-            minWidth: '40dp',
-            minHeight: '40dp',
-            targetCellWidth: 2,
-            targetCellHeight: 1,
-            minResizeWidth: '40dp',
-            minResizeHeight: '40dp',
-            maxResizeWidth: '180dp',
-            maxResizeHeight: '190dp',
-            resizeMode: 'horizontal|vertical',
+            ...SMALL_WIDGET_SIZE,
             updatePeriodMillis: 1800000
           },
           {

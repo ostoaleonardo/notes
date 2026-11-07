@@ -1,42 +1,26 @@
 import { memo } from 'react'
-import Animated from 'react-native-reanimated'
-import { Pressable, StyleSheet } from 'react-native'
 
+import { SwatchOption } from './swatch-option'
 import { Typography } from '@/ui/typography'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { useAnimatedBorderRadius } from '@/hooks/use-animated-border-radius'
+import { TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
 
-import { COLOR_OPTION } from '@/constants/components'
-import { OPACITY, RADIUS, SPACING, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
-
-export const FontOption = memo(function FontOption({
+export const FontOption = memo(({
     fontFamily,
     preview,
     active,
     onPress,
     children
-}) {
+}) => {
     const { colors } = useTheme()
 
-    const animatedStyle = useAnimatedBorderRadius(
-        active, { from: COLOR_OPTION.radius, to: RADIUS.lg }
-    )
-
     return (
-        <Pressable
-            accessibilityRole='button'
-            accessibilityState={{ selected: !!active }}
+        <SwatchOption
+            active={active}
             onPress={onPress}
-            style={styles.container}
-        >
-            <Animated.View
-                style={[
-                    styles.preview,
-                    animatedStyle,
-                    { backgroundColor: active ? colors.tertiary : colors.surfaceVariant }
-                ]}
-            >
+            swatchStyle={{ backgroundColor: active ? colors.tertiary : colors.surfaceVariant }}
+            swatch={(
                 <Typography
                     fontSize={TYPOGRAPHY_SIZE_VARIANTS.headlineSmall}
                     color={active ? colors.onTertiary : colors.onBackground}
@@ -44,27 +28,9 @@ export const FontOption = memo(function FontOption({
                 >
                     {preview}
                 </Typography>
-            </Animated.View>
-            <Typography
-                bold={active}
-                opacity={active ? 1 : OPACITY.disabled}
-            >
-                {children}
-            </Typography>
-        </Pressable>
+            )}
+        >
+            {children}
+        </SwatchOption>
     )
-})
-
-const styles = StyleSheet.create({
-    container: {
-        width: COLOR_OPTION.width,
-        alignItems: 'center',
-        gap: SPACING.xxs
-    },
-    preview: {
-        width: COLOR_OPTION.size,
-        height: COLOR_OPTION.size,
-        alignItems: 'center',
-        justifyContent: 'center'
-    }
 })

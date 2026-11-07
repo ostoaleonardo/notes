@@ -1,17 +1,19 @@
 import { memo } from 'react'
-import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
 import { SheetTitle } from '@/ui/modal/sheet-title'
 import { ListItem } from '@/ui/list-item'
-import { PositionGroup } from '@/ui/position-group'
+import { SheetGroup } from '@/ui/modal/sheet-group'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import { MARKDOWN_GROUPS } from '@/constants/markdown-controls'
-import { BOTTOM_GAP, SPACING } from '@/constants/theme'
 
-const GroupItem = memo(function GroupItem({ action, Icon, onSelect }) {
+const GroupItem = memo(({
+    action,
+    Icon,
+    onSelect
+}) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
 
@@ -26,7 +28,11 @@ const GroupItem = memo(function GroupItem({ action, Icon, onSelect }) {
     )
 })
 
-export const MarkdownGroupSheet = memo(function MarkdownGroupSheet({ sheet, group, onSelect }) {
+export const MarkdownGroupSheet = memo(({
+    sheet,
+    group,
+    onSelect
+}) => {
     const { t } = useTranslation()
     const items = MARKDOWN_GROUPS[group]?.items
 
@@ -37,25 +43,16 @@ export const MarkdownGroupSheet = memo(function MarkdownGroupSheet({ sheet, grou
         >
             {group && <SheetTitle>{t(`markdown_group.${group}`)}</SheetTitle>}
 
-            <View style={[styles.list, { paddingBottom: BOTTOM_GAP }]}>
-                <PositionGroup>
-                    {items?.map(({ action, Icon }) => (
-                        <GroupItem
-                            key={action}
-                            action={action}
-                            Icon={Icon}
-                            onSelect={onSelect}
-                        />
-                    ))}
-                </PositionGroup>
-            </View>
+            <SheetGroup>
+                {items?.map(({ action, Icon }) => (
+                    <GroupItem
+                        key={action}
+                        action={action}
+                        Icon={Icon}
+                        onSelect={onSelect}
+                    />
+                ))}
+            </SheetGroup>
         </ModalBottomSheet>
     )
-})
-
-const styles = StyleSheet.create({
-    list: {
-        gap: SPACING.xxxs,
-        paddingHorizontal: SPACING.lg
-    }
 })

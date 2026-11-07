@@ -1,41 +1,24 @@
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { AnimatedView } from '@/ui/animated/animated-view'
-import { Typography } from '@/ui/typography'
+import { MessageScreen } from '@/ui/message-screen'
 
-import { SPACING, OPACITY, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
-
-export function Intro() {
+export const Intro = () => {
     const { t } = useTranslation()
 
     return (
         <AnimatedView style={styles.container}>
-            <View style={{ gap: SPACING.lg }}>
-                <Typography
-                    heading
-                    fontSize={TYPOGRAPHY_SIZE_VARIANTS.headlineLarge}
-                    textAlign='center'
-                >
-                    {t('notes.intro.title')}
-                </Typography>
-                <Typography
-                    opacity={OPACITY.secondary}
-                    textAlign='center'
-                >
-                    {t('notes.intro.subtitle')}
-                </Typography>
-            </View>
+            <MessageScreen
+                title={t('notes.intro.title')}
+                message={t('notes.intro.subtitle')}
+            />
         </AnimatedView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        gap: SPACING.xxxl,
-        padding: SPACING.xxl,
-        alignItems: 'center',
-        justifyContent: 'center'
+        flex: 1
     }
 })

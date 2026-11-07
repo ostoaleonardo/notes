@@ -1,41 +1,17 @@
-import { useMemo } from 'react'
 import { OutlinedButton as ComposeOutlinedButton } from '@expo/ui/jetpack-compose'
-import { border, testID as testIdModifier } from '@expo/ui/jetpack-compose/modifiers'
+import { border } from '@expo/ui/jetpack-compose/modifiers'
 
-import { ButtonContent } from '@/ui/button/button-content'
-import { ComposeHost } from '@/ui/compose-context'
-import { getButtonColors } from '@/ui/utils/compose-colors'
-import { useTheme } from '@/ui/hooks/use-theme'
+import { ComposeButton } from '@/ui/button/compose-button'
 
 import { BORDER_WIDTH } from '@/ui/tokens/theme'
 
-export function OutlinedButton({
-    children,
-    onPress,
-    disabled = false,
-    loading = false,
-    testID,
-    style
-}) {
-    const { colors } = useTheme()
-    const buttonColors = useMemo(() => getButtonColors(colors, 'outlined'), [colors])
-    const modifiers = useMemo(() => [
-        border(BORDER_WIDTH.thin, colors.outline),
-        ...(testID ? [testIdModifier(testID)] : [])
-    ], [colors.outline, testID])
+const getOutlineModifiers = (colors) => [border(BORDER_WIDTH.thin, colors.outline)]
 
-    return (
-        <ComposeHost style={style}>
-            <ComposeOutlinedButton
-                colors={buttonColors}
-                modifiers={modifiers}
-                enabled={!disabled && !loading}
-                onClick={onPress}
-            >
-                <ButtonContent loading={loading}>
-                    {children}
-                </ButtonContent>
-            </ComposeOutlinedButton>
-        </ComposeHost>
-    )
-}
+export const OutlinedButton = (props) => (
+    <ComposeButton
+        component={ComposeOutlinedButton}
+        variant='outlined'
+        getModifiers={getOutlineModifiers}
+        {...props}
+    />
+)

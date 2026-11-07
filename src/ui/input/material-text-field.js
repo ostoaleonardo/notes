@@ -5,16 +5,16 @@ import { fillMaxWidth } from '@expo/ui/jetpack-compose/modifiers'
 import { ComposeContext, ComposeHost } from '@/ui/compose-context'
 import { useTextState } from '@/ui/hooks/use-text-state'
 import { useTheme } from '@/ui/hooks/use-theme'
+import { useTextFieldStyle } from '@/ui/hooks/use-text-field-style'
 
 import { getTextFieldColors } from '@/ui/utils/compose-colors'
 
 import { FILLED_INPUT } from '@/ui/tokens/components'
 import { FONTS } from '@/ui/tokens/theme'
-import { TINT } from '@/ui/tokens/transparent'
 
 const FILL_WIDTH = [fillMaxWidth()]
 
-export function MaterialTextField({
+export const MaterialTextField = ({
     Field,
     label,
     value = '',
@@ -27,25 +27,17 @@ export function MaterialTextField({
     multiline = true,
     disabled = false,
     autoFocus = false
-}) {
+}) => {
     const { colors } = useTheme()
     const inCompose = useContext(ComposeContext)
     const { text, onFocusChanged } = useTextState(value)
     const fieldColors = useMemo(() => getTextFieldColors(colors, containerColor), [colors, containerColor])
 
-    const textStyle = useMemo(() => ({
-        color: colors.onBackground,
-        fontFamily: FONTS.azeretLight
-    }), [colors.onBackground])
+    const { textStyle, selectionColors } = useTextFieldStyle()
 
     const labelStyle = useMemo(() => ({
         fontFamily: FONTS.azeretLight
     }), [])
-
-    const selectionColors = useMemo(() => ({
-        handleColor: colors.accentText,
-        backgroundColor: colors.tertiary + TINT.highlight
-    }), [colors.accentText, colors.tertiary])
 
     const field = (
         <Field
