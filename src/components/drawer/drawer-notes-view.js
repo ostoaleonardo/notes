@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 import { BackHandler } from 'react-native'
 import { SlideInLeft, SlideInRight } from 'react-native-reanimated'
 import { useTranslation } from 'react-i18next'
@@ -45,7 +45,7 @@ const ENTERINGS = {
     [LEVEL_DIRECTIONS.BACK]: SlideInLeft
 }
 
-export function DrawerNotesView({ closeDrawer, drawerOpen }) {
+export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
     const { t } = useTranslation()
     const { notes, loading } = useNotes()
     const { currentId } = useCurrentNote()
@@ -99,10 +99,13 @@ export function DrawerNotesView({ closeDrawer, drawerOpen }) {
         goToFolder(parentId, LEVEL_DIRECTIONS.BACK)
     }, [goToFolder, parentId])
 
-    useEffect(() => {
+    const revealCurrentNote = useEffectEvent(() => {
         const note = notes.find((item) => item.path === currentId)
         if (note) goToFolder(note.repositoryId, LEVEL_DIRECTIONS.FORWARD)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+    })
+
+    useEffect(() => {
+        revealCurrentNote()
     }, [currentId])
 
     useEffect(() => {
