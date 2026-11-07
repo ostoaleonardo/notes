@@ -13,8 +13,12 @@ import { useWikiLinkRenameConfirm } from '@/hooks/use-wiki-link-rename-confirm'
 import { useRegisterCurrent } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useDefaultNoteFolder } from '@/hooks/use-default-note-folder'
-import { getUniqueTitle } from '@/utils/note-filename'
-import { isDraftSaved, toSavedSnapshot } from '@/utils/note-draft'
+import {
+    getNewNoteTitle,
+    isDraftSaved,
+    resolveNewNoteRepositoryId,
+    toSavedSnapshot
+} from '@/utils/note-draft'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
 
@@ -64,14 +68,14 @@ export default function Note() {
     initDraftRef.current = () => {
         firstRender.current = false
 
-        const resolvedRepositoryId = targetRepositoryId || defaultFolderRef.current || activeRepository.id
+        const resolvedRepositoryId = resolveNewNoteRepositoryId({
+            targetRepositoryId,
+            defaultFolderId: defaultFolderRef.current,
+            activeRepositoryId: activeRepository.id
+        })
         setRepositoryId(resolvedRepositoryId)
 
-        const titlesInRepository = notesRef.current
-            .filter((n) => n.repositoryId === resolvedRepositoryId)
-            .map((n) => n.title)
-
-        const autoTitle = getUniqueTitle(titlesInRepository, t('notes.untitled'))
+        const autoTitle = getNewNoteTitle(notesRef.current, resolvedRepositoryId, t('notes.untitled'))
         autoTitleRef.current = autoTitle
         setTitle(autoTitle)
     }

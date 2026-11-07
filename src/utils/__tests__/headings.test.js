@@ -5,6 +5,7 @@ import {
     findHeadings,
     getVisibleOutline,
     normalizeHeading,
+    planHeadingRenames,
     renameHeadingLinks
 } from '../headings'
 
@@ -149,5 +150,45 @@ describe('extract section', () => {
 
     test('ignores headings inside code blocks', () => {
         expect(extractSection('```\n# One\n```', 'One')).toBeNull()
+    })
+})
+
+describe('plan heading renames', () => {
+    test('rewrites self links when a heading of the saved note was renamed', () => {
+        const plan = planHeadingRenames({
+            previous: '# Plan\n## Old\n[[#Old]]\n',
+            next: '# Plan\n## New\n[[#Old]]\n',
+            path: 'target',
+            notes,
+            notePaths: new Map()
+        })
+
+        expect(plan.renames).toEqual([{ from: 'Old', to: 'New' }])
+        expect(plan.rewritten).toBe('# Plan\n## New\n[[#New]]\n')
+    })
+
+    test('returns no rewrite when no heading was renamed', () => {
+        const plan = planHeadingRenames({
+            previous: '# Plan\n',
+            next: '# Plan\nmore text\n',
+            path: 'target',
+            notes,
+            notePaths: new Map()
+        })
+
+        expect(plan).toEqual({ renames: [], rewritten: null })
+    })
+
+    test('returns no rewrite when the content has no links to the renamed heading', () => {
+        const plan = planHeadingRenames({
+            previous: '## Old\n',
+            next: '## New\n',
+            path: 'target',
+            notes,
+            notePaths: new Map()
+        })
+
+        expect(plan.renames).toHaveLength(1)
+        expect(plan.rewritten).toBeNull()
     })
 })

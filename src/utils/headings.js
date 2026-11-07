@@ -99,3 +99,12 @@ export const renameHeadingLinks = (content, targetPath, renames, notes, notePath
         return alias === undefined ? `[[${link}]]` : `[[${link}|${alias}]]`
     }))
 }
+
+export const planHeadingRenames = ({ previous, next, path, notes, notePaths }) => {
+    const renames = findHeadingRenames(previous || '', next || '')
+    if (!renames.length) return { renames, rewritten: null }
+
+    const rewritten = renameHeadingLinks(next, path, renames, notes, notePaths)
+
+    return { renames, rewritten: rewritten === next ? null : rewritten }
+}

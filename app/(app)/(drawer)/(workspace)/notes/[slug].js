@@ -16,7 +16,7 @@ import { useRepositories } from '@/hooks/use-repositories'
 import { useNoteVersions } from '@/hooks/use-note-versions'
 import { getVersionLocation } from '@/utils/note-version-location'
 import { logError } from '@/utils/log-error'
-import { findHeadingRenames, renameHeadingLinks } from '@/utils/headings'
+import { planHeadingRenames } from '@/utils/headings'
 import { planExternalSync, toSyncShape } from '@/utils/external-note-sync'
 import { fromSavedSnapshot, isDraftSaved, toDraft, toSavedSnapshot } from '@/utils/note-draft'
 
@@ -40,7 +40,6 @@ export default function EditNote() {
         propagateHeadingRename,
         loading: notesLoading
     } = useNotes()
-
 
     const pathRef = useRef(slug)
     const isSavingRef = useRef(false)
@@ -140,15 +139,16 @@ export default function EditNote() {
     }
 
     const markSaved = (savedContent) => {
-        const renames = findHeadingRenames(savedRef.current.note || '', savedContent || '')
-        if (renames.length) {
-            propagateHeadingRename(pathRef.current, renames, notes, notePaths)
+        const { renames, rewritten } = planHeadingRenames({
+            previous: savedRef.current.note,
+            next: savedContent,
+            path: pathRef.current,
+            notes,
+            notePaths
+        })
 
-            const rewritten = renameHeadingLinks(savedContent, pathRef.current, renames, notes, notePaths)
-            if (rewritten !== savedContent) {
-                setNote((current) => (current === savedContent ? rewritten : current))
-            }
-        }
+        if (renames.length) propagateHeadingRename(pathRef.current, renames, notes, notePaths)
+        if (rewritten) setNote((current) => (current === savedContent ? rewritten : current))
 
         savedRef.current = toSavedSnapshot({
             note: savedContent,

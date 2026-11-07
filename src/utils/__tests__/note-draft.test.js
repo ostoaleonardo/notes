@@ -1,4 +1,11 @@
-import { fromSavedSnapshot, isDraftSaved, toDraft, toSavedSnapshot } from '../note-draft'
+import {
+    fromSavedSnapshot,
+    getNewNoteTitle,
+    isDraftSaved,
+    resolveNewNoteRepositoryId,
+    toDraft,
+    toSavedSnapshot
+} from '../note-draft'
 
 const content = {
     note: 'body',
@@ -72,5 +79,30 @@ describe('draft saved check', () => {
         ['raw frontmatter', { rawFrontmatter: 'status: open' }]
     ])('is not saved when the %s changed', (_, change) => {
         expect(isDraftSaved({ ...content, ...change }, saved)).toBe(false)
+    })
+})
+
+describe('resolve new note repository', () => {
+    test('prefers the requested folder, then the default folder, then the active one', () => {
+        const ids = { targetRepositoryId: 't', defaultFolderId: 'd', activeRepositoryId: 'a' }
+
+        expect(resolveNewNoteRepositoryId(ids)).toBe('t')
+        expect(resolveNewNoteRepositoryId({ ...ids, targetRepositoryId: undefined })).toBe('d')
+        expect(resolveNewNoteRepositoryId({ activeRepositoryId: 'a' })).toBe('a')
+    })
+})
+
+describe('new note title', () => {
+    const notes = [
+        { repositoryId: 'r1', title: 'Untitled' },
+        { repositoryId: 'r2', title: 'Untitled (2)' }
+    ]
+
+    test('numbers the title when it is taken in the same folder', () => {
+        expect(getNewNoteTitle(notes, 'r1', 'Untitled')).toBe('Untitled (2)')
+    })
+
+    test('ignores titles from other folders', () => {
+        expect(getNewNoteTitle(notes, 'r3', 'Untitled')).toBe('Untitled')
     })
 })
