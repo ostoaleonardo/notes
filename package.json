@@ -114,6 +114,7 @@
       "src/**/*.js",
       "app/**/*.js",
       "!**/__tests__/**",
+      "!**/dom-tests/**",
       "!**/__fixtures__/**"
     ],
     "projects": [
