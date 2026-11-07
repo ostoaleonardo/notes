@@ -1,10 +1,27 @@
-import { WHITESPACE_RUN_PATTERN } from '@/constants/markdown-patterns'
+import {
+    ASCII_CONTROL_SPACE_FROM,
+    ASCII_CONTROL_SPACE_TO,
+    ASCII_LIMIT,
+    ASCII_SPACE_CODE,
+    UNICODE_WHITESPACE_CODES
+} from '@/constants/word-count'
+
+const isWhitespace = (code) => (
+    code === ASCII_SPACE_CODE ||
+    (code >= ASCII_CONTROL_SPACE_FROM && code <= ASCII_CONTROL_SPACE_TO) ||
+    (code > ASCII_LIMIT && UNICODE_WHITESPACE_CODES.has(code))
+)
 
 export const countWords = (text = '') => {
-    const trimmed = text.trim()
+    let words = 0
+    let inWord = false
 
-    return {
-        words: trimmed ? trimmed.split(WHITESPACE_RUN_PATTERN).length : 0,
-        characters: text.length
+    for (let index = 0; index < text.length; index++) {
+        const word = !isWhitespace(text.charCodeAt(index))
+
+        if (word && !inWord) words++
+        inWord = word
     }
+
+    return { words, characters: text.length }
 }

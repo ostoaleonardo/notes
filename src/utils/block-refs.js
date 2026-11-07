@@ -10,7 +10,7 @@ import {
 } from '@/constants/block-refs'
 import { LEADING_WHITESPACE_PATTERN } from '@/constants/markdown-patterns'
 
-import { getCodeRanges, isInsideRanges } from '@/utils/outside-code'
+import { getCodeRanges } from '@/utils/outside-code'
 
 const getIndent = (line) => line.match(LEADING_WHITESPACE_PATTERN)[0].length
 
@@ -30,9 +30,14 @@ const groupLines = (text) => {
     const codeRanges = getCodeRanges(text)
     const groups = []
     let current = null
+    let range = 0
 
     for (const line of toLines(text)) {
-        if (!line.text.trim() || isInsideRanges(codeRanges, line.start)) {
+        while (range < codeRanges.length && codeRanges[range][1] <= line.start) range++
+
+        const insideCode = range < codeRanges.length && line.start >= codeRanges[range][0]
+
+        if (!line.text.trim() || insideCode) {
             current = null
             continue
         }
@@ -62,9 +67,9 @@ const findListItemBlock = (group, index) => {
     const indent = getIndent(line.text)
     const children = []
 
-    for (const next of group.slice(index + 1)) {
-        if (getIndent(next.text) <= indent) break
-        children.push(next)
+    for (let next = index + 1; next < group.length; next++) {
+        if (getIndent(group[next].text) <= indent) break
+        children.push(group[next])
     }
 
     return [{ ...line, text: stripTrailingId(line.text) }, ...children]
@@ -99,11 +104,11 @@ const findGroupBlocks = (group, previousGroup) => {
     return blocks
 }
 
-export const findBlocks = (text) => {
-    const groups = groupLines(text || '')
+const findBlocksInGroups = (groups) => (
+    groups.flatMap((group, index) => findGroupBlocks(group, groups[index - 1]))
+)
 
-    return groups.flatMap((group, index) => findGroupBlocks(group, groups[index - 1]))
-}
+export const findBlocks = (text) => findBlocksInGroups(groupLines(text || ''))
 
 export const extractBlock = (text, id) => findBlocks(text).find((block) => block.id === id)?.text ?? null
 
@@ -129,6 +134,15 @@ const findGroupUnlabeledBlocks = (group) => {
 }
 
 export const findUnlabeledBlocks = (text) => groupLines(text || '').flatMap(findGroupUnlabeledBlocks)
+
+export const findAllBlocks = (text) => {
+    const groups = groupLines(text || '')
+
+    return {
+        labeled: findBlocksInGroups(groups),
+        unlabeled: groups.flatMap(findGroupUnlabeledBlocks)
+    }
+}
 
 export const addBlockId = (text, { index, preview }, id) => {
     const block = findUnlabeledBlocks(text)[index]

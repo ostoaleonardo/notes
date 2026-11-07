@@ -1,4 +1,4 @@
-import { findBlocks, findUnlabeledBlocks, getBlockPreview } from '@/utils/block-refs'
+import { findAllBlocks, getBlockPreview } from '@/utils/block-refs'
 import { getAliases, resolveWikiLinkTarget } from '@/utils/wiki-links'
 
 const blocksByPath = new Map()
@@ -29,10 +29,11 @@ const getBlocks = (note) => {
     const cached = blocksByPath.get(note.path)
     if (cached?.body === body) return cached
 
+    const { labeled, unlabeled } = findAllBlocks(body)
     const blocks = {
         body,
-        labeled: findBlocks(body).map(({ id, text }) => ({ id, preview: getBlockPreview(text) })),
-        unlabeled: findUnlabeledBlocks(body).map(({ text }) => ({ preview: getBlockPreview(text) }))
+        labeled: labeled.map(({ id, text }) => ({ id, preview: getBlockPreview(text) })),
+        unlabeled: unlabeled.map(({ text }) => ({ preview: getBlockPreview(text) }))
     }
     blocksByPath.set(note.path, blocks)
     return blocks

@@ -1,6 +1,7 @@
 import {
     addBlockId,
     extractBlock,
+    findAllBlocks,
     findBlocks,
     findUnlabeledBlocks,
     generateBlockId
@@ -138,5 +139,40 @@ describe('generate block id', () => {
         expect(generateBlockId(['aaaaaa'])).not.toBe('aaaaaa')
 
         random.mockRestore()
+    })
+})
+
+describe('find all blocks', () => {
+    const text = [
+        'Intro paragraph',
+        '',
+        '```',
+        'code ^hidden',
+        '```',
+        '',
+        '- item one ^one',
+        '  - child',
+        '- item two',
+        '',
+        'Key idea ^idea-1',
+        '',
+        'Last paragraph'
+    ].join('\n')
+
+    test('returns the same blocks as the separate searches', () => {
+        expect(findAllBlocks(text)).toEqual({
+            labeled: findBlocks(text),
+            unlabeled: findUnlabeledBlocks(text)
+        })
+    })
+
+    test('ignores ids inside code blocks', () => {
+        const ids = findAllBlocks(text).labeled.map((block) => block.id)
+
+        expect(ids).toEqual(['one', 'idea-1'])
+    })
+
+    test('returns empty lists for an empty text', () => {
+        expect(findAllBlocks('')).toEqual({ labeled: [], unlabeled: [] })
     })
 })
