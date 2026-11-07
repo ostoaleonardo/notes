@@ -1,0 +1,22 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": [
+    "app/**/*.js",
+    "plugins/*.js",
+    "scripts/*.js"
+  ],
+  "project": [
+    "src/**/*.js",
+    "app/**/*.js",
+    "plugins/*.js",
+    "scripts/*.js"
+  ],
+  "paths": {
+    "@/*": [
+      "src/*"
+    ]
+  },
+  "ignoreDependencies": [
+    "expo-updates"
+  ]
+}

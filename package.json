@@ -19,7 +19,9 @@
     "test:coverage": "jest --coverage",
     "lint": "eslint src app",
     "postinstall": "patch-package",
-    "test:maestro": "bash scripts/test-maestro.sh"
+    "test:maestro": "bash scripts/test-maestro.sh",
+    "audit:dupes": "jscpd src app --min-lines 5 --min-tokens 40 --ignore \"**/__tests__/**,**/dom-tests/**,**/__fixtures__/**,src/icons/**,src/translations/**\"",
+    "audit:dead": "knip"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.20.3",
@@ -100,6 +102,8 @@
     "jest": "^30.5.2",
     "jest-environment-jsdom": "^30.5.2",
     "jest-expo": "~58.0.14",
+    "jscpd": "^5.4.2",
+    "knip": "^6.44.2",
     "patch-package": "^8.0.1",
     "test-renderer": "^1.2.0"
   },
