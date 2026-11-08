@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react'
+import { useCallback, useContext, useMemo } from 'react'
 import { Text } from '@expo/ui/jetpack-compose'
 import { fillMaxWidth, testID as testIdModifier } from '@expo/ui/jetpack-compose/modifiers'
 
@@ -27,10 +27,15 @@ export const MaterialTextField = ({
     multiline = true,
     disabled = false,
     autoFocus = false,
+    syncWhileFocused = false,
     testID
 }) => {
     const { colors } = useTheme()
-    const { text, onFocusChanged } = useTextState(value)
+    const { text, onFocusChanged, onTyped } = useTextState(value, syncWhileFocused)
+    const onValueChange = useCallback((next) => {
+        onTyped(next)
+        onChangeText?.(next)
+    }, [onTyped, onChangeText])
     const { textStyle, selectionColors } = useTextFieldStyle()
     const inCompose = useContext(ComposeContext)
 
@@ -58,7 +63,7 @@ export const MaterialTextField = ({
             keyboardOptions={FILLED_INPUT.keyboardOptions}
             textSelectionColors={selectionColors}
             onFocusChanged={onFocusChanged}
-            onValueChange={onChangeText}
+            onValueChange={onValueChange}
         >
             {!!startAdornment && (
                 <Field.LeadingIcon>

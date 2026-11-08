@@ -25,6 +25,7 @@ export const SearchBar = ({
                 ref={ref}
                 testID={testID}
                 multiline={false}
+                syncWhileFocused
                 label={label}
                 value={value}
                 onChangeText={onChangeText}
