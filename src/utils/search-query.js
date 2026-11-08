@@ -61,6 +61,14 @@ export const getActiveTags = (ast) => ast.children
     .filter((node) => node.type === SEARCH_NODE_TYPES.FILTER && node.name === SEARCH_OPERATORS.TAG)
     .map(filterValue)
 
+const getChipValue = (target) => {
+    if (target.type === SEARCH_NODE_TYPES.PROPERTY) return target.raw.slice(1, -1)
+    if (!target.argument) return null
+    if (target.name === SEARCH_OPERATORS.TAG) return getTagValue(target.argument)
+
+    return target.argument.value ?? target.argument.raw
+}
+
 const toChip = (node) => {
     const negate = node.type === SEARCH_NODE_TYPES.NOT
     const target = negate ? node.child : node
@@ -70,6 +78,7 @@ const toChip = (node) => {
     return {
         key: `${node.start}:${node.raw}`,
         group: target.type === SEARCH_NODE_TYPES.PROPERTY ? target.type : target.name,
+        value: getChipValue(target),
         label: target.raw,
         negate,
         start: node.start,

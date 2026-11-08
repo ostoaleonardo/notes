@@ -25,6 +25,8 @@ appId: com.monospace.notes
     id: search-filter-pinned
 - tapOn:
     id: search-filter-button
+- tapOn:
+    id: search-chips-summary
 - assertVisible:
     id: search-chip-is:pinned
 - back

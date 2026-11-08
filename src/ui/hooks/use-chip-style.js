@@ -7,7 +7,7 @@ import { TRANSPARENT } from '@/ui/tokens/transparent'
 
 const BORDER = { width: 0, color: TRANSPARENT.color }
 
-export const useChipStyle = ({ selected, overrides, trailing = false }) => {
+export const useChipStyle = ({ selected, overrides, trailing = false, strikethrough = false }) => {
     const { colors } = useTheme()
 
     const chipColors = useMemo(() => ({
@@ -23,8 +23,9 @@ export const useChipStyle = ({ selected, overrides, trailing = false }) => {
     }), [colors.surfaceVariant, colors.onBackground, colors.background, trailing, overrides])
 
     const textStyle = useMemo(() => ({
-        fontFamily: selected ? FONTS.azeretMedium : FONTS.azeretLight
-    }), [selected])
+        fontFamily: selected ? FONTS.azeretMedium : FONTS.azeretLight,
+        ...(strikethrough && { textDecoration: 'lineThrough' })
+    }), [selected, strikethrough])
 
     return { chipColors, border: BORDER, textStyle }
 }

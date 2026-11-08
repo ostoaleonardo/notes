@@ -47,6 +47,8 @@ export const TEST_IDS = {
     SEARCH_SAVE: 'search-save',
     SEARCH_RESULTS: 'search-results',
     SEARCH_CHIP_PREFIX: 'search-chip-',
+    SEARCH_CHIPS: 'search-chips',
+    SEARCH_CHIPS_SUMMARY: 'search-chips-summary',
     SEARCH_FILTER_PREFIX: 'search-filter-',
     SEARCH_TAG_PREFIX: 'search-tag-',
     ORIGIN_TILE_PREFIX: 'origin-tile-',

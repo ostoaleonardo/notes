@@ -11,6 +11,7 @@ import {
     togglePinnedQualifier,
     toggleTagQualifier
 } from '../search-query'
+import { getChipLabelKey, getChipText } from '../search-chip-label'
 import { filterNotes, searchNotes } from '../search-filter'
 import { MOCK_NOTE_PATHS, MOCK_SEARCH_NOTES } from '../__fixtures__/search-query'
 
@@ -309,6 +310,25 @@ describe('filter chips', () => {
         const groups = groupChips(getQueryChips(parseSearchQuery('tag:one -tag:two')))
         expect(groups).toHaveLength(1)
         expect(groups[0].map((chip) => chip.negate)).toEqual([false, true])
+    })
+
+    test('exposes the operator group and the shown value of each chip', () => {
+        const chips = getQueryChips(parseSearchQuery('tag:#Work path:"my docs" [status:draft] task-done: line:(a b)'))
+        expect(chips.map((chip) => [chip.group, chip.value])).toEqual([
+            ['tag', 'work'],
+            ['path', 'my docs'],
+            ['property', 'status:draft'],
+            ['task-done', null],
+            ['line', 'a b']
+        ])
+    })
+
+    test('uses a translation key for the filters without a typed value', () => {
+        const chips = getQueryChips(parseSearchQuery('has:images tag:work'))
+        const t = (key) => `t:${key}`
+        expect(getChipLabelKey(chips[0])).toBe('search.filters.images')
+        expect(getChipText(chips[0], t)).toBe('t:search.filters.images')
+        expect(getChipText(chips[1], t)).toBe('work')
     })
 
     test('removes a chip from the query', () => {

@@ -590,7 +590,9 @@
 			"line": "Misma línea",
 			"section": "Misma sección"
 		},
-		"empty": "Sin notas coincidentes"
+		"empty": "Sin notas coincidentes",
+		"filters_count_one": "{{count}} filtro",
+		"filters_count_other": "{{count}} filtros"
 	},
 	"error_boundary": {
 		"title": "Algo salió mal",

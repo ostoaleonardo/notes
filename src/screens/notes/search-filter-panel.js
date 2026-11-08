@@ -2,23 +2,12 @@ import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 
+import { FILTER_ICONS } from './search-filter-icons'
 import { SearchTagList } from './search-tag-list'
 import { SearchValueDialog } from './search-value-dialog'
 import { GroupedGrid } from '@/ui/grid/grouped-grid'
 
 import { addQualifier, buildQualifier, hasQualifier, toggleQualifier } from '@/utils/search-query'
-
-import { AttachFile } from '@/icons/attach-file'
-import { Checklist } from '@/icons/checklist'
-import { DoneAll } from '@/icons/done-all'
-import { Folder } from '@/icons/folder'
-import { FormatListBulleted } from '@/icons/format-list-bulleted'
-import { Keep } from '@/icons/keep'
-import { NoteStack } from '@/icons/note-stack'
-import { Notes } from '@/icons/notes'
-import { Picture } from '@/icons/picture'
-import { Tag } from '@/icons/tag'
-import { Title } from '@/icons/title'
 
 import {
     SEARCH_FILTER_COLUMNS,
@@ -27,21 +16,6 @@ import {
 } from '@/constants/search-filters'
 import { SPACING } from '@/constants/theme'
 import { TEST_IDS } from '@/constants/test-ids'
-
-const FILTER_ICONS = {
-    tag: Tag,
-    path: Folder,
-    file: NoteStack,
-    property: FormatListBulleted,
-    'task-todo': Checklist,
-    'task-done': DoneAll,
-    images: Picture,
-    files: AttachFile,
-    pinned: Keep,
-    content: Notes,
-    line: FormatListBulleted,
-    section: Title
-}
 
 const toQualifier = (option, value) => {
     if (option.kind === SEARCH_FILTER_KINDS.PROPERTY) return `[${value}]`

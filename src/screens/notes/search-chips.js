@@ -1,63 +1,64 @@
-import { memo, useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
-import { InputChip } from '@/ui/input-chip'
+import { SearchChipGroup } from './search-chip-group'
+import { SearchChipsSummary } from './search-chips-summary'
+import { useTheme } from '@/ui/hooks/use-theme'
 
-import { groupChips, removeChip } from '@/utils/search-query'
+import { groupChips } from '@/utils/search-query'
 
-import { Close } from '@/icons/close'
-
-import { SPACING } from '@/constants/theme'
+import { RADIUS, SPACING } from '@/constants/theme'
 import { TEST_IDS } from '@/constants/test-ids'
 
-const SearchChip = memo(({ chip, query, setQuery }) => {
-    const onRemove = useCallback(() => setQuery(removeChip(query, chip)), [query, chip, setQuery])
-
-    return (
-        <View testID={TEST_IDS.SEARCH_CHIP_PREFIX + chip.label}>
-            <InputChip
-                selected={!chip.negate}
-                trailingIcon={Close}
-                onPress={onRemove}
-            >
-                {chip.negate ? `-${chip.label}` : chip.label}
-            </InputChip>
-        </View>
-    )
-})
-
 export const SearchChips = ({ chips, query, setQuery }) => {
+    const { colors } = useTheme()
+    const [expanded, setExpanded] = useState(false)
+
+    const onToggle = useCallback(() => setExpanded((open) => !open), [])
+
     if (chips.length === 0) return null
 
     return (
-        <View style={styles.container}>
-            {groupChips(chips).map((group) => (
+        <View
+            style={[
+                styles.container, {
+                    backgroundColor: colors.surfaceVariant
+                }
+            ]}
+        >
+            <SearchChipsSummary
+                chips={chips}
+                expanded={expanded}
+                onPress={onToggle}
+            />
+
+            {expanded && (
                 <View
-                    key={group[0].group}
-                    style={styles.row}
+                    testID={TEST_IDS.SEARCH_CHIPS}
+                    style={styles.groups}
                 >
-                    {group.map((chip) => (
-                        <SearchChip
-                            key={chip.key}
-                            chip={chip}
+                    {groupChips(chips).map((group) => (
+                        <SearchChipGroup
+                            key={group[0].group}
+                            group={group}
                             query={query}
                             setQuery={setQuery}
                         />
                     ))}
                 </View>
-            ))}
+            )}
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        gap: SPACING.xxs,
-        paddingHorizontal: SPACING.lg
+        gap: SPACING.md,
+        padding: SPACING.md,
+        borderRadius: RADIUS.lg,
+        marginHorizontal: SPACING.lg
     },
-    row: {
-        flexWrap: 'wrap',
-        gap: SPACING.xxs,
-        flexDirection: 'row'
+    groups: {
+        gap: SPACING.xxxs
     }
 })

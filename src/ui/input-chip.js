@@ -1,10 +1,12 @@
-import { InputChip as ComposeInputChip, Text } from '@expo/ui/jetpack-compose'
+import { useMemo } from 'react'
+import { IconButton, InputChip as ComposeInputChip, Text } from '@expo/ui/jetpack-compose'
+import { size as sizeModifier } from '@expo/ui/jetpack-compose/modifiers'
 
 import { ComposeHost } from '@/ui/compose-context'
 import { ComposeIcon } from '@/ui/compose-icon'
 import { useChipStyle } from '@/ui/hooks/use-chip-style'
 
-import { ICON_SIZE } from '@/ui/tokens/theme'
+import { ICON_SIZE, SIZE } from '@/ui/tokens/theme'
 
 export const InputChip = ({
     children,
@@ -12,14 +14,19 @@ export const InputChip = ({
     colors: overrides,
     selected = false,
     enabled = true,
+    strikethrough = false,
     style,
-    onPress
+    onPress,
+    onTrailingPress
 }) => {
     const { chipColors, border, textStyle } = useChipStyle({
         selected,
         overrides,
-        trailing: !!trailingIcon
+        trailing: !!trailingIcon,
+        strikethrough
     })
+
+    const trailingModifiers = useMemo(() => [sizeModifier(SIZE.xs, SIZE.xs)], [])
 
     return (
         <ComposeHost style={style}>
@@ -31,14 +38,21 @@ export const InputChip = ({
                 onClick={onPress}
             >
                 <ComposeInputChip.Label>
-                    <Text style={textStyle}>{children}</Text>
+                    <Text style={textStyle}>
+                        {children}
+                    </Text>
                 </ComposeInputChip.Label>
                 {!!trailingIcon && (
                     <ComposeInputChip.TrailingIcon>
-                        <ComposeIcon
-                            icon={trailingIcon}
-                            size={ICON_SIZE.md}
-                        />
+                        <IconButton
+                            modifiers={trailingModifiers}
+                            onClick={onTrailingPress}
+                        >
+                            <ComposeIcon
+                                icon={trailingIcon}
+                                size={ICON_SIZE.md}
+                            />
+                        </IconButton>
                     </ComposeInputChip.TrailingIcon>
                 )}
             </ComposeInputChip>

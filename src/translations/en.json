@@ -590,7 +590,9 @@
 			"line": "Same line",
 			"section": "Same section"
 		},
-		"empty": "No matching notes"
+		"empty": "No matching notes",
+		"filters_count_one": "{{count}} filter",
+		"filters_count_other": "{{count}} filters"
 	},
 	"error_boundary": {
 		"title": "Something went wrong",

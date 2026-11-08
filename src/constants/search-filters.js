@@ -86,3 +86,11 @@ export const SEARCH_FILTER_OPTIONS = [
         operator: SEARCH_OPERATORS.SECTION
     }
 ]
+
+export const SEARCH_CHIP_LABELS = {
+    'has:images': 'search.filters.images',
+    'has:files': 'search.filters.files',
+    'is:pinned': 'search.filters.pinned',
+    'task-todo:': 'search.filters.task_todo',
+    'task-done:': 'search.filters.task_done'
+}
