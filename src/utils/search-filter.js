@@ -1,129 +1,216 @@
-import { fuzzyMatch } from './fuzzy-match'
 import { getNoteTags } from './note-tags'
+import { sortNotes } from './note-sort'
+import { getTagValue } from './search-parser'
 import { matchesTag } from './tag-names'
-import { toDateKey } from './date-key'
-import { hasMatchers } from './search-query'
 
 import {
-    MARKDOWN_IMAGE_REGEX,
+    BLOCK_SEPARATOR_REGEX,
+    FILE_REFERENCE_REGEX,
+    HEADING_LINE_REGEX,
+    IMAGE_REFERENCE_REGEX,
+    SEARCH_HAS_VALUES,
+    SEARCH_IS_VALUES,
+    SEARCH_NODE_TYPES,
     SEARCH_OPERATORS,
     TASK_STATUSES_DONE,
     TASK_STATUS_LINE_REGEX,
-    TASK_STATUS_TODO
+    TASK_STATUS_TODO,
+    UNIT_OPERATORS
 } from '@/constants/search-query'
 
-const hasMatchingTag = (note, queries) => (
-    getNoteTags(note).some((tag) => queries.some((query) => matchesTag(tag, query)))
-)
+const createField = (raw) => {
+    let lower = null
 
-const getFullPath = (note, notePaths) => {
+    return {
+        raw,
+        get lower() {
+            if (lower === null) lower = raw.toLowerCase()
+            return lower
+        }
+    }
+}
+
+const createLazy = (build) => {
+    let value
+    let ready = false
+
+    return () => {
+        if (!ready) {
+            value = build()
+            ready = true
+        }
+
+        return value
+    }
+}
+
+const splitSections = (lines) => {
+    const sections = []
+
+    lines.forEach((line) => {
+        if (HEADING_LINE_REGEX.test(line) || sections.length === 0) sections.push([])
+        sections[sections.length - 1].push(line)
+    })
+
+    return sections.map((section) => section.join('\n'))
+}
+
+const readTasks = (lines) => lines.flatMap((line) => {
+    const match = TASK_STATUS_LINE_REGEX.exec(line)
+    return match ? [{ field: createField(line.slice(match[0].length)), status: match[1] }] : []
+})
+
+const infoCache = new WeakMap()
+
+const getNoteInfo = (note) => {
+    let info = infoCache.get(note)
+
+    if (!info) {
+        const content = note.note || ''
+        const lines = createLazy(() => content.split('\n'))
+
+        info = {
+            title: createField(note.title || ''),
+            filename: createField(note.filename || note.title || ''),
+            content: createField(content),
+            lines: createLazy(() => lines().map(createField)),
+            blocks: createLazy(() => content.split(BLOCK_SEPARATOR_REGEX).map(createField)),
+            sections: createLazy(() => splitSections(lines()).map(createField)),
+            tasks: createLazy(() => readTasks(lines())),
+            hasImages: createLazy(() => IMAGE_REFERENCE_REGEX.test(content)),
+            hasFiles: createLazy(() => FILE_REFERENCE_REGEX.test(content))
+        }
+
+        infoCache.set(note, info)
+    }
+
+    return info
+}
+
+const getFullPath = (note, info, notePaths) => {
     const folder = notePaths?.get(note.path)
-    return (folder ? `${folder}/${note.filename}` : note.filename || '').toLowerCase()
+    return createField(folder ? `${folder}/${info.filename.raw}` : info.filename.raw)
 }
-
-const inDateRange = (timestamp, range) => {
-    if (!range) return true
-
-    const key = toDateKey(timestamp)
-    if (!key) return false
-
-    return (!range.from || key >= range.from) && (!range.to || key <= range.to)
-}
-
-const lowerContentCache = new WeakMap()
-
-const getLowerContent = (note) => {
-    if (!lowerContentCache.has(note)) lowerContentCache.set(note, (note.note || '').toLowerCase())
-    return lowerContentCache.get(note)
-}
-
-const includesTerm = (note, parsed, term) => (
-    (note.title || '').toLowerCase().includes(term)
-    || (parsed.inContent && getLowerContent(note).includes(term))
-)
-
-const matchesRegex = (note, parsed, regex) => (
-    regex.test(note.title || '') || (parsed.inContent && regex.test(note.note || ''))
-)
 
 const getPropertyValues = (note, key) => {
     const entry = Object.entries(note.properties || {}).find(([name]) => name.toLowerCase() === key)
     if (!entry) return null
 
-    return (Array.isArray(entry[1]) ? entry[1] : [entry[1]]).map((item) => String(item ?? '').toLowerCase())
+    const values = Array.isArray(entry[1]) ? entry[1] : [entry[1]]
+    return values.map((item) => createField(String(item ?? '')))
 }
 
-const matchesProperty = (note, { key, value }) => {
-    const values = getPropertyValues(note, key)
-    if (!values) return false
+const compareValues = (raw, operator, target) => {
+    const left = Number(raw)
+    const right = Number(target)
+    const numeric = raw.trim() !== '' && target.trim() !== '' && !Number.isNaN(left) && !Number.isNaN(right)
+    const a = numeric ? left : raw.toLowerCase()
+    const b = numeric ? right : target.toLowerCase()
 
-    return !value || values.some((item) => item.includes(value))
+    if (operator === '>') return a > b
+    if (operator === '>=') return a >= b
+    if (operator === '<') return a < b
+
+    return a <= b
 }
 
-const lineMatches = (line, { kind, terms }) => {
-    const task = TASK_STATUS_LINE_REGEX.exec(line)
-    const text = (task ? line.slice(task[0].length) : line).toLowerCase()
+const unitsFor = (name, info) => ({
+    [SEARCH_OPERATORS.LINE]: info.lines,
+    [SEARCH_OPERATORS.BLOCK]: info.blocks,
+    [SEARCH_OPERATORS.SECTION]: info.sections
+}[name]())
 
-    if (!terms.every((term) => text.includes(term))) return false
-    if (kind === SEARCH_OPERATORS.LINE) return true
-    if (!task) return false
-    if (kind === SEARCH_OPERATORS.TASK_TODO) return task[1] === TASK_STATUS_TODO
-    if (kind === SEARCH_OPERATORS.TASK_DONE) return TASK_STATUSES_DONE.includes(task[1])
+const taskMatches = (name, status) => {
+    if (name === SEARCH_OPERATORS.TASK_TODO) return status === TASK_STATUS_TODO
+    if (name === SEARCH_OPERATORS.TASK_DONE) return TASK_STATUSES_DONE.includes(status)
 
     return true
 }
 
-const matchesLines = (note, specs) => {
-    const lines = (note.note || '').split('\n')
-    return specs.every((spec) => lines.some((line) => lineMatches(line, spec)))
+const evaluate = (node, state) => {
+    switch (node.type) {
+        case SEARCH_NODE_TYPES.AND:
+            return node.children.every((child) => evaluate(child, state))
+        case SEARCH_NODE_TYPES.OR:
+            return node.children.some((child) => evaluate(child, state))
+        case SEARCH_NODE_TYPES.NOT:
+            return !evaluate(node.child, state)
+        case SEARCH_NODE_TYPES.TEXT:
+            return state.fields.some((field) => (
+                state.sensitive ? field.raw.includes(node.value) : field.lower.includes(node.lower)
+            ))
+        case SEARCH_NODE_TYPES.REGEX: {
+            const regex = state.sensitive ? node.regexes.sensitive : node.regexes.insensitive
+            return state.fields.some((field) => regex.test(field.raw))
+        }
+        case SEARCH_NODE_TYPES.COMPARE:
+            return state.fields.some((field) => compareValues(field.raw, node.operator, node.value))
+        case SEARCH_NODE_TYPES.NULL:
+            return state.fields.every((field) => field.raw.trim() === '')
+        case SEARCH_NODE_TYPES.PROPERTY:
+            return evaluateProperty(node, state)
+        default:
+            return evaluateFilter(node, state)
+    }
 }
 
-const NOTE_FILTERS = [
-    (note, parsed, { pinned }) => !parsed.pinned || pinned.has(note.path),
-    (note, parsed, { pinned }) => !parsed.notPinned || !pinned.has(note.path),
-    (note, parsed, { notePaths }) => parsed.paths.every((path) => getFullPath(note, notePaths).includes(path)),
-    (note, parsed, { notePaths }) => !parsed.excludedPaths.some((path) => getFullPath(note, notePaths).includes(path)),
-    (note, parsed) => parsed.files.every((file) => (note.filename || '').toLowerCase().includes(file)),
-    (note, parsed) => !parsed.excludedFiles.some((file) => (note.filename || '').toLowerCase().includes(file)),
-    (note, parsed) => parsed.tags.length === 0 || hasMatchingTag(note, parsed.tags),
-    (note, parsed) => !hasMatchingTag(note, parsed.excludedTags),
-    (note, parsed) => !parsed.hasImage || MARKDOWN_IMAGE_REGEX.test(note.note || ''),
-    (note, parsed) => !parsed.noImage || !MARKDOWN_IMAGE_REGEX.test(note.note || ''),
-    (note, parsed) => inDateRange(note.updatedAt, parsed.modified),
-    (note, parsed) => inDateRange(note.createdAt, parsed.created),
-    (note, parsed) => matchesLines(note, parsed.lines),
-    (note, parsed) => parsed.properties.every((property) => matchesProperty(note, property) !== property.negate),
-    (note, parsed) => !parsed.excludedTerms.some((term) => includesTerm(note, parsed, term)),
-    (note, parsed) => !parsed.excludedRegexes.some((regex) => matchesRegex(note, parsed, regex))
-]
+const evaluateProperty = (node, state) => {
+    const values = getPropertyValues(state.note, node.key)
+    if (!values) return false
+    if (!node.expression) return true
 
-const scoreGroup = (note, parsed, group) => {
-    const phrasesMatch = group.phrases.every((phrase) => includesTerm(note, parsed, phrase))
-    const regexesMatch = group.regexes.every((regex) => matchesRegex(note, parsed, regex))
+    const [first] = node.expression.children
+    const isNull = node.expression.children.length === 1 && first.type === SEARCH_NODE_TYPES.NULL
 
-    if (!phrasesMatch || !regexesMatch) return null
-    if (!group.text) return 0
+    if (isNull) return values.length === 0 || values.every((field) => field.raw.trim() === '')
 
-    const titleMatch = fuzzyMatch(group.text, note.title)
-    const matchesContent = parsed.inContent && getLowerContent(note).includes(group.text)
-
-    return titleMatch.matches || matchesContent ? titleMatch.score : null
+    return values.some((field) => evaluate(node.expression, { ...state, fields: [field] }))
 }
 
-const scoreNote = (note, parsed) => {
-    const groups = [parsed, ...parsed.orGroups].filter(hasMatchers)
-    if (groups.length === 0) return { note, score: 0 }
+const evaluateFilter = (node, state) => {
+    const { name, argument } = node
+    const { info, note, context } = state
 
-    const scores = groups.map((group) => scoreGroup(note, parsed, group)).filter((score) => score !== null)
+    if (name === SEARCH_OPERATORS.FILE) return evaluate(argument, { ...state, fields: [info.filename] })
+    if (name === SEARCH_OPERATORS.PATH) {
+        return evaluate(argument, { ...state, fields: [getFullPath(note, info, context.notePaths)] })
+    }
+    if (name === SEARCH_OPERATORS.CONTENT) return evaluate(argument, { ...state, fields: [info.content] })
+    if (name === SEARCH_OPERATORS.MATCH_CASE) return evaluate(argument, { ...state, sensitive: true })
+    if (name === SEARCH_OPERATORS.IGNORE_CASE) return evaluate(argument, { ...state, sensitive: false })
+    if (name === SEARCH_OPERATORS.TAG) {
+        const target = getTagValue(argument)
+        return getNoteTags(note).some((tag) => matchesTag(tag, target))
+    }
+    if (name === SEARCH_OPERATORS.IS) return argument.value === SEARCH_IS_VALUES.PINNED && context.pinned.has(note.path)
+    if (name === SEARCH_OPERATORS.HAS) {
+        return argument.value === SEARCH_HAS_VALUES.IMAGES ? info.hasImages() : info.hasFiles()
+    }
+    if (UNIT_OPERATORS.includes(name)) {
+        return unitsFor(name, info).some((unit) => evaluate(argument, { ...state, fields: [unit] }))
+    }
 
-    return scores.length > 0 ? { note, score: Math.max(...scores) } : null
+    return info.tasks().some(({ field, status }) => (
+        taskMatches(name, status) && (!argument || evaluate(argument, { ...state, fields: [field] }))
+    ))
 }
 
-export const filterNotes = (notes, parsed, context) => (
-    notes
-        .filter((note) => NOTE_FILTERS.every((filter) => filter(note, parsed, context)))
-        .map((note) => scoreNote(note, parsed))
-        .filter(Boolean)
-        .sort((a, b) => b.score - a.score)
-        .map(({ note }) => note)
+const matchesNote = (note, ast, context) => {
+    const info = getNoteInfo(note)
+
+    return evaluate(ast, {
+        note,
+        info,
+        context,
+        sensitive: !!context.matchCase,
+        fields: [info.title, info.filename, getFullPath(note, info, context.notePaths), info.content]
+    })
+}
+
+export const filterNotes = (notes, ast, context) => (
+    notes.filter((note) => matchesNote(note, ast, context))
+)
+
+export const searchNotes = (notes, ast, context, sort) => (
+    sortNotes(filterNotes(notes, ast, context), sort)
 )

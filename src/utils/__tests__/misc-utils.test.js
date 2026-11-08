@@ -1,17 +1,6 @@
-import { toDateKey } from '../date-key'
 import { getNoteKey } from '../note-key'
 import { buildNotePayload } from '../note-payload'
 import { buildFileLinkUrl, isFileLinkTarget } from '../file-links'
-
-describe('date key', () => {
-    test('formats a timestamp as an iso day', () => {
-        expect(toDateKey(Date.UTC(2024, 0, 5, 12))).toBe('2024-01-05')
-    })
-
-    test('returns null without a timestamp', () => {
-        expect(toDateKey(0)).toBeNull()
-    })
-})
 
 describe('note key', () => {
     test('prefixes the id', () => {

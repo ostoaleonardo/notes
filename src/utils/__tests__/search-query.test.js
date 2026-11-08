@@ -1,497 +1,329 @@
+import { parseSearchQuery } from '../search-parser'
 import {
-    parseSearchQuery,
-    toggleTagQualifier,
+    getActiveTags,
+    getQueryChips,
+    groupChips,
+    hasQualifier,
+    removeChip,
+    toggleChipNegation,
+    toggleFilesQualifier,
+    toggleImagesQualifier,
     togglePinnedQualifier,
-    toggleImageQualifier,
-    toggleContentQualifier
+    toggleTagQualifier
 } from '../search-query'
-import { filterNotes } from '../search-filter'
-import { MOCK_SEARCH_NOTES } from '../__fixtures__/search-query'
+import { filterNotes, searchNotes } from '../search-filter'
+import { MOCK_NOTE_PATHS, MOCK_SEARCH_NOTES } from '../__fixtures__/search-query'
 
-const parsedWith = (overrides) => ({
-    text: '',
-    phrases: [],
-    regexes: [],
-    orGroups: [],
-    tags: [],
-    excludedTags: [],
-    paths: [],
-    excludedPaths: [],
-    files: [],
-    excludedFiles: [],
-    pinned: false,
-    notPinned: false,
-    hasImage: false,
-    noImage: false,
-    inContent: false,
-    modified: null,
-    created: null,
-    lines: [],
-    properties: [],
-    excludedTerms: [],
-    excludedRegexes: [],
-    ...overrides
-})
+import { NOTE_SORTS } from '@/constants/note-sort'
+
+const run = (query, extra = {}) => filterNotes(
+    MOCK_SEARCH_NOTES,
+    parseSearchQuery(query),
+    { pinned: new Set(), notePaths: MOCK_NOTE_PATHS, ...extra }
+).map((note) => note.path)
 
 describe('parse search query', () => {
-    test('extracts plain text', () => {
-        expect(parseSearchQuery('Groceries')).toEqual(parsedWith({ text: 'groceries' }))
+    test('reads plain words as an implicit and', () => {
+        const ast = parseSearchQuery('meeting work')
+        expect(ast.children.map((node) => node.value)).toEqual(['meeting', 'work'])
     })
 
-    test('extracts a bare tag qualifier', () => {
-        expect(parseSearchQuery('tag:work meeting')).toEqual(
-            parsedWith({ text: 'meeting', tags: ['work'] })
-        )
+    test('reads an empty query as no children', () => {
+        expect(parseSearchQuery('   ').children).toEqual([])
     })
 
-    test('extracts a quoted tag qualifier with spaces', () => {
-        expect(parseSearchQuery('tag:"personal notes" ideas')).toEqual(
-            parsedWith({ text: 'ideas', tags: ['personal notes'] })
-        )
+    test('reads a quoted phrase with escaped quotes', () => {
+        const [node] = parseSearchQuery('"they said \\"hi\\" to us"').children
+        expect(node.value).toBe('they said "hi" to us')
     })
 
-    test('extracts more than one tag qualifier', () => {
-        expect(parseSearchQuery('tag:work tag:personal standup')).toEqual(
-            parsedWith({ text: 'standup', tags: ['work', 'personal'] })
-        )
+    test('reads or branches', () => {
+        const [node] = parseSearchQuery('meeting OR work').children
+        expect(node.type).toBe('or')
+        expect(node.children).toHaveLength(2)
     })
 
-    test('extracts the pinned qualifier', () => {
-        expect(parseSearchQuery('is:pinned todo')).toEqual(
-            parsedWith({ text: 'todo', pinned: true })
-        )
+    test('reads parentheses as a group', () => {
+        const [group] = parseSearchQuery('(work OR meetup) personal').children
+        expect(group.type).toBe('or')
     })
 
-    test('combines pinned and tag qualifiers with text', () => {
-        expect(parseSearchQuery('is:pinned tag:work standup')).toEqual(
-            parsedWith({ text: 'standup', tags: ['work'], pinned: true })
-        )
+    test('reads a negated group', () => {
+        const [node] = parseSearchQuery('-(work meetup)').children
+        expect(node.type).toBe('not')
+        expect(node.child.type).toBe('and')
     })
 
-    test('extracts the has:image qualifier', () => {
-        expect(parseSearchQuery('has:image recipe')).toEqual(
-            parsedWith({ text: 'recipe', hasImage: true })
-        )
+    test('treats a lone dash as text', () => {
+        const [node] = parseSearchQuery('-').children
+        expect(node.value).toBe('-')
     })
 
-    test('extracts the in:content qualifier', () => {
-        expect(parseSearchQuery('in:content recipe')).toEqual(
-            parsedWith({ text: 'recipe', inContent: true })
-        )
+    test('reads operators with a bare, quoted or grouped argument', () => {
+        const nodes = parseSearchQuery('file:a path:"x y" line:(a b)').children
+        expect(nodes.map((node) => node.name)).toEqual(['file', 'path', 'line'])
+        expect(nodes[1].argument.value).toBe('x y')
+        expect(nodes[2].argument.type).toBe('and')
     })
 
-    test('extracts the modified: date qualifier', () => {
-        expect(parseSearchQuery('modified:2026-01-15 report')).toEqual(
-            parsedWith({ text: 'report', modified: { from: '2026-01-15', to: '2026-01-15' } })
-        )
+    test('treats an unknown operator or an invalid value as text', () => {
+        const nodes = parseSearchQuery('http://x has:video is:foo').children
+        expect(nodes.map((node) => node.type)).toEqual(['text', 'text', 'text'])
     })
 
-    test('extracts the created: date qualifier', () => {
-        expect(parseSearchQuery('created:2026-01-01')).toEqual(
-            parsedWith({ created: { from: '2026-01-01', to: '2026-01-01' } })
-        )
+    test('reads a regex only when it is delimited by slashes', () => {
+        const nodes = parseSearchQuery('/gu[il]de/ /a/b').children
+        expect(nodes[0].type).toBe('regex')
+        expect(nodes[1].type).toBe('text')
     })
 
-    test('extracts a date range', () => {
-        expect(parseSearchQuery('modified:2026-01-01..2026-01-31').modified).toEqual({
-            from: '2026-01-01',
-            to: '2026-01-31'
-        })
+    test('reads a regex as an operator argument', () => {
+        const [node] = parseSearchQuery('path:/\\d{4}/').children
+        expect(node.argument.type).toBe('regex')
     })
 
-    test('extracts open ended date comparisons', () => {
-        expect(parseSearchQuery('modified:>2026-01-01').modified).toEqual({
-            from: '2026-01-02',
-            to: null
-        })
-        expect(parseSearchQuery('created:<=2026-01-10').created).toEqual({
-            from: null,
-            to: '2026-01-10'
-        })
+    test('reads properties with and without a value', () => {
+        const [exists, equals] = parseSearchQuery('[status] [status:Draft OR Published]').children
+        expect(exists.expression).toBeNull()
+        expect(equals.expression.children[0].type).toBe('or')
     })
 
-    test('treats an invalid date as plain text', () => {
-        expect(parseSearchQuery('modified:soon').text).toBe('modified:soon')
+    test('reads property comparisons and null', () => {
+        const [lower, empty] = parseSearchQuery('[duration:<5] [aliases:null]').children
+        expect(lower.expression.children[0]).toMatchObject({ type: 'compare', operator: '<', value: '5' })
+        expect(empty.expression.children[0].type).toBe('null')
     })
 
-    test('extracts negated qualifiers', () => {
-        const result = parseSearchQuery('-tag:work -path:old -file:draft -is:pinned -has:image')
-
-        expect(result).toEqual(parsedWith({
-            excludedTags: ['work'],
-            excludedPaths: ['old'],
-            excludedFiles: ['draft'],
-            notPinned: true,
-            noImage: true
-        }))
+    test('ignores a stray closing parenthesis', () => {
+        expect(parseSearchQuery('a) b').children).toHaveLength(2)
     })
 
-    test('extracts phrases, negated words and regular expressions', () => {
-        const result = parseSearchQuery('"exact phrase" -draft -"old idea" /te+st/ -/tmp\\d/')
-
-        expect(result.phrases).toEqual(['exact phrase'])
-        expect(result.excludedTerms).toEqual(['draft', 'old idea'])
-        expect(result.regexes).toEqual([/te+st/i])
-        expect(result.excludedRegexes).toEqual([/tmp\d/i])
-    })
-
-    test('treats an invalid regular expression as plain text', () => {
-        expect(parseSearchQuery('/(/').text).toBe('/(/')
-    })
-
-    test('splits alternatives on OR', () => {
-        const result = parseSearchQuery('apples oranges OR pears')
-
-        expect(result.text).toBe('apples oranges')
-        expect(result.orGroups).toEqual([{ text: 'pears', phrases: [], regexes: [] }])
-    })
-
-    test('extracts line and task operators', () => {
-        const result = parseSearchQuery('line:(milk eggs) task-todo:(call) task:"x"')
-
-        expect(result.lines).toEqual([
-            { kind: 'line', terms: ['milk', 'eggs'] },
-            { kind: 'task-todo', terms: ['call'] },
-            { kind: 'task', terms: ['x'] }
-        ])
-    })
-
-    test('extracts property queries', () => {
-        const result = parseSearchQuery('[status:done] [author] -[draft:true]')
-
-        expect(result.properties).toEqual([
-            { key: 'status', value: 'done', negate: false },
-            { key: 'author', value: null, negate: false },
-            { key: 'draft', value: 'true', negate: true }
-        ])
+    test('keeps source positions for filters', () => {
+        const [, filter] = parseSearchQuery('hello tag:work').children
+        expect([filter.start, filter.end, filter.raw]).toEqual([6, 14, 'tag:work'])
     })
 })
 
-describe('toggle tag qualifier', () => {
-    test('adds a tag qualifier to an empty query', () => {
+describe('search notes by text', () => {
+    test('matches the note content by default', () => {
+        expect(run('agenda')).toEqual(['note-1'])
+    })
+
+    test('matches the title and file name', () => {
+        expect(run('grocery')).toEqual(['note-2'])
+    })
+
+    test('matches the folder path', () => {
+        expect(run('meetings')).toEqual(['note-1'])
+    })
+
+    test('requires every word in the same note, in any place', () => {
+        expect(run('milk receipt')).toEqual(['note-2'])
+        expect(run('milk agenda')).toEqual([])
+    })
+
+    test('matches an exact phrase only', () => {
+        expect(run('"milk, eggs"')).toEqual(['note-2'])
+        expect(run('"eggs milk"')).toEqual([])
+    })
+
+    test('matches either side of or', () => {
+        expect(run('agenda OR milk')).toEqual(['note-1', 'note-2'])
+    })
+
+    test('honors parentheses precedence', () => {
+        expect(run('(agenda OR milk) week')).toEqual(['note-1'])
+    })
+
+    test('excludes words and groups', () => {
+        expect(run('-agenda')).toEqual(['note-2', 'note-3'])
+        expect(run('-(milk receipt)')).toEqual(['note-1', 'note-3'])
+        expect(run('-(milk agenda)')).toEqual(['note-1', 'note-2', 'note-3'])
+    })
+
+    test('matches regular expressions', () => {
+        expect(run('/gro[cs]ery/')).toEqual(['note-2'])
+    })
+
+    test('is case insensitive unless match case is on', () => {
+        expect(run('happycat')).toEqual(['note-3'])
+        expect(run('HappyCat', { matchCase: true })).toEqual(['note-3'])
+        expect(run('happycat', { matchCase: true })).toEqual([])
+    })
+
+    test('match-case and ignore-case override the global option', () => {
+        expect(run('match-case:HappyCat')).toEqual(['note-3'])
+        expect(run('match-case:happycat')).toEqual([])
+        expect(run('ignore-case:HAPPYCAT', { matchCase: true })).toEqual(['note-3'])
+    })
+})
+
+describe('search notes with operators', () => {
+    test('file matches only the file name', () => {
+        expect(run('file:standup')).toEqual(['note-1'])
+        expect(run('file:agenda')).toEqual([])
+    })
+
+    test('path matches the folder and name', () => {
+        expect(run('path:work/meetings')).toEqual(['note-1'])
+        expect(run('path:"home/grocery"')).toEqual(['note-2'])
+    })
+
+    test('content ignores the title and path', () => {
+        expect(run('content:grocery')).toEqual([])
+        expect(run('content:milk')).toEqual(['note-2'])
+    })
+
+    test('tag matches the tag and its nested tags', () => {
+        expect(run('tag:work')).toEqual(['note-1'])
+        expect(run('tag:#home')).toEqual(['note-2'])
+        expect(run('tag:home/shopping')).toEqual(['note-2'])
+        expect(run('-tag:work')).toEqual(['note-2', 'note-3'])
+    })
+
+    test('line requires every term in one line', () => {
+        expect(run('line:(milk eggs)')).toEqual(['note-2'])
+        expect(run('line:(milk receipt)')).toEqual([])
+        expect(run('-line:(milk eggs)')).toEqual(['note-1', 'note-3'])
+    })
+
+    test('block requires every term in one block', () => {
+        expect(run('block:(agenda week)')).toEqual(['note-1'])
+        expect(run('block:(agenda call)')).toEqual([])
+    })
+
+    test('section requires every term in one section', () => {
+        expect(run('section:(call bob)')).toEqual(['note-1'])
+        expect(run('section:(agenda bob)')).toEqual([])
+    })
+
+    test('task variants match task lines by status', () => {
+        expect(run('task:call')).toEqual(['note-1'])
+        expect(run('task-todo:call')).toEqual(['note-1'])
+        expect(run('task-done:call')).toEqual([])
+        expect(run('task-done:(call OR bob)')).toEqual(['note-1'])
+        expect(run('task:')).toEqual(['note-1'])
+    })
+
+    test('has images and has files detect attachments', () => {
+        expect(run('has:images')).toEqual(['note-2'])
+        expect(run('has:files')).toEqual(['note-2'])
+        expect(run('-has:images')).toEqual(['note-1', 'note-3'])
+    })
+
+    test('is pinned uses the pinned set', () => {
+        expect(run('is:pinned', { pinned: new Set(['note-3']) })).toEqual(['note-3'])
+    })
+})
+
+describe('search notes by property', () => {
+    test('matches a property that exists', () => {
+        expect(run('[status]')).toEqual(['note-1', 'note-2'])
+    })
+
+    test('matches a value, an or and a regex', () => {
+        expect(run('[status:draft]')).toEqual(['note-1'])
+        expect(run('[status:draft OR done]')).toEqual(['note-1', 'note-2'])
+        expect(run('[status:/^dr/]')).toEqual(['note-1'])
+    })
+
+    test('matches an empty property with null', () => {
+        expect(run('[aliases:null]')).toEqual(['note-1'])
+        expect(run('[status:null]')).toEqual([])
+    })
+
+    test('compares numbers', () => {
+        expect(run('[duration:<5]')).toEqual(['note-1'])
+        expect(run('[duration:>=10]')).toEqual(['note-2'])
+    })
+
+    test('negates a property', () => {
+        expect(run('-[status:draft]')).toEqual(['note-2', 'note-3'])
+    })
+})
+
+describe('sort search results', () => {
+    test('sorts by name ascending by default', () => {
+        const ast = parseSearchQuery('-zzz')
+        const result = searchNotes(MOCK_SEARCH_NOTES, ast, { pinned: new Set() })
+        expect(result.map((note) => note.path)).toEqual(['note-2', 'note-3', 'note-1'])
+    })
+
+    test('sorts by the chosen option', () => {
+        const ast = parseSearchQuery('-zzz')
+        const result = searchNotes(MOCK_SEARCH_NOTES, ast, { pinned: new Set() }, NOTE_SORTS.MODIFIED_DESC)
+        expect(result.map((note) => note.path)).toEqual(['note-1', 'note-3', 'note-2'])
+    })
+})
+
+describe('edit the query from filters', () => {
+    test('toggles a tag qualifier on and off', () => {
         expect(toggleTagQualifier('', 'work')).toBe('tag:work')
+        expect(toggleTagQualifier('tag:work', 'work')).toBe('')
+        expect(toggleTagQualifier('hello tag:work', 'work')).toBe('hello')
+        expect(toggleTagQualifier('tag:#Work hi', 'work')).toBe('hi')
     })
 
-    test('quotes a tag name containing spaces', () => {
-        expect(toggleTagQualifier('', 'personal notes')).toBe('tag:"personal notes"')
+    test('quotes tags with spaces', () => {
+        expect(toggleTagQualifier('hi', 'my tag')).toBe('hi tag:"my tag"')
     })
 
-    test('removes the qualifier when the same tag is toggled again', () => {
-        expect(toggleTagQualifier('meeting tag:work', 'work')).toBe('meeting')
+    test('toggles the pinned, images and files qualifiers', () => {
+        expect(togglePinnedQualifier('hi')).toBe('hi is:pinned')
+        expect(togglePinnedQualifier('hi is:pinned')).toBe('hi')
+        expect(toggleImagesQualifier('')).toBe('has:images')
+        expect(toggleFilesQualifier('has:files x')).toBe('x')
     })
 
-    test('adds a second tag qualifier alongside an existing one', () => {
-        expect(toggleTagQualifier('meeting tag:work', 'personal')).toBe(
-            'meeting tag:work tag:personal'
-        )
-    })
-
-    test('removes only the toggled tag, keeping other selected tags', () => {
-        expect(toggleTagQualifier('meeting tag:work tag:personal', 'work')).toBe(
-            'meeting tag:personal'
-        )
-    })
-})
-
-describe('toggle pinned qualifier', () => {
-    test('adds the pinned qualifier to an empty query', () => {
-        expect(togglePinnedQualifier('')).toBe('is:pinned')
-    })
-
-    test('appends the pinned qualifier to existing text', () => {
-        expect(togglePinnedQualifier('todo')).toBe('todo is:pinned')
-    })
-
-    test('removes the pinned qualifier when already present', () => {
-        expect(togglePinnedQualifier('todo is:pinned')).toBe('todo')
+    test('reads active tags and qualifiers', () => {
+        const ast = parseSearchQuery('tag:work tag:#home has:images')
+        expect(getActiveTags(ast)).toEqual(['work', 'home'])
+        expect(hasQualifier(ast, 'has', 'images')).toBe(true)
+        expect(hasQualifier(ast, 'has', 'files')).toBe(false)
     })
 })
 
-describe('toggle image qualifier', () => {
-    test('adds the has:image qualifier to an empty query', () => {
-        expect(toggleImageQualifier('')).toBe('has:image')
+describe('filter chips', () => {
+    test('lists filters and negated filters, not plain text', () => {
+        const chips = getQueryChips(parseSearchQuery('hello tag:work -path:old [status:draft]'))
+        expect(chips.map((chip) => [chip.label, chip.negate])).toEqual([
+            ['tag:work', false],
+            ['path:old', true],
+            ['[status:draft]', false]
+        ])
     })
 
-    test('appends the has:image qualifier to existing text', () => {
-        expect(toggleImageQualifier('recipe')).toBe('recipe has:image')
+    test('groups chips of the same filter in one row', () => {
+        const query = 'has:images task-done: tag:one has:files [a:1] tag:two [b:2]'
+        const groups = groupChips(getQueryChips(parseSearchQuery(query)))
+
+        expect(groups.map((group) => group.map((chip) => chip.label))).toEqual([
+            ['has:images', 'has:files'],
+            ['task-done:'],
+            ['tag:one', 'tag:two'],
+            ['[a:1]', '[b:2]']
+        ])
     })
 
-    test('removes the has:image qualifier when already present', () => {
-        expect(toggleImageQualifier('recipe has:image')).toBe('recipe')
-    })
-})
-
-describe('toggle content qualifier', () => {
-    test('adds the in:content qualifier to an empty query', () => {
-        expect(toggleContentQualifier('')).toBe('in:content')
+    test('groups a negated chip with its filter', () => {
+        const groups = groupChips(getQueryChips(parseSearchQuery('tag:one -tag:two')))
+        expect(groups).toHaveLength(1)
+        expect(groups[0].map((chip) => chip.negate)).toEqual([false, true])
     })
 
-    test('appends the in:content qualifier to existing text', () => {
-        expect(toggleContentQualifier('recipe')).toBe('recipe in:content')
+    test('removes a chip from the query', () => {
+        const query = 'hello tag:work world'
+        const [chip] = getQueryChips(parseSearchQuery(query))
+        expect(removeChip(query, chip)).toBe('hello world')
     })
 
-    test('removes the in:content qualifier when already present', () => {
-        expect(toggleContentQualifier('recipe in:content')).toBe('recipe')
-    })
-})
+    test('switches a chip between include and exclude', () => {
+        const query = 'hello tag:work'
+        const [chip] = getQueryChips(parseSearchQuery(query))
+        const negated = toggleChipNegation(query, chip)
+        expect(negated).toBe('hello -tag:work')
 
-describe('parse path, file and hashed tag qualifiers', () => {
-    test('extracts path and file qualifiers', () => {
-        const result = parseSearchQuery('path:work/ideas file:"my note" plan')
-
-        expect(result.paths).toEqual(['work/ideas'])
-        expect(result.files).toEqual(['my note'])
-        expect(result.text).toBe('plan')
-    })
-
-    test('ignores the leading hash of a tag qualifier', () => {
-        expect(parseSearchQuery('tag:#work').tags).toEqual(['work'])
-    })
-})
-
-describe('filter notes', () => {
-    test('filters by title text', () => {
-        const options = { pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('grocery'), options)
-        expect(result.map((note) => note.path)).toEqual(['note-2'])
-    })
-
-    test('fuzzy-matches a non-contiguous title query', () => {
-        const options = { pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('wkstandup'), options)
-        expect(result.map((note) => note.path)).toEqual(['note-1'])
-    })
-
-    test('ignores note body text by default', () => {
-        const options = { pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('agenda'), options)
-        expect(result).toHaveLength(0)
-    })
-
-    test('matches note body text when in:content is set', () => {
-        const options = { pinned: new Set() }
-        const result = filterNotes(
-            MOCK_SEARCH_NOTES,
-            parseSearchQuery('in:content agenda'),
-            options
-        )
-        expect(result.map((note) => note.path)).toEqual(['note-1'])
-    })
-
-    test('still matches by title when in:content is set', () => {
-        const options = { pinned: new Set() }
-        const result = filterNotes(
-            MOCK_SEARCH_NOTES,
-            parseSearchQuery('in:content grocery'),
-            options
-        )
-        expect(result.map((note) => note.path)).toEqual(['note-2'])
-    })
-
-    test('filters by tag qualifier', () => {
-        const options = { pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('tag:work'), options)
-        expect(result.map((note) => note.path)).toEqual(['note-1'])
-    })
-
-    test('filters by more than one tag qualifier, matching any of them', () => {
-        const options = { pinned: new Set() }
-        const result = filterNotes(
-            MOCK_SEARCH_NOTES,
-            parseSearchQuery('tag:work tag:personal'),
-            options
-        )
-        expect(result.map((note) => note.path).sort()).toEqual(['note-1', 'note-2'])
-    })
-
-    test('matches nested tags when filtering by their parent', () => {
-        const notes = [
-            { path: 'a', title: 'A', tags: ['work/projects'] },
-            { path: 'b', title: 'B', tags: ['workshop'] },
-            { path: 'c', title: 'C', tags: [], note: 'text #work/todo' }
-        ]
-        const result = filterNotes(notes, parseSearchQuery('tag:work'), { pinned: new Set() })
-        expect(result.map((note) => note.path)).toEqual(['a', 'c'])
-    })
-
-    test('filters by pinned qualifier', () => {
-        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('is:pinned'), {
-            pinned: new Set(['note-3'])
-        })
-        expect(result.map((note) => note.path)).toEqual(['note-3'])
-    })
-
-    test('combines pinned, tag and text qualifiers', () => {
-        const result = filterNotes(
-            MOCK_SEARCH_NOTES,
-            parseSearchQuery('is:pinned tag:work standup'),
-            { pinned: new Set(['note-1']) }
-        )
-        expect(result.map((note) => note.path)).toEqual(['note-1'])
-    })
-
-    test('returns every note for an empty query', () => {
-        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery(''), { pinned: new Set() })
-        expect(result).toHaveLength(3)
-    })
-
-    test('filters by has:image qualifier', () => {
-        const options = { pinned: new Set() }
-        const result = filterNotes(MOCK_SEARCH_NOTES, parseSearchQuery('has:image'), options)
-        expect(result.map((note) => note.path)).toEqual(['note-2'])
-    })
-
-    test('filters by modified: date qualifier', () => {
-        const options = { pinned: new Set() }
-        const result = filterNotes(
-            MOCK_SEARCH_NOTES,
-            parseSearchQuery('modified:2026-01-05'),
-            options
-        )
-        expect(result.map((note) => note.path)).toEqual(['note-1'])
-    })
-
-    test('filters by created: date qualifier', () => {
-        const options = { pinned: new Set() }
-        const result = filterNotes(
-            MOCK_SEARCH_NOTES,
-            parseSearchQuery('created:2026-01-02'),
-            options
-        )
-        expect(result.map((note) => note.path)).toEqual(['note-2'])
-    })
-
-    describe('by path and file', () => {
-        const notes = [
-            { path: 'r1::a.md', filename: 'a.md', title: 'a' },
-            { path: 'r2::b.md', filename: 'b.md', title: 'b' },
-            { path: 'r2::plan.md', filename: 'plan.md', title: 'plan' }
-        ]
-        const notePaths = new Map(
-            [['r1::a.md', ''], ['r2::b.md', 'Work/Ideas'], ['r2::plan.md', 'Work/Ideas']]
-        )
-        const options = { pinned: new Set(), notePaths }
-
-        test('filters by folder path', () => {
-            const result = filterNotes(notes, parseSearchQuery('path:work/ideas'), options)
-            expect(result.map((note) => note.path)).toEqual(['r2::b.md', 'r2::plan.md'])
-        })
-
-        test('filters by file name', () => {
-            const result = filterNotes(notes, parseSearchQuery('file:plan'), options)
-            expect(result.map((note) => note.path)).toEqual(['r2::plan.md'])
-        })
-
-        test('combines path and file qualifiers', () => {
-            const result = filterNotes(notes, parseSearchQuery('path:work file:b.md'), options)
-            expect(result.map((note) => note.path)).toEqual(['r2::b.md'])
-        })
-    })
-})
-
-describe('filter notes with advanced operators', () => {
-    const notes = [
-        {
-            path: 'a',
-            title: 'Alpha plan',
-            filename: 'alpha.md',
-            tags: ['work'],
-            note: 'milk and eggs\n- [ ] call mom\n- [x] pay rent\n- [/] write report',
-            properties: { status: 'done', authors: ['Ann', 'Bob'] },
-            updatedAt: new Date('2026-01-10T10:00:00Z').getTime(),
-            createdAt: new Date('2026-01-01T10:00:00Z').getTime()
-        },
-        {
-            path: 'b',
-            title: 'Beta draft',
-            filename: 'beta.md',
-            tags: [],
-            note: 'bread\nmilk',
-            properties: { status: 'todo', rating: 5 },
-            updatedAt: new Date('2026-02-10T10:00:00Z').getTime(),
-            createdAt: new Date('2026-02-01T10:00:00Z').getTime()
-        },
-        {
-            path: 'c',
-            title: 'Gamma',
-            filename: 'gamma.md',
-            tags: ['work'],
-            note: 'plain text',
-            updatedAt: new Date('2026-03-10T10:00:00Z').getTime(),
-            createdAt: new Date('2026-03-01T10:00:00Z').getTime()
-        }
-    ]
-    const options = { pinned: new Set(['a']) }
-    const run = (query) => (
-        filterNotes(notes, parseSearchQuery(query), options).map((note) => note.path)
-    )
-
-    test('excludes notes with a negated tag', () => {
-        expect(run('-tag:work')).toEqual(['b'])
-    })
-
-    test('excludes pinned notes with a negated pinned qualifier', () => {
-        expect(run('-is:pinned')).toEqual(['b', 'c'])
-    })
-
-    test('excludes notes whose title contains a negated word', () => {
-        expect(run('-draft')).toEqual(['a', 'c'])
-    })
-
-    test('searches negated words in the body when in:content is set', () => {
-        expect(run('in:content -milk')).toEqual(['c'])
-    })
-
-    test('matches an exact phrase instead of fuzzy matching', () => {
-        expect(run('"alpha plan"')).toEqual(['a'])
-        expect(run('"alpha pln"')).toEqual([])
-    })
-
-    test('matches a regular expression against titles', () => {
-        expect(run('/^(alpha|gamma)/')).toEqual(['a', 'c'])
-    })
-
-    test('matches a regular expression against the body with in:content', () => {
-        expect(run('in:content /pl\\w+ text/')).toEqual(['c'])
-    })
-
-    test('matches any alternative separated by OR', () => {
-        expect(run('alpha OR gamma')).toEqual(['a', 'c'])
-    })
-
-    test('keeps words of one alternative together', () => {
-        expect(run('in:content milk and OR plain')).toEqual(['a', 'c'])
-    })
-
-    test('filters by a date range', () => {
-        expect(run('modified:2026-01-01..2026-02-28')).toEqual(['a', 'b'])
-        expect(run('created:>2026-02-01')).toEqual(['c'])
-        expect(run('modified:<2026-02-10')).toEqual(['a'])
-    })
-
-    test('finds terms that share a line', () => {
-        expect(run('line:(milk eggs)')).toEqual(['a'])
-        expect(run('line:(bread milk)')).toEqual([])
-    })
-
-    test('filters tasks by status', () => {
-        expect(run('task:(mom)')).toEqual(['a'])
-        expect(run('task-todo:(mom)')).toEqual(['a'])
-        expect(run('task-done:(mom)')).toEqual([])
-        expect(run('task-done:(rent)')).toEqual(['a'])
-        expect(run('task:(report)')).toEqual(['a'])
-        expect(run('task-todo:(report)')).toEqual([])
-    })
-
-    test('does not treat plain lines as tasks', () => {
-        expect(run('task:(milk)')).toEqual([])
-    })
-
-    test('filters by property value and presence', () => {
-        expect(run('[status:done]')).toEqual(['a'])
-        expect(run('[rating]')).toEqual(['b'])
-        expect(run('[rating:5]')).toEqual(['b'])
-        expect(run('[authors:bob]')).toEqual(['a'])
-        expect(run('-[status]')).toEqual(['c'])
+        const [again] = getQueryChips(parseSearchQuery(negated))
+        expect(toggleChipNegation(negated, again)).toBe('hello tag:work')
     })
 })

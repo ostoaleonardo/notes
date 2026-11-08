@@ -1,59 +1,82 @@
-export const TAG_QUALIFIER_REGEX = /(?<![\w-])tag:"([^"]+)"|(?<![\w-])tag:(\S+)/gi
-export const MARKDOWN_IMAGE_REGEX = /!\[[^\]]*\]\([^)]+\)/
-export const PINNED_QUALIFIER_REGEX = /(?<![\w-])is:pinned\b/i
-export const IMAGE_QUALIFIER_REGEX = /(?<![\w-])has:image\b/i
-export const CONTENT_QUALIFIER_REGEX = /(?<![\w-])in:content\b/i
-
-export const QUALIFIER_TOKEN_REGEX = /^([a-z-]+):(.*)$/i
-export const PROPERTY_TOKEN_REGEX = /^\[([^[\]:]+?)(?::([^[\]]*))?\]$/
-export const REGEX_TOKEN_REGEX = /^\/(.+)\/$/
-export const PHRASE_TOKEN_REGEX = /^"(.+)"$/
-export const WRAPPED_VALUE_REGEX = /^(?:"(.*)"|\((.*)\))$/
-export const DATE_VALUE_REGEX = /^(?:(\d{4}-\d{2}-\d{2})\.\.(\d{4}-\d{2}-\d{2})|(>=|<=|>|<)?(\d{4}-\d{2}-\d{2}))$/
-export const TASK_STATUS_LINE_REGEX = /^\s*(?:>\s*)*(?:[-*+]|\d+[.)])\s+\[(.)\]\s/
-
-export const DATE_KEY_LENGTH = 10
-export const DAY_IN_MS = 86400000
-export const REGEX_FLAGS = 'i'
-
-export const NEGATION_PREFIX = '-'
-export const OR_KEYWORD = 'OR'
-export const REGEX_DELIMITER = '/'
-export const QUOTE_CHAR = '"'
-export const OPENING_BRACKETS = ['(', '[']
-export const CLOSING_BRACKETS = [')', ']']
-
-export const PINNED_QUALIFIER = 'is:pinned'
-export const IMAGE_QUALIFIER = 'has:image'
-export const CONTENT_QUALIFIER = 'in:content'
-
 export const SEARCH_OPERATORS = {
-    TAG: 'tag',
-    PATH: 'path',
     FILE: 'file',
+    PATH: 'path',
+    CONTENT: 'content',
+    MATCH_CASE: 'match-case',
+    IGNORE_CASE: 'ignore-case',
+    TAG: 'tag',
     LINE: 'line',
+    BLOCK: 'block',
+    SECTION: 'section',
     TASK: 'task',
     TASK_TODO: 'task-todo',
     TASK_DONE: 'task-done',
-    MODIFIED: 'modified',
-    CREATED: 'created',
-    IS: 'is',
     HAS: 'has',
-    IN: 'in'
+    IS: 'is'
 }
 
-export const LINE_OPERATORS = [
+export const SEARCH_OPERATOR_NAMES = Object.values(SEARCH_OPERATORS)
+
+export const UNIT_OPERATORS = [
     SEARCH_OPERATORS.LINE,
+    SEARCH_OPERATORS.BLOCK,
+    SEARCH_OPERATORS.SECTION
+]
+
+export const TASK_OPERATORS = [
     SEARCH_OPERATORS.TASK,
     SEARCH_OPERATORS.TASK_TODO,
     SEARCH_OPERATORS.TASK_DONE
 ]
 
+export const SEARCH_HAS_VALUES = {
+    IMAGES: 'images',
+    FILES: 'files'
+}
+
+export const SEARCH_IS_VALUES = {
+    PINNED: 'pinned'
+}
+
+export const SEARCH_NODE_TYPES = {
+    AND: 'and',
+    OR: 'or',
+    NOT: 'not',
+    TEXT: 'text',
+    REGEX: 'regex',
+    FILTER: 'filter',
+    PROPERTY: 'property',
+    COMPARE: 'compare',
+    NULL: 'null'
+}
+
+export const COMPARISON_OPERATORS = ['>=', '<=', '>', '<']
+
+export const OPERATOR_PREFIX_REGEX = /^([a-z-]+):/i
+export const PROPERTY_BRACKETS = { OPEN: '[', CLOSE: ']' }
+export const GROUP_BRACKETS = { OPEN: '(', CLOSE: ')' }
+
+export const TASK_STATUS_LINE_REGEX = /^\s*(?:>\s*)*(?:[-*+]|\d+[.)])\s+\[(.)\]\s/
+export const BLOCK_SEPARATOR_REGEX = /\n[ \t]*\n/
+export const HEADING_LINE_REGEX = /^#{1,6}\s/
+export const IMAGE_REFERENCE_REGEX = /!\[[^\]]*\]\([^)]+\)|!\[\[[^\]]+\.(?:png|jpe?g|gif|webp|avif|bmp|svg|heic)(?:[|#][^\]]*)?\]\]/i
+export const FILE_REFERENCE_REGEX = /!?\[\[[^\]|#]+\.(?!(?:md|png|jpe?g|gif|webp|avif|bmp|svg|heic)\b)\w+(?:[|#][^\]]*)?\]\]|\[[^\]]*\]\((?:file|content):[^)]+\)/i
+
 export const TASK_STATUS_TODO = ' '
 export const TASK_STATUSES_DONE = ['x', 'X']
 
-export const SEARCH_QUALIFIER_VALUES = {
-    PINNED: 'pinned',
-    IMAGE: 'image',
-    CONTENT: 'content'
-}
+export const NEGATION_PREFIX = '-'
+export const OR_KEYWORD = 'OR'
+export const NULL_KEYWORD = 'null'
+export const REGEX_DELIMITER = '/'
+export const QUOTE_CHAR = '"'
+export const ESCAPE_CHAR = '\\'
+export const PROPERTY_SEPARATOR = ':'
+
+export const REGEX_FLAGS = { INSENSITIVE: 'i', SENSITIVE: '' }
+
+export const SNIPPET_LIMIT = 3
+export const SNIPPET_EXTENDED_LIMIT = 8
+export const SNIPPET_MAX_LENGTH = 140
+export const SNIPPET_LEAD_LENGTH = 40
+export const SNIPPET_ELLIPSIS = '…'
