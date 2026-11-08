@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react'
-import { RNHostView, Text } from '@expo/ui/jetpack-compose'
+import { Text } from '@expo/ui/jetpack-compose'
 import { fillMaxWidth, testID as testIdModifier } from '@expo/ui/jetpack-compose/modifiers'
 
 import { ComposeContext, ComposeHost } from '@/ui/compose-context'
@@ -30,11 +30,11 @@ export const MaterialTextField = ({
     testID
 }) => {
     const { colors } = useTheme()
-    const inCompose = useContext(ComposeContext)
     const { text, onFocusChanged } = useTextState(value)
-    const fieldColors = useMemo(() => getTextFieldColors(colors, containerColor), [colors, containerColor])
-
     const { textStyle, selectionColors } = useTextFieldStyle()
+    const inCompose = useContext(ComposeContext)
+
+    const fieldColors = useMemo(() => getTextFieldColors(colors, containerColor), [colors, containerColor])
 
     const modifiers = useMemo(() => {
         const list = [...(inCompose ? FILL_WIDTH : []), ...(testID ? [testIdModifier(testID)] : [])]
@@ -62,22 +62,26 @@ export const MaterialTextField = ({
         >
             {!!startAdornment && (
                 <Field.LeadingIcon>
-                    <RNHostView matchContents>{startAdornment}</RNHostView>
+                    {startAdornment}
                 </Field.LeadingIcon>
             )}
             {!!endAdornment && (
                 <Field.TrailingIcon>
-                    <RNHostView matchContents>{endAdornment}</RNHostView>
+                    {endAdornment}
                 </Field.TrailingIcon>
             )}
             {!!label && (
                 <Field.Label>
-                    <Text style={labelStyle}>{label}</Text>
+                    <Text style={labelStyle}>
+                        {label}
+                    </Text>
                 </Field.Label>
             )}
             {!!placeholder && (
                 <Field.Placeholder>
-                    <Text style={labelStyle}>{placeholder}</Text>
+                    <Text style={labelStyle}>
+                        {placeholder}
+                    </Text>
                 </Field.Placeholder>
             )}
         </Field>
