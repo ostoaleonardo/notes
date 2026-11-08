@@ -1,13 +1,13 @@
 import { StyleSheet, View } from 'react-native'
 
-import { ComposeHost } from '@/ui/compose-context'
+import { ComposeBox } from '@/ui/compose-box'
 import { ComposeIcon } from '@/ui/compose-icon'
 import { FilledTextField } from '@/ui/input/filled-text-field'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import { Search } from '@/icons/search'
 
-import { ICON_SIZE, SPACING } from '@/constants/theme'
+import { ICON_SIZE, SIZE, SPACING } from '@/constants/theme'
 
 export const SearchBar = ({
     ref,
@@ -29,13 +29,13 @@ export const SearchBar = ({
                 value={value}
                 onChangeText={onChangeText}
                 startAdornment={(
-                    <ComposeHost>
+                    <ComposeBox size={SIZE.sm}>
                         <ComposeIcon
                             icon={Search}
                             size={ICON_SIZE.xxl}
                             color={colors.onSurfaceVariant}
                         />
-                    </ComposeHost>
+                    </ComposeBox>
                 )}
                 endAdornment={endAdornment}
             />
@@ -47,8 +47,5 @@ const styles = StyleSheet.create({
     container: {
         marginHorizontal: SPACING.lg,
         marginBottom: SPACING.lg
-    },
-    icon: {
-        padding: SPACING.sm
     }
 })

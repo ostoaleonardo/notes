@@ -10,6 +10,7 @@ import { SearchResults } from './search-results'
 import { SearchResultsToolbar } from './search-results-toolbar'
 import { RecentSearches } from './recent-searches'
 import { SavedSearches } from './saved-searches'
+import { ComposeRow } from '@/ui/compose-row'
 import { SearchBar } from '@/components/input/search-bar'
 import { SearchClearButton } from '@/components/input/search-clear-button'
 
@@ -126,14 +127,14 @@ export const NoteSearch = ({ onClose, initialQuery = '' }) => {
                 label={t('drawer.search')}
                 testID={TEST_IDS.SEARCH_INPUT}
                 endAdornment={(
-                    <View style={styles.end}>
+                    <ComposeRow>
                         <SearchFilterButton
                             active={panelOpen}
                             onPress={onTogglePanel}
                         />
 
                         {!!query && <SearchClearButton onPress={onClear} />}
-                    </View>
+                    </ComposeRow>
                 )}
             />
 
@@ -200,10 +201,6 @@ export const NoteSearch = ({ onClose, initialQuery = '' }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1
-    },
-    end: {
-        alignItems: 'center',
-        flexDirection: 'row'
     },
     suggestions: {
         gap: SPACING.xl
