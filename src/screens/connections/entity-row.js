@@ -12,6 +12,7 @@ export const EntityRow = memo(({
     title,
     caption,
     background,
+    children,
     onPress
 }) => {
     const { colors } = useTheme()
@@ -32,6 +33,8 @@ export const EntityRow = memo(({
                     color={colors.onBackground}
                 />
             )}
-        />
+        >
+            {children}
+        </ListItem>
     )
 })

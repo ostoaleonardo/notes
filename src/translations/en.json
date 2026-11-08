@@ -282,7 +282,8 @@
 		"dont_update": "Don't update",
 		"update_once": "Update once",
 		"update_always": "Always update",
-		"move": "Move to"
+		"move": "Move to",
+		"clear": "Clear"
 	},
 	"count": {
 		"notes_one": "{{count}} note",
@@ -565,10 +566,31 @@
 		"recent": "Recent",
 		"saved": "Saved",
 		"pinned": "Pinned",
-		"has_image": "Images",
-		"in_content": "Content",
 		"save": "Save",
-		"unsave": "Remove"
+		"unsave": "Remove",
+		"filter": "Filter",
+		"match_case": "Match case",
+		"more_context": "More context",
+		"results_one": "{{count}} result",
+		"results_other": "{{count}} results",
+		"add": "Add",
+		"value_placeholder": "Value",
+		"property_placeholder": "name:value",
+		"filters": {
+			"tag": "Tag",
+			"path": "Path",
+			"file": "File name",
+			"property": "Property",
+			"task_todo": "Pending tasks",
+			"task_done": "Done tasks",
+			"images": "Has images",
+			"files": "Has files",
+			"pinned": "Pinned",
+			"content": "Content",
+			"line": "Same line",
+			"section": "Same section"
+		},
+		"empty": "No matching notes"
 	},
 	"error_boundary": {
 		"title": "Something went wrong",

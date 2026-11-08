@@ -6,8 +6,10 @@ import { OriginTiles } from './origin-tiles'
 import { RelationList } from './relation-list'
 import { FreshSheet } from '@/ui/modal/fresh-sheet'
 import { SearchBar } from '@/components/input/search-bar'
+import { SearchClearButton } from '@/components/input/search-clear-button'
 import { EmptyMessage } from '@/ui/modal/empty-message'
 
+import { useSearchClear } from '@/hooks/use-search-clear'
 import { describeEntity } from '@/utils/connection-caption'
 import { listOriginOptions } from '@/utils/connection-model'
 
@@ -23,6 +25,7 @@ const OriginContent = ({
     const { t } = useTranslation()
     const [type, setType] = useState(CONNECTION_TYPES.NOTE)
     const [query, setQuery] = useState('')
+    const { fieldRef, onClear } = useSearchClear(setQuery)
 
     const options = useMemo(() => Object.fromEntries(
         ORIGIN_TYPES.map((value) => [value, listOriginOptions(value, model)])
@@ -50,9 +53,11 @@ const OriginContent = ({
             />
 
             <SearchBar
+                ref={fieldRef}
                 value={query}
                 onChangeText={setQuery}
                 label={t('connections.origin.filter')}
+                endAdornment={query ? <SearchClearButton onPress={onClear} /> : undefined}
             />
 
             <RelationList

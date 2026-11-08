@@ -282,7 +282,8 @@
 		"dont_update": "No actualizar",
 		"update_once": "Solo una vez",
 		"update_always": "Siempre actualizar",
-		"move": "Mover a"
+		"move": "Mover a",
+		"clear": "Borrar"
 	},
 	"count": {
 		"notes_one": "{{count}} nota",
@@ -565,10 +566,31 @@
 		"recent": "Recientes",
 		"saved": "Guardadas",
 		"pinned": "Fijadas",
-		"has_image": "Imágenes",
-		"in_content": "Contenido",
 		"save": "Guardar",
-		"unsave": "Quitar"
+		"unsave": "Quitar",
+		"filter": "Filtro",
+		"match_case": "Distinguir mayúsculas",
+		"more_context": "Más contexto",
+		"results_one": "{{count}} resultado",
+		"results_other": "{{count}} resultados",
+		"add": "Añadir",
+		"value_placeholder": "Valor",
+		"property_placeholder": "nombre:valor",
+		"filters": {
+			"tag": "Etiqueta",
+			"path": "Ruta",
+			"file": "Nombre de archivo",
+			"property": "Propiedad",
+			"task_todo": "Tareas pendientes",
+			"task_done": "Tareas hechas",
+			"images": "Con imágenes",
+			"files": "Con archivos",
+			"pinned": "Fijadas",
+			"content": "Contenido",
+			"line": "Misma línea",
+			"section": "Misma sección"
+		},
+		"empty": "Sin notas coincidentes"
 	},
 	"error_boundary": {
 		"title": "Algo salió mal",

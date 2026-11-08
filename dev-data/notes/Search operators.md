@@ -12,6 +12,6 @@ tags:
 
 Keyword for content search: findme-keyword.
 
-Try `tag:test/search`, `path:Folder 1`, `[status:draft]`, `task:` and `has:image`.
+Try `tag:test/search`, `path:Folder 1`, `[status:draft]`, `task:` and `has:images`.
 
 ![[dev-image.png]]

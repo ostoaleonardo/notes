@@ -210,7 +210,7 @@ In edit mode, tap a cell to edit it and use the row and column handles (tap or l
 | Callouts | Read and edit | Done | 1.1 | Android | Medium | Editor team | 13 types and aliases |
 | Embeds | Read only | Done | 1.2 | Android | Medium | Links team | Notes, blocks and images |
 | Tables | Edit | Done | 1.3 | Android | High | Editor team | Horizontal scrolling |
-| Search with operators | Search | Done | 1.4 | Android | High | Search team | `tag:` `path:` `is:pinned` |
+| Search with operators | Search | Done | 1.4 | Android | High | Search team | `tag:` `path:` `has:images` `is:pinned` |
 
 ## 9. Code
 
@@ -280,15 +280,16 @@ Text with <mark>mark</mark>, <sup>superscript</sup> and <sub>subscript</sub>.
 
 ## 14. Search
 
-Operators to try in the search:
+Plain words match the note content, title and path. Every word must appear in the same note.
 
-- `tag:test` or `tag:#test/syntax`
-- `path:test` and `file:guide`
-- `is:pinned`, `has:image` (only with images inserted as `![](url)`) and `in:content`
-- `modified:2026-01-01` and `created:2026-01-01`
-- Negation `-tag:test`, OR `guide OR syntax`, phrase `"syntax guide"`, regex `/gu[il]de/`
-- `line:(pending task)`, `task:(pending)`, `task-todo:(task)`, `task-done:(task)`
-- Properties `[author:Notes]` and date ranges `modified:2026-01-01..2026-12-31`
+- `"exact phrase"`, `/gu[il]de/` regex, `a OR b`, `(a OR b) c` and negation `-word` or `-(a b)`
+- `tag:test` or `tag:#test/syntax`, `path:Folder 1`, `file:guide`, `content:text`
+- `match-case:Notes` and `ignore-case:notes`, and the Match case button
+- `line:(pending task)`, `block:(a b)`, `section:(a b)`
+- `task:call`, `task-todo:call`, `task-done:call`
+- `has:images`, `has:files` and `is:pinned`
+- Properties `[author]`, `[author:Notes]`, `[author:null]`, `[rating:>3]` and `[status:draft OR done]`
+- Sort, more context and the Filter button to add filters without typing
 
 ## 15. Long text and special characters
 

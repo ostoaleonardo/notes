@@ -1,47 +1,43 @@
-import { useCallback, useRef } from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
+import { ComposeHost } from '@/ui/compose-context'
+import { ComposeIcon } from '@/ui/compose-icon'
 import { FilledTextField } from '@/ui/input/filled-text-field'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { Close } from '@/icons/close'
 import { Search } from '@/icons/search'
 
 import { ICON_SIZE, SPACING } from '@/constants/theme'
 
 export const SearchBar = ({
+    ref,
     label,
     value,
     testID,
+    endAdornment,
     onChangeText
 }) => {
     const { colors } = useTheme()
-    const fieldRef = useRef(null)
-
-    const onClear = useCallback(() => {
-        fieldRef.current?.clear()
-        onChangeText('')
-    }, [onChangeText])
 
     return (
         <View style={styles.container}>
             <FilledTextField
-                ref={fieldRef}
+                ref={ref}
                 testID={testID}
                 multiline={false}
                 label={label}
                 value={value}
                 onChangeText={onChangeText}
                 startAdornment={(
-                    <View style={styles.icon}>
-                        <Search width={ICON_SIZE.xxl} height={ICON_SIZE.xxl} color={colors.onSurfaceVariant} />
-                    </View>
+                    <ComposeHost>
+                        <ComposeIcon
+                            icon={Search}
+                            size={ICON_SIZE.xxl}
+                            color={colors.onSurfaceVariant}
+                        />
+                    </ComposeHost>
                 )}
-                endAdornment={value ? (
-                    <Pressable style={styles.icon} onPress={onClear} accessibilityRole='button'>
-                        <Close width={ICON_SIZE.xxl} height={ICON_SIZE.xxl} color={colors.onSurfaceVariant} />
-                    </Pressable>
-                ) : undefined}
+                endAdornment={endAdornment}
             />
         </View>
     )

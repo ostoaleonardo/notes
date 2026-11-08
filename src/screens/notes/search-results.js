@@ -2,38 +2,38 @@ import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 
-import { EntityRow } from '@/screens/connections/entity-row'
+import { SearchResultRow } from './search-result-row'
 import { AnimatedList } from '@/ui/animated/animated-list'
 import { AnimatedView } from '@/ui/animated/animated-view'
 import { GroupedList } from '@/ui/grouped-list'
-import { useTheme } from '@/ui/hooks/use-theme'
-
-import { makeEntity } from '@/utils/connection-model'
-
-import { CONNECTION_TYPES } from '@/constants/connections'
 import { BOTTOM_GAP, SPACING } from '@/constants/theme'
+import { TEST_IDS } from '@/constants/test-ids'
 
 const getNotePath = (note) => note.path
 
 export const SearchResults = ({
     results,
     aliasById,
+    highlights,
+    snippetLimit,
     onOpenResult
 }) => {
     const { t } = useTranslation()
-    const { colors } = useTheme()
 
     const onPress = (entity) => onOpenResult(entity.id)
 
     return (
-        <View style={styles.container}>
+        <View
+            style={styles.container}
+            testID={TEST_IDS.SEARCH_RESULTS}
+        >
             <GroupedList
                 paged
                 component={AnimatedList}
                 gap={SPACING.xxxs}
                 data={results}
                 keyExtractor={getNotePath}
-                emptyLabel={t('message.notes.empty')}
+                emptyLabel={t('search.empty')}
                 keyboardShouldPersistTaps='handled'
                 contentContainerStyle={[styles.list, { paddingBottom: BOTTOM_GAP }]}
                 renderItem={({ item }) => (
@@ -41,11 +41,12 @@ export const SearchResults = ({
                         entering={FadeInUp}
                         exiting={FadeOutUp}
                     >
-                        <EntityRow
-                            entity={makeEntity(CONNECTION_TYPES.NOTE, item.path)}
+                        <SearchResultRow
+                            note={item}
                             title={item.title || t('notes.untitled')}
                             caption={aliasById.get(item.repositoryId)}
-                            background={colors.surfaceVariant}
+                            highlights={highlights}
+                            snippetLimit={snippetLimit}
                             onPress={onPress}
                         />
                     </AnimatedView>

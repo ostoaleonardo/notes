@@ -17,6 +17,16 @@ appId: com.monospace.notes
 - waitForAnimationToEnd
 - assertNotVisible:
     id: search-suggestions
+- tapOn:
+    id: search-filter-button
+- assertVisible:
+    id: search-filter-panel
+- tapOn:
+    id: search-filter-pinned
+- tapOn:
+    id: search-filter-button
+- assertVisible:
+    id: search-chip-is:pinned
 - back
 - waitForAnimationToEnd
 - runFlow:

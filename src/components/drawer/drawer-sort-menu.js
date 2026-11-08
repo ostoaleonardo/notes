@@ -15,7 +15,7 @@ import { getMenuItemTestId } from '@/ui/utils/test-ids'
 
 const SORT_OPTIONS = Object.keys(NOTE_SORT_LABELS)
 
-export const DrawerSortMenu = ({ sort, onChange }) => {
+export const DrawerSortMenu = ({ sort, onChange, testID = TEST_IDS.DRAWER_SORT }) => {
     const { t } = useTranslation()
     const { visible, onOpen, onClose, trigger } = useMenuAction()
 
@@ -27,7 +27,7 @@ export const DrawerSortMenu = ({ sort, onChange }) => {
                 <DrawerToolbarButton
                     icon={SortByAlpha}
                     onPress={onOpen}
-                    testID={TEST_IDS.DRAWER_SORT}
+                    testID={testID}
                     accessibilityLabel={t('drawer.sort.title')}
                 />
             }

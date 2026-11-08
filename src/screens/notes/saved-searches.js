@@ -1,14 +1,10 @@
 import { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ListItemAction } from '@/ui/button/list-item-action'
-import { useTheme } from '@/ui/hooks/use-theme'
-
 import { SearchListSection } from './search-list-section'
+import { SearchRemoveAction } from './search-remove-action'
 
-import { Close } from '@/icons/close'
 import { Search } from '@/icons/search'
-import { ICON_SIZE } from '@/constants/theme'
 
 const getEntryKey = (entry) => entry.id
 const getEntryLabel = (entry) => entry.query
@@ -19,22 +15,12 @@ export const SavedSearches = memo(({
     onDelete
 }) => {
     const { t } = useTranslation()
-    const { colors } = useTheme()
 
     const onSelectEntry = useCallback((entry) => onSelect(entry.query), [onSelect])
 
     const renderTrailing = useCallback((entry) => (
-        <ListItemAction
-            label={t('button.delete')}
-            onPress={() => onDelete(entry.id)}
-        >
-            <Close
-                width={ICON_SIZE.lg}
-                height={ICON_SIZE.lg}
-                color={colors.onBackground}
-            />
-        </ListItemAction>
-    ), [onDelete, t, colors.onBackground])
+        <SearchRemoveAction onPress={() => onDelete(entry.id)} />
+    ), [onDelete])
 
     return (
         <SearchListSection
