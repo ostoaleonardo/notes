@@ -1,5 +1,13 @@
 import { ICON_SIZE, RADIUS, SIZE, SPACING } from './theme'
 
+export const GRID_ITEM = {
+    height: SIZE.lg,
+    gap: SPACING.md,
+    padding: SPACING.md,
+    iconSize: ICON_SIZE.xl,
+    selectedRadius: RADIUS.lg
+}
+
 export const BUTTON = {
     size: SIZE.md,
     groupGap: SPACING.xxxs

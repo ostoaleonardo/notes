@@ -1,11 +1,7 @@
-import { useMemo } from 'react'
 import { FilterChip, RNHostView, Text } from '@expo/ui/jetpack-compose'
 
 import { ComposeHost } from '@/ui/compose-context'
-import { useTheme } from '@/ui/hooks/use-theme'
-
-import { FONTS } from '@/ui/tokens/theme'
-import { TRANSPARENT } from '@/ui/tokens/transparent'
+import { useChipStyle } from '@/ui/hooks/use-chip-style'
 
 export const Chip = ({
     children,
@@ -16,19 +12,7 @@ export const Chip = ({
     style,
     onPress
 }) => {
-    const { colors } = useTheme()
-
-    const chipColors = useMemo(() => ({
-        containerColor: colors.surfaceVariant,
-        labelColor: colors.onBackground,
-        selectedContainerColor: colors.onBackground,
-        selectedLabelColor: colors.background,
-        ...overrides
-    }), [colors.surfaceVariant, colors.onBackground, colors.background, overrides])
-    const border = useMemo(() => ({ width: 0, color: TRANSPARENT.color }), [])
-    const textStyle = useMemo(() => ({
-        fontFamily: selected ? FONTS.azeretMedium : FONTS.azeretLight
-    }), [selected])
+    const { chipColors, border, textStyle } = useChipStyle({ selected, overrides })
 
     return (
         <ComposeHost style={style}>
