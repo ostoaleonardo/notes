@@ -64,6 +64,11 @@ const COMPOSE_ICONS = [
     'format-italic',
     'format-strikethrough',
     'horizontal-rule',
+    'checklist',
+    'done-all',
+    'picture',
+    'tag',
+    'tune',
     'schedule',
     'title'
 ].map((name) => name.replace(/-/g, '_'))

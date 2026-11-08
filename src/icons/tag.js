@@ -9,3 +9,5 @@ export const Tag = (props) => (
         <Path d={TAG_ICON_PATH} />
     </IconSvg>
 )
+
+Tag.source = require('./xml/tag_sharp_wght100.xml')
