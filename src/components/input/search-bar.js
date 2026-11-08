@@ -46,7 +46,6 @@ export const SearchBar = ({
 
 const styles = StyleSheet.create({
     container: {
-        marginHorizontal: SPACING.lg,
-        marginBottom: SPACING.lg
+        marginHorizontal: SPACING.lg
     }
 })

@@ -11,6 +11,7 @@ import { Add } from '@/icons/add'
 import { Notes } from '@/icons/notes'
 import { Title } from '@/icons/title'
 
+import { CONTROL_TOUCH_INSET } from '@/ui/tokens/components'
 import { SPACING } from '@/constants/theme'
 import { TEST_IDS } from '@/constants/test-ids'
 
@@ -77,6 +78,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
+        marginVertical: -CONTROL_TOUCH_INSET,
         paddingHorizontal: SPACING.lg
     },
     actions: {

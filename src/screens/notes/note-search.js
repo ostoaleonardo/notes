@@ -119,7 +119,11 @@ export const NoteSearch = ({ onClose, initialQuery = '' }) => {
     }, [saved, setItem])
 
     return (
-        <Pressable accessible={false} style={styles.container} onPress={Keyboard.dismiss}>
+        <Pressable
+            accessible={false}
+            style={styles.container}
+            onPress={Keyboard.dismiss}
+        >
             <SearchBar
                 ref={fieldRef}
                 value={query}
@@ -138,7 +142,7 @@ export const NoteSearch = ({ onClose, initialQuery = '' }) => {
                 )}
             />
 
-            <View style={styles.actions}>
+            <View style={styles.container}>
                 {panelOpen && (
                     <SearchFilterPanel
                         ast={ast}
@@ -179,7 +183,7 @@ export const NoteSearch = ({ onClose, initialQuery = '' }) => {
                 ) : (
                     <View
                         testID={TEST_IDS.SEARCH_SUGGESTIONS}
-                        style={styles.suggestions}
+                        style={styles.container}
                     >
                         <SavedSearches
                             saved={saved}
@@ -200,12 +204,6 @@ export const NoteSearch = ({ onClose, initialQuery = '' }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
-    },
-    suggestions: {
-        gap: SPACING.xl
-    },
-    actions: {
         flex: 1,
         gap: SPACING.xl
     }

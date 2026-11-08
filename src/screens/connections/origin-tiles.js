@@ -40,11 +40,11 @@ const Tile = memo(({
             onPress={handlePress}
         >
             <EntityShape
-                kind={getShapeKind({ type })}
                 width={width}
                 height={height}
-                fill={selected ? colors.tertiary : colors.surfaceVariant}
                 stroke='transparent'
+                kind={getShapeKind({ type })}
+                fill={selected ? colors.tertiary : colors.surfaceVariant}
                 radius={isSquare ? { borderRadius: RADIUS.xl } : undefined}
                 style={styles.tile}
             >
@@ -56,17 +56,17 @@ const Tile = memo(({
                 />
                 <View>
                     <Typography
-                        uppercase
-                        fontSize={ORIGIN_TILE.labelSize}
                         color={color}
+                        uppercase={true}
                         numberOfLines={1}
+                        fontSize={ORIGIN_TILE.labelSize}
                     >
                         {label}
                     </Typography>
                     <Typography
-                        fontSize={ORIGIN_TILE.countSize}
                         color={color}
                         opacity={OPACITY.secondary}
+                        fontSize={ORIGIN_TILE.countSize}
                     >
                         {count}
                     </Typography>
@@ -105,10 +105,9 @@ export const OriginTiles = memo(({
 const styles = StyleSheet.create({
     row: {
         gap: SPACING.sm,
-        paddingHorizontal: SPACING.lg,
-        paddingVertical: SPACING.md,
         flexDirection: 'row',
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
+        paddingHorizontal: SPACING.lg
     },
     tile: {
         padding: SPACING.md,

@@ -44,7 +44,11 @@ const OriginContent = ({
     const getCaption = useCallback((entity) => describeEntity(entity, model, t), [model, t])
 
     return (
-        <Pressable accessible={false} style={styles.container} onPress={Keyboard.dismiss}>
+        <Pressable
+            accessible={false}
+            style={styles.container}
+            onPress={Keyboard.dismiss}
+        >
             <OriginTiles
                 types={ORIGIN_TYPES}
                 counts={counts}
@@ -83,15 +87,23 @@ export const OriginSheet = memo(({
     onSelect
 }) => {
     return (
-        <FreshSheet sheet={sheet} snapPoints={SHEET.snapPoints.search}>
-            <OriginContent model={model} getTitle={getTitle} onSelect={onSelect} />
+        <FreshSheet
+            sheet={sheet}
+            snapPoints={SHEET.snapPoints.search}
+        >
+            <OriginContent
+                model={model}
+                getTitle={getTitle}
+                onSelect={onSelect}
+            />
         </FreshSheet>
     )
 })
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        gap: SPACING.xl
     },
     empty: {
         paddingVertical: SPACING.lg,
