@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
+import Animated from 'react-native-reanimated'
 import { View, StyleSheet } from 'react-native'
 
-import { AnimatedView } from '@/ui/animated/animated-view'
 import { Typography } from '@/ui/typography'
 import { useTheme } from '@/ui/hooks/use-theme'
 
@@ -82,8 +82,7 @@ export const ToggleButton = ({
         : styles.content
 
     return (
-        <AnimatedView
-            {...(expandable && { layout: undefined })}
+        <Animated.View
             style={[
                 styles.container,
                 animatedStyle,
@@ -125,7 +124,7 @@ export const ToggleButton = ({
                     </View>
                 </View>
             )}
-        </AnimatedView>
+        </Animated.View>
     )
 }
 
