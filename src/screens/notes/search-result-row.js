@@ -1,38 +1,16 @@
 import { memo, useCallback, useMemo } from 'react'
-import { Pressable, StyleSheet, Text } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 
+import { SearchSnippet } from './search-snippet'
 import { EntityRow } from '@/screens/connections/entity-row'
-import { Typography } from '@/ui/typography'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { getSnippets, splitByRanges } from '@/utils/search-context'
+import { getSnippets } from '@/utils/search-context'
 import { makeEntity } from '@/utils/connection-model'
 
 import { CONNECTION_TYPES } from '@/constants/connections'
-import { FONTS, SPACING } from '@/constants/theme'
-
-const SNIPPET_LINES = 2
-
-const Snippet = ({ snippet, color }) => {
-    const parts = splitByRanges(snippet.text, snippet.ranges)
-
-    return (
-        <Typography
-            variant='bodySmall'
-            numberOfLines={SNIPPET_LINES}
-            opacity={0.8}
-        >
-            {parts.map((part, index) => (
-                <Text
-                    key={index}
-                    style={part.match ? { color, fontFamily: FONTS.azeretMedium } : undefined}
-                >
-                    {part.text}
-                </Text>
-            ))}
-        </Typography>
-    )
-}
+import { SPACING } from '@/constants/theme'
+import { TINT } from '@/ui/tokens/transparent'
 
 export const SearchResultRow = memo(({
     note,
@@ -66,10 +44,11 @@ export const SearchResultRow = memo(({
                     onPress={handlePress}
                 >
                     {snippets.map((snippet) => (
-                        <Snippet
+                        <SearchSnippet
                             key={snippet.text}
                             snippet={snippet}
                             color={colors.accentText}
+                            background={colors.accentText + TINT.fill}
                         />
                     ))}
                 </Pressable>
