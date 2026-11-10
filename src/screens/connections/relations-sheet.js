@@ -182,7 +182,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: SPACING.lg
     },
     body: {
-        flexShrink: 1
+        flexShrink: 1,
+        paddingHorizontal: SPACING.lg
     },
     list: {
         flexShrink: 1

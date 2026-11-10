@@ -1,12 +1,11 @@
 import { memo, useCallback } from 'react'
-import { StyleSheet } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 
 import { GroupedList, GroupSeparator } from '@/ui/grouped-list'
 import { useTheme } from '@/ui/hooks/use-theme'
 import { EntityRow } from './entity-row'
 
-import { BOTTOM_GAP, SPACING } from '@/constants/theme'
+import { BOTTOM_GAP } from '@/constants/theme'
 
 const keyOf = (entity) => `${entity.type}:${entity.id}`
 
@@ -36,16 +35,10 @@ export const RelationList = memo(({
             data={entities}
             renderItem={renderItem}
             keyExtractor={keyOf}
-            contentContainerStyle={[styles.list, { paddingBottom: BOTTOM_GAP }]}
             showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: BOTTOM_GAP }}
             ItemSeparatorComponent={GroupSeparator}
             {...props}
         />
     )
-})
-
-const styles = StyleSheet.create({
-    list: {
-        paddingHorizontal: SPACING.lg
-    }
 })

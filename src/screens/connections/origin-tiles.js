@@ -106,8 +106,7 @@ const styles = StyleSheet.create({
     row: {
         gap: SPACING.sm,
         flexDirection: 'row',
-        alignItems: 'flex-end',
-        paddingHorizontal: SPACING.lg
+        alignItems: 'flex-end'
     },
     tile: {
         padding: SPACING.md,
