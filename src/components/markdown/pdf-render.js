@@ -6,11 +6,11 @@ let pdfjsPromise = null
 
 const loadPdfjs = () => {
     pdfjsPromise ??= Promise.all([
-        import('pdfjs-dist/build/pdf.min.js'),
-        import('pdfjs-dist/build/pdf.worker.min.js')
+        import('pdfjs-dist/build/pdf.min.mjs'),
+        import('pdfjs-dist/build/pdf.worker.min.mjs')
     ]).then(([pdfjs, worker]) => {
-        globalThis.pdfjsWorker = worker.default ?? worker
-        return pdfjs.default ?? pdfjs
+        globalThis.pdfjsWorker = worker
+        return pdfjs
     })
 
     return pdfjsPromise
@@ -21,7 +21,8 @@ export const renderPdfPage = async (container, dataUrl, pageNumber) => {
     if (!bytes) throw new Error('invalid pdf data url')
 
     const pdfjs = await loadPdfjs()
-    const doc = await pdfjs.getDocument({ data: bytes, isEvalSupported: false }).promise
+    const task = pdfjs.getDocument({ data: bytes, isEvalSupported: false })
+    const doc = await task.promise
 
     try {
         const page = await doc.getPage(Math.min(Math.max(pageNumber, 1), doc.numPages))
@@ -40,6 +41,6 @@ export const renderPdfPage = async (container, dataUrl, pageNumber) => {
 
         return canvas
     } finally {
-        doc.destroy()
+        task.destroy()
     }
 }
