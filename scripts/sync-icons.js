@@ -69,6 +69,7 @@ const COMPOSE_ICONS = [
     'picture',
     'tag',
     'tune',
+    'match-case',
     'schedule',
     'title'
 ].map((name) => name.replace(/-/g, '_'))
