@@ -1,15 +1,13 @@
 import { memo, useCallback, useMemo, useState } from 'react'
-import { Keyboard, Pressable, StyleSheet } from 'react-native'
+import { Keyboard, Pressable, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { OriginTiles } from './origin-tiles'
 import { RelationList } from './relation-list'
 import { FreshSheet } from '@/ui/modal/fresh-sheet'
 import { SearchBar } from '@/components/input/search-bar'
-import { SearchClearButton } from '@/components/input/search-clear-button'
 import { EmptyMessage } from '@/ui/modal/empty-message'
 
-import { useSearchClear } from '@/hooks/use-search-clear'
 import { describeEntity } from '@/utils/connection-caption'
 import { listOriginOptions } from '@/utils/connection-model'
 
@@ -25,7 +23,6 @@ const OriginContent = ({
     const { t } = useTranslation()
     const [type, setType] = useState(CONNECTION_TYPES.NOTE)
     const [query, setQuery] = useState('')
-    const { fieldRef, onClear } = useSearchClear(setQuery)
 
     const options = useMemo(() => Object.fromEntries(
         ORIGIN_TYPES.map((value) => [value, listOriginOptions(value, model)])
@@ -56,13 +53,13 @@ const OriginContent = ({
                 onSelect={setType}
             />
 
-            <SearchBar
-                ref={fieldRef}
-                value={query}
-                onChangeText={setQuery}
-                label={t('connections.origin.filter')}
-                endAdornment={query ? <SearchClearButton onPress={onClear} /> : undefined}
-            />
+            <View style={styles.search}>
+                <SearchBar
+                    value={query}
+                    onChangeText={setQuery}
+                    label={t('connections.origin.filter')}
+                />
+            </View>
 
             <RelationList
                 entities={items}
@@ -103,10 +100,12 @@ export const OriginSheet = memo(({
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        gap: SPACING.xl
+        gap: SPACING.xl,
+        marginHorizontal: SPACING.lg
+    },
+    search: {
     },
     empty: {
-        paddingVertical: SPACING.lg,
-        paddingHorizontal: SPACING.sm
+        paddingVertical: SPACING.lg
     }
 })

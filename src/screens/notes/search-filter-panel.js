@@ -23,7 +23,7 @@ const toQualifier = (option, value) => {
     return buildQualifier(option.operator, value)
 }
 
-export const SearchFilterPanel = ({ ast, tags, query, setQuery }) => {
+export const SearchFilterPanel = ({ ast, tagTree, query, setQuery }) => {
     const { t } = useTranslation()
     const [pending, setPending] = useState(null)
     const [showTags, setShowTags] = useState(false)
@@ -63,7 +63,7 @@ export const SearchFilterPanel = ({ ast, tags, query, setQuery }) => {
         return (
             <SearchTagList
                 ast={ast}
-                tags={tags}
+                tagTree={tagTree}
                 query={query}
                 setQuery={setQuery}
                 onBack={onCloseTags}

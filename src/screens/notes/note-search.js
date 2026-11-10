@@ -5,25 +5,22 @@ import { useTranslation } from 'react-i18next'
 
 import { SearchFilterPanel } from './search-filter-panel'
 import { SearchChips } from './search-chips'
-import { SearchFilterButton } from './search-filter-button'
+import { SearchOptions } from './search-options'
 import { SearchResults } from './search-results'
 import { SearchResultsToolbar } from './search-results-toolbar'
 import { RecentSearches } from './recent-searches'
 import { SavedSearches } from './saved-searches'
-import { ComposeRow } from '@/ui/compose-row'
 import { SearchBar } from '@/components/input/search-bar'
-import { SearchClearButton } from '@/components/input/search-clear-button'
 
 import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'
-import { useSearchClear } from '@/hooks/use-search-clear'
 import { useSearchOptions } from '@/hooks/use-search-options'
 import { useStorage } from '@/hooks/use-storage'
-import { useTags } from '@/hooks/use-tags'
 import { useUtils } from '@/hooks/use-utils'
 import { searchNotes } from '@/utils/search-filter'
 import { collectHighlights } from '@/utils/search-context'
 import { getQueryChips } from '@/utils/search-query'
+import { buildTagTree } from '@/utils/drawer-tags'
 import { isEmptySearch, parseSearchQuery } from '@/utils/search-parser'
 import { getEditorPath } from '@/utils/editor-path'
 import { toggleSavedSearch, removeSavedSearch, parseStoredList } from '@/utils/saved-searches'
@@ -37,7 +34,6 @@ import { TEST_IDS } from '@/constants/test-ids'
 
 export const NoteSearch = ({ onClose, initialQuery = '' }) => {
     const { t } = useTranslation()
-    const { tags } = useTags()
     const { pinned } = useUtils()
     const { notes, notePaths } = useNotes()
     const { getItem, setItem } = useStorage()
@@ -49,7 +45,7 @@ export const NoteSearch = ({ onClose, initialQuery = '' }) => {
     const [panelOpen, setPanelOpen] = useState(false)
 
     const options = useSearchOptions()
-    const { fieldRef, onClear } = useSearchClear(setQuery)
+    const tagTree = useMemo(() => buildTagTree(notes), [notes])
 
     const trimmedQuery = query.trim()
 
@@ -124,29 +120,29 @@ export const NoteSearch = ({ onClose, initialQuery = '' }) => {
             style={styles.container}
             onPress={Keyboard.dismiss}
         >
-            <SearchBar
-                ref={fieldRef}
-                value={query}
-                onChangeText={setQuery}
-                label={t('drawer.search')}
-                testID={TEST_IDS.SEARCH_INPUT}
-                endAdornment={(
-                    <ComposeRow>
-                        <SearchFilterButton
-                            active={panelOpen}
-                            onPress={onTogglePanel}
-                        />
+            <View style={styles.header}>
+                <View style={styles.field}>
+                    <SearchBar
+                        value={query}
+                        onChangeText={setQuery}
+                        label={t('drawer.search')}
+                        testID={TEST_IDS.SEARCH_INPUT}
+                    />
+                </View>
 
-                        {!!query && <SearchClearButton onPress={onClear} />}
-                    </ComposeRow>
-                )}
-            />
+                <SearchOptions
+                    matchCase={matchCase}
+                    panelOpen={panelOpen}
+                    onToggleMatchCase={options.onToggleMatchCase}
+                    onTogglePanel={onTogglePanel}
+                />
+            </View>
 
             <View style={styles.container}>
                 {panelOpen && (
                     <SearchFilterPanel
                         ast={ast}
-                        tags={tags}
+                        tagTree={tagTree}
                         query={query}
                         setQuery={setQuery}
                     />
@@ -163,13 +159,11 @@ export const NoteSearch = ({ onClose, initialQuery = '' }) => {
                         <SearchResultsToolbar
                             count={results.length}
                             sort={sort}
-                            matchCase={matchCase}
                             moreContext={moreContext}
                             isSaved={isSaved}
                             canSave={!!trimmedQuery}
                             onToggleSave={onToggleSaveSearch}
                             onChangeSort={options.onChangeSort}
-                            onToggleMatchCase={options.onToggleMatchCase}
                             onToggleMoreContext={options.onToggleMoreContext}
                         />
                         <SearchResults
@@ -206,5 +200,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         gap: SPACING.xl
+    },
+    header: {
+        flexDirection: 'row'
+    },
+    field: {
+        flex: 1,
+        marginLeft: SPACING.lg,
+        marginRight: SPACING.sm
     }
 })

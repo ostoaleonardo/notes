@@ -9,7 +9,6 @@ import { DrawerSortMenu } from '@/components/drawer/drawer-sort-menu'
 import { Check } from '@/ui/icons/check'
 import { Add } from '@/icons/add'
 import { Notes } from '@/icons/notes'
-import { Title } from '@/icons/title'
 
 import { CONTROL_TOUCH_INSET } from '@/ui/tokens/components'
 import { SPACING } from '@/constants/theme'
@@ -18,25 +17,16 @@ import { TEST_IDS } from '@/constants/test-ids'
 export const SearchResultsToolbar = ({
     count,
     sort,
-    matchCase,
     moreContext,
     isSaved,
     canSave,
     onChangeSort,
-    onToggleMatchCase,
     onToggleMoreContext,
     onToggleSave
 }) => {
     const { t } = useTranslation()
 
     const buttons = useMemo(() => [
-        {
-            icon: Title,
-            label: t('search.match_case'),
-            selected: matchCase,
-            testID: TEST_IDS.SEARCH_MATCH_CASE,
-            onPress: onToggleMatchCase
-        },
         {
             icon: Notes,
             label: t('search.more_context'),
@@ -52,7 +42,7 @@ export const SearchResultsToolbar = ({
             testID: TEST_IDS.SEARCH_SAVE,
             onPress: onToggleSave
         }
-    ], [t, matchCase, moreContext, isSaved, canSave, onToggleMatchCase, onToggleMoreContext, onToggleSave])
+    ], [t, moreContext, isSaved, canSave, onToggleMoreContext, onToggleSave])
 
     return (
         <View style={styles.container}>

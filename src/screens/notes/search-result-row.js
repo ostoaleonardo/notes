@@ -6,6 +6,7 @@ import { EntityRow } from '@/screens/connections/entity-row'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import { getSnippets } from '@/utils/search-context'
+import { getSearchText } from '@/utils/search-text'
 import { makeEntity } from '@/utils/connection-model'
 
 import { CONNECTION_TYPES } from '@/constants/connections'
@@ -24,8 +25,8 @@ export const SearchResultRow = memo(({
 
     const entity = useMemo(() => makeEntity(CONNECTION_TYPES.NOTE, note.path), [note.path])
     const snippets = useMemo(
-        () => getSnippets(note.note || '', highlights, snippetLimit),
-        [note.note, highlights, snippetLimit]
+        () => getSnippets(getSearchText(note), highlights, snippetLimit),
+        [note, highlights, snippetLimit]
     )
 
     const handlePress = useCallback(() => onPress(entity), [onPress, entity])
