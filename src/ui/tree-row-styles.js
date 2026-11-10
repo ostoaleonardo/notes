@@ -24,7 +24,6 @@ export const treeRowStyles = StyleSheet.create({
         justifyContent: 'center'
     },
     content: {
-        gap: SPACING.md,
         flexDirection: 'row',
         alignItems: 'center'
     },

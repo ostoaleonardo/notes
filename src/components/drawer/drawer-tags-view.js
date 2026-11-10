@@ -30,6 +30,7 @@ const TagRow = memo(({
     depth,
     count,
     hasChildren,
+    showSlot,
     expanded,
     onToggle
 }) => {
@@ -40,6 +41,7 @@ const TagRow = memo(({
             count={count}
             collapsed={!expanded}
             expandable={hasChildren}
+            showSlot={showSlot}
             onPress={() => onToggle(tagKey)}
         />
     )
@@ -54,6 +56,7 @@ export const DrawerTagsView = () => {
 
     const tree = useMemo(() => buildTagTree(notes), [notes])
     const rows = useMemo(() => flattenTagTree(tree, expandedTags, sort), [tree, expandedTags, sort])
+    const hasNested = useMemo(() => [...tree.values()].some((node) => node.children.size > 0), [tree])
 
     useStorageEffect(STORAGE_KEYS.TAG_SORT, (stored) => {
         if (TAG_SORT_LABELS[stored]) setSort(stored)
@@ -108,11 +111,12 @@ export const DrawerTagsView = () => {
                 depth={item.depth}
                 count={item.count}
                 hasChildren={item.hasChildren}
+                showSlot={hasNested}
                 expanded={item.expanded}
                 onToggle={onToggleTag}
             />
         )
-    }, [onToggleTag])
+    }, [onToggleTag, hasNested])
 
     return (
         <DrawerView

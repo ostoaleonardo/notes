@@ -21,6 +21,7 @@ const getRowKey = (row) => row.id
 const TagRow = memo(({
     row,
     selected,
+    showSlot,
     onSelect,
     onExpand
 }) => {
@@ -34,10 +35,10 @@ const TagRow = memo(({
                 depth={row.depth}
                 count={row.count}
                 selected={selected}
-                leadingChevron
+                onPress={onPress}
                 collapsed={!row.expanded}
                 expandable={row.hasChildren}
-                onPress={onPress}
+                showSlot={showSlot}
                 onExpand={row.hasChildren ? onToggle : undefined}
             />
         </View>
@@ -57,6 +58,7 @@ export const SearchTagList = ({
 
     const activeTags = getActiveTags(ast)
     const rows = useMemo(() => flattenTagTree(tagTree, expanded), [tagTree, expanded])
+    const hasNested = useMemo(() => [...tagTree.values()].some((node) => node.children.size > 0), [tagTree])
 
     const onSelect = useCallback((key) => setQuery(toggleTagQualifier(query, key)), [query, setQuery])
     const onExpand = useCallback((key) => setExpanded((current) => toggleInSet(current, key)), [])
@@ -86,6 +88,7 @@ export const SearchTagList = ({
                     <TagRow
                         row={item}
                         selected={activeTags.includes(item.key)}
+                        showSlot={hasNested}
                         onSelect={onSelect}
                         onExpand={onExpand}
                     />

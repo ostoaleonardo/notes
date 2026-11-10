@@ -77,6 +77,7 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
 
     const level = useMemo(() => resolveLevel(tree, drawerFolderId), [tree, drawerFolderId])
     const rows = useMemo(() => (level ? buildLevelRows(level) : []), [level])
+    const hasFolders = useMemo(() => rows.some((row) => row.type === DRAWER_ITEM_TYPES.REPOSITORY), [rows])
 
     const folderId = level?.repository.id
     const parentId = level?.repository.parentId || null
@@ -219,6 +220,7 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
                 <DrawerLevelNote
                     note={item.note}
                     active={item.note.path === currentId}
+                    showSlot={hasFolders}
                     onOpenNote={onOpenNote}
                 />
             )
@@ -240,7 +242,7 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
                 onAction={onRepositoryAction}
             />
         )
-    }, [currentId, onOpenNote, onUpLevel, onEnterFolder, onRepositoryAction])
+    }, [currentId, hasFolders, onOpenNote, onUpLevel, onEnterFolder, onRepositoryAction])
 
     const Entering = ENTERINGS[direction.current]
 

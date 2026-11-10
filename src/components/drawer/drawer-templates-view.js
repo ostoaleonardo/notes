@@ -97,6 +97,8 @@ export const DrawerTemplatesView = ({ closeDrawer }) => {
         }
     ], [t, anyCollapsed, onToggleCollapseAll])
 
+    const hasFolders = useMemo(() => rows.some((row) => row.type === DRAWER_ITEM_TYPES.FOLDER), [rows])
+
     const renderItem = useCallback(({ item }) => {
         if (item.type === DRAWER_ITEM_TYPES.FOLDER) {
             return (
@@ -115,10 +117,11 @@ export const DrawerTemplatesView = ({ closeDrawer }) => {
                     title: t(`templates.names.${item.template.name}`, item.template.name)
                 }}
                 active={item.template.filename === activeFilename}
+                showSlot={hasFolders}
                 onOpenNote={onOpenTemplate}
             />
         )
-    }, [t, activeFilename, onOpenTemplate, onFolderAction])
+    }, [t, activeFilename, hasFolders, onOpenTemplate, onFolderAction])
 
     return (
         <DrawerView

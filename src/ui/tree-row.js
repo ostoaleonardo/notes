@@ -9,17 +9,23 @@ import { treeRowStyles } from '@/ui/tree-row-styles'
 import { Touchable } from '@/ui/touchable'
 
 import { ICON_SIZE, OPACITY, RADIUS, SPACING } from '@/ui/tokens/theme'
+import { TINT } from '@/ui/tokens/transparent'
 
 export const TreeRow = ({
     label,
-    depth,
+    caption,
+    depth = 0,
     collapsed,
     expandable = true,
+    showSlot = true,
     count,
+    trailing,
+    icon: Icon,
     bold,
     uppercase,
+    variant,
     selected = false,
-    leadingChevron = false,
+    active = false,
     onPress,
     onExpand,
     onLongPress
@@ -27,59 +33,84 @@ export const TreeRow = ({
     const { colors } = useTheme()
 
     const Chevron = collapsed ? ChevronRight : KeyboardArrowDown
-    const textColor = selected ? colors.background : colors.onBackground
-    const background = selected ? { backgroundColor: colors.onBackground } : undefined
-    const paddingStart = SPACING.md + depth * SPACING.lg
+    const SlotIcon = Icon ?? (expandable ? Chevron : null)
+    const hasSlot = showSlot || !!SlotIcon
+    const paddingStart = depth * SPACING.lg + (hasSlot ? 0 : SPACING.md)
+    const textColor = (selected && colors.background) || (active && colors.accentText) || colors.onBackground
+    const tinted = selected || active
 
-    const chevron = (
+    let background
+    if (selected) background = { backgroundColor: colors.onBackground }
+    if (active) background = { backgroundColor: colors.tertiary + TINT.fill }
+
+    const slot = hasSlot && (
         <Pressable
-            disabled={!onExpand}
-            accessibilityRole={onExpand ? 'button' : undefined}
-            hitSlop={SPACING.sm}
             onPress={onExpand}
+            disabled={!onExpand}
+            hitSlop={SPACING.sm}
+            accessibilityRole={onExpand ? 'button' : undefined}
             style={treeRowStyles.slot}
         >
-            {expandable && (
-                <Chevron
+            {!!SlotIcon && (
+                <SlotIcon
                     color={textColor}
-                    opacity={OPACITY.muted}
                     width={ICON_SIZE.lg}
                     height={ICON_SIZE.lg}
+                    opacity={Icon ? undefined : OPACITY.muted}
                 />
             )}
         </Pressable>
     )
 
+    const title = (
+        <Typography
+            numberOfLines={1}
+            variant={variant}
+            uppercase={uppercase}
+            bold={bold || active}
+            color={tinted ? textColor : undefined}
+        >
+            {label}
+        </Typography>
+    )
+
     return (
         <View style={[styles.container, background]}>
             <Touchable
-                accessibilityRole='button'
-                accessibilityState={expandable ? { expanded: !collapsed } : undefined}
                 onPress={onPress}
                 onLongPress={onLongPress}
-                style={[treeRowStyles.touch, leadingChevron && treeRowStyles.touchEnd, { paddingStart }]}
+                accessibilityRole='button'
+                accessibilityState={expandable ? { expanded: !collapsed } : undefined}
+                style={[
+                    treeRowStyles.touch,
+                    treeRowStyles.touchEnd,
+                    { paddingStart }
+                ]}
             >
                 <View style={treeRowStyles.content}>
-                    {leadingChevron && chevron}
-                    <Typography
-                        bold={bold}
-                        color={selected ? textColor : undefined}
-                        uppercase={uppercase}
-                        numberOfLines={1}
-                        styleProps={treeRowStyles.label}
-                    >
-                        {label}
-                    </Typography>
+                    {slot}
+                    <View style={treeRowStyles.label}>
+                        {title}
+                        {!!caption && (
+                            <Typography
+                                numberOfLines={1}
+                                variant='bodySmall'
+                                opacity={OPACITY.muted}
+                            >
+                                {caption}
+                            </Typography>
+                        )}
+                    </View>
                     {count !== undefined && (
                         <Typography
-                            color={selected ? textColor : undefined}
-                            opacity={OPACITY.muted}
                             variant='bodySmall'
+                            opacity={OPACITY.muted}
+                            color={tinted ? textColor : undefined}
                         >
                             {count}
                         </Typography>
                     )}
-                    {!leadingChevron && chevron}
+                    {trailing}
                 </View>
             </Touchable>
         </View>

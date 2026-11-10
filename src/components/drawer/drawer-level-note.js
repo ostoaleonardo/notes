@@ -1,58 +1,24 @@
 import { memo, useCallback } from 'react'
-import { StyleSheet, View } from 'react-native'
 
-import { Typography } from '@/ui/typography'
-import { Touchable } from '@/ui/touchable'
-import { useTheme } from '@/ui/hooks/use-theme'
-import { treeRowStyles } from '@/ui/tree-row-styles'
-
-import { RADIUS, SPACING } from '@/constants/theme'
-import { TRANSPARENT } from '@/constants/themes'
+import { TreeRow } from '@/ui/tree-row'
 
 export const DrawerLevelNote = memo(({
     note,
     depth = 0,
     active,
+    showSlot = true,
     onOpenNote
 }) => {
-    const { colors } = useTheme()
-
     const onPress = useCallback(() => onOpenNote(note.path), [onOpenNote, note.path])
 
-    const color = active ? colors.accentText : colors.onBackground
-    const paddingStart = SPACING.md + depth * SPACING.lg
-
     return (
-        <View
-            style={[
-                styles.container,
-                { backgroundColor: active ? colors.tertiary + TRANSPARENT[20] : colors.transparent }
-            ]}
-        >
-            <Touchable
-                accessibilityRole='button'
-                accessibilityState={{ selected: !!active }}
-                onPress={onPress}
-                style={[treeRowStyles.touch, treeRowStyles.touchEnd, { paddingStart }]}
-            >
-                <View style={treeRowStyles.content}>
-                    <Typography
-                        bold={active}
-                        color={color}
-                        numberOfLines={1}
-                        styleProps={treeRowStyles.label}
-                    >
-                        {note.title}
-                    </Typography>
-                </View>
-            </Touchable>
-        </View>
+        <TreeRow
+            label={note.title}
+            depth={depth}
+            active={!!active}
+            expandable={false}
+            showSlot={showSlot}
+            onPress={onPress}
+        />
     )
-})
-
-const styles = StyleSheet.create({
-    container: {
-        overflow: 'hidden',
-        borderRadius: RADIUS.xl
-    }
 })
