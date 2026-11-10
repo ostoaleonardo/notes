@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react'
 import { View } from 'react-native'
 
 import { DrawerFolderActions } from './drawer-folder-actions'
-import { DrawerTreeRow } from './drawer-tree-row'
+import { TreeRow } from '@/ui/tree-row'
 
 import { useMenuAction } from '@/hooks/use-menu-action'
 import { useUtils } from '@/hooks/use-utils'
@@ -24,7 +24,7 @@ export const DrawerTemplateFolderItem = memo(({
 
     return (
         <View>
-            <DrawerTreeRow
+            <TreeRow
                 uppercase
                 label={folder.name}
                 depth={folder.depth}

@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native'
 import { Typography } from '@/ui/typography'
 import { Touchable } from '@/ui/touchable'
 import { useTheme } from '@/ui/hooks/use-theme'
-import { levelRowStyles } from './drawer-level-styles'
+import { treeRowStyles } from '@/ui/tree-row-styles'
 
 import { RADIUS, SPACING } from '@/constants/theme'
 import { TRANSPARENT } from '@/constants/themes'
@@ -33,14 +33,14 @@ export const DrawerLevelNote = memo(({
                 accessibilityRole='button'
                 accessibilityState={{ selected: !!active }}
                 onPress={onPress}
-                style={[levelRowStyles.touch, levelRowStyles.touchEnd, { paddingStart }]}
+                style={[treeRowStyles.touch, treeRowStyles.touchEnd, { paddingStart }]}
             >
-                <View style={levelRowStyles.content}>
+                <View style={treeRowStyles.content}>
                     <Typography
                         bold={active}
                         color={color}
                         numberOfLines={1}
-                        styleProps={levelRowStyles.label}
+                        styleProps={treeRowStyles.label}
                     >
                         {note.title}
                     </Typography>

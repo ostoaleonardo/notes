@@ -5,7 +5,7 @@ import { EntityIcon } from './entity-icon'
 import { Chip } from '@/ui/chip'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { ChevronRight } from '@/icons/chevron-right'
+import { ChevronRight } from '@/ui/icons/chevron-right'
 
 import { FOCUS } from '@/constants/connections'
 import { ICON_SIZE, SPACING } from '@/constants/theme'

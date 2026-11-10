@@ -5,11 +5,11 @@ import { Typography } from '@/ui/typography'
 import { Touchable } from '@/ui/touchable'
 import { useTheme } from '@/ui/hooks/use-theme'
 import { DrawerFolderActions } from './drawer-folder-actions'
-import { levelRowStyles } from './drawer-level-styles'
+import { treeRowStyles } from '@/ui/tree-row-styles'
 
 import { useMenuAction } from '@/hooks/use-menu-action'
 
-import { ChevronRight } from '@/icons/chevron-right'
+import { ChevronRight } from '@/ui/icons/chevron-right'
 
 import { OPACITY, RADIUS, ICON_SIZE } from '@/constants/theme'
 
@@ -34,13 +34,13 @@ export const DrawerLevelFolder = memo(({
                     accessibilityRole='button'
                     onPress={onPress}
                     onLongPress={menu.onOpen}
-                    style={levelRowStyles.touch}
+                    style={treeRowStyles.touch}
                 >
-                    <View style={levelRowStyles.content}>
-                        <Typography uppercase numberOfLines={1} styleProps={levelRowStyles.label}>
+                    <View style={treeRowStyles.content}>
+                        <Typography uppercase numberOfLines={1} styleProps={treeRowStyles.label}>
                             {repository.alias}
                         </Typography>
-                        <View style={levelRowStyles.slot}>
+                        <View style={treeRowStyles.slot}>
                             <ChevronRight
                                 color={colors.onBackground}
                                 opacity={OPACITY.muted}

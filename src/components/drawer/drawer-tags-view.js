@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { DrawerView } from './drawer-view'
 import { DrawerTagsEmpty } from './drawer-empty'
-import { DrawerTreeRow } from './drawer-tree-row'
+import { TreeRow } from '@/ui/tree-row'
 
 import { useNotes } from '@/hooks/use-notes'
 import { useStorage } from '@/hooks/use-storage'
@@ -34,7 +34,7 @@ const TagRow = memo(({
     onToggle
 }) => {
     return (
-        <DrawerTreeRow
+        <TreeRow
             label={name}
             depth={depth}
             count={count}

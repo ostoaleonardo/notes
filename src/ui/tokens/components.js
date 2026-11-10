@@ -1,5 +1,10 @@
 import { ICON_SIZE, RADIUS, SIZE, SPACING } from './theme'
 
+export const TREE_ROW = {
+    minHeight: SIZE.sm,
+    slotSize: SIZE.xs
+}
+
 export const GRID_ITEM = {
     height: SIZE.lg,
     gap: SPACING.md,

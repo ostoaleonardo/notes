@@ -1,12 +1,12 @@
 import { StyleSheet } from 'react-native'
 
-import { DRAWER_ITEM } from '@/constants/components'
-import { SPACING } from '@/constants/theme'
+import { TREE_ROW } from '@/ui/tokens/components'
+import { SPACING } from '@/ui/tokens/theme'
 
-export const levelRowStyles = StyleSheet.create({
+export const treeRowStyles = StyleSheet.create({
     touch: {
         flex: 1,
-        minHeight: DRAWER_ITEM.minHeight,
+        minHeight: TREE_ROW.minHeight,
         justifyContent: 'center',
         paddingStart: SPACING.md
     },
@@ -17,8 +17,8 @@ export const levelRowStyles = StyleSheet.create({
         paddingStart: 0
     },
     slot: {
-        width: DRAWER_ITEM.slotSize,
-        height: DRAWER_ITEM.slotSize,
+        width: TREE_ROW.slotSize,
+        height: TREE_ROW.slotSize,
         margin: 0,
         alignItems: 'center',
         justifyContent: 'center'

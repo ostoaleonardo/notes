@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native'
 import { Typography } from '@/ui/typography'
 import { Touchable } from '@/ui/touchable'
 import { useTheme } from '@/ui/hooks/use-theme'
-import { levelRowStyles } from './drawer-level-styles'
+import { treeRowStyles } from '@/ui/tree-row-styles'
 
 import { ArrowBack } from '@/icons/arrow-back'
 
@@ -22,10 +22,10 @@ export const DrawerLevelHeader = memo(({
                 <Touchable
                     accessibilityRole='button'
                     onPress={onBack}
-                    style={[levelRowStyles.touch, levelRowStyles.touchStart]}
+                    style={[treeRowStyles.touch, treeRowStyles.touchStart]}
                 >
-                    <View style={levelRowStyles.content}>
-                        <View style={levelRowStyles.slot}>
+                    <View style={treeRowStyles.content}>
+                        <View style={treeRowStyles.slot}>
                             <ArrowBack
                                 color={colors.onBackground}
                                 width={ICON_SIZE.lg}
@@ -37,7 +37,7 @@ export const DrawerLevelHeader = memo(({
                             uppercase
                             variant='titleSmall'
                             numberOfLines={1}
-                            styleProps={levelRowStyles.label}
+                            styleProps={treeRowStyles.label}
                         >
                             {repository.alias}
                         </Typography>

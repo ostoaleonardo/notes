@@ -26,7 +26,3 @@ export const CARD_GRID = {
     padding: SPACING.lg
 }
 
-export const DRAWER_ITEM = {
-    minHeight: SIZE.sm,
-    slotSize: SIZE.xs
-}
