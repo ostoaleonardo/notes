@@ -159,6 +159,40 @@ describe('search notes by text', () => {
     })
 })
 
+describe('search notes with phrases', () => {
+    test('a phrase needs whole words in the content', () => {
+        expect(run('"happy cat"')).toEqual(['note-3'])
+        expect(run('"appy cat"')).toEqual([])
+        expect(run('"a random thought about HappyC"')).toEqual([])
+    })
+
+    test('an unquoted term matches inside a word', () => {
+        expect(run('appy')).toEqual(['note-3'])
+    })
+
+    test('a phrase matches inside the title and the path', () => {
+        expect(run('"kly stan"')).toEqual(['note-1'])
+        expect(run('"ork/Meet"')).toEqual(['note-1'])
+    })
+
+    test('a phrase respects the case option', () => {
+        expect(run('"HappyCat"', { matchCase: true })).toEqual(['note-3'])
+        expect(run('"happycat"', { matchCase: true })).toEqual([])
+    })
+})
+
+describe('search notes in the properties text', () => {
+    test('finds words that only exist in the frontmatter', () => {
+        expect(run('2026-03-01')).toEqual(['note-1'])
+        expect(run('"status: draft"')).toEqual(['note-1'])
+    })
+
+    test('line and content operators read the frontmatter too', () => {
+        expect(run('line:(due 2026)')).toEqual(['note-1'])
+        expect(run('content:duration')).toEqual(['note-1'])
+    })
+})
+
 describe('search notes with operators', () => {
     test('file matches only the file name', () => {
         expect(run('file:standup')).toEqual(['note-1'])

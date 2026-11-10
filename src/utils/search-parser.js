@@ -57,8 +57,9 @@ const createParser = (source, { property = false } = {}) => {
         ...fields
     })
 
-    const createText = (value, start) => createNode(SEARCH_NODE_TYPES.TEXT, start, {
+    const createText = (value, start, phrase = false) => createNode(SEARCH_NODE_TYPES.TEXT, start, {
         value,
+        phrase,
         lower: value.toLowerCase()
     })
 
@@ -156,7 +157,7 @@ const createParser = (source, { property = false } = {}) => {
     const parseValue = () => {
         const start = pos
 
-        if (source[pos] === QUOTE_CHAR) return createText(readQuoted(), start)
+        if (source[pos] === QUOTE_CHAR) return createText(readQuoted(), start, true)
 
         return (source[pos] === REGEX_DELIMITER && parseRegex()) || parseWord()
     }
@@ -241,7 +242,7 @@ const createParser = (source, { property = false } = {}) => {
         }
 
         if (char === PROPERTY_BRACKETS.OPEN) return parseProperty()
-        if (char === QUOTE_CHAR) return createText(readQuoted(), start)
+        if (char === QUOTE_CHAR) return createText(readQuoted(), start, true)
         if (char === REGEX_DELIMITER) return parseRegex() || parseWord()
 
         const prefix = OPERATOR_PREFIX_REGEX.exec(source.slice(pos))

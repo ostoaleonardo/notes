@@ -1,4 +1,5 @@
 import { getNoteTags } from './note-tags'
+import { getSearchText } from './search-text'
 import { sortNotes } from './note-sort'
 import { getTagValue } from './search-parser'
 import { matchesTag } from './tag-names'
@@ -15,14 +16,29 @@ import {
     TASK_STATUSES_DONE,
     TASK_STATUS_LINE_REGEX,
     TASK_STATUS_TODO,
-    UNIT_OPERATORS
+    UNIT_OPERATORS,
+    WORD_CHARACTER_PATTERN
 } from '@/constants/search-query'
 
-const createField = (raw) => {
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+const getWordRegex = (node, sensitive) => {
+    const key = sensitive ? 'wordRegexSensitive' : 'wordRegexInsensitive'
+
+    if (!node[key]) {
+        const source = `(?<!${WORD_CHARACTER_PATTERN})${escapeRegex(node.value)}(?!${WORD_CHARACTER_PATTERN})`
+        node[key] = new RegExp(source, sensitive ? 'u' : 'iu')
+    }
+
+    return node[key]
+}
+
+const createField = (raw, wholeWord = false) => {
     let lower = null
 
     return {
         raw,
+        wholeWord,
         get lower() {
             if (lower === null) lower = raw.toLowerCase()
             return lower
@@ -57,7 +73,7 @@ const splitSections = (lines) => {
 
 const readTasks = (lines) => lines.flatMap((line) => {
     const match = TASK_STATUS_LINE_REGEX.exec(line)
-    return match ? [{ field: createField(line.slice(match[0].length)), status: match[1] }] : []
+    return match ? [{ field: createField(line.slice(match[0].length), true), status: match[1] }] : []
 })
 
 const infoCache = new WeakMap()
@@ -66,16 +82,16 @@ const getNoteInfo = (note) => {
     let info = infoCache.get(note)
 
     if (!info) {
-        const content = note.note || ''
+        const content = getSearchText(note)
         const lines = createLazy(() => content.split('\n'))
 
         info = {
             title: createField(note.title || ''),
             filename: createField(note.filename || note.title || ''),
-            content: createField(content),
-            lines: createLazy(() => lines().map(createField)),
-            blocks: createLazy(() => content.split(BLOCK_SEPARATOR_REGEX).map(createField)),
-            sections: createLazy(() => splitSections(lines()).map(createField)),
+            content: createField(content, true),
+            lines: createLazy(() => lines().map((line) => createField(line, true))),
+            blocks: createLazy(() => content.split(BLOCK_SEPARATOR_REGEX).map((block) => createField(block, true))),
+            sections: createLazy(() => splitSections(lines()).map((section) => createField(section, true))),
             tasks: createLazy(() => readTasks(lines())),
             hasImages: createLazy(() => IMAGE_REFERENCE_REGEX.test(content)),
             hasFiles: createLazy(() => FILE_REFERENCE_REGEX.test(content))
@@ -127,6 +143,12 @@ const taskMatches = (name, status) => {
     return true
 }
 
+const matchesText = (node, field, sensitive) => {
+    if (node.phrase && field.wholeWord) return getWordRegex(node, sensitive).test(field.raw)
+
+    return sensitive ? field.raw.includes(node.value) : field.lower.includes(node.lower)
+}
+
 const evaluate = (node, state) => {
     switch (node.type) {
         case SEARCH_NODE_TYPES.AND:
@@ -136,9 +158,7 @@ const evaluate = (node, state) => {
         case SEARCH_NODE_TYPES.NOT:
             return !evaluate(node.child, state)
         case SEARCH_NODE_TYPES.TEXT:
-            return state.fields.some((field) => (
-                state.sensitive ? field.raw.includes(node.value) : field.lower.includes(node.lower)
-            ))
+            return state.fields.some((field) => matchesText(node, field, state.sensitive))
         case SEARCH_NODE_TYPES.REGEX: {
             const regex = state.sensitive ? node.regexes.sensitive : node.regexes.insensitive
             return state.fields.some((field) => regex.test(field.raw))

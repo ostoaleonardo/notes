@@ -65,6 +65,8 @@ export const FILE_REFERENCE_REGEX = /!?\[\[[^\]|#]+\.(?!(?:md|png|jpe?g|gif|webp
 export const TASK_STATUS_TODO = ' '
 export const TASK_STATUSES_DONE = ['x', 'X']
 
+export const WORD_CHARACTER_PATTERN = '[\\p{L}\\p{N}_]'
+
 export const NEGATION_PREFIX = '-'
 export const OR_KEYWORD = 'OR'
 export const NULL_KEYWORD = 'null'

@@ -5,6 +5,7 @@ export const MOCK_SEARCH_NOTES = [
         filename: 'Weekly standup.md',
         tags: ['work'],
         properties: { status: 'draft', duration: 4, aliases: [] },
+        rawFrontmatter: 'status: draft\nduration: 4\ndue: 2026-03-01',
         note: '# Agenda\nAgenda for the week\n\n## Tasks\n- [ ] call Ana\n- [x] email Bob',
         createdAt: new Date('2026-01-01T10:00:00Z').getTime(),
         updatedAt: new Date('2026-01-05T10:00:00Z').getTime()
