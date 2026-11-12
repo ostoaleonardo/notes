@@ -119,6 +119,52 @@ Simple notes that stay on your phone.
 - Filter by tag, folder, pinned or images.
 - Save the searches you use often.
 - See your recent searches.
+- Turn on match case, see the matching lines and sort the results.
+
+<br clear="right" />
+
+## Advanced search
+
+<img align="right" width="220" alt="Search filters" src="docs/screenshots/filters.png" />
+
+- Tap the filter button to pick what to look for.
+- Match a tag, folder, file name, property or content.
+- Find notes with pending or done tasks, images or files.
+- Match words in the same line or the same section.
+- Combine words with `OR`, `-` and parentheses, or use `/regex/`.
+- Each filter you add becomes a chip you can remove with a tap.
+
+<br clear="right" />
+
+## Share to Notes
+
+<img align="right" width="220" alt="Share to Notes" src="docs/screenshots/share.png" />
+
+- Share text or a link from any app to Notes.
+- Save it as a new note named with today's date.
+- Add it to today's daily note.
+- Add it to a note you choose.
+- A shared link is saved as a Markdown link.
+
+<br clear="right" />
+
+## Recent notes
+
+<img align="right" width="220" alt="Recent notes" src="docs/screenshots/recent.png" />
+
+- Open the notes you used last from a card grid.
+- Remove a card with its close button.
+- Start a new note from the same sheet.
+
+<br clear="right" />
+
+## Home screen widgets
+
+<img align="right" width="220" alt="Home screen widgets" src="docs/screenshots/widgets.png" />
+
+- Create a note in one tap.
+- Open today's daily note.
+- Show your latest pinned note.
 
 <br clear="right" />
 
