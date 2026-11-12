@@ -8,21 +8,22 @@ import { useStorage } from './use-storage'
 import { useFileStorage } from './use-file-storage'
 import { getDate } from '@/utils/date'
 import { getDailyNoteTitle, planDailyNote } from '@/utils/daily-note'
+import { appendSharedContent } from '@/utils/shared-note'
 import { renderTemplate } from '@/utils/render-template'
 import { scopedStorageKey } from '@/utils/scoped-storage-key'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
 export function useDailyNote() {
-    const { notes, saveNote } = useNotes()
     const { getTemplate } = useTemplates()
-    const { currentLanguage } = useLanguage()
-    const { activeRepository, getDescendants } = useRepositories()
     const { getItem, setItem } = useStorage()
+    const { currentLanguage } = useLanguage()
     const { directoryExists } = useFileStorage()
+    const { notes, saveNote, updateNote } = useNotes()
+    const { activeRepository, getDescendants } = useRepositories()
     const busy = useRef(false)
 
-    const open = async () => {
+    const open = async ({ append } = {}) => {
         if (busy.current || !activeRepository) return null
 
         busy.current = true
@@ -42,12 +43,24 @@ export function useDailyNote() {
             }, directoryExists)
 
             if (!plan) return null
-            if (plan.existing) return plan.existing.path
+
+            if (plan.existing) {
+                if (append) {
+                    await updateNote({
+                        ...plan.existing,
+                        note: appendSharedContent(plan.existing.note, append)
+                    })
+                }
+
+                return plan.existing.path
+            }
 
             const template = templateFilename ? await getTemplate(templateFilename) : null
             if (templateFilename && !template) await setItem(templateKey, '')
 
-            const note = template ? renderTemplate(template.content, { title, language: currentLanguage }) : ''
+            const rendered = template ? renderTemplate(template.content, { title, language: currentLanguage }) : ''
+            const note = append ? appendSharedContent(rendered, append) : rendered
+
             const { path } = await saveNote(
                 { title, note, tags: [], createdAt: getDate() },
                 plan.repository.id
@@ -62,5 +75,5 @@ export function useDailyNote() {
     const latest = useRef(open)
     latest.current = open
 
-    return useCallback(() => latest.current(), [])
+    return useCallback((options) => latest.current(options), [])
 }

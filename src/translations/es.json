@@ -682,5 +682,12 @@
 			},
 			"cta": "💡 Puedes probarlo cuando quieras desde Ajustes."
 		}
+	},
+	"share": {
+		"title": "Añadir texto compartido a",
+		"new_note": "Nota nueva",
+		"add_to_daily": "Añadir a la nota diaria",
+		"add_to_note": "Añadir a una nota",
+		"choose_note": "Elige una nota"
 	}
 }

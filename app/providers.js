@@ -10,6 +10,7 @@ import { RecentNotesProvider } from '@/context/recent-notes-context'
 import { RepositoryProvider } from '@/context/repository-context'
 import { UtilsProvider } from '@/context/utils-context'
 import { WidgetsProvider } from '@/context/widgets-provider'
+import { ShareIntentHandler } from '@/screens/share/share-intent-handler'
 import { GlobalSnackbarHost } from '@/ui/snackbar/snackbar-host'
 
 export default function Providers({ children }) {
@@ -26,6 +27,7 @@ export default function Providers({ children }) {
                                             <KeyboardProvider>
                                                 <BottomSheetModalProvider>
                                                     {children}
+                                                    <ShareIntentHandler />
                                                 </BottomSheetModalProvider>
                                             </KeyboardProvider>
                                         </ImportProvider>

@@ -682,5 +682,12 @@
 			},
 			"cta": "💡 You can try it anytime from Settings."
 		}
+	},
+	"share": {
+		"title": "Add shared text to",
+		"new_note": "New note",
+		"add_to_daily": "Add to daily note",
+		"add_to_note": "Add to a note",
+		"choose_note": "Choose a note"
 	}
 }

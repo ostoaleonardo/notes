@@ -63,6 +63,13 @@ export default {
     'expo-localization',
     ['expo-image-picker', { microphonePermission: false }],
     './plugins/with-markdown-intent',
+    [
+      'expo-share-intent',
+      {
+        disableIOS: true,
+        androidIntentFilters: ['text/*']
+      }
+    ],
     './plugins/with-text-handle-color',
     './plugins/with-release-permissions',
     './plugins/with-transparent-navigation-bar',
