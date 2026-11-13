@@ -508,39 +508,6 @@
 			"ideas": "Lluvia de ideas",
 			"goals": "Objetivo"
 		},
-		"journal": {
-			"mood": "Cómo me siento hoy",
-			"gratitude": "Agradecimientos",
-			"highlight": "Lo más destacado de hoy",
-			"reflection": "Reflexión",
-			"tomorrow": "Plan de mañana"
-		},
-		"item_placeholder": "Escribe aquí...",
-		"checklist": {
-			"urgent": "Urgente",
-			"week": "Esta semana",
-			"someday": "Algún día"
-		},
-		"meeting": {
-			"attendees": "Asistentes",
-			"objective": "Objetivo",
-			"agenda": "Agenda",
-			"notes": "Notas",
-			"decisions": "Decisiones",
-			"next_steps": "Próximos pasos"
-		},
-		"ideas": {
-			"main": "Idea principal",
-			"pros": "A favor",
-			"cons": "En contra",
-			"next_steps": "Próximos pasos"
-		},
-		"goals": {
-			"objective": "Objetivo",
-			"why": "Por qué importa",
-			"steps": "Pasos",
-			"deadline": "Plazo"
-		},
 		"new": "Nueva plantilla",
 		"import": "Importar",
 		"save": {
@@ -603,85 +570,6 @@
 		"html": "HTML",
 		"pdf": "PDF",
 		"save_to_device": "Guardar en el dispositivo"
-	},
-	"welcome": {
-		"title": "Bienvenida",
-		"intro": "Esta es tu primera nota. Un repaso corto de lo nuevo, sección por sección.",
-		"style": {
-			"heading": "✨ Dale estilo y estructura a tu texto",
-			"bold": "**Negrita**: agrega ** alrededor de la palabra para resaltarla con más fuerza.",
-			"italic": "*Cursiva*: agrega * alrededor de la palabra para darle un énfasis más suave.",
-			"strike": "~~Tachado~~: agrega ~~ alrededor de la palabra para marcarla como descartada.",
-			"code": "`Código`: agrega ` alrededor de la palabra para mostrarla con formato de código.",
-			"footer": "**¿Prefieres no escribir los símbolos?** Usa los íconos de la barra inferior."
-		},
-		"organize": {
-			"quote": "**Cita**: agrega > al inicio de la línea para destacar un fragmento importante.",
-			"task": "**Lista de tareas**: agrega - [ ] al inicio de la línea para marcar pendientes.",
-			"table": {
-				"bullet": "**Tabla**: agrega | entre cada columna para ordenar datos en filas y columnas.",
-				"col1": "Función",
-				"col2": "Cómo se escribe",
-				"row1_1": "Encabezado",
-				"row1_2": "# o ##",
-				"row2_1": "Enlace",
-				"row2_2": "[texto](URL)",
-				"row3_1": "Separador",
-				"row3_2": "---"
-			},
-			"quote_example": "Así se ve una cita destacada.",
-			"task_example": "Marca esto cuando lo termines"
-		},
-		"attachments": {
-			"heading": "📎 Adjunta archivos",
-			"image": "**Vista previa**: escribe `![[foto.png]]` para mostrar un archivo compatible dentro de la nota.",
-			"link": "**Otros archivos**: escribe `[[documento.pdf]]` para obtener un chip que lo abre en otra app.",
-			"footer": "Encuentra todos los archivos adjuntos en la vista **Archivos** del menú lateral."
-		},
-		"tools": {
-			"heading": "🧰 Más herramientas",
-			"tags": {
-				"title": "Etiquetas",
-				"body": "Organiza tus notas por tema y encuéntralas rápido."
-			},
-			"templates": {
-				"title": "Plantillas",
-				"body": "Crea notas nuevas con una estructura lista para usar."
-			},
-			"history": {
-				"title": "Historial de versiones",
-				"body": "Vuelve a una versión anterior de tu nota."
-			},
-			"export": {
-				"title": "Exportar",
-				"body": "Guarda tu nota como archivo Markdown."
-			},
-			"share": {
-				"title": "Compartir",
-				"body": "Envíala directo a otra app."
-			},
-			"daily": {
-				"title": "Nota diaria",
-				"body": "Toca el botón de calendario del menú lateral para abrir la nota de hoy. Elige su carpeta y plantilla en Ajustes."
-			}
-		},
-		"pro": {
-			"heading": "⭐ Saca más provecho con Pro",
-			"intro": "La versión Pro te da:",
-			"versions": {
-				"title": "Historial de versiones completo",
-				"body": "Sin límite, para volver a cualquier punto de tu nota."
-			},
-			"subfolders": {
-				"title": "Subcarpetas",
-				"body": "Todas las que necesites para organizar tus repositorios."
-			},
-			"accents": {
-				"title": "Colores de acento",
-				"body": "Personalízalos para darle tu toque a la app."
-			},
-			"cta": "💡 Puedes probarlo cuando quieras desde Ajustes."
-		}
 	},
 	"share": {
 		"title": "Añadir texto compartido a",

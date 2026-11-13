@@ -131,6 +131,7 @@
           "/dom-tests/"
         ],
         "moduleNameMapper": {
+          "\\.md$": "<rootDir>/jest/markdown-stub.js",
           "^@/(.*)$": "<rootDir>/src/$1"
         }
       },

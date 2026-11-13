@@ -1,9 +1,21 @@
 import { renderHook } from '@testing-library/react-native'
 
 import { useRepositoryTreeOps } from '../use-repository-tree-ops'
+import { setBundledContent } from '@/utils/bundled-content'
 import { DEFAULT_TEMPLATE_FILES } from '@/constants/default-templates'
 
 let mockUuidCount = 0
+
+beforeAll(() => {
+    setBundledContent({
+        welcome: {},
+        templates: {
+            en: Object.fromEntries(
+                Object.keys(DEFAULT_TEMPLATE_FILES).map((key) => [key.toLowerCase(), `## ${key}`])
+            )
+        }
+    })
+})
 
 jest.mock('expo-crypto', () => ({
     randomUUID: () => `uuid-${++mockUuidCount}`

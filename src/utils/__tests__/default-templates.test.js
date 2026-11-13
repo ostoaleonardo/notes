@@ -1,23 +1,49 @@
+import fs from 'fs'
+import path from 'path'
+
 import { getDefaultTemplates } from '../default-templates'
 import { getWelcomeNote } from '../welcome-note'
+import { setBundledContent } from '../bundled-content'
 import { DEFAULT_TEMPLATE_FILES } from '@/constants/default-templates'
 
-describe('default templates', () => {
-    const templates = getDefaultTemplates()
+const CONTENT_DIR = path.join(process.cwd(), 'src', 'content')
 
+const readContent = (...parts) => fs.readFileSync(path.join(CONTENT_DIR, ...parts), 'utf8')
+
+const readLanguage = (language) => ({
+    welcome: readContent('welcome', `${language}.md`),
+    templates: Object.fromEntries(
+        Object.keys(DEFAULT_TEMPLATE_FILES).map((key) => [
+            key.toLowerCase(),
+            readContent('templates', language, `${key.toLowerCase()}.md`)
+        ])
+    )
+})
+
+beforeAll(() => {
+    const en = readLanguage('en')
+    const es = readLanguage('es')
+
+    setBundledContent({
+        welcome: { en: en.welcome, es: es.welcome },
+        templates: { en: en.templates, es: es.templates }
+    })
+})
+
+describe('default templates', () => {
     test('creates one template per default file', () => {
-        expect(templates.map((template) => template.filename).sort())
+        expect(getDefaultTemplates().map((template) => template.filename).sort())
             .toEqual(Object.values(DEFAULT_TEMPLATE_FILES).sort())
     })
 
     test('every template has headings and non-empty content', () => {
-        templates.forEach((template) => {
+        getDefaultTemplates().forEach((template) => {
             expect(template.content).toContain('## ')
         })
     })
 
     test('titled templates start with the title and date placeholders', () => {
-        const titled = templates.filter(
+        const titled = getDefaultTemplates().filter(
             (template) => template.filename !== DEFAULT_TEMPLATE_FILES.JOURNAL
         )
 
@@ -27,7 +53,7 @@ describe('default templates', () => {
     })
 
     test('checklist template contains unchecked tasks', () => {
-        const checklist = templates.find(
+        const checklist = getDefaultTemplates().find(
             (template) => template.filename === DEFAULT_TEMPLATE_FILES.CHECKLIST
         )
 
@@ -36,20 +62,25 @@ describe('default templates', () => {
 })
 
 describe('welcome note', () => {
-    const note = getWelcomeNote()
+    test('splits the title line from the content', () => {
+        const note = getWelcomeNote()
 
-    test('has a title and content', () => {
-        expect(note.title.length).toBeGreaterThan(0)
+        expect(note.title).toBe('Welcome')
+        expect(note.content.startsWith('# ')).toBe(false)
         expect(note.content.length).toBeGreaterThan(0)
     })
 
     test('contains the style, tools and pro sections separated by rules', () => {
-        expect(note.content.match(/^## /gm).length).toBeGreaterThanOrEqual(4)
-        expect(note.content).toContain('\n---\n')
+        const { content } = getWelcomeNote()
+
+        expect(content.match(/^## /gm).length).toBeGreaterThanOrEqual(4)
+        expect(content).toContain('\n---\n')
     })
 
     test('contains an example table and task', () => {
-        expect(note.content).toContain('| --- | --- |')
-        expect(note.content).toContain('- [ ] ')
+        const { content } = getWelcomeNote()
+
+        expect(content).toContain('| --- | --- |')
+        expect(content).toContain('- [ ] ')
     })
 })

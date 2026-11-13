@@ -508,39 +508,6 @@
 			"ideas": "Brainstorm",
 			"goals": "Goal"
 		},
-		"journal": {
-			"mood": "How I'm feeling today",
-			"gratitude": "Grateful for",
-			"highlight": "Today's highlight",
-			"reflection": "Reflection",
-			"tomorrow": "Tomorrow's plan"
-		},
-		"item_placeholder": "Write here...",
-		"checklist": {
-			"urgent": "Urgent",
-			"week": "This week",
-			"someday": "Someday"
-		},
-		"meeting": {
-			"attendees": "Attendees",
-			"objective": "Objective",
-			"agenda": "Agenda",
-			"notes": "Notes",
-			"decisions": "Decisions",
-			"next_steps": "Next steps"
-		},
-		"ideas": {
-			"main": "Main idea",
-			"pros": "Pros",
-			"cons": "Cons",
-			"next_steps": "Next steps"
-		},
-		"goals": {
-			"objective": "Objective",
-			"why": "Why it matters",
-			"steps": "Steps",
-			"deadline": "Deadline"
-		},
 		"new": "New template",
 		"import": "Import",
 		"save": {
@@ -603,85 +570,6 @@
 		"html": "HTML",
 		"pdf": "PDF",
 		"save_to_device": "Save to device"
-	},
-	"welcome": {
-		"title": "Welcome",
-		"intro": "This is your first note. A quick tour of what's new, section by section.",
-		"style": {
-			"heading": "✨ Style and structure your text",
-			"bold": "**Bold**: add ** around the word to make it stand out more.",
-			"italic": "*Italic*: add * around the word for a softer emphasis.",
-			"strike": "~~Strikethrough~~: add ~~ around the word to mark it as discarded.",
-			"code": "`Code`: add ` around the word to show it in code format.",
-			"footer": "**Would rather not type the symbols?** Use the icons in the bottom bar."
-		},
-		"organize": {
-			"quote": "**Quote**: add > at the start of the line to highlight an important part.",
-			"task": "**To-do list**: add - [ ] at the start of the line to mark something pending.",
-			"table": {
-				"bullet": "**Table**: add | between each column to sort data into rows and columns.",
-				"col1": "Feature",
-				"col2": "How to write it",
-				"row1_1": "Heading",
-				"row1_2": "# or ##",
-				"row2_1": "Link",
-				"row2_2": "[text](URL)",
-				"row3_1": "Divider",
-				"row3_2": "---"
-			},
-			"quote_example": "This is what a highlighted quote looks like.",
-			"task_example": "Check this off once you're done"
-		},
-		"attachments": {
-			"heading": "📎 Attach files",
-			"image": "**Preview**: write `![[photo.png]]` to show a supported file right inside the note.",
-			"link": "**Other files**: write `[[document.pdf]]` to get a chip that opens it in another app.",
-			"footer": "Find every attached file in the **Files** view of the side menu."
-		},
-		"tools": {
-			"heading": "🧰 More tools",
-			"tags": {
-				"title": "Tags",
-				"body": "Organize your notes by topic and find them fast."
-			},
-			"templates": {
-				"title": "Templates",
-				"body": "Create new notes with a ready-to-use structure."
-			},
-			"history": {
-				"title": "Version history",
-				"body": "Go back to an earlier version of your note."
-			},
-			"export": {
-				"title": "Export",
-				"body": "Save your note as a Markdown file."
-			},
-			"share": {
-				"title": "Share",
-				"body": "Send it straight to another app."
-			},
-			"daily": {
-				"title": "Daily note",
-				"body": "Tap the calendar button in the drawer to open today's note. Pick its folder and template in Settings."
-			}
-		},
-		"pro": {
-			"heading": "⭐ Get more out of Pro",
-			"intro": "The Pro version gives you:",
-			"versions": {
-				"title": "Full version history",
-				"body": "Unlimited, so you can go back to any point in your note."
-			},
-			"subfolders": {
-				"title": "Subfolders",
-				"body": "As many as you need to organize your repositories."
-			},
-			"accents": {
-				"title": "Accent colors",
-				"body": "Customize them to make the app feel like yours."
-			},
-			"cta": "💡 You can try it anytime from Settings."
-		}
 	},
 	"share": {
 		"title": "Add shared text to",

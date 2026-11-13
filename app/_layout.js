@@ -19,6 +19,7 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { THEMES } from '@/constants/themes'
 import { FREE_ACCENT, THEME_MODES } from '@/constants/theme-options'
 import { LOG_MESSAGES } from '@/constants/log-messages'
+import { loadBundledContent } from '@/utils/bundled-content'
 import { logError } from '@/utils/log-error'
 
 SplashScreen.preventAutoHideAsync()
@@ -62,6 +63,7 @@ export default function MainLayout() {
 
         setInitialTheme({ mode, name, theme, accent })
         await initLanguage()
+        await loadBundledContent()
     }
 
     if (!isReady) {
