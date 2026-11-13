@@ -492,7 +492,32 @@
 		"saved": "Gespeichert",
 		"pinned": "Angeheftet",
 		"save": "Speichern",
-		"unsave": "Entfernen"
+		"unsave": "Entfernen",
+		"filter": "Filter",
+		"match_case": "Groß-/Kleinschreibung",
+		"more_context": "Mehr Kontext",
+		"results_one": "{{count}} Ergebnis",
+		"results_other": "{{count}} Ergebnisse",
+		"add": "Hinzufügen",
+		"value_placeholder": "Wert",
+		"property_placeholder": "name:value",
+		"filters": {
+			"tag": "Tag",
+			"path": "Pfad",
+			"file": "Dateiname",
+			"property": "Eigenschaft",
+			"task_todo": "Offene Aufgaben",
+			"task_done": "Erledigte Aufgaben",
+			"images": "Enthält Bilder",
+			"files": "Enthält Dateien",
+			"pinned": "Angeheftet",
+			"content": "Inhalt",
+			"line": "Gleiche Zeile",
+			"section": "Gleicher Abschnitt"
+		},
+		"empty": "Keine passenden Notizen",
+		"filters_count_one": "{{count}} Filter",
+		"filters_count_other": "{{count}} Filter"
 	},
 	"error_boundary": {
 		"title": "Etwas ist schiefgelaufen",
@@ -503,5 +528,12 @@
 		"html": "HTML",
 		"pdf": "PDF",
 		"save_to_device": "Auf dem Gerät speichern"
+	},
+	"share": {
+		"title": "Geteilten Text hinzufügen zu",
+		"new_note": "Neue Notiz",
+		"add_to_daily": "Zur täglichen Notiz hinzufügen",
+		"add_to_note": "Zu einer Notiz hinzufügen",
+		"choose_note": "Notiz auswählen"
 	}
 }

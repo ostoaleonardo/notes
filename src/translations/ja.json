@@ -492,7 +492,32 @@
 		"saved": "保存済み",
 		"pinned": "ピン留め済み",
 		"save": "保存",
-		"unsave": "削除"
+		"unsave": "削除",
+		"filter": "フィルター",
+		"match_case": "大文字と小文字を区別",
+		"more_context": "さらに表示",
+		"results_one": "{{count}} 件の結果",
+		"results_other": "{{count}} 件の結果",
+		"add": "追加",
+		"value_placeholder": "値",
+		"property_placeholder": "name:value",
+		"filters": {
+			"tag": "タグ",
+			"path": "パス",
+			"file": "ファイル名",
+			"property": "プロパティ",
+			"task_todo": "未完了のタスク",
+			"task_done": "完了したタスク",
+			"images": "画像あり",
+			"files": "ファイルあり",
+			"pinned": "ピン留め",
+			"content": "内容",
+			"line": "同じ行",
+			"section": "同じセクション"
+		},
+		"empty": "一致するメモはありません",
+		"filters_count_one": "{{count}} 件のフィルター",
+		"filters_count_other": "{{count}} 件のフィルター"
 	},
 	"error_boundary": {
 		"title": "問題が発生しました",
@@ -503,5 +528,12 @@
 		"html": "HTML",
 		"pdf": "PDF",
 		"save_to_device": "端末に保存"
+	},
+	"share": {
+		"title": "共有テキストの追加先",
+		"new_note": "新しいメモ",
+		"add_to_daily": "デイリーノートに追加",
+		"add_to_note": "メモに追加",
+		"choose_note": "メモを選択"
 	}
 }

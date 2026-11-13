@@ -512,7 +512,32 @@
 		"saved": "المحفوظة",
 		"pinned": "المثبتة",
 		"save": "حفظ",
-		"unsave": "إزالة"
+		"unsave": "إزالة",
+		"filter": "تصفية",
+		"match_case": "مطابقة حالة الأحرف",
+		"more_context": "مزيد من السياق",
+		"results_one": "{{count}} نتيجة",
+		"results_other": "{{count}} نتيجة",
+		"add": "إضافة",
+		"value_placeholder": "القيمة",
+		"property_placeholder": "name:value",
+		"filters": {
+			"tag": "وسم",
+			"path": "المسار",
+			"file": "اسم الملف",
+			"property": "خاصية",
+			"task_todo": "مهام معلقة",
+			"task_done": "مهام منجزة",
+			"images": "تحتوي على صور",
+			"files": "تحتوي على ملفات",
+			"pinned": "مثبتة",
+			"content": "المحتوى",
+			"line": "نفس السطر",
+			"section": "نفس القسم"
+		},
+		"empty": "لا توجد ملاحظات مطابقة",
+		"filters_count_one": "{{count}} عامل تصفية",
+		"filters_count_other": "{{count}} عوامل تصفية"
 	},
 	"error_boundary": {
 		"title": "حدث خطأ ما",
@@ -523,5 +548,12 @@
 		"html": "HTML",
 		"pdf": "PDF",
 		"save_to_device": "حفظ على الجهاز"
+	},
+	"share": {
+		"title": "أضف النص المشارك إلى",
+		"new_note": "ملاحظة جديدة",
+		"add_to_daily": "أضف إلى الملاحظة اليومية",
+		"add_to_note": "أضف إلى ملاحظة",
+		"choose_note": "اختر ملاحظة"
 	}
 }

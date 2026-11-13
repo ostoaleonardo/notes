@@ -492,7 +492,32 @@
 		"saved": "Sparade",
 		"pinned": "Fästa",
 		"save": "Spara",
-		"unsave": "Ta bort"
+		"unsave": "Ta bort",
+		"filter": "Filter",
+		"match_case": "Skiftlägeskänslig",
+		"more_context": "Mer sammanhang",
+		"results_one": "{{count}} resultat",
+		"results_other": "{{count}} resultat",
+		"add": "Lägg till",
+		"value_placeholder": "Värde",
+		"property_placeholder": "name:value",
+		"filters": {
+			"tag": "Tagg",
+			"path": "Sökväg",
+			"file": "Filnamn",
+			"property": "Egenskap",
+			"task_todo": "Pågående uppgifter",
+			"task_done": "Klara uppgifter",
+			"images": "Har bilder",
+			"files": "Har filer",
+			"pinned": "Fästa",
+			"content": "Innehåll",
+			"line": "Samma rad",
+			"section": "Samma avsnitt"
+		},
+		"empty": "Inga matchande anteckningar",
+		"filters_count_one": "{{count}} filter",
+		"filters_count_other": "{{count}} filter"
 	},
 	"error_boundary": {
 		"title": "Något gick fel",
@@ -503,5 +528,12 @@
 		"html": "HTML",
 		"pdf": "PDF",
 		"save_to_device": "Spara på enheten"
+	},
+	"share": {
+		"title": "Lägg till delad text i",
+		"new_note": "Ny anteckning",
+		"add_to_daily": "Lägg till i dagliga anteckningen",
+		"add_to_note": "Lägg till i en anteckning",
+		"choose_note": "Välj en anteckning"
 	}
 }

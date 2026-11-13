@@ -492,7 +492,32 @@
 		"saved": "저장됨",
 		"pinned": "고정됨",
 		"save": "저장",
-		"unsave": "제거"
+		"unsave": "제거",
+		"filter": "필터",
+		"match_case": "대소문자 구분",
+		"more_context": "더 많은 컨텍스트",
+		"results_one": "결과 {{count}}개",
+		"results_other": "결과 {{count}}개",
+		"add": "추가",
+		"value_placeholder": "값",
+		"property_placeholder": "name:value",
+		"filters": {
+			"tag": "태그",
+			"path": "경로",
+			"file": "파일 이름",
+			"property": "속성",
+			"task_todo": "미완료 작업",
+			"task_done": "완료한 작업",
+			"images": "이미지 포함",
+			"files": "파일 포함",
+			"pinned": "고정됨",
+			"content": "내용",
+			"line": "같은 줄",
+			"section": "같은 섹션"
+		},
+		"empty": "일치하는 노트 없음",
+		"filters_count_one": "필터 {{count}}개",
+		"filters_count_other": "필터 {{count}}개"
 	},
 	"error_boundary": {
 		"title": "문제가 발생했습니다",
@@ -503,5 +528,12 @@
 		"html": "HTML",
 		"pdf": "PDF",
 		"save_to_device": "기기에 저장"
+	},
+	"share": {
+		"title": "공유한 텍스트 추가 위치",
+		"new_note": "새 노트",
+		"add_to_daily": "일일 노트에 추가",
+		"add_to_note": "노트에 추가",
+		"choose_note": "노트 선택"
 	}
 }

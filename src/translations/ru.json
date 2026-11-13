@@ -502,7 +502,32 @@
 		"saved": "Сохранённые",
 		"pinned": "Закреплённые",
 		"save": "Сохранить",
-		"unsave": "Убрать"
+		"unsave": "Убрать",
+		"filter": "Фильтр",
+		"match_case": "Учитывать регистр",
+		"more_context": "Больше контекста",
+		"results_one": "{{count}} результат",
+		"results_other": "{{count}} результата",
+		"add": "Добавить",
+		"value_placeholder": "Значение",
+		"property_placeholder": "name:value",
+		"filters": {
+			"tag": "Тег",
+			"path": "Путь",
+			"file": "Имя файла",
+			"property": "Свойство",
+			"task_todo": "Невыполненные задачи",
+			"task_done": "Выполненные задачи",
+			"images": "Есть изображения",
+			"files": "Есть файлы",
+			"pinned": "Закреплённые",
+			"content": "Содержимое",
+			"line": "Та же строка",
+			"section": "Тот же раздел"
+		},
+		"empty": "Нет подходящих заметок",
+		"filters_count_one": "{{count}} фильтр",
+		"filters_count_other": "{{count}} фильтра"
 	},
 	"error_boundary": {
 		"title": "Что-то пошло не так",
@@ -513,5 +538,12 @@
 		"html": "HTML",
 		"pdf": "PDF",
 		"save_to_device": "Сохранить на устройстве"
+	},
+	"share": {
+		"title": "Добавить полученный текст в",
+		"new_note": "Новая заметка",
+		"add_to_daily": "Добавить в ежедневную заметку",
+		"add_to_note": "Добавить в заметку",
+		"choose_note": "Выберите заметку"
 	}
 }

@@ -492,7 +492,32 @@
 		"saved": "Opgeslagen",
 		"pinned": "Vastgepind",
 		"save": "Opslaan",
-		"unsave": "Verwijderen"
+		"unsave": "Verwijderen",
+		"filter": "Filter",
+		"match_case": "Hoofdlettergevoelig",
+		"more_context": "Meer context",
+		"results_one": "{{count}} resultaat",
+		"results_other": "{{count}} resultaten",
+		"add": "Toevoegen",
+		"value_placeholder": "Waarde",
+		"property_placeholder": "name:value",
+		"filters": {
+			"tag": "Tag",
+			"path": "Pad",
+			"file": "Bestandsnaam",
+			"property": "Eigenschap",
+			"task_todo": "Openstaande taken",
+			"task_done": "Voltooide taken",
+			"images": "Bevat afbeeldingen",
+			"files": "Bevat bestanden",
+			"pinned": "Vastgemaakt",
+			"content": "Inhoud",
+			"line": "Dezelfde regel",
+			"section": "Dezelfde sectie"
+		},
+		"empty": "Geen overeenkomende notities",
+		"filters_count_one": "{{count}} filter",
+		"filters_count_other": "{{count}} filters"
 	},
 	"error_boundary": {
 		"title": "Er is iets misgegaan",
@@ -503,5 +528,12 @@
 		"html": "HTML",
 		"pdf": "PDF",
 		"save_to_device": "Opslaan op apparaat"
+	},
+	"share": {
+		"title": "Gedeelde tekst toevoegen aan",
+		"new_note": "Nieuwe notitie",
+		"add_to_daily": "Toevoegen aan dagelijkse notitie",
+		"add_to_note": "Toevoegen aan een notitie",
+		"choose_note": "Kies een notitie"
 	}
 }

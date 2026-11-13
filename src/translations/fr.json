@@ -492,7 +492,32 @@
 		"saved": "Enregistrées",
 		"pinned": "Épinglées",
 		"save": "Enregistrer",
-		"unsave": "Retirer"
+		"unsave": "Retirer",
+		"filter": "Filtre",
+		"match_case": "Respecter la casse",
+		"more_context": "Plus de contexte",
+		"results_one": "{{count}} résultat",
+		"results_other": "{{count}} résultats",
+		"add": "Ajouter",
+		"value_placeholder": "Valeur",
+		"property_placeholder": "name:value",
+		"filters": {
+			"tag": "Tag",
+			"path": "Chemin",
+			"file": "Nom du fichier",
+			"property": "Propriété",
+			"task_todo": "Tâches en cours",
+			"task_done": "Tâches terminées",
+			"images": "Contient des images",
+			"files": "Contient des fichiers",
+			"pinned": "Épinglées",
+			"content": "Contenu",
+			"line": "Même ligne",
+			"section": "Même section"
+		},
+		"empty": "Aucune note correspondante",
+		"filters_count_one": "{{count}} filtre",
+		"filters_count_other": "{{count}} filtres"
 	},
 	"error_boundary": {
 		"title": "Une erreur s'est produite",
@@ -503,5 +528,12 @@
 		"html": "HTML",
 		"pdf": "PDF",
 		"save_to_device": "Enregistrer sur l'appareil"
+	},
+	"share": {
+		"title": "Ajouter le texte partagé à",
+		"new_note": "Nouvelle note",
+		"add_to_daily": "Ajouter à la note quotidienne",
+		"add_to_note": "Ajouter à une note",
+		"choose_note": "Choisir une note"
 	}
 }

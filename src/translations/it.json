@@ -492,7 +492,32 @@
 		"saved": "Salvate",
 		"pinned": "Fissate",
 		"save": "Salva",
-		"unsave": "Rimuovi"
+		"unsave": "Rimuovi",
+		"filter": "Filtro",
+		"match_case": "Maiuscole/minuscole",
+		"more_context": "Più contesto",
+		"results_one": "{{count}} risultato",
+		"results_other": "{{count}} risultati",
+		"add": "Aggiungi",
+		"value_placeholder": "Valore",
+		"property_placeholder": "name:value",
+		"filters": {
+			"tag": "Tag",
+			"path": "Percorso",
+			"file": "Nome del file",
+			"property": "Proprietà",
+			"task_todo": "Attività in sospeso",
+			"task_done": "Attività completate",
+			"images": "Contiene immagini",
+			"files": "Contiene file",
+			"pinned": "Fissate",
+			"content": "Contenuto",
+			"line": "Stessa riga",
+			"section": "Stessa sezione"
+		},
+		"empty": "Nessuna nota corrispondente",
+		"filters_count_one": "{{count}} filtro",
+		"filters_count_other": "{{count}} filtri"
 	},
 	"error_boundary": {
 		"title": "Qualcosa è andato storto",
@@ -503,5 +528,12 @@
 		"html": "HTML",
 		"pdf": "PDF",
 		"save_to_device": "Salva sul dispositivo"
+	},
+	"share": {
+		"title": "Aggiungi il testo condiviso a",
+		"new_note": "Nuova nota",
+		"add_to_daily": "Aggiungi alla nota giornaliera",
+		"add_to_note": "Aggiungi a una nota",
+		"choose_note": "Scegli una nota"
 	}
 }

@@ -502,7 +502,32 @@
 		"saved": "Збережені",
 		"pinned": "Закріплені",
 		"save": "Зберегти",
-		"unsave": "Прибрати"
+		"unsave": "Прибрати",
+		"filter": "Фільтр",
+		"match_case": "Враховувати регістр",
+		"more_context": "Більше контексту",
+		"results_one": "{{count}} результат",
+		"results_other": "{{count}} результатів",
+		"add": "Додати",
+		"value_placeholder": "Значення",
+		"property_placeholder": "name:value",
+		"filters": {
+			"tag": "Тег",
+			"path": "Шлях",
+			"file": "Назва файлу",
+			"property": "Властивість",
+			"task_todo": "Невиконані завдання",
+			"task_done": "Виконані завдання",
+			"images": "Є зображення",
+			"files": "Є файли",
+			"pinned": "Закріплені",
+			"content": "Вміст",
+			"line": "Той самий рядок",
+			"section": "Той самий розділ"
+		},
+		"empty": "Немає відповідних нотаток",
+		"filters_count_one": "{{count}} фільтр",
+		"filters_count_other": "{{count}} фільтрів"
 	},
 	"error_boundary": {
 		"title": "Щось пішло не так",
@@ -513,5 +538,12 @@
 		"html": "HTML",
 		"pdf": "PDF",
 		"save_to_device": "Зберегти на пристрої"
+	},
+	"share": {
+		"title": "Додати отриманий текст до",
+		"new_note": "Нова нотатка",
+		"add_to_daily": "Додати до щоденної нотатки",
+		"add_to_note": "Додати до нотатки",
+		"choose_note": "Оберіть нотатку"
 	}
 }

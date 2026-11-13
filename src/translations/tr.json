@@ -492,7 +492,32 @@
 		"saved": "Kayıtlı",
 		"pinned": "Sabitlenmiş",
 		"save": "Kaydet",
-		"unsave": "Kaldır"
+		"unsave": "Kaldır",
+		"filter": "Filtre",
+		"match_case": "Büyük/küçük harf duyarlı",
+		"more_context": "Daha fazla bağlam",
+		"results_one": "{{count}} sonuç",
+		"results_other": "{{count}} sonuç",
+		"add": "Ekle",
+		"value_placeholder": "Değer",
+		"property_placeholder": "name:value",
+		"filters": {
+			"tag": "Etiket",
+			"path": "Yol",
+			"file": "Dosya adı",
+			"property": "Özellik",
+			"task_todo": "Bekleyen görevler",
+			"task_done": "Tamamlanan görevler",
+			"images": "Görsel içerir",
+			"files": "Dosya içerir",
+			"pinned": "Sabitlenmiş",
+			"content": "İçerik",
+			"line": "Aynı satır",
+			"section": "Aynı bölüm"
+		},
+		"empty": "Eşleşen not yok",
+		"filters_count_one": "{{count}} filtre",
+		"filters_count_other": "{{count}} filtre"
 	},
 	"error_boundary": {
 		"title": "Bir şeyler ters gitti",
@@ -503,5 +528,12 @@
 		"html": "HTML",
 		"pdf": "PDF",
 		"save_to_device": "Cihaza kaydet"
+	},
+	"share": {
+		"title": "Paylaşılan metni şuraya ekle",
+		"new_note": "Yeni not",
+		"add_to_daily": "Günlük nota ekle",
+		"add_to_note": "Bir nota ekle",
+		"choose_note": "Bir not seç"
 	}
 }

@@ -502,7 +502,32 @@
 		"saved": "Uložené",
 		"pinned": "Připnuté",
 		"save": "Uložit",
-		"unsave": "Odebrat"
+		"unsave": "Odebrat",
+		"filter": "Filtr",
+		"match_case": "Rozlišovat velikost písmen",
+		"more_context": "Více kontextu",
+		"results_one": "{{count}} výsledek",
+		"results_other": "{{count}} výsledků",
+		"add": "Přidat",
+		"value_placeholder": "Hodnota",
+		"property_placeholder": "name:value",
+		"filters": {
+			"tag": "Štítek",
+			"path": "Cesta",
+			"file": "Název souboru",
+			"property": "Vlastnost",
+			"task_todo": "Nedokončené úkoly",
+			"task_done": "Dokončené úkoly",
+			"images": "Obsahuje obrázky",
+			"files": "Obsahuje soubory",
+			"pinned": "Připnuté",
+			"content": "Obsah",
+			"line": "Stejný řádek",
+			"section": "Stejná sekce"
+		},
+		"empty": "Žádné odpovídající poznámky",
+		"filters_count_one": "{{count}} filtr",
+		"filters_count_other": "{{count}} filtrů"
 	},
 	"error_boundary": {
 		"title": "Něco se pokazilo",
@@ -513,5 +538,12 @@
 		"html": "HTML",
 		"pdf": "PDF",
 		"save_to_device": "Uložit do zařízení"
+	},
+	"share": {
+		"title": "Přidat sdílený text do",
+		"new_note": "Nová poznámka",
+		"add_to_daily": "Přidat do denní poznámky",
+		"add_to_note": "Přidat do poznámky",
+		"choose_note": "Vyberte poznámku"
 	}
 }
