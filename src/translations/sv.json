@@ -538,7 +538,7 @@
 	},
 	"indexing": {
 		"title": "Indexerar arkivet...",
-		"message": "Vissa funktioner kanske inte är tillgängliga förrän detta är klart.",
+		"message": "Dina anteckningar förbereds. Det kan ta en stund.",
 		"complete": "Indexeringen är klar."
 	},
 	"direct_access": {

@@ -538,7 +538,7 @@
 	},
 	"indexing": {
 		"title": "Indicizzazione del repository...",
-		"message": "Alcune funzioni potrebbero non essere disponibili fino al termine.",
+		"message": "Le tue note sono in preparazione. Potrebbe volerci un momento.",
 		"complete": "Indicizzazione completata."
 	},
 	"direct_access": {

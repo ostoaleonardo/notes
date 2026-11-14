@@ -550,7 +550,7 @@
 	},
 	"indexing": {
 		"title": "Indexando repositório...",
-		"message": "Algumas funções podem não estar disponíveis até terminar.",
+		"message": "Suas notas estão sendo preparadas. Isso pode levar um momento.",
 		"complete": "Indexação concluída."
 	},
 	"direct_access": {

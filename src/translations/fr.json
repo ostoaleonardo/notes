@@ -538,7 +538,7 @@
 	},
 	"indexing": {
 		"title": "Indexation du dépôt...",
-		"message": "Certaines fonctionnalités peuvent être indisponibles jusqu'à la fin.",
+		"message": "Vos notes sont en cours de préparation. Cela peut prendre un instant.",
 		"complete": "Indexation terminée."
 	},
 	"direct_access": {

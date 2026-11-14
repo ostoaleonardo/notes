@@ -583,7 +583,7 @@
 	},
 	"indexing": {
 		"title": "Indexing repository...",
-		"message": "Some functionality may not be available until this is complete.",
+		"message": "Your notes are being prepared. This may take a moment.",
 		"complete": "Indexing complete."
 	},
 	"direct_access": {

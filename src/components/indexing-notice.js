@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 
+import { ProgressBar } from '@/ui/progress-bar'
 import { Typography } from '@/ui/typography'
 import { useTheme } from '@/ui/hooks/use-theme'
 
@@ -54,23 +55,10 @@ export const IndexingNotice = () => {
                         {t('indexing.message')}
                     </Typography>
 
-                    <View
-                        style={[
-                            styles.track, {
-                                backgroundColor: colors.outline
-                            }
-                        ]}
-                    >
-                        <View
-                            style={[
-                                styles.bar,
-                                {
-                                    width: `${status.progress * 100}%`,
-                                    backgroundColor: colors.onBackground
-                                }
-                            ]}
-                        />
-                    </View>
+                    <ProgressBar
+                        progress={status.progress}
+                        indeterminate={status.indeterminate}
+                    />
                 </>
             )}
         </View>
@@ -87,15 +75,5 @@ const styles = StyleSheet.create({
         paddingHorizontal: SPACING.lg,
         borderRadius: RADIUS.xl,
         borderWidth: StyleSheet.hairlineWidth
-    },
-    track: {
-        height: SPACING.xxs,
-        marginTop: SPACING.xxs,
-        borderRadius: RADIUS.full,
-        overflow: 'hidden'
-    },
-    bar: {
-        height: '100%',
-        borderRadius: RADIUS.full
     }
 })

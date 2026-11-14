@@ -127,3 +127,8 @@ export const SHEET = {
         search: ['90%']
     }
 }
+
+export const PROGRESS_BAR = {
+    indeterminateDuration: 1200,
+    indeterminateWidth: 0.4
+}

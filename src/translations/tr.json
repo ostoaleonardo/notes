@@ -538,7 +538,7 @@
 	},
 	"indexing": {
 		"title": "Depo dizine ekleniyor...",
-		"message": "Bu tamamlanana kadar bazı işlevler kullanılamayabilir.",
+		"message": "Notların hazırlanıyor. Bu biraz zaman alabilir.",
 		"complete": "Dizine ekleme tamamlandı."
 	},
 	"direct_access": {

@@ -538,7 +538,7 @@
 	},
 	"indexing": {
 		"title": "Repository indexeren...",
-		"message": "Sommige functies zijn mogelijk pas daarna beschikbaar.",
+		"message": "Je notities worden voorbereid. Dit kan even duren.",
 		"complete": "Indexeren voltooid."
 	},
 	"direct_access": {

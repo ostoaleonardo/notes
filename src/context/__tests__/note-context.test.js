@@ -5,7 +5,7 @@ import { act, renderHook, waitFor } from '@testing-library/react-native'
 import { NoteContext, NoteProvider } from '../note-context'
 import { getIndexingStatus, setIndexingStatus } from '@/utils/indexing-status'
 
-import { INDEXING_COMPLETE, INDEXING_NOTICE_MIN_FILES } from '@/constants/indexing'
+import { INDEXING_COMPLETE, INDEXING_NOTICE_MIN_FILES, INDEXING_STARTED } from '@/constants/indexing'
 
 const mockLoadRepositoryData = jest.fn()
 const mockUpdatePinned = jest.fn()
@@ -216,7 +216,7 @@ describe('indexing status', () => {
 
         const { result } = await renderNoteContext()
 
-        expect(getIndexingStatus()).toEqual({ progress: 0 })
+        expect(getIndexingStatus()).toBe(INDEXING_STARTED)
         expect(result.current.loading).toBe(true)
     })
 

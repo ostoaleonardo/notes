@@ -548,7 +548,7 @@
 	},
 	"indexing": {
 		"title": "Indexování úložiště...",
-		"message": "Některé funkce nemusí být dostupné, dokud se nedokončí.",
+		"message": "Vaše poznámky se připravují. Může to chvíli trvat.",
 		"complete": "Indexování dokončeno."
 	},
 	"direct_access": {

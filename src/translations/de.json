@@ -538,7 +538,7 @@
 	},
 	"indexing": {
 		"title": "Repository wird indexiert...",
-		"message": "Einige Funktionen sind möglicherweise erst danach verfügbar.",
+		"message": "Deine Notizen werden vorbereitet. Das kann einen Moment dauern.",
 		"complete": "Indexierung abgeschlossen."
 	},
 	"direct_access": {
