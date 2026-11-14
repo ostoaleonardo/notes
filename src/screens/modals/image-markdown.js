@@ -6,10 +6,9 @@ import { Linking, StyleSheet, View } from 'react-native'
 
 import { ButtonGroup } from '@/ui/button/button-group'
 import { SheetActions } from '@/ui/modal/sheet-actions'
+import { PermissionCard } from '@/ui/permission-card'
 import { SheetForm, SheetInput } from '@/ui/modal/sheet-form'
-import { Typography } from '@/ui/typography'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
-import { Touchable } from '@/ui/touchable'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import { useFileStorage } from '@/hooks/use-file-storage'
@@ -22,8 +21,7 @@ import { getCameraPermission, openImagePicker, requestCameraPermission } from '@
 import { Camera } from '@/icons/camera'
 import { Picture } from '@/icons/picture'
 
-import { TRANSPARENT } from '@/constants/themes'
-import { ICON_SIZE, OPACITY, RADIUS, SPACING } from '@/constants/theme'
+import { RADIUS, SPACING } from '@/constants/theme'
 import { IMAGE_EXTENSION_BY_MIME_TYPE, IMAGE_SOURCES } from '@/constants/image'
 import { PICKER_ERROR_CODES } from '@/constants/picker-errors'
 import { LOG_MESSAGES } from '@/constants/log-messages'
@@ -138,38 +136,13 @@ export const ImageMarkdown = ({
             )}
         >
             {cameraPermission && !cameraPermission.granted && (
-                <View
-                    style={[
-                        styles.permissionCard,
-                        { backgroundColor: colors.tertiary + TRANSPARENT[10] }
-                    ]}
-                >
-                    <Touchable accessibilityRole='button' onPress={onRequestCameraPermission}>
-                        <View style={styles.permissionContent}>
-                            <View style={styles.permissionText}>
-                                <Typography
-                                    bold
-                                    uppercase
-                                    color={colors.accentText}
-                                    variant='bodySmall'
-                                >
-                                    {t('markdown.camera_permission.title')}
-                                </Typography>
-                                <Typography
-                                    opacity={OPACITY.pressed}
-                                    variant='bodySmall'
-                                    styleProps={styles.permissionMessage}
-                                >
-                                    {t('markdown.camera_permission.message')}
-                                </Typography>
-                            </View>
-                            <Camera
-                                color={colors.accentText}
-                                width={ICON_SIZE.lg}
-                                height={ICON_SIZE.lg}
-                            />
-                        </View>
-                    </Touchable>
+                <View style={styles.permission}>
+                    <PermissionCard
+                        title={t('markdown.camera_permission.title')}
+                        message={t('markdown.camera_permission.message')}
+                        icon={Camera}
+                        onPress={onRequestCameraPermission}
+                    />
                 </View>
             )}
 
@@ -212,23 +185,8 @@ export const ImageMarkdown = ({
 }
 
 const styles = StyleSheet.create({
-    permissionCard: {
-        marginHorizontal: SPACING.lg,
-        borderRadius: RADIUS.lg,
-        overflow: 'hidden'
-    },
-    permissionContent: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: SPACING.md,
-        padding: SPACING.lg
-    },
-    permissionText: {
-        flex: 1
-    },
-    permissionMessage: {
-        marginTop: SPACING.xxs
+    permission: {
+        marginHorizontal: SPACING.lg
     },
     previewField: {
         paddingHorizontal: SPACING.lg
