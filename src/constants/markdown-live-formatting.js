@@ -37,3 +37,12 @@ export const FOOTNOTE_REFERENCE_PATTERN = /\[\^([^\]\n]+)\]/g
 
 export const KATEX_RENDER_CACHE_LIMIT = 200
 export const HTML_RENDER_CACHE_LIMIT = 100
+
+export const CODE_LABEL_CLASS = 'cm-live-codeblock-label'
+export const CODE_FIRST_LINE_CLASS = 'cm-live-codeblock-first'
+export const CODE_LAST_LINE_CLASS = 'cm-live-codeblock-last'
+export const CODE_FENCED_LAST_LINE_CLASS = 'cm-live-codeblock-last-fence'
+export const CODE_HIDDEN_CLASS = 'cm-live-codeblock-hidden'
+export const CODE_OPEN_LINE_CLASS = 'cm-live-codeblock-open'
+export const CODE_CLOSE_LINE_CLASS = 'cm-live-codeblock-close'
+export const CODE_LABEL_PLACEHOLDER = '\u200b'

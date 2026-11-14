@@ -61,7 +61,7 @@ export const buildPreviewCss = ({ colors, dark, typography }) => {
         codeBlockBackground: codeBlockBackgroundColor,
         thematicBreak: thematicBreakColor,
         surface: surfaceColor
-    } = buildDerivedColors(colors, dark)
+    } = buildDerivedColors(colors)
     const { fontSize, fontFamily, headingFontFamily } = typography
 
     return `
@@ -127,12 +127,12 @@ export const buildPreviewCss = ({ colors, dark, typography }) => {
         background-color: ${codeBackgroundColor}; border-radius: ${INLINE_CODE_STYLE.borderRadius}; padding: ${INLINE_CODE_STYLE.padding};
         font-family: monospace;
     }
-    .markdown-preview pre { background-color: ${codeBlockBackgroundColor}; border-radius: 8px; padding: 0.8em; overflow-x: auto; max-width: 100%; }
+    .markdown-preview pre { background-color: ${codeBlockBackgroundColor}; border-radius: ${RADIUS.md}px; padding: 0.8em; white-space: pre-wrap; overflow-wrap: anywhere; max-width: 100%; }
     .markdown-preview pre code { background-color: transparent; padding: 0; }
     .markdown-preview .${CODE_BLOCK_CLASS} { position: relative; margin: 0.6em 0; }
     .markdown-preview .${CODE_BLOCK_CLASS} pre { margin: 0; padding-right: 2.6em; }
     .markdown-preview .${CODE_COPY_BUTTON_CLASS} {
-        position: absolute; top: 6px; right: 6px; display: flex; padding: 6px; border: 0; border-radius: 6px;
+        position: absolute; top: 0.25em; right: 0.1em; display: flex; padding: 4px; border: 0; border-radius: 6px;
         background: transparent; color: ${textColor + TRANSPARENT[60]}; cursor: pointer;
     }
     .markdown-preview .${CODE_COPY_DONE_CLASS} { color: ${textColor}; }

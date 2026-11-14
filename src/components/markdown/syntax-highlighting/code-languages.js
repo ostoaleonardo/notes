@@ -39,3 +39,5 @@ export const codeLanguages = LANGUAGE_SOURCES.map(({ name, alias, load }) => (
 export const findCodeLanguage = (info) => (
     info ? LanguageDescription.matchLanguageName(codeLanguages, info, true) : null
 )
+
+export const getCodeLanguageLabel = (info) => findCodeLanguage(info)?.name ?? info
