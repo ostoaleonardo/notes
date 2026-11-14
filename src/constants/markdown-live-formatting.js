@@ -29,6 +29,8 @@ export const HTML_BLOCK_NODE_NAMES = ['Table', 'HTMLBlock']
 export const HTML_NODE_NAMES = ['Table', 'HTMLBlock', 'HTMLTag']
 export const CODE_RANGE_NODE_NAMES = ['FencedCode', 'InlineCode']
 
+export const MATH_DELIMITER = '$'
+
 export const BLOCK_MATH_PATTERN = /\$\$([^$]+?)\$\$/g
 export const INLINE_MATH_PATTERN = /(?<![\w$])\$(?!\s)([^$\n]+?)(?<!\s)\$(?!\w)/g
 

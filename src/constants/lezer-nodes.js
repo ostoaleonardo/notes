@@ -8,5 +8,6 @@ export const LEZER_NODES = {
     CODE_MARK: 'CodeMark',
     CODE_INFO: 'CodeInfo',
     QUOTE_MARK: 'QuoteMark',
-    TABLE: 'Table'
+    TABLE: 'Table',
+    LINK_REFERENCE: 'LinkReference'
 }

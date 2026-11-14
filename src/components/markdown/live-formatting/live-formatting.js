@@ -3,6 +3,7 @@ import { syntaxTree } from '@codemirror/language'
 import { Decoration, EditorView } from '@codemirror/view'
 
 import { mediaMapFacet } from './media-map'
+import { applyZones, changedZones, selectionZones } from './decoration-zones'
 import { overlapsAny } from './utils'
 import { inlineMarkNodeNames, decorateInlineMark, inlineMarksTheme } from './inline-marks'
 import { headingNodeNames, decorateHeading, headingsTheme } from './headings'
@@ -20,7 +21,8 @@ import { htmlNodeNames, decorateHtml, htmlTheme } from './html'
 import { decorateTable, tableTheme } from './table'
 import { tableLabelsFacet } from './table-labels'
 import { TableWidget } from './table-widget'
-import { decorateMath, mathTheme } from './math'
+import { mathTheme } from './math'
+import { liveMath } from './math-field'
 import { decorateFootnotes, footnotesTheme } from './footnotes'
 import { decorateBlockIds, blockIdsTheme } from './block-ids'
 import { decorateExtraMarks, extraMarksTheme } from './extra-marks'
@@ -88,7 +90,6 @@ const collectDecorationRanges = (state, from, to) => {
 
     const localSource = { text, selection: localSelection, ranges: textRanges, codeRanges }
 
-    decorateMath(localSource)
     decorateFootnotes(localSource)
     decorateBlockIds(localSource)
     decorateCustomTasks({ ...localSource, customTaskRanges })
@@ -101,72 +102,6 @@ const collectDecorationRanges = (state, from, to) => {
 const buildLiveFormattingDecorations = (state) => (
     Decoration.set(collectDecorationRanges(state, 0, state.doc.length), true)
 )
-
-const getTouchedBlocks = (state, selection) => {
-    const blocks = []
-
-    let child = syntaxTree(state).topNode.firstChild
-
-    while (child) {
-        if (child.from <= selection.to && child.to >= selection.from) {
-            blocks.push({ from: child.from, to: child.to })
-        }
-
-        child = child.nextSibling
-    }
-
-    return blocks
-}
-
-const mergeZones = (zones) => {
-    const sorted = [...zones].sort((a, b) => a.from - b.from)
-
-    return sorted.reduce((merged, zone) => {
-        const last = merged[merged.length - 1]
-        if (last && zone.from <= last.to) last.to = Math.max(last.to, zone.to)
-        else merged.push({ ...zone })
-
-        return merged
-    }, [])
-}
-
-const expandZone = (decorations, zone) => {
-    let { from, to } = zone
-
-    decorations.between(from, to, (rangeFrom, rangeTo) => {
-        from = Math.min(from, rangeFrom)
-        to = Math.max(to, rangeTo)
-    })
-
-    return { from, to }
-}
-
-const refreshSelectionZones = (decorations, tr) => {
-    const { startState, state } = tr
-    if (syntaxTree(startState) !== syntaxTree(state)) return buildLiveFormattingDecorations(state)
-
-    const touched = [
-        ...getTouchedBlocks(startState, startState.selection.main),
-        ...getTouchedBlocks(state, state.selection.main)
-    ]
-
-    if (!touched.length) return decorations
-
-    const zones = mergeZones(touched.map((zone) => expandZone(decorations, zone)))
-
-    if (zones.reduce((size, zone) => size + zone.to - zone.from, 0) > state.doc.length / 2) {
-        return buildLiveFormattingDecorations(state)
-    }
-
-    return zones.reduce((current, zone) => current.update({
-        filter: () => false,
-        filterFrom: zone.from,
-        filterTo: zone.to
-    }).update({
-        add: collectDecorationRanges(state, zone.from, zone.to),
-        sort: true
-    }), decorations)
-}
 
 const guardTableBoundary = (field) => EditorState.transactionFilter.of((tr) => {
     if (!tr.docChanged || !TABLE_BOUNDARY_INPUT_EVENTS.some((event) => tr.isUserEvent(event))) return tr
@@ -219,12 +154,34 @@ export { mediaMapFacet, tableLabelsFacet }
 export const liveFormatting = StateField.define({
     create: (state) => buildLiveFormattingDecorations(state),
     update: (decorations, tr) => {
-        if (tr.docChanged || tr.reconfigured) return buildLiveFormattingDecorations(tr.state)
-        if (tr.selection) return refreshSelectionZones(decorations, tr)
+        if (tr.reconfigured) return buildLiveFormattingDecorations(tr.state)
 
-        return decorations
+        if (tr.docChanged) {
+            const zones = changedZones(tr)
+            if (!zones) return buildLiveFormattingDecorations(tr.state)
+
+            return applyZones(
+                decorations.map(tr.changes),
+                tr.state,
+                zones,
+                collectDecorationRanges,
+                buildLiveFormattingDecorations
+            )
+        }
+
+        if (!tr.selection) return decorations
+        if (syntaxTree(tr.startState) !== syntaxTree(tr.state)) return buildLiveFormattingDecorations(tr.state)
+
+        return applyZones(
+            decorations,
+            tr.state,
+            selectionZones(tr),
+            collectDecorationRanges,
+            buildLiveFormattingDecorations
+        )
     },
     provide: (field) => [
+        liveMath,
         EditorView.decorations.from(field),
         guardTableBoundary(field),
         ensureLineAfterTable(field),

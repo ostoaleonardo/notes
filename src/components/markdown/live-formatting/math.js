@@ -28,11 +28,13 @@ const renderKatex = (tex, displayMode) => {
 
 export const decorateMath = ({ text, selection, ranges, codeRanges }) => {
     const consumed = []
+    const matches = []
 
     for (const match of text.matchAll(BLOCK_MATH_PATTERN)) {
         const from = match.index
         const to = from + match[0].length
         consumed.push({ from, to })
+        matches.push({ from, to })
 
         if (overlapsAny(from, to, codeRanges) || isRangeSelected(selection, from, to)) continue
 
@@ -48,6 +50,9 @@ export const decorateMath = ({ text, selection, ranges, codeRanges }) => {
         const to = from + match[0].length
 
         if (overlapsAny(from, to, codeRanges) || overlapsAny(from, to, consumed)) continue
+
+        matches.push({ from, to })
+
         if (isRangeSelected(selection, from, to)) continue
 
         const html = renderKatex(match[1].trim(), false)
@@ -55,6 +60,8 @@ export const decorateMath = ({ text, selection, ranges, codeRanges }) => {
 
         ranges.push(Decoration.replace({ widget: new HtmlWidget(html, 'cm-live-math-inline') }).range(from, to))
     }
+
+    return matches
 }
 
 export const mathTheme = () => ({
