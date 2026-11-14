@@ -17,6 +17,7 @@ import { StorageSelectOption } from '@/screens/settings/storage-select-option'
 import { StorageSwitchOption } from '@/screens/settings/storage-switch-option'
 import { DailyNoteOption } from '@/screens/settings/daily-note-option'
 import { DefaultNoteFolderOption } from '@/screens/settings/default-note-folder-option'
+import { DirectAccessOption } from '@/screens/settings/direct-access-option'
 import { Scroll } from '@/ui/animated/scroll'
 import { Section } from '@/ui/section'
 
@@ -101,6 +102,16 @@ export default function Settings() {
                         contentStyle={styles.items}
                     >
                         <WidgetsOption />
+                    </Section>
+                )}
+
+                {Platform.OS === 'android' && (
+                    <Section
+                        title={t('settings.permissions.title')}
+                        containerStyle={styles.section}
+                        contentStyle={styles.items}
+                    >
+                        <DirectAccessOption />
                     </Section>
                 )}
 

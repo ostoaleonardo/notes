@@ -206,6 +206,14 @@
 				"title": "Interne links automatisch bijwerken",
 				"description": "Schakel uit om eerst gevraagd te worden voordat links worden bijgewerkt na het hernoemen van een notitie."
 			}
+		},
+		"permissions": {
+			"title": "Machtigingen",
+			"direct_access": {
+				"title": "Toegang tot alle bestanden",
+				"granted": "Toegestaan. Grote repositories laden sneller.",
+				"denied": "Niet toegestaan. Sta het toe zodat grote repositories sneller laden."
+			}
 		}
 	},
 	"pro": {

@@ -206,6 +206,14 @@
 				"title": "Aggiorna automaticamente i link interni",
 				"description": "Disattiva per ricevere una richiesta prima di aggiornare i link dopo aver rinominato una nota."
 			}
+		},
+		"permissions": {
+			"title": "Autorizzazioni",
+			"direct_access": {
+				"title": "Accesso a tutti i file",
+				"granted": "Consentito. I repository grandi si caricano più velocemente.",
+				"denied": "Non consentito. Consentilo per caricare più velocemente i repository grandi."
+			}
 		}
 	},
 	"pro": {

@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react'
 
+import { useDirectAccess } from './use-direct-access'
 import { useNotes } from './use-notes'
-import { useOnForeground } from './use-on-foreground'
 import { useStorage } from './use-storage'
 import { useStorageEffect } from './use-storage-effect'
-import { hasDirectAccess, requestDirectAccess, shouldPromptDirectAccess } from '@/utils/direct-access'
+import { shouldPromptDirectAccess } from '@/utils/direct-access'
 
 import { DIRECT_ACCESS_MIN_NOTES } from '@/constants/direct-access'
 import { STORAGE_BOOLEAN } from '@/constants/storage-values'
@@ -14,14 +14,12 @@ export function useDirectAccessPrompt() {
     const { setItem } = useStorage()
     const { notes } = useNotes()
 
-    const [granted, setGranted] = useState(hasDirectAccess)
+    const { granted, request } = useDirectAccess()
     const [dismissed, setDismissed] = useState(true)
 
     useStorageEffect(STORAGE_KEYS.DIRECT_ACCESS_DISMISSED, (value) => {
         setDismissed(value === STORAGE_BOOLEAN.TRUE)
     })
-
-    useOnForeground(() => setGranted(hasDirectAccess()))
 
     const onDismiss = useCallback(() => {
         setDismissed(true)
@@ -35,7 +33,7 @@ export function useDirectAccessPrompt() {
             noteCount: notes.length,
             minNotes: DIRECT_ACCESS_MIN_NOTES
         }),
-        onRequest: requestDirectAccess,
+        onRequest: request,
         onDismiss
     }
 }

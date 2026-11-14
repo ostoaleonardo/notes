@@ -218,6 +218,14 @@
 				"description": "Fundo translúcido nos widgets",
 				"opacity": "Opacidade"
 			}
+		},
+		"permissions": {
+			"title": "Permissões",
+			"direct_access": {
+				"title": "Acesso a todos os arquivos",
+				"granted": "Permitido. Repositórios grandes carregam mais rápido.",
+				"denied": "Não permitido. Permita para que repositórios grandes carreguem mais rápido."
+			}
 		}
 	},
 	"pro": {

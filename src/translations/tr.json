@@ -206,6 +206,14 @@
 				"title": "İç bağlantıları otomatik güncelle",
 				"description": "Bir notu yeniden adlandırdıktan sonra bağlantıları güncellemeden önce sorulmasını istiyorsan kapat."
 			}
+		},
+		"permissions": {
+			"title": "İzinler",
+			"direct_access": {
+				"title": "Tüm dosyalara erişim",
+				"granted": "İzin verildi. Büyük depolar daha hızlı yüklenir.",
+				"denied": "İzin verilmedi. Büyük depoların daha hızlı yüklenmesi için izin verin."
+			}
 		}
 	},
 	"pro": {

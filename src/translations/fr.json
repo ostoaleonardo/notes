@@ -206,6 +206,14 @@
 				"title": "Mettre à jour automatiquement les liens internes",
 				"description": "Désactivez pour qu'on vous demande avant de mettre à jour les liens après le renommage d'une note."
 			}
+		},
+		"permissions": {
+			"title": "Autorisations",
+			"direct_access": {
+				"title": "Accès à tous les fichiers",
+				"granted": "Autorisé. Les grands dépôts se chargent plus vite.",
+				"denied": "Non autorisé. Autorisez-le pour charger plus vite les grands dépôts."
+			}
 		}
 	},
 	"pro": {

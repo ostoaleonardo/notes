@@ -206,6 +206,14 @@
 				"title": "Uppdatera interna länkar automatiskt",
 				"description": "Stäng av för att bli tillfrågad innan länkar uppdateras efter att en anteckning döpts om."
 			}
+		},
+		"permissions": {
+			"title": "Behörigheter",
+			"direct_access": {
+				"title": "Åtkomst till alla filer",
+				"granted": "Tillåtet. Stora arkiv läses in snabbare.",
+				"denied": "Inte tillåtet. Tillåt det så att stora arkiv läses in snabbare."
+			}
 		}
 	},
 	"pro": {

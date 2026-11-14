@@ -206,6 +206,14 @@
 				"title": "Automaticky aktualizovat interní odkazy",
 				"description": "Vypni, pokud chceš, aby se tě aplikace zeptala před aktualizací odkazů po přejmenování poznámky."
 			}
+		},
+		"permissions": {
+			"title": "Oprávnění",
+			"direct_access": {
+				"title": "Přístup ke všem souborům",
+				"granted": "Povoleno. Velká úložiště se načítají rychleji.",
+				"denied": "Nepovoleno. Povolte, aby se velká úložiště načítala rychleji."
+			}
 		}
 	},
 	"pro": {

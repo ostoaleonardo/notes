@@ -206,6 +206,14 @@
 				"title": "Interne Links automatisch aktualisieren",
 				"description": "Deaktivieren, um vor dem Aktualisieren der Links nach dem Umbenennen einer Notiz gefragt zu werden."
 			}
+		},
+		"permissions": {
+			"title": "Berechtigungen",
+			"direct_access": {
+				"title": "Zugriff auf alle Dateien",
+				"granted": "Erlaubt. Große Repositorys laden schneller.",
+				"denied": "Nicht erlaubt. Erlaube es, damit große Repositorys schneller laden."
+			}
 		}
 	},
 	"pro": {

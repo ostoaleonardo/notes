@@ -218,6 +218,14 @@
 				"description": "Translucent widget background",
 				"opacity": "Opacity"
 			}
+		},
+		"permissions": {
+			"title": "Permissions",
+			"direct_access": {
+				"title": "Access to all files",
+				"granted": "Allowed. Large repositories load faster.",
+				"denied": "Not allowed. Allow it so large repositories load faster."
+			}
 		}
 	},
 	"pro": {
