@@ -1,32 +1,31 @@
 import i18n from '@/i18n/i18next'
-import { Asset } from 'expo-asset'
-import { File } from 'expo-file-system'
+import { parseBundledKey, readBundledText } from '@/utils/bundled-asset'
 
-import { BUNDLED_TEMPLATES, BUNDLED_WELCOME } from '@/constants/bundled-content'
+import { BUNDLED_CONTENT_KINDS, BUNDLED_MARKDOWN_EXTENSION } from '@/constants/bundled-content'
+import { bundledContent } from '@/constants/bundled-context'
 import { DEFAULT_LANGUAGE } from '@/constants/languages'
 
 let loaded = { welcome: {}, templates: {} }
 
-const readText = async (module) => {
-    const asset = Asset.fromModule(module)
-    await asset.downloadAsync()
-
-    return new File(asset.localUri).text()
-}
-
-const readEntries = async (entries) => Object.fromEntries(
-    await Promise.all(Object.entries(entries).map(async ([key, module]) => [key, await readText(module)]))
-)
+const stripExtension = (filename) => filename.slice(0, -BUNDLED_MARKDOWN_EXTENSION.length)
 
 export const loadBundledContent = async () => {
-    const languages = Object.keys(BUNDLED_WELCOME)
+    const next = { welcome: {}, templates: {} }
 
-    const welcome = await readEntries(BUNDLED_WELCOME)
-    const templates = Object.fromEntries(await Promise.all(
-        languages.map(async (language) => [language, await readEntries(BUNDLED_TEMPLATES[language])])
-    ))
+    await Promise.all(bundledContent.keys().map(async (key) => {
+        const { kind, folder, filename } = parseBundledKey(key)
+        const text = await readBundledText(bundledContent(key))
 
-    loaded = { welcome, templates }
+        if (kind === BUNDLED_CONTENT_KINDS.WELCOME) {
+            next.welcome[stripExtension(filename)] = text
+            return
+        }
+
+        const [language] = folder
+        next.templates[language] = { ...next.templates[language], [stripExtension(filename)]: text }
+    }))
+
+    loaded = next
 }
 
 export const setBundledContent = (content) => {

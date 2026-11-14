@@ -1,7 +1,6 @@
 import { useEffect, useEffectEvent } from 'react'
 import { DevSettings } from 'react-native'
 import { registerDevMenuItems } from 'expo-dev-menu'
-import { Asset } from 'expo-asset'
 import { Directory, File, Paths } from 'expo-file-system'
 import legacyNotes from '../../legacy/notes.json'
 import legacyTags from '../../legacy/categories.json'
@@ -16,6 +15,7 @@ import { sanitizeFilename } from '@/utils/note-filename'
 import { getVersionLocation } from '@/utils/note-version-location'
 import { buildNoteFileContent, parseFrontmatter } from '@/utils/frontmatter'
 import { buildDevTestPlan, groupDevData, parseDevDataKey } from '@/utils/dev-test-data'
+import { readBundledBytes, readBundledText } from '@/utils/bundled-asset'
 import { getFileMimeType } from '@/utils/attachments'
 import { buildNotePath } from '@/utils/note-path'
 import { invalidateMediaIndex } from '@/utils/media-index'
@@ -34,15 +34,13 @@ import { logError } from '@/utils/log-error'
 // require.context only accepts literal arguments
 const devData = require.context('../../dev-data', true, /\.(md|png|txt|pdf|wav|mp4)$/)
 
-const fetchDevAsset = (module) => fetch(Asset.fromModule(module).uri.replaceAll(' ', '%20'))
-
 const loadDevData = () => Promise.all(devData.keys().map(async (key) => {
     const entry = parseDevDataKey(key)
-    const response = await fetchDevAsset(devData(key))
+    const module = devData(key)
 
     return entry.kind === DEV_DATA_KINDS.ATTACHMENTS
-        ? { ...entry, bytes: new Uint8Array(await response.arrayBuffer()) }
-        : { ...entry, content: await response.text() }
+        ? { ...entry, bytes: await readBundledBytes(module) }
+        : { ...entry, content: await readBundledText(module) }
 }))
 
 export function useDevMenu() {

@@ -124,14 +124,14 @@
         "preset": "jest-expo",
         "setupFiles": [
           "<rootDir>/jest/setup-idle-callback.js",
-          "<rootDir>/jest/setup-keyboard-controller.js"
+          "<rootDir>/jest/setup-keyboard-controller.js",
+          "<rootDir>/jest/setup-bundled-content.js"
         ],
         "testPathIgnorePatterns": [
           "/node_modules/",
           "/dom-tests/"
         ],
         "moduleNameMapper": {
-          "\\.md$": "<rootDir>/jest/markdown-stub.js",
           "^@/(.*)$": "<rootDir>/src/$1"
         }
       },

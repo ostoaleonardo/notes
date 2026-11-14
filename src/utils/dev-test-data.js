@@ -1,18 +1,14 @@
 import { buildNoteFileContent } from '@/utils/frontmatter'
+import { parseBundledKey } from '@/utils/bundled-asset'
 
 import { NOTE_FILE_EXTENSION } from '@/constants/file-storage'
 import {
-    DEV_DATA_KEY_PREFIX,
     DEV_DATA_KINDS,
     NOTES_PER_FOLDER,
     TREE_BRANCHING
 } from '@/constants/dev-menu'
 
-export const parseDevDataKey = (key) => {
-    const [kind, ...segments] = key.replace(DEV_DATA_KEY_PREFIX, '').split('/')
-
-    return { kind, folder: segments.slice(0, -1), filename: segments.at(-1) }
-}
+export const parseDevDataKey = parseBundledKey
 
 export const listDevFolders = (branching = TREE_BRANCHING) => {
     const folders = []
