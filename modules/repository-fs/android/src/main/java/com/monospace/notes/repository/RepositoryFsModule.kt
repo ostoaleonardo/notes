@@ -2,14 +2,19 @@ package com.monospace.notes.repository
 
 import android.content.ContentProviderClient
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import android.os.Environment
 import android.os.ParcelFileDescriptor
 import android.provider.DocumentsContract
 import android.provider.DocumentsContract.Document
+import android.provider.Settings
 import expo.modules.kotlin.exception.Exceptions
 import expo.modules.kotlin.functions.Coroutine
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
+import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -17,6 +22,10 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 
 private const val READ_PARALLELISM = 16
+private const val EXTERNAL_STORAGE_AUTHORITY = "com.android.externalstorage.documents"
+private const val PRIMARY_VOLUME = "primary"
+private const val VOLUME_SEPARATOR = ":"
+private const val PATH_SEPARATOR = "/"
 
 private val CHILD_COLUMNS = arrayOf(
   Document.COLUMN_DOCUMENT_ID,
@@ -35,6 +44,15 @@ class RepositoryFsModule : Module() {
   override fun definition() = ModuleDefinition {
     Name("RepositoryFs")
 
+    Function("hasDirectAccess") { hasDirectAccess() }
+
+    Function("requestDirectAccess") {
+      val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse("package:${context.packageName}"))
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+      context.startActivity(intent)
+    }
+
     Function("listDirectorySync") { uri: String ->
       listDirectory(context, Uri.parse(uri))
     }
@@ -45,26 +63,64 @@ class RepositoryFsModule : Module() {
 
     AsyncFunction("readTextFiles") Coroutine { uris: List<String> ->
       val documents = uris.map(Uri::parse)
-      val client = documents.firstOrNull()?.authority?.let(context.contentResolver::acquireUnstableContentProviderClient)
-        ?: return@Coroutine emptyList<String?>()
+      val client = lazy {
+        documents.firstOrNull()?.authority?.let(context.contentResolver::acquireUnstableContentProviderClient)
+      }
 
       try {
         coroutineScope {
-          documents.map { uri -> async(readDispatcher) { readText(client, uri) } }.awaitAll()
+          documents.map { uri ->
+            async(readDispatcher) { directFile(context, uri)?.let(::readText) ?: client.value?.let { readText(it, uri) } }
+          }.awaitAll()
         }
       } finally {
-        client.close()
+        if (client.isInitialized()) client.value?.close()
       }
     }
   }
 }
 
-private fun listDirectory(context: Context, uri: Uri): List<Map<String, Any?>> {
-  val documentId = if (DocumentsContract.isDocumentUri(context, uri)) {
-    DocumentsContract.getDocumentId(uri)
-  } else {
-    DocumentsContract.getTreeDocumentId(uri)
+private fun hasDirectAccess(): Boolean =
+  Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()
+
+private fun documentIdOf(context: Context, uri: Uri): String = if (DocumentsContract.isDocumentUri(context, uri)) {
+  DocumentsContract.getDocumentId(uri)
+} else {
+  DocumentsContract.getTreeDocumentId(uri)
+}
+
+private fun directFile(context: Context, uri: Uri): File? {
+  if (uri.authority != EXTERNAL_STORAGE_AUTHORITY || !hasDirectAccess()) return null
+
+  val documentId = runCatching { documentIdOf(context, uri) }.getOrNull() ?: return null
+  val volume = documentId.substringBefore(VOLUME_SEPARATOR)
+  val relativePath = documentId.substringAfter(VOLUME_SEPARATOR, "")
+  val root = if (volume == PRIMARY_VOLUME) Environment.getExternalStorageDirectory() else File("/storage/$volume")
+
+  return File(root, relativePath)
+}
+
+private fun listDirectory(context: Context, uri: Uri): List<Map<String, Any?>> =
+  directFile(context, uri)?.takeIf { it.isDirectory }?.let { listDirectDirectory(uri, documentIdOf(context, uri), it) }
+    ?: listProviderDirectory(context, uri)
+
+private fun listDirectDirectory(uri: Uri, documentId: String, directory: File): List<Map<String, Any?>> =
+  directory.listFiles().orEmpty().map { file ->
+    val childId = documentId + PATH_SEPARATOR + file.name
+    val childUri = DocumentsContract.buildDocumentUriUsingTree(uri, childId).toString()
+    val isDirectory = file.isDirectory
+
+    mapOf(
+      "uri" to if (isDirectory) "$childUri/" else childUri,
+      "name" to file.name,
+      "isDirectory" to isDirectory,
+      "lastModified" to file.lastModified().toDouble(),
+      "size" to file.length().toDouble()
+    )
   }
+
+private fun listProviderDirectory(context: Context, uri: Uri): List<Map<String, Any?>> {
+  val documentId = documentIdOf(context, uri)
   val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(uri, documentId)
   val entries = mutableListOf<Map<String, Any?>>()
 
@@ -93,3 +149,5 @@ private fun readText(client: ContentProviderClient, uri: Uri): String? = runCatc
     it.readBytes().toString(Charsets.UTF_8)
   }
 }.getOrNull()
+
+private fun readText(file: File): String? = runCatching { file.readText() }.getOrNull()
