@@ -30,12 +30,7 @@ export const PermissionCard = ({
                 accessibilityRole='button'
                 onPress={onPress}
             >
-                <View
-                    style={[
-                        styles.content,
-                        onDismiss && styles.dismissible
-                    ]}
-                >
+                <View style={styles.content}>
                     <View style={styles.text}>
                         <Typography
                             bold={true}
@@ -92,9 +87,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between'
     },
-    dismissible: {
-        paddingRight: SPACING.xxxxl
-    },
     text: {
         flex: 1
     },
@@ -103,7 +95,7 @@ const styles = StyleSheet.create({
     },
     dismiss: {
         position: 'absolute',
-        top: SPACING.md,
-        right: SPACING.md
+        top: SPACING.sm,
+        right: SPACING.sm
     }
 })

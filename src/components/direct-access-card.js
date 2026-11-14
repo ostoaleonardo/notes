@@ -33,7 +33,8 @@ export const DirectAccessCard = () => {
 
 const styles = StyleSheet.create({
     container: {
-        marginHorizontal: SPACING.lg,
-        marginTop: SPACING.sm
+        position: 'absolute',
+        left: SPACING.lg,
+        right: SPACING.lg
     }
 })

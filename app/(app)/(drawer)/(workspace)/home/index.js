@@ -74,8 +74,8 @@ export default function Home() {
             />
 
             <BlurTarget style={{ flex: 1 }}>
-                <DirectAccessCard />
                 <Intro />
+                <DirectAccessCard />
             </BlurTarget>
 
             <HomeToolbar
