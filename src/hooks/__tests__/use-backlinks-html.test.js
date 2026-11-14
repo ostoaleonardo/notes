@@ -11,12 +11,26 @@ const mockNotes = [
 jest.mock('react-i18next', () => ({
     useTranslation: () => ({ t: (key) => key })
 }))
+const mockNotePaths = new Map(mockNotes.map((note) => [note.path, '']))
+
 jest.mock('../use-notes', () => ({
     useNotes: () => ({
         notes: mockNotes,
-        notePaths: new Map(mockNotes.map((note) => [note.path, '']))
+        notePaths: mockNotePaths
     })
 }))
+
+let idleCallbacks
+
+beforeEach(() => {
+    idleCallbacks = []
+    jest.spyOn(global, 'requestIdleCallback').mockImplementation((callback) => idleCallbacks.push(callback))
+    jest.spyOn(global, 'cancelIdleCallback').mockImplementation(() => {})
+})
+
+afterEach(() => {
+    jest.restoreAllMocks()
+})
 
 describe('backlinks html', () => {
     test('is empty when backlinks are disabled', async () => {
@@ -44,7 +58,7 @@ describe('backlinks html', () => {
         expect(result.current).not.toContain('title.unlinked_mentions')
 
         await act(async () => {
-            await new Promise((resolve) => setTimeout(resolve, 10))
+            idleCallbacks.forEach((callback) => callback())
         })
 
         expect(result.current).toContain('title.unlinked_mentions')
