@@ -1,4 +1,4 @@
-import { EditorState } from '@codemirror/state'
+import { EditorState, StateEffect } from '@codemirror/state'
 import { ensureSyntaxTree } from '@codemirror/language'
 import { markdown } from '@codemirror/lang-markdown'
 import { GFM } from '@lezer/markdown'
@@ -9,14 +9,15 @@ import { buildDocument, measure, report } from '../../../../jest/perf-fixtures'
 const SIZES = [1500, 7000, 30000, 120000]
 
 const createState = (doc) => {
-    const state = EditorState.create({
+    const parsed = EditorState.create({
         doc,
         selection: { anchor: 0 },
-        extensions: [markdown({ extensions: GFM }), liveFormatting]
+        extensions: [markdown({ extensions: GFM })]
     })
-    ensureSyntaxTree(state, doc.length, 60000)
 
-    return state
+    ensureSyntaxTree(parsed, doc.length, 60000)
+
+    return parsed.update({ effects: StateEffect.appendConfig.of(liveFormatting) }).state
 }
 
 describe('live formatting decorations', () => {

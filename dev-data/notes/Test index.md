@@ -20,4 +20,5 @@ Entry point of the generated test data. Every feature of the app has something t
 - Tasks: [[Tasks]]
 - Outline: [[Long outline]]
 - Code blocks: [[Code blocks]]
+- Large note (120k characters, for performance checks): [[Large note]]
 - Daily notes: [[2026-11-10]], [[2026-11-12]]

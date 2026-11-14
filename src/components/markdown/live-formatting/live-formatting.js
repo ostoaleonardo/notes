@@ -50,25 +50,34 @@ const NODE_HANDLERS = new Map([
     [LEZER_NODES.TABLE, decorateTable]
 ])
 
-const buildLiveFormattingDecorations = (state) => {
+const shiftRange = (range, offset) => range.value.range(range.from + offset, range.to + offset)
+
+const collectDecorationRanges = (state, from, to) => {
     const ranges = []
-    const selection = state.selection.main
     const doc = state.doc
+    const offset = -from
+    const selection = state.selection.main
+    const localSelection = { from: selection.from + offset, to: selection.to + offset }
     const mediaMap = state.facet(mediaMapFacet)
     const noteEntries = state.facet(noteEntriesFacet)
     const tableLabels = state.facet(tableLabelsFacet)
     const codeRanges = []
-    const text = doc.toString()
+    const text = doc.sliceString(from, to)
     const wikiLinkRanges = findWikiLinkRanges(text)
     const customTaskRanges = findCustomTaskRanges(text)
+    const textRanges = from === 0 ? ranges : []
 
     syntaxTree(state).iterate({
+        from,
+        to,
         enter: (node) => {
-            if (codeRangeNodeNames.has(node.name)) codeRanges.push({ from: node.from, to: node.to })
+            if (codeRangeNodeNames.has(node.name)) {
+                codeRanges.push({ from: node.from + offset, to: node.to + offset })
+            }
 
             const isLink = linkNodeNames.includes(node.name)
-            if (isLink && overlapsAny(node.from, node.to, wikiLinkRanges)) return
-            if (isLink && overlapsAny(node.from, node.to, customTaskRanges)) return
+            if (isLink && overlapsAny(node.from + offset, node.to + offset, wikiLinkRanges)) return
+            if (isLink && overlapsAny(node.from + offset, node.to + offset, customTaskRanges)) return
 
             const handler = NODE_HANDLERS.get(node.name)
             if (!handler) return
@@ -77,14 +86,86 @@ const buildLiveFormattingDecorations = (state) => {
         }
     })
 
-    decorateMath({ text, selection, ranges, codeRanges })
-    decorateFootnotes({ text, ranges, codeRanges })
-    decorateBlockIds({ text, ranges })
-    decorateCustomTasks({ customTaskRanges, selection, ranges, codeRanges })
-    decorateExtraMarks({ text, selection, ranges, codeRanges })
-    decorateWikiLinks({ ranges, codeRanges, wikiLinkRanges, noteEntries, selection, mediaMap })
+    const localSource = { text, selection: localSelection, ranges: textRanges, codeRanges }
 
-    return Decoration.set(ranges, true)
+    decorateMath(localSource)
+    decorateFootnotes(localSource)
+    decorateBlockIds(localSource)
+    decorateCustomTasks({ ...localSource, customTaskRanges })
+    decorateExtraMarks(localSource)
+    decorateWikiLinks({ ...localSource, wikiLinkRanges, noteEntries, mediaMap })
+
+    return from === 0 ? ranges : ranges.concat(textRanges.map((range) => shiftRange(range, from)))
+}
+
+const buildLiveFormattingDecorations = (state) => (
+    Decoration.set(collectDecorationRanges(state, 0, state.doc.length), true)
+)
+
+const getTouchedBlocks = (state, selection) => {
+    const blocks = []
+
+    let child = syntaxTree(state).topNode.firstChild
+
+    while (child) {
+        if (child.from <= selection.to && child.to >= selection.from) {
+            blocks.push({ from: child.from, to: child.to })
+        }
+
+        child = child.nextSibling
+    }
+
+    return blocks
+}
+
+const mergeZones = (zones) => {
+    const sorted = [...zones].sort((a, b) => a.from - b.from)
+
+    return sorted.reduce((merged, zone) => {
+        const last = merged[merged.length - 1]
+        if (last && zone.from <= last.to) last.to = Math.max(last.to, zone.to)
+        else merged.push({ ...zone })
+
+        return merged
+    }, [])
+}
+
+const expandZone = (decorations, zone) => {
+    let { from, to } = zone
+
+    decorations.between(from, to, (rangeFrom, rangeTo) => {
+        from = Math.min(from, rangeFrom)
+        to = Math.max(to, rangeTo)
+    })
+
+    return { from, to }
+}
+
+const refreshSelectionZones = (decorations, tr) => {
+    const { startState, state } = tr
+    if (syntaxTree(startState) !== syntaxTree(state)) return buildLiveFormattingDecorations(state)
+
+    const touched = [
+        ...getTouchedBlocks(startState, startState.selection.main),
+        ...getTouchedBlocks(state, state.selection.main)
+    ]
+
+    if (!touched.length) return decorations
+
+    const zones = mergeZones(touched.map((zone) => expandZone(decorations, zone)))
+
+    if (zones.reduce((size, zone) => size + zone.to - zone.from, 0) > state.doc.length / 2) {
+        return buildLiveFormattingDecorations(state)
+    }
+
+    return zones.reduce((current, zone) => current.update({
+        filter: () => false,
+        filterFrom: zone.from,
+        filterTo: zone.to
+    }).update({
+        add: collectDecorationRanges(state, zone.from, zone.to),
+        sort: true
+    }), decorations)
 }
 
 const guardTableBoundary = (field) => EditorState.transactionFilter.of((tr) => {
@@ -94,6 +175,7 @@ const guardTableBoundary = (field) => EditorState.transactionFilter.of((tr) => {
     tr.changes.iterChanges((from, to, fromB, toB, inserted) => {
         edits.push({ from, to, insert: inserted.toString() })
     })
+
     if (edits.length !== 1) return tr
 
     const tables = []
@@ -122,6 +204,7 @@ const ensureLineAfterTable = (field) => EditorState.transactionFilter.of((tr) =>
     tr.startState.field(field).between(end, end, (from, to, value) => {
         if (value.spec.widget instanceof TableWidget) endsWithTable = true
     })
+
     if (!endsWithTable) return tr
 
     return [tr, {
@@ -135,11 +218,12 @@ export { mediaMapFacet, tableLabelsFacet }
 
 export const liveFormatting = StateField.define({
     create: (state) => buildLiveFormattingDecorations(state),
-    update: (decorations, tr) => (
-        tr.docChanged || tr.selection || tr.reconfigured
-            ? buildLiveFormattingDecorations(tr.state)
-            : decorations.map(tr.changes)
-    ),
+    update: (decorations, tr) => {
+        if (tr.docChanged || tr.reconfigured) return buildLiveFormattingDecorations(tr.state)
+        if (tr.selection) return refreshSelectionZones(decorations, tr)
+
+        return decorations
+    },
     provide: (field) => [
         EditorView.decorations.from(field),
         guardTableBoundary(field),
