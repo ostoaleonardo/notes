@@ -12,6 +12,7 @@ import {
     ROOT_ENTITY_ID
 } from '@/constants/connections'
 import { WIKI_LINK_ANCHOR_SEPARATOR, WIKI_LINK_PATTERN } from '@/constants/wiki-links'
+import { compareText } from '@/utils/compare-text'
 
 const { ROOT, NOTE, FOLDER, FILE, TAG, MISSING } = CONNECTION_TYPES
 const { LINKS_OUT, LINKS_IN, TAGS, FILES, NOTES, FOLDERS, RELATED_TAGS } = CONNECTION_SECTIONS
@@ -162,7 +163,7 @@ export const entityTitle = (entity, model) => {
 }
 
 const sortByTitle = (entities, model) => [...entities].sort((a, b) => (
-    entityTitle(a, model).localeCompare(entityTitle(b, model))
+    compareText(entityTitle(a, model), entityTitle(b, model))
 ))
 
 const noteEntities = (paths, model) => sortByTitle(
@@ -180,7 +181,7 @@ const rankTags = (tags, limit) => {
     tags.forEach((tag) => counts.set(tag, (counts.get(tag) || 0) + 1))
 
     return [...counts.entries()]
-        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .sort((a, b) => b[1] - a[1] || compareText(a[0], b[0]))
         .slice(0, limit)
         .map(([tag]) => makeEntity(TAG, tag))
 }
@@ -339,7 +340,7 @@ export const summarizeConnections = (model) => {
             const hasOutgoing = (model.outgoing.get(note.path) || []).some((link) => link.path)
             return !hasOutgoing && !model.incoming.has(note.path)
         })
-        .sort((a, b) => getNoteTitle(a).localeCompare(getNoteTitle(b)))
+        .sort((a, b) => compareText(getNoteTitle(a), getNoteTitle(b)))
 
     const total = model.notes.length
     const connected = total - orphans.length
@@ -351,6 +352,6 @@ export const summarizeConnections = (model) => {
         connected,
         percent: total ? Math.round((connected / total) * 100) : 100,
         orphans,
-        unresolved: [...model.unresolved.values()].sort((a, b) => a.title.localeCompare(b.title))
+        unresolved: [...model.unresolved.values()].sort((a, b) => compareText(a.title, b.title))
     }
 }

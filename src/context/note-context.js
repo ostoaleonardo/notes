@@ -1,4 +1,13 @@
-import { createContext, useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
+import {
+    createContext,
+    useCallback,
+    useDeferredValue,
+    useEffect,
+    useEffectEvent,
+    useMemo,
+    useRef,
+    useState
+} from 'react'
 
 import { useOnForeground } from '@/hooks/use-on-foreground'
 import { useFileStorage } from '@/hooks/use-file-storage'
@@ -132,7 +141,8 @@ export const NoteProvider = ({ children }) => {
         setNotes([])
     }, [])
 
-    const tags = useMemo(() => collectTags(notes), [notes])
+    const deferredNotes = useDeferredValue(notes)
+    const tags = useMemo(() => collectTags(deferredNotes), [deferredNotes])
     const notesByPath = useMemo(() => new Map(notes.map((note) => [note.path, note])), [notes])
 
     const notePaths = useStableMap(useMemo(() => getNotePaths(notes, repositories), [notes, repositories]))

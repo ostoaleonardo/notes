@@ -2,6 +2,7 @@ import { extractInlineTags } from './inline-tags'
 import { dedupeTags } from './tag-names'
 
 import { TAG_PATH_SEPARATOR } from '@/constants/tags'
+import { compareText } from '@/utils/compare-text'
 
 const cache = new WeakMap()
 
@@ -22,5 +23,5 @@ const withParents = (tag) => {
 }
 
 export const collectTags = (notes) => (
-    dedupeTags(notes.flatMap(getNoteTags).flatMap(withParents)).sort((a, b) => a.localeCompare(b))
+    dedupeTags(notes.flatMap(getNoteTags).flatMap(withParents)).sort(compareText)
 )

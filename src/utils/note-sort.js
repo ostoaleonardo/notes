@@ -1,6 +1,7 @@
 import { DEFAULT_NOTE_SORT, NOTE_SORTS } from '@/constants/note-sort'
+import { compareText } from '@/utils/compare-text'
 
-const compareNotesByTitle = (a, b) => a.title.localeCompare(b.title)
+const compareNotesByTitle = (a, b) => compareText(a.title, b.title)
 const modifiedAt = (note) => note.updatedAt || note.createdAt || 0
 const createdAt = (note) => note.createdAt || 0
 

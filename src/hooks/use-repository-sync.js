@@ -58,7 +58,9 @@ export function useRepositorySync({
         const reconciled = (await Promise.all(roots.map(reconcileTree))).flat()
         if (busyRef.current || repositoriesRef.current !== repositories) return
 
-        await persistRepositories(reconciled)
+        if (JSON.stringify(reconciled) !== JSON.stringify(repositories)) {
+            await persistRepositories(reconciled)
+        }
 
         if (activeRepositoryId && !reconciled.some((r) => r.id === activeRepositoryId)) {
             const remainingRoots = reconciled.filter((r) => !r.parentId)

@@ -1,8 +1,9 @@
 import { getNoteTags } from './note-tags'
 
 import { DEFAULT_TAG_SORT, TAG_PATH_SEPARATOR, TAG_SORTS } from '@/constants/tags'
+import { compareText } from '@/utils/compare-text'
 
-const compareTagsByName = (a, b) => a.name.localeCompare(b.name)
+const compareTagsByName = (a, b) => compareText(a.name, b.name)
 const compareByCount = (a, b) => a.uses - b.uses
 
 const TAG_COMPARATORS = {

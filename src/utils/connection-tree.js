@@ -7,6 +7,7 @@ import {
 } from '@/utils/connection-model'
 
 import { CONNECTION_NODE_KINDS, CONNECTION_TYPES, FOLDER_SEPARATOR } from '@/constants/connections'
+import { compareText } from '@/utils/compare-text'
 
 const { FOLDER, FILE } = CONNECTION_TYPES
 const { ROOT, FOLDER: FOLDER_KIND, FILE: FILE_KIND, NOTE: NOTE_KIND } = CONNECTION_NODE_KINDS
@@ -31,7 +32,7 @@ const sortChildren = (node, model) => {
         const folderOrder = Number(b.kind === FOLDER_KIND) - Number(a.kind === FOLDER_KIND)
 
         return folderOrder ||
-            entityTitle(a.entity, model).localeCompare(entityTitle(b.entity, model))
+            compareText(entityTitle(a.entity, model), entityTitle(b.entity, model))
     })
 
     node.children.forEach((child) => sortChildren(child, model))

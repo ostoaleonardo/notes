@@ -62,7 +62,7 @@ describe('repository sync', () => {
         expect(props.persistRepositories).not.toHaveBeenCalled()
     })
 
-    test('keeps tracked repositories that still exist on disk', async () => {
+    test('does not persist when every tracked repository still exists on disk', async () => {
         const { props, result } = await setup({
             repositories: [root, kept],
             diskSubdirectories: { 'file:///root': [{ name: 'kept', uri: kept.uri }] }
@@ -70,7 +70,7 @@ describe('repository sync', () => {
 
         await result.current.reconcileRepositories()
 
-        expect(props.persistRepositories).toHaveBeenCalledWith([root, kept])
+        expect(props.persistRepositories).not.toHaveBeenCalled()
     })
 
     test('drops tracked subfolders that disappeared from disk', async () => {
