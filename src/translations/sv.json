@@ -540,5 +540,9 @@
 		"title": "Indexerar arkivet...",
 		"message": "Vissa funktioner kanske inte är tillgängliga förrän detta är klart.",
 		"complete": "Indexeringen är klar."
+	},
+	"direct_access": {
+		"title": "Snabbare inläsning",
+		"message": "Tillåt åtkomst till alla filer så att stora arkiv läses in snabbare. Notes fungerar även utan."
 	}
 }

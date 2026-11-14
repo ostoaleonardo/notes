@@ -540,5 +540,9 @@
 		"title": "Indexation du dépôt...",
 		"message": "Certaines fonctionnalités peuvent être indisponibles jusqu'à la fin.",
 		"complete": "Indexation terminée."
+	},
+	"direct_access": {
+		"title": "Chargement plus rapide",
+		"message": "Autorisez l'accès à tous les fichiers pour charger plus vite les grands dépôts. Notes fonctionne sans."
 	}
 }

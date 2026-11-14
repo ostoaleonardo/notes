@@ -540,5 +540,9 @@
 		"title": "Repository indexeren...",
 		"message": "Sommige functies zijn mogelijk pas daarna beschikbaar.",
 		"complete": "Indexeren voltooid."
+	},
+	"direct_access": {
+		"title": "Sneller laden",
+		"message": "Sta toegang tot alle bestanden toe zodat grote repositories sneller laden. Notes werkt ook zonder."
 	}
 }

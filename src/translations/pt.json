@@ -552,5 +552,9 @@
 		"title": "Indexando repositório...",
 		"message": "Algumas funções podem não estar disponíveis até terminar.",
 		"complete": "Indexação concluída."
+	},
+	"direct_access": {
+		"title": "Carregamento mais rápido",
+		"message": "Permita o acesso a todos os arquivos para que repositórios grandes carreguem mais rápido. O Notes funciona sem isso."
 	}
 }

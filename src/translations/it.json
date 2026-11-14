@@ -540,5 +540,9 @@
 		"title": "Indicizzazione del repository...",
 		"message": "Alcune funzioni potrebbero non essere disponibili fino al termine.",
 		"complete": "Indicizzazione completata."
+	},
+	"direct_access": {
+		"title": "Caricamento più veloce",
+		"message": "Consenti l'accesso a tutti i file per caricare più velocemente i repository grandi. Notes funziona anche senza."
 	}
 }

@@ -550,5 +550,9 @@
 		"title": "Indexování úložiště...",
 		"message": "Některé funkce nemusí být dostupné, dokud se nedokončí.",
 		"complete": "Indexování dokončeno."
+	},
+	"direct_access": {
+		"title": "Rychlejší načítání",
+		"message": "Povolte přístup ke všem souborům, aby se velká úložiště načítala rychleji. Notes funguje i bez něj."
 	}
 }

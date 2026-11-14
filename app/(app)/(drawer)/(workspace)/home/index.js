@@ -5,6 +5,7 @@ import { Intro } from '@/screens/notes/intro'
 import { NoteToolbarSheets } from '@/screens/notes/note-toolbar-sheets'
 import { HomeToolbar } from '@/screens/notes/home-toolbar'
 import { AppBar } from '@/components/app-bar/app-bar'
+import { DirectAccessCard } from '@/components/direct-access-card'
 import { BlurTarget, BlurTargetProvider } from '@/ui/blur/blur-target'
 
 import { useBottomSheet } from '@/hooks/use-bottom-sheet'
@@ -73,6 +74,7 @@ export default function Home() {
             />
 
             <BlurTarget style={{ flex: 1 }}>
+                <DirectAccessCard />
                 <Intro />
             </BlurTarget>
 

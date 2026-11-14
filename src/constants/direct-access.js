@@ -1,0 +1,1 @@
+export const DIRECT_ACCESS_MIN_NOTES = 500

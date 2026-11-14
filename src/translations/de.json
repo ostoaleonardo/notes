@@ -540,5 +540,9 @@
 		"title": "Repository wird indexiert...",
 		"message": "Einige Funktionen sind möglicherweise erst danach verfügbar.",
 		"complete": "Indexierung abgeschlossen."
+	},
+	"direct_access": {
+		"title": "Schnelleres Laden",
+		"message": "Erlaube den Zugriff auf alle Dateien, damit große Repositorys schneller laden. Notes funktioniert auch ohne."
 	}
 }

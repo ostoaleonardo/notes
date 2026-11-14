@@ -540,5 +540,9 @@
 		"title": "Depo dizine ekleniyor...",
 		"message": "Bu tamamlanana kadar bazı işlevler kullanılamayabilir.",
 		"complete": "Dizine ekleme tamamlandı."
+	},
+	"direct_access": {
+		"title": "Daha hızlı yükleme",
+		"message": "Büyük depoların daha hızlı yüklenmesi için tüm dosyalara erişime izin verin. Notes bunsuz da çalışır."
 	}
 }

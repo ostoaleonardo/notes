@@ -585,5 +585,9 @@
 		"title": "Indexing repository...",
 		"message": "Some functionality may not be available until this is complete.",
 		"complete": "Indexing complete."
+	},
+	"direct_access": {
+		"title": "Faster loading",
+		"message": "Allow access to all files so large repositories load faster. Notes works without it."
 	}
 }

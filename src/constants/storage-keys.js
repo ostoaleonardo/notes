@@ -20,6 +20,7 @@ export const STORAGE_KEYS = {
     ATTACHMENT_LOCATION: 'attachment-location',
     ATTACHMENT_FOLDER: 'attachment-folder',
     PDF_EMBED: 'pdf-embed',
+    DIRECT_ACCESS_DISMISSED: 'direct-access-dismissed',
     WIDGET_GLASS: 'widget-glass',
     WIDGET_GLASS_ALPHA: 'widget-glass-alpha',
     PRO: 'pro',
