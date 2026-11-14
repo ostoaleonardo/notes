@@ -10,7 +10,7 @@ import { ExportSheet } from '@/screens/dialogs/export-sheet'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { MarkdownInput } from '@/components/markdown/markdown-input'
 
-import { useBottomSheet } from '@/hooks/use-bottom-sheet'
+import { useMountedSheet } from '@/hooks/use-mounted-sheet'
 import { useEditorChrome } from '@/hooks/use-editor-chrome'
 import { useNoteDelete } from '@/hooks/use-note-delete'
 import { useNoteMove } from '@/hooks/use-note-move'
@@ -103,8 +103,8 @@ export const NoteEditorScreen = ({
         replace: search.replaceText
     }), [search.searchQuery, search.replaceText])
 
-    const outlineSheet = useBottomSheet()
-    const outgoingLinksSheet = useBottomSheet()
+    const outlineSheet = useMountedSheet()
+    const outgoingLinksSheet = useMountedSheet()
 
     const jump = useEditorJump(anchor)
     const { sheet: sharingSheet, onConfirmExport, onConfirmShare } = useNoteSharing({ id, flush })
@@ -171,17 +171,21 @@ export const NoteEditorScreen = ({
             versionHistory={versionHistory}
             sheets={(
                 <>
-                    <OutlineSheet
-                        sheet={outlineSheet}
-                        contentRef={latestContent}
-                        onSelect={jump.onSelectHeading}
-                    />
+                    {outlineSheet.mounted && (
+                        <OutlineSheet
+                            contentRef={latestContent}
+                            onSelect={jump.onSelectHeading}
+                            onClose={outlineSheet.onClose}
+                        />
+                    )}
 
-                    <OutgoingLinksSheet
-                        sheet={outgoingLinksSheet}
-                        contentRef={latestContent}
-                        selfPath={id}
-                    />
+                    {outgoingLinksSheet.mounted && (
+                        <OutgoingLinksSheet
+                            contentRef={latestContent}
+                            selfPath={id}
+                            onClose={outgoingLinksSheet.onClose}
+                        />
+                    )}
 
                     <MoveNoteSheet
                         sheet={noteMove.sheet}

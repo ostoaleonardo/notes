@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { BottomSheetModal, BottomSheetView } from '@expo/ui/community/bottom-sheet'
 
@@ -10,10 +11,15 @@ export const ModalBottomSheet = ({
     ref,
     onClose,
     children,
+    presentOnMount = false,
     contentContainerStyle,
     ...prop
 }) => {
     const { colors } = useTheme()
+
+    useEffect(() => {
+        if (presentOnMount) ref.current?.present()
+    }, [ref, presentOnMount])
 
     return (
         <BottomSheetModal

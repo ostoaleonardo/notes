@@ -14,6 +14,8 @@ export const ListSheet = ({
     sheet,
     title,
     onChange,
+    onClose,
+    presentOnMount,
     data,
     renderItem,
     keyExtractor,
@@ -25,8 +27,10 @@ export const ListSheet = ({
         <ModalBottomSheet
             key={isEmpty ? 'empty' : 'list'}
             ref={sheet.ref}
+            onClose={onClose}
             onChange={onChange}
             enableDynamicSizing={isEmpty}
+            presentOnMount={presentOnMount}
             snapPoints={isEmpty ? undefined : SHEET.snapPoints.tall}
         >
             {title && <SheetTitle>{title}</SheetTitle>}

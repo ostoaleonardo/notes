@@ -5,6 +5,7 @@ import { ListItem } from '@/ui/list-item'
 import { ListSheet } from '@/ui/modal/list-sheet'
 import { useTheme } from '@/ui/hooks/use-theme'
 
+import { useBottomSheet } from '@/hooks/use-bottom-sheet'
 import { useNotes } from '@/hooks/use-notes'
 import { getEditorPath } from '@/utils/editor-path'
 import { findOutgoingLinks } from '@/utils/outgoing-links'
@@ -29,17 +30,17 @@ const OutgoingLinkItem = memo(({ item, onPress }) => {
 })
 
 export const OutgoingLinksSheet = memo(({
-    sheet,
     contentRef,
-    selfPath
+    selfPath,
+    onClose
 }) => {
     const { t } = useTranslation()
     const { notes, notePaths } = useNotes()
-    const [links, setLinks] = useState([])
+    const sheet = useBottomSheet()
 
-    sheet.beforeOpen.current = () => {
-        setLinks(findOutgoingLinks(contentRef.current.content, selfPath, notes, notePaths))
-    }
+    const [links] = useState(() => (
+        findOutgoingLinks(contentRef.current.content, selfPath, notes, notePaths)
+    ))
 
     const onPress = useCallback((path) => {
         sheet.onClose()
@@ -56,6 +57,8 @@ export const OutgoingLinksSheet = memo(({
     return (
         <ListSheet
             sheet={sheet}
+            presentOnMount
+            onClose={onClose}
             title={t('title.outgoing_links')}
             data={links}
             renderItem={renderItem}

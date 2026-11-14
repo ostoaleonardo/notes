@@ -7,6 +7,8 @@ import { ListItem } from '@/ui/list-item'
 import { ListSheet } from '@/ui/modal/list-sheet'
 import { useTheme } from '@/ui/hooks/use-theme'
 
+import { useBottomSheet } from '@/hooks/use-bottom-sheet'
+
 import { toggleInSet } from '@/utils/toggle-in-set'
 import { buildOutline, findHeadings, getVisibleOutline } from '@/utils/headings'
 
@@ -22,6 +24,7 @@ const OutlineItem = memo(({
 }) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
+
     const toggleKey = collapsed ? 'message.outline.expand' : 'message.outline.collapse'
     const handlePress = useCallback(() => onPress(item.index), [onPress, item.index])
     const handleToggle = useCallback(() => onToggle(item.index), [onToggle, item.index])
@@ -53,20 +56,17 @@ const OutlineItem = memo(({
 })
 
 export const OutlineSheet = memo(({
-    sheet,
     contentRef,
-    onSelect
+    onSelect,
+    onClose
 }) => {
     const { t } = useTranslation()
-    const [outline, setOutline] = useState([])
+    const sheet = useBottomSheet()
+
+    const [outline] = useState(() => buildOutline(findHeadings(contentRef.current.content || '')))
     const [collapsed, setCollapsed] = useState(() => new Set())
 
     const items = useMemo(() => getVisibleOutline(outline, collapsed), [outline, collapsed])
-
-    sheet.beforeOpen.current = () => {
-        setCollapsed(new Set())
-        setOutline(buildOutline(findHeadings(contentRef.current.content || '')))
-    }
 
     const onPress = useCallback((index) => {
         sheet.onClose()
@@ -87,6 +87,8 @@ export const OutlineSheet = memo(({
     return (
         <ListSheet
             sheet={sheet}
+            presentOnMount
+            onClose={onClose}
             title={t('title.outline')}
             data={items}
             renderItem={renderItem}
