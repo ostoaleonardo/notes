@@ -26,7 +26,7 @@ export const decorateCodeBlock = (node, { doc, ranges }) => {
 
 export const codeBlocksTheme = ({ colors }) => ({
     '.cm-live-codeblock-line': {
-        backgroundColor: colors.codeBackground,
+        backgroundColor: colors.codeBlockBackground,
         fontFamily: MONOSPACE_FONT_FAMILY,
         paddingLeft: '0.4em',
         paddingRight: '0.4em'

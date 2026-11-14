@@ -7,8 +7,8 @@ import { RADIUS, OPACITY } from '@/constants/theme'
 import { INLINE_TAG_CLASS } from '@/constants/tags'
 import { TRANSPARENT } from '@/constants/themes'
 
-export const buildEditorTheme = ({ colors, typography }) => {
-    const derived = buildDerivedColors(colors)
+export const buildEditorTheme = ({ colors, dark, typography }) => {
+    const derived = buildDerivedColors(colors, dark)
     const { onBackground, tertiary, accentText, selection, placeholder, surface } = derived
     const { fontSize, fontFamily } = typography
 

@@ -4,6 +4,7 @@ import { EditorView, lineNumbers as cmLineNumbers } from '@codemirror/view'
 import { indentUnit } from '@codemirror/language'
 
 import { buildEditorTheme } from './markdown-dom-theme'
+import { buildEditorHighlighting } from './syntax-highlighting/syntax-highlight-style'
 import { liveFormatting, mediaMapFacet, tableLabelsFacet } from './live-formatting/live-formatting'
 import { noteEntriesFacet, wikiLinkFormatFacet } from './wiki-link-completion'
 import { knownTagsFacet } from './tag-completion'
@@ -89,6 +90,12 @@ export const useEditorCompartments = (viewRef, {
         [stableTheme]
     )
 
+    const highlightingExtension = useCompartment(
+        viewRef,
+        () => buildEditorHighlighting(stableTheme),
+        [stableTheme]
+    )
+
     const bottomInset = stableTheme.layout?.bottomInset ?? 0
 
     const scrollMarginsExtension = useCompartment(
@@ -117,6 +124,7 @@ export const useEditorCompartments = (viewRef, {
         frontmatterExtension,
         placeholderCompartment,
         scrollMarginsExtension,
-        themeExtension
+        themeExtension,
+        highlightingExtension
     ]
 }

@@ -8,6 +8,7 @@ import { katexCss } from './markdown-dom-katex-css'
 import { TitleSection } from './markdown-dom-widgets'
 import { buildPreviewCss } from './markdown-dom-preview-css'
 import { renderReadHtml } from './markdown-dom-render-html'
+import { useCodeLanguages } from './use-code-languages'
 import { runAction } from './markdown-dom-commands'
 import { buildEditorExtensions, buildUpdateListener } from './markdown-dom-editor-extensions'
 import { shouldApplyExternalValue } from './markdown-dom-external-value'
@@ -203,9 +204,12 @@ export default function MarkdownDomEditor({
     useEditorSearch(viewRef, searchQuery, replaceText)
 
     usePreviewClicks(previewRef, { onLinkPress, onImagePress, onToggleTask, onEdit })
+
+    const isReading = mode === EDITOR_MODES.READ
+    const loadedLanguages = useCodeLanguages(isReading ? previewValue : '')
     const html = useMemo(
-        () => (mode === EDITOR_MODES.READ ? renderReadHtml(previewValue) + (backlinksHtml || '') : ''),
-        [mode, previewValue, backlinksHtml]
+        () => (isReading ? renderReadHtml(previewValue, loadedLanguages) + (backlinksHtml || '') : ''),
+        [isReading, previewValue, backlinksHtml, loadedLanguages]
     )
 
     usePdfEmbeds(previewRef, html)

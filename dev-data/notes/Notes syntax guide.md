@@ -214,7 +214,7 @@ In edit mode, tap a cell to edit it and use the row and column handles (tap or l
 
 ## 9. Code
 
-Block with a language:
+Block with a language (highlighted in read and edit, 21 languages in [[Code blocks]]; read mode adds a copy button):
 
 ```js
 const greet = (name) => `Hello, ${name}`

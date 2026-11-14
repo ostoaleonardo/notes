@@ -19,3 +19,4 @@ Entry point of the generated test data. Every feature of the app has something t
 - Search: [[Search operators]]
 - Tasks: [[Tasks]]
 - Outline: [[Long outline]]
+- Code blocks: [[Code blocks]]

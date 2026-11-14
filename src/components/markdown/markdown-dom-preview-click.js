@@ -1,8 +1,16 @@
 import { EMBED_CLASS } from '@/constants/embeds'
 import { PREVIEW_CLICK_TYPES } from '@/constants/preview-click'
 import { TASK_CHECKBOX_SELECTOR } from '@/constants/tasks'
+import { CODE_COPY_SELECTOR, CODE_BLOCK_CLASS } from '@/constants/code-copy'
 
 export const resolvePreviewClick = (target, container) => {
+    const copyButton = target.closest(CODE_COPY_SELECTOR)
+
+    if (copyButton) {
+        const code = copyButton.closest(`.${CODE_BLOCK_CLASS}`)?.querySelector('code')
+        return { type: PREVIEW_CLICK_TYPES.COPY_CODE, button: copyButton, text: code?.textContent ?? '' }
+    }
+
     const link = target.closest('a')
     if (link) return { type: PREVIEW_CLICK_TYPES.LINK, url: link.getAttribute('href') }
 

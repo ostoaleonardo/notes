@@ -1,7 +1,10 @@
 import { resolvePreviewClick } from '../markdown-dom-preview-click'
 
-const createTarget = ({ link, image, isCheckbox = false, embedded = false } = {}) => ({
+import { CODE_COPY_SELECTOR } from '@/constants/code-copy'
+
+const createTarget = ({ link, image, copyButton, isCheckbox = false, embedded = false } = {}) => ({
     closest: (selector) => {
+        if (selector === CODE_COPY_SELECTOR) return copyButton || null
         if (selector === 'a') return link || null
         if (selector === 'img') return image || null
         return embedded ? {} : null
@@ -50,6 +53,19 @@ describe('resolve preview click', () => {
 
         expect(resolvePreviewClick(target, createContainer([target]))).toEqual({
             type: 'blocked-task'
+        })
+    })
+
+    test('resolves a code copy click with the block text', () => {
+        const code = { textContent: 'const a = 1' }
+        const block = { querySelector: () => code }
+        const copyButton = { closest: () => block }
+        const target = createTarget({ copyButton })
+
+        expect(resolvePreviewClick(target, createContainer([]))).toEqual({
+            type: 'copy-code',
+            button: copyButton,
+            text: 'const a = 1'
         })
     })
 })

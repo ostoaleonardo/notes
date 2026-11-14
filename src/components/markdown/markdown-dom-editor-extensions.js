@@ -16,6 +16,7 @@ import { listKeymap } from './markdown-dom-list-keymap'
 import { headingFoldService } from './markdown-dom-fold'
 import { pasteUrlOverSelection } from './markdown-dom-paste'
 import { markdownAutoPair } from './markdown-dom-auto-pair'
+import { codeLanguages } from './syntax-highlighting/code-languages'
 import { rememberEmittedValue } from '@/utils/emitted-values'
 
 const createHiddenSearchPanel = () => {
@@ -65,7 +66,7 @@ export const buildEditorExtensions = ({
         ...searchKeymap
     ]),
     Prec.high(keymap.of(listKeymap)),
-    markdown({ extensions: GFM }),
+    markdown({ extensions: GFM, codeLanguages }),
     inlineTagExtensions(onTagPressRef),
     fileLinkPress(onLinkPressRef),
     filePressFacet.of(onLinkPressRef),

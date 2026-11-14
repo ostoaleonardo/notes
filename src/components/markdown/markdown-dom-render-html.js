@@ -6,6 +6,8 @@ import footnote from 'markdown-it-footnote'
 import taskLists from 'markdown-it-task-lists'
 
 import { markdownItExtras } from './markdown-it-extras'
+import { wrapCodeBlock } from './markdown-dom-code-copy'
+import { highlightFence } from './syntax-highlighting/preview-code-highlight'
 
 import { findInlineTags } from '@/utils/inline-tags'
 
@@ -15,7 +17,12 @@ import { PREVIEW_TABLE_SCROLL_CLASS } from '@/constants/table-widget'
 import { MARKDOWN_IT_TOKENS } from '@/constants/markdown-it-tokens'
 import { ALLOWED_URI_REGEXP, BLOCKED_LINK_PROTOCOL_PATTERN } from '@/constants/html-sanitize'
 
-const md = new MarkdownIt({ html: true, linkify: true, breaks: true })
+const md = new MarkdownIt({
+    html: true,
+    linkify: true,
+    breaks: true,
+    highlight: (code, info) => highlightFence(code, info, (text) => md.utils.escapeHtml(text))
+})
     .use(taskLists, { enabled: true })
     .use(texmath, { engine: katex, delimiters: 'dollars' })
     .use(footnote)
@@ -32,6 +39,12 @@ md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
 
     return defaultLinkOpen(tokens, idx, options, env, self)
 }
+
+const defaultFence = md.renderer.rules.fence
+
+md.renderer.rules.fence = (tokens, idx, options, env, self) => (
+    wrapCodeBlock(defaultFence(tokens, idx, options, env, self))
+)
 
 md.renderer.rules.table_open = (tokens, idx, options, env, self) => (
     `<div class="${PREVIEW_TABLE_SCROLL_CLASS}">${self.renderToken(tokens, idx, options)}`
@@ -103,13 +116,13 @@ export const renderInlineHtml = (text) => (
     DOMPurify.sanitize(md.renderInline(text || '', { tags: true }), { ALLOWED_URI_REGEXP })
 )
 
-let lastRead = { text: null, html: '' }
+let lastRead = { text: null, languagesVersion: 0, html: '' }
 
-export const renderReadHtml = (text) => {
+export const renderReadHtml = (text, languagesVersion = 0) => {
     if (!text) return ''
-    if (lastRead.text === text) return lastRead.html
+    if (lastRead.text === text && lastRead.languagesVersion === languagesVersion) return lastRead.html
 
-    lastRead = { text, html: renderMarkdownHtml(text) }
+    lastRead = { text, languagesVersion, html: renderMarkdownHtml(text) }
 
     return lastRead.html
 }

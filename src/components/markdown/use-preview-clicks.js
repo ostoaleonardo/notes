@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 
 import { resolvePreviewClick } from './markdown-dom-preview-click'
+import { copyText } from './markdown-dom-clipboard'
+import { markCodeCopied } from './markdown-dom-code-copy'
 
 import { PREVIEW_CLICK_TYPES } from '@/constants/preview-click'
 
@@ -20,6 +22,9 @@ export const usePreviewClicks = (previewRef, { onLinkPress, onImagePress, onTogg
                     break
                 case PREVIEW_CLICK_TYPES.IMAGE:
                     onImagePress?.(click.url)
+                    break
+                case PREVIEW_CLICK_TYPES.COPY_CODE:
+                    copyText(click.text).then((copied) => copied && markCodeCopied(click.button))
                     break
                 case PREVIEW_CLICK_TYPES.TASK:
                     onToggleTask?.(click.index)

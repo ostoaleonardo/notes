@@ -1,6 +1,7 @@
 export const LOG_MESSAGES = {
     ERROR_AUTOSAVING_NOTE: 'error autosaving note',
     ERROR_CHECKING_PRO_PURCHASE: 'error checking pro purchase',
+    ERROR_COPYING_CODE: 'error copying code to the clipboard',
     ERROR_DELETING_NOTE: 'error deleting note',
     ERROR_MOVING_NOTE: 'error moving note',
     ERROR_DELETING_TEMPLATE: 'error deleting template',

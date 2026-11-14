@@ -10,12 +10,13 @@ import { BUTTON } from '@/constants/components'
 import { BODY_FONT_FAMILY, SPACING } from '@/constants/theme'
 
 export function useEditorTheme() {
-    const { colors } = useTheme()
+    const { colors, dark } = useTheme()
     const { bottom } = useSafeAreaInsets()
     const { fontFamily: headingFont } = useHeadingFont()
     const { fontSize, maxWidth, ...display } = useEditorDisplay()
 
     const theme = useMemo(() => ({
+        dark,
         colors,
         layout: { maxWidth, bottomInset: BUTTON.size + SPACING.lg * 2 + bottom },
         typography: {
@@ -23,7 +24,14 @@ export function useEditorTheme() {
             fontFamily: BODY_FONT_FAMILY,
             headingFontFamily: toCssHeadingFamily(headingFont)
         }
-    }), [colors, fontSize, maxWidth, headingFont, bottom])
+    }), [
+        colors,
+        dark,
+        fontSize,
+        maxWidth,
+        headingFont,
+        bottom
+    ])
 
     return { theme, display }
 }

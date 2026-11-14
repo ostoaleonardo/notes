@@ -1,6 +1,8 @@
 import { buildDerivedColors } from './markdown-dom-derived-colors'
+import { buildPreviewSyntaxCss } from './syntax-highlighting/syntax-highlight-style'
 
 import { TRANSPARENT } from '@/constants/themes'
+import { CODE_BLOCK_CLASS, CODE_COPY_BUTTON_CLASS, CODE_COPY_DONE_CLASS } from '@/constants/code-copy'
 import { RADIUS, OPACITY, INLINE_CODE_STYLE } from '@/constants/theme'
 import {
     PREVIEW_TABLE_SCROLL_CLASS,
@@ -49,16 +51,17 @@ const buildCalloutCss = () => Object.entries(CALLOUT_COLORS).map(([type, color])
     }
     .markdown-preview .${CALLOUT_TYPE_CLASS_PREFIX}${type} .${CALLOUT_TITLE_CLASS} { color: ${color}; }`).join('')
 
-export const buildPreviewCss = ({ colors, typography }) => {
+export const buildPreviewCss = ({ colors, dark, typography }) => {
     const {
         onBackground: textColor,
         tertiary: linkColor,
         accentText: linkTextColor,
         background: quoteBackgroundColor,
         codeBackground: codeBackgroundColor,
+        codeBlockBackground: codeBlockBackgroundColor,
         thematicBreak: thematicBreakColor,
         surface: surfaceColor
-    } = buildDerivedColors(colors)
+    } = buildDerivedColors(colors, dark)
     const { fontSize, fontFamily, headingFontFamily } = typography
 
     return `
@@ -124,8 +127,16 @@ export const buildPreviewCss = ({ colors, typography }) => {
         background-color: ${codeBackgroundColor}; border-radius: ${INLINE_CODE_STYLE.borderRadius}; padding: ${INLINE_CODE_STYLE.padding};
         font-family: monospace;
     }
-    .markdown-preview pre { background-color: ${codeBackgroundColor}; border-radius: 8px; padding: 0.8em; overflow-x: auto; max-width: 100%; }
+    .markdown-preview pre { background-color: ${codeBlockBackgroundColor}; border-radius: 8px; padding: 0.8em; overflow-x: auto; max-width: 100%; }
     .markdown-preview pre code { background-color: transparent; padding: 0; }
+    .markdown-preview .${CODE_BLOCK_CLASS} { position: relative; margin: 0.6em 0; }
+    .markdown-preview .${CODE_BLOCK_CLASS} pre { margin: 0; padding-right: 2.6em; }
+    .markdown-preview .${CODE_COPY_BUTTON_CLASS} {
+        position: absolute; top: 6px; right: 6px; display: flex; padding: 6px; border: 0; border-radius: 6px;
+        background: transparent; color: ${textColor + TRANSPARENT[60]}; cursor: pointer;
+    }
+    .markdown-preview .${CODE_COPY_DONE_CLASS} { color: ${textColor}; }
+    ${buildPreviewSyntaxCss({ colors, dark })}
     .markdown-preview ul, .markdown-preview ol { padding-left: 1.4em; margin: 0.4em 0; list-style-position: inside; }
     .markdown-preview li.task-list-item { list-style: none; margin-left: -1.4em; }
     .markdown-preview input[type="checkbox"] { accent-color: ${linkColor}; margin-right: 0.4em; }
