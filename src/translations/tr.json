@@ -535,5 +535,10 @@
 		"add_to_daily": "Günlük nota ekle",
 		"add_to_note": "Bir nota ekle",
 		"choose_note": "Bir not seç"
+	},
+	"indexing": {
+		"title": "Depo dizine ekleniyor...",
+		"message": "Bu tamamlanana kadar bazı işlevler kullanılamayabilir.",
+		"complete": "Dizine ekleme tamamlandı."
 	}
 }

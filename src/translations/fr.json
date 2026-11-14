@@ -535,5 +535,10 @@
 		"add_to_daily": "Ajouter à la note quotidienne",
 		"add_to_note": "Ajouter à une note",
 		"choose_note": "Choisir une note"
+	},
+	"indexing": {
+		"title": "Indexation du dépôt...",
+		"message": "Certaines fonctionnalités peuvent être indisponibles jusqu'à la fin.",
+		"complete": "Indexation terminée."
 	}
 }

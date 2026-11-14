@@ -535,5 +535,10 @@
 		"add_to_daily": "Zur täglichen Notiz hinzufügen",
 		"add_to_note": "Zu einer Notiz hinzufügen",
 		"choose_note": "Notiz auswählen"
+	},
+	"indexing": {
+		"title": "Repository wird indexiert...",
+		"message": "Einige Funktionen sind möglicherweise erst danach verfügbar.",
+		"complete": "Indexierung abgeschlossen."
 	}
 }

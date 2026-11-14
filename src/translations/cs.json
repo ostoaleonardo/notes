@@ -545,5 +545,10 @@
 		"add_to_daily": "Přidat do denní poznámky",
 		"add_to_note": "Přidat do poznámky",
 		"choose_note": "Vyberte poznámku"
+	},
+	"indexing": {
+		"title": "Indexování úložiště...",
+		"message": "Některé funkce nemusí být dostupné, dokud se nedokončí.",
+		"complete": "Indexování dokončeno."
 	}
 }

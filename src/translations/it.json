@@ -535,5 +535,10 @@
 		"add_to_daily": "Aggiungi alla nota giornaliera",
 		"add_to_note": "Aggiungi a una nota",
 		"choose_note": "Scegli una nota"
+	},
+	"indexing": {
+		"title": "Indicizzazione del repository...",
+		"message": "Alcune funzioni potrebbero non essere disponibili fino al termine.",
+		"complete": "Indicizzazione completata."
 	}
 }

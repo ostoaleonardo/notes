@@ -535,5 +535,10 @@
 		"add_to_daily": "Toevoegen aan dagelijkse notitie",
 		"add_to_note": "Toevoegen aan een notitie",
 		"choose_note": "Kies een notitie"
+	},
+	"indexing": {
+		"title": "Repository indexeren...",
+		"message": "Sommige functies zijn mogelijk pas daarna beschikbaar.",
+		"complete": "Indexeren voltooid."
 	}
 }

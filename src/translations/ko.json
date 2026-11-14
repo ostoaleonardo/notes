@@ -535,5 +535,10 @@
 		"add_to_daily": "일일 노트에 추가",
 		"add_to_note": "노트에 추가",
 		"choose_note": "노트 선택"
+	},
+	"indexing": {
+		"title": "저장소 색인 중...",
+		"message": "완료될 때까지 일부 기능을 사용할 수 없을 수 있습니다.",
+		"complete": "색인이 완료되었습니다."
 	}
 }

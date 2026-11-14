@@ -580,5 +580,10 @@
 		"add_to_daily": "Add to daily note",
 		"add_to_note": "Add to a note",
 		"choose_note": "Choose a note"
+	},
+	"indexing": {
+		"title": "Indexing repository...",
+		"message": "Some functionality may not be available until this is complete.",
+		"complete": "Indexing complete."
 	}
 }

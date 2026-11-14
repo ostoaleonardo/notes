@@ -6,8 +6,10 @@ import { useTranslation } from 'react-i18next'
 import { LoadingOverlay } from '@/ui/layout'
 import { useTheme } from '@/ui/hooks/use-theme'
 import { AppBar } from '@/components/app-bar/app-bar'
+import { IndexingNotice } from '@/components/indexing-notice'
 
 import { useNotes } from '@/hooks/use-notes'
+import { useIndexingStatus } from '@/hooks/use-indexing-status'
 import { useNavigationReadiness } from '@/hooks/use-navigation-readiness'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useRepositoryReconciliation } from '@/hooks/use-repository-reconciliation'
@@ -18,11 +20,14 @@ import { pushOnce } from '@/utils/navigation'
 
 const useDevMenu = __DEV__ ? require('@/hooks/use-dev-menu').useDevMenu : () => {}
 
+const isIndexing = (status) => status !== null
+
 export default function AppLayout() {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { importing } = useImportMarkdown()
     const { loading: notesLoading } = useNotes()
+    const indexing = useIndexingStatus(isIndexing)
 
     const {
         loading,
@@ -48,10 +53,10 @@ export default function AppLayout() {
     })
 
     useEffect(() => {
-        if (isReady || needsGate) {
+        if (isReady || needsGate || indexing) {
             SplashScreen.hideAsync()
         }
-    }, [isReady, needsGate])
+    }, [isReady, needsGate, indexing])
 
     useEffect(() => {
         if (showDrawer && pendingWelcomeNoteId) {
@@ -64,7 +69,14 @@ export default function AppLayout() {
         clearPendingWelcomeNote
     ])
 
-    if (shouldRenderNothing) return null
+    if (shouldRenderNothing) {
+        return indexing && (
+            <>
+                <LoadingOverlay />
+                <IndexingNotice />
+            </>
+        )
+    }
 
     return (
         <>
@@ -130,6 +142,7 @@ export default function AppLayout() {
             </Stack>
 
             {(showDrawer && notesLoading || importing) && <LoadingOverlay />}
+            <IndexingNotice />
         </>
     )
 }

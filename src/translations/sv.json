@@ -535,5 +535,10 @@
 		"add_to_daily": "Lägg till i dagliga anteckningen",
 		"add_to_note": "Lägg till i en anteckning",
 		"choose_note": "Välj en anteckning"
+	},
+	"indexing": {
+		"title": "Indexerar arkivet...",
+		"message": "Vissa funktioner kanske inte är tillgängliga förrän detta är klart.",
+		"complete": "Indexeringen är klar."
 	}
 }
