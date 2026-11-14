@@ -4,10 +4,9 @@ import { AnimatedView } from '@/ui/animated/animated-view'
 import { Typography } from '@/ui/typography'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { useGroupPosition } from '@/ui/hooks/use-group-position'
-import { getSegmentCorners } from '@/ui/utils/group-position'
+import { useSplitCorners } from '@/ui/hooks/use-split-corners'
 
-import { BUTTON, SPLIT_TRIGGER_RADIUS } from '@/ui/tokens/components'
+import { BUTTON } from '@/ui/tokens/components'
 import { SPACING } from '@/ui/tokens/theme'
 import { Touchable } from '@/ui/touchable'
 
@@ -18,12 +17,7 @@ export const SplitButtonPrimary = ({
     testID
 }) => {
     const { colors } = useTheme()
-    const position = useGroupPosition()
-    const { left, right } = getSegmentCorners(
-        position,
-        SPLIT_TRIGGER_RADIUS.outer,
-        SPLIT_TRIGGER_RADIUS.inner
-    )
+    const { left, right } = useSplitCorners()
 
     return (
         <AnimatedView

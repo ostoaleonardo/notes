@@ -2,30 +2,11 @@ import { useEffect, useState } from 'react'
 
 import { useStorage } from './use-storage'
 
-import { STORAGE_KEYS } from '@/constants/storage-keys'
-import {
-    DEFAULT_EDITOR_AUTOCORRECT,
-    DEFAULT_EDITOR_FONT_SIZE,
-    DEFAULT_EDITOR_INLINE_TITLE,
-    DEFAULT_EDITOR_LINE_NUMBERS,
-    DEFAULT_EDITOR_LINE_WIDTH,
-    DEFAULT_EDITOR_SPELLCHECK,
-    DEFAULT_EDITOR_TAB_SIZE,
-    EDITOR_FONT_SIZES,
-    EDITOR_LINE_WIDTHS,
-    EDITOR_TAB_SIZES,
-    EDITOR_TOGGLE
-} from '@/constants/editor-display'
+import { EDITOR_DISPLAY_OPTIONS } from '@/constants/editor-display'
 
-const OPTIONS = [
-    ['fontSize', STORAGE_KEYS.EDITOR_FONT_SIZE, EDITOR_FONT_SIZES, DEFAULT_EDITOR_FONT_SIZE],
-    ['maxWidth', STORAGE_KEYS.EDITOR_LINE_WIDTH, EDITOR_LINE_WIDTHS, DEFAULT_EDITOR_LINE_WIDTH],
-    ['lineNumbers', STORAGE_KEYS.EDITOR_LINE_NUMBERS, EDITOR_TOGGLE, DEFAULT_EDITOR_LINE_NUMBERS],
-    ['spellcheck', STORAGE_KEYS.EDITOR_SPELLCHECK, EDITOR_TOGGLE, DEFAULT_EDITOR_SPELLCHECK],
-    ['autocorrect', STORAGE_KEYS.EDITOR_AUTOCORRECT, EDITOR_TOGGLE, DEFAULT_EDITOR_AUTOCORRECT],
-    ['tabSize', STORAGE_KEYS.EDITOR_TAB_SIZE, EDITOR_TAB_SIZES, DEFAULT_EDITOR_TAB_SIZE],
-    ['inlineTitle', STORAGE_KEYS.EDITOR_INLINE_TITLE, EDITOR_TOGGLE, DEFAULT_EDITOR_INLINE_TITLE]
-]
+const OPTIONS = EDITOR_DISPLAY_OPTIONS.map(({ name, storageKey, options, defaultValue }) => (
+    [name, storageKey, options, defaultValue]
+))
 
 const KEYS = OPTIONS.map(([, key]) => key)
 

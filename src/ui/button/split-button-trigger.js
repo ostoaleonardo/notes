@@ -5,8 +5,7 @@ import { KeyboardArrowDown } from '@/ui/icons/keyboard-arrow-down'
 import { KeyboardArrowUp } from '@/ui/icons/keyboard-arrow-up'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { useGroupPosition } from '@/ui/hooks/use-group-position'
-import { getSegmentCorners } from '@/ui/utils/group-position'
+import { useSplitCorners } from '@/ui/hooks/use-split-corners'
 
 import { BUTTON, SPLIT_TRIGGER_RADIUS } from '@/ui/tokens/components'
 import { OPACITY, PROGRESS_RANGE } from '@/ui/tokens/theme'
@@ -20,12 +19,7 @@ export const SplitButtonTrigger = ({
     testID
 }) => {
     const { colors } = useTheme()
-    const position = useGroupPosition()
-    const { left, right } = getSegmentCorners(
-        position,
-        SPLIT_TRIGGER_RADIUS.outer,
-        SPLIT_TRIGGER_RADIUS.inner
-    )
+    const { left, right } = useSplitCorners()
 
     const animatedStyle = useAnimatedStyle(() => {
         const radius = (closed) => interpolate(
