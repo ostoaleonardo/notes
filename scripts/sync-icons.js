@@ -50,6 +50,7 @@ const COMPOSE_ICONS = [
     'search',
     'shapes',
     'share',
+    'shuffle',
     'sort-by-alpha',
     'undo',
     'upload-file',

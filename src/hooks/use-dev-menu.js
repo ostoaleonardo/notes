@@ -193,7 +193,7 @@ export function useDevMenu() {
     const registerItems = useEffectEvent(() => {
         registerDevMenuItems([
             {
-                name: 'Reset app (no repository selected)',
+                name: 'Reset app',
                 callback: resetApp,
                 shouldCollapse: true
             },
@@ -203,7 +203,7 @@ export function useDevMenu() {
                 shouldCollapse: true
             },
             {
-                name: 'Generate test data (folders, notes, tags, templates, files, links)',
+                name: 'Generate test data',
                 callback: generateTestData,
                 shouldCollapse: true
             },

@@ -25,7 +25,6 @@ export const DrawerTemplateFolderItem = memo(({
     return (
         <View>
             <TreeRow
-                uppercase
                 label={folder.name}
                 depth={folder.depth}
                 collapsed={folder.isCollapsed}

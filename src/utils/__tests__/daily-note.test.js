@@ -1,4 +1,9 @@
-import { getDailyNoteTitle, planDailyNote } from '../daily-note'
+import {
+    getDailyNoteTitle,
+    planDailyNote,
+    findAdjacentDailyNote,
+    pickRandomNote
+} from '../daily-note'
 
 test('formats the date as YYYY-MM-DD', () => {
     expect(getDailyNoteTitle(new Date(2026, 0, 5))).toBe('2026-01-05')
@@ -55,5 +60,47 @@ describe('plan daily note', () => {
         const note = { repositoryId: 'root', title, path: 'root/2026-01-05.md' }
 
         expect(plan({ folderId: 'child', notes: [note] }).existing).toBeUndefined()
+    })
+})
+
+describe('adjacent daily notes', () => {
+    const daily = (title, repositoryId = 'root') => ({ title, repositoryId, path: title })
+    const notes = [
+        daily('2026-01-01'),
+        daily('2026-01-05'),
+        daily('2026-01-09'),
+        daily('2026-01-07', 'other'),
+        { title: 'Meeting', repositoryId: 'root', path: 'Meeting' }
+    ]
+
+    test('finds the closest earlier daily note skipping gaps', () => {
+        expect(findAdjacentDailyNote(notes, notes[1], 'previous')).toBe(notes[0])
+    })
+
+    test('finds the closest later daily note skipping gaps', () => {
+        expect(findAdjacentDailyNote(notes, notes[1], 'next')).toBe(notes[2])
+    })
+
+    test('ignores daily notes of other folders', () => {
+        expect(findAdjacentDailyNote(notes, notes[2], 'next')).toBeNull()
+    })
+
+    test('returns null when the current note is not a daily note', () => {
+        expect(findAdjacentDailyNote(notes, notes[4], 'next')).toBeNull()
+        expect(findAdjacentDailyNote(notes, null, 'next')).toBeNull()
+    })
+})
+
+describe('random note', () => {
+    const notes = [{ path: 'a' }, { path: 'b' }, { path: 'c' }]
+
+    test('picks by the random value and never the excluded note', () => {
+        expect(pickRandomNote(notes, 'a', () => 0)).toBe(notes[1])
+        expect(pickRandomNote(notes, 'a', () => 0.99)).toBe(notes[2])
+    })
+
+    test('returns null when there is nothing else to open', () => {
+        expect(pickRandomNote([{ path: 'a' }], 'a')).toBeNull()
+        expect(pickRandomNote([], '')).toBeNull()
     })
 })

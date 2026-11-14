@@ -7,12 +7,12 @@ import { DrawerView } from './drawer-view'
 import { DrawerTemplatesEmpty } from './drawer-empty'
 import { DrawerLevelNote } from './drawer-level-note'
 import { DrawerTemplateFolderItem } from './drawer-template-folder-item'
-import { openEditor } from './drawer-open-editor'
 
 import { useCurrentNote } from '@/hooks/use-current-note'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplatesList } from '@/hooks/use-templates-list'
 import { useUtils } from '@/hooks/use-utils'
+import { openEditor } from '@/utils/open-editor'
 import { flattenTemplateTree } from '@/utils/template-path'
 
 import { CreateNewFolder } from '@/icons/create-new-folder'

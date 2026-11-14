@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: SPACING.sm
+        gap: SPACING.xs
     },
     button: {
         margin: 0

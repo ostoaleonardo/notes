@@ -12,16 +12,16 @@ import { DrawerSortMenu } from './drawer-sort-menu'
 import { DrawerLevelNote } from './drawer-level-note'
 import { DrawerLevelFolder } from './drawer-level-folder'
 import { DrawerLevelHeader } from './drawer-level-header'
-import { openEditor } from './drawer-open-editor'
 
 import { useCurrentNote } from '@/hooks/use-current-note'
-import { useDailyNote } from '@/hooks/use-daily-note'
+import { useOpenDailyNote } from '@/hooks/use-open-daily-note'
+import { usePickMarkdownImport } from '@/hooks/use-pick-markdown-import'
 import { useNoteSort } from '@/hooks/use-note-sort'
 import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useUtils } from '@/hooks/use-utils'
-import { useSingleFlight } from '@/hooks/use-single-flight'
 import { buildLevelRows, buildRepositoryTree, resolveLevel } from '@/utils/drawer-tree'
+import { openEditor } from '@/utils/open-editor'
 import { pushOnce } from '@/utils/navigation'
 
 import { CreateNewFolder } from '@/icons/create-new-folder'
@@ -29,6 +29,7 @@ import { FolderDelete } from '@/icons/folder-delete'
 import { FolderManaged } from '@/icons/folder-managed'
 import { Add } from '@/icons/add'
 import { CalendarToday } from '@/icons/calendar-today'
+import { UploadFile } from '@/icons/upload-file'
 
 import { REPOSITORY_ACTIONS } from '@/constants/repository-actions'
 import { ROUTES } from '@/constants/routes'
@@ -50,7 +51,6 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
     const { notes, loading } = useNotes()
     const { currentId } = useCurrentNote()
     const { drawerFolderId, setDrawerFolderId } = useUtils()
-    const openDailyNote = useDailyNote()
     const { sort, onChangeSort } = useNoteSort()
     const { activeRepositoryTree } = useRepositories()
 
@@ -142,13 +142,8 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
         if (action === REPOSITORY_ACTIONS.DELETE) return setDeleteId(repositoryId)
     }, [onCreateNote])
 
-    const [onOpenDailyNote] = useSingleFlight(async () => {
-        const path = await openDailyNote()
-        if (!path) return
-
-        closeDrawer()
-        if (path !== currentId) openEditor(path, currentId)
-    })
+    const [onOpenDailyNote] = useOpenDailyNote({ currentId, onOpened: closeDrawer })
+    const [onImportNote] = usePickMarkdownImport(folderId)
 
     const onDismissEdit = useCallback(() => setEditFolderId(''), [])
     const onDismissSubfolder = useCallback(() => setSubfolderParentId(''), [])
@@ -173,6 +168,13 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
             icon: CalendarToday,
             onPress: onOpenDailyNote,
             accessibilityLabel: t('drawer.daily_note')
+        },
+        {
+            key: 'import-note',
+            testID: TEST_IDS.DRAWER_IMPORT_NOTE,
+            icon: UploadFile,
+            onPress: onImportNote,
+            accessibilityLabel: t('title.import')
         },
         {
             key: 'add-subfolder',
@@ -200,6 +202,7 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
     ], [
         onCreateFolderNote,
         onOpenDailyNote,
+        onImportNote,
         onAddFolderSubfolder,
         onEditFolder,
         onDeleteFolder,

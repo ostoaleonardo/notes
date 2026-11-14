@@ -14,7 +14,6 @@ export const DrawerLevelHeader = memo(({
     <View style={styles.container}>
         <TreeRow
             bold
-            uppercase
             variant='titleSmall'
             icon={ArrowBack}
             expandable={false}

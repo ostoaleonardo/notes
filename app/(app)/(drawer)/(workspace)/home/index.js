@@ -1,5 +1,4 @@
 import { useFocusEffect } from 'expo-router'
-import * as DocumentPicker from 'expo-document-picker'
 import { useCallback, useEffect, useEffectEvent, useMemo, useState } from 'react'
 
 import { Intro } from '@/screens/notes/intro'
@@ -11,13 +10,12 @@ import { BlurTarget, BlurTargetProvider } from '@/ui/blur/blur-target'
 import { useBottomSheet } from '@/hooks/use-bottom-sheet'
 import { useCurrentNote } from '@/hooks/use-current-note'
 import { useDefaultNoteFolder } from '@/hooks/use-default-note-folder'
-import { useImportMarkdown } from '@/hooks/use-import-markdown'
+import { useOpenDailyNote } from '@/hooks/use-open-daily-note'
 import { useNotes } from '@/hooks/use-notes'
 import { usePro } from '@/hooks/use-pro'
 import { useRecentNotes } from '@/hooks/use-recent-notes'
 import { useTemplates } from '@/hooks/use-templates'
 import { useUtils } from '@/hooks/use-utils'
-import { useSingleFlight } from '@/hooks/use-single-flight'
 import { getRecentIds } from '@/utils/recent-ids'
 import { pushOnce } from '@/utils/navigation'
 
@@ -31,7 +29,6 @@ export default function Home() {
     const { pro } = usePro()
     const { recent } = useRecentNotes()
     const { listTemplates } = useTemplates()
-    const { importFile } = useImportMarkdown()
     const { registerCurrent } = useCurrentNote()
 
     const [templates, setTemplates] = useState([])
@@ -66,12 +63,7 @@ export default function Home() {
         })
     }
 
-    const [onImportNote] = useSingleFlight(async () => {
-        const result = await DocumentPicker.getDocumentAsync({ type: '*/*' })
-        if (result.canceled) return
-
-        importFile(result.assets[0].uri, result.assets[0].name)
-    })
+    const [onOpenDailyNote] = useOpenDailyNote()
 
     return (
         <BlurTargetProvider style={{ flex: 1 }}>
@@ -86,7 +78,7 @@ export default function Home() {
 
             <HomeToolbar
                 onCreateNote={onCreateNote}
-                onImportNote={onImportNote}
+                onOpenDailyNote={onOpenDailyNote}
                 onOpenRecents={recentsSheet.onOpen}
                 onOpenSearch={searchSheet.onOpen}
                 recentCount={recentCount}

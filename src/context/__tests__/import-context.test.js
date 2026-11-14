@@ -45,7 +45,7 @@ describe('import file', () => {
         expect(mockSaveNote).toHaveBeenCalledWith(expect.objectContaining({
             note: 'Just a plain note',
             tags: []
-        }))
+        }), undefined)
     })
 
     test('strips frontmatter from the body and collects its tags', async () => {
@@ -59,7 +59,7 @@ describe('import file', () => {
         expect(mockSaveNote).toHaveBeenCalledWith(expect.objectContaining({
             note: 'Actual content',
             tags: ['personal', 'work']
-        }))
+        }), undefined)
     })
 
     test('derives the title from the file name when none is provided', async () => {
@@ -70,6 +70,17 @@ describe('import file', () => {
             await result.current.importFile('content://picked/My Note.md')
         })
 
-        expect(mockSaveNote).toHaveBeenCalledWith(expect.objectContaining({ title: 'My Note' }))
+        expect(mockSaveNote).toHaveBeenCalledWith(expect.objectContaining({ title: 'My Note' }), undefined)
+    })
+
+    test('saves into the given folder', async () => {
+        global.__mockFileText = 'content'
+        const { result } = await renderImportContext()
+
+        await act(async () => {
+            await result.current.importFile('content://picked/Note.md', 'Note.md', 'folder-1')
+        })
+
+        expect(mockSaveNote).toHaveBeenCalledWith(expect.anything(), 'folder-1')
     })
 })

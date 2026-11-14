@@ -6,14 +6,14 @@ import { ToolbarSurface } from '@/ui/toolbar-surface'
 import { IconButton } from '@/ui/button/icon-button'
 
 import { Add } from '@/icons/add'
+import { CalendarToday } from '@/icons/calendar-today'
 import { Search } from '@/icons/search'
-import { UploadFile } from '@/icons/upload-file'
 import { SPACING } from '@/constants/theme'
 import { TEST_IDS } from '@/constants/test-ids'
 
 export const HomeToolbar = ({
     onCreateNote,
-    onImportNote,
+    onOpenDailyNote,
     onOpenRecents,
     onOpenSearch,
     recentCount
@@ -33,6 +33,14 @@ export const HomeToolbar = ({
 
                 <IconButton
                     style={styles.button}
+                    icon={CalendarToday}
+                    label={t('drawer.daily_note')}
+                    testID={TEST_IDS.HOME_DAILY_NOTE}
+                    onPress={onOpenDailyNote}
+                />
+
+                <IconButton
+                    style={styles.button}
                     icon={Search}
                     label={t('drawer.search')}
                     testID={TEST_IDS.HOME_SEARCH}
@@ -44,14 +52,6 @@ export const HomeToolbar = ({
                     testID={TEST_IDS.HOME_RECENTS}
                     count={recentCount}
                     buttonStyle={styles.button}
-                />
-
-                <IconButton
-                    style={styles.button}
-                    icon={UploadFile}
-                    label={t('title.import')}
-                    testID={TEST_IDS.HOME_IMPORT}
-                    onPress={onImportNote}
                 />
             </View>
         </ToolbarSurface>

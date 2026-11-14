@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocalSearchParams } from 'expo-router'
 
@@ -13,15 +13,21 @@ import { toggleInSet } from '@/utils/toggle-in-set'
 import { getDate } from '@/utils/date'
 import { getEditorPath } from '@/utils/editor-path'
 import { buildDuplicateNote } from '@/utils/duplicate-note'
+import { findAdjacentDailyNote, pickRandomNote } from '@/utils/daily-note'
 import { pushOnce } from '@/utils/navigation'
 
+import { ArrowBack } from '@/icons/arrow-back'
+import { ArrowForward } from '@/icons/arrow-forward'
 import { Folder } from '@/icons/folder'
 import { FormatListBulleted } from '@/icons/format-list-bulleted'
 import { Keep } from '@/icons/keep'
 import { KeepFilled } from '@/icons/keep-filled'
 import { NoteStack } from '@/icons/note-stack'
 import { Share as ShareIcon } from '@/icons/share'
+import { Shuffle } from '@/icons/shuffle'
 import { getMenuItemTestId } from '@/ui/utils/test-ids'
+
+import { DAILY_DIRECTIONS } from '@/constants/daily-note'
 
 export const useNoteActionsMenu = ({
     onTrigger,
@@ -39,7 +45,7 @@ export const useNoteActionsMenu = ({
     const { pinned, updatePinned } = useUtils()
     const [isPinned, setIsPinned] = useState(pinned.has(slug))
 
-    const { getNote, saveNote } = useNotes()
+    const { notes, getNote, saveNote } = useNotes()
 
     const common = useCommonActionsMenu({
         onTrigger,
@@ -67,6 +73,21 @@ export const useNoteActionsMenu = ({
         pushOnce(getEditorPath(path))
     })
 
+    const current = getNote(currentId)
+    const previousDaily = useMemo(
+        () => findAdjacentDailyNote(notes, current, DAILY_DIRECTIONS.PREVIOUS),
+        [notes, current]
+    )
+    const nextDaily = useMemo(
+        () => findAdjacentDailyNote(notes, current, DAILY_DIRECTIONS.NEXT),
+        [notes, current]
+    )
+
+    const openNote = useCallback((note) => note && pushOnce(getEditorPath(note.path)), [])
+    const onOpenPreviousDaily = useCallback(() => openNote(previousDaily), [openNote, previousDaily])
+    const onOpenNextDaily = useCallback(() => openNote(nextDaily), [openNote, nextDaily])
+    const onOpenRandom = useCallback(() => openNote(pickRandomNote(notes, currentId)), [openNote, notes, currentId])
+
     return [
         [
             common.code,
@@ -76,6 +97,34 @@ export const useNoteActionsMenu = ({
                 title={isPinned ? t('button.unpin') : t('button.pin')}
                 icon={isPinned ? KeepFilled : Keep}
                 action={toggleKeep}
+                onTrigger={onTrigger}
+            />,
+            previousDaily && (
+                <ActionMenuItem
+                    key='previous-daily'
+                    testID={getMenuItemTestId('previous-daily')}
+                    title={t('button.previous_daily')}
+                    icon={ArrowBack}
+                    action={onOpenPreviousDaily}
+                    onTrigger={onTrigger}
+                />
+            ),
+            nextDaily && (
+                <ActionMenuItem
+                    key='next-daily'
+                    testID={getMenuItemTestId('next-daily')}
+                    title={t('button.next_daily')}
+                    icon={ArrowForward}
+                    action={onOpenNextDaily}
+                    onTrigger={onTrigger}
+                />
+            ),
+            <ActionMenuItem
+                key='random'
+                testID={getMenuItemTestId('random')}
+                title={t('button.random_note')}
+                icon={Shuffle}
+                action={onOpenRandom}
                 onTrigger={onTrigger}
             />,
             slug && (

@@ -20,3 +20,4 @@ Entry point of the generated test data. Every feature of the app has something t
 - Tasks: [[Tasks]]
 - Outline: [[Long outline]]
 - Code blocks: [[Code blocks]]
+- Daily notes: [[2026-11-10]], [[2026-11-12]]

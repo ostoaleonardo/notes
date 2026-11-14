@@ -23,7 +23,6 @@ export const DrawerLevelFolder = memo(({
         <View>
             <TreeRow
                 collapsed
-                uppercase
                 label={repository.alias}
                 onPress={onPress}
                 onLongPress={menu.onOpen}

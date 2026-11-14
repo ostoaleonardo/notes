@@ -21,7 +21,7 @@ export const ImportProvider = ({ children }) => {
 
     const [importing, setImporting] = useState(false)
 
-    const importFile = useCallback(async (url, name) => {
+    const importFile = useCallback(async (url, name, repositoryId) => {
         try {
             setImporting(true)
 
@@ -36,7 +36,7 @@ export const ImportProvider = ({ children }) => {
                 note: body,
                 tags,
                 properties: extractProperties(frontmatter)
-            })
+            }, repositoryId)
 
             pushOnce(ROUTES.HOME)
         } catch (error) {

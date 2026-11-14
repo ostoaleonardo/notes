@@ -12,6 +12,4 @@ appId: com.monospace.notes
 - assertVisible:
     id: home-recents
 - assertVisible:
-    id: home-import
-- assertVisible:
     id: app-bar-menu
