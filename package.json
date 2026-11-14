@@ -21,7 +21,8 @@
     "postinstall": "patch-package",
     "test:maestro": "bash scripts/test-maestro.sh",
     "audit:dupes": "jscpd src app --min-lines 5 --min-tokens 40 --ignore \"**/__tests__/**,**/dom-tests/**,**/__fixtures__/**,src/icons/**,src/translations/**\"",
-    "audit:dead": "knip"
+    "audit:dead": "knip",
+    "test:perf": "jest --selectProjects perf --runInBand"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.20.3",
@@ -140,6 +141,20 @@
           "/node_modules/",
           "/dom-tests/"
         ],
+        "moduleNameMapper": {
+          "^@/(.*)$": "<rootDir>/src/$1"
+        }
+      },
+      {
+        "displayName": "perf",
+        "testEnvironment": "jsdom",
+        "testMatch": [
+          "**/__perf__/**/*.perf.js"
+        ],
+        "testTimeout": 60000,
+        "transform": {
+          "^.+\\.[jt]sx?$": "babel-jest"
+        },
         "moduleNameMapper": {
           "^@/(.*)$": "<rootDir>/src/$1"
         }

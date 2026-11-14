@@ -66,7 +66,7 @@ module.exports = [
         }
     },
     {
-        files: ['**/__tests__/**', '**/*.test.js'],
+        files: ['**/__tests__/**', '**/*.test.js', '**/__perf__/**'],
         languageOptions: { globals: globals.jest }
     }
 ]
