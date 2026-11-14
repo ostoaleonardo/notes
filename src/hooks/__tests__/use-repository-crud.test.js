@@ -133,6 +133,26 @@ describe('repository crud', () => {
             expect(props.persistRepositories).not.toHaveBeenCalled()
         })
 
+        test('tells the caller once a folder was picked', async () => {
+            Directory.pickDirectoryAsync.mockResolvedValue(picked)
+            const { api } = await setup({ repositories: [] })
+            const onPicked = jest.fn()
+
+            await api.addRepository(onPicked)
+
+            expect(onPicked).toHaveBeenCalledTimes(1)
+        })
+
+        test('does not tell the caller when the picker is cancelled', async () => {
+            Directory.pickDirectoryAsync.mockRejectedValue({ code: PICKER_ERROR_CODES.CANCELLED })
+            const { api } = await setup()
+            const onPicked = jest.fn()
+
+            await api.addRepository(onPicked)
+
+            expect(onPicked).not.toHaveBeenCalled()
+        })
+
         test('returns null when the picker is cancelled', async () => {
             Directory.pickDirectoryAsync.mockRejectedValue({ code: PICKER_ERROR_CODES.CANCELLED })
             const { api } = await setup()

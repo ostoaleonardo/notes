@@ -7,7 +7,9 @@ import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useSingleFlight } from '@/hooks/use-single-flight'
+import { setIndexingStatus } from '@/utils/indexing-status'
 
+import { INDEXING_STARTED } from '@/constants/indexing'
 import { REPOSITORY_RESULTS } from '@/constants/repository-results'
 
 export default function RepositoryGate() {
@@ -15,8 +17,10 @@ export default function RepositoryGate() {
     const { loading } = useNotes()
     const { activeRepository, addRepository } = useRepositories()
 
-    const [onAddRepository] = useSingleFlight(async () => {
-        const result = await addRepository()
+    const [onAddRepository, adding] = useSingleFlight(async () => {
+        const result = await addRepository(() => setIndexingStatus(INDEXING_STARTED))
+
+        if (!result?.id) setIndexingStatus(null)
         if (result === REPOSITORY_RESULTS.ERROR) showSnackbar(t('repositories.add_failed'))
     })
 
@@ -27,7 +31,7 @@ export default function RepositoryGate() {
         >
             <FilledButton
                 onPress={onAddRepository}
-                loading={!!activeRepository && loading}
+                loading={adding || (!!activeRepository && loading)}
             >
                 {t('repositories.choose.button')}
             </FilledButton>

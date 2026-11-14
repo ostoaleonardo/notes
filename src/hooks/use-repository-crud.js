@@ -4,6 +4,7 @@ import { Directory } from 'expo-file-system'
 import { sanitizeFilename } from '@/utils/note-filename'
 import { buildRepositoryPaths } from '@/utils/note-path'
 import { withBusy } from '@/utils/with-busy'
+import { yieldToUi } from '@/utils/yield-to-ui'
 import { resolveAttachmentTarget } from '@/utils/attachments'
 import { FREE_SUBFOLDERS_PER_REPOSITORY } from '@/constants/default-values'
 import { TEMPLATES_FOLDER_NAME } from '@/constants/file-storage'
@@ -43,9 +44,11 @@ export function useRepositoryCrud({
         deleteRepositoryIndex
     } = fileStorage
 
-    const addRepository = useCallback(() => withBusy(busyRef, async () => {
+    const addRepository = useCallback((onPicked) => withBusy(busyRef, async () => {
         try {
             const directory = await Directory.pickDirectoryAsync()
+            onPicked?.()
+            await yieldToUi()
 
             if (repositories.some((repository) => repository.uri === directory.uri)) {
                 return REPOSITORY_RESULTS.DUPLICATE
