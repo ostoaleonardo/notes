@@ -2,6 +2,7 @@ import { escapeHtml, findBacklinks, getAliases } from '@/utils/wiki-links'
 import { mapOutsideCode } from '@/utils/outside-code'
 
 import { WIKI_LINK_SCHEME } from '@/constants/wiki-links'
+import { EMPTY_NOTE_PATHS } from '@/constants/note-paths'
 import { REGEXP_SPECIAL_CHARS_PATTERN } from '@/constants/markdown-patterns'
 import {
     BACKLINKS_CLASS,
@@ -26,46 +27,56 @@ const getMentionNames = (target) => (
         .sort((a, b) => b.length - a.length)
 )
 
-const mapMentions = (text, names, onMention) => {
-    if (!names.length) return text
-
+const buildMentionPattern = (names) => {
     const alternatives = names.map(escapeRegExp).join('|')
-    const pattern = new RegExp(
+
+    return new RegExp(
         `${MENTION_EXISTING_LINKS_SOURCE}|(?<![${MENTION_WORD_CHARS}${MENTION_EXCLUDED_PREFIX}])(?:${alternatives})(?![${MENTION_WORD_CHARS}])`,
         'gi'
     )
-
-    return mapOutsideCode(text, (segment) => segment.replace(
-        pattern,
-        (match) => (match.startsWith('[') ? match : onMention(match))
-    ))
 }
 
-const hasMention = (text, names) => {
+const mapMentions = (text, pattern, onMention) => mapOutsideCode(text, (segment) => segment.replace(
+    pattern,
+    (match) => (match.startsWith('[') ? match : onMention(match))
+))
+
+const hasMention = (text, pattern) => {
     let found = false
-    mapMentions(text, names, (match) => {
+    mapMentions(text, pattern, (match) => {
         found = true
         return match
     })
     return found
 }
 
-export const linkMentions = (text, target) => mapMentions(text, getMentionNames(target), (match) => (
-    match === target.title ? `[[${match}]]` : `[[${target.title}|${match}]]`
-))
+export const linkMentions = (text, target) => {
+    const names = getMentionNames(target)
+    if (!names.length) return text
 
-export const findUnlinkedMentions = (target, notes, notePaths = new Map()) => {
+    return mapMentions(text, buildMentionPattern(names), (match) => (
+        match === target.title ? `[[${match}]]` : `[[${target.title}|${match}]]`
+    ))
+}
+
+export const findUnlinkedMentions = (target, notes, notePaths = EMPTY_NOTE_PATHS) => {
     const names = getMentionNames(target)
     if (!names.length) return []
 
     const linked = new Set(findBacklinks(target.path, notes, notePaths).map((note) => note.path))
+    const probe = new RegExp(names.map(escapeRegExp).join('|'), 'i')
+    const pattern = buildMentionPattern(names)
 
-    return notes.filter((note) => (
-        note.path !== target.path && !linked.has(note.path) && hasMention(note.note || '', names)
-    ))
+    return notes.filter((note) => {
+        if (note.path === target.path || linked.has(note.path)) return false
+
+        const body = note.note || ''
+
+        return probe.test(body) && hasMention(body, pattern)
+    })
 }
 
-export const buildUnlinkedMentionsHtml = (mentions, label, actionLabel, notePaths = new Map()) => {
+export const buildUnlinkedMentionsHtml = (mentions, label, actionLabel, notePaths = EMPTY_NOTE_PATHS) => {
     if (!mentions.length) return ''
 
     const items = mentions.map((note) => {

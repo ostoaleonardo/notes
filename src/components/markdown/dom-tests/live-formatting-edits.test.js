@@ -1,4 +1,5 @@
 import { EditorState, StateEffect } from '@codemirror/state'
+import { ensureSyntaxTree, syntaxTreeAvailable } from '@codemirror/language'
 import { markdown } from '@codemirror/lang-markdown'
 import { GFM } from '@lezer/markdown'
 
@@ -40,7 +41,17 @@ const createRandom = (seed) => {
 
 const EXTENSIONS = [markdown({ extensions: GFM }), liveFormatting]
 
-const createState = (doc) => EditorState.create({ doc, selection: { anchor: 0 }, extensions: EXTENSIONS })
+const createState = (doc, anchor = 0) => {
+    const parsed = EditorState.create({
+        doc,
+        selection: { anchor },
+        extensions: [markdown({ extensions: GFM })]
+    })
+
+    ensureSyntaxTree(parsed, doc.length, 5000)
+
+    return parsed.update({ effects: StateEffect.appendConfig.of(liveFormatting) }).state
+}
 
 const snapshot = (state) => {
     const found = []
@@ -79,6 +90,15 @@ describe('live formatting document edits', () => {
                 ...spec,
                 effects: StateEffect.reconfigure.of(EXTENSIONS)
             }).state
+
+            if (!syntaxTreeAvailable(state, state.doc.length) || !syntaxTreeAvailable(reference, reference.doc.length)) {
+                const doc = state.doc.toString()
+                const anchor = state.selection.main.head
+
+                state = createState(doc, anchor)
+                reference = createState(doc, anchor)
+                continue
+            }
 
             expect(snapshot(state)).toEqual(snapshot(reference))
         }

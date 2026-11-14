@@ -161,6 +161,24 @@ describe('find backlinks', () => {
         expect(result.map((note) => note.path)).toEqual(['a', 'c'])
     })
 
+    test('reflects an edited note when the notes array is replaced', () => {
+        findBacklinks('target', linkingNotes)
+        const edited = linkingNotes.map((note) => (
+            note.path === 'b' ? { ...note, note: 'Now links to [[Grocery List]].' } : note
+        ))
+
+        expect(findBacklinks('target', edited).map((note) => note.path)).toEqual(['a', 'b', 'c'])
+    })
+
+    test('follows a renamed target when the notes array is replaced', () => {
+        findBacklinks('target', linkingNotes)
+        const renamed = linkingNotes.map((note) => (
+            note.path === 'target' ? { ...note, title: 'Shopping' } : note
+        ))
+
+        expect(findBacklinks('target', renamed)).toEqual([])
+    })
+
     test('matches case-insensitively and through aliases', () => {
         const result = findBacklinks('target', linkingNotes)
 

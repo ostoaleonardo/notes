@@ -3,6 +3,7 @@ import { createContext, useCallback, useEffect, useEffectEvent, useMemo, useRef,
 import { useOnForeground } from '@/hooks/use-on-foreground'
 import { useRepositoryData } from '@/hooks/use-repository-data'
 import { useRepositories } from '@/hooks/use-repositories'
+import { useStableMap } from '@/hooks/use-stable-map'
 import { useUtils } from '@/hooks/use-utils'
 import { useRecentNotes } from '@/hooks/use-recent-notes'
 import { collectTags } from '@/utils/note-tags'
@@ -88,7 +89,7 @@ export const NoteProvider = ({ children }) => {
     const tags = useMemo(() => collectTags(notes), [notes])
     const notesByPath = useMemo(() => new Map(notes.map((note) => [note.path, note])), [notes])
 
-    const notePaths = useMemo(() => getNotePaths(notes, repositories), [notes, repositories])
+    const notePaths = useStableMap(useMemo(() => getNotePaths(notes, repositories), [notes, repositories]))
 
     const value = useMemo(() => ({
         notes,

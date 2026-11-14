@@ -14,6 +14,7 @@ import {
     BACKLINK_PATH_CLASS
 } from '@/constants/backlinks'
 import { mapOutsideCode } from '@/utils/outside-code'
+import { EMPTY_NOTE_PATHS } from '@/constants/note-paths'
 import { buildFileLinkUrl, isFileLinkTarget } from '@/utils/file-links'
 
 import { FILE_LINK_CLASS } from '@/constants/file-links'
@@ -93,7 +94,7 @@ export const resolveWikiLink = (linkText, notes, notePaths, selfPath) => {
 
 export const isSameNoteTarget = (linkText) => linkText.trim().startsWith(WIKI_LINK_ANCHOR_SEPARATOR)
 
-export const resolveWikiLinkTarget = (linkText, notes, notePaths = new Map()) => (
+export const resolveWikiLinkTarget = (linkText, notes, notePaths = EMPTY_NOTE_PATHS) => (
     resolveWikiLink(linkText, notes, notePaths).note
 )
 
@@ -115,7 +116,7 @@ export const unwrapWikiLinks = (value) => mapOutsideCode(
     )
 )
 
-export const resolveWikiLinks = (value, notes, notePaths = new Map(), selfPath) => mapOutsideCode(
+export const resolveWikiLinks = (value, notes, notePaths = EMPTY_NOTE_PATHS, selfPath) => mapOutsideCode(
     value,
     (segment) => segment.replace(
         WIKI_LINK_PATTERN,
@@ -155,19 +156,83 @@ export const parseMissingWikiLinkTarget = (encoded) => {
     }
 }
 
-export const findBacklinks = (targetPath, notes, notePaths = new Map()) => (
-    notes.filter((note) => {
-        if (note.path === targetPath) return false
+const NAMES_FIELD_SEPARATOR = '\u0001'
+const NAMES_NOTE_SEPARATOR = '\u0002'
+const NO_BACKLINKS = []
+const linkTargetsCache = new WeakMap()
+const backlinkIndexCache = new WeakMap()
+const resolvedTargetsCache = new WeakMap()
 
-        const body = note.note || ''
+const getLinkTargets = (note) => {
+    const body = note.note || ''
 
-        const hasWikiLink = [...body.matchAll(WIKI_LINK_PATTERN)].some(
-            (match) => resolveWikiLinkTarget(match[1], notes, notePaths)?.path === targetPath
-        )
-        if (hasWikiLink) return true
+    const cached = linkTargetsCache.get(note)
+    if (cached?.body === body) return cached
 
-        return [...body.matchAll(MARKDOWN_WIKI_LINK_PATTERN)].some((match) => match[2] === targetPath)
-    })
+    const entry = {
+        body,
+        wiki: Array.from(body.matchAll(WIKI_LINK_PATTERN), (match) => match[1]),
+        markdown: Array.from(body.matchAll(MARKDOWN_WIKI_LINK_PATTERN), (match) => match[2])
+    }
+
+    linkTargetsCache.set(note, entry)
+
+    return entry
+}
+
+const getNamesSignature = (notes) => notes.map((note) => (
+    `${note.title}${NAMES_FIELD_SEPARATOR}${getAliases(note).join(NAMES_FIELD_SEPARATOR)}`
+)).join(NAMES_NOTE_SEPARATOR)
+
+const getBacklinkIndex = (notes, notePaths) => {
+    const cached = backlinkIndexCache.get(notes)
+    if (cached?.notePaths === notePaths) return cached.index
+
+    const index = new Map()
+    const resolvedPaths = new Map()
+    const signature = getNamesSignature(notes)
+
+    const resolvePath = (linkText) => {
+        if (!resolvedPaths.has(linkText)) {
+            resolvedPaths.set(linkText, resolveWikiLinkTarget(linkText, notes, notePaths)?.path)
+        }
+
+        return resolvedPaths.get(linkText)
+    }
+
+    const resolveTargets = (note) => {
+        const { body, wiki, markdown } = getLinkTargets(note)
+        const known = resolvedTargetsCache.get(note)
+
+        if (known?.body === body && known.signature === signature && known.notePaths === notePaths) {
+            return known.targets
+        }
+
+        const targets = new Set(markdown)
+
+        for (const linkText of wiki) {
+            const path = resolvePath(linkText)
+            if (path) targets.add(path)
+        }
+
+        targets.delete(note.path)
+        const list = [...targets]
+        resolvedTargetsCache.set(note, { body, signature, notePaths, targets: list })
+
+        return list
+    }
+
+    for (const note of notes) {
+        for (const path of resolveTargets(note)) pushTo(index, path, note)
+    }
+
+    backlinkIndexCache.set(notes, { notePaths, index })
+
+    return index
+}
+
+export const findBacklinks = (targetPath, notes, notePaths = EMPTY_NOTE_PATHS) => (
+    getBacklinkIndex(notes, notePaths).get(targetPath) || NO_BACKLINKS
 )
 
 export const renameWikiLinksForNote = (
@@ -175,7 +240,7 @@ export const renameWikiLinksForNote = (
     targetPath,
     newTitle,
     notes,
-    notePaths = new Map(),
+    notePaths = EMPTY_NOTE_PATHS,
     resolvePaths = notePaths
 ) => {
     if (!content) return content
@@ -201,7 +266,7 @@ export const renameWikiLinksForNote = (
     })
 }
 
-export const buildBacklinksHtml = (backlinks, label, notePaths = new Map()) => {
+export const buildBacklinksHtml = (backlinks, label, notePaths = EMPTY_NOTE_PATHS) => {
     if (!backlinks.length) return ''
 
     const items = backlinks.map((note) => {
