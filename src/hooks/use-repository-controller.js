@@ -73,6 +73,7 @@ export function useRepositoryController() {
         busyRef,
         directoryExists: fileStorage.directoryExists,
         scanSubdirectories: fileStorage.scanSubdirectories,
+        deleteRepositoryIndex: fileStorage.deleteRepositoryIndex,
         buildRepository: treeOps.buildRepository,
         discoverSubfolders: treeOps.discoverSubfolders,
         persistRepositories,

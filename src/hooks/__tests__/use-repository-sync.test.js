@@ -32,6 +32,7 @@ const setup = async ({
             parentId
         })),
         discoverSubfolders: jest.fn(() => []),
+        deleteRepositoryIndex: jest.fn(),
         persistRepositories: jest.fn(() => Promise.resolve()),
         persistActiveRepository: jest.fn(() => Promise.resolve())
     }
@@ -82,6 +83,19 @@ describe('repository sync', () => {
         await result.current.reconcileRepositories()
 
         expect(props.persistRepositories).toHaveBeenCalledWith([root, kept])
+    })
+
+    test('deletes the index of a root that disappeared from disk', async () => {
+        const other = repo('other', 'file:///other')
+        const { props, result } = await setup({
+            repositories: [root, other],
+            existingUris: ['file:///other']
+        })
+
+        await result.current.reconcileRepositories()
+
+        expect(props.deleteRepositoryIndex).toHaveBeenCalledTimes(1)
+        expect(props.deleteRepositoryIndex).toHaveBeenCalledWith('root')
     })
 
     test('adds folders created on disk and their descendants', async () => {

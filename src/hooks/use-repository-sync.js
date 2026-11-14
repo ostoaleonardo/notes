@@ -8,6 +8,7 @@ export function useRepositorySync({
     scanSubdirectories,
     buildRepository,
     discoverSubfolders,
+    deleteRepositoryIndex,
     persistRepositories,
     persistActiveRepository
 }) {
@@ -59,6 +60,12 @@ export function useRepositorySync({
         if (busyRef.current || repositoriesRef.current !== repositories) return
 
         if (JSON.stringify(reconciled) !== JSON.stringify(repositories)) {
+            const keptIds = new Set(reconciled.map((repository) => repository.id))
+
+            repositories
+                .filter((repository) => !keptIds.has(repository.id))
+                .forEach((repository) => deleteRepositoryIndex(repository.id))
+
             await persistRepositories(reconciled)
         }
 
@@ -70,6 +77,7 @@ export function useRepositorySync({
         repositories,
         activeRepositoryId,
         reconcileTree,
+        deleteRepositoryIndex,
         persistRepositories,
         persistActiveRepository,
         busyRef
