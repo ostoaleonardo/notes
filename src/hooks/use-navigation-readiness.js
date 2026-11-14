@@ -9,9 +9,12 @@ export function useNavigationReadiness({
     const needsGate = !loading && !activeRepository
 
     const hasNeededGate = useRef(false)
-    if (needsGate) hasNeededGate.current = true
-
     const hasBeenReady = useRef(false)
+    if (needsGate) {
+        hasNeededGate.current = true
+        hasBeenReady.current = false
+    }
+
     if (isReady) hasBeenReady.current = true
 
     const showDrawer = !needsGate && hasBeenReady.current

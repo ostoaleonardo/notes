@@ -30,7 +30,7 @@ export const NoteContext = createContext()
 
 export const NoteProvider = ({ children }) => {
     const [notes, setNotes] = useState([])
-    const [loading, setLoading] = useState(true)
+    const [loadedRepositoryId, setLoadedRepositoryId] = useState(null)
 
     const loadRepositoryData = useRepositoryData()
     const { readRepositoryIndex, writeRepositoryIndex } = useFileStorage()
@@ -86,12 +86,12 @@ export const NoteProvider = ({ children }) => {
             let snapshot = notes
 
             if (isRepositorySwitch) {
-                setLoading(true)
+                setLoadedRepositoryId(null)
                 snapshot = await readRepositoryIndex(rootRepository.id)
                 if (!isCurrent()) return
 
                 setNotes(snapshot)
-                if (snapshot.length) setLoading(false)
+                if (snapshot.length) setLoadedRepositoryId(activeRepository.id)
                 else setIndexingStatus(INDEXING_STARTED)
             }
 
@@ -114,7 +114,7 @@ export const NoteProvider = ({ children }) => {
         } finally {
             if (isCurrent()) {
                 run.running = false
-                setLoading(false)
+                setLoadedRepositoryId(activeRepository.id)
                 if (getIndexingStatus()) setIndexingStatus(INDEXING_COMPLETE)
             }
         }
@@ -136,6 +136,8 @@ export const NoteProvider = ({ children }) => {
     useOnForeground(() => {
         if (!loadRunRef.current.running) getNotesRef.current(false)
     })
+
+    const loading = loadedRepositoryId !== activeRepository?.id
 
     const clear = useCallback(() => {
         setNotes([])

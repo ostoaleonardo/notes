@@ -76,6 +76,33 @@ describe('navigation readiness', () => {
         })
     })
 
+    test('goes back to the gate while a forgotten repository is replaced and its notes load', async () => {
+        const { result, rerender } = await renderHook(
+            (props) => useNavigationReadiness(props),
+            {
+                initialProps: {
+                    loading: false,
+                    activeRepository: { id: 'r1' },
+                    notesLoading: false
+                }
+            }
+        )
+
+        await rerender({
+            loading: false,
+            activeRepository: null,
+            notesLoading: false
+        })
+        await rerender({
+            loading: false,
+            activeRepository: { id: 'r2' },
+            notesLoading: true
+        })
+
+        expect(result.current.showDrawer).toBe(false)
+        expect(result.current.needsGate).toBe(false)
+    })
+
     test('keeps showing something while switching away from the active repository', async () => {
         const { result, rerender } = await renderHook(
             (props) => useNavigationReadiness(props),
