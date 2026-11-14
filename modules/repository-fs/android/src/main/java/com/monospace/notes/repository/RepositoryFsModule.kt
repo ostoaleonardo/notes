@@ -3,6 +3,9 @@ package com.monospace.notes.repository
 import android.content.ContentProviderClient
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import android.content.pm.PermissionInfo
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -53,6 +56,10 @@ class RepositoryFsModule : Module() {
       context.startActivity(intent)
     }
 
+    Function("revokePermissions") {
+      revokePermissions(context)
+    }
+
     Function("listDirectorySync") { uri: String ->
       listDirectory(context, Uri.parse(uri))
     }
@@ -78,6 +85,30 @@ class RepositoryFsModule : Module() {
       }
     }
   }
+}
+
+private fun revokePermissions(context: Context) {
+  val resolver = context.contentResolver
+  val access = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+
+  resolver.persistedUriPermissions.forEach { resolver.releasePersistableUriPermission(it.uri, access) }
+
+  if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+
+  val packageManager = context.packageManager
+  val info = packageManager.getPackageInfo(context.packageName, PackageManager.PackageInfoFlags.of(PackageManager.GET_PERMISSIONS.toLong()))
+  val runtimePermissions = granted(info).filter { name ->
+    runCatching { packageManager.getPermissionInfo(name, 0).protection == PermissionInfo.PROTECTION_DANGEROUS }.getOrDefault(false)
+  }
+
+  if (runtimePermissions.isNotEmpty()) context.revokeSelfPermissionsOnKill(runtimePermissions)
+}
+
+private fun granted(info: PackageInfo): List<String> {
+  val names = info.requestedPermissions ?: return emptyList()
+  val flags = info.requestedPermissionsFlags ?: return emptyList()
+
+  return names.filterIndexed { index, _ -> flags[index] and PackageInfo.REQUESTED_PERMISSION_GRANTED != 0 }
 }
 
 private fun hasDirectAccess(): Boolean =

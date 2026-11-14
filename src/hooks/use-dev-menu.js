@@ -11,6 +11,8 @@ import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
 
 import { getWelcomeNote } from '@/utils/welcome-note'
+import { hasDirectAccess, requestDirectAccess } from '@/utils/direct-access'
+import { revokePermissions } from '@/utils/permissions'
 import { sanitizeFilename } from '@/utils/note-filename'
 import { getVersionLocation } from '@/utils/note-version-location'
 import { buildNoteFileContent, parseFrontmatter } from '@/utils/frontmatter'
@@ -44,7 +46,7 @@ const loadDevData = () => Promise.all(devData.keys().map(async (key) => {
 }))
 
 export function useDevMenu() {
-    const { getItem, setItem } = useStorage()
+    const { getItem, setItem, removeItem } = useStorage()
     const { pro, setPro } = usePro()
 
     const {
@@ -77,6 +79,13 @@ export function useDevMenu() {
         await setItem(STORAGE_KEYS.ACTIVE_REPOSITORY, '')
 
         DevSettings.reload()
+    }
+
+    const resetPermissions = async () => {
+        revokePermissions()
+        await removeItem(STORAGE_KEYS.DIRECT_ACCESS_DISMISSED)
+
+        if (hasDirectAccess()) requestDirectAccess()
     }
 
     const seedLegacyDump = async () => {
@@ -195,6 +204,11 @@ export function useDevMenu() {
             {
                 name: 'Reset app',
                 callback: resetApp,
+                shouldCollapse: true
+            },
+            {
+                name: 'Revoke permissions',
+                callback: resetPermissions,
                 shouldCollapse: true
             },
             {
