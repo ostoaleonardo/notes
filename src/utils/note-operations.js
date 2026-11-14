@@ -56,7 +56,7 @@ export const createNote = ({ note, repositoryId, uri }, fileStorage) => {
 }
 
 const planInPlaceUpdate = (previous, fileStorage) => {
-    const existing = previous.fileUri && fileStorage.getExistingFile(previous.fileUri)
+    const existing = fileStorage.getExistingFile(previous.fileUri)
     if (!existing) return null
 
     return {
@@ -88,7 +88,7 @@ export const planNoteUpdate = ({ note, previous, uri }, fileStorage) => {
         filename,
         path: buildNotePath(note.repositoryId, filename),
         renamed: filename !== previous.filename,
-        existing: files.find((file) => file.name === previous.filename)
+        existing: fileStorage.getExistingFile(files.find((file) => file.name === previous.filename)?.uri)
     }
 }
 

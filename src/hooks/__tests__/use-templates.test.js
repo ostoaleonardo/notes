@@ -9,6 +9,7 @@ const mockFileStorage = {
     findDirectory: jest.fn(),
     listMarkdownFiles: jest.fn(),
     listSubdirectories: jest.fn(() => []),
+    readTextFiles: jest.fn(),
     createSubdirectory: jest.fn(),
     writeNoteFile: jest.fn(),
     renameNoteFile: jest.fn(async () => { }),
@@ -40,7 +41,10 @@ beforeEach(() => {
         files.has(filename) ? { text: async () => files.get(filename) } : undefined
     ))
     mockFileStorage.listMarkdownFiles.mockImplementation(() => (
-        Array.from(files.entries()).map(([name, content]) => ({ name, text: async () => content }))
+        Array.from(files.keys()).map((name) => ({ name, uri: name }))
+    ))
+    mockFileStorage.readTextFiles.mockImplementation(async (names) => (
+        names.map((name) => files.get(name))
     ))
     mockFileStorage.writeNoteFile.mockImplementation((_uri, filename, content) => {
         files.set(filename, content)
@@ -91,8 +95,7 @@ describe('list templates', () => {
 
 describe('list templates without content', () => {
     test('does not read the file contents', async () => {
-        const text = jest.fn(async () => 'content a')
-        mockFileStorage.listMarkdownFiles.mockImplementation(() => [{ name: 'A.md', text }])
+        files.set('A.md', 'content a')
         const { result } = await renderTemplatesHook()
 
         const templates = await act(async () =>
@@ -105,7 +108,7 @@ describe('list templates without content', () => {
             folder: '',
             content: ''
         }])
-        expect(text).not.toHaveBeenCalled()
+        expect(mockFileStorage.readTextFiles).not.toHaveBeenCalled()
     })
 })
 

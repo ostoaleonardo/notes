@@ -31,7 +31,6 @@ export default function AppLayout() {
 
     const {
         loading,
-        reconciled,
         activeRepository,
         pendingWelcomeNoteId,
         clearPendingWelcomeNote
@@ -47,7 +46,6 @@ export default function AppLayout() {
         shouldRenderNothing
     } = useNavigationReadiness({
         loading,
-        reconciled,
         activeRepository,
         notesLoading
     })

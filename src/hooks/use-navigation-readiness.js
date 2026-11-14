@@ -2,13 +2,11 @@ import { useRef } from 'react'
 
 export function useNavigationReadiness({
     loading,
-    reconciled,
     activeRepository,
     notesLoading
 }) {
-    const repositorySettled = !loading && reconciled
-    const isReady = repositorySettled && !!activeRepository && !notesLoading
-    const needsGate = repositorySettled && !activeRepository
+    const isReady = !loading && !!activeRepository && !notesLoading
+    const needsGate = !loading && !activeRepository
 
     const hasNeededGate = useRef(false)
     if (needsGate) hasNeededGate.current = true
@@ -23,6 +21,6 @@ export function useNavigationReadiness({
         isReady,
         needsGate,
         showDrawer,
-        shouldRenderNothing: !repositorySettled || !hasResolvedOnce
+        shouldRenderNothing: loading || !hasResolvedOnce
     }
 }

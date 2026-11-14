@@ -39,7 +39,8 @@ export function useRepositoryCrud({
         getOrCreateTemplatesFolder,
         getOrCreateImagesFolder,
         renameVersionsUnder,
-        deleteVersionsUnder
+        deleteVersionsUnder,
+        deleteRepositoryIndex
     } = fileStorage
 
     const addRepository = useCallback(() => withBusy(busyRef, async () => {
@@ -214,11 +215,18 @@ export function useRepositoryCrud({
         const idSet = new Set(ids)
         const remaining = repositories.filter((r) => !idSet.has(r.id))
         await persistRepositories(remaining)
+        ids.forEach(deleteRepositoryIndex)
 
         if (idSet.has(activeRepositoryId)) {
             await persistActiveRepository(remaining[0]?.id || '')
         }
-    }, [repositories, persistRepositories, activeRepositoryId, persistActiveRepository])
+    }, [
+        repositories,
+        persistRepositories,
+        deleteRepositoryIndex,
+        activeRepositoryId,
+        persistActiveRepository
+    ])
 
     const forgetRepository = useCallback(async (id) => {
         const repository = repositories.find((r) => r.id === id)

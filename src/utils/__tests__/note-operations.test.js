@@ -25,11 +25,18 @@ const createFakeStorage = (initialFiles = {}) => {
         calls,
         listMarkdownFiles: jest.fn(() => [...files.keys()].map((name) => ({
             name,
-            delete: () => files.delete(name)
+            uri: `${REPO_URI}/${name}`
         }))),
-        getExistingFile: jest.fn(
-            (fileUri) => (fileUri === 'file:///repo/Groceries.md' ? HANDLE : undefined)
-        ),
+        getExistingFile: jest.fn((fileUri) => {
+            const name = fileUri?.slice(REPO_URI.length + 1)
+            if (!files.has(name)) return undefined
+
+            return {
+                name,
+                uri: fileUri,
+                delete: () => files.delete(name)
+            }
+        }),
         writeNoteFile: (_uri, filename, content) => {
             files.set(filename, content)
             return { creationTime: 10, lastModified: 20 }
@@ -114,7 +121,7 @@ describe('plan note update', () => {
 
         const plan = planNoteUpdate({ note: located, previous: located, uri: REPO_URI }, storage)
 
-        expect(plan.existing).toBe(HANDLE)
+        expect(plan.existing).toMatchObject(HANDLE)
         expect(plan.path).toBe(previous.path)
         expect(storage.listMarkdownFiles).not.toHaveBeenCalled()
     })

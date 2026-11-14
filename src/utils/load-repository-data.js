@@ -10,11 +10,10 @@ import {
     parseFrontmatter
 } from '@/utils/frontmatter'
 import { buildLegacyNoteBody } from '@/utils/legacy-note-body'
-import { createLimiter } from '@/utils/create-limiter'
 
 import { LEGACY_ALL_TAG_ID } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { NOTE_READ_CONCURRENCY, TEMPLATES_FOLDER_NAME } from '@/constants/file-storage'
+import { NOTE_READ_BATCH_SIZE, TEMPLATES_FOLDER_NAME } from '@/constants/file-storage'
 import { DEFAULT_IMAGE_EXTENSION, IMAGE_EXTENSION_PATTERN } from '@/constants/image'
 import { NOTE_KEY_PREFIX } from '@/constants/note-key'
 import { LOG_MESSAGES } from '@/constants/log-messages'
@@ -99,41 +98,70 @@ const migrateStorageNotesToFiles = async (rootRepository, storage, fileStorage, 
     return report
 }
 
-const loadFromTree = async (tree, loadFolder, fileStorage, previousByPath) => {
-    const limit = createLimiter(NOTE_READ_CONCURRENCY)
-    const perFolder = await Promise.all(tree.map((repository) => (
-        loadFolder(repository, fileStorage, previousByPath, limit)
-    )))
+const scanFolder = async (repository, fileStorage) => {
+    const files = await fileStorage.scanMarkdownFiles(repository.uri)
 
-    return perFolder.flat()
+    return files.map((file) => ({
+        file,
+        repositoryId: repository.id,
+        path: buildNotePath(repository.id, file.name)
+    }))
 }
 
-const loadNotesFromFolder = async (repository, fileStorage, previousByPath, limit) => {
-    const files = fileStorage.listMarkdownFiles(repository.uri)
+const buildNote = ({ file, repositoryId, path }, content) => {
+    const { frontmatter, body, error, rawFrontmatter } = parseFrontmatter(content)
 
-    return Promise.all(files.map(async (file) => {
-        const path = buildNotePath(repository.id, file.name)
-        const unchanged = previousByPath.get(path)
-        if (unchanged && unchanged.updatedAt === file.lastModified) return unchanged
+    return {
+        filename: file.name,
+        repositoryId,
+        path,
+        fileUri: file.uri,
+        title: getTitle(file.name),
+        note: body,
+        tags: readFrontmatterTags(frontmatter),
+        properties: extractProperties(frontmatter),
+        invalidFrontmatter: error ? rawFrontmatter : null,
+        rawFrontmatter: error ? null : rawFrontmatter ?? null,
+        createdAt: file.lastModified,
+        updatedAt: file.lastModified
+    }
+}
 
-        const content = await limit(() => file.text())
-        const { frontmatter, body, error, rawFrontmatter } = parseFrontmatter(content)
+const readChangedNotes = async (changed, fileStorage, onProgress) => {
+    const notesByPath = new Map()
+    if (changed.length) onProgress?.(0, changed.length)
 
-        return {
-            filename: file.name,
-            repositoryId: repository.id,
-            path,
-            fileUri: file.uri,
-            title: getTitle(file.name),
-            note: body,
-            tags: readFrontmatterTags(frontmatter),
-            properties: extractProperties(frontmatter),
-            invalidFrontmatter: error ? rawFrontmatter : null,
-            rawFrontmatter: error ? null : rawFrontmatter ?? null,
-            createdAt: file.creationTime ?? file.lastModified,
-            updatedAt: file.lastModified
-        }
-    }))
+    for (let start = 0; start < changed.length; start += NOTE_READ_BATCH_SIZE) {
+        const batch = changed.slice(start, start + NOTE_READ_BATCH_SIZE)
+        const contents = await fileStorage.readTextFiles(batch.map((entry) => entry.file.uri))
+
+        batch.forEach((entry, index) => {
+            if (contents[index] != null) notesByPath.set(entry.path, buildNote(entry, contents[index]))
+        })
+
+        onProgress?.(start + batch.length, changed.length)
+    }
+
+    return notesByPath
+}
+
+const loadNotes = async (tree, fileStorage, previousNotes, onProgress) => {
+    const previousByPath = new Map(previousNotes.map((note) => [note.path, note]))
+    const scanned = (await Promise.all(tree.map((repository) => scanFolder(repository, fileStorage)))).flat()
+
+    const changed = scanned.filter(({ file, path }) => (
+        previousByPath.get(path)?.updatedAt !== file.lastModified
+    ))
+    const readByPath = await readChangedNotes(changed, fileStorage, onProgress)
+
+    const notes = scanned
+        .map(({ path }) => readByPath.get(path) ?? previousByPath.get(path))
+        .filter(Boolean)
+
+    return {
+        notes,
+        changed: changed.length > 0 || notes.length !== previousNotes.length
+    }
 }
 
 const migrateLegacyVersionFiles = async (tree, rootUri, storage, fileStorage) => {
@@ -157,7 +185,8 @@ export const loadRepositoryData = async (
     rootRepository,
     storage,
     fileStorage,
-    previousNotes = []
+    previousNotes = [],
+    onProgress
 ) => {
     const rootUri = rootRepository.uri
 
@@ -172,8 +201,7 @@ export const loadRepositoryData = async (
 
     await migrateLegacyVersionFiles(tree, rootUri, storage, fileStorage)
 
-    const previousByPath = new Map(previousNotes.map((note) => [note.path, note]))
-    const notes = await loadFromTree(tree, loadNotesFromFolder, fileStorage, previousByPath)
+    const { notes, changed } = await loadNotes(tree, fileStorage, previousNotes, onProgress)
 
-    return { notes, migration }
+    return { notes, changed, migration }
 }

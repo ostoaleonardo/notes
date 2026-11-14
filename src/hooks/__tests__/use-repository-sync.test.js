@@ -20,7 +20,7 @@ const setup = async ({
         activeRepositoryId,
         busyRef: { current: busy },
         directoryExists: jest.fn((uri) => !existingUris || existingUris.includes(uri)),
-        listSubdirectories: jest.fn((uri) => {
+        scanSubdirectories: jest.fn(async (uri) => {
             const entry = diskSubdirectories[uri]
             if (entry instanceof Error) throw entry
             return entry || []
@@ -44,6 +44,18 @@ const setup = async ({
 describe('repository sync', () => {
     test('does nothing while another operation is busy', async () => {
         const { props, result } = await setup({ repositories: [root], busy: true })
+
+        await result.current.reconcileRepositories()
+
+        expect(props.persistRepositories).not.toHaveBeenCalled()
+    })
+
+    test('discards the scan when another operation started meanwhile', async () => {
+        const { props, result } = await setup({ repositories: [root] })
+        props.scanSubdirectories.mockImplementation(async () => {
+            props.busyRef.current = true
+            return []
+        })
 
         await result.current.reconcileRepositories()
 

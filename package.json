@@ -135,7 +135,8 @@
         "setupFiles": [
           "<rootDir>/jest/setup-idle-callback.js",
           "<rootDir>/jest/setup-keyboard-controller.js",
-          "<rootDir>/jest/setup-bundled-content.js"
+          "<rootDir>/jest/setup-bundled-content.js",
+          "<rootDir>/jest/setup-repository-fs.js"
         ],
         "testPathIgnorePatterns": [
           "/node_modules/",

@@ -16,6 +16,7 @@ export function useTemplates() {
         findDirectory,
         listMarkdownFiles,
         listSubdirectories,
+        readTextFiles,
         createSubdirectory,
         writeNoteFile,
         renameNoteFile,
@@ -39,19 +40,22 @@ export function useTemplates() {
     }, [getTemplatesUri, findDirectory])
 
     const collectTemplates = useCallback(async (uri, dir, withContent) => {
-        const own = await Promise.all(listMarkdownFiles(uri).map(async (file) => ({
+        const files = listMarkdownFiles(uri)
+        const contents = withContent ? await readTextFiles(files.map((file) => file.uri)) : []
+
+        const own = files.map((file, index) => ({
             filename: joinTemplatePath(dir, file.name),
             name: stripNoteExtension(file.name),
             folder: dir,
-            content: withContent ? await file.text() : ''
-        })))
+            content: contents[index] ?? ''
+        }))
 
         const nested = await Promise.all(listSubdirectories(uri).map((directory) => (
             collectTemplates(directory.uri, joinTemplatePath(dir, directory.name), withContent)
         )))
 
         return [...own, ...nested.flat()]
-    }, [listMarkdownFiles, listSubdirectories])
+    }, [listMarkdownFiles, listSubdirectories, readTextFiles])
 
     const collectFolders = useCallback((uri, dir) => (
         listSubdirectories(uri).flatMap((directory) => {

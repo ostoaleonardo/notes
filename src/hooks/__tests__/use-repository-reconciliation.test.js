@@ -3,15 +3,13 @@ import { renderHook } from '@testing-library/react-native'
 import { useRepositoryReconciliation } from '../use-repository-reconciliation'
 
 const mockReconcile = jest.fn()
-const mockSetReconciled = jest.fn()
 let mockLoading = false
 let mockForegroundCallback
 
 jest.mock('../use-repositories', () => ({
     useRepositories: () => ({
         loading: mockLoading,
-        reconcileRepositories: mockReconcile,
-        setReconciled: mockSetReconciled
+        reconcileRepositories: mockReconcile
     })
 }))
 jest.mock('../use-on-foreground', () => ({
@@ -25,11 +23,10 @@ beforeEach(() => {
 })
 
 describe('repository reconciliation', () => {
-    test('reconciles once loading finishes and marks it as reconciled', async () => {
+    test('reconciles once loading finishes', async () => {
         await renderHook(() => useRepositoryReconciliation())
 
         expect(mockReconcile).toHaveBeenCalledTimes(1)
-        expect(mockSetReconciled).toHaveBeenCalledWith(true)
     })
 
     test('waits while repositories are still loading', async () => {
@@ -38,7 +35,6 @@ describe('repository reconciliation', () => {
         await renderHook(() => useRepositoryReconciliation())
 
         expect(mockReconcile).not.toHaveBeenCalled()
-        expect(mockSetReconciled).not.toHaveBeenCalled()
     })
 
     test('reconciles again when the app returns to the foreground', async () => {

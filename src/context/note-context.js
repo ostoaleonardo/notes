@@ -1,6 +1,7 @@
 import { createContext, useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 
 import { useOnForeground } from '@/hooks/use-on-foreground'
+import { useFileStorage } from '@/hooks/use-file-storage'
 import { useRepositoryData } from '@/hooks/use-repository-data'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useStableMap } from '@/hooks/use-stable-map'
@@ -8,7 +9,10 @@ import { useUtils } from '@/hooks/use-utils'
 import { useRecentNotes } from '@/hooks/use-recent-notes'
 import { collectTags } from '@/utils/note-tags'
 import { getNotePaths } from '@/utils/note-path'
+import { mergeLoadedNotes } from '@/utils/merge-loaded-notes'
+import { getIndexingStatus, setIndexingStatus } from '@/utils/indexing-status'
 
+import { INDEXING_COMPLETE, INDEXING_NOTICE_MIN_FILES, INDEXING_STARTED } from '@/constants/indexing'
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
 import { LOG_MESSAGES } from '@/constants/log-messages'
 import { logError } from '@/utils/log-error'
@@ -20,6 +24,7 @@ export const NoteProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
 
     const loadRepositoryData = useRepositoryData()
+    const { readRepositoryIndex, writeRepositoryIndex } = useFileStorage()
 
     const {
         repositories,
@@ -48,22 +53,61 @@ export const NoteProvider = ({ children }) => {
         recent.filter(isStale).forEach((entry) => removeRecent(entry))
     }
 
+    const loadRunRef = useRef({ id: 0, running: false })
+
     const getNotesRef = useRef(null)
-    getNotesRef.current = async (showLoading = true) => {
+    getNotesRef.current = async (isRepositorySwitch) => {
         if (!activeRepository) return
 
-        if (showLoading) setLoading(true)
+        const run = loadRunRef.current
+        const id = ++run.id
+        const isCurrent = () => run.id === id
+        run.running = true
+
+        const rootRepository = activeRepositoryTree[0] || activeRepository
+        const reportProgress = (done, total) => {
+            if (!isCurrent()) return
+
+            if (getIndexingStatus() || total >= INDEXING_NOTICE_MIN_FILES) {
+                setIndexingStatus({ progress: done / total })
+            }
+        }
 
         try {
-            const rootRepository = activeRepositoryTree[0] || activeRepository
-            const { notes: loaded } = await loadRepositoryData(activeRepositoryTree, rootRepository, notes)
+            let snapshot = notes
 
-            setNotes(loaded)
+            if (isRepositorySwitch) {
+                setLoading(true)
+                snapshot = await readRepositoryIndex(rootRepository.id)
+                if (!isCurrent()) return
+
+                setNotes(snapshot)
+                if (snapshot.length) setLoading(false)
+                else setIndexingStatus(INDEXING_STARTED)
+            }
+
+            const { notes: loaded, changed } = await loadRepositoryData(
+                activeRepositoryTree,
+                rootRepository,
+                snapshot,
+                reportProgress
+            )
+            if (!isCurrent()) return
+
             pruneStaleFavoritesRef.current(loaded)
+            if (!changed) return
+
+            setNotes((current) => mergeLoadedNotes(loaded, snapshot, current))
+            writeRepositoryIndex(rootRepository.id, loaded)
         } catch (error) {
             logError(LOG_MESSAGES.ERROR_LOADING_NOTES, error)
+            if (isCurrent()) setIndexingStatus(null)
         } finally {
-            if (showLoading) setLoading(false)
+            if (isCurrent()) {
+                run.running = false
+                setLoading(false)
+                if (getIndexingStatus()) setIndexingStatus(INDEXING_COMPLETE)
+            }
         }
     }
 
@@ -80,7 +124,9 @@ export const NoteProvider = ({ children }) => {
         reloadForTree()
     }, [treeKey])
 
-    useOnForeground(() => getNotesRef.current(false))
+    useOnForeground(() => {
+        if (!loadRunRef.current.running) getNotesRef.current(false)
+    })
 
     const clear = useCallback(() => {
         setNotes([])

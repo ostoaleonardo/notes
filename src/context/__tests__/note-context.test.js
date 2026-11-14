@@ -3,11 +3,15 @@ import { AppState } from 'react-native'
 import { act, renderHook, waitFor } from '@testing-library/react-native'
 
 import { NoteContext, NoteProvider } from '../note-context'
+import { getIndexingStatus, setIndexingStatus } from '@/utils/indexing-status'
 
+import { INDEXING_COMPLETE, INDEXING_NOTICE_MIN_FILES } from '@/constants/indexing'
 
 const mockLoadRepositoryData = jest.fn()
 const mockUpdatePinned = jest.fn()
 const mockRemoveRecent = jest.fn()
+const mockReadRepositoryIndex = jest.fn()
+const mockWriteRepositoryIndex = jest.fn()
 
 let mockActiveRepository = null
 let mockActiveRepositoryTree = []
@@ -19,6 +23,12 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
 }))
 jest.mock('../../hooks/use-repository-data', () => ({
     useRepositoryData: () => mockLoadRepositoryData
+}))
+jest.mock('../../hooks/use-file-storage', () => ({
+    useFileStorage: () => ({
+        readRepositoryIndex: mockReadRepositoryIndex,
+        writeRepositoryIndex: mockWriteRepositoryIndex
+    })
 }))
 jest.mock('../../hooks/use-repositories', () => ({
     useRepositories: () => ({
@@ -42,6 +52,8 @@ beforeEach(() => {
     mockActiveRepositoryTree = []
     mockPinned = new Set()
     mockRecent = []
+    mockReadRepositoryIndex.mockResolvedValue([])
+    setIndexingStatus(null)
 })
 
 describe('loading notes on mount', () => {
@@ -57,12 +69,13 @@ describe('loading notes on mount', () => {
         mockActiveRepository = root
         mockActiveRepositoryTree = [root]
         mockLoadRepositoryData.mockResolvedValue({
-            notes: [{ id: 'note-1', title: 'Hello', tags: ['work'], note: 'a #work/todo' }]
+            notes: [{ id: 'note-1', title: 'Hello', tags: ['work'], note: 'a #work/todo' }],
+            changed: true
         })
 
         const { result } = await renderNoteContext()
 
-        expect(mockLoadRepositoryData).toHaveBeenCalledWith([root], root, [])
+        expect(mockLoadRepositoryData).toHaveBeenCalledWith([root], root, [], expect.any(Function))
         expect(result.current.notes).toHaveLength(1)
         expect(result.current.tags).toEqual(['work', 'work/todo'])
         expect(result.current.loading).toBe(false)
@@ -81,6 +94,143 @@ describe('loading notes on mount', () => {
     })
 })
 
+describe('loading from the repository index', () => {
+    const root = { id: 'repo-1', uri: 'content://repo-1' }
+    const cached = [{ path: 'repo-1::A.md', title: 'A' }]
+
+    beforeEach(() => {
+        mockActiveRepository = root
+        mockActiveRepositoryTree = [root]
+    })
+
+    test('shows the indexed notes before the repository is scanned', async () => {
+        mockReadRepositoryIndex.mockResolvedValue(cached)
+        mockLoadRepositoryData.mockReturnValue(new Promise(() => {}))
+
+        const { result } = await renderNoteContext()
+
+        expect(mockReadRepositoryIndex).toHaveBeenCalledWith('repo-1')
+        expect(result.current.notes).toBe(cached)
+        expect(result.current.loading).toBe(false)
+        expect(mockLoadRepositoryData).toHaveBeenCalledWith([root], root, cached, expect.any(Function))
+    })
+
+    test('keeps the indexed notes and the index when nothing changed on disk', async () => {
+        mockReadRepositoryIndex.mockResolvedValue(cached)
+        mockLoadRepositoryData.mockResolvedValue({
+            notes: [...cached],
+            changed: false
+        })
+
+        const { result } = await renderNoteContext()
+
+        expect(result.current.notes).toBe(cached)
+        expect(mockWriteRepositoryIndex).not.toHaveBeenCalled()
+    })
+
+    test('stores the index again when the repository changed', async () => {
+        const loaded = [{ path: 'repo-1::B.md', title: 'B' }]
+        mockReadRepositoryIndex.mockResolvedValue(cached)
+        mockLoadRepositoryData.mockResolvedValue({
+            notes: loaded,
+            changed: true
+        })
+
+        const { result } = await renderNoteContext()
+
+        expect(result.current.notes).toBe(loaded)
+        expect(mockWriteRepositoryIndex).toHaveBeenCalledWith('repo-1', loaded)
+    })
+
+    test('keeps a note edited while the repository was being scanned', async () => {
+        let finishLoading
+        mockReadRepositoryIndex.mockResolvedValue(cached)
+        mockLoadRepositoryData.mockReturnValue(new Promise((resolve) => {
+            finishLoading = resolve
+        }))
+
+        const { result } = await renderNoteContext()
+        const edited = { path: 'repo-1::A.md', title: 'A', note: 'edited' }
+
+        await act(async () => {
+            result.current.setNotes([edited])
+        })
+        await act(async () => {
+            finishLoading({
+                notes: [{ path: 'repo-1::A.md', title: 'A', note: 'stale' }],
+                changed: true
+            })
+        })
+
+        expect(result.current.notes).toEqual([edited])
+    })
+})
+
+describe('indexing status', () => {
+    const root = { id: 'repo-1', uri: 'content://repo-1' }
+
+    const loadReporting = (total) => {
+        mockActiveRepository = root
+        mockActiveRepositoryTree = [root]
+        mockReadRepositoryIndex.mockResolvedValue([{ path: 'repo-1::A.md' }])
+
+        let finishLoading
+        mockLoadRepositoryData.mockImplementation((_tree, _root, _previous, onProgress) => {
+            onProgress(total / 2, total)
+            return new Promise((resolve) => {
+                finishLoading = resolve
+            })
+        })
+
+        return () => act(async () => {
+            finishLoading({
+                notes: [],
+                changed: true
+            })
+        })
+    }
+
+    test('reports progress while many files are read and completes afterwards', async () => {
+        const finish = loadReporting(INDEXING_NOTICE_MIN_FILES)
+
+        await renderNoteContext()
+        expect(getIndexingStatus()).toEqual({ progress: 0.5 })
+
+        await finish()
+        expect(getIndexingStatus()).toBe(INDEXING_COMPLETE)
+    })
+
+    test('stays silent when only a few files changed', async () => {
+        const finish = loadReporting(INDEXING_NOTICE_MIN_FILES - 2)
+
+        await renderNoteContext()
+        await finish()
+
+        expect(getIndexingStatus()).toBeNull()
+    })
+
+    test('announces indexing right away when the repository has no index yet', async () => {
+        mockActiveRepository = root
+        mockActiveRepositoryTree = [root]
+        mockLoadRepositoryData.mockReturnValue(new Promise(() => {}))
+
+        const { result } = await renderNoteContext()
+
+        expect(getIndexingStatus()).toEqual({ progress: 0 })
+        expect(result.current.loading).toBe(true)
+    })
+
+    test('clears the status when loading fails', async () => {
+        mockActiveRepository = root
+        mockActiveRepositoryTree = [root]
+        mockLoadRepositoryData.mockRejectedValue(new Error('disk error'))
+
+        await renderNoteContext()
+
+        expect(getIndexingStatus()).toBeNull()
+    })
+})
+
 describe('reload on app foreground', () => {
     test('refreshes notes without toggling the loading flag', async () => {
         const root = { id: 'repo-1', uri: 'content://repo-1' }
@@ -96,7 +246,7 @@ describe('reload on app foreground', () => {
 
         mockLoadRepositoryData.mockResolvedValue({
             notes: [{ id: 'note-2', title: 'Fresh' }],
-            tags: []
+            changed: true
         })
 
         await act(async () => {
@@ -117,7 +267,7 @@ describe('pruning stale pinned and recent entries', () => {
         mockRecent = ['repo-1::Gone.md', 'repo-1::AlsoGone.md']
         mockLoadRepositoryData.mockResolvedValue({
             notes: [{ path: 'repo-1::Kept.md', title: 'Kept' }],
-            tags: []
+            changed: true
         })
 
         await renderNoteContext()
@@ -147,7 +297,7 @@ describe('pruning stale pinned and recent entries', () => {
         mockRecent = ['repo-1::Kept.md']
         mockLoadRepositoryData.mockResolvedValue({
             notes: [{ path: 'repo-1::Kept.md', title: 'Kept' }],
-            tags: []
+            changed: true
         })
 
         await renderNoteContext()
@@ -163,7 +313,8 @@ describe('clear', () => {
         mockActiveRepository = root
         mockActiveRepositoryTree = [root]
         mockLoadRepositoryData.mockResolvedValue({
-            notes: [{ id: 'note-1', title: 'Hello', tags: ['work'] }]
+            notes: [{ id: 'note-1', title: 'Hello', tags: ['work'] }],
+            changed: true
         })
 
         const { result } = await renderNoteContext()

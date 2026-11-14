@@ -34,5 +34,7 @@ google-services.json
 
 # typescript
 *.tsbuildinfo
-android
+/android
 /coverage
+
+modules/*/android/build/

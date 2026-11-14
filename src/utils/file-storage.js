@@ -1,4 +1,6 @@
-import { Directory, File, FileMode } from 'expo-file-system'
+import { Directory, File, FileMode, Paths } from 'expo-file-system'
+
+import RepositoryFs from '../../modules/repository-fs'
 
 import { getUniqueFilename, stripNoteExtension } from '@/utils/note-filename'
 import { buildVersionKey } from '@/utils/note-version-location'
@@ -13,30 +15,49 @@ import {
     NOTES_FOLDER_NAME,
     RESERVED_FOLDER_NAMES,
     CORRUPT_FILE_SUFFIX,
-    WRITE_ATTEMPTS
+    WRITE_ATTEMPTS,
+    REPOSITORY_INDEX_FOLDER_NAME,
+    REPOSITORY_INDEX_VERSION
 } from '@/constants/file-storage'
 import { MIME_TYPES } from '@/constants/mime-types'
 import { LOG_MESSAGES } from '@/constants/log-messages'
 import { logError } from './log-error'
 
-const listEntries = (directoryUri) => new Directory(directoryUri).list()
+const listEntries = (directoryUri) => RepositoryFs.listDirectorySync(directoryUri)
 
-const findFile = (directoryUri, filename) => (
-    listEntries(directoryUri).find((entry) => (
-        entry instanceof File && entry.name === filename
-    ))
+const isMarkdownFile = (entry) => (
+    !entry.isDirectory &&
+    entry.name.toLowerCase().endsWith(NOTE_FILE_EXTENSION)
 )
 
+const isNoteFolder = (entry) => (
+    entry.isDirectory &&
+    !entry.name.startsWith('.') &&
+    !RESERVED_FOLDER_NAMES.includes(entry.name)
+)
+
+const findFile = (directoryUri, filename) => {
+    const entry = listEntries(directoryUri).find((candidate) => (
+        !candidate.isDirectory && candidate.name === filename
+    ))
+
+    return entry && new File(entry.uri)
+}
+
 const getExistingFile = (fileUri) => {
+    if (!fileUri) return undefined
+
     const file = new File(fileUri)
     return file.exists ? file : undefined
 }
 
-const findDirectory = (directoryUri, name) => (
-    listEntries(directoryUri).find((entry) => (
-        entry instanceof Directory && entry.name === name
+const findDirectory = (directoryUri, name) => {
+    const entry = listEntries(directoryUri).find((candidate) => (
+        candidate.isDirectory && candidate.name === name
     ))
-)
+
+    return entry && new Directory(entry.uri)
+}
 
 const createSubdirectory = (directoryUri, name) => (
     new Directory(directoryUri).createDirectory(name)
@@ -58,20 +79,26 @@ const getOrCreateNotesFolder = (directoryUri) => (
     findDirectory(directoryUri, NOTES_FOLDER_NAME) || createSubdirectory(directoryUri, NOTES_FOLDER_NAME)
 )
 
-const listMarkdownFiles = (directoryUri) => (
-    listEntries(directoryUri).filter((entry) => (
-        entry instanceof File &&
-        entry.name.toLowerCase().endsWith(NOTE_FILE_EXTENSION)
-    ))
-)
+const listMarkdownFiles = (directoryUri) => listEntries(directoryUri).filter(isMarkdownFile)
 
-const listSubdirectories = (directoryUri) => (
-    listEntries(directoryUri).filter((entry) => (
-        entry instanceof Directory &&
-        !entry.name.startsWith('.') &&
-        !RESERVED_FOLDER_NAMES.includes(entry.name)
-    ))
-)
+const listSubdirectories = (directoryUri) => listEntries(directoryUri).filter(isNoteFolder)
+
+const pendingScans = new Map()
+
+const scanEntries = (directoryUri) => {
+    if (!pendingScans.has(directoryUri)) {
+        const scan = RepositoryFs.listDirectory(directoryUri).finally(() => pendingScans.delete(directoryUri))
+        pendingScans.set(directoryUri, scan)
+    }
+
+    return pendingScans.get(directoryUri)
+}
+
+const scanMarkdownFiles = async (directoryUri) => (await scanEntries(directoryUri)).filter(isMarkdownFile)
+
+const scanSubdirectories = async (directoryUri) => (await scanEntries(directoryUri)).filter(isNoteFolder)
+
+const readTextFiles = (fileUris) => RepositoryFs.readTextFiles(fileUris)
 
 const deleteDirectory = (directoryUri) => {
     new Directory(directoryUri).delete()
@@ -212,7 +239,7 @@ const deleteVersions = (rootUri, key) => deleteNotesFile(rootUri, getVersionsFil
 
 const clearRepository = (directoryUri, { rootUri, folderPath }) => {
     listMarkdownFiles(directoryUri).forEach((file) => {
-        file.delete()
+        new File(file.uri).delete()
         deleteVersions(rootUri, buildVersionKey(folderPath, file.name))
     })
 }
@@ -233,7 +260,7 @@ const listVersionsUnder = (rootUri, prefix) => {
 
     return listEntries(folder.uri)
         .filter((entry) => (
-            entry instanceof File &&
+            !entry.isDirectory &&
             entry.name.startsWith(encodedPrefix) &&
             entry.name.endsWith(VERSIONS_FILENAME_SUFFIX)
         ))
@@ -252,7 +279,7 @@ const deleteVersionsUnder = (rootUri, prefix) => {
 
 const migrateLegacyVersions = async (folderUri, rootUri, folderPath) => {
     const legacyFiles = listEntries(folderUri).filter((entry) => (
-        entry instanceof File && entry.name.endsWith(VERSIONS_FILENAME_SUFFIX)
+        !entry.isDirectory && entry.name.endsWith(VERSIONS_FILENAME_SUFFIX)
     ))
 
     for (const file of legacyFiles) {
@@ -260,8 +287,44 @@ const migrateLegacyVersions = async (folderUri, rootUri, folderPath) => {
         const versions = await readJson(folderUri, file.name, null)
 
         if (versions) writeVersions(rootUri, buildVersionKey(folderPath, filename), versions)
-        file.delete()
+        new File(file.uri).delete()
     }
+}
+
+const getRepositoryIndexFile = (repositoryId) => (
+    new File(Paths.document, REPOSITORY_INDEX_FOLDER_NAME, `${repositoryId}.json`)
+)
+
+const readRepositoryIndex = async (repositoryId) => {
+    const file = getRepositoryIndexFile(repositoryId)
+    if (!file.exists) return []
+
+    try {
+        const { version, notes } = JSON.parse(await file.text())
+        return version === REPOSITORY_INDEX_VERSION ? notes : []
+    } catch (error) {
+        logError(LOG_MESSAGES.ERROR_READING_REPOSITORY_INDEX, error)
+        return []
+    }
+}
+
+// ponytail: one JSON file with every note body, parsed on the JS thread; split into metadata plus lazy bodies if repositories reach tens of MB
+const writeRepositoryIndex = (repositoryId, notes) => {
+    try {
+        const folder = new Directory(Paths.document, REPOSITORY_INDEX_FOLDER_NAME)
+        if (!folder.exists) folder.create()
+
+        const file = getRepositoryIndexFile(repositoryId)
+        if (!file.exists) file.create()
+        file.write(JSON.stringify({ version: REPOSITORY_INDEX_VERSION, notes }))
+    } catch (error) {
+        logError(LOG_MESSAGES.ERROR_WRITING_REPOSITORY_INDEX, error)
+    }
+}
+
+const deleteRepositoryIndex = (repositoryId) => {
+    const file = getRepositoryIndexFile(repositoryId)
+    if (file.exists) file.delete()
 }
 
 export const fileStorage = {
@@ -270,6 +333,12 @@ export const fileStorage = {
     findDirectory,
     listMarkdownFiles,
     listSubdirectories,
+    scanMarkdownFiles,
+    scanSubdirectories,
+    readTextFiles,
+    readRepositoryIndex,
+    writeRepositoryIndex,
+    deleteRepositoryIndex,
     writeNoteFile,
     renameNoteFile,
     deleteNoteFile,

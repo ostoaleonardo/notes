@@ -11,6 +11,7 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { NOTE_KEY_PREFIX } from '@/constants/note-key'
 import {
     NOTE_FILE_EXTENSION,
+    NOTE_READ_BATCH_SIZE,
     NOTES_FOLDER_NAME
 } from '@/constants/file-storage'
 
@@ -47,15 +48,24 @@ const createFakeFileStorage = (deviceCache = new Map()) => {
     }
     const notesUri = (uri) => `${uri}/${NOTES_FOLDER_NAME}`
 
+    const listMarkdownFiles = (uri) => Array.from(filesFor(uri).entries())
+        .filter(([name]) => name.toLowerCase().endsWith(NOTE_FILE_EXTENSION))
+        .map(([name, content]) => ({
+            name,
+            uri: `${uri}/${name}`,
+            text: async () => content,
+            lastModified: 0
+        }))
+
+    const readTextFile = (fileUri) => {
+        const separator = fileUri.lastIndexOf('/')
+        return filesFor(fileUri.slice(0, separator)).get(fileUri.slice(separator + 1)) ?? null
+    }
+
     return {
-        listMarkdownFiles: (uri) => Array.from(filesFor(uri).entries())
-            .filter(([name]) => name.toLowerCase().endsWith(NOTE_FILE_EXTENSION))
-            .map(([name, content]) => ({
-                name,
-                text: async () => content,
-                creationTime: 0,
-                lastModified: 0
-            })),
+        listMarkdownFiles,
+        scanMarkdownFiles: async (uri) => listMarkdownFiles(uri),
+        readTextFiles: async (fileUris) => fileUris.map(readTextFile),
         writeNoteFile: (uri, filename, content) => { filesFor(uri).set(filename, content) },
         deleteNoteFile: (uri, filename) => { filesFor(uri).delete(filename) },
         readJson,
@@ -438,15 +448,12 @@ describe('reload with previous notes', () => {
     const setupFiles = () => {
         const fileStorage = createFakeFileStorage()
         const reads = []
-        const listMarkdownFiles = fileStorage.listMarkdownFiles
+        const readTextFiles = fileStorage.readTextFiles
 
-        fileStorage.listMarkdownFiles = (uri) => listMarkdownFiles(uri).map((file) => ({
-            ...file,
-            text: async () => {
-                reads.push(file.name)
-                return file.text()
-            }
-        }))
+        fileStorage.readTextFiles = (fileUris) => {
+            reads.push(...fileUris.map((fileUri) => fileUri.split('/').pop()))
+            return readTextFiles(fileUris)
+        }
         fileStorage.writeNoteFile(REPO_URI, 'A.md', 'body')
 
         return { fileStorage, reads }
@@ -456,11 +463,6 @@ describe('reload with previous notes', () => {
 
     test('keeps the file uri on every loaded note', async () => {
         const { fileStorage } = setupFiles()
-        const listMarkdownFiles = fileStorage.listMarkdownFiles
-        fileStorage.listMarkdownFiles = (uri) => listMarkdownFiles(uri).map((file) => ({
-            ...file,
-            uri: `${uri}/${file.name}`
-        }))
 
         const { notes } = await loadRepositoryData(tree, tree[0], createFakeStorage(), fileStorage)
 
@@ -476,6 +478,62 @@ describe('reload with previous notes', () => {
 
         expect(reads).toEqual(['A.md'])
         expect(second.notes[0]).toBe(first.notes[0])
+    })
+
+    test('reports nothing changed when every file matches the previous notes', async () => {
+        const { fileStorage } = setupFiles()
+        const storage = createFakeStorage()
+        const onProgress = jest.fn()
+
+        const first = await loadRepositoryData(tree, tree[0], storage, fileStorage)
+        const second = await loadRepositoryData(tree, tree[0], storage, fileStorage, first.notes, onProgress)
+
+        expect(first.changed).toBe(true)
+        expect(second.changed).toBe(false)
+        expect(onProgress).not.toHaveBeenCalled()
+    })
+
+    test('reports a change when a previous note is gone from disk', async () => {
+        const { fileStorage } = setupFiles()
+        const storage = createFakeStorage()
+
+        const first = await loadRepositoryData(tree, tree[0], storage, fileStorage)
+        fileStorage.deleteNoteFile(REPO_URI, 'A.md')
+        const second = await loadRepositoryData(tree, tree[0], storage, fileStorage, first.notes)
+
+        expect(second.notes).toEqual([])
+        expect(second.changed).toBe(true)
+    })
+
+    test('reads changed files in batches and reports progress after each one', async () => {
+        const { fileStorage, reads } = setupFiles()
+        const total = NOTE_READ_BATCH_SIZE + 1
+        for (let index = 1; index < total; index++) {
+            fileStorage.writeNoteFile(REPO_URI, `Note ${index}.md`, 'body')
+        }
+        const onProgress = jest.fn()
+
+        const { notes } = await loadRepositoryData(tree, tree[0], createFakeStorage(), fileStorage, [], onProgress)
+
+        expect(notes).toHaveLength(total)
+        expect(reads).toHaveLength(total)
+        expect(onProgress.mock.calls).toEqual([
+            [0, total],
+            [NOTE_READ_BATCH_SIZE, total],
+            [total, total]
+        ])
+    })
+
+    test('keeps the previous note when a changed file cannot be read', async () => {
+        const { fileStorage } = setupFiles()
+        const storage = createFakeStorage()
+
+        const first = await loadRepositoryData(tree, tree[0], storage, fileStorage)
+        const stale = first.notes.map((note) => ({ ...note, updatedAt: 1 }))
+        fileStorage.readTextFiles = async (fileUris) => fileUris.map(() => null)
+        const second = await loadRepositoryData(tree, tree[0], storage, fileStorage, stale)
+
+        expect(second.notes).toEqual(stale)
     })
 
     test('rereads notes whose file changed', async () => {

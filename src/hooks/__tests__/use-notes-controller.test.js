@@ -21,6 +21,7 @@ const mockFileStorage = {
     writeNoteFile: jest.fn(),
     deleteNoteFile: jest.fn(),
     findFile: jest.fn(),
+    getExistingFile: jest.fn(),
     renameVersions: jest.fn(async () => { }),
     deleteVersions: jest.fn(),
     moveNoteFiles: jest.fn(async () => { }),
@@ -86,11 +87,16 @@ beforeEach(() => {
 
     jest.clearAllMocks()
     mockFileStorage.listMarkdownFiles.mockImplementation(() => (
-        Array.from(files.entries()).map(([name, content]) => ({
-            name,
-            text: async () => content,
-            delete: () => files.delete(name)
-        }))
+        Array.from(files.keys()).map((name) => ({ name, uri: name }))
+    ))
+    mockFileStorage.getExistingFile.mockImplementation((name) => (
+        files.has(name)
+            ? {
+                name,
+                text: async () => files.get(name),
+                delete: () => files.delete(name)
+            }
+            : undefined
     ))
     mockFileStorage.writeNoteFile.mockImplementation((_uri, filename, content) => {
         files.set(filename, content)

@@ -45,7 +45,8 @@ const makeProps = (overrides = {}) => {
             getOrCreateTemplatesFolder: jest.fn((uri) => ({ uri: `${uri}/templates` })),
             getOrCreateImagesFolder: jest.fn((uri) => ({ uri: `${uri}/images` })),
             renameVersionsUnder: jest.fn(async () => {}),
-            deleteVersionsUnder: jest.fn()
+            deleteVersionsUnder: jest.fn(),
+            deleteRepositoryIndex: jest.fn()
         },
         seedWelcomeNote: jest.fn(async () => null),
         setPendingWelcomeNoteId: jest.fn(),

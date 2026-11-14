@@ -166,7 +166,7 @@ describe('write note file', () => {
 
         const written = result.current.writeNoteFile('content://repo', 'note.md', 'short')
 
-        expect(written).toBe(original)
+        expect(written.uri).toBe(original.uri)
         expect(registry.get('content://repo/note.md').content).toBe('short')
     })
 

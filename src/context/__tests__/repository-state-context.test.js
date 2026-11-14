@@ -64,13 +64,12 @@ describe('repository state context', () => {
         expect(console.warn).toHaveBeenCalled()
     })
 
-    test('starts unreconciled with no pending welcome note and a free busy flag', async () => {
+    test('starts with no pending welcome note and a free busy flag', async () => {
         stubStorage({})
 
         const { result } = await setup()
 
         await waitFor(() => expect(result.current.loading).toBe(false))
-        expect(result.current.reconciled).toBe(false)
         expect(result.current.pendingWelcomeNoteId).toBeNull()
         expect(result.current.busyRef.current).toBe(false)
     })

@@ -10,7 +10,6 @@ export const RepositoryStateContext = createContext()
 
 export const RepositoryStateProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
-    const [reconciled, setReconciled] = useState(false)
     const [repositories, setRepositories] = useState([])
     const [activeRepositoryId, setActiveRepositoryId] = useState('')
     const [pendingWelcomeNoteId, setPendingWelcomeNoteId] = useState(null)
@@ -42,14 +41,11 @@ export const RepositoryStateProvider = ({ children }) => {
         activeRepositoryId,
         setActiveRepositoryId,
         loading,
-        reconciled,
-        setReconciled,
         pendingWelcomeNoteId,
         setPendingWelcomeNoteId,
         busyRef
     }), [
         loading,
-        reconciled,
         repositories,
         activeRepositoryId,
         pendingWelcomeNoteId

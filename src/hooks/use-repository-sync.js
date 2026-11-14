@@ -1,23 +1,26 @@
-import { useCallback } from 'react'
+import { useCallback, useRef } from 'react'
 
 export function useRepositorySync({
     repositories,
     activeRepositoryId,
     busyRef,
     directoryExists,
-    listSubdirectories,
+    scanSubdirectories,
     buildRepository,
     discoverSubfolders,
     persistRepositories,
     persistActiveRepository
 }) {
-    const reconcileTree = useCallback((repository) => {
+    const repositoriesRef = useRef(repositories)
+    repositoriesRef.current = repositories
+
+    const reconcileTree = useCallback(async (repository) => {
         if (!directoryExists(repository.uri)) return []
 
         let diskSubdirectories
 
         try {
-            diskSubdirectories = listSubdirectories(repository.uri)
+            diskSubdirectories = await scanSubdirectories(repository.uri)
         } catch {
             diskSubdirectories = []
         }
@@ -26,9 +29,11 @@ export function useRepositorySync({
         const diskUris = new Set(diskSubdirectories.map((d) => d.uri))
         const trackedUris = new Set(trackedChildren.map((r) => r.uri))
 
-        const survivingDescendants = trackedChildren
-            .filter((child) => diskUris.has(child.uri))
-            .flatMap(reconcileTree)
+        const survivingDescendants = await Promise.all(
+            trackedChildren
+                .filter((child) => diskUris.has(child.uri))
+                .map(reconcileTree)
+        )
 
         const newDescendants = diskSubdirectories
             .filter((d) => !trackedUris.has(d.uri))
@@ -37,12 +42,12 @@ export function useRepositorySync({
                 return [entry, ...discoverSubfolders(d, entry.id)]
             })
 
-        return [repository, ...survivingDescendants, ...newDescendants]
+        return [repository, ...survivingDescendants.flat(), ...newDescendants]
     }, [
         repositories,
         buildRepository,
         directoryExists,
-        listSubdirectories,
+        scanSubdirectories,
         discoverSubfolders
     ])
 
@@ -50,7 +55,8 @@ export function useRepositorySync({
         if (busyRef.current) return
 
         const roots = repositories.filter((r) => !r.parentId)
-        const reconciled = roots.flatMap(reconcileTree)
+        const reconciled = (await Promise.all(roots.map(reconcileTree))).flat()
+        if (busyRef.current || repositoriesRef.current !== repositories) return
 
         await persistRepositories(reconciled)
 

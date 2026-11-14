@@ -6,7 +6,6 @@ describe('navigation readiness', () => {
     test('renders nothing while repositories are still loading', async () => {
         const { result } = await renderHook(() => useNavigationReadiness({
             loading: true,
-            reconciled: false,
             activeRepository: null,
             notesLoading: true
         }))
@@ -22,7 +21,6 @@ describe('navigation readiness', () => {
     test('needs the gate once settled with no active repository', async () => {
         const { result } = await renderHook(() => useNavigationReadiness({
             loading: false,
-            reconciled: true,
             activeRepository: null,
             notesLoading: false
         }))
@@ -38,7 +36,6 @@ describe('navigation readiness', () => {
     test('is ready and shows the drawer once settled with notes loaded', async () => {
         const { result } = await renderHook(() => useNavigationReadiness({
             loading: false,
-            reconciled: true,
             activeRepository: { id: 'r1' },
             notesLoading: false
         }))
@@ -57,7 +54,6 @@ describe('navigation readiness', () => {
             {
                 initialProps: {
                     loading: false,
-                    reconciled: true,
                     activeRepository: { id: 'r1' },
                     notesLoading: false
                 }
@@ -68,7 +64,6 @@ describe('navigation readiness', () => {
 
         await rerender({
             loading: false,
-            reconciled: true,
             activeRepository: { id: 'r1' },
             notesLoading: true
         })
@@ -87,7 +82,6 @@ describe('navigation readiness', () => {
             {
                 initialProps: {
                     loading: false,
-                    reconciled: true,
                     activeRepository: { id: 'r1' },
                     notesLoading: false
                 }
@@ -98,7 +92,6 @@ describe('navigation readiness', () => {
 
         await rerender({
             loading: true,
-            reconciled: true,
             activeRepository: { id: 'r1' },
             notesLoading: false
         })
@@ -117,7 +110,6 @@ describe('navigation readiness', () => {
             {
                 initialProps: {
                     loading: false,
-                    reconciled: true,
                     activeRepository: null,
                     notesLoading: false
                 }
@@ -128,7 +120,6 @@ describe('navigation readiness', () => {
 
         await rerender({
             loading: false,
-            reconciled: true,
             activeRepository: { id: 'r1' },
             notesLoading: true
         })

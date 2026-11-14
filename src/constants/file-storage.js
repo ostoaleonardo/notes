@@ -7,7 +7,10 @@ export const NOTE_PATH_SEPARATOR = '::'
 
 export const WRITE_ATTEMPTS = 2
 
-export const NOTE_READ_CONCURRENCY = 16
+export const NOTE_READ_BATCH_SIZE = 100
+
+export const REPOSITORY_INDEX_FOLDER_NAME = 'repository-index'
+export const REPOSITORY_INDEX_VERSION = 1
 
 export const TEMPLATES_FOLDER_NAME = 'templates'
 export const IMAGES_FOLDER_NAME = 'images'

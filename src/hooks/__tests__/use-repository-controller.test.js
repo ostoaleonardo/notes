@@ -10,6 +10,8 @@ let mockUuidCounter = 0
 const mockFileStorage = {
     listMarkdownFiles: jest.fn(() => []),
     listSubdirectories: jest.fn(() => []),
+    scanSubdirectories: jest.fn(async () => []),
+    deleteRepositoryIndex: jest.fn(),
     writeNoteFile: jest.fn(),
     createSubdirectory: jest.fn(),
     deleteDirectory: jest.fn(),
@@ -53,8 +55,6 @@ const renderRepositoriesHook = (initialRepositories = [], activeRepositoryId = '
                     activeRepositoryId: activeId,
                     setActiveRepositoryId: setActiveId,
                     loading: false,
-                    reconciled: false,
-                    setReconciled: () => {},
                     busyRef: { current: false }
                 }}
             >
@@ -203,7 +203,7 @@ describe('reconcile repositories', () => {
     test('discovers a new subfolder created on disk outside the app', async () => {
         const root = { id: 'root-1', uri: 'content://root-1', parentId: null }
         mockFileStorage.directoryExists.mockReturnValue(true)
-        mockFileStorage.listSubdirectories.mockImplementation((uri) => (
+        mockFileStorage.scanSubdirectories.mockImplementation(async (uri) => (
             uri === 'content://root-1' ? [{ uri: 'content://new-folder', name: 'new-folder' }] : []
         ))
 

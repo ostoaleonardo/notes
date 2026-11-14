@@ -1,3 +1,4 @@
+import RepositoryFs from '../../../modules/repository-fs'
 import { fileStorage } from '../file-storage'
 import { logError } from '../log-error'
 import {
@@ -7,6 +8,8 @@ import {
     RESERVED_FOLDER_NAMES,
     TEMPLATES_FOLDER_NAME,
     VAULT_TRASH_FOLDER_NAME,
+    REPOSITORY_INDEX_FOLDER_NAME,
+    REPOSITORY_INDEX_VERSION,
     VERSIONS_FILENAME_SUFFIX
 } from '@/constants/file-storage'
 import { MIME_TYPES } from '@/constants/mime-types'
@@ -22,8 +25,8 @@ jest.mock('expo-file-system', () => {
     const nameOf = (uri) => uri.slice(uri.lastIndexOf('/') + 1)
 
     class Entry {
-        constructor(uri) {
-            this.uri = uri
+        constructor(...parts) {
+            this.uri = parts.join('/')
         }
 
         get name() {
@@ -59,8 +62,14 @@ jest.mock('expo-file-system', () => {
             return mockFs.get(this.uri).bytes
         }
 
-        write(bytes) {
-            mockFs.get(this.uri).bytes = bytes
+        write(content) {
+            mockFs.get(this.uri).bytes = typeof content === 'string'
+                ? new TextEncoder().encode(content)
+                : content
+        }
+
+        create() {
+            mockFs.set(this.uri, { bytes: new Uint8Array() })
         }
 
         open() {
@@ -76,6 +85,10 @@ jest.mock('expo-file-system', () => {
     }
 
     class Directory extends Entry {
+        create() {
+            mockFs.set(this.uri, { dir: true })
+        }
+
         list() {
             const prefix = this.uri + '/'
 
@@ -99,7 +112,12 @@ jest.mock('expo-file-system', () => {
         }
     }
 
-    return { Directory, File, FileMode: { Truncate: 'truncate' } }
+    return {
+        Directory,
+        File,
+        FileMode: { Truncate: 'truncate' },
+        Paths: { document: 'documents' }
+    }
 })
 
 const ROOT = 'root'
@@ -497,5 +515,76 @@ describe('copying images', () => {
         await fileStorage.copyImageFile('picked/photo', `${ROOT}/images`, 'p.jpg')
 
         expect(mockFs.get(`${ROOT}/images/p.jpg`).mime).toBe(MIME_TYPES.JPEG)
+    })
+})
+
+describe('scanning a folder', () => {
+    test('lists markdown files and note folders without blocking', async () => {
+        seedFile(`${FOLDER}/a.md`)
+        seedFile(`${FOLDER}/data.json`)
+        seedDir(`${FOLDER}/sub`)
+        seedDir(`${FOLDER}/.hidden`)
+        seedDir(`${FOLDER}/${IMAGES_FOLDER_NAME}`)
+
+        expect(names(await fileStorage.scanMarkdownFiles(FOLDER))).toEqual(['a.md'])
+        expect(names(await fileStorage.scanSubdirectories(FOLDER))).toEqual(['sub'])
+    })
+
+    test('shares one listing between scans of the same folder that overlap', async () => {
+        const listDirectory = jest.spyOn(RepositoryFs, 'listDirectory')
+        seedFile(`${FOLDER}/a.md`)
+
+        await Promise.all([
+            fileStorage.scanMarkdownFiles(FOLDER),
+            fileStorage.scanSubdirectories(FOLDER)
+        ])
+        await fileStorage.scanMarkdownFiles(FOLDER)
+
+        expect(listDirectory).toHaveBeenCalledTimes(2)
+    })
+
+    test('reads several files at once', async () => {
+        seedFile(`${FOLDER}/a.md`, 'first')
+        seedFile(`${FOLDER}/b.md`, 'second')
+
+        const contents = await fileStorage.readTextFiles([`${FOLDER}/a.md`, `${FOLDER}/b.md`])
+
+        expect(contents).toEqual(['first', 'second'])
+    })
+})
+
+describe('repository index', () => {
+    const INDEX = `documents/${REPOSITORY_INDEX_FOLDER_NAME}/repo.json`
+    const notes = [{ path: 'repo::a.md', note: 'body' }]
+
+    test('returns no notes when the repository was never indexed', async () => {
+        expect(await fileStorage.readRepositoryIndex('repo')).toEqual([])
+    })
+
+    test('reads back the notes it stored', async () => {
+        fileStorage.writeRepositoryIndex('repo', notes)
+
+        expect(await fileStorage.readRepositoryIndex('repo')).toEqual(notes)
+    })
+
+    test('ignores an index written by another version', async () => {
+        seedFile(INDEX, JSON.stringify({ version: REPOSITORY_INDEX_VERSION + 1, notes }))
+
+        expect(await fileStorage.readRepositoryIndex('repo')).toEqual([])
+    })
+
+    test('ignores a corrupt index and logs it', async () => {
+        seedFile(INDEX, '{broken')
+
+        expect(await fileStorage.readRepositoryIndex('repo')).toEqual([])
+        expect(logError).toHaveBeenCalled()
+    })
+
+    test('deletes the index of a repository', async () => {
+        fileStorage.writeRepositoryIndex('repo', notes)
+
+        fileStorage.deleteRepositoryIndex('repo')
+
+        expect(mockFs.has(INDEX)).toBe(false)
     })
 })
