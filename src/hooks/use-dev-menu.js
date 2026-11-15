@@ -1,5 +1,5 @@
 import { useEffect, useEffectEvent } from 'react'
-import { DevSettings } from 'react-native'
+import { AppState, DevSettings } from 'react-native'
 import { registerDevMenuItems } from 'expo-dev-menu'
 import { Directory, File, Paths } from 'expo-file-system'
 import legacyNotes from '../../legacy/notes.json'
@@ -13,6 +13,7 @@ import { useRepositories } from './use-repositories'
 import { getWelcomeNote } from '@/utils/welcome-note'
 import { hasDirectAccess, requestDirectAccess } from '@/utils/direct-access'
 import { revokePermissions } from '@/utils/permissions'
+import { startStallDetector } from '@/utils/stall-detector'
 import { sanitizeFilename } from '@/utils/note-filename'
 import { getVersionLocation } from '@/utils/note-version-location'
 import { buildNoteFileContent, parseFrontmatter } from '@/utils/frontmatter'
@@ -22,12 +23,15 @@ import { getFileMimeType } from '@/utils/attachments'
 import { buildNotePath } from '@/utils/note-path'
 import { invalidateMediaIndex } from '@/utils/media-index'
 
+import { APP_STATES } from '@/constants/app-state'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { NOTE_FILE_EXTENSION } from '@/constants/file-storage'
 import { LOG_MESSAGES } from '@/constants/log-messages'
 import {
     DEV_DATA_KINDS,
     DEV_TEST_PINNED_TITLES,
+    STALL_CHECK_INTERVAL_MS,
+    STALL_THRESHOLD_MS,
     LEGACY_SEED_IMAGE_BASE64,
     LEGACY_SEED_IMAGE_FILENAME
 } from '@/constants/dev-menu'
@@ -233,6 +237,26 @@ export function useDevMenu() {
             }
         ])
     })
+
+    useEffect(() => {
+        const start = () => startStallDetector({
+            intervalMs: STALL_CHECK_INTERVAL_MS,
+            thresholdMs: STALL_THRESHOLD_MS,
+            onStall: (ms) => console.log(`[stall] JS thread blocked for ${ms} ms`)
+        })
+
+        let stop = start()
+
+        const subscription = AppState.addEventListener('change', (state) => {
+            stop()
+            if (state === APP_STATES.ACTIVE) stop = start()
+        })
+
+        return () => {
+            stop()
+            subscription.remove()
+        }
+    }, [])
 
     useEffect(() => {
         registerItems()
