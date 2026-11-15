@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 import { useExclusiveQueue } from './use-exclusive-queue'
 import { useMemoByDeps } from './use-memo-by-deps'
+import { useTimer } from './use-timer'
 
-import { AUTOSAVE_DELAY } from '@/constants/default-values'
+import { AUTOSAVE_DELAY } from '@/constants/debounce'
 import { LOG_MESSAGES } from '@/constants/log-messages'
 import { logError } from '@/utils/log-error'
 
@@ -14,11 +15,11 @@ export function useAutosave(
 ) {
     const { t } = useTranslation()
     const { runExclusive } = useExclusiveQueue()
+    const { schedule, cancel, isPending } = useTimer({ cancelOnUnmount: false })
 
     const onSaveRef = useRef(onSave)
     onSaveRef.current = onSave
 
-    const timerRef = useRef(null)
     const depsToken = useMemoByDeps(() => ({}), deps)
 
     const save = useCallback(async () => {
@@ -32,39 +33,34 @@ export function useAutosave(
 
     useEffect(() => {
         if (skip) {
-            timerRef.current = null
+            cancel()
             return
         }
 
-        timerRef.current = setTimeout(() => {
-            timerRef.current = null
-            save()
-        }, delay)
-
-        return () => {
-            if (timerRef.current) clearTimeout(timerRef.current)
-        }
-    }, [skip, delay, save, depsToken])
+        schedule(save, delay)
+    }, [
+        skip,
+        delay,
+        save,
+        depsToken,
+        schedule,
+        cancel
+    ])
 
     const saveRef = useRef(save)
     saveRef.current = save
 
     useEffect(() => () => {
-        if (!timerRef.current) return
+        if (!isPending()) return
 
-        clearTimeout(timerRef.current)
-        timerRef.current = null
+        cancel()
         saveRef.current()
-    }, [])
+    }, [isPending, cancel])
 
     const flush = useCallback(async () => {
-        if (timerRef.current) {
-            clearTimeout(timerRef.current)
-            timerRef.current = null
-        }
-
+        cancel()
         await save()
-    }, [save])
+    }, [cancel, save])
 
     return { flush, runExclusive }
 }

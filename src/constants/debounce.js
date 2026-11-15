@@ -1,0 +1,4 @@
+export const AUTOSAVE_DELAY = 500
+export const SEARCH_DEBOUNCE_MS = 250
+export const SEARCH_PROGRESS_DELAY_MS = 120
+export const SEARCH_PROGRESS_MIN_MS = 300
