@@ -1,6 +1,6 @@
 import RepositoryFs from 'repository-fs'
-import { openDatabaseAsync } from 'expo-sqlite'
 
+import { queryIndex } from '@/utils/index-query'
 import { extractProperties, parseFrontmatter, readFrontmatterTags } from '@/utils/frontmatter'
 import { extractInlineTags } from '@/utils/inline-tags'
 import { extractWikiLinkTexts } from '@/utils/note-links'
@@ -48,13 +48,13 @@ const groupByNote = (rows) => {
     return grouped
 }
 
-const readIndex = async (db, repositoryId) => {
-    const notes = await db.getAllAsync(INDEX_CHECK_SQL.NOTES, repositoryId)
+const readIndex = async (repositoryId) => {
+    const notes = await queryIndex(INDEX_CHECK_SQL.NOTES, repositoryId)
 
     const [tags, links, keys] = await Promise.all([
-        db.getAllAsync(INDEX_CHECK_SQL.TAGS),
-        db.getAllAsync(INDEX_CHECK_SQL.LINKS),
-        db.getAllAsync(INDEX_CHECK_SQL.PROPERTIES)
+        queryIndex(INDEX_CHECK_SQL.TAGS),
+        queryIndex(INDEX_CHECK_SQL.LINKS),
+        queryIndex(INDEX_CHECK_SQL.PROPERTIES)
     ])
 
     const grouped = { tags: groupByNote(tags), links: groupByNote(links), keys: groupByNote(keys) }
@@ -109,13 +109,13 @@ const pickSearchTerm = (texts) => {
     return null
 }
 
-const searchTimes = async (db, term) => {
+const searchTimes = async (term) => {
     const runs = []
     let count = 0
 
     for (let run = 0; run < INDEX_CHECK_FTS_RUNS; run += 1) {
         const start = performance.now()
-        const rows = await db.getAllAsync(INDEX_CHECK_SQL.SEARCH, term)
+        const rows = await queryIndex(INDEX_CHECK_SQL.SEARCH, term)
         runs.push(performance.now() - start)
         count = rows.length
     }
@@ -150,9 +150,7 @@ export const checkIndex = async (repositories, scanMarkdownFiles) => {
     const warm = await timed(() => RepositoryFs.indexRepository(repository.id, repository.uri))
     log(describe('unchanged reconcile', warm.ms, warm.result))
 
-    const db = await openDatabaseAsync(RepositoryFs.indexDatabaseName)
-
-    await db.runAsync(
+    await queryIndex(
         INDEX_CHECK_SQL.TOUCH,
         repository.id,
         INDEX_CHECK_TOUCHED_NOTES
@@ -162,7 +160,7 @@ export const checkIndex = async (repositories, scanMarkdownFiles) => {
     log(describe(`reconcile after touching ${INDEX_CHECK_TOUCHED_NOTES} notes`, touched.ms, touched.result))
 
     const texts = await RepositoryFs.readTextFiles(files.map((file) => file.uri))
-    const indexed = await readIndex(db, repository.id)
+    const indexed = await readIndex(repository.id)
     const parity = compareWithJs(files, texts, indexed)
 
     log(`parity with the JS parsers: ${files.length - parity.different - parity.missing}/${files.length} equal, `
@@ -170,12 +168,11 @@ export const checkIndex = async (repositories, scanMarkdownFiles) => {
     parity.samples.forEach((sample) => log(`difference ${JSON.stringify(sample).slice(0, 400)}`))
 
     const term = pickSearchTerm(texts)
-    if (term) log(`full text search: ${await searchTimes(db, term)}`)
+    if (term) log(`full text search: ${await searchTimes(term)}`)
 
-    const [{ version }] = await db.getAllAsync(INDEX_CHECK_SQL.VERSION)
+    const [{ version }] = await queryIndex(INDEX_CHECK_SQL.VERSION)
     log(`sqlite ${version}`)
 
     subscription.remove()
-    await db.closeAsync()
     log('done')
 }

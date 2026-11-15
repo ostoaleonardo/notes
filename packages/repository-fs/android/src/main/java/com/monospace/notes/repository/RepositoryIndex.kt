@@ -1,9 +1,14 @@
 package com.monospace.notes.repository
 
 import androidx.sqlite.SQLiteConnection
+import androidx.sqlite.SQLITE_DATA_FLOAT
+import androidx.sqlite.SQLITE_DATA_INTEGER
+import androidx.sqlite.SQLITE_DATA_NULL
 import androidx.sqlite.SQLiteStatement
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import androidx.sqlite.execSQL
+import java.text.Collator
+import java.util.Locale
 
 data class FileMeta(val modified: Long, val size: Long)
 
@@ -16,6 +21,9 @@ data class IndexedNote(
 )
 
 class RepositoryIndex private constructor(private val connection: SQLiteConnection) : AutoCloseable {
+  private val locale: Locale = Locale.getDefault()
+  private val collator: Collator = Collator.getInstance(locale)
+
   companion object {
     fun open(path: String): RepositoryIndex {
       val connection = BundledSQLiteDriver().open(path)
@@ -35,12 +43,28 @@ class RepositoryIndex private constructor(private val connection: SQLiteConnecti
     connection.execSQL(IndexSql.FOREIGN_KEYS)
 
     val version = queryOne(IndexSql.READ_VERSION) { it.getLong(0) } ?: 0L
-    if (version == INDEX_SCHEMA_VERSION.toLong()) return
+    if (version == INDEX_SCHEMA_VERSION.toLong() && storedLocale() == locale.toLanguageTag()) return
 
     transaction {
       IndexSql.DROP_ORDER.forEach { connection.execSQL(IndexSql.DROP_TABLE + it) }
       IndexSql.SCHEMA.forEach(connection::execSQL)
       connection.execSQL(IndexSql.WRITE_VERSION)
+      writeMeta(LOCALE_META_KEY, locale.toLanguageTag())
+    }
+  }
+
+  private fun storedLocale(): String? = runCatching {
+    connection.prepare(IndexSql.SELECT_META).use { statement ->
+      statement.bindText(1, LOCALE_META_KEY)
+      if (statement.step()) statement.getText(0) else null
+    }
+  }.getOrNull()
+
+  private fun writeMeta(key: String, value: String) {
+    connection.prepare(IndexSql.UPSERT_META).use { statement ->
+      statement.bindText(1, key)
+      statement.bindText(2, value)
+      statement.step()
     }
   }
 
@@ -75,8 +99,21 @@ class RepositoryIndex private constructor(private val connection: SQLiteConnecti
     )
   }
 
+  fun query(sql: String, params: List<Any?>): Map<String, Any> {
+    connection.prepare(sql).use { statement ->
+      params.forEachIndexed { index, value -> bind(statement, index + FIRST_BIND_INDEX, value) }
+
+      val names = (0 until statement.getColumnCount()).map(statement::getColumnName)
+      val values = names.map { ArrayList<Any?>() }
+
+      while (statement.step()) names.indices.forEach { values[it].add(read(statement, it)) }
+
+      return mapOf(QueryKeys.COLUMNS to names, QueryKeys.VALUES to values)
+    }
+  }
+
   fun write(repositoryId: String, upserts: List<IndexedNote>, removed: List<String>) = transaction {
-    WriteStatements(connection).use { statements ->
+    WriteStatements(connection, collator).use { statements ->
       (upserts.map { it.filename } + removed).forEach { statements.delete(repositoryId, it) }
       upserts.forEach { statements.insert(repositoryId, it) }
     }
@@ -90,7 +127,7 @@ class RepositoryIndex private constructor(private val connection: SQLiteConnecti
       while (statement.step()) filenames.add(statement.getText(0))
     }
 
-    WriteStatements(connection).use { statements -> filenames.forEach { statements.delete(repositoryId, it) } }
+    WriteStatements(connection, collator).use { statements -> filenames.forEach { statements.delete(repositoryId, it) } }
   }
 
   fun deleteRepositoriesExcept(keep: Set<String>) {
@@ -121,7 +158,7 @@ class RepositoryIndex private constructor(private val connection: SQLiteConnecti
   }
 }
 
-private class WriteStatements(connection: SQLiteConnection) : AutoCloseable {
+private class WriteStatements(connection: SQLiteConnection, private val collator: Collator) : AutoCloseable {
   private val findNote = connection.prepare(IndexSql.SELECT_NOTE_ID)
   private val deleteFts = connection.prepare(IndexSql.DELETE_FTS)
   private val deleteNote = connection.prepare(IndexSql.DELETE_NOTE)
@@ -155,9 +192,10 @@ private class WriteStatements(connection: SQLiteConnection) : AutoCloseable {
       it.bindText(2, note.filename)
       it.bindText(3, note.uri)
       it.bindText(4, title)
-      it.bindLong(5, note.modified)
-      it.bindLong(6, note.size)
-      it.bindLong(7, if (parsed.invalidFrontmatter) INVALID_FRONTMATTER else VALID_FRONTMATTER)
+      it.bindText(5, toHex(collator.getCollationKey(title).toByteArray()))
+      it.bindLong(6, note.modified)
+      it.bindLong(7, note.size)
+      it.bindLong(8, if (parsed.invalidFrontmatter) INVALID_FRONTMATTER else VALID_FRONTMATTER)
     }
 
     lastId.step()
@@ -197,4 +235,37 @@ private class WriteStatements(connection: SQLiteConnection) : AutoCloseable {
     statement.step()
     statement.reset()
   }
+}
+
+private fun toHex(bytes: ByteArray): String {
+  val builder = StringBuilder(bytes.size * 2)
+
+  bytes.forEach { byte ->
+    val value = byte.toInt() and BYTE_MASK
+    builder.append(HEX_DIGITS[value shr NIBBLE_BITS]).append(HEX_DIGITS[value and NIBBLE_MASK])
+  }
+
+  return builder.toString()
+}
+
+private fun bind(statement: SQLiteStatement, index: Int, value: Any?) {
+  when (value) {
+    null -> statement.bindNull(index)
+    is Boolean -> statement.bindLong(index, if (value) 1L else 0L)
+    is Int -> statement.bindLong(index, value.toLong())
+    is Long -> statement.bindLong(index, value)
+    is Double -> if (value % 1.0 == 0.0 && Math.abs(value) < Long.MAX_VALUE) {
+      statement.bindLong(index, value.toLong())
+    } else {
+      statement.bindDouble(index, value)
+    }
+    else -> statement.bindText(index, value.toString())
+  }
+}
+
+private fun read(statement: SQLiteStatement, index: Int): Any? = when (statement.getColumnType(index)) {
+  SQLITE_DATA_NULL -> null
+  SQLITE_DATA_INTEGER -> statement.getLong(index)
+  SQLITE_DATA_FLOAT -> statement.getDouble(index)
+  else -> statement.getText(index)
 }

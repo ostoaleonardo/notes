@@ -119,6 +119,10 @@ class RepositoryFsModule : Module() {
       }
     }
 
+    AsyncFunction("queryIndex") Coroutine { sql: String, params: List<Any?> ->
+      withContext(Dispatchers.IO) { openIndex(context).use { it.query(sql, params) } }
+    }
+
     AsyncFunction("pruneRepositoryIndex") Coroutine { keepIds: List<String> ->
       indexLock.withLock {
         withContext(Dispatchers.IO) { openIndex(context).use { it.deleteRepositoriesExcept(keepIds.toSet()) } }
