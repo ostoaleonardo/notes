@@ -9,11 +9,15 @@ import { dedupeTags } from '@/utils/tag-names'
 import {
     INDEX_CHECK_DIFF_SAMPLES,
     INDEX_CHECK_FTS_RUNS,
+    INDEX_CHECK_LOG_PREFIX,
     INDEX_CHECK_MIN_WORD_LENGTH,
-    INDEX_CHECK_TOUCHED_NOTES
-} from '@/constants/dev-menu'
+    INDEX_CHECK_SQL,
+    INDEX_CHECK_TOUCHED_NOTES,
+    INDEX_CHECK_WORD_FLAGS
+} from '@/constants/index-check'
+import { INDEX_INVALID_FLAG, INDEX_PROGRESS_EVENT } from '@/constants/repository-index'
 
-const log = (line) => console.log(`[index] ${line}`)
+const log = (line) => console.log(`${INDEX_CHECK_LOG_PREFIX} ${line}`)
 
 const timed = async (task) => {
     const start = performance.now()
@@ -45,15 +49,12 @@ const groupByNote = (rows) => {
 }
 
 const readIndex = async (db, repositoryId) => {
-    const notes = await db.getAllAsync(
-        'SELECT id, filename, invalid_frontmatter AS invalid FROM notes WHERE repository_id = ?',
-        repositoryId
-    )
+    const notes = await db.getAllAsync(INDEX_CHECK_SQL.NOTES, repositoryId)
 
     const [tags, links, keys] = await Promise.all([
-        db.getAllAsync('SELECT note_id, name AS value FROM tags ORDER BY note_id, position'),
-        db.getAllAsync('SELECT note_id, text AS value FROM links ORDER BY note_id, position'),
-        db.getAllAsync('SELECT note_id, key AS value FROM properties ORDER BY note_id, position')
+        db.getAllAsync(INDEX_CHECK_SQL.TAGS),
+        db.getAllAsync(INDEX_CHECK_SQL.LINKS),
+        db.getAllAsync(INDEX_CHECK_SQL.PROPERTIES)
     ])
 
     const grouped = { tags: groupByNote(tags), links: groupByNote(links), keys: groupByNote(keys) }
@@ -62,7 +63,7 @@ const readIndex = async (db, repositoryId) => {
         tags: dedupeTags(grouped.tags.get(id) || []),
         links: grouped.links.get(id) || [],
         keys: grouped.keys.get(id) || [],
-        invalid: invalid === 1
+        invalid: invalid === INDEX_INVALID_FLAG
     }]))
 }
 
@@ -98,7 +99,7 @@ const compareWithJs = (files, texts, indexed) => {
 }
 
 const pickSearchTerm = (texts) => {
-    const pattern = new RegExp(`[a-z]{${INDEX_CHECK_MIN_WORD_LENGTH},}`, 'i')
+    const pattern = new RegExp(`[a-z]{${INDEX_CHECK_MIN_WORD_LENGTH},}`, INDEX_CHECK_WORD_FLAGS)
 
     for (const text of texts) {
         const match = text && parseFrontmatter(text).body.match(pattern)
@@ -114,7 +115,7 @@ const searchTimes = async (db, term) => {
 
     for (let run = 0; run < INDEX_CHECK_FTS_RUNS; run += 1) {
         const start = performance.now()
-        const rows = await db.getAllAsync('SELECT rowid FROM note_fts WHERE note_fts MATCH ?', term)
+        const rows = await db.getAllAsync(INDEX_CHECK_SQL.SEARCH, term)
         runs.push(performance.now() - start)
         count = rows.length
     }
@@ -138,7 +139,7 @@ export const checkIndex = async (repositories, scanMarkdownFiles) => {
     log(`repository ${repository.alias || repository.id}: ${files.length} notes`)
 
     let progressEvents = 0
-    const subscription = RepositoryFs.addListener('onIndexProgress', () => { progressEvents += 1 })
+    const subscription = RepositoryFs.addListener(INDEX_PROGRESS_EVENT, () => { progressEvents += 1 })
 
     await RepositoryFs.pruneRepositoryIndex([repository.id])
     await RepositoryFs.deleteRepositoryIndex(repository.id)
@@ -152,7 +153,7 @@ export const checkIndex = async (repositories, scanMarkdownFiles) => {
     const db = await openDatabaseAsync(RepositoryFs.indexDatabaseName)
 
     await db.runAsync(
-        'UPDATE notes SET modified = 0 WHERE id IN (SELECT id FROM notes WHERE repository_id = ? LIMIT ?)',
+        INDEX_CHECK_SQL.TOUCH,
         repository.id,
         INDEX_CHECK_TOUCHED_NOTES
     )
@@ -171,7 +172,7 @@ export const checkIndex = async (repositories, scanMarkdownFiles) => {
     const term = pickSearchTerm(texts)
     if (term) log(`full text search: ${await searchTimes(db, term)}`)
 
-    const [{ version }] = await db.getAllAsync('SELECT sqlite_version() AS version')
+    const [{ version }] = await db.getAllAsync(INDEX_CHECK_SQL.VERSION)
     log(`sqlite ${version}`)
 
     subscription.remove()
