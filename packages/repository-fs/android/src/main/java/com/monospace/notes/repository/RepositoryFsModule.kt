@@ -13,18 +13,26 @@ import android.os.ParcelFileDescriptor
 import android.provider.DocumentsContract
 import android.provider.DocumentsContract.Document
 import android.provider.Settings
+import androidx.annotation.RequiresApi
 import expo.modules.kotlin.exception.Exceptions
 import expo.modules.kotlin.functions.Coroutine
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.attribute.BasicFileAttributes
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 private const val READ_PARALLELISM = 16
+private const val INDEX_PROGRESS_EVENT = "onIndexProgress"
+private const val DATABASE_DIRECTORY = "SQLite"
 private const val EXTERNAL_STORAGE_AUTHORITY = "com.android.externalstorage.documents"
 private const val PRIMARY_VOLUME = "primary"
 private const val VOLUME_SEPARATOR = ":"
@@ -45,6 +53,7 @@ class RepositoryFsModule : Module() {
     get() = appContext.reactContext ?: throw Exceptions.ReactContextLost()
 
   private val readDispatcher = Dispatchers.IO.limitedParallelism(READ_PARALLELISM)
+  private val indexLock = Mutex()
 
   override fun definition() = ModuleDefinition {
     Name("RepositoryFs")
@@ -88,19 +97,46 @@ class RepositoryFsModule : Module() {
     }
 
     AsyncFunction("readTextFiles") Coroutine { uris: List<String> ->
-      val documents = uris.map(Uri::parse)
-      val client = lazy {
-        documents.firstOrNull()?.authority?.let(context.contentResolver::acquireUnstableContentProviderClient)
-      }
+      readAll(context, uris, readDispatcher) { it }
+    }
 
-      try {
-        coroutineScope {
-          documents.map { uri ->
-            async(readDispatcher) { directFile(context, uri)?.let(::readText) ?: client.value?.let { readText(it, uri) } }
-          }.awaitAll()
+    Constants("indexDatabaseName" to INDEX_DATABASE_NAME)
+
+    Events(INDEX_PROGRESS_EVENT)
+
+    AsyncFunction("indexRepository") Coroutine { repositoryId: String, uri: String ->
+      indexLock.withLock {
+        withContext(Dispatchers.IO) {
+          openIndex(context).use { index ->
+            val stats = indexRepository(context, index, repositoryId, uri, readDispatcher) { done, total ->
+              sendEvent(INDEX_PROGRESS_EVENT, mapOf("repositoryId" to repositoryId, "done" to done, "total" to total))
+            }
+
+            mapOf(
+              "total" to stats.total,
+              "added" to stats.added,
+              "updated" to stats.updated,
+              "removed" to stats.removed,
+              "unchanged" to stats.unchanged,
+              "unreadable" to stats.unreadable,
+              "scanMs" to stats.scanMs,
+              "readParseMs" to stats.readParseMs,
+              "writeMs" to stats.writeMs
+            )
+          }
         }
-      } finally {
-        if (client.isInitialized()) client.value?.close()
+      }
+    }
+
+    AsyncFunction("pruneRepositoryIndex") Coroutine { keepIds: List<String> ->
+      indexLock.withLock {
+        withContext(Dispatchers.IO) { openIndex(context).use { it.deleteRepositoriesExcept(keepIds.toSet()) } }
+      }
+    }
+
+    AsyncFunction("deleteRepositoryIndex") Coroutine { repositoryId: String ->
+      indexLock.withLock {
+        withContext(Dispatchers.IO) { openIndex(context).use { it.deleteRepository(repositoryId) } }
       }
     }
   }
@@ -150,22 +186,27 @@ private fun directFile(context: Context, uri: Uri): File? {
   return File(root, relativePath)
 }
 
-private fun listDirectory(context: Context, uri: Uri): List<Map<String, Any?>> =
-  directFile(context, uri)?.takeIf { it.isDirectory }?.let { listDirectDirectory(uri, documentIdOf(context, uri), it) }
+internal fun listDirectory(context: Context, uri: Uri): List<Map<String, Any?>> =
+  directFile(context, uri)?.takeIf { it.isDirectory && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O }?.let { listDirectDirectory(uri, documentIdOf(context, uri), it) }
     ?: listProviderDirectory(context, uri)
 
+@RequiresApi(Build.VERSION_CODES.O)
 private fun listDirectDirectory(uri: Uri, documentId: String, directory: File): List<Map<String, Any?>> =
-  directory.listFiles().orEmpty().map { file ->
+  directory.listFiles().orEmpty().mapNotNull { file ->
+    val attributes = runCatching {
+      Files.readAttributes(file.toPath(), BasicFileAttributes::class.java)
+    }.getOrNull() ?: return@mapNotNull null
+
     val childId = documentId + PATH_SEPARATOR + file.name
     val childUri = DocumentsContract.buildDocumentUriUsingTree(uri, childId).toString()
-    val isDirectory = file.isDirectory
+    val isDirectory = attributes.isDirectory
 
     mapOf(
       "uri" to if (isDirectory) "$childUri/" else childUri,
       "name" to file.name,
       "isDirectory" to isDirectory,
-      "lastModified" to file.lastModified().toDouble(),
-      "size" to file.length().toDouble()
+      "lastModified" to attributes.lastModifiedTime().toMillis().toDouble(),
+      "size" to attributes.size().toDouble()
     )
   }
 
@@ -262,3 +303,33 @@ private fun readText(client: ContentProviderClient, uri: Uri): String? = runCatc
 }.getOrNull()
 
 private fun readText(file: File): String? = runCatching { file.readText() }.getOrNull()
+
+suspend fun <T> readAll(
+  context: Context,
+  uris: List<String>,
+  dispatcher: CoroutineDispatcher,
+  transform: (String) -> T
+): List<T?> {
+  val documents = uris.map(Uri::parse)
+  val client = lazy {
+    documents.firstOrNull()?.authority?.let(context.contentResolver::acquireUnstableContentProviderClient)
+  }
+
+  return try {
+    coroutineScope {
+      documents.map { uri ->
+        async(dispatcher) {
+          (directFile(context, uri)?.let(::readText) ?: client.value?.let { readText(it, uri) })?.let(transform)
+        }
+      }.awaitAll()
+    }
+  } finally {
+    if (client.isInitialized()) client.value?.close()
+  }
+}
+
+private fun openIndex(context: Context): RepositoryIndex {
+  val directory = File(context.filesDir, DATABASE_DIRECTORY).apply { mkdirs() }
+
+  return RepositoryIndex.open(File(directory, INDEX_DATABASE_NAME).path)
+}
