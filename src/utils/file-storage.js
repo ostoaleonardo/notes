@@ -363,6 +363,10 @@ const writeRepositoryIndex = (repositoryId, notes) => {
 const deleteRepositoryIndex = (repositoryId) => {
     const file = getRepositoryIndexFile(repositoryId)
     if (file.exists) file.delete()
+
+    RepositoryFs.deleteRepositoryIndex(repositoryId).catch((error) => {
+        logError(LOG_MESSAGES.ERROR_DELETING_NATIVE_INDEX, error)
+    })
 }
 
 export const fileStorage = {

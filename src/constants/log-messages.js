@@ -19,6 +19,8 @@ export const LOG_MESSAGES = {
     ERROR_PICKING_REPOSITORY: 'error picking repository',
     ERROR_PURCHASING_PRO: 'error purchasing pro',
     ERROR_READING_REPOSITORY_INDEX: 'error reading repository index',
+    ERROR_INDEXING_REPOSITORY: 'error indexing repository',
+    ERROR_DELETING_NATIVE_INDEX: 'error deleting native repository index',
     ERROR_WRITING_REPOSITORY_INDEX: 'error writing repository index',
     ERROR_READING_STORED_PRO_PURCHASE: 'error reading stored pro purchase',
     ERROR_RENAMING_REPOSITORY_FOLDER: 'error renaming repository folder',

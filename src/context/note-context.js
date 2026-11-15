@@ -19,6 +19,7 @@ import { collectTags } from '@/utils/note-tags'
 import { getNotePaths } from '@/utils/note-path'
 import { mergeLoadedNotes } from '@/utils/merge-loaded-notes'
 import { getIndexingStatus, setIndexingStatus } from '@/utils/indexing-status'
+import { syncRepositoryIndex } from '@/utils/repository-index'
 
 import { INDEXING_COMPLETE, INDEXING_NOTICE_MIN_FILES, INDEXING_STARTED } from '@/constants/indexing'
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
@@ -115,6 +116,7 @@ export const NoteProvider = ({ children }) => {
                 run.running = false
                 setLoadedRepositoryId(activeRepository.id)
                 if (getIndexingStatus()) setIndexingStatus(INDEXING_COMPLETE)
+                syncRepositoryIndex(activeRepositoryTree, repositories)
             }
         }
     }
