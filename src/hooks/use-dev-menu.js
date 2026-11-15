@@ -22,6 +22,7 @@ import { readBundledBytes, readBundledText } from '@/utils/bundled-asset'
 import { getFileMimeType } from '@/utils/attachments'
 import { buildNotePath } from '@/utils/note-path'
 import { invalidateMediaIndex } from '@/utils/media-index'
+import { checkIndex } from '@/utils/index-check'
 
 import { APP_STATES } from '@/constants/app-state'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
@@ -54,6 +55,7 @@ export function useDevMenu() {
 
     const {
         writeNoteFile,
+        scanMarkdownFiles,
         findFile,
         clearRepository,
         createSubdirectory,
@@ -212,6 +214,11 @@ export function useDevMenu() {
             {
                 name: 'Revoke permissions',
                 callback: resetPermissions,
+                shouldCollapse: true
+            },
+            {
+                name: 'Check native index',
+                callback: () => checkIndex(repositories, scanMarkdownFiles).catch((error) => console.log('[index] failed', error)),
                 shouldCollapse: true
             },
             {
