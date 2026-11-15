@@ -9,7 +9,6 @@ export const LOG_MESSAGES = {
     ERROR_IMPORTING_MARKDOWN_FILE: 'error importing markdown file',
     ERROR_SHARING_TEXT: 'error saving shared text',
     ERROR_KEEPING_EXTERNAL_TEXT: 'error keeping external text',
-    ERROR_LISTING_DIRECTORY: 'error listing directory',
     ERROR_LOADING_APP: 'error loading app',
     ERROR_LOADING_EDITOR_FONTS: 'error loading editor fonts',
     ERROR_LOADING_NOTES: 'error loading notes',

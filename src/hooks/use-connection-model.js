@@ -1,26 +1,26 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { useAttachmentFiles } from './use-attachment-files'
 import { useNotes } from './use-notes'
 import { useRepositories } from './use-repositories'
 import { getConnectionModel } from '@/utils/connection-model-cache'
 
+const NO_FILES = []
+
 export function useConnectionModel() {
     const { notes, notePaths } = useNotes()
     const { activeRepository, getRootRepository } = useRepositories()
     const listFiles = useAttachmentFiles()
-    const [files, setFiles] = useState(listFiles)
-    const mounted = useRef(false)
+    const [files, setFiles] = useState(NO_FILES)
 
     useEffect(() => {
-        if (!mounted.current) {
-            mounted.current = true
-            return undefined
-        }
+        let cancelled = false
 
-        const task = requestIdleCallback(() => setFiles(listFiles()))
+        listFiles().then((rows) => {
+            if (!cancelled) setFiles(rows)
+        })
 
-        return () => cancelIdleCallback(task)
+        return () => { cancelled = true }
     }, [listFiles, notes])
 
     const rootName = activeRepository ? getRootRepository(activeRepository).alias : ''

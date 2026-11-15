@@ -21,7 +21,7 @@ export function useEditorLinkHandlers({ id, onTagPress, onJumpToAnchor }) {
 
     const { setMissing } = missingNote
 
-    const onLinkPress = useCallback((url) => {
+    const onLinkPress = useCallback(async (url) => {
         const link = resolveLinkPress(url)
         if (!link) return
 
@@ -40,7 +40,7 @@ export function useEditorLinkHandlers({ id, onTagPress, onJumpToAnchor }) {
                 linkMention(link.path)
                 break
             case LINK_TYPES.FILE:
-                openFile(findFileByTarget(listFiles(), link.target))
+                openFile(findFileByTarget(await listFiles(), link.target))
                 break
             default:
                 Linking.openURL(link.url)

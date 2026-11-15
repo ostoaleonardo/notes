@@ -1,13 +1,17 @@
 import { useCallback } from 'react'
 
+import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
-import { buildFileRows, collectFiles } from '@/utils/attachments'
-import { listDirectoryEntries } from '@/utils/list-directory-entries'
+import { buildFileRows, filterFileEntries } from '@/utils/attachments'
+import { getAttachmentEntries } from '@/utils/media-index'
 
 export const useAttachmentFiles = () => {
     const { activeRepository, getRootRepository } = useRepositories()
+    const { scanAttachments } = useFileStorage()
 
-    return useCallback(() => (
-        buildFileRows(collectFiles(getRootRepository(activeRepository).uri, listDirectoryEntries))
-    ), [activeRepository, getRootRepository])
+    return useCallback(async () => {
+        const entries = await getAttachmentEntries(getRootRepository(activeRepository).uri, scanAttachments)
+
+        return buildFileRows(filterFileEntries(entries))
+    }, [activeRepository, getRootRepository, scanAttachments])
 }

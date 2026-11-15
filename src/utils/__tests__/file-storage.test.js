@@ -563,6 +563,22 @@ describe('scanning a folder', () => {
         expect(listDirectory).toHaveBeenCalledTimes(2)
     })
 
+    test('lists the files that are not notes through the whole tree', async () => {
+        seedFile(`${FOLDER}/a.md`)
+        seedFile(`${FOLDER}/pic.png`)
+        seedDir(`${FOLDER}/files`)
+        seedFile(`${FOLDER}/files/doc.pdf`)
+        seedDir(`${FOLDER}/.trash`)
+        seedFile(`${FOLDER}/.trash/gone.png`)
+
+        const found = await fileStorage.scanAttachments(FOLDER)
+
+        expect(found).toEqual([
+            { filename: 'pic.png', uri: `${FOLDER}/pic.png`, folder: '' },
+            { filename: 'doc.pdf', uri: `${FOLDER}/files/doc.pdf`, folder: 'files' }
+        ])
+    })
+
     test('reads several files at once', async () => {
         seedFile(`${FOLDER}/a.md`, 'first')
         seedFile(`${FOLDER}/b.md`, 'second')

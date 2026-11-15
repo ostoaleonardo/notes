@@ -40,16 +40,12 @@ export const resolveAttachmentTarget = ({ location, folderName }, { rootUri, not
     }
 }
 
-export const collectMediaUris = (directoryUri, listEntries, found = new Map()) => {
-    for (const entry of listEntries(directoryUri)) {
-        if (entry.name.startsWith('.')) continue
+export const buildMediaUris = (entries) => {
+    const found = new Map()
 
-        if (entry.isDirectory) {
-            collectMediaUris(entry.uri, listEntries, found)
-        } else if (EMBED_MEDIA_PATTERN.test(entry.name) && !found.has(entry.name)) {
-            found.set(entry.name, entry.uri)
-        }
-    }
+    entries.forEach(({ filename, uri }) => {
+        if (EMBED_MEDIA_PATTERN.test(filename) && !found.has(filename)) found.set(filename, uri)
+    })
 
     return found
 }
@@ -64,19 +60,7 @@ export const getFileKind = (filename) => (
     filename.includes('.') ? FILE_KIND_BY_EXTENSION[getFileExtension(filename)] ?? null : null
 )
 
-export const collectFiles = (directoryUri, listEntries, folder = '', found = []) => {
-    for (const entry of listEntries(directoryUri)) {
-        if (entry.name.startsWith('.')) continue
-
-        if (entry.isDirectory) {
-            collectFiles(entry.uri, listEntries, folder ? folder + '/' + entry.name : entry.name, found)
-        } else if (getFileKind(entry.name)) {
-            found.push({ filename: entry.name, uri: entry.uri, folder })
-        }
-    }
-
-    return found
-}
+export const filterFileEntries = (entries) => entries.filter(({ filename }) => getFileKind(filename))
 
 export const buildFileRows = (files) => (
     files

@@ -1,13 +1,17 @@
 import { useCallback } from 'react'
 
+import { useFileStorage } from './use-file-storage'
 import { useRepositories } from './use-repositories'
-import { getMediaIndex } from '@/utils/media-index'
-import { listDirectoryEntries } from '@/utils/list-directory-entries'
+import { buildMediaUris } from '@/utils/attachments'
+import { getAttachmentEntries } from '@/utils/media-index'
 
 export const useMediaUris = () => {
     const { activeRepository, getRootRepository } = useRepositories()
+    const { scanAttachments } = useFileStorage()
 
-    return useCallback(() => (
-        getMediaIndex(getRootRepository(activeRepository).uri, listDirectoryEntries)
-    ), [activeRepository, getRootRepository])
+    return useCallback(async () => {
+        const entries = await getAttachmentEntries(getRootRepository(activeRepository).uri, scanAttachments)
+
+        return buildMediaUris(entries)
+    }, [activeRepository, getRootRepository, scanAttachments])
 }

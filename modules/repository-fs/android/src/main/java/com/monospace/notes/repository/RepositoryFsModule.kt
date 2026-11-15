@@ -29,6 +29,8 @@ private const val EXTERNAL_STORAGE_AUTHORITY = "com.android.externalstorage.docu
 private const val PRIMARY_VOLUME = "primary"
 private const val VOLUME_SEPARATOR = ":"
 private const val PATH_SEPARATOR = "/"
+private const val HIDDEN_PREFIX = "."
+private const val NOTE_EXTENSION = ".md"
 
 private val CHILD_COLUMNS = arrayOf(
   Document.COLUMN_DOCUMENT_ID,
@@ -58,6 +60,19 @@ class RepositoryFsModule : Module() {
 
     Function("revokePermissions") {
       revokePermissions(context)
+    }
+
+    AsyncFunction("listAttachments") Coroutine { uri: String ->
+      withContext(Dispatchers.IO) {
+        val found = mutableListOf<Triple<String, String, String>>()
+        walkAttachments(context, Uri.parse(uri), "", found)
+
+        mapOf(
+          "uris" to found.map { it.first },
+          "names" to found.map { it.second },
+          "folders" to found.map { it.third }
+        )
+      }
     }
 
     Function("findChild") { uri: String, name: String ->
@@ -153,6 +168,21 @@ private fun listDirectDirectory(uri: Uri, documentId: String, directory: File): 
       "size" to file.length().toDouble()
     )
   }
+
+private fun walkAttachments(context: Context, uri: Uri, folder: String, found: MutableList<Triple<String, String, String>>) {
+  listDirectory(context, uri).forEach { entry ->
+    val name = entry["name"] as String
+    val entryUri = entry["uri"] as String
+
+    if (name.startsWith(HIDDEN_PREFIX)) return@forEach
+
+    if (entry["isDirectory"] == true) {
+      walkAttachments(context, Uri.parse(entryUri), if (folder.isEmpty()) name else "$folder$PATH_SEPARATOR$name", found)
+    } else if (!name.endsWith(NOTE_EXTENSION, ignoreCase = true)) {
+      found.add(Triple(entryUri, name, folder))
+    }
+  }
+}
 
 private fun toColumns(entries: List<Map<String, Any?>>): Map<String, List<Any?>> = mapOf(
   "uris" to entries.map { it["uri"] },

@@ -36,7 +36,7 @@ export function useFiles() {
 
     const buildHtml = async (note) => {
         const names = extractEmbedImageNames(note.note || '')
-        const uris = names.length ? listMediaUris() : new Map()
+        const uris = names.length ? await listMediaUris() : new Map()
         const images = new Map()
 
         await Promise.all(names.map(async (name) => {

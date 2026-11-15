@@ -1,6 +1,6 @@
 import { AppState } from 'react-native'
 
-import { collectMediaUris } from '@/utils/attachments'
+import { APP_STATES } from '@/constants/app-state'
 
 let cached = null
 
@@ -8,12 +8,12 @@ export const invalidateMediaIndex = () => {
     cached = null
 }
 
-export const getMediaIndex = (rootUri, listEntries) => {
-    if (cached?.rootUri !== rootUri) cached = { rootUri, uris: collectMediaUris(rootUri, listEntries) }
+export const getAttachmentEntries = (rootUri, scanAttachments) => {
+    if (cached?.rootUri !== rootUri) cached = { rootUri, entries: scanAttachments(rootUri) }
 
-    return cached.uris
+    return cached.entries
 }
 
 AppState.addEventListener('change', (state) => {
-    if (state === 'active') invalidateMediaIndex()
+    if (state === APP_STATES.ACTIVE) invalidateMediaIndex()
 })

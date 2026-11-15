@@ -115,6 +115,12 @@ const scanSubdirectories = async (directoryUri) => (await scanEntries(directoryU
 
 const readTextFiles = (fileUris) => RepositoryFs.readTextFiles(fileUris)
 
+const scanAttachments = async (rootUri) => {
+    const { uris, names, folders } = await RepositoryFs.listAttachments(rootUri)
+
+    return names.map((filename, index) => ({ filename, uri: uris[index], folder: folders[index] }))
+}
+
 const deleteDirectory = (directoryUri) => {
     new Directory(directoryUri).delete()
     invalidateMediaIndex()
@@ -362,6 +368,7 @@ export const fileStorage = {
     listSubdirectories,
     scanMarkdownFiles,
     scanSubdirectories,
+    scanAttachments,
     readTextFiles,
     readRepositoryIndex,
     writeRepositoryIndex,

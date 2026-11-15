@@ -13,7 +13,13 @@ export const DrawerFilesView = ({ closeDrawer }) => {
     const [rows, setRows] = useState([])
 
     useEffect(() => {
-        setRows(listFiles())
+        let cancelled = false
+
+        listFiles().then((files) => {
+            if (!cancelled) setRows(files)
+        })
+
+        return () => { cancelled = true }
     }, [listFiles])
 
     const openFile = useOpenFile()

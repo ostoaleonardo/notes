@@ -1,7 +1,7 @@
 import {
     buildFileRows,
-    collectFiles,
-    collectMediaUris,
+    buildMediaUris,
+    filterFileEntries,
     findFileByTarget,
     getFileKind,
     readAttachmentSettings,
@@ -87,85 +87,66 @@ describe('attachment settings', () => {
     })
 })
 
-describe('collect media uris', () => {
-    const tree = {
-        root: [
-            { name: 'pasted.png', uri: 'root/pasted.png' },
-            { name: 'note.md', uri: 'root/note.md' },
-            { name: 'doc.pdf', uri: 'root/doc.pdf' },
-            { name: 'notes.txt', uri: 'root/notes.txt' },
-            { name: '.trash', uri: 'root/.trash', isDirectory: true },
-            { name: 'files', uri: 'root/files', isDirectory: true }
-        ],
-        'root/.trash': [{ name: 'gone.png', uri: 'root/.trash/gone.png' }],
-        'root/files': [
-            { name: 'deep.JPG', uri: 'root/files/deep.JPG' },
-            { name: 'song.mp3', uri: 'root/files/song.mp3' },
-            { name: 'clip.webm', uri: 'root/files/clip.webm' },
-            { name: 'pasted.png', uri: 'root/files/pasted.png' }
-        ]
-    }
+const entry = (filename, folder = '') => ({
+    filename,
+    folder,
+    uri: `root/${folder ? folder + '/' : ''}${filename}`
+})
 
-    test('finds images by name anywhere in the vault', () => {
-        const found = collectMediaUris('root', (uri) => tree[uri])
+describe('build media uris', () => {
+    const entries = [
+        entry('pasted.png'),
+        entry('doc.pdf'),
+        entry('notes.txt'),
+        entry('deep.JPG', 'files'),
+        entry('song.mp3', 'files'),
+        entry('clip.webm', 'files'),
+        entry('pasted.png', 'files')
+    ]
+
+    test('finds images by name anywhere in the repository', () => {
+        const found = buildMediaUris(entries)
 
         expect(found.get('deep.JPG')).toBe('root/files/deep.JPG')
         expect(found.get('pasted.png')).toBe('root/pasted.png')
     })
 
     test('finds pdf files', () => {
-        const found = collectMediaUris('root', (uri) => tree[uri])
-
-        expect(found.get('doc.pdf')).toBe('root/doc.pdf')
+        expect(buildMediaUris(entries).get('doc.pdf')).toBe('root/doc.pdf')
     })
 
     test('finds audio and video files', () => {
-        const found = collectMediaUris('root', (uri) => tree[uri])
+        const found = buildMediaUris(entries)
 
         expect(found.get('song.mp3')).toBe('root/files/song.mp3')
         expect(found.get('clip.webm')).toBe('root/files/clip.webm')
     })
 
-    test('skips hidden folders and files that cannot be previewed', () => {
-        const found = collectMediaUris('root', (uri) => tree[uri])
-
-        expect(found.has('gone.png')).toBe(false)
-        expect(found.has('note.md')).toBe(false)
-        expect(found.has('notes.txt')).toBe(false)
+    test('skips files that cannot be previewed', () => {
+        expect(buildMediaUris(entries).has('notes.txt')).toBe(false)
     })
 })
 
-describe('collect files', () => {
-    const tree = {
-        root: [
-            { name: 'song.mp3', uri: 'root/song.mp3' },
-            { name: 'note.md', uri: 'root/note.md' },
-            { name: '.trash', uri: 'root/.trash', isDirectory: true },
-            { name: 'files', uri: 'root/files', isDirectory: true }
-        ],
-        'root/.trash': [{ name: 'gone.pdf', uri: 'root/.trash/gone.pdf' }],
-        'root/files': [
-            { name: 'song.mp3', uri: 'root/files/song.mp3' },
-            { name: 'deep', uri: 'root/files/deep', isDirectory: true }
-        ],
-        'root/files/deep': [{ name: 'doc.PDF', uri: 'root/files/deep/doc.PDF' }]
-    }
+describe('filter file entries', () => {
+    const entries = [
+        entry('song.mp3'),
+        entry('readme'),
+        entry('data.bin'),
+        entry('doc.PDF', 'files/deep')
+    ]
 
-    test('lists every supported file with its folder', () => {
-        const found = collectFiles('root', (uri) => tree[uri])
-
-        expect(found).toEqual([
+    test('keeps the supported files with their folder', () => {
+        expect(filterFileEntries(entries)).toEqual([
             { filename: 'song.mp3', uri: 'root/song.mp3', folder: '' },
-            { filename: 'song.mp3', uri: 'root/files/song.mp3', folder: 'files' },
             { filename: 'doc.PDF', uri: 'root/files/deep/doc.PDF', folder: 'files/deep' }
         ])
     })
 
-    test('skips hidden folders and unsupported files', () => {
-        const names = collectFiles('root', (uri) => tree[uri]).map((file) => file.filename)
+    test('drops names without a supported extension', () => {
+        const names = filterFileEntries(entries).map((file) => file.filename)
 
-        expect(names).not.toContain('gone.pdf')
-        expect(names).not.toContain('note.md')
+        expect(names).not.toContain('readme')
+        expect(names).not.toContain('data.bin')
     })
 })
 

@@ -1,10 +1,10 @@
-import { renderHook } from '@testing-library/react-native'
+import { act, renderHook } from '@testing-library/react-native'
 
 import { useResolvedWikiLinks } from '../use-resolved-wiki-links'
 
 const mockNotes = [{ path: 'repo::Target.md', title: 'Target', note: 'body' }]
 const mockNotePaths = new Map([['repo::Target.md', '']])
-const mockListMediaUris = jest.fn(() => new Map([
+const mockListMediaUris = jest.fn(async () => new Map([
     ['pic.png', 'file:///pic.png'],
     ['song.mp3', 'file:///song.mp3'],
     ['big.mp4', 'file:///big.mp4'],
@@ -21,10 +21,16 @@ jest.mock('../use-media-uris', () => ({
     useMediaUris: () => mockListMediaUris
 }))
 
-const setup = (value, selfPath = 'repo::Self.md', pdf = false) => renderHook(
-    ({ text }) => useResolvedWikiLinks(text, selfPath, pdf),
-    { initialProps: { text: value } }
-)
+const setup = async (value, selfPath = 'repo::Self.md', pdf = false) => {
+    const hook = await renderHook(
+        ({ text }) => useResolvedWikiLinks(text, selfPath, pdf),
+        { initialProps: { text: value } }
+    )
+
+    await act(async () => {})
+
+    return hook
+}
 
 describe('resolved wiki links', () => {
     beforeEach(() => {

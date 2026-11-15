@@ -31,12 +31,19 @@ export const useEmbedMediaMap = (value, enabled, pdf = false) => {
         let cancelled = false
         const cache = cacheRef.current
         const missing = namesKey.split('\n').filter((name) => !cache.has(name))
-        const uris = missing.length ? listMediaUris() : EMPTY_MAP
 
-        Promise.all(missing.map(async (name) => {
-            const uri = uris.get(name)
-            if (uri && isEmbeddableMedia(name, uri)) cache.set(name, await resolveUrl(uri))
-        })).catch((error) => logError(LOG_MESSAGES.ERROR_RESOLVING_EMBEDDED_IMAGES, error)).then(() => {
+        const resolveMissing = async () => {
+            if (!missing.length) return
+
+            const uris = await listMediaUris()
+
+            await Promise.all(missing.map(async (name) => {
+                const uri = uris.get(name)
+                if (uri && isEmbeddableMedia(name, uri)) cache.set(name, await resolveUrl(uri))
+            }))
+        }
+
+        resolveMissing().catch((error) => logError(LOG_MESSAGES.ERROR_RESOLVING_EMBEDDED_IMAGES, error)).then(() => {
             if (cancelled) return
             const names = namesKey.split('\n')
             setMap(new Map(names.map((name) => [name, cache.get(name) ?? null])))

@@ -31,6 +31,29 @@ jest.mock('../modules/repository-fs', () => {
                 }
             },
             readTextFiles,
+            listAttachments: async (uri) => {
+                const { Directory, File } = require('expo-file-system')
+                const found = []
+
+                const walk = (directoryUri, folder) => {
+                    new Directory(directoryUri).list().forEach((entry) => {
+                        if (entry.name.startsWith('.')) return
+                        if (entry instanceof Directory) {
+                            walk(entry.uri, folder ? `${folder}/${entry.name}` : entry.name)
+                        } else if (entry instanceof File && !entry.name.toLowerCase().endsWith('.md')) {
+                            found.push({ uri: entry.uri, name: entry.name, folder })
+                        }
+                    })
+                }
+
+                walk(uri, '')
+
+                return {
+                    uris: found.map((file) => file.uri),
+                    names: found.map((file) => file.name),
+                    folders: found.map((file) => file.folder)
+                }
+            },
             findChild: (uri, name) => (
                 listDirectorySync(uri).find((entry) => entry.name === name) ?? null
             ),
