@@ -1,3 +1,5 @@
+import { NOTE_SORTS } from '@/constants/note-sort'
+
 export const SCALE_CHECK_LOG_PREFIX = '[scale]'
 export const SCALE_CHECK_FOLDER_URI = 'content://com.android.externalstorage.documents/tree/primary%3ADocuments%2Fstress-20k'
 export const SCALE_CHECK_REPOSITORY_ID = 'scale-check'
@@ -5,7 +7,10 @@ export const SCALE_CHECK_READ_BATCH = 500
 export const SCALE_CHECK_RUNS = 3
 export const SCALE_CHECK_TAG = 'tag7'
 
+export const SCALE_CHECK_SORT = NOTE_SORTS.NAME_ASC
+
 export const SCALE_CHECK_SEARCHES = [
+    'a',
     'topic 12',
     'note 19999',
     'note 1999',

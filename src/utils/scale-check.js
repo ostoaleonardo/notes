@@ -1,16 +1,20 @@
-import { openDatabaseAsync } from 'expo-sqlite'
 import RepositoryFs from 'repository-fs'
 
+import { queryIndex } from '@/utils/index-query'
 import { buildLinkGraph } from '@/utils/connection-model'
 import { buildTagTree } from '@/utils/drawer-tags'
 import { extractProperties, parseFrontmatter, readFrontmatterTags } from '@/utils/frontmatter'
 import { buildNotePath } from '@/utils/note-path'
 import { collectTags } from '@/utils/note-tags'
-import { searchIndex } from '@/utils/search-index'
+import { createMemorySource, createSearchCursor } from '@/utils/search-cursor'
+import { SourceOverflowError, searchIndex } from '@/utils/search-index'
+import { getNoteComparator, sortNotes } from '@/utils/note-sort'
+import { sortInChunks } from '@/utils/sort-in-chunks'
 import { searchNotes } from '@/utils/search-filter'
 import { parseSearchQuery } from '@/utils/search-parser'
 
 import { NOTE_FILE_EXTENSION } from '@/constants/file-storage'
+import { SEARCH_PAGE_SIZE } from '@/constants/search-index'
 import {
     SCALE_CHECK_FOLDER_URI,
     SCALE_CHECK_FTS_QUERIES,
@@ -19,6 +23,7 @@ import {
     SCALE_CHECK_REPOSITORY_ID,
     SCALE_CHECK_RUNS,
     SCALE_CHECK_SEARCHES,
+    SCALE_CHECK_SORT,
     SCALE_CHECK_SQL,
     SCALE_CHECK_TAG
 } from '@/constants/scale-check'
@@ -91,6 +96,37 @@ const measureJs = async (notes) => {
     }
 }
 
+const drainCursor = async (makeSource, ast, context, start = performance.now()) => {
+    const cursor = createSearchCursor({ source: makeSource(), ast, context })
+    const first = await cursor.next(SEARCH_PAGE_SIZE)
+    const firstMs = performance.now() - start
+    const results = [...first.found]
+    let done = first.done
+
+    while (!done) {
+        const next = await cursor.next(SEARCH_PAGE_SIZE)
+        results.push(...next.found)
+        done = next.done
+    }
+
+    return { firstMs: firstMs.toFixed(0), totalMs: (performance.now() - start).toFixed(0), first: first.found.length, results }
+}
+
+const drainWithFallback = async (source, notes, ast, context) => {
+    const start = performance.now()
+    const memorySource = () => createMemorySource(notes, SCALE_CHECK_SORT)
+
+    if (!source) return { via: 'memory', ...await drainCursor(memorySource, ast, context, start) }
+
+    try {
+        return { via: 'database', ...await drainCursor(() => source, ast, context, start) }
+    } catch (error) {
+        if (!(error instanceof SourceOverflowError)) throw error
+
+        return { via: 'memory after overflow', ...await drainCursor(memorySource, ast, context, start) }
+    }
+}
+
 const measurePrefilter = async (notes) => {
     const notePaths = new Map(notes.map((note) => [note.path, '']))
     const context = { pinned: new Set(), notePaths, matchCase: false }
@@ -98,24 +134,34 @@ const measurePrefilter = async (notes) => {
     const refresh = await best(() => searchIndex.refresh(notes))
     log(`search index coverage refresh: best ${refresh.ms} ms`)
 
+    const sortStart = performance.now()
+    sortNotes(notes, SCALE_CHECK_SORT)
+    log(`js sort of ${notes.length} notes by name in one pass: ${(performance.now() - sortStart).toFixed(0)} ms`)
+
+    const chunkStart = performance.now()
+    await sortInChunks(notes, getNoteComparator(SCALE_CHECK_SORT))
+    log(`js sort in chunks: ${(performance.now() - chunkStart).toFixed(0)} ms`)
+
     for (const query of SCALE_CHECK_SEARCHES) {
         const ast = parseSearchQuery(query)
-        const full = await best(() => searchNotes(notes, ast, context, null))
-        const candidates = await best(() => searchIndex.findCandidates(ast, notes, notePaths))
-        const filtered = await best(() => searchNotes(candidates.result || notes, ast, context, null))
-        const same = sameResults(full.result, filtered.result)
-        const size = candidates.result ? candidates.result.length : 'no prefilter'
+        const full = await best(() => searchNotes(notes, ast, context, SCALE_CHECK_SORT))
+        const request = { ast, notes, notePaths, sort: SCALE_CHECK_SORT }
+        const source = searchIndex.createSource(request)
+        const paged = await drainWithFallback(source, notes, ast, context)
+        const memory = await drainCursor(() => createMemorySource(notes, SCALE_CHECK_SORT), ast, context)
 
-        log(`prefiltered search "${query}": candidates ${candidates.ms} ms (${size}), evaluate ${filtered.ms} ms, `
-            + `total ${Number(candidates.ms) + Number(filtered.ms)} ms vs full ${full.ms} ms, `
-            + `${filtered.result.length} results, same as full scan: ${same}`)
+        log(`paged search "${query}" via ${paged.via}: first page ${paged.firstMs} ms (${paged.first}), `
+            + `everything ${paged.totalMs} ms (${paged.results.length} results), `
+            + `memory pages: first ${memory.firstMs} ms, everything ${memory.totalMs} ms, `
+            + `full scan ${full.ms} ms (${full.result.length} results), `
+            + `same order as full scan: ${sameResults(full.result, paged.results)}`)
     }
 }
 
 const sameResults = (a, b) => a.length === b.length && a.every((note, index) => note === b[index])
 
-const queryTime = async (db, label, sql, ...params) => {
-    const search = await best(() => db.getAllAsync(sql, ...params))
+const queryTime = async (label, sql, ...params) => {
+    const search = await best(() => queryIndex(sql, ...params))
     log(`sqlite ${label}: best ${search.ms} ms (first ${search.first} ms), ${search.result.length} rows`)
 }
 
@@ -131,18 +177,15 @@ const measureNative = async () => {
     const noop = await best(() => RepositoryFs.indexRepository(SCALE_CHECK_REPOSITORY_ID, SCALE_CHECK_FOLDER_URI))
     log(`native reconcile with no changes: best ${noop.ms} ms`)
 
-    const db = await openDatabaseAsync(RepositoryFs.indexDatabaseName)
-
-    await queryTime(db, 'tags with counts', SCALE_CHECK_SQL.TAGS)
-    await queryTime(db, 'notes with one tag', SCALE_CHECK_SQL.TAG_NOTES, SCALE_CHECK_TAG)
+    await queryTime('tags with counts', SCALE_CHECK_SQL.TAGS)
+    await queryTime('notes with one tag', SCALE_CHECK_SQL.TAG_NOTES, SCALE_CHECK_TAG)
 
     for (const query of SCALE_CHECK_FTS_QUERIES) {
-        await queryTime(db, `fts ${query}`, SCALE_CHECK_SQL.SEARCH, query)
+        await queryTime(`fts ${query}`, SCALE_CHECK_SQL.SEARCH, query)
     }
 
-    await queryTime(db, 'resolved link edges', SCALE_CHECK_SQL.EDGES, SCALE_CHECK_REPOSITORY_ID)
+    await queryTime('resolved link edges', SCALE_CHECK_SQL.EDGES, SCALE_CHECK_REPOSITORY_ID)
 
-    await db.closeAsync()
 }
 
 export const checkScale = async () => {
