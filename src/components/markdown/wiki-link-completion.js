@@ -1,7 +1,7 @@
 import { Facet } from '@codemirror/state'
 
 import { generateBlockId } from '@/utils/block-refs'
-import { getBlockSuggestions } from '@/utils/note-entries'
+import { filterBlockSuggestions, resolveBlockTarget } from '@/utils/note-entries'
 
 import { WIKI_LINK_FORMATS, WIKI_LINK_CLOSING, WIKI_LINK_TYPING_PATTERN } from '@/constants/wiki-links'
 import { BLOCK_COMPLETION_PATTERN } from '@/constants/block-refs'
@@ -12,6 +12,10 @@ export const noteEntriesFacet = Facet.define({
 })
 
 export const blockIdCreatorFacet = Facet.define({
+    combine: (values) => values[values.length - 1]
+})
+
+export const blockLoaderFacet = Facet.define({
     combine: (values) => values[values.length - 1]
 })
 
@@ -87,14 +91,21 @@ const applyBlockId = (view, from, to, id) => {
     })
 }
 
-export const blockCompletionSource = (context) => {
+export const blockCompletionSource = async (context) => {
     const match = context.matchBefore(BLOCK_COMPLETION_PATTERN)
     if (!match) return null
 
     const [, target, query] = BLOCK_COMPLETION_PATTERN.exec(match.text)
     const entries = context.state.facet(noteEntriesFacet)
-    const suggestions = getBlockSuggestions(entries, target, query)
+    const path = resolveBlockTarget(entries, target)
+    const loadBlocks = context.state.facet(blockLoaderFacet)?.current
+    if (!path || !loadBlocks) return null
+
+    const blocks = await loadBlocks(path)
+    const suggestions = filterBlockSuggestions(path, blocks, query)
     if (!suggestions.length) return null
+
+    const taken = blocks.labeled.map(({ id }) => id)
 
     return {
         from: match.to - query.length,
@@ -113,7 +124,6 @@ export const blockCompletionSource = (context) => {
             return {
                 label: preview,
                 apply: (view, _completion, from, to) => {
-                    const taken = entries.find((entry) => entry.id === path)?.blocks.map(({ id }) => id)
                     const id = generateBlockId(taken)
 
                     applyBlockId(view, from, to, id)

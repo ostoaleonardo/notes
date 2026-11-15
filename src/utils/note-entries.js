@@ -4,27 +4,15 @@ import { getAliases, resolveWikiLinkTarget } from '@/utils/wiki-links'
 const blocksByPath = new Map()
 const resolverInputsByEntries = new WeakMap()
 
-const areBlocksEqual = (a, b) => (
-    a.length === b.length &&
-    a.every((block, index) => block.id === b[index].id && block.preview === b[index].preview)
-)
-
-const arePreviewsEqual = (a, b) => (
-    a.length === b.length &&
-    a.every((block, index) => block.preview === b[index].preview)
-)
-
 const areEntriesEqual = (a, b) => (
     a.id === b.id &&
     a.title === b.title &&
     a.path === b.path &&
     a.aliases.length === b.aliases.length &&
-    a.aliases.every((alias, index) => alias === b.aliases[index]) &&
-    areBlocksEqual(a.blocks, b.blocks) &&
-    arePreviewsEqual(a.unlabeled, b.unlabeled)
+    a.aliases.every((alias, index) => alias === b.aliases[index])
 )
 
-const getBlocks = (note) => {
+export const getNoteBlocks = (note) => {
     const body = note.note || ''
     const cached = blocksByPath.get(note.path)
     if (cached?.body === body) return cached
@@ -47,18 +35,12 @@ export const areNoteEntriesEqual = (previous, next) => (
 export const buildNoteEntries = (notes, notePaths) => (
     notes
         .filter((note) => note.title)
-        .map((note) => {
-            const { labeled, unlabeled } = getBlocks(note)
-
-            return {
-                id: note.path,
-                title: note.title,
-                aliases: getAliases(note),
-                path: notePaths.get(note.path) || '',
-                blocks: labeled,
-                unlabeled
-            }
-        })
+        .map((note) => ({
+            id: note.path,
+            title: note.title,
+            aliases: getAliases(note),
+            path: notePaths.get(note.path) || ''
+        }))
 )
 
 export const getEntryResolverInputs = (entries) => {
@@ -72,19 +54,20 @@ export const getEntryResolverInputs = (entries) => {
     return resolverInputsByEntries.get(entries)
 }
 
-export const getBlockSuggestions = (entries, linkTarget, query) => {
+export const resolveBlockTarget = (entries, linkTarget) => {
     const { notes, notePaths } = getEntryResolverInputs(entries)
-    const note = resolveWikiLinkTarget(linkTarget, notes, notePaths)
-    if (!note) return []
 
+    return resolveWikiLinkTarget(linkTarget, notes, notePaths)?.path || null
+}
+
+export const filterBlockSuggestions = (path, blocks, query) => {
     const normalizedQuery = query.toLowerCase()
-    const entry = entries.find(({ id }) => id === note.path)
 
-    const labeled = (entry?.blocks || []).filter(({ id, preview }) => (
+    const labeled = blocks.labeled.filter(({ id, preview }) => (
         id.toLowerCase().includes(normalizedQuery) || preview.toLowerCase().includes(normalizedQuery)
     ))
-    const unlabeled = (entry?.unlabeled || [])
-        .map(({ preview }, index) => ({ preview, index, path: note.path }))
+    const unlabeled = blocks.unlabeled
+        .map(({ preview }, index) => ({ preview, index, path }))
         .filter(({ preview }) => preview.toLowerCase().includes(normalizedQuery))
 
     return [...labeled, ...unlabeled]

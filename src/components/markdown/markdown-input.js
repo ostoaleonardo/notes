@@ -14,6 +14,7 @@ import { useTags } from '@/hooks/use-tags'
 import { useStableCallback } from '@/hooks/use-stable-callback'
 import { useStableValue } from '@/hooks/use-stable-value'
 import { useBlockIdCreator } from '@/hooks/use-block-id-creator'
+import { useBlockLoader } from '@/hooks/use-block-loader'
 import { useDomValue } from '@/hooks/use-dom-value'
 import { useEditorLinkHandlers } from '@/hooks/use-editor-link-handlers'
 import { useEditorPreview } from '@/hooks/use-editor-preview'
@@ -71,11 +72,9 @@ export const MarkdownInput = ({
         if (value === WIKI_LINK_FORMATS.MARKDOWN) setLinkFormat(WIKI_LINK_FORMATS.MARKDOWN)
     })
 
-    const allNoteEntries = useNoteEntries()
-    const noteEntries = useMemo(() => allNoteEntries.map((entry) => (
-        entry.id === id ? { ...entry, unlabeled: [] } : entry
-    )), [allNoteEntries, id])
+    const noteEntries = useNoteEntries()
     const onCreateBlockId = useBlockIdCreator()
+    const onLoadBlocks = useBlockLoader(id)
 
     const { previewValue, mediaMapEntries, backlinksHtml } = useEditorPreview({ id, mode, value, showBacklinks })
     const { onLinkPress, onImagePress, missingNote } = useEditorLinkHandlers({ id, onTagPress, onJumpToAnchor })
@@ -132,6 +131,7 @@ export const MarkdownInput = ({
                     onLinkPress={onLinkPress}
                     onTagPress={onTagPress}
                     onCreateBlockId={onCreateBlockId}
+                    onLoadBlocks={onLoadBlocks}
                     onImagePress={onImagePress}
                     onToggleTask={onToggleTask}
                     placeholder={placeholder}

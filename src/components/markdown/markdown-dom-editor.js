@@ -49,6 +49,7 @@ export default function MarkdownDomEditor({
     onLinkPress,
     onTagPress,
     onCreateBlockId,
+    onLoadBlocks,
     onImagePress,
     onToggleTask,
     theme,
@@ -87,6 +88,7 @@ export default function MarkdownDomEditor({
     const onTagPressRef = useLatestRef(onTagPress)
     const onLinkPressRef = useLatestRef(onLinkPress)
     const onCreateBlockIdRef = useLatestRef(onCreateBlockId)
+    const onLoadBlocksRef = useLatestRef(onLoadBlocks)
 
     const [addPropertyRequest, setAddPropertyRequest] = useState(0)
     const onAddProperty = useCallback(() => setAddPropertyRequest((count) => count + 1), [])
@@ -127,6 +129,7 @@ export default function MarkdownDomEditor({
                 onTagPressRef,
                 onLinkPressRef,
                 onCreateBlockIdRef,
+                onLoadBlocksRef,
                 updateListener: buildUpdateListener({
                     onChangeRef,
                     onHistoryChangeRef,

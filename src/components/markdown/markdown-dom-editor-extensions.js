@@ -7,7 +7,12 @@ import { codeFolding } from '@codemirror/language'
 import { markdown } from '@codemirror/lang-markdown'
 import { GFM } from '@lezer/markdown'
 
-import { wikiLinkCompletionSource, blockCompletionSource, blockIdCreatorFacet } from './wiki-link-completion'
+import {
+    wikiLinkCompletionSource,
+    blockCompletionSource,
+    blockIdCreatorFacet,
+    blockLoaderFacet
+} from './wiki-link-completion'
 import { tagCompletionSource } from './tag-completion'
 import { inlineTagExtensions } from './inline-tag-highlight'
 import { filePressFacet } from './live-formatting/file-press'
@@ -55,6 +60,7 @@ export const buildEditorExtensions = ({
     onTagPressRef,
     onLinkPressRef,
     onCreateBlockIdRef,
+    onLoadBlocksRef,
     updateListener
 }) => [
     history(),
@@ -71,6 +77,7 @@ export const buildEditorExtensions = ({
     fileLinkPress(onLinkPressRef),
     filePressFacet.of(onLinkPressRef),
     blockIdCreatorFacet.of(onCreateBlockIdRef),
+    blockLoaderFacet.of(onLoadBlocksRef),
     autocompletion({ override: [wikiLinkCompletionSource, blockCompletionSource, tagCompletionSource] }),
     closeBrackets(),
     markdownAutoPair,
