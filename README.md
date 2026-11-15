@@ -238,6 +238,24 @@ Simple notes that stay on your phone.
 
 <br clear="right" />
 
+## Permissions
+
+Notes asks for as little as possible, and your notes never leave your phone.
+
+**Asked from you**
+
+- **Folder access:** Android's folder picker; Notes reads and writes only that folder.
+- **Camera (optional):** only to take photos for a note.
+- **All files access (optional):** faster loading of large repositories. Turn it on or off in Settings → Permissions.
+
+**Granted when you install**
+
+- **Internet and network state:** Google Play purchase check and images.
+- **Google Play billing:** buy or restore Pro.
+- **Vibration:** haptic feedback.
+- **Background work:** keeps widgets and background tasks running.
+- **Old storage access:** Android 12 or older only.
+
 ## Free vs Pro
 
 Notes is free. Pro unlocks more.
