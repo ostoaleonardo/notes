@@ -296,11 +296,6 @@ Notes is free. Pro unlocks more.
 5. Make your changes. Run `npm run lint` and `npm test`.
 6. Open a pull request.
 
-### Project layout
-
-- `src/ui` has the generic components, hooks and design tokens. It can't import app code, and ESLint enforces it.
-- `src/components` and `src/screens` have what is specific to Notes.
-
 ## Translations
 
 Help us bring Notes to your language on [Crowdin](https://crowdin.com/project/monospace-notes).
