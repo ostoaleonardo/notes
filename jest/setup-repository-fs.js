@@ -1,4 +1,4 @@
-jest.mock('../modules/repository-fs', () => {
+jest.mock('repository-fs', () => {
     const listDirectorySync = (uri) => {
         const { Directory } = require('expo-file-system')
 

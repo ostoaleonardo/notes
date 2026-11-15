@@ -1,24 +1,29 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "entry": [
-    "app/**/*.js",
-    "plugins/*.js",
-    "scripts/*.js",
-    "src/hooks/use-dev-menu.js",
-    "src/**/__perf__/*.perf.js"
-  ],
-  "project": [
-    "src/**/*.js",
-    "app/**/*.js",
-    "plugins/*.js",
-    "scripts/*.js"
-  ],
-  "paths": {
-    "@/*": [
-      "src/*"
-    ]
-  },
-  "ignoreDependencies": [
-    "expo-updates"
-  ]
+  "workspaces": {
+    ".": {
+      "entry": [
+        "app/**/*.js",
+        "plugins/*.js",
+        "scripts/*.js",
+        "src/hooks/use-dev-menu.js",
+        "src/**/__perf__/*.perf.js"
+      ],
+      "project": [
+        "src/**/*.js",
+        "app/**/*.js",
+        "plugins/*.js",
+        "scripts/*.js"
+      ],
+      "paths": {
+        "@/*": [
+          "src/*"
+        ]
+      },
+      "ignoreDependencies": [
+        "expo-updates"
+      ]
+    },
+    "packages/*": {}
+  }
 }

@@ -11,6 +11,9 @@
       }
     }
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
@@ -98,7 +101,8 @@
     "react-native-web": "^0.21.4",
     "react-native-webview": "14.0.1",
     "react-native-worklets": "0.13.0",
-    "react-native-zoom-toolkit": "^5.1.0"
+    "react-native-zoom-toolkit": "^5.1.0",
+    "repository-fs": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",

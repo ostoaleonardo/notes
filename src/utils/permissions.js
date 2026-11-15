@@ -1,3 +1,3 @@
-import RepositoryFs from '../../modules/repository-fs'
+import RepositoryFs from 'repository-fs'
 
 export const revokePermissions = () => RepositoryFs.revokePermissions()

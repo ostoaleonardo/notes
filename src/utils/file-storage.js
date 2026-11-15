@@ -1,6 +1,6 @@
 import { Directory, File, FileMode, Paths } from 'expo-file-system'
 
-import RepositoryFs from '../../modules/repository-fs'
+import RepositoryFs from 'repository-fs'
 
 import { getUniqueFilenameBy, stripNoteExtension } from '@/utils/note-filename'
 import { buildVersionKey } from '@/utils/note-version-location'

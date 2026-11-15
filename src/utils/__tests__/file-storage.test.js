@@ -1,4 +1,4 @@
-import RepositoryFs from '../../../modules/repository-fs'
+import RepositoryFs from 'repository-fs'
 import { fileStorage } from '../file-storage'
 import { logError } from '../log-error'
 import { getNoteLinkTexts } from '../note-links'

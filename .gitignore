@@ -37,4 +37,4 @@ google-services.json
 /android
 /coverage
 
-modules/*/android/build/
+packages/*/android/build/
