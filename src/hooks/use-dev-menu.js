@@ -23,6 +23,7 @@ import { getFileMimeType } from '@/utils/attachments'
 import { buildNotePath } from '@/utils/note-path'
 import { invalidateMediaIndex } from '@/utils/media-index'
 import { checkIndex } from '@/utils/index-check'
+import { checkScale } from '@/utils/scale-check'
 
 import { APP_STATES } from '@/constants/app-state'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
@@ -219,6 +220,11 @@ export function useDevMenu() {
             {
                 name: 'Check native index',
                 callback: () => checkIndex(repositories, scanMarkdownFiles).catch((error) => console.log('[index] failed', error)),
+                shouldCollapse: true
+            },
+            {
+                name: 'Check scale',
+                callback: () => checkScale().catch((error) => console.log('[scale] failed', error)),
                 shouldCollapse: true
             },
             {
