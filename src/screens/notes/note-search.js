@@ -15,9 +15,9 @@ import { SearchBar } from '@/components/input/search-bar'
 import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useSearchOptions } from '@/hooks/use-search-options'
+import { useSearchResults } from '@/hooks/use-search-results'
 import { useStorage } from '@/hooks/use-storage'
 import { useUtils } from '@/hooks/use-utils'
-import { searchNotes } from '@/utils/search-filter'
 import { collectHighlights } from '@/utils/search-context'
 import { getQueryChips } from '@/utils/search-query'
 import { buildTagTree } from '@/utils/drawer-tags'
@@ -71,11 +71,15 @@ export const NoteSearch = ({ onClose, initialQuery = '' }) => {
     const hasResultsQuery = !isEmptySearch(deferredAst)
     const { sort, matchCase, moreContext } = options
 
-    const results = useMemo(() => (
-        hasResultsQuery
-            ? searchNotes(notes, deferredAst, { pinned, notePaths, matchCase }, sort)
-            : []
-    ), [hasResultsQuery, deferredAst, notes, pinned, notePaths, matchCase, sort])
+    const results = useSearchResults({
+        enabled: hasResultsQuery,
+        ast: deferredAst,
+        notes,
+        notePaths,
+        pinned,
+        matchCase,
+        sort
+    })
 
     const highlights = useMemo(() => collectHighlights(deferredAst), [deferredAst])
 

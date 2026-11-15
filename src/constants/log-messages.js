@@ -20,6 +20,8 @@ export const LOG_MESSAGES = {
     ERROR_PURCHASING_PRO: 'error purchasing pro',
     ERROR_READING_REPOSITORY_INDEX: 'error reading repository index',
     ERROR_INDEXING_REPOSITORY: 'error indexing repository',
+    ERROR_SEARCHING_INDEX: 'error searching the native index',
+    ERROR_REFRESHING_SEARCH_INDEX: 'error refreshing the search index coverage',
     ERROR_DELETING_NATIVE_INDEX: 'error deleting native repository index',
     ERROR_WRITING_REPOSITORY_INDEX: 'error writing repository index',
     ERROR_READING_STORED_PRO_PURCHASE: 'error reading stored pro purchase',

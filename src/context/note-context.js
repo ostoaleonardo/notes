@@ -20,6 +20,7 @@ import { getNotePaths } from '@/utils/note-path'
 import { mergeLoadedNotes } from '@/utils/merge-loaded-notes'
 import { getIndexingStatus, setIndexingStatus } from '@/utils/indexing-status'
 import { syncRepositoryIndex } from '@/utils/repository-index'
+import { searchIndex } from '@/utils/search-index'
 
 import { INDEXING_COMPLETE, INDEXING_NOTICE_MIN_FILES, INDEXING_STARTED } from '@/constants/indexing'
 import { TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
@@ -31,6 +32,7 @@ export const NoteContext = createContext()
 export const NoteProvider = ({ children }) => {
     const [notes, setNotes] = useState([])
     const [loadedRepositoryId, setLoadedRepositoryId] = useState(null)
+    const [indexSyncRequest, setIndexSyncRequest] = useState(0)
 
     const loadRepositoryData = useRepositoryData()
     const { readRepositoryIndex, writeRepositoryIndex } = useFileStorage()
@@ -116,7 +118,7 @@ export const NoteProvider = ({ children }) => {
                 run.running = false
                 setLoadedRepositoryId(activeRepository.id)
                 if (getIndexingStatus()) setIndexingStatus(INDEXING_COMPLETE)
-                syncRepositoryIndex(activeRepositoryTree, repositories)
+                setIndexSyncRequest((request) => request + 1)
             }
         }
     }
@@ -137,6 +139,22 @@ export const NoteProvider = ({ children }) => {
     useOnForeground(() => {
         if (!loadRunRef.current.running) getNotesRef.current(false)
     })
+
+    const syncIndex = useEffectEvent(async () => {
+        const startNotes = notes
+
+        await syncRepositoryIndex(activeRepositoryTree, repositories)
+
+        try {
+            await searchIndex.refresh(startNotes)
+        } catch (error) {
+            logError(LOG_MESSAGES.ERROR_REFRESHING_SEARCH_INDEX, error)
+        }
+    })
+
+    useEffect(() => {
+        if (indexSyncRequest > 0) syncIndex()
+    }, [indexSyncRequest])
 
     const loading = loadedRepositoryId !== activeRepository?.id
 
