@@ -11,6 +11,7 @@ import { DrawerTemplatesView } from './drawer-templates-view'
 import { DrawerFilesView } from './drawer-files-view'
 import { DrawerViewSwitcher } from './drawer-view-switcher'
 
+import { useDrawerMounted } from '@/hooks/use-drawer-mounted'
 import { useStorage } from '@/hooks/use-storage'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
 
@@ -37,7 +38,7 @@ const VIEW_COMPONENTS = {
     [DRAWER_VIEWS.FILES]: DrawerFilesView
 }
 
-export const DrawerItems = ({ navigation, state }) => {
+const DrawerContent = ({ navigation, drawerOpen }) => {
     const { t } = useTranslation()
     const { setItem } = useStorage()
     const bottomSpacing = useBottomSpacing()
@@ -87,8 +88,6 @@ export const DrawerItems = ({ navigation, state }) => {
     ], [onOpenConnections, onOpenRepositories, onOpenSettings, t])
 
     const ActiveView = VIEW_COMPONENTS[view]
-    const drawerOpen = state.history.some((entry) => entry.type === DRAWER_HISTORY_TYPE)
-
     return (
         <>
             {ActiveView && <ActiveView closeDrawer={closeDrawer} drawerOpen={drawerOpen} />}
@@ -109,6 +108,20 @@ export const DrawerItems = ({ navigation, state }) => {
                 </DrawerToolbar>
             </View>
         </>
+    )
+}
+
+export const DrawerItems = ({ navigation, state }) => {
+    const drawerOpen = state.history.some((entry) => entry.type === DRAWER_HISTORY_TYPE)
+    const mounted = useDrawerMounted(drawerOpen)
+
+    if (!mounted) return null
+
+    return (
+        <DrawerContent
+            navigation={navigation}
+            drawerOpen={drawerOpen}
+        />
     )
 }
 
