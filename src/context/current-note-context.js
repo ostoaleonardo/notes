@@ -1,6 +1,7 @@
 import { createContext, useEffect, useMemo, useState } from 'react'
 
 import { useStorage } from '@/hooks/use-storage'
+import { setCurrentNoteId } from '@/utils/current-note-store'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 
@@ -16,6 +17,10 @@ export const CurrentNoteProvider = ({ children }) => {
             if (value) setCurrentId(value)
         })
     }, [getItem])
+
+    useEffect(() => {
+        setCurrentNoteId(currentId)
+    }, [currentId])
 
     const value = useMemo(() => ({ currentId, setCurrentId }), [currentId])
 
