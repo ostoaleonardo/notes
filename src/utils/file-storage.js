@@ -2,7 +2,7 @@ import { Directory, File, FileMode, Paths } from 'expo-file-system'
 
 import RepositoryFs from '../../modules/repository-fs'
 
-import { getUniqueFilename, stripNoteExtension } from '@/utils/note-filename'
+import { getUniqueFilenameBy, stripNoteExtension } from '@/utils/note-filename'
 import { buildVersionKey } from '@/utils/note-version-location'
 import { invalidateMediaIndex } from '@/utils/media-index'
 import { getNoteTags, seedNoteTags } from '@/utils/note-tags'
@@ -37,12 +37,18 @@ const isNoteFolder = (entry) => (
     !RESERVED_FOLDER_NAMES.includes(entry.name)
 )
 
-const findFile = (directoryUri, filename) => {
-    const entry = listEntries(directoryUri).find((candidate) => (
-        !candidate.isDirectory && candidate.name === filename
-    ))
+const findChild = (directoryUri, name) => RepositoryFs.findChild(directoryUri, name)
 
-    return entry && new File(entry.uri)
+const fileExists = (directoryUri, filename) => {
+    const entry = findChild(directoryUri, filename)
+
+    return !!entry && !entry.isDirectory
+}
+
+const findFile = (directoryUri, filename) => {
+    const entry = findChild(directoryUri, filename)
+
+    return entry && !entry.isDirectory ? new File(entry.uri) : undefined
 }
 
 const getExistingFile = (fileUri) => {
@@ -53,11 +59,9 @@ const getExistingFile = (fileUri) => {
 }
 
 const findDirectory = (directoryUri, name) => {
-    const entry = listEntries(directoryUri).find((candidate) => (
-        candidate.isDirectory && candidate.name === name
-    ))
+    const entry = findChild(directoryUri, name)
 
-    return entry && new Directory(entry.uri)
+    return entry?.isDirectory ? new Directory(entry.uri) : undefined
 }
 
 const createSubdirectory = (directoryUri, name) => (
@@ -190,8 +194,11 @@ const deleteNoteFile = (directoryUri, filename) => {
 
 const moveNoteFiles = async (sourceUri, filename, destinationUri) => {
     const source = findFile(sourceUri, filename)
-    const names = listMarkdownFiles(destinationUri).map((file) => file.name)
-    const target = getUniqueFilename(names, stripNoteExtension(filename), null)
+    const target = getUniqueFilenameBy(
+        (name) => fileExists(destinationUri, name),
+        stripNoteExtension(filename),
+        null
+    )
 
     writeNoteFile(destinationUri, target, await source.text())
     source.delete()
@@ -338,6 +345,7 @@ const deleteRepositoryIndex = (repositoryId) => {
 
 export const fileStorage = {
     findFile,
+    fileExists,
     getExistingFile,
     findDirectory,
     listMarkdownFiles,

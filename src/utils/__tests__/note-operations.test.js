@@ -23,10 +23,12 @@ const createFakeStorage = (initialFiles = {}) => {
     return {
         files,
         calls,
-        listMarkdownFiles: jest.fn(() => [...files.keys()].map((name) => ({
-            name,
-            uri: `${REPO_URI}/${name}`
-        }))),
+        fileExists: jest.fn((_uri, name) => files.has(name)),
+        findFile: jest.fn((_uri, name) => (
+            files.has(name)
+                ? { name, uri: `${REPO_URI}/${name}`, delete: () => files.delete(name) }
+                : undefined
+        )),
         getExistingFile: jest.fn((fileUri) => {
             const name = fileUri?.slice(REPO_URI.length + 1)
             if (!files.has(name)) return undefined
@@ -115,7 +117,7 @@ describe('plan note update', () => {
         expect(plan.existing).toMatchObject({ name: 'Groceries.md' })
     })
 
-    test('reuses the known file without listing the folder when the title is unchanged', () => {
+    test('reuses the known file without looking it up by name when the title is unchanged', () => {
         const storage = createFakeStorage({ 'Groceries.md': 'x' })
         const located = { ...previous, fileUri: HANDLE.uri }
 
@@ -123,20 +125,20 @@ describe('plan note update', () => {
 
         expect(plan.existing).toMatchObject(HANDLE)
         expect(plan.path).toBe(previous.path)
-        expect(storage.listMarkdownFiles).not.toHaveBeenCalled()
+        expect(storage.findFile).not.toHaveBeenCalled()
     })
 
-    test('lists the folder when the known file is gone', () => {
+    test('looks the file up by name when the known file is gone', () => {
         const storage = createFakeStorage({ 'Groceries.md': 'x' })
         const stale = { ...previous, fileUri: 'file:///repo/stale.md' }
 
         const plan = planNoteUpdate({ note: stale, previous: stale, uri: REPO_URI }, storage)
 
         expect(plan.existing).toMatchObject({ name: 'Groceries.md' })
-        expect(storage.listMarkdownFiles).toHaveBeenCalledTimes(1)
+        expect(storage.findFile).toHaveBeenCalledTimes(1)
     })
 
-    test('lists the folder to validate the name when the title changes', () => {
+    test('checks the new name by lookup when the title changes', () => {
         const storage = createFakeStorage({ 'Groceries.md': 'x' })
         const located = { ...previous, fileUri: HANDLE.uri }
 
@@ -145,7 +147,7 @@ describe('plan note update', () => {
             storage
         )
 
-        expect(storage.listMarkdownFiles).toHaveBeenCalledTimes(1)
+        expect(storage.fileExists).toHaveBeenCalledWith(REPO_URI, 'Shopping.md')
     })
 
     test('flags a rename when the title changes', () => {
@@ -434,7 +436,7 @@ describe('persist note move', () => {
     ]
 
     const createMoveStorage = (destinationNames = []) => ({
-        listMarkdownFiles: jest.fn(() => destinationNames.map((name) => ({ name }))),
+        fileExists: jest.fn((_uri, name) => destinationNames.includes(name)),
         moveNoteFiles: jest.fn(async () => 'Idea.md'),
         renameVersions: jest.fn(async () => {}),
         findFile: jest.fn(() => ({ uri: 'file:///root/Child/Idea.md', lastModified: 99 }))

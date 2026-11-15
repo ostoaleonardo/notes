@@ -519,6 +519,25 @@ describe('copying images', () => {
     })
 })
 
+describe('looking up entries by name', () => {
+    test('finds a file without listing the folder', () => {
+        const listDirectory = jest.spyOn(RepositoryFs, 'listDirectorySync')
+        seedFile(`${FOLDER}/a.md`)
+
+        expect(fileStorage.findFile(FOLDER, 'a.md').name).toBe('a.md')
+        expect(listDirectory).not.toHaveBeenCalled()
+    })
+
+    test('reports whether a note file exists, ignoring folders and missing names', () => {
+        seedFile(`${FOLDER}/a.md`)
+        seedDir(`${FOLDER}/sub`)
+
+        expect(fileStorage.fileExists(FOLDER, 'a.md')).toBe(true)
+        expect(fileStorage.fileExists(FOLDER, 'sub')).toBe(false)
+        expect(fileStorage.fileExists(FOLDER, 'missing.md')).toBe(false)
+    })
+})
+
 describe('scanning a folder', () => {
     test('lists markdown files and note folders without blocking', async () => {
         seedFile(`${FOLDER}/a.md`)

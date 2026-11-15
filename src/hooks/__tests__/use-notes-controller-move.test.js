@@ -11,7 +11,7 @@ const REPOSITORIES = [
 ]
 
 const mockFileStorage = {
-    listMarkdownFiles: jest.fn(),
+    fileExists: jest.fn(),
     writeNoteFile: jest.fn(),
     findFile: jest.fn(),
     getExistingFile: jest.fn(),
@@ -93,7 +93,7 @@ describe('move note', () => {
     beforeEach(() => {
         jest.clearAllMocks()
         written = new Map()
-        mockFileStorage.listMarkdownFiles.mockReturnValue([])
+        mockFileStorage.fileExists.mockReturnValue(false)
         mockFileStorage.moveNoteFiles.mockResolvedValue('Idea.md')
         mockFileStorage.findFile.mockReturnValue({ uri: 'file:///root/Child/Idea.md', lastModified: 99 })
         mockFileStorage.getExistingFile.mockReturnValue({ lastModified: 5 })

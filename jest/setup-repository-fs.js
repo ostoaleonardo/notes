@@ -21,6 +21,9 @@ jest.mock('../modules/repository-fs', () => {
             listDirectorySync,
             listDirectory: async (uri) => listDirectorySync(uri),
             readTextFiles,
+            findChild: (uri, name) => (
+                listDirectorySync(uri).find((entry) => entry.name === name) ?? null
+            ),
             hasDirectAccess: () => false,
             requestDirectAccess: () => {},
             revokePermissions: () => {}

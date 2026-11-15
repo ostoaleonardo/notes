@@ -17,7 +17,7 @@ import { NoteContext } from '@/context/note-context'
 import { parseFrontmatter } from '@/utils/frontmatter'
 
 const mockFileStorage = {
-    listMarkdownFiles: jest.fn(),
+    fileExists: jest.fn(),
     writeNoteFile: jest.fn(),
     deleteNoteFile: jest.fn(),
     findFile: jest.fn(),
@@ -86,9 +86,7 @@ beforeEach(() => {
     mockDeleteBehavior = null
 
     jest.clearAllMocks()
-    mockFileStorage.listMarkdownFiles.mockImplementation(() => (
-        Array.from(files.keys()).map((name) => ({ name, uri: name }))
-    ))
+    mockFileStorage.fileExists.mockImplementation((_uri, name) => files.has(name))
     mockFileStorage.getExistingFile.mockImplementation((name) => (
         files.has(name)
             ? {
@@ -106,7 +104,13 @@ beforeEach(() => {
         files.delete(filename)
     })
     mockFileStorage.findFile.mockImplementation((_uri, filename) => (
-        files.has(filename) ? { name: filename } : undefined
+        files.has(filename)
+            ? {
+                name: filename,
+                text: async () => files.get(filename),
+                delete: () => files.delete(filename)
+            }
+            : undefined
     ))
 })
 
@@ -152,7 +156,7 @@ describe('save note', () => {
         })
 
         expect(result.current.notes).toHaveLength(1)
-        expect(mockFileStorage.listMarkdownFiles).not.toHaveBeenCalled()
+        expect(mockFileStorage.fileExists).not.toHaveBeenCalled()
         expect(mockFileStorage.writeNoteFile).not.toHaveBeenCalled()
     })
 })
@@ -171,7 +175,7 @@ describe('update note', () => {
         expect(result.current.notes[0].note).toBe('updated content')
     })
 
-    test('lists the repository directory only once per update', async () => {
+    test('looks up the file by name instead of listing the directory', async () => {
         files.set('Old title.md', '---\ntags: []\n---\n\ncontent')
         const { result } = await renderNotesHook([MOCK_OLD_TITLE_NOTE])
 
@@ -179,8 +183,8 @@ describe('update note', () => {
             await result.current.updateNote({ ...MOCK_OLD_TITLE_NOTE, title: 'New title' })
         })
 
-        expect(mockFileStorage.listMarkdownFiles).toHaveBeenCalledTimes(1)
-        expect(mockFileStorage.findFile).not.toHaveBeenCalled()
+        expect(mockFileStorage.fileExists).toHaveBeenCalledWith(MOCK_REPO_URI, 'New title.md')
+        expect(mockFileStorage.findFile).toHaveBeenCalledTimes(1)
     })
 
     test('throws a duplicate-title error without touching the filesystem', async () => {

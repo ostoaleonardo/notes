@@ -60,6 +60,10 @@ class RepositoryFsModule : Module() {
       revokePermissions(context)
     }
 
+    Function("findChild") { uri: String, name: String ->
+      findChild(context, Uri.parse(uri), name)
+    }
+
     Function("listDirectorySync") { uri: String ->
       listDirectory(context, Uri.parse(uri))
     }
@@ -149,6 +153,44 @@ private fun listDirectDirectory(uri: Uri, documentId: String, directory: File): 
       "size" to file.length().toDouble()
     )
   }
+
+private fun entryOf(uri: Uri, documentId: String, name: String, isDirectory: Boolean, lastModified: Long?, size: Long?): Map<String, Any?> {
+  val childUri = DocumentsContract.buildDocumentUriUsingTree(uri, documentId).toString()
+
+  return mapOf(
+    "uri" to if (isDirectory) "$childUri/" else childUri,
+    "name" to name,
+    "isDirectory" to isDirectory,
+    "lastModified" to lastModified?.toDouble(),
+    "size" to size?.toDouble()
+  )
+}
+
+private fun findChild(context: Context, uri: Uri, name: String): Map<String, Any?>? {
+  val childId = documentIdOf(context, uri) + PATH_SEPARATOR + name
+  val file = directFile(context, uri)?.let { File(it, name) }
+
+  if (file != null) {
+    return if (file.exists()) entryOf(uri, childId, name, file.isDirectory, file.lastModified(), file.length()) else null
+  }
+
+  val childUri = DocumentsContract.buildDocumentUriUsingTree(uri, childId)
+
+  return runCatching {
+    context.contentResolver.query(childUri, CHILD_COLUMNS, null, null, null)?.use { cursor ->
+      if (!cursor.moveToFirst()) return@use null
+
+      entryOf(
+        uri,
+        childId,
+        cursor.getString(1) ?: name,
+        cursor.getString(2) == Document.MIME_TYPE_DIR,
+        if (cursor.isNull(3)) null else cursor.getLong(3),
+        if (cursor.isNull(4)) null else cursor.getLong(4)
+      )
+    }
+  }.getOrNull()
+}
 
 private fun listProviderDirectory(context: Context, uri: Uri): List<Map<String, Any?>> {
   val documentId = documentIdOf(context, uri)

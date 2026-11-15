@@ -1,4 +1,4 @@
-import { getUniqueFilename, isTitleTaken } from '@/utils/note-filename'
+import { getUniqueFilenameBy, isTitleTakenBy } from '@/utils/note-filename'
 import { logError } from '@/utils/log-error'
 import { buildNotePath, buildRepositoryPaths } from '@/utils/note-path'
 import { buildNoteFileContent, decomposeNoteFileContent } from '@/utils/frontmatter'
@@ -16,7 +16,7 @@ export const getRepositoryUri = (repositories, repositoryId) => (
 
 export const buildFileContent = (note) => buildNoteFileContent(note, note.note)
 
-const listNoteNames = (fileStorage, uri) => fileStorage.listMarkdownFiles(uri).map((file) => file.name)
+const nameExistsIn = (fileStorage, uri) => (name) => fileStorage.fileExists(uri, name)
 
 const readFileTimes = (file) => ({
     fileUri: file.uri,
@@ -43,7 +43,7 @@ export const createNote = ({ note, repositoryId, uri }, fileStorage) => {
         }
     }
 
-    const filename = getUniqueFilename(listNoteNames(fileStorage, uri), note.title, null)
+    const filename = getUniqueFilenameBy(nameExistsIn(fileStorage, uri), note.title, null)
     const path = buildNotePath(repositoryId, filename)
     const times = readFileTimes(
         fileStorage.writeNoteFile(uri, filename, buildFileContent(note), undefined, null)
@@ -73,22 +73,21 @@ export const planNoteUpdate = ({ note, previous, uri }, fileStorage) => {
         if (inPlace) return inPlace
     }
 
-    const files = fileStorage.listMarkdownFiles(uri)
-    const names = files.map((file) => file.name)
+    const exists = nameExistsIn(fileStorage, uri)
 
-    if (note.title !== previous.title && isTitleTaken(names, note.title, previous.filename)) {
+    if (note.title !== previous.title && isTitleTakenBy(exists, note.title, previous.filename)) {
         const error = new Error('A note with this title already exists')
         error.code = DUPLICATE_TITLE_ERROR
         throw error
     }
 
-    const filename = getUniqueFilename(names, note.title, previous.filename)
+    const filename = getUniqueFilenameBy(exists, note.title, previous.filename)
 
     return {
         filename,
         path: buildNotePath(note.repositoryId, filename),
         renamed: filename !== previous.filename,
-        existing: fileStorage.getExistingFile(files.find((file) => file.name === previous.filename)?.uri)
+        existing: fileStorage.findFile(uri, previous.filename)
     }
 }
 
@@ -209,7 +208,7 @@ export const persistNoteMove = async ({ note, destinationId, repositories }, fil
         throw new Error('The note cannot be moved to that folder')
     }
 
-    if (listNoteNames(fileStorage, destinationUri).includes(note.filename)) {
+    if (fileStorage.fileExists(destinationUri, note.filename)) {
         const error = new Error('A note with this title already exists in that folder')
         error.code = DUPLICATE_TITLE_ERROR
         throw error

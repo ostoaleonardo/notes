@@ -32,22 +32,32 @@ export const getUniqueTitle = (existingTitles, base) => {
     return title
 }
 
-export const isTitleTaken = (existingNames, title, currentFilename) => {
+export const isTitleTakenBy = (exists, title, currentFilename) => {
     const candidate = sanitizeFilename(title) + NOTE_FILE_EXTENSION
-    return existingNames.some((name) => name === candidate && name !== currentFilename)
+    return candidate !== currentFilename && exists(candidate)
 }
 
-export const getUniqueFilename = (existingNames, title, currentFilename, extension = NOTE_FILE_EXTENSION) => {
+export const isTitleTaken = (existingNames, title, currentFilename) => (
+    isTitleTakenBy((name) => existingNames.includes(name), title, currentFilename)
+)
+
+export const getUniqueFilenameBy = (exists, title, currentFilename, extension = NOTE_FILE_EXTENSION) => {
     const base = sanitizeFilename(title)
-    const taken = new Set(existingNames.filter((name) => name !== currentFilename))
+    const isTaken = (name) => name !== currentFilename && exists(name)
 
     let filename = base + extension
     let count = 2
 
-    while (taken.has(filename)) {
+    while (isTaken(filename)) {
         filename = `${base} (${count})${extension}`
         count++
     }
 
     return filename
+}
+
+export const getUniqueFilename = (existingNames, title, currentFilename, extension = NOTE_FILE_EXTENSION) => {
+    const names = new Set(existingNames)
+
+    return getUniqueFilenameBy((name) => names.has(name), title, currentFilename, extension)
 }
