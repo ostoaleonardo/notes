@@ -1,6 +1,7 @@
 import { FlatList, StyleSheet } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
+import { DRAWER_LIST_WINDOW } from '@/constants/drawer-views'
 import { SPACING } from '@/constants/theme'
 
 const getRowId = (row) => row.id
@@ -11,6 +12,7 @@ export const DrawerList = (props) => {
     return (
         <FlatList
             keyExtractor={getRowId}
+            {...DRAWER_LIST_WINDOW}
             showsVerticalScrollIndicator={false}
             style={styles.list}
             contentContainerStyle={{

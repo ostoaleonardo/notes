@@ -39,3 +39,9 @@ export const DRAWER_ACTIONS = {
     OPEN: 'OPEN_DRAWER',
     CLOSE: 'CLOSE_DRAWER'
 }
+
+export const DRAWER_LIST_WINDOW = {
+    initialNumToRender: 20,
+    maxToRenderPerBatch: 10,
+    windowSize: 5
+}
