@@ -1,3 +1,4 @@
+import { memo, useMemo } from 'react'
 import { FlatList, StyleSheet } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -6,8 +7,16 @@ import { SPACING } from '@/constants/theme'
 
 const getRowId = (row) => row.id
 
-export const DrawerList = (props) => {
+export const DrawerList = memo((props) => {
     const insets = useSafeAreaInsets()
+
+    const contentContainerStyle = useMemo(() => ({
+        flexGrow: 1,
+        paddingTop: SPACING.md + insets.top,
+        paddingBottom: SPACING.md,
+        paddingStart: SPACING.md + insets.left,
+        paddingEnd: SPACING.md + insets.right
+    }), [insets.top, insets.left, insets.right])
 
     return (
         <FlatList
@@ -15,17 +24,11 @@ export const DrawerList = (props) => {
             {...DRAWER_LIST_WINDOW}
             showsVerticalScrollIndicator={false}
             style={styles.list}
-            contentContainerStyle={{
-                flexGrow: 1,
-                paddingTop: SPACING.md + insets.top,
-                paddingBottom: SPACING.md,
-                paddingStart: SPACING.md + insets.left,
-                paddingEnd: SPACING.md + insets.right
-            }}
+            contentContainerStyle={contentContainerStyle}
             {...props}
         />
     )
-}
+})
 
 const styles = StyleSheet.create({
     list: {

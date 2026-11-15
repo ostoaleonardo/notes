@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import Animated from 'react-native-reanimated'
 import { StyleSheet, View } from 'react-native'
 
@@ -7,7 +8,7 @@ import { DrawerToolbar, DrawerToolbarButton } from './drawer-toolbar'
 
 import { SPACING } from '@/constants/theme'
 
-export const DrawerView = ({
+export const DrawerView = memo(({
     data,
     renderItem,
     toolbarItems,
@@ -49,7 +50,7 @@ export const DrawerView = ({
             {children}
         </>
     )
-}
+})
 
 const styles = StyleSheet.create({
     list: {

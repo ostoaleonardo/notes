@@ -9,7 +9,7 @@ import { DeleteRepository } from '@/screens/dialogs/delete-repository'
 import { DrawerView } from './drawer-view'
 import { DrawerNotesEmpty } from './drawer-empty'
 import { DrawerSortMenu } from './drawer-sort-menu'
-import { DrawerLevelNote } from './drawer-level-note'
+import { DrawerCurrentAwareNote } from './drawer-level-note'
 import { DrawerLevelFolder } from './drawer-level-folder'
 import { DrawerLevelHeader } from './drawer-level-header'
 
@@ -42,8 +42,8 @@ import {
 import { ANIMATION_DURATION } from '@/constants/theme'
 
 const ENTERINGS = {
-    [LEVEL_DIRECTIONS.FORWARD]: SlideInRight,
-    [LEVEL_DIRECTIONS.BACK]: SlideInLeft
+    [LEVEL_DIRECTIONS.FORWARD]: SlideInRight.duration(ANIMATION_DURATION),
+    [LEVEL_DIRECTIONS.BACK]: SlideInLeft.duration(ANIMATION_DURATION)
 }
 
 export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
@@ -220,9 +220,8 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
     const renderItem = useCallback(({ item }) => {
         if (item.type === DRAWER_ITEM_TYPES.NOTE) {
             return (
-                <DrawerLevelNote
+                <DrawerCurrentAwareNote
                     note={item.note}
-                    active={item.note.path === currentId}
                     showSlot={hasFolders}
                     onOpenNote={onOpenNote}
                 />
@@ -245,22 +244,22 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
                 onAction={onRepositoryAction}
             />
         )
-    }, [currentId, hasFolders, onOpenNote, onUpLevel, onEnterFolder, onRepositoryAction])
-
-    const Entering = ENTERINGS[direction.current]
+    }, [hasFolders, onOpenNote, onUpLevel, onEnterFolder, onRepositoryAction])
 
     return (
-        <DrawerView
-            data={rows}
-            ListEmptyComponent={DrawerNotesEmpty}
-            loading={loading}
-            renderItem={renderItem}
-            toolbarItems={toolbarItems}
-            toolbarExtra={toolbarExtra}
-            listKey={folderId}
-            listRef={listRef}
-            listEntering={Entering?.duration(ANIMATION_DURATION)}
-        >
+        <>
+            <DrawerView
+                data={rows}
+                ListEmptyComponent={DrawerNotesEmpty}
+                loading={loading}
+                renderItem={renderItem}
+                toolbarItems={toolbarItems}
+                toolbarExtra={toolbarExtra}
+                listKey={folderId}
+                listRef={listRef}
+                listEntering={ENTERINGS[direction.current]}
+            />
+
             <RenameRepository
                 visible={!!editFolderId}
                 repositoryId={editFolderId}
@@ -276,6 +275,6 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
                 repositoryId={deleteId}
                 onDismiss={onDismissDelete}
             />
-        </DrawerView>
+        </>
     )
 }
