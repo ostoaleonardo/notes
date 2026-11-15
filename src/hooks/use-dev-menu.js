@@ -37,7 +37,6 @@ import {
 } from '@/constants/dev-menu'
 import { logError } from '@/utils/log-error'
 
-// require.context only accepts literal arguments
 const devData = require.context('../../dev-data', true, /\.(md|png|txt|pdf|wav|mp4)$/)
 
 const loadDevData = () => Promise.all(devData.keys().map(async (key) => {

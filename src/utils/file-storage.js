@@ -342,7 +342,6 @@ const readRepositoryIndex = async (repositoryId) => {
     }
 }
 
-// ponytail: one JSON file with every note body, parsed on the JS thread; split into metadata plus lazy bodies if repositories reach tens of MB
 const writeRepositoryIndex = (repositoryId, notes) => {
     try {
         const folder = new Directory(Paths.document, REPOSITORY_INDEX_FOLDER_NAME)
