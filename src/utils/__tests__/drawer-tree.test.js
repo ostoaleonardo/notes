@@ -4,6 +4,7 @@ import {
     findFolderNode,
     resolveLevel
 } from '../drawer-tree'
+import * as noteSort from '../note-sort'
 import { NOTE_SORTS } from '@/constants/note-sort'
 import { MOCK_NOTES_BY_REPOSITORY, MOCK_REPOSITORY_LIST } from '../__fixtures__/drawer-tree'
 
@@ -112,5 +113,33 @@ describe('build the rows of one level', () => {
         const rows = buildLevelRows({ repository: { id: 'empty' }, notes: [], subfolders: [] })
 
         expect(rows).toEqual([])
+    })
+})
+
+describe('lazy note sorting', () => {
+    test('sorts only the notes of the folder that is read', () => {
+        const sortNotes = jest.spyOn(noteSort, 'sortNotes')
+        const tree = buildRepositoryTree(MOCK_REPOSITORY_LIST, MOCK_NOTES_BY_REPOSITORY)
+
+        expect(sortNotes).not.toHaveBeenCalled()
+
+        buildLevelRows(findFolderNode(tree, 'child-a'))
+
+        expect(sortNotes).toHaveBeenCalledTimes(1)
+        sortNotes.mockRestore()
+    })
+
+    test('sorts a folder once however many times it is read', () => {
+        const sortNotes = jest.spyOn(noteSort, 'sortNotes')
+        const node = findFolderNode(
+            buildRepositoryTree(MOCK_REPOSITORY_LIST, MOCK_NOTES_BY_REPOSITORY),
+            'child-a'
+        )
+
+        buildLevelRows(node)
+        buildLevelRows(node)
+
+        expect(sortNotes).toHaveBeenCalledTimes(1)
+        sortNotes.mockRestore()
     })
 })

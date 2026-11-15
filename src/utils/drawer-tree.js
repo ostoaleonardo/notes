@@ -2,14 +2,28 @@ import { sortNotes } from './note-sort'
 
 import { DRAWER_ITEM_TYPES } from '@/constants/drawer-views'
 
+const createNode = (repository, notes, sort, subfolders) => {
+    let sorted = null
+
+    return {
+        repository,
+        subfolders,
+        get notes() {
+            sorted ??= sortNotes(notes, sort)
+            return sorted
+        }
+    }
+}
+
 export const buildRepositoryTree = (flatList, notesByRepository, sort, parentId = null) => (
     flatList
         .filter((repository) => (repository.parentId || null) === parentId)
-        .map((repository) => ({
+        .map((repository) => createNode(
             repository,
-            notes: sortNotes(notesByRepository.get(repository.id) || [], sort),
-            subfolders: buildRepositoryTree(flatList, notesByRepository, sort, repository.id)
-        }))
+            notesByRepository.get(repository.id) || [],
+            sort,
+            buildRepositoryTree(flatList, notesByRepository, sort, repository.id)
+        ))
 )
 
 export const findFolderNode = (tree, folderId) => {
