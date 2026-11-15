@@ -5,36 +5,6 @@ import androidx.sqlite.SQLiteStatement
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import androidx.sqlite.execSQL
 
-const val INDEX_SCHEMA_VERSION = 1
-const val INDEX_DATABASE_NAME = "repository-index.db"
-
-private const val NOTE_EXTENSION_LENGTH = 3
-
-private val SCHEMA = listOf(
-  """CREATE TABLE notes(
-    id INTEGER PRIMARY KEY,
-    repository_id TEXT NOT NULL,
-    filename TEXT NOT NULL,
-    uri TEXT NOT NULL,
-    title TEXT NOT NULL,
-    modified INTEGER NOT NULL,
-    size INTEGER NOT NULL,
-    invalid_frontmatter INTEGER NOT NULL,
-    UNIQUE(repository_id, filename)
-  )""",
-  "CREATE TABLE tags(note_id INTEGER NOT NULL REFERENCES notes(id) ON DELETE CASCADE, position INTEGER NOT NULL, name TEXT NOT NULL)",
-  "CREATE TABLE links(note_id INTEGER NOT NULL REFERENCES notes(id) ON DELETE CASCADE, position INTEGER NOT NULL, text TEXT NOT NULL)",
-  "CREATE TABLE properties(note_id INTEGER NOT NULL REFERENCES notes(id) ON DELETE CASCADE, position INTEGER NOT NULL, key TEXT NOT NULL)",
-  "CREATE INDEX tags_note ON tags(note_id)",
-  "CREATE INDEX tags_name ON tags(name COLLATE NOCASE)",
-  "CREATE INDEX links_note ON links(note_id)",
-  "CREATE INDEX links_text ON links(text COLLATE NOCASE)",
-  "CREATE INDEX properties_note ON properties(note_id)",
-  "CREATE VIRTUAL TABLE note_fts USING fts5(title, body, content='', contentless_delete=1, tokenize='unicode61 remove_diacritics 2')"
-)
-
-private val DROP_ORDER = listOf("note_fts", "properties", "links", "tags", "notes")
-
 data class FileMeta(val modified: Long, val size: Long)
 
 data class IndexedNote(
@@ -60,24 +30,24 @@ class RepositoryIndex private constructor(private val connection: SQLiteConnecti
   }
 
   private fun prepare() {
-    connection.execSQL("PRAGMA journal_mode = WAL")
-    connection.execSQL("PRAGMA synchronous = NORMAL")
-    connection.execSQL("PRAGMA foreign_keys = ON")
+    connection.execSQL(IndexSql.JOURNAL_MODE)
+    connection.execSQL(IndexSql.SYNCHRONOUS)
+    connection.execSQL(IndexSql.FOREIGN_KEYS)
 
-    val version = queryOne("PRAGMA user_version") { it.getLong(0) } ?: 0L
+    val version = queryOne(IndexSql.READ_VERSION) { it.getLong(0) } ?: 0L
     if (version == INDEX_SCHEMA_VERSION.toLong()) return
 
     transaction {
-      DROP_ORDER.forEach { connection.execSQL("DROP TABLE IF EXISTS $it") }
-      SCHEMA.forEach(connection::execSQL)
-      connection.execSQL("PRAGMA user_version = $INDEX_SCHEMA_VERSION")
+      IndexSql.DROP_ORDER.forEach { connection.execSQL(IndexSql.DROP_TABLE + it) }
+      IndexSql.SCHEMA.forEach(connection::execSQL)
+      connection.execSQL(IndexSql.WRITE_VERSION)
     }
   }
 
   fun metas(repositoryId: String): Map<String, FileMeta> {
     val metas = HashMap<String, FileMeta>()
 
-    connection.prepare("SELECT filename, modified, size FROM notes WHERE repository_id = ?").use { statement ->
+    connection.prepare(IndexSql.SELECT_METAS).use { statement ->
       statement.bindText(1, repositoryId)
       while (statement.step()) metas[statement.getText(0)] = FileMeta(statement.getLong(1), statement.getLong(2))
     }
@@ -85,10 +55,24 @@ class RepositoryIndex private constructor(private val connection: SQLiteConnecti
     return metas
   }
 
-  fun count(repositoryId: String): Int = connection.prepare("SELECT COUNT(*) FROM notes WHERE repository_id = ?").use { statement ->
-    statement.bindText(1, repositoryId)
-    statement.step()
-    statement.getLong(0).toInt()
+  fun indexedNotes(): Map<String, List<Any>> {
+    val repositories = ArrayList<String>()
+    val filenames = ArrayList<String>()
+    val modified = ArrayList<Long>()
+
+    connection.prepare(IndexSql.SELECT_INDEXED).use { statement ->
+      while (statement.step()) {
+        repositories.add(statement.getText(0))
+        filenames.add(statement.getText(1))
+        modified.add(statement.getLong(2))
+      }
+    }
+
+    return mapOf(
+      IndexedKeys.REPOSITORY_IDS to repositories,
+      IndexedKeys.FILENAMES to filenames,
+      IndexedKeys.MODIFIED to modified
+    )
   }
 
   fun write(repositoryId: String, upserts: List<IndexedNote>, removed: List<String>) = transaction {
@@ -101,7 +85,7 @@ class RepositoryIndex private constructor(private val connection: SQLiteConnecti
   fun deleteRepository(repositoryId: String) = transaction {
     val filenames = ArrayList<String>()
 
-    connection.prepare("SELECT filename FROM notes WHERE repository_id = ?").use { statement ->
+    connection.prepare(IndexSql.SELECT_FILENAMES).use { statement ->
       statement.bindText(1, repositoryId)
       while (statement.step()) filenames.add(statement.getText(0))
     }
@@ -112,7 +96,7 @@ class RepositoryIndex private constructor(private val connection: SQLiteConnecti
   fun deleteRepositoriesExcept(keep: Set<String>) {
     val stale = ArrayList<String>()
 
-    connection.prepare("SELECT DISTINCT repository_id FROM notes").use { statement ->
+    connection.prepare(IndexSql.SELECT_REPOSITORIES).use { statement ->
       while (statement.step()) statement.getText(0).takeIf { it !in keep }?.let(stale::add)
     }
 
@@ -125,32 +109,30 @@ class RepositoryIndex private constructor(private val connection: SQLiteConnecti
     connection.prepare(sql).use { statement -> if (statement.step()) read(statement) else null }
 
   private fun transaction(block: () -> Unit) {
-    connection.execSQL("BEGIN IMMEDIATE")
+    connection.execSQL(IndexSql.BEGIN)
 
     try {
       block()
-      connection.execSQL("COMMIT")
+      connection.execSQL(IndexSql.COMMIT)
     } catch (error: Throwable) {
-      connection.execSQL("ROLLBACK")
+      connection.execSQL(IndexSql.ROLLBACK)
       throw error
     }
   }
 }
 
 private class WriteStatements(connection: SQLiteConnection) : AutoCloseable {
-  private val findNote = connection.prepare("SELECT id FROM notes WHERE repository_id = ? AND filename = ?")
-  private val deleteFts = connection.prepare("DELETE FROM note_fts WHERE rowid = ?")
-  private val deleteNote = connection.prepare("DELETE FROM notes WHERE id = ?")
+  private val findNote = connection.prepare(IndexSql.SELECT_NOTE_ID)
+  private val deleteFts = connection.prepare(IndexSql.DELETE_FTS)
+  private val deleteNote = connection.prepare(IndexSql.DELETE_NOTE)
 
-  private val insertNote = connection.prepare(
-    "INSERT INTO notes(repository_id, filename, uri, title, modified, size, invalid_frontmatter) VALUES(?,?,?,?,?,?,?)"
-  )
+  private val insertNote = connection.prepare(IndexSql.INSERT_NOTE)
 
-  private val insertTag = connection.prepare("INSERT INTO tags(note_id, position, name) VALUES(?,?,?)")
-  private val insertLink = connection.prepare("INSERT INTO links(note_id, position, text) VALUES(?,?,?)")
-  private val insertProperty = connection.prepare("INSERT INTO properties(note_id, position, key) VALUES(?,?,?)")
-  private val insertFts = connection.prepare("INSERT INTO note_fts(rowid, title, body) VALUES(?,?,?)")
-  private val lastId = connection.prepare("SELECT last_insert_rowid()")
+  private val insertTag = connection.prepare(IndexSql.INSERT_TAG)
+  private val insertLink = connection.prepare(IndexSql.INSERT_LINK)
+  private val insertProperty = connection.prepare(IndexSql.INSERT_PROPERTY)
+  private val insertFts = connection.prepare(IndexSql.INSERT_FTS)
+  private val lastId = connection.prepare(IndexSql.SELECT_LAST_ID)
 
   fun delete(repositoryId: String, filename: String) {
     findNote.bindText(1, repositoryId)
@@ -166,7 +148,7 @@ private class WriteStatements(connection: SQLiteConnection) : AutoCloseable {
 
   fun insert(repositoryId: String, note: IndexedNote) {
     val parsed = note.parsed
-    val title = note.filename.dropLast(NOTE_EXTENSION_LENGTH)
+    val title = note.filename.dropLast(NOTE_EXTENSION.length)
 
     execute(insertNote) {
       it.bindText(1, repositoryId)
@@ -175,7 +157,7 @@ private class WriteStatements(connection: SQLiteConnection) : AutoCloseable {
       it.bindText(4, title)
       it.bindLong(5, note.modified)
       it.bindLong(6, note.size)
-      it.bindLong(7, if (parsed.invalidFrontmatter) 1 else 0)
+      it.bindLong(7, if (parsed.invalidFrontmatter) INVALID_FRONTMATTER else VALID_FRONTMATTER)
     }
 
     lastId.step()
@@ -189,7 +171,7 @@ private class WriteStatements(connection: SQLiteConnection) : AutoCloseable {
     execute(insertFts) {
       it.bindLong(1, id)
       it.bindText(2, title)
-      it.bindText(3, parsed.body)
+      it.bindText(3, parsed.content)
     }
   }
 

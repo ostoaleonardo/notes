@@ -10,28 +10,9 @@ data class ParsedNote(
   val links: List<String>,
   val propertyKeys: List<String>,
   val invalidFrontmatter: Boolean,
-  val body: String
+  val body: String,
+  val content: String
 )
-
-private const val WHITESPACE = "\\s\\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000\\ufeff"
-private const val INVALID_TAG_CHARS = "!-,.:-@\\[-\\^`{-~"
-
-private val FRONTMATTER = Regex("^---\\r?\\n([\\s\\S]*?)\\r?\\n---(?:\\r?\\n+|\\z)")
-private val FENCED_CODE = Regex("(```|~~~)[\\s\\S]*?(\\1|\\z)")
-private val INLINE_CODE = Regex("`[^`\\n]*`")
-private val INLINE_TAG = Regex("(^|[$WHITESPACE])#([^$WHITESPACE$INVALID_TAG_CHARS]+)")
-private val TAG_SEPARATOR = Regex("[,$WHITESPACE]+")
-private val WHITESPACE_RUN = Regex("[$WHITESPACE]+")
-private val INVALID_TAG_CHAR = Regex("[$INVALID_TAG_CHARS]")
-private val TRAILING_SLASHES = Regex("/+\\z")
-private val NON_NUMERIC = Regex("\\D")
-private val WIKI_LINK = Regex("\\[\\[([^\\]|]+)(?:\\|([^\\]]+))?\\]\\]")
-private val CODE_SEGMENT = Regex(
-  "^[ \\t]{0,3}(`{3,}|~{3,})[\\s\\S]*?(?:^[ \\t]{0,3}\\1[`~]*[ \\t]*$|(?![\\s\\S]))|(`+)(?!`)[^\\n]*?[^`\\n]\\2(?!`)",
-  RegexOption.MULTILINE
-)
-
-private val TAG_KEYS = listOf("tags", "tag")
 
 private val yaml = ThreadLocal.withInitial {
   Load(LoadSettings.builder().setSchema(CoreSchema()).setAllowDuplicateKeys(false).build())
@@ -60,7 +41,8 @@ fun parseNote(text: String): ParsedNote {
     links = extractWikiLinks(body),
     propertyKeys = frontmatter.keys.map { it.toString() }.filter { it !in TAG_KEYS },
     invalidFrontmatter = invalid,
-    body = body
+    body = body,
+    content = if (raw.isNullOrEmpty()) body else "$raw\n$body"
   )
 }
 
@@ -72,8 +54,8 @@ private fun toTagList(value: Any?): List<Any?> = when (value) {
 
 private fun sanitizeTag(name: String): String = name
   .trim { it.isWhitespace() || it == '﻿' }
-  .removePrefix("#")
-  .replace(WHITESPACE_RUN, "-")
+  .removePrefix(TAG_HASH_PREFIX)
+  .replace(WHITESPACE_RUN, TAG_WORD_JOINER)
   .replace(INVALID_TAG_CHAR, "")
   .replace(TRAILING_SLASHES, "")
 
@@ -94,10 +76,10 @@ private fun readFrontmatterTags(frontmatter: Map<*, *>): List<String> {
   return dedupe(names)
 }
 
-private fun blank(text: String, pattern: Regex) = pattern.replace(text) { " ".repeat(it.value.length) }
+private fun blank(text: String, pattern: Regex) = pattern.replace(text) { BLANK_CHAR.repeat(it.value.length) }
 
 private fun extractInlineTags(body: String): List<String> {
-  if (!body.contains('#')) return emptyList()
+  if (!body.contains(HASH_CHAR)) return emptyList()
 
   val visible = blank(blank(blank(body, FRONTMATTER), FENCED_CODE), INLINE_CODE)
   val found = ArrayList<String>()

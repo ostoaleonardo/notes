@@ -30,24 +30,6 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
-private const val READ_PARALLELISM = 16
-private const val INDEX_PROGRESS_EVENT = "onIndexProgress"
-private const val DATABASE_DIRECTORY = "SQLite"
-private const val EXTERNAL_STORAGE_AUTHORITY = "com.android.externalstorage.documents"
-private const val PRIMARY_VOLUME = "primary"
-private const val VOLUME_SEPARATOR = ":"
-private const val PATH_SEPARATOR = "/"
-private const val HIDDEN_PREFIX = "."
-private const val NOTE_EXTENSION = ".md"
-
-private val CHILD_COLUMNS = arrayOf(
-  Document.COLUMN_DOCUMENT_ID,
-  Document.COLUMN_DISPLAY_NAME,
-  Document.COLUMN_MIME_TYPE,
-  Document.COLUMN_LAST_MODIFIED,
-  Document.COLUMN_SIZE
-)
-
 class RepositoryFsModule : Module() {
   private val context: Context
     get() = appContext.reactContext ?: throw Exceptions.ReactContextLost()
@@ -77,9 +59,9 @@ class RepositoryFsModule : Module() {
         walkAttachments(context, Uri.parse(uri), "", found)
 
         mapOf(
-          "uris" to found.map { it.first },
-          "names" to found.map { it.second },
-          "folders" to found.map { it.third }
+          ColumnKeys.URIS to found.map { it.first },
+          ColumnKeys.NAMES to found.map { it.second },
+          ColumnKeys.FOLDERS to found.map { it.third }
         )
       }
     }
@@ -109,22 +91,31 @@ class RepositoryFsModule : Module() {
         withContext(Dispatchers.IO) {
           openIndex(context).use { index ->
             val stats = indexRepository(context, index, repositoryId, uri, readDispatcher) { done, total ->
-              sendEvent(INDEX_PROGRESS_EVENT, mapOf("repositoryId" to repositoryId, "done" to done, "total" to total))
+              sendEvent(
+                INDEX_PROGRESS_EVENT,
+                mapOf(ProgressKeys.REPOSITORY_ID to repositoryId, ProgressKeys.DONE to done, ProgressKeys.TOTAL to total)
+              )
             }
 
             mapOf(
-              "total" to stats.total,
-              "added" to stats.added,
-              "updated" to stats.updated,
-              "removed" to stats.removed,
-              "unchanged" to stats.unchanged,
-              "unreadable" to stats.unreadable,
-              "scanMs" to stats.scanMs,
-              "readParseMs" to stats.readParseMs,
-              "writeMs" to stats.writeMs
+              StatsKeys.TOTAL to stats.total,
+              StatsKeys.ADDED to stats.added,
+              StatsKeys.UPDATED to stats.updated,
+              StatsKeys.REMOVED to stats.removed,
+              StatsKeys.UNCHANGED to stats.unchanged,
+              StatsKeys.UNREADABLE to stats.unreadable,
+              StatsKeys.SCAN_MS to stats.scanMs,
+              StatsKeys.READ_PARSE_MS to stats.readParseMs,
+              StatsKeys.WRITE_MS to stats.writeMs
             )
           }
         }
+      }
+    }
+
+    AsyncFunction("listIndexedNotes") Coroutine { ->
+      indexLock.withLock {
+        withContext(Dispatchers.IO) { openIndex(context).use { it.indexedNotes() } }
       }
     }
 
@@ -202,22 +193,22 @@ private fun listDirectDirectory(uri: Uri, documentId: String, directory: File): 
     val isDirectory = attributes.isDirectory
 
     mapOf(
-      "uri" to if (isDirectory) "$childUri/" else childUri,
-      "name" to file.name,
-      "isDirectory" to isDirectory,
-      "lastModified" to attributes.lastModifiedTime().toMillis().toDouble(),
-      "size" to attributes.size().toDouble()
+      EntryKeys.URI to if (isDirectory) "$childUri/" else childUri,
+      EntryKeys.NAME to file.name,
+      EntryKeys.IS_DIRECTORY to isDirectory,
+      EntryKeys.LAST_MODIFIED to attributes.lastModifiedTime().toMillis().toDouble(),
+      EntryKeys.SIZE to attributes.size().toDouble()
     )
   }
 
 private fun walkAttachments(context: Context, uri: Uri, folder: String, found: MutableList<Triple<String, String, String>>) {
   listDirectory(context, uri).forEach { entry ->
-    val name = entry["name"] as String
-    val entryUri = entry["uri"] as String
+    val name = entry[EntryKeys.NAME] as String
+    val entryUri = entry[EntryKeys.URI] as String
 
     if (name.startsWith(HIDDEN_PREFIX)) return@forEach
 
-    if (entry["isDirectory"] == true) {
+    if (entry[EntryKeys.IS_DIRECTORY] == true) {
       walkAttachments(context, Uri.parse(entryUri), if (folder.isEmpty()) name else "$folder$PATH_SEPARATOR$name", found)
     } else if (!name.endsWith(NOTE_EXTENSION, ignoreCase = true)) {
       found.add(Triple(entryUri, name, folder))
@@ -226,22 +217,22 @@ private fun walkAttachments(context: Context, uri: Uri, folder: String, found: M
 }
 
 private fun toColumns(entries: List<Map<String, Any?>>): Map<String, List<Any?>> = mapOf(
-  "uris" to entries.map { it["uri"] },
-  "names" to entries.map { it["name"] },
-  "directories" to entries.map { it["isDirectory"] },
-  "lastModified" to entries.map { it["lastModified"] },
-  "sizes" to entries.map { it["size"] }
+  ColumnKeys.URIS to entries.map { it[EntryKeys.URI] },
+  ColumnKeys.NAMES to entries.map { it[EntryKeys.NAME] },
+  ColumnKeys.DIRECTORIES to entries.map { it[EntryKeys.IS_DIRECTORY] },
+  ColumnKeys.LAST_MODIFIED to entries.map { it[EntryKeys.LAST_MODIFIED] },
+  ColumnKeys.SIZES to entries.map { it[EntryKeys.SIZE] }
 )
 
 private fun entryOf(uri: Uri, documentId: String, name: String, isDirectory: Boolean, lastModified: Long?, size: Long?): Map<String, Any?> {
   val childUri = DocumentsContract.buildDocumentUriUsingTree(uri, documentId).toString()
 
   return mapOf(
-    "uri" to if (isDirectory) "$childUri/" else childUri,
-    "name" to name,
-    "isDirectory" to isDirectory,
-    "lastModified" to lastModified?.toDouble(),
-    "size" to size?.toDouble()
+    EntryKeys.URI to if (isDirectory) "$childUri/" else childUri,
+    EntryKeys.NAME to name,
+    EntryKeys.IS_DIRECTORY to isDirectory,
+    EntryKeys.LAST_MODIFIED to lastModified?.toDouble(),
+    EntryKeys.SIZE to size?.toDouble()
   )
 }
 
@@ -283,11 +274,11 @@ private fun listProviderDirectory(context: Context, uri: Uri): List<Map<String, 
 
       entries.add(
         mapOf(
-          "uri" to if (isDirectory) "$childUri/" else childUri,
-          "name" to cursor.getString(1),
-          "isDirectory" to isDirectory,
-          "lastModified" to if (cursor.isNull(3)) null else cursor.getLong(3).toDouble(),
-          "size" to if (cursor.isNull(4)) null else cursor.getLong(4).toDouble()
+          EntryKeys.URI to if (isDirectory) "$childUri/" else childUri,
+          EntryKeys.NAME to cursor.getString(1),
+          EntryKeys.IS_DIRECTORY to isDirectory,
+          EntryKeys.LAST_MODIFIED to if (cursor.isNull(3)) null else cursor.getLong(3).toDouble(),
+          EntryKeys.SIZE to if (cursor.isNull(4)) null else cursor.getLong(4).toDouble()
         )
       )
     }

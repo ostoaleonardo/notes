@@ -7,11 +7,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-private const val INDEX_BATCH_SIZE = 500
-private const val PIPELINE_DEPTH = 1
-private const val NANOS_PER_MILLI = 1_000_000L
-private const val HIDDEN_PREFIX = "."
-private const val NOTE_EXTENSION = ".md"
 
 data class IndexStats(
   val total: Int,
@@ -27,17 +22,17 @@ data class IndexStats(
 
 fun scanNotes(context: Context, directoryUri: String): List<ScannedFile> =
   listDirectory(context, Uri.parse(directoryUri)).mapNotNull { entry ->
-    val name = entry["name"] as String
+    val name = entry[EntryKeys.NAME] as String
 
-    if (entry["isDirectory"] == true || !name.endsWith(NOTE_EXTENSION, ignoreCase = true) || name.startsWith(HIDDEN_PREFIX)) {
+    if (entry[EntryKeys.IS_DIRECTORY] == true || !name.endsWith(NOTE_EXTENSION, ignoreCase = true) || name.startsWith(HIDDEN_PREFIX)) {
       return@mapNotNull null
     }
 
     ScannedFile(
-      uri = entry["uri"] as String,
+      uri = entry[EntryKeys.URI] as String,
       filename = name,
-      modified = (entry["lastModified"] as Double?)?.toLong() ?: 0L,
-      size = (entry["size"] as Double?)?.toLong() ?: 0L
+      modified = (entry[EntryKeys.LAST_MODIFIED] as Double?)?.toLong() ?: 0L,
+      size = (entry[EntryKeys.SIZE] as Double?)?.toLong() ?: 0L
     )
   }
 

@@ -126,4 +126,26 @@ class NoteParserTest {
     assertEquals(emptyList<String>(), note.propertyKeys)
     assertFalse(note.invalidFrontmatter)
   }
+
+  @Test
+  fun `keeps the raw frontmatter in the searchable content`() {
+    val note = parseNote("---\ntags: [a]\nstatus: open\n---\n\nBody")
+
+    assertEquals("tags: [a]\nstatus: open\nBody", note.content)
+  }
+
+  @Test
+  fun `keeps the raw text of an invalid frontmatter in the searchable content`() {
+    val note = parseNote("---\ntags: [a, b\n---\n\nBody")
+
+    assertTrue(note.content.startsWith("tags: [a, b\n"))
+    assertTrue(note.content.endsWith("Body"))
+  }
+
+  @Test
+  fun `uses only the body as content when there is no frontmatter`() {
+    val note = parseNote("Just text")
+
+    assertEquals("Just text", note.content)
+  }
 }
