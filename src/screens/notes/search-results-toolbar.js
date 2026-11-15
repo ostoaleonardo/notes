@@ -3,19 +3,25 @@ import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 
 import { ButtonGroup } from '@/ui/button/button-group'
+import { Progress } from '@/ui/progress'
 import { Typography } from '@/ui/typography'
 import { DrawerSortMenu } from '@/components/drawer/drawer-sort-menu'
+import { getSearchSummary } from '@/utils/search-summary'
 
 import { Check } from '@/ui/icons/check'
 import { Add } from '@/icons/add'
 import { Notes } from '@/icons/notes'
 
 import { CONTROL_TOUCH_INSET } from '@/ui/tokens/components'
+import { ICON_SIZE } from '@/ui/tokens/theme'
 import { SPACING } from '@/constants/theme'
 import { TEST_IDS } from '@/constants/test-ids'
 
 export const SearchResultsToolbar = ({
     count,
+    partial,
+    searching,
+    showLoader,
     sort,
     moreContext,
     isSaved,
@@ -44,11 +50,14 @@ export const SearchResultsToolbar = ({
         }
     ], [t, moreContext, isSaved, canSave, onToggleMoreContext, onToggleSave])
 
+    const { loader, key } = getSearchSummary({ showLoader, searching, partial, count })
+
     return (
         <View style={styles.container}>
-            <Typography variant='bodySmall'>
-                {t('search.results', { count })}
-            </Typography>
+            <View style={styles.summary}>
+                {loader && <Progress dimension={ICON_SIZE.md} />}
+                <Typography variant='bodySmall'>{t(key, { count })}</Typography>
+            </View>
 
             <View style={styles.actions}>
                 <ButtonGroup buttons={buttons} />
@@ -70,6 +79,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginVertical: -CONTROL_TOUCH_INSET,
         paddingHorizontal: SPACING.lg
+    },
+    summary: {
+        gap: SPACING.xs,
+        alignItems: 'center',
+        flexDirection: 'row'
     },
     actions: {
         gap: SPACING.xs,

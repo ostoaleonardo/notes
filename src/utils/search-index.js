@@ -1,21 +1,20 @@
-import { openDatabaseAsync } from 'expo-sqlite'
 import RepositoryFs from 'repository-fs'
 
+import { queryIndex } from '@/utils/index-query'
 import { buildNotePath } from '@/utils/note-path'
-import { buildPrefilter, compilePrefilter } from '@/utils/search-prefilter'
-import { logError } from '@/utils/log-error'
+import { getNoteComparator } from '@/utils/note-sort'
+import { buildPrefilter, compilePage } from '@/utils/search-prefilter'
+import {
+    SEARCH_DATABASE_MAX_PAGES,
+    SEARCH_DATABASE_PAGE_SIZE,
+    SEARCH_INDEX_MIN_NOTES,
+    SEARCH_INDEX_UNCOVERED_RATIO
+} from '@/constants/search-index'
 
-import { LOG_MESSAGES } from '@/constants/log-messages'
-import { SEARCH_INDEX_CANDIDATE_RATIO, SEARCH_INDEX_MIN_NOTES } from '@/constants/search-index'
+export class SourceOverflowError extends Error {}
 
-export const createSearchIndex = ({ openDatabase, listIndexedNotes }) => {
+export const createSearchIndex = ({ query, listIndexedNotes }) => {
     let covered = new WeakSet()
-    let database = null
-
-    const getDatabase = () => {
-        database ??= openDatabase()
-        return database
-    }
 
     const refresh = async (notes) => {
         const { repositoryIds, filenames, modified } = await listIndexedNotes()
@@ -27,33 +26,72 @@ export const createSearchIndex = ({ openDatabase, listIndexedNotes }) => {
         covered = new WeakSet(notes.filter((note) => indexed.get(note.path) === note.updatedAt))
     }
 
-    const findCandidates = async (ast, notes, notePaths) => {
+    const createSource = ({ ast, notes, notePaths, sort }) => {
         if (notes.length < SEARCH_INDEX_MIN_NOTES) return null
+
+        const uncovered = notes.filter((note) => !covered.has(note))
+        if (uncovered.length > notes.length * SEARCH_INDEX_UNCOVERED_RATIO) return null
 
         const folders = new Set([...notePaths.values()].map((folder) => folder.toLowerCase()))
         const tree = buildPrefilter(ast, folders)
         if (!tree) return null
 
-        const limit = Math.floor(notes.length * SEARCH_INDEX_CANDIDATE_RATIO)
-        const { sql, params } = compilePrefilter(tree)
+        const notesByPath = new Map(notes.map((note) => [note.path, note]))
+        const compare = getNoteComparator(sort)
+        const pending = uncovered.sort(compare)
 
-        try {
-            const rows = await (await getDatabase()).getAllAsync(sql, ...params, limit + 1)
-            if (rows.length > limit) return null
+        let cursor = null
+        let exhausted = false
+        let pendingIndex = 0
+        let pages = 0
 
-            const hits = new Set(rows.map(({ repositoryId, filename }) => buildNotePath(repositoryId, filename)))
+        const flushBefore = (batch, note) => {
+            while (pendingIndex < pending.length && compare(pending[pendingIndex], note) < 0) {
+                batch.push(pending[pendingIndex])
+                pendingIndex += 1
+            }
+        }
 
-            return notes.filter((note) => hits.has(note.path) || !covered.has(note))
-        } catch (error) {
-            logError(LOG_MESSAGES.ERROR_SEARCHING_INDEX, error)
-            return null
+        return {
+            nextBatch: async () => {
+                if (exhausted && pendingIndex >= pending.length) return null
+
+                const batch = []
+
+                if (!exhausted) {
+                    if (pages >= SEARCH_DATABASE_MAX_PAGES) throw new SourceOverflowError()
+
+                    pages += 1
+
+                    const { sql, params } = compilePage({ tree, sort, cursor, size: SEARCH_DATABASE_PAGE_SIZE })
+                    const rows = await query(sql, ...params)
+
+                    exhausted = rows.length < SEARCH_DATABASE_PAGE_SIZE
+                    cursor = rows.length ? rows.at(-1) : cursor
+
+                    rows.forEach(({ repositoryId, filename }) => {
+                        const note = notesByPath.get(buildNotePath(repositoryId, filename))
+                        if (!note || !covered.has(note)) return
+
+                        flushBefore(batch, note)
+                        batch.push(note)
+                    })
+                }
+
+                if (exhausted) {
+                    batch.push(...pending.slice(pendingIndex))
+                    pendingIndex = pending.length
+                }
+
+                return batch
+            }
         }
     }
 
-    return { refresh, findCandidates }
+    return { refresh, createSource }
 }
 
 export const searchIndex = createSearchIndex({
-    openDatabase: () => openDatabaseAsync(RepositoryFs.indexDatabaseName, { useNewConnection: true }),
+    query: queryIndex,
     listIndexedNotes: () => RepositoryFs.listIndexedNotes()
 })

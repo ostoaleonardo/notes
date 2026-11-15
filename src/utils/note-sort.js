@@ -14,6 +14,6 @@ const NOTE_COMPARATORS = {
     [NOTE_SORTS.CREATED_ASC]: (a, b) => createdAt(a) - createdAt(b) || compareNotesByTitle(a, b)
 }
 
-export const sortNotes = (notes, sort = DEFAULT_NOTE_SORT) => (
-    notes.slice().sort(NOTE_COMPARATORS[sort] || compareNotesByTitle)
-)
+export const getNoteComparator = (sort = DEFAULT_NOTE_SORT) => NOTE_COMPARATORS[sort] || compareNotesByTitle
+
+export const sortNotes = (notes, sort = DEFAULT_NOTE_SORT) => notes.slice().sort(getNoteComparator(sort))

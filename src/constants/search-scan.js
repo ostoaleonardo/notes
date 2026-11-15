@@ -1,0 +1,2 @@
+export const SEARCH_SCAN_CHUNK_SIZE = 1000
+export const SEARCH_SORT_CHUNK_SIZE = 2000

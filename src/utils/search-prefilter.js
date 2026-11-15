@@ -21,8 +21,11 @@ import {
     SEARCH_INDEX_NORMALIZATION_FORM,
     SEARCH_INDEX_QUOTE,
     SEARCH_INDEX_SQL,
-    SEARCH_INDEX_TAG_CHILD_SUFFIX
+    SEARCH_INDEX_TAG_CHILD_SUFFIX,
+    SEARCH_PAGE_SQL,
+    SEARCH_SORT_ORDERS
 } from '@/constants/search-index'
+import { DEFAULT_NOTE_SORT } from '@/constants/note-sort'
 
 const CONTENT_ONLY = [SEARCH_INDEX_FIELDS.CONTENT]
 const FILENAME_ONLY = [SEARCH_INDEX_FIELDS.FILENAME]
@@ -119,7 +122,7 @@ const toMatch = (node) => {
     return `(${parts.join(joiner)})`
 }
 
-export const compilePrefilter = (tree) => {
+export const compileMatchIds = (tree) => {
     const params = []
 
     const build = (node) => {
@@ -139,7 +142,50 @@ export const compilePrefilter = (tree) => {
         return `SELECT id FROM (${node.children.map(build).join(joiner)})`
     }
 
-    const ids = build(tree)
+    return { sql: `(${build(tree)})`, params }
+}
 
-    return { sql: `${SEARCH_INDEX_SQL.NOTES}(${ids}) LIMIT ?`, params }
+const keysetCondition = (order, cursor) => {
+    const clauses = order.map((current, index) => {
+        const equalities = order.slice(0, index).map((previous) => `${previous.column}${SEARCH_PAGE_SQL.EQUALS}`)
+        const comparison = `${current.column}${current.descending ? SEARCH_PAGE_SQL.LESS : SEARCH_PAGE_SQL.GREATER}`
+
+        return `(${[...equalities, comparison].join(SEARCH_PAGE_SQL.AND)})`
+    })
+
+    const params = order.flatMap((current, index) => [
+        ...order.slice(0, index).map((previous) => cursor[previous.field]),
+        cursor[current.field]
+    ])
+
+    return { sql: `(${clauses.join(SEARCH_PAGE_SQL.OR)})`, params }
+}
+
+export const compilePage = ({ tree, sort, cursor, size }) => {
+    const order = SEARCH_SORT_ORDERS[sort] || SEARCH_SORT_ORDERS[DEFAULT_NOTE_SORT]
+    const conditions = []
+    const params = []
+
+    if (tree) {
+        const ids = compileMatchIds(tree)
+        conditions.push(`${SEARCH_PAGE_SQL.ID_IN}${ids.sql}`)
+        params.push(...ids.params)
+    }
+
+    if (cursor) {
+        const keyset = keysetCondition(order, cursor)
+        conditions.push(keyset.sql)
+        params.push(...keyset.params)
+    }
+
+    const where = conditions.length ? `${SEARCH_PAGE_SQL.WHERE}${conditions.join(SEARCH_PAGE_SQL.AND)}` : ''
+
+    const orderBy = order
+        .map((current) => `${current.column}${current.descending ? SEARCH_PAGE_SQL.DESC : SEARCH_PAGE_SQL.ASC}`)
+        .join(', ')
+
+    return {
+        sql: `${SEARCH_PAGE_SQL.SELECT}${where}${SEARCH_PAGE_SQL.ORDER_BY}${orderBy}${SEARCH_PAGE_SQL.LIMIT}`,
+        params: [...params, size]
+    }
 }

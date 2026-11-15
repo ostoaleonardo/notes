@@ -25,6 +25,11 @@ export const GroupedList = ({
     const page = usePagedRows(rows, paged ? LIST_WINDOW.pageSize : Infinity)
     const total = totalOverride ?? rows.length
 
+    const handleEndReached = useCallback(() => {
+        if (page.hasMore) page.onEndReached()
+        else onEndReached?.()
+    }, [page, onEndReached])
+
     const renderGroupedItem = useCallback((info) => (
         <GroupPositionContext.Provider value={getGroupPosition(info.index, total)}>
             {renderItem(info)}
@@ -35,7 +40,7 @@ export const GroupedList = ({
         <List
             data={paged ? page.data : data}
             renderItem={renderGroupedItem}
-            onEndReached={paged ? page.onEndReached : onEndReached}
+            onEndReached={paged ? handleEndReached : onEndReached}
             onEndReachedThreshold={LIST_WINDOW.endThreshold}
             initialNumToRender={LIST_WINDOW.initial}
             maxToRenderPerBatch={LIST_WINDOW.batch}

@@ -17,5 +17,5 @@ export function usePagedRows(rows, pageSize) {
         })
     }, [rows, pageSize])
 
-    return { data, total: rows.length, onEndReached }
+    return { data, total: rows.length, hasMore: count < rows.length, onEndReached }
 }

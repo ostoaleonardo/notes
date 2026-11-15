@@ -1,4 +1,4 @@
-import { buildPrefilter, compilePrefilter } from '../search-prefilter'
+import { buildPrefilter, compileMatchIds, compilePage } from '../search-prefilter'
 import { filterNotes } from '../search-filter'
 import { parseSearchQuery } from '../search-parser'
 import { getNoteTags } from '../note-tags'
@@ -155,16 +155,15 @@ describe('search prefilter', () => {
 })
 
 describe('search prefilter sql', () => {
-    test('compiles a single term into a notes lookup with a limit placeholder', () => {
-        const { sql, params } = compilePrefilter({ kind: 'fts', columns: ['title', 'content'], term: 'agenda' })
+    test('compiles a single term into a match subquery', () => {
+        const { sql, params } = compileMatchIds({ kind: 'fts', columns: ['title', 'content'], term: 'agenda' })
 
         expect(sql).toContain('note_fts MATCH ?')
-        expect(sql.endsWith('LIMIT ?')).toBe(true)
         expect(params).toEqual(['{title content} : "agenda"'])
     })
 
     test('escapes double quotes inside a term', () => {
-        const { params } = compilePrefilter({ kind: 'fts', columns: ['content'], term: 'say "hi"' })
+        const { params } = compileMatchIds({ kind: 'fts', columns: ['content'], term: 'say "hi"' })
 
         expect(params).toEqual(['{content} : "say ""hi"""'])
     })
@@ -184,7 +183,7 @@ describe('search prefilter sql', () => {
             ]
         }
 
-        const { sql, params } = compilePrefilter(tree)
+        const { sql, params } = compileMatchIds(tree)
 
         expect(sql).not.toContain('INTERSECT')
         expect(params).toEqual(['({content} : "one" AND ({title} : "two" OR {content} : "three"))'])
@@ -205,7 +204,7 @@ describe('search prefilter sql', () => {
             ]
         }
 
-        const { sql, params } = compilePrefilter(tree)
+        const { sql, params } = compileMatchIds(tree)
 
         expect(sql).toContain(' INTERSECT ')
         expect(sql).toContain(' UNION ')
@@ -213,8 +212,73 @@ describe('search prefilter sql', () => {
     })
 
     test('escapes like wildcards in a tag name', () => {
-        const { params } = compilePrefilter({ kind: 'tag', name: 'a_b%' })
+        const { params } = compileMatchIds({ kind: 'tag', name: 'a_b%' })
 
         expect(params).toEqual(['a_b%', 'a\\_b\\%/%'])
+    })
+})
+
+describe('search page sql', () => {
+    const TREE = { kind: 'fts', columns: ['content'], term: 'agenda' }
+
+    test('pages every note by name when there is no filter and no cursor', () => {
+        const { sql, params } = compilePage({ tree: null, sort: 'name-asc', cursor: null, size: 50 })
+
+        expect(sql).toContain('FROM notes n ORDER BY n.sort_key ASC, n.id ASC LIMIT ?')
+        expect(sql).not.toContain('WHERE')
+        expect(params).toEqual([50])
+    })
+
+    test('restricts the page to the notes that match the filter', () => {
+        const { sql, params } = compilePage({ tree: TREE, sort: 'name-asc', cursor: null, size: 20 })
+
+        expect(sql).toContain('WHERE n.id IN (')
+        expect(params).toEqual(['{content} : "agenda"', 20])
+    })
+
+    test('continues after the cursor with a keyset condition for an ascending name order', () => {
+        const cursor = { sortKey: 'key', id: 7 }
+        const { sql, params } = compilePage({ tree: null, sort: 'name-asc', cursor, size: 10 })
+
+        expect(sql).toContain('WHERE ((n.sort_key > ?) OR (n.sort_key = ? AND n.id > ?))')
+        expect(params).toEqual(['key', 'key', 7, 10])
+    })
+
+    test('reverses the comparison for a descending name order', () => {
+        const cursor = { sortKey: 'key', id: 7 }
+        const { sql } = compilePage({ tree: null, sort: 'name-desc', cursor, size: 10 })
+
+        expect(sql).toContain('n.sort_key < ?')
+        expect(sql).toContain('ORDER BY n.sort_key DESC, n.id DESC')
+    })
+
+    test('orders by modified time then by name with a three level keyset', () => {
+        const cursor = { sortKey: 'key', modified: 500, id: 7 }
+        const { sql, params } = compilePage({ tree: null, sort: 'modified-desc', cursor, size: 10 })
+
+        expect(sql).toContain('ORDER BY n.modified DESC, n.sort_key ASC, n.id ASC')
+        expect(sql).toContain('(n.modified < ?)')
+        expect(sql).toContain('(n.modified = ? AND n.sort_key > ?)')
+        expect(sql).toContain('(n.modified = ? AND n.sort_key = ? AND n.id > ?)')
+        expect(params).toEqual([500, 500, 'key', 500, 'key', 7, 10])
+    })
+
+    test('uses the modified column for the created orders', () => {
+        const { sql } = compilePage({ tree: null, sort: 'created-asc', cursor: null, size: 10 })
+
+        expect(sql).toContain('ORDER BY n.modified ASC, n.sort_key ASC, n.id ASC')
+    })
+
+    test('falls back to the name order for an unknown sort', () => {
+        const { sql } = compilePage({ tree: null, sort: 'other', cursor: null, size: 10 })
+
+        expect(sql).toContain('ORDER BY n.sort_key ASC, n.id ASC')
+    })
+
+    test('keeps the filter parameters before the cursor and the size', () => {
+        const cursor = { sortKey: 'key', id: 3 }
+        const { params } = compilePage({ tree: TREE, sort: 'name-asc', cursor, size: 5 })
+
+        expect(params).toEqual(['{content} : "agenda"', 'key', 'key', 3, 5])
     })
 })

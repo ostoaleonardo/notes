@@ -1,11 +1,8 @@
-import { createSearchIndex } from '../search-index'
-import { logError } from '../log-error'
+import { SourceOverflowError, createSearchIndex } from '../search-index'
 import { parseSearchQuery } from '../search-parser'
 import { buildNotePath } from '../note-path'
 
-jest.mock('expo-sqlite', () => ({ openDatabaseAsync: jest.fn() }))
 jest.mock('repository-fs', () => ({ __esModule: true, default: {} }))
-jest.mock('../log-error', () => ({ logError: jest.fn() }))
 
 const buildNote = (name, updatedAt = 1) => ({
     path: buildNotePath('repo', `${name}.md`),
@@ -16,9 +13,10 @@ const buildNote = (name, updatedAt = 1) => ({
     updatedAt
 })
 
-const NOTES = Array.from({ length: 2000 }, (_, index) => buildNote(`note${index}`))
+const NOTES = Array.from({ length: 2000 }, (_, index) => buildNote(`note${String(index).padStart(4, '0')}`))
 const NOTE_PATHS = new Map(NOTES.map((note) => [note.path, '']))
 const AST = parseSearchQuery('agenda')
+const SORT = 'name-asc'
 
 const buildIndexed = (notes) => ({
     repositoryIds: notes.map(() => 'repo'),
@@ -26,129 +24,146 @@ const buildIndexed = (notes) => ({
     modified: notes.map((note) => note.updatedAt)
 })
 
-const buildDatabase = (rows) => ({ getAllAsync: jest.fn(async () => rows) })
+const row = (note, id) => ({
+    id,
+    repositoryId: 'repo',
+    filename: note.filename,
+    sortKey: `key-${note.title}`,
+    modified: note.updatedAt
+})
 
-const hit = (note) => ({ repositoryId: 'repo', filename: note.filename })
+const buildIndex = (pages) => {
+    const query = jest.fn()
+    pages.forEach((page) => query.mockResolvedValueOnce(page))
 
-describe('search index candidates', () => {
-    beforeEach(() => {
-        logError.mockClear()
-    })
+    const index = createSearchIndex({ query, listIndexedNotes: async () => buildIndexed(NOTES) })
 
-    test('returns only the matching notes when every note is covered', async () => {
-        const database = buildDatabase([hit(NOTES[2]), hit(NOTES[5])])
-        const index = createSearchIndex({
-            openDatabase: async () => database,
-            listIndexedNotes: async () => buildIndexed(NOTES)
-        })
+    return { index, query }
+}
 
-        await index.refresh(NOTES)
+const request = (overrides = {}) => ({ ast: AST, notes: NOTES, notePaths: NOTE_PATHS, sort: SORT, ...overrides })
 
-        expect(await index.findCandidates(AST, NOTES, NOTE_PATHS)).toEqual([NOTES[2], NOTES[5]])
-    })
+const titles = (batch) => batch.map((note) => note.title)
 
-    test('keeps notes that are not covered by the index', async () => {
-        const edited = { ...NOTES[7], note: 'changed' }
-        const notes = NOTES.map((note) => (note === NOTES[7] ? edited : note))
-        const database = buildDatabase([hit(NOTES[2])])
-        const index = createSearchIndex({
-            openDatabase: async () => database,
-            listIndexedNotes: async () => buildIndexed(NOTES)
-        })
-
-        await index.refresh(NOTES)
-
-        expect(await index.findCandidates(AST, notes, NOTE_PATHS)).toEqual([NOTES[2], edited])
-    })
-
-    test('keeps notes whose modified time differs from the indexed one', async () => {
-        const stale = NOTES.map((note) => (note === NOTES[4] ? { ...note, updatedAt: 99 } : note))
-        const database = buildDatabase([])
-        const index = createSearchIndex({
-            openDatabase: async () => database,
-            listIndexedNotes: async () => buildIndexed(NOTES)
-        })
-
-        await index.refresh(stale)
-
-        expect(await index.findCandidates(AST, stale, NOTE_PATHS)).toEqual([stale[4]])
-    })
-
-    test('keeps every note before the first refresh', async () => {
-        const database = buildDatabase([])
-        const index = createSearchIndex({
-            openDatabase: async () => database,
-            listIndexedNotes: async () => buildIndexed(NOTES)
-        })
-
-        expect(await index.findCandidates(AST, NOTES, NOTE_PATHS)).toEqual(NOTES)
-    })
-
-    test('gives up when the index returns more than a tenth of the notes', async () => {
-        const database = buildDatabase(NOTES.slice(0, 201).map(hit))
-        const index = createSearchIndex({
-            openDatabase: async () => database,
-            listIndexedNotes: async () => buildIndexed(NOTES)
-        })
-
-        await index.refresh(NOTES)
-
-        expect(await index.findCandidates(AST, NOTES, NOTE_PATHS)).toBeNull()
-    })
-
-    test('asks the database for one row more than the limit', async () => {
-        const database = buildDatabase([])
-        const index = createSearchIndex({
-            openDatabase: async () => database,
-            listIndexedNotes: async () => buildIndexed(NOTES)
-        })
-
-        await index.findCandidates(AST, NOTES, NOTE_PATHS)
-
-        expect(database.getAllAsync.mock.calls[0].at(-1)).toBe(201)
-    })
-
+describe('search index source', () => {
     test('skips the index for a small collection of notes', async () => {
-        const database = buildDatabase([])
-        const index = createSearchIndex({
-            openDatabase: async () => database,
-            listIndexedNotes: async () => buildIndexed(NOTES)
-        })
+        const { index } = buildIndex([])
+        await index.refresh(NOTES)
 
-        expect(await index.findCandidates(AST, NOTES.slice(0, 50), NOTE_PATHS)).toBeNull()
-        expect(database.getAllAsync).not.toHaveBeenCalled()
+        expect(index.createSource(request({ notes: NOTES.slice(0, 50) }))).toBeNull()
     })
 
-    test('skips the database when the query cannot be filtered', async () => {
-        const database = buildDatabase([])
-        const index = createSearchIndex({
-            openDatabase: async () => database,
-            listIndexedNotes: async () => buildIndexed(NOTES)
-        })
+    test('skips the index when too many notes are not covered', () => {
+        const { index } = buildIndex([])
 
-        expect(await index.findCandidates(parseSearchQuery('-agenda'), NOTES, NOTE_PATHS)).toBeNull()
-        expect(database.getAllAsync).not.toHaveBeenCalled()
+        expect(index.createSource(request())).toBeNull()
     })
 
-    test('logs the failure and returns null when the query throws', async () => {
+    test('returns the notes of a database page in the order of the page', async () => {
+        const { index } = buildIndex([[row(NOTES[7], 8), row(NOTES[3], 4)]])
+        await index.refresh(NOTES)
+
+        const source = index.createSource(request())
+
+        expect(titles(await source.nextBatch())).toEqual(['note0007', 'note0003'])
+    })
+
+    test('asks for the next page after the last row of the previous one', async () => {
+        const firstPage = Array.from({ length: 500 }, (_, position) => row(NOTES[position], position + 1))
+        const { index, query } = buildIndex([firstPage, [row(NOTES[500], 501)]])
+        await index.refresh(NOTES)
+
+        const source = index.createSource(request())
+        await source.nextBatch()
+        const second = await source.nextBatch()
+
+        expect(titles(second)).toEqual(['note0500'])
+        expect(query.mock.calls[1]).toContain('key-note0499')
+        expect(query.mock.calls[1]).toContain(500)
+    })
+
+    test('finishes after a short page', async () => {
+        const { index } = buildIndex([[row(NOTES[1], 2)]])
+        await index.refresh(NOTES)
+
+        const source = index.createSource(request())
+        await source.nextBatch()
+
+        expect(await source.nextBatch()).toBeNull()
+    })
+
+    test('places an uncovered note in order among the database rows', async () => {
+        const edited = { ...NOTES[2], note: 'changed', updatedAt: 99 }
+        const notes = NOTES.map((note) => (note === NOTES[2] ? edited : note))
+        const { index } = buildIndex([[row(NOTES[1], 2), row(NOTES[2], 3), row(NOTES[3], 4)]])
+        await index.refresh(NOTES)
+
+        const source = index.createSource(request({ notes }))
+
+        expect(titles(await source.nextBatch())).toEqual(['note0001', 'note0002', 'note0003'])
+        expect((await source.nextBatch())).toBeNull()
+    })
+
+    test('appends the uncovered notes that sort after the last database row', async () => {
+        const created = buildNote('zzz-new')
+        const notes = [...NOTES, created]
+        const { index } = buildIndex([[row(NOTES[1], 2)]])
+        await index.refresh(NOTES)
+
+        const source = index.createSource(request({ notes }))
+
+        expect(titles(await source.nextBatch())).toEqual(['note0001', 'zzz-new'])
+    })
+
+    test('skips database rows for notes that are not loaded', async () => {
+        const ghost = buildNote('ghost')
+        const { index } = buildIndex([[row(ghost, 9), row(NOTES[4], 5)]])
+        await index.refresh(NOTES)
+
+        const source = index.createSource(request())
+
+        expect(titles(await source.nextBatch())).toEqual(['note0004'])
+    })
+
+    test('filters the page query with the full text index when the query allows it', async () => {
+        const { index, query } = buildIndex([[]])
+        await index.refresh(NOTES)
+
+        await index.createSource(request()).nextBatch()
+
+        expect(query.mock.calls[0][0]).toContain('MATCH')
+    })
+
+    test('skips the index when the query cannot use the full text index', async () => {
+        const { index } = buildIndex([])
+        await index.refresh(NOTES)
+
+        expect(index.createSource(request({ ast: parseSearchQuery('-agenda') }))).toBeNull()
+        expect(index.createSource(request({ ast: parseSearchQuery('ag') }))).toBeNull()
+    })
+
+    test('gives up when the candidates do not fit in a few pages', async () => {
+        const fullPage = (offset) => Array.from({ length: 500 }, (_, position) => row(NOTES[offset + position], offset + position + 1))
+        const { index, query } = buildIndex([fullPage(0), fullPage(500), fullPage(1000)])
+        await index.refresh(NOTES)
+
+        const source = index.createSource(request())
+        await source.nextBatch()
+        await source.nextBatch()
+        await source.nextBatch()
+
+        await expect(source.nextBatch()).rejects.toBeInstanceOf(SourceOverflowError)
+        expect(query).toHaveBeenCalledTimes(3)
+    })
+
+    test('rejects when the database fails', async () => {
         const failure = new Error('locked')
-        const database = { getAllAsync: jest.fn(async () => { throw failure }) }
         const index = createSearchIndex({
-            openDatabase: async () => database,
+            query: jest.fn().mockRejectedValue(failure),
             listIndexedNotes: async () => buildIndexed(NOTES)
         })
+        await index.refresh(NOTES)
 
-        expect(await index.findCandidates(AST, NOTES, NOTE_PATHS)).toBeNull()
-        expect(logError).toHaveBeenCalledWith(expect.any(String), failure)
-    })
-
-    test('opens the database only once', async () => {
-        const openDatabase = jest.fn(async () => buildDatabase([]))
-        const index = createSearchIndex({ openDatabase, listIndexedNotes: async () => buildIndexed(NOTES) })
-
-        await index.findCandidates(AST, NOTES, NOTE_PATHS)
-        await index.findCandidates(AST, NOTES, NOTE_PATHS)
-
-        expect(openDatabase).toHaveBeenCalledTimes(1)
+        await expect(index.createSource(request()).nextBatch()).rejects.toBe(failure)
     })
 })

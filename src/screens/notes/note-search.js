@@ -14,6 +14,8 @@ import { SearchBar } from '@/components/input/search-bar'
 
 import { useNotes } from '@/hooks/use-notes'
 import { useRepositories } from '@/hooks/use-repositories'
+import { useDebouncedValue } from '@/hooks/use-debounced-value'
+import { useIndicatorFlag } from '@/hooks/use-indicator-flag'
 import { useSearchOptions } from '@/hooks/use-search-options'
 import { useSearchResults } from '@/hooks/use-search-results'
 import { useStorage } from '@/hooks/use-storage'
@@ -28,9 +30,13 @@ import { pushOnce } from '@/utils/navigation'
 
 import { RECENT_SEARCHES_LIMIT } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { SEARCH_DEBOUNCE_MS, SEARCH_PROGRESS_DELAY_MS, SEARCH_PROGRESS_MIN_MS } from '@/constants/debounce'
 import { SNIPPET_EXTENDED_LIMIT, SNIPPET_LIMIT } from '@/constants/search-query'
 import { SPACING } from '@/constants/theme'
 import { TEST_IDS } from '@/constants/test-ids'
+
+const isBlankQuery = (value) => value.trim() === ''
+const NO_RESULTS = []
 
 export const NoteSearch = ({ onClose, initialQuery = '' }) => {
     const { t } = useTranslation()
@@ -66,12 +72,13 @@ export const NoteSearch = ({ onClose, initialQuery = '' }) => {
     const ast = useMemo(() => parseSearchQuery(query), [query])
     const chips = useMemo(() => getQueryChips(ast), [ast])
 
-    const deferredQuery = useDeferredValue(query)
+    const debouncedQuery = useDebouncedValue(query, SEARCH_DEBOUNCE_MS, isBlankQuery)
+    const deferredQuery = useDeferredValue(debouncedQuery)
     const deferredAst = useMemo(() => parseSearchQuery(deferredQuery), [deferredQuery])
     const hasResultsQuery = !isEmptySearch(deferredAst)
     const { sort, matchCase, moreContext } = options
 
-    const results = useSearchResults({
+    const { results, done, scanning, loading, loadMore } = useSearchResults({
         enabled: hasResultsQuery,
         ast: deferredAst,
         notes,
@@ -81,6 +88,15 @@ export const NoteSearch = ({ onClose, initialQuery = '' }) => {
         sort
     })
 
+    const typing = !isBlankQuery(query) && query !== deferredQuery
+    const pending = typing || loading
+    const visibleResults = pending ? NO_RESULTS : results
+
+    const showProgress = useIndicatorFlag(
+        pending || scanning,
+        SEARCH_PROGRESS_DELAY_MS,
+        SEARCH_PROGRESS_MIN_MS
+    )
     const highlights = useMemo(() => collectHighlights(deferredAst), [deferredAst])
 
     const onTogglePanel = useCallback(() => setPanelOpen((open) => !open), [])
@@ -161,7 +177,10 @@ export const NoteSearch = ({ onClose, initialQuery = '' }) => {
                 {panelOpen ? null : hasResultsQuery ? (
                     <>
                         <SearchResultsToolbar
-                            count={results.length}
+                            count={visibleResults.length}
+                            partial={!done}
+                            searching={pending}
+                            showLoader={showProgress}
                             sort={sort}
                             moreContext={moreContext}
                             isSaved={isSaved}
@@ -171,11 +190,13 @@ export const NoteSearch = ({ onClose, initialQuery = '' }) => {
                             onToggleMoreContext={options.onToggleMoreContext}
                         />
                         <SearchResults
-                            results={results}
+                            results={visibleResults}
                             aliasById={aliasById}
                             highlights={highlights}
                             snippetLimit={moreContext ? SNIPPET_EXTENDED_LIMIT : SNIPPET_LIMIT}
                             onOpenResult={onOpenResult}
+                            onLoadMore={loadMore}
+                            loading={pending}
                         />
                     </>
                 ) : (

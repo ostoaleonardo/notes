@@ -16,7 +16,9 @@ export const SearchResults = ({
     aliasById,
     highlights,
     snippetLimit,
-    onOpenResult
+    onOpenResult,
+    onLoadMore,
+    loading
 }) => {
     const { t } = useTranslation()
 
@@ -32,8 +34,9 @@ export const SearchResults = ({
                 component={AnimatedList}
                 gap={SPACING.xxxs}
                 data={results}
+                onEndReached={onLoadMore}
                 keyExtractor={getNotePath}
-                emptyLabel={t('search.empty')}
+                emptyLabel={loading ? '' : t('search.empty')}
                 keyboardShouldPersistTaps='handled'
                 contentContainerStyle={[styles.list, { paddingBottom: BOTTOM_GAP }]}
                 renderItem={({ item }) => (
