@@ -1,9 +1,12 @@
-export const getRepositoryNoteCount = (uri, listMarkdownFiles) => listMarkdownFiles(uri).length
+export const getRepositoryNoteCount = async (uri, scanMarkdownFiles) => (await scanMarkdownFiles(uri)).length
 
-export const getRepositoryNoteCounts = (repositories, listMarkdownFiles) => (
-    Object.fromEntries(
-        repositories.map((repository) => [repository.id, getRepositoryNoteCount(repository.uri, listMarkdownFiles)])
-    )
+export const getRepositoryNoteCounts = async (repositories, scanMarkdownFiles) => (
+    Object.fromEntries(await Promise.all(
+        repositories.map(async (repository) => [
+            repository.id,
+            await getRepositoryNoteCount(repository.uri, scanMarkdownFiles)
+        ])
+    ))
 )
 
 export const getChildFolderCounts = (descendants) => {

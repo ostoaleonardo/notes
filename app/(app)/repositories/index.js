@@ -32,7 +32,7 @@ export default function Repositories() {
     const { t } = useTranslation()
     const { bottom } = useSafeAreaInsets()
     const { pro } = usePro()
-    const { listMarkdownFiles } = useFileStorage()
+    const { scanMarkdownFiles } = useFileStorage()
 
     const {
         repositories,
@@ -51,8 +51,8 @@ export default function Repositories() {
     const [deleteId, setDeleteId] = useState('')
 
     const refreshCounts = useCallback(() => (
-        setCounts(getRepositoryNoteCounts(rootRepositories, listMarkdownFiles))
-    ), [rootRepositories, listMarkdownFiles])
+        getRepositoryNoteCounts(rootRepositories, scanMarkdownFiles).then(setCounts)
+    ), [rootRepositories, scanMarkdownFiles])
 
     useEffect(() => {
         refreshCounts()

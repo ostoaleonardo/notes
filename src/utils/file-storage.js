@@ -286,7 +286,7 @@ const deleteVersionsUnder = (rootUri, prefix) => {
 }
 
 const migrateLegacyVersions = async (folderUri, rootUri, folderPath) => {
-    const legacyFiles = listEntries(folderUri).filter((entry) => (
+    const legacyFiles = (await scanEntries(folderUri)).filter((entry) => (
         !entry.isDirectory && entry.name.endsWith(VERSIONS_FILENAME_SUFFIX)
     ))
 

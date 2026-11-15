@@ -241,7 +241,7 @@ describe('rename repository', () => {
         }
 
         mockFileStorage.renameDirectory.mockReturnValue('content://root-1/renamed')
-        mockFileStorage.listSubdirectories.mockImplementation((uri) => {
+        mockFileStorage.scanSubdirectories.mockImplementation(async (uri) => {
             if (uri === 'content://root-1/renamed') {
                 return [{ uri: 'content://root-1/renamed/grand', name: 'grand' }]
             }

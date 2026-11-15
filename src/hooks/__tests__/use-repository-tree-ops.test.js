@@ -25,7 +25,7 @@ const dir = (name, uri = `file:///${name}`) => ({ name, uri })
 
 const makeFileStorage = ({ existing = [], subdirectories = {} } = {}) => ({
     listMarkdownFiles: jest.fn(() => existing.map((name) => ({ name }))),
-    listSubdirectories: jest.fn((uri) => {
+    scanSubdirectories: jest.fn(async (uri) => {
         const entry = subdirectories[uri]
         if (entry instanceof Error) throw entry
         return entry || []
@@ -104,7 +104,7 @@ describe('repository tree ops', () => {
                 }
             })
 
-            const entries = result.current.discoverSubfolders(dir('root'), 'root-id')
+            const entries = await result.current.discoverSubfolders(dir('root'), 'root-id')
 
             expect(entries.map(({ alias, parentId }) => [alias, parentId])).toEqual([
                 ['a', 'root-id'],
@@ -115,7 +115,7 @@ describe('repository tree ops', () => {
         test('returns nothing for a folder without subdirectories', async () => {
             const { result } = await setup()
 
-            expect(result.current.discoverSubfolders(dir('root'), 'root-id')).toEqual([])
+            expect(await result.current.discoverSubfolders(dir('root'), 'root-id')).toEqual([])
         })
     })
 
@@ -133,7 +133,7 @@ describe('repository tree ops', () => {
                 }
             })
 
-            const relinked = result.current.relinkUris(root)
+            const relinked = await result.current.relinkUris(root)
 
             expect(relinked.map(({ id, uri }) => [id, uri])).toEqual([
                 ['child', 'file:///root/a'],
@@ -147,7 +147,7 @@ describe('repository tree ops', () => {
                 subdirectories: { 'file:///root': [] }
             })
 
-            expect(result.current.relinkUris(root)).toEqual([])
+            expect(await result.current.relinkUris(root)).toEqual([])
         })
 
         test('treats an unreadable folder as having no children', async () => {
@@ -156,7 +156,7 @@ describe('repository tree ops', () => {
                 subdirectories: { 'file:///root': new Error('denied') }
             })
 
-            expect(result.current.relinkUris(root)).toEqual([])
+            expect(await result.current.relinkUris(root)).toEqual([])
         })
     })
 })

@@ -34,7 +34,7 @@ export const RepositoryItem = memo(({
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { getDescendants } = useRepositories()
-    const { listMarkdownFiles } = useFileStorage()
+    const { scanMarkdownFiles } = useFileStorage()
     const position = useGroupPosition()
 
     const [expanded, setExpanded] = useState(false)
@@ -59,7 +59,7 @@ export const RepositoryItem = memo(({
 
     const { counts: noteCounts, loading: loadingCounts } = useDescendantNoteCounts(
         descendants,
-        listMarkdownFiles,
+        scanMarkdownFiles,
         expanded
     )
 

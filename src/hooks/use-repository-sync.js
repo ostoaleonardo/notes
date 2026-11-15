@@ -36,14 +36,16 @@ export function useRepositorySync({
                 .map(reconcileTree)
         )
 
-        const newDescendants = diskSubdirectories
-            .filter((d) => !trackedUris.has(d.uri))
-            .flatMap((d) => {
-                const entry = buildRepository(d, repository.id, false)
-                return [entry, ...discoverSubfolders(d, entry.id)]
-            })
+        const newDescendants = await Promise.all(
+            diskSubdirectories
+                .filter((d) => !trackedUris.has(d.uri))
+                .map(async (d) => {
+                    const entry = buildRepository(d, repository.id, false)
+                    return [entry, ...await discoverSubfolders(d, entry.id)]
+                })
+        )
 
-        return [repository, ...survivingDescendants.flat(), ...newDescendants]
+        return [repository, ...survivingDescendants.flat(), ...newDescendants.flat()]
     }, [
         repositories,
         buildRepository,

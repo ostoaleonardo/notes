@@ -55,7 +55,7 @@ export function useRepositoryCrud({
             }
 
             const repository = buildRepository(directory)
-            const discovered = discoverSubfolders(directory, repository.id)
+            const discovered = await discoverSubfolders(directory, repository.id)
             const welcomeNotePath = await seedWelcomeNote(directory.uri, repository.id)
             if (welcomeNotePath) setPendingWelcomeNoteId(welcomeNotePath)
 
@@ -190,7 +190,7 @@ export function useRepositoryCrud({
                 const newUri = await renameDirectory(repository.uri, parent.uri, sanitized)
                 await renameVersionsUnder(getRootRepository(repository).uri, oldPath, newPath)
                 const renamedRepository = { ...repository, uri: newUri, alias: sanitized }
-                const relinked = relinkUris(renamedRepository)
+                const relinked = await relinkUris(renamedRepository)
                 const relinkedById = new Map(relinked.map((r) => [r.id, r]))
 
                 await persistRepositories(repositories.map((r) => {

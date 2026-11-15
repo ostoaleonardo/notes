@@ -4,7 +4,7 @@ import { getRepositoryNoteCount } from '@/utils/repository-note-counts'
 
 import { REPOSITORY_COUNT_BATCH } from '@/constants/repository-counts'
 
-export function useDescendantNoteCounts(descendants, listMarkdownFiles, enabled) {
+export function useDescendantNoteCounts(descendants, scanMarkdownFiles, enabled) {
     const cache = useRef({})
     const [counts, setCounts] = useState({})
     const [pending, setPending] = useState(false)
@@ -15,30 +15,30 @@ export function useDescendantNoteCounts(descendants, listMarkdownFiles, enabled)
         setCounts({ ...cache.current })
         setPending(descendants.length > 0)
 
-        let index = 0
-        let task
+        let cancelled = false
 
-        const step = () => {
-            descendants
-                .slice(index, index + REPOSITORY_COUNT_BATCH)
-                .forEach(({ id, uri }) => {
-                    cache.current[id] = getRepositoryNoteCount(uri, listMarkdownFiles)
+        const countAll = async () => {
+            for (let index = 0; index < descendants.length; index += REPOSITORY_COUNT_BATCH) {
+                const batch = descendants.slice(index, index + REPOSITORY_COUNT_BATCH)
+
+                const batchCounts = await Promise.all(batch.map(({ uri }) => (
+                    getRepositoryNoteCount(uri, scanMarkdownFiles)
+                )))
+                if (cancelled) return
+
+                batch.forEach(({ id }, position) => {
+                    cache.current[id] = batchCounts[position]
                 })
-
-            index += REPOSITORY_COUNT_BATCH
-            setCounts({ ...cache.current })
-
-            if (index < descendants.length) {
-                task = requestIdleCallback(step)
-            } else {
-                setPending(false)
+                setCounts({ ...cache.current })
             }
+
+            setPending(false)
         }
 
-        task = requestIdleCallback(step)
+        countAll()
 
-        return () => cancelIdleCallback(task)
-    }, [enabled, descendants, listMarkdownFiles])
+        return () => { cancelled = true }
+    }, [enabled, descendants, scanMarkdownFiles])
 
     return { counts, loading: pending && Object.keys(counts).length === 0 }
 }

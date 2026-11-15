@@ -6,7 +6,7 @@ import { getDefaultTemplates } from '@/utils/default-templates'
 export function useRepositoryTreeOps({ repositories, fileStorage }) {
     const {
         listMarkdownFiles,
-        listSubdirectories,
+        scanSubdirectories,
         writeNoteFile,
         getOrCreateTemplatesFolder
     } = fileStorage
@@ -41,18 +41,22 @@ export function useRepositoryTreeOps({ repositories, fileStorage }) {
         }
     }, [getOrCreateTemplatesFolder, seedTemplates])
 
-    const discoverSubfolders = useCallback((directory, parentId) => (
-        listSubdirectories(directory.uri).flatMap((subdirectory) => {
-            const entry = buildRepository(subdirectory, parentId, false)
-            return [entry, ...discoverSubfolders(subdirectory, entry.id)]
-        })
-    ), [listSubdirectories, buildRepository])
+    const discoverSubfolders = useCallback(async (directory, parentId) => {
+        const subdirectories = await scanSubdirectories(directory.uri)
 
-    const relinkUris = useCallback((repository) => {
+        const discovered = await Promise.all(subdirectories.map(async (subdirectory) => {
+            const entry = buildRepository(subdirectory, parentId, false)
+            return [entry, ...await discoverSubfolders(subdirectory, entry.id)]
+        }))
+
+        return discovered.flat()
+    }, [scanSubdirectories, buildRepository])
+
+    const relinkUris = useCallback(async (repository) => {
         let diskChildren
 
         try {
-            diskChildren = listSubdirectories(repository.uri)
+            diskChildren = await scanSubdirectories(repository.uri)
         } catch {
             diskChildren = []
         }
@@ -60,14 +64,16 @@ export function useRepositoryTreeOps({ repositories, fileStorage }) {
         const trackedChildren = repositories.filter((r) => r.parentId === repository.id)
         const diskByName = new Map(diskChildren.map((d) => [d.name, d]))
 
-        return trackedChildren.flatMap((child) => {
+        const relinked = await Promise.all(trackedChildren.map(async (child) => {
             const disk = diskByName.get(child.alias)
             if (!disk) return []
 
             const relinkedChild = { ...child, uri: disk.uri }
-            return [relinkedChild, ...relinkUris(relinkedChild)]
-        })
-    }, [listSubdirectories, repositories])
+            return [relinkedChild, ...await relinkUris(relinkedChild)]
+        }))
+
+        return relinked.flat()
+    }, [scanSubdirectories, repositories])
 
     return {
         seedTemplates,
