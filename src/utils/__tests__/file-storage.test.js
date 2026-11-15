@@ -1,6 +1,7 @@
 import RepositoryFs from '../../../modules/repository-fs'
 import { fileStorage } from '../file-storage'
 import { logError } from '../log-error'
+import { getNoteLinkTexts } from '../note-links'
 import { getNoteTags } from '../note-tags'
 import {
     CORRUPT_FILE_SUFFIX,
@@ -608,6 +609,7 @@ describe('repository index', () => {
 
         fileStorage.writeRepositoryIndex('repo', [note])
         expect(JSON.parse(readText(INDEX)).tags).toEqual([['front', 'inline']])
+        expect(JSON.parse(readText(INDEX)).links).toEqual([[]])
 
         seedFile(INDEX, JSON.stringify({
             version: REPOSITORY_INDEX_VERSION,
@@ -618,6 +620,20 @@ describe('repository index', () => {
 
         expect(getNoteTags(restored)).toEqual(['seeded'])
         expect(restored).toEqual(note)
+    })
+
+    test('restores the link texts without rescanning the body', async () => {
+        const note = { path: 'repo::a.md', note: 'body [[Real]]' }
+
+        seedFile(INDEX, JSON.stringify({
+            version: REPOSITORY_INDEX_VERSION,
+            notes: [note],
+            tags: [[]],
+            links: [['Seeded']]
+        }))
+        const [restored] = await fileStorage.readRepositoryIndex('repo')
+
+        expect(getNoteLinkTexts(restored)).toEqual(['Seeded'])
     })
 
     test('ignores an index written by another version', async () => {

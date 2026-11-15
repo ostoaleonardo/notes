@@ -5,6 +5,8 @@ export const PERF_BUDGETS_MS = {
     collectTagsSeeded: 15,
     collectTagsWarm: 20,
     notePaths: 20,
+    linkGraphCold: 250,
+    linkGraphSeeded: 120,
     repositoryTree: 60,
     mergeLoadedNotes: 20,
     loadCold: 400,

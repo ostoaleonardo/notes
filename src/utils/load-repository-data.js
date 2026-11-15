@@ -10,6 +10,7 @@ import {
     parseFrontmatter
 } from '@/utils/frontmatter'
 import { buildLegacyNoteBody } from '@/utils/legacy-note-body'
+import { getNoteLinkTexts } from '@/utils/note-links'
 import { getNoteTags } from '@/utils/note-tags'
 
 import { LEGACY_ALL_TAG_ID } from '@/constants/default-values'
@@ -128,6 +129,7 @@ const buildNote = ({ file, repositoryId, path }, content) => {
     }
 
     getNoteTags(note)
+    getNoteLinkTexts(note)
 
     return note
 }

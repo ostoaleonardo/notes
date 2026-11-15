@@ -1,8 +1,8 @@
 import { findFileByTarget } from '@/utils/attachments'
 import { isFileLinkTarget } from '@/utils/file-links'
 import { stripNoteExtension } from '@/utils/note-filename'
-import { findOutgoingLinks } from '@/utils/outgoing-links'
-import { mapOutsideCode } from '@/utils/outside-code'
+import { getNoteLinkTexts, extractWikiLinkTexts } from '@/utils/note-links'
+import { resolveOutgoingLinks } from '@/utils/outgoing-links'
 
 import {
     CONNECTION_LIMITS,
@@ -11,7 +11,7 @@ import {
     FOLDER_SEPARATOR,
     ROOT_ENTITY_ID
 } from '@/constants/connections'
-import { WIKI_LINK_ANCHOR_SEPARATOR, WIKI_LINK_PATTERN } from '@/constants/wiki-links'
+import { WIKI_LINK_ANCHOR_SEPARATOR } from '@/constants/wiki-links'
 import { compareText } from '@/utils/compare-text'
 
 const { ROOT, NOTE, FOLDER, FILE, TAG, MISSING } = CONNECTION_TYPES
@@ -48,33 +48,11 @@ const uniqueEntities = (entities) => {
 
 const getNoteTitle = (note) => note.title || stripNoteExtension(note.filename)
 
-const fileTargetsByNote = new WeakMap()
-
-const extractFileTargets = (content) => {
-    const targets = new Set()
-
-    mapOutsideCode(content || '', (segment) => {
-        for (const match of segment.matchAll(WIKI_LINK_PATTERN)) {
-            const target = match[1].split(WIKI_LINK_ANCHOR_SEPARATOR)[0]
-            if (isFileLinkTarget(target)) targets.add(target)
-        }
-
-        return segment
-    })
-
-    return [...targets]
-}
-
-const getFileTargets = (note) => {
-    let targets = fileTargetsByNote.get(note)
-
-    if (!targets) {
-        targets = extractFileTargets(note.note)
-        fileTargetsByNote.set(note, targets)
-    }
-
-    return targets
-}
+const getFileTargets = (linkTexts) => [...new Set(
+    linkTexts
+        .map((text) => text.split(WIKI_LINK_ANCHOR_SEPARATOR)[0])
+        .filter(isFileLinkTarget)
+)]
 
 const resolveFileTargets = (targets, files) => {
     const found = new Map()
@@ -87,7 +65,9 @@ const resolveFileTargets = (targets, files) => {
     return [...found.values()]
 }
 
-export const findFileReferences = (content, files) => resolveFileTargets(extractFileTargets(content), files)
+export const findFileReferences = (content, files) => (
+    resolveFileTargets(getFileTargets(extractWikiLinkTexts(content)), files)
+)
 
 export const buildLinkGraph = ({ notes, notePaths }) => {
     const noteByPath = new Map(notes.map((note) => [note.path, note]))
@@ -98,7 +78,7 @@ export const buildLinkGraph = ({ notes, notePaths }) => {
     const tagNotes = new Map()
 
     notes.forEach((note) => {
-        const links = findOutgoingLinks(note.note, note.path, notes, notePaths)
+        const links = resolveOutgoingLinks(getNoteLinkTexts(note), note.path, notes, notePaths)
         outgoing.set(note.path, links)
 
         links.forEach((link) => {
@@ -133,7 +113,7 @@ const buildFileLinks = ({ notes, files }) => {
 
     if (files.length) {
         notes.forEach((note) => {
-            resolveFileTargets(getFileTargets(note), files).forEach((file) => {
+            resolveFileTargets(getFileTargets(getNoteLinkTexts(note)), files).forEach((file) => {
                 pushTo(noteFiles, note.path, file.id)
                 pushTo(fileNotes, file.id, note.path)
             })

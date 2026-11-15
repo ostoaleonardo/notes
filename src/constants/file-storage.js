@@ -10,7 +10,7 @@ export const WRITE_ATTEMPTS = 2
 export const NOTE_READ_BATCH_SIZE = 100
 
 export const REPOSITORY_INDEX_FOLDER_NAME = 'repository-index'
-export const REPOSITORY_INDEX_VERSION = 3
+export const REPOSITORY_INDEX_VERSION = 4
 
 export const TEMPLATES_FOLDER_NAME = 'templates'
 export const IMAGES_FOLDER_NAME = 'images'

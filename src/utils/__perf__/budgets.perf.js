@@ -1,4 +1,6 @@
 import { collectTags, getNoteTags, seedNoteTags } from '../note-tags'
+import { buildLinkGraph } from '../connection-model'
+import { getNoteLinkTexts, seedNoteLinkTexts } from '../note-links'
 import { buildRepositoryTree } from '../drawer-tree'
 import { getNotePaths } from '../note-path'
 import { mergeLoadedNotes } from '../merge-loaded-notes'
@@ -73,6 +75,28 @@ describe('startup budgets', () => {
             'collectTags seeded',
             timeOnce(() => collectTags(restored)).elapsed,
             PERF_BUDGETS_MS.collectTagsSeeded
+        )
+    })
+
+    test('builds the link graph cold and from seeded link texts', () => {
+        const notes = buildNotes(PERF_NOTE_COUNT)
+        const notePaths = getNotePaths(notes, [REPOSITORY])
+        const seeded = notes.map((note) => {
+            const copy = { ...note }
+            seedNoteLinkTexts(copy, getNoteLinkTexts(note))
+
+            return copy
+        })
+
+        within(
+            'link graph cold',
+            timeOnce(() => buildLinkGraph({ notes, notePaths })).elapsed,
+            PERF_BUDGETS_MS.linkGraphCold
+        )
+        within(
+            'link graph seeded',
+            timeOnce(() => buildLinkGraph({ notes: seeded, notePaths })).elapsed,
+            PERF_BUDGETS_MS.linkGraphSeeded
         )
     })
 
