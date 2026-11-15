@@ -1,6 +1,7 @@
 import RepositoryFs from '../../../modules/repository-fs'
 import { fileStorage } from '../file-storage'
 import { logError } from '../log-error'
+import { getNoteTags } from '../note-tags'
 import {
     CORRUPT_FILE_SUFFIX,
     IMAGES_FOLDER_NAME,
@@ -565,6 +566,23 @@ describe('repository index', () => {
         fileStorage.writeRepositoryIndex('repo', notes)
 
         expect(await fileStorage.readRepositoryIndex('repo')).toEqual(notes)
+    })
+
+    test('stores the computed tags and restores them without rescanning the body', async () => {
+        const note = { path: 'repo::a.md', note: 'body #inline', tags: ['front'] }
+
+        fileStorage.writeRepositoryIndex('repo', [note])
+        expect(JSON.parse(readText(INDEX)).tags).toEqual([['front', 'inline']])
+
+        seedFile(INDEX, JSON.stringify({
+            version: REPOSITORY_INDEX_VERSION,
+            notes: [note],
+            tags: [['seeded']]
+        }))
+        const [restored] = await fileStorage.readRepositoryIndex('repo')
+
+        expect(getNoteTags(restored)).toEqual(['seeded'])
+        expect(restored).toEqual(note)
     })
 
     test('ignores an index written by another version', async () => {

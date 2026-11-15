@@ -5,6 +5,7 @@ import RepositoryFs from '../../modules/repository-fs'
 import { getUniqueFilename, stripNoteExtension } from '@/utils/note-filename'
 import { buildVersionKey } from '@/utils/note-version-location'
 import { invalidateMediaIndex } from '@/utils/media-index'
+import { getNoteTags, seedNoteTags } from '@/utils/note-tags'
 
 import {
     NOTE_FILE_EXTENSION,
@@ -295,13 +296,21 @@ const getRepositoryIndexFile = (repositoryId) => (
     new File(Paths.document, REPOSITORY_INDEX_FOLDER_NAME, `${repositoryId}.json`)
 )
 
+const restoreNotes = (notes, tags) => {
+    notes.forEach((note, index) => {
+        if (tags?.[index]) seedNoteTags(note, tags[index])
+    })
+
+    return notes
+}
+
 const readRepositoryIndex = async (repositoryId) => {
     const file = getRepositoryIndexFile(repositoryId)
     if (!file.exists) return []
 
     try {
-        const { version, notes } = JSON.parse(await file.text())
-        return version === REPOSITORY_INDEX_VERSION ? notes : []
+        const { version, notes, tags } = JSON.parse(await file.text())
+        return version === REPOSITORY_INDEX_VERSION ? restoreNotes(notes, tags) : []
     } catch (error) {
         logError(LOG_MESSAGES.ERROR_READING_REPOSITORY_INDEX, error)
         return []
@@ -316,7 +325,7 @@ const writeRepositoryIndex = (repositoryId, notes) => {
 
         const file = getRepositoryIndexFile(repositoryId)
         if (!file.exists) file.create()
-        file.write(JSON.stringify({ version: REPOSITORY_INDEX_VERSION, notes }))
+        file.write(JSON.stringify({ version: REPOSITORY_INDEX_VERSION, notes, tags: notes.map(getNoteTags) }))
     } catch (error) {
         logError(LOG_MESSAGES.ERROR_WRITING_REPOSITORY_INDEX, error)
     }

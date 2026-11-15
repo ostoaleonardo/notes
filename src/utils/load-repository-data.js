@@ -10,6 +10,7 @@ import {
     parseFrontmatter
 } from '@/utils/frontmatter'
 import { buildLegacyNoteBody } from '@/utils/legacy-note-body'
+import { getNoteTags } from '@/utils/note-tags'
 
 import { LEGACY_ALL_TAG_ID } from '@/constants/default-values'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
@@ -111,7 +112,7 @@ const scanFolder = async (repository, fileStorage) => {
 const buildNote = ({ file, repositoryId, path }, content) => {
     const { frontmatter, body, error, rawFrontmatter } = parseFrontmatter(content)
 
-    return {
+    const note = {
         filename: file.name,
         repositoryId,
         path,
@@ -125,6 +126,10 @@ const buildNote = ({ file, repositoryId, path }, content) => {
         createdAt: file.lastModified,
         updatedAt: file.lastModified
     }
+
+    getNoteTags(note)
+
+    return note
 }
 
 const readChangedNotes = async (changed, fileStorage, onProgress) => {

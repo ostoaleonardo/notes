@@ -17,6 +17,10 @@ export const getNoteTags = (note) => {
     return tags
 }
 
+export const seedNoteTags = (note, tags) => {
+    cache.set(note, tags)
+}
+
 const withParents = (tag) => {
     const segments = tag.split(TAG_PATH_SEPARATOR)
     return segments.map((_, index) => segments.slice(0, index + 1).join(TAG_PATH_SEPARATOR))

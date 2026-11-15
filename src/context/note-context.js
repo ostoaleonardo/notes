@@ -1,7 +1,6 @@
 import {
     createContext,
     useCallback,
-    useDeferredValue,
     useEffect,
     useEffectEvent,
     useMemo,
@@ -143,8 +142,7 @@ export const NoteProvider = ({ children }) => {
         setNotes([])
     }, [])
 
-    const deferredNotes = useDeferredValue(notes)
-    const tags = useMemo(() => collectTags(deferredNotes), [deferredNotes])
+    const tags = useMemo(() => collectTags(notes), [notes])
     const notesByPath = useMemo(() => new Map(notes.map((note) => [note.path, note])), [notes])
 
     const notePaths = useStableMap(useMemo(() => getNotePaths(notes, repositories), [notes, repositories]))
