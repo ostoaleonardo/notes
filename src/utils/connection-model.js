@@ -48,33 +48,53 @@ const uniqueEntities = (entities) => {
 
 const getNoteTitle = (note) => note.title || stripNoteExtension(note.filename)
 
-export const findFileReferences = (content, files) => {
-    const found = new Map()
+const fileTargetsByNote = new WeakMap()
+
+const extractFileTargets = (content) => {
+    const targets = new Set()
 
     mapOutsideCode(content || '', (segment) => {
         for (const match of segment.matchAll(WIKI_LINK_PATTERN)) {
             const target = match[1].split(WIKI_LINK_ANCHOR_SEPARATOR)[0]
-            if (!isFileLinkTarget(target)) continue
-
-            const file = findFileByTarget(files, target)
-            if (file) found.set(file.id, file)
+            if (isFileLinkTarget(target)) targets.add(target)
         }
 
         return segment
     })
 
+    return [...targets]
+}
+
+const getFileTargets = (note) => {
+    let targets = fileTargetsByNote.get(note)
+
+    if (!targets) {
+        targets = extractFileTargets(note.note)
+        fileTargetsByNote.set(note, targets)
+    }
+
+    return targets
+}
+
+const resolveFileTargets = (targets, files) => {
+    const found = new Map()
+
+    targets.forEach((target) => {
+        const file = findFileByTarget(files, target)
+        if (file) found.set(file.id, file)
+    })
+
     return [...found.values()]
 }
 
-export const buildConnectionModel = ({ notes, notePaths, files, rootName = '' }) => {
+export const findFileReferences = (content, files) => resolveFileTargets(extractFileTargets(content), files)
+
+export const buildLinkGraph = ({ notes, notePaths }) => {
     const noteByPath = new Map(notes.map((note) => [note.path, note]))
     const folderByNote = new Map(notes.map((note) => [note.path, notePaths.get(note.path) || '']))
-    const fileById = new Map(files.map((file) => [file.id, file]))
     const outgoing = new Map()
     const incoming = new Map()
     const unresolved = new Map()
-    const noteFiles = new Map()
-    const fileNotes = new Map()
     const tagNotes = new Map()
 
     notes.forEach((note) => {
@@ -93,29 +113,46 @@ export const buildConnectionModel = ({ notes, notePaths, files, rootName = '' })
             unresolved.set(link.key, entry)
         })
 
-        findFileReferences(note.note, files).forEach((file) => {
-            pushTo(noteFiles, note.path, file.id)
-            pushTo(fileNotes, file.id, note.path)
-        })
-
         unique(note.tags || []).forEach((tag) => pushTo(tagNotes, tag, note.path))
     })
 
     return {
-        rootName,
-        notes,
-        files,
         noteByPath,
         folderByNote,
-        fileById,
         outgoing,
         incoming,
         unresolved,
-        noteFiles,
-        fileNotes,
         tagNotes
     }
 }
+
+const buildFileLinks = ({ notes, files }) => {
+    const fileById = new Map(files.map((file) => [file.id, file]))
+    const noteFiles = new Map()
+    const fileNotes = new Map()
+
+    if (files.length) {
+        notes.forEach((note) => {
+            resolveFileTargets(getFileTargets(note), files).forEach((file) => {
+                pushTo(noteFiles, note.path, file.id)
+                pushTo(fileNotes, file.id, note.path)
+            })
+        })
+    }
+
+    return { fileById, noteFiles, fileNotes }
+}
+
+export const buildConnectionModel = (
+    { notes, notePaths, files, rootName = '' },
+    graph = buildLinkGraph({ notes, notePaths })
+) => ({
+    rootName,
+    notes,
+    files,
+    ...graph,
+    ...buildFileLinks({ notes, files })
+})
 
 export const entityExists = (entity, model) => {
     switch (entity.type) {
