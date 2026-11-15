@@ -69,7 +69,7 @@ class RepositoryFsModule : Module() {
     }
 
     AsyncFunction("listDirectory") Coroutine { uri: String ->
-      withContext(Dispatchers.IO) { listDirectory(context, Uri.parse(uri)) }
+      withContext(Dispatchers.IO) { toColumns(listDirectory(context, Uri.parse(uri))) }
     }
 
     AsyncFunction("readTextFiles") Coroutine { uris: List<String> ->
@@ -153,6 +153,14 @@ private fun listDirectDirectory(uri: Uri, documentId: String, directory: File): 
       "size" to file.length().toDouble()
     )
   }
+
+private fun toColumns(entries: List<Map<String, Any?>>): Map<String, List<Any?>> = mapOf(
+  "uris" to entries.map { it["uri"] },
+  "names" to entries.map { it["name"] },
+  "directories" to entries.map { it["isDirectory"] },
+  "lastModified" to entries.map { it["lastModified"] },
+  "sizes" to entries.map { it["size"] }
+)
 
 private fun entryOf(uri: Uri, documentId: String, name: String, isDirectory: Boolean, lastModified: Long?, size: Long?): Map<String, Any?> {
   val childUri = DocumentsContract.buildDocumentUriUsingTree(uri, documentId).toString()

@@ -90,9 +90,19 @@ const listSubdirectories = (directoryUri) => listEntries(directoryUri).filter(is
 
 const pendingScans = new Map()
 
+const toEntries = ({ uris, names, directories, lastModified, sizes }) => names.map((name, index) => ({
+    uri: uris[index],
+    name,
+    isDirectory: directories[index],
+    lastModified: lastModified[index],
+    size: sizes[index]
+}))
+
 const scanEntries = (directoryUri) => {
     if (!pendingScans.has(directoryUri)) {
-        const scan = RepositoryFs.listDirectory(directoryUri).finally(() => pendingScans.delete(directoryUri))
+        const scan = RepositoryFs.listDirectory(directoryUri)
+            .then(toEntries)
+            .finally(() => pendingScans.delete(directoryUri))
         pendingScans.set(directoryUri, scan)
     }
 
