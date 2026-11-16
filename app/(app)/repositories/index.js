@@ -4,7 +4,7 @@ import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { RepositoryItem } from '@/screens/repositories/repository-item'
+import { RepositoryItem } from '@/features/repositories/screens/repositories/repository-item'
 import { DeleteRepository } from '@/screens/dialogs/delete-repository'
 import { ForgetRepository } from '@/screens/dialogs/forget-repository'
 import { RenameRepository } from '@/screens/dialogs/rename-repository'

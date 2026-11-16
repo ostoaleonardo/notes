@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { getRepositoryNoteCount } from '@/utils/repository-note-counts'
 
-import { REPOSITORY_COUNT_BATCH } from '@/constants/repository-counts'
+import { REPOSITORY_COUNT_BATCH } from '@/features/repositories/constants/repository-counts'
 
 export function useDescendantNoteCounts(descendants, scanMarkdownFiles, enabled) {
     const cache = useRef({})

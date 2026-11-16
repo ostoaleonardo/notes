@@ -8,7 +8,7 @@ import { Divider } from '@/ui/divider/divider'
 import { Typography } from '@/ui/typography'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { useDescendantNoteCounts } from '@/hooks/use-descendant-note-counts'
+import { useDescendantNoteCounts } from '@/features/repositories/hooks/use-descendant-note-counts'
 import { useFileStorage } from '@/hooks/use-file-storage'
 import { useGroupPosition } from '@/ui/hooks/use-group-position'
 import { useRepositories } from '@/hooks/use-repositories'
@@ -16,11 +16,11 @@ import { getStackedRadiusStyle } from '@/ui/utils/group-position'
 import { IconButton } from '@/ui/button/icon-button'
 import { Progress } from '@/ui/progress'
 import { getChildFolderCounts } from '@/utils/repository-note-counts'
-import { getRepositoryPath } from '@/utils/repository-path'
+import { getRepositoryPath } from '@/features/repositories/utils/repository-path'
 
 import { OpenInNew } from '@/icons/open-in-new'
 import { SPACING, OPACITY } from '@/constants/theme'
-import { PENDING_COUNT } from '@/constants/repository-counts'
+import { PENDING_COUNT } from '@/features/repositories/constants/repository-counts'
 
 export const RepositoryItem = memo(({
     repository,
