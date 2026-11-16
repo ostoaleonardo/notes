@@ -5,7 +5,7 @@ import { ShareNotePickerSheet } from './share-note-picker-sheet'
 import { ShareSheet } from './share-sheet'
 import { useBottomSheet } from '@/hooks/use-bottom-sheet'
 import { useNotes } from '@/hooks/use-notes'
-import { useShareDestinations } from '@/hooks/use-share-destinations'
+import { useShareDestinations } from '@/features/share/hooks/use-share-destinations'
 import { buildSharedContent } from '@/utils/shared-note'
 
 export const ShareIntentHandler = () => {

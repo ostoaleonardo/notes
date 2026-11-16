@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
-import { useDailyNote } from './use-daily-note'
-import { useNotes } from './use-notes'
+import { useDailyNote } from '../../../hooks/use-daily-note'
+import { useNotes } from '../../../hooks/use-notes'
 import { getDailyNoteTitle } from '@/utils/daily-note'
 import { getEditorPath } from '@/utils/editor-path'
 import { logError } from '@/utils/log-error'
