@@ -1,6 +1,9 @@
 <div align="center">
 <a target="_blank" href="https://play.google.com/store/apps/details?id=com.monospace.notes" title="Notes on Google Play">
-<img width="160" alt="Notes icon" src="assets/adaptive-icon.png" />
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="assets/icon-dark.png" />
+<img width="128" alt="Notes icon" src="assets/icon-light.png" />
+</picture>
 </a>
 
 # Notes
@@ -260,22 +263,22 @@ Notes asks for as little as possible, and your notes never leave your phone.
 
 Notes is free. Pro unlocks more.
 
-| Feature | Free | Pro |
-| --- | --- | --- |
-| Write, read and edit notes | ✓ | ✓ |
-| Tables, tasks and callouts | ✓ | ✓ |
-| Links, outline and connections | ✓ | ✓ |
-| Search and saved searches | ✓ | ✓ |
-| Tags and templates | ✓ | ✓ |
-| Daily note | ✓ | ✓ |
-| Import and Markdown export | ✓ | ✓ |
-| Light and dark themes | ✓ | ✓ |
-| 15 languages | ✓ | ✓ |
-| Folders on your phone | 1 | Unlimited |
-| Subfolders | 1 | Unlimited |
-| Version history | Last 5 versions | All versions |
-| Accent colors | White | All colors |
-| HTML and PDF export | - | ✓ |
+| Feature                        | Free            | Pro          |
+| ------------------------------ | --------------- | ------------ |
+| Write, read and edit notes     | ✓               | ✓            |
+| Tables, tasks and callouts     | ✓               | ✓            |
+| Links, outline and connections | ✓               | ✓            |
+| Search and saved searches      | ✓               | ✓            |
+| Tags and templates             | ✓               | ✓            |
+| Daily note                     | ✓               | ✓            |
+| Import and Markdown export     | ✓               | ✓            |
+| Light and dark themes          | ✓               | ✓            |
+| 15 languages                   | ✓               | ✓            |
+| Folders on your phone          | 1               | Unlimited    |
+| Subfolders                     | 1               | Unlimited    |
+| Version history                | Last 5 versions | All versions |
+| Accent colors                  | White           | All colors   |
+| HTML and PDF export            | -               | ✓            |
 
 ## Download
 

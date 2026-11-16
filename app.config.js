@@ -21,8 +21,9 @@ export default {
   newArchEnabled: true,
   android: {
     adaptiveIcon: {
-      foregroundImage: './assets/adaptive-icon.png',
-      backgroundColor: '#ffffff'
+      foregroundImage: './assets/adaptive-foreground.png',
+      monochromeImage: './assets/adaptive-monochrome.png',
+      backgroundColor: '#06080a'
     },
     package: 'com.monospace.notes',
     versionCode: 16,
@@ -34,12 +35,12 @@ export default {
     [
       'expo-splash-screen',
       {
-        image: './assets/adaptive-icon.png',
+        image: './assets/icon-light.png',
         backgroundColor: '#d7d8d8',
         resizeMode: 'contain',
-        imageWidth: 270,
+        imageWidth: 230,
         dark: {
-          image: './assets/dark-splash.png',
+          image: './assets/icon-dark.png',
           resizeMode: 'contain',
           backgroundColor: '#06080a'
         }
