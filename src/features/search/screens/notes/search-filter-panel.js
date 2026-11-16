@@ -13,7 +13,7 @@ import {
     SEARCH_FILTER_COLUMNS,
     SEARCH_FILTER_KINDS,
     SEARCH_FILTER_OPTIONS
-} from '@/constants/search-filters'
+} from '@/features/search/constants/search-filters'
 import { SPACING } from '@/constants/theme'
 import { TEST_IDS } from '@/constants/test-ids'
 

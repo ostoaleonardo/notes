@@ -6,7 +6,7 @@ import { FilledButton } from '@/ui/button/filled-button'
 import { TextButton } from '@/ui/button/text-button'
 import { FilledTextField } from '@/ui/input/filled-text-field'
 
-import { SEARCH_FILTER_KINDS } from '@/constants/search-filters'
+import { SEARCH_FILTER_KINDS } from '@/features/search/constants/search-filters'
 
 export const SearchValueDialog = ({ option, onDismiss, onSubmit }) => {
     const { t } = useTranslation()

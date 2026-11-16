@@ -2,7 +2,7 @@ import { Text } from 'react-native'
 
 import { Typography } from '@/ui/typography'
 
-import { splitByRanges } from '@/utils/search-context'
+import { splitByRanges } from '@/features/search/utils/search-context'
 
 import { FONTS } from '@/constants/theme'
 

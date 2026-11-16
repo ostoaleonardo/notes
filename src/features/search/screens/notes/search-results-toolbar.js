@@ -6,7 +6,7 @@ import { ButtonGroup } from '@/ui/button/button-group'
 import { Progress } from '@/ui/progress'
 import { Typography } from '@/ui/typography'
 import { DrawerSortMenu } from '@/components/drawer/drawer-sort-menu'
-import { getSearchSummary } from '@/utils/search-summary'
+import { getSearchSummary } from '@/features/search/utils/search-summary'
 
 import { Check } from '@/ui/icons/check'
 import { Add } from '@/icons/add'

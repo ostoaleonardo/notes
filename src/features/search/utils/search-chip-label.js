@@ -1,4 +1,4 @@
-import { SEARCH_CHIP_LABELS } from '@/constants/search-filters'
+import { SEARCH_CHIP_LABELS } from '@/features/search/constants/search-filters'
 
 export const getChipLabelKey = (chip) => SEARCH_CHIP_LABELS[`${chip.group}:${chip.value ?? ''}`] ?? null
 

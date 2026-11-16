@@ -1,4 +1,4 @@
-import { SEARCH_HAS_VALUES, SEARCH_IS_VALUES, SEARCH_OPERATORS } from './search-query'
+import { SEARCH_HAS_VALUES, SEARCH_IS_VALUES, SEARCH_OPERATORS } from '../../../constants/search-query'
 
 export const SEARCH_FILTER_COLUMNS = 2
 

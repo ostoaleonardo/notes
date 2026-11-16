@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { InputChip } from '@/ui/input-chip'
 
-import { getChipText } from '@/utils/search-chip-label'
+import { getChipText } from '@/features/search/utils/search-chip-label'
 import { removeChip, toggleChipNegation } from '@/utils/search-query'
 
 import { Close } from '@/icons/close'

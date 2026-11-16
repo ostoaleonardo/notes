@@ -1,4 +1,4 @@
-import { SEARCH_SUMMARY_KEYS } from '@/constants/search-summary'
+import { SEARCH_SUMMARY_KEYS } from '@/features/search/constants/search-summary'
 
 export const getSearchSummary = ({ showLoader, searching, partial, count }) => {
     const loader = showLoader || (searching && count === 0)

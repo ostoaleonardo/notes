@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import { NoteSearchSheet } from './note-search-sheet'
+import { NoteSearchSheet } from '../../features/search/screens/notes/note-search-sheet'
 import { RecentNotesSheet } from './recent-notes-sheet'
 
 export const NoteToolbarSheets = memo(({

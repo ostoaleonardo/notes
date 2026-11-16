@@ -5,7 +5,7 @@ import { SearchSnippet } from './search-snippet'
 import { EntityRow } from '@/screens/connections/entity-row'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { getSnippets } from '@/utils/search-context'
+import { getSnippets } from '@/features/search/utils/search-context'
 import { getSearchText } from '@/utils/search-text'
 import { makeEntity } from '@/utils/connection-model'
 
