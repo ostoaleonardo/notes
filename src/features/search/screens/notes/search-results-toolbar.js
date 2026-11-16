@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native'
 import { ButtonGroup } from '@/ui/button/button-group'
 import { Progress } from '@/ui/progress'
 import { Typography } from '@/ui/typography'
-import { DrawerSortMenu } from '@/components/drawer/drawer-sort-menu'
+import { DrawerSortMenu } from '@/features/drawer/components/drawer/drawer-sort-menu'
 import { getSearchSummary } from '@/features/search/utils/search-summary'
 
 import { Check } from '@/ui/icons/check'

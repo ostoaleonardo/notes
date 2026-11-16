@@ -1,4 +1,4 @@
-import { useDeferredReady } from './use-deferred-ready'
+import { useDeferredReady } from '../../../hooks/use-deferred-ready'
 
 export function useDrawerMounted(drawerOpen) {
     const ready = useDeferredReady()

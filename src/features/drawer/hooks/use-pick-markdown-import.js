@@ -1,7 +1,7 @@
 import * as DocumentPicker from 'expo-document-picker'
 
-import { useImportMarkdown } from './use-import-markdown'
-import { useSingleFlight } from './use-single-flight'
+import { useImportMarkdown } from '../../../hooks/use-import-markdown'
+import { useSingleFlight } from '../../../hooks/use-single-flight'
 
 export const usePickMarkdownImport = (repositoryId) => {
     const { importFile } = useImportMarkdown()

@@ -7,7 +7,7 @@ import { TreeRow } from '@/ui/tree-row'
 import { useMenuAction } from '@/hooks/use-menu-action'
 import { useUtils } from '@/hooks/use-utils'
 
-import { TEMPLATE_FOLDER_ACTIONS } from '@/constants/repository-actions'
+import { TEMPLATE_FOLDER_ACTIONS } from '@/features/drawer/constants/repository-actions'
 
 export const DrawerTemplateFolderItem = memo(({
     folder,

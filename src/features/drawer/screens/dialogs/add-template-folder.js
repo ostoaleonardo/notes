@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { NameDialog } from '@/components/name-dialog'
+import { NameDialog } from '@/features/drawer/components/name-dialog'
 
 import { useTemplates } from '@/hooks/use-templates'
 

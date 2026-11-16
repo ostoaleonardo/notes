@@ -1,4 +1,4 @@
-import { sortNotes } from './note-sort'
+import { sortNotes } from '../../../utils/note-sort'
 
 import { DRAWER_ITEM_TYPES } from '@/constants/drawer-views'
 

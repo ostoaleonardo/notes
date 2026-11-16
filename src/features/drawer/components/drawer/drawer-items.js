@@ -11,7 +11,7 @@ import { DrawerTemplatesView } from './drawer-templates-view'
 import { DrawerFilesView } from './drawer-files-view'
 import { DrawerViewSwitcher } from './drawer-view-switcher'
 
-import { useDrawerMounted } from '@/hooks/use-drawer-mounted'
+import { useDrawerMounted } from '@/features/drawer/hooks/use-drawer-mounted'
 import { useStorage } from '@/hooks/use-storage'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
 

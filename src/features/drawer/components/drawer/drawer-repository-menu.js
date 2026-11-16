@@ -7,7 +7,7 @@ import { Edit } from '@/icons/edit'
 import { Folder } from '@/icons/folder'
 import { Add } from '@/icons/add'
 
-import { REPOSITORY_ACTIONS } from '@/constants/repository-actions'
+import { REPOSITORY_ACTIONS } from '@/features/drawer/constants/repository-actions'
 import { getMenuItemTestId } from '@/ui/utils/test-ids'
 
 const MENU_ITEMS = [

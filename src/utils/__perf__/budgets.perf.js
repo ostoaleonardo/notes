@@ -1,7 +1,7 @@
 import { collectTags, getNoteTags, seedNoteTags } from '../note-tags'
 import { buildLinkGraph } from '../connection-model'
 import { getNoteLinkTexts, seedNoteLinkTexts } from '../note-links'
-import { buildRepositoryTree } from '../drawer-tree'
+import { buildRepositoryTree } from '../../features/drawer/utils/drawer-tree'
 import { getNotePaths } from '../note-path'
 import { mergeLoadedNotes } from '../merge-loaded-notes'
 import { loadRepositoryData } from '../load-repository-data'

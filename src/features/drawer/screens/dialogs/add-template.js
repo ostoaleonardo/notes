@@ -3,7 +3,7 @@ import * as DocumentPicker from 'expo-document-picker'
 
 import { TextButton } from '@/ui/button/text-button'
 
-import { NameDialog } from '@/components/name-dialog'
+import { NameDialog } from '@/features/drawer/components/name-dialog'
 
 import { useHaptics } from '@/hooks/use-haptics'
 import { useSingleFlight } from '@/hooks/use-single-flight'

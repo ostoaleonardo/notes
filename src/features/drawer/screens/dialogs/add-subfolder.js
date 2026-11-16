@@ -1,7 +1,7 @@
 import { ToastAndroid } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
-import { NameDialog } from '@/components/name-dialog'
+import { NameDialog } from '@/features/drawer/components/name-dialog'
 
 import { useRepositories } from '@/hooks/use-repositories'
 

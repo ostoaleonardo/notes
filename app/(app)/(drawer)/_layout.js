@@ -2,7 +2,7 @@ import { Drawer } from 'expo-router/drawer'
 
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { DrawerItems } from '@/components/drawer/drawer-items'
+import { DrawerItems } from '@/features/drawer/components/drawer/drawer-items'
 
 import { getScreenContentStyle } from '@/utils/screen-content-style'
 

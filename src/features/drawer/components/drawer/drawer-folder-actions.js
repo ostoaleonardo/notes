@@ -2,7 +2,7 @@ import { Menu } from '@/ui/menu/menu'
 import { MenuGroup } from '@/ui/menu/menu-group'
 import { DrawerRepositoryMenu } from './drawer-repository-menu'
 
-import { REPOSITORY_ACTIONS } from '@/constants/repository-actions'
+import { REPOSITORY_ACTIONS } from '@/features/drawer/constants/repository-actions'
 
 const ALL_ACTIONS = Object.values(REPOSITORY_ACTIONS)
 

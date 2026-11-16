@@ -4,7 +4,7 @@ import { useDrawerMounted } from '../use-drawer-mounted'
 
 let mockReady = false
 
-jest.mock('../use-deferred-ready', () => ({
+jest.mock('../../../../hooks/use-deferred-ready', () => ({
     useDeferredReady: () => mockReady
 }))
 

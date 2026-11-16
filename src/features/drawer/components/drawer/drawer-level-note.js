@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react'
 
 import { TreeRow } from '@/ui/tree-row'
 
-import { useIsCurrentNote } from '@/hooks/use-is-current-note'
+import { useIsCurrentNote } from '@/features/drawer/hooks/use-is-current-note'
 
 export const DrawerLevelNote = memo(({
     note,

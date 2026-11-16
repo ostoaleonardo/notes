@@ -7,11 +7,11 @@ import { STORAGE_KEYS } from '@/constants/storage-keys'
 const mockSetItem = jest.fn()
 const mockUseStorageEffect = jest.fn()
 
-jest.mock('../use-storage', () => ({
+jest.mock('../../../../hooks/use-storage', () => ({
     useStorage: () => ({ setItem: mockSetItem })
 }))
 
-jest.mock('../use-storage-effect', () => ({
+jest.mock('../../../../hooks/use-storage-effect', () => ({
     useStorageEffect: (...args) => mockUseStorageEffect(...args)
 }))
 
