@@ -8,7 +8,7 @@ jest.mock('../use-media-uris', () => ({
     useMediaUris: () => mockListMediaUris
 }))
 
-jest.mock('../use-resolved-preview-markdown', () => ({
+jest.mock('@/utils/resolve-url', () => ({
     resolveUrl: jest.fn(async (uri) => `data:${uri}`)
 }))
 

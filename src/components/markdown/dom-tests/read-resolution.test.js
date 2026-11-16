@@ -107,3 +107,52 @@ describe('read resolution of embeds', () => {
         expect(services.resolveMedia).not.toHaveBeenCalled()
     })
 })
+
+describe('read resolution of local images', () => {
+    const buildLocalServices = () => ({
+        ...buildServices(),
+        resolveLocalUrls: jest.fn(async (urls) => Object.fromEntries(urls.map((url) => [url, `data:${url}`])))
+    })
+
+    test('swaps a local markdown image for its resolved data url', async () => {
+        const { html, services } = await render('![a](file:///a.png)', buildLocalServices())
+
+        expect(html).toContain('src="data:file:///a.png"')
+        expect(services.resolveLocalUrls).toHaveBeenCalledWith(['file:///a.png'])
+    })
+
+    test('swaps the sources inside raw html', async () => {
+        const { html } = await render('<img src="content://a/b.png">\n', buildLocalServices())
+
+        expect(html).toContain('src="data:content://a/b.png"')
+    })
+
+    test('leaves remote images alone and does not ask for them', async () => {
+        const { html, services } = await render('![a](https://x.com/a.png)', buildLocalServices())
+
+        expect(html).toContain('src="https://x.com/a.png"')
+        expect(services.resolveLocalUrls).not.toHaveBeenCalled()
+    })
+
+    test('resolves local images inside embedded notes', async () => {
+        const services = buildLocalServices()
+        services.loadEmbeds = jest.fn(async () => ({
+            Delta: { path: 'd.md', title: 'Delta', anchor: '', text: '![i](file:///inner.png)' }
+        }))
+
+        const { html } = await render('![[Delta]]', services)
+
+        expect(html).toContain('src="data:file:///inner.png"')
+    })
+})
+
+describe('read resolution of local links', () => {
+    test('keeps local file links blocked', async () => {
+        const { html } = await render('[doc](file:///a.pdf)', {
+            ...buildServices(),
+            resolveLocalUrls: jest.fn(async () => ({}))
+        })
+
+        expect(html).not.toContain('<a')
+    })
+})

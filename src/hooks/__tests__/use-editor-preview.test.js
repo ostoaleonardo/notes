@@ -3,18 +3,14 @@ import { renderHook } from '@testing-library/react-native'
 import { useEditorPreview } from '../use-editor-preview'
 import { EDITOR_MODES } from '@/constants/editor-modes'
 
-const mockPreviewMarkdown = jest.fn((value) => ({ value: `preview:${value}`, mediaMap: [['img', 'i']] }))
 const mockBacklinks = jest.fn(() => 'backlinks')
-const mockEmbedMediaMap = jest.fn(() => [['embed', 'e']])
+const mockEmbedMediaMap = jest.fn(() => new Map([['embed', 'e']]))
 
 jest.mock('../use-pdf-embed', () => ({
     usePdfEmbed: () => false
 }))
 jest.mock('../use-backlinks-html', () => ({
     useBacklinksHtml: (...args) => mockBacklinks(...args)
-}))
-jest.mock('../use-resolved-preview-markdown', () => ({
-    useResolvedPreviewMarkdown: (...args) => mockPreviewMarkdown(...args)
 }))
 jest.mock('../use-embed-media-map', () => ({
     useEmbedMediaMap: (...args) => mockEmbedMediaMap(...args)
@@ -30,18 +26,18 @@ const setup = (mode) => renderHook(() => useEditorPreview({
 beforeEach(() => jest.clearAllMocks())
 
 describe('editor preview', () => {
-    test('resolves the preview and the backlinks while reading', async () => {
+    test('hands the note text and the backlinks to the reader while reading', async () => {
         const { result } = await setup(EDITOR_MODES.READ)
 
-        expect(result.current.previewValue).toBe('preview:text')
+        expect(result.current.readValue).toBe('text')
         expect(result.current.backlinksHtml).toBe('backlinks')
         expect(mockBacklinks).toHaveBeenCalledWith('a', true)
     })
 
-    test('does not resolve the note text outside reading', async () => {
-        await setup(EDITOR_MODES.LIVE)
+    test('hands over no note text outside reading', async () => {
+        const { result } = await setup(EDITOR_MODES.LIVE)
 
-        expect(mockPreviewMarkdown).toHaveBeenCalledWith('')
+        expect(result.current.readValue).toBe('')
         expect(mockBacklinks).toHaveBeenCalledWith('a', false)
     })
 
@@ -53,9 +49,9 @@ describe('editor preview', () => {
         expect(mockEmbedMediaMap).toHaveBeenNthCalledWith(2, 'text', false, false)
     })
 
-    test('joins the preview media with the embedded media', async () => {
+    test('exposes the embedded media as serializable entries', async () => {
         const { result } = await setup(EDITOR_MODES.LIVE)
 
-        expect(result.current.mediaMapEntries).toEqual([['img', 'i'], ['embed', 'e']])
+        expect(result.current.mediaMapEntries).toEqual([['embed', 'e']])
     })
 })

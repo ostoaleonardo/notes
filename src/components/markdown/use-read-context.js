@@ -3,13 +3,13 @@ import { useEffect, useRef, useState } from 'react'
 import { useLatestRef } from './use-latest-ref'
 import { createReadCache, resolveReadContext } from './read-resolution'
 
-const EMPTY_CONTEXT = { details: new Map(), media: new Map(), embeds: new Map() }
+const EMPTY_CONTEXT = { details: new Map(), media: new Map(), local: new Map(), embeds: new Map() }
 
 export const useReadContext = (parsed, services, linkVersion) => {
     const [state, setState] = useState({ parsed: null, context: EMPTY_CONTEXT })
     const cacheRef = useRef({ version: linkVersion, ...createReadCache() })
     const servicesRef = useLatestRef(services)
-    const needsResolution = !!parsed && parsed.targets.length > 0
+    const needsResolution = !!parsed && (parsed.targets.length > 0 || parsed.localUrls.length > 0)
 
     useEffect(() => {
         if (!needsResolution) return undefined

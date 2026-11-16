@@ -4,7 +4,12 @@ import { EMBED_MAX_DEPTH } from '@/constants/embeds'
 
 const NO_RESULTS = {}
 
-export const createReadCache = () => ({ details: new Map(), media: new Map(), embeds: new Map() })
+export const createReadCache = () => ({
+    details: new Map(),
+    media: new Map(),
+    local: new Map(),
+    embeds: new Map()
+})
 
 const unknownOf = (items, known) => [...new Set(items)].filter((item) => !known.has(item))
 
@@ -25,16 +30,19 @@ export const resolveReadContext = async (parsed, services, cache) => {
         const canEmbed = depth < EMBED_MAX_DEPTH
         const links = unknownOf(level.flatMap((item) => item.targets), cache.details)
         const names = unknownOf(level.flatMap((item) => item.mediaNames), cache.media)
+        const urls = unknownOf(level.flatMap((item) => item.localUrls), cache.local)
         const embeds = canEmbed ? unknownOf(level.flatMap((item) => item.embedTargets), cache.embeds) : []
 
-        const [details, media, loaded] = await Promise.all([
+        const [details, media, local, loaded] = await Promise.all([
             ask(links, services.resolveLinks),
             ask(names, services.resolveMedia),
+            ask(urls, services.resolveLocalUrls),
             ask(embeds, services.loadEmbeds)
         ])
 
         links.forEach((target) => cache.details.set(target, details[target] ?? missingDetails(target)))
         names.forEach((name) => cache.media.set(name, media[name] ?? null))
+        urls.forEach((url) => cache.local.set(url, local[url] ?? url))
         embeds.forEach((target) => cache.embeds.set(
             target,
             loaded[target] ? { ...loaded[target], parsed: parseNoteMarkdown(loaded[target].text) } : null
@@ -46,6 +54,7 @@ export const resolveReadContext = async (parsed, services, cache) => {
     return {
         details: new Map(cache.details),
         media: new Map(cache.media),
+        local: new Map(cache.local),
         embeds: new Map(cache.embeds)
     }
 }

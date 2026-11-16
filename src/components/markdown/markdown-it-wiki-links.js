@@ -1,14 +1,21 @@
 import { isFileLinkTarget } from '@/utils/file-links'
+import { extractLocalUrls } from '@/utils/local-images'
 import { buildEmbedBlockHtml, buildMediaHtml } from '@/utils/embed-html'
 import { parseEmbedMedia } from '@/utils/embed-media'
 import { renderWikiLink } from '@/utils/wiki-links'
 
 import { EMBED_MAX_DEPTH } from '@/constants/embeds'
+import { LOCAL_URL_PATTERN } from '@/constants/local-urls'
 import {
     CHAR,
     CODE_INDENT_WIDTH,
     EMBED_BLOCK_ALT_RULES,
     EMBED_MEDIA_TOKEN,
+    HTML_BLOCK_TOKEN,
+    HTML_INLINE_TOKEN,
+    IMAGE_TOKEN,
+    INLINE_TOKEN,
+    LOCAL_URLS_RULE,
     NOTE_EMBED_BLOCK_RULE,
     NOTE_EMBED_RULE,
     NOTE_EMBED_TOKEN,
@@ -143,8 +150,48 @@ const renderMediaToken = (tokens, idx, options, env) => {
     return url ? buildMediaHtml(media, alias, url) : renderLinkFallback(env, tokens[idx].meta)
 }
 
+const collectLocalUrls = (state) => {
+    const { localUrls } = state.env
+
+    if (!localUrls) return
+
+    for (const block of state.tokens) {
+        if (block.type === HTML_BLOCK_TOKEN) extractLocalUrls(block.content).forEach((url) => localUrls.add(url))
+        if (block.type !== INLINE_TOKEN) continue
+
+        for (const child of block.children) {
+            const src = child.type === IMAGE_TOKEN ? child.attrGet('src') : null
+
+            if (src && LOCAL_URL_PATTERN.test(src)) localUrls.add(src)
+            else if (child.type === HTML_INLINE_TOKEN) extractLocalUrls(child.content).forEach((url) => localUrls.add(url))
+        }
+    }
+}
+
+const createImageRule = (defaultRule) => (state, silent) => {
+    const { validateLink } = state.md
+
+    state.md.validateLink = (url) => LOCAL_URL_PATTERN.test(url.trim()) || validateLink(url)
+
+    try {
+        return defaultRule(state, silent)
+    } finally {
+        state.md.validateLink = validateLink
+    }
+}
+
+const createImageRenderer = (defaultImage) => (tokens, idx, options, env, self) => {
+    const src = tokens[idx].attrGet('src')
+    const resolved = env.localMedia?.get(src)
+
+    if (resolved) tokens[idx].attrSet('src', resolved)
+
+    return defaultImage(tokens, idx, options, env, self)
+}
+
 const inheritContext = (child, parent, path) => {
     child.wikiResolved = parent.wikiResolved
+    child.localMedia = parent.localMedia
     child.embedMedia = parent.embedMedia
     child.embedLoaded = parent.embedLoaded
     child.embedStack = [...parent.embedStack, path]
@@ -175,6 +222,11 @@ export const wikiLinksPlugin = (md) => {
     md.inline.ruler.before(WIKI_LINK_RULE_ANCHOR, NOTE_NODES.WIKI_LINK, wikiLinkRule)
     md.inline.ruler.before(WIKI_LINK_RULE_ANCHOR, NOTE_EMBED_RULE, embedInlineRule)
     md.block.ruler.before('paragraph', NOTE_EMBED_BLOCK_RULE, embedBlockRule, { alt: EMBED_BLOCK_ALT_RULES })
+    const imageRule = md.inline.ruler.__rules__.find((rule) => rule.name === IMAGE_TOKEN)
+
+    md.inline.ruler.at(IMAGE_TOKEN, createImageRule(imageRule.fn))
+    md.core.ruler.push(LOCAL_URLS_RULE, collectLocalUrls)
+    md.renderer.rules[IMAGE_TOKEN] = createImageRenderer(md.renderer.rules[IMAGE_TOKEN])
     md.renderer.rules[WIKI_LINK_TOKEN] = renderWikiLinkToken
     md.renderer.rules[EMBED_MEDIA_TOKEN] = renderMediaToken
     md.renderer.rules[NOTE_EMBED_TOKEN] = createEmbedRenderer(md)

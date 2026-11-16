@@ -35,7 +35,7 @@ export default function MarkdownDomEditor({
     onEdit,
     value,
     valueNonce,
-    previewValue,
+    readValue,
     mediaMap,
     linkVersion,
     knownTags,
@@ -61,6 +61,7 @@ export default function MarkdownDomEditor({
     onResolveLinks,
     onResolveLinkDetails,
     onResolveMedia,
+    onResolveLocalUrls,
     onLoadEmbeds,
     onSearchNotes,
     onImagePress,
@@ -237,16 +238,17 @@ export default function MarkdownDomEditor({
     usePreviewClicks(previewRef, { onLinkPress, onImagePress, onToggleTask, onEdit })
 
     const isReading = mode === EDITOR_MODES.READ
-    const languagesReady = useCodeLanguages(isReading ? previewValue : '')
+    const languagesReady = useCodeLanguages(isReading ? readValue : '')
     const parsed = useMemo(
-        () => (isReading && languagesReady ? parseReadMarkdown(previewValue) : null),
-        [isReading, languagesReady, previewValue]
+        () => (isReading && languagesReady ? parseReadMarkdown(readValue) : null),
+        [isReading, languagesReady, readValue]
     )
     const readServices = useMemo(() => ({
         resolveLinks: onResolveLinkDetails,
         resolveMedia: onResolveMedia,
+        resolveLocalUrls: onResolveLocalUrls,
         loadEmbeds: onLoadEmbeds
-    }), [onResolveLinkDetails, onResolveMedia, onLoadEmbeds])
+    }), [onResolveLinkDetails, onResolveMedia, onResolveLocalUrls, onLoadEmbeds])
     const readContext = useReadContext(parsed, readServices, linkVersion)
     const html = useMemo(
         () => (parsed && readContext ? renderReadHtml(parsed, readContext) + (backlinksHtml || '') : ''),

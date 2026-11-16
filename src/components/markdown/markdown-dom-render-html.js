@@ -11,6 +11,7 @@ import { wrapCodeBlock } from './markdown-dom-code-copy'
 import { highlightFence } from './syntax-highlighting/preview-code-highlight'
 
 import { findInlineTags } from '@/utils/inline-tags'
+import { replaceLocalImageUrls } from '@/utils/local-images'
 
 import { TAG_LINK_SCHEME } from '@/constants/tags'
 import { WIKI_LINK_SCHEME } from '@/constants/wiki-links'
@@ -56,9 +57,12 @@ md.renderer.rules.table_close = (tokens, idx, options, env, self) => (
     `${self.renderToken(tokens, idx, options)}</div>`
 )
 
-const renderHtmlToken = (tokens, idx, options, env) => (
-    env.sanitizeHtml ? env.sanitizeHtml(tokens[idx].content) : tokens[idx].content
-)
+const renderHtmlToken = (tokens, idx, options, env) => {
+    const { content } = tokens[idx]
+    const resolved = env.localMedia?.size ? replaceLocalImageUrls(content, env.localMedia) : content
+
+    return env.sanitizeHtml ? env.sanitizeHtml(resolved) : resolved
+}
 
 md.renderer.rules.html_block = renderHtmlToken
 md.renderer.rules.html_inline = renderHtmlToken
@@ -118,13 +122,14 @@ export const renderInlineHtml = (text) => (
     DOMPurify.sanitize(md.renderInline(text || '', { tags: true }), { ALLOWED_URI_REGEXP })
 )
 
-const EMPTY_READ_CONTEXT = { details: new Map(), media: new Map(), embeds: new Map() }
+const EMPTY_READ_CONTEXT = { details: new Map(), media: new Map(), local: new Map(), embeds: new Map() }
 
 const createReadEnv = () => ({
     tags: true,
     wikiTargets: new Set(),
     embedTargets: new Set(),
-    mediaNames: new Set()
+    mediaNames: new Set(),
+    localUrls: new Set()
 })
 
 export const parseNoteMarkdown = (text) => {
@@ -136,7 +141,8 @@ export const parseNoteMarkdown = (text) => {
         env,
         targets: [...env.wikiTargets],
         embedTargets: [...env.embedTargets],
-        mediaNames: [...env.mediaNames]
+        mediaNames: [...env.mediaNames],
+        localUrls: [...env.localUrls]
     }
 }
 
@@ -157,6 +163,7 @@ export const renderReadHtml = (parsed, context = EMPTY_READ_CONTEXT) => {
     Object.assign(parsed.env, {
         wikiResolved: context.details,
         embedMedia: context.media,
+        localMedia: context.local,
         embedLoaded: context.embeds,
         embedStack: [],
         embedDepth: 0

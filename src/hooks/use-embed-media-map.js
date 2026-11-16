@@ -1,9 +1,9 @@
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 
 import { useMediaUris } from './use-media-uris'
-import { resolveUrl } from './use-resolved-preview-markdown'
 import { extractEmbedMediaNames } from '@/utils/embeds'
 import { resolveEmbedMedia } from '@/utils/embed-media-resolver'
+import { resolveUrl } from '@/utils/resolve-url'
 import { logError } from '@/utils/log-error'
 
 import { EMBED_OPENING } from '@/constants/embeds'
