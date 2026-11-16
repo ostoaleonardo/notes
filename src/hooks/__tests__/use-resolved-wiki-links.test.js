@@ -1,6 +1,7 @@
 import { act, renderHook } from '@testing-library/react-native'
 
 import { useResolvedWikiLinks } from '../use-resolved-wiki-links'
+import { resolveWikiLinks } from '@/utils/wiki-links'
 
 const mockNotes = [{ path: 'repo::Target.md', title: 'Target', note: 'body' }]
 const mockNotePaths = new Map([['repo::Target.md', '']])
@@ -11,6 +12,11 @@ const mockListMediaUris = jest.fn(async () => new Map([
     ['doc.pdf', 'file:///doc.pdf']
 ]))
 
+jest.mock('@/utils/wiki-links', () => {
+    const actual = jest.requireActual('@/utils/wiki-links')
+
+    return { ...actual, resolveWikiLinks: jest.fn(actual.resolveWikiLinks) }
+})
 jest.mock('../use-notes', () => ({
     useNotes: () => ({ notes: mockNotes, notePaths: mockNotePaths })
 }))
@@ -102,4 +108,31 @@ describe('resolved wiki links', () => {
 
         expect(result.current).toBe(first)
     })
+
+    test('keeps the result when only the pdf setting changes and the text has no embeds', async () => {
+        const hook = await renderHook(
+            ({ pdf }) => useResolvedWikiLinks('see [[Target]]', 'repo::Self.md', pdf),
+            { initialProps: { pdf: false } }
+        )
+        await act(async () => {})
+        const calls = resolveWikiLinks.mock.calls.length
+
+        await hook.rerender({ pdf: true })
+
+        expect(resolveWikiLinks.mock.calls.length).toBe(calls)
+    })
+
+    test('resolves again when the pdf setting changes and the text has embeds', async () => {
+        const hook = await renderHook(
+            ({ pdf }) => useResolvedWikiLinks('see ![[doc.pdf]]', 'repo::Self.md', pdf),
+            { initialProps: { pdf: false } }
+        )
+        await act(async () => {})
+        const calls = resolveWikiLinks.mock.calls.length
+
+        await hook.rerender({ pdf: true })
+
+        expect(resolveWikiLinks.mock.calls.length).toBeGreaterThan(calls)
+    })
 })
+

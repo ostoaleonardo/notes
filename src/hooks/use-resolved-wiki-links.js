@@ -7,12 +7,16 @@ import { parseEmbedMedia } from '@/utils/embed-media'
 import { extractEmbedMediaNames, resolveEmbeds } from '@/utils/embeds'
 import { isEmbeddableMedia } from '@/utils/media-size'
 
+import { EMBED_OPENING } from '@/constants/embeds'
 import { FILE_KINDS } from '@/constants/file-types'
 
-export const useResolvedWikiLinks = (value, selfPath, pdf = false) => {
+export const useResolvedWikiLinks = (value, selfPath, pdfSetting = false) => {
     const { notes, notePaths } = useNotes()
     const listMediaUris = useMediaUris()
     const [mediaUris, setMediaUris] = useState(null)
+
+    const hasEmbeds = useMemo(() => (value || '').includes(EMBED_OPENING), [value])
+    const pdf = pdfSetting && hasEmbeds
 
     const hasMedia = useMemo(
         () => extractEmbedMediaNames(value || '', { pdf: true }).length > 0,

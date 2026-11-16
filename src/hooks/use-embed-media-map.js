@@ -6,16 +6,18 @@ import { extractEmbedMediaNames } from '@/utils/embeds'
 import { isEmbeddableMedia } from '@/utils/media-size'
 import { logError } from '@/utils/log-error'
 
+import { EMBED_OPENING } from '@/constants/embeds'
 import { LOG_MESSAGES } from '@/constants/log-messages'
 
 const EMPTY_MAP = new Map()
 
-export const useEmbedMediaMap = (value, enabled, pdf = false) => {
+export const useEmbedMediaMap = (value, enabled, pdfSetting = false) => {
     const listMediaUris = useMediaUris()
     const [map, setMap] = useState(EMPTY_MAP)
     const cacheRef = useRef(new Map())
 
     const deferredValue = useDeferredValue(value)
+    const pdf = pdfSetting && (deferredValue || '').includes(EMBED_OPENING)
 
     const namesKey = useMemo(
         () => (enabled ? extractEmbedMediaNames(deferredValue || '', { pdf }).join('\n') : ''),

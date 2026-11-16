@@ -22,3 +22,4 @@ export const EMBED_PDF_DEFAULT_PAGE = 1
 export const EMBED_PDF_ESTIMATED_HEIGHT = 320
 export const EMBED_OPEN_CLASS = 'embed-open'
 export const EMBED_OPEN_ICON_SIZE = '1em'
+export const EMBED_OPENING = '![['

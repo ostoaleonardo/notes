@@ -5,8 +5,10 @@ import {
     WIKI_LINK_ANCHOR_SEPARATOR,
     WIKI_LINK_ANCHOR_LABEL_SEPARATOR,
     NOTE_ALIASES_PROPERTY,
-    MARKDOWN_WIKI_LINK_PATTERN
+    MARKDOWN_WIKI_LINK_PATTERN,
+    MARKDOWN_WIKI_LINK_OPENING
 } from '@/constants/wiki-links'
+import { WIKI_LINK_OPEN } from '@/constants/markdown-syntax'
 import {
     BACKLINKS_CLASS,
     BACKLINKS_TITLE_CLASS,
@@ -159,6 +161,7 @@ export const parseMissingWikiLinkTarget = (encoded) => {
 const NAMES_FIELD_SEPARATOR = '\u0001'
 const NAMES_NOTE_SEPARATOR = '\u0002'
 const NO_BACKLINKS = []
+const NO_TARGETS = []
 const linkTargetsCache = new WeakMap()
 const backlinkIndexCache = new WeakMap()
 const resolvedTargetsCache = new WeakMap()
@@ -171,8 +174,12 @@ const getLinkTargets = (note) => {
 
     const entry = {
         body,
-        wiki: Array.from(body.matchAll(WIKI_LINK_PATTERN), (match) => match[1]),
-        markdown: Array.from(body.matchAll(MARKDOWN_WIKI_LINK_PATTERN), (match) => match[2])
+        wiki: body.includes(WIKI_LINK_OPEN)
+            ? Array.from(body.matchAll(WIKI_LINK_PATTERN), (match) => match[1])
+            : NO_TARGETS,
+        markdown: body.includes(MARKDOWN_WIKI_LINK_OPENING)
+            ? Array.from(body.matchAll(MARKDOWN_WIKI_LINK_PATTERN), (match) => match[2])
+            : NO_TARGETS
     }
 
     linkTargetsCache.set(note, entry)

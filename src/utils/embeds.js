@@ -22,7 +22,8 @@ import {
     EMBED_PDF_CLASS,
     EMBED_PLAYER_PRELOAD,
     EMBED_WIDTH_PATTERN,
-    EMBED_MAX_DEPTH
+    EMBED_MAX_DEPTH,
+    EMBED_OPENING
 } from '@/constants/embeds'
 
 const buildMedia = ({ name, kind, page }, width, getMediaUrl) => {
@@ -94,7 +95,7 @@ const replaceEmbeds = (value, context, depth, visited) => mapOutsideCode(
 )
 
 export const resolveEmbeds = (value, { notes, notePaths = new Map(), getMediaUrl, selfPath, withOpenLink = false }) => (
-    replaceEmbeds(
+    !value.includes(EMBED_OPENING) ? value : replaceEmbeds(
         value,
         { notes, notePaths, getMediaUrl, selfPath, withOpenLink },
         0,
@@ -103,6 +104,8 @@ export const resolveEmbeds = (value, { notes, notePaths = new Map(), getMediaUrl
 )
 
 const extractEmbedNames = (value, accepts) => {
+    if (!value.includes(EMBED_OPENING)) return []
+
     const names = new Set()
 
     mapOutsideCode(value, (segment) => {

@@ -46,3 +46,25 @@ describe('map outside code', () => {
         expect(result).toBe('A `b` C')
     })
 })
+
+describe('code segment cache', () => {
+    const buildLongText = (suffix) => `${'plain line\n'.repeat(300)}\`code\` ${suffix}`
+
+    test('gives the same result when the same long text is read again', () => {
+        const text = buildLongText('end')
+
+        expect(getCodeRanges(text)).toEqual(getCodeRanges(text))
+        expect(mapOutsideCode(text, (part) => part.toUpperCase())).toBe(
+            mapOutsideCode(text, (part) => part.toUpperCase())
+        )
+    })
+
+    test('does not mix the segments of two different long texts', () => {
+        const first = buildLongText('one')
+        const second = `${'x'.repeat(3300)}\n\`other\``
+
+        expect(getCodeRanges(first)).toHaveLength(1)
+        expect(getCodeRanges(second)[0][0]).toBe(3301)
+        expect(getCodeRanges(first)).toHaveLength(1)
+    })
+})
