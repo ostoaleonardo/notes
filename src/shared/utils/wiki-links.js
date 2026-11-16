@@ -159,17 +159,6 @@ export const resolveWikiLinkDetails = (linkText, notes, notePaths, selfPath) => 
     return { path: note ? note.path : null, target, anchor }
 }
 
-export const resolveWikiLinks = (value, notes, notePaths = EMPTY_NOTE_PATHS, selfPath) => mapOutsideCode(
-    value,
-    (segment) => segment.replace(
-        WIKI_LINK_PATTERN,
-        (match, linkText, alias) => renderWikiLink(
-            alias,
-            resolveWikiLinkDetails(linkText, notes, notePaths, selfPath)
-        )
-    )
-)
-
 export const parseMissingWikiLinkTarget = (encoded) => {
     const separatorIndex = encoded.indexOf('/')
 

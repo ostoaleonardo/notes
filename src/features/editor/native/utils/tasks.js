@@ -3,8 +3,6 @@ import MarkdownIt from 'markdown-it'
 import { COMMENT_MARKER, COMMENT_OR_CODE_PATTERN } from '@/features/editor/shared/constants/extra-marks'
 import { MARKDOWN_IT_TOKENS } from '@/features/editor/shared/constants/markdown-it-tokens'
 import {
-    CUSTOM_TASK_LINE_PATTERN,
-    CUSTOM_TASK_MARKER_LENGTH,
     NON_NEWLINE_PATTERN,
     TASK_CHECKED_MARK,
     TASK_CONTENT_PATTERN,
@@ -46,12 +44,3 @@ export const toggleTask = (source, index) => {
 
     return lines.join('\n')
 }
-
-export const findCustomTaskRanges = (text) => Array.from(
-    text.matchAll(CUSTOM_TASK_LINE_PATTERN),
-    (match) => {
-        const from = match.index + match[1].length
-
-        return { from, to: from + CUSTOM_TASK_MARKER_LENGTH, status: match[2] }
-    }
-)

@@ -33,12 +33,3 @@ export const findPendingFenceLanguages = (text) => {
 
     return [...infos].map(findCodeLanguage).filter((language) => language && !language.support)
 }
-
-export const loadFenceLanguages = async (text) => {
-    const pending = findPendingFenceLanguages(text)
-
-    if (pending.length === 0) return false
-
-    await Promise.all(pending.map((language) => language.load()))
-    return true
-}

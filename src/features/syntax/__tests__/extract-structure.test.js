@@ -11,8 +11,7 @@ const legacyShape = (text) => {
     return {
         links: structure.links.map(({ target }) => target),
         tags: structure.tags.map(({ name, from, to }) => ({ name, from, to })),
-        headings: structure.headings,
-        customTasks: structure.customTasks.map(({ from, to, status }) => ({ from, to, status }))
+        headings: structure.headings
     }
 }
 
@@ -37,14 +36,6 @@ describe('structure extraction parity', () => {
 
     test.each(Object.keys(CHANGED_LINKS))('%s changes links on purpose', (name) => {
         expect(pick(legacyShape(byName[name]), 'links')).toEqual(CHANGED_LINKS[name])
-    })
-
-    test.each(corpus.map(({ name }) => name))('%s keeps the recorded custom tasks', (name) => {
-        const expected = describeNote(byName[name]).customTasks
-        const received = legacyShape(byName[name]).customTasks
-
-        if (name === 'tasks-custom') expect(received).toHaveLength(expected.length - 1)
-        else expect(received).toEqual(expected)
     })
 
     test.each(corpus.map(({ name }) => name).filter((name) => name !== 'html-blocks'))(
@@ -105,5 +96,28 @@ describe('structure extraction details', () => {
         const { headings } = extractNoteStructure('## Title ##\n')
 
         expect(headings).toEqual([{ level: 2, text: 'Title', from: 0 }])
+    })
+})
+
+describe('structure extraction of custom tasks', () => {
+    test('returns the marker range and status of each custom task', () => {
+        expect(extractNoteStructure('- [/] a\n- [-] b').customTasks).toEqual([
+            { from: 2, to: 5, status: '/' },
+            { from: 10, to: 13, status: '-' }
+        ])
+    })
+
+    test('ignores regular tasks and plain brackets', () => {
+        expect(extractNoteStructure('- [ ] a\n- [x] b\n[/] c\n- [/]d').customTasks).toEqual([])
+    })
+
+    test('supports nested, quoted and numbered tasks', () => {
+        const { customTasks } = extractNoteStructure('- [>] a\n    - [/] b\n\n> - [?] c\n\n1. [-] d')
+
+        expect(customTasks.map(({ status }) => status)).toEqual(['>', '/', '?', '-'])
+    })
+
+    test('ignores tasks inside code fences', () => {
+        expect(extractNoteStructure('```\n- [-] a\n```').customTasks).toEqual([])
     })
 })

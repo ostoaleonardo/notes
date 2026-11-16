@@ -54,8 +54,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "blocks-paragraphs": {
     "links": [],
@@ -104,8 +103,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "blocks-structures": {
     "links": [],
@@ -147,8 +145,7 @@
       "unlabeled": []
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "callouts": {
     "links": [
@@ -189,8 +186,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "embeds-code": {
     "links": [
@@ -219,8 +215,7 @@
     "embedImages": [
       "visible.png",
       "visible2.png"
-    ],
-    "customTasks": []
+    ]
   },
   "embeds-media": {
     "links": [
@@ -273,8 +268,7 @@
       "photo.png",
       "diagram.svg",
       "PHOTO.PNG"
-    ],
-    "customTasks": []
+    ]
   },
   "empty-and-whitespace": {
     "links": [],
@@ -285,8 +279,7 @@
       "unlabeled": []
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "footnotes": {
     "links": [
@@ -315,8 +308,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "frontmatter-links": {
     "links": [
@@ -341,8 +333,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "headings-atx": {
     "links": [],
@@ -409,8 +400,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "headings-code-and-quotes": {
     "links": [],
@@ -441,8 +431,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "headings-setext": {
     "links": [],
@@ -462,8 +451,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "html-blocks": {
     "links": [
@@ -507,8 +495,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "line-endings-crlf": {
     "links": [
@@ -538,8 +525,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "math": {
     "links": [
@@ -572,8 +558,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "mixed-realistic": {
     "links": [
@@ -666,13 +651,6 @@
     ],
     "embedImages": [
       "diagram.png"
-    ],
-    "customTasks": [
-      {
-        "from": 223,
-        "to": 226,
-        "status": "/"
-      }
     ]
   },
   "tabs-and-indentation": {
@@ -701,8 +679,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "tags-basic": {
     "links": [],
@@ -796,8 +773,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "tags-code-and-frontmatter": {
     "links": [],
@@ -832,8 +808,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "tags-not-tags": {
     "links": [],
@@ -873,8 +848,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "tasks-custom": {
     "links": [],
@@ -950,69 +924,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": [
-      {
-        "from": 24,
-        "to": 27,
-        "status": "-"
-      },
-      {
-        "from": 40,
-        "to": 43,
-        "status": "/"
-      },
-      {
-        "from": 58,
-        "to": 61,
-        "status": ">"
-      },
-      {
-        "from": 74,
-        "to": 77,
-        "status": "<"
-      },
-      {
-        "from": 90,
-        "to": 93,
-        "status": "?"
-      },
-      {
-        "from": 105,
-        "to": 108,
-        "status": "!"
-      },
-      {
-        "from": 121,
-        "to": 124,
-        "status": "*"
-      },
-      {
-        "from": 132,
-        "to": 135,
-        "status": "\""
-      },
-      {
-        "from": 144,
-        "to": 147,
-        "status": "l"
-      },
-      {
-        "from": 159,
-        "to": 162,
-        "status": "b"
-      },
-      {
-        "from": 237,
-        "to": 240,
-        "status": "-"
-      },
-      {
-        "from": 269,
-        "to": 272,
-        "status": "-"
-      }
-    ]
+    "embedImages": []
   },
   "wikilinks-alias-anchor-block": {
     "links": [
@@ -1046,8 +958,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "wikilinks-basic": {
     "links": [
@@ -1076,8 +987,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "wikilinks-code-fenced": {
     "links": [
@@ -1105,8 +1015,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "wikilinks-code-indented": {
     "links": [
@@ -1142,8 +1051,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "wikilinks-code-inline": {
     "links": [
@@ -1175,8 +1083,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "wikilinks-escaped-and-broken": {
     "links": [
@@ -1214,8 +1121,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "wikilinks-markdown-style": {
     "links": [
@@ -1241,8 +1147,7 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "wikilinks-table": {
     "links": [
@@ -1257,8 +1162,7 @@
       "unlabeled": []
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   },
   "wikilinks-unicode": {
     "links": [
@@ -1285,7 +1189,6 @@
       ]
     },
     "embedMedia": [],
-    "embedImages": [],
-    "customTasks": []
+    "embedImages": []
   }
 }

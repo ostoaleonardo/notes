@@ -1,4 +1,4 @@
-import { findPendingFenceLanguages, highlightFence, loadFenceLanguages } from '../preview-code-highlight'
+import { findPendingFenceLanguages, highlightFence } from '../preview-code-highlight'
 import { buildSyntaxColors } from '../syntax-colors'
 
 const mockLoad = jest.fn()
@@ -20,6 +20,8 @@ jest.mock('../code-languages', () => {
     }
 })
 
+const loadLanguages = (text) => Promise.all(findPendingFenceLanguages(text).map((language) => language.load()))
+
 const escapeHtml = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;')
 
 describe('preview code highlight', () => {
@@ -32,19 +34,20 @@ describe('preview code highlight', () => {
         expect(findPendingFenceLanguages('```nope\nx\n```')).toHaveLength(0)
     })
 
-    test('loads fence languages once', async () => {
-        expect(await loadFenceLanguages('```js\nx\n```')).toBe(true)
-        expect(await loadFenceLanguages('```js\nx\n```')).toBe(false)
+    test('stops listing a language once it is loaded', async () => {
+        await loadLanguages('```js\nx\n```')
+
+        expect(findPendingFenceLanguages('```js\nx\n```')).toHaveLength(0)
         expect(mockLoad).toHaveBeenCalledTimes(1)
     })
 
     test('ignores unknown languages', async () => {
-        expect(await loadFenceLanguages('```nope\nx\n```')).toBe(false)
+        expect(findPendingFenceLanguages('```nope\nx\n```')).toHaveLength(0)
         expect(highlightFence('x', 'nope', escapeHtml)).toBe('')
     })
 
     test('wraps tokens in classed spans and escapes text', async () => {
-        await loadFenceLanguages('```js\nx\n```')
+        await loadLanguages('```js\nx\n```')
 
         const html = highlightFence('const a = "<b>"', 'js', escapeHtml)
 

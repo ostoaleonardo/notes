@@ -6,7 +6,6 @@ export const TASK_LINE_PATTERN = /^(\s*(?:>\s*)*(?:[-*+]|\d+[.)])\s+\[)([^\]\n])
 export const TASK_CHECKED_MARK = 'x'
 export const TASK_UNCHECKED_MARK = ' '
 export const NON_NEWLINE_PATTERN = /[^\n]/g
-export const CUSTOM_TASK_LINE_PATTERN = /^([ \t]*(?:>[ \t]*)*(?:[-*+]|\d+[.)])[ \t]+)\[([^\sxX\]])\](?=\s)/gm
 export const CUSTOM_TASK_LIVE_CLASS = 'cm-live-task-status'
 export const CUSTOM_TASK_MARKER_LENGTH = 3
 export const CUSTOM_TASK_STATUS_ATTRIBUTE = 'data-status'

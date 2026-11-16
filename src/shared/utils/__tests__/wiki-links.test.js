@@ -1,11 +1,18 @@
 import {
-    resolveWikiLinks,
+    renderWikiLink,
+    resolveWikiLinkDetails,
     resolveWikiLinkTarget,
     findBacklinks,
     renameWikiLinksForNote,
     buildBacklinksHtml,
     parseMissingWikiLinkTarget
 } from '../wiki-links'
+
+const renderLink = (value, notes, notePaths = new Map(), selfPath) => {
+    const [, linkText, alias] = /^\[\[([^\]|]+)(?:\|([^\]]+))?\]\]$/.exec(value)
+
+    return renderWikiLink(alias, resolveWikiLinkDetails(linkText, notes, notePaths, selfPath))
+}
 
 const notes = [
     { path: 'note-1', title: 'Meeting Notes' },
@@ -14,28 +21,28 @@ const notes = [
 
 describe('matching note', () => {
     test('renders a wiki link to the matching note path', () => {
-        const result = resolveWikiLinks('See [[Meeting Notes]] for details', notes)
+        const result = renderLink('[[Meeting Notes]]', notes)
 
         expect(result).toBe(
-            'See <a href="wikilink://note-1" class="wiki-link">Meeting Notes</a> for details'
+            '<a href="wikilink://note-1" class="wiki-link">Meeting Notes</a>'
         )
     })
 
     test('matches the title case-insensitively', () => {
-        const result = resolveWikiLinks('[[meeting notes]]', notes)
+        const result = renderLink('[[meeting notes]]', notes)
 
         expect(result).toBe('<a href="wikilink://note-1" class="wiki-link">meeting notes</a>')
     })
 
     test('uses the alias as the label when provided', () => {
-        const result = resolveWikiLinks('[[Meeting Notes|notes from today]]', notes)
+        const result = renderLink('[[Meeting Notes|notes from today]]', notes)
 
         expect(result).toBe('<a href="wikilink://note-1" class="wiki-link">notes from today</a>')
     })
 
     test('encodes the path so it survives as a single URL segment', () => {
         const withSpecialChars = [{ path: 'repo-1::My Note.md', title: 'My Note' }]
-        const result = resolveWikiLinks('[[My Note]]', withSpecialChars)
+        const result = renderLink('[[My Note]]', withSpecialChars)
 
         expect(result).toBe(
             '<a href="wikilink://repo-1%3A%3AMy%20Note.md" class="wiki-link">My Note</a>'
@@ -43,31 +50,9 @@ describe('matching note', () => {
     })
 })
 
-describe('code spans and blocks', () => {
-    test('leaves a wiki link inside inline code untouched', () => {
-        expect(resolveWikiLinks('use `[[Meeting Notes]]` here', notes)).toBe(
-            'use `[[Meeting Notes]]` here'
-        )
-    })
-
-    test('leaves a wiki link inside a fenced block untouched', () => {
-        const value = '```\n[[Meeting Notes]]\n```'
-
-        expect(resolveWikiLinks(value, notes)).toBe(value)
-    })
-
-    test('still resolves wiki links next to code', () => {
-        const result = resolveWikiLinks('`code` [[Meeting Notes]]', notes)
-
-        expect(result).toBe(
-            '`code` <a href="wikilink://note-1" class="wiki-link">Meeting Notes</a>'
-        )
-    })
-})
-
 describe('missing note', () => {
     test('renders a clickable broken link carrying the missing title when no note matches', () => {
-        const result = resolveWikiLinks('[[Unknown Note]]', notes)
+        const result = renderLink('[[Unknown Note]]', notes)
 
         expect(result).toBe(
             '<a href="wikilink://missing//Unknown%20Note" ' +
@@ -76,7 +61,7 @@ describe('missing note', () => {
     })
 
     test('carries the folder path so a note created from it lands in the right place', () => {
-        const result = resolveWikiLinks('[[one/Unknown Note]]', notes)
+        const result = renderLink('[[one/Unknown Note]]', notes)
 
         expect(result).toBe(
             '<a href="wikilink://missing/one/Unknown%20Note" ' +
@@ -87,7 +72,7 @@ describe('missing note', () => {
 
 describe('label escaping', () => {
     test('escapes html characters in the label', () => {
-        const result = resolveWikiLinks('[[Unknown Note|<b>bold</b>]]', notes)
+        const result = renderLink('[[Unknown Note|<b>bold</b>]]', notes)
 
         expect(result).toBe(
             '<a href="wikilink://missing//Unknown%20Note" ' +
@@ -107,14 +92,6 @@ describe('missing wiki link target', () => {
         expect(parseMissingWikiLinkTarget('/Unknown%20Note')).toEqual(
             { path: '', title: 'Unknown Note' }
         )
-    })
-})
-
-describe('plain text', () => {
-    test('leaves text without wiki links unchanged', () => {
-        const result = resolveWikiLinks('Just a regular paragraph.', notes)
-
-        expect(result).toBe('Just a regular paragraph.')
     })
 })
 
@@ -140,8 +117,8 @@ describe('duplicate titles across folders', () => {
         expect(target.path).toBe('sub-test')
     })
 
-    test('resolveWikiLinks renders a path-qualified link to the disambiguated note', () => {
-        const result = resolveWikiLinks('[[one/Test]]', duplicateNotes, notePaths)
+    test('renders a path-qualified link to the disambiguated note', () => {
+        const result = renderLink('[[one/Test]]', duplicateNotes, notePaths)
 
         expect(result).toBe('<a href="wikilink://sub-test" class="wiki-link">Test</a>')
     })
@@ -396,7 +373,7 @@ describe('backlinks html', () => {
 
 describe('heading and block anchors', () => {
     test('resolves a heading link to its note and shows the heading in the label', () => {
-        const result = resolveWikiLinks('[[Meeting Notes#Agenda]]', notes)
+        const result = renderLink('[[Meeting Notes#Agenda]]', notes)
 
         expect(result).toBe(
             '<a href="wikilink://note-1#Agenda" class="wiki-link">Meeting Notes &gt; Agenda</a>'
@@ -404,13 +381,13 @@ describe('heading and block anchors', () => {
     })
 
     test('resolves a block link to its note', () => {
-        const result = resolveWikiLinks('[[Meeting Notes#^abc123]]', notes)
+        const result = renderLink('[[Meeting Notes#^abc123]]', notes)
 
         expect(result).toContain('href="wikilink://note-1#%5Eabc123"')
     })
 
     test('uses the alias as the label when provided', () => {
-        const result = resolveWikiLinks('[[Meeting Notes#Agenda|the agenda]]', notes)
+        const result = renderLink('[[Meeting Notes#Agenda|the agenda]]', notes)
 
         expect(result).toBe('<a href="wikilink://note-1#Agenda" class="wiki-link">the agenda</a>')
     })
@@ -440,7 +417,7 @@ describe('heading and block anchors', () => {
     })
 
     test('a missing heading link carries the title without the anchor', () => {
-        const result = resolveWikiLinks('[[Unknown#Heading]]', notes)
+        const result = renderLink('[[Unknown#Heading]]', notes)
 
         expect(result).toBe(
             '<a href="wikilink://missing//Unknown" ' +
@@ -449,23 +426,23 @@ describe('heading and block anchors', () => {
     })
 
     test('a same-note heading link renders as plain text without the current note', () => {
-        expect(resolveWikiLinks('[[#Agenda]]', notes)).toBe('Agenda')
+        expect(renderLink('[[#Agenda]]', notes)).toBe('Agenda')
     })
 
     test('a same-note heading link points to the current note', () => {
-        const result = resolveWikiLinks('[[#Agenda]]', notes, new Map(), 'note-1')
+        const result = renderLink('[[#Agenda]]', notes, new Map(), 'note-1')
 
         expect(result).toBe('<a href="wikilink://note-1#Agenda" class="wiki-link">#Agenda</a>')
     })
 
     test('a same-note heading link uses the alias as the label', () => {
-        const result = resolveWikiLinks('[[#Agenda|the agenda]]', notes, new Map(), 'note-1')
+        const result = renderLink('[[#Agenda|the agenda]]', notes, new Map(), 'note-1')
 
         expect(result).toBe('<a href="wikilink://note-1#Agenda" class="wiki-link">the agenda</a>')
     })
 
     test('a same-note block link points to the current note', () => {
-        const result = resolveWikiLinks('[[#^abc123]]', notes, new Map(), 'note-1')
+        const result = renderLink('[[#^abc123]]', notes, new Map(), 'note-1')
 
         expect(result).toContain('href="wikilink://note-1#%5Eabc123"')
     })
@@ -547,7 +524,7 @@ describe('unicode normalization', () => {
 
 describe('file links', () => {
     test('renders a link to a vault file as a file link', () => {
-        const result = resolveWikiLinks('[[docs/sample doc.pdf]]', notes)
+        const result = renderLink('[[docs/sample doc.pdf]]', notes)
 
         expect(result).toBe(
             '<a href="filelink://docs%2Fsample%20doc.pdf" class="file-link">sample doc.pdf</a>'
@@ -555,13 +532,13 @@ describe('file links', () => {
     })
 
     test('uses the alias as the label and drops the anchor from the target', () => {
-        const result = resolveWikiLinks('[[sample.pdf#page=2|Manual]]', notes)
+        const result = renderLink('[[sample.pdf#page=2|Manual]]', notes)
 
         expect(result).toBe('<a href="filelink://sample.pdf" class="file-link">Manual</a>')
     })
 
     test('keeps a note with a file-like title as a note link', () => {
-        const result = resolveWikiLinks('[[spec.pdf]]', [{ path: 'note-3', title: 'spec.pdf' }])
+        const result = renderLink('[[spec.pdf]]', [{ path: 'note-3', title: 'spec.pdf' }])
 
         expect(result).toBe('<a href="wikilink://note-3" class="wiki-link">spec.pdf</a>')
     })

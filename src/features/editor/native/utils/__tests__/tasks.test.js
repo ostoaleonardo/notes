@@ -1,4 +1,4 @@
-import { findCustomTaskRanges, toggleTask } from '../tasks'
+import { toggleTask } from '../tasks'
 
 describe('toggle task', () => {
     test('checks an unchecked task', () => {
@@ -51,24 +51,5 @@ describe('toggle task', () => {
 
     test('keeps the source when the index does not exist', () => {
         expect(toggleTask('- [ ] only', 3)).toBe('- [ ] only')
-    })
-})
-
-describe('find custom task ranges', () => {
-    test('returns the marker range and status of each custom task', () => {
-        expect(findCustomTaskRanges('- [/] a\n- [-] b')).toEqual([
-            { from: 2, to: 5, status: '/' },
-            { from: 10, to: 13, status: '-' }
-        ])
-    })
-
-    test('ignores regular tasks and plain brackets', () => {
-        expect(findCustomTaskRanges('- [ ] a\n- [x] b\n[/] c\n- [/]d')).toEqual([])
-    })
-
-    test('supports nested, quoted and numbered tasks', () => {
-        const ranges = findCustomTaskRanges('  - [>] a\n> - [/] b\n1. [-] c')
-
-        expect(ranges.map((range) => range.status)).toEqual(['>', '/', '-'])
     })
 })

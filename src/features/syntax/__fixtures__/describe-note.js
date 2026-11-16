@@ -3,7 +3,6 @@ import { findInlineTags } from '@/shared/utils/inline-tags'
 import { findHeadings } from '@/shared/utils/headings'
 import { findAllBlocks } from '@/features/editor/shared/utils/block-refs'
 import { extractEmbedImageNames, extractEmbedMediaNames } from '@/features/editor/native/utils/embeds'
-import { findCustomTaskRanges } from '@/features/editor/native/utils/tasks'
 
 export const describeNote = (text) => ({
     links: extractWikiLinkTexts(text),
@@ -11,6 +10,5 @@ export const describeNote = (text) => ({
     headings: findHeadings(text),
     blocks: findAllBlocks(text),
     embedMedia: extractEmbedMediaNames(text, { pdf: true }),
-    embedImages: extractEmbedImageNames(text),
-    customTasks: findCustomTaskRanges(text)
+    embedImages: extractEmbedImageNames(text)
 })
