@@ -2,7 +2,7 @@ import { useFocusEffect } from 'expo-router'
 import { useCallback, useEffect, useEffectEvent, useMemo, useState } from 'react'
 
 import { Intro } from '@/screens/notes/intro'
-import { NoteToolbarSheets } from '@/screens/notes/note-toolbar-sheets'
+import { NoteToolbarSheets } from '@/features/editor/screens/notes/note-toolbar-sheets'
 import { HomeToolbar } from '@/screens/notes/home-toolbar'
 import { AppBar } from '@/components/app-bar/app-bar'
 import { DirectAccessCard } from '@/components/direct-access-card'

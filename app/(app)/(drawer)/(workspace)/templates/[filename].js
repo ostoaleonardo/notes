@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
 
-import { EditorShell } from '@/screens/notes/editor-shell'
+import { EditorShell } from '@/features/editor/screens/notes/editor-shell'
 import { TemplateEditorForm } from '@/features/templates/screens/templates/template-editor-form'
 import { TemplatePlaceholders } from '@/screens/dialogs/template-placeholders'
 import { LoadingOverlay } from '@/ui/layout'

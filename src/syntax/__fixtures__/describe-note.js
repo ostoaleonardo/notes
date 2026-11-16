@@ -1,9 +1,9 @@
 import { extractWikiLinkTexts } from '@/utils/note-links'
 import { findInlineTags } from '@/utils/inline-tags'
 import { findHeadings } from '@/utils/headings'
-import { findAllBlocks } from '@/utils/block-refs'
-import { extractEmbedImageNames, extractEmbedMediaNames } from '@/utils/embeds'
-import { findCustomTaskRanges } from '@/utils/tasks'
+import { findAllBlocks } from '@/features/editor/utils/block-refs'
+import { extractEmbedImageNames, extractEmbedMediaNames } from '@/features/editor/utils/embeds'
+import { findCustomTaskRanges } from '@/features/editor/utils/tasks'
 
 export const describeNote = (text) => ({
     links: extractWikiLinkTexts(text),

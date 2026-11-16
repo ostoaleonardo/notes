@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 
-import { NoteEditorScreen } from '@/screens/notes/note-editor-screen'
+import { NoteEditorScreen } from '@/features/editor/screens/notes/note-editor-screen'
 import { RenameLinksDialog } from '@/screens/dialogs/rename-links-dialog'
 
 import { useAutosave } from '@/hooks/use-autosave'

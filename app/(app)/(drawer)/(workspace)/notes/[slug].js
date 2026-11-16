@@ -2,7 +2,7 @@ import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { router, useLocalSearchParams } from 'expo-router'
 
-import { NoteEditorScreen } from '@/screens/notes/note-editor-screen'
+import { NoteEditorScreen } from '@/features/editor/screens/notes/note-editor-screen'
 import { LoadingOverlay } from '@/ui/layout'
 import { RenameLinksDialog } from '@/screens/dialogs/rename-links-dialog'
 

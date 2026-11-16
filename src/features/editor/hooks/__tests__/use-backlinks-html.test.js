@@ -1,0 +1,67 @@
+import { act, renderHook } from '@testing-library/react-native'
+
+import { useBacklinksHtml } from '../use-backlinks-html'
+
+const mockNotes = [
+    { path: 'r::Target.md', title: 'Target', note: '' },
+    { path: 'r::Source.md', title: 'Source', note: 'see [[Target]]' },
+    { path: 'r::Mention.md', title: 'Mention', note: 'about Target here' }
+]
+
+jest.mock('react-i18next', () => ({
+    useTranslation: () => ({ t: (key) => key })
+}))
+const mockNotePaths = new Map(mockNotes.map((note) => [note.path, '']))
+
+jest.mock('../../../../hooks/use-notes', () => ({
+    useNotes: () => ({
+        notes: mockNotes,
+        notePaths: mockNotePaths
+    })
+}))
+
+let idleCallbacks
+
+beforeEach(() => {
+    idleCallbacks = []
+    jest.spyOn(global, 'requestIdleCallback').mockImplementation((callback) => idleCallbacks.push(callback))
+    jest.spyOn(global, 'cancelIdleCallback').mockImplementation(() => {})
+})
+
+afterEach(() => {
+    jest.restoreAllMocks()
+})
+
+describe('backlinks html', () => {
+    test('is empty when backlinks are disabled', async () => {
+        const { result } = await renderHook(() => useBacklinksHtml('r::Target.md', false))
+
+        expect(result.current).toBe('')
+    })
+
+    test('lists the notes linking to the target when enabled', async () => {
+        const { result } = await renderHook(() => useBacklinksHtml('r::Target.md', true))
+
+        expect(result.current).toContain('Source')
+        expect(result.current).toContain('title.backlinks')
+    })
+
+    test('is empty when nothing links to the note', async () => {
+        const { result } = await renderHook(() => useBacklinksHtml('r::Source.md', true))
+
+        expect(result.current).toBe('')
+    })
+
+    test('adds the unlinked mentions after the idle callback', async () => {
+        const { result } = await renderHook(() => useBacklinksHtml('r::Target.md', true))
+
+        expect(result.current).not.toContain('title.unlinked_mentions')
+
+        await act(async () => {
+            idleCallbacks.forEach((callback) => callback())
+        })
+
+        expect(result.current).toContain('title.unlinked_mentions')
+        expect(result.current).toContain('Mention')
+    })
+})

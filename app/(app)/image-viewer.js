@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router'
 
-import { ImageViewer } from '@/screens/notes/image-viewer'
+import { ImageViewer } from '@/features/editor/screens/notes/image-viewer'
 
 const onClose = () => router.back()
 

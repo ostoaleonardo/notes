@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native'
 
 import { FilledButton } from '@/ui/button/filled-button'
 import { ConfirmDialog } from '@/components/confirm-dialog'
-import { VersionHistoryContent } from '@/screens/notes/version-history-content'
+import { VersionHistoryContent } from '@/features/editor/screens/notes/version-history-content'
 
 import { useLanguage } from '@/hooks/use-language'
 import { getFormattedDate } from '@/utils/formatted-date'

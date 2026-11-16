@@ -1,0 +1,50 @@
+import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { useBottomSheet } from '../../../hooks/use-bottom-sheet'
+import { useTemplates } from '../../../hooks/use-templates'
+import { useTemplatesList } from '../../../hooks/use-templates-list'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
+
+import { TEMPLATE_INSERT_SEPARATOR } from '@/constants/template-placeholders'
+import { LOG_MESSAGES } from '@/constants/log-messages'
+import { logError } from '@/utils/log-error'
+
+export function useNoteTemplates({ latestContent, setNote }) {
+    const { t } = useTranslation()
+    const { addTemplate } = useTemplates()
+    const { templates, refresh } = useTemplatesList([], { immediate: false })
+
+    const sheet = useBottomSheet()
+    const { onOpen: openSheet, onClose: closeSheet } = sheet
+
+    const onSelect = useCallback((content) => {
+        setNote((prev) => (prev ? prev + TEMPLATE_INSERT_SEPARATOR + content : content))
+        closeSheet()
+    }, [setNote, closeSheet])
+
+    const onSaveAsTemplate = useCallback(async () => {
+        const { title, content } = latestContent.current
+
+        try {
+            await addTemplate(title.trim() || t('placeholder.title'), content)
+            showSnackbar(t('templates.save.success'))
+        } catch (error) {
+            logError(LOG_MESSAGES.ERROR_SAVING_TEMPLATE, error)
+            showSnackbar(t('templates.save.failed'))
+        }
+    }, [addTemplate, latestContent, t])
+
+    const onOpen = useCallback(() => {
+        refresh()
+        openSheet()
+    }, [refresh, openSheet])
+
+    return {
+        sheet,
+        templates,
+        onOpen,
+        onSelect,
+        onSaveAsTemplate
+    }
+}
