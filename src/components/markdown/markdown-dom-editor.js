@@ -9,7 +9,7 @@ import { katexCss } from './markdown-dom-katex-css'
 import { TitleSection } from './markdown-dom-widgets'
 import { buildPreviewCss } from './markdown-dom-preview-css'
 import { parseReadMarkdown, renderReadHtml } from './markdown-dom-render-html'
-import { useWikiLinkDetails } from './use-wiki-link-details'
+import { useReadContext } from './use-read-context'
 import { PERF_MARK_READ_PAINTED } from '@/constants/perf-marks'
 import { linksReset } from './link-resolution'
 import { useCodeLanguages } from './use-code-languages'
@@ -28,7 +28,6 @@ import { EDITOR_MODES } from '@/constants/editor-modes'
 import { TEST_IDS } from '@/constants/test-ids'
 
 const NO_META_LINES = []
-const NO_TARGETS = []
 
 export default function MarkdownDomEditor({
     ref,
@@ -61,6 +60,8 @@ export default function MarkdownDomEditor({
     onLoadBlocks,
     onResolveLinks,
     onResolveLinkDetails,
+    onResolveMedia,
+    onLoadEmbeds,
     onSearchNotes,
     onImagePress,
     onToggleTask,
@@ -241,10 +242,15 @@ export default function MarkdownDomEditor({
         () => (isReading && languagesReady ? parseReadMarkdown(previewValue) : null),
         [isReading, languagesReady, previewValue]
     )
-    const wikiDetails = useWikiLinkDetails(parsed?.targets ?? NO_TARGETS, onResolveLinkDetails, linkVersion)
+    const readServices = useMemo(() => ({
+        resolveLinks: onResolveLinkDetails,
+        resolveMedia: onResolveMedia,
+        loadEmbeds: onLoadEmbeds
+    }), [onResolveLinkDetails, onResolveMedia, onLoadEmbeds])
+    const readContext = useReadContext(parsed, readServices, linkVersion)
     const html = useMemo(
-        () => (parsed && wikiDetails ? renderReadHtml(parsed, wikiDetails) + (backlinksHtml || '') : ''),
-        [parsed, wikiDetails, backlinksHtml]
+        () => (parsed && readContext ? renderReadHtml(parsed, readContext) + (backlinksHtml || '') : ''),
+        [parsed, readContext, backlinksHtml]
     )
 
     usePdfEmbeds(previewRef, html)

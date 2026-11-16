@@ -1,6 +1,6 @@
 import { parseReadMarkdown, renderReadHtml } from '../markdown-dom-render-html'
 
-const render = (text, resolved = new Map()) => renderReadHtml(parseReadMarkdown(text), resolved)
+const render = (text, details = new Map()) => renderReadHtml(parseReadMarkdown(text), { details })
 
 const found = (path, target, anchor = '') => ({ path, target, anchor })
 

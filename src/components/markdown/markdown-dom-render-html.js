@@ -118,24 +118,49 @@ export const renderInlineHtml = (text) => (
     DOMPurify.sanitize(md.renderInline(text || '', { tags: true }), { ALLOWED_URI_REGEXP })
 )
 
+const EMPTY_READ_CONTEXT = { details: new Map(), media: new Map(), embeds: new Map() }
+
+const createReadEnv = () => ({
+    tags: true,
+    wikiTargets: new Set(),
+    embedTargets: new Set(),
+    mediaNames: new Set()
+})
+
+export const parseNoteMarkdown = (text) => {
+    const env = createReadEnv()
+    const tokens = md.parse(text, env)
+
+    return {
+        tokens,
+        env,
+        targets: [...env.wikiTargets],
+        embedTargets: [...env.embedTargets],
+        mediaNames: [...env.mediaNames]
+    }
+}
+
 let lastParsed = { text: null, parsed: null }
 
 export const parseReadMarkdown = (text) => {
     if (!text) return null
     if (lastParsed.text === text) return lastParsed.parsed
 
-    const env = { tags: true, wikiTargets: new Set() }
-    const tokens = md.parse(text, env)
-
-    lastParsed = { text, parsed: { tokens, env, targets: [...env.wikiTargets] } }
+    lastParsed = { text, parsed: parseNoteMarkdown(text) }
 
     return lastParsed.parsed
 }
 
-export const renderReadHtml = (parsed, resolved) => {
+export const renderReadHtml = (parsed, context = EMPTY_READ_CONTEXT) => {
     if (!parsed) return ''
 
-    parsed.env.wikiResolved = resolved
+    Object.assign(parsed.env, {
+        wikiResolved: context.details,
+        embedMedia: context.media,
+        embedLoaded: context.embeds,
+        embedStack: [],
+        embedDepth: 0
+    })
 
     return DOMPurify.sanitize(
         md.renderer.render(parsed.tokens, md.options, parsed.env),

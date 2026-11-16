@@ -19,6 +19,7 @@ import { useDomValue } from '@/hooks/use-dom-value'
 import { useEditorLinkHandlers } from '@/hooks/use-editor-link-handlers'
 import { useEditorPreview } from '@/hooks/use-editor-preview'
 import { useEditorTheme } from '@/hooks/use-editor-theme'
+import { useEmbedLookup } from '@/hooks/use-embed-lookup'
 import { useNoteLookup } from '@/hooks/use-note-lookup'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
 
@@ -94,6 +95,7 @@ export const MarkdownInput = ({
         onLoadBlocks
     } = useNoteLookup(id)
 
+    const { onResolveMedia, onLoadEmbeds } = useEmbedLookup(id)
     const onCreateBlockId = useBlockIdCreator()
 
     const { previewValue, mediaMapEntries, backlinksHtml } = useEditorPreview({ id, mode, value, showBacklinks })
@@ -161,6 +163,8 @@ export const MarkdownInput = ({
                     onLoadBlocks={onLoadBlocks}
                     onResolveLinks={onResolveLinks}
                     onResolveLinkDetails={onResolveLinkDetails}
+                    onResolveMedia={onResolveMedia}
+                    onLoadEmbeds={onLoadEmbeds}
                     onSearchNotes={onSearchNotes}
                     onImagePress={onImagePress}
                     onToggleTask={onToggleTask}

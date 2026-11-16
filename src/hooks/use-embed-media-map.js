@@ -3,7 +3,7 @@ import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import { useMediaUris } from './use-media-uris'
 import { resolveUrl } from './use-resolved-preview-markdown'
 import { extractEmbedMediaNames } from '@/utils/embeds'
-import { isEmbeddableMedia } from '@/utils/media-size'
+import { resolveEmbedMedia } from '@/utils/embed-media-resolver'
 import { logError } from '@/utils/log-error'
 
 import { EMBED_OPENING } from '@/constants/embeds'
@@ -34,16 +34,11 @@ export const useEmbedMediaMap = (value, enabled, pdfSetting = false) => {
         const cache = cacheRef.current
         const missing = namesKey.split('\n').filter((name) => !cache.has(name))
 
-        const resolveMissing = async () => {
-            if (!missing.length) return
-
-            const uris = await listMediaUris()
-
-            await Promise.all(missing.map(async (name) => {
-                const uri = uris.get(name)
-                if (uri && isEmbeddableMedia(name, uri)) cache.set(name, await resolveUrl(uri))
-            }))
-        }
+        const resolveMissing = () => (
+            missing.length
+                ? resolveEmbedMedia({ names: missing, pdf: true, listMediaUris, resolveUrl, cache })
+                : Promise.resolve()
+        )
 
         resolveMissing().catch((error) => logError(LOG_MESSAGES.ERROR_RESOLVING_EMBEDDED_IMAGES, error)).then(() => {
             if (cancelled) return
