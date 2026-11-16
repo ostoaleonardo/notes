@@ -1,0 +1,1291 @@
+{
+  "blocks-lists": {
+    "links": [],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [
+        {
+          "id": "item1",
+          "text": "- item one",
+          "idFrom": 11,
+          "idTo": 17
+        },
+        {
+          "id": "nested1",
+          "text": "  - nested item",
+          "idFrom": 45,
+          "idTo": 53
+        },
+        {
+          "id": "num1",
+          "text": "1. numbered",
+          "idFrom": 95,
+          "idTo": 100
+        },
+        {
+          "id": "task1",
+          "text": "- [ ] task item",
+          "idFrom": 134,
+          "idTo": 140
+        }
+      ],
+      "unlabeled": [
+        {
+          "text": "- item two\n  - nested item ^nested1\n  - nested two",
+          "insertAt": 28
+        },
+        {
+          "text": "  - nested two",
+          "insertAt": 68
+        },
+        {
+          "text": "- item three",
+          "insertAt": 81
+        },
+        {
+          "text": "2. numbered two",
+          "insertAt": 116
+        },
+        {
+          "text": "- [x] done item",
+          "insertAt": 156
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "blocks-paragraphs": {
+    "links": [],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [
+        {
+          "id": "second",
+          "text": "Second paragraph with id.",
+          "idFrom": 55,
+          "idTo": 62
+        },
+        {
+          "id": "third",
+          "text": "Third paragraph\nspanning lines.",
+          "idFrom": 96,
+          "idTo": 102
+        },
+        {
+          "id": "standalone",
+          "text": "Third paragraph\nspanning lines. ^third",
+          "idFrom": 104,
+          "idTo": 115
+        },
+        {
+          "id": "after-para",
+          "text": "Paragraph before standalone id",
+          "idFrom": 149,
+          "idTo": 160
+        }
+      ],
+      "unlabeled": [
+        {
+          "text": "First paragraph without id.",
+          "insertAt": 27
+        },
+        {
+          "text": "Paragraph before standalone id",
+          "insertAt": 147
+        },
+        {
+          "text": "Fourth ^notvalid because trailing text after ^id here",
+          "insertAt": 215
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "blocks-structures": {
+    "links": [],
+    "tags": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Heading ^heading-id",
+        "from": 112
+      }
+    ],
+    "blocks": {
+      "labeled": [
+        {
+          "id": "quote1",
+          "text": "> quote line one\n> quote line two",
+          "idFrom": 34,
+          "idTo": 41
+        },
+        {
+          "id": "table-id",
+          "text": "| a | b |\n| - | - |\n| 1 | 2 |",
+          "idFrom": 74,
+          "idTo": 83
+        },
+        {
+          "id": "heading-id",
+          "text": "# Heading",
+          "idFrom": 122,
+          "idTo": 133
+        },
+        {
+          "id": "ABC123",
+          "text": "Ids with dash ^my-block-id and underscore ^my_block and caps",
+          "idFrom": 196,
+          "idTo": 203
+        }
+      ],
+      "unlabeled": []
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "callouts": {
+    "links": [
+      "Link In Callout",
+      "Quote Link"
+    ],
+    "tags": [
+      {
+        "name": "callout-tag",
+        "from": 52,
+        "to": 64
+      }
+    ],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "> [!note] Title\n> Body with [[Link In Callout]] and #callout-tag.",
+          "insertAt": 65
+        },
+        {
+          "text": "> [!warning]- Folded\n> Hidden body",
+          "insertAt": 101
+        },
+        {
+          "text": "> [!tip]+ Open fold\n> Visible",
+          "insertAt": 132
+        },
+        {
+          "text": "> [!custom-type]\n> No title",
+          "insertAt": 161
+        },
+        {
+          "text": "> Not a callout\n> just quote [[Quote Link]]",
+          "insertAt": 206
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "embeds-code": {
+    "links": [
+      "visible.png",
+      "visible2.png"
+    ],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "![[visible.png]]",
+          "insertAt": 16
+        },
+        {
+          "text": "Inline `![[hidden2.png]]` and ![[visible2.png]].",
+          "insertAt": 91
+        }
+      ]
+    },
+    "embedMedia": [
+      "visible.png",
+      "visible2.png"
+    ],
+    "embedImages": [
+      "visible.png",
+      "visible2.png"
+    ],
+    "customTasks": []
+  },
+  "embeds-media": {
+    "links": [
+      "photo.png",
+      "diagram.svg",
+      "clip.mp4",
+      "song.mp3",
+      "doc.pdf",
+      "photo.png",
+      "photo.png",
+      "doc.pdf#page=3",
+      "Some Note",
+      "Some Note#Heading",
+      "Some Note#^id",
+      "photo.png",
+      "PHOTO.PNG"
+    ],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "![[photo.png]] and ![[diagram.svg]] and ![[clip.mp4]] and ![[song.mp3]] and ![[doc.pdf]].",
+          "insertAt": 89
+        },
+        {
+          "text": "Sized ![[photo.png|200]] and ![[photo.png|200x100]] and page ![[doc.pdf#page=3]].",
+          "insertAt": 172
+        },
+        {
+          "text": "Note embed ![[Some Note]] and section ![[Some Note#Heading]] and block ![[Some Note#^id]].",
+          "insertAt": 264
+        },
+        {
+          "text": "Duplicate ![[photo.png]] again and uppercase ![[PHOTO.PNG]].",
+          "insertAt": 326
+        }
+      ]
+    },
+    "embedMedia": [
+      "photo.png",
+      "diagram.svg",
+      "clip.mp4",
+      "song.mp3",
+      "doc.pdf",
+      "PHOTO.PNG"
+    ],
+    "embedImages": [
+      "photo.png",
+      "diagram.svg",
+      "PHOTO.PNG"
+    ],
+    "customTasks": []
+  },
+  "empty-and-whitespace": {
+    "links": [],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": []
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "footnotes": {
+    "links": [
+      "Linked",
+      "Footnote Link"
+    ],
+    "tags": [
+      {
+        "name": "foot-tag",
+        "from": 92,
+        "to": 101
+      }
+    ],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Text with footnote[^1] and link [[Linked]].",
+          "insertAt": 43
+        },
+        {
+          "text": "[^1]: Footnote body with [[Footnote Link]] and #foot-tag.",
+          "insertAt": 102
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "frontmatter-links": {
+    "links": [
+      "Frontmatter Link",
+      "Body Link"
+    ],
+    "tags": [
+      {
+        "name": "body-tag",
+        "from": 89,
+        "to": 98
+      }
+    ],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Body [[Body Link]] and #body-tag.",
+          "insertAt": 99
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "headings-atx": {
+    "links": [],
+    "tags": [
+      {
+        "name": "NoSpace",
+        "from": 118,
+        "to": 126
+      }
+    ],
+    "headings": [
+      {
+        "level": 1,
+        "text": "One",
+        "from": 0
+      },
+      {
+        "level": 2,
+        "text": "Two",
+        "from": 7
+      },
+      {
+        "level": 3,
+        "text": "Three with `code` and **bold**",
+        "from": 15
+      },
+      {
+        "level": 4,
+        "text": "Four",
+        "from": 51
+      },
+      {
+        "level": 5,
+        "text": "Five",
+        "from": 62
+      },
+      {
+        "level": 6,
+        "text": "Six",
+        "from": 74
+      },
+      {
+        "level": 2,
+        "text": "Trailing hashes",
+        "from": 145
+      },
+      {
+        "level": 2,
+        "text": "Extra   spaces",
+        "from": 168
+      }
+    ],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "####### Seven is not a heading",
+          "insertAt": 116
+        },
+        {
+          "text": "#NoSpace is not a heading",
+          "insertAt": 143
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "headings-code-and-quotes": {
+    "links": [],
+    "tags": [],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Real",
+        "from": 0
+      },
+      {
+        "level": 1,
+        "text": "Heading right after paragraph",
+        "from": 112
+      }
+    ],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "> # Quoted heading",
+          "insertAt": 53
+        },
+        {
+          "text": "- # List heading",
+          "insertAt": 71
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "headings-setext": {
+    "links": [],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Setext One\n==========",
+          "insertAt": 21
+        },
+        {
+          "text": "Normal paragraph\nand more.",
+          "insertAt": 72
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "html-blocks": {
+    "links": [
+      "Inside Html Block",
+      "In Comment",
+      "Inside Inline Html",
+      "In Obsidian Comment",
+      "In Highlight"
+    ],
+    "tags": [
+      {
+        "name": "html-tag",
+        "from": 32,
+        "to": 41
+      }
+    ],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "<div>\n[[Inside Html Block]] and #html-tag\n</div>",
+          "insertAt": 48
+        },
+        {
+          "text": "<!-- [[In Comment]] -->",
+          "insertAt": 73
+        },
+        {
+          "text": "<span>inline [[Inside Inline Html]]</span>",
+          "insertAt": 117
+        },
+        {
+          "text": "%% [[In Obsidian Comment]] %%",
+          "insertAt": 148
+        },
+        {
+          "text": "==highlight [[In Highlight]]==",
+          "insertAt": 180
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "line-endings-crlf": {
+    "links": [
+      "Crlf One"
+    ],
+    "tags": [
+      {
+        "name": "crlf-tag",
+        "from": 32,
+        "to": 41
+      }
+    ],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Crlf heading",
+        "from": 43
+      }
+    ],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Line one [[Crlf One]]\r\nLine two #crlf-tag\r\n# Crlf heading\r\nPara ^crlf-id\r",
+          "insertAt": 72
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "math": {
+    "links": [
+      "b",
+      "matrix",
+      "Link After Money",
+      "Link"
+    ],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Inline math $a[[b]]c$ and display:",
+          "insertAt": 34
+        },
+        {
+          "text": "$$\nx = [[matrix]]\n$$",
+          "insertAt": 56
+        },
+        {
+          "text": "Money $5 and $10 stay text with [[Link After Money]].",
+          "insertAt": 111
+        },
+        {
+          "text": "Escaped \\$not math\\$ and [[Link]].",
+          "insertAt": 147
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "mixed-realistic": {
+    "links": [
+      "Alice",
+      "Bob",
+      "Spec#Requirements",
+      "diagram.png",
+      "Alice",
+      "Style Guide#^rules",
+      "Budget",
+      "Alpha"
+    ],
+    "tags": [
+      {
+        "name": "project/alpha",
+        "from": 110,
+        "to": 124
+      },
+      {
+        "name": "friday",
+        "from": 422,
+        "to": 429
+      }
+    ],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Research log",
+        "from": 40
+      },
+      {
+        "level": 2,
+        "text": "Tasks",
+        "from": 127
+      },
+      {
+        "level": 2,
+        "text": "Code",
+        "from": 243
+      }
+    ],
+    "blocks": {
+      "labeled": [
+        {
+          "id": "review",
+          "text": "- [ ] Review [[Spec#Requirements]]",
+          "idFrom": 172,
+          "idTo": 179
+        },
+        {
+          "id": "final",
+          "text": "Final paragraph.",
+          "idFrom": 497,
+          "idTo": 503
+        }
+      ],
+      "unlabeled": [
+        {
+          "text": "  - project",
+          "insertAt": 21
+        },
+        {
+          "text": "  - research",
+          "insertAt": 34
+        },
+        {
+          "text": "Meeting notes with [[Alice]] and [[Bob|Robert]] about #project/alpha.",
+          "insertAt": 125
+        },
+        {
+          "text": "- [x] Send ![[diagram.png]] to [[Alice]]",
+          "insertAt": 220
+        },
+        {
+          "text": "- [/] Draft proposal",
+          "insertAt": 241
+        },
+        {
+          "text": "Use `inline [[code]]` carefully, see [[Style Guide#^rules]].",
+          "insertAt": 375
+        },
+        {
+          "text": "> [!note] Remember\n> Check [[Budget]] before #friday.",
+          "insertAt": 430
+        }
+      ]
+    },
+    "embedMedia": [
+      "diagram.png"
+    ],
+    "embedImages": [
+      "diagram.png"
+    ],
+    "customTasks": [
+      {
+        "from": 223,
+        "to": 226,
+        "status": "/"
+      }
+    ]
+  },
+  "tabs-and-indentation": {
+    "links": [
+      "Tab Link",
+      "Space Link",
+      "Tab List Link"
+    ],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "\ttab indented [[Tab Link]]",
+          "insertAt": 26
+        },
+        {
+          "text": "  two-space [[Space Link]]",
+          "insertAt": 54
+        },
+        {
+          "text": "\t- tab list [[Tab List Link]]",
+          "insertAt": 85
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "tags-basic": {
+    "links": [],
+    "tags": [
+      {
+        "name": "one",
+        "from": 5,
+        "to": 9
+      },
+      {
+        "name": "two",
+        "from": 14,
+        "to": 18
+      },
+      {
+        "name": "one",
+        "from": 23,
+        "to": 27
+      },
+      {
+        "name": "nested/tag",
+        "from": 35,
+        "to": 46
+      },
+      {
+        "name": "deep/er/tag",
+        "from": 51,
+        "to": 63
+      },
+      {
+        "name": "start-of-line",
+        "from": 87,
+        "to": 101
+      },
+      {
+        "name": "end",
+        "from": 122,
+        "to": 126
+      },
+      {
+        "name": "comma",
+        "from": 167,
+        "to": 173
+      },
+      {
+        "name": "dot",
+        "from": 179,
+        "to": 183
+      },
+      {
+        "name": "café",
+        "from": 194,
+        "to": 199
+      },
+      {
+        "name": "日本",
+        "from": 200,
+        "to": 203
+      },
+      {
+        "name": "ñ",
+        "from": 204,
+        "to": 206
+      },
+      {
+        "name": "Tag-With_Chars123",
+        "from": 217,
+        "to": 235
+      }
+    ],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Tags #one and #two and #one again, #nested/tag and #deep/er/tag/ with trailing slash.",
+          "insertAt": 85
+        },
+        {
+          "text": "#start-of-line tag and end of line #end",
+          "insertAt": 126
+        },
+        {
+          "text": "Punctuation (#paren) and \"#quoted\" and #comma, and #dot.",
+          "insertAt": 184
+        },
+        {
+          "text": "Unicode #café #日本 #ñ and mixed #Tag-With_Chars123.",
+          "insertAt": 236
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "tags-code-and-frontmatter": {
+    "links": [],
+    "tags": [
+      {
+        "name": "body-tag",
+        "from": 66,
+        "to": 75
+      },
+      {
+        "name": "after-inline",
+        "from": 132,
+        "to": 145
+      }
+    ],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "  - fm-tag",
+          "insertAt": 20
+        },
+        {
+          "text": "Body #body-tag.",
+          "insertAt": 76
+        },
+        {
+          "text": "Inline `#hidden-inline` and #after-inline.",
+          "insertAt": 146
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "tags-not-tags": {
+    "links": [],
+    "tags": [
+      {
+        "name": "ff00ff",
+        "from": 166,
+        "to": 173
+      }
+    ],
+    "headings": [
+      {
+        "level": 1,
+        "text": "Heading is not a tag",
+        "from": 0
+      }
+    ],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Number #123 and #1 and hash alone # and a#b inside word.",
+          "insertAt": 80
+        },
+        {
+          "text": "URL https://example.com/page#fragment and link [x](https://a.com/#frag).",
+          "insertAt": 154
+        },
+        {
+          "text": "Hex color #ff00ff and issue #42 maybe.",
+          "insertAt": 194
+        },
+        {
+          "text": "Escaped \\#notatag and html entity &#35;also.",
+          "insertAt": 240
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "tasks-custom": {
+    "links": [],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "- [ ] open",
+          "insertAt": 10
+        },
+        {
+          "text": "- [x] done",
+          "insertAt": 21
+        },
+        {
+          "text": "- [-] cancelled",
+          "insertAt": 37
+        },
+        {
+          "text": "- [/] in progress",
+          "insertAt": 55
+        },
+        {
+          "text": "- [>] forwarded",
+          "insertAt": 71
+        },
+        {
+          "text": "- [<] scheduled",
+          "insertAt": 87
+        },
+        {
+          "text": "- [?] question",
+          "insertAt": 102
+        },
+        {
+          "text": "- [!] important",
+          "insertAt": 118
+        },
+        {
+          "text": "- [*] star",
+          "insertAt": 129
+        },
+        {
+          "text": "- [\"] quote",
+          "insertAt": 141
+        },
+        {
+          "text": "- [l] location",
+          "insertAt": 156
+        },
+        {
+          "text": "- [b] bookmark",
+          "insertAt": 171
+        },
+        {
+          "text": "* [ ] star bullet",
+          "insertAt": 190
+        },
+        {
+          "text": "+ [x] plus bullet",
+          "insertAt": 208
+        },
+        {
+          "text": "1. [ ] numbered task",
+          "insertAt": 229
+        },
+        {
+          "text": "    - [-] indented under code?",
+          "insertAt": 261
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": [
+      {
+        "from": 24,
+        "to": 27,
+        "status": "-"
+      },
+      {
+        "from": 40,
+        "to": 43,
+        "status": "/"
+      },
+      {
+        "from": 58,
+        "to": 61,
+        "status": ">"
+      },
+      {
+        "from": 74,
+        "to": 77,
+        "status": "<"
+      },
+      {
+        "from": 90,
+        "to": 93,
+        "status": "?"
+      },
+      {
+        "from": 105,
+        "to": 108,
+        "status": "!"
+      },
+      {
+        "from": 121,
+        "to": 124,
+        "status": "*"
+      },
+      {
+        "from": 132,
+        "to": 135,
+        "status": "\""
+      },
+      {
+        "from": 144,
+        "to": 147,
+        "status": "l"
+      },
+      {
+        "from": 159,
+        "to": 162,
+        "status": "b"
+      },
+      {
+        "from": 237,
+        "to": 240,
+        "status": "-"
+      },
+      {
+        "from": 269,
+        "to": 272,
+        "status": "-"
+      }
+    ]
+  },
+  "wikilinks-alias-anchor-block": {
+    "links": [
+      "Target",
+      "Target#Heading",
+      "Target#Heading",
+      "Target#^abc123",
+      "#Local heading",
+      "#^local-block",
+      "folder/Target",
+      "a/b/c/Target",
+      "a/b#Section"
+    ],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Alias [[Target|shown text]] and anchor [[Target#Heading]] and both [[Target#Heading|label]].",
+          "insertAt": 92
+        },
+        {
+          "text": "Block ref [[Target#^abc123]] and same-note [[#Local heading]] and [[#^local-block]].",
+          "insertAt": 178
+        },
+        {
+          "text": "Path [[folder/Target]] and deep [[a/b/c/Target|alias]] and anchor in path [[a/b#Section|x]].",
+          "insertAt": 272
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "wikilinks-basic": {
+    "links": [
+      "Note A",
+      "Note B",
+      "Note A",
+      "Last",
+      "First",
+      "One",
+      "Two",
+      " Three "
+    ],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Plain [[Note A]] and [[Note B]] and [[Note A]] again.",
+          "insertAt": 53
+        },
+        {
+          "text": "A link at the end of a line [[Last]]\n[[First]] at the start of a line.\nAdjacent [[One]][[Two]] links, spaced [[ Three ]] and empty [[]] one.",
+          "insertAt": 195
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "wikilinks-code-fenced": {
+    "links": [
+      "Visible One",
+      "Visible Two",
+      "Visible Three"
+    ],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Outside [[Visible One]].",
+          "insertAt": 24
+        },
+        {
+          "text": "Between [[Visible Two]].",
+          "insertAt": 91
+        },
+        {
+          "text": "After [[Visible Three]].",
+          "insertAt": 193
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "wikilinks-code-indented": {
+    "links": [
+      "Visible One",
+      "Indented code",
+      "Visible Two"
+    ],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Paragraph [[Visible One]].",
+          "insertAt": 26
+        },
+        {
+          "text": "    [[Indented code]]",
+          "insertAt": 49
+        },
+        {
+          "text": "- item\n    - nested [[Visible Two]]",
+          "insertAt": 57
+        },
+        {
+          "text": "    - nested [[Visible Two]]",
+          "insertAt": 86
+        },
+        {
+          "text": "    code after list?",
+          "insertAt": 108
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "wikilinks-code-inline": {
+    "links": [
+      "Visible One",
+      "Visible Two",
+      "Visible Three"
+    ],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Inline `[[Hidden One]]` code and [[Visible One]].",
+          "insertAt": 49
+        },
+        {
+          "text": "Double ``a `[[Hidden Two]]` b`` ticks and [[Visible Two]].",
+          "insertAt": 109
+        },
+        {
+          "text": "A single backtick ` unclosed and [[Visible Three]] continues.",
+          "insertAt": 172
+        },
+        {
+          "text": "Escaped \\`[[Visible Four]]\\` backticks.",
+          "insertAt": 213
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "wikilinks-escaped-and-broken": {
+    "links": [
+      "Not A Link",
+      "Never closed and a later [[Closed",
+      "Name ",
+      "Split\nLink",
+      "[Three"
+    ],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Escaped \\[[Not A Link]] and \\[\\[Also Not\\]\\].",
+          "insertAt": 45
+        },
+        {
+          "text": "Unclosed [[Never closed and a later [[Closed]] link.",
+          "insertAt": 99
+        },
+        {
+          "text": "Brackets inside [[Name [with] brackets]] and [[Name ]] done.",
+          "insertAt": 161
+        },
+        {
+          "text": "Line break in link [[Split\nLink]] should not match.",
+          "insertAt": 214
+        },
+        {
+          "text": "Single [Not] and triple [[[Three]]] brackets.",
+          "insertAt": 261
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "wikilinks-markdown-style": {
+    "links": [
+      "Wiki"
+    ],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Markdown style [Shown](wikilink://Target) and [Other](wikilink://folder/Other).",
+          "insertAt": 79
+        },
+        {
+          "text": "Normal [link](https://example.com) and [[Wiki]] mixed.",
+          "insertAt": 135
+        },
+        {
+          "text": "Image ![alt](wikilink://Pic.png) here.",
+          "insertAt": 175
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "wikilinks-table": {
+    "links": [
+      "Target\\",
+      "Plain",
+      "Other"
+    ],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": []
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  },
+  "wikilinks-unicode": {
+    "links": [
+      "Café con leche",
+      "Ñandú",
+      "日本語のノート",
+      "Emoji 🚀 note",
+      "Café",
+      "ÁÉÍ"
+    ],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Accents [[Café con leche]] and [[Ñandú]] and [[日本語のノート]] and [[Emoji 🚀 note]].",
+          "insertAt": 79
+        },
+        {
+          "text": "Normalized [[Café]] and [[ÁÉÍ|alias]].",
+          "insertAt": 120
+        }
+      ]
+    },
+    "embedMedia": [],
+    "embedImages": [],
+    "customTasks": []
+  }
+}
