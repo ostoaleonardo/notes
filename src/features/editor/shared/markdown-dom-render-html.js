@@ -10,12 +10,17 @@ import { wikiLinksPlugin } from '../dom/markdown-it-wiki-links'
 import { wrapCodeBlock } from '../dom/markdown-dom-code-copy'
 import { highlightFence } from '../dom/syntax-highlighting/preview-code-highlight'
 
+import { fillTemplate } from '@/shared/utils/fill-template'
 import { findInlineTags } from '@/shared/utils/inline-tags'
 import { replaceLocalImageUrls } from '@/features/editor/shared/utils/local-images'
 
 import { TAG_LINK_SCHEME } from '@/shared/constants/tags'
 import { WIKI_LINK_SCHEME } from '@/shared/constants/wiki-links'
-import { PREVIEW_TABLE_SCROLL_CLASS } from '@/features/editor/dom/constants/table-widget'
+import {
+    PREVIEW_TABLE_CLOSE_TEMPLATE,
+    PREVIEW_TABLE_OPEN_TEMPLATE,
+    PREVIEW_TABLE_SCROLL_CLASS
+} from '@/features/editor/dom/constants/table-widget'
 import { MARKDOWN_IT_TOKENS } from '@/features/editor/shared/constants/markdown-it-tokens'
 import { ALLOWED_URI_REGEXP, BLOCKED_LINK_PROTOCOL_PATTERN } from '@/shared/constants/html-sanitize'
 
@@ -49,13 +54,14 @@ md.renderer.rules.fence = (tokens, idx, options, env, self) => (
     wrapCodeBlock(defaultFence(tokens, idx, options, env, self))
 )
 
-md.renderer.rules.table_open = (tokens, idx, options, env, self) => (
-    `<div class="${PREVIEW_TABLE_SCROLL_CLASS}">${self.renderToken(tokens, idx, options)}`
-)
+md.renderer.rules.table_open = (tokens, idx, options, env, self) => fillTemplate(PREVIEW_TABLE_OPEN_TEMPLATE, {
+    className: PREVIEW_TABLE_SCROLL_CLASS,
+    table: self.renderToken(tokens, idx, options)
+})
 
-md.renderer.rules.table_close = (tokens, idx, options, env, self) => (
-    `${self.renderToken(tokens, idx, options)}</div>`
-)
+md.renderer.rules.table_close = (tokens, idx, options, env, self) => fillTemplate(PREVIEW_TABLE_CLOSE_TEMPLATE, {
+    table: self.renderToken(tokens, idx, options)
+})
 
 const renderHtmlToken = (tokens, idx, options, env) => {
     const { content } = tokens[idx]

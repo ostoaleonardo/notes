@@ -3,7 +3,9 @@ import { highlightCode } from '@lezer/highlight'
 import { findCodeLanguage } from './code-languages'
 import { previewHighlighter } from './syntax-highlight-style'
 
-import { CODE_FENCE_LANGUAGE_PATTERN } from '@/features/editor/dom/constants/syntax-highlighting'
+import { fillTemplate } from '@/shared/utils/fill-template'
+
+import { CODE_FENCE_LANGUAGE_PATTERN, SYNTAX_SPAN_TEMPLATE } from '@/features/editor/dom/constants/syntax-highlighting'
 
 export const highlightFence = (code, info, escapeHtml) => {
     const language = findCodeLanguage(info)?.support?.language
@@ -16,7 +18,7 @@ export const highlightFence = (code, info, escapeHtml) => {
         language.parser.parse(code),
         previewHighlighter,
         (text, classes) => {
-            html += classes ? `<span class="${classes}">${escapeHtml(text)}</span>` : escapeHtml(text)
+            html += classes ? fillTemplate(SYNTAX_SPAN_TEMPLATE, { classes, text: escapeHtml(text) }) : escapeHtml(text)
         },
         () => {
             html += '\n'

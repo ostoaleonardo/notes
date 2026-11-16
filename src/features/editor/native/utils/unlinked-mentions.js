@@ -1,14 +1,13 @@
-import { escapeHtml, findBacklinks, getAliases } from '@/shared/utils/wiki-links'
+import { buildBacklinkLink, escapeHtml, findBacklinks, getAliases } from '@/shared/utils/wiki-links'
+import { fillTemplate } from '@/shared/utils/fill-template'
 import { mapOutsideCode } from '@/shared/utils/outside-code'
 
-import { WIKI_LINK_SCHEME } from '@/shared/constants/wiki-links'
+import { BACKLINKS_TEMPLATE, MENTION_ITEM_TEMPLATE } from '@/shared/constants/backlinks-html'
 import { EMPTY_NOTE_PATHS } from '@/shared/constants/note-paths'
 import { REGEXP_SPECIAL_CHARS_PATTERN } from '@/shared/constants/markdown-patterns'
 import {
     BACKLINKS_CLASS,
     BACKLINKS_TITLE_CLASS,
-    BACKLINK_TITLE_CLASS,
-    BACKLINK_PATH_CLASS,
     MENTIONS_CLASS,
     MENTION_ROW_CLASS,
     MENTION_ACTION_CLASS
@@ -79,23 +78,18 @@ export const findUnlinkedMentions = (target, notes, notePaths = EMPTY_NOTE_PATHS
 export const buildUnlinkedMentionsHtml = (mentions, label, actionLabel, notePaths = EMPTY_NOTE_PATHS) => {
     if (!mentions.length) return ''
 
-    const items = mentions.map((note) => {
-        const path = notePaths.get(note.path) || ''
-        const pathHtml = path ? `<span class="${BACKLINK_PATH_CLASS}">${escapeHtml(path)}</span>` : ''
+    const items = mentions.map((note) => fillTemplate(MENTION_ITEM_TEMPLATE, {
+        rowClass: MENTION_ROW_CLASS,
+        link: buildBacklinkLink(note, notePaths),
+        actionHref: `${LINK_MENTION_SCHEME}${encodeURIComponent(note.path)}`,
+        actionClass: MENTION_ACTION_CLASS,
+        action: escapeHtml(actionLabel)
+    })).join('')
 
-        return (
-            `<li class="${MENTION_ROW_CLASS}">`
-            + `<a href="${WIKI_LINK_SCHEME}${encodeURIComponent(note.path)}" class="wiki-link">`
-            + `<span class="${BACKLINK_TITLE_CLASS}">${escapeHtml(note.title || '')}</span>${pathHtml}`
-            + `</a>`
-            + `<a href="${LINK_MENTION_SCHEME}${encodeURIComponent(note.path)}" class="${MENTION_ACTION_CLASS}">`
-            + `${escapeHtml(actionLabel)}</a>`
-            + `</li>`
-        )
-    }).join('')
-
-    return (
-        `<div class="${BACKLINKS_CLASS} ${MENTIONS_CLASS}">`
-        + `<div class="${BACKLINKS_TITLE_CLASS}">${escapeHtml(label)}</div><ul>${items}</ul></div>`
-    )
+    return fillTemplate(BACKLINKS_TEMPLATE, {
+        className: `${BACKLINKS_CLASS} ${MENTIONS_CLASS}`,
+        titleClass: BACKLINKS_TITLE_CLASS,
+        label: escapeHtml(label),
+        items
+    })
 }

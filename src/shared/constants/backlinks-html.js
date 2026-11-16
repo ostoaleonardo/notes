@@ -1,0 +1,5 @@
+export const BACKLINK_PATH_TEMPLATE = '<span class="{className}">{path}</span>'
+export const BACKLINK_LINK_TEMPLATE = '<a href="{href}" class="{linkClass}"><span class="{titleClass}">{title}</span>{path}</a>'
+export const BACKLINK_ITEM_TEMPLATE = '<li>{link}</li>'
+export const BACKLINKS_TEMPLATE = '<div class="{className}"><div class="{titleClass}">{label}</div><ul>{items}</ul></div>'
+export const MENTION_ITEM_TEMPLATE = '<li class="{rowClass}">{link}<a href="{actionHref}" class="{actionClass}">{action}</a></li>'

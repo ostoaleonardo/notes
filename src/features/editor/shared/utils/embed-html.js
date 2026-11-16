@@ -5,6 +5,18 @@ import { buildIconMarkup } from '../../dom/utils/icon-mask'
 import { OPEN_IN_NEW_FILLED_ICON_PATH } from '@/shared/constants/icon-paths'
 import { FILE_LINK_CLASS } from '@/shared/constants/file-links'
 import { WIKI_LINK_SCHEME, WIKI_LINK_ANCHOR_SEPARATOR } from '@/shared/constants/wiki-links'
+import { fillTemplate } from '@/shared/utils/fill-template'
+import {
+    EMBED_AUDIO_TEMPLATE,
+    EMBED_BLOCK_TEMPLATE,
+    EMBED_HEAD_TEMPLATE,
+    EMBED_IMAGE_TEMPLATE,
+    EMBED_MARKDOWN_IMAGE_TEMPLATE,
+    EMBED_OPEN_LINK_TEMPLATE,
+    EMBED_PDF_TEMPLATE,
+    EMBED_VIDEO_TEMPLATE,
+    EMBED_WIDTH_TEMPLATE
+} from '@/features/editor/shared/constants/embed-html'
 import { FILE_KINDS } from '@/shared/constants/file-types'
 import {
     EMBED_CLASS,
@@ -16,41 +28,54 @@ import {
     EMBED_WIDTH_PATTERN
 } from '@/shared/constants/embeds'
 
+const buildWidth = (width) => (
+    width && EMBED_WIDTH_PATTERN.test(width) ? fillTemplate(EMBED_WIDTH_TEMPLATE, { width }) : ''
+)
+
 export const buildMediaHtml = ({ name, kind, page }, width, url, { markdownImage = false } = {}) => {
     const src = escapeHtml(url)
 
     if (kind === FILE_KINDS.PDF) {
-        const classes = `${FILE_LINK_CLASS} ${EMBED_PDF_CLASS}`
-
-        return `<a href="${buildFileLinkUrl(name)}" class="${classes}" data-pdf="${src}" data-page="${page}">${escapeHtml(name)}</a>`
+        return fillTemplate(EMBED_PDF_TEMPLATE, {
+            href: buildFileLinkUrl(name),
+            classes: `${FILE_LINK_CLASS} ${EMBED_PDF_CLASS}`,
+            src,
+            page,
+            name: escapeHtml(name)
+        })
     }
 
     if (kind === FILE_KINDS.AUDIO) {
-        return `<audio controls preload="${EMBED_PLAYER_PRELOAD}" src="${src}"></audio>`
+        return fillTemplate(EMBED_AUDIO_TEMPLATE, { preload: EMBED_PLAYER_PRELOAD, src })
     }
-
-    const sized = width && EMBED_WIDTH_PATTERN.test(width) ? ` width="${width}"` : ''
 
     if (kind === FILE_KINDS.VIDEO) {
-        return `<video controls preload="${EMBED_PLAYER_PRELOAD}" src="${src}"${sized}></video>`
+        return fillTemplate(EMBED_VIDEO_TEMPLATE, { preload: EMBED_PLAYER_PRELOAD, src, width: buildWidth(width) })
     }
 
-    if (markdownImage && !sized) return `![${name}](${url})`
+    const sized = buildWidth(width)
 
-    return `<img src="${src}" alt="${escapeHtml(name)}"${sized}>`
+    if (markdownImage && !sized) return fillTemplate(EMBED_MARKDOWN_IMAGE_TEMPLATE, { name, url })
+
+    return fillTemplate(EMBED_IMAGE_TEMPLATE, { src, alt: escapeHtml(name), width: sized })
 }
 
 const buildOpenLink = (path, anchor) => {
     const suffix = anchor ? `${WIKI_LINK_ANCHOR_SEPARATOR}${encodeURIComponent(anchor)}` : ''
-    const href = `${WIKI_LINK_SCHEME}${encodeURIComponent(path)}${suffix}`
-    const icon = buildIconMarkup(OPEN_IN_NEW_FILLED_ICON_PATH, EMBED_OPEN_ICON_SIZE)
 
-    return `<a href="${href}" class="${EMBED_OPEN_CLASS}">${icon}</a>`
+    return fillTemplate(EMBED_OPEN_LINK_TEMPLATE, {
+        href: `${WIKI_LINK_SCHEME}${encodeURIComponent(path)}${suffix}`,
+        className: EMBED_OPEN_CLASS,
+        icon: buildIconMarkup(OPEN_IN_NEW_FILLED_ICON_PATH, EMBED_OPEN_ICON_SIZE)
+    })
 }
 
 export const buildEmbedBlockHtml = ({ title, body, path, anchor, withOpenLink }) => {
-    const openLink = withOpenLink ? buildOpenLink(path, anchor) : ''
-    const head = `<div class="${EMBED_TITLE_CLASS}"><span>${escapeHtml(title)}</span>${openLink}</div>`
+    const head = fillTemplate(EMBED_HEAD_TEMPLATE, {
+        titleClass: EMBED_TITLE_CLASS,
+        title: escapeHtml(title),
+        openLink: withOpenLink ? buildOpenLink(path, anchor) : ''
+    })
 
-    return `\n\n<div class="${EMBED_CLASS}">${head}\n\n${body}\n\n</div>\n\n`
+    return fillTemplate(EMBED_BLOCK_TEMPLATE, { className: EMBED_CLASS, head, body })
 }

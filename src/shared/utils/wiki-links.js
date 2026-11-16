@@ -20,6 +20,9 @@ import { EMPTY_NOTE_PATHS } from '@/shared/constants/note-paths'
 import { buildFileLinkUrl, isFileLinkTarget } from '@/shared/utils/file-links'
 
 import { FILE_LINK_CLASS } from '@/shared/constants/file-links'
+import { ANCHOR_TEMPLATE, WIKI_LINK_BROKEN_CLASS, WIKI_LINK_CLASS } from '@/shared/constants/wiki-link-html'
+import { BACKLINK_ITEM_TEMPLATE, BACKLINK_LINK_TEMPLATE, BACKLINK_PATH_TEMPLATE, BACKLINKS_TEMPLATE } from '@/shared/constants/backlinks-html'
+import { fillTemplate } from '@/shared/utils/fill-template'
 import { HTML_ESCAPE_PATTERN, HTML_ESCAPES } from '@/shared/constants/html-sanitize'
 
 export const escapeHtml = (text) => text.replace(HTML_ESCAPE_PATTERN, (char) => HTML_ESCAPES[char])
@@ -127,19 +130,27 @@ export const renderWikiLink = (alias, { path: notePath, target, anchor }) => {
     const label = escapeHtml((alias || defaultLabel).trim())
 
     if (!notePath && isFileLinkTarget(target)) {
-        return `<a href="${buildFileLinkUrl(target)}" class="${FILE_LINK_CLASS}">${escapeHtml((alias || title).trim())}</a>`
+        return fillTemplate(ANCHOR_TEMPLATE, {
+            href: buildFileLinkUrl(target),
+            className: FILE_LINK_CLASS,
+            label: escapeHtml((alias || title).trim())
+        })
     }
 
     if (!notePath) {
         const encodedPath = encodeURIComponent(path)
         const encodedTitle = encodeURIComponent(title)
         const missingHref = `${WIKI_LINK_SCHEME}${WIKI_LINK_MISSING_PREFIX}${encodedPath}/${encodedTitle}`
-        return `<a href="${missingHref}" class="wiki-link-broken">${label}</a>`
+        return fillTemplate(ANCHOR_TEMPLATE, { href: missingHref, className: WIKI_LINK_BROKEN_CLASS, label })
     }
 
     const anchorSuffix = anchor ? `${WIKI_LINK_ANCHOR_SEPARATOR}${encodeURIComponent(anchor)}` : ''
 
-    return `<a href="${WIKI_LINK_SCHEME}${encodeURIComponent(notePath)}${anchorSuffix}" class="wiki-link">${label}</a>`
+    return fillTemplate(ANCHOR_TEMPLATE, {
+        href: `${WIKI_LINK_SCHEME}${encodeURIComponent(notePath)}${anchorSuffix}`,
+        className: WIKI_LINK_CLASS,
+        label
+    })
 }
 
 export const resolveWikiLinkDetails = (linkText, notes, notePaths, selfPath) => {
@@ -283,19 +294,29 @@ export const renameWikiLinksForNote = (
     })
 }
 
+export const buildBacklinkLink = (note, notePaths) => {
+    const path = notePaths.get(note.path) || ''
+
+    return fillTemplate(BACKLINK_LINK_TEMPLATE, {
+        href: `${WIKI_LINK_SCHEME}${encodeURIComponent(note.path)}`,
+        linkClass: WIKI_LINK_CLASS,
+        titleClass: BACKLINK_TITLE_CLASS,
+        title: escapeHtml(note.title || ''),
+        path: path ? fillTemplate(BACKLINK_PATH_TEMPLATE, { className: BACKLINK_PATH_CLASS, path: escapeHtml(path) }) : ''
+    })
+}
+
 export const buildBacklinksHtml = (backlinks, label, notePaths = EMPTY_NOTE_PATHS) => {
     if (!backlinks.length) return ''
 
-    const items = backlinks.map((note) => {
-        const path = notePaths.get(note.path) || ''
-        const pathHtml = path ? `<span class="${BACKLINK_PATH_CLASS}">${escapeHtml(path)}</span>` : ''
+    const items = backlinks
+        .map((note) => fillTemplate(BACKLINK_ITEM_TEMPLATE, { link: buildBacklinkLink(note, notePaths) }))
+        .join('')
 
-        return (
-            `<li><a href="${WIKI_LINK_SCHEME}${encodeURIComponent(note.path)}" class="wiki-link">`
-            + `<span class="${BACKLINK_TITLE_CLASS}">${escapeHtml(note.title || '')}</span>${pathHtml}`
-            + `</a></li>`
-        )
-    }).join('')
-
-    return `<div class="${BACKLINKS_CLASS}"><div class="${BACKLINKS_TITLE_CLASS}">${escapeHtml(label)}</div><ul>${items}</ul></div>`
+    return fillTemplate(BACKLINKS_TEMPLATE, {
+        className: BACKLINKS_CLASS,
+        titleClass: BACKLINKS_TITLE_CLASS,
+        label: escapeHtml(label),
+        items
+    })
 }

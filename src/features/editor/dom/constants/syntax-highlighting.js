@@ -42,3 +42,4 @@ export const SYNTAX_PALETTES = {
 }
 
 export const SYNTAX_COMMENT_OPACITY = TRANSPARENT[50]
+export const SYNTAX_SPAN_TEMPLATE = '<span class="{classes}">{text}</span>'

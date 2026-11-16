@@ -31,3 +31,5 @@ export const TABLE_DROP_THICKNESS = 2
 
 export const TABLE_CELL_MIN_WIDTH = 96
 export const TABLE_CELL_MAX_WIDTH = 320
+export const PREVIEW_TABLE_OPEN_TEMPLATE = '<div class="{className}">{table}'
+export const PREVIEW_TABLE_CLOSE_TEMPLATE = '{table}</div>'

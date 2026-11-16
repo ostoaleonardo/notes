@@ -10,7 +10,12 @@ import { COLORS, THEMES } from '@/shared/constants/themes'
 import { FONTS } from '@/shared/constants/theme'
 import { DEFAULT_HEADING_FONT } from '@/shared/constants/heading-fonts'
 import { getHeadingFontFamily, toCssHeadingFamily } from '@/shared/utils/heading-font'
-import { EXPORT_FONT_SIZE, EXPORT_CONTENT_SECURITY_POLICY } from '@/features/editor/native/constants/export'
+import { fillTemplate } from '@/shared/utils/fill-template'
+import {
+    EXPORT_CONTENT_SECURITY_POLICY,
+    EXPORT_DOCUMENT_TEMPLATE,
+    EXPORT_FONT_SIZE
+} from '@/features/editor/native/constants/export'
 
 const NO_MEDIA = () => null
 const NO_URLS = new Map()
@@ -47,21 +52,12 @@ export const getNoteAsHtml = (
     const markdown = replaceLocalImageUrls(getExportMarkdown(note, context), imageUrls)
     const body = renderMarkdownRaw(`# ${note.title}\n\n${markdown}`, { sanitizeHtml })
 
-    return `<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta http-equiv="Content-Security-Policy" content="${EXPORT_CONTENT_SECURITY_POLICY}" />
-<title>${escapeHtml(note.title)}</title>
-<style>
-    body { background: ${COLORS.light.foreground}; margin: 0; }
-    ${fontFacesCss(fonts)}
-    ${css}
-</style>
-</head>
-<body>
-<div class="markdown-preview">${body}</div>
-</body>
-</html>`
+    return fillTemplate(EXPORT_DOCUMENT_TEMPLATE, {
+        policy: EXPORT_CONTENT_SECURITY_POLICY,
+        title: escapeHtml(note.title),
+        background: COLORS.light.foreground,
+        fonts: fontFacesCss(fonts),
+        css,
+        body
+    })
 }

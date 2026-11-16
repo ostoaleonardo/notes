@@ -49,3 +49,21 @@ const EXPORT_CONTENT_SECURITY_POLICY_DIRECTIVES = [
 ]
 
 export const EXPORT_CONTENT_SECURITY_POLICY = EXPORT_CONTENT_SECURITY_POLICY_DIRECTIVES.join('; ')
+
+export const EXPORT_DOCUMENT_TEMPLATE = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="Content-Security-Policy" content="{policy}" />
+<title>{title}</title>
+<style>
+    body { background: {background}; margin: 0; }
+    {fonts}
+    {css}
+</style>
+</head>
+<body>
+<div class="markdown-preview">{body}</div>
+</body>
+</html>`
