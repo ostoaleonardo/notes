@@ -8,9 +8,10 @@ import { EditorView } from '@codemirror/view'
 import { katexCss } from './markdown-dom-katex-css'
 import { TitleSection } from './markdown-dom-widgets'
 import { buildPreviewCss } from '../shared/markdown-dom-preview-css'
-import { parseReadMarkdown, renderReadHtml } from '../shared/markdown-dom-render-html'
+import { createReadRenderer, parseReadMarkdown } from '../shared/markdown-dom-render-html'
+import { useChunkedPreview } from './use-chunked-preview'
 import { useReadContext } from './use-read-context'
-import { PERF_MARK_READ_PAINTED } from '@/features/editor/shared/constants/perf-marks'
+import { PERF_MARK_READ_COMPLETE, PERF_MARK_READ_PAINTED } from '@/features/editor/shared/constants/perf-marks'
 import { linksReset } from './link-resolution'
 import { useCodeLanguages } from './use-code-languages'
 import { runAction } from './markdown-dom-commands'
@@ -250,14 +251,16 @@ export default function MarkdownDomEditor({
         loadEmbeds: onLoadEmbeds
     }), [onResolveLinkDetails, onResolveMedia, onResolveLocalUrls, onLoadEmbeds])
     const readContext = useReadContext(parsed, readServices, linkVersion)
-    const html = useMemo(
-        () => (parsed && readContext ? renderReadHtml(parsed, readContext) + (backlinksHtml || '') : ''),
-        [parsed, readContext, backlinksHtml]
+    const reader = useMemo(
+        () => (parsed && readContext ? createReadRenderer(parsed, readContext) : null),
+        [parsed, readContext]
     )
 
-    usePdfEmbeds(previewRef, html)
-
     const onPerfMarkRef = useLatestRef(onPerfMark)
+    const onReadComplete = useCallback(() => onPerfMarkRef.current?.(PERF_MARK_READ_COMPLETE), [onPerfMarkRef])
+    const { firstHtml: html, flushAll } = useChunkedPreview({ previewRef, reader, backlinksHtml, onComplete: onReadComplete })
+
+    usePdfEmbeds(previewRef, html)
 
     useEffect(() => {
         if (!html || !onPerfMarkRef.current) return
@@ -272,7 +275,10 @@ export default function MarkdownDomEditor({
 
         const target = { anchor, headingIndex }
 
-        if (mode === EDITOR_MODES.READ) scrollToPreviewTarget(previewRef.current, target)
+        if (mode === EDITOR_MODES.READ) {
+            flushAll()
+            scrollToPreviewTarget(previewRef.current, target)
+        }
         else if (viewRef.current) scrollToEditorTarget(viewRef.current, target)
     })
 

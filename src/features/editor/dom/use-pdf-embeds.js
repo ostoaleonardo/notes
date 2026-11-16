@@ -7,18 +7,15 @@ import { FILE_LINK_CLASS } from '@/shared/constants/file-links'
 
 const PDF_SELECTOR = `.${EMBED_PDF_CLASS}[data-pdf]`
 
-export const usePdfEmbeds = (previewRef, html) => {
-    useEffect(() => {
-        const container = previewRef.current
-        if (!container) return
+export const embedPdfLinks = (nodes, isCancelled = () => false) => {
+    nodes.forEach((node) => {
+        const links = node.matches(PDF_SELECTOR) ? [node] : node.querySelectorAll(PDF_SELECTOR)
 
-        let cancelled = false
-
-        container.querySelectorAll(PDF_SELECTOR).forEach(async (link) => {
+        links.forEach(async (link) => {
             try {
                 const page = Number(link.dataset.page) || EMBED_PDF_DEFAULT_PAGE
                 const canvas = await renderPdfPage(link, link.dataset.pdf, page)
-                if (cancelled) return
+                if (isCancelled()) return
 
                 link.classList.remove(FILE_LINK_CLASS)
                 link.replaceChildren(canvas)
@@ -26,6 +23,17 @@ export const usePdfEmbeds = (previewRef, html) => {
                 link.removeAttribute('data-pdf')
             }
         })
+    })
+}
+
+export const usePdfEmbeds = (previewRef, html) => {
+    useEffect(() => {
+        const container = previewRef.current
+        if (!container) return
+
+        let cancelled = false
+
+        embedPdfLinks([...container.children], () => cancelled)
 
         return () => { cancelled = true }
     }, [previewRef, html])

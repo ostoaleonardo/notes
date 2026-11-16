@@ -12,6 +12,7 @@ ADB=(adb)
 
 measure() {
     "${ADB[@]}" logcat -c
+    "${ADB[@]}" shell input keyevent KEYCODE_WAKEUP
     "${ADB[@]}" shell am force-stop "$PACKAGE"
     sleep 1.5
     "${ADB[@]}" shell am start -a android.intent.action.VIEW -d "notes://notes/$1" >/dev/null

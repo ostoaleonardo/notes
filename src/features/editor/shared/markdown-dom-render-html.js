@@ -5,6 +5,7 @@ import texmath from 'markdown-it-texmath'
 import footnote from 'markdown-it-footnote'
 import taskLists from 'markdown-it-task-lists'
 
+import { groupChunks } from '../dom/read-chunks'
 import { markdownItExtras } from '../dom/markdown-it-extras'
 import { wikiLinksPlugin } from '../dom/markdown-it-wiki-links'
 import { wrapCodeBlock } from '../dom/markdown-dom-code-copy'
@@ -22,7 +23,10 @@ import {
     PREVIEW_TABLE_SCROLL_CLASS
 } from '@/features/editor/dom/constants/table-widget'
 import { MARKDOWN_IT_TOKENS } from '@/features/editor/shared/constants/markdown-it-tokens'
-import { ALLOWED_URI_REGEXP, BLOCKED_LINK_PROTOCOL_PATTERN } from '@/shared/constants/html-sanitize'
+import {
+    ALLOWED_URI_REGEXP,
+    BLOCKED_LINK_PROTOCOL_PATTERN
+} from '@/shared/constants/html-sanitize'
 
 const md = new MarkdownIt({
     html: true,
@@ -163,8 +167,12 @@ export const parseReadMarkdown = (text) => {
     return lastParsed.parsed
 }
 
-export const renderReadHtml = (parsed, context = EMPTY_READ_CONTEXT) => {
-    if (!parsed) return ''
+const sanitize = (html) => DOMPurify.sanitize(html, { ALLOWED_URI_REGEXP })
+
+const EMPTY_READER = { count: 0, render: () => '' }
+
+export const createReadRenderer = (parsed, context = EMPTY_READ_CONTEXT) => {
+    if (!parsed) return EMPTY_READER
 
     Object.assign(parsed.env, {
         wikiResolved: context.details,
@@ -175,8 +183,20 @@ export const renderReadHtml = (parsed, context = EMPTY_READ_CONTEXT) => {
         embedDepth: 0
     })
 
-    return DOMPurify.sanitize(
-        md.renderer.render(parsed.tokens, md.options, parsed.env),
-        { ALLOWED_URI_REGEXP }
-    )
+    const chunks = groupChunks(parsed.tokens)
+
+    return {
+        count: chunks.length,
+        render: (index) => {
+            const { from, to } = chunks[index]
+
+            return sanitize(md.renderer.render(parsed.tokens.slice(from, to), md.options, parsed.env))
+        }
+    }
+}
+
+export const renderReadHtml = (parsed, context = EMPTY_READ_CONTEXT) => {
+    const reader = createReadRenderer(parsed, context)
+
+    return Array.from({ length: reader.count }, (_, index) => reader.render(index)).join('')
 }
