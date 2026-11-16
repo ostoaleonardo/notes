@@ -5,7 +5,7 @@ import { SelectOption } from './select-option'
 
 import { useStorage } from '@/hooks/use-storage'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
-import { getSettingTestId } from '@/utils/test-ids'
+import { getSettingTestId } from '@/features/settings/utils/test-ids'
 
 export const StorageSelectOption = ({
     storageKey,

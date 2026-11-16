@@ -1,12 +1,12 @@
 import { StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
-import { ListItem } from '../../ui/list-item'
+import { ListItem } from '../../../../ui/list-item'
 import { ColorOption } from './color-option'
 import { Section } from '@/ui/section'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 
-import { useToggleMode } from '@/hooks/use-toggle-mode'
+import { useToggleMode } from '@/features/settings/hooks/use-toggle-mode'
 import { usePro } from '@/hooks/use-pro'
 import { isAccentAllowed, toggleAccentSelection } from '@/utils/accent'
 

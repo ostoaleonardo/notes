@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { useRepositories } from './use-repositories'
-import { useStorage } from './use-storage'
-import { useStorageEffect } from './use-storage-effect'
+import { useRepositories } from '../../../hooks/use-repositories'
+import { useStorage } from '../../../hooks/use-storage'
+import { useStorageEffect } from '../../../hooks/use-storage-effect'
 import { scopedStorageKey } from '@/utils/scoped-storage-key'
 
 import { SPACING } from '@/constants/theme'

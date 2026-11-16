@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ListItem } from '../../ui/list-item'
+import { ListItem } from '../../../../ui/list-item'
 import { Switch } from '@/ui/button/switch'
 
 import { useStorage } from '@/hooks/use-storage'

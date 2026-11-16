@@ -6,13 +6,13 @@ import { PositionGroup } from '@/ui/position-group'
 
 import { useStorage } from '@/hooks/use-storage'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
-import { useFolderSetting } from '@/hooks/use-folder-setting'
+import { useFolderSetting } from '@/features/settings/hooks/use-folder-setting'
 import { useRepositories } from '@/hooks/use-repositories'
 import { useTemplates } from '@/hooks/use-templates'
 import { scopedStorageKey } from '@/utils/scoped-storage-key'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { getSettingTestId } from '@/utils/test-ids'
+import { getSettingTestId } from '@/features/settings/utils/test-ids'
 
 export const DailyNoteOption = () => {
     const { t } = useTranslation()

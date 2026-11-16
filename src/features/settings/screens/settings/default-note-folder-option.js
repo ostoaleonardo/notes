@@ -2,10 +2,10 @@ import { useTranslation } from 'react-i18next'
 
 import { SelectOption } from './select-option'
 
-import { useFolderSetting } from '@/hooks/use-folder-setting'
+import { useFolderSetting } from '@/features/settings/hooks/use-folder-setting'
 
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { getSettingTestId } from '@/utils/test-ids'
+import { getSettingTestId } from '@/features/settings/utils/test-ids'
 
 export const DefaultNoteFolderOption = () => {
     const { t } = useTranslation()

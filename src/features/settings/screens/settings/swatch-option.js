@@ -3,7 +3,7 @@ import { Pressable, StyleSheet } from 'react-native'
 
 import { Typography } from '@/ui/typography'
 
-import { useAnimatedBorderRadius } from '@/hooks/use-animated-border-radius'
+import { useAnimatedBorderRadius } from '@/features/settings/hooks/use-animated-border-radius'
 
 import { COLOR_OPTION } from '@/constants/components'
 import { OPACITY, RADIUS, SPACING } from '@/constants/theme'

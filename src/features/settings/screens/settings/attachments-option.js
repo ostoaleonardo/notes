@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ListItem } from '../../ui/list-item'
+import { ListItem } from '../../../../ui/list-item'
 import { SelectOption } from './select-option'
 import { StorageSelectOption } from './storage-select-option'
 import { Dialog } from '@/ui/dialog'

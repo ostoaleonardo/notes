@@ -4,7 +4,7 @@ import { nativeApplicationVersion } from 'expo-application'
 
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { ListItem } from '../../ui/list-item'
+import { ListItem } from '../../../../ui/list-item'
 
 import { OpenInNew } from '@/icons/open-in-new'
 

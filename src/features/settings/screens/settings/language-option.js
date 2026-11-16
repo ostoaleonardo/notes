@@ -9,7 +9,7 @@ import { isSupportedLanguage } from '@/utils/language'
 
 import { LANGUAGES, SYSTEM_LANGUAGE } from '@/constants/languages'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { getSettingTestId } from '@/utils/test-ids'
+import { getSettingTestId } from '@/features/settings/utils/test-ids'
 
 export const LanguageOption = () => {
     const { t } = useTranslation()
