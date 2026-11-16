@@ -22,11 +22,13 @@ import { useEditorTheme } from '@/hooks/use-editor-theme'
 import { useNoteLookup } from '@/hooks/use-note-lookup'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
 
+import { perfMark } from '@/utils/perf-mark'
 import { toggleTask } from '@/utils/tasks'
 import { buildTableLabels } from '@/utils/table-labels'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { MATH_DELIMITER } from '@/constants/markdown-math'
+import { PERF_MARK_EDITOR_READY } from '@/constants/perf-marks'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { WIKI_LINK_FORMATS } from '@/constants/wiki-links'
 
@@ -71,6 +73,7 @@ export const MarkdownInput = ({
     const metaLinesRef = useLatestRef(metaLines)
 
     const onReady = useCallback(() => {
+        perfMark(PERF_MARK_EDITOR_READY)
         setReady(true)
         editorRef.current?.setMetaLines(metaLinesRef.current)
     }, [metaLinesRef])

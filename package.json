@@ -25,7 +25,8 @@
     "test:maestro": "bash scripts/test-maestro.sh",
     "audit:dupes": "jscpd src app --min-lines 5 --min-tokens 40 --ignore \"**/__tests__/**,**/dom-tests/**,**/__fixtures__/**,src/icons/**,src/translations/**\"",
     "audit:dead": "knip",
-    "test:perf": "jest --selectProjects perf --runInBand"
+    "test:perf": "jest --selectProjects perf --runInBand",
+    "bench:device": "bash scripts/bench-device.sh"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.20.3",
