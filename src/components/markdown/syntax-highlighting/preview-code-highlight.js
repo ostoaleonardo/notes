@@ -26,9 +26,14 @@ export const highlightFence = (code, info, escapeHtml) => {
     return html
 }
 
-export const loadFenceLanguages = async (text) => {
+export const findPendingFenceLanguages = (text) => {
     const infos = new Set(Array.from(text.matchAll(CODE_FENCE_LANGUAGE_PATTERN), (match) => match[1]))
-    const pending = [...infos].map(findCodeLanguage).filter((language) => language && !language.support)
+
+    return [...infos].map(findCodeLanguage).filter((language) => language && !language.support)
+}
+
+export const loadFenceLanguages = async (text) => {
+    const pending = findPendingFenceLanguages(text)
 
     if (pending.length === 0) return false
 

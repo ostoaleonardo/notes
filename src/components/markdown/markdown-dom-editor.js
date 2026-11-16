@@ -231,10 +231,10 @@ export default function MarkdownDomEditor({
     usePreviewClicks(previewRef, { onLinkPress, onImagePress, onToggleTask, onEdit })
 
     const isReading = mode === EDITOR_MODES.READ
-    const loadedLanguages = useCodeLanguages(isReading ? previewValue : '')
+    const languagesReady = useCodeLanguages(isReading ? previewValue : '')
     const html = useMemo(
-        () => (isReading ? renderReadHtml(previewValue, loadedLanguages) + (backlinksHtml || '') : ''),
-        [isReading, previewValue, backlinksHtml, loadedLanguages]
+        () => (isReading && languagesReady ? renderReadHtml(previewValue) + (backlinksHtml || '') : ''),
+        [isReading, languagesReady, previewValue, backlinksHtml]
     )
 
     usePdfEmbeds(previewRef, html)

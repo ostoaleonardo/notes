@@ -116,13 +116,13 @@ export const renderInlineHtml = (text) => (
     DOMPurify.sanitize(md.renderInline(text || '', { tags: true }), { ALLOWED_URI_REGEXP })
 )
 
-let lastRead = { text: null, languagesVersion: 0, html: '' }
+let lastRead = { text: null, html: '' }
 
-export const renderReadHtml = (text, languagesVersion = 0) => {
+export const renderReadHtml = (text) => {
     if (!text) return ''
-    if (lastRead.text === text && lastRead.languagesVersion === languagesVersion) return lastRead.html
+    if (lastRead.text === text) return lastRead.html
 
-    lastRead = { text, languagesVersion, html: renderMarkdownHtml(text) }
+    lastRead = { text, html: renderMarkdownHtml(text) }
 
     return lastRead.html
 }

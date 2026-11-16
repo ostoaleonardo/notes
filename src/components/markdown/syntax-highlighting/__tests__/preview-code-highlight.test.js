@@ -1,4 +1,4 @@
-import { highlightFence, loadFenceLanguages } from '../preview-code-highlight'
+import { findPendingFenceLanguages, highlightFence, loadFenceLanguages } from '../preview-code-highlight'
 import { buildSyntaxColors } from '../syntax-colors'
 
 const mockLoad = jest.fn()
@@ -25,6 +25,11 @@ const escapeHtml = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;')
 describe('preview code highlight', () => {
     test('returns nothing until the language is loaded', () => {
         expect(highlightFence('const a = 1', 'js', escapeHtml)).toBe('')
+    })
+
+    test('lists only the languages that need loading', async () => {
+        expect(findPendingFenceLanguages('```js\nx\n```')).toHaveLength(1)
+        expect(findPendingFenceLanguages('```nope\nx\n```')).toHaveLength(0)
     })
 
     test('loads fence languages once', async () => {
