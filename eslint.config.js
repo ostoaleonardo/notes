@@ -20,6 +20,34 @@ const UI_APP_FOLDERS = [
     '@/translations/**'
 ]
 
+const DOM_FORBIDDEN_PACKAGES = [
+    'react-native',
+    'react-i18next',
+    'expo-router',
+    'expo-file-system',
+    'expo-sharing',
+    'expo-image-picker',
+    'expo-asset',
+    'expo-font'
+]
+
+const DOM_FORBIDDEN_PATTERNS = [
+    {
+        group: [
+            '@/features/*/native/**',
+            '@/shared/hooks/**',
+            '!@/shared/hooks/use-memo-by-deps',
+            '@/shared/context/**',
+            '@/screens/**'
+        ],
+        message: 'DOM and shared editor code run in the WebView: it cannot import app (React Native) code.'
+    },
+    {
+        group: ['@/ui/*', '!@/ui/tokens'],
+        message: 'DOM and shared editor code may only import ui/tokens.'
+    }
+]
+
 module.exports = [
     js.configs.recommended,
     { ignores: ['dist/*', 'android/*', 'ios/*', '.expo/*'] },
@@ -52,6 +80,30 @@ module.exports = [
                 patterns: [{
                     group: UI_APP_FOLDERS,
                     message: 'src/ui must not import app code: pass data in through props or use ui/tokens.'
+                }]
+            }]
+        }
+    },
+    {
+        files: ['src/features/*/dom/**/*.js', 'src/features/*/shared/**/*.js', 'src/features/syntax/**/*.js'],
+        ignores: ['**/__tests__/**', '**/__fixtures__/**', '**/__perf__/**', '**/dom-tests/**'],
+        rules: {
+            'no-restricted-imports': ['error', {
+                paths: DOM_FORBIDDEN_PACKAGES.map((name) => ({
+                    name,
+                    message: 'This code runs in the WebView: it cannot depend on React Native or Expo native modules.'
+                })),
+                patterns: DOM_FORBIDDEN_PATTERNS
+            }]
+        }
+    },
+    {
+        files: ['src/shared/**/*.js', 'src/screens/**/*.js', 'app/**/*.js', 'src/features/!(editor)/**/*.js'],
+        rules: {
+            'no-restricted-imports': ['error', {
+                patterns: [{
+                    group: ['@/features/*/dom/**'],
+                    message: 'WebView code is private to its feature: reach it through the feature native entry.'
                 }]
             }]
         }
