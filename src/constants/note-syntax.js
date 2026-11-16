@@ -11,7 +11,13 @@ export const NOTE_NODES = {
     COMMENT: 'Comment',
     COMMENT_MARK: 'CommentMark',
     CUSTOM_TASK: 'CustomTask',
-    CUSTOM_TASK_MARKER: 'CustomTaskMarker'
+    CUSTOM_TASK_MARKER: 'CustomTaskMarker',
+    INLINE_MATH: 'InlineMath',
+    BLOCK_MATH: 'BlockMath',
+    CALLOUT: 'Callout',
+    CALLOUT_MARKER: 'CalloutMarker',
+    FRONTMATTER: 'Frontmatter',
+    FRONTMATTER_MARK: 'FrontmatterMark'
 }
 
 export const CHAR = {
@@ -24,6 +30,7 @@ export const CHAR = {
     EQUALS: 61,
     OPEN_BRACKET: 91,
     CLOSE_BRACKET: 93,
+    DOLLAR: 36,
     CARET: 94,
     PIPE: 124
 }
@@ -39,3 +46,10 @@ export const LIST_ITEM_NODE = 'ListItem'
 export const CUSTOM_TASK_START_PATTERN = /^\[[^\sxX\]]\][ \t]/
 export const SETEXT_HEADING_NODE = 'SetextHeading'
 export const LINK_PARSER_NAME = 'Link'
+export const CALLOUT_START_PATTERN = /^\[![\w-]+\][+-]?/
+export const BLOCKQUOTE_NODE = 'Blockquote'
+export const WORD_CHAR_PATTERN = /[\w$]/
+export const FRONTMATTER_FENCE = '---'
+export const FRONTMATTER_MARK_LENGTH = 3
+export const HORIZONTAL_RULE_PARSER_NAME = 'HorizontalRule'
+export const MATH_DELIMITER_LENGTH = 2

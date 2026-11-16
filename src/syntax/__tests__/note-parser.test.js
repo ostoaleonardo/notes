@@ -104,3 +104,55 @@ describe('custom tasks', () => {
         expect(listNodes('[-] a\n\n```\n- [-] b\n```', ['CustomTaskMarker'])).toEqual([])
     })
 })
+
+describe('math', () => {
+    test('parses inline and display math as opaque nodes', () => {
+        expect(listNodes('a $x[[y]]$ b $$\n[[z]]\n$$ c', ['InlineMath', 'BlockMath', 'WikiLink'])).toEqual([
+            ['InlineMath', '$x[[y]]$'],
+            ['BlockMath', '$$\n[[z]]\n$$']
+        ])
+    })
+
+    test('leaves currency amounts as text', () => {
+        expect(listNodes('costs $5 and $10 [[Link]]', ['InlineMath', 'WikiLink'])).toEqual([
+            ['WikiLink', '[[Link]]']
+        ])
+    })
+})
+
+describe('callouts', () => {
+    test('parses the callout marker inside a blockquote', () => {
+        const text = '> [!warning]- Folded title\n> body [[Link]]\n\n> plain quote'
+
+        expect(listNodes(text, ['CalloutMarker', 'WikiLink'])).toEqual([
+            ['CalloutMarker', '[!warning]-'],
+            ['WikiLink', '[[Link]]']
+        ])
+    })
+
+    test('ignores markers outside blockquotes', () => {
+        expect(listNodes('[!note] text', ['CalloutMarker'])).toEqual([])
+    })
+})
+
+describe('frontmatter', () => {
+    test('parses the leading block and keeps links inside it', () => {
+        const text = '---\nrelated: "[[Link]]"\n---\n\nBody [[Other]]'
+
+        expect(listNodes(text, ['Frontmatter', 'WikiLink'])).toEqual([
+            ['Frontmatter', '---\nrelated: "[[Link]]"\n---'],
+            ['WikiLink', '[[Link]]'],
+            ['WikiLink', '[[Other]]']
+        ])
+    })
+
+    test('treats an unclosed fence as a normal rule', () => {
+        expect(listNodes('---\nno end\n', ['Frontmatter', 'HorizontalRule'])).toEqual([
+            ['HorizontalRule', '---']
+        ])
+    })
+
+    test('only applies at the start of the document', () => {
+        expect(listNodes('text\n\n---\na: 1\n---\n', ['Frontmatter'])).toEqual([])
+    })
+})
