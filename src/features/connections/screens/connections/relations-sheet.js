@@ -15,9 +15,9 @@ import { useTheme } from '@/ui/hooks/use-theme'
 
 import { useDelayedValue } from '@/hooks/use-delayed-value'
 
-import { describeEntity } from '@/utils/connection-caption'
+import { describeEntity } from '@/features/connections/utils/connection-caption'
 import { entityKey, listRelations } from '@/utils/connection-model'
-import { findSectionById, resolveSection, sectionId } from '@/utils/section-tabs'
+import { findSectionById, resolveSection, sectionId } from '@/features/connections/utils/section-tabs'
 
 import { ICON_TOGGLE } from '@/constants/components'
 import { RELATIONS_SHEET } from '@/constants/connections'

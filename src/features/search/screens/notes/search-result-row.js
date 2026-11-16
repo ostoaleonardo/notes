@@ -2,7 +2,7 @@ import { memo, useCallback, useMemo } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 
 import { SearchSnippet } from './search-snippet'
-import { EntityRow } from '@/screens/connections/entity-row'
+import { EntityRow } from '@/features/connections/screens/connections/entity-row'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import { getSnippets } from '@/features/search/utils/search-context'

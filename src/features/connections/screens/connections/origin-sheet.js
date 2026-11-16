@@ -8,7 +8,7 @@ import { FreshSheet } from '@/ui/modal/fresh-sheet'
 import { SearchBar } from '@/components/input/search-bar'
 import { EmptyMessage } from '@/ui/modal/empty-message'
 
-import { describeEntity } from '@/utils/connection-caption'
+import { describeEntity } from '@/features/connections/utils/connection-caption'
 import { listOriginOptions } from '@/utils/connection-model'
 
 import { SHEET } from '@/constants/components'

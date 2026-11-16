@@ -1,10 +1,10 @@
 import { describeEntity } from '../connection-caption'
-import { buildConnectionModel, makeEntity, ROOT_ENTITY } from '../connection-model'
+import { buildConnectionModel, makeEntity, ROOT_ENTITY } from '../../../../utils/connection-model'
 import {
     MOCK_CONNECTION_FILES,
     MOCK_CONNECTION_NOTES,
     MOCK_CONNECTION_NOTE_PATHS
-} from '../__fixtures__/connections'
+} from '../../../../utils/__fixtures__/connections'
 import { CONNECTION_TYPES } from '@/constants/connections'
 
 const { NOTE, FILE, TAG, FOLDER, MISSING } = CONNECTION_TYPES
