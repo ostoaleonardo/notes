@@ -7,6 +7,7 @@ import { buildVersionKey } from '@/utils/note-version-location'
 import { invalidateMediaIndex } from '@/utils/media-index'
 import { getNoteLinkTexts, seedNoteLinkTexts } from '@/utils/note-links'
 import { getNoteTags, seedNoteTags } from '@/utils/note-tags'
+import { readFileText } from '@/utils/read-file-text'
 
 import {
     NOTE_FILE_EXTENSION,
@@ -334,7 +335,7 @@ const readRepositoryIndex = async (repositoryId) => {
     if (!file.exists) return []
 
     try {
-        const { version, notes, tags, links } = JSON.parse(await file.text())
+        const { version, notes, tags, links } = JSON.parse(await readFileText(file))
         return version === REPOSITORY_INDEX_VERSION ? restoreNotes(notes, tags, links) : []
     } catch (error) {
         logError(LOG_MESSAGES.ERROR_READING_REPOSITORY_INDEX, error)
