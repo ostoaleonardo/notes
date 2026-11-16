@@ -3,7 +3,7 @@ import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } fro
 import { router, useLocalSearchParams } from 'expo-router'
 
 import { EditorShell } from '@/screens/notes/editor-shell'
-import { TemplateEditorForm } from '@/screens/templates/template-editor-form'
+import { TemplateEditorForm } from '@/features/templates/screens/templates/template-editor-form'
 import { TemplatePlaceholders } from '@/screens/dialogs/template-placeholders'
 import { LoadingOverlay } from '@/ui/layout'
 import { ConfirmDialog } from '@/components/confirm-dialog'
