@@ -26,11 +26,10 @@ import { liveMath } from './math-field'
 import { decorateFootnotes, footnotesTheme } from './footnotes'
 import { decorateBlockIds, blockIdsTheme } from './block-ids'
 import { decorateExtraMarks, extraMarksTheme } from './extra-marks'
-import { decorateCustomTasks, customTasksTheme } from './custom-tasks'
+import { decorateCustomTasks, findCustomTaskRanges, customTasksTheme } from './custom-tasks'
 import { findWikiLinkRanges, decorateWikiLinks, wikiLinksTheme } from './wiki-links'
 import { linksReset, linksResolved, resolvedLinksField } from '@/components/markdown/link-resolution'
 
-import { findCustomTaskRanges } from '@/utils/tasks'
 import { getBoundaryEdit } from '@/utils/table-boundary'
 
 import { CODE_RANGE_NODE_NAMES } from '@/constants/markdown-live-formatting'
@@ -70,8 +69,9 @@ const collectDecorationRanges = (state, from, to) => {
     const tableLabels = state.facet(tableLabelsFacet)
     const codeRanges = []
     const text = doc.sliceString(from, to)
-    const wikiLinkRanges = findWikiLinkRanges(text)
-    const customTaskRanges = findCustomTaskRanges(text)
+    const tree = syntaxTree(state)
+    const wikiLinkRanges = findWikiLinkRanges(tree, text, from, to)
+    const customTaskRanges = findCustomTaskRanges(tree, text, from, to)
     const textRanges = from === 0 ? ranges : []
 
     syntaxTree(state).iterate({

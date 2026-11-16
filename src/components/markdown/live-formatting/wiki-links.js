@@ -1,6 +1,7 @@
 import { Decoration, EditorView } from '@codemirror/view'
 
 import { isRangeSelected, overlapsAny } from './utils'
+import { fullSyntaxTree } from '@/components/markdown/full-syntax-tree'
 import { ImageWidget, MediaWidget, PdfWidget } from './widgets'
 
 import { isSameNoteTarget } from '@/utils/wiki-links'
@@ -13,31 +14,50 @@ import { RADIUS, OPACITY } from '@/constants/theme'
 import { FILE_LINK_LIVE_CLASS } from '@/constants/file-links'
 import { ATTACH_FILE_ICON_PATH } from '@/constants/icon-paths'
 
-import { WIKI_LINK_PATTERN, WIKI_LINK_ANCHOR_SEPARATOR } from '@/constants/wiki-links'
+import { WIKI_LINK_ANCHOR_SEPARATOR } from '@/constants/wiki-links'
+import { NOTE_NODES, WIKI_LINK_MARK_LENGTH } from '@/constants/note-syntax'
 import { EMBED_LIVE_CLASS, EMBED_MARKER } from '@/constants/embeds'
 import { FILE_KINDS } from '@/constants/file-types'
 
-export const findWikiLinkRanges = (text) => {
+const toRange = (node, text, offset) => {
+    const isEmbed = node.name === NOTE_NODES.WIKI_EMBED
+    const linkStart = node.from + offset + (isEmbed ? EMBED_MARKER.length : 0)
+    const target = node.node.getChild(NOTE_NODES.WIKI_LINK_TARGET)
+    const linkText = text.slice(target.from + offset, target.to + offset)
+    const to = node.to + offset
+
+    const anchorIndex = linkText.indexOf(WIKI_LINK_ANCHOR_SEPARATOR)
+    const head = anchorIndex === -1 ? linkText : linkText.slice(0, anchorIndex)
+    const separatorIndex = head.lastIndexOf('/')
+
+    const labelFrom = node.node.getChild(NOTE_NODES.WIKI_LINK_ALIAS)
+        ? linkStart + WIKI_LINK_MARK_LENGTH + linkText.length + 1
+        : linkStart + WIKI_LINK_MARK_LENGTH + (separatorIndex === -1 ? 0 : separatorIndex + 1)
+
+    return {
+        from: isEmbed ? linkStart - EMBED_MARKER.length : linkStart,
+        to,
+        linkText,
+        labelFrom,
+        labelTo: to - WIKI_LINK_MARK_LENGTH,
+        isEmbed
+    }
+}
+
+export const findWikiLinkRanges = (tree, text, from = 0, to = text.length) => {
     const ranges = []
 
-    for (const match of text.matchAll(WIKI_LINK_PATTERN)) {
-        const linkStart = match.index
-        const isEmbed = text[linkStart - 1] === EMBED_MARKER
-        const from = isEmbed ? linkStart - 1 : linkStart
-        const to = linkStart + match[0].length
-        const linkText = match[1]
-        const alias = match[2]
+    tree.iterate({
+        from,
+        to,
+        enter: (node) => {
+            if (node.name !== NOTE_NODES.WIKI_LINK && node.name !== NOTE_NODES.WIKI_EMBED) return
+            if (node.from < from || node.to > to) return false
 
-        const anchorIndex = linkText.indexOf(WIKI_LINK_ANCHOR_SEPARATOR)
-        const head = anchorIndex === -1 ? linkText : linkText.slice(0, anchorIndex)
-        const separatorIndex = head.lastIndexOf('/')
-
-        const labelFrom = alias !== undefined
-            ? linkStart + 2 + linkText.length + 1
-            : linkStart + 2 + (separatorIndex === -1 ? 0 : separatorIndex + 1)
-
-        ranges.push({ from, to, linkText, labelFrom, labelTo: to - 2, isEmbed })
-    }
+            ranges.push(toRange(node, text, -from))
+            return false
+        }
+    })
 
     return ranges
 }
@@ -127,7 +147,7 @@ export const fileLinkPress = (onPressRef) => EditorView.domEventHandlers({
         const position = view.posAtCoords({ x: event.clientX, y: event.clientY })
         if (position === null) return false
 
-        const range = findWikiLinkRanges(view.state.doc.toString())
+        const range = findWikiLinkRanges(fullSyntaxTree(view.state), view.state.doc.toString())
             .find(({ from, to, linkText }) => position >= from && position <= to && isFileLinkTarget(linkText))
         if (!range) return false
 

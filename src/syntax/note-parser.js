@@ -9,7 +9,7 @@ import { comment, highlight } from './marks'
 import { math } from './math'
 import { wikiLink } from './wiki-link'
 
-const noteExtensions = [
+export const extensions = [
     frontmatter,
     wikiLink,
     inlineTag,
@@ -21,4 +21,4 @@ const noteExtensions = [
     callout
 ]
 
-export const noteParser = parser.configure([GFM, ...noteExtensions])
+export const noteParser = parser.configure([GFM, ...extensions])

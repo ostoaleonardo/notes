@@ -1,5 +1,5 @@
+import { CUSTOM_TASK_MARKER_LENGTH } from '@/constants/tasks'
 import {
-    CUSTOM_TASK_MARKER_LENGTH,
     CUSTOM_TASK_START_PATTERN,
     LIST_ITEM_NODE,
     NOTE_NODES,

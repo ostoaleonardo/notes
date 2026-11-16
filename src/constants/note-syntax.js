@@ -38,7 +38,6 @@ export const CHAR = {
 export const WIKI_LINK_MARK_LENGTH = 2
 export const COMMENT_MARK_LENGTH = 2
 export const HIGHLIGHT_MARK_LENGTH = 2
-export const CUSTOM_TASK_MARKER_LENGTH = 3
 export const BLOCK_ID_CHAR_PATTERN = /[A-Za-z0-9-]/
 export const TAG_STOP_PATTERN = /[\s!-,.:-@[-^`{-~]/
 export const TRAILING_SLASH = '/'

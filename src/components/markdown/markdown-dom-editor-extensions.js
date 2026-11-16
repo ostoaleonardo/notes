@@ -24,6 +24,7 @@ import { headingFoldService } from './markdown-dom-fold'
 import { pasteUrlOverSelection } from './markdown-dom-paste'
 import { markdownAutoPair } from './markdown-dom-auto-pair'
 import { codeLanguages } from './syntax-highlighting/code-languages'
+import { extensions } from '@/syntax/note-parser'
 import { rememberEmittedValue } from '@/utils/emitted-values'
 
 const createHiddenSearchPanel = () => {
@@ -67,30 +68,30 @@ export const buildEditorExtensions = ({
     onSearchNotesRef,
     updateListener
 }) => [
-    history(),
-    search({ createPanel: createHiddenSearchPanel }),
-    keymap.of([
-        indentWithTab,
-        ...defaultKeymap,
-        ...historyKeymap,
-        ...searchKeymap
-    ]),
-    Prec.high(keymap.of(listKeymap)),
-    markdown({ extensions: GFM, codeLanguages }),
-    inlineTagExtensions(onTagPressRef),
-    fileLinkPress(onLinkPressRef),
-    filePressFacet.of(onLinkPressRef),
-    blockIdCreatorFacet.of(onCreateBlockIdRef),
-    blockLoaderFacet.of(onLoadBlocksRef),
-    linkResolverFacet.of(onResolveLinksRef),
-    noteSearchFacet.of(onSearchNotesRef),
-    autocompletion({ override: [wikiLinkCompletionSource, blockCompletionSource, tagCompletionSource] }),
-    closeBrackets(),
-    markdownAutoPair,
-    codeFolding(),
-    headingFoldService,
-    pasteUrlOverSelection,
-    EditorView.lineWrapping,
-    ...dynamic,
-    updateListener
-]
+        history(),
+        search({ createPanel: createHiddenSearchPanel }),
+        keymap.of([
+            indentWithTab,
+            ...defaultKeymap,
+            ...historyKeymap,
+            ...searchKeymap
+        ]),
+        Prec.high(keymap.of(listKeymap)),
+        markdown({ extensions: [GFM, ...extensions], codeLanguages }),
+        inlineTagExtensions(onTagPressRef),
+        fileLinkPress(onLinkPressRef),
+        filePressFacet.of(onLinkPressRef),
+        blockIdCreatorFacet.of(onCreateBlockIdRef),
+        blockLoaderFacet.of(onLoadBlocksRef),
+        linkResolverFacet.of(onResolveLinksRef),
+        noteSearchFacet.of(onSearchNotesRef),
+        autocompletion({ override: [wikiLinkCompletionSource, blockCompletionSource, tagCompletionSource] }),
+        closeBrackets(),
+        markdownAutoPair,
+        codeFolding(),
+        headingFoldService,
+        pasteUrlOverSelection,
+        EditorView.lineWrapping,
+        ...dynamic,
+        updateListener
+    ]

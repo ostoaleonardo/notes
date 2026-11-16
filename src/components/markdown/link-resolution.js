@@ -1,6 +1,7 @@
 import { Facet, StateEffect, StateField } from '@codemirror/state'
 import { ViewPlugin } from '@codemirror/view'
 
+import { fullSyntaxTree } from './full-syntax-tree'
 import { findWikiLinkRanges } from './live-formatting/wiki-links'
 import { isSameNoteTarget } from '@/utils/wiki-links'
 
@@ -58,7 +59,7 @@ const resolutionPlugin = ViewPlugin.fromClass(class {
         if (!resolveLinks) return
 
         const known = state.field(resolvedLinksField)
-        const targets = [...new Set(findWikiLinkRanges(state.doc.toString()).map(({ linkText }) => linkText))]
+        const targets = [...new Set(findWikiLinkRanges(fullSyntaxTree(state), state.doc.toString()).map(({ linkText }) => linkText))]
             .filter((target) => !known.has(target) && !this.pending.has(target) && !isSameNoteTarget(target))
         if (!targets.length) return
 

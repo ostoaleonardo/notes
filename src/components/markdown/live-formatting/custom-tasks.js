@@ -8,8 +8,13 @@ import {
     CUSTOM_TASK_BOX_SIZE,
     CUSTOM_TASK_GLYPH_SIZE,
     CUSTOM_TASK_LIVE_CLASS,
+    CUSTOM_TASK_MARKER_LENGTH,
     TASK_UNCHECKED_MARK
 } from '@/constants/tasks'
+import {
+    CUSTOM_TASK_STATUS_OFFSET,
+    NOTE_NODES
+} from '@/constants/note-syntax'
 
 class CustomTaskWidget extends WidgetType {
     constructor(status, from, to) {
@@ -37,6 +42,29 @@ class CustomTaskWidget extends WidgetType {
 
         return box
     }
+}
+
+export const findCustomTaskRanges = (tree, text, from = 0, to = text.length) => {
+    const ranges = []
+
+    tree.iterate({
+        from,
+        to,
+        enter: (node) => {
+            if (node.name !== NOTE_NODES.CUSTOM_TASK_MARKER) return
+            if (node.from < from || node.to > to) return false
+
+            const start = node.from - from
+            ranges.push({
+                from: start,
+                to: start + CUSTOM_TASK_MARKER_LENGTH,
+                status: text[start + CUSTOM_TASK_STATUS_OFFSET]
+            })
+            return false
+        }
+    })
+
+    return ranges
 }
 
 export const decorateCustomTasks = ({ customTaskRanges, selection, ranges, codeRanges }) => {

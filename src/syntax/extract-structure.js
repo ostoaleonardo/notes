@@ -2,7 +2,6 @@ import { noteParser } from './note-parser'
 
 import {
     ATX_HEADING_PATTERN,
-    CUSTOM_TASK_MARKER_LENGTH,
     CUSTOM_TASK_STATUS_OFFSET,
     ESCAPED_PIPE_SUFFIX,
     HEADER_MARK_NODE,
@@ -10,6 +9,7 @@ import {
     NOTE_NODES,
     URL_NODE
 } from '@/constants/note-syntax'
+import { CUSTOM_TASK_MARKER_LENGTH } from '@/constants/tasks'
 import { WIKI_LINK_SCHEME } from '@/constants/wiki-links'
 
 const readTarget = (text, node) => {
