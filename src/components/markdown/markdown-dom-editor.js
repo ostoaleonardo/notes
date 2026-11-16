@@ -8,7 +8,8 @@ import { EditorView } from '@codemirror/view'
 import { katexCss } from './markdown-dom-katex-css'
 import { TitleSection } from './markdown-dom-widgets'
 import { buildPreviewCss } from './markdown-dom-preview-css'
-import { renderReadHtml } from './markdown-dom-render-html'
+import { parseReadMarkdown, renderReadHtml } from './markdown-dom-render-html'
+import { useWikiLinkDetails } from './use-wiki-link-details'
 import { PERF_MARK_READ_PAINTED } from '@/constants/perf-marks'
 import { linksReset } from './link-resolution'
 import { useCodeLanguages } from './use-code-languages'
@@ -27,6 +28,7 @@ import { EDITOR_MODES } from '@/constants/editor-modes'
 import { TEST_IDS } from '@/constants/test-ids'
 
 const NO_META_LINES = []
+const NO_TARGETS = []
 
 export default function MarkdownDomEditor({
     ref,
@@ -58,6 +60,7 @@ export default function MarkdownDomEditor({
     onCreateBlockId,
     onLoadBlocks,
     onResolveLinks,
+    onResolveLinkDetails,
     onSearchNotes,
     onImagePress,
     onToggleTask,
@@ -234,9 +237,14 @@ export default function MarkdownDomEditor({
 
     const isReading = mode === EDITOR_MODES.READ
     const languagesReady = useCodeLanguages(isReading ? previewValue : '')
+    const parsed = useMemo(
+        () => (isReading && languagesReady ? parseReadMarkdown(previewValue) : null),
+        [isReading, languagesReady, previewValue]
+    )
+    const wikiDetails = useWikiLinkDetails(parsed?.targets ?? NO_TARGETS, onResolveLinkDetails, linkVersion)
     const html = useMemo(
-        () => (isReading && languagesReady ? renderReadHtml(previewValue) + (backlinksHtml || '') : ''),
-        [isReading, languagesReady, previewValue, backlinksHtml]
+        () => (parsed && wikiDetails ? renderReadHtml(parsed, wikiDetails) + (backlinksHtml || '') : ''),
+        [parsed, wikiDetails, backlinksHtml]
     )
 
     usePdfEmbeds(previewRef, html)

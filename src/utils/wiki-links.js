@@ -118,34 +118,44 @@ export const unwrapWikiLinks = (value) => mapOutsideCode(
     )
 )
 
+export const renderWikiLink = (alias, { path: notePath, target, anchor }) => {
+    const { path, title } = parseWikiLinkText(target)
+
+    if (!title.trim() && !notePath) return escapeHtml((alias || anchor).trim())
+
+    const defaultLabel = buildDefaultLabel(title, anchor)
+    const label = escapeHtml((alias || defaultLabel).trim())
+
+    if (!notePath && isFileLinkTarget(target)) {
+        return `<a href="${buildFileLinkUrl(target)}" class="${FILE_LINK_CLASS}">${escapeHtml((alias || title).trim())}</a>`
+    }
+
+    if (!notePath) {
+        const encodedPath = encodeURIComponent(path)
+        const encodedTitle = encodeURIComponent(title)
+        const missingHref = `${WIKI_LINK_SCHEME}${WIKI_LINK_MISSING_PREFIX}${encodedPath}/${encodedTitle}`
+        return `<a href="${missingHref}" class="wiki-link-broken">${label}</a>`
+    }
+
+    const anchorSuffix = anchor ? `${WIKI_LINK_ANCHOR_SEPARATOR}${encodeURIComponent(anchor)}` : ''
+
+    return `<a href="${WIKI_LINK_SCHEME}${encodeURIComponent(notePath)}${anchorSuffix}" class="wiki-link">${label}</a>`
+}
+
+export const resolveWikiLinkDetails = (linkText, notes, notePaths, selfPath) => {
+    const { note, target, anchor } = resolveWikiLink(linkText, notes, notePaths, selfPath)
+
+    return { path: note ? note.path : null, target, anchor }
+}
+
 export const resolveWikiLinks = (value, notes, notePaths = EMPTY_NOTE_PATHS, selfPath) => mapOutsideCode(
     value,
     (segment) => segment.replace(
         WIKI_LINK_PATTERN,
-        (match, linkText, alias) => {
-            const { note, target, anchor } = resolveWikiLink(linkText, notes, notePaths, selfPath)
-            const { path, title } = parseWikiLinkText(target)
-
-            if (!title.trim() && !note) return escapeHtml((alias || anchor).trim())
-
-            const defaultLabel = buildDefaultLabel(title, anchor)
-            const label = escapeHtml((alias || defaultLabel).trim())
-
-            if (!note && isFileLinkTarget(target)) {
-                return `<a href="${buildFileLinkUrl(target)}" class="${FILE_LINK_CLASS}">${escapeHtml((alias || title).trim())}</a>`
-            }
-
-            if (!note) {
-                const encodedPath = encodeURIComponent(path)
-                const encodedTitle = encodeURIComponent(title)
-                const missingHref = `${WIKI_LINK_SCHEME}${WIKI_LINK_MISSING_PREFIX}${encodedPath}/${encodedTitle}`
-                return `<a href="${missingHref}" class="wiki-link-broken">${label}</a>`
-            }
-
-            const anchorSuffix = anchor ? `${WIKI_LINK_ANCHOR_SEPARATOR}${encodeURIComponent(anchor)}` : ''
-
-            return `<a href="${WIKI_LINK_SCHEME}${encodeURIComponent(note.path)}${anchorSuffix}" class="wiki-link">${label}</a>`
-        }
+        (match, linkText, alias) => renderWikiLink(
+            alias,
+            resolveWikiLinkDetails(linkText, notes, notePaths, selfPath)
+        )
     )
 )
 

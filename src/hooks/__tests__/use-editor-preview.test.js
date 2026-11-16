@@ -3,7 +3,7 @@ import { renderHook } from '@testing-library/react-native'
 import { useEditorPreview } from '../use-editor-preview'
 import { EDITOR_MODES } from '@/constants/editor-modes'
 
-const mockResolveWikiLinks = jest.fn((value) => `wiki:${value}`)
+const mockResolveEmbeds = jest.fn((value) => `embeds:${value}`)
 const mockBacklinks = jest.fn(() => 'backlinks')
 const mockEmbedMediaMap = jest.fn(() => [['embed', 'e']])
 
@@ -13,8 +13,8 @@ jest.mock('../use-pdf-embed', () => ({
 jest.mock('../use-backlinks-html', () => ({
     useBacklinksHtml: (...args) => mockBacklinks(...args)
 }))
-jest.mock('../use-resolved-wiki-links', () => ({
-    useResolvedWikiLinks: (...args) => mockResolveWikiLinks(...args)
+jest.mock('../use-resolved-embeds', () => ({
+    useResolvedEmbeds: (...args) => mockResolveEmbeds(...args)
 }))
 jest.mock('../use-resolved-preview-markdown', () => ({
     useResolvedPreviewMarkdown: (value) => ({ value: `preview:${value}`, mediaMap: [['img', 'i']] })
@@ -36,7 +36,7 @@ describe('editor preview', () => {
     test('resolves the preview and the backlinks while reading', async () => {
         const { result } = await setup(EDITOR_MODES.READ)
 
-        expect(result.current.previewValue).toBe('preview:wiki:text')
+        expect(result.current.previewValue).toBe('preview:embeds:text')
         expect(result.current.backlinksHtml).toBe('backlinks')
         expect(mockBacklinks).toHaveBeenCalledWith('a', true)
     })
@@ -44,7 +44,7 @@ describe('editor preview', () => {
     test('does not resolve the note text outside reading', async () => {
         await setup(EDITOR_MODES.LIVE)
 
-        expect(mockResolveWikiLinks).toHaveBeenCalledWith('', 'a', false)
+        expect(mockResolveEmbeds).toHaveBeenCalledWith('', 'a', false)
         expect(mockBacklinks).toHaveBeenCalledWith('a', false)
     })
 

@@ -1,18 +1,22 @@
-import { renderReadHtml } from '../markdown-dom-render-html'
+import { parseReadMarkdown, renderReadHtml } from '../markdown-dom-render-html'
 
-describe('render markdown html cache', () => {
-    test('returns the same html for the same text', () => {
-        const first = renderReadHtml('# one')
+describe('read markdown parsing cache', () => {
+    test('returns the same parsed note for the same text', () => {
+        const first = parseReadMarkdown('# one')
 
-        expect(renderReadHtml('# one')).toBe(first)
+        expect(parseReadMarkdown('# one')).toBe(first)
     })
 
-    test('recomputes when the text changes', () => {
-        const first = renderReadHtml('# one')
-        const second = renderReadHtml('# two')
+    test('parses again when the text changes', () => {
+        const first = parseReadMarkdown('# one')
+        const second = parseReadMarkdown('# two')
 
         expect(second).not.toBe(first)
-        expect(second).toContain('two')
-        expect(renderReadHtml('# one')).toContain('one')
+        expect(renderReadHtml(second)).toContain('two')
+        expect(renderReadHtml(parseReadMarkdown('# one'))).toContain('one')
+    })
+
+    test('renders nothing for empty text', () => {
+        expect(renderReadHtml(parseReadMarkdown(''))).toBe('')
     })
 })

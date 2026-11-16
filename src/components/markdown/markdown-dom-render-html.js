@@ -6,6 +6,7 @@ import footnote from 'markdown-it-footnote'
 import taskLists from 'markdown-it-task-lists'
 
 import { markdownItExtras } from './markdown-it-extras'
+import { wikiLinksPlugin } from './markdown-it-wiki-links'
 import { wrapCodeBlock } from './markdown-dom-code-copy'
 import { highlightFence } from './syntax-highlighting/preview-code-highlight'
 
@@ -27,6 +28,7 @@ const md = new MarkdownIt({
     .use(texmath, { engine: katex, delimiters: 'dollars' })
     .use(footnote)
     .use(markdownItExtras)
+    .use(wikiLinksPlugin)
 
 md.validateLink = (url) => !BLOCKED_LINK_PROTOCOL_PATTERN.test(url.trim())
 
@@ -116,13 +118,27 @@ export const renderInlineHtml = (text) => (
     DOMPurify.sanitize(md.renderInline(text || '', { tags: true }), { ALLOWED_URI_REGEXP })
 )
 
-let lastRead = { text: null, html: '' }
+let lastParsed = { text: null, parsed: null }
 
-export const renderReadHtml = (text) => {
-    if (!text) return ''
-    if (lastRead.text === text) return lastRead.html
+export const parseReadMarkdown = (text) => {
+    if (!text) return null
+    if (lastParsed.text === text) return lastParsed.parsed
 
-    lastRead = { text, html: renderMarkdownHtml(text) }
+    const env = { tags: true, wikiTargets: new Set() }
+    const tokens = md.parse(text, env)
 
-    return lastRead.html
+    lastParsed = { text, parsed: { tokens, env, targets: [...env.wikiTargets] } }
+
+    return lastParsed.parsed
+}
+
+export const renderReadHtml = (parsed, resolved) => {
+    if (!parsed) return ''
+
+    parsed.env.wikiResolved = resolved
+
+    return DOMPurify.sanitize(
+        md.renderer.render(parsed.tokens, md.options, parsed.env),
+        { ALLOWED_URI_REGEXP }
+    )
 }

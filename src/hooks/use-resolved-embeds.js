@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { useNotes } from './use-notes'
 import { useMediaUris } from './use-media-uris'
-import { resolveWikiLinks } from '@/utils/wiki-links'
 import { parseEmbedMedia } from '@/utils/embed-media'
 import { extractEmbedMediaNames, resolveEmbeds } from '@/utils/embeds'
 import { isEmbeddableMedia } from '@/utils/media-size'
@@ -10,7 +9,7 @@ import { isEmbeddableMedia } from '@/utils/media-size'
 import { EMBED_OPENING } from '@/constants/embeds'
 import { FILE_KINDS } from '@/constants/file-types'
 
-export const useResolvedWikiLinks = (value, selfPath, pdfSetting = false) => {
+export const useResolvedEmbeds = (value, selfPath, pdfSetting = false) => {
     const { notes, notePaths } = useNotes()
     const listMediaUris = useMediaUris()
     const [mediaUris, setMediaUris] = useState(null)
@@ -43,13 +42,12 @@ export const useResolvedWikiLinks = (value, selfPath, pdfSetting = false) => {
             return uri && isEmbeddableMedia(name, uri) ? uri : undefined
         }
 
-        const withEmbeds = resolveEmbeds(value || '', {
+        return resolveEmbeds(value || '', {
             notes,
             notePaths,
             getMediaUrl,
             selfPath,
             withOpenLink: true
         })
-        return resolveWikiLinks(withEmbeds, notes, notePaths, selfPath)
     }, [value, selfPath, pdf, notes, notePaths, mediaUris])
 }

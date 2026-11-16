@@ -58,3 +58,5 @@ export const LINK_NODE = 'Link'
 export const URL_NODE = 'URL'
 export const ESCAPED_PIPE_SUFFIX = '\\'
 export const CUSTOM_TASK_STATUS_OFFSET = 1
+export const WIKI_LINK_TOKEN = 'wiki_link'
+export const WIKI_LINK_RULE_ANCHOR = 'link'

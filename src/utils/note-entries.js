@@ -1,5 +1,5 @@
 import { findAllBlocks, getBlockPreview } from '@/utils/block-refs'
-import { getAliases, resolveWikiLinkTarget } from '@/utils/wiki-links'
+import { getAliases, resolveWikiLinkDetails, resolveWikiLinkTarget } from '@/utils/wiki-links'
 
 import { WIKI_LINK_SUGGESTION_LIMIT } from '@/constants/wiki-links'
 
@@ -81,6 +81,14 @@ export const resolveLinkTargets = (entries, targets) => {
 
     return Object.fromEntries(targets.map((target) => (
         [target, !!resolveWikiLinkTarget(target, notes, notePaths)]
+    )))
+}
+
+export const resolveLinkDetails = (entries, targets, selfPath) => {
+    const { notes, notePaths } = getEntryResolverInputs(entries)
+
+    return Object.fromEntries(targets.map((target) => (
+        [target, resolveWikiLinkDetails(target, notes, notePaths, selfPath)]
     )))
 }
 

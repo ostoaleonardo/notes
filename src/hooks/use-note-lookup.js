@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useBlockLoader } from './use-block-loader'
 import { useNoteEntries } from './use-note-entries'
 import { useStableCallback } from './use-stable-callback'
-import { resolveLinkTargets, searchNoteEntries } from '@/utils/note-entries'
+import { resolveLinkDetails, resolveLinkTargets, searchNoteEntries } from '@/utils/note-entries'
 
 export function useNoteLookup(selfId) {
     const entries = useNoteEntries()
@@ -14,8 +14,17 @@ export function useNoteLookup(selfId) {
     }
 
     const onResolveLinks = useStableCallback(async (targets) => resolveLinkTargets(entries, targets))
+    const onResolveLinkDetails = useStableCallback(async (targets) => (
+        resolveLinkDetails(entries, targets, selfId)
+    ))
     const onSearchNotes = useStableCallback(async (query) => searchNoteEntries(entries, query))
     const onLoadBlocks = useBlockLoader(selfId, entries)
 
-    return { linkVersion: tracked.version, onResolveLinks, onSearchNotes, onLoadBlocks }
+    return {
+        linkVersion: tracked.version,
+        onResolveLinks,
+        onResolveLinkDetails,
+        onSearchNotes,
+        onLoadBlocks
+    }
 }

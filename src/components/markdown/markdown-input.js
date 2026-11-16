@@ -86,7 +86,14 @@ export const MarkdownInput = ({
         if (value === WIKI_LINK_FORMATS.MARKDOWN) setLinkFormat(WIKI_LINK_FORMATS.MARKDOWN)
     })
 
-    const { linkVersion, onResolveLinks, onSearchNotes, onLoadBlocks } = useNoteLookup(id)
+    const {
+        linkVersion,
+        onResolveLinks,
+        onResolveLinkDetails,
+        onSearchNotes,
+        onLoadBlocks
+    } = useNoteLookup(id)
+
     const onCreateBlockId = useBlockIdCreator()
 
     const { previewValue, mediaMapEntries, backlinksHtml } = useEditorPreview({ id, mode, value, showBacklinks })
@@ -153,6 +160,7 @@ export const MarkdownInput = ({
                     onCreateBlockId={onCreateBlockId}
                     onLoadBlocks={onLoadBlocks}
                     onResolveLinks={onResolveLinks}
+                    onResolveLinkDetails={onResolveLinkDetails}
                     onSearchNotes={onSearchNotes}
                     onImagePress={onImagePress}
                     onToggleTask={onToggleTask}
