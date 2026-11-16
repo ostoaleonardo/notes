@@ -4,6 +4,7 @@ set -euo pipefail
 PACKAGE=${PACKAGE:-com.monospace.notes}
 RUNS=${RUNS:-5}
 WAIT=${WAIT:-10}
+MARK=${MARK:-editor-ready}
 OUT=${OUT:-}
 SCENARIOS=${*:-new daily}
 ADB=(adb)
@@ -15,10 +16,10 @@ measure() {
     sleep 1.5
     "${ADB[@]}" shell am start -a android.intent.action.VIEW -d "notes://notes/$1" >/dev/null
     sleep "$WAIT"
-    "${ADB[@]}" logcat -d -v epoch ActivityTaskManager:I ReactNativeJS:V '*:S' | awk '
+    "${ADB[@]}" logcat -d -v epoch ActivityTaskManager:I ReactNativeJS:V '*:S' | awk -v mark="$MARK" '
         { t = $1 + 0 }
         !start && /START u0/ && /VIEW/ { start = t }
-        start && !ready && /\[perf\] editor-ready/ && t > start { ready = t }
+        start && !ready && index($0, "[perf] " mark) && t > start { ready = t }
         END { if (start && ready) printf "%d\n", (ready - start) * 1000; else print "NA" }'
 }
 

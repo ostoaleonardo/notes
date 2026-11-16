@@ -9,6 +9,7 @@ import { katexCss } from './markdown-dom-katex-css'
 import { TitleSection } from './markdown-dom-widgets'
 import { buildPreviewCss } from './markdown-dom-preview-css'
 import { renderReadHtml } from './markdown-dom-render-html'
+import { PERF_MARK_READ_PAINTED } from '@/constants/perf-marks'
 import { linksReset } from './link-resolution'
 import { useCodeLanguages } from './use-code-languages'
 import { runAction } from './markdown-dom-commands'
@@ -51,6 +52,7 @@ export default function MarkdownDomEditor({
     onFocus,
     onBlur,
     onReady,
+    onPerfMark,
     onLinkPress,
     onTagPress,
     onCreateBlockId,
@@ -238,6 +240,16 @@ export default function MarkdownDomEditor({
     )
 
     usePdfEmbeds(previewRef, html)
+
+    const onPerfMarkRef = useLatestRef(onPerfMark)
+
+    useEffect(() => {
+        if (!html || !onPerfMarkRef.current) return
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => onPerfMarkRef.current?.(PERF_MARK_READ_PAINTED))
+        })
+    }, [html, onPerfMarkRef])
 
     const scrollToTarget = useEffectEvent(() => {
         if ((!anchor && headingIndex == null) || !fontsReady) return

@@ -28,7 +28,7 @@ import { buildTableLabels } from '@/utils/table-labels'
 
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { MATH_DELIMITER } from '@/constants/markdown-math'
-import { PERF_MARK_EDITOR_READY } from '@/constants/perf-marks'
+import { PERF_MARKS_ENABLED, PERF_MARK_EDITOR_READY } from '@/constants/perf-marks'
 import { STORAGE_KEYS } from '@/constants/storage-keys'
 import { WIKI_LINK_FORMATS } from '@/constants/wiki-links'
 
@@ -147,6 +147,7 @@ export const MarkdownInput = ({
                     onFocus={onFocus}
                     onBlur={onBlur}
                     onReady={onReady}
+                    onPerfMark={PERF_MARKS_ENABLED ? perfMark : undefined}
                     onLinkPress={onLinkPress}
                     onTagPress={onTagPress}
                     onCreateBlockId={onCreateBlockId}
