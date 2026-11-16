@@ -11,8 +11,8 @@ import {
     buildPropertyValueStyle
 } from '@/features/editor/dom/markdown-dom-panel-theme'
 
-import { CLOSE_ICON_PATH } from '@/constants/icon-paths'
-import { ICON_SIZE, OPACITY } from '@/constants/theme'
+import { CLOSE_ICON_PATH } from '@/shared/constants/icon-paths'
+import { ICON_SIZE, OPACITY } from '@/shared/constants/theme'
 import {
     PROPERTY_CHANGES,
     PROPERTY_INPUT_TYPES,

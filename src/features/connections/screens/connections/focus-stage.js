@@ -8,11 +8,11 @@ import { FocusNode } from './focus-node'
 import { LoadingOverlay } from '@/ui/layout'
 import { Typography } from '@/ui/typography'
 
-import { entityKey } from '@/utils/connection-model'
-import { layoutFocusRing } from '@/utils/focus-navigation'
+import { entityKey } from '@/shared/utils/connection-model'
+import { layoutFocusRing } from '@/shared/utils/focus-navigation'
 
-import { FOCUS } from '@/constants/connections'
-import { OPACITY, SPACING } from '@/constants/theme'
+import { FOCUS } from '@/shared/constants/connections'
+import { OPACITY, SPACING } from '@/shared/constants/theme'
 
 export const FocusStage = memo(({
     focus,

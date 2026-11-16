@@ -6,7 +6,7 @@ import {
     SNIPPET_MAX_LENGTH,
     TASK_OPERATORS,
     UNIT_OPERATORS
-} from '@/constants/search-query'
+} from '@/shared/constants/search-query'
 
 const SCOPED_OPERATORS = [
     SEARCH_OPERATORS.CONTENT,

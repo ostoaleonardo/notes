@@ -1,6 +1,6 @@
-import { sortNotes } from '../../../utils/note-sort'
+import { sortNotes } from '../../../shared/utils/note-sort'
 
-import { DRAWER_ITEM_TYPES } from '@/constants/drawer-views'
+import { DRAWER_ITEM_TYPES } from '@/shared/constants/drawer-views'
 
 const createNode = (repository, notes, sort, subfolders) => {
     let sorted = null

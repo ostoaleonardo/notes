@@ -2,15 +2,15 @@ import { useCallback, useState } from 'react'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 
-import { useMenuAction } from '../../../../hooks/use-menu-action'
-import { useNotes } from '../../../../hooks/use-notes'
-import { useStorage } from '../../../../hooks/use-storage'
+import { useMenuAction } from '../../../../shared/hooks/use-menu-action'
+import { useNotes } from '../../../../shared/hooks/use-notes'
+import { useStorage } from '../../../../shared/hooks/use-storage'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
-import { readDeleteBehavior } from '@/utils/delete-note-files'
+import { readDeleteBehavior } from '@/shared/utils/delete-note-files'
 
-import { DEFAULT_DELETE_BEHAVIOR } from '@/constants/delete-behavior'
-import { LOG_MESSAGES } from '@/constants/log-messages'
-import { logError } from '@/utils/log-error'
+import { DEFAULT_DELETE_BEHAVIOR } from '@/shared/constants/delete-behavior'
+import { LOG_MESSAGES } from '@/shared/constants/log-messages'
+import { logError } from '@/shared/utils/log-error'
 
 export function useNoteDelete(id, busyRef) {
     const { t } = useTranslation()

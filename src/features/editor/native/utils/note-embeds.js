@@ -1,5 +1,5 @@
 import { extractEmbedSource } from './embed-source'
-import { resolveWikiLink } from '../../../../utils/wiki-links'
+import { resolveWikiLink } from '../../../../shared/utils/wiki-links'
 
 export const loadEmbedNotes = (targets, { notes, notePaths, selfPath }) => Object.fromEntries(
     targets.map((target) => {

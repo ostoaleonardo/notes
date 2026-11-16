@@ -10,11 +10,11 @@ import {
     CUSTOM_TASK_LIVE_CLASS,
     CUSTOM_TASK_MARKER_LENGTH,
     TASK_UNCHECKED_MARK
-} from '@/constants/tasks'
+} from '@/shared/constants/tasks'
 import {
     CUSTOM_TASK_STATUS_OFFSET,
     NOTE_NODES
-} from '@/constants/note-syntax'
+} from '@/shared/constants/note-syntax'
 
 class CustomTaskWidget extends WidgetType {
     constructor(status, from, to) {

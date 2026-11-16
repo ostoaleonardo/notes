@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
 
-import { useFileStorage } from '../../../../hooks/use-file-storage'
-import { useRepositories } from '../../../../hooks/use-repositories'
-import { buildMediaUris } from '@/utils/attachments'
-import { getAttachmentEntries } from '@/utils/media-index'
+import { useFileStorage } from '../../../../shared/hooks/use-file-storage'
+import { useRepositories } from '../../../../shared/hooks/use-repositories'
+import { buildMediaUris } from '@/shared/utils/attachments'
+import { getAttachmentEntries } from '@/shared/utils/media-index'
 
 export const useMediaUris = () => {
     const { activeRepository, getRootRepository } = useRepositories()

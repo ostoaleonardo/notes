@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 
 import { CardGrid } from './card-grid'
 
-import { useLanguage } from '@/hooks/use-language'
+import { useLanguage } from '@/shared/hooks/use-language'
 import { getPreviewNote } from '@/features/editor/native/utils/preview-note'
-import { renderTemplate } from '@/utils/render-template'
+import { renderTemplate } from '@/shared/utils/render-template'
 
 import { TEMPLATE_CARD_PREVIEW_LINES } from '@/features/editor/native/constants/note-preview'
 

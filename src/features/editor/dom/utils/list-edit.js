@@ -1,4 +1,4 @@
-import { LIST_INDENT, LIST_LINE_PATTERN, NEW_CHECKBOX, ORDERED_MARKER_PATTERN } from '@/constants/markdown-patterns'
+import { LIST_INDENT, LIST_LINE_PATTERN, NEW_CHECKBOX, ORDERED_MARKER_PATTERN } from '@/shared/constants/markdown-patterns'
 
 export const getListEnterEdit = (text, offset) => {
     const match = text.match(LIST_LINE_PATTERN)

@@ -11,7 +11,7 @@ import { IconButton } from '@/ui/button/icon-button'
 
 import { MarkdownGroupSheet } from './markdown-group-sheet'
 
-import { useBottomSheet } from '@/hooks/use-bottom-sheet'
+import { useBottomSheet } from '@/shared/hooks/use-bottom-sheet'
 
 import { NoteStack } from '@/icons/note-stack'
 import { Redo } from '@/icons/redo'
@@ -20,11 +20,11 @@ import { Shapes } from '@/icons/shapes'
 import { Undo } from '@/icons/undo'
 
 import { MARKDOWN_CONTROLS, MARKDOWN_GROUPS } from '@/features/editor/native/constants/markdown-controls'
-import { EDITOR_MODES } from '@/constants/editor-modes'
-import { TEMPLATE_SCOPE, TOOLBAR_BUTTON_KEYS } from '@/constants/toolbar'
-import { DIVIDER, SPACING } from '@/constants/theme'
-import { TEST_IDS } from '@/constants/test-ids'
-import { MARKDOWN_ACTIONS } from '@/constants/markdown-actions'
+import { EDITOR_MODES } from '@/shared/constants/editor-modes'
+import { TEMPLATE_SCOPE, TOOLBAR_BUTTON_KEYS } from '@/shared/constants/toolbar'
+import { DIVIDER, SPACING } from '@/shared/constants/theme'
+import { TEST_IDS } from '@/shared/constants/test-ids'
+import { MARKDOWN_ACTIONS } from '@/shared/constants/markdown-actions'
 
 export const MarkdownToolbar = memo(({
     mode,

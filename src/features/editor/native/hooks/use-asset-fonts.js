@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { Asset } from 'expo-asset'
 import { File } from 'expo-file-system'
 
-import { logError } from '@/utils/log-error'
+import { logError } from '@/shared/utils/log-error'
 
-import { LOG_MESSAGES } from '@/constants/log-messages'
+import { LOG_MESSAGES } from '@/shared/constants/log-messages'
 
 const NO_FONTS = {}
 

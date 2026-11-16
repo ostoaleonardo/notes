@@ -5,7 +5,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 
 import { Close } from '@/icons/close'
 
-import { ICON_SIZE } from '@/constants/theme'
+import { ICON_SIZE } from '@/shared/constants/theme'
 
 export const SearchRemoveAction = ({ onPress }) => {
     const { t } = useTranslation()

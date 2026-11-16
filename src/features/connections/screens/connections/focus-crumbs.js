@@ -7,9 +7,9 @@ import { useTheme } from '@/ui/hooks/use-theme'
 
 import { ChevronRight } from '@/ui/icons/chevron-right'
 
-import { FOCUS } from '@/constants/connections'
-import { ICON_SIZE, SPACING } from '@/constants/theme'
-import { TRANSPARENT } from '@/constants/themes'
+import { FOCUS } from '@/shared/constants/connections'
+import { ICON_SIZE, SPACING } from '@/shared/constants/theme'
+import { TRANSPARENT } from '@/shared/constants/themes'
 
 const Crumb = memo(({
     entity,

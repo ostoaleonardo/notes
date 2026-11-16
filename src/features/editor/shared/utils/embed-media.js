@@ -5,9 +5,9 @@ import {
     EMBED_PDF_PAGE_PATTERN,
     EMBED_PDF_PATTERN,
     EMBED_VIDEO_PATTERN
-} from '@/constants/embeds'
-import { FILE_KINDS } from '@/constants/file-types'
-import { WIKI_LINK_ANCHOR_SEPARATOR } from '@/constants/wiki-links'
+} from '@/shared/constants/embeds'
+import { FILE_KINDS } from '@/shared/constants/file-types'
+import { WIKI_LINK_ANCHOR_SEPARATOR } from '@/shared/constants/wiki-links'
 
 const getKind = (name) => {
     if (EMBED_IMAGE_PATTERN.test(name)) return FILE_KINDS.IMAGE

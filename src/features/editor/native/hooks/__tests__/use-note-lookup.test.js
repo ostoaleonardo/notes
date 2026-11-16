@@ -4,7 +4,7 @@ import { useNoteLookup } from '../use-note-lookup'
 
 let mockNotes = []
 
-jest.mock('../../../../../hooks/use-notes', () => ({
+jest.mock('../../../../../shared/hooks/use-notes', () => ({
     useNotes: () => ({
         notes: mockNotes,
         notePaths: new Map(mockNotes.map((note) => [note.path, 'work'])),

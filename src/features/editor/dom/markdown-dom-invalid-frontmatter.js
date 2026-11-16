@@ -2,7 +2,7 @@ import { RangeSetBuilder } from '@codemirror/state'
 import { Decoration } from '@codemirror/view'
 
 import { buildDocDecorationsPlugin } from './markdown-dom-doc-decorations'
-import { parseFrontmatter } from '@/utils/frontmatter'
+import { parseFrontmatter } from '@/shared/utils/frontmatter'
 
 const buildInvalidFrontmatterDecorations = (view, backgroundColor) => {
     const builder = new RangeSetBuilder()

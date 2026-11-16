@@ -13,8 +13,8 @@ import { FormatListBulleted } from '@/icons/format-list-bulleted'
 import { Link } from '@/icons/link'
 import { OpenInNew } from '@/icons/open-in-new'
 
-import { ANIMATION_DURATION } from '@/constants/theme'
-import { TEST_IDS } from '@/constants/test-ids'
+import { ANIMATION_DURATION } from '@/shared/constants/theme'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 const DetailRow = memo(({
     title,

@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 
-import { buildNoteFileContent, decomposeNoteFileContent } from '@/utils/frontmatter'
+import { buildNoteFileContent, decomposeNoteFileContent } from '@/shared/utils/frontmatter'
 
 export function useCodeMode({ content, update }) {
     const [codeBuffer, setCodeBuffer] = useState('')

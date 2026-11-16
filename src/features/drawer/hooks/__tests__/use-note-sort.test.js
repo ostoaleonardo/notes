@@ -1,17 +1,17 @@
 import { act, renderHook } from '@testing-library/react-native'
 
 import { useNoteSort } from '../use-note-sort'
-import { DEFAULT_NOTE_SORT, NOTE_SORTS } from '@/constants/note-sort'
-import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { DEFAULT_NOTE_SORT, NOTE_SORTS } from '@/shared/constants/note-sort'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
 
 const mockSetItem = jest.fn()
 const mockUseStorageEffect = jest.fn()
 
-jest.mock('../../../../hooks/use-storage', () => ({
+jest.mock('../../../../shared/hooks/use-storage', () => ({
     useStorage: () => ({ setItem: mockSetItem })
 }))
 
-jest.mock('../../../../hooks/use-storage-effect', () => ({
+jest.mock('../../../../shared/hooks/use-storage-effect', () => ({
     useStorageEffect: (...args) => mockUseStorageEffect(...args)
 }))
 

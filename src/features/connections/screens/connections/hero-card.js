@@ -5,8 +5,8 @@ import { CircularProgressIndicator } from '@/ui/circular-progress-indicator'
 import { Typography } from '@/ui/typography'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { SUMMARY_CARD } from '@/constants/connections'
-import { RADIUS, SPACING } from '@/constants/theme'
+import { SUMMARY_CARD } from '@/shared/constants/connections'
+import { RADIUS, SPACING } from '@/shared/constants/theme'
 
 export const HeroCard = memo(({
     progress,

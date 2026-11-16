@@ -4,12 +4,12 @@ import { renderMarkdownRaw } from '@/features/editor/shared/markdown-dom-render-
 import { resolveEmbeds } from '@/features/editor/native/utils/embeds'
 import { replaceLocalImageUrls } from '@/features/editor/shared/utils/local-images'
 import { sanitizeHtml } from '@/features/editor/native/utils/sanitize-html'
-import { escapeHtml, unwrapWikiLinks } from '@/utils/wiki-links'
+import { escapeHtml, unwrapWikiLinks } from '@/shared/utils/wiki-links'
 
-import { COLORS, THEMES } from '@/constants/themes'
-import { FONTS } from '@/constants/theme'
-import { DEFAULT_HEADING_FONT } from '@/constants/heading-fonts'
-import { getHeadingFontFamily, toCssHeadingFamily } from '@/utils/heading-font'
+import { COLORS, THEMES } from '@/shared/constants/themes'
+import { FONTS } from '@/shared/constants/theme'
+import { DEFAULT_HEADING_FONT } from '@/shared/constants/heading-fonts'
+import { getHeadingFontFamily, toCssHeadingFamily } from '@/shared/utils/heading-font'
 import { EXPORT_FONT_SIZE, EXPORT_CONTENT_SECURITY_POLICY } from '@/features/editor/native/constants/export'
 
 const NO_MEDIA = () => null

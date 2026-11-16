@@ -7,12 +7,12 @@ import { Section } from '@/ui/section'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 
 import { useToggleMode } from '@/features/settings/hooks/use-toggle-mode'
-import { usePro } from '@/hooks/use-pro'
-import { isAccentAllowed, toggleAccentSelection } from '@/utils/accent'
+import { usePro } from '@/shared/hooks/use-pro'
+import { isAccentAllowed, toggleAccentSelection } from '@/shared/utils/accent'
 
-import { ACCENT_COLORS, THEME_COLORS } from '@/constants/themes'
-import { ACCENT_OPTIONS, THEME_OPTIONS } from '@/constants/theme-options'
-import { SPACING } from '@/constants/theme'
+import { ACCENT_COLORS, THEME_COLORS } from '@/shared/constants/themes'
+import { ACCENT_OPTIONS, THEME_OPTIONS } from '@/shared/constants/theme-options'
+import { SPACING } from '@/shared/constants/theme'
 
 export const ThemeOption = () => {
     const { t } = useTranslation()

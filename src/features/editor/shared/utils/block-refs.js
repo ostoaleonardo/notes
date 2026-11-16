@@ -7,10 +7,10 @@ import {
     BLOCK_NON_TARGET_PATTERN,
     BLOCK_PREVIEW_MAX_LENGTH,
     LIST_ITEM_PATTERN
-} from '@/constants/block-refs'
-import { LEADING_WHITESPACE_PATTERN } from '@/constants/markdown-patterns'
+} from '@/shared/constants/block-refs'
+import { LEADING_WHITESPACE_PATTERN } from '@/shared/constants/markdown-patterns'
 
-import { getCodeRanges } from '@/utils/outside-code'
+import { getCodeRanges } from '@/shared/utils/outside-code'
 
 const getIndent = (line) => line.match(LEADING_WHITESPACE_PATTERN)[0].length
 

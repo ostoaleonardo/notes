@@ -1,11 +1,11 @@
 import { useContext } from 'react'
 
-import { useStorage } from '../../../hooks/use-storage'
-import { usePro } from '../../../hooks/use-pro'
-import { ThemeContext } from '@/context/theme-context'
-import { isAccentAllowed } from '@/utils/accent'
+import { useStorage } from '../../../shared/hooks/use-storage'
+import { usePro } from '../../../shared/hooks/use-pro'
+import { ThemeContext } from '@/shared/context/theme-context'
+import { isAccentAllowed } from '@/shared/utils/accent'
 
-import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
 
 export function useToggleMode() {
     const {

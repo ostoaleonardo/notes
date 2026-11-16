@@ -1,6 +1,6 @@
-import { GRAPH_NODE } from '@/constants/connections'
-import { CONNECTION_NODE_KINDS } from '@/constants/connections'
-import { TRANSPARENT } from '@/constants/themes'
+import { GRAPH_NODE } from '@/shared/constants/connections'
+import { CONNECTION_NODE_KINDS } from '@/shared/constants/connections'
+import { TRANSPARENT } from '@/shared/constants/themes'
 
 export const getNodePalette = (
     { kind, missing },

@@ -18,7 +18,7 @@ jest.mock('@/features/editor/native/utils/media-size', () => ({
     isEmbeddableMedia: (...args) => mockIsEmbeddable(...args)
 }))
 
-jest.mock('@/utils/log-error', () => ({
+jest.mock('@/shared/utils/log-error', () => ({
     logError: jest.fn()
 }))
 

@@ -1,14 +1,14 @@
 import { useCallback } from 'react'
 
-import { useDailyNote } from '../../../hooks/use-daily-note'
-import { useNotes } from '../../../hooks/use-notes'
-import { getDailyNoteTitle } from '@/utils/daily-note'
-import { getEditorPath } from '@/utils/editor-path'
-import { logError } from '@/utils/log-error'
-import { pushOnce } from '@/utils/navigation'
-import { appendSharedContent } from '@/utils/shared-note'
+import { useDailyNote } from '../../../shared/hooks/use-daily-note'
+import { useNotes } from '../../../shared/hooks/use-notes'
+import { getDailyNoteTitle } from '@/shared/utils/daily-note'
+import { getEditorPath } from '@/shared/utils/editor-path'
+import { logError } from '@/shared/utils/log-error'
+import { pushOnce } from '@/shared/utils/navigation'
+import { appendSharedContent } from '@/shared/utils/shared-note'
 
-import { LOG_MESSAGES } from '@/constants/log-messages'
+import { LOG_MESSAGES } from '@/shared/constants/log-messages'
 
 const reportError = (error) => logError(LOG_MESSAGES.ERROR_SHARING_TEXT, error)
 

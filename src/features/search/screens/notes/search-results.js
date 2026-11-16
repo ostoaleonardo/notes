@@ -6,8 +6,8 @@ import { SearchResultRow } from './search-result-row'
 import { AnimatedList } from '@/ui/animated/animated-list'
 import { AnimatedView } from '@/ui/animated/animated-view'
 import { GroupedList } from '@/ui/grouped-list'
-import { BOTTOM_GAP, SPACING } from '@/constants/theme'
-import { TEST_IDS } from '@/constants/test-ids'
+import { BOTTOM_GAP, SPACING } from '@/shared/constants/theme'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 const getNotePath = (note) => note.path
 

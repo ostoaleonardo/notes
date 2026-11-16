@@ -7,7 +7,7 @@ import { DialogText } from '@/ui/dialog-text'
 import { FilledButton } from '@/ui/button/filled-button'
 import { OutlinedButton } from '@/ui/button/outlined-button'
 
-import { SPACING } from '@/constants/theme'
+import { SPACING } from '@/shared/constants/theme'
 
 const COLUMN_MODIFIERS = [fillMaxWidth()]
 const COLUMN_ARRANGEMENT = { spacedBy: SPACING.sm }

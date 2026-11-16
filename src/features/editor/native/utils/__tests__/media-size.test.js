@@ -1,6 +1,6 @@
 import { isEmbeddableMedia } from '../media-size'
 
-import { EMBED_MEDIA_MAX_BYTES } from '@/constants/embeds'
+import { EMBED_MEDIA_MAX_BYTES } from '@/shared/constants/embeds'
 
 const mockSizes = new Map()
 

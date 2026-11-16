@@ -1,9 +1,9 @@
-import { escapeHtml, findBacklinks, getAliases } from '@/utils/wiki-links'
-import { mapOutsideCode } from '@/utils/outside-code'
+import { escapeHtml, findBacklinks, getAliases } from '@/shared/utils/wiki-links'
+import { mapOutsideCode } from '@/shared/utils/outside-code'
 
-import { WIKI_LINK_SCHEME } from '@/constants/wiki-links'
-import { EMPTY_NOTE_PATHS } from '@/constants/note-paths'
-import { REGEXP_SPECIAL_CHARS_PATTERN } from '@/constants/markdown-patterns'
+import { WIKI_LINK_SCHEME } from '@/shared/constants/wiki-links'
+import { EMPTY_NOTE_PATHS } from '@/shared/constants/note-paths'
+import { REGEXP_SPECIAL_CHARS_PATTERN } from '@/shared/constants/markdown-patterns'
 import {
     BACKLINKS_CLASS,
     BACKLINKS_TITLE_CLASS,
@@ -12,7 +12,7 @@ import {
     MENTIONS_CLASS,
     MENTION_ROW_CLASS,
     MENTION_ACTION_CLASS
-} from '@/constants/backlinks'
+} from '@/shared/constants/backlinks'
 import {
     LINK_MENTION_SCHEME,
     MENTION_WORD_CHARS,

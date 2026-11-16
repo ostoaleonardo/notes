@@ -5,12 +5,12 @@ import { MenuGroup } from '@/ui/menu/menu-group'
 import { SelectMenuItem } from '@/ui/menu/select-menu-item'
 import { DrawerToolbarButton } from './drawer-toolbar'
 
-import { useMenuAction } from '@/hooks/use-menu-action'
+import { useMenuAction } from '@/shared/hooks/use-menu-action'
 
 import { SortByAlpha } from '@/icons/sort-by-alpha'
 
-import { NOTE_SORT_LABELS } from '@/constants/note-sort'
-import { TEST_IDS } from '@/constants/test-ids'
+import { NOTE_SORT_LABELS } from '@/shared/constants/note-sort'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 import { getMenuItemTestId } from '@/ui/utils/test-ids'
 
 const SORT_OPTIONS = Object.keys(NOTE_SORT_LABELS)

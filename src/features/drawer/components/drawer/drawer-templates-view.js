@@ -8,12 +8,12 @@ import { DrawerTemplatesEmpty } from './drawer-empty'
 import { DrawerLevelNote } from './drawer-level-note'
 import { DrawerTemplateFolderItem } from './drawer-template-folder-item'
 
-import { useCurrentNote } from '@/hooks/use-current-note'
-import { useRepositories } from '@/hooks/use-repositories'
-import { useTemplatesList } from '@/hooks/use-templates-list'
-import { useUtils } from '@/hooks/use-utils'
-import { openEditor } from '@/utils/open-editor'
-import { flattenTemplateTree } from '@/utils/template-path'
+import { useCurrentNote } from '@/shared/hooks/use-current-note'
+import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useTemplatesList } from '@/shared/hooks/use-templates-list'
+import { useUtils } from '@/shared/hooks/use-utils'
+import { openEditor } from '@/shared/utils/open-editor'
+import { flattenTemplateTree } from '@/shared/utils/template-path'
 
 import { CreateNewFolder } from '@/icons/create-new-folder'
 import { Add } from '@/icons/add'
@@ -21,9 +21,9 @@ import { CollapseAll } from '@/icons/collapse-all'
 import { ExpandAll } from '@/icons/expand-all'
 
 import { REPOSITORY_ACTIONS } from '@/features/drawer/constants/repository-actions'
-import { TEMPLATE_FOLDER_KEY_PREFIX, TEMPLATE_TAB_PREFIX } from '@/constants/tabs'
-import { DRAWER_ITEM_TYPES, DRAWER_TOOLBAR_KEYS } from '@/constants/drawer-views'
-import { TEST_IDS } from '@/constants/test-ids'
+import { TEMPLATE_FOLDER_KEY_PREFIX, TEMPLATE_TAB_PREFIX } from '@/shared/constants/tabs'
+import { DRAWER_ITEM_TYPES, DRAWER_TOOLBAR_KEYS } from '@/shared/constants/drawer-views'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 export const DrawerTemplatesView = ({ closeDrawer }) => {
     const { t } = useTranslation()

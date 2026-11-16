@@ -59,14 +59,14 @@ jest.mock('expo-file-system', () => {
 jest.mock('@/ui/snackbar/snackbar-host', () => ({
     showSnackbar: jest.fn()
 }))
-jest.mock('@/utils/log-error', () => ({
+jest.mock('@/shared/utils/log-error', () => ({
     logError: jest.fn()
 }))
 jest.mock('@/features/editor/native/utils/export-html', () => ({
     getExportMarkdown: jest.fn(() => ''),
     getNoteAsHtml: jest.fn(() => '<html>note</html>')
 }))
-jest.mock('../../../../../hooks/use-notes', () => ({
+jest.mock('../../../../../shared/hooks/use-notes', () => ({
     useNotes: () => ({
         getNote: () => mockNote,
         notes: [mockNote],

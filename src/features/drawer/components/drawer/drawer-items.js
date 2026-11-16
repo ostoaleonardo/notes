@@ -12,8 +12,8 @@ import { DrawerFilesView } from './drawer-files-view'
 import { DrawerViewSwitcher } from './drawer-view-switcher'
 
 import { useDrawerMounted } from '@/features/drawer/hooks/use-drawer-mounted'
-import { useStorage } from '@/hooks/use-storage'
-import { useStorageEffect } from '@/hooks/use-storage-effect'
+import { useStorage } from '@/shared/hooks/use-storage'
+import { useStorageEffect } from '@/shared/hooks/use-storage-effect'
 
 import { FolderCode } from '@/icons/folder-code'
 import { Settings } from '@/icons/settings'
@@ -24,12 +24,12 @@ import {
     DRAWER_ACTIONS,
     DRAWER_HISTORY_TYPE,
     DRAWER_VIEWS
-} from '@/constants/drawer-views'
-import { SPACING } from '@/constants/theme'
-import { ROUTES } from '@/constants/routes'
-import { TEST_IDS } from '@/constants/test-ids'
-import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { pushOnce } from '@/utils/navigation'
+} from '@/shared/constants/drawer-views'
+import { SPACING } from '@/shared/constants/theme'
+import { ROUTES } from '@/shared/constants/routes'
+import { TEST_IDS } from '@/shared/constants/test-ids'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
+import { pushOnce } from '@/shared/utils/navigation'
 
 const VIEW_COMPONENTS = {
     [DRAWER_VIEWS.NOTES]: DrawerNotesView,

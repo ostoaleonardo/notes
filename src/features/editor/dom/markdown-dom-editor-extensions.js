@@ -24,7 +24,7 @@ import { headingFoldService } from './markdown-dom-fold'
 import { pasteUrlOverSelection } from './markdown-dom-paste'
 import { markdownAutoPair } from './markdown-dom-auto-pair'
 import { codeLanguages } from './syntax-highlighting/code-languages'
-import { extensions } from '@/syntax/note-parser'
+import { extensions } from '@/features/syntax/note-parser'
 import { rememberEmittedValue } from '@/features/editor/shared/utils/emitted-values'
 
 const createHiddenSearchPanel = () => {

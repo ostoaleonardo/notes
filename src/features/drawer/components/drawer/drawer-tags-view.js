@@ -6,11 +6,11 @@ import { DrawerView } from './drawer-view'
 import { DrawerTagsEmpty } from './drawer-empty'
 import { TreeRow } from '@/ui/tree-row'
 
-import { useNotes } from '@/hooks/use-notes'
-import { useStorage } from '@/hooks/use-storage'
-import { useStorageEffect } from '@/hooks/use-storage-effect'
-import { toggleInSet } from '@/utils/toggle-in-set'
-import { buildTagTree, collectTagKeys, flattenTagTree } from '@/utils/drawer-tags'
+import { useNotes } from '@/shared/hooks/use-notes'
+import { useStorage } from '@/shared/hooks/use-storage'
+import { useStorageEffect } from '@/shared/hooks/use-storage-effect'
+import { toggleInSet } from '@/shared/utils/toggle-in-set'
+import { buildTagTree, collectTagKeys, flattenTagTree } from '@/shared/utils/drawer-tags'
 
 import { ArrowDownward } from '@/icons/arrow-downward'
 import { ArrowUpward } from '@/icons/arrow-upward'
@@ -18,11 +18,11 @@ import { CollapseAll } from '@/icons/collapse-all'
 import { ExpandAll } from '@/icons/expand-all'
 import { SortByAlpha } from '@/icons/sort-by-alpha'
 
-import { DEFAULT_TAG_SORT, TAG_SORT_LABELS, TAG_SORTS } from '@/constants/tags'
-import { OPACITY } from '@/constants/theme'
-import { DRAWER_TOOLBAR_KEYS } from '@/constants/drawer-views'
-import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { TEST_IDS } from '@/constants/test-ids'
+import { DEFAULT_TAG_SORT, TAG_SORT_LABELS, TAG_SORTS } from '@/shared/constants/tags'
+import { OPACITY } from '@/shared/constants/theme'
+import { DRAWER_TOOLBAR_KEYS } from '@/shared/constants/drawer-views'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 const TagRow = memo(({
     tagKey,

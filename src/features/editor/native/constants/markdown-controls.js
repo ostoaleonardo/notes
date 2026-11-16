@@ -25,8 +25,8 @@ import { Schedule } from '@/icons/schedule'
 import { Table } from '@/icons/table'
 import { Title } from '@/icons/title'
 
-import { TEMPLATE_SCOPE } from '@/constants/toolbar'
-import { MARKDOWN_ACTIONS } from '@/constants/markdown-actions'
+import { TEMPLATE_SCOPE } from '@/shared/constants/toolbar'
+import { MARKDOWN_ACTIONS } from '@/shared/constants/markdown-actions'
 
 const MARKDOWN_GROUP_KEYS = {
     HEADING: 'heading',

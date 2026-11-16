@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react'
 
-import { useStorage } from '../../../../hooks/use-storage'
-import { useStorageEffect } from '../../../../hooks/use-storage-effect'
+import { useStorage } from '../../../../shared/hooks/use-storage'
+import { useStorageEffect } from '../../../../shared/hooks/use-storage-effect'
 
-import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { STORAGE_BOOLEAN } from '@/constants/storage-values'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
+import { STORAGE_BOOLEAN } from '@/shared/constants/storage-values'
 
 export function useShowProperties() {
     const { setItem } = useStorage()

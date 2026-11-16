@@ -13,8 +13,8 @@ import {
     TABLE_GUTTER,
     TABLE_MENU_MIN_WIDTH
 } from '@/features/editor/dom/constants/table-widget'
-import { TRANSPARENT } from '@/constants/themes'
-import { RADIUS, SPACING, OPACITY, Z_INDEX, INLINE_CODE_STYLE, DOM_FONT_SIZE } from '@/constants/theme'
+import { TRANSPARENT } from '@/shared/constants/themes'
+import { RADIUS, SPACING, OPACITY, Z_INDEX, INLINE_CODE_STYLE, DOM_FONT_SIZE } from '@/shared/constants/theme'
 import { LEZER_NODES } from '@/features/editor/dom/constants/lezer-nodes'
 
 export const decorateTable = (node, context) => {

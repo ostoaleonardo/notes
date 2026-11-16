@@ -6,9 +6,9 @@ import { AnimatedView } from '@/ui/animated/animated-view'
 import { Typography } from '@/ui/typography'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { RADIUS, SPACING, OPACITY, BORDER_WIDTH } from '@/constants/theme'
+import { RADIUS, SPACING, OPACITY, BORDER_WIDTH } from '@/shared/constants/theme'
 import { CARD_PREVIEW_LINES } from '@/features/editor/native/constants/note-preview'
-import { CARD_GRID } from '@/constants/components'
+import { CARD_GRID } from '@/shared/constants/components'
 import { TINT } from '@/ui/tokens/transparent'
 
 export const CardGridItem = memo(({

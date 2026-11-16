@@ -3,9 +3,9 @@ import { EditorView } from '@codemirror/view'
 import { buildDerivedColors } from './markdown-dom-derived-colors'
 import { buildLiveFormattingTheme } from './live-formatting/live-formatting'
 
-import { RADIUS, OPACITY } from '@/constants/theme'
-import { INLINE_TAG_CLASS } from '@/constants/tags'
-import { TRANSPARENT } from '@/constants/themes'
+import { RADIUS, OPACITY } from '@/shared/constants/theme'
+import { INLINE_TAG_CLASS } from '@/shared/constants/tags'
+import { TRANSPARENT } from '@/shared/constants/themes'
 
 export const buildEditorTheme = ({ colors, typography }) => {
     const derived = buildDerivedColors(colors)

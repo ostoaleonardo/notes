@@ -1,4 +1,4 @@
-import { WORD_PATTERN } from '@/constants/markdown-patterns'
+import { WORD_PATTERN } from '@/shared/constants/markdown-patterns'
 
 export const countWords = (text = '') => {
     let words = 0

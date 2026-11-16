@@ -1,6 +1,6 @@
 import { parseEmbedMedia } from '../embed-media'
 
-import { FILE_KINDS } from '@/constants/file-types'
+import { FILE_KINDS } from '@/shared/constants/file-types'
 
 describe('parse embed media', () => {
     test('recognizes images including avif', () => {

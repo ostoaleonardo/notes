@@ -2,7 +2,7 @@ import { waitFor, renderHook } from '@testing-library/react-native'
 
 import { useVersionDiff } from '../use-version-diff'
 
-import { DIFF_TYPES } from '@/constants/diff'
+import { DIFF_TYPES } from '@/shared/constants/diff'
 
 const currentContentRef = { current: { content: 'one\ntwo' } }
 

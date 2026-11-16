@@ -8,7 +8,7 @@ import {
     buildPropertyRows,
     buildPropertySuggestions
 } from '@/features/editor/shared/utils/properties'
-import { hasTag, isValidTagName, sanitizeTagName } from '@/utils/tag-names'
+import { hasTag, isValidTagName, sanitizeTagName } from '@/shared/utils/tag-names'
 
 import { EDITABLE_PROPERTY_TYPES } from '@/features/editor/shared/constants/properties'
 

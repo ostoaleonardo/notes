@@ -17,7 +17,7 @@ import sv from '@/translations/sv.json'
 import tr from '@/translations/tr.json'
 import uk from '@/translations/uk.json'
 
-import { DEFAULT_LANGUAGE } from '@/constants/languages'
+import { DEFAULT_LANGUAGE } from '@/shared/constants/languages'
 
 const languageResources = {
     ar: { translation: ar },

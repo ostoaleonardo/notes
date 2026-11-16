@@ -2,8 +2,8 @@ import { File } from 'expo-file-system'
 
 import { parseEmbedMedia } from '../../shared/utils/embed-media'
 
-import { EMBED_MEDIA_MAX_BYTES } from '@/constants/embeds'
-import { FILE_KINDS } from '@/constants/file-types'
+import { EMBED_MEDIA_MAX_BYTES } from '@/shared/constants/embeds'
+import { FILE_KINDS } from '@/shared/constants/file-types'
 
 export const isEmbeddableMedia = (name, uri) => {
     if (parseEmbedMedia(name).kind === FILE_KINDS.IMAGE) return true

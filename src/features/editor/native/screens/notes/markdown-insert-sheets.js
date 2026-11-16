@@ -5,7 +5,7 @@ import { TableMarkdown } from '@/features/editor/native/screens/modals/table-mar
 import { ImageMarkdown } from '@/features/editor/native/screens/modals/image-markdown'
 import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
 
-import { MARKDOWN_ACTIONS } from '@/constants/markdown-actions'
+import { MARKDOWN_ACTIONS } from '@/shared/constants/markdown-actions'
 
 export const MarkdownInsertSheets = memo(({
     linkSheet,

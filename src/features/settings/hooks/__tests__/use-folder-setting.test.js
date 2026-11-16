@@ -1,8 +1,8 @@
 import { act, renderHook, waitFor } from '@testing-library/react-native'
 
 import { useFolderSetting } from '../use-folder-setting'
-import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { SPACING } from '@/constants/theme'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
+import { SPACING } from '@/shared/constants/theme'
 
 const mockStorage = {
     getItem: jest.fn(),
@@ -15,10 +15,10 @@ const DESCENDANTS = [
     { id: 'b', alias: 'Beta', depth: 1 }
 ]
 
-jest.mock('../../../../hooks/use-storage', () => ({
+jest.mock('../../../../shared/hooks/use-storage', () => ({
     useStorage: () => mockStorage
 }))
-jest.mock('../../../../hooks/use-repositories', () => ({
+jest.mock('../../../../shared/hooks/use-repositories', () => ({
     useRepositories: () => ({
         activeRepository: ACTIVE,
         getDescendants: () => DESCENDANTS

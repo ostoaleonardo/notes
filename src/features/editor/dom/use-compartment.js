@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Compartment } from '@codemirror/state'
 
-import { useMemoByDeps } from '@/hooks/use-memo-by-deps'
+import { useMemoByDeps } from '@/shared/hooks/use-memo-by-deps'
 
 export const useCompartment = (viewRef, buildExtension, deps) => {
     const [compartment] = useState(() => new Compartment())

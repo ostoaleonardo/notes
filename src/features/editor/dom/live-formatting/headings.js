@@ -3,7 +3,7 @@ import { Decoration } from '@codemirror/view'
 import { isRangeSelected } from './utils'
 
 import { ATX_HEADING_LEVELS, SETEXT_HEADING_LEVELS } from '@/features/editor/dom/constants/markdown-live-formatting'
-import { HEADING_SCALE } from '@/constants/headings'
+import { HEADING_SCALE } from '@/shared/constants/headings'
 import { LEZER_NODES } from '@/features/editor/dom/constants/lezer-nodes'
 
 export const headingNodeNames = [

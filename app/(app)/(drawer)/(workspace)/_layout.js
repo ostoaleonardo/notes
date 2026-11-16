@@ -2,7 +2,7 @@ import { Stack } from 'expo-router'
 
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { getScreenContentStyle } from '@/utils/screen-content-style'
+import { getScreenContentStyle } from '@/shared/utils/screen-content-style'
 
 export default function WorkspaceLayout() {
     const { colors } = useTheme()

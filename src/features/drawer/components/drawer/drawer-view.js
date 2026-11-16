@@ -6,7 +6,7 @@ import { DrawerList } from './drawer-list'
 import { DrawerLoading } from './drawer-loading'
 import { DrawerToolbar, DrawerToolbarButton } from './drawer-toolbar'
 
-import { SPACING } from '@/constants/theme'
+import { SPACING } from '@/shared/constants/theme'
 
 export const DrawerView = memo(({
     data,

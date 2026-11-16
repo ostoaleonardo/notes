@@ -13,21 +13,21 @@ import { EmptyMessage } from '@/ui/modal/empty-message'
 import { Typography } from '@/ui/typography'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { useDelayedValue } from '@/hooks/use-delayed-value'
+import { useDelayedValue } from '@/shared/hooks/use-delayed-value'
 
 import { describeEntity } from '@/features/connections/utils/connection-caption'
-import { entityKey, listRelations } from '@/utils/connection-model'
+import { entityKey, listRelations } from '@/shared/utils/connection-model'
 import { findSectionById, resolveSection, sectionId } from '@/features/connections/utils/section-tabs'
 
-import { ICON_TOGGLE } from '@/constants/components'
-import { RELATIONS_SHEET } from '@/constants/connections'
+import { ICON_TOGGLE } from '@/shared/constants/components'
+import { RELATIONS_SHEET } from '@/shared/constants/connections'
 import {
     CONNECTION_TAB_LABELS,
     CONNECTION_TYPES,
     CONNECTION_TYPE_LABELS
-} from '@/constants/connections'
-import { ICON_SIZE, OPACITY, BOTTOM_GAP, SPACING } from '@/constants/theme'
-import { TEST_IDS } from '@/constants/test-ids'
+} from '@/shared/constants/connections'
+import { ICON_SIZE, OPACITY, BOTTOM_GAP, SPACING } from '@/shared/constants/theme'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 const { ROOT } = CONNECTION_TYPES
 

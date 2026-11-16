@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next'
 
 import { SelectOption } from './select-option'
 
-import { useLanguage } from '@/hooks/use-language'
-import { useStorageEffect } from '@/hooks/use-storage-effect'
-import { isSupportedLanguage } from '@/utils/language'
+import { useLanguage } from '@/shared/hooks/use-language'
+import { useStorageEffect } from '@/shared/hooks/use-storage-effect'
+import { isSupportedLanguage } from '@/shared/utils/language'
 
-import { LANGUAGES, SYSTEM_LANGUAGE } from '@/constants/languages'
-import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { LANGUAGES, SYSTEM_LANGUAGE } from '@/shared/constants/languages'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
 import { getSettingTestId } from '@/features/settings/utils/test-ids'
 
 export const LanguageOption = () => {

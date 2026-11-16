@@ -5,11 +5,11 @@ import { ListItem } from '@/ui/list-item'
 import { ListSheet } from '@/ui/modal/list-sheet'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { useBottomSheet } from '@/hooks/use-bottom-sheet'
-import { useNotes } from '@/hooks/use-notes'
-import { getEditorPath } from '@/utils/editor-path'
-import { findOutgoingLinks } from '@/utils/outgoing-links'
-import { pushOnce } from '@/utils/navigation'
+import { useBottomSheet } from '@/shared/hooks/use-bottom-sheet'
+import { useNotes } from '@/shared/hooks/use-notes'
+import { getEditorPath } from '@/shared/utils/editor-path'
+import { findOutgoingLinks } from '@/shared/utils/outgoing-links'
+import { pushOnce } from '@/shared/utils/navigation'
 
 import { ArrowForward } from '@/icons/arrow-forward'
 

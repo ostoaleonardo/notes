@@ -1,6 +1,6 @@
 import { TABLE_AXES } from '@/features/editor/shared/constants/table'
 import { TABLE_CLASSES } from '@/features/editor/dom/constants/table-widget'
-import { ICON_FILL, ICON_VIEW_BOX, SVG_NAMESPACE } from '@/constants/theme'
+import { ICON_FILL, ICON_VIEW_BOX, SVG_NAMESPACE } from '@/shared/constants/theme'
 
 export const buildSvg = (path, size) => {
     const svg = document.createElementNS(SVG_NAMESPACE, 'svg')

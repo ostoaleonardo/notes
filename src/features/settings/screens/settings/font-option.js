@@ -4,7 +4,7 @@ import { SwatchOption } from './swatch-option'
 import { Typography } from '@/ui/typography'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
+import { TYPOGRAPHY_SIZE_VARIANTS } from '@/shared/constants/theme'
 
 export const FontOption = memo(({
     fontFamily,

@@ -12,11 +12,11 @@ import {
     buildPropertyValueStyle
 } from '@/features/editor/dom/markdown-dom-panel-theme'
 
-import { CLOSE_ICON_PATH } from '@/constants/icon-paths'
-import { ICON_SIZE, OPACITY, DOM_FONT_SIZE } from '@/constants/theme'
+import { CLOSE_ICON_PATH } from '@/shared/constants/icon-paths'
+import { ICON_SIZE, OPACITY, DOM_FONT_SIZE } from '@/shared/constants/theme'
 import { PROPERTY_TYPES, PROPERTY_TYPE_ICON_PATHS } from '@/features/editor/shared/constants/properties'
 import { KEYBOARD_KEYS } from '@/features/editor/dom/constants/keyboard-keys'
-import { filterTagSuggestions } from '@/utils/tag-names'
+import { filterTagSuggestions } from '@/shared/utils/tag-names'
 
 const TagInput = ({
     tags,

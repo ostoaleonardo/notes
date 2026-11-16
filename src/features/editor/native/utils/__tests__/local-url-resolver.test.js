@@ -1,6 +1,6 @@
 import { resolveLocalUrls } from '../local-url-resolver'
 
-import { MAX_PREVIEW_IMAGE_CACHE } from '@/constants/image'
+import { MAX_PREVIEW_IMAGE_CACHE } from '@/shared/constants/image'
 
 const setup = () => ({
     resolveUrl: jest.fn(async (url) => `data:${url}`),

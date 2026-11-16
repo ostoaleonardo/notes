@@ -1,15 +1,15 @@
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 
-import { RecentsButton } from '@/components/app-bar/recents-button'
+import { RecentsButton } from '@/shared/components/app-bar/recents-button'
 import { ToolbarSurface } from '@/ui/toolbar-surface'
 import { IconButton } from '@/ui/button/icon-button'
 
 import { Add } from '@/icons/add'
 import { CalendarToday } from '@/icons/calendar-today'
 import { Search } from '@/icons/search'
-import { SPACING } from '@/constants/theme'
-import { TEST_IDS } from '@/constants/test-ids'
+import { SPACING } from '@/shared/constants/theme'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 export const HomeToolbar = ({
     onCreateNote,

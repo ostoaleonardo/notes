@@ -7,9 +7,9 @@ import { useTheme } from '@/ui/hooks/use-theme'
 
 import { useVersionDiff } from '@/features/editor/native/hooks/use-version-diff'
 
-import { DIFF_ADDED_COLOR, DIFF_REMOVED_COLOR, DIFF_TYPES } from '@/constants/diff'
-import { TRANSPARENT } from '@/constants/themes'
-import { FONTS, RADIUS, SPACING, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
+import { DIFF_ADDED_COLOR, DIFF_REMOVED_COLOR, DIFF_TYPES } from '@/shared/constants/diff'
+import { TRANSPARENT } from '@/shared/constants/themes'
+import { FONTS, RADIUS, SPACING, TYPOGRAPHY_SIZE_VARIANTS } from '@/shared/constants/theme'
 
 const DIFF_PREFIXES = {
     [DIFF_TYPES.ADDED]: '+ ',

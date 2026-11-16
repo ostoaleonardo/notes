@@ -1,0 +1,50 @@
+import { DIFF_TYPES } from '@/shared/constants/diff'
+
+export const diffLines = (oldText, newText) => (
+    diffLineArrays((oldText || '').split('\n'), (newText || '').split('\n'))
+)
+
+export const diffLineArrays = (oldLines, newLines) => {
+    const m = oldLines.length
+    const n = newLines.length
+
+    const lcs = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0))
+
+    for (let i = m - 1; i >= 0; i--) {
+        for (let j = n - 1; j >= 0; j--) {
+            lcs[i][j] = oldLines[i] === newLines[j]
+                ? lcs[i + 1][j + 1] + 1
+                : Math.max(lcs[i + 1][j], lcs[i][j + 1])
+        }
+    }
+
+    const result = []
+    let i = 0
+    let j = 0
+
+    while (i < m && j < n) {
+        if (oldLines[i] === newLines[j]) {
+            result.push({ type: DIFF_TYPES.UNCHANGED, line: oldLines[i] })
+            i++
+            j++
+        } else if (lcs[i + 1][j] >= lcs[i][j + 1]) {
+            result.push({ type: DIFF_TYPES.REMOVED, line: oldLines[i] })
+            i++
+        } else {
+            result.push({ type: DIFF_TYPES.ADDED, line: newLines[j] })
+            j++
+        }
+    }
+
+    while (i < m) {
+        result.push({ type: DIFF_TYPES.REMOVED, line: oldLines[i] })
+        i++
+    }
+
+    while (j < n) {
+        result.push({ type: DIFF_TYPES.ADDED, line: newLines[j] })
+        j++
+    }
+
+    return result
+}

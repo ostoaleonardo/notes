@@ -2,7 +2,7 @@ import { interpolate, useAnimatedStyle } from 'react-native-reanimated'
 
 import { useAnimatedProgress } from '../../../ui/hooks/use-animated-progress'
 
-import { PROGRESS_RANGE } from '@/constants/theme'
+import { PROGRESS_RANGE } from '@/shared/constants/theme'
 
 export function useAnimatedBorderRadius(active, { from, to }) {
     const progress = useAnimatedProgress(active)

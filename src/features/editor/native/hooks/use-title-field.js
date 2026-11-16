@@ -1,12 +1,12 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useLanguage } from '../../../../hooks/use-language'
+import { useLanguage } from '../../../../shared/hooks/use-language'
 import { useNoteModifiedAt } from './use-note-modified-at'
 import { buildNoteMetaLines } from '@/features/editor/native/utils/note-meta-label'
 import { countWords } from '@/features/editor/native/utils/word-count'
 
-import { EDITOR_MODES } from '@/constants/editor-modes'
+import { EDITOR_MODES } from '@/shared/constants/editor-modes'
 
 export function useTitleField({ id, title, note, mode }) {
     const { t } = useTranslation()

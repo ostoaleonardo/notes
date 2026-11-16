@@ -4,7 +4,7 @@ import { Line, Svg } from 'react-native-svg'
 
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { GRAPH_EDGE } from '@/constants/connections'
+import { GRAPH_EDGE } from '@/shared/constants/connections'
 
 export const FocusEdges = memo(({
     width,

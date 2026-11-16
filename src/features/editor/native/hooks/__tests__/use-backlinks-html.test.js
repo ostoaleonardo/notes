@@ -13,7 +13,7 @@ jest.mock('react-i18next', () => ({
 }))
 const mockNotePaths = new Map(mockNotes.map((note) => [note.path, '']))
 
-jest.mock('../../../../../hooks/use-notes', () => ({
+jest.mock('../../../../../shared/hooks/use-notes', () => ({
     useNotes: () => ({
         notes: mockNotes,
         notePaths: mockNotePaths

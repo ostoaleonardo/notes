@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react-native'
 
 import { useTagSearchSeed } from '../use-tag-search-seed'
-import { toggleTagQualifier } from '@/utils/search-query'
+import { toggleTagQualifier } from '@/shared/utils/search-query'
 
 describe('tag search seed', () => {
     test('starts with an empty seed', async () => {

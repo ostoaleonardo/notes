@@ -5,7 +5,7 @@ import { TreeRow } from '@/ui/tree-row'
 
 import { ArrowBack } from '@/icons/arrow-back'
 
-import { SPACING } from '@/constants/theme'
+import { SPACING } from '@/shared/constants/theme'
 
 export const DrawerLevelHeader = memo(({
     repository,

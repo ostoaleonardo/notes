@@ -12,12 +12,9 @@ const UI_FORBIDDEN_PACKAGES = [
 ]
 
 const UI_APP_FOLDERS = [
-    '@/components/**',
+    '@/shared/**',
+    '@/features/**',
     '@/screens/**',
-    '@/context/**',
-    '@/hooks/**',
-    '@/utils/**',
-    '@/constants/**',
     '@/icons/**',
     '@/i18n/**',
     '@/translations/**'
@@ -41,7 +38,7 @@ module.exports = [
         }
     },
     {
-        files: ['src/constants/note-filename.js'],
+        files: ['src/shared/constants/note-filename.js'],
         rules: { 'no-control-regex': 'off' }
     },
     {

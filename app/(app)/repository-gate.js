@@ -4,13 +4,13 @@ import { FilledButton } from '@/ui/button/filled-button'
 import { MessageScreen } from '@/ui/message-screen'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 
-import { useNotes } from '@/hooks/use-notes'
-import { useRepositories } from '@/hooks/use-repositories'
-import { useSingleFlight } from '@/hooks/use-single-flight'
-import { setIndexingStatus } from '@/utils/indexing-status'
+import { useNotes } from '@/shared/hooks/use-notes'
+import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useSingleFlight } from '@/shared/hooks/use-single-flight'
+import { setIndexingStatus } from '@/shared/utils/indexing-status'
 
-import { INDEXING_STARTED } from '@/constants/indexing'
-import { REPOSITORY_RESULTS } from '@/constants/repository-results'
+import { INDEXING_STARTED } from '@/shared/constants/indexing'
+import { REPOSITORY_RESULTS } from '@/shared/constants/repository-results'
 
 export default function RepositoryGate() {
     const { t } = useTranslation()

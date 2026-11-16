@@ -4,7 +4,7 @@ import { EditorView, keymap } from '@codemirror/view'
 
 import { getPairAction, isEmptyPair } from '@/features/editor/dom/utils/auto-pair'
 
-import { AUTO_PAIR_ACTIONS, AUTO_PAIR_CHARS } from '@/constants/markdown-patterns'
+import { AUTO_PAIR_ACTIONS, AUTO_PAIR_CHARS } from '@/shared/constants/markdown-patterns'
 import { CODE_RANGE_NODE_NAMES } from '@/features/editor/dom/constants/markdown-live-formatting'
 import { KEYBOARD_KEYS } from '@/features/editor/dom/constants/keyboard-keys'
 

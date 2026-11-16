@@ -7,14 +7,14 @@ import { GroupedList } from '@/ui/grouped-list'
 import { ListItem } from '@/ui/list-item'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { flattenTagTree } from '@/utils/drawer-tags'
-import { toggleInSet } from '@/utils/toggle-in-set'
-import { getActiveTags, toggleTagQualifier } from '@/utils/search-query'
+import { flattenTagTree } from '@/shared/utils/drawer-tags'
+import { toggleInSet } from '@/shared/utils/toggle-in-set'
+import { getActiveTags, toggleTagQualifier } from '@/shared/utils/search-query'
 
 import { ArrowBack } from '@/icons/arrow-back'
 
-import { BOTTOM_GAP, SPACING } from '@/constants/theme'
-import { TEST_IDS } from '@/constants/test-ids'
+import { BOTTOM_GAP, SPACING } from '@/shared/constants/theme'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 const getRowKey = (row) => row.id
 

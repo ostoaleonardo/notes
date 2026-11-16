@@ -4,7 +4,7 @@ import DOMPurify from 'dompurify'
 import { filePressFacet } from './file-press'
 import { renderPdfPage } from '../pdf-render'
 
-import { buildFileLinkUrl } from '@/utils/file-links'
+import { buildFileLinkUrl } from '@/shared/utils/file-links'
 
 import {
     EMBED_LIVE_MEDIA_CLASS,
@@ -12,8 +12,8 @@ import {
     EMBED_PDF_ESTIMATED_HEIGHT,
     EMBED_PLAYER_PRELOAD,
     EMBED_VIDEO_FRAME_FRAGMENT
-} from '@/constants/embeds'
-import { FILE_KINDS } from '@/constants/file-types'
+} from '@/shared/constants/embeds'
+import { FILE_KINDS } from '@/shared/constants/file-types'
 
 export class HtmlWidget extends WidgetType {
     constructor(html, className) {

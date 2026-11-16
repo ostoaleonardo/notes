@@ -13,7 +13,7 @@ import {
     buildTitleSectionStyle,
     buildTitleTextareaStyle
 } from './markdown-dom-panel-theme'
-import { TEST_IDS } from '@/constants/test-ids'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 const AutoGrowTitle = ({
     value,

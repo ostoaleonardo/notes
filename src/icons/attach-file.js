@@ -2,7 +2,7 @@ import { Path } from 'react-native-svg'
 
 import { IconSvg } from '@/ui/icons/icon-svg'
 
-import { ATTACH_FILE_ICON_PATH } from '@/constants/icon-paths'
+import { ATTACH_FILE_ICON_PATH } from '@/shared/constants/icon-paths'
 
 export const AttachFile = (props) => (
     <IconSvg {...props}>

@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react'
 
-import { NoteContext } from '@/context/note-context'
+import { NoteContext } from '@/shared/context/note-context'
 
 export function useNoteModifiedAt(path) {
     const { notesByPath } = useContext(NoteContext)

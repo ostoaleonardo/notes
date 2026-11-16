@@ -3,7 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { IconButton } from '@/ui/button/icon-button'
 
-import { SPACING } from '@/constants/theme'
+import { SPACING } from '@/shared/constants/theme'
 import { ICON_BUTTON } from '@/ui/tokens/components'
 
 export const DrawerToolbar = ({ children }) => {

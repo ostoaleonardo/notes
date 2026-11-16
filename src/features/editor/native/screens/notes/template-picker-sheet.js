@@ -2,12 +2,12 @@ import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TemplatePicker } from './template-picker'
-import { useSingleFlight } from '@/hooks/use-single-flight'
+import { useSingleFlight } from '@/shared/hooks/use-single-flight'
 import { TonalButton } from '@/ui/button/tonal-button'
 import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
 import { SheetActions } from '@/ui/modal/sheet-actions'
 import { SheetTitle } from '@/ui/modal/sheet-title'
-import { TEST_IDS } from '@/constants/test-ids'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 export const TemplatePickerSheet = memo(({
     sheet,

@@ -1,4 +1,4 @@
-import { HEADING_FONT_KEYS } from '@/constants/heading-fonts'
+import { HEADING_FONT_KEYS } from '@/shared/constants/heading-fonts'
 
 const HEADING_FONT_MODULE_KEYS = {
     [HEADING_FONT_KEYS.NTYPE82]: 'heading',

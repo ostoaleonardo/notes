@@ -3,18 +3,18 @@ import { Directory, File, Paths } from 'expo-file-system'
 import * as Sharing from 'expo-sharing'
 import * as Print from 'expo-print'
 
-import { useNotes } from '../../../../hooks/use-notes'
+import { useNotes } from '../../../../shared/hooks/use-notes'
 import { useMediaUris } from './use-media-uris'
 import { useDomFonts } from './use-dom-fonts'
-import { useHeadingFont } from '../../../../hooks/use-heading-font'
+import { useHeadingFont } from '../../../../shared/hooks/use-heading-font'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
-import { buildFileContent } from '@/utils/note-operations'
+import { buildFileContent } from '@/shared/utils/note-operations'
 import { getExportMarkdown, getNoteAsHtml } from '@/features/editor/native/utils/export-html'
 import { extractEmbedImageNames } from '@/features/editor/native/utils/embeds'
 import { extractLocalUrls } from '@/features/editor/shared/utils/local-images'
 import { resolveUrl } from '@/features/editor/native/utils/resolve-url'
 import { pickExportFonts } from '@/features/editor/native/utils/export-fonts'
-import { getUniqueFilename } from '@/utils/note-filename'
+import { getUniqueFilename } from '@/shared/utils/note-filename'
 
 import {
     EXPORT_FORMATS,
@@ -22,10 +22,10 @@ import {
     EXPORT_EXTENSIONS,
     EXPORT_LOCAL_IMAGE_URL_PATTERN
 } from '@/features/editor/native/constants/export'
-import { logError } from '@/utils/log-error'
+import { logError } from '@/shared/utils/log-error'
 
-import { PICKER_ERROR_CODES } from '@/constants/picker-errors'
-import { LOG_MESSAGES } from '@/constants/log-messages'
+import { PICKER_ERROR_CODES } from '@/shared/constants/picker-errors'
+import { LOG_MESSAGES } from '@/shared/constants/log-messages'
 
 export function useFiles() {
     const { t } = useTranslation()

@@ -1,17 +1,17 @@
 import { useCallback } from 'react'
 import { Linking } from 'react-native'
 
-import { useAttachmentFiles } from '../../../../hooks/use-attachment-files'
+import { useAttachmentFiles } from '../../../../shared/hooks/use-attachment-files'
 import { useMentionLinker } from './use-mention-linker'
-import { useMissingNote } from '../../../../hooks/use-missing-note'
-import { useOpenFile } from '../../../../hooks/use-open-file'
-import { findFileByTarget } from '@/utils/attachments'
-import { getEditorPath } from '@/utils/editor-path'
+import { useMissingNote } from '../../../../shared/hooks/use-missing-note'
+import { useOpenFile } from '../../../../shared/hooks/use-open-file'
+import { findFileByTarget } from '@/shared/utils/attachments'
+import { getEditorPath } from '@/shared/utils/editor-path'
 import { resolveLinkPress } from '@/features/editor/native/utils/link-press'
-import { pushOnce } from '@/utils/navigation'
+import { pushOnce } from '@/shared/utils/navigation'
 
 import { LINK_TYPES } from '@/features/editor/native/constants/link-types'
-import { ROUTES } from '@/constants/routes'
+import { ROUTES } from '@/shared/constants/routes'
 
 export function useEditorLinkHandlers({ id, onTagPress, onJumpToAnchor }) {
     const missingNote = useMissingNote()

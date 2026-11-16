@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useNotes } from '../../../../hooks/use-notes'
-import { findBacklinks, buildBacklinksHtml } from '@/utils/wiki-links'
+import { useNotes } from '../../../../shared/hooks/use-notes'
+import { findBacklinks, buildBacklinksHtml } from '@/shared/utils/wiki-links'
 import { findUnlinkedMentions, buildUnlinkedMentionsHtml } from '@/features/editor/native/utils/unlinked-mentions'
 
 export function useBacklinksHtml(id, enabled) {

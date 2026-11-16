@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react-native'
 
 import { useIsCurrentNote } from '../use-is-current-note'
-import { setCurrentNoteId } from '@/utils/current-note-store'
+import { setCurrentNoteId } from '@/shared/utils/current-note-store'
 
 beforeEach(() => {
     setCurrentNoteId('')

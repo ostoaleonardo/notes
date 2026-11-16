@@ -1,17 +1,17 @@
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useBottomSheet } from '../../../../hooks/use-bottom-sheet'
-import { useNotes } from '../../../../hooks/use-notes'
-import { useRecentNotes } from '../../../../hooks/use-recent-notes'
-import { useUtils } from '../../../../hooks/use-utils'
+import { useBottomSheet } from '../../../../shared/hooks/use-bottom-sheet'
+import { useNotes } from '../../../../shared/hooks/use-notes'
+import { useRecentNotes } from '../../../../shared/hooks/use-recent-notes'
+import { useUtils } from '../../../../shared/hooks/use-utils'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
-import { logError } from '@/utils/log-error'
+import { logError } from '@/shared/utils/log-error'
 import { replaceInSet } from '@/features/editor/native/utils/replace-in-set'
 
-import { DUPLICATE_TITLE_ERROR } from '@/constants/note-errors'
-import { LOG_MESSAGES } from '@/constants/log-messages'
-import { useSingleFlight } from '@/hooks/use-single-flight'
+import { DUPLICATE_TITLE_ERROR } from '@/shared/constants/note-errors'
+import { LOG_MESSAGES } from '@/shared/constants/log-messages'
+import { useSingleFlight } from '@/shared/hooks/use-single-flight'
 
 export function useNoteMove({ id, busyRef, flush, onMoved }) {
     const { t } = useTranslation()

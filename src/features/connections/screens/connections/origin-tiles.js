@@ -8,10 +8,10 @@ import { getShapeKind } from './entity-badge'
 import { Typography } from '@/ui/typography'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { ORIGIN_TILE } from '@/constants/connections'
-import { CONNECTION_TYPES, CONNECTION_TYPE_LABELS } from '@/constants/connections'
-import { ICON_SIZE, OPACITY, RADIUS, SPACING } from '@/constants/theme'
-import { TEST_IDS } from '@/constants/test-ids'
+import { ORIGIN_TILE } from '@/shared/constants/connections'
+import { CONNECTION_TYPES, CONNECTION_TYPE_LABELS } from '@/shared/constants/connections'
+import { ICON_SIZE, OPACITY, RADIUS, SPACING } from '@/shared/constants/theme'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 const TILE_COLUMNS = ORIGIN_TILE.columns
 

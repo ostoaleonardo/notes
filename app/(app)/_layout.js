@@ -5,20 +5,20 @@ import { useTranslation } from 'react-i18next'
 
 import { LoadingOverlay } from '@/ui/layout'
 import { useTheme } from '@/ui/hooks/use-theme'
-import { AppBar } from '@/components/app-bar/app-bar'
-import { IndexingNotice } from '@/components/indexing-notice'
+import { AppBar } from '@/shared/components/app-bar/app-bar'
+import { IndexingNotice } from '@/shared/components/indexing-notice'
 
-import { useNotes } from '@/hooks/use-notes'
-import { useIndexingStatus } from '@/hooks/use-indexing-status'
-import { useNavigationReadiness } from '@/hooks/use-navigation-readiness'
-import { useRepositories } from '@/hooks/use-repositories'
-import { useRepositoryReconciliation } from '@/hooks/use-repository-reconciliation'
-import { useImportMarkdown } from '@/hooks/use-import-markdown'
-import { getScreenContentStyle } from '@/utils/screen-content-style'
-import { getEditorPath } from '@/utils/editor-path'
-import { pushOnce } from '@/utils/navigation'
+import { useNotes } from '@/shared/hooks/use-notes'
+import { useIndexingStatus } from '@/shared/hooks/use-indexing-status'
+import { useNavigationReadiness } from '@/shared/hooks/use-navigation-readiness'
+import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useRepositoryReconciliation } from '@/shared/hooks/use-repository-reconciliation'
+import { useImportMarkdown } from '@/shared/hooks/use-import-markdown'
+import { getScreenContentStyle } from '@/shared/utils/screen-content-style'
+import { getEditorPath } from '@/shared/utils/editor-path'
+import { pushOnce } from '@/shared/utils/navigation'
 
-const useDevMenu = __DEV__ ? require('@/hooks/use-dev-menu').useDevMenu : () => {}
+const useDevMenu = __DEV__ ? require('@/shared/hooks/use-dev-menu').useDevMenu : () => {}
 
 const isIndexing = (status) => status !== null
 

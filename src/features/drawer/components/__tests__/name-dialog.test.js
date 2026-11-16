@@ -7,10 +7,10 @@ let mockConfirmProps = {}
 let mockSecondaryProps = {}
 let mockCancelProps = {}
 
-jest.mock('@/hooks/use-dialog-input', () => ({
+jest.mock('@/shared/hooks/use-dialog-input', () => ({
     useCreateDialogInput: () => [mockName, jest.fn(), !mockName.trim()]
 }))
-jest.mock('@/hooks/use-haptics', () => ({
+jest.mock('@/shared/hooks/use-haptics', () => ({
     useHaptics: () => ({ vibrate: jest.fn() })
 }))
 jest.mock('react-i18next', () => ({

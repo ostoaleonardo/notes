@@ -4,14 +4,14 @@ import { useTranslation } from 'react-i18next'
 import { SelectOption } from './select-option'
 import { PositionGroup } from '@/ui/position-group'
 
-import { useStorage } from '@/hooks/use-storage'
-import { useStorageEffect } from '@/hooks/use-storage-effect'
+import { useStorage } from '@/shared/hooks/use-storage'
+import { useStorageEffect } from '@/shared/hooks/use-storage-effect'
 import { useFolderSetting } from '@/features/settings/hooks/use-folder-setting'
-import { useRepositories } from '@/hooks/use-repositories'
-import { useTemplates } from '@/hooks/use-templates'
-import { scopedStorageKey } from '@/utils/scoped-storage-key'
+import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useTemplates } from '@/shared/hooks/use-templates'
+import { scopedStorageKey } from '@/shared/utils/scoped-storage-key'
 
-import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
 import { getSettingTestId } from '@/features/settings/utils/test-ids'
 
 export const DailyNoteOption = () => {

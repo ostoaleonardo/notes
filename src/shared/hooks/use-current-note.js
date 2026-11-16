@@ -1,0 +1,40 @@
+import { useCallback, useContext } from 'react'
+import { useFocusEffect } from 'expo-router'
+
+import { useRecentNotes } from './use-recent-notes'
+import { useStorage } from './use-storage'
+import { CurrentNoteContext } from '@/shared/context/current-note-context'
+
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
+import { RECENT_NOTES_LIMIT } from '@/shared/constants/default-values'
+
+export function useCurrentNote() {
+    const { currentId, setCurrentId } = useContext(CurrentNoteContext)
+    const { getItem, setItem } = useStorage()
+    const { refresh } = useRecentNotes()
+
+    const registerCurrent = useCallback(async (id) => {
+        setCurrentId(id)
+        await setItem(STORAGE_KEYS.CURRENT_NOTE, id)
+
+        if (!id) return
+
+        const stored = await getItem(STORAGE_KEYS.RECENT_NOTES)
+        const recent = stored ? JSON.parse(stored) : []
+        const next = [id, ...recent.filter((entry) => entry !== id)].slice(0, RECENT_NOTES_LIMIT)
+        await setItem(STORAGE_KEYS.RECENT_NOTES, JSON.stringify(next))
+        refresh()
+    }, [setCurrentId, getItem, setItem, refresh])
+
+    return { currentId, registerCurrent }
+}
+
+export function useRegisterCurrent(id) {
+    const { registerCurrent } = useCurrentNote()
+
+    useFocusEffect(
+        useCallback(() => {
+            if (id) registerCurrent(id)
+        }, [id, registerCurrent])
+    )
+}

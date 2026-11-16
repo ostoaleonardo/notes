@@ -8,17 +8,17 @@ import { SelectMenuItem } from '@/ui/menu/select-menu-item'
 import { Typography } from '@/ui/typography'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { useMenuAction } from '@/hooks/use-menu-action'
+import { useMenuAction } from '@/shared/hooks/use-menu-action'
 
 import { KeyboardArrowDown } from '@/ui/icons/keyboard-arrow-down'
 import { KeyboardArrowUp } from '@/ui/icons/keyboard-arrow-up'
 
-import { BUTTON } from '@/constants/components'
+import { BUTTON } from '@/shared/constants/components'
 import { MENU_ALIGN } from '@/ui/tokens/components'
-import { DRAWER_VIEWS, DRAWER_VIEW_LABELS } from '@/constants/drawer-views'
-import { TRANSPARENT } from '@/constants/themes'
-import { RADIUS, SPACING, ICON_SIZE, OPACITY } from '@/constants/theme'
-import { TEST_IDS } from '@/constants/test-ids'
+import { DRAWER_VIEWS, DRAWER_VIEW_LABELS } from '@/shared/constants/drawer-views'
+import { TRANSPARENT } from '@/shared/constants/themes'
+import { RADIUS, SPACING, ICON_SIZE, OPACITY } from '@/shared/constants/theme'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 import { getMenuItemTestId } from '@/ui/utils/test-ids'
 
 const VIEW_OPTIONS = Object.values(DRAWER_VIEWS)

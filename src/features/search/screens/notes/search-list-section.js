@@ -4,7 +4,7 @@ import { Section } from '@/ui/section'
 import { ListItem } from '@/ui/list-item'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { ICON_SIZE, SPACING } from '@/constants/theme'
+import { ICON_SIZE, SPACING } from '@/shared/constants/theme'
 
 export const SearchListSection = ({
     title,

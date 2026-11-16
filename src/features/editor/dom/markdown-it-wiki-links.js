@@ -1,10 +1,10 @@
-import { isFileLinkTarget } from '@/utils/file-links'
+import { isFileLinkTarget } from '@/shared/utils/file-links'
 import { extractLocalUrls } from '@/features/editor/shared/utils/local-images'
 import { buildEmbedBlockHtml, buildMediaHtml } from '@/features/editor/shared/utils/embed-html'
 import { parseEmbedMedia } from '@/features/editor/shared/utils/embed-media'
-import { renderWikiLink } from '@/utils/wiki-links'
+import { renderWikiLink } from '@/shared/utils/wiki-links'
 
-import { EMBED_MAX_DEPTH } from '@/constants/embeds'
+import { EMBED_MAX_DEPTH } from '@/shared/constants/embeds'
 import { LOCAL_URL_PATTERN } from '@/features/editor/dom/constants/local-urls'
 import {
     CHAR,
@@ -23,7 +23,7 @@ import {
     WIKI_LINK_MARK_LENGTH,
     WIKI_LINK_RULE_ANCHOR,
     WIKI_LINK_TOKEN
-} from '@/constants/note-syntax'
+} from '@/shared/constants/note-syntax'
 
 const readLink = (src, pos, max) => {
     const targetFrom = pos + WIKI_LINK_MARK_LENGTH

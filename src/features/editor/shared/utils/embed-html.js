@@ -1,11 +1,11 @@
-import { escapeHtml } from '../../../../utils/wiki-links'
-import { buildFileLinkUrl } from '../../../../utils/file-links'
+import { escapeHtml } from '../../../../shared/utils/wiki-links'
+import { buildFileLinkUrl } from '../../../../shared/utils/file-links'
 import { buildIconMarkup } from '../../dom/utils/icon-mask'
 
-import { OPEN_IN_NEW_FILLED_ICON_PATH } from '@/constants/icon-paths'
-import { FILE_LINK_CLASS } from '@/constants/file-links'
-import { WIKI_LINK_SCHEME, WIKI_LINK_ANCHOR_SEPARATOR } from '@/constants/wiki-links'
-import { FILE_KINDS } from '@/constants/file-types'
+import { OPEN_IN_NEW_FILLED_ICON_PATH } from '@/shared/constants/icon-paths'
+import { FILE_LINK_CLASS } from '@/shared/constants/file-links'
+import { WIKI_LINK_SCHEME, WIKI_LINK_ANCHOR_SEPARATOR } from '@/shared/constants/wiki-links'
+import { FILE_KINDS } from '@/shared/constants/file-types'
 import {
     EMBED_CLASS,
     EMBED_OPEN_CLASS,
@@ -14,7 +14,7 @@ import {
     EMBED_PLAYER_PRELOAD,
     EMBED_TITLE_CLASS,
     EMBED_WIDTH_PATTERN
-} from '@/constants/embeds'
+} from '@/shared/constants/embeds'
 
 export const buildMediaHtml = ({ name, kind, page }, width, url, { markdownImage = false } = {}) => {
     const src = escapeHtml(url)

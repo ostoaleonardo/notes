@@ -3,10 +3,10 @@ import { MarkdownModeToggle } from './markdown-mode-toggle'
 import { MarkdownSearchBar } from './markdown-search-bar'
 import { MarkdownInsertSheets } from './markdown-insert-sheets'
 import { NoteToolbarSheets } from './note-toolbar-sheets'
-import { AppBar } from '@/components/app-bar/app-bar'
+import { AppBar } from '@/shared/components/app-bar/app-bar'
 
-import { APP_BAR_MODES } from '@/constants/app-bar'
-import { EDITOR_MODES } from '@/constants/editor-modes'
+import { APP_BAR_MODES } from '@/shared/constants/app-bar'
+import { EDITOR_MODES } from '@/shared/constants/editor-modes'
 
 export const EditorShell = ({
     mode,

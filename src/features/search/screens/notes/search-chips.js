@@ -5,10 +5,10 @@ import { SearchChipGroup } from './search-chip-group'
 import { SearchChipsSummary } from './search-chips-summary'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { groupChips } from '@/utils/search-query'
+import { groupChips } from '@/shared/utils/search-query'
 
-import { RADIUS, SPACING } from '@/constants/theme'
-import { TEST_IDS } from '@/constants/test-ids'
+import { RADIUS, SPACING } from '@/shared/constants/theme'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 export const SearchChips = ({ chips, query, setQuery }) => {
     const { colors } = useTheme()

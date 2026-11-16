@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next'
 
-import { ConfirmDialog } from '@/components/confirm-dialog'
+import { ConfirmDialog } from '@/shared/components/confirm-dialog'
 
-import { useHaptics } from '@/hooks/use-haptics'
-import { useRepositories } from '@/hooks/use-repositories'
+import { useHaptics } from '@/shared/hooks/use-haptics'
+import { useRepositories } from '@/shared/hooks/use-repositories'
 
-import { FEEDBACK_TYPES } from '@/constants/feedback-types'
+import { FEEDBACK_TYPES } from '@/shared/constants/feedback-types'
 
 export const ForgetRepository = ({
     visible,

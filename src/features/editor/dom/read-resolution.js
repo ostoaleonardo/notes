@@ -1,6 +1,6 @@
 import { parseNoteMarkdown } from '../shared/markdown-dom-render-html'
 
-import { EMBED_MAX_DEPTH } from '@/constants/embeds'
+import { EMBED_MAX_DEPTH } from '@/shared/constants/embeds'
 
 const NO_RESULTS = {}
 

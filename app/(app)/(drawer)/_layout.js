@@ -4,7 +4,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 
 import { DrawerItems } from '@/features/drawer/components/drawer/drawer-items'
 
-import { getScreenContentStyle } from '@/utils/screen-content-style'
+import { getScreenContentStyle } from '@/shared/utils/screen-content-style'
 
 export default function DrawerLayout() {
     const { colors } = useTheme()

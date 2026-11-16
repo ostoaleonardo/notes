@@ -10,13 +10,13 @@ import { PositionGroup } from '@/ui/position-group'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { usePro } from '@/hooks/use-pro'
+import { usePro } from '@/shared/hooks/use-pro'
 
 import { Folder } from '@/icons/folder'
 import { Share } from '@/icons/share'
 
 import { EXPORT_FORMATS, PRO_EXPORT_FORMATS } from '@/features/editor/native/constants/export'
-import { ICON_SIZE, BOTTOM_GAP, SPACING } from '@/constants/theme'
+import { ICON_SIZE, BOTTOM_GAP, SPACING } from '@/shared/constants/theme'
 
 export const ExportSheet = memo(({
     sheet,

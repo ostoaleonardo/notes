@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 
-import { toggleTagQualifier } from '@/utils/search-query'
+import { toggleTagQualifier } from '@/shared/utils/search-query'
 
 export function useTagSearchSeed(openSearch) {
     const [seed, setSeed] = useState('')

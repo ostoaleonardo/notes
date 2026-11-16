@@ -4,7 +4,7 @@ import { useBacklinksHtml } from './use-backlinks-html'
 import { useEmbedMediaMap } from './use-embed-media-map'
 import { usePdfEmbed } from './use-pdf-embed'
 
-import { EDITOR_MODES } from '@/constants/editor-modes'
+import { EDITOR_MODES } from '@/shared/constants/editor-modes'
 
 export function useEditorPreview({ id, mode, value, showBacklinks }) {
     const reading = mode === EDITOR_MODES.READ

@@ -7,7 +7,7 @@ import { LoadingOverlay } from '@/ui/layout'
 import RawMarkdownDomEditor from '../dom/markdown-dom-editor'
 import { useLatestRef } from '../shared/use-latest-ref'
 
-import { MissingNoteDialog } from '@/components/missing-note-dialog'
+import { MissingNoteDialog } from '@/shared/components/missing-note-dialog'
 
 import { loadDomFonts } from '@/features/editor/native/hooks/use-dom-fonts'
 import { loadKatexFonts } from '@/features/editor/native/hooks/use-katex-fonts'
@@ -21,17 +21,17 @@ import { useEditorPreview } from '@/features/editor/native/hooks/use-editor-prev
 import { useEditorTheme } from '@/features/editor/native/hooks/use-editor-theme'
 import { useEmbedLookup } from '@/features/editor/native/hooks/use-embed-lookup'
 import { useNoteLookup } from '@/features/editor/native/hooks/use-note-lookup'
-import { useStorageEffect } from '@/hooks/use-storage-effect'
+import { useStorageEffect } from '@/shared/hooks/use-storage-effect'
 
 import { perfMark } from '@/features/editor/native/utils/perf-mark'
 import { toggleTask } from '@/features/editor/native/utils/tasks'
 import { buildTableLabels } from '@/features/editor/native/utils/table-labels'
 
-import { EDITOR_MODES } from '@/constants/editor-modes'
+import { EDITOR_MODES } from '@/shared/constants/editor-modes'
 import { MATH_DELIMITER } from '@/features/editor/shared/constants/markdown-math'
 import { PERF_MARKS_ENABLED, PERF_MARK_EDITOR_READY } from '@/features/editor/shared/constants/perf-marks'
-import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { WIKI_LINK_FORMATS } from '@/constants/wiki-links'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
+import { WIKI_LINK_FORMATS } from '@/shared/constants/wiki-links'
 
 const MarkdownDomEditor = memo(RawMarkdownDomEditor)
 

@@ -3,7 +3,7 @@ import {
     PREVIEW_IMAGE_PATTERN,
     PREVIEW_LINK_PATTERN,
     PREVIEW_MARKER
-} from '@/constants/markdown-patterns'
+} from '@/shared/constants/markdown-patterns'
 
 export const getPreviewNote = (note, maxLines = PREVIEW_MAX_LINES, maxChars = PREVIEW_MAX_CHARS) => {
     if (!note) return ''

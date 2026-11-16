@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react'
 
-import { useNotes } from '../../../../hooks/use-notes'
+import { useNotes } from '../../../../shared/hooks/use-notes'
 import { addBlockId } from '@/features/editor/shared/utils/block-refs'
 
 export function useBlockIdCreator() {

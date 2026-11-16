@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { getRepositoryNoteCount } from '@/utils/repository-note-counts'
+import { getRepositoryNoteCount } from '@/shared/utils/repository-note-counts'
 
 import { REPOSITORY_COUNT_BATCH } from '@/features/repositories/constants/repository-counts'
 

@@ -13,16 +13,16 @@ import { DrawerCurrentAwareNote } from './drawer-level-note'
 import { DrawerLevelFolder } from './drawer-level-folder'
 import { DrawerLevelHeader } from './drawer-level-header'
 
-import { useCurrentNote } from '@/hooks/use-current-note'
-import { useOpenDailyNote } from '@/hooks/use-open-daily-note'
+import { useCurrentNote } from '@/shared/hooks/use-current-note'
+import { useOpenDailyNote } from '@/shared/hooks/use-open-daily-note'
 import { usePickMarkdownImport } from '@/features/drawer/hooks/use-pick-markdown-import'
 import { useNoteSort } from '@/features/drawer/hooks/use-note-sort'
-import { useNotes } from '@/hooks/use-notes'
-import { useRepositories } from '@/hooks/use-repositories'
-import { useUtils } from '@/hooks/use-utils'
+import { useNotes } from '@/shared/hooks/use-notes'
+import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useUtils } from '@/shared/hooks/use-utils'
 import { buildLevelRows, buildRepositoryTree, resolveLevel } from '@/features/drawer/utils/drawer-tree'
-import { openEditor } from '@/utils/open-editor'
-import { pushOnce } from '@/utils/navigation'
+import { openEditor } from '@/shared/utils/open-editor'
+import { pushOnce } from '@/shared/utils/navigation'
 
 import { CreateNewFolder } from '@/icons/create-new-folder'
 import { FolderDelete } from '@/icons/folder-delete'
@@ -32,14 +32,14 @@ import { CalendarToday } from '@/icons/calendar-today'
 import { UploadFile } from '@/icons/upload-file'
 
 import { REPOSITORY_ACTIONS } from '@/features/drawer/constants/repository-actions'
-import { ROUTES } from '@/constants/routes'
-import { TEST_IDS } from '@/constants/test-ids'
+import { ROUTES } from '@/shared/constants/routes'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 import {
     DRAWER_ITEM_TYPES,
     DRAWER_TOOLBAR_KEYS,
     LEVEL_DIRECTIONS
-} from '@/constants/drawer-views'
-import { ANIMATION_DURATION } from '@/constants/theme'
+} from '@/shared/constants/drawer-views'
+import { ANIMATION_DURATION } from '@/shared/constants/theme'
 
 const ENTERINGS = {
     [LEVEL_DIRECTIONS.FORWARD]: SlideInRight.duration(ANIMATION_DURATION),

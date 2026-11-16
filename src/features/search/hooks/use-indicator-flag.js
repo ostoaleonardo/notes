@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { useTimer } from '../../../hooks/use-timer'
+import { useTimer } from '../../../shared/hooks/use-timer'
 
 export function useIndicatorFlag(active, delayMs, minVisibleMs) {
     const [visible, setVisible] = useState(false)

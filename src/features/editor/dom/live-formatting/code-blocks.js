@@ -14,7 +14,7 @@ import {
     CODE_OPEN_LINE_CLASS,
     CODE_CLOSE_LINE_CLASS
 } from '@/features/editor/dom/constants/markdown-live-formatting'
-import { OPACITY, RADIUS, MONOSPACE_FONT_FAMILY } from '@/constants/theme'
+import { OPACITY, RADIUS, MONOSPACE_FONT_FAMILY } from '@/shared/constants/theme'
 import { LEZER_NODES } from '@/features/editor/dom/constants/lezer-nodes'
 
 export const codeBlockNodeNames = CODE_BLOCK_NODE_NAMES

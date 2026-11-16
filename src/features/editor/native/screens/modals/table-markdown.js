@@ -9,7 +9,7 @@ import { Typography } from '@/ui/typography'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import { MAX_TABLE_COLS, MAX_TABLE_ROWS, TABLE_CELL_SIZE, TABLE_CELL_GAP } from '@/features/editor/shared/constants/table'
-import { SPACING, RADIUS } from '@/constants/theme'
+import { SPACING, RADIUS } from '@/shared/constants/theme'
 
 const ROW_INDEXES = Array.from({ length: MAX_TABLE_ROWS }, (_, index) => index)
 const COL_INDEXES = Array.from({ length: MAX_TABLE_COLS }, (_, index) => index)

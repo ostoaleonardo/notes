@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 
 import { SelectOption } from './select-option'
 
-import { useStorage } from '@/hooks/use-storage'
-import { useStorageEffect } from '@/hooks/use-storage-effect'
+import { useStorage } from '@/shared/hooks/use-storage'
+import { useStorageEffect } from '@/shared/hooks/use-storage-effect'
 import { getSettingTestId } from '@/features/settings/utils/test-ids'
 
 export const StorageSelectOption = ({

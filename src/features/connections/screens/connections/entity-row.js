@@ -5,7 +5,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 
 import { EntityIcon } from './entity-icon'
 
-import { ICON_SIZE } from '@/constants/theme'
+import { ICON_SIZE } from '@/shared/constants/theme'
 
 export const EntityRow = memo(({
     entity,

@@ -3,7 +3,7 @@ import { ViewPlugin } from '@codemirror/view'
 
 import { fullSyntaxTree } from './full-syntax-tree'
 import { findWikiLinkRanges } from './live-formatting/wiki-links'
-import { isSameNoteTarget } from '@/utils/wiki-links'
+import { isSameNoteTarget } from '@/shared/utils/wiki-links'
 
 import { LINK_RESOLUTION_DEBOUNCE_MS } from '@/features/editor/dom/constants/link-resolution'
 

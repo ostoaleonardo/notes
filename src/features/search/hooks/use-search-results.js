@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { createMemorySource, createSearchCursor } from '@/utils/search-cursor'
-import { logError } from '@/utils/log-error'
-import { SourceOverflowError, searchIndex } from '@/utils/search-index'
+import { createMemorySource, createSearchCursor } from '@/shared/utils/search-cursor'
+import { logError } from '@/shared/utils/log-error'
+import { SourceOverflowError, searchIndex } from '@/shared/utils/search-index'
 
-import { LOG_MESSAGES } from '@/constants/log-messages'
-import { SEARCH_PAGE_SIZE } from '@/constants/search-index'
+import { LOG_MESSAGES } from '@/shared/constants/log-messages'
+import { SEARCH_PAGE_SIZE } from '@/shared/constants/search-index'
 
 const NO_MATCHES = []
 const IDLE = { matches: NO_MATCHES, done: true, scanning: false, settledAst: null }

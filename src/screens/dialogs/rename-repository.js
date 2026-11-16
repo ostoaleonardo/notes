@@ -5,13 +5,13 @@ import { Dialog } from '@/ui/dialog'
 import { FilledButton } from '@/ui/button/filled-button'
 import { FilledTextField } from '@/ui/input/filled-text-field'
 
-import { useEditDialogInput } from '@/hooks/use-dialog-input'
-import { useHaptics } from '@/hooks/use-haptics'
-import { useSingleFlight } from '@/hooks/use-single-flight'
-import { useRepositories } from '@/hooks/use-repositories'
+import { useEditDialogInput } from '@/shared/hooks/use-dialog-input'
+import { useHaptics } from '@/shared/hooks/use-haptics'
+import { useSingleFlight } from '@/shared/hooks/use-single-flight'
+import { useRepositories } from '@/shared/hooks/use-repositories'
 
-import { FEEDBACK_TYPES } from '@/constants/feedback-types'
-import { REPOSITORY_RESULTS } from '@/constants/repository-results'
+import { FEEDBACK_TYPES } from '@/shared/constants/feedback-types'
+import { REPOSITORY_RESULTS } from '@/shared/constants/repository-results'
 
 export const RenameRepository = ({
     visible,

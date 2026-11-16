@@ -1,5 +1,5 @@
 import { buildIconMaskUrl } from '../icon-mask'
-import { ICON_VIEW_BOX } from '@/constants/theme'
+import { ICON_VIEW_BOX } from '@/shared/constants/theme'
 
 describe('icon mask', () => {
     const decode = (url) => decodeURIComponent(url.slice('url("data:image/svg+xml,'.length, -2))

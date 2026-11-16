@@ -1,6 +1,6 @@
 import { EditorView } from '@codemirror/view'
 
-import { URL_PATTERN } from '@/constants/markdown-patterns'
+import { URL_PATTERN } from '@/shared/constants/markdown-patterns'
 
 export const pasteUrlOverSelection = EditorView.domEventHandlers({
     paste: (event, view) => {

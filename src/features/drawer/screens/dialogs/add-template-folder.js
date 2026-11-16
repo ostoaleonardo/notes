@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 
 import { NameDialog } from '@/features/drawer/components/name-dialog'
 
-import { useTemplates } from '@/hooks/use-templates'
+import { useTemplates } from '@/shared/hooks/use-templates'
 
 export const AddTemplateFolder = ({
     visible,

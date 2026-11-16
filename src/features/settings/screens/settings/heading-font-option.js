@@ -5,17 +5,17 @@ import { useTranslation } from 'react-i18next'
 import { FontOption } from './font-option'
 import { ListItem } from '../../../../ui/list-item'
 
-import { useHeadingFont } from '@/hooks/use-heading-font'
-import { useStorage } from '@/hooks/use-storage'
+import { useHeadingFont } from '@/shared/hooks/use-heading-font'
+import { useStorage } from '@/shared/hooks/use-storage'
 
 import {
     HEADING_FONT_FAMILIES,
     HEADING_FONT_PREVIEW,
     HEADING_FONT_TRANSLATION_KEY
-} from '@/constants/heading-fonts'
-import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { SPACING } from '@/constants/theme'
-import { TEST_IDS } from '@/constants/test-ids'
+} from '@/shared/constants/heading-fonts'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
+import { SPACING } from '@/shared/constants/theme'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 export const HeadingFontOption = () => {
     const { t } = useTranslation()

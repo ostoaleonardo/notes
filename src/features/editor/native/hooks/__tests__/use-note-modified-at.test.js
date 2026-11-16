@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-native'
 
 import { useNoteModifiedAt } from '../use-note-modified-at'
-import { NoteContext } from '@/context/note-context'
+import { NoteContext } from '@/shared/context/note-context'
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
     default: {}

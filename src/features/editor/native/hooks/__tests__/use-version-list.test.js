@@ -2,16 +2,16 @@ import { waitFor, renderHook } from '@testing-library/react-native'
 
 import { useVersionList } from '../use-version-list'
 
-import { FREE_VERSION_HISTORY_LIMIT } from '@/constants/default-values'
+import { FREE_VERSION_HISTORY_LIMIT } from '@/shared/constants/default-values'
 
 const mockGetVersions = jest.fn()
 let mockPro = true
 
-jest.mock('../../../../../hooks/use-pro', () => ({
+jest.mock('../../../../../shared/hooks/use-pro', () => ({
     usePro: () => ({ pro: mockPro })
 }))
 
-jest.mock('../../../../../hooks/use-note-versions', () => ({
+jest.mock('../../../../../shared/hooks/use-note-versions', () => ({
     useNoteVersions: () => ({ getVersions: mockGetVersions })
 }))
 

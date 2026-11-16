@@ -5,13 +5,13 @@ import { TextButton } from '@/ui/button/text-button'
 
 import { NameDialog } from '@/features/drawer/components/name-dialog'
 
-import { useHaptics } from '@/hooks/use-haptics'
-import { useSingleFlight } from '@/hooks/use-single-flight'
-import { useTemplates } from '@/hooks/use-templates'
+import { useHaptics } from '@/shared/hooks/use-haptics'
+import { useSingleFlight } from '@/shared/hooks/use-single-flight'
+import { useTemplates } from '@/shared/hooks/use-templates'
 
-import { FEEDBACK_TYPES } from '@/constants/feedback-types'
-import { ROUTES } from '@/constants/routes'
-import { pushOnce } from '@/utils/navigation'
+import { FEEDBACK_TYPES } from '@/shared/constants/feedback-types'
+import { ROUTES } from '@/shared/constants/routes'
+import { pushOnce } from '@/shared/utils/navigation'
 
 export const AddTemplate = ({
     visible,

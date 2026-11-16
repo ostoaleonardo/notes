@@ -17,7 +17,7 @@ import {
     PROPERTY_TYPES,
     PROPERTY_TYPE_ICON_PATHS
 } from '@/features/editor/shared/constants/properties'
-import { TAG_PROPERTY_KEYS } from '@/constants/tags'
+import { TAG_PROPERTY_KEYS } from '@/shared/constants/tags'
 import { KEYBOARD_KEYS } from '@/features/editor/dom/constants/keyboard-keys'
 import { getDefaultPropertyValue, isValidPropertyName } from '@/features/editor/shared/utils/properties'
 import { keepFocus } from '@/features/editor/dom/utils/keep-focus'

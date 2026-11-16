@@ -3,7 +3,7 @@ import { Decoration } from '@codemirror/view'
 import { collectMarks, isRangeSelected } from './utils'
 
 import { INLINE_MARK_NODE_TYPES } from '@/features/editor/dom/constants/markdown-live-formatting'
-import { INLINE_CODE_STYLE, MONOSPACE_FONT_FAMILY } from '@/constants/theme'
+import { INLINE_CODE_STYLE, MONOSPACE_FONT_FAMILY } from '@/shared/constants/theme'
 
 export const inlineMarkNodeNames = Object.keys(INLINE_MARK_NODE_TYPES)
 

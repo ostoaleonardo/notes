@@ -14,8 +14,8 @@ import {
     CONNECTION_NODE_KINDS,
     CONNECTION_TYPES,
     FOCUS
-} from '@/constants/connections'
-import { TEST_IDS } from '@/constants/test-ids'
+} from '@/shared/constants/connections'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 const BADGE_ORIGIN = { x: 0, y: 0 }
 

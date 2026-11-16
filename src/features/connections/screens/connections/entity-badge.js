@@ -3,8 +3,8 @@ import { StyleSheet } from 'react-native'
 import { EntityIcon } from './entity-icon'
 import { EntityShape } from './entity-shape'
 
-import { CONNECTION_NODE_KINDS, CONNECTION_TYPES } from '@/constants/connections'
-import { TRANSPARENT } from '@/constants/themes'
+import { CONNECTION_NODE_KINDS, CONNECTION_TYPES } from '@/shared/constants/connections'
+import { TRANSPARENT } from '@/shared/constants/themes'
 
 const SHAPE_BY_TYPE = {
     [CONNECTION_TYPES.ROOT]: CONNECTION_NODE_KINDS.ROOT,

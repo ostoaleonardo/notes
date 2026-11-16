@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react-native'
 
 import { useNoteTemplates } from '../use-note-templates'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
-import { TEMPLATE_INSERT_SEPARATOR } from '@/constants/template-placeholders'
+import { TEMPLATE_INSERT_SEPARATOR } from '@/shared/constants/template-placeholders'
 
 const mockAddTemplate = jest.fn()
 const mockRefresh = jest.fn()
@@ -13,13 +13,13 @@ jest.mock('react-i18next', () => ({
 jest.mock('@/ui/snackbar/snackbar-host', () => ({
     showSnackbar: jest.fn()
 }))
-jest.mock('@/utils/log-error', () => ({
+jest.mock('@/shared/utils/log-error', () => ({
     logError: jest.fn()
 }))
-jest.mock('../../../../../hooks/use-templates', () => ({
+jest.mock('../../../../../shared/hooks/use-templates', () => ({
     useTemplates: () => ({ addTemplate: mockAddTemplate })
 }))
-jest.mock('../../../../../hooks/use-templates-list', () => ({
+jest.mock('../../../../../shared/hooks/use-templates-list', () => ({
     useTemplatesList: () => ({ templates: [{ name: 'Daily' }], refresh: mockRefresh })
 }))
 

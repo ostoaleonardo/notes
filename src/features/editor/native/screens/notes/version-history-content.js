@@ -10,7 +10,7 @@ import { GroupedList } from '@/ui/grouped-list'
 
 import { useVersionList } from '@/features/editor/native/hooks/use-version-list'
 
-import { SPACING } from '@/constants/theme'
+import { SPACING } from '@/shared/constants/theme'
 
 const keyExtractor = (version) => version.id
 

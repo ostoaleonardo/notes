@@ -4,20 +4,20 @@ import { isRangeSelected, overlapsAny } from './utils'
 import { fullSyntaxTree } from '@/features/editor/dom/full-syntax-tree'
 import { ImageWidget, MediaWidget, PdfWidget } from './widgets'
 
-import { isSameNoteTarget } from '@/utils/wiki-links'
+import { isSameNoteTarget } from '@/shared/utils/wiki-links'
 import { parseEmbedMedia } from '@/features/editor/shared/utils/embed-media'
-import { buildFileLinkUrl, isFileLinkTarget } from '@/utils/file-links'
+import { buildFileLinkUrl, isFileLinkTarget } from '@/shared/utils/file-links'
 import { buildIconMaskUrl } from '@/features/editor/dom/utils/icon-mask'
 
-import { TRANSPARENT } from '@/constants/themes'
-import { RADIUS, OPACITY } from '@/constants/theme'
-import { FILE_LINK_LIVE_CLASS } from '@/constants/file-links'
-import { ATTACH_FILE_ICON_PATH } from '@/constants/icon-paths'
+import { TRANSPARENT } from '@/shared/constants/themes'
+import { RADIUS, OPACITY } from '@/shared/constants/theme'
+import { FILE_LINK_LIVE_CLASS } from '@/shared/constants/file-links'
+import { ATTACH_FILE_ICON_PATH } from '@/shared/constants/icon-paths'
 
-import { WIKI_LINK_ANCHOR_SEPARATOR } from '@/constants/wiki-links'
-import { NOTE_NODES, WIKI_LINK_MARK_LENGTH } from '@/constants/note-syntax'
-import { EMBED_LIVE_CLASS, EMBED_MARKER } from '@/constants/embeds'
-import { FILE_KINDS } from '@/constants/file-types'
+import { WIKI_LINK_ANCHOR_SEPARATOR } from '@/shared/constants/wiki-links'
+import { NOTE_NODES, WIKI_LINK_MARK_LENGTH } from '@/shared/constants/note-syntax'
+import { EMBED_LIVE_CLASS, EMBED_MARKER } from '@/shared/constants/embeds'
+import { FILE_KINDS } from '@/shared/constants/file-types'
 
 const toRange = (node, text, offset) => {
     const isEmbed = node.name === NOTE_NODES.WIKI_EMBED

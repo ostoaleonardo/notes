@@ -1,0 +1,110 @@
+import { HEADING_PATTERN } from '@/shared/constants/headings'
+import { WIKI_LINK_ANCHOR_SEPARATOR, WIKI_LINK_PATTERN } from '@/shared/constants/wiki-links'
+import { BLOCK_ANCHOR_PREFIX } from '@/shared/constants/block-refs'
+import { WHITESPACE_RUN_PATTERN } from '@/shared/constants/markdown-patterns'
+
+import { getCodeRanges, isInsideRanges, mapOutsideCode } from '@/shared/utils/outside-code'
+import { resolveWikiLink } from '@/shared/utils/wiki-links'
+
+export const normalizeHeading = (text) => (
+    text.normalize('NFC').replace(WHITESPACE_RUN_PATTERN, ' ').trim().toLowerCase()
+)
+
+export const findHeadings = (text) => {
+    const codeRanges = getCodeRanges(text)
+
+    const headings = []
+    let from = 0
+
+    for (const line of text.split('\n')) {
+        const inCode = isInsideRanges(codeRanges, from)
+        const match = inCode ? null : HEADING_PATTERN.exec(line)
+        if (match) headings.push({ level: match[1].length, text: match[2].trim(), from })
+
+        from += line.length + 1
+    }
+
+    return headings
+}
+
+export const extractSection = (text, headingText) => {
+    const headings = findHeadings(text)
+    const name = normalizeHeading(headingText)
+    const index = headings.findIndex((heading) => normalizeHeading(heading.text) === name)
+    if (index === -1) return null
+
+    const { level, from } = headings[index]
+    const next = headings.slice(index + 1).find((heading) => heading.level <= level)
+
+    return text.slice(from, next ? next.from : text.length).trim()
+}
+
+export const buildOutline = (headings) => {
+    const stack = []
+
+    const items = headings.map((heading, index) => {
+        while (stack.length && stack[stack.length - 1] >= heading.level) stack.pop()
+
+        const item = { ...heading, index, depth: stack.length }
+        stack.push(heading.level)
+        return item
+    })
+
+    return items.map((item, position) => ({
+        ...item,
+        hasChildren: items[position + 1]?.depth > item.depth
+    }))
+}
+
+export const getVisibleOutline = (items, collapsed) => {
+    const visible = []
+    let hiddenFrom = null
+
+    for (const item of items) {
+        if (hiddenFrom !== null && item.depth > hiddenFrom) continue
+
+        hiddenFrom = collapsed.has(item.index) ? item.depth : null
+        visible.push(item)
+    }
+
+    return visible
+}
+
+export const findHeadingRenames = (previous, next) => {
+    const before = findHeadings(previous)
+    const after = findHeadings(next)
+
+    if (before.length !== after.length) return []
+
+    return before.flatMap((heading, index) => {
+        const current = after[index]
+        const renamed = current.level === heading.level && current.text !== heading.text
+        return renamed ? [{ from: heading.text, to: current.text }] : []
+    })
+}
+
+export const renameHeadingLinks = (content, targetPath, renames, notes, notePaths = new Map()) => {
+    if (!content || !renames.length) return content
+
+    const targets = new Map(renames.map(({ from, to }) => [normalizeHeading(from), to]))
+
+    return mapOutsideCode(content, (segment) => segment.replace(WIKI_LINK_PATTERN, (match, linkText, alias) => {
+        const { note, target, anchor } = resolveWikiLink(linkText, notes, notePaths, targetPath)
+        if (note?.path !== targetPath || !anchor || anchor.startsWith(BLOCK_ANCHOR_PREFIX)) return match
+
+        const renamed = targets.get(normalizeHeading(anchor))
+        if (renamed === undefined) return match
+
+        const link = `${target}${WIKI_LINK_ANCHOR_SEPARATOR}${renamed}`
+        return alias === undefined ? `[[${link}]]` : `[[${link}|${alias}]]`
+    }))
+}
+
+export const planHeadingRenames = ({ previous, next, path, notes, notePaths }) => {
+    const renames = findHeadingRenames(previous || '', next || '')
+    if (!renames.length) return { renames, rewritten: null }
+
+    const rewritten = renameHeadingLinks(next, path, renames, notes, notePaths)
+
+    return { renames, rewritten: rewritten === next ? null : rewritten }
+}

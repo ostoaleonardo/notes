@@ -14,9 +14,9 @@ import {
     setCell
 } from '@/features/editor/dom/utils/markdown-table'
 
-import { NEWLINE_PATTERN } from '@/constants/markdown-patterns'
+import { NEWLINE_PATTERN } from '@/shared/constants/markdown-patterns'
 import { KEYBOARD_KEYS } from '@/features/editor/dom/constants/keyboard-keys'
-import { DRAG_INDICATOR_ICON_PATH, TABLE_MENU_ICON_PATHS } from '@/constants/icon-paths'
+import { DRAG_INDICATOR_ICON_PATH, TABLE_MENU_ICON_PATHS } from '@/shared/constants/icon-paths'
 import { TABLE_AXES } from '@/features/editor/shared/constants/table'
 import {
     TABLE_CLASSES,

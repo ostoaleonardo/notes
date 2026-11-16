@@ -4,7 +4,7 @@ import { View } from 'react-native'
 import { DrawerFolderActions } from './drawer-folder-actions'
 import { TreeRow } from '@/ui/tree-row'
 
-import { useMenuAction } from '@/hooks/use-menu-action'
+import { useMenuAction } from '@/shared/hooks/use-menu-action'
 
 export const DrawerLevelFolder = memo(({
     repository,

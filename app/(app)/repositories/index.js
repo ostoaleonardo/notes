@@ -13,20 +13,20 @@ import { FloatingActionButton } from '@/ui/button/floating-action-button'
 import { GroupedList } from '@/ui/grouped-list'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 
-import { useFileStorage } from '@/hooks/use-file-storage'
-import { useOnForeground } from '@/hooks/use-on-foreground'
-import { usePro } from '@/hooks/use-pro'
-import { useRepositories } from '@/hooks/use-repositories'
-import { useSingleFlight } from '@/hooks/use-single-flight'
-import { getRepositoryNoteCounts } from '@/utils/repository-note-counts'
+import { useFileStorage } from '@/shared/hooks/use-file-storage'
+import { useOnForeground } from '@/shared/hooks/use-on-foreground'
+import { usePro } from '@/shared/hooks/use-pro'
+import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useSingleFlight } from '@/shared/hooks/use-single-flight'
+import { getRepositoryNoteCounts } from '@/shared/utils/repository-note-counts'
 
 import { Folder } from '@/icons/folder'
 
-import { ROUTES } from '@/constants/routes'
-import { FREE_REPOSITORIES_LIMIT } from '@/constants/default-values'
-import { SPACING } from '@/constants/theme'
-import { REPOSITORY_RESULTS } from '@/constants/repository-results'
-import { TEST_IDS } from '@/constants/test-ids'
+import { ROUTES } from '@/shared/constants/routes'
+import { FREE_REPOSITORIES_LIMIT } from '@/shared/constants/default-values'
+import { SPACING } from '@/shared/constants/theme'
+import { REPOSITORY_RESULTS } from '@/shared/constants/repository-results'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 export default function Repositories() {
     const { t } = useTranslation()

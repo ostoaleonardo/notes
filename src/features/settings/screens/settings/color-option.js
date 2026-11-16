@@ -2,7 +2,7 @@ import { memo } from 'react'
 
 import { SwatchOption } from './swatch-option'
 
-import { COLOR_OPTION } from '@/constants/components'
+import { COLOR_OPTION } from '@/shared/constants/components'
 
 export const ColorOption = memo(({
     name,

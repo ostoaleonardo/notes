@@ -5,7 +5,7 @@ import { ImageWidget } from './widgets'
 
 import { IMAGE_NODE_NAMES } from '@/features/editor/dom/constants/markdown-live-formatting'
 import { LEZER_NODES } from '@/features/editor/dom/constants/lezer-nodes'
-import { EMBED_LIVE_MEDIA_CLASS, EMBED_LIVE_PDF_CLASS } from '@/constants/embeds'
+import { EMBED_LIVE_MEDIA_CLASS, EMBED_LIVE_PDF_CLASS } from '@/shared/constants/embeds'
 
 export const imageNodeNames = IMAGE_NODE_NAMES
 

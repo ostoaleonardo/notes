@@ -2,7 +2,7 @@ import { Decoration } from '@codemirror/view'
 
 import { findBlocks } from '@/features/editor/shared/utils/block-refs'
 
-import { BLOCK_ID_LIVE_CLASS, BLOCK_ID_MUTED_OPACITY } from '@/constants/block-refs'
+import { BLOCK_ID_LIVE_CLASS, BLOCK_ID_MUTED_OPACITY } from '@/shared/constants/block-refs'
 
 export const decorateBlockIds = ({ text, ranges }) => {
     const markDecoration = Decoration.mark({ class: BLOCK_ID_LIVE_CLASS })

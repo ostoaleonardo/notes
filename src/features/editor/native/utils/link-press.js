@@ -1,13 +1,13 @@
-import { parseMissingWikiLinkTarget } from '@/utils/wiki-links'
+import { parseMissingWikiLinkTarget } from '@/shared/utils/wiki-links'
 
 import { LINK_TYPES } from '@/features/editor/native/constants/link-types'
-import { TAG_LINK_SCHEME } from '@/constants/tags'
+import { TAG_LINK_SCHEME } from '@/shared/constants/tags'
 import {
     WIKI_LINK_SCHEME,
     WIKI_LINK_MISSING_PREFIX,
     WIKI_LINK_ANCHOR_SEPARATOR
-} from '@/constants/wiki-links'
-import { FILE_LINK_SCHEME } from '@/constants/file-links'
+} from '@/shared/constants/wiki-links'
+import { FILE_LINK_SCHEME } from '@/shared/constants/file-links'
 import { LINK_MENTION_SCHEME } from '@/features/editor/native/constants/unlinked-mentions'
 
 export const resolveLinkPress = (url) => {

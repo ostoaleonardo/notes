@@ -10,8 +10,8 @@ import {
     CALLOUT_LIVE_TYPE_CLASS_PREFIX,
     CALLOUT_QUOTE_HEAD_PATTERN
 } from '@/features/editor/dom/constants/callouts'
-import { TRANSPARENT } from '@/constants/themes'
-import { OPACITY } from '@/constants/theme'
+import { TRANSPARENT } from '@/shared/constants/themes'
+import { OPACITY } from '@/shared/constants/theme'
 import { LEZER_NODES } from '@/features/editor/dom/constants/lezer-nodes'
 
 export const blockquoteNodeNames = BLOCKQUOTE_NODE_NAMES

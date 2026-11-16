@@ -1,4 +1,4 @@
-import { MissingNoteDialog } from '@/components/missing-note-dialog'
+import { MissingNoteDialog } from '@/shared/components/missing-note-dialog'
 
 export const CreateNoteDialog = ({ missingNote }) => {
     return (

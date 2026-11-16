@@ -7,7 +7,7 @@ import { Code } from '@/icons/code'
 import { Commit } from '@/icons/commit'
 import { Delete } from '@/icons/delete'
 
-import { EDITOR_MODES } from '@/constants/editor-modes'
+import { EDITOR_MODES } from '@/shared/constants/editor-modes'
 import { getMenuItemTestId } from '@/ui/utils/test-ids'
 
 export const useCommonActionsMenu = ({

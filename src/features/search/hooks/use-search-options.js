@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react'
 
-import { useStorage } from '../../../hooks/use-storage'
-import { useStorageEffect } from '../../../hooks/use-storage-effect'
+import { useStorage } from '../../../shared/hooks/use-storage'
+import { useStorageEffect } from '../../../shared/hooks/use-storage-effect'
 
-import { DEFAULT_NOTE_SORT, NOTE_SORT_LABELS } from '@/constants/note-sort'
-import { STORAGE_BOOLEAN } from '@/constants/storage-values'
-import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { DEFAULT_NOTE_SORT, NOTE_SORT_LABELS } from '@/shared/constants/note-sort'
+import { STORAGE_BOOLEAN } from '@/shared/constants/storage-values'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
 
 export function useSearchOptions() {
     const { setItem } = useStorage()

@@ -1,7 +1,7 @@
 import { foldService, syntaxTree } from '@codemirror/language'
 
 import { ATX_HEADING_LEVELS } from '@/features/editor/dom/constants/markdown-live-formatting'
-import { HEADING_PREFIX_PATTERN } from '@/constants/headings'
+import { HEADING_PREFIX_PATTERN } from '@/shared/constants/headings'
 
 export const headingFoldService = foldService.of((state, lineStart, lineEnd) => {
     let headingNode = null

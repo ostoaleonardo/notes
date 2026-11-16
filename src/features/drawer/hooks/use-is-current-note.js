@@ -1,6 +1,6 @@
 import { useCallback, useSyncExternalStore } from 'react'
 
-import { getCurrentNoteId, subscribeCurrentNoteId } from '@/utils/current-note-store'
+import { getCurrentNoteId, subscribeCurrentNoteId } from '@/shared/utils/current-note-store'
 
 export function useIsCurrentNote(path) {
     const getSnapshot = useCallback(() => getCurrentNoteId() === path, [path])

@@ -1,6 +1,6 @@
-import { EMBED_CLASS } from '@/constants/embeds'
+import { EMBED_CLASS } from '@/shared/constants/embeds'
 import { PREVIEW_CLICK_TYPES } from '@/features/editor/dom/constants/preview-click'
-import { TASK_CHECKBOX_SELECTOR } from '@/constants/tasks'
+import { TASK_CHECKBOX_SELECTOR } from '@/shared/constants/tasks'
 import { CODE_COPY_SELECTOR, CODE_BLOCK_CLASS } from '@/features/editor/dom/constants/code-copy'
 
 export const resolvePreviewClick = (target, container) => {

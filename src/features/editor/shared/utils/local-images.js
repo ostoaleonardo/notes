@@ -1,5 +1,5 @@
-import { EMBED_VIDEO_FRAME_FRAGMENT } from '@/constants/embeds'
-import { MARKDOWN_IMAGE_PATTERN, HTML_IMAGE_PATTERN, HTML_MEDIA_PATTERN, HTML_PDF_PATTERN } from '@/constants/markdown-patterns'
+import { EMBED_VIDEO_FRAME_FRAGMENT } from '@/shared/constants/embeds'
+import { MARKDOWN_IMAGE_PATTERN, HTML_IMAGE_PATTERN, HTML_MEDIA_PATTERN, HTML_PDF_PATTERN } from '@/shared/constants/markdown-patterns'
 
 export const extractLocalUrls = (value) => {
     const urls = new Set()

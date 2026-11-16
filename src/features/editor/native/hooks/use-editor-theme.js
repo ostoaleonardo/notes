@@ -2,12 +2,12 @@ import { useMemo } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useEditorDisplay } from './use-editor-display'
-import { useHeadingFont } from '../../../../hooks/use-heading-font'
+import { useHeadingFont } from '../../../../shared/hooks/use-heading-font'
 import { useTheme } from '@/ui/hooks/use-theme'
-import { toCssHeadingFamily } from '@/utils/heading-font'
+import { toCssHeadingFamily } from '@/shared/utils/heading-font'
 
-import { BUTTON } from '@/constants/components'
-import { BODY_FONT_FAMILY, SPACING } from '@/constants/theme'
+import { BUTTON } from '@/shared/constants/components'
+import { BODY_FONT_FAMILY, SPACING } from '@/shared/constants/theme'
 
 export function useEditorTheme() {
     const { colors, dark } = useTheme()

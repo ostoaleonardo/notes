@@ -2,7 +2,7 @@ import { buildElement, buildSvg, setLaneHighlight } from './table-dom'
 
 import { applyTableAction } from '@/features/editor/dom/utils/markdown-table'
 import { keepFocus } from '@/features/editor/dom/utils/keep-focus'
-import { TABLE_MENU_ICON_PATHS } from '@/constants/icon-paths'
+import { TABLE_MENU_ICON_PATHS } from '@/shared/constants/icon-paths'
 import { TABLE_AXES, TABLE_MENU_LAYOUT } from '@/features/editor/shared/constants/table'
 import { TABLE_CLASSES, TABLE_MENU_ICON_SIZE } from '@/features/editor/dom/constants/table-widget'
 

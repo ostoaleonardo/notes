@@ -1,13 +1,13 @@
 import { ToastAndroid } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
-import { ConfirmDialog } from '@/components/confirm-dialog'
+import { ConfirmDialog } from '@/shared/components/confirm-dialog'
 
-import { useHaptics } from '@/hooks/use-haptics'
-import { useRepositories } from '@/hooks/use-repositories'
+import { useHaptics } from '@/shared/hooks/use-haptics'
+import { useRepositories } from '@/shared/hooks/use-repositories'
 
-import { FEEDBACK_TYPES } from '@/constants/feedback-types'
-import { REPOSITORY_RESULTS } from '@/constants/repository-results'
+import { FEEDBACK_TYPES } from '@/shared/constants/feedback-types'
+import { REPOSITORY_RESULTS } from '@/shared/constants/repository-results'
 
 export const DeleteRepository = ({
     visible,

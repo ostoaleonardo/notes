@@ -6,8 +6,8 @@ import { TreeRow } from '@/ui/tree-row'
 import { Typography } from '@/ui/typography'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { RADIUS, SPACING, OPACITY } from '@/constants/theme'
-import { TRANSPARENT } from '@/constants/themes'
+import { RADIUS, SPACING, OPACITY } from '@/shared/constants/theme'
+import { TRANSPARENT } from '@/shared/constants/themes'
 
 export const DrawerFileItem = memo(({ file, onOpenFile }) => {
     const { colors } = useTheme()

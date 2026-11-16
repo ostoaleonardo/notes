@@ -5,11 +5,11 @@ import { ListItem } from '../../../../ui/list-item'
 import { PositionGroup } from '@/ui/position-group'
 import { Switch } from '@/ui/button/switch'
 
-import { useStorage } from '@/hooks/use-storage'
-import { useStorageEffect } from '@/hooks/use-storage-effect'
-import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { STORAGE_BOOLEAN } from '@/constants/storage-values'
-import { WIKI_LINK_FORMATS } from '@/constants/wiki-links'
+import { useStorage } from '@/shared/hooks/use-storage'
+import { useStorageEffect } from '@/shared/hooks/use-storage-effect'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
+import { STORAGE_BOOLEAN } from '@/shared/constants/storage-values'
+import { WIKI_LINK_FORMATS } from '@/shared/constants/wiki-links'
 
 export const WikiLinksOption = () => {
     const { t } = useTranslation()

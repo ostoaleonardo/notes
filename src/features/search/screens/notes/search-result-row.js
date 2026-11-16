@@ -6,11 +6,11 @@ import { EntityRow } from '@/features/connections/screens/connections/entity-row
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import { getSnippets } from '@/features/search/utils/search-context'
-import { getSearchText } from '@/utils/search-text'
-import { makeEntity } from '@/utils/connection-model'
+import { getSearchText } from '@/shared/utils/search-text'
+import { makeEntity } from '@/shared/utils/connection-model'
 
-import { CONNECTION_TYPES } from '@/constants/connections'
-import { SPACING } from '@/constants/theme'
+import { CONNECTION_TYPES } from '@/shared/constants/connections'
+import { SPACING } from '@/shared/constants/theme'
 import { TINT } from '@/ui/tokens/transparent'
 
 export const SearchResultRow = memo(({

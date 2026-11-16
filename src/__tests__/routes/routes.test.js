@@ -5,7 +5,7 @@ import App from '../../../app/(app)/index'
 import DailyNote from '../../../app/(app)/(drawer)/(workspace)/notes/daily'
 import NotFound from '../../../app/+not-found'
 
-import { NOT_FOUND_REDIRECT_DELAY } from '@/constants/default-values'
+import { NOT_FOUND_REDIRECT_DELAY } from '@/shared/constants/default-values'
 
 const mockState = {
     loading: false,
@@ -16,23 +16,23 @@ const mockState = {
 const mockGetItem = jest.fn(() => Promise.resolve(null))
 const mockOpenDailyNote = jest.fn(() => Promise.resolve(mockState.dailyPath))
 
-jest.mock('@/hooks/use-notes', () => ({
+jest.mock('@/shared/hooks/use-notes', () => ({
     useNotes: () => ({ loading: mockState.loading })
 }))
 
-jest.mock('@/hooks/use-current-note', () => ({
+jest.mock('@/shared/hooks/use-current-note', () => ({
     useCurrentNote: () => ({ currentId: null })
 }))
 
-jest.mock('@/hooks/use-repositories', () => ({
+jest.mock('@/shared/hooks/use-repositories', () => ({
     useRepositories: () => ({ activeRepository: mockState.activeRepository })
 }))
 
-jest.mock('@/hooks/use-storage', () => ({
+jest.mock('@/shared/hooks/use-storage', () => ({
     useStorage: () => ({ getItem: mockGetItem })
 }))
 
-jest.mock('@/hooks/use-daily-note', () => ({
+jest.mock('@/shared/hooks/use-daily-note', () => ({
     useDailyNote: () => mockOpenDailyNote
 }))
 

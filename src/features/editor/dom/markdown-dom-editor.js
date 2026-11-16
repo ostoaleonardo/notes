@@ -24,8 +24,8 @@ import { usePdfEmbeds } from './use-pdf-embeds'
 import { usePreviewClicks } from './use-preview-clicks'
 import { scrollToEditorTarget, scrollToPreviewTarget } from './markdown-dom-anchor-target'
 
-import { EDITOR_MODES } from '@/constants/editor-modes'
-import { TEST_IDS } from '@/constants/test-ids'
+import { EDITOR_MODES } from '@/shared/constants/editor-modes'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 const NO_META_LINES = []
 

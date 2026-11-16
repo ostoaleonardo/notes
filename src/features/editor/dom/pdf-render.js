@@ -1,6 +1,6 @@
 import { dataUrlToBytes } from '@/features/editor/dom/utils/data-url'
 
-import { EMBED_PDF_MAX_PIXEL_RATIO } from '@/constants/embeds'
+import { EMBED_PDF_MAX_PIXEL_RATIO } from '@/shared/constants/embeds'
 
 let pdfjsPromise = null
 

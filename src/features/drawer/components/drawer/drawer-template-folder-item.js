@@ -4,8 +4,8 @@ import { View } from 'react-native'
 import { DrawerFolderActions } from './drawer-folder-actions'
 import { TreeRow } from '@/ui/tree-row'
 
-import { useMenuAction } from '@/hooks/use-menu-action'
-import { useUtils } from '@/hooks/use-utils'
+import { useMenuAction } from '@/shared/hooks/use-menu-action'
+import { useUtils } from '@/shared/hooks/use-utils'
 
 import { TEMPLATE_FOLDER_ACTIONS } from '@/features/drawer/constants/repository-actions'
 

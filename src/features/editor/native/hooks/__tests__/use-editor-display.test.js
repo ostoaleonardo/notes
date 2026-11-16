@@ -1,7 +1,7 @@
 import { waitFor, renderHook } from '@testing-library/react-native'
 
 import { resetEditorDisplayCache, useEditorDisplay } from '../use-editor-display'
-import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
 import {
     EDITOR_FONT_SIZES,
     EDITOR_LINE_WIDTHS,
@@ -9,13 +9,13 @@ import {
     DEFAULT_EDITOR_FONT_SIZE,
     DEFAULT_EDITOR_LINE_WIDTH,
     DEFAULT_EDITOR_TAB_SIZE
-} from '@/constants/editor-display'
+} from '@/shared/constants/editor-display'
 
 const mockStorage = {
     multiGet: jest.fn()
 }
 
-jest.mock('../../../../../hooks/use-storage', () => ({
+jest.mock('../../../../../shared/hooks/use-storage', () => ({
     useStorage: () => mockStorage
 }))
 

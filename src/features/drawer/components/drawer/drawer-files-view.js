@@ -4,10 +4,10 @@ import { DrawerList } from './drawer-list'
 import { DrawerFilesEmpty } from './drawer-empty'
 import { DrawerFileItem } from './drawer-file-item'
 
-import { useAttachmentFiles } from '@/hooks/use-attachment-files'
-import { useOpenFile } from '@/hooks/use-open-file'
+import { useAttachmentFiles } from '@/shared/hooks/use-attachment-files'
+import { useOpenFile } from '@/shared/hooks/use-open-file'
 
-import { FILE_KINDS } from '@/constants/file-types'
+import { FILE_KINDS } from '@/shared/constants/file-types'
 export const DrawerFilesView = ({ closeDrawer }) => {
     const listFiles = useAttachmentFiles()
     const [rows, setRows] = useState([])

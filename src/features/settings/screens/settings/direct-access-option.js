@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { ListItem } from '@/ui/list-item'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { useDirectAccess } from '@/hooks/use-direct-access'
+import { useDirectAccess } from '@/shared/hooks/use-direct-access'
 
 import { OpenInNew } from '@/icons/open-in-new'
 

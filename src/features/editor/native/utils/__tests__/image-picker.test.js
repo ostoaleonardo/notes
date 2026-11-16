@@ -5,7 +5,7 @@ import {
     openImagePicker,
     requestCameraPermission
 } from '../image-picker'
-import { IMAGE_PICKER_OPTIONS, IMAGE_SOURCES } from '@/constants/image'
+import { IMAGE_PICKER_OPTIONS, IMAGE_SOURCES } from '@/shared/constants/image'
 
 jest.mock('expo-image-picker', () => ({
     getCameraPermissionsAsync: jest.fn(),

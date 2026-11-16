@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { useRepositories } from '../../../hooks/use-repositories'
-import { useStorage } from '../../../hooks/use-storage'
-import { useStorageEffect } from '../../../hooks/use-storage-effect'
-import { scopedStorageKey } from '@/utils/scoped-storage-key'
+import { useRepositories } from '../../../shared/hooks/use-repositories'
+import { useStorage } from '../../../shared/hooks/use-storage'
+import { useStorageEffect } from '../../../shared/hooks/use-storage-effect'
+import { scopedStorageKey } from '@/shared/utils/scoped-storage-key'
 
-import { SPACING } from '@/constants/theme'
+import { SPACING } from '@/shared/constants/theme'
 
 export function useFolderSetting(storageKey, rootLabel) {
     const { setItem } = useStorage()

@@ -2,7 +2,7 @@ import { useContext } from 'react'
 
 import { ThemeContext } from '@/features/editor/dom/markdown-dom-theme-context'
 
-import { ICON_FILL, ICON_SIZE, ICON_VIEW_BOX, OPACITY } from '@/constants/theme'
+import { ICON_FILL, ICON_SIZE, ICON_VIEW_BOX, OPACITY } from '@/shared/constants/theme'
 
 const SECONDARY_STYLE = { opacity: OPACITY.secondary }
 

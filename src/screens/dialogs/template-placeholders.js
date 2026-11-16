@@ -6,10 +6,10 @@ import { Dialog } from '@/ui/dialog'
 import { DialogText } from '@/ui/dialog-text'
 import { TextButton } from '@/ui/button/text-button'
 
-import { renderTemplate } from '@/utils/render-template'
+import { renderTemplate } from '@/shared/utils/render-template'
 
-import { TEMPLATE_PLACEHOLDERS } from '@/constants/template-placeholders'
-import { SPACING } from '@/constants/theme'
+import { TEMPLATE_PLACEHOLDERS } from '@/shared/constants/template-placeholders'
+import { SPACING } from '@/shared/constants/theme'
 
 const LIST_MODIFIERS = [fillMaxWidth()]
 const LIST_ARRANGEMENT = { spacedBy: SPACING.md }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { useTimer } from '../../../hooks/use-timer'
+import { useTimer } from '../../../shared/hooks/use-timer'
 
 export function useDebouncedValue(value, delay, isImmediate) {
     const { schedule, cancel } = useTimer()

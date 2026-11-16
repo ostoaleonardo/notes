@@ -1,7 +1,7 @@
 import { NoteSearch } from './note-search'
 import { FreshSheet } from '@/ui/modal/fresh-sheet'
 
-import { SHEET } from '@/constants/components'
+import { SHEET } from '@/shared/constants/components'
 
 export const NoteSearchSheet = ({ sheet, initialQuery }) => {
     return (

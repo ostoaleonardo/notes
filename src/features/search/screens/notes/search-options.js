@@ -7,8 +7,8 @@ import { ButtonGroup } from '@/ui/button/button-group'
 import { MatchCase } from '@/icons/match-case'
 import { Tune } from '@/icons/tune'
 
-import { SPACING } from '@/constants/theme'
-import { TEST_IDS } from '@/constants/test-ids'
+import { SPACING } from '@/shared/constants/theme'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 export const SearchOptions = ({
     matchCase,

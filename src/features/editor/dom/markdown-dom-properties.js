@@ -15,10 +15,10 @@ import {
     KEYBOARD_ARROW_DOWN_ICON_PATH,
     KEYBOARD_ARROW_UP_ICON_PATH,
     ADD_ICON_PATH
-} from '@/constants/icon-paths'
-import { ICON_SIZE } from '@/constants/theme'
+} from '@/shared/constants/icon-paths'
+import { ICON_SIZE } from '@/shared/constants/theme'
 import { PROPERTY_TYPES } from '@/features/editor/shared/constants/properties'
-import { TAG_PROPERTY_KEYS } from '@/constants/tags'
+import { TAG_PROPERTY_KEYS } from '@/shared/constants/tags'
 
 export const PropertiesPanel = ({
     tags = [],

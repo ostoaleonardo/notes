@@ -5,7 +5,7 @@ import { GroupedList, GroupSeparator } from '@/ui/grouped-list'
 import { useTheme } from '@/ui/hooks/use-theme'
 import { EntityRow } from './entity-row'
 
-import { BOTTOM_GAP } from '@/constants/theme'
+import { BOTTOM_GAP } from '@/shared/constants/theme'
 
 const keyOf = (entity) => `${entity.type}:${entity.id}`
 

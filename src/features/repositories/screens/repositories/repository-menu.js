@@ -7,14 +7,14 @@ import { MenuItem } from '@/ui/menu/menu-item'
 import { ActionMenuItem } from '@/ui/menu/action-menu-item'
 import { IconButton } from '@/ui/button/icon-button'
 
-import { useMenuAction } from '@/hooks/use-menu-action'
+import { useMenuAction } from '@/shared/hooks/use-menu-action'
 
 import { Close } from '@/icons/close'
 import { Delete } from '@/icons/delete'
 import { Edit } from '@/icons/edit'
 import { MoreVert } from '@/icons/more-vert'
 import { getMenuItemTestId } from '@/ui/utils/test-ids'
-import { TEST_IDS } from '@/constants/test-ids'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 export const RepositoryMenu = memo(({
     onRename,

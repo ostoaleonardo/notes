@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react'
 import { router } from 'expo-router'
 
-import { useDailyNote } from '@/hooks/use-daily-note'
-import { useNotes } from '@/hooks/use-notes'
-import { useRepositories } from '@/hooks/use-repositories'
-import { getEditorPath } from '@/utils/editor-path'
+import { useDailyNote } from '@/shared/hooks/use-daily-note'
+import { useNotes } from '@/shared/hooks/use-notes'
+import { useRepositories } from '@/shared/hooks/use-repositories'
+import { getEditorPath } from '@/shared/utils/editor-path'
 
 export default function DailyNote() {
     const { loading } = useNotes()

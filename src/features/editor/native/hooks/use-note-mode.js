@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 
 import { useCodeMode } from './use-code-mode'
 
-import { EDITOR_MODES } from '@/constants/editor-modes'
+import { EDITOR_MODES } from '@/shared/constants/editor-modes'
 
 export function useNoteMode({ initialMode, content, update, setNote }) {
     const [mode, setMode] = useState(initialMode)

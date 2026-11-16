@@ -6,11 +6,11 @@ import { FilledButton } from '@/ui/button/filled-button'
 import { TextButton } from '@/ui/button/text-button'
 import { FilledTextField } from '@/ui/input/filled-text-field'
 
-import { useCreateDialogInput } from '@/hooks/use-dialog-input'
-import { useSingleFlight } from '@/hooks/use-single-flight'
-import { useHaptics } from '@/hooks/use-haptics'
+import { useCreateDialogInput } from '@/shared/hooks/use-dialog-input'
+import { useSingleFlight } from '@/shared/hooks/use-single-flight'
+import { useHaptics } from '@/shared/hooks/use-haptics'
 
-import { FEEDBACK_TYPES } from '@/constants/feedback-types'
+import { FEEDBACK_TYPES } from '@/shared/constants/feedback-types'
 
 export const NameDialog = ({
     visible,

@@ -7,14 +7,14 @@ import { ListItem } from '@/ui/list-item'
 import { ListSheet } from '@/ui/modal/list-sheet'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { useBottomSheet } from '@/hooks/use-bottom-sheet'
+import { useBottomSheet } from '@/shared/hooks/use-bottom-sheet'
 
-import { toggleInSet } from '@/utils/toggle-in-set'
-import { buildOutline, findHeadings, getVisibleOutline } from '@/utils/headings'
+import { toggleInSet } from '@/shared/utils/toggle-in-set'
+import { buildOutline, findHeadings, getVisibleOutline } from '@/shared/utils/headings'
 
 import { KeyboardArrowDown } from '@/ui/icons/keyboard-arrow-down'
 
-import { HEADING_OUTLINE_CHEVRON_SIZE, HEADING_OUTLINE_INDENT } from '@/constants/headings'
+import { HEADING_OUTLINE_CHEVRON_SIZE, HEADING_OUTLINE_INDENT } from '@/shared/constants/headings'
 
 const OutlineItem = memo(({
     item,

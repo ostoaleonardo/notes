@@ -4,8 +4,8 @@ import { Decoration, EditorView } from '@codemirror/view'
 
 import { buildDocDecorationsPlugin } from './markdown-dom-doc-decorations'
 
-import { INLINE_TAG_CLASS } from '@/constants/tags'
-import { NOTE_NODES } from '@/constants/note-syntax'
+import { INLINE_TAG_CLASS } from '@/shared/constants/tags'
+import { NOTE_NODES } from '@/shared/constants/note-syntax'
 
 const tagMark = Decoration.mark({ class: INLINE_TAG_CLASS })
 

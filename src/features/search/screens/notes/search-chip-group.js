@@ -4,7 +4,7 @@ import { SearchChip } from './search-chip'
 import { GROUP_ICONS } from './search-filter-icons'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { RADIUS, SIZE, SPACING, ICON_SIZE } from '@/constants/theme'
+import { RADIUS, SIZE, SPACING, ICON_SIZE } from '@/shared/constants/theme'
 
 export const SearchChipGroup = ({ group, query, setQuery }) => {
     const { colors } = useTheme()

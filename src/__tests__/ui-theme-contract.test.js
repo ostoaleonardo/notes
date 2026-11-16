@@ -1,4 +1,4 @@
-import { THEMES } from '@/constants/themes'
+import { THEMES } from '@/shared/constants/themes'
 import { UI_THEME_COLOR_KEYS } from '@/ui/tokens/theme-contract'
 import { getButtonColors } from '@/ui/utils/compose-colors'
 

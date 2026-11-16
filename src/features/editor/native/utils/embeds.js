@@ -1,12 +1,12 @@
-import { resolveWikiLink } from '../../../../utils/wiki-links'
-import { mapOutsideCode } from '../../../../utils/outside-code'
-import { isFileLinkTarget } from '../../../../utils/file-links'
+import { resolveWikiLink } from '../../../../shared/utils/wiki-links'
+import { mapOutsideCode } from '../../../../shared/utils/outside-code'
+import { isFileLinkTarget } from '../../../../shared/utils/file-links'
 import { buildEmbedBlockHtml, buildMediaHtml } from '../../shared/utils/embed-html'
 import { extractEmbedSource } from './embed-source'
 import { parseEmbedMedia } from '../../shared/utils/embed-media'
 
-import { FILE_KINDS } from '@/constants/file-types'
-import { EMBED_PATTERN, EMBED_MAX_DEPTH, EMBED_OPENING } from '@/constants/embeds'
+import { FILE_KINDS } from '@/shared/constants/file-types'
+import { EMBED_PATTERN, EMBED_MAX_DEPTH, EMBED_OPENING } from '@/shared/constants/embeds'
 
 const replaceEmbeds = (value, context, depth, visited) => mapOutsideCode(
     value,

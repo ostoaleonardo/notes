@@ -3,9 +3,9 @@ import { Facet } from '@codemirror/state'
 import { generateBlockId } from '@/features/editor/shared/utils/block-refs'
 import { filterBlockSuggestions } from '@/features/editor/shared/utils/note-entries'
 
-import { WIKI_LINK_FORMATS, WIKI_LINK_CLOSING, WIKI_LINK_TYPING_PATTERN } from '@/constants/wiki-links'
-import { BLOCK_COMPLETION_PATTERN } from '@/constants/block-refs'
-import { WIKI_LINK_OPEN, WIKI_LINK_CLOSE } from '@/constants/markdown-syntax'
+import { WIKI_LINK_FORMATS, WIKI_LINK_CLOSING, WIKI_LINK_TYPING_PATTERN } from '@/shared/constants/wiki-links'
+import { BLOCK_COMPLETION_PATTERN } from '@/shared/constants/block-refs'
+import { WIKI_LINK_OPEN, WIKI_LINK_CLOSE } from '@/shared/constants/markdown-syntax'
 
 export const noteSearchFacet = Facet.define({
     combine: (values) => values[values.length - 1]

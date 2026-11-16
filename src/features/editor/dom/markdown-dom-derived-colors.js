@@ -1,4 +1,4 @@
-import { TRANSPARENT } from '@/constants/themes'
+import { TRANSPARENT } from '@/shared/constants/themes'
 
 export const buildDerivedColors = (colors) => ({
     ...colors,

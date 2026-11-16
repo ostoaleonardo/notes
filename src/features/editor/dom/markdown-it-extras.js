@@ -4,7 +4,7 @@ import {
     BLOCK_ID_ATTRIBUTE,
     BLOCK_ID_STANDALONE_PATTERN,
     BLOCK_ID_TRAILING_PATTERN
-} from '@/constants/block-refs'
+} from '@/shared/constants/block-refs'
 import {
     CALLOUT_CLASS,
     CALLOUT_FOLD_OPEN,
@@ -18,7 +18,7 @@ import {
     TASK_CHECKBOX_TAG_PATTERN,
     TASK_CHECKED_MARK,
     TASK_STATUS_ATTRIBUTE
-} from '@/constants/tasks'
+} from '@/shared/constants/tasks'
 import { TABLE_BODY_START_LINE, TABLE_PIPE, TABLE_RULE_NAME } from '@/features/editor/shared/constants/table'
 import { MARKDOWN_IT_TOKENS } from '@/features/editor/shared/constants/markdown-it-tokens'
 import {

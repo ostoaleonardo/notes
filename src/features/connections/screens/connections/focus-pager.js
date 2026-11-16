@@ -9,9 +9,9 @@ import { useTheme } from '@/ui/hooks/use-theme'
 import { ArrowBack } from '@/icons/arrow-back'
 import { ArrowForward } from '@/icons/arrow-forward'
 
-import { FOCUS } from '@/constants/connections'
-import { RADIUS, SPACING } from '@/constants/theme'
-import { TRANSPARENT } from '@/constants/themes'
+import { FOCUS } from '@/shared/constants/connections'
+import { RADIUS, SPACING } from '@/shared/constants/theme'
+import { TRANSPARENT } from '@/shared/constants/themes'
 
 export const FocusPager = memo(({
     page,

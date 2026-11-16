@@ -1,19 +1,19 @@
 import { act, renderHook } from '@testing-library/react-native'
 
 import { useSearchResults } from '../use-search-results'
-import { logError } from '@/utils/log-error'
-import { SourceOverflowError, searchIndex } from '@/utils/search-index'
-import { parseSearchQuery } from '@/utils/search-parser'
-import { MOCK_NOTE_PATHS, MOCK_SEARCH_NOTES } from '@/utils/__fixtures__/search-query'
+import { logError } from '@/shared/utils/log-error'
+import { SourceOverflowError, searchIndex } from '@/shared/utils/search-index'
+import { parseSearchQuery } from '@/shared/utils/search-parser'
+import { MOCK_NOTE_PATHS, MOCK_SEARCH_NOTES } from '@/shared/utils/__fixtures__/search-query'
 
-import { NOTE_SORTS } from '@/constants/note-sort'
+import { NOTE_SORTS } from '@/shared/constants/note-sort'
 
-jest.mock('@/constants/search-scan', () => ({
+jest.mock('@/shared/constants/search-scan', () => ({
     SEARCH_SCAN_CHUNK_SIZE: 10,
     SEARCH_SORT_CHUNK_SIZE: 2000
 }))
-jest.mock('@/utils/log-error', () => ({ logError: jest.fn() }))
-jest.mock('@/utils/search-index', () => ({
+jest.mock('@/shared/utils/log-error', () => ({ logError: jest.fn() }))
+jest.mock('@/shared/utils/search-index', () => ({
     SourceOverflowError: class SourceOverflowError extends Error {},
     searchIndex: { createSource: jest.fn() }
 }))

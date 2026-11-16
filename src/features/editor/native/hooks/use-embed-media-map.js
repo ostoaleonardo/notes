@@ -4,10 +4,10 @@ import { useMediaUris } from './use-media-uris'
 import { extractEmbedMediaNames } from '@/features/editor/native/utils/embeds'
 import { resolveEmbedMedia } from '@/features/editor/native/utils/embed-media-resolver'
 import { resolveUrl } from '@/features/editor/native/utils/resolve-url'
-import { logError } from '@/utils/log-error'
+import { logError } from '@/shared/utils/log-error'
 
-import { EMBED_OPENING } from '@/constants/embeds'
-import { LOG_MESSAGES } from '@/constants/log-messages'
+import { EMBED_OPENING } from '@/shared/constants/embeds'
+import { LOG_MESSAGES } from '@/shared/constants/log-messages'
 
 const EMPTY_MAP = new Map()
 

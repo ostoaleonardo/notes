@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 
 import { useMediaUris } from './use-media-uris'
-import { useNotes } from '../../../../hooks/use-notes'
+import { useNotes } from '../../../../shared/hooks/use-notes'
 import { usePdfEmbed } from './use-pdf-embed'
 import { useStableCallback } from './use-stable-callback'
 import { resolveEmbedMedia } from '@/features/editor/native/utils/embed-media-resolver'

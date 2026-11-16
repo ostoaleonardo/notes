@@ -3,7 +3,7 @@ import { BackHandler, StyleSheet, View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { AppBar } from '@/components/app-bar/app-bar'
+import { AppBar } from '@/shared/components/app-bar/app-bar'
 import { LoadingOverlay } from '@/ui/layout'
 import { ConnectionSheets } from '@/features/connections/screens/connections/connection-sheets'
 import { ConnectionsAppBar } from '@/features/connections/screens/connections/connections-app-bar'
@@ -11,13 +11,13 @@ import { FocusCrumbs } from '@/features/connections/screens/connections/focus-cr
 import { FocusPager } from '@/features/connections/screens/connections/focus-pager'
 import { FocusStage } from '@/features/connections/screens/connections/focus-stage'
 
-import { useConnectionsSession } from '@/hooks/use-connections-session'
-import { useDeferredReady } from '@/hooks/use-deferred-ready'
-import { useFocusNavigation } from '@/hooks/use-focus-navigation'
-import { useNotes } from '@/hooks/use-notes'
+import { useConnectionsSession } from '@/shared/hooks/use-connections-session'
+import { useDeferredReady } from '@/shared/hooks/use-deferred-ready'
+import { useFocusNavigation } from '@/shared/hooks/use-focus-navigation'
+import { useNotes } from '@/shared/hooks/use-notes'
 
-import { CONNECTION_TYPES } from '@/constants/connections'
-import { BOTTOM_GAP, SPACING } from '@/constants/theme'
+import { CONNECTION_TYPES } from '@/shared/constants/connections'
+import { BOTTOM_GAP, SPACING } from '@/shared/constants/theme'
 
 const { NOTE, FILE, MISSING } = CONNECTION_TYPES
 

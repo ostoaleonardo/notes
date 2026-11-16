@@ -7,11 +7,11 @@ import { OutlineSheet } from './outline-sheet'
 import { TemplatePickerSheet } from './template-picker-sheet'
 import { EditorShell } from './editor-shell'
 import { ExportSheet } from '@/features/editor/native/screens/dialogs/export-sheet'
-import { ConfirmDialog } from '@/components/confirm-dialog'
+import { ConfirmDialog } from '@/shared/components/confirm-dialog'
 import { MarkdownInput } from '@/features/editor/native/markdown-input'
 
 import { useMountedSheet } from '@/features/editor/native/hooks/use-mounted-sheet'
-import { useEditorChrome } from '@/hooks/use-editor-chrome'
+import { useEditorChrome } from '@/shared/hooks/use-editor-chrome'
 import { useNoteDelete } from '@/features/editor/native/hooks/use-note-delete'
 import { useNoteMove } from '@/features/editor/native/hooks/use-note-move'
 import { useEditorJump } from '@/features/editor/native/hooks/use-editor-jump'
@@ -20,12 +20,12 @@ import { usePropertiesPanel } from '@/features/editor/native/hooks/use-propertie
 import { useTitleField } from '@/features/editor/native/hooks/use-title-field'
 import { useNoteSharing } from '@/features/editor/native/hooks/use-note-sharing'
 import { useNoteTemplates } from '@/features/editor/native/hooks/use-note-templates'
-import { useRepositories } from '@/hooks/use-repositories'
+import { useRepositories } from '@/shared/hooks/use-repositories'
 import { useTagSearchSeed } from '@/features/editor/native/hooks/use-tag-search-seed'
-import { useVersionHistory } from '@/hooks/use-version-history'
-import { getVersionLocation } from '@/utils/note-version-location'
+import { useVersionHistory } from '@/shared/hooks/use-version-history'
+import { getVersionLocation } from '@/shared/utils/note-version-location'
 
-import { EDITOR_MODES } from '@/constants/editor-modes'
+import { EDITOR_MODES } from '@/shared/constants/editor-modes'
 
 export const NoteEditorScreen = ({
     id,

@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Redirect, router } from 'expo-router'
 
-import { useCurrentNote } from '@/hooks/use-current-note'
-import { useNotes } from '@/hooks/use-notes'
-import { useRepositories } from '@/hooks/use-repositories'
-import { useStorage } from '@/hooks/use-storage'
-import { getStartupTarget } from '@/utils/startup-target'
-import { pushOnce } from '@/utils/navigation'
+import { useCurrentNote } from '@/shared/hooks/use-current-note'
+import { useNotes } from '@/shared/hooks/use-notes'
+import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useStorage } from '@/shared/hooks/use-storage'
+import { getStartupTarget } from '@/shared/utils/startup-target'
+import { pushOnce } from '@/shared/utils/navigation'
 
-import { ROUTES } from '@/constants/routes'
-import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { STARTUP_BEHAVIORS } from '@/constants/startup-behavior'
+import { ROUTES } from '@/shared/constants/routes'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
+import { STARTUP_BEHAVIORS } from '@/shared/constants/startup-behavior'
 
 export default function App() {
     const { loading } = useNotes()

@@ -12,9 +12,9 @@ import { FindReplace } from '@/icons/find-replace'
 import { KeyboardArrowDown } from '@/ui/icons/keyboard-arrow-down'
 import { KeyboardArrowUp } from '@/ui/icons/keyboard-arrow-up'
 
-import { RADIUS, SPACING } from '@/constants/theme'
+import { RADIUS, SPACING } from '@/shared/constants/theme'
 import { TINT } from '@/ui/tokens/transparent'
-import { MARKDOWN_ACTIONS } from '@/constants/markdown-actions'
+import { MARKDOWN_ACTIONS } from '@/shared/constants/markdown-actions'
 
 export const MarkdownSearchBar = ({
     search,

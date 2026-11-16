@@ -5,10 +5,10 @@ import { ListItem } from '@/ui/list-item'
 import { ListSheet } from '@/ui/modal/list-sheet'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { useNotes } from '@/hooks/use-notes'
-import { sortNotes } from '@/utils/note-sort'
+import { useNotes } from '@/shared/hooks/use-notes'
+import { sortNotes } from '@/shared/utils/note-sort'
 
-import { NOTE_SORTS } from '@/constants/note-sort'
+import { NOTE_SORTS } from '@/shared/constants/note-sort'
 
 const PickerItem = memo(({ item, onPress }) => {
     const { colors } = useTheme()

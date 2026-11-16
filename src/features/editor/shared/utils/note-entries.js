@@ -1,7 +1,7 @@
 import { findAllBlocks, getBlockPreview } from '@/features/editor/shared/utils/block-refs'
-import { getAliases, resolveWikiLinkDetails, resolveWikiLinkTarget } from '@/utils/wiki-links'
+import { getAliases, resolveWikiLinkDetails, resolveWikiLinkTarget } from '@/shared/utils/wiki-links'
 
-import { WIKI_LINK_SUGGESTION_LIMIT } from '@/constants/wiki-links'
+import { WIKI_LINK_SUGGESTION_LIMIT } from '@/shared/constants/wiki-links'
 
 const blocksByPath = new Map()
 const resolverInputsByEntries = new WeakMap()

@@ -15,7 +15,7 @@ import { buildPropertiesTrigger, frontmatterAutoClose } from './markdown-dom-fro
 import { buildBlankPlaceholder } from './markdown-dom-placeholder'
 import { useStableValue } from '@/features/editor/shared/hooks/use-stable-value'
 
-import { EDITOR_MODES } from '@/constants/editor-modes'
+import { EDITOR_MODES } from '@/shared/constants/editor-modes'
 
 export const useEditorCompartments = (viewRef, {
     mode,

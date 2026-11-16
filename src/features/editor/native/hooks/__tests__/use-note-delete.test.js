@@ -3,7 +3,7 @@ import { router } from 'expo-router'
 
 import { useNoteDelete } from '../use-note-delete'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
-import { DELETE_BEHAVIORS, DEFAULT_DELETE_BEHAVIOR } from '@/constants/delete-behavior'
+import { DELETE_BEHAVIORS, DEFAULT_DELETE_BEHAVIOR } from '@/shared/constants/delete-behavior'
 
 const mockDeleteNote = jest.fn()
 const mockGetItem = jest.fn()
@@ -17,13 +17,13 @@ jest.mock('react-i18next', () => ({
 jest.mock('@/ui/snackbar/snackbar-host', () => ({
     showSnackbar: jest.fn()
 }))
-jest.mock('@/utils/log-error', () => ({
+jest.mock('@/shared/utils/log-error', () => ({
     logError: jest.fn()
 }))
-jest.mock('../../../../../hooks/use-notes', () => ({
+jest.mock('../../../../../shared/hooks/use-notes', () => ({
     useNotes: () => ({ deleteNote: mockDeleteNote })
 }))
-jest.mock('../../../../../hooks/use-storage', () => ({
+jest.mock('../../../../../shared/hooks/use-storage', () => ({
     useStorage: () => ({ getItem: mockGetItem })
 }))
 

@@ -1,4 +1,4 @@
-import { getFileKind } from '@/utils/attachments'
+import { getFileKind } from '@/shared/utils/attachments'
 
 import { ArrowBack } from '@/icons/arrow-back'
 import { ArrowForward } from '@/icons/arrow-forward'
@@ -11,8 +11,8 @@ import { Picture } from '@/icons/picture'
 import { Sell } from '@/icons/sell'
 import { Tag } from '@/icons/tag'
 
-import { CONNECTION_SECTIONS, CONNECTION_TYPES } from '@/constants/connections'
-import { FILE_KINDS } from '@/constants/file-types'
+import { CONNECTION_SECTIONS, CONNECTION_TYPES } from '@/shared/constants/connections'
+import { FILE_KINDS } from '@/shared/constants/file-types'
 
 const TYPE_ICONS = {
     [CONNECTION_TYPES.ROOT]: FolderCode,

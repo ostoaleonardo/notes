@@ -7,13 +7,13 @@ import { IconButton } from '@/ui/button/icon-button'
 
 import { ICON_BUTTON } from '@/ui/tokens/components'
 
-import { AppBar } from '@/components/app-bar/app-bar'
+import { AppBar } from '@/shared/components/app-bar/app-bar'
 
 import { LinkOff } from '@/icons/link-off'
 import { Search } from '@/icons/search'
 
-import { BADGE } from '@/constants/components'
-import { TEST_IDS } from '@/constants/test-ids'
+import { BADGE } from '@/shared/constants/components'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 export const ConnectionsAppBar = memo(({
     pendingCount,

@@ -1,4 +1,4 @@
-import { escapeHtml } from '../../../../utils/wiki-links'
+import { escapeHtml } from '../../../../shared/utils/wiki-links'
 
 import {
     EXPORT_ALLOWED_ATTRIBUTES,
@@ -12,7 +12,7 @@ import {
     HTML_ESCAPES,
     HTML_LESS_THAN_PATTERN,
     HTML_TAG_PATTERN
-} from '@/constants/html-sanitize'
+} from '@/shared/constants/html-sanitize'
 
 const escapeText = (text) => text.replace(HTML_LESS_THAN_PATTERN, HTML_ESCAPES['<'])
 

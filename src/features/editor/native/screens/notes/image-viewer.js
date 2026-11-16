@@ -6,8 +6,8 @@ import { ResumableZoom, fitContainer, useImageResolution } from 'react-native-zo
 
 import { Close } from '@/icons/close'
 
-import { SPACING, Z_INDEX } from '@/constants/theme'
-import { IMAGE_VIEWER_MAX_SCALE } from '@/constants/image'
+import { SPACING, Z_INDEX } from '@/shared/constants/theme'
+import { IMAGE_VIEWER_MAX_SCALE } from '@/shared/constants/image'
 import { TonalIconButton } from '@/ui/button/tonal-icon-button'
 import { LoadingOverlay } from '@/ui/layout'
 import { ICON_BUTTON } from '@/ui/tokens/components'

@@ -6,12 +6,12 @@ import { PositionGroup } from '@/ui/position-group'
 import { Slider } from '@/ui/input/slider'
 import { Switch } from '@/ui/button/switch'
 
-import { useStorage } from '@/hooks/use-storage'
+import { useStorage } from '@/shared/hooks/use-storage'
 import { useWidgetGlass } from '@/features/settings/hooks/use-widget-glass'
 
-import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { STORAGE_BOOLEAN } from '@/constants/storage-values'
-import { WIDGET_GLASS_ALPHA } from '@/constants/widgets'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
+import { STORAGE_BOOLEAN } from '@/shared/constants/storage-values'
+import { WIDGET_GLASS_ALPHA } from '@/shared/constants/widgets'
 
 export const WidgetsOption = () => {
     const { t } = useTranslation()

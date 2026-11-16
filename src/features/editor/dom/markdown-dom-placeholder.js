@@ -3,7 +3,7 @@ import { Decoration, WidgetType } from '@codemirror/view'
 import { buildDocDecorationsPlugin } from './markdown-dom-doc-decorations'
 
 import { PLACEHOLDER_CLASS, PLACEHOLDER_POINTER_EVENTS } from '@/features/editor/dom/constants/editor-placeholder'
-import { NON_WHITESPACE_PATTERN } from '@/constants/markdown-patterns'
+import { NON_WHITESPACE_PATTERN } from '@/shared/constants/markdown-patterns'
 
 class PlaceholderWidget extends WidgetType {
     constructor(text) {

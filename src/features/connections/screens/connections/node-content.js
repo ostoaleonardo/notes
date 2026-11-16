@@ -3,8 +3,8 @@ import { StyleSheet, View } from 'react-native'
 import { EntityIcon } from './entity-icon'
 import { Typography } from '@/ui/typography'
 
-import { GRAPH_NODE } from '@/constants/connections'
-import { CONNECTION_NODE_KINDS } from '@/constants/connections'
+import { GRAPH_NODE } from '@/shared/constants/connections'
+import { CONNECTION_NODE_KINDS } from '@/shared/constants/connections'
 
 export const NodeContent = ({
     kind,

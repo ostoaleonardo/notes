@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 
 import { NameDialog } from '@/features/drawer/components/name-dialog'
 
-import { useRepositories } from '@/hooks/use-repositories'
+import { useRepositories } from '@/shared/hooks/use-repositories'
 
-import { REPOSITORY_RESULTS } from '@/constants/repository-results'
+import { REPOSITORY_RESULTS } from '@/shared/constants/repository-results'
 
 export const AddSubfolder = ({
     visible,

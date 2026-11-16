@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useRouter } from 'expo-router'
 
-import { ROUTES } from '@/constants/routes'
-import { NOT_FOUND_REDIRECT_DELAY } from '@/constants/default-values'
+import { ROUTES } from '@/shared/constants/routes'
+import { NOT_FOUND_REDIRECT_DELAY } from '@/shared/constants/default-values'
 
 export default function NotFound() {
     const router = useRouter()

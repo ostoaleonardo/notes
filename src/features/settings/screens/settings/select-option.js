@@ -6,11 +6,11 @@ import { MenuGroup } from '@/ui/menu/menu-group'
 import { SelectMenuItem } from '@/ui/menu/select-menu-item'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { useMenuAction } from '@/hooks/use-menu-action'
+import { useMenuAction } from '@/shared/hooks/use-menu-action'
 
 import { ArrowForward } from '@/icons/arrow-forward'
 
-import { SIZE } from '@/constants/theme'
+import { SIZE } from '@/shared/constants/theme'
 import { getMenuItemTestId } from '@/ui/utils/test-ids'
 
 export const SelectOption = ({

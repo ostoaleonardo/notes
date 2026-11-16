@@ -1,4 +1,4 @@
-import { CONNECTION_TYPES } from '@/constants/connections'
+import { CONNECTION_TYPES } from '@/shared/constants/connections'
 
 const { ROOT, NOTE, FOLDER, FILE, TAG, MISSING } = CONNECTION_TYPES
 

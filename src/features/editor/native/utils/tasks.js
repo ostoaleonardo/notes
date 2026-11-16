@@ -10,7 +10,7 @@ import {
     TASK_CONTENT_PATTERN,
     TASK_LINE_PATTERN,
     TASK_UNCHECKED_MARK
-} from '@/constants/tasks'
+} from '@/shared/constants/tasks'
 
 const md = new MarkdownIt({ html: true })
 

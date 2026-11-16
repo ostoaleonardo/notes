@@ -1,5 +1,5 @@
 import { pickExportFonts } from '../export-fonts'
-import { HEADING_FONT_KEYS } from '@/constants/heading-fonts'
+import { HEADING_FONT_KEYS } from '@/shared/constants/heading-fonts'
 
 const fonts = {
     body: 'b',

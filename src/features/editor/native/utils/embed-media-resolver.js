@@ -1,7 +1,7 @@
 import { parseEmbedMedia } from '../../shared/utils/embed-media'
 import { isEmbeddableMedia } from './media-size'
 
-import { FILE_KINDS } from '@/constants/file-types'
+import { FILE_KINDS } from '@/shared/constants/file-types'
 
 const isAllowed = (name, pdf) => pdf || parseEmbedMedia(name).kind !== FILE_KINDS.PDF
 

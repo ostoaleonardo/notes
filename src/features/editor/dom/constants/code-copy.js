@@ -1,4 +1,4 @@
-import { COPY_ICON_PATH, CHECK_ICON_PATH } from '@/constants/icon-paths'
+import { COPY_ICON_PATH, CHECK_ICON_PATH } from '@/shared/constants/icon-paths'
 
 import { ICON_VIEW_BOX, ICON_FILL } from '@/ui/tokens/theme'
 

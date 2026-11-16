@@ -11,22 +11,22 @@ import { SheetForm, SheetInput } from '@/ui/modal/sheet-form'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { useFileStorage } from '@/hooks/use-file-storage'
-import { useRepositories } from '@/hooks/use-repositories'
-import { useStorage } from '@/hooks/use-storage'
-import { useSingleFlight } from '@/hooks/use-single-flight'
-import { readAttachmentSettings } from '@/utils/attachments'
+import { useFileStorage } from '@/shared/hooks/use-file-storage'
+import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useStorage } from '@/shared/hooks/use-storage'
+import { useSingleFlight } from '@/shared/hooks/use-single-flight'
+import { readAttachmentSettings } from '@/shared/utils/attachments'
 import { getCameraPermission, openImagePicker, requestCameraPermission } from '@/features/editor/native/utils/image-picker'
 
 import { Camera } from '@/icons/camera'
 import { Picture } from '@/icons/picture'
 
-import { RADIUS, SPACING } from '@/constants/theme'
-import { IMAGE_EXTENSION_BY_MIME_TYPE, IMAGE_SOURCES } from '@/constants/image'
-import { PICKER_ERROR_CODES } from '@/constants/picker-errors'
-import { LOG_MESSAGES } from '@/constants/log-messages'
+import { RADIUS, SPACING } from '@/shared/constants/theme'
+import { IMAGE_EXTENSION_BY_MIME_TYPE, IMAGE_SOURCES } from '@/shared/constants/image'
+import { PICKER_ERROR_CODES } from '@/shared/constants/picker-errors'
+import { LOG_MESSAGES } from '@/shared/constants/log-messages'
 import { INPUT_EXAMPLES } from '@/features/editor/native/constants/input-examples'
-import { logError } from '@/utils/log-error'
+import { logError } from '@/shared/utils/log-error'
 
 export const ImageMarkdown = ({
     onClose,

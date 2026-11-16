@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-native'
 
 import { useEditorPreview } from '../use-editor-preview'
-import { EDITOR_MODES } from '@/constants/editor-modes'
+import { EDITOR_MODES } from '@/shared/constants/editor-modes'
 
 const mockBacklinks = jest.fn(() => 'backlinks')
 const mockEmbedMediaMap = jest.fn(() => new Map([['embed', 'e']]))

@@ -5,8 +5,8 @@ import { Typography } from '@/ui/typography'
 
 import { useAnimatedBorderRadius } from '@/features/settings/hooks/use-animated-border-radius'
 
-import { COLOR_OPTION } from '@/constants/components'
-import { OPACITY, RADIUS, SPACING } from '@/constants/theme'
+import { COLOR_OPTION } from '@/shared/constants/components'
+import { OPACITY, RADIUS, SPACING } from '@/shared/constants/theme'
 
 export const SwatchOption = ({
     active,

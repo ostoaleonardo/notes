@@ -5,15 +5,15 @@ import { useTranslation } from 'react-i18next'
 import { OriginTiles } from './origin-tiles'
 import { RelationList } from './relation-list'
 import { FreshSheet } from '@/ui/modal/fresh-sheet'
-import { SearchBar } from '@/components/input/search-bar'
+import { SearchBar } from '@/shared/components/input/search-bar'
 import { EmptyMessage } from '@/ui/modal/empty-message'
 
 import { describeEntity } from '@/features/connections/utils/connection-caption'
-import { listOriginOptions } from '@/utils/connection-model'
+import { listOriginOptions } from '@/shared/utils/connection-model'
 
-import { SHEET } from '@/constants/components'
-import { CONNECTION_TYPES, ORIGIN_TYPES } from '@/constants/connections'
-import { SPACING } from '@/constants/theme'
+import { SHEET } from '@/shared/constants/components'
+import { CONNECTION_TYPES, ORIGIN_TYPES } from '@/shared/constants/connections'
+import { SPACING } from '@/shared/constants/theme'
 
 const OriginContent = ({
     model,

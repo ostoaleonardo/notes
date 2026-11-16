@@ -10,8 +10,8 @@ import {
     HIGHLIGHT_LIVE_PATTERN,
     HIGHLIGHT_MARKER
 } from '@/features/editor/shared/constants/extra-marks'
-import { TRANSPARENT } from '@/constants/themes'
-import { OPACITY } from '@/constants/theme'
+import { TRANSPARENT } from '@/shared/constants/themes'
+import { OPACITY } from '@/shared/constants/theme'
 
 const MARKS = [
     { pattern: HIGHLIGHT_LIVE_PATTERN, marker: HIGHLIGHT_MARKER, className: HIGHLIGHT_LIVE_CLASS },

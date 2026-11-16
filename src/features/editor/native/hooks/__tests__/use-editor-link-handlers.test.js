@@ -2,9 +2,9 @@ import { Linking } from 'react-native'
 import { act, renderHook } from '@testing-library/react-native'
 
 import { useEditorLinkHandlers } from '../use-editor-link-handlers'
-import { pushOnce } from '@/utils/navigation'
+import { pushOnce } from '@/shared/utils/navigation'
 import { LINK_TYPES } from '@/features/editor/native/constants/link-types'
-import { ROUTES } from '@/constants/routes'
+import { ROUTES } from '@/shared/constants/routes'
 
 const mockSetMissing = jest.fn()
 const mockLinkMention = jest.fn()
@@ -13,22 +13,22 @@ const mockResolveLinkPress = jest.fn()
 const mockListFiles = jest.fn(() => [])
 const mockMissingNote = { setMissing: mockSetMissing }
 
-jest.mock('../../../../../hooks/use-missing-note', () => ({
+jest.mock('../../../../../shared/hooks/use-missing-note', () => ({
     useMissingNote: () => mockMissingNote
 }))
 jest.mock('../use-mention-linker', () => ({
     useMentionLinker: () => mockLinkMention
 }))
-jest.mock('../../../../../hooks/use-attachment-files', () => ({
+jest.mock('../../../../../shared/hooks/use-attachment-files', () => ({
     useAttachmentFiles: () => mockListFiles
 }))
-jest.mock('../../../../../hooks/use-open-file', () => ({
+jest.mock('../../../../../shared/hooks/use-open-file', () => ({
     useOpenFile: () => mockOpenFile
 }))
 jest.mock('@/features/editor/native/utils/link-press', () => ({
     resolveLinkPress: (...args) => mockResolveLinkPress(...args)
 }))
-jest.mock('@/utils/navigation', () => ({
+jest.mock('@/shared/utils/navigation', () => ({
     pushOnce: jest.fn()
 }))
 

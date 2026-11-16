@@ -4,7 +4,7 @@ import { Typography } from '@/ui/typography'
 
 import { splitByRanges } from '@/features/search/utils/search-context'
 
-import { FONTS } from '@/constants/theme'
+import { FONTS } from '@/shared/constants/theme'
 
 export const SearchSnippet = ({ snippet, color, background }) => {
     const parts = splitByRanges(snippet.text, snippet.ranges)

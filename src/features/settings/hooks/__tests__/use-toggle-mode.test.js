@@ -1,17 +1,17 @@
 import { act, renderHook } from '@testing-library/react-native'
 
 import { useToggleMode } from '../use-toggle-mode'
-import { ThemeContext } from '@/context/theme-context'
-import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { FREE_ACCENT } from '@/constants/theme-options'
+import { ThemeContext } from '@/shared/context/theme-context'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
+import { FREE_ACCENT } from '@/shared/constants/theme-options'
 
 const mockSetItem = jest.fn()
 let mockPro = false
 
-jest.mock('../../../../hooks/use-storage', () => ({
+jest.mock('../../../../shared/hooks/use-storage', () => ({
     useStorage: () => ({ setItem: mockSetItem })
 }))
-jest.mock('../../../../hooks/use-pro', () => ({
+jest.mock('../../../../shared/hooks/use-pro', () => ({
     usePro: () => ({ pro: mockPro })
 }))
 

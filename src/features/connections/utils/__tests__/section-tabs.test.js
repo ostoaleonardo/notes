@@ -1,5 +1,5 @@
 import { findSectionById, resolveSection, sectionId } from '../section-tabs'
-import { CONNECTION_SECTIONS } from '@/constants/connections'
+import { CONNECTION_SECTIONS } from '@/shared/constants/connections'
 
 const relations = [
     { key: CONNECTION_SECTIONS.LINKS_OUT, entities: [] },

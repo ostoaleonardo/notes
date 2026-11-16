@@ -1,4 +1,4 @@
-import { MAX_PREVIEW_IMAGE_CACHE } from '@/constants/image'
+import { MAX_PREVIEW_IMAGE_CACHE } from '@/shared/constants/image'
 
 export const resolveLocalUrls = async ({ urls, resolveUrl, cache }) => {
     const entries = await Promise.all(urls.map(async (url) => (

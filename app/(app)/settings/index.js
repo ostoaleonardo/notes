@@ -23,9 +23,9 @@ import { Section } from '@/ui/section'
 
 import { OpenInNew } from '@/icons/open-in-new'
 
-import { LINKS } from '@/constants/links'
-import { SPACING } from '@/constants/theme'
-import { EDITOR_SELECT_OPTIONS, NOTES_SELECT_OPTIONS } from '@/constants/settings-select-options'
+import { LINKS } from '@/shared/constants/links'
+import { SPACING } from '@/shared/constants/theme'
+import { EDITOR_SELECT_OPTIONS, NOTES_SELECT_OPTIONS } from '@/shared/constants/settings-select-options'
 
 export default function Settings() {
     const { t } = useTranslation()

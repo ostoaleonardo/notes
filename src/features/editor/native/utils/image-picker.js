@@ -5,7 +5,7 @@ import {
     requestCameraPermissionsAsync
 } from 'expo-image-picker'
 
-import { IMAGE_PICKER_OPTIONS, IMAGE_SOURCES } from '@/constants/image'
+import { IMAGE_PICKER_OPTIONS, IMAGE_SOURCES } from '@/shared/constants/image'
 
 export const getCameraPermission = () => getCameraPermissionsAsync()
 export const requestCameraPermission = () => requestCameraPermissionsAsync()

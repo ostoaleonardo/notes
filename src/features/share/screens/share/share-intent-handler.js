@@ -3,10 +3,10 @@ import { useShareIntent } from 'expo-share-intent'
 
 import { ShareNotePickerSheet } from './share-note-picker-sheet'
 import { ShareSheet } from './share-sheet'
-import { useBottomSheet } from '@/hooks/use-bottom-sheet'
-import { useNotes } from '@/hooks/use-notes'
+import { useBottomSheet } from '@/shared/hooks/use-bottom-sheet'
+import { useNotes } from '@/shared/hooks/use-notes'
 import { useShareDestinations } from '@/features/share/hooks/use-share-destinations'
-import { buildSharedContent } from '@/utils/shared-note'
+import { buildSharedContent } from '@/shared/utils/shared-note'
 
 export const ShareIntentHandler = () => {
     const sheet = useBottomSheet()

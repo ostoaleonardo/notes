@@ -5,12 +5,12 @@ import { useTranslation } from 'react-i18next'
 import { InputChip } from '@/ui/input-chip'
 
 import { getChipText } from '@/features/search/utils/search-chip-label'
-import { removeChip, toggleChipNegation } from '@/utils/search-query'
+import { removeChip, toggleChipNegation } from '@/shared/utils/search-query'
 
 import { Close } from '@/icons/close'
 
-import { SPACING } from '@/constants/theme'
-import { TEST_IDS } from '@/constants/test-ids'
+import { SPACING } from '@/shared/constants/theme'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 export const SearchChip = memo(({ chip, query, setQuery }) => {
     const { t } = useTranslation()

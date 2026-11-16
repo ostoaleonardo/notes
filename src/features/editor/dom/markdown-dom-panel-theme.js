@@ -1,5 +1,5 @@
-import { DOM_FONT_SIZE, OPACITY, RADIUS, SPACING, Z_INDEX } from '@/constants/theme'
-import { TRANSPARENT } from '@/constants/themes'
+import { DOM_FONT_SIZE, OPACITY, RADIUS, SPACING, Z_INDEX } from '@/shared/constants/theme'
+import { TRANSPARENT } from '@/shared/constants/themes'
 
 export const buildTitleSectionStyle = () => ({
     boxSizing: 'border-box',

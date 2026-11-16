@@ -7,8 +7,8 @@ import { SECTION_ICONS } from './entity-icon'
 
 import { Link } from '@/icons/link'
 
-import { GRAPH_BADGE, GRAPH_NODE } from '@/constants/connections'
-import { CONNECTION_SECTIONS, RELATION_BADGES } from '@/constants/connections'
+import { GRAPH_BADGE, GRAPH_NODE } from '@/shared/constants/connections'
+import { CONNECTION_SECTIONS, RELATION_BADGES } from '@/shared/constants/connections'
 
 const BADGE_ICONS = {
     [RELATION_BADGES.OUT]: SECTION_ICONS[CONNECTION_SECTIONS.LINKS_OUT],

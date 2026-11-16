@@ -6,13 +6,13 @@ import { ListSheet } from '@/ui/modal/list-sheet'
 import { ListItem } from '@/ui/list-item'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { useRepositories } from '@/hooks/use-repositories'
+import { useRepositories } from '@/shared/hooks/use-repositories'
 
 import { Check } from '@/ui/icons/check'
 import { Folder } from '@/icons/folder'
 
-import { SPACING, ICON_SIZE } from '@/constants/theme'
-import { TEST_IDS } from '@/constants/test-ids'
+import { SPACING, ICON_SIZE } from '@/shared/constants/theme'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 const MoveNoteItem = memo(({
     item,

@@ -8,10 +8,10 @@ import { useTheme } from '@/ui/hooks/use-theme'
 import { useGroupPosition } from '@/ui/hooks/use-group-position'
 import { getStackedRadiusStyle } from '@/ui/utils/group-position'
 
-import { useLanguage } from '@/hooks/use-language'
-import { getFormattedDate } from '@/utils/formatted-date'
+import { useLanguage } from '@/shared/hooks/use-language'
+import { getFormattedDate } from '@/shared/utils/formatted-date'
 
-import { OPACITY, SPACING } from '@/constants/theme'
+import { OPACITY, SPACING } from '@/shared/constants/theme'
 
 export const VersionItem = memo(({ version, onSelect }) => {
     const { colors } = useTheme()

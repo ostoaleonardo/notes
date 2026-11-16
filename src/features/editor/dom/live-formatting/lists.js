@@ -4,7 +4,7 @@ import { isRangeSelected } from './utils'
 import { CheckboxWidget } from './widgets'
 
 import { LIST_NODE_NAMES } from '@/features/editor/dom/constants/markdown-live-formatting'
-import { CHECKED_TASK_PATTERN } from '@/constants/markdown-patterns'
+import { CHECKED_TASK_PATTERN } from '@/shared/constants/markdown-patterns'
 import { LEZER_NODES } from '@/features/editor/dom/constants/lezer-nodes'
 
 export const listNodeNames = LIST_NODE_NAMES

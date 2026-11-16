@@ -2,8 +2,8 @@ import { memo, useMemo } from 'react'
 import { FlatList, StyleSheet } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { DRAWER_LIST_WINDOW } from '@/constants/drawer-views'
-import { SPACING } from '@/constants/theme'
+import { DRAWER_LIST_WINDOW } from '@/shared/constants/drawer-views'
+import { SPACING } from '@/shared/constants/theme'
 
 const getRowId = (row) => row.id
 

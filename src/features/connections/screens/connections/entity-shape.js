@@ -1,9 +1,9 @@
 import { StyleSheet, View } from 'react-native'
 import { Path, Svg } from 'react-native-svg'
 
-import { GRAPH_NODE } from '@/constants/connections'
-import { CONNECTION_NODE_KINDS } from '@/constants/connections'
-import { RADIUS } from '@/constants/theme'
+import { GRAPH_NODE } from '@/shared/constants/connections'
+import { CONNECTION_NODE_KINDS } from '@/shared/constants/connections'
+import { RADIUS } from '@/shared/constants/theme'
 
 const buildFilePath = (width, height) => {
     const { fileCorner: corner } = GRAPH_NODE

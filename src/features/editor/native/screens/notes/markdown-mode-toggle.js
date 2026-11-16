@@ -9,16 +9,16 @@ import { ActionMenuItem } from '@/ui/menu/action-menu-item'
 import { MenuGroup } from '@/ui/menu/menu-group'
 import { SplitButton } from '@/ui/button/split-button'
 
-import { useBottomSheet } from '@/hooks/use-bottom-sheet'
-import { useMenuAction } from '@/hooks/use-menu-action'
+import { useBottomSheet } from '@/shared/hooks/use-bottom-sheet'
+import { useMenuAction } from '@/shared/hooks/use-menu-action'
 
 import { EditNote } from '@/icons/edit-note'
 import { Notes } from '@/icons/notes'
 import { Search } from '@/icons/search'
 
-import { EDITOR_MODES } from '@/constants/editor-modes'
-import { TEMPLATE_SCOPE } from '@/constants/toolbar'
-import { TEST_IDS } from '@/constants/test-ids'
+import { EDITOR_MODES } from '@/shared/constants/editor-modes'
+import { TEMPLATE_SCOPE } from '@/shared/constants/toolbar'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 import { getMenuItemTestId } from '@/ui/utils/test-ids'
 
 export const MarkdownModeToggle = ({

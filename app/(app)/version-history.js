@@ -4,14 +4,14 @@ import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 
 import { FilledButton } from '@/ui/button/filled-button'
-import { ConfirmDialog } from '@/components/confirm-dialog'
-import { VersionHistoryContent } from '@/features/editor/screens/notes/version-history-content'
+import { ConfirmDialog } from '@/shared/components/confirm-dialog'
+import { VersionHistoryContent } from '@/features/editor/native/screens/notes/version-history-content'
 
-import { useLanguage } from '@/hooks/use-language'
-import { getFormattedDate } from '@/utils/formatted-date'
-import { clearVersionHistorySession, getVersionHistorySession } from '@/utils/version-history-session'
+import { useLanguage } from '@/shared/hooks/use-language'
+import { getFormattedDate } from '@/shared/utils/formatted-date'
+import { clearVersionHistorySession, getVersionHistorySession } from '@/shared/utils/version-history-session'
 
-import { SPACING } from '@/constants/theme'
+import { SPACING } from '@/shared/constants/theme'
 
 export default function VersionHistoryScreen() {
     const { t } = useTranslation()

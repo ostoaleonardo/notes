@@ -8,18 +8,18 @@ import { ListItem } from '../../../../ui/list-item'
 import { Section } from '@/ui/section'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 
-import { usePro } from '@/hooks/use-pro'
-import { useStorage } from '@/hooks/use-storage'
-import { findProPurchase } from '@/utils/iap'
+import { usePro } from '@/shared/hooks/use-pro'
+import { useStorage } from '@/shared/hooks/use-storage'
+import { findProPurchase } from '@/shared/utils/iap'
 
 import { ArrowForward } from '@/icons/arrow-forward'
 import { Check } from '@/ui/icons/check'
 
-import { PRODUCT_ID } from '@/constants/iap'
-import { STORAGE_KEYS } from '@/constants/storage-keys'
-import { SPACING } from '@/constants/theme'
-import { LOG_MESSAGES } from '@/constants/log-messages'
-import { logError } from '@/utils/log-error'
+import { PRODUCT_ID } from '@/shared/constants/iap'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
+import { SPACING } from '@/shared/constants/theme'
+import { LOG_MESSAGES } from '@/shared/constants/log-messages'
+import { logError } from '@/shared/utils/log-error'
 
 export const ProSection = () => {
     const { t } = useTranslation()

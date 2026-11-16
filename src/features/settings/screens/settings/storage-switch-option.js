@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { ListItem } from '../../../../ui/list-item'
 import { Switch } from '@/ui/button/switch'
 
-import { useStorage } from '@/hooks/use-storage'
-import { useStorageEffect } from '@/hooks/use-storage-effect'
+import { useStorage } from '@/shared/hooks/use-storage'
+import { useStorageEffect } from '@/shared/hooks/use-storage-effect'
 
-import { EDITOR_TOGGLE } from '@/constants/editor-display'
+import { EDITOR_TOGGLE } from '@/shared/constants/editor-display'
 
 const ON = 'on'
 const OFF = 'off'

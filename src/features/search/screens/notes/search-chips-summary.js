@@ -6,8 +6,8 @@ import { KeyboardArrowDown } from '@/ui/icons/keyboard-arrow-down'
 import { KeyboardArrowUp } from '@/ui/icons/keyboard-arrow-up'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { ICON_SIZE, OPACITY, SPACING } from '@/constants/theme'
-import { TEST_IDS } from '@/constants/test-ids'
+import { ICON_SIZE, OPACITY, SPACING } from '@/shared/constants/theme'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 export const SearchChipsSummary = ({ chips, expanded, onPress }) => {
     const { t } = useTranslation()

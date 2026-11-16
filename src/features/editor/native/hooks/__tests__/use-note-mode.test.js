@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react-native'
 
 import { useNoteMode } from '../use-note-mode'
-import { EDITOR_MODES } from '@/constants/editor-modes'
+import { EDITOR_MODES } from '@/shared/constants/editor-modes'
 
 const mockCodeMode = {
     enter: jest.fn(),

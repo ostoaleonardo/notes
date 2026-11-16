@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Typography } from '@/ui/typography'
 
-import { OPACITY, SPACING } from '@/constants/theme'
+import { OPACITY, SPACING } from '@/shared/constants/theme'
 
 export const DrawerEmpty = ({ messageKey }) => {
     const { t } = useTranslation()

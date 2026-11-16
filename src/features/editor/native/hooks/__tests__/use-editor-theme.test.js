@@ -2,8 +2,8 @@ import { renderHook } from '@testing-library/react-native'
 
 import { useEditorTheme } from '../use-editor-theme'
 
-import { BUTTON } from '@/constants/components'
-import { SPACING } from '@/constants/theme'
+import { BUTTON } from '@/shared/constants/components'
+import { SPACING } from '@/shared/constants/theme'
 
 const mockColors = { background: '#000' }
 const mockTheme = { colors: mockColors }
@@ -25,7 +25,7 @@ jest.mock('@/ui/hooks/use-theme', () => ({
 jest.mock('react-native-safe-area-context', () => ({
     useSafeAreaInsets: () => mockInsets
 }))
-jest.mock('../../../../../hooks/use-heading-font', () => ({
+jest.mock('../../../../../shared/hooks/use-heading-font', () => ({
     useHeadingFont: () => mockHeading
 }))
 jest.mock('../use-editor-display', () => ({

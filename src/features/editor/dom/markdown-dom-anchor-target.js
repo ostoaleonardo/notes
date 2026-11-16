@@ -1,15 +1,15 @@
 import { EditorView } from '@codemirror/view'
 
 import { findBlocks } from '@/features/editor/shared/utils/block-refs'
-import { findHeadings, normalizeHeading } from '@/utils/headings'
+import { findHeadings, normalizeHeading } from '@/shared/utils/headings'
 
 import {
     BLOCK_ANCHOR_PREFIX,
     BLOCK_HIGHLIGHT_CLASS,
     BLOCK_HIGHLIGHT_DURATION,
     BLOCK_ID_ATTRIBUTE
-} from '@/constants/block-refs'
-import { HEADING_SELECTOR } from '@/constants/headings'
+} from '@/shared/constants/block-refs'
+import { HEADING_SELECTOR } from '@/shared/constants/headings'
 
 const isBlockAnchor = (anchor) => anchor?.startsWith(BLOCK_ANCHOR_PREFIX)
 

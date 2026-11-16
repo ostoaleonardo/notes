@@ -10,9 +10,9 @@ import { PositionGroup } from '@/ui/position-group'
 import { FilledTextField } from '@/ui/input/filled-text-field'
 import { useTheme } from '@/ui/hooks/use-theme'
 
-import { useStorage } from '@/hooks/use-storage'
-import { useStorageEffect } from '@/hooks/use-storage-effect'
-import { sanitizeFolderName } from '@/utils/attachments'
+import { useStorage } from '@/shared/hooks/use-storage'
+import { useStorageEffect } from '@/shared/hooks/use-storage-effect'
+import { sanitizeFolderName } from '@/shared/utils/attachments'
 
 import { ArrowForward } from '@/icons/arrow-forward'
 
@@ -21,9 +21,9 @@ import {
     ATTACHMENT_LOCATIONS,
     DEFAULT_ATTACHMENT_FOLDER,
     DEFAULT_ATTACHMENT_LOCATION
-} from '@/constants/attachments'
-import { PDF_EMBED_MODES, DEFAULT_PDF_EMBED_MODE } from '@/constants/pdf-embed'
-import { STORAGE_KEYS } from '@/constants/storage-keys'
+} from '@/shared/constants/attachments'
+import { PDF_EMBED_MODES, DEFAULT_PDF_EMBED_MODE } from '@/shared/constants/pdf-embed'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
 
 const LOCATIONS = Object.values(ATTACHMENT_LOCATIONS)
 const PDF_EMBED_VALUES = Object.values(PDF_EMBED_MODES)

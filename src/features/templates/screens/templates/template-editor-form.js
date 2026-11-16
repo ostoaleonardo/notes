@@ -6,7 +6,7 @@ import { useHeadingFamily } from '@/ui/hooks/use-heading-family'
 import { useTheme } from '@/ui/hooks/use-theme'
 import { MarkdownInput } from '@/features/editor/native/markdown-input'
 import { Section } from '@/ui/section'
-import { SPACING, TYPOGRAPHY_SIZE_VARIANTS } from '@/constants/theme'
+import { SPACING, TYPOGRAPHY_SIZE_VARIANTS } from '@/shared/constants/theme'
 import { TINT } from '@/ui/tokens/transparent'
 
 export const TemplateEditorForm = ({

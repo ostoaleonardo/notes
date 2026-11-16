@@ -7,15 +7,15 @@ import { SearchTagList } from './search-tag-list'
 import { SearchValueDialog } from './search-value-dialog'
 import { GroupedGrid } from '@/ui/grid/grouped-grid'
 
-import { addQualifier, buildQualifier, hasQualifier, toggleQualifier } from '@/utils/search-query'
+import { addQualifier, buildQualifier, hasQualifier, toggleQualifier } from '@/shared/utils/search-query'
 
 import {
     SEARCH_FILTER_COLUMNS,
     SEARCH_FILTER_KINDS,
     SEARCH_FILTER_OPTIONS
 } from '@/features/search/constants/search-filters'
-import { SPACING } from '@/constants/theme'
-import { TEST_IDS } from '@/constants/test-ids'
+import { SPACING } from '@/shared/constants/theme'
+import { TEST_IDS } from '@/shared/constants/test-ids'
 
 const toQualifier = (option, value) => {
     if (option.kind === SEARCH_FILTER_KINDS.PROPERTY) return `[${value}]`

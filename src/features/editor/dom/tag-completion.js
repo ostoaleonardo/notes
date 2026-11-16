@@ -1,6 +1,6 @@
 import { Facet } from '@codemirror/state'
 
-import { TAG_TYPING_PATTERN, WHITESPACE_PATTERN } from '@/constants/markdown-patterns'
+import { TAG_TYPING_PATTERN, WHITESPACE_PATTERN } from '@/shared/constants/markdown-patterns'
 
 export const knownTagsFacet = Facet.define({
     combine: (values) => values[values.length - 1] || []

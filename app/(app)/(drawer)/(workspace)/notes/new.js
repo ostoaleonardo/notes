@@ -2,25 +2,25 @@ import { useTranslation } from 'react-i18next'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 
-import { NoteEditorScreen } from '@/features/editor/screens/notes/note-editor-screen'
+import { NoteEditorScreen } from '@/features/editor/native/screens/notes/note-editor-screen'
 import { RenameLinksDialog } from '@/screens/dialogs/rename-links-dialog'
 
-import { useAutosave } from '@/hooks/use-autosave'
-import { useNoteDraft } from '@/hooks/use-note-draft'
-import { useTitleCommit } from '@/hooks/use-title-commit'
-import { useNotes } from '@/hooks/use-notes'
-import { useWikiLinkRenameConfirm } from '@/hooks/use-wiki-link-rename-confirm'
-import { useRegisterCurrent } from '@/hooks/use-current-note'
-import { useRepositories } from '@/hooks/use-repositories'
-import { useDefaultNoteFolder } from '@/hooks/use-default-note-folder'
+import { useAutosave } from '@/shared/hooks/use-autosave'
+import { useNoteDraft } from '@/shared/hooks/use-note-draft'
+import { useTitleCommit } from '@/shared/hooks/use-title-commit'
+import { useNotes } from '@/shared/hooks/use-notes'
+import { useWikiLinkRenameConfirm } from '@/shared/hooks/use-wiki-link-rename-confirm'
+import { useRegisterCurrent } from '@/shared/hooks/use-current-note'
+import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useDefaultNoteFolder } from '@/shared/hooks/use-default-note-folder'
 import {
     getNewNoteTitle,
     isDraftSaved,
     resolveNewNoteRepositoryId,
     toSavedSnapshot
-} from '@/utils/note-draft'
+} from '@/shared/utils/note-draft'
 
-import { EDITOR_MODES } from '@/constants/editor-modes'
+import { EDITOR_MODES } from '@/shared/constants/editor-modes'
 
 export default function Note() {
     const { t } = useTranslation()

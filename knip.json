@@ -6,7 +6,7 @@
         "app/**/*.js",
         "plugins/*.js",
         "scripts/*.js",
-        "src/hooks/use-dev-menu.js",
+        "src/shared/hooks/use-dev-menu.js",
         "src/**/__perf__/*.perf.js"
       ],
       "project": [

@@ -4,7 +4,7 @@ import { SelectOption } from './select-option'
 
 import { useFolderSetting } from '@/features/settings/hooks/use-folder-setting'
 
-import { STORAGE_KEYS } from '@/constants/storage-keys'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
 import { getSettingTestId } from '@/features/settings/utils/test-ids'
 
 export const DefaultNoteFolderOption = () => {

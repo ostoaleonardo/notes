@@ -10,14 +10,14 @@ import { wikiLinksPlugin } from '../dom/markdown-it-wiki-links'
 import { wrapCodeBlock } from '../dom/markdown-dom-code-copy'
 import { highlightFence } from '../dom/syntax-highlighting/preview-code-highlight'
 
-import { findInlineTags } from '@/utils/inline-tags'
+import { findInlineTags } from '@/shared/utils/inline-tags'
 import { replaceLocalImageUrls } from '@/features/editor/shared/utils/local-images'
 
-import { TAG_LINK_SCHEME } from '@/constants/tags'
-import { WIKI_LINK_SCHEME } from '@/constants/wiki-links'
+import { TAG_LINK_SCHEME } from '@/shared/constants/tags'
+import { WIKI_LINK_SCHEME } from '@/shared/constants/wiki-links'
 import { PREVIEW_TABLE_SCROLL_CLASS } from '@/features/editor/dom/constants/table-widget'
 import { MARKDOWN_IT_TOKENS } from '@/features/editor/shared/constants/markdown-it-tokens'
-import { ALLOWED_URI_REGEXP, BLOCKED_LINK_PROTOCOL_PATTERN } from '@/constants/html-sanitize'
+import { ALLOWED_URI_REGEXP, BLOCKED_LINK_PROTOCOL_PATTERN } from '@/shared/constants/html-sanitize'
 
 const md = new MarkdownIt({
     html: true,

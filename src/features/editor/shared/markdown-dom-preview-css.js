@@ -1,9 +1,9 @@
 import { buildDerivedColors } from '../dom/markdown-dom-derived-colors'
 import { buildPreviewSyntaxCss } from '../dom/syntax-highlighting/syntax-highlight-style'
 
-import { TRANSPARENT } from '@/constants/themes'
+import { TRANSPARENT } from '@/shared/constants/themes'
 import { CODE_BLOCK_CLASS, CODE_COPY_BUTTON_CLASS, CODE_COPY_DONE_CLASS } from '@/features/editor/dom/constants/code-copy'
-import { RADIUS, OPACITY, INLINE_CODE_STYLE } from '@/constants/theme'
+import { RADIUS, OPACITY, INLINE_CODE_STYLE } from '@/shared/constants/theme'
 import {
     PREVIEW_TABLE_SCROLL_CLASS,
     TABLE_BLEED,
@@ -16,11 +16,11 @@ import {
     CALLOUT_TITLE_CLASS,
     CALLOUT_TYPE_CLASS_PREFIX
 } from '@/features/editor/dom/constants/callouts'
-import { EMBED_CLASS, EMBED_PDF_CLASS, EMBED_TITLE_CLASS, EMBED_OPEN_CLASS } from '@/constants/embeds'
-import { FILE_LINK_CLASS } from '@/constants/file-links'
-import { BLOCK_HIGHLIGHT_CLASS } from '@/constants/block-refs'
-import { ATTACH_FILE_ICON_PATH } from '@/constants/icon-paths'
-import { HEADING_SCALE } from '@/constants/headings'
+import { EMBED_CLASS, EMBED_PDF_CLASS, EMBED_TITLE_CLASS, EMBED_OPEN_CLASS } from '@/shared/constants/embeds'
+import { FILE_LINK_CLASS } from '@/shared/constants/file-links'
+import { BLOCK_HIGHLIGHT_CLASS } from '@/shared/constants/block-refs'
+import { ATTACH_FILE_ICON_PATH } from '@/shared/constants/icon-paths'
+import { HEADING_SCALE } from '@/shared/constants/headings'
 import { buildIconMaskUrl } from '@/features/editor/dom/utils/icon-mask'
 import {
     BACKLINKS_CLASS,
@@ -30,14 +30,14 @@ import {
     MENTIONS_CLASS,
     MENTION_ROW_CLASS,
     MENTION_ACTION_CLASS
-} from '@/constants/backlinks'
+} from '@/shared/constants/backlinks'
 import {
     CUSTOM_TASK_BOX_MARGIN,
     CUSTOM_TASK_BOX_RADIUS,
     CUSTOM_TASK_BOX_SIZE,
     CUSTOM_TASK_GLYPH_SIZE,
     CUSTOM_TASK_STATUS_ATTRIBUTE
-} from '@/constants/tasks'
+} from '@/shared/constants/tasks'
 
 const ATTACH_FILE_MASK = buildIconMaskUrl(ATTACH_FILE_ICON_PATH)
 

@@ -11,7 +11,7 @@ import {
     TABLE_TRAILING_PIPE_PATTERN,
     NEWLINE_PATTERN,
     TABLE_UNESCAPED_PIPE_PATTERN
-} from '@/constants/markdown-patterns'
+} from '@/shared/constants/markdown-patterns'
 
 const splitRow = (line) => {
     const text = line.trim().replace(TABLE_LEADING_PIPE_PATTERN, '').replace(TABLE_TRAILING_PIPE_PATTERN, '')

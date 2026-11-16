@@ -5,9 +5,9 @@ import { FadeInUp, FadeOutUp } from 'react-native-reanimated'
 import { CardGridItem } from './card-grid-item'
 import { AnimatedView } from '@/ui/animated/animated-view'
 import { Typography } from '@/ui/typography'
-import { CARD_GRID } from '@/constants/components'
+import { CARD_GRID } from '@/shared/constants/components'
 
-import { OPACITY } from '@/constants/theme'
+import { OPACITY } from '@/shared/constants/theme'
 
 export const CardGrid = ({
     cards,

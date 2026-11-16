@@ -2,19 +2,19 @@ import { act, renderHook } from '@testing-library/react-native'
 
 import { useNoteMove } from '../use-note-move'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
-import { DUPLICATE_TITLE_ERROR } from '@/constants/note-errors'
+import { DUPLICATE_TITLE_ERROR } from '@/shared/constants/note-errors'
 
 const mockMoveNote = jest.fn()
 const mockUpdatePinned = jest.fn()
 const mockRemoveRecent = jest.fn()
 
-jest.mock('../../../../../hooks/use-notes', () => ({
+jest.mock('../../../../../shared/hooks/use-notes', () => ({
     useNotes: () => ({ moveNote: mockMoveNote })
 }))
-jest.mock('../../../../../hooks/use-utils', () => ({
+jest.mock('../../../../../shared/hooks/use-utils', () => ({
     useUtils: () => ({ pinned: mockPinned, updatePinned: mockUpdatePinned })
 }))
-jest.mock('../../../../../hooks/use-recent-notes', () => ({
+jest.mock('../../../../../shared/hooks/use-recent-notes', () => ({
     useRecentNotes: () => ({ removeRecent: mockRemoveRecent })
 }))
 jest.mock('@/ui/snackbar/snackbar-host', () => ({
@@ -23,7 +23,7 @@ jest.mock('@/ui/snackbar/snackbar-host', () => ({
 jest.mock('react-i18next', () => ({
     useTranslation: () => ({ t: (key) => key })
 }))
-jest.mock('@/utils/log-error', () => ({
+jest.mock('@/shared/utils/log-error', () => ({
     logError: jest.fn()
 }))
 

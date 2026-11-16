@@ -1,6 +1,6 @@
 import { File } from 'expo-file-system'
 
-import { MIME_TYPES } from '@/constants/mime-types'
+import { MIME_TYPES } from '@/shared/constants/mime-types'
 
 export const resolveUrl = async (url) => {
     try {
