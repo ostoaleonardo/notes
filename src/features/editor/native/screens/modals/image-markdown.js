@@ -1,0 +1,203 @@
+import { useEffect, useState } from 'react'
+import { Image } from 'expo-image'
+import { randomUUID } from 'expo-crypto'
+import { useTranslation } from 'react-i18next'
+import { Linking, StyleSheet, View } from 'react-native'
+
+import { ButtonGroup } from '@/ui/button/button-group'
+import { SheetActions } from '@/ui/modal/sheet-actions'
+import { PermissionCard } from '@/ui/permission-card'
+import { SheetForm, SheetInput } from '@/ui/modal/sheet-form'
+import { showSnackbar } from '@/ui/snackbar/snackbar-host'
+import { useTheme } from '@/ui/hooks/use-theme'
+
+import { useFileStorage } from '@/hooks/use-file-storage'
+import { useRepositories } from '@/hooks/use-repositories'
+import { useStorage } from '@/hooks/use-storage'
+import { useSingleFlight } from '@/hooks/use-single-flight'
+import { readAttachmentSettings } from '@/utils/attachments'
+import { getCameraPermission, openImagePicker, requestCameraPermission } from '@/features/editor/native/utils/image-picker'
+
+import { Camera } from '@/icons/camera'
+import { Picture } from '@/icons/picture'
+
+import { RADIUS, SPACING } from '@/constants/theme'
+import { IMAGE_EXTENSION_BY_MIME_TYPE, IMAGE_SOURCES } from '@/constants/image'
+import { PICKER_ERROR_CODES } from '@/constants/picker-errors'
+import { LOG_MESSAGES } from '@/constants/log-messages'
+import { INPUT_EXAMPLES } from '@/features/editor/native/constants/input-examples'
+import { logError } from '@/utils/log-error'
+
+export const ImageMarkdown = ({
+    onClose,
+    onInsert,
+    repositoryId
+}) => {
+    const { t } = useTranslation()
+    const { copyImageFile } = useFileStorage()
+    const { getItem } = useStorage()
+    const { repositories, activeRepository, ensureAttachmentsFolder } = useRepositories()
+    const { colors } = useTheme()
+
+    const [title, setTitle] = useState('')
+    const [url, setUrl] = useState('')
+    const [deviceImageName, setDeviceImageName] = useState('')
+    const [imageSize, setImageSize] = useState(null)
+    const [cameraPermission, setCameraPermission] = useState(null)
+
+    const hasPreview = url.trim() !== ''
+    const isDeviceImage = deviceImageName !== ''
+
+    useEffect(() => {
+        getCameraPermission().then(setCameraPermission)
+    }, [])
+
+    const onRequestCameraPermission = async () => {
+        if (cameraPermission && !cameraPermission.canAskAgain) {
+            Linking.openSettings()
+            return
+        }
+
+        setCameraPermission(await requestCameraPermission())
+    }
+
+    const [onPickImage] = useSingleFlight(async (type) => {
+        let asset = null
+
+        try {
+            asset = await openImagePicker(type)
+        } catch (error) {
+            if (error.code === PICKER_ERROR_CODES.PERMISSION_REJECTED) {
+                setCameraPermission(await getCameraPermission())
+                showSnackbar(t('markdown.camera_permission.denied'))
+                return
+            }
+
+            logError(LOG_MESSAGES.ERROR_PICKING_IMAGE, error)
+            showSnackbar(t('markdown.image.pick_failed'))
+            return
+        }
+
+        if (!asset) return
+
+        try {
+            const repository = repositories.find((item) => item.id === repositoryId) || activeRepository
+            const settings = await readAttachmentSettings(getItem)
+            const attachmentsUri = ensureAttachmentsFolder(repository, settings)
+            const extension = IMAGE_EXTENSION_BY_MIME_TYPE[asset.mimeType] || 'jpg'
+            const file = await copyImageFile(asset.uri, attachmentsUri, `${randomUUID()}.${extension}`)
+
+            setUrl(file.uri)
+            setDeviceImageName(file.name)
+            setImageSize(null)
+        } catch (error) {
+            logError(LOG_MESSAGES.ERROR_SAVING_PICKED_IMAGE, error)
+            showSnackbar(t('markdown.image.save_failed'))
+        }
+    })
+
+    const onAdd = () => {
+        if (!url.trim()) return
+
+        onInsert(isDeviceImage ? { embed: deviceImageName } : { title, url })
+
+        setTitle('')
+        setUrl('')
+        setDeviceImageName('')
+        setImageSize(null)
+        onClose()
+    }
+
+    return (
+        <SheetForm
+            title={t('markdown_action.image')}
+            footer={(
+                <SheetActions>
+                    <ButtonGroup
+                        buttons={[
+                            {
+                                icon: Camera,
+                                label: t('markdown.image.camera'),
+                                onPress: () => onPickImage(IMAGE_SOURCES.CAMERA)
+                            },
+                            {
+                                icon: Picture,
+                                label: t('markdown.image.gallery'),
+                                onPress: () => onPickImage(IMAGE_SOURCES.GALLERY)
+                            },
+                            {
+                                showLabel: true,
+                                label: t('button.insert'),
+                                onPress: onAdd
+                            }
+                        ]}
+                    />
+                </SheetActions>
+            )}
+        >
+            {cameraPermission && !cameraPermission.granted && (
+                <View style={styles.permission}>
+                    <PermissionCard
+                        title={t('markdown.camera_permission.title')}
+                        message={t('markdown.camera_permission.message')}
+                        icon={Camera}
+                        onPress={onRequestCameraPermission}
+                    />
+                </View>
+            )}
+
+            {!isDeviceImage && (
+                <SheetInput
+                    label={t('markdown.image.url')}
+                    value={url}
+                    onChangeText={setUrl}
+                    placeholder={INPUT_EXAMPLES.IMAGE_URL}
+                />
+            )}
+
+            {hasPreview && (
+                <View style={styles.previewField}>
+                    <View
+                        style={{
+                            ...styles.preview,
+                            backgroundColor: colors.surfaceVariant,
+                            aspectRatio: imageSize ? imageSize.width / imageSize.height : 1
+                        }}
+                    >
+                        <Image
+                            source={url}
+                            style={styles.image}
+                            contentFit='contain'
+                            onLoad={(event) => setImageSize(event.source)}
+                        />
+                    </View>
+                </View>
+            )}
+
+            <SheetInput
+                label={t('markdown.image.alt')}
+                value={title}
+                onChangeText={setTitle}
+                placeholder={t('markdown.image.alt_placeholder')}
+            />
+        </SheetForm>
+    )
+}
+
+const styles = StyleSheet.create({
+    permission: {
+        marginHorizontal: SPACING.lg
+    },
+    previewField: {
+        paddingHorizontal: SPACING.lg
+    },
+    preview: {
+        width: '100%',
+        borderRadius: RADIUS.lg,
+        overflow: 'hidden'
+    },
+    image: {
+        width: '100%',
+        height: '100%'
+    }
+})

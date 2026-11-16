@@ -1,5 +1,5 @@
 import { findBacklinks } from '../wiki-links'
-import { findUnlinkedMentions } from '../../features/editor/utils/unlinked-mentions'
+import { findUnlinkedMentions } from '../../features/editor/native/utils/unlinked-mentions'
 import { searchNotes } from '../search-filter'
 import { parseSearchQuery } from '../search-parser'
 import { buildNotes, measure, report } from '../../../jest/perf-fixtures'

@@ -1,0 +1,57 @@
+import { memo } from 'react'
+
+import { LinkMarkdown } from '@/features/editor/native/screens/modals/link-markdown'
+import { TableMarkdown } from '@/features/editor/native/screens/modals/table-markdown'
+import { ImageMarkdown } from '@/features/editor/native/screens/modals/image-markdown'
+import { ModalBottomSheet } from '@/ui/modal/modal-bottom-sheet'
+
+import { MARKDOWN_ACTIONS } from '@/constants/markdown-actions'
+
+export const MarkdownInsertSheets = memo(({
+    linkSheet,
+    tableSheet,
+    imageSheet,
+    repositoryId,
+    action
+}) => {
+    return (
+        <>
+            <ModalBottomSheet
+                enableDynamicSizing
+                ref={linkSheet.ref}
+            >
+                <LinkMarkdown
+                    onClose={linkSheet.onClose}
+                    onInsert={(payload) => action.run(MARKDOWN_ACTIONS.LINK, payload)}
+                />
+            </ModalBottomSheet>
+
+            <ModalBottomSheet
+                enableDynamicSizing
+                ref={tableSheet.ref}
+                enablePanDownToClose={false}
+                dismissOnClickOutside
+                dismissOnBackPress
+            >
+                <TableMarkdown
+                    onClose={tableSheet.onClose}
+                    onInsert={(payload) => action.run(MARKDOWN_ACTIONS.TABLE, payload)}
+                />
+            </ModalBottomSheet>
+
+            <ModalBottomSheet
+                enableDynamicSizing
+                ref={imageSheet.ref}
+            >
+                <ImageMarkdown
+                    onClose={imageSheet.onClose}
+                    repositoryId={repositoryId}
+                    onInsert={(payload) => action.run(
+                        payload.embed ? MARKDOWN_ACTIONS.IMAGE_EMBED : MARKDOWN_ACTIONS.IMAGE,
+                        payload
+                    )}
+                />
+            </ModalBottomSheet>
+        </>
+    )
+})

@@ -226,6 +226,70 @@ const evict = (feature) => {
     return mapping
 }
 
+const reachableFrom = (entry, graph) => {
+    const seen = new Set()
+    const stack = [entry]
+
+    while (stack.length) {
+        const current = stack.pop()
+        if (seen.has(current)) continue
+
+        seen.add(current)
+        stack.push(...(graph.imports.get(current) || []))
+    }
+
+    return seen
+}
+
+const collapseEditorPath = (rel) => rel.replace(/^components\/markdown\//, '')
+
+const splitRuntime = (feature, entryRel) => {
+    const graph = buildGraph()
+    const root = featureRoot(feature)
+    const reachable = reachableFrom(path.join(ROOT, entryRel), graph)
+    const inside = [...graph.imports.keys()].filter((file) => file.startsWith(root + path.sep))
+    const classes = new Map()
+
+    for (const file of inside.filter((item) => !isTest(item))) {
+        if (!reachable.has(file)) {
+            classes.set(file, 'native')
+            continue
+        }
+
+        const usedByNative = [...(graph.importers.get(file) || [])].some((user) => !reachable.has(user) && !isTest(user))
+        classes.set(file, usedByNative && file !== path.join(ROOT, entryRel) ? 'shared' : 'dom')
+    }
+
+    const classOfTest = (file) => {
+        const subject = subjectOf(file)
+        if (subject && classes.has(subject)) return classes.get(subject)
+
+        const local = [...(graph.imports.get(file) || [])].filter((target) => classes.has(target))
+        const kinds = new Set(local.map((target) => classes.get(target)))
+
+        if (/dom-tests/.test(file)) return 'dom'
+        if (kinds.size === 1) return [...kinds][0]
+
+        return kinds.has('native') ? 'native' : 'dom'
+    }
+
+    const mapping = {}
+    const used = new Map()
+
+    for (const file of inside) {
+        const kind = isTest(file) ? classOfTest(file) : classes.get(file)
+        const rel = collapseEditorPath(path.relative(root, file))
+        const target = path.join(root, kind, rel)
+
+        if (used.has(target)) throw new Error(`collision: ${toRel(file)} and ${toRel(used.get(target))} -> ${toRel(target)}`)
+
+        used.set(target, file)
+        mapping[toRel(file)] = toRel(target)
+    }
+
+    return mapping
+}
+
 const [command, ...args] = process.argv.slice(2)
 
 if (command === 'analyze') {
@@ -233,6 +297,8 @@ if (command === 'analyze') {
     const result = analyze(feature, patterns)
 
     console.log(JSON.stringify(result, null, 2))
+} else if (command === 'split-runtime') {
+    console.log(JSON.stringify(splitRuntime(args[0], args[1]), null, 2))
 } else if (command === 'evict') {
     console.log(JSON.stringify(evict(args[0]), null, 2))
 } else if (command === 'move') {

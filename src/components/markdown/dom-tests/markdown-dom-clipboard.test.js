@@ -1,4 +1,4 @@
-import { copyText } from '../../../features/editor/components/markdown/markdown-dom-clipboard'
+import { copyText } from '../../../features/editor/dom/markdown-dom-clipboard'
 
 import { logError } from '@/utils/log-error'
 

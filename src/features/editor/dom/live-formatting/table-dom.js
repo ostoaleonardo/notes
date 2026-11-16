@@ -1,0 +1,40 @@
+import { TABLE_AXES } from '@/features/editor/shared/constants/table'
+import { TABLE_CLASSES } from '@/features/editor/dom/constants/table-widget'
+import { ICON_FILL, ICON_VIEW_BOX, SVG_NAMESPACE } from '@/constants/theme'
+
+export const buildSvg = (path, size) => {
+    const svg = document.createElementNS(SVG_NAMESPACE, 'svg')
+    svg.setAttribute('width', size)
+    svg.setAttribute('height', size)
+    svg.setAttribute('viewBox', ICON_VIEW_BOX)
+    svg.setAttribute('fill', ICON_FILL)
+
+    const shape = document.createElementNS(SVG_NAMESPACE, 'path')
+    shape.setAttribute('d', path)
+    svg.appendChild(shape)
+
+    return svg
+}
+
+export const buildElement = (tag, className, parent) => {
+    const element = document.createElement(tag)
+    element.className = className
+    parent?.appendChild(element)
+    return element
+}
+
+export const placeCaretAtEnd = (element) => {
+    const range = document.createRange()
+    range.selectNodeContents(element)
+    range.collapse(false)
+
+    const selection = window.getSelection()
+    selection.removeAllRanges()
+    selection.addRange(range)
+}
+
+const getAxisPosition = (cell, axis) => (axis === TABLE_AXES.ROW ? cell.row : cell.col)
+
+export const setLaneHighlight = (wrap, axis, index, on) => wrap.cells.forEach((cell) => {
+    if (getAxisPosition(cell, axis) === index) cell.classList.toggle(TABLE_CLASSES.HIGHLIGHT, on)
+})
