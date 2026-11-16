@@ -1,18 +1,17 @@
 import { useNotes } from './use-notes'
 import { useStableCallback } from './use-stable-callback'
-import { getNoteBlocks } from '@/utils/note-entries'
+import { getNoteBlocks, resolveBlockTarget } from '@/utils/note-entries'
 
-const NO_BLOCKS = { labeled: [], unlabeled: [] }
-
-export function useBlockLoader(selfId) {
+export function useBlockLoader(selfId, entries) {
     const { getNote } = useNotes()
 
-    return useStableCallback(async (path) => {
-        const note = getNote(path)
-        if (!note.path) return NO_BLOCKS
+    return useStableCallback(async (target) => {
+        const path = resolveBlockTarget(entries, target)
+        const note = path && getNote(path)
+        if (!note?.path) return null
 
         const { labeled, unlabeled } = getNoteBlocks(note)
 
-        return { labeled, unlabeled: path === selfId ? [] : unlabeled }
+        return { path, labeled, unlabeled: path === selfId ? [] : unlabeled }
     })
 }

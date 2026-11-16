@@ -6,7 +6,8 @@ import { indentUnit } from '@codemirror/language'
 import { buildEditorTheme } from './markdown-dom-theme'
 import { buildEditorHighlighting } from './syntax-highlighting/syntax-highlight-style'
 import { liveFormatting, mediaMapFacet, tableLabelsFacet } from './live-formatting/live-formatting'
-import { noteEntriesFacet, wikiLinkFormatFacet } from './wiki-link-completion'
+import { linkResolution } from './link-resolution'
+import { wikiLinkFormatFacet } from './wiki-link-completion'
 import { knownTagsFacet } from './tag-completion'
 import { useCompartment } from './use-compartment'
 import { buildInvalidFrontmatterHighlight } from './markdown-dom-invalid-frontmatter'
@@ -19,7 +20,6 @@ import { EDITOR_MODES } from '@/constants/editor-modes'
 export const useEditorCompartments = (viewRef, {
     mode,
     mediaMap,
-    noteEntries,
     knownTags,
     linkFormat,
     tableLabels,
@@ -34,14 +34,12 @@ export const useEditorCompartments = (viewRef, {
     const { colors } = stableTheme
 
     const stableMediaMap = useStableValue(mediaMap)
-    const stableNoteEntries = useStableValue(noteEntries)
     const stableKnownTags = useStableValue(knownTags)
     const stableTableLabels = useStableValue(tableLabels)
 
     const mediaMapValue = useMemo(() => new Map(stableMediaMap || []), [stableMediaMap])
 
     const mediaMapExtension = useCompartment(viewRef, () => mediaMapFacet.of(mediaMapValue), [mediaMapValue])
-    const noteEntriesExtension = useCompartment(viewRef, () => noteEntriesFacet.of(stableNoteEntries || []), [stableNoteEntries])
     const knownTagsExtension = useCompartment(viewRef, () => knownTagsFacet.of(stableKnownTags || []), [stableKnownTags])
     const linkFormatExtension = useCompartment(viewRef, () => wikiLinkFormatFacet.of(linkFormat), [linkFormat])
     const tableLabelsExtension = useCompartment(viewRef, () => tableLabelsFacet.of(stableTableLabels || {}), [stableTableLabels])
@@ -68,7 +66,7 @@ export const useEditorCompartments = (viewRef, {
 
     const liveFormattingExtension = useCompartment(
         viewRef,
-        () => (mode === EDITOR_MODES.LIVE ? [liveFormatting] : []),
+        () => (mode === EDITOR_MODES.LIVE ? [liveFormatting, linkResolution] : []),
         [mode]
     )
 
@@ -112,7 +110,6 @@ export const useEditorCompartments = (viewRef, {
 
     return [
         mediaMapExtension,
-        noteEntriesExtension,
         knownTagsExtension,
         linkFormatExtension,
         tableLabelsExtension,

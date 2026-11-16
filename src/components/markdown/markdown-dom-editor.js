@@ -1,6 +1,7 @@
 'use dom'
 
 import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
+import { useDOMImperativeHandle } from 'expo/dom'
 import { EditorState } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
 
@@ -8,6 +9,7 @@ import { katexCss } from './markdown-dom-katex-css'
 import { TitleSection } from './markdown-dom-widgets'
 import { buildPreviewCss } from './markdown-dom-preview-css'
 import { renderReadHtml } from './markdown-dom-render-html'
+import { linksReset } from './link-resolution'
 import { useCodeLanguages } from './use-code-languages'
 import { runAction } from './markdown-dom-commands'
 import { buildEditorExtensions, buildUpdateListener } from './markdown-dom-editor-extensions'
@@ -23,14 +25,17 @@ import { scrollToEditorTarget, scrollToPreviewTarget } from './markdown-dom-anch
 import { EDITOR_MODES } from '@/constants/editor-modes'
 import { TEST_IDS } from '@/constants/test-ids'
 
+const NO_META_LINES = []
+
 export default function MarkdownDomEditor({
+    ref,
     mode,
     onEdit,
     value,
     valueNonce,
     previewValue,
     mediaMap,
-    noteEntries,
+    linkVersion,
     knownTags,
     linkFormat,
     tableLabels,
@@ -50,6 +55,8 @@ export default function MarkdownDomEditor({
     onTagPress,
     onCreateBlockId,
     onLoadBlocks,
+    onResolveLinks,
+    onSearchNotes,
     onImagePress,
     onToggleTask,
     theme,
@@ -89,6 +96,11 @@ export default function MarkdownDomEditor({
     const onLinkPressRef = useLatestRef(onLinkPress)
     const onCreateBlockIdRef = useLatestRef(onCreateBlockId)
     const onLoadBlocksRef = useLatestRef(onLoadBlocks)
+    const onResolveLinksRef = useLatestRef(onResolveLinks)
+    const onSearchNotesRef = useLatestRef(onSearchNotes)
+
+    const [metaLines, setMetaLines] = useState(NO_META_LINES)
+    useDOMImperativeHandle(ref, () => ({ setMetaLines }), [])
 
     const [addPropertyRequest, setAddPropertyRequest] = useState(0)
     const onAddProperty = useCallback(() => setAddPropertyRequest((count) => count + 1), [])
@@ -101,7 +113,6 @@ export default function MarkdownDomEditor({
     const dynamicExtensions = useEditorCompartments(viewRef, {
         mode,
         mediaMap,
-        noteEntries,
         knownTags,
         linkFormat,
         tableLabels,
@@ -130,6 +141,8 @@ export default function MarkdownDomEditor({
                 onLinkPressRef,
                 onCreateBlockIdRef,
                 onLoadBlocksRef,
+                onResolveLinksRef,
+                onSearchNotesRef,
                 updateListener: buildUpdateListener({
                     onChangeRef,
                     onHistoryChangeRef,
@@ -164,6 +177,15 @@ export default function MarkdownDomEditor({
     })
 
     useEffect(() => initEditor(), [])
+
+    const linkVersionRef = useRef(linkVersion)
+
+    useEffect(() => {
+        if (linkVersionRef.current === linkVersion) return
+
+        linkVersionRef.current = linkVersion
+        viewRef.current?.dispatch({ effects: linksReset.of(null) })
+    }, [linkVersion])
 
     useEffect(() => {
         const view = viewRef.current
@@ -255,6 +277,7 @@ export default function MarkdownDomEditor({
 
             <TitleSection
                 {...titleField}
+                metaLines={metaLines}
                 showTitle={inlineTitle}
                 onTitleChange={onTitleChange}
                 onTitleBlur={onTitleBlur}

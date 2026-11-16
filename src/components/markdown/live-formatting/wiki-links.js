@@ -3,9 +3,8 @@ import { Decoration, EditorView } from '@codemirror/view'
 import { isRangeSelected, overlapsAny } from './utils'
 import { ImageWidget, MediaWidget, PdfWidget } from './widgets'
 
-import { isSameNoteTarget, resolveWikiLinkTarget } from '@/utils/wiki-links'
+import { isSameNoteTarget } from '@/utils/wiki-links'
 import { parseEmbedMedia } from '@/utils/embed-media'
-import { getEntryResolverInputs } from '@/utils/note-entries'
 import { buildFileLinkUrl, isFileLinkTarget } from '@/utils/file-links'
 import { buildIconMaskUrl } from '@/utils/icon-mask'
 
@@ -50,13 +49,11 @@ const buildMediaWidget = ({ name, kind, page }, url, linkText) => {
     return new MediaWidget(kind, url)
 }
 
-export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, noteEntries, selection, mediaMap }) => {
-    const { notes, notePaths } = getEntryResolverInputs(noteEntries)
-
+export const decorateWikiLinks = ({ ranges, codeRanges, wikiLinkRanges, resolvedLinks, selection, mediaMap }) => {
     for (const { from, to, linkText, labelFrom, labelTo, isEmbed } of wikiLinkRanges) {
         if (overlapsAny(from, to, codeRanges)) continue
 
-        const resolved = isSameNoteTarget(linkText) || !!resolveWikiLinkTarget(linkText, notes, notePaths)
+        const resolved = isSameNoteTarget(linkText) || resolvedLinks.get(linkText) !== false
         const media = isEmbed ? parseEmbedMedia(linkText.trim()) : null
         const mediaKind = media?.kind ?? null
         const isPendingKind = mediaKind && mediaKind !== FILE_KINDS.PDF

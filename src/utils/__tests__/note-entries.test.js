@@ -3,7 +3,9 @@ import {
     buildNoteEntries,
     filterBlockSuggestions,
     getNoteBlocks,
-    resolveBlockTarget
+    resolveBlockTarget,
+    resolveLinkTargets,
+    searchNoteEntries
 } from '../note-entries'
 
 const entry = (overrides = {}) => ({
@@ -139,5 +141,44 @@ describe('block suggestions', () => {
         expect(filterBlockSuggestions('r::A.md', blocks, 'milk').map(({ id }) => id)).toEqual(
             ['todo']
         )
+    })
+})
+
+describe('link target resolution', () => {
+    test('marks each target as resolved or missing', () => {
+        const entries = [entry({ id: 'r::Alpha.md', title: 'Alpha', aliases: [] })]
+
+        expect(resolveLinkTargets(entries, ['Alpha', 'Nope'])).toEqual({ Alpha: true, Nope: false })
+    })
+})
+
+describe('note search', () => {
+    const entries = [
+        entry({ id: '1', title: 'Project plan', path: 'work' }),
+        entry({ id: '2', title: 'Plan B', path: 'work' }),
+        entry({ id: '3', title: 'Plan B', path: 'home' }),
+        entry({ id: '4', title: 'Unrelated', path: '' })
+    ]
+
+    test('puts titles that start with the query first', () => {
+        const titles = searchNoteEntries(entries, 'plan').map(({ title }) => title)
+
+        expect(titles).toEqual(['Plan B', 'Plan B', 'Project plan'])
+    })
+
+    test('flags titles shared by several notes as ambiguous', () => {
+        const [first] = searchNoteEntries(entries, 'plan b')
+
+        expect(first.ambiguous).toBe(true)
+    })
+
+    test('skips the same title in the same folder', () => {
+        const duplicated = [...entries, entry({ id: '5', title: 'Plan B', path: 'work' })]
+
+        expect(searchNoteEntries(duplicated, 'plan b')).toHaveLength(2)
+    })
+
+    test('returns nothing when no title matches', () => {
+        expect(searchNoteEntries(entries, 'zzz')).toEqual([])
     })
 })

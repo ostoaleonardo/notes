@@ -11,8 +11,10 @@ import {
     wikiLinkCompletionSource,
     blockCompletionSource,
     blockIdCreatorFacet,
-    blockLoaderFacet
+    blockLoaderFacet,
+    noteSearchFacet
 } from './wiki-link-completion'
+import { linkResolverFacet } from './link-resolution'
 import { tagCompletionSource } from './tag-completion'
 import { inlineTagExtensions } from './inline-tag-highlight'
 import { filePressFacet } from './live-formatting/file-press'
@@ -61,6 +63,8 @@ export const buildEditorExtensions = ({
     onLinkPressRef,
     onCreateBlockIdRef,
     onLoadBlocksRef,
+    onResolveLinksRef,
+    onSearchNotesRef,
     updateListener
 }) => [
     history(),
@@ -78,6 +82,8 @@ export const buildEditorExtensions = ({
     filePressFacet.of(onLinkPressRef),
     blockIdCreatorFacet.of(onCreateBlockIdRef),
     blockLoaderFacet.of(onLoadBlocksRef),
+    linkResolverFacet.of(onResolveLinksRef),
+    noteSearchFacet.of(onSearchNotesRef),
     autocompletion({ override: [wikiLinkCompletionSource, blockCompletionSource, tagCompletionSource] }),
     closeBrackets(),
     markdownAutoPair,

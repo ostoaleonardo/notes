@@ -28,7 +28,7 @@ import { decorateBlockIds, blockIdsTheme } from './block-ids'
 import { decorateExtraMarks, extraMarksTheme } from './extra-marks'
 import { decorateCustomTasks, customTasksTheme } from './custom-tasks'
 import { findWikiLinkRanges, decorateWikiLinks, wikiLinksTheme } from './wiki-links'
-import { noteEntriesFacet } from '@/components/markdown/wiki-link-completion'
+import { linksReset, linksResolved, resolvedLinksField } from '@/components/markdown/link-resolution'
 
 import { findCustomTaskRanges } from '@/utils/tasks'
 import { getBoundaryEdit } from '@/utils/table-boundary'
@@ -38,6 +38,11 @@ import { TABLE_BOUNDARY_INPUT_EVENTS, TABLE_END_LINE } from '@/constants/table'
 import { LEZER_NODES } from '@/constants/lezer-nodes'
 
 const codeRangeNodeNames = new Set(CODE_RANGE_NODE_NAMES)
+const NO_RESOLVED_LINKS = new Map()
+
+const isLinkResolutionChange = (tr) => (
+    tr.effects.some((effect) => effect.is(linksResolved) || effect.is(linksReset))
+)
 
 const NODE_HANDLERS = new Map([
     ...inlineMarkNodeNames.map((name) => [name, decorateInlineMark]),
@@ -61,7 +66,7 @@ const collectDecorationRanges = (state, from, to) => {
     const selection = state.selection.main
     const localSelection = { from: selection.from + offset, to: selection.to + offset }
     const mediaMap = state.facet(mediaMapFacet)
-    const noteEntries = state.facet(noteEntriesFacet)
+    const resolvedLinks = state.field(resolvedLinksField, false) ?? NO_RESOLVED_LINKS
     const tableLabels = state.facet(tableLabelsFacet)
     const codeRanges = []
     const text = doc.sliceString(from, to)
@@ -94,7 +99,7 @@ const collectDecorationRanges = (state, from, to) => {
     decorateBlockIds(localSource)
     decorateCustomTasks({ ...localSource, customTaskRanges })
     decorateExtraMarks(localSource)
-    decorateWikiLinks({ ...localSource, wikiLinkRanges, noteEntries, mediaMap })
+    decorateWikiLinks({ ...localSource, wikiLinkRanges, resolvedLinks, mediaMap })
 
     return from === 0 ? ranges : ranges.concat(textRanges.map((range) => shiftRange(range, from)))
 }
@@ -154,7 +159,9 @@ export { mediaMapFacet, tableLabelsFacet }
 export const liveFormatting = StateField.define({
     create: (state) => buildLiveFormattingDecorations(state),
     update: (decorations, tr) => {
-        if (tr.reconfigured) return buildLiveFormattingDecorations(tr.state)
+        if (tr.reconfigured || isLinkResolutionChange(tr)) {
+            return buildLiveFormattingDecorations(tr.state)
+        }
 
         if (tr.docChanged) {
             const zones = changedZones(tr)
@@ -186,7 +193,7 @@ export const liveFormatting = StateField.define({
         guardTableBoundary(field),
         ensureLineAfterTable(field),
         EditorView.atomicRanges.of((view) => view.state.field(field).update({
-            filter: (from, to, value) => value.spec.widget instanceof TableWidget
+            filter: (_from, _to, value) => value.spec.widget instanceof TableWidget
         }))
     ]
 })

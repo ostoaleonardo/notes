@@ -12,3 +12,4 @@ export const WIKI_LINK_FORMATS = {
 }
 export const WIKI_LINK_CLOSING = ']]'
 export const WIKI_LINK_TYPING_PATTERN = /\[\[[^\]]*/
+export const WIKI_LINK_SUGGESTION_LIMIT = 100

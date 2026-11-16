@@ -1,8 +1,11 @@
 import { findAllBlocks, getBlockPreview } from '@/utils/block-refs'
 import { getAliases, resolveWikiLinkTarget } from '@/utils/wiki-links'
 
+import { WIKI_LINK_SUGGESTION_LIMIT } from '@/constants/wiki-links'
+
 const blocksByPath = new Map()
 const resolverInputsByEntries = new WeakMap()
+const titleCountsByEntries = new WeakMap()
 
 const areEntriesEqual = (a, b) => (
     a.id === b.id &&
@@ -43,7 +46,7 @@ export const buildNoteEntries = (notes, notePaths) => (
         }))
 )
 
-export const getEntryResolverInputs = (entries) => {
+const getEntryResolverInputs = (entries) => {
     if (!resolverInputsByEntries.has(entries)) {
         resolverInputsByEntries.set(entries, {
             notes: entries.map(({ id, title, aliases }) => ({ path: id, title, properties: { aliases } })),
@@ -71,4 +74,50 @@ export const filterBlockSuggestions = (path, blocks, query) => {
         .filter(({ preview }) => preview.toLowerCase().includes(normalizedQuery))
 
     return [...labeled, ...unlabeled]
+}
+
+export const resolveLinkTargets = (entries, targets) => {
+    const { notes, notePaths } = getEntryResolverInputs(entries)
+
+    return Object.fromEntries(targets.map((target) => (
+        [target, !!resolveWikiLinkTarget(target, notes, notePaths)]
+    )))
+}
+
+const getTitleCounts = (entries) => {
+    if (!titleCountsByEntries.has(entries)) {
+        const counts = new Map()
+
+        entries.forEach(({ title }) => {
+            const key = title.toLowerCase()
+            counts.set(key, (counts.get(key) || 0) + 1)
+        })
+
+        titleCountsByEntries.set(entries, counts)
+    }
+
+    return titleCountsByEntries.get(entries)
+}
+
+export const searchNoteEntries = (entries, query) => {
+    const normalizedQuery = query.toLowerCase()
+    const counts = getTitleCounts(entries)
+    const seen = new Set()
+    const starting = []
+    const containing = []
+
+    for (const { id, title, path } of entries) {
+        const lowerTitle = title.toLowerCase()
+        if (!lowerTitle.includes(normalizedQuery)) continue
+
+        const key = `${lowerTitle}|${path.toLowerCase()}`
+        if (seen.has(key)) continue
+        seen.add(key)
+
+        const match = { id, title, path, ambiguous: counts.get(lowerTitle) > 1 }
+        const bucket = lowerTitle.startsWith(normalizedQuery) ? starting : containing
+        bucket.push(match)
+    }
+
+    return [...starting, ...containing].slice(0, WIKI_LINK_SUGGESTION_LIMIT)
 }

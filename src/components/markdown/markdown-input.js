@@ -1,10 +1,11 @@
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { LoadingOverlay } from '@/ui/layout'
 
 import RawMarkdownDomEditor from './markdown-dom-editor'
+import { useLatestRef } from './use-latest-ref'
 
 import { MissingNoteDialog } from '@/components/missing-note-dialog'
 
@@ -14,12 +15,11 @@ import { useTags } from '@/hooks/use-tags'
 import { useStableCallback } from '@/hooks/use-stable-callback'
 import { useStableValue } from '@/hooks/use-stable-value'
 import { useBlockIdCreator } from '@/hooks/use-block-id-creator'
-import { useBlockLoader } from '@/hooks/use-block-loader'
 import { useDomValue } from '@/hooks/use-dom-value'
 import { useEditorLinkHandlers } from '@/hooks/use-editor-link-handlers'
 import { useEditorPreview } from '@/hooks/use-editor-preview'
 import { useEditorTheme } from '@/hooks/use-editor-theme'
-import { useNoteEntries } from '@/hooks/use-note-entries'
+import { useNoteLookup } from '@/hooks/use-note-lookup'
 import { useStorageEffect } from '@/hooks/use-storage-effect'
 
 import { toggleTask } from '@/utils/tasks'
@@ -66,22 +66,32 @@ export const MarkdownInput = ({
 
     const [linkFormat, setLinkFormat] = useState(WIKI_LINK_FORMATS.WIKILINK)
     const [ready, setReady] = useState(false)
-    const onReady = useCallback(() => setReady(true), [])
+    const editorRef = useRef(null)
+    const metaLines = titleField?.metaLines
+    const metaLinesRef = useLatestRef(metaLines)
+
+    const onReady = useCallback(() => {
+        setReady(true)
+        editorRef.current?.setMetaLines(metaLinesRef.current)
+    }, [metaLinesRef])
+
+    useEffect(() => {
+        if (ready) editorRef.current?.setMetaLines(metaLines)
+    }, [ready, metaLines])
 
     useStorageEffect(STORAGE_KEYS.LINK_FORMAT, (value) => {
         if (value === WIKI_LINK_FORMATS.MARKDOWN) setLinkFormat(WIKI_LINK_FORMATS.MARKDOWN)
     })
 
-    const noteEntries = useNoteEntries()
+    const { linkVersion, onResolveLinks, onSearchNotes, onLoadBlocks } = useNoteLookup(id)
     const onCreateBlockId = useBlockIdCreator()
-    const onLoadBlocks = useBlockLoader(id)
 
     const { previewValue, mediaMapEntries, backlinksHtml } = useEditorPreview({ id, mode, value, showBacklinks })
     const { onLinkPress, onImagePress, missingNote } = useEditorLinkHandlers({ id, onTagPress, onJumpToAnchor })
 
-    const onToggleTask = useCallback((index) => {
+    const onToggleTask = useStableCallback((index) => {
         onChangeText(toggleTask(value, index))
-    }, [value, onChangeText])
+    })
 
     const tableLabels = useMemo(() => buildTableLabels(t), [t])
 
@@ -96,23 +106,29 @@ export const MarkdownInput = ({
     const { theme, display } = useEditorTheme()
     const { domValue, valueNonce, onDomChange } = useDomValue(value, onChangeText)
 
-    const stableNoteEntries = useStableValue(noteEntries)
     const stableKnownTags = useStableValue(knownTags)
-    const stableTitleField = useStableValue(titleField)
+    const titleText = titleField?.title
+    const titlePlaceholder = titleField?.titlePlaceholder
+
+    const titleProps = useMemo(() => (
+        titleText === undefined ? undefined : { title: titleText, titlePlaceholder }
+    ), [titleText, titlePlaceholder])
     const stablePropertiesPanel = useStableValue(propertiesPanel)
     const stableOnTitleBlur = useStableCallback(onTitleBlur)
+    const stableOnEdit = useStableCallback(onEdit)
 
     return (
         <>
             <View style={{ flex: 1 }}>
                 <MarkdownDomEditor
+                    ref={editorRef}
                     mode={mode}
-                    onEdit={onEdit}
+                    onEdit={stableOnEdit}
                     value={domValue}
                     valueNonce={valueNonce}
                     previewValue={previewValue}
                     mediaMap={mediaMapEntries}
-                    noteEntries={stableNoteEntries}
+                    linkVersion={linkVersion}
                     knownTags={stableKnownTags}
                     linkFormat={linkFormat}
                     tableLabels={tableLabels}
@@ -132,10 +148,12 @@ export const MarkdownInput = ({
                     onTagPress={onTagPress}
                     onCreateBlockId={onCreateBlockId}
                     onLoadBlocks={onLoadBlocks}
+                    onResolveLinks={onResolveLinks}
+                    onSearchNotes={onSearchNotes}
                     onImagePress={onImagePress}
                     onToggleTask={onToggleTask}
                     placeholder={placeholder}
-                    titleField={stableTitleField}
+                    titleField={titleProps}
                     onTitleChange={onTitleChange}
                     onTitleBlur={stableOnTitleBlur}
                     propertiesPanel={stablePropertiesPanel}
