@@ -4,7 +4,7 @@ import {
     findFolderNode,
     resolveLevel
 } from '../drawer-tree'
-import * as noteSort from '../../../../shared/utils/note-sort'
+import * as noteSort from '@/shared/utils/note-sort'
 import { NOTE_SORTS } from '@/shared/constants/note-sort'
 import { MOCK_NOTES_BY_REPOSITORY, MOCK_REPOSITORY_LIST } from '../__fixtures__/drawer-tree'
 

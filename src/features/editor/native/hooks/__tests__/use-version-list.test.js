@@ -7,11 +7,11 @@ import { FREE_VERSION_HISTORY_LIMIT } from '@/shared/constants/default-values'
 const mockGetVersions = jest.fn()
 let mockPro = true
 
-jest.mock('../../../../../shared/hooks/use-pro', () => ({
+jest.mock('@/shared/hooks/use-pro', () => ({
     usePro: () => ({ pro: mockPro })
 }))
 
-jest.mock('../../../../../shared/hooks/use-note-versions', () => ({
+jest.mock('@/shared/hooks/use-note-versions', () => ({
     useNoteVersions: () => ({ getVersions: mockGetVersions })
 }))
 

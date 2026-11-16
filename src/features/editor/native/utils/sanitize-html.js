@@ -1,4 +1,4 @@
-import { escapeHtml } from '../../../../shared/utils/wiki-links'
+import { escapeHtml } from '@/shared/utils/wiki-links'
 
 import {
     EXPORT_ALLOWED_ATTRIBUTES,

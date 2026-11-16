@@ -18,6 +18,7 @@ import { WIKI_LINK_ANCHOR_SEPARATOR } from '@/shared/constants/wiki-links'
 import { NOTE_NODES, WIKI_LINK_MARK_LENGTH } from '@/shared/constants/note-syntax'
 import { EMBED_LIVE_CLASS, EMBED_MARKER } from '@/shared/constants/embeds'
 import { FILE_KINDS } from '@/shared/constants/file-types'
+import { buildBorder } from '@/shared/utils/css-values'
 
 const toRange = (node, text, offset) => {
     const isEmbed = node.name === NOTE_NODES.WIKI_EMBED
@@ -119,7 +120,7 @@ export const wikiLinksTheme = ({ colors }) => ({
         cursor: 'pointer',
         backgroundColor: colors.surface,
         borderRadius: `${RADIUS.sm}px`,
-        border: `1px solid ${colors.onBackground + TRANSPARENT[5]}`
+        border: buildBorder(colors.onBackground + TRANSPARENT[5])
     },
     [`.${FILE_LINK_LIVE_CLASS}::before`]: {
         content: '""',

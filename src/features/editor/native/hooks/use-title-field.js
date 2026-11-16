@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useLanguage } from '../../../../shared/hooks/use-language'
+import { useLanguage } from '@/shared/hooks/use-language'
 import { useNoteModifiedAt } from './use-note-modified-at'
 import { buildNoteMetaLines } from '@/features/editor/native/utils/note-meta-label'
 import { countWords } from '@/features/editor/native/utils/word-count'

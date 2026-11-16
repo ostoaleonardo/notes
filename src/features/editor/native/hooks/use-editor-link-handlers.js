@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 import { Linking } from 'react-native'
 
-import { useAttachmentFiles } from '../../../../shared/hooks/use-attachment-files'
+import { useAttachmentFiles } from '@/shared/hooks/use-attachment-files'
 import { useMentionLinker } from './use-mention-linker'
-import { useMissingNote } from '../../../../shared/hooks/use-missing-note'
-import { useOpenFile } from '../../../../shared/hooks/use-open-file'
+import { useMissingNote } from '@/shared/hooks/use-missing-note'
+import { useOpenFile } from '@/shared/hooks/use-open-file'
 import { findFileByTarget } from '@/shared/utils/attachments'
 import { getEditorPath } from '@/shared/utils/editor-path'
 import { resolveLinkPress } from '@/features/editor/native/utils/link-press'

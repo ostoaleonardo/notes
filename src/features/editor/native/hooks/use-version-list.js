@@ -1,7 +1,7 @@
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 
-import { useNoteVersions } from '../../../../shared/hooks/use-note-versions'
-import { usePro } from '../../../../shared/hooks/use-pro'
+import { useNoteVersions } from '@/shared/hooks/use-note-versions'
+import { usePro } from '@/shared/hooks/use-pro'
 
 import { FREE_VERSION_HISTORY_LIMIT } from '@/shared/constants/default-values'
 

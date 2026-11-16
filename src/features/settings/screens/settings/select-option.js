@@ -1,6 +1,6 @@
 import { View } from 'react-native'
 
-import { ListItem } from '../../../../ui/list-item'
+import { ListItem } from '@/ui/list-item'
 import { Menu } from '@/ui/menu/menu'
 import { MenuGroup } from '@/ui/menu/menu-group'
 import { SelectMenuItem } from '@/ui/menu/select-menu-item'

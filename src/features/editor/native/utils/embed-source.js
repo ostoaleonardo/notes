@@ -1,5 +1,5 @@
 import { extractBlock } from '../../shared/utils/block-refs'
-import { extractSection } from '../../../../shared/utils/headings'
+import { extractSection } from '@/shared/utils/headings'
 
 import { BLOCK_ANCHOR_PREFIX } from '@/shared/constants/block-refs'
 

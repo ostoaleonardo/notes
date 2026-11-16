@@ -6,9 +6,9 @@ import { codeFolding, indentUnit } from '@codemirror/language'
 import { markdown } from '@codemirror/lang-markdown'
 import { GFM } from '@lezer/markdown'
 
-import { runAction } from '../../../../features/editor/dom/markdown-dom-commands'
-import { listKeymap } from '../../../../features/editor/dom/markdown-dom-list-keymap'
-import { headingFoldService } from '../../../../features/editor/dom/markdown-dom-fold'
+import { runAction } from '@/features/editor/dom/markdown-dom-commands'
+import { listKeymap } from '@/features/editor/dom/markdown-dom-list-keymap'
+import { headingFoldService } from '@/features/editor/dom/markdown-dom-fold'
 
 import { LIST_INDENT } from '@/shared/constants/markdown-patterns'
 

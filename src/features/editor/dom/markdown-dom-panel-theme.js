@@ -1,5 +1,6 @@
 import { DOM_FONT_SIZE, OPACITY, RADIUS, SPACING, Z_INDEX } from '@/shared/constants/theme'
 import { TRANSPARENT } from '@/shared/constants/themes'
+import { buildBorder } from '@/shared/utils/css-values'
 
 export const buildTitleSectionStyle = () => ({
     boxSizing: 'border-box',
@@ -89,7 +90,7 @@ export const buildPropertiesCardStyle = ({ colors }) => ({
     marginBottom: SPACING.lg,
     borderRadius: '8px',
     backgroundColor: colors.surface,
-    border: `1px solid ${colors.onBackground + TRANSPARENT[5]}`,
+    border: buildBorder(colors.onBackground + TRANSPARENT[5]),
     color: colors.onBackground
 })
 
@@ -180,7 +181,7 @@ export const buildPropertyMenuStyle = ({ colors }) => ({
     padding: SPACING.xs,
     borderRadius: `${RADIUS.lg}px`,
     backgroundColor: colors.surface,
-    border: `1px solid ${colors.onBackground + TRANSPARENT[5]}`
+    border: buildBorder(colors.onBackground + TRANSPARENT[5])
 })
 
 export const buildPropertyMenuItemStyle = ({ colors, typography }) => ({

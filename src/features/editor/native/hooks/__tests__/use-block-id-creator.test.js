@@ -6,7 +6,7 @@ const mockGetNote = jest.fn()
 const mockUpdateNote = jest.fn()
 const mockAddBlockId = jest.fn()
 
-jest.mock('../../../../../shared/hooks/use-notes', () => ({
+jest.mock('@/shared/hooks/use-notes', () => ({
     useNotes: () => ({ getNote: mockGetNote, updateNote: mockUpdateNote })
 }))
 

@@ -25,7 +25,7 @@ jest.mock('@/ui/hooks/use-theme', () => ({
 jest.mock('react-native-safe-area-context', () => ({
     useSafeAreaInsets: () => mockInsets
 }))
-jest.mock('../../../../../shared/hooks/use-heading-font', () => ({
+jest.mock('@/shared/hooks/use-heading-font', () => ({
     useHeadingFont: () => mockHeading
 }))
 jest.mock('../use-editor-display', () => ({

@@ -7,11 +7,11 @@ import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
 const mockSetItem = jest.fn()
 const mockUseStorageEffect = jest.fn()
 
-jest.mock('../../../../shared/hooks/use-storage', () => ({
+jest.mock('@/shared/hooks/use-storage', () => ({
     useStorage: () => ({ setItem: mockSetItem })
 }))
 
-jest.mock('../../../../shared/hooks/use-storage-effect', () => ({
+jest.mock('@/shared/hooks/use-storage-effect', () => ({
     useStorageEffect: (...args) => mockUseStorageEffect(...args)
 }))
 

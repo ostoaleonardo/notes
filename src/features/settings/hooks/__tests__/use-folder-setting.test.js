@@ -15,10 +15,10 @@ const DESCENDANTS = [
     { id: 'b', alias: 'Beta', depth: 1 }
 ]
 
-jest.mock('../../../../shared/hooks/use-storage', () => ({
+jest.mock('@/shared/hooks/use-storage', () => ({
     useStorage: () => mockStorage
 }))
-jest.mock('../../../../shared/hooks/use-repositories', () => ({
+jest.mock('@/shared/hooks/use-repositories', () => ({
     useRepositories: () => ({
         activeRepository: ACTIVE,
         getDescendants: () => DESCENDANTS

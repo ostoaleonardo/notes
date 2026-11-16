@@ -1,4 +1,4 @@
-import { TAG_PROPERTY_KEYS } from '../../../../shared/constants/tags'
+import { TAG_PROPERTY_KEYS } from '@/shared/constants/tags'
 import {
     CALENDAR_ICON_PATH,
     CHECKBOX_ICON_PATH,
@@ -7,7 +7,7 @@ import {
     SCHEDULE_ICON_PATH,
     TAG_ICON_PATH,
     TEXT_ICON_PATH
-} from '../../../../shared/constants/icon-paths'
+} from '@/shared/constants/icon-paths'
 
 export const PROPERTY_TYPES = {
     TEXT: 'text',

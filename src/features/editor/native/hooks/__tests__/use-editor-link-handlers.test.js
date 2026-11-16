@@ -13,16 +13,16 @@ const mockResolveLinkPress = jest.fn()
 const mockListFiles = jest.fn(() => [])
 const mockMissingNote = { setMissing: mockSetMissing }
 
-jest.mock('../../../../../shared/hooks/use-missing-note', () => ({
+jest.mock('@/shared/hooks/use-missing-note', () => ({
     useMissingNote: () => mockMissingNote
 }))
 jest.mock('../use-mention-linker', () => ({
     useMentionLinker: () => mockLinkMention
 }))
-jest.mock('../../../../../shared/hooks/use-attachment-files', () => ({
+jest.mock('@/shared/hooks/use-attachment-files', () => ({
     useAttachmentFiles: () => mockListFiles
 }))
-jest.mock('../../../../../shared/hooks/use-open-file', () => ({
+jest.mock('@/shared/hooks/use-open-file', () => ({
     useOpenFile: () => mockOpenFile
 }))
 jest.mock('@/features/editor/native/utils/link-press', () => ({

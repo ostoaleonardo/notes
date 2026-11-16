@@ -8,10 +8,10 @@ import { FREE_ACCENT } from '@/shared/constants/theme-options'
 const mockSetItem = jest.fn()
 let mockPro = false
 
-jest.mock('../../../../shared/hooks/use-storage', () => ({
+jest.mock('@/shared/hooks/use-storage', () => ({
     useStorage: () => ({ setItem: mockSetItem })
 }))
-jest.mock('../../../../shared/hooks/use-pro', () => ({
+jest.mock('@/shared/hooks/use-pro', () => ({
     usePro: () => ({ pro: mockPro })
 }))
 

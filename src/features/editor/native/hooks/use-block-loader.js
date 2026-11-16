@@ -1,4 +1,4 @@
-import { useNotes } from '../../../../shared/hooks/use-notes'
+import { useNotes } from '@/shared/hooks/use-notes'
 import { useStableCallback } from './use-stable-callback'
 import { getNoteBlocks, resolveBlockTarget } from '@/features/editor/shared/utils/note-entries'
 

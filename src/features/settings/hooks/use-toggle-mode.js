@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 
-import { useStorage } from '../../../shared/hooks/use-storage'
-import { usePro } from '../../../shared/hooks/use-pro'
+import { useStorage } from '@/shared/hooks/use-storage'
+import { usePro } from '@/shared/hooks/use-pro'
 import { ThemeContext } from '@/shared/context/theme-context'
 import { isAccentAllowed } from '@/shared/utils/accent'
 

@@ -8,7 +8,7 @@ const mockNotes = new Map([
 
 const ENTRIES = [{ id: 'r::A.md', title: 'A', aliases: [], path: '' }]
 
-jest.mock('../../../../../shared/hooks/use-notes', () => ({
+jest.mock('@/shared/hooks/use-notes', () => ({
     useNotes: () => ({ getNote: (path) => mockNotes.get(path) || {} })
 }))
 

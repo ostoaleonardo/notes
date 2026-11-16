@@ -8,13 +8,13 @@ const mockMoveNote = jest.fn()
 const mockUpdatePinned = jest.fn()
 const mockRemoveRecent = jest.fn()
 
-jest.mock('../../../../../shared/hooks/use-notes', () => ({
+jest.mock('@/shared/hooks/use-notes', () => ({
     useNotes: () => ({ moveNote: mockMoveNote })
 }))
-jest.mock('../../../../../shared/hooks/use-utils', () => ({
+jest.mock('@/shared/hooks/use-utils', () => ({
     useUtils: () => ({ pinned: mockPinned, updatePinned: mockUpdatePinned })
 }))
-jest.mock('../../../../../shared/hooks/use-recent-notes', () => ({
+jest.mock('@/shared/hooks/use-recent-notes', () => ({
     useRecentNotes: () => ({ removeRecent: mockRemoveRecent })
 }))
 jest.mock('@/ui/snackbar/snackbar-host', () => ({

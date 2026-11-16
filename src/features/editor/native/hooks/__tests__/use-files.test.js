@@ -66,7 +66,7 @@ jest.mock('@/features/editor/native/utils/export-html', () => ({
     getExportMarkdown: jest.fn(() => ''),
     getNoteAsHtml: jest.fn(() => '<html>note</html>')
 }))
-jest.mock('../../../../../shared/hooks/use-notes', () => ({
+jest.mock('@/shared/hooks/use-notes', () => ({
     useNotes: () => ({
         getNote: () => mockNote,
         notes: [mockNote],

@@ -1,4 +1,4 @@
-import { MIME_TYPES } from '../../../../shared/constants/mime-types'
+import { MIME_TYPES } from '@/shared/constants/mime-types'
 
 export const EXPORT_FONT_SIZE = 13
 

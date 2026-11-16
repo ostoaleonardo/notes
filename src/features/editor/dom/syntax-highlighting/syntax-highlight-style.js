@@ -4,6 +4,8 @@ import { tagHighlighter } from '@lezer/highlight'
 import { buildSyntaxColors } from './syntax-colors'
 
 import { SYNTAX_TOKENS, SYNTAX_TOKEN_CLASS_PREFIX } from '@/features/editor/dom/constants/syntax-highlighting'
+import { fillTemplate } from '@/shared/utils/fill-template'
+import { SYNTAX_TOKEN_RULE_TEMPLATE } from '@/shared/constants/css-templates'
 
 const tokenNames = Object.keys(SYNTAX_TOKENS)
 
@@ -23,6 +25,9 @@ export const buildPreviewSyntaxCss = (theme) => {
     const palette = buildSyntaxColors(theme)
 
     return tokenNames
-        .map((name) => `.markdown-preview .${SYNTAX_TOKEN_CLASS_PREFIX}${name} { color: ${palette[name]}; }`)
+        .map((name) => fillTemplate(SYNTAX_TOKEN_RULE_TEMPLATE, {
+            className: SYNTAX_TOKEN_CLASS_PREFIX + name,
+            color: palette[name]
+        }))
         .join('\n')
 }

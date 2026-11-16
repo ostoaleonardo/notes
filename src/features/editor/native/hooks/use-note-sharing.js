@@ -1,4 +1,4 @@
-import { useBottomSheet } from '../../../../shared/hooks/use-bottom-sheet'
+import { useBottomSheet } from '@/shared/hooks/use-bottom-sheet'
 import { useFiles } from './use-files'
 import { useSingleFlight } from '@/shared/hooks/use-single-flight'
 

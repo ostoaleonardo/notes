@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useEditorDisplay } from './use-editor-display'
-import { useHeadingFont } from '../../../../shared/hooks/use-heading-font'
+import { useHeadingFont } from '@/shared/hooks/use-heading-font'
 import { useTheme } from '@/ui/hooks/use-theme'
 import { toCssHeadingFamily } from '@/shared/utils/heading-font'
 

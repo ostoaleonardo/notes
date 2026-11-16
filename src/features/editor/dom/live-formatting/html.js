@@ -6,6 +6,7 @@ import { renderMarkdownHtml } from '@/features/editor/shared/markdown-dom-render
 
 import { HTML_BLOCK_NODE_NAMES, HTML_NODE_NAMES, HTML_RENDER_CACHE_LIMIT } from '@/features/editor/dom/constants/markdown-live-formatting'
 import { OPACITY, INLINE_CODE_STYLE, MONOSPACE_FONT_FAMILY } from '@/shared/constants/theme'
+import { buildBorder } from '@/shared/utils/css-values'
 
 const BLOCK_NODE_NAMES = new Set(HTML_BLOCK_NODE_NAMES)
 const htmlCache = new Map()
@@ -40,7 +41,7 @@ export const decorateHtml = (node, { doc, selection, ranges }) => {
 export const htmlTheme = ({ colors, typography }) => ({
     '.cm-live-block': { display: 'block', overflowX: 'auto' },
     '.cm-live-block table': { borderCollapse: 'collapse' },
-    '.cm-live-block th, .cm-live-block td': { border: `1px solid ${colors.codeBackground}`, padding: '4px 8px' },
+    '.cm-live-block th, .cm-live-block td': { border: buildBorder(colors.codeBackground), padding: '4px 8px' },
     '.cm-live-block code': { backgroundColor: colors.codeBackground, ...INLINE_CODE_STYLE, fontFamily: 'monospace' },
     '.cm-live-block img': { maxWidth: '100%', borderRadius: '8px' },
     '.cm-live-block a': { color: colors.accentText },

@@ -11,7 +11,7 @@ import {
     togglePinnedQualifier,
     toggleTagQualifier
 } from '../search-query'
-import { getChipLabelKey, getChipText } from '../../../features/search/utils/search-chip-label'
+import { getChipLabelKey, getChipText } from '@/features/search/utils/search-chip-label'
 import { filterNotes, searchNotes } from '../search-filter'
 import { MOCK_NOTE_PATHS, MOCK_SEARCH_NOTES } from '../__fixtures__/search-query'
 

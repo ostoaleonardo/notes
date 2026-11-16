@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 
-import { useStorage } from '../../../../shared/hooks/use-storage'
-import { useStorageEffect } from '../../../../shared/hooks/use-storage-effect'
+import { useStorage } from '@/shared/hooks/use-storage'
+import { useStorageEffect } from '@/shared/hooks/use-storage-effect'
 
 import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
 import { STORAGE_BOOLEAN } from '@/shared/constants/storage-values'

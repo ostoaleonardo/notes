@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Progress } from '@/ui/progress'
 import { useTheme } from '@/ui/hooks/use-theme'
-import { ListItem } from '../../../../ui/list-item'
+import { ListItem } from '@/ui/list-item'
 import { Section } from '@/ui/section'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 

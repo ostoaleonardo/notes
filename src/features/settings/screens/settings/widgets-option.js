@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ListItem } from '../../../../ui/list-item'
+import { ListItem } from '@/ui/list-item'
 import { PositionGroup } from '@/ui/position-group'
 import { Slider } from '@/ui/input/slider'
 import { Switch } from '@/ui/button/switch'

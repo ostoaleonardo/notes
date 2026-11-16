@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react'
 
-import { useNotes } from '../../../../shared/hooks/use-notes'
+import { useNotes } from '@/shared/hooks/use-notes'
 import { linkMentions } from '@/features/editor/native/utils/unlinked-mentions'
 
 export function useMentionLinker(targetPath) {

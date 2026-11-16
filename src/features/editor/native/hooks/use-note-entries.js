@@ -1,6 +1,6 @@
 import { useDeferredValue, useMemo, useRef } from 'react'
 
-import { useNotes } from '../../../../shared/hooks/use-notes'
+import { useNotes } from '@/shared/hooks/use-notes'
 import { areNoteEntriesEqual, buildNoteEntries } from '@/features/editor/shared/utils/note-entries'
 
 export function useNoteEntries() {

@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useBottomSheet } from '../../../../shared/hooks/use-bottom-sheet'
-import { useTemplates } from '../../../../shared/hooks/use-templates'
-import { useTemplatesList } from '../../../../shared/hooks/use-templates-list'
+import { useBottomSheet } from '@/shared/hooks/use-bottom-sheet'
+import { useTemplates } from '@/shared/hooks/use-templates'
+import { useTemplatesList } from '@/shared/hooks/use-templates-list'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 
 import { TEMPLATE_INSERT_SEPARATOR } from '@/shared/constants/template-placeholders'

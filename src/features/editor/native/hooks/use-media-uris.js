@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
-import { useFileStorage } from '../../../../shared/hooks/use-file-storage'
-import { useRepositories } from '../../../../shared/hooks/use-repositories'
+import { useFileStorage } from '@/shared/hooks/use-file-storage'
+import { useRepositories } from '@/shared/hooks/use-repositories'
 import { buildMediaUris } from '@/shared/utils/attachments'
 import { getAttachmentEntries } from '@/shared/utils/media-index'
 

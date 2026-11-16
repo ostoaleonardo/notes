@@ -3,6 +3,7 @@ import { Decoration } from '@codemirror/view'
 import { isRangeSelected } from './utils'
 
 import { HORIZONTAL_RULE_NODE_NAMES } from '@/features/editor/dom/constants/markdown-live-formatting'
+import { buildBorder } from '@/shared/utils/css-values'
 
 export const horizontalRuleNodeNames = HORIZONTAL_RULE_NODE_NAMES
 
@@ -19,6 +20,6 @@ export const horizontalRuleTheme = ({ colors }) => ({
         width: '100%',
         color: 'transparent',
         lineHeight: 0,
-        borderTop: `1px solid ${colors.thematicBreak}`
+        borderTop: buildBorder(colors.thematicBreak)
     }
 })

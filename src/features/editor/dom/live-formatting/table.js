@@ -16,6 +16,7 @@ import {
 import { TRANSPARENT } from '@/shared/constants/themes'
 import { RADIUS, SPACING, OPACITY, Z_INDEX, INLINE_CODE_STYLE, DOM_FONT_SIZE } from '@/shared/constants/theme'
 import { LEZER_NODES } from '@/features/editor/dom/constants/lezer-nodes'
+import { buildBorder } from '@/shared/utils/css-values'
 
 export const decorateTable = (node, context) => {
     const { doc, ranges, tableLabels } = context
@@ -33,7 +34,7 @@ export const decorateTable = (node, context) => {
 
 export const tableTheme = ({ colors, typography }) => {
     const accent = colors.tertiary
-    const border = `1px solid ${colors.onBackground + TRANSPARENT[20]}`
+    const border = buildBorder(colors.onBackground + TRANSPARENT[20])
 
     return {
         [`.${TABLE_CLASSES.WRAP}`]: {
@@ -119,7 +120,7 @@ export const tableTheme = ({ colors, typography }) => {
             overflow: 'hidden',
             borderRadius: `${RADIUS.md}px`,
             backgroundColor: colors.surface,
-            border: `1px solid ${colors.onBackground + TRANSPARENT[5]}`
+            border: buildBorder(colors.onBackground + TRANSPARENT[5])
         },
         [`.${TABLE_CLASSES.MENU_GROUP}:first-child`]: {
             borderTopLeftRadius: `${RADIUS.lg}px`,

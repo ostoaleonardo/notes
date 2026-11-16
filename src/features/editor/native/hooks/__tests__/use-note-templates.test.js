@@ -16,10 +16,10 @@ jest.mock('@/ui/snackbar/snackbar-host', () => ({
 jest.mock('@/shared/utils/log-error', () => ({
     logError: jest.fn()
 }))
-jest.mock('../../../../../shared/hooks/use-templates', () => ({
+jest.mock('@/shared/hooks/use-templates', () => ({
     useTemplates: () => ({ addTemplate: mockAddTemplate })
 }))
-jest.mock('../../../../../shared/hooks/use-templates-list', () => ({
+jest.mock('@/shared/hooks/use-templates-list', () => ({
     useTemplatesList: () => ({ templates: [{ name: 'Daily' }], refresh: mockRefresh })
 }))
 

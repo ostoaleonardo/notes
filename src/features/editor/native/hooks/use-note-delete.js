@@ -2,9 +2,9 @@ import { useCallback, useState } from 'react'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 
-import { useMenuAction } from '../../../../shared/hooks/use-menu-action'
-import { useNotes } from '../../../../shared/hooks/use-notes'
-import { useStorage } from '../../../../shared/hooks/use-storage'
+import { useMenuAction } from '@/shared/hooks/use-menu-action'
+import { useNotes } from '@/shared/hooks/use-notes'
+import { useStorage } from '@/shared/hooks/use-storage'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 import { readDeleteBehavior } from '@/shared/utils/delete-note-files'
 

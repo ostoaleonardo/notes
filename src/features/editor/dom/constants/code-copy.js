@@ -12,7 +12,7 @@ export const CODE_COPY_LABEL = 'Copy code'
 export const CODE_COPY_RESET_MS = 1500
 export const CODE_COPY_SELECTOR = `.${CODE_COPY_BUTTON_CLASS}`
 
-export const CODE_ICON_SIZE = 22
+const CODE_ICON_SIZE = 22
 
 const buildCodeIcon = (path) => fillTemplate(CODE_ICON_TEMPLATE, {
     size: CODE_ICON_SIZE,

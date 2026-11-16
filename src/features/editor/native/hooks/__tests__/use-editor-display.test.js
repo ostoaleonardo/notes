@@ -15,7 +15,7 @@ const mockStorage = {
     multiGet: jest.fn()
 }
 
-jest.mock('../../../../../shared/hooks/use-storage', () => ({
+jest.mock('@/shared/hooks/use-storage', () => ({
     useStorage: () => mockStorage
 }))
 

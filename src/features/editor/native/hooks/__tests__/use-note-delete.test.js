@@ -20,10 +20,10 @@ jest.mock('@/ui/snackbar/snackbar-host', () => ({
 jest.mock('@/shared/utils/log-error', () => ({
     logError: jest.fn()
 }))
-jest.mock('../../../../../shared/hooks/use-notes', () => ({
+jest.mock('@/shared/hooks/use-notes', () => ({
     useNotes: () => ({ deleteNote: mockDeleteNote })
 }))
-jest.mock('../../../../../shared/hooks/use-storage', () => ({
+jest.mock('@/shared/hooks/use-storage', () => ({
     useStorage: () => ({ getItem: mockGetItem })
 }))
 

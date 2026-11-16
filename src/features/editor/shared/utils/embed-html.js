@@ -1,5 +1,5 @@
-import { escapeHtml } from '../../../../shared/utils/wiki-links'
-import { buildFileLinkUrl } from '../../../../shared/utils/file-links'
+import { escapeHtml } from '@/shared/utils/wiki-links'
+import { buildFileLinkUrl } from '@/shared/utils/file-links'
 import { buildIconMarkup } from '../../dom/utils/icon-mask'
 
 import { OPEN_IN_NEW_FILLED_ICON_PATH } from '@/shared/constants/icon-paths'

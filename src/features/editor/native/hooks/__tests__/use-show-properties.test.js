@@ -9,7 +9,7 @@ const mockStorage = {
     setItem: jest.fn()
 }
 
-jest.mock('../../../../../shared/hooks/use-storage', () => ({
+jest.mock('@/shared/hooks/use-storage', () => ({
     useStorage: () => mockStorage
 }))
 

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { useStorageEffect } from '../../../../shared/hooks/use-storage-effect'
+import { useStorageEffect } from '@/shared/hooks/use-storage-effect'
 
 import { DEFAULT_PDF_EMBED_MODE, PDF_EMBED_MODES } from '@/shared/constants/pdf-embed'
 import { STORAGE_KEYS } from '@/shared/constants/storage-keys'

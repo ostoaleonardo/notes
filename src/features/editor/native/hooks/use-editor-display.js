@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { useStorage } from '../../../../shared/hooks/use-storage'
+import { useStorage } from '@/shared/hooks/use-storage'
 
 import { EDITOR_DISPLAY_OPTIONS } from '@/shared/constants/editor-display'
 

@@ -1,4 +1,8 @@
-import { SEARCH_HAS_VALUES, SEARCH_IS_VALUES, SEARCH_OPERATORS } from '../../../shared/constants/search-query'
+import {
+    SEARCH_HAS_VALUES,
+    SEARCH_IS_VALUES,
+    SEARCH_OPERATORS
+} from '@/shared/constants/search-query'
 
 export const SEARCH_FILTER_COLUMNS = 2
 
