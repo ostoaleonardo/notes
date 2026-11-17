@@ -31,6 +31,4 @@ jobs:
         with:
           tool: cargo-ndk,cargo-audit
       - run: cargo ndk -t arm64-v8a -t x86_64 build -p engine-bindings
-        env:
-          ANDROID_NDK_HOME: ${{ env.ANDROID_NDK_LATEST_HOME }}
       - run: cargo audit
