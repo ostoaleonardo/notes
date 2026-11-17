@@ -1,5 +1,8 @@
 import RepositoryFs from 'repository-fs'
 
+import { bootMark } from '@/shared/utils/boot-mark'
+
+import { BOOT_MARKS } from '@/shared/constants/boot-marks'
 import { LOG_MESSAGES } from '@/shared/constants/log-messages'
 import { logError } from '@/shared/utils/log-error'
 
@@ -24,7 +27,10 @@ export const createRepositoryIndexSync = (fs) => {
             await fs.pruneRepositoryIndex(repositories.map((repository) => repository.id))
 
             for (const repository of tree) {
-                changed = hasChanges(await fs.indexRepository(repository.id, repository.uri)) || changed
+                const stats = await fs.indexRepository(repository.id, repository.uri)
+
+                bootMark(BOOT_MARKS.INDEX_SYNC, { repositoryId: repository.id, ...stats })
+                changed = hasChanges(stats) || changed
             }
         } catch (error) {
             logError(LOG_MESSAGES.ERROR_INDEXING_REPOSITORY, error)

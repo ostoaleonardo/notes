@@ -17,9 +17,10 @@ const REPORTED_MARKS = [
     'scan-done',
     'snapshot-write',
     'index-list',
+    'index-sync',
     'load-end'
 ]
-const DETAIL_MARKS = ['snapshot', 'snapshot-write', 'index-list']
+const DETAIL_MARKS = ['snapshot', 'snapshot-write', 'index-list', 'index-sync']
 
 const adb = (...args) => execFileSync('adb', DEVICE ? ['-s', DEVICE, ...args] : args, {
     encoding: 'utf8',

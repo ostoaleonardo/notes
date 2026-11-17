@@ -9,5 +9,6 @@ export const BOOT_MARKS = {
     SCAN_DONE: 'scan-done',
     SNAPSHOT_WRITE: 'snapshot-write',
     INDEX_LIST: 'index-list',
+    INDEX_SYNC: 'index-sync',
     LOAD_END: 'load-end'
 }
