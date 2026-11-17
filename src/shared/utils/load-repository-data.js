@@ -172,7 +172,7 @@ const loadNotes = async (tree, fileStorage, previousNotes, onProgress) => {
 }
 
 const loadIndexedNotes = async (tree, previousNotes, indexed) => {
-    await indexed.sync(tree)
+    if ((await indexed.sync(tree)) === false) return { notes: previousNotes, changed: false }
 
     const previousByPath = new Map(previousNotes.map((note) => [note.path, note]))
     const listed = await indexed.list(tree.map((repository) => repository.id))

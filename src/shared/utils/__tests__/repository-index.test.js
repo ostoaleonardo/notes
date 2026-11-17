@@ -50,7 +50,7 @@ describe('repository index sync', () => {
         fs.indexRepository.mockRejectedValueOnce(failure)
         const sync = createRepositoryIndexSync(fs)
 
-        await expect(sync([root, child], [root, child])).resolves.toBeUndefined()
+        await expect(sync([root, child], [root, child])).resolves.toBe(true)
 
         expect(logError).toHaveBeenCalledWith(expect.any(String), failure)
         expect(fs.indexRepository).toHaveBeenCalledTimes(1)
@@ -78,5 +78,42 @@ describe('repository index sync', () => {
         await sync([root], [root])
 
         expect(fs.indexRepository).toHaveBeenCalledTimes(2)
+    })
+
+    test('reports no change when every repository is up to date', async () => {
+        const fs = buildFs()
+        fs.indexRepository.mockResolvedValue({ added: 0, updated: 0, removed: 0 })
+
+        expect(await createRepositoryIndexSync(fs)([root, child], [root, child])).toBe(false)
+    })
+
+    test('reports a change when any repository added, updated or removed notes', async () => {
+        const fs = buildFs()
+        fs.indexRepository
+            .mockResolvedValueOnce({ added: 0, updated: 0, removed: 0 })
+            .mockResolvedValueOnce({ added: 0, updated: 2, removed: 0 })
+
+        expect(await createRepositoryIndexSync(fs)([root, child], [root, child])).toBe(true)
+    })
+
+    test('assumes a change when the indexer returns no statistics', async () => {
+        expect(await createRepositoryIndexSync(buildFs())([root], [root])).toBe(true)
+    })
+
+    test('assumes a change after a failure or while another sync is running', async () => {
+        const fs = buildFs()
+        fs.indexRepository.mockRejectedValueOnce(new Error('disk full'))
+        const sync = createRepositoryIndexSync(fs)
+
+        expect(await sync([root], [root])).toBe(true)
+
+        let release
+        fs.pruneRepositoryIndex.mockReturnValueOnce(new Promise((resolve) => { release = resolve }))
+        const first = sync([root], [root])
+
+        expect(await sync([root], [root])).toBe(true)
+
+        release()
+        await first
     })
 })

@@ -569,6 +569,20 @@ describe('loading from the notes index', () => {
         expect(indexed.list).toHaveBeenCalledWith(['repo-1'])
     })
 
+    test('skips the listing when the synchronization found nothing new', async () => {
+        const previous = [note('a', 1)]
+        const indexed = buildIndexed([note('a', 2)])
+        indexed.sync.mockResolvedValue(false)
+
+        const { notes, changed } = await loadRepositoryData(
+            tree, tree[0], createFakeStorage(), createFakeFileStorage(), previous, undefined, indexed
+        )
+
+        expect(indexed.list).not.toHaveBeenCalled()
+        expect(notes).toBe(previous)
+        expect(changed).toBe(false)
+    })
+
     test('keeps the previous note objects whose modified time did not change', async () => {
         const previous = [note('a', 1), note('b', 1)]
         const indexed = buildIndexed([note('a', 1), note('b', 2)])
