@@ -16,6 +16,7 @@ import { useRepositories } from '@/shared/hooks/use-repositories'
 import { useNoteVersions } from '@/shared/hooks/use-note-versions'
 import { getVersionLocation } from '@/shared/utils/note-version-location'
 import { logError } from '@/shared/utils/log-error'
+import { noteBodies } from '@/shared/utils/note-body'
 import { planHeadingRenames } from '@/shared/utils/headings'
 import { planExternalSync, toSyncShape } from '@/shared/utils/external-note-sync'
 import { fromSavedSnapshot, isDraftSaved, toDraft, toSavedSnapshot } from '@/shared/utils/note-draft'
@@ -49,7 +50,7 @@ export default function EditNote() {
     const [initial] = useState(() => {
         const stored = notesLoading || repositoriesLoading ? null : getNote(slug)
 
-        return stored && toDraft(stored, t('notes.untitled'))
+        return stored && stored.note !== undefined ? toDraft(stored, t('notes.untitled')) : null
     })
 
     const {
@@ -69,8 +70,13 @@ export default function EditNote() {
     const savedTitleRef = useRef(null)
     const savedRef = useRef(null)
 
-    const loadNote = useEffectEvent(() => {
-        const loaded = toDraft(getNote(pathRef.current), t('notes.untitled'))
+    const loadNote = useEffectEvent(async () => {
+        const path = pathRef.current
+        const stored = getNote(path)
+        const body = await noteBodies.get(stored)
+        if (pathRef.current !== path) return
+
+        const loaded = toDraft(stored, t('notes.untitled'), body)
 
         update(loaded)
 
@@ -94,14 +100,20 @@ export default function EditNote() {
         if (!notes.some((n) => n.path === pathRef.current)) router.replace(ROUTES.HOME)
     }, [notes, notesLoading, repositoriesLoading])
 
-    const syncExternalChanges = useEffectEvent(() => {
+    const latestDraftRef = useRef(null)
+    latestDraftRef.current = { note, tags, properties, invalidFrontmatter, rawFrontmatter }
+
+    const syncExternalChanges = useEffectEvent(async () => {
         if (loading || isSavingRef.current) return
 
         const incoming = notes.find((n) => n.path === pathRef.current)
+        const incomingShape = incoming && toSyncShape(incoming, await noteBodies.get(incoming))
+        if (isSavingRef.current || pathRef.current !== incoming?.path) return
+
         const synced = planExternalSync({
-            draft: { note, tags, properties, invalidFrontmatter, rawFrontmatter },
+            draft: latestDraftRef.current,
             original: fromSavedSnapshot(savedRef.current),
-            incoming: incoming && toSyncShape(incoming)
+            incoming: incomingShape
         })
         if (!synced) return
 

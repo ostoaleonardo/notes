@@ -2,7 +2,7 @@ import { getUniqueTitle } from '@/shared/utils/note-filename'
 
 const sameList = (a, b) => a.length === b.length && a.every((item, index) => item === b[index])
 
-export const toDraft = (stored, untitled) => {
+export const toDraft = (stored, untitled, body) => {
     const {
         title = '',
         note = '',
@@ -16,7 +16,7 @@ export const toDraft = (stored, untitled) => {
 
     return {
         title: title || untitled,
-        note,
+        note: body ?? note,
         tags,
         properties,
         repositoryId,

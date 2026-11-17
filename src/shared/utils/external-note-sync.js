@@ -11,8 +11,8 @@ const matches = (left, right) => (
     left.invalidFrontmatter === right.invalidFrontmatter
 )
 
-export const toSyncShape = (note) => ({
-    note: note.note,
+export const toSyncShape = (note, body = note.note) => ({
+    note: body,
     tags: note.tags ?? [],
     properties: note.properties ?? {},
     invalidFrontmatter: note.invalidFrontmatter ?? null,

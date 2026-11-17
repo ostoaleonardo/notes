@@ -5,6 +5,7 @@ import { buildNoteFileContent, decomposeNoteFileContent } from '@/shared/utils/f
 import { commitNoteVersion } from '@/shared/utils/note-versions'
 import { planExternalSync, toSyncShape } from '@/shared/utils/external-note-sync'
 import { renameWikiLinksForNote } from '@/shared/utils/wiki-links'
+import { noteBodies } from '@/shared/utils/note-body'
 import { bodyOf } from '@/shared/utils/note-body-of'
 import { buildVersionKey, getVersionLocation } from '@/shared/utils/note-version-location'
 
@@ -110,7 +111,8 @@ const mergeExternalEdits = async ({ note, previous, existing, repositories }, fi
     if (!existing || existing.lastModified === previous.updatedAt) return null
 
     const incoming = await readDiskNote(existing)
-    const plan = planExternalSync({ draft: toSyncShape(note), original: toSyncShape(previous), incoming })
+    const original = toSyncShape(previous, await noteBodies.get(previous))
+    const plan = planExternalSync({ draft: toSyncShape(note), original, incoming })
     if (!plan) return null
 
     if (plan.lostExternalText) {

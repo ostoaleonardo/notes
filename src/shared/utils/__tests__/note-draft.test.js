@@ -54,6 +54,18 @@ describe('stored note to draft', () => {
     })
 })
 
+describe('draft of a note without a body in memory', () => {
+    test('takes the loaded body instead of the stored one', () => {
+        const draft = toDraft({ title: 'T', filename: 'T.md' }, 'Untitled', 'Loaded body')
+
+        expect(draft.note).toBe('Loaded body')
+    })
+
+    test('keeps the stored body when no loaded body is given', () => {
+        expect(toDraft({ title: 'T', note: 'Resident' }, 'Untitled').note).toBe('Resident')
+    })
+})
+
 describe('saved snapshot', () => {
     test('freezes the properties as text', () => {
         expect(toSavedSnapshot(content).properties).toBe('{"status":"done"}')

@@ -1,4 +1,4 @@
-import { planExternalSync } from '../external-note-sync'
+import { planExternalSync, toSyncShape } from '../external-note-sync'
 
 const base = {
     note: 'alpha beta gamma delta epsilon zeta eta theta iota kappa lambda',
@@ -66,5 +66,23 @@ describe('plan external sync', () => {
     test('returns null when nothing changed or the note is gone', () => {
         expect(planExternalSync({ draft: base, original: base, incoming: { ...base } })).toBeNull()
         expect(planExternalSync({ draft: base, original: base, incoming: undefined })).toBeNull()
+    })
+})
+
+describe('sync shape of a note', () => {
+    test('uses the loaded body when the note has none in memory', () => {
+        const shape = toSyncShape({ tags: ['a'] }, 'Loaded body')
+
+        expect(shape).toEqual({
+            note: 'Loaded body',
+            tags: ['a'],
+            properties: {},
+            invalidFrontmatter: null,
+            rawFrontmatter: null
+        })
+    })
+
+    test('uses the resident body by default', () => {
+        expect(toSyncShape({ note: 'Resident' }).note).toBe('Resident')
     })
 })
