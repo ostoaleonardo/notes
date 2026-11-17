@@ -1,5 +1,6 @@
 use super::constants::TAG_KEYS;
 use super::patterns::{FRONTMATTER, FRONTMATTER_RAW_GROUP};
+use crate::model::Property;
 use serde_yaml_ng::{Mapping, Value};
 
 pub struct Split<'a> {
@@ -45,12 +46,48 @@ pub fn read_metadata(raw: Option<&str>) -> Metadata {
 	}
 }
 
-pub fn property_keys(mapping: &Mapping) -> Vec<String> {
+pub fn properties(mapping: &Mapping) -> Vec<Property> {
 	mapping
-		.keys()
-		.filter_map(scalar_text)
-		.filter(|key| !TAG_KEYS.contains(&key.as_str()))
+		.iter()
+		.filter_map(|(key, value)| Some((scalar_text(key)?, value)))
+		.filter(|(key, _)| !TAG_KEYS.contains(&key.as_str()))
+		.map(|(key, value)| Property {
+			key,
+			value: to_json(value).to_string(),
+		})
 		.collect()
+}
+
+fn to_json(value: &Value) -> serde_json::Value {
+	match value {
+		Value::Null => serde_json::Value::Null,
+		Value::Bool(flag) => serde_json::Value::Bool(*flag),
+		Value::Number(number) => number_to_json(number),
+		Value::String(text) => serde_json::Value::String(text.clone()),
+		Value::Sequence(items) => serde_json::Value::Array(items.iter().map(to_json).collect()),
+		Value::Mapping(mapping) => serde_json::Value::Object(
+			mapping
+				.iter()
+				.filter_map(|(key, value)| Some((scalar_text(key)?, to_json(value))))
+				.collect(),
+		),
+		Value::Tagged(tagged) => to_json(&tagged.value),
+	}
+}
+
+fn number_to_json(number: &serde_yaml_ng::Number) -> serde_json::Value {
+	if let Some(integer) = number.as_i64() {
+		return integer.into();
+	}
+
+	if let Some(integer) = number.as_u64() {
+		return integer.into();
+	}
+
+	number
+		.as_f64()
+		.and_then(serde_json::Number::from_f64)
+		.map_or(serde_json::Value::Null, serde_json::Value::Number)
 }
 
 pub fn scalar_text(value: &Value) -> Option<String> {

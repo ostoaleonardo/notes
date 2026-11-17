@@ -1,4 +1,16 @@
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Tag {
+	pub name: String,
+	pub inline: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Property {
+	pub key: String,
+	pub value: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Link {
 	pub text: String,
 	pub name: String,
@@ -13,10 +25,11 @@ pub struct NoteRef {
 
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct ParsedNote {
-	pub tags: Vec<String>,
+	pub tags: Vec<Tag>,
 	pub links: Vec<Link>,
 	pub markdown_links: Vec<String>,
-	pub property_keys: Vec<String>,
+	pub properties: Vec<Property>,
+	pub frontmatter: Option<String>,
 	pub invalid_frontmatter: bool,
 	pub content: String,
 }

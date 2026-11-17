@@ -10,9 +10,9 @@ icu_normalizer = "2"
 rayon = "1"
 regex = { version = "1", default-features = false, features = ["std", "unicode"] }
 rusqlite = { version = "0.43", features = ["bundled"] }
+serde_json = { version = "1.0.154", features = ["preserve_order"] }
 serde_yaml_ng = "0.10"
 thiserror = "2"
 
 [dev-dependencies]
-serde_json = "1.0.154"
 tempfile = "3.27.0"

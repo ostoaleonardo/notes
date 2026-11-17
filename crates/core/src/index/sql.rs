@@ -50,12 +50,14 @@ pub const SCHEMA: &[&str] = &[
 		modified INTEGER NOT NULL,
 		size INTEGER NOT NULL,
 		invalid_frontmatter INTEGER NOT NULL,
+		frontmatter TEXT,
 		UNIQUE(repository_id, filename)
 	)",
 	"CREATE TABLE tags(
 		note_id INTEGER NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
 		position INTEGER NOT NULL,
-		name TEXT NOT NULL
+		name TEXT NOT NULL,
+		inline INTEGER NOT NULL
 	)",
 	"CREATE TABLE links(
 		note_id INTEGER NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
@@ -72,7 +74,8 @@ pub const SCHEMA: &[&str] = &[
 	"CREATE TABLE properties(
 		note_id INTEGER NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
 		position INTEGER NOT NULL,
-		key TEXT NOT NULL
+		key TEXT NOT NULL,
+		value TEXT NOT NULL
 	)",
 	"CREATE TABLE meta(key TEXT PRIMARY KEY, value TEXT NOT NULL)",
 	"CREATE INDEX notes_sort_key ON notes(sort_key, id)",
@@ -111,14 +114,16 @@ pub const DELETE_FTS_BY_REPOSITORY: &str =
 pub const DELETE_NOTES_BY_REPOSITORY: &str = "DELETE FROM notes WHERE repository_id = ?1";
 
 pub const INSERT_NOTE: &str = "INSERT INTO notes(
-	repository_id, filename, uri, title, sort_key, modified, size, invalid_frontmatter
-) VALUES(?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)";
-pub const INSERT_TAG: &str = "INSERT INTO tags(note_id, position, name) VALUES(?1,?2,?3)";
+	repository_id, filename, uri, title, sort_key, modified, size, invalid_frontmatter, frontmatter
+) VALUES(?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)";
+pub const INSERT_TAG: &str =
+	"INSERT INTO tags(note_id, position, name, inline) VALUES(?1,?2,?3,?4)";
 pub const INSERT_LINK: &str =
 	"INSERT INTO links(note_id, position, text, name, anchor_name) VALUES(?1,?2,?3,?4,?5)";
 pub const INSERT_MARKDOWN_LINK: &str =
 	"INSERT INTO markdown_links(note_id, position, target) VALUES(?1,?2,?3)";
-pub const INSERT_PROPERTY: &str = "INSERT INTO properties(note_id, position, key) VALUES(?1,?2,?3)";
+pub const INSERT_PROPERTY: &str =
+	"INSERT INTO properties(note_id, position, key, value) VALUES(?1,?2,?3,?4)";
 pub const INSERT_FTS: &str = "INSERT INTO note_fts(rowid, title, content) VALUES(?1,?2,?3)";
 
 pub const BACKLINK_BY_NAME_HEAD: &str = "SELECT DISTINCT n.repository_id, n.filename

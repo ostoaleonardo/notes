@@ -53,7 +53,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "blocks-paragraphs": {
     "links": [],
@@ -101,7 +107,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "blocks-structures": {
     "links": [],
@@ -142,7 +154,13 @@
       ],
       "unlabeled": []
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "callouts": {
     "links": [
@@ -182,7 +200,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "embeds-code": {
     "links": [
@@ -207,7 +231,13 @@
     "embedImages": [
       "visible.png",
       "visible2.png"
-    ]
+    ],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "embeds-media": {
     "links": [
@@ -252,7 +282,13 @@
       "photo.png",
       "diagram.svg",
       "PHOTO.PNG"
-    ]
+    ],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "empty-and-whitespace": {
     "links": [],
@@ -262,7 +298,13 @@
       "labeled": [],
       "unlabeled": []
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "footnotes": {
     "links": [
@@ -290,7 +332,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "frontmatter-links": {
     "links": [
@@ -314,7 +362,19 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [
+        "a",
+        "b"
+      ],
+      "properties": {
+        "title": "Note",
+        "related": "[[Frontmatter Link]]"
+      },
+      "invalidFrontmatter": null,
+      "rawFrontmatter": "title: Note\nrelated: \"[[Frontmatter Link]]\"\ntags: [a, b]"
+    }
   },
   "headings-atx": {
     "links": [],
@@ -380,7 +440,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "headings-code-and-quotes": {
     "links": [],
@@ -410,7 +476,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "headings-setext": {
     "links": [],
@@ -429,7 +501,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "html-blocks": {
     "links": [
@@ -472,7 +550,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "line-endings-crlf": {
     "links": [
@@ -501,7 +585,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "math": {
     "links": [
@@ -533,7 +623,399 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
+  },
+  "metadata-aliases-string": {
+    "links": [],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": []
+    },
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {
+        "aliases": "Single Alias"
+      },
+      "invalidFrontmatter": null,
+      "rawFrontmatter": "aliases: Single Alias"
+    }
+  },
+  "metadata-aliases": {
+    "links": [],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Body.",
+          "insertAt": 59
+        }
+      ]
+    },
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {
+        "aliases": [
+          "Short",
+          "Long Name"
+        ],
+        "cssclass": "wide"
+      },
+      "invalidFrontmatter": null,
+      "rawFrontmatter": "aliases: [Short, \"Long Name\"]\ncssclass: wide"
+    }
+  },
+  "metadata-crlf-block": {
+    "links": [],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Body.\r",
+          "insertAt": 45
+        }
+      ]
+    },
+    "embedImages": [],
+    "metadata": {
+      "tags": [
+        "crlf"
+      ],
+      "properties": {
+        "status": "done"
+      },
+      "invalidFrontmatter": null,
+      "rawFrontmatter": "tags: [crlf]\r\nstatus: done"
+    }
+  },
+  "metadata-duplicate-keys": {
+    "links": [],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Body.",
+          "insertAt": 30
+        }
+      ]
+    },
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": "same: 1\nsame: 2",
+      "rawFrontmatter": null
+    }
+  },
+  "metadata-empty-block": {
+    "links": [],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Body.",
+          "insertAt": 15
+        }
+      ]
+    },
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": ""
+    }
+  },
+  "metadata-invalid": {
+    "links": [],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "Body.",
+          "insertAt": 41
+        }
+      ]
+    },
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": "tags: [a, b\nstatus: broken",
+      "rawFrontmatter": null
+    }
+  },
+  "metadata-no-block": {
+    "links": [],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "No frontmatter here.",
+          "insertAt": 20
+        },
+        {
+          "text": "- item",
+          "insertAt": 28
+        }
+      ]
+    },
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
+  },
+  "metadata-non-string-keys": {
+    "links": [],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": []
+    },
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {
+        "1": "one",
+        "2.5": "half",
+        "true": "yes-key",
+        "name": "text"
+      },
+      "invalidFrontmatter": null,
+      "rawFrontmatter": "1: one\n2.5: half\ntrue: yes-key\nname: text"
+    }
+  },
+  "metadata-not-a-map": {
+    "links": [],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "- a",
+          "insertAt": 7
+        },
+        {
+          "text": "- b",
+          "insertAt": 11
+        },
+        {
+          "text": "Body.",
+          "insertAt": 22
+        }
+      ]
+    },
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": "- a\n- b",
+      "rawFrontmatter": null
+    }
+  },
+  "metadata-properties": {
+    "links": [],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "    - a",
+          "insertAt": 174
+        },
+        {
+          "text": "    - b: 1",
+          "insertAt": 185
+        },
+        {
+          "text": "Body.",
+          "insertAt": 209
+        }
+      ]
+    },
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {
+        "title": "A title",
+        "count": 3,
+        "ratio": 0.5,
+        "whole": 2,
+        "negative": -7,
+        "flag": true,
+        "off": false,
+        "nothing": null,
+        "tilde": null,
+        "empty": null,
+        "list": [
+          "one",
+          2,
+          true
+        ],
+        "nested": {
+          "key": "value",
+          "deeper": [
+            "a",
+            {
+              "b": 1
+            }
+          ]
+        },
+        "status": "open"
+      },
+      "invalidFrontmatter": null,
+      "rawFrontmatter": "title: A title\ncount: 3\nratio: 0.5\nwhole: 2.0\nnegative: -7\nflag: true\noff: false\nnothing: null\ntilde: ~\nempty:\nlist: [one, 2, true]\nnested:\n  key: value\n  deeper:\n    - a\n    - b: 1\nstatus: open"
+    }
+  },
+  "metadata-scalar-types": {
+    "links": [],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": []
+    },
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {
+        "date": "2024-01-05",
+        "created": "2024-01-05T10:20:30Z",
+        "yes": "yes",
+        "no": "no",
+        "upper": true,
+        "mixed": false,
+        "hex": 31,
+        "octal": 12,
+        "exp": 1000
+      },
+      "invalidFrontmatter": null,
+      "rawFrontmatter": "date: 2024-01-05\ncreated: 2024-01-05T10:20:30Z\nyes: yes\nno: no\nupper: TRUE\nmixed: False\nhex: 0x1F\noctal: 0o14\nexp: 1e3"
+    }
+  },
+  "metadata-tags-forms": {
+    "links": [],
+    "tags": [
+      {
+        "name": "inline",
+        "from": 82,
+        "to": 89
+      }
+    ],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": [
+        {
+          "text": "  - one",
+          "insertAt": 17
+        },
+        {
+          "text": "  - \"#two words\"",
+          "insertAt": 34
+        },
+        {
+          "text": "  - 2024",
+          "insertAt": 43
+        },
+        {
+          "text": "  - Mixed/Case/",
+          "insertAt": 59
+        },
+        {
+          "text": "Body #inline.",
+          "insertAt": 90
+        }
+      ]
+    },
+    "embedImages": [],
+    "metadata": {
+      "tags": [
+        "one",
+        "two-words",
+        "Mixed/Case",
+        "single"
+      ],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": "tags:\n  - one\n  - \"#two words\"\n  - 2024\n  - Mixed/Case/\ntag: single"
+    }
+  },
+  "metadata-tags-string": {
+    "links": [],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": []
+    },
+    "embedImages": [],
+    "metadata": {
+      "tags": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "properties": {
+        "status": "x"
+      },
+      "invalidFrontmatter": null,
+      "rawFrontmatter": "tags: a, b  c,d\nstatus: x"
+    }
+  },
+  "metadata-yaml-features": {
+    "links": [],
+    "tags": [],
+    "headings": [],
+    "blocks": {
+      "labeled": [],
+      "unlabeled": []
+    },
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {
+        "base": {
+          "x": 1
+        },
+        "ref": {
+          "x": 1
+        },
+        "multi": "line one\nline two\n",
+        "folded": "folded text\n",
+        "quoted": "with: colon"
+      },
+      "invalidFrontmatter": null,
+      "rawFrontmatter": "base: &anchor\n  x: 1\nref: *anchor\nmulti: |\n  line one\n  line two\nfolded: >\n  folded\n  text\nquoted: \"with: colon\""
+    }
   },
   "mixed-realistic": {
     "links": [
@@ -623,7 +1105,16 @@
     },
     "embedImages": [
       "diagram.png"
-    ]
+    ],
+    "metadata": {
+      "tags": [
+        "project",
+        "research"
+      ],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": "tags:\n  - project\n  - research"
+    }
   },
   "tabs-and-indentation": {
     "links": [
@@ -650,7 +1141,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "tags-basic": {
     "links": [],
@@ -743,7 +1240,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "tags-code-and-frontmatter": {
     "links": [],
@@ -777,7 +1280,17 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [
+        "fm-tag"
+      ],
+      "properties": {
+        "title": "#not-a-tag in frontmatter"
+      },
+      "invalidFrontmatter": null,
+      "rawFrontmatter": "tags:\n  - fm-tag\ntitle: \"#not-a-tag in frontmatter\""
+    }
   },
   "tags-not-tags": {
     "links": [],
@@ -816,7 +1329,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "tasks-custom": {
     "links": [],
@@ -891,7 +1410,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "wikilinks-alias-anchor-block": {
     "links": [
@@ -924,7 +1449,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "wikilinks-basic": {
     "links": [
@@ -952,7 +1483,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "wikilinks-code-fenced": {
     "links": [
@@ -979,7 +1516,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "wikilinks-code-indented": {
     "links": [
@@ -1014,7 +1557,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "wikilinks-code-inline": {
     "links": [
@@ -1045,7 +1594,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "wikilinks-escaped-and-broken": {
     "links": [
@@ -1082,7 +1637,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "wikilinks-markdown-style": {
     "links": [
@@ -1107,7 +1668,13 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "wikilinks-table": {
     "links": [
@@ -1121,7 +1688,13 @@
       "labeled": [],
       "unlabeled": []
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   },
   "wikilinks-unicode": {
     "links": [
@@ -1147,6 +1720,12 @@
         }
       ]
     },
-    "embedImages": []
+    "embedImages": [],
+    "metadata": {
+      "tags": [],
+      "properties": {},
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
   }
 }

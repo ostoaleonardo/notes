@@ -339,3 +339,88 @@ fn escapes_quotes_in_mention_terms() {
 
 	assert_eq!(refs(found.unwrap()), ["A.md"]);
 }
+
+fn texts(engine: &Engine, statement: &str) -> Vec<Vec<Value>> {
+	engine.query(statement, &[]).unwrap().rows
+}
+
+#[test]
+fn stores_whether_each_tag_came_from_the_frontmatter_or_the_body() {
+	let directory = TempDir::new().unwrap();
+	let engine = engine(&directory, "en");
+
+	engine
+		.write("repo", vec![input("A.md", "---\ntags: [fm]\n---\n#body")])
+		.unwrap();
+
+	assert_eq!(
+		texts(&engine, "SELECT name, inline FROM tags ORDER BY position"),
+		[
+			[Value::Text("fm".into()), Value::Integer(0)],
+			[Value::Text("body".into()), Value::Integer(1)]
+		]
+	);
+}
+
+#[test]
+fn stores_property_values_as_json() {
+	let directory = TempDir::new().unwrap();
+	let engine = engine(&directory, "en");
+
+	engine
+		.write(
+			"repo",
+			vec![input(
+				"A.md",
+				"---\ncount: 3\naliases: [x, y]\nnested:\n  k: v\n---\n",
+			)],
+		)
+		.unwrap();
+
+	assert_eq!(
+		texts(
+			&engine,
+			"SELECT key, value FROM properties ORDER BY position"
+		),
+		[
+			[Value::Text("count".into()), Value::Text("3".into())],
+			[
+				Value::Text("aliases".into()),
+				Value::Text("[\"x\",\"y\"]".into())
+			],
+			[
+				Value::Text("nested".into()),
+				Value::Text("{\"k\":\"v\"}".into())
+			]
+		]
+	);
+}
+
+#[test]
+fn stores_the_raw_frontmatter_and_null_when_there_is_no_block() {
+	let directory = TempDir::new().unwrap();
+	let engine = engine(&directory, "en");
+
+	engine
+		.write(
+			"repo",
+			vec![
+				input("A.md", "---\nstatus: open\n---\nbody"),
+				input("B.md", "no block"),
+				input("C.md", "---\ntags: [a, b\n---\nbroken"),
+			],
+		)
+		.unwrap();
+
+	assert_eq!(
+		texts(
+			&engine,
+			"SELECT frontmatter, invalid_frontmatter FROM notes ORDER BY filename"
+		),
+		[
+			[Value::Text("status: open".into()), Value::Integer(0)],
+			[Value::Null, Value::Integer(0)],
+			[Value::Text("tags: [a, b".into()), Value::Integer(1)]
+		]
+	);
+}

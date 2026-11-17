@@ -8,14 +8,24 @@ mod tags;
 
 pub use link_name::normalize;
 
-use crate::model::ParsedNote;
+use crate::model::{ParsedNote, Tag};
 
 pub fn parse_note(text: &str) -> ParsedNote {
 	let split = frontmatter::split(text);
 	let metadata = frontmatter::read_metadata(split.raw);
 
-	let mut note_tags = tags::frontmatter_tags(&metadata.mapping);
-	note_tags.extend(tags::inline_tags(split.body));
+	let note_tags = tags::frontmatter_tags(&metadata.mapping)
+		.into_iter()
+		.map(|name| Tag {
+			name,
+			inline: false,
+		})
+		.chain(
+			tags::inline_tags(split.body)
+				.into_iter()
+				.map(|name| Tag { name, inline: true }),
+		)
+		.collect();
 
 	let content = match split.raw {
 		Some(raw) if !raw.is_empty() => {
@@ -30,7 +40,8 @@ pub fn parse_note(text: &str) -> ParsedNote {
 		tags: note_tags,
 		links: links.wiki,
 		markdown_links: links.markdown,
-		property_keys: frontmatter::property_keys(&metadata.mapping),
+		properties: frontmatter::properties(&metadata.mapping),
+		frontmatter: split.raw.map(str::to_string),
 		invalid_frontmatter: metadata.invalid,
 		content,
 	}

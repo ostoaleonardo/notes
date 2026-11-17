@@ -1,7 +1,7 @@
 use super::sql;
 use crate::collation::SortKeys;
 use crate::error::Result;
-use crate::model::{IndexedNote, Link};
+use crate::model::{IndexedNote, Link, Property, Tag};
 use rusqlite::{Transaction, params};
 
 pub fn write_batch(
@@ -73,11 +73,12 @@ fn insert(
 			input.modified,
 			input.size,
 			i64::from(parsed.invalid_frontmatter),
+			parsed.frontmatter,
 		])?;
 
 	let id = transaction.last_insert_rowid();
 
-	insert_all(transaction, sql::INSERT_TAG, id, &parsed.tags)?;
+	insert_tags(transaction, id, &parsed.tags)?;
 	insert_links(transaction, id, &parsed.links)?;
 	insert_all(
 		transaction,
@@ -85,11 +86,45 @@ fn insert(
 		id,
 		&parsed.markdown_links,
 	)?;
-	insert_all(transaction, sql::INSERT_PROPERTY, id, &parsed.property_keys)?;
+	insert_properties(transaction, id, &parsed.properties)?;
 
 	transaction
 		.prepare_cached(sql::INSERT_FTS)?
 		.execute(params![id, title, parsed.content])?;
+
+	Ok(())
+}
+
+fn insert_tags(transaction: &Transaction<'_>, note_id: i64, tags: &[Tag]) -> Result<()> {
+	let mut prepared = transaction.prepare_cached(sql::INSERT_TAG)?;
+
+	for (position, tag) in tags.iter().enumerate() {
+		prepared.execute(params![
+			note_id,
+			position as i64,
+			tag.name,
+			i64::from(tag.inline)
+		])?;
+	}
+
+	Ok(())
+}
+
+fn insert_properties(
+	transaction: &Transaction<'_>,
+	note_id: i64,
+	properties: &[Property],
+) -> Result<()> {
+	let mut prepared = transaction.prepare_cached(sql::INSERT_PROPERTY)?;
+
+	for (position, property) in properties.iter().enumerate() {
+		prepared.execute(params![
+			note_id,
+			position as i64,
+			property.key,
+			property.value
+		])?;
+	}
 
 	Ok(())
 }
