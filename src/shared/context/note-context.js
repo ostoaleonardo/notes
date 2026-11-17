@@ -19,6 +19,8 @@ import { collectTags } from '@/shared/utils/note-tags'
 import { getNotePaths } from '@/shared/utils/note-path'
 import { mergeLoadedNotes } from '@/shared/utils/merge-loaded-notes'
 import { getIndexingStatus, setIndexingStatus } from '@/shared/utils/indexing-status'
+import { isBodylessVault } from '@/shared/utils/body-mode'
+import { loadNotesFromIndex } from '@/shared/utils/index-notes'
 import { syncRepositoryIndex } from '@/shared/utils/repository-index'
 import { searchIndex } from '@/shared/utils/search-index'
 
@@ -67,6 +69,29 @@ export const NoteProvider = ({ children }) => {
     }
 
     const loadRunRef = useRef({ id: 0, running: false })
+    const bodylessRef = useRef(false)
+
+    const indexedSource = useMemo(() => ({
+        sync: (tree) => syncRepositoryIndex(tree, repositories),
+        list: loadNotesFromIndex
+    }), [repositories])
+
+    const readStartSnapshot = async (rootId) => {
+        const ids = activeRepositoryTree.map((repository) => repository.id)
+
+        bodylessRef.current = await isBodylessVault(ids)
+
+        if (bodylessRef.current) {
+            try {
+                return await loadNotesFromIndex(ids)
+            } catch (error) {
+                logError(LOG_MESSAGES.ERROR_LISTING_INDEXED_NOTES, error)
+                bodylessRef.current = false
+            }
+        }
+
+        return readRepositoryIndex(rootId)
+    }
 
     const getNotesRef = useRef(null)
     getNotesRef.current = async (isRepositorySwitch) => {
@@ -92,7 +117,7 @@ export const NoteProvider = ({ children }) => {
 
             if (isRepositorySwitch) {
                 setLoadedRepositoryId(null)
-                snapshot = await readRepositoryIndex(rootRepository.id)
+                snapshot = await readStartSnapshot(rootRepository.id)
                 if (!isCurrent()) return
 
                 setNotes(snapshot)
@@ -105,7 +130,8 @@ export const NoteProvider = ({ children }) => {
                 activeRepositoryTree,
                 rootRepository,
                 snapshot,
-                reportProgress
+                reportProgress,
+                bodylessRef.current ? indexedSource : undefined
             )
             if (!isCurrent()) return
             bootMark(BOOT_MARKS.SCAN_DONE, { changed, notes: loaded.length })
@@ -114,7 +140,7 @@ export const NoteProvider = ({ children }) => {
             if (!changed) return
 
             setNotes((current) => mergeLoadedNotes(loaded, snapshot, current))
-            writeRepositoryIndex(rootRepository.id, loaded)
+            if (!bodylessRef.current) writeRepositoryIndex(rootRepository.id, loaded)
         } catch (error) {
             logError(LOG_MESSAGES.ERROR_LOADING_NOTES, error)
             if (isCurrent()) setIndexingStatus(null)

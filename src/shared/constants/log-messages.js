@@ -19,6 +19,7 @@ export const LOG_MESSAGES = {
     ERROR_PICKING_REPOSITORY: 'error picking repository',
     ERROR_PURCHASING_PRO: 'error purchasing pro',
     ERROR_READING_REPOSITORY_INDEX: 'error reading repository index',
+    ERROR_LISTING_INDEXED_NOTES: 'error listing the indexed notes',
     ERROR_INDEXING_REPOSITORY: 'error indexing repository',
     ERROR_SEARCHING_INDEX: 'error searching the native index',
     ERROR_REFRESHING_SEARCH_INDEX: 'error refreshing the search index coverage',

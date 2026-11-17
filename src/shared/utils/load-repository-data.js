@@ -171,6 +171,24 @@ const loadNotes = async (tree, fileStorage, previousNotes, onProgress) => {
     }
 }
 
+const loadIndexedNotes = async (tree, previousNotes, indexed) => {
+    await indexed.sync(tree)
+
+    const previousByPath = new Map(previousNotes.map((note) => [note.path, note]))
+    const listed = await indexed.list(tree.map((repository) => repository.id))
+
+    const notes = listed.map((note) => {
+        const previous = previousByPath.get(note.path)
+
+        return previous?.updatedAt === note.updatedAt ? previous : note
+    })
+
+    return {
+        notes,
+        changed: notes.length !== previousNotes.length || notes.some((note) => previousByPath.get(note.path) !== note)
+    }
+}
+
 const migrateLegacyVersionFiles = async (tree, rootUri, storage, fileStorage) => {
     const migratedKey = STORAGE_KEYS.LEGACY_VERSIONS_MIGRATED_PREFIX + rootUri
     if (await storage.getItem(migratedKey)) return
@@ -193,7 +211,8 @@ export const loadRepositoryData = async (
     storage,
     fileStorage,
     previousNotes = [],
-    onProgress
+    onProgress,
+    indexed
 ) => {
     const rootUri = rootRepository.uri
 
@@ -208,7 +227,9 @@ export const loadRepositoryData = async (
 
     await migrateLegacyVersionFiles(tree, rootUri, storage, fileStorage)
 
-    const { notes, changed } = await loadNotes(tree, fileStorage, previousNotes, onProgress)
+    const { notes, changed } = indexed
+        ? await loadIndexedNotes(tree, previousNotes, indexed)
+        : await loadNotes(tree, fileStorage, previousNotes, onProgress)
 
     return { notes, changed, migration }
 }

@@ -10,14 +10,15 @@ export function useRepositoryData() {
     const { t } = useTranslation()
     const fileStorage = useFileStorage()
 
-    return useCallback(async (tree, rootRepository, previousNotes, onProgress) => {
+    return useCallback(async (tree, rootRepository, previousNotes, onProgress, indexed) => {
         const { migration, ...data } = await loadRepositoryData(
             tree,
             rootRepository,
             storage,
             fileStorage,
             previousNotes,
-            onProgress
+            onProgress,
+            indexed
         )
 
         if (migration.renamedNotes || migration.failedImages) {

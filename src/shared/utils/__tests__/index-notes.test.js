@@ -1,4 +1,4 @@
-import { buildNoteFromMetadata, createIndexedNotesLoader } from '../index-notes'
+import { buildNoteFromMetadata, createIndexedNotesCounter, createIndexedNotesLoader } from '../index-notes'
 import { getNoteLinkTexts } from '../note-links'
 import { getNoteTags } from '../note-tags'
 import { buildNotePath } from '../note-path'
@@ -79,5 +79,31 @@ describe('load notes from the index', () => {
         const load = createIndexedNotesLoader({ listNoteMetadata: async () => '[]' })
 
         expect(await load(['repo'])).toEqual([])
+    })
+})
+
+describe('count the indexed notes', () => {
+    test('asks the index for the notes of the given repositories', async () => {
+        const query = jest.fn(async () => [{ count: 42 }])
+
+        const count = await createIndexedNotesCounter(query)(['a', 'b'])
+
+        expect(count).toBe(42)
+        expect(query).toHaveBeenCalledWith(
+            'SELECT COUNT(*) AS count FROM notes WHERE repository_id IN (?,?)',
+            'a',
+            'b'
+        )
+    })
+
+    test('counts nothing without asking when there are no repositories', async () => {
+        const query = jest.fn()
+
+        expect(await createIndexedNotesCounter(query)([])).toBe(0)
+        expect(query).not.toHaveBeenCalled()
+    })
+
+    test('counts zero when the index returns no row', async () => {
+        expect(await createIndexedNotesCounter(async () => [])(['a'])).toBe(0)
     })
 })

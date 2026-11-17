@@ -547,3 +547,65 @@ describe('reload with previous notes', () => {
         expect(reads).toEqual(['A.md', 'A.md'])
     })
 })
+
+describe('loading from the notes index', () => {
+    const tree = [{ id: 'repo-1', uri: REPO_URI }]
+    const buildIndexed = (listed) => ({
+        sync: jest.fn(async () => {}),
+        list: jest.fn(async () => listed)
+    })
+    const note = (name, updatedAt) => ({ path: `repo-1::${name}.md`, title: name, updatedAt })
+
+    test('synchronizes the index before listing the notes of the tree', async () => {
+        const indexed = buildIndexed([])
+        const order = []
+        indexed.sync.mockImplementation(async () => { order.push('sync') })
+        indexed.list.mockImplementation(async () => { order.push('list'); return [] })
+
+        await loadRepositoryData(tree, tree[0], createFakeStorage(), createFakeFileStorage(), [], undefined, indexed)
+
+        expect(order).toEqual(['sync', 'list'])
+        expect(indexed.sync).toHaveBeenCalledWith(tree)
+        expect(indexed.list).toHaveBeenCalledWith(['repo-1'])
+    })
+
+    test('keeps the previous note objects whose modified time did not change', async () => {
+        const previous = [note('a', 1), note('b', 1)]
+        const indexed = buildIndexed([note('a', 1), note('b', 2)])
+
+        const { notes, changed } = await loadRepositoryData(
+            tree, tree[0], createFakeStorage(), createFakeFileStorage(), previous, undefined, indexed
+        )
+
+        expect(notes[0]).toBe(previous[0])
+        expect(notes[1]).not.toBe(previous[1])
+        expect(changed).toBe(true)
+    })
+
+    test('reports no change when the listing matches the previous notes', async () => {
+        const previous = [note('a', 1), note('b', 1)]
+        const indexed = buildIndexed([note('b', 1), note('a', 1)])
+
+        const { changed } = await loadRepositoryData(
+            tree, tree[0], createFakeStorage(), createFakeFileStorage(), previous, undefined, indexed
+        )
+
+        expect(changed).toBe(false)
+    })
+
+    test('reports a change when a note was added or removed', async () => {
+        const previous = [note('a', 1)]
+
+        const added = await loadRepositoryData(
+            tree, tree[0], createFakeStorage(), createFakeFileStorage(), previous, undefined,
+            buildIndexed([note('a', 1), note('c', 1)])
+        )
+        const removed = await loadRepositoryData(
+            tree, tree[0], createFakeStorage(), createFakeFileStorage(), previous, undefined,
+            buildIndexed([])
+        )
+
+        expect(added.changed).toBe(true)
+        expect(removed.changed).toBe(true)
+    })
+})

@@ -1,0 +1,1 @@
+export const BODYLESS_MIN_NOTES = 5000

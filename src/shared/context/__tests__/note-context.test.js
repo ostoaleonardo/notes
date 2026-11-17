@@ -12,6 +12,8 @@ const mockUpdatePinned = jest.fn()
 const mockRemoveRecent = jest.fn()
 const mockReadRepositoryIndex = jest.fn()
 const mockWriteRepositoryIndex = jest.fn()
+const mockIsBodylessVault = jest.fn()
+const mockLoadNotesFromIndex = jest.fn()
 
 let mockActiveRepository = null
 let mockActiveRepositoryTree = []
@@ -20,6 +22,12 @@ let mockRecent = []
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
     default: {}
+}))
+jest.mock('@/shared/utils/body-mode', () => ({
+    isBodylessVault: (...args) => mockIsBodylessVault(...args)
+}))
+jest.mock('@/shared/utils/index-notes', () => ({
+    loadNotesFromIndex: (...args) => mockLoadNotesFromIndex(...args)
 }))
 jest.mock('../../hooks/use-repository-data', () => ({
     useRepositoryData: () => mockLoadRepositoryData
@@ -53,6 +61,8 @@ beforeEach(() => {
     mockPinned = new Set()
     mockRecent = []
     mockReadRepositoryIndex.mockResolvedValue([])
+    mockIsBodylessVault.mockResolvedValue(false)
+    mockLoadNotesFromIndex.mockResolvedValue([])
     setIndexingStatus(null)
 })
 
@@ -75,7 +85,7 @@ describe('loading notes on mount', () => {
 
         const { result } = await renderNoteContext()
 
-        expect(mockLoadRepositoryData).toHaveBeenCalledWith([root], root, [], expect.any(Function))
+        expect(mockLoadRepositoryData).toHaveBeenCalledWith([root], root, [], expect.any(Function), undefined)
         expect(result.current.notes).toHaveLength(1)
         expect(result.current.tags).toEqual(['work', 'work/todo'])
         expect(result.current.loading).toBe(false)
@@ -112,7 +122,7 @@ describe('loading from the repository index', () => {
         expect(mockReadRepositoryIndex).toHaveBeenCalledWith('repo-1')
         expect(result.current.notes).toBe(cached)
         expect(result.current.loading).toBe(false)
-        expect(mockLoadRepositoryData).toHaveBeenCalledWith([root], root, cached, expect.any(Function))
+        expect(mockLoadRepositoryData).toHaveBeenCalledWith([root], root, cached, expect.any(Function), undefined)
     })
 
     test('keeps the indexed notes and the index when nothing changed on disk', async () => {
@@ -326,5 +336,62 @@ describe('clear', () => {
 
         expect(result.current.notes).toEqual([])
         expect(result.current.tags).toEqual([])
+    })
+})
+
+describe('loading a large vault without note bodies', () => {
+    const root = { id: 'repo-1', uri: 'content://repo-1' }
+    const listed = [{ path: 'repo-1::A.md', title: 'A' }]
+
+    beforeEach(() => {
+        mockActiveRepository = root
+        mockActiveRepositoryTree = [root]
+        mockIsBodylessVault.mockResolvedValue(true)
+        mockLoadNotesFromIndex.mockResolvedValue(listed)
+    })
+
+    test('shows the notes listed from the index instead of the stored snapshot', async () => {
+        mockLoadRepositoryData.mockReturnValue(new Promise(() => {}))
+
+        const { result } = await renderNoteContext()
+
+        expect(mockIsBodylessVault).toHaveBeenCalledWith(['repo-1'])
+        expect(mockLoadNotesFromIndex).toHaveBeenCalledWith(['repo-1'])
+        expect(mockReadRepositoryIndex).not.toHaveBeenCalled()
+        expect(result.current.notes).toBe(listed)
+        expect(result.current.loading).toBe(false)
+    })
+
+    test('hands the loader the index source to synchronize and list from', async () => {
+        mockLoadRepositoryData.mockReturnValue(new Promise(() => {}))
+
+        await renderNoteContext()
+
+        const indexed = mockLoadRepositoryData.mock.calls[0][4]
+
+        await indexed.list(['repo-1'])
+
+        expect(indexed).toEqual({ sync: expect.any(Function), list: expect.any(Function) })
+        expect(mockLoadNotesFromIndex).toHaveBeenLastCalledWith(['repo-1'])
+    })
+
+    test('does not store the snapshot when notes changed', async () => {
+        mockLoadRepositoryData.mockResolvedValue({ notes: [{ path: 'repo-1::B.md' }], changed: true })
+
+        await renderNoteContext()
+
+        expect(mockWriteRepositoryIndex).not.toHaveBeenCalled()
+    })
+
+    test('falls back to the stored snapshot when the index cannot be listed', async () => {
+        mockLoadNotesFromIndex.mockRejectedValue(new Error('index unavailable'))
+        mockReadRepositoryIndex.mockResolvedValue([{ path: 'repo-1::C.md' }])
+        mockLoadRepositoryData.mockReturnValue(new Promise(() => {}))
+
+        const { result } = await renderNoteContext()
+
+        expect(mockReadRepositoryIndex).toHaveBeenCalledWith('repo-1')
+        expect(result.current.notes).toEqual([{ path: 'repo-1::C.md' }])
+        expect(mockLoadRepositoryData.mock.calls[0][4]).toBeUndefined()
     })
 })
