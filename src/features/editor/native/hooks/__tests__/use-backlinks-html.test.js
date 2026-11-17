@@ -8,8 +8,10 @@ const mockNotes = [
     { path: 'r::Mention.md', title: 'Mention', note: 'about Target here' }
 ]
 
+const mockTranslate = (key) => key
+
 jest.mock('react-i18next', () => ({
-    useTranslation: () => ({ t: (key) => key })
+    useTranslation: () => ({ t: mockTranslate })
 }))
 const mockNotePaths = new Map(mockNotes.map((note) => [note.path, '']))
 
@@ -32,6 +34,8 @@ afterEach(() => {
     jest.restoreAllMocks()
 })
 
+const settle = () => act(async () => {})
+
 describe('backlinks html', () => {
     test('is empty when backlinks are disabled', async () => {
         const { result } = await renderHook(() => useBacklinksHtml('r::Target.md', false))
@@ -41,6 +45,7 @@ describe('backlinks html', () => {
 
     test('lists the notes linking to the target when enabled', async () => {
         const { result } = await renderHook(() => useBacklinksHtml('r::Target.md', true))
+        await settle()
 
         expect(result.current).toContain('Source')
         expect(result.current).toContain('title.backlinks')
@@ -48,18 +53,21 @@ describe('backlinks html', () => {
 
     test('is empty when nothing links to the note', async () => {
         const { result } = await renderHook(() => useBacklinksHtml('r::Source.md', true))
+        await settle()
 
         expect(result.current).toBe('')
     })
 
     test('adds the unlinked mentions after the idle callback', async () => {
         const { result } = await renderHook(() => useBacklinksHtml('r::Target.md', true))
+        await settle()
 
         expect(result.current).not.toContain('title.unlinked_mentions')
 
         await act(async () => {
             idleCallbacks.forEach((callback) => callback())
         })
+        await settle()
 
         expect(result.current).toContain('title.unlinked_mentions')
         expect(result.current).toContain('Mention')

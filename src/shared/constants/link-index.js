@@ -1,0 +1,2 @@
+export const LINK_INDEX_MIN_NOTES = 1000
+export const LINK_INDEX_UNCOVERED_RATIO = 0.2

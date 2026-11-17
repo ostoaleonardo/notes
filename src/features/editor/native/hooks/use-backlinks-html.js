@@ -1,42 +1,73 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useNotes } from '@/shared/hooks/use-notes'
-import { findBacklinks, buildBacklinksHtml } from '@/shared/utils/wiki-links'
-import { findUnlinkedMentions, buildUnlinkedMentionsHtml } from '@/features/editor/native/utils/unlinked-mentions'
+import { buildBacklinksHtml } from '@/shared/utils/wiki-links'
+import { linkIndex } from '@/shared/utils/link-index'
+import {
+    buildUnlinkedMentionsHtml,
+    findUnlinkedMentions,
+    getMentionNames
+} from '@/features/editor/native/utils/unlinked-mentions'
+
+const EMPTY_HTML = { backlinks: '', mentions: '' }
 
 export function useBacklinksHtml(id, enabled) {
     const { t } = useTranslation()
     const { notes, notePaths } = useNotes()
-    const [mentionsHtml, setMentionsHtml] = useState('')
-
-    const backlinksHtml = useMemo(() => {
-        if (!enabled) return ''
-
-        return buildBacklinksHtml(findBacklinks(id, notes, notePaths), t('title.backlinks'), notePaths)
-    }, [enabled, id, notes, notePaths, t])
+    const [html, setHtml] = useState(EMPTY_HTML)
 
     useEffect(() => {
         if (!enabled) {
-            setMentionsHtml('')
+            setHtml(EMPTY_HTML)
             return undefined
         }
 
-        const task = requestIdleCallback(() => {
-            const target = notes.find((note) => note.path === id)
+        let cancelled = false
+        let task = null
+        const target = notes.find((note) => note.path === id)
 
-            setMentionsHtml(target
-                ? buildUnlinkedMentionsHtml(
-                    findUnlinkedMentions(target, notes, notePaths),
+        const findMentions = async (backlinks) => {
+            const linked = new Set(backlinks.map((note) => note.path))
+            const pool = await linkIndex.selectPool(
+                notes,
+                () => linkIndex.mentionCandidates(getMentionNames(target))
+            )
+
+            if (cancelled) return
+
+            const mentions = findUnlinkedMentions(target, notes, notePaths, { linked, pool })
+
+            setHtml((current) => ({
+                ...current,
+                mentions: buildUnlinkedMentionsHtml(
+                    mentions,
                     t('title.unlinked_mentions'),
                     t('button.link_mention'),
                     notePaths
                 )
-                : '')
-        })
+            }))
+        }
 
-        return () => cancelIdleCallback(task)
+        const load = async () => {
+            const backlinks = await linkIndex.findBacklinks(target || { path: id }, notes, notePaths)
+            if (cancelled) return
+
+            setHtml({
+                backlinks: buildBacklinksHtml(backlinks, t('title.backlinks'), notePaths),
+                mentions: ''
+            })
+
+            if (target) task = requestIdleCallback(() => findMentions(backlinks))
+        }
+
+        load()
+
+        return () => {
+            cancelled = true
+            if (task !== null) cancelIdleCallback(task)
+        }
     }, [enabled, id, notes, notePaths, t])
 
-    return backlinksHtml + mentionsHtml
+    return html.backlinks + html.mentions
 }

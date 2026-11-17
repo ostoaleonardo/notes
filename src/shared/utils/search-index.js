@@ -1,7 +1,6 @@
-import RepositoryFs from 'repository-fs'
-
 import { queryIndex } from '@/shared/utils/index-query'
 import { buildNotePath } from '@/shared/utils/note-path'
+import { createIndexCoverage, indexCoverage } from '@/shared/utils/index-coverage'
 import { getNoteComparator } from '@/shared/utils/note-sort'
 import { buildPrefilter, compilePage } from '@/shared/utils/search-prefilter'
 import {
@@ -13,23 +12,17 @@ import {
 
 export class SourceOverflowError extends Error {}
 
-export const createSearchIndex = ({ query, listIndexedNotes }) => {
-    let covered = new WeakSet()
-
-    const refresh = async (notes) => {
-        const { repositoryIds, filenames, modified } = await listIndexedNotes()
-        const indexed = new Map(filenames.map((filename, index) => [
-            buildNotePath(repositoryIds[index], filename),
-            modified[index]
-        ]))
-
-        covered = new WeakSet(notes.filter((note) => indexed.get(note.path) === note.updatedAt))
-    }
+export const createSearchIndex = ({
+    query,
+    listIndexedNotes,
+    coverage = createIndexCoverage({ listIndexedNotes })
+}) => {
+    const { refresh, isCovered } = coverage
 
     const createSource = ({ ast, notes, notePaths, sort }) => {
         if (notes.length < SEARCH_INDEX_MIN_NOTES) return null
 
-        const uncovered = notes.filter((note) => !covered.has(note))
+        const uncovered = notes.filter((note) => !isCovered(note))
         if (uncovered.length > notes.length * SEARCH_INDEX_UNCOVERED_RATIO) return null
 
         const folders = new Set([...notePaths.values()].map((folder) => folder.toLowerCase()))
@@ -71,7 +64,7 @@ export const createSearchIndex = ({ query, listIndexedNotes }) => {
 
                     rows.forEach(({ repositoryId, filename }) => {
                         const note = notesByPath.get(buildNotePath(repositoryId, filename))
-                        if (!note || !covered.has(note)) return
+                        if (!note || !isCovered(note)) return
 
                         flushBefore(batch, note)
                         batch.push(note)
@@ -93,5 +86,5 @@ export const createSearchIndex = ({ query, listIndexedNotes }) => {
 
 export const searchIndex = createSearchIndex({
     query: queryIndex,
-    listIndexedNotes: () => RepositoryFs.listIndexedNotes()
+    coverage: indexCoverage
 })

@@ -168,13 +168,8 @@ export const parseMissingWikiLinkTarget = (encoded) => {
     }
 }
 
-const NAMES_FIELD_SEPARATOR = '\u0001'
-const NAMES_NOTE_SEPARATOR = '\u0002'
-const NO_BACKLINKS = []
 const NO_TARGETS = []
 const linkTargetsCache = new WeakMap()
-const backlinkIndexCache = new WeakMap()
-const resolvedTargetsCache = new WeakMap()
 
 const getLinkTargets = (note) => {
     const body = note.note || ''
@@ -197,59 +192,16 @@ const getLinkTargets = (note) => {
     return entry
 }
 
-const getNamesSignature = (notes) => notes.map((note) => (
-    `${note.title}${NAMES_FIELD_SEPARATOR}${getAliases(note).join(NAMES_FIELD_SEPARATOR)}`
-)).join(NAMES_NOTE_SEPARATOR)
+const noteLinksTo = (note, targetPath, notes, notePaths = EMPTY_NOTE_PATHS) => {
+    const { wiki, markdown } = getLinkTargets(note)
 
-const getBacklinkIndex = (notes, notePaths) => {
-    const cached = backlinkIndexCache.get(notes)
-    if (cached?.notePaths === notePaths) return cached.index
-
-    const index = new Map()
-    const resolvedPaths = new Map()
-    const signature = getNamesSignature(notes)
-
-    const resolvePath = (linkText) => {
-        if (!resolvedPaths.has(linkText)) {
-            resolvedPaths.set(linkText, resolveWikiLinkTarget(linkText, notes, notePaths)?.path)
-        }
-
-        return resolvedPaths.get(linkText)
-    }
-
-    const resolveTargets = (note) => {
-        const { body, wiki, markdown } = getLinkTargets(note)
-        const known = resolvedTargetsCache.get(note)
-
-        if (known?.body === body && known.signature === signature && known.notePaths === notePaths) {
-            return known.targets
-        }
-
-        const targets = new Set(markdown)
-
-        for (const linkText of wiki) {
-            const path = resolvePath(linkText)
-            if (path) targets.add(path)
-        }
-
-        targets.delete(note.path)
-        const list = [...targets]
-        resolvedTargetsCache.set(note, { body, signature, notePaths, targets: list })
-
-        return list
-    }
-
-    for (const note of notes) {
-        for (const path of resolveTargets(note)) pushTo(index, path, note)
-    }
-
-    backlinkIndexCache.set(notes, { notePaths, index })
-
-    return index
+    return markdown.includes(targetPath) || wiki.some((linkText) => (
+        resolveWikiLinkTarget(linkText, notes, notePaths)?.path === targetPath
+    ))
 }
 
-export const findBacklinks = (targetPath, notes, notePaths = EMPTY_NOTE_PATHS) => (
-    getBacklinkIndex(notes, notePaths).get(targetPath) || NO_BACKLINKS
+export const findBacklinks = (targetPath, notes, notePaths = EMPTY_NOTE_PATHS, candidates = notes) => (
+    candidates.filter((note) => note.path !== targetPath && noteLinksTo(note, targetPath, notes, notePaths))
 )
 
 export const renameWikiLinksForNote = (

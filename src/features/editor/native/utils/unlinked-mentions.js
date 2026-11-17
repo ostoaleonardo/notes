@@ -21,7 +21,7 @@ import {
 
 const escapeRegExp = (text) => text.replace(REGEXP_SPECIAL_CHARS_PATTERN, '\\$&')
 
-const getMentionNames = (target) => (
+export const getMentionNames = (target) => (
     [...new Set([target.title, ...getAliases(target)].map((name) => (name || '').trim()).filter(Boolean))]
         .sort((a, b) => b.length - a.length)
 )
@@ -58,16 +58,22 @@ export const linkMentions = (text, target) => {
     ))
 }
 
-export const findUnlinkedMentions = (target, notes, notePaths = EMPTY_NOTE_PATHS) => {
+export const findUnlinkedMentions = (
+    target,
+    notes,
+    notePaths = EMPTY_NOTE_PATHS,
+    { linked, pool = null } = {}
+) => {
     const names = getMentionNames(target)
     if (!names.length) return []
 
-    const linked = new Set(findBacklinks(target.path, notes, notePaths).map((note) => note.path))
+    const linkedPaths = linked || new Set(findBacklinks(target.path, notes, notePaths).map((note) => note.path))
+    const candidates = pool ? notes.filter((note) => pool.has(note.path)) : notes
     const probe = new RegExp(names.map(escapeRegExp).join('|'), 'i')
     const pattern = buildMentionPattern(names)
 
-    return notes.filter((note) => {
-        if (note.path === target.path || linked.has(note.path)) return false
+    return candidates.filter((note) => {
+        if (note.path === target.path || linkedPaths.has(note.path)) return false
 
         const body = note.note || ''
 

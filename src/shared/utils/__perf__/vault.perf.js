@@ -6,7 +6,6 @@ import { buildNotes, measure, report } from '../../../../jest/perf-fixtures'
 
 const SIZES = [1000, 5000]
 const TARGET_INDEX = 7
-const CHANGED_INDEX = 3
 
 const timeOnce = (fn) => {
     const start = performance.now()
@@ -27,26 +26,12 @@ describe('vault operations', () => {
         const coldNotes = buildNotes(count)
         const cold = timeOnce(() => findBacklinks(target.path, coldNotes))
 
-        findBacklinks(target.path, notes)
-
-        let edits = 0
-        const afterSave = measure(() => {
-            edits += 1
-            const next = notes.map((note, index) => (
-                index === CHANGED_INDEX ? { ...note, note: `${note.note}\nedit ${edits}` } : note
-            ))
-
-            findBacklinks(target.path, next)
-        })
-
-        const warm = measure(() => findBacklinks(target.path, notes))
         const mentions = measure(() => findUnlinkedMentions(target, notes))
         const search = measure(() => searchNotes(notes, ast, context, null))
 
         results.push(
-            `${String(count).padStart(5)} notes  backlinks cold ${cold.toFixed(1)} ms` +
-            `  after save ${afterSave.toFixed(1)} ms  warm ${warm.toFixed(2)} ms` +
-            `  mentions ${mentions.toFixed(1)} ms  search ${search.toFixed(1)} ms`
+            `${String(count).padStart(5)} notes  backlinks scan ${cold.toFixed(1)} ms` +
+            `  mentions scan ${mentions.toFixed(1)} ms  search ${search.toFixed(1)} ms`
         )
     })
 
