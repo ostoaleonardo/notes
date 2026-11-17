@@ -89,8 +89,8 @@ class RepositoryFsModule : Module() {
     AsyncFunction("indexRepository") Coroutine { repositoryId: String, uri: String ->
       indexLock.withLock {
         withContext(Dispatchers.IO) {
-          openIndex(context).use { index ->
-            val stats = indexRepository(context, index, repositoryId, uri, readDispatcher) { done, total ->
+          openEngine(context).use { engine ->
+            val stats = indexRepository(context, engine, repositoryId, uri, readDispatcher) { done, total ->
               sendEvent(
                 INDEX_PROGRESS_EVENT,
                 mapOf(ProgressKeys.REPOSITORY_ID to repositoryId, ProgressKeys.DONE to done, ProgressKeys.TOTAL to total)
@@ -115,23 +115,23 @@ class RepositoryFsModule : Module() {
 
     AsyncFunction("listIndexedNotes") Coroutine { ->
       indexLock.withLock {
-        withContext(Dispatchers.IO) { openIndex(context).use { it.indexedNotes() } }
+        withContext(Dispatchers.IO) { openEngine(context).use(::listIndexed) }
       }
     }
 
     AsyncFunction("queryIndex") Coroutine { sql: String, params: List<Any?> ->
-      withContext(Dispatchers.IO) { openIndex(context).use { it.query(sql, params) } }
+      withContext(Dispatchers.IO) { openEngine(context).use { runQuery(it, sql, params) } }
     }
 
     AsyncFunction("pruneRepositoryIndex") Coroutine { keepIds: List<String> ->
       indexLock.withLock {
-        withContext(Dispatchers.IO) { openIndex(context).use { it.deleteRepositoriesExcept(keepIds.toSet()) } }
+        withContext(Dispatchers.IO) { openEngine(context).use { it.prune(keepIds) } }
       }
     }
 
     AsyncFunction("deleteRepositoryIndex") Coroutine { repositoryId: String ->
       indexLock.withLock {
-        withContext(Dispatchers.IO) { openIndex(context).use { it.deleteRepository(repositoryId) } }
+        withContext(Dispatchers.IO) { openEngine(context).use { it.deleteRepository(repositoryId) } }
       }
     }
   }
@@ -323,8 +323,3 @@ suspend fun <T> readAll(
   }
 }
 
-private fun openIndex(context: Context): RepositoryIndex {
-  val directory = File(context.filesDir, DATABASE_DIRECTORY).apply { mkdirs() }
-
-  return RepositoryIndex.open(File(directory, INDEX_DATABASE_NAME).path)
-}

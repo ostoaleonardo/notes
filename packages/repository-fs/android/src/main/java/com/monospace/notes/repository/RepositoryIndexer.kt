@@ -6,7 +6,11 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import uniffi.engine.Engine
+import uniffi.engine.NoteRecord
+import uniffi.engine.ScannedRecord
 
+data class ScannedFile(val uri: String, val filename: String, val modified: Long, val size: Long)
 
 data class IndexStats(
   val total: Int,
@@ -38,63 +42,66 @@ fun scanNotes(context: Context, directoryUri: String): List<ScannedFile> =
 
 suspend fun indexRepository(
   context: Context,
-  index: RepositoryIndex,
+  engine: Engine,
   repositoryId: String,
   directoryUri: String,
   dispatcher: CoroutineDispatcher,
   onProgress: (done: Int, total: Int) -> Unit
 ): IndexStats {
   val scanStart = System.nanoTime()
-  val plan = planReconcile(index.metas(repositoryId), scanNotes(context, directoryUri))
+  val scanned = scanNotes(context, directoryUri)
+  val plan = engine.plan(repositoryId, scanned.map { ScannedRecord(it.filename, it.modified, it.size) })
+  val changed = plan.changed.map { scanned[it.toInt()] }
   val scanMs = elapsedMs(scanStart)
-  var readParseMs = 0L
+  var readMs = 0L
+  var parseMs = 0L
   var writeMs = 0L
   var unreadable = 0
   var done = 0
 
-  if (plan.removed.isNotEmpty()) index.write(repositoryId, emptyList(), plan.removed)
+  if (plan.removed.isNotEmpty()) engine.remove(repositoryId, plan.removed)
 
-  onProgress(0, plan.changed.size)
+  onProgress(0, changed.size)
 
   coroutineScope {
-    val batches = Channel<Pair<List<ScannedFile>, List<ParsedNote?>>>(PIPELINE_DEPTH)
+    val batches = Channel<Pair<List<ScannedFile>, List<String?>>>(PIPELINE_DEPTH)
 
     launch {
-      for (batch in plan.changed.chunked(INDEX_BATCH_SIZE)) {
+      for (batch in changed.chunked(INDEX_BATCH_SIZE)) {
         val readStart = System.nanoTime()
-        val parsed = readAll(context, batch.map { it.uri }, dispatcher, ::parseNote)
-        readParseMs += elapsedMs(readStart)
-        batches.send(batch to parsed)
+        val texts = readAll(context, batch.map { it.uri }, dispatcher) { it }
+        readMs += elapsedMs(readStart)
+        batches.send(batch to texts)
       }
 
       batches.close()
     }
 
-    for ((batch, parsed) in batches) {
+    for ((batch, texts) in batches) {
       val notes = batch.mapIndexedNotNull { position, file ->
-        parsed[position]?.let { IndexedNote(file.filename, file.uri, file.modified, file.size, it) }
+        texts[position]?.let { NoteRecord(file.filename, file.uri, file.modified, file.size, it) }
       }
 
       unreadable += batch.size - notes.size
 
-      val writeStart = System.nanoTime()
-      index.write(repositoryId, notes, emptyList())
-      writeMs += elapsedMs(writeStart)
+      val report = engine.write(repositoryId, notes)
+      parseMs += report.parseMs.toLong()
+      writeMs += report.writeMs.toLong()
 
       done += batch.size
-      onProgress(done, plan.changed.size)
+      onProgress(done, changed.size)
     }
   }
 
   return IndexStats(
-    total = plan.unchanged + plan.added + plan.updated,
-    added = plan.added,
-    updated = plan.updated,
+    total = plan.unchanged.toInt() + plan.added.toInt() + plan.updated.toInt(),
+    added = plan.added.toInt(),
+    updated = plan.updated.toInt(),
     removed = plan.removed.size,
-    unchanged = plan.unchanged,
+    unchanged = plan.unchanged.toInt(),
     unreadable = unreadable,
     scanMs = scanMs,
-    readParseMs = readParseMs,
+    readParseMs = readMs + parseMs,
     writeMs = writeMs
   )
 }
