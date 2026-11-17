@@ -98,7 +98,7 @@ export const MarkdownInput = ({
     const { onResolveMedia, onResolveLocalUrls, onLoadEmbeds } = useEmbedLookup(id)
     const onCreateBlockId = useBlockIdCreator()
 
-    const { readValue, mediaMapEntries, backlinksHtml } = useEditorPreview({ id, mode, value, showBacklinks })
+    const { readValue, backlinksHtml } = useEditorPreview({ id, mode, value, showBacklinks })
     const { onLinkPress, onImagePress, missingNote } = useEditorLinkHandlers({ id, onTagPress, onJumpToAnchor })
 
     const onToggleTask = useStableCallback((index) => {
@@ -139,7 +139,6 @@ export const MarkdownInput = ({
                     value={domValue}
                     valueNonce={valueNonce}
                     readValue={readValue}
-                    mediaMap={mediaMapEntries}
                     linkVersion={linkVersion}
                     knownTags={stableKnownTags}
                     linkFormat={linkFormat}

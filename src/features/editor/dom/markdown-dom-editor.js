@@ -37,7 +37,6 @@ export default function MarkdownDomEditor({
     value,
     valueNonce,
     readValue,
-    mediaMap,
     linkVersion,
     knownTags,
     linkFormat,
@@ -105,6 +104,7 @@ export default function MarkdownDomEditor({
     const onCreateBlockIdRef = useLatestRef(onCreateBlockId)
     const onLoadBlocksRef = useLatestRef(onLoadBlocks)
     const onResolveLinksRef = useLatestRef(onResolveLinks)
+    const onResolveMediaRef = useLatestRef(onResolveMedia)
     const onSearchNotesRef = useLatestRef(onSearchNotes)
 
     const [metaLines, setMetaLines] = useState(NO_META_LINES)
@@ -120,7 +120,6 @@ export default function MarkdownDomEditor({
 
     const dynamicExtensions = useEditorCompartments(viewRef, {
         mode,
-        mediaMap,
         knownTags,
         linkFormat,
         tableLabels,
@@ -150,6 +149,7 @@ export default function MarkdownDomEditor({
                 onCreateBlockIdRef,
                 onLoadBlocksRef,
                 onResolveLinksRef,
+                onResolveMediaRef,
                 onSearchNotesRef,
                 updateListener: buildUpdateListener({
                     onChangeRef,

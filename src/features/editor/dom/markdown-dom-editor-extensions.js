@@ -15,6 +15,7 @@ import {
     noteSearchFacet
 } from './wiki-link-completion'
 import { linkResolverFacet } from './link-resolution'
+import { mediaResolverFacet } from './media-resolution'
 import { tagCompletionSource } from './tag-completion'
 import { inlineTagExtensions } from './inline-tag-highlight'
 import { filePressFacet } from './live-formatting/file-press'
@@ -65,6 +66,7 @@ export const buildEditorExtensions = ({
     onCreateBlockIdRef,
     onLoadBlocksRef,
     onResolveLinksRef,
+    onResolveMediaRef,
     onSearchNotesRef,
     updateListener
 }) => [
@@ -84,6 +86,7 @@ export const buildEditorExtensions = ({
         blockIdCreatorFacet.of(onCreateBlockIdRef),
         blockLoaderFacet.of(onLoadBlocksRef),
         linkResolverFacet.of(onResolveLinksRef),
+        mediaResolverFacet.of(onResolveMediaRef),
         noteSearchFacet.of(onSearchNotesRef),
         autocompletion({ override: [wikiLinkCompletionSource, blockCompletionSource, tagCompletionSource] }),
         closeBrackets(),

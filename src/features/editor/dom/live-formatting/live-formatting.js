@@ -2,7 +2,6 @@ import { EditorSelection, EditorState, StateField } from '@codemirror/state'
 import { syntaxTree } from '@codemirror/language'
 import { Decoration, EditorView } from '@codemirror/view'
 
-import { mediaMapFacet } from './media-map'
 import { applyZones, changedZones, selectionZones } from './decoration-zones'
 import { overlapsAny } from './utils'
 import { inlineMarkNodeNames, decorateInlineMark, inlineMarksTheme } from './inline-marks'
@@ -29,6 +28,7 @@ import { decorateExtraMarks, extraMarksTheme } from './extra-marks'
 import { decorateCustomTasks, findCustomTaskRanges, customTasksTheme } from './custom-tasks'
 import { findWikiLinkRanges, decorateWikiLinks, wikiLinksTheme } from './wiki-links'
 import { linksReset, linksResolved, resolvedLinksField } from '@/features/editor/dom/link-resolution'
+import { mediaResolved, resolvedMediaField } from '@/features/editor/dom/media-resolution'
 
 import { getBoundaryEdit } from '@/features/editor/dom/utils/table-boundary'
 
@@ -38,9 +38,10 @@ import { LEZER_NODES } from '@/features/editor/dom/constants/lezer-nodes'
 
 const codeRangeNodeNames = new Set(CODE_RANGE_NODE_NAMES)
 const NO_RESOLVED_LINKS = new Map()
+const NO_RESOLVED_MEDIA = new Map()
 
 const isLinkResolutionChange = (tr) => (
-    tr.effects.some((effect) => effect.is(linksResolved) || effect.is(linksReset))
+    tr.effects.some((effect) => effect.is(linksResolved) || effect.is(linksReset) || effect.is(mediaResolved))
 )
 
 const NODE_HANDLERS = new Map([
@@ -64,7 +65,7 @@ const collectDecorationRanges = (state, from, to) => {
     const offset = -from
     const selection = state.selection.main
     const localSelection = { from: selection.from + offset, to: selection.to + offset }
-    const mediaMap = state.facet(mediaMapFacet)
+    const mediaMap = state.field(resolvedMediaField, false) ?? NO_RESOLVED_MEDIA
     const resolvedLinks = state.field(resolvedLinksField, false) ?? NO_RESOLVED_LINKS
     const tableLabels = state.facet(tableLabelsFacet)
     const codeRanges = []
@@ -154,7 +155,7 @@ const ensureLineAfterTable = (field) => EditorState.transactionFilter.of((tr) =>
     }]
 })
 
-export { mediaMapFacet, tableLabelsFacet }
+export { tableLabelsFacet }
 
 export const liveFormatting = StateField.define({
     create: (state) => buildLiveFormattingDecorations(state),
