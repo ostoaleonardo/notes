@@ -1,7 +1,21 @@
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Link {
+	pub text: String,
+	pub name: String,
+	pub anchor_name: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+pub struct NoteRef {
+	pub repository_id: String,
+	pub filename: String,
+}
+
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct ParsedNote {
 	pub tags: Vec<String>,
-	pub links: Vec<String>,
+	pub links: Vec<Link>,
+	pub markdown_links: Vec<String>,
 	pub property_keys: Vec<String>,
 	pub invalid_frontmatter: bool,
 	pub content: String,

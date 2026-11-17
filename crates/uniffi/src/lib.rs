@@ -3,8 +3,8 @@ uniffi::setup_scaffolding!("engine");
 mod records;
 
 use records::{
-	BatchReport, EngineError, IndexedNotesReport, NoteRecord, PlanReport, QueryReport,
-	ScannedRecord, Value,
+	BatchReport, EngineError, IndexedNotesReport, NoteRecord, NoteRefsReport, PlanReport,
+	QueryReport, ScannedRecord, Value,
 };
 use std::collections::HashSet;
 
@@ -51,6 +51,24 @@ impl Engine {
 	pub fn query(&self, sql: String, params: Vec<Value>) -> Result<QueryReport, EngineError> {
 		let bound: Vec<_> = params.into_iter().map(Into::into).collect();
 		Ok(self.inner.query(&sql, &bound)?.into())
+	}
+
+	pub fn backlink_candidates(
+		&self,
+		names: Vec<String>,
+		markdown_target: String,
+	) -> Result<NoteRefsReport, EngineError> {
+		Ok(self
+			.inner
+			.backlink_candidates(&names, &markdown_target)?
+			.into())
+	}
+
+	pub fn mention_candidates(
+		&self,
+		terms: Vec<String>,
+	) -> Result<Option<NoteRefsReport>, EngineError> {
+		Ok(self.inner.mention_candidates(&terms)?.map(Into::into))
 	}
 
 	pub fn delete_repository(&self, repository_id: String) -> Result<(), EngineError> {

@@ -8,6 +8,7 @@ const INVALID_TAG_CHARS: &str = r"!-,.:-@\[-\^`{-~";
 pub const FRONTMATTER_RAW_GROUP: usize = 1;
 pub const INLINE_TAG_NAME_GROUP: usize = 2;
 pub const WIKI_LINK_TARGET_GROUP: usize = 1;
+pub const MARKDOWN_LINK_TARGET_GROUP: usize = 2;
 
 fn compile(pattern: &str) -> Regex {
 	Regex::new(pattern).expect("static pattern")
@@ -35,3 +36,6 @@ pub static TRAILING_SLASHES: LazyLock<Regex> = LazyLock::new(|| compile(r"/+\z")
 
 pub static WIKI_LINK: LazyLock<Regex> =
 	LazyLock::new(|| compile(r"\[\[([^\]|]+)(?:\|([^\]]+))?\]\]"));
+
+pub static MARKDOWN_LINK: LazyLock<Regex> =
+	LazyLock::new(|| compile(r"\[([^\]]*)\]\(wikilink://([^)]+)\)"));

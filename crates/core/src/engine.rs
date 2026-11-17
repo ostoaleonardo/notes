@@ -2,8 +2,8 @@ use crate::collation::SortKeys;
 use crate::error::Result;
 use crate::index::Index;
 use crate::model::{
-	BatchStats, IndexedNote, IndexedNotes, NoteInput, QueryResult, ReconcilePlan, ScannedFile,
-	Value,
+	BatchStats, IndexedNote, IndexedNotes, NoteInput, NoteRef, QueryResult, ReconcilePlan,
+	ScannedFile, Value,
 };
 use crate::reconcile;
 use crate::syntax::parse_note;
@@ -67,6 +67,18 @@ impl Engine {
 
 	pub fn query(&self, statement: &str, params: &[Value]) -> Result<QueryResult> {
 		self.open()?.query(statement, params)
+	}
+
+	pub fn backlink_candidates(
+		&self,
+		names: &[String],
+		markdown_target: &str,
+	) -> Result<Vec<NoteRef>> {
+		self.open()?.backlink_candidates(names, markdown_target)
+	}
+
+	pub fn mention_candidates(&self, terms: &[String]) -> Result<Option<Vec<NoteRef>>> {
+		self.open()?.mention_candidates(terms)
 	}
 
 	pub fn delete_repository(&self, repository_id: &str) -> Result<()> {

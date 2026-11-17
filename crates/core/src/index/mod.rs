@@ -1,3 +1,4 @@
+mod candidates;
 mod reader;
 mod schema;
 mod sql;
@@ -5,7 +6,7 @@ mod writer;
 
 use crate::collation::SortKeys;
 use crate::error::Result;
-use crate::model::{FileMeta, IndexedNote, IndexedNotes, QueryResult, Value};
+use crate::model::{FileMeta, IndexedNote, IndexedNotes, NoteRef, QueryResult, Value};
 use rusqlite::{Connection, TransactionBehavior};
 use std::collections::{HashMap, HashSet};
 use std::path::Path;
@@ -31,6 +32,18 @@ impl Index {
 
 	pub fn query(&self, statement: &str, params: &[Value]) -> Result<QueryResult> {
 		reader::query(&self.connection, statement, params)
+	}
+
+	pub fn backlink_candidates(
+		&self,
+		names: &[String],
+		markdown_target: &str,
+	) -> Result<Vec<NoteRef>> {
+		candidates::backlinks(&self.connection, names, markdown_target)
+	}
+
+	pub fn mention_candidates(&self, terms: &[String]) -> Result<Option<Vec<NoteRef>>> {
+		candidates::mentions(&self.connection, terms)
 	}
 
 	pub fn write(

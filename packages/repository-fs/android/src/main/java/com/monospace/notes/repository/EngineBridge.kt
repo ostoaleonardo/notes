@@ -4,6 +4,7 @@ import android.content.Context
 import java.io.File
 import java.util.Locale
 import uniffi.engine.Engine
+import uniffi.engine.NoteRefsReport
 import uniffi.engine.Value
 
 fun openEngine(context: Context): Engine {
@@ -44,3 +45,8 @@ fun listIndexed(engine: Engine): Map<String, List<Any>> {
     IndexedKeys.MODIFIED to notes.modified
   )
 }
+
+fun toRefs(report: NoteRefsReport): Map<String, List<String>> = mapOf(
+  IndexedKeys.REPOSITORY_IDS to report.repositoryIds,
+  IndexedKeys.FILENAMES to report.filenames
+)

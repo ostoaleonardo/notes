@@ -1,9 +1,12 @@
 mod code;
 mod constants;
 mod frontmatter;
+mod link_name;
 mod links;
 mod patterns;
 mod tags;
+
+pub use link_name::normalize;
 
 use crate::model::ParsedNote;
 
@@ -21,9 +24,12 @@ pub fn parse_note(text: &str) -> ParsedNote {
 		_ => split.body.to_string(),
 	};
 
+	let links = links::extract(split.body);
+
 	ParsedNote {
 		tags: note_tags,
-		links: links::extract_wiki_links(split.body),
+		links: links.wiki,
+		markdown_links: links.markdown,
 		property_keys: frontmatter::property_keys(&metadata.mapping),
 		invalid_frontmatter: metadata.invalid,
 		content,
@@ -35,5 +41,9 @@ pub fn inline_tags(text: &str) -> Vec<String> {
 }
 
 pub fn wiki_links(text: &str) -> Vec<String> {
-	links::extract_wiki_links(frontmatter::split(text).body)
+	links::extract(frontmatter::split(text).body)
+		.wiki
+		.into_iter()
+		.map(|link| link.text)
+		.collect()
 }

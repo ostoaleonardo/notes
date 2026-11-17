@@ -239,6 +239,7 @@ version = "0.1.0"
 dependencies = [
  "icu_collator",
  "icu_locale",
+ "icu_normalizer",
  "rayon",
  "regex",
  "rusqlite",

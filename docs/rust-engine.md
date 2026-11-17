@@ -36,3 +36,5 @@ cargo test
 - Kotlin only does what needs Android APIs: directory scanning and file reading through SAF or direct access (`RepositoryFsModule`, `RepositoryIndexer`), and marshalling for Expo (`EngineBridge`).
 - The index database is rebuilt when `SCHEMA_VERSION` or the device locale changes. Bump the version whenever the stored format changes, including the sort key bytes.
 - The syntax extractor is checked in `crates/core/tests/corpus_parity.rs` against the shared corpus in `src/features/syntax/__fixtures__`.
+- Link names are normalized (NFC, trimmed, lowercase, title after the last `/`) when a note is indexed, so backlink candidates are one indexed SQL lookup. Markdown-style `wikilink://` links live in `markdown_links`. Mention candidates use the trigram full-text index and ask the caller to scan when a term is shorter than three characters.
+- The index only narrows the candidates. JS verifies them with the same resolution rules as before and always checks notes the index has not covered yet (`index-coverage.js`).

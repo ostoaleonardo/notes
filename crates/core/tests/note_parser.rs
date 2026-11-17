@@ -1,4 +1,9 @@
+use engine::model::ParsedNote;
 use engine::syntax::{inline_tags, parse_note};
+
+fn link_texts(note: &ParsedNote) -> Vec<&str> {
+	note.links.iter().map(|link| link.text.as_str()).collect()
+}
 
 #[test]
 fn reads_list_tags_from_the_frontmatter() {
@@ -105,7 +110,10 @@ fn ignores_inline_tags_inside_code() {
 fn extracts_wiki_link_targets_and_skips_code() {
 	let text = "See [[Alpha]] and [[Beta|alias]] and `[[Code]]`\n\n```\n[[Fenced]]\n```\n\n[[Gamma#Heading]]";
 
-	assert_eq!(parse_note(text).links, ["Alpha", "Beta", "Gamma#Heading"]);
+	assert_eq!(
+		link_texts(&parse_note(text)),
+		["Alpha", "Beta", "Gamma#Heading"]
+	);
 }
 
 #[test]
@@ -148,5 +156,5 @@ fn ignores_wiki_links_and_tags_after_an_unclosed_fence() {
 
 #[test]
 fn keeps_links_after_an_unclosed_inline_backtick() {
-	assert_eq!(parse_note("` [[a]]").links, ["a"]);
+	assert_eq!(link_texts(&parse_note("` [[a]]")), ["a"]);
 }

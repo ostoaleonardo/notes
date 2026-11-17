@@ -1,15 +1,32 @@
 use super::code::code_segments;
-use super::patterns::{WIKI_LINK, WIKI_LINK_TARGET_GROUP};
+use super::link_name::describe;
+use super::patterns::{
+	MARKDOWN_LINK, MARKDOWN_LINK_TARGET_GROUP, WIKI_LINK, WIKI_LINK_TARGET_GROUP,
+};
+use crate::model::Link;
 
-pub fn extract_wiki_links(body: &str) -> Vec<String> {
-	let mut links = Vec::new();
+pub struct Links {
+	pub wiki: Vec<Link>,
+	pub markdown: Vec<String>,
+}
+
+pub fn extract(body: &str) -> Links {
+	let mut links = Links {
+		wiki: Vec::new(),
+		markdown: Vec::new(),
+	};
 	let mut cursor = 0;
 
 	let mut scan = |segment: &str| {
-		links.extend(
+		links.wiki.extend(
 			WIKI_LINK
 				.captures_iter(segment)
-				.map(|captures| captures[WIKI_LINK_TARGET_GROUP].to_string()),
+				.map(|captures| describe(&captures[WIKI_LINK_TARGET_GROUP])),
+		);
+		links.markdown.extend(
+			MARKDOWN_LINK
+				.captures_iter(segment)
+				.map(|captures| captures[MARKDOWN_LINK_TARGET_GROUP].to_string()),
 		);
 	};
 

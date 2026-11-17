@@ -29,16 +29,17 @@ pub fn write_version() -> String {
 	format!("{WRITE_VERSION_PREFIX}{SCHEMA_VERSION}")
 }
 
-pub const DROP_ORDER: [&str; 6] = [
+pub const DROP_ORDER: &[&str] = &[
 	"DROP TABLE IF EXISTS note_fts",
 	"DROP TABLE IF EXISTS properties",
+	"DROP TABLE IF EXISTS markdown_links",
 	"DROP TABLE IF EXISTS links",
 	"DROP TABLE IF EXISTS tags",
 	"DROP TABLE IF EXISTS notes",
 	"DROP TABLE IF EXISTS meta",
 ];
 
-pub const SCHEMA: [&str; 12] = [
+pub const SCHEMA: &[&str] = &[
 	"CREATE TABLE notes(
 		id INTEGER PRIMARY KEY,
 		repository_id TEXT NOT NULL,
@@ -59,7 +60,14 @@ pub const SCHEMA: [&str; 12] = [
 	"CREATE TABLE links(
 		note_id INTEGER NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
 		position INTEGER NOT NULL,
-		text TEXT NOT NULL
+		text TEXT NOT NULL,
+		name TEXT NOT NULL,
+		anchor_name TEXT
+	)",
+	"CREATE TABLE markdown_links(
+		note_id INTEGER NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
+		position INTEGER NOT NULL,
+		target TEXT NOT NULL
 	)",
 	"CREATE TABLE properties(
 		note_id INTEGER NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
@@ -73,6 +81,10 @@ pub const SCHEMA: [&str; 12] = [
 	"CREATE INDEX tags_name ON tags(name COLLATE NOCASE)",
 	"CREATE INDEX links_note ON links(note_id)",
 	"CREATE INDEX links_text ON links(text COLLATE NOCASE)",
+	"CREATE INDEX links_name ON links(name)",
+	"CREATE INDEX links_anchor_name ON links(anchor_name)",
+	"CREATE INDEX markdown_links_note ON markdown_links(note_id)",
+	"CREATE INDEX markdown_links_target ON markdown_links(target)",
 	"CREATE INDEX properties_note ON properties(note_id)",
 ];
 
@@ -102,6 +114,33 @@ pub const INSERT_NOTE: &str = "INSERT INTO notes(
 	repository_id, filename, uri, title, sort_key, modified, size, invalid_frontmatter
 ) VALUES(?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)";
 pub const INSERT_TAG: &str = "INSERT INTO tags(note_id, position, name) VALUES(?1,?2,?3)";
-pub const INSERT_LINK: &str = "INSERT INTO links(note_id, position, text) VALUES(?1,?2,?3)";
+pub const INSERT_LINK: &str =
+	"INSERT INTO links(note_id, position, text, name, anchor_name) VALUES(?1,?2,?3,?4,?5)";
+pub const INSERT_MARKDOWN_LINK: &str =
+	"INSERT INTO markdown_links(note_id, position, target) VALUES(?1,?2,?3)";
 pub const INSERT_PROPERTY: &str = "INSERT INTO properties(note_id, position, key) VALUES(?1,?2,?3)";
 pub const INSERT_FTS: &str = "INSERT INTO note_fts(rowid, title, content) VALUES(?1,?2,?3)";
+
+pub const BACKLINK_BY_NAME_HEAD: &str = "SELECT DISTINCT n.repository_id, n.filename
+	FROM links l JOIN notes n ON n.id = l.note_id
+	WHERE l.name IN (";
+pub const BACKLINK_BY_NAME_MIDDLE: &str = ") OR l.anchor_name IN (";
+pub const BACKLINK_BY_NAME_TAIL: &str = ")";
+pub const BACKLINK_BY_MARKDOWN: &str = "SELECT DISTINCT n.repository_id, n.filename
+	FROM markdown_links m JOIN notes n ON n.id = m.note_id
+	WHERE m.target = ?1";
+pub const MENTION_CANDIDATES: &str = "SELECT n.repository_id, n.filename
+	FROM note_fts JOIN notes n ON n.id = note_fts.rowid
+	WHERE note_fts MATCH ?1";
+
+pub const PLACEHOLDER: &str = "?";
+pub const PLACEHOLDER_SEPARATOR: &str = ",";
+pub const FTS_QUOTE: &str = "\"";
+pub const FTS_ESCAPED_QUOTE: &str = "\"\"";
+pub const FTS_OR: &str = " OR ";
+pub const MIN_TRIGRAM_LENGTH: usize = 3;
+
+pub mod ref_column {
+	pub const REPOSITORY_ID: usize = 0;
+	pub const FILENAME: usize = 1;
+}

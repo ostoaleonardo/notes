@@ -123,6 +123,18 @@ class RepositoryFsModule : Module() {
       withContext(Dispatchers.IO) { openEngine(context).use { runQuery(it, sql, params) } }
     }
 
+    AsyncFunction("findBacklinkCandidates") Coroutine { names: List<String>, markdownTarget: String ->
+      withContext(Dispatchers.IO) {
+        openEngine(context).use { toRefs(it.backlinkCandidates(names, markdownTarget)) }
+      }
+    }
+
+    AsyncFunction("findMentionCandidates") Coroutine { terms: List<String> ->
+      withContext(Dispatchers.IO) {
+        openEngine(context).use { engine -> engine.mentionCandidates(terms)?.let(::toRefs) }
+      }
+    }
+
     AsyncFunction("pruneRepositoryIndex") Coroutine { keepIds: List<String> ->
       indexLock.withLock {
         withContext(Dispatchers.IO) { openEngine(context).use { it.prune(keepIds) } }

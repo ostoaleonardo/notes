@@ -17,3 +17,5 @@ pub const FENCE_MARKERS: [&str; 2] = ["```", "~~~"];
 pub const FENCE_LENGTH: usize = 3;
 pub const MAX_FENCE_INDENT: usize = 3;
 pub const ADVANCE: usize = 1;
+pub const PATH_SEPARATOR: char = '/';
+pub const ANCHOR_SEPARATOR: char = '#';

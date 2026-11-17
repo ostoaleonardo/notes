@@ -1,7 +1,7 @@
 use super::sql;
 use crate::collation::SortKeys;
 use crate::error::Result;
-use crate::model::IndexedNote;
+use crate::model::{IndexedNote, Link};
 use rusqlite::{Transaction, params};
 
 pub fn write_batch(
@@ -78,12 +78,34 @@ fn insert(
 	let id = transaction.last_insert_rowid();
 
 	insert_all(transaction, sql::INSERT_TAG, id, &parsed.tags)?;
-	insert_all(transaction, sql::INSERT_LINK, id, &parsed.links)?;
+	insert_links(transaction, id, &parsed.links)?;
+	insert_all(
+		transaction,
+		sql::INSERT_MARKDOWN_LINK,
+		id,
+		&parsed.markdown_links,
+	)?;
 	insert_all(transaction, sql::INSERT_PROPERTY, id, &parsed.property_keys)?;
 
 	transaction
 		.prepare_cached(sql::INSERT_FTS)?
 		.execute(params![id, title, parsed.content])?;
+
+	Ok(())
+}
+
+fn insert_links(transaction: &Transaction<'_>, note_id: i64, links: &[Link]) -> Result<()> {
+	let mut prepared = transaction.prepare_cached(sql::INSERT_LINK)?;
+
+	for (position, link) in links.iter().enumerate() {
+		prepared.execute(params![
+			note_id,
+			position as i64,
+			link.text,
+			link.name,
+			link.anchor_name
+		])?;
+	}
 
 	Ok(())
 }

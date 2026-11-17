@@ -229,3 +229,113 @@ fn binds_parameters_of_every_type() {
 		]
 	);
 }
+
+fn refs(found: Vec<engine::model::NoteRef>) -> Vec<String> {
+	let mut names: Vec<String> = found.into_iter().map(|note| note.filename).collect();
+	names.sort();
+	names
+}
+
+fn candidate_engine(directory: &TempDir) -> Engine {
+	let engine = engine(directory, "en");
+
+	engine
+		.write(
+			"repo",
+			vec![
+				input("Plain.md", "see [[Target]]"),
+				input("Alias.md", "see [[the alias]]"),
+				input("Path.md", "see [[Folder/Target]]"),
+				input("Anchor.md", "see [[Target#Heading]]"),
+				input("Markdown.md", "see [x](wikilink://repo/Target.md)"),
+				input("Other.md", "see [[Unrelated]]"),
+				input("Code.md", "`[[Target]]`"),
+			],
+		)
+		.unwrap();
+
+	engine
+}
+
+#[test]
+fn finds_notes_that_link_to_a_name_alias_path_anchor_or_markdown_target() {
+	let directory = TempDir::new().unwrap();
+	let engine = candidate_engine(&directory);
+
+	let found = engine
+		.backlink_candidates(
+			&["Target".to_string(), "The Alias".to_string()],
+			"repo/Target.md",
+		)
+		.unwrap();
+
+	assert_eq!(
+		refs(found),
+		[
+			"Alias.md",
+			"Anchor.md",
+			"Markdown.md",
+			"Path.md",
+			"Plain.md"
+		]
+	);
+}
+
+#[test]
+fn finds_no_backlinks_without_names_or_markdown_matches() {
+	let directory = TempDir::new().unwrap();
+	let engine = candidate_engine(&directory);
+
+	assert!(engine.backlink_candidates(&[], "none").unwrap().is_empty());
+}
+
+#[test]
+fn finds_mention_candidates_with_full_text_search() {
+	let directory = TempDir::new().unwrap();
+	let engine = engine(&directory, "en");
+
+	engine
+		.write(
+			"repo",
+			vec![
+				input("A.md", "talks about Rust Engine today"),
+				input("B.md", "nothing related"),
+			],
+		)
+		.unwrap();
+
+	let found = engine
+		.mention_candidates(&["rust engine".to_string()])
+		.unwrap();
+
+	assert_eq!(refs(found.unwrap()), ["A.md"]);
+}
+
+#[test]
+fn asks_for_a_full_scan_when_a_term_is_too_short_for_trigrams() {
+	let directory = TempDir::new().unwrap();
+	let engine = engine(&directory, "en");
+
+	assert!(
+		engine
+			.mention_candidates(&["ab".to_string()])
+			.unwrap()
+			.is_none()
+	);
+}
+
+#[test]
+fn escapes_quotes_in_mention_terms() {
+	let directory = TempDir::new().unwrap();
+	let engine = engine(&directory, "en");
+
+	engine
+		.write("repo", vec![input("A.md", "say \"hello\" now")])
+		.unwrap();
+
+	let found = engine
+		.mention_candidates(&["\"hello\"".to_string()])
+		.unwrap();
+
+	assert_eq!(refs(found.unwrap()), ["A.md"]);
+}

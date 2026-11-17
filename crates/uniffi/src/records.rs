@@ -40,6 +40,12 @@ pub struct IndexedNotesReport {
 }
 
 #[derive(uniffi::Record)]
+pub struct NoteRefsReport {
+	pub repository_ids: Vec<String>,
+	pub filenames: Vec<String>,
+}
+
+#[derive(uniffi::Record)]
 pub struct QueryReport {
 	pub columns: Vec<String>,
 	pub rows: Vec<Vec<Value>>,
@@ -151,6 +157,20 @@ impl From<Value> for model::Value {
 			Value::Integer { value } => Self::Integer(value),
 			Value::Real { value } => Self::Real(value),
 			Value::Text { value } => Self::Text(value),
+		}
+	}
+}
+
+impl From<Vec<model::NoteRef>> for NoteRefsReport {
+	fn from(notes: Vec<model::NoteRef>) -> Self {
+		let (repository_ids, filenames) = notes
+			.into_iter()
+			.map(|note| (note.repository_id, note.filename))
+			.unzip();
+
+		Self {
+			repository_ids,
+			filenames,
 		}
 	}
 }
