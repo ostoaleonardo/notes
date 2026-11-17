@@ -1,0 +1,13 @@
+[package]
+name = "engine-bindings"
+version.workspace = true
+edition.workspace = true
+
+[lib]
+name = "engine_bindings"
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+engine = { path = "../core" }
+thiserror = "2"
+uniffi = { version = "0.32", default-features = false }

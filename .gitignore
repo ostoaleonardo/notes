@@ -38,3 +38,5 @@ google-services.json
 /coverage
 
 packages/*/android/build/
+
+/target

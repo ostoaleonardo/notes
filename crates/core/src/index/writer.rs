@@ -1,0 +1,109 @@
+use super::sql;
+use crate::collation::SortKeys;
+use crate::error::Result;
+use crate::model::IndexedNote;
+use rusqlite::{Transaction, params};
+
+pub fn write_batch(
+	transaction: &Transaction<'_>,
+	repository_id: &str,
+	notes: &[IndexedNote],
+	removed: &[String],
+	keys: &SortKeys,
+) -> Result<()> {
+	for filename in removed {
+		delete_existing(transaction, repository_id, filename)?;
+	}
+
+	for note in notes {
+		delete_existing(transaction, repository_id, &note.input.filename)?;
+		insert(transaction, repository_id, note, keys)?;
+	}
+
+	Ok(())
+}
+
+pub fn delete_repository(transaction: &Transaction<'_>, repository_id: &str) -> Result<()> {
+	transaction.execute(sql::DELETE_FTS_BY_REPOSITORY, [repository_id])?;
+	transaction.execute(sql::DELETE_NOTES_BY_REPOSITORY, [repository_id])?;
+
+	Ok(())
+}
+
+fn delete_existing(
+	transaction: &Transaction<'_>,
+	repository_id: &str,
+	filename: &str,
+) -> Result<()> {
+	let id: Option<i64> = transaction
+		.prepare_cached(sql::SELECT_NOTE_ID)?
+		.query_row(params![repository_id, filename], |row| {
+			row.get(sql::FIRST_COLUMN)
+		})
+		.ok();
+
+	if let Some(id) = id {
+		transaction.prepare_cached(sql::DELETE_FTS)?.execute([id])?;
+		transaction
+			.prepare_cached(sql::DELETE_NOTE)?
+			.execute([id])?;
+	}
+
+	Ok(())
+}
+
+fn insert(
+	transaction: &Transaction<'_>,
+	repository_id: &str,
+	note: &IndexedNote,
+	keys: &SortKeys,
+) -> Result<()> {
+	let input = &note.input;
+	let parsed = &note.parsed;
+	let title = title_of(&input.filename);
+
+	transaction
+		.prepare_cached(sql::INSERT_NOTE)?
+		.execute(params![
+			repository_id,
+			input.filename,
+			input.uri,
+			title,
+			keys.key(title),
+			input.modified,
+			input.size,
+			i64::from(parsed.invalid_frontmatter),
+		])?;
+
+	let id = transaction.last_insert_rowid();
+
+	insert_all(transaction, sql::INSERT_TAG, id, &parsed.tags)?;
+	insert_all(transaction, sql::INSERT_LINK, id, &parsed.links)?;
+	insert_all(transaction, sql::INSERT_PROPERTY, id, &parsed.property_keys)?;
+
+	transaction
+		.prepare_cached(sql::INSERT_FTS)?
+		.execute(params![id, title, parsed.content])?;
+
+	Ok(())
+}
+
+fn insert_all(
+	transaction: &Transaction<'_>,
+	statement: &str,
+	note_id: i64,
+	values: &[String],
+) -> Result<()> {
+	let mut prepared = transaction.prepare_cached(statement)?;
+
+	for (position, value) in values.iter().enumerate() {
+		prepared.execute(params![note_id, position as i64, value])?;
+	}
+
+	Ok(())
+}
+
+fn title_of(filename: &str) -> &str {
+	let end = filename.len().saturating_sub(sql::NOTE_EXTENSION_LENGTH);
+	filename.get(..end).unwrap_or(filename)
+}

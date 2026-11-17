@@ -1,0 +1,11 @@
+[package]
+name = "engine-bindgen"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "uniffi-bindgen"
+path = "src/main.rs"
+
+[dependencies]
+uniffi = { version = "0.32", features = ["cli"] }

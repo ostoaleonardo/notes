@@ -1,0 +1,19 @@
+pub const TAG_KEYS: [&str; 2] = ["tags", "tag"];
+pub const TAG_WORD_JOINER: &str = "-";
+pub const TAG_HASH_PREFIX: char = '#';
+pub const BYTE_ORDER_MARK: char = '\u{feff}';
+pub const BLANK_CHAR: char = ' ';
+pub const HASH_CHAR: char = '#';
+pub const FRONTMATTER_PROPERTY_SEPARATOR: &str = "\n";
+pub const REMOVAL: &str = "";
+
+pub const BACKTICK: u8 = b'`';
+pub const TILDE: u8 = b'~';
+pub const SPACE: u8 = b' ';
+pub const TAB: u8 = b'\t';
+pub const NEWLINE: char = '\n';
+pub const FENCE_CHARS: [char; 2] = ['`', '~'];
+pub const FENCE_MARKERS: [&str; 2] = ["```", "~~~"];
+pub const FENCE_LENGTH: usize = 3;
+pub const MAX_FENCE_INDENT: usize = 3;
+pub const ADVANCE: usize = 1;

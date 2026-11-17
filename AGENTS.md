@@ -28,3 +28,10 @@ This project uses the `test-renderer` peer dependency, never `react-test-rendere
 - Prefer the codebase-memory MCP graph tools (`search_graph`, `trace_path`, etc.) over raw grep for structural code exploration.
 - For an icon rendered inside a react-native-paper component that provides its own icon render-prop (`IconButton`, `Appbar.Action`, `MenuItem`'s `leadingIcon`, etc.), use `icon={(props) => <Icon {...props} />}` — spread the render-prop's own `props` (paper computes `color` from the theme/component state). Do not wrap it in a custom hook or component just to apply theme color; paper already provides it. Only when a specific call site needs a size other than the icon's own default should you pass explicit `width`/`height` inside that render function (e.g. `icon={(props) => <Icon width={16} height={16} {...props} />}`) — never a hook for this, since react-native-svg has no `size` prop, only `width`/`height`. Every icon component under `src/icons/` should default its `<Svg>` to `width='24' height='24'` so it matches paper's own default icon size when no override is given.
 - On every change, consider render performance: memoize context provider `value` objects with `useMemo`, avoid passing new inline functions/objects as props to memoized children, and virtualize (`FlatList`) any list that can grow beyond a handful of items instead of `.map()` inside a `ScrollView`.
+
+## Rust core
+
+- `crates/core` (package `engine`) holds parsing, the index and queries; it must stay free of platform code. `crates/uniffi` only translates types for Android. See `docs/rust-engine.md`.
+- Before pushing Rust changes run `cargo fmt --all --check`, `cargo clippy --all-targets -- -D warnings` and `cargo test`. CI runs the same.
+- No literals in Rust logic: SQL and schema live in `crates/core/src/index/sql.rs`, regex and capture-group indexes in `syntax/patterns.rs`, other markers in `syntax/constants.rs`.
+- Generated bindings and shared libraries are build output (`packages/repository-fs/android/build/engine`); never commit them.
