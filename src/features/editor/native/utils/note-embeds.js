@@ -1,13 +1,23 @@
 import { extractEmbedSource } from './embed-source'
 import { resolveWikiLink } from '@/shared/utils/wiki-links'
+import { bodyOf } from '@/shared/utils/note-body-of'
 
-export const loadEmbedNotes = (targets, { notes, notePaths, selfPath }) => Object.fromEntries(
-    targets.map((target) => {
-        const { note, anchor } = resolveWikiLink(target, notes, notePaths, selfPath)
-        if (!note || note.path === selfPath) return [target, null]
+export const loadEmbedNotes = async (
+    targets,
+    { notes, notePaths, selfPath, loadBodies = async () => undefined }
+) => {
+    const resolved = targets.map((request) => ({
+        request,
+        ...resolveWikiLink(request, notes, notePaths, selfPath)
+    }))
+    const embedded = resolved.filter(({ note }) => note && note.path !== selfPath)
+    const bodies = await loadBodies(embedded.map(({ note }) => note))
 
-        const text = extractEmbedSource(note.note || '', anchor)
+    return Object.fromEntries(resolved.map(({ request, note, anchor }) => {
+        if (!note || note.path === selfPath) return [request, null]
 
-        return [target, text === null ? null : { path: note.path, title: note.title || '', anchor, text }]
-    })
-)
+        const text = extractEmbedSource(bodyOf(note, bodies), anchor)
+
+        return [request, text === null ? null : { path: note.path, title: note.title || '', anchor, text }]
+    }))
+}

@@ -8,6 +8,7 @@ import { resolveEmbedMedia } from '@/features/editor/native/utils/embed-media-re
 import { loadEmbedNotes } from '@/features/editor/native/utils/note-embeds'
 import { resolveLocalUrls } from '@/features/editor/native/utils/local-url-resolver'
 import { resolveUrl } from '@/features/editor/native/utils/resolve-url'
+import { noteBodies } from '@/shared/utils/note-body'
 
 export function useEmbedLookup(selfId) {
     const pdf = usePdfEmbed()
@@ -32,7 +33,12 @@ export function useEmbedLookup(selfId) {
     }))
 
     const onLoadEmbeds = useStableCallback(async (targets) => (
-        loadEmbedNotes(targets, { notes, notePaths, selfPath: selfId })
+        loadEmbedNotes(targets, {
+        notes,
+        notePaths,
+        selfPath: selfId,
+        loadBodies: noteBodies.load
+    })
     ))
 
     return { onResolveMedia, onResolveLocalUrls, onLoadEmbeds }

@@ -208,6 +208,17 @@ describe('find backlinks', () => {
     })
 })
 
+describe('find backlinks with loaded bodies', () => {
+    test('reads the links from the loaded body instead of the note', () => {
+        const target = { path: 'target', title: 'Grocery List' }
+        const bodyless = { path: 'a', title: 'Recipe' }
+        const bodies = new Map([['a', 'See [[Grocery List]].']])
+
+        expect(findBacklinks('target', [target, bodyless], undefined, undefined, bodies))
+            .toEqual([bodyless])
+    })
+})
+
 describe('rename wiki links for note', () => {
     test('renames a link that resolves to the target note', () => {
         const notesForRename = [{ path: 'target', title: 'Grocery List' }]

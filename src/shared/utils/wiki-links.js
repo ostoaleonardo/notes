@@ -16,6 +16,7 @@ import {
     BACKLINK_PATH_CLASS
 } from '@/shared/constants/backlinks'
 import { mapOutsideCode } from '@/shared/utils/outside-code'
+import { bodyOf } from '@/shared/utils/note-body-of'
 import { EMPTY_NOTE_PATHS } from '@/shared/constants/note-paths'
 import { buildFileLinkUrl, isFileLinkTarget } from '@/shared/utils/file-links'
 
@@ -171,8 +172,8 @@ export const parseMissingWikiLinkTarget = (encoded) => {
 const NO_TARGETS = []
 const linkTargetsCache = new WeakMap()
 
-const getLinkTargets = (note) => {
-    const body = note.note || ''
+const getLinkTargets = (note, bodies) => {
+    const body = bodyOf(note, bodies)
 
     const cached = linkTargetsCache.get(note)
     if (cached?.body === body) return cached
@@ -192,16 +193,24 @@ const getLinkTargets = (note) => {
     return entry
 }
 
-const noteLinksTo = (note, targetPath, notes, notePaths = EMPTY_NOTE_PATHS) => {
-    const { wiki, markdown } = getLinkTargets(note)
+const noteLinksTo = (note, targetPath, notes, notePaths = EMPTY_NOTE_PATHS, bodies) => {
+    const { wiki, markdown } = getLinkTargets(note, bodies)
 
     return markdown.includes(targetPath) || wiki.some((linkText) => (
         resolveWikiLinkTarget(linkText, notes, notePaths)?.path === targetPath
     ))
 }
 
-export const findBacklinks = (targetPath, notes, notePaths = EMPTY_NOTE_PATHS, candidates = notes) => (
-    candidates.filter((note) => note.path !== targetPath && noteLinksTo(note, targetPath, notes, notePaths))
+export const findBacklinks = (
+    targetPath,
+    notes,
+    notePaths = EMPTY_NOTE_PATHS,
+    candidates = notes,
+    bodies
+) => (
+    candidates.filter((note) => (
+        note.path !== targetPath && noteLinksTo(note, targetPath, notes, notePaths, bodies)
+    ))
 )
 
 export const renameWikiLinksForNote = (

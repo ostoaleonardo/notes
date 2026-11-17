@@ -20,13 +20,19 @@ const refs = (...notes) => ({
     filenames: notes.map((note) => note.filename)
 })
 
-const build = ({ covered = () => true, backlinks = refs(), mentions = refs() } = {}) => {
+const build = ({
+    covered = () => true,
+    backlinks = refs(),
+    mentions = refs(),
+    loadBodies
+} = {}) => {
     const backlinkCandidates = jest.fn(async () => backlinks)
     const mentionCandidates = jest.fn(async () => mentions)
     const index = createLinkIndex({
         coverage: { isCovered: covered },
         backlinkCandidates,
-        mentionCandidates
+        mentionCandidates,
+        loadBodies
     })
 
     return { index, backlinkCandidates, mentionCandidates }
@@ -107,6 +113,28 @@ describe('find backlinks through the index', () => {
         await index.findBacklinks({ path: 'missing' }, [target, ...FILLER], NOTE_PATHS)
 
         expect(backlinkCandidates).not.toHaveBeenCalled()
+    })
+})
+
+describe('find backlinks for notes without a body in memory', () => {
+    const target = buildNote('Target')
+    const linker = { ...buildNote('Linker'), note: undefined }
+
+    test('loads the body of the candidates and verifies their links', async () => {
+        const loadBodies = jest.fn(async () => new Map([[linker.path, 'see [[Target]]']]))
+        const { index } = build({ backlinks: refs(linker), loadBodies })
+
+        const found = await index.findBacklinks(target, [target, linker, ...FILLER], NOTE_PATHS)
+
+        expect(loadBodies).toHaveBeenCalledWith([linker])
+        expect(found).toEqual([linker])
+    })
+
+    test('does not count a candidate whose loaded body has no link', async () => {
+        const loadBodies = async () => new Map([[linker.path, 'nothing here']])
+        const { index } = build({ backlinks: refs(linker), loadBodies })
+
+        expect(await index.findBacklinks(target, [target, linker, ...FILLER], NOTE_PATHS)).toEqual([])
     })
 })
 

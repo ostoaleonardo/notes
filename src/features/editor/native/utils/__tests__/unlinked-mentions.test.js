@@ -12,6 +12,15 @@ const target = {
 
 const buildNote = (path, text) => ({ path, title: path, note: text })
 
+describe('find unlinked mentions with loaded bodies', () => {
+    test('reads the mentions from the loaded body', () => {
+        const bodyless = { path: 'a', title: 'a' }
+        const bodies = new Map([['a', 'Working on project alpha today']])
+
+        expect(findUnlinkedMentions(target, [target, bodyless], undefined, { bodies })).toEqual([bodyless])
+    })
+})
+
 describe('find unlinked mentions', () => {
     test('returns notes that mention the title in plain text', () => {
         const notes = [target, buildNote('a', 'Working on project alpha today')]

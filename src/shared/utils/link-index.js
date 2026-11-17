@@ -1,6 +1,7 @@
 import RepositoryFs from 'repository-fs'
 
 import { indexCoverage } from '@/shared/utils/index-coverage'
+import { noteBodies } from '@/shared/utils/note-body'
 import { buildNotePath } from '@/shared/utils/note-path'
 import { findBacklinks as scanBacklinks, getAliases } from '@/shared/utils/wiki-links'
 
@@ -10,7 +11,12 @@ const getNames = (target) => (
     [target.title, ...getAliases(target)].filter((name) => typeof name === 'string' && name.trim())
 )
 
-export const createLinkIndex = ({ coverage, backlinkCandidates, mentionCandidates }) => {
+export const createLinkIndex = ({
+    coverage,
+    backlinkCandidates,
+    mentionCandidates,
+    loadBodies = async () => undefined
+}) => {
     const selectPool = async (notes, fetchRefs) => {
         if (notes.length < LINK_INDEX_MIN_NOTES) return null
 
@@ -42,14 +48,17 @@ export const createLinkIndex = ({ coverage, backlinkCandidates, mentionCandidate
             : null
         const candidates = pool ? notes.filter((note) => pool.has(note.path)) : notes
 
-        return scanBacklinks(target.path, notes, notePaths, candidates)
+        const bodies = await loadBodies(candidates)
+
+        return scanBacklinks(target.path, notes, notePaths, candidates, bodies)
     }
 
-    return { findBacklinks, selectPool, mentionCandidates }
+    return { findBacklinks, selectPool, mentionCandidates, loadBodies }
 }
 
 export const linkIndex = createLinkIndex({
     coverage: indexCoverage,
     backlinkCandidates: (names, path) => RepositoryFs.findBacklinkCandidates(names, path),
-    mentionCandidates: (terms) => RepositoryFs.findMentionCandidates(terms)
+    mentionCandidates: (terms) => RepositoryFs.findMentionCandidates(terms),
+    loadBodies: noteBodies.load
 })

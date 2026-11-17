@@ -34,9 +34,12 @@ export function useBacklinksHtml(id, enabled) {
                 () => linkIndex.mentionCandidates(getMentionNames(target))
             )
 
+            const poolNotes = pool ? notes.filter((note) => pool.has(note.path)) : notes
+            const bodies = await linkIndex.loadBodies(poolNotes)
+
             if (cancelled) return
 
-            const mentions = findUnlinkedMentions(target, notes, notePaths, { linked, pool })
+            const mentions = findUnlinkedMentions(target, notes, notePaths, { linked, pool, bodies })
 
             setHtml((current) => ({
                 ...current,
