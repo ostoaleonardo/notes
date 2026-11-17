@@ -25,6 +25,7 @@
     "test:maestro": "bash scripts/test-maestro.sh",
     "audit:dupes": "jscpd src app --min-lines 5 --min-tokens 40 --ignore \"**/__tests__/**,**/dom-tests/**,**/__fixtures__/**,src/icons/**,src/translations/**\"",
     "audit:dead": "knip",
+    "eas-build-pre-install": "bash scripts/eas-install-rust.sh",
     "test:perf": "jest --selectProjects perf --runInBand",
     "bench:device": "bash scripts/bench-device.sh"
   },
