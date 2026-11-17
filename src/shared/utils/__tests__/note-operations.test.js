@@ -318,6 +318,35 @@ describe('plan wiki link rename', () => {
         expect(changedNotes[0].note).toBe('edited [[New]] again')
     })
 
+    test('rewrites the loaded body of a note that has none in memory', () => {
+        const bodyless = { ...linker, note: undefined }
+        const bodies = new Map([[linker.path, 'see [[Old]]']])
+
+        const { changedNotes } = planWikiLinkRename({
+            targetPath: target.path,
+            newTitle: 'New',
+            notes: [target, bodyless],
+            notePaths: new Map(),
+            bodies
+        })
+
+        expect(changedNotes.map((note) => note.path)).toEqual([linker.path])
+        expect(changedNotes[0].note).toBe('see [[New]]')
+    })
+
+    test('leaves a note without a loaded body untouched', () => {
+        const bodyless = { ...other, note: undefined }
+
+        const { changedNotes } = planWikiLinkRename({
+            targetPath: target.path,
+            newTitle: 'New',
+            notes: [target, bodyless],
+            notePaths: new Map()
+        })
+
+        expect(changedNotes).toEqual([])
+    })
+
     test('never rewrites the target note itself', () => {
         const { renameNote } = planWikiLinkRename({
             targetPath: target.path,

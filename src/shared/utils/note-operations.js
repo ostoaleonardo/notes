@@ -5,6 +5,7 @@ import { buildNoteFileContent, decomposeNoteFileContent } from '@/shared/utils/f
 import { commitNoteVersion } from '@/shared/utils/note-versions'
 import { planExternalSync, toSyncShape } from '@/shared/utils/external-note-sync'
 import { renameWikiLinksForNote } from '@/shared/utils/wiki-links'
+import { bodyOf } from '@/shared/utils/note-body-of'
 import { buildVersionKey, getVersionLocation } from '@/shared/utils/note-version-location'
 
 import { DUPLICATE_TITLE_ERROR } from '@/shared/constants/note-errors'
@@ -157,13 +158,15 @@ export const planWikiLinkRename = ({
     notes,
     notePaths,
     currentNotes = notes,
-    rewrite = (content) => renameWikiLinksForNote(content, targetPath, newTitle, notes, notePaths)
+    rewrite = (content) => renameWikiLinksForNote(content, targetPath, newTitle, notes, notePaths),
+    bodies
 }) => {
     const renameNote = (note) => {
         if (note.path === targetPath) return note
 
-        const renamed = rewrite(note.note)
-        return renamed === note.note ? note : { ...note, note: renamed }
+        const body = bodyOf(note, bodies)
+        const renamed = rewrite(body)
+        return renamed === body ? note : { ...note, note: renamed }
     }
 
     const changedNotes = currentNotes
@@ -233,7 +236,15 @@ export const persistNoteMove = async ({ note, destinationId, repositories }, fil
     }
 }
 
-export const planMovedNoteLinks = ({ note, destinationId, notes, notePaths, repositories, currentNotes }) => {
+export const planMovedNoteLinks = ({
+    note,
+    destinationId,
+    notes,
+    notePaths,
+    repositories,
+    currentNotes,
+    bodies
+}) => {
     const destinationPath = buildRepositoryPaths(repositories).get(destinationId) || ''
     const qualifyPaths = new Map(notePaths).set(note.path, destinationPath)
 
@@ -242,6 +253,7 @@ export const planMovedNoteLinks = ({ note, destinationId, notes, notePaths, repo
         notes,
         notePaths,
         currentNotes,
+        bodies,
         rewrite: (content) => renameWikiLinksForNote(content, note.path, note.title, notes, qualifyPaths, notePaths)
     })
 }

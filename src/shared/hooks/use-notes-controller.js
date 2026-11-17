@@ -6,6 +6,8 @@ import { useStorage } from './use-storage'
 import { NoteContext } from '@/shared/context/note-context'
 import { deleteNoteFiles, readDeleteBehavior } from '@/shared/utils/delete-note-files'
 import { renameHeadingLinks } from '@/shared/utils/headings'
+import { linkIndex } from '@/shared/utils/link-index'
+import { noteBodies } from '@/shared/utils/note-body'
 import { getVersionLocation } from '@/shared/utils/note-version-location'
 import {
     createNote,
@@ -59,24 +61,35 @@ export function useNotesController() {
             )))
         }
 
-        const propagateWikiLinkRename = (targetPath, newTitle, notesSnapshot, snapshotPaths) => applyLinkRewrite(
-            planWikiLinkRename({
+        const loadLinkingBodies = async (targetPath, notesSnapshot, snapshotPaths) => {
+            const target = notesSnapshot.find((note) => note.path === targetPath)
+            const linking = target
+                ? await linkIndex.findBacklinks(target, notesSnapshot, snapshotPaths)
+                : notesSnapshot
+
+            return noteBodies.load(linking)
+        }
+
+        const propagateWikiLinkRename = async (targetPath, newTitle, notesSnapshot, snapshotPaths) => (
+            applyLinkRewrite(planWikiLinkRename({
                 targetPath,
                 newTitle,
                 notes: notesSnapshot,
                 notePaths: snapshotPaths,
-                currentNotes: latest().notes
-            })
+                currentNotes: latest().notes,
+                bodies: await loadLinkingBodies(targetPath, notesSnapshot, snapshotPaths)
+            }))
         )
 
-        const propagateHeadingRename = (targetPath, renames, notesSnapshot, snapshotPaths) => applyLinkRewrite(
-            planWikiLinkRename({
+        const propagateHeadingRename = async (targetPath, renames, notesSnapshot, snapshotPaths) => (
+            applyLinkRewrite(planWikiLinkRename({
                 targetPath,
                 notes: notesSnapshot,
                 notePaths: snapshotPaths,
                 currentNotes: latest().notes,
+                bodies: await loadLinkingBodies(targetPath, notesSnapshot, snapshotPaths),
                 rewrite: (content) => renameHeadingLinks(content, targetPath, renames, notesSnapshot, snapshotPaths)
-            })
+            }))
         )
 
         const updateNote = async (note) => {
@@ -174,7 +187,8 @@ export function useNotesController() {
                 notes: latest().notes,
                 notePaths: currentPaths,
                 repositories: currentRepositories,
-                currentNotes: latest().notes
+                currentNotes: latest().notes,
+                bodies: await loadLinkingBodies(note.path, latest().notes, currentPaths)
             }))
             setNotes((prev) => prev.map((n) => (n.path === path ? { ...n, ...moved } : n)))
 

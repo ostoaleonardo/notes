@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 
 import { useNotes } from './use-notes'
 import { useStorage } from './use-storage'
-import { findBacklinks, renameWikiLinksForNote } from '@/shared/utils/wiki-links'
+import { linkIndex } from '@/shared/utils/link-index'
+import { renameWikiLinksForNote } from '@/shared/utils/wiki-links'
 import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
 import { STORAGE_BOOLEAN } from '@/shared/constants/storage-values'
 import { useSingleFlight } from '@/shared/hooks/use-single-flight'
@@ -37,7 +38,8 @@ export function useWikiLinkRenameConfirm() {
 
         if (!titleChanged) return { savedNote, path, filename, createdAt, updatedAt }
 
-        const backlinks = findBacklinks(note.path, notes, notePaths)
+        const previous = notes.find((entry) => entry.path === note.path)
+        const backlinks = previous ? await linkIndex.findBacklinks(previous, notes, notePaths) : []
         if (!backlinks.length) return { savedNote, path, filename, createdAt, updatedAt }
 
         if (alwaysUpdate) {
