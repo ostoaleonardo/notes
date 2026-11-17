@@ -17,6 +17,8 @@ import { useImportMarkdown } from '@/shared/hooks/use-import-markdown'
 import { getScreenContentStyle } from '@/shared/utils/screen-content-style'
 import { getEditorPath } from '@/shared/utils/editor-path'
 import { pushOnce } from '@/shared/utils/navigation'
+import { bootMark } from '@/shared/utils/boot-mark'
+import { BOOT_MARKS } from '@/shared/constants/boot-marks'
 
 const useDevMenu = __DEV__ ? require('@/shared/hooks/use-dev-menu').useDevMenu : () => {}
 
@@ -52,6 +54,7 @@ export default function AppLayout() {
 
     useEffect(() => {
         if (isReady || needsGate || indexing) {
+            bootMark(BOOT_MARKS.SPLASH_HIDE)
             SplashScreen.hideAsync()
         }
     }, [isReady, needsGate, indexing])

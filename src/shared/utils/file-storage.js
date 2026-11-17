@@ -25,6 +25,8 @@ import {
 import { MIME_TYPES } from '@/shared/constants/mime-types'
 import { LOG_MESSAGES } from '@/shared/constants/log-messages'
 import { logError } from './log-error'
+import { bootMark } from './boot-mark'
+import { BOOT_MARKS } from '@/shared/constants/boot-marks'
 
 const listEntries = (directoryUri) => RepositoryFs.listDirectorySync(directoryUri)
 
@@ -335,8 +337,22 @@ const readRepositoryIndex = async (repositoryId) => {
     if (!file.exists) return []
 
     try {
-        const { version, notes, tags, links } = JSON.parse(await readFileText(file))
-        return version === REPOSITORY_INDEX_VERSION ? restoreNotes(notes, tags, links) : []
+        const readStart = Date.now()
+        const text = await readFileText(file)
+        const parseStart = Date.now()
+        const { version, notes, tags, links } = JSON.parse(text)
+        const restoreStart = Date.now()
+        const restored = version === REPOSITORY_INDEX_VERSION ? restoreNotes(notes, tags, links) : []
+
+        bootMark(BOOT_MARKS.SNAPSHOT, {
+            bytes: text.length,
+            notes: restored.length,
+            readMs: parseStart - readStart,
+            parseMs: restoreStart - parseStart,
+            restoreMs: Date.now() - restoreStart
+        })
+
+        return restored
     } catch (error) {
         logError(LOG_MESSAGES.ERROR_READING_REPOSITORY_INDEX, error)
         return []
@@ -350,12 +366,22 @@ const writeRepositoryIndex = (repositoryId, notes) => {
 
         const file = getRepositoryIndexFile(repositoryId)
         if (!file.exists) file.create()
-        file.write(JSON.stringify({
+        const stringifyStart = Date.now()
+        const payload = JSON.stringify({
             version: REPOSITORY_INDEX_VERSION,
             notes,
             tags: notes.map(getNoteTags),
             links: notes.map(getNoteLinkTexts)
-        }))
+        })
+        const writeStart = Date.now()
+
+        file.write(payload)
+
+        bootMark(BOOT_MARKS.SNAPSHOT_WRITE, {
+            bytes: payload.length,
+            stringifyMs: writeStart - stringifyStart,
+            writeMs: Date.now() - writeStart
+        })
     } catch (error) {
         logError(LOG_MESSAGES.ERROR_WRITING_REPOSITORY_INDEX, error)
     }

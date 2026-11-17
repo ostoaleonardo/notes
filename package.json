@@ -27,7 +27,8 @@
     "audit:dead": "knip",
     "eas-build-pre-install": "bash scripts/eas-install-rust.sh",
     "test:perf": "jest --selectProjects perf --runInBand",
-    "bench:device": "bash scripts/bench-device.sh"
+    "bench:device": "bash scripts/bench-device.sh",
+    "bench:boot": "node scripts/bench-boot.js"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.20.3",

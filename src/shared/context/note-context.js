@@ -22,10 +22,12 @@ import { getIndexingStatus, setIndexingStatus } from '@/shared/utils/indexing-st
 import { syncRepositoryIndex } from '@/shared/utils/repository-index'
 import { searchIndex } from '@/shared/utils/search-index'
 
+import { BOOT_MARKS } from '@/shared/constants/boot-marks'
 import { INDEXING_COMPLETE, INDEXING_NOTICE_MIN_FILES, INDEXING_STARTED } from '@/shared/constants/indexing'
 import { TEMPLATE_TAB_PREFIX } from '@/shared/constants/tabs'
 import { LOG_MESSAGES } from '@/shared/constants/log-messages'
 import { logError } from '@/shared/utils/log-error'
+import { bootMark } from '@/shared/utils/boot-mark'
 
 export const NoteContext = createContext()
 
@@ -74,6 +76,7 @@ export const NoteProvider = ({ children }) => {
         const id = ++run.id
         const isCurrent = () => run.id === id
         run.running = true
+        bootMark(BOOT_MARKS.LOAD_START, { isRepositorySwitch })
 
         const rootRepository = activeRepositoryTree[0] || activeRepository
         const reportProgress = (done, total) => {
@@ -93,6 +96,7 @@ export const NoteProvider = ({ children }) => {
                 if (!isCurrent()) return
 
                 setNotes(snapshot)
+                bootMark(BOOT_MARKS.SNAPSHOT_SET, { notes: snapshot.length })
                 if (snapshot.length) setLoadedRepositoryId(activeRepository.id)
                 else setIndexingStatus(INDEXING_STARTED)
             }
@@ -104,6 +108,7 @@ export const NoteProvider = ({ children }) => {
                 reportProgress
             )
             if (!isCurrent()) return
+            bootMark(BOOT_MARKS.SCAN_DONE, { changed, notes: loaded.length })
 
             pruneStaleFavoritesRef.current(loaded)
             if (!changed) return
@@ -117,6 +122,7 @@ export const NoteProvider = ({ children }) => {
             if (isCurrent()) {
                 run.running = false
                 setLoadedRepositoryId(activeRepository.id)
+                bootMark(BOOT_MARKS.LOAD_END)
                 if (getIndexingStatus()) setIndexingStatus(INDEXING_COMPLETE)
                 setIndexSyncRequest((request) => request + 1)
             }
