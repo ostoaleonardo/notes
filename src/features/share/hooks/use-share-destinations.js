@@ -6,6 +6,7 @@ import { getDailyNoteTitle } from '@/shared/utils/daily-note'
 import { getEditorPath } from '@/shared/utils/editor-path'
 import { logError } from '@/shared/utils/log-error'
 import { pushOnce } from '@/shared/utils/navigation'
+import { noteBodies } from '@/shared/utils/note-body'
 import { appendSharedContent } from '@/shared/utils/shared-note'
 
 import { LOG_MESSAGES } from '@/shared/constants/log-messages'
@@ -44,7 +45,9 @@ export function useShareDestinations(content) {
 
     const addToNote = useCallback(async (note) => {
         try {
-            await updateNote({ ...note, note: appendSharedContent(note.note, content) })
+            const body = await noteBodies.get(note)
+
+            await updateNote({ ...note, note: appendSharedContent(body, content) })
             open(note.path)
         } catch (error) {
             reportError(error)

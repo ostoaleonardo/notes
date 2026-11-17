@@ -2,13 +2,14 @@ import { useCallback, useRef } from 'react'
 
 import { useNotes } from '@/shared/hooks/use-notes'
 import { addBlockId } from '@/features/editor/shared/utils/block-refs'
+import { noteBodies } from '@/shared/utils/note-body'
 
 export function useBlockIdCreator() {
     const { getNote, updateNote } = useNotes()
 
     const create = async ({ path, index, preview, id }) => {
         const note = getNote(path)
-        const text = addBlockId(note.note || '', { index, preview }, id)
+        const text = addBlockId(await noteBodies.get(note), { index, preview }, id)
         if (text !== null) await updateNote({ ...note, note: text })
     }
 

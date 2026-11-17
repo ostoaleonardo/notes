@@ -1,5 +1,6 @@
 import { findAllBlocks, getBlockPreview } from '@/features/editor/shared/utils/block-refs'
 import { getAliases, resolveWikiLinkDetails, resolveWikiLinkTarget } from '@/shared/utils/wiki-links'
+import { bodyOf } from '@/shared/utils/note-body-of'
 
 import { WIKI_LINK_SUGGESTION_LIMIT } from '@/shared/constants/wiki-links'
 
@@ -15,8 +16,8 @@ const areEntriesEqual = (a, b) => (
     a.aliases.every((alias, index) => alias === b.aliases[index])
 )
 
-export const getNoteBlocks = (note) => {
-    const body = note.note || ''
+export const getNoteBlocks = (note, bodies) => {
+    const body = bodyOf(note, bodies)
     const cached = blocksByPath.get(note.path)
     if (cached?.body === body) return cached
 

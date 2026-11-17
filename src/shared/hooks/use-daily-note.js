@@ -8,6 +8,7 @@ import { useStorage } from './use-storage'
 import { useFileStorage } from './use-file-storage'
 import { getDate } from '@/shared/utils/date'
 import { getDailyNoteTitle, planDailyNote } from '@/shared/utils/daily-note'
+import { noteBodies } from '@/shared/utils/note-body'
 import { appendSharedContent } from '@/shared/utils/shared-note'
 import { renderTemplate } from '@/shared/utils/render-template'
 import { scopedStorageKey } from '@/shared/utils/scoped-storage-key'
@@ -48,7 +49,7 @@ export function useDailyNote() {
                 if (append) {
                     await updateNote({
                         ...plan.existing,
-                        note: appendSharedContent(plan.existing.note, append)
+                        note: appendSharedContent(await noteBodies.get(plan.existing), append)
                     })
                 }
 

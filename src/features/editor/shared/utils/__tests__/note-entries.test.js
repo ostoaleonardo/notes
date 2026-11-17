@@ -64,6 +64,15 @@ describe('build note entries', () => {
         ])
     })
 
+    test('lists the blocks of a note from its loaded body', () => {
+        const bodyless = { path: 'r::D.md', title: 'D' }
+        const bodies = new Map([['r::D.md', 'Loaded block ^loaded']])
+
+        expect(getNoteBlocks(bodyless, bodies).labeled).toEqual([
+            { id: 'loaded', preview: 'Loaded block' }
+        ])
+    })
+
     test('refreshes the blocks when the note body changes', () => {
         getNoteBlocks({ path: 'r::C.md', title: 'C', note: 'Old ^old' })
 
