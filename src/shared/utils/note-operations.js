@@ -111,7 +111,18 @@ const mergeExternalEdits = async ({ note, previous, existing, repositories }, fi
     if (!existing || existing.lastModified === previous.updatedAt) return null
 
     const incoming = await readDiskNote(existing)
-    const original = toSyncShape(previous, await noteBodies.get(previous))
+    const base = noteBodies.peek(previous)
+
+    if (base === undefined) {
+        await keepExternalText(
+            { previous, text: incoming.note, repositories, repositoryId: note.repositoryId },
+            fileStorage
+        )
+
+        return null
+    }
+
+    const original = toSyncShape(previous, base)
     const plan = planExternalSync({ draft: toSyncShape(note), original, incoming })
     if (!plan) return null
 

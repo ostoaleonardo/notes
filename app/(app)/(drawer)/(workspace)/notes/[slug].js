@@ -76,6 +76,8 @@ export default function EditNote() {
         const body = await noteBodies.get(stored)
         if (pathRef.current !== path) return
 
+        noteBodies.pin(stored, body)
+
         const loaded = toDraft(stored, t('notes.untitled'), body)
 
         update(loaded)
@@ -119,6 +121,7 @@ export default function EditNote() {
 
         update(synced.draft)
         savedRef.current = toSavedSnapshot(synced.original)
+        noteBodies.pin(incoming, synced.original.note)
 
         if (synced.lostExternalText) {
             commitVersion(

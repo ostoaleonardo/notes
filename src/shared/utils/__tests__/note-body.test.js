@@ -9,10 +9,13 @@ const bodyless = (name, updatedAt = 1) => ({
     updatedAt
 })
 
-const build = (files = {}, maxNotes) => {
+const build = (files = {}, maxNotes, maxPinned) => {
     const readTextFiles = jest.fn(async (uris) => uris.map((uri) => files[uri] ?? null))
 
-    return { loader: createNoteBodyLoader({ readTextFiles, maxNotes }), readTextFiles }
+    return {
+        loader: createNoteBodyLoader({ readTextFiles, maxNotes, maxPinned }),
+        readTextFiles
+    }
 }
 
 describe('split a note body from its file content', () => {
@@ -92,5 +95,55 @@ describe('load note bodies on demand', () => {
         const { loader } = build({})
 
         expect(await loader.get(bodyless('gone'))).toBe('')
+    })
+})
+
+describe('pin the body a note was opened with', () => {
+    test('serves the pinned body without reading the file', async () => {
+        const { loader, readTextFiles } = build({ 'file:///a.md': 'changed on disk' })
+
+        loader.pin(bodyless('a'), 'as opened')
+
+        expect(await loader.get(bodyless('a'))).toBe('as opened')
+        expect(readTextFiles).not.toHaveBeenCalled()
+    })
+
+    test('peeks only resident or pinned bodies of the same version', () => {
+        const { loader } = build()
+
+        loader.pin(bodyless('a', 1), 'as opened')
+
+        expect(loader.peek(bodyless('a', 1))).toBe('as opened')
+        expect(loader.peek(bodyless('a', 2))).toBeUndefined()
+        expect(loader.peek(bodyless('b'))).toBeUndefined()
+        expect(loader.peek({ ...bodyless('c'), note: 'resident' })).toBe('resident')
+    })
+
+    test('never trusts a cached disk read as a base body', async () => {
+        const { loader } = build({ 'file:///a.md': 'A' })
+
+        await loader.get(bodyless('a'))
+
+        expect(loader.peek(bodyless('a'))).toBeUndefined()
+    })
+
+    test('keeps a pinned body while cached bodies are evicted', async () => {
+        const { loader } = build({ 'file:///b.md': 'B', 'file:///c.md': 'C' }, 1)
+
+        loader.pin(bodyless('a'), 'as opened')
+        await loader.get(bodyless('b'))
+        await loader.get(bodyless('c'))
+
+        expect(loader.peek(bodyless('a'))).toBe('as opened')
+    })
+
+    test('drops the oldest pin beyond the limit', () => {
+        const { loader } = build({}, undefined, 1)
+
+        loader.pin(bodyless('a'), 'A')
+        loader.pin(bodyless('b'), 'B')
+
+        expect(loader.peek(bodyless('a'))).toBeUndefined()
+        expect(loader.peek(bodyless('b'))).toBe('B')
     })
 })

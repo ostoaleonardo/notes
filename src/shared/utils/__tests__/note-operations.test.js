@@ -10,6 +10,8 @@ import {
     writeChangedNotes
 } from '../note-operations'
 import { parseFrontmatter } from '../frontmatter'
+import { noteBodies } from '../note-body'
+import * as noteVersions from '../note-versions'
 
 const REPO_URI = 'file:///repo'
 const REPOSITORIES = [{ id: 'repo-1', uri: REPO_URI }]
@@ -266,6 +268,40 @@ describe('persist note update with external edits', () => {
 
         expect(merged.note).toBe(expected)
         expect(parseFrontmatter(storage.files.get('Groceries.md')).body).toBe(expected)
+    })
+
+    test('merges with the pinned base body of a note opened without one', async () => {
+        const opened = { ...previous, path: 'repo-1::Pinned.md', note: undefined }
+        noteBodies.pin(opened, base)
+        const disk = createDiskFile(base.replace('gamma', 'GAMMA'), 30)
+        const storage = createFakeStorage({ 'Groceries.md': 'x' })
+        const plan = { filename: 'Groceries.md', renamed: false, existing: disk }
+
+        const { merged } = await persistNoteUpdate(
+            { note: { ...opened, note: `${base} typed` }, previous: opened, uri: REPO_URI, plan, repositories: REPOSITORIES },
+            storage
+        )
+
+        expect(merged.note).toBe(`${base.replace('gamma', 'GAMMA')} typed`)
+    })
+
+    test('keeps the external text in the versions when the base body is unknown', async () => {
+        const commit = jest.spyOn(noteVersions, 'commitNoteVersion').mockResolvedValue()
+        const opened = { ...previous, path: 'repo-1::Unknown.md', note: undefined }
+        const external = base.replace('gamma', 'GAMMA')
+        const disk = createDiskFile(external, 30)
+        const storage = createFakeStorage({ 'Groceries.md': 'x' })
+        const plan = { filename: 'Groceries.md', renamed: false, existing: disk }
+
+        const { merged } = await persistNoteUpdate(
+            { note: { ...opened, note: `${base} typed` }, previous: opened, uri: REPO_URI, plan, repositories: REPOSITORIES },
+            storage
+        )
+
+        expect(merged).toBeNull()
+        expect(commit).toHaveBeenCalledWith(expect.anything(), expect.anything(), 'Groceries.md', opened.title, external)
+        expect(parseFrontmatter(storage.files.get('Groceries.md')).body).toBe(`${base} typed`)
+        commit.mockRestore()
     })
 
     test('keeps the draft when the external text cannot be merged', async () => {
