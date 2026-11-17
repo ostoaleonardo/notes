@@ -72,6 +72,3 @@ const extractEmbedNames = (value, accepts) => {
 
 export const extractEmbedImageNames = (value) => extractEmbedNames(value, (kind) => kind === FILE_KINDS.IMAGE)
 
-export const extractEmbedMediaNames = (value, { pdf = false } = {}) => (
-    extractEmbedNames(value, (kind) => !!kind && (pdf || kind !== FILE_KINDS.PDF))
-)

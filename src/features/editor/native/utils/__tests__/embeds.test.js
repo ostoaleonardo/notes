@@ -1,4 +1,4 @@
-import { extractEmbedImageNames, extractEmbedMediaNames, resolveEmbeds } from '../embeds'
+import { extractEmbedImageNames, resolveEmbeds } from '../embeds'
 
 const notes = [
     { path: 'a', title: 'Alpha', note: 'alpha body' },
@@ -160,17 +160,9 @@ describe('media embeds', () => {
         expect(result).toBe('[[song.mp3]]')
     })
 
-    test('lists pdf embeds only when asked', () => {
-        const value = '![[doc.pdf#page=2]] ![[a.png]]'
-
-        expect(extractEmbedMediaNames(value)).toEqual(['a.png'])
-        expect(extractEmbedMediaNames(value, { pdf: true })).toEqual(['doc.pdf', 'a.png'])
-    })
-
-    test('lists audio and video among the embedded media names', () => {
+    test('lists only the embedded image names', () => {
         const value = '![[a.png]] ![[b.mp3]] ![[c.mp4]] ![[doc.pdf]] ![[Alpha]]'
 
-        expect(extractEmbedMediaNames(value)).toEqual(['a.png', 'b.mp3', 'c.mp4'])
         expect(extractEmbedImageNames(value)).toEqual(['a.png'])
     })
 })

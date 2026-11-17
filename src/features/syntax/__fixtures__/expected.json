@@ -53,7 +53,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "blocks-paragraphs": {
@@ -102,7 +101,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "blocks-structures": {
@@ -144,7 +142,6 @@
       ],
       "unlabeled": []
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "callouts": {
@@ -185,7 +182,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "embeds-code": {
@@ -208,10 +204,6 @@
         }
       ]
     },
-    "embedMedia": [
-      "visible.png",
-      "visible2.png"
-    ],
     "embedImages": [
       "visible.png",
       "visible2.png"
@@ -256,14 +248,6 @@
         }
       ]
     },
-    "embedMedia": [
-      "photo.png",
-      "diagram.svg",
-      "clip.mp4",
-      "song.mp3",
-      "doc.pdf",
-      "PHOTO.PNG"
-    ],
     "embedImages": [
       "photo.png",
       "diagram.svg",
@@ -278,7 +262,6 @@
       "labeled": [],
       "unlabeled": []
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "footnotes": {
@@ -307,7 +290,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "frontmatter-links": {
@@ -332,7 +314,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "headings-atx": {
@@ -399,7 +380,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "headings-code-and-quotes": {
@@ -430,7 +410,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "headings-setext": {
@@ -450,7 +429,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "html-blocks": {
@@ -494,7 +472,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "line-endings-crlf": {
@@ -524,7 +501,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "math": {
@@ -557,7 +533,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "mixed-realistic": {
@@ -646,9 +621,6 @@
         }
       ]
     },
-    "embedMedia": [
-      "diagram.png"
-    ],
     "embedImages": [
       "diagram.png"
     ]
@@ -678,7 +650,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "tags-basic": {
@@ -772,7 +743,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "tags-code-and-frontmatter": {
@@ -807,7 +777,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "tags-not-tags": {
@@ -847,7 +816,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "tasks-custom": {
@@ -923,7 +891,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "wikilinks-alias-anchor-block": {
@@ -957,7 +924,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "wikilinks-basic": {
@@ -986,7 +952,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "wikilinks-code-fenced": {
@@ -1014,7 +979,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "wikilinks-code-indented": {
@@ -1050,7 +1014,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "wikilinks-code-inline": {
@@ -1082,7 +1045,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "wikilinks-escaped-and-broken": {
@@ -1120,7 +1082,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "wikilinks-markdown-style": {
@@ -1146,7 +1107,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "wikilinks-table": {
@@ -1161,7 +1121,6 @@
       "labeled": [],
       "unlabeled": []
     },
-    "embedMedia": [],
     "embedImages": []
   },
   "wikilinks-unicode": {
@@ -1188,7 +1147,6 @@
         }
       ]
     },
-    "embedMedia": [],
     "embedImages": []
   }
 }
