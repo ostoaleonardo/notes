@@ -1,8 +1,7 @@
 use super::sql;
 use crate::error::Result;
-use rusqlite::{Connection, params_from_iter};
-use serde_json::{Map, Value};
-use std::collections::HashMap;
+use rusqlite::{Connection, Rows};
+use std::collections::HashSet;
 
 mod key {
 	pub const REPOSITORY_ID: &str = "repositoryId";
@@ -11,7 +10,6 @@ mod key {
 	pub const TITLE: &str = "title";
 	pub const CREATED_AT: &str = "createdAt";
 	pub const UPDATED_AT: &str = "updatedAt";
-	pub const SIZE: &str = "size";
 	pub const TAGS: &str = "tags";
 	pub const INLINE_TAGS: &str = "inlineTags";
 	pub const PROPERTIES: &str = "properties";
@@ -20,123 +18,290 @@ mod key {
 	pub const RAW_FRONTMATTER: &str = "rawFrontmatter";
 }
 
-#[derive(Default)]
-struct Children {
-	tags: Vec<String>,
-	inline_tags: Vec<String>,
-	properties: Map<String, Value>,
-	link_texts: Vec<String>,
+mod token {
+	pub const ARRAY_OPEN: char = '[';
+	pub const ARRAY_CLOSE: char = ']';
+	pub const OBJECT_OPEN: char = '{';
+	pub const OBJECT_CLOSE: char = '}';
+	pub const SEPARATOR: char = ',';
+	pub const COLON: char = ':';
+	pub const QUOTE: char = '"';
+	pub const BACKSLASH: char = '\\';
+	pub const NULL: &str = "null";
+	pub const ESCAPE_PREFIX: &str = "\\u00";
+	pub const ESCAPED_QUOTE: &str = "\\\"";
+	pub const ESCAPED_BACKSLASH: &str = "\\\\";
+	pub const ESCAPED_NEWLINE: &str = "\\n";
+	pub const ESCAPED_RETURN: &str = "\\r";
+	pub const ESCAPED_TAB: &str = "\\t";
+	pub const FIRST_PRINTABLE: char = ' ';
+	pub const ESTIMATED_NOTE_BYTES: usize = 640;
+}
+
+struct Cursor<'a, T> {
+	rows: Rows<'a>,
+	pending: Option<(i64, T)>,
+	read: fn(&rusqlite::Row<'_>) -> rusqlite::Result<(i64, T)>,
+}
+
+impl<'a, T> Cursor<'a, T> {
+	fn new(
+		mut rows: Rows<'a>,
+		read: fn(&rusqlite::Row<'_>) -> rusqlite::Result<(i64, T)>,
+	) -> Result<Self> {
+		let pending = rows.next()?.map(read).transpose()?;
+
+		Ok(Self {
+			rows,
+			pending,
+			read,
+		})
+	}
+
+	fn take(&mut self, note_id: i64) -> Result<Vec<T>> {
+		let mut taken = Vec::new();
+
+		while self.pending.as_ref().is_some_and(|(id, _)| *id < note_id) {
+			self.pending = self.rows.next()?.map(self.read).transpose()?;
+		}
+
+		while self.pending.as_ref().is_some_and(|(id, _)| *id == note_id) {
+			if let Some((_, value)) = self.pending.take() {
+				taken.push(value);
+			}
+
+			self.pending = self.rows.next()?.map(self.read).transpose()?;
+		}
+
+		Ok(taken)
+	}
+}
+
+fn read_tag(row: &rusqlite::Row<'_>) -> rusqlite::Result<(i64, (String, bool))> {
+	Ok((
+		row.get(sql::list_child_column::NOTE_ID)?,
+		(
+			row.get(sql::list_child_column::FIRST)?,
+			row.get::<_, i64>(sql::list_child_column::SECOND)? != 0,
+		),
+	))
+}
+
+fn read_property(row: &rusqlite::Row<'_>) -> rusqlite::Result<(i64, (String, String))> {
+	Ok((
+		row.get(sql::list_child_column::NOTE_ID)?,
+		(
+			row.get(sql::list_child_column::FIRST)?,
+			row.get(sql::list_child_column::SECOND)?,
+		),
+	))
+}
+
+fn read_link(row: &rusqlite::Row<'_>) -> rusqlite::Result<(i64, String)> {
+	Ok((
+		row.get(sql::list_child_column::NOTE_ID)?,
+		row.get(sql::list_child_column::FIRST)?,
+	))
 }
 
 pub fn list(connection: &Connection, repository_ids: &[String]) -> Result<String> {
-	if repository_ids.is_empty() {
-		return Ok(Value::Array(Vec::new()).to_string());
+	let mut out = String::new();
+	out.push(token::ARRAY_OPEN);
+
+	if !repository_ids.is_empty() {
+		write_notes(connection, repository_ids, &mut out)?;
 	}
 
-	let mut children = read_children(connection, repository_ids)?;
-	let statement = [
-		sql::LIST_NOTES_HEAD,
-		&sql::placeholders(repository_ids.len(), 0),
-		sql::LIST_NOTES_TAIL,
-	]
-	.concat();
-	let mut prepared = connection.prepare(&statement)?;
-	let mut rows = prepared.query(params_from_iter(repository_ids))?;
-	let mut notes = Vec::new();
+	out.push(token::ARRAY_CLOSE);
+
+	Ok(out)
+}
+
+fn write_notes(connection: &Connection, repository_ids: &[String], out: &mut String) -> Result<()> {
+	let wanted: HashSet<&str> = repository_ids.iter().map(String::as_str).collect();
+	let mut notes = connection.prepare(sql::LIST_NOTES)?;
+	let mut tags = connection.prepare(sql::LIST_TAGS)?;
+	let mut properties = connection.prepare(sql::LIST_PROPERTIES)?;
+	let mut links = connection.prepare(sql::LIST_LINKS)?;
+
+	let mut tag_cursor = Cursor::new(tags.query([])?, read_tag)?;
+	let mut property_cursor = Cursor::new(properties.query([])?, read_property)?;
+	let mut link_cursor = Cursor::new(links.query([])?, read_link)?;
+	let mut rows = notes.query([])?;
+	let mut first = true;
 
 	while let Some(row) = rows.next()? {
+		let repository: String = row.get(sql::list_note_column::REPOSITORY_ID)?;
+		if !wanted.contains(repository.as_str()) {
+			continue;
+		}
+
 		let id: i64 = row.get(sql::list_note_column::ID)?;
 		let modified: i64 = row.get(sql::list_note_column::MODIFIED)?;
 		let invalid: i64 = row.get(sql::list_note_column::INVALID_FRONTMATTER)?;
 		let raw: Option<String> = row.get(sql::list_note_column::FRONTMATTER)?;
-		let child = children.remove(&id).unwrap_or_default();
 		let (invalid_raw, valid_raw) = if invalid == 0 {
 			(None, raw)
 		} else {
 			(raw, None)
 		};
+		let (inline, frontmatter): (Vec<_>, Vec<_>) = tag_cursor
+			.take(id)?
+			.into_iter()
+			.partition(|(_, inline)| *inline);
 
-		let mut note = Map::new();
-		note.insert(
-			key::REPOSITORY_ID.into(),
-			row.get::<_, String>(sql::list_note_column::REPOSITORY_ID)?
-				.into(),
+		if !first {
+			out.push(token::SEPARATOR);
+		}
+
+		first = false;
+		out.reserve(token::ESTIMATED_NOTE_BYTES);
+		out.push(token::OBJECT_OPEN);
+
+		string_field(
+			out,
+			key::REPOSITORY_ID,
+			&row.get::<_, String>(sql::list_note_column::REPOSITORY_ID)?,
 		);
-		note.insert(
-			key::FILENAME.into(),
-			row.get::<_, String>(sql::list_note_column::FILENAME)?
-				.into(),
+		out.push(token::SEPARATOR);
+		string_field(
+			out,
+			key::FILENAME,
+			&row.get::<_, String>(sql::list_note_column::FILENAME)?,
 		);
-		note.insert(
-			key::FILE_URI.into(),
-			row.get::<_, String>(sql::list_note_column::URI)?.into(),
+		out.push(token::SEPARATOR);
+		string_field(
+			out,
+			key::FILE_URI,
+			&row.get::<_, String>(sql::list_note_column::URI)?,
 		);
-		note.insert(
-			key::TITLE.into(),
-			row.get::<_, String>(sql::list_note_column::TITLE)?.into(),
+		out.push(token::SEPARATOR);
+		string_field(
+			out,
+			key::TITLE,
+			&row.get::<_, String>(sql::list_note_column::TITLE)?,
 		);
-		note.insert(key::CREATED_AT.into(), modified.into());
-		note.insert(key::UPDATED_AT.into(), modified.into());
-		note.insert(
-			key::SIZE.into(),
-			row.get::<_, i64>(sql::list_note_column::SIZE)?.into(),
+		out.push(token::SEPARATOR);
+		number_field(out, key::CREATED_AT, modified);
+		out.push(token::SEPARATOR);
+		number_field(out, key::UPDATED_AT, modified);
+		out.push(token::SEPARATOR);
+		list_field(
+			out,
+			key::TAGS,
+			frontmatter.iter().map(|(name, _)| name.as_str()),
 		);
-		note.insert(key::TAGS.into(), strings(child.tags));
-		note.insert(key::INLINE_TAGS.into(), strings(child.inline_tags));
-		note.insert(key::PROPERTIES.into(), Value::Object(child.properties));
-		note.insert(key::LINK_TEXTS.into(), strings(child.link_texts));
-		note.insert(key::INVALID_FRONTMATTER.into(), optional(invalid_raw));
-		note.insert(key::RAW_FRONTMATTER.into(), optional(valid_raw));
-		notes.push(Value::Object(note));
+		out.push(token::SEPARATOR);
+		list_field(
+			out,
+			key::INLINE_TAGS,
+			inline.iter().map(|(name, _)| name.as_str()),
+		);
+		out.push(token::SEPARATOR);
+		properties_field(out, &property_cursor.take(id)?);
+		out.push(token::SEPARATOR);
+		list_field(
+			out,
+			key::LINK_TEXTS,
+			link_cursor.take(id)?.iter().map(String::as_str),
+		);
+		out.push(token::SEPARATOR);
+		optional_field(out, key::INVALID_FRONTMATTER, invalid_raw.as_deref());
+		out.push(token::SEPARATOR);
+		optional_field(out, key::RAW_FRONTMATTER, valid_raw.as_deref());
+		out.push(token::OBJECT_CLOSE);
 	}
 
-	Ok(Value::Array(notes).to_string())
+	Ok(())
 }
 
-fn read_children(
-	connection: &Connection,
-	repository_ids: &[String],
-) -> Result<HashMap<i64, Children>> {
-	let mut children: HashMap<i64, Children> = HashMap::new();
+fn name(out: &mut String, key: &str) {
+	out.push(token::QUOTE);
+	out.push_str(key);
+	out.push(token::QUOTE);
+	out.push(token::COLON);
+}
 
-	for (head, tail) in [
-		(sql::LIST_TAGS_HEAD, sql::LIST_TAGS_TAIL),
-		(sql::LIST_PROPERTIES_HEAD, sql::LIST_PROPERTIES_TAIL),
-		(sql::LIST_LINKS_HEAD, sql::LIST_LINKS_TAIL),
-	] {
-		let statement = [head, &sql::placeholders(repository_ids.len(), 0), tail].concat();
-		let mut prepared = connection.prepare(&statement)?;
-		let mut rows = prepared.query(params_from_iter(repository_ids))?;
+fn string_field(out: &mut String, key: &str, value: &str) {
+	name(out, key);
+	string(out, value);
+}
 
-		while let Some(row) = rows.next()? {
-			let child = children
-				.entry(row.get(sql::list_child_column::NOTE_ID)?)
-				.or_default();
-			let first: String = row.get(sql::list_child_column::FIRST)?;
+fn number_field(out: &mut String, key: &str, value: i64) {
+	name(out, key);
+	out.push_str(&value.to_string());
+}
 
-			match head {
-				sql::LIST_TAGS_HEAD if row.get::<_, i64>(sql::list_child_column::SECOND)? == 0 => {
-					child.tags.push(first)
-				}
-				sql::LIST_TAGS_HEAD => child.inline_tags.push(first),
-				sql::LIST_PROPERTIES_HEAD => {
-					let value: String = row.get(sql::list_child_column::SECOND)?;
-					child
-						.properties
-						.insert(first, serde_json::from_str(&value).unwrap_or(Value::Null));
-				}
-				_ => child.link_texts.push(first),
+fn optional_field(out: &mut String, key: &str, value: Option<&str>) {
+	name(out, key);
+
+	match value {
+		Some(text) => string(out, text),
+		None => out.push_str(token::NULL),
+	}
+}
+
+fn list_field<'a>(out: &mut String, key: &str, values: impl Iterator<Item = &'a str>) {
+	name(out, key);
+	out.push(token::ARRAY_OPEN);
+
+	for (index, value) in values.enumerate() {
+		if index > 0 {
+			out.push(token::SEPARATOR);
+		}
+
+		string(out, value);
+	}
+
+	out.push(token::ARRAY_CLOSE);
+}
+
+fn properties_field(out: &mut String, properties: &[(String, String)]) {
+	name(out, key::PROPERTIES);
+	out.push(token::OBJECT_OPEN);
+
+	for (index, (property, value)) in properties.iter().enumerate() {
+		if index > 0 {
+			out.push(token::SEPARATOR);
+		}
+
+		string(out, property);
+		out.push(token::COLON);
+		out.push_str(value);
+	}
+
+	out.push(token::OBJECT_CLOSE);
+}
+
+fn needs_escape(byte: u8) -> bool {
+	byte == token::QUOTE as u8
+		|| byte == token::BACKSLASH as u8
+		|| byte < token::FIRST_PRINTABLE as u8
+}
+
+fn string(out: &mut String, value: &str) {
+	out.push(token::QUOTE);
+
+	if !value.bytes().any(needs_escape) {
+		out.push_str(value);
+		out.push(token::QUOTE);
+		return;
+	}
+
+	for character in value.chars() {
+		match character {
+			token::QUOTE => out.push_str(token::ESCAPED_QUOTE),
+			token::BACKSLASH => out.push_str(token::ESCAPED_BACKSLASH),
+			'\n' => out.push_str(token::ESCAPED_NEWLINE),
+			'\r' => out.push_str(token::ESCAPED_RETURN),
+			'\t' => out.push_str(token::ESCAPED_TAB),
+			control if control < token::FIRST_PRINTABLE => {
+				out.push_str(token::ESCAPE_PREFIX);
+				out.push_str(&format!("{:02x}", control as u32));
 			}
+			other => out.push(other),
 		}
 	}
 
-	Ok(children)
-}
-
-fn strings(values: Vec<String>) -> Value {
-	Value::Array(values.into_iter().map(Value::String).collect())
-}
-
-fn optional(value: Option<String>) -> Value {
-	value.map_or(Value::Null, Value::String)
+	out.push(token::QUOTE);
 }
