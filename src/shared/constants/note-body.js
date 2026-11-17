@@ -1,0 +1,2 @@
+export const NOTE_BODY_CACHE_MAX_NOTES = 300
+export const NOTE_BODY_KEY_SEPARATOR = '\u0000'

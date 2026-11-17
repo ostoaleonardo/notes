@@ -1,0 +1,63 @@
+import RepositoryFs from 'repository-fs'
+
+import { splitBody } from '@/shared/utils/note-body-of'
+
+import { NOTE_READ_BATCH_SIZE } from '@/shared/constants/file-storage'
+import { NOTE_BODY_CACHE_MAX_NOTES, NOTE_BODY_KEY_SEPARATOR } from '@/shared/constants/note-body'
+
+const getKey = (note) => `${note.path}${NOTE_BODY_KEY_SEPARATOR}${note.updatedAt}`
+
+export const createNoteBodyLoader = ({ readTextFiles, maxNotes = NOTE_BODY_CACHE_MAX_NOTES }) => {
+    const cache = new Map()
+
+    const remember = (key, body) => {
+        cache.delete(key)
+        cache.set(key, body)
+
+        while (cache.size > maxNotes) cache.delete(cache.keys().next().value)
+    }
+
+    const readMissing = async (missing, bodies) => {
+        for (let start = 0; start < missing.length; start += NOTE_READ_BATCH_SIZE) {
+            const batch = missing.slice(start, start + NOTE_READ_BATCH_SIZE)
+            const texts = await readTextFiles(batch.map((note) => note.fileUri))
+
+            batch.forEach((note, index) => {
+                const body = texts[index] == null ? '' : splitBody(texts[index])
+
+                remember(getKey(note), body)
+                bodies.set(note.path, body)
+            })
+        }
+    }
+
+    const load = async (notes) => {
+        const bodies = new Map()
+        const missing = []
+
+        for (const note of notes) {
+            const key = getKey(note)
+
+            if (note.note !== undefined) {
+                bodies.set(note.path, note.note)
+            } else if (cache.has(key)) {
+                bodies.set(note.path, cache.get(key))
+                remember(key, cache.get(key))
+            } else {
+                missing.push(note)
+            }
+        }
+
+        await readMissing(missing, bodies)
+
+        return bodies
+    }
+
+    const get = async (note) => (await load([note])).get(note.path)
+
+    return { load, get }
+}
+
+export const noteBodies = createNoteBodyLoader({
+    readTextFiles: (uris) => RepositoryFs.readTextFiles(uris)
+})
