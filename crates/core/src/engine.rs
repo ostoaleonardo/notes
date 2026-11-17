@@ -69,6 +69,10 @@ impl Engine {
 		self.open()?.query(statement, params)
 	}
 
+	pub fn list_notes(&self, repository_ids: &[String]) -> Result<String> {
+		self.open()?.list_notes(repository_ids)
+	}
+
 	pub fn backlink_candidates(
 		&self,
 		names: &[String],

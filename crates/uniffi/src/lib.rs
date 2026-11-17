@@ -53,6 +53,10 @@ impl Engine {
 		Ok(self.inner.query(&sql, &bound)?.into())
 	}
 
+	pub fn list_notes(&self, repository_ids: Vec<String>) -> Result<String, EngineError> {
+		Ok(self.inner.list_notes(&repository_ids)?)
+	}
+
 	pub fn backlink_candidates(
 		&self,
 		names: Vec<String>,

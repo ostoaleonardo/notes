@@ -1,4 +1,5 @@
 mod candidates;
+mod notes_json;
 mod reader;
 mod schema;
 mod sql;
@@ -32,6 +33,10 @@ impl Index {
 
 	pub fn query(&self, statement: &str, params: &[Value]) -> Result<QueryResult> {
 		reader::query(&self.connection, statement, params)
+	}
+
+	pub fn list_notes(&self, repository_ids: &[String]) -> Result<String> {
+		notes_json::list(&self.connection, repository_ids)
 	}
 
 	pub fn backlink_candidates(

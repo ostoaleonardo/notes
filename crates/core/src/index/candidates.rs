@@ -16,9 +16,9 @@ pub fn backlinks(
 	if !normalized.is_empty() {
 		let statement = [
 			sql::BACKLINK_BY_NAME_HEAD,
-			&placeholders(normalized.len(), 0),
+			&sql::placeholders(normalized.len(), 0),
 			sql::BACKLINK_BY_NAME_MIDDLE,
-			&placeholders(normalized.len(), normalized.len()),
+			&sql::placeholders(normalized.len(), normalized.len()),
 			sql::BACKLINK_BY_NAME_TAIL,
 		]
 		.concat();
@@ -92,13 +92,6 @@ fn unique(notes: Vec<NoteRef>) -> Vec<NoteRef> {
 		.into_iter()
 		.filter(|note| seen.insert(note.clone()))
 		.collect()
-}
-
-fn placeholders(count: usize, offset: usize) -> String {
-	(offset + 1..=offset + count)
-		.map(|index| format!("{}{index}", sql::PLACEHOLDER))
-		.collect::<Vec<_>>()
-		.join(sql::PLACEHOLDER_SEPARATOR)
 }
 
 fn phrase(term: &str) -> String {

@@ -149,3 +149,42 @@ pub mod ref_column {
 	pub const REPOSITORY_ID: usize = 0;
 	pub const FILENAME: usize = 1;
 }
+
+pub fn placeholders(count: usize, offset: usize) -> String {
+	(offset + 1..=offset + count)
+		.map(|index| format!("{PLACEHOLDER}{index}"))
+		.collect::<Vec<_>>()
+		.join(PLACEHOLDER_SEPARATOR)
+}
+
+pub const LIST_NOTES_HEAD: &str = "SELECT id, repository_id, filename, uri, title, modified, size,
+	invalid_frontmatter, frontmatter
+	FROM notes WHERE repository_id IN (";
+pub const LIST_NOTES_TAIL: &str = ") ORDER BY id";
+pub const LIST_TAGS_HEAD: &str = "SELECT t.note_id, t.name, t.inline
+	FROM tags t JOIN notes n ON n.id = t.note_id WHERE n.repository_id IN (";
+pub const LIST_TAGS_TAIL: &str = ") ORDER BY t.note_id, t.position";
+pub const LIST_PROPERTIES_HEAD: &str = "SELECT p.note_id, p.key, p.value
+	FROM properties p JOIN notes n ON n.id = p.note_id WHERE n.repository_id IN (";
+pub const LIST_PROPERTIES_TAIL: &str = ") ORDER BY p.note_id, p.position";
+pub const LIST_LINKS_HEAD: &str = "SELECT l.note_id, l.text
+	FROM links l JOIN notes n ON n.id = l.note_id WHERE n.repository_id IN (";
+pub const LIST_LINKS_TAIL: &str = ") ORDER BY l.note_id, l.position";
+
+pub mod list_note_column {
+	pub const ID: usize = 0;
+	pub const REPOSITORY_ID: usize = 1;
+	pub const FILENAME: usize = 2;
+	pub const URI: usize = 3;
+	pub const TITLE: usize = 4;
+	pub const MODIFIED: usize = 5;
+	pub const SIZE: usize = 6;
+	pub const INVALID_FRONTMATTER: usize = 7;
+	pub const FRONTMATTER: usize = 8;
+}
+
+pub mod list_child_column {
+	pub const NOTE_ID: usize = 0;
+	pub const FIRST: usize = 1;
+	pub const SECOND: usize = 2;
+}

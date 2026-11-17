@@ -135,6 +135,10 @@ class RepositoryFsModule : Module() {
       }
     }
 
+    AsyncFunction("listNoteMetadata") Coroutine { repositoryIds: List<String> ->
+      withContext(Dispatchers.IO) { openEngine(context).use { it.listNotes(repositoryIds) } }
+    }
+
     AsyncFunction("pruneRepositoryIndex") Coroutine { keepIds: List<String> ->
       indexLock.withLock {
         withContext(Dispatchers.IO) { openEngine(context).use { it.prune(keepIds) } }
