@@ -11,11 +11,13 @@ import { IconButton } from '@/ui/button/icon-button'
 import { useCurrentNote } from '@/shared/hooks/use-current-note'
 import { useRecentNotes } from '@/shared/hooks/use-recent-notes'
 import { useDefaultNoteFolder } from '@/shared/hooks/use-default-note-folder'
+import { useNoteBodies } from '@/shared/hooks/use-note-bodies'
 import { useNotes } from '@/shared/hooks/use-notes'
 import { useTemplatesList } from '@/shared/hooks/use-templates-list'
 import { useUtils } from '@/shared/hooks/use-utils'
 import { getEditorNavigation } from '@/shared/utils/editor-path'
 import { getPreviewNote } from '@/features/editor/native/utils/preview-note'
+import { bodyOf } from '@/shared/utils/note-body-of'
 import { getRecentIds } from '@/shared/utils/recent-ids'
 import { toggleInSet } from '@/shared/utils/toggle-in-set'
 import { pushOnce } from '@/shared/utils/navigation'
@@ -38,9 +40,19 @@ export const RecentNotes = ({ onClose, home = false }) => {
     const { templates } = useTemplatesList()
     const { recent, removeRecent, clearRecent } = useRecentNotes()
 
-    const cards = useMemo(() => {
-        const ids = getRecentIds(pinned, recent, notes, templates)
+    const ids = useMemo(
+        () => getRecentIds(pinned, recent, notes, templates),
+        [pinned, recent, notes, templates]
+    )
 
+    const recentNotes = useMemo(() => ids
+        .filter((id) => !id.startsWith(TEMPLATE_TAB_PREFIX))
+        .map((id) => notes.find((entry) => entry.path === id))
+        .filter(Boolean), [ids, notes])
+
+    const bodies = useNoteBodies(recentNotes)
+
+    const cards = useMemo(() => {
         return ids.map((id) => {
             if (id.startsWith(TEMPLATE_TAB_PREFIX)) {
                 const filename = id.slice(TEMPLATE_TAB_PREFIX.length)
@@ -60,12 +72,12 @@ export const RecentNotes = ({ onClose, home = false }) => {
             return {
                 id,
                 title: note.title || t('notes.untitled'),
-                preview: getPreviewNote(note.note),
+                preview: getPreviewNote(bodyOf(note, bodies)),
                 pinned: pinned.has(id),
                 active: id === currentId
             }
         })
-    }, [pinned, recent, notes, templates, currentId, t])
+    }, [ids, pinned, notes, templates, currentId, bodies, t])
 
     const onCreateNote = () => {
         onClose()

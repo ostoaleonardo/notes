@@ -11,7 +11,8 @@ import { useHeadingFont } from '@/shared/hooks/use-heading-font'
 import { useNotes } from '@/shared/hooks/use-notes'
 import { useStorageEffect } from '@/shared/hooks/use-storage-effect'
 import { useUtils } from '@/shared/hooks/use-utils'
-import { buildPinnedNote } from '@/shared/utils/widget-data'
+import { noteBodies } from '@/shared/utils/note-body'
+import { buildPinnedNote, findPinnedNote } from '@/shared/utils/widget-data'
 import { buildWidgetProps } from '@/shared/utils/widget-props'
 
 import { STORAGE_BOOLEAN } from '@/shared/constants/storage-values'
@@ -46,13 +47,19 @@ export const WidgetsProvider = ({ children }) => {
     useEffect(() => {
         if (!IS_ANDROID || loading) return undefined
 
-        const timer = setTimeout(() => {
+        let cancelled = false
+
+        const timer = setTimeout(async () => {
+            const pinnedNote = findPinnedNote(notes, pinned)
+            const bodies = pinnedNote ? await noteBodies.load([pinnedNote]) : undefined
+            if (cancelled) return
+
             bridgeWidget.updateSnapshot(buildWidgetProps({
                 mode,
                 headingFont: fontKey,
                 glass,
                 alpha,
-                note: buildPinnedNote(notes, pinned),
+                note: buildPinnedNote(notes, pinned, undefined, bodies),
                 labels: {
                     newNote: t('settings.notes.startup.new'),
                     dailyNote: t('drawer.daily_note'),
@@ -62,7 +69,10 @@ export const WidgetsProvider = ({ children }) => {
             }))
         }, WIDGET_UPDATE_DELAY_MS)
 
-        return () => clearTimeout(timer)
+        return () => {
+            cancelled = true
+            clearTimeout(timer)
+        }
     }, [notes, pinned, loading, mode, fontKey, glass, alpha, t])
 
     const value = useMemo(() => ({ glass, setGlass, alpha, setAlpha }), [glass, alpha])

@@ -1,4 +1,4 @@
-import { buildExtract, buildPinnedNote } from '../widget-data'
+import { buildExtract, buildPinnedNote, findPinnedNote } from '../widget-data'
 
 const notes = [
     { path: 'a.md', title: 'Old', updatedAt: 1, note: 'plain' },
@@ -45,5 +45,21 @@ describe('pinned note', () => {
 
     test('returns null when nothing is pinned', () => {
         expect(buildPinnedNote(notes, new Set())).toBeNull()
+    })
+})
+
+describe('build the pinned note from loaded bodies', () => {
+    test('reads the extract from the loaded body of a note without one', () => {
+        const note = { path: 'a', title: 'A', updatedAt: 1 }
+        const bodies = new Map([['a', 'Loaded text']])
+
+        expect(buildPinnedNote([note], new Set(['a']), undefined, bodies).extract).toBe('Loaded text')
+    })
+
+    test('finds the most recently updated pinned note', () => {
+        const older = { path: 'a', updatedAt: 1 }
+        const newer = { path: 'b', updatedAt: 2 }
+
+        expect(findPinnedNote([older, newer], new Set(['a', 'b']))).toBe(newer)
     })
 })

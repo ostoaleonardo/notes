@@ -4,6 +4,7 @@ import { Pressable, StyleSheet } from 'react-native'
 import { SearchSnippet } from './search-snippet'
 import { EntityRow } from '@/features/connections/screens/connections/entity-row'
 import { useTheme } from '@/ui/hooks/use-theme'
+import { useNoteBodies } from '@/shared/hooks/use-note-bodies'
 
 import { getSnippets } from '@/features/search/utils/search-context'
 import { getSearchText } from '@/shared/utils/search-text'
@@ -24,9 +25,11 @@ export const SearchResultRow = memo(({
     const { colors } = useTheme()
 
     const entity = useMemo(() => makeEntity(CONNECTION_TYPES.NOTE, note.path), [note.path])
+    const bodyNotes = useMemo(() => [note], [note])
+    const bodies = useNoteBodies(bodyNotes)
     const snippets = useMemo(
-        () => getSnippets(getSearchText(note), highlights, snippetLimit),
-        [note, highlights, snippetLimit]
+        () => getSnippets(getSearchText(note, bodies), highlights, snippetLimit),
+        [note, bodies, highlights, snippetLimit]
     )
 
     const handlePress = useCallback(() => onPress(entity), [onPress, entity])
