@@ -154,3 +154,40 @@ describe('search cursor', () => {
         expect(await cursor.next(5)).toEqual({ found: [], done: true })
     })
 })
+
+describe('search cursor with notes that have no body in memory', () => {
+    const bodyless = ['delta', 'alpha', 'charlie'].map((title) => ({ ...buildNote(title), note: undefined }))
+    const stored = new Map(bodyless.map((note) => [note.path, note.title === 'charlie' ? 'other' : 'match']))
+    const loadBodies = jest.fn(async (batch) => new Map(batch.map((note) => [note.path, stored.get(note.path)])))
+
+    const build = (overrides = {}) => createSearchCursor({
+        source: createMemorySource(bodyless, 'name-asc', 2),
+        ast: AST,
+        context: CONTEXT,
+        yieldFn: noYield,
+        loadBodies,
+        ...overrides
+    })
+
+    beforeEach(() => loadBodies.mockClear())
+
+    test('matches against the bodies loaded for each batch', async () => {
+        const result = await build().next(10)
+
+        expect(result.found.map((note) => note.title)).toEqual(['alpha', 'delta'])
+        expect(loadBodies).toHaveBeenCalledTimes(2)
+    })
+
+    test('loads the bodies of one batch at a time', async () => {
+        await build().next(1)
+
+        expect(loadBodies).toHaveBeenCalledTimes(1)
+        expect(loadBodies.mock.calls[0][0].map((note) => note.title)).toEqual(['alpha', 'charlie'])
+    })
+
+    test('stops when the search is cancelled while the bodies load', async () => {
+        const cursor = build({ isCancelled: () => loadBodies.mock.calls.length > 0 })
+
+        expect(await cursor.next(10)).toBeNull()
+    })
+})

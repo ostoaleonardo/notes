@@ -78,11 +78,12 @@ const readTasks = (lines) => lines.flatMap((line) => {
 
 const infoCache = new WeakMap()
 
-const getNoteInfo = (note) => {
-    let info = infoCache.get(note)
+const getNoteInfo = (note, bodies) => {
+    const resident = note.note !== undefined
+    let info = resident ? infoCache.get(note) : undefined
 
     if (!info) {
-        const content = getSearchText(note)
+        const content = getSearchText(note, bodies)
         const lines = createLazy(() => content.split('\n'))
 
         info = {
@@ -97,7 +98,7 @@ const getNoteInfo = (note) => {
             hasFiles: createLazy(() => FILE_REFERENCE_REGEX.test(content))
         }
 
-        infoCache.set(note, info)
+        if (resident) infoCache.set(note, info)
     }
 
     return info
@@ -216,7 +217,7 @@ const evaluateFilter = (node, state) => {
 }
 
 const matchesNote = (note, ast, context) => {
-    const info = getNoteInfo(note)
+    const info = getNoteInfo(note, context.bodies)
 
     return evaluate(ast, {
         note,

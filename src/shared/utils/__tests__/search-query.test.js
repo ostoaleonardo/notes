@@ -381,3 +381,36 @@ describe('filter chips', () => {
         expect(toggleChipNegation(negated, again)).toBe('hello tag:work')
     })
 })
+
+describe('filter notes without a body in memory', () => {
+    const context = { pinned: new Set(), notePaths: new Map() }
+    const bodyless = { path: 'p', title: 'Plain', filename: 'Plain.md' }
+
+    test('matches the loaded body', () => {
+        const bodies = new Map([['p', 'a needle in the text']])
+
+        expect(filterNotes([bodyless], parseSearchQuery('needle'), { ...context, bodies })).toEqual([bodyless])
+    })
+
+    test('does not match when the loaded body lacks the term', () => {
+        const bodies = new Map([['p', 'nothing here']])
+
+        expect(filterNotes([bodyless], parseSearchQuery('needle'), { ...context, bodies })).toEqual([])
+    })
+
+    test('reads the current body on every search instead of remembering an old one', () => {
+        const first = new Map([['p', 'needle']])
+        const second = new Map([['p', 'haystack']])
+        const ast = parseSearchQuery('needle')
+
+        expect(filterNotes([bodyless], ast, { ...context, bodies: first })).toHaveLength(1)
+        expect(filterNotes([bodyless], ast, { ...context, bodies: second })).toHaveLength(0)
+    })
+
+    test('finds the term in the frontmatter text of a note without a body', () => {
+        const withFrontmatter = { ...bodyless, rawFrontmatter: 'status: needle' }
+
+        expect(filterNotes([withFrontmatter], parseSearchQuery('needle'), { ...context, bodies: new Map() }))
+            .toEqual([withFrontmatter])
+    })
+})

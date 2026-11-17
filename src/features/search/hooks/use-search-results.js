@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { createMemorySource, createSearchCursor } from '@/shared/utils/search-cursor'
 import { logError } from '@/shared/utils/log-error'
+import { noteBodies } from '@/shared/utils/note-body'
 import { SourceOverflowError, searchIndex } from '@/shared/utils/search-index'
 
 import { LOG_MESSAGES } from '@/shared/constants/log-messages'
@@ -82,7 +83,8 @@ export function useSearchResults({ enabled, ast, notes, notePaths, pinned, match
                 source,
                 ast,
                 context,
-                isCancelled: () => session.cancelled
+                isCancelled: () => session.cancelled,
+                loadBodies: noteBodies.load
             })
             session.matches = NO_MATCHES
             session.done = false

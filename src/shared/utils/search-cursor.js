@@ -37,7 +37,14 @@ export const createMemorySource = (notes, sort, chunkSize = SEARCH_SCAN_CHUNK_SI
     }
 }
 
-export const createSearchCursor = ({ source, ast, context, yieldFn = yieldToUi, isCancelled = () => false }) => {
+export const createSearchCursor = ({
+    source,
+    ast,
+    context,
+    yieldFn = yieldToUi,
+    isCancelled = () => false,
+    loadBodies = async () => undefined
+}) => {
     let exhausted = false
     const buffer = []
 
@@ -64,7 +71,10 @@ export const createSearchCursor = ({ source, ast, context, yieldFn = yieldToUi, 
                 break
             }
 
-            buffer.push(...filterNotes(batch, ast, context))
+            const bodies = await loadBodies(batch)
+            if (isCancelled()) return null
+
+            buffer.push(...filterNotes(batch, ast, { ...context, bodies }))
             take()
 
             await yieldFn()
