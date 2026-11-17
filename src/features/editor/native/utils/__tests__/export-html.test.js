@@ -73,3 +73,16 @@ describe('export markdown', () => {
         expect(markdown).not.toContain('[[')
     })
 })
+
+describe('export markdown with loaded bodies', () => {
+    test('reads the note and its embeds from the loaded bodies', () => {
+        const note = { path: 'self', title: 'T' }
+        const embedded = { path: 'a', title: 'Alpha' }
+        const bodies = new Map([['self', 'intro ![[Alpha]]'], ['a', 'alpha body']])
+
+        const markdown = getExportMarkdown(note, { notes: [note, embedded], bodies })
+
+        expect(markdown).toContain('intro')
+        expect(markdown).toContain('alpha body')
+    })
+})

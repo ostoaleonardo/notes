@@ -5,6 +5,7 @@ import { resolveEmbeds } from '@/features/editor/native/utils/embeds'
 import { replaceLocalImageUrls } from '@/features/editor/shared/utils/local-images'
 import { sanitizeHtml } from '@/features/editor/native/utils/sanitize-html'
 import { escapeHtml, unwrapWikiLinks } from '@/shared/utils/wiki-links'
+import { bodyOf } from '@/shared/utils/note-body-of'
 
 import { COLORS, THEMES } from '@/shared/constants/themes'
 import { FONTS } from '@/shared/constants/theme'
@@ -20,12 +21,16 @@ import {
 const NO_MEDIA = () => null
 const NO_URLS = new Map()
 
-export const getExportMarkdown = (note, { notes = [], notePaths, getMediaUrl = NO_MEDIA } = {}) => {
-    const embedded = resolveEmbeds(note.note || '', {
+export const getExportMarkdown = (
+    note,
+    { notes = [], notePaths, getMediaUrl = NO_MEDIA, bodies } = {}
+) => {
+    const embedded = resolveEmbeds(bodyOf(note, bodies), {
         notes,
         notePaths,
         getMediaUrl,
-        selfPath: note.path
+        selfPath: note.path,
+        bodies
     })
 
     return unwrapWikiLinks(embedded)

@@ -15,7 +15,7 @@ export const getRepositoryUri = (repositories, repositoryId) => (
     repositories.find((repository) => repository.id === repositoryId)?.uri
 )
 
-export const buildFileContent = (note) => buildNoteFileContent(note, note.note)
+export const buildFileContent = (note, body = note.note) => buildNoteFileContent(note, body)
 
 const nameExistsIn = (fileStorage, uri) => (name) => fileStorage.fileExists(uri, name)
 

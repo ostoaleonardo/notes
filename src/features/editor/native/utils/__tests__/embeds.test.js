@@ -1,4 +1,4 @@
-import { extractEmbedImageNames, resolveEmbeds } from '../embeds'
+import { collectEmbedBodies, extractEmbedImageNames, resolveEmbeds } from '../embeds'
 
 const notes = [
     { path: 'a', title: 'Alpha', note: 'alpha body' },
@@ -225,5 +225,73 @@ describe('heading embeds', () => {
 
     test('turns an embed of a heading in the same note into a plain wiki link', () => {
         expect(resolveSection('![[#One]]', 'p')).toBe('[[#One]]')
+    })
+})
+
+describe('embeds of notes without a body in memory', () => {
+    const bodyless = [
+        { path: 'a', title: 'Alpha' },
+        { path: 'b', title: 'Beta' },
+        { path: 'c', title: 'Gamma' }
+    ]
+    const stored = new Map([
+        ['a', 'alpha body ![[Gamma]]'],
+        ['b', 'beta body'],
+        ['c', 'gamma body']
+    ])
+    const loadBodies = jest.fn(async (list) => new Map(list.map(({ path }) => [path, stored.get(path)])))
+
+    beforeEach(() => loadBodies.mockClear())
+
+    test('inlines the loaded bodies', () => {
+        const bodies = new Map([['a', 'alpha body']])
+
+        expect(resolveEmbeds('![[Alpha]]', { notes: bodyless, bodies })).toContain('alpha body')
+    })
+
+    test('collects the bodies of nested embeds level by level', async () => {
+        const bodies = await collectEmbedBodies('![[Alpha]]', {
+            notes: bodyless,
+            notePaths: new Map(),
+            selfPath: 'self',
+            loadBodies
+        })
+
+        expect([...bodies.keys()]).toEqual(['a', 'c'])
+        expect(loadBodies).toHaveBeenCalledTimes(2)
+    })
+
+    test('stops at the maximum embed depth and on loops', async () => {
+        const looping = [{ path: 'l', title: 'Loop' }]
+        const bodies = await collectEmbedBodies('![[Loop]]', {
+            notes: looping,
+            notePaths: new Map(),
+            selfPath: 'self',
+            loadBodies: async (list) => new Map(list.map(({ path }) => [path, '![[Loop]]']))
+        })
+
+        expect([...bodies.keys()]).toEqual(['l'])
+    })
+
+    test('ignores media, files, code and the note itself', async () => {
+        await collectEmbedBodies('![[a.png]] ![[manual.pdf]] `![[Alpha]]` ![[Self]]', {
+            notes: [...bodyless, { path: 'self', title: 'Self' }],
+            notePaths: new Map(),
+            selfPath: 'self',
+            loadBodies
+        })
+
+        expect(loadBodies).not.toHaveBeenCalled()
+    })
+
+    test('collects nothing for a note without embeds', async () => {
+        const bodies = await collectEmbedBodies('plain text', {
+            notes: bodyless,
+            notePaths: new Map(),
+            selfPath: 'self',
+            loadBodies
+        })
+
+        expect(bodies.size).toBe(0)
     })
 })

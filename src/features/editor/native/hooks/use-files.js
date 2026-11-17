@@ -10,7 +10,7 @@ import { useHeadingFont } from '@/shared/hooks/use-heading-font'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 import { buildFileContent } from '@/shared/utils/note-operations'
 import { getExportMarkdown, getNoteAsHtml } from '@/features/editor/native/utils/export-html'
-import { extractEmbedImageNames } from '@/features/editor/native/utils/embeds'
+import { collectEmbedBodies, extractEmbedImageNames } from '@/features/editor/native/utils/embeds'
 import { extractLocalUrls } from '@/features/editor/shared/utils/local-images'
 import { resolveUrl } from '@/features/editor/native/utils/resolve-url'
 import { pickExportFonts } from '@/features/editor/native/utils/export-fonts'
@@ -23,6 +23,7 @@ import {
     EXPORT_LOCAL_IMAGE_URL_PATTERN
 } from '@/features/editor/native/constants/export'
 import { logError } from '@/shared/utils/log-error'
+import { noteBodies } from '@/shared/utils/note-body'
 
 import { PICKER_ERROR_CODES } from '@/shared/constants/picker-errors'
 import { LOG_MESSAGES } from '@/shared/constants/log-messages'
@@ -35,7 +36,17 @@ export function useFiles() {
     const domFonts = useDomFonts()
 
     const buildHtml = async (note) => {
-        const names = extractEmbedImageNames(note.note || '')
+        const body = await noteBodies.get(note)
+        const bodies = await collectEmbedBodies(body, {
+            notes,
+            notePaths,
+            selfPath: note.path,
+            loadBodies: noteBodies.load
+        })
+
+        bodies.set(note.path, body)
+
+        const names = extractEmbedImageNames(body)
         const uris = names.length ? await listMediaUris() : new Map()
         const images = new Map()
 
@@ -46,6 +57,7 @@ export function useFiles() {
         const context = {
             notes,
             notePaths,
+            bodies,
             getMediaUrl: (name) => images.get(name)
         }
         const localUrls = extractLocalUrls(getExportMarkdown(note, context))
@@ -67,7 +79,7 @@ export function useFiles() {
             return buildHtml(note)
         }
 
-        return buildFileContent(note)
+        return buildFileContent(note, await noteBodies.get(note))
     }
 
     const resolveExportFilename = (directory, note, format) => {
