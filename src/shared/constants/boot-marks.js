@@ -8,5 +8,6 @@ export const BOOT_MARKS = {
     SPLASH_HIDE: 'splash-hide',
     SCAN_DONE: 'scan-done',
     SNAPSHOT_WRITE: 'snapshot-write',
+    INDEX_LIST: 'index-list',
     LOAD_END: 'load-end'
 }

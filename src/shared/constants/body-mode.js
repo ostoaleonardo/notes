@@ -1,1 +1,1 @@
-export const BODYLESS_MIN_NOTES = 50000
+export const BODYLESS_MIN_NOTES = 10000
