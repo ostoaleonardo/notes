@@ -56,6 +56,50 @@ pub struct ScannedFile {
 	pub size: i64,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SourceFile {
+	pub uri: String,
+	pub filename: String,
+	pub modified: i64,
+	pub size: i64,
+}
+
+impl From<&SourceFile> for ScannedFile {
+	fn from(file: &SourceFile) -> Self {
+		Self {
+			filename: file.filename.clone(),
+			modified: file.modified,
+			size: file.size,
+		}
+	}
+}
+
+impl NoteInput {
+	pub fn from_file(file: &SourceFile, text: String) -> Self {
+		Self {
+			filename: file.filename.clone(),
+			uri: file.uri.clone(),
+			modified: file.modified,
+			size: file.size,
+			text,
+		}
+	}
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub struct SyncStats {
+	pub total: u32,
+	pub added: u32,
+	pub updated: u32,
+	pub removed: u32,
+	pub unchanged: u32,
+	pub unreadable: u32,
+	pub scan_ms: u64,
+	pub read_ms: u64,
+	pub parse_ms: u64,
+	pub write_ms: u64,
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct FileMeta {
 	pub modified: i64,

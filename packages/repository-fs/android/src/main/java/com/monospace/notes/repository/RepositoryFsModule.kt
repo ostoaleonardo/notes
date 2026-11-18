@@ -197,6 +197,15 @@ private fun directFile(context: Context, uri: Uri): File? {
   return File(root, relativePath)
 }
 
+internal data class DirectNotesTarget(val path: String, val uriPrefix: String)
+
+internal fun directNotesTarget(context: Context, uri: Uri): DirectNotesTarget? {
+  val directory = directFile(context, uri)?.takeIf { it.isDirectory } ?: return null
+  val childPrefix = DocumentsContract.buildDocumentUriUsingTree(uri, documentIdOf(context, uri) + PATH_SEPARATOR)
+
+  return DirectNotesTarget(directory.path, childPrefix.toString())
+}
+
 internal fun listDirectory(context: Context, uri: Uri): List<Map<String, Any?>> =
   directFile(context, uri)?.takeIf { it.isDirectory && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O }?.let { listDirectDirectory(uri, documentIdOf(context, uri), it) }
     ?: listProviderDirectory(context, uri)

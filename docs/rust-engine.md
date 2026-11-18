@@ -33,7 +33,8 @@ cargo test
 ## Architecture
 
 - Rust owns parsing, the SQLite index (schema, writer, reconciliation, queries) and the locale sort keys (ICU4X collator).
-- Kotlin only does what needs Android APIs: directory scanning and file reading through SAF or direct access (`RepositoryFsModule`, `RepositoryIndexer`), and marshalling for Expo (`EngineBridge`).
+- `Engine::sync` runs the whole indexing pass (scan, reconcile, batched reads overlapped with parse and write, progress) against a `NoteSource` (`crates/core/src/source`). `FsSource` reads a directory with `std::fs`; Android uses it when the app has all-files access (`syncDirectory`, Kotlin passes the document URI prefix so stored URIs match the provider ones). Without that access Kotlin implements `NoteSource` over SAF (`ProviderNoteSource`) and Rust calls back for `scan` and `read`. A desktop build only needs `FsSource` or its own `NoteSource`.
+- Kotlin only does what needs Android APIs: SAF listing and reading, resolving the direct path, and marshalling for Expo (`RepositoryFsModule`, `RepositoryIndexer`, `EngineBridge`).
 - The index database is rebuilt when `SCHEMA_VERSION` or the device locale changes. Bump the version whenever the stored format changes, including the sort key bytes.
 - The syntax extractor is checked in `crates/core/tests/corpus_parity.rs` against the shared corpus in `src/features/syntax/__fixtures__`.
 - Link names are normalized (NFC, trimmed, lowercase, title after the last `/`) when a note is indexed, so backlink candidates are one indexed SQL lookup. Markdown-style `wikilink://` links live in `markdown_links`. Mention candidates use the trigram full-text index and ask the caller to scan when a term is shorter than three characters.

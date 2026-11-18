@@ -1,33 +1,23 @@
 use engine::model;
 
 #[derive(uniffi::Record)]
-pub struct NoteRecord {
-	pub filename: String,
+pub struct SourceRecord {
 	pub uri: String,
-	pub modified: i64,
-	pub size: i64,
-	pub text: String,
-}
-
-#[derive(uniffi::Record)]
-pub struct ScannedRecord {
 	pub filename: String,
 	pub modified: i64,
 	pub size: i64,
 }
 
 #[derive(uniffi::Record)]
-pub struct PlanReport {
-	pub changed: Vec<u32>,
-	pub removed: Vec<String>,
+pub struct SyncReport {
+	pub total: u32,
 	pub added: u32,
 	pub updated: u32,
+	pub removed: u32,
 	pub unchanged: u32,
-}
-
-#[derive(uniffi::Record)]
-pub struct BatchReport {
-	pub notes: u32,
+	pub unreadable: u32,
+	pub scan_ms: u64,
+	pub read_ms: u64,
 	pub parse_ms: u64,
 	pub write_ms: u64,
 }
@@ -81,50 +71,6 @@ impl From<engine::error::Error> for EngineError {
 			engine::error::Error::Database(_) => Self::Database(message),
 			engine::error::Error::Collation { .. } => Self::Collation(message),
 			engine::error::Error::Io(_) => Self::Io(message),
-		}
-	}
-}
-
-impl From<NoteRecord> for model::NoteInput {
-	fn from(record: NoteRecord) -> Self {
-		Self {
-			filename: record.filename,
-			uri: record.uri,
-			modified: record.modified,
-			size: record.size,
-			text: record.text,
-		}
-	}
-}
-
-impl From<ScannedRecord> for model::ScannedFile {
-	fn from(record: ScannedRecord) -> Self {
-		Self {
-			filename: record.filename,
-			modified: record.modified,
-			size: record.size,
-		}
-	}
-}
-
-impl From<model::ReconcilePlan> for PlanReport {
-	fn from(plan: model::ReconcilePlan) -> Self {
-		Self {
-			changed: plan.changed,
-			removed: plan.removed,
-			added: plan.added,
-			updated: plan.updated,
-			unchanged: plan.unchanged,
-		}
-	}
-}
-
-impl From<model::BatchStats> for BatchReport {
-	fn from(stats: model::BatchStats) -> Self {
-		Self {
-			notes: stats.notes,
-			parse_ms: stats.parse_ms,
-			write_ms: stats.write_ms,
 		}
 	}
 }
@@ -184,6 +130,53 @@ impl From<Vec<model::NoteRef>> for NoteRefsReport {
 		Self {
 			repository_ids,
 			filenames,
+		}
+	}
+}
+
+impl From<uniffi::UnexpectedUniFFICallbackError> for EngineError {
+	fn from(error: uniffi::UnexpectedUniFFICallbackError) -> Self {
+		Self::Io(error.to_string())
+	}
+}
+
+impl From<EngineError> for engine::error::Error {
+	fn from(error: EngineError) -> Self {
+		let message = match error {
+			EngineError::Busy(message)
+			| EngineError::Database(message)
+			| EngineError::Collation(message)
+			| EngineError::Io(message) => message,
+		};
+
+		Self::Io(std::io::Error::other(message))
+	}
+}
+
+impl From<SourceRecord> for model::SourceFile {
+	fn from(record: SourceRecord) -> Self {
+		Self {
+			uri: record.uri,
+			filename: record.filename,
+			modified: record.modified,
+			size: record.size,
+		}
+	}
+}
+
+impl From<model::SyncStats> for SyncReport {
+	fn from(stats: model::SyncStats) -> Self {
+		Self {
+			total: stats.total,
+			added: stats.added,
+			updated: stats.updated,
+			removed: stats.removed,
+			unchanged: stats.unchanged,
+			unreadable: stats.unreadable,
+			scan_ms: stats.scan_ms,
+			read_ms: stats.read_ms,
+			parse_ms: stats.parse_ms,
+			write_ms: stats.write_ms,
 		}
 	}
 }

@@ -1,12 +1,13 @@
 uniffi::setup_scaffolding!("engine");
 
 mod records;
+mod source;
 
-use records::{
-	BatchReport, EngineError, IndexedNotesReport, NoteRecord, NoteRefsReport, PlanReport,
-	QueryReport, ScannedRecord, Value,
-};
+use engine::source::FsSource;
+use records::{EngineError, IndexedNotesReport, NoteRefsReport, QueryReport, SyncReport, Value};
+use source::{ForeignSource, NoteSource, ProgressListener};
 use std::collections::HashSet;
+use std::sync::Arc;
 
 #[derive(uniffi::Object)]
 pub struct Engine {
@@ -22,26 +23,37 @@ impl Engine {
 		})
 	}
 
-	pub fn plan(
+	pub fn sync(
 		&self,
 		repository_id: String,
-		scanned: Vec<ScannedRecord>,
-	) -> Result<PlanReport, EngineError> {
-		let files: Vec<_> = scanned.into_iter().map(Into::into).collect();
-		Ok(self.inner.plan(&repository_id, &files)?.into())
+		source: Arc<dyn NoteSource>,
+		listener: Arc<dyn ProgressListener>,
+	) -> Result<SyncReport, EngineError> {
+		let source = ForeignSource::new(source);
+
+		Ok(self
+			.inner
+			.sync(&repository_id, &source, &|done, total| {
+				listener.on_progress(done, total)
+			})?
+			.into())
 	}
 
-	pub fn remove(&self, repository_id: String, filenames: Vec<String>) -> Result<(), EngineError> {
-		Ok(self.inner.remove(&repository_id, &filenames)?)
-	}
-
-	pub fn write(
+	pub fn sync_directory(
 		&self,
 		repository_id: String,
-		notes: Vec<NoteRecord>,
-	) -> Result<BatchReport, EngineError> {
-		let inputs = notes.into_iter().map(Into::into).collect();
-		Ok(self.inner.write(&repository_id, inputs)?.into())
+		path: String,
+		uri_prefix: String,
+		listener: Arc<dyn ProgressListener>,
+	) -> Result<SyncReport, EngineError> {
+		let source = FsSource::new(path, uri_prefix);
+
+		Ok(self
+			.inner
+			.sync(&repository_id, &source, &|done, total| {
+				listener.on_progress(done, total)
+			})?
+			.into())
 	}
 
 	pub fn indexed_notes(&self) -> Result<IndexedNotesReport, EngineError> {

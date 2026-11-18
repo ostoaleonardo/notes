@@ -3,12 +3,11 @@ package com.monospace.notes.repository
 import android.content.Context
 import android.net.Uri
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import uniffi.engine.Engine
-import uniffi.engine.NoteRecord
-import uniffi.engine.ScannedRecord
+import uniffi.engine.NoteSource
+import uniffi.engine.ProgressListener
+import uniffi.engine.SourceRecord
 
 data class ScannedFile(val uri: String, val filename: String, val modified: Long, val size: Long)
 
@@ -40,7 +39,23 @@ fun scanNotes(context: Context, directoryUri: String): List<ScannedFile> =
     )
   }
 
-suspend fun indexRepository(
+private class ProviderNoteSource(
+  private val context: Context,
+  private val directoryUri: String,
+  private val dispatcher: CoroutineDispatcher
+) : NoteSource {
+  override fun scan(): List<SourceRecord> =
+    scanNotes(context, directoryUri).map { SourceRecord(it.uri, it.filename, it.modified, it.size) }
+
+  override fun read(uris: List<String>): List<String?> =
+    runBlocking { readAll(context, uris, dispatcher) { it } }
+}
+
+private class ProgressBridge(private val onProgress: (done: Int, total: Int) -> Unit) : ProgressListener {
+  override fun onProgress(done: UInt, total: UInt) = onProgress(done.toInt(), total.toInt())
+}
+
+fun indexRepository(
   context: Context,
   engine: Engine,
   repositoryId: String,
@@ -48,62 +63,24 @@ suspend fun indexRepository(
   dispatcher: CoroutineDispatcher,
   onProgress: (done: Int, total: Int) -> Unit
 ): IndexStats {
-  val scanStart = System.nanoTime()
-  val scanned = scanNotes(context, directoryUri)
-  val plan = engine.plan(repositoryId, scanned.map { ScannedRecord(it.filename, it.modified, it.size) })
-  val changed = plan.changed.map { scanned[it.toInt()] }
-  val scanMs = elapsedMs(scanStart)
-  var readMs = 0L
-  var parseMs = 0L
-  var writeMs = 0L
-  var unreadable = 0
-  var done = 0
+  val listener = ProgressBridge(onProgress)
+  val direct = directNotesTarget(context, Uri.parse(directoryUri))
 
-  if (plan.removed.isNotEmpty()) engine.remove(repositoryId, plan.removed)
-
-  onProgress(0, changed.size)
-
-  coroutineScope {
-    val batches = Channel<Pair<List<ScannedFile>, List<String?>>>(PIPELINE_DEPTH)
-
-    launch {
-      for (batch in changed.chunked(INDEX_BATCH_SIZE)) {
-        val readStart = System.nanoTime()
-        val texts = readAll(context, batch.map { it.uri }, dispatcher) { it }
-        readMs += elapsedMs(readStart)
-        batches.send(batch to texts)
-      }
-
-      batches.close()
-    }
-
-    for ((batch, texts) in batches) {
-      val notes = batch.mapIndexedNotNull { position, file ->
-        texts[position]?.let { NoteRecord(file.filename, file.uri, file.modified, file.size, it) }
-      }
-
-      unreadable += batch.size - notes.size
-
-      val report = engine.write(repositoryId, notes)
-      parseMs += report.parseMs.toLong()
-      writeMs += report.writeMs.toLong()
-
-      done += batch.size
-      onProgress(done, changed.size)
-    }
+  val report = if (direct != null) {
+    engine.syncDirectory(repositoryId, direct.path, direct.uriPrefix, listener)
+  } else {
+    engine.sync(repositoryId, ProviderNoteSource(context, directoryUri, dispatcher), listener)
   }
 
   return IndexStats(
-    total = plan.unchanged.toInt() + plan.added.toInt() + plan.updated.toInt(),
-    added = plan.added.toInt(),
-    updated = plan.updated.toInt(),
-    removed = plan.removed.size,
-    unchanged = plan.unchanged.toInt(),
-    unreadable = unreadable,
-    scanMs = scanMs,
-    readParseMs = readMs + parseMs,
-    writeMs = writeMs
+    total = report.total.toInt(),
+    added = report.added.toInt(),
+    updated = report.updated.toInt(),
+    removed = report.removed.toInt(),
+    unchanged = report.unchanged.toInt(),
+    unreadable = report.unreadable.toInt(),
+    scanMs = report.scanMs.toLong(),
+    readParseMs = (report.readMs + report.parseMs).toLong(),
+    writeMs = report.writeMs.toLong()
   )
 }
-
-private fun elapsedMs(start: Long) = (System.nanoTime() - start) / NANOS_PER_MILLI
