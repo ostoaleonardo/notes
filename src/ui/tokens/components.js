@@ -18,6 +18,13 @@ export const BUTTON = {
     groupGap: SPACING.xxxs
 }
 
+export const BUTTON_PADDING = {
+    start: SPACING.md,
+    top: SPACING.sm,
+    end: SPACING.md,
+    bottom: SPACING.sm
+}
+
 export const CONTROL_SIZE = {
     small: SIZE.sm,
     touch: SIZE.lg

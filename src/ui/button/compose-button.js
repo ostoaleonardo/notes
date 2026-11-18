@@ -6,6 +6,8 @@ import { ComposeHost } from '@/ui/compose-context'
 import { getButtonColors } from '@/ui/utils/compose-colors'
 import { useTheme } from '@/ui/hooks/use-theme'
 
+import { BUTTON_PADDING } from '@/ui/tokens/components'
+
 export const ComposeButton = ({
     component: Component,
     variant,
@@ -18,7 +20,9 @@ export const ComposeButton = ({
     style
 }) => {
     const { colors } = useTheme()
+
     const buttonColors = useMemo(() => getButtonColors(colors, variant), [colors, variant])
+
     const modifiers = useMemo(() => {
         const list = [...(getModifiers?.(colors) ?? []), ...(testID ? [testIdModifier(testID)] : [])]
         return list.length ? list : undefined
@@ -29,6 +33,7 @@ export const ComposeButton = ({
             <Component
                 colors={buttonColors}
                 modifiers={modifiers}
+                contentPadding={BUTTON_PADDING}
                 enabled={!disabled && !loading}
                 onClick={onPress}
             >
