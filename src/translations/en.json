@@ -290,7 +290,7 @@
 		"redo": "Redo",
 		"try_again": "Try again",
 		"restore": "Restore",
-		"dont_update": "Don't update",
+		"dont_update": "Skip",
 		"update_once": "Update once",
 		"update_always": "Always update",
 		"move": "Move to",

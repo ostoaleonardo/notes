@@ -275,7 +275,7 @@
 		"redo": "やり直す",
 		"try_again": "再試行",
 		"restore": "復元",
-		"dont_update": "更新しない",
+		"dont_update": "スキップ",
 		"update_once": "今回のみ更新",
 		"update_always": "常に更新",
 		"move": "移動先"

@@ -275,7 +275,7 @@
 		"redo": "Wiederholen",
 		"try_again": "Erneut versuchen",
 		"restore": "Wiederherstellen",
-		"dont_update": "Nicht aktualisieren",
+		"dont_update": "Überspringen",
 		"update_once": "Einmal aktualisieren",
 		"update_always": "Immer aktualisieren",
 		"move": "Verschieben nach"

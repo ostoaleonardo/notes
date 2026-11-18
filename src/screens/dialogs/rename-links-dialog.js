@@ -1,16 +1,13 @@
 import { useTranslation } from 'react-i18next'
-import { Column } from '@expo/ui/jetpack-compose'
-import { fillMaxWidth } from '@expo/ui/jetpack-compose/modifiers'
+import { Row } from '@expo/ui/jetpack-compose'
 
 import { Dialog } from '@/ui/dialog'
 import { DialogText } from '@/ui/dialog-text'
 import { FilledButton } from '@/ui/button/filled-button'
 import { OutlinedButton } from '@/ui/button/outlined-button'
+import { TextButton } from '@/ui/button/text-button'
 
 import { SPACING } from '@/shared/constants/theme'
-
-const COLUMN_MODIFIERS = [fillMaxWidth()]
-const COLUMN_ARRANGEMENT = { spacedBy: SPACING.sm }
 
 export const RenameLinksDialog = ({
     visible,
@@ -24,28 +21,38 @@ export const RenameLinksDialog = ({
 
     return (
         <Dialog
-            title={t('message.wiki_links.rename.title')}
-            visible={visible}
             locked={busy}
+            visible={visible}
             onDismiss={onDismiss}
-        >
-            <Column
-                modifiers={COLUMN_MODIFIERS}
-                verticalArrangement={COLUMN_ARRANGEMENT}
-            >
-                <DialogText tone='secondary'>
-                    {t('message.wiki_links.rename.message', { count: linksCount })}
-                </DialogText>
-                <OutlinedButton disabled={busy} onPress={onDismiss}>
+            title={t('message.wiki_links.rename.title')}
+            dismiss={(
+                <TextButton
+                    disabled={busy}
+                    onPress={onDismiss}
+                >
                     {t('button.dont_update')}
-                </OutlinedButton>
-                <OutlinedButton disabled={busy} onPress={onConfirmOnce}>
-                    {t('button.update_once')}
-                </OutlinedButton>
-                <FilledButton loading={busy} onPress={onConfirmAlways}>
-                    {t('button.update_always')}
-                </FilledButton>
-            </Column>
+                </TextButton>
+            )}
+            confirm={(
+                <Row horizontalArrangement={{ spacedBy: SPACING.sm }}>
+                    <OutlinedButton
+                        disabled={busy}
+                        onPress={onConfirmOnce}
+                    >
+                        {t('button.update_once')}
+                    </OutlinedButton>
+                    <FilledButton
+                        loading={busy}
+                        onPress={onConfirmAlways}
+                    >
+                        {t('button.update_always')}
+                    </FilledButton>
+                </Row>
+            )}
+        >
+            <DialogText tone='secondary'>
+                {t('message.wiki_links.rename.message', { count: linksCount })}
+            </DialogText>
         </Dialog>
     )
 }

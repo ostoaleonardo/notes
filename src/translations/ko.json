@@ -275,7 +275,7 @@
 		"redo": "다시 실행",
 		"try_again": "다시 시도",
 		"restore": "복원",
-		"dont_update": "업데이트 안 함",
+		"dont_update": "건너뛰기",
 		"update_once": "한 번만 업데이트",
 		"update_always": "항상 업데이트",
 		"move": "이동할 위치"
