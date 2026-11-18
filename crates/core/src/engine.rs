@@ -19,12 +19,12 @@ pub struct Engine {
 }
 
 impl Engine {
-	pub fn new(database_path: impl Into<PathBuf>, locale_tag: &str) -> Self {
-		Self {
+	pub fn new(database_path: impl Into<PathBuf>, locale_tag: &str) -> Result<Self> {
+		Ok(Self {
 			database_path: database_path.into(),
 			locale_tag: locale_tag.to_string(),
-			sort_keys: SortKeys::new(locale_tag),
-		}
+			sort_keys: SortKeys::new(locale_tag)?,
+		})
 	}
 
 	pub fn plan(&self, repository_id: &str, scanned: &[ScannedFile]) -> Result<ReconcilePlan> {

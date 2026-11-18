@@ -1,7 +1,7 @@
 use engine::collation::SortKeys;
 
 fn sorted(locale: &str, words: &[&str]) -> Vec<String> {
-	let keys = SortKeys::new(locale);
+	let keys = SortKeys::new(locale).unwrap();
 	let mut items: Vec<_> = words.iter().map(|w| (keys.key(w), w.to_string())).collect();
 	items.sort();
 	items.into_iter().map(|(_, word)| word).collect()

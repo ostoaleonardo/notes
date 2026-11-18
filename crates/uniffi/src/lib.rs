@@ -16,10 +16,10 @@ pub struct Engine {
 #[uniffi::export]
 impl Engine {
 	#[uniffi::constructor]
-	pub fn new(database_path: String, locale_tag: String) -> Self {
-		Self {
-			inner: engine::engine::Engine::new(database_path, &locale_tag),
-		}
+	pub fn new(database_path: String, locale_tag: String) -> Result<Self, EngineError> {
+		Ok(Self {
+			inner: engine::engine::Engine::new(database_path, &locale_tag)?,
+		})
 	}
 
 	pub fn plan(

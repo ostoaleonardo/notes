@@ -63,12 +63,25 @@ pub enum Value {
 #[uniffi(flat_error)]
 pub enum EngineError {
 	#[error("{0}")]
-	Failed(String),
+	Busy(String),
+	#[error("{0}")]
+	Database(String),
+	#[error("{0}")]
+	Collation(String),
+	#[error("{0}")]
+	Io(String),
 }
 
 impl From<engine::error::Error> for EngineError {
 	fn from(error: engine::error::Error) -> Self {
-		Self::Failed(error.to_string())
+		let message = error.to_string();
+
+		match error {
+			engine::error::Error::Busy(_) => Self::Busy(message),
+			engine::error::Error::Database(_) => Self::Database(message),
+			engine::error::Error::Collation { .. } => Self::Collation(message),
+			engine::error::Error::Io(_) => Self::Io(message),
+		}
 	}
 }
 

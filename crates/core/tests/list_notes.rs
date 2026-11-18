@@ -21,7 +21,7 @@ fn input(name: &str, text: &str) -> NoteInput {
 
 fn listed(inputs: Vec<NoteInput>, repositories: &[&str]) -> Vec<Value> {
 	let directory = TempDir::new().unwrap();
-	let engine = Engine::new(directory.path().join("index.db"), "en");
+	let engine = Engine::new(directory.path().join("index.db"), "en").unwrap();
 
 	engine.write(REPOSITORY, inputs).unwrap();
 

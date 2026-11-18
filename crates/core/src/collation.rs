@@ -2,19 +2,25 @@ use icu_collator::options::CollatorOptions;
 use icu_collator::{Collator, CollatorBorrowed, CollatorPreferences};
 use icu_locale::Locale;
 
+use crate::error::{Error, Result};
+
 pub struct SortKeys {
 	collator: CollatorBorrowed<'static>,
 }
 
 impl SortKeys {
-	pub fn new(locale_tag: &str) -> Self {
+	pub fn new(locale_tag: &str) -> Result<Self> {
 		let locale: Locale = locale_tag.parse().unwrap_or(Locale::UNKNOWN);
 		let collator = Collator::try_new(
 			CollatorPreferences::from(&locale),
 			CollatorOptions::default(),
 		)
-		.expect("compiled collation data");
-		Self { collator }
+		.map_err(|error| Error::Collation {
+			locale: locale_tag.to_string(),
+			reason: error.to_string(),
+		})?;
+
+		Ok(Self { collator })
 	}
 
 	pub fn key(&self, text: &str) -> String {

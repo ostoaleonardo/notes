@@ -22,7 +22,7 @@ fn scanned(filename: &str, modified: i64, size: i64) -> ScannedFile {
 }
 
 fn engine(directory: &TempDir, locale: &str) -> Engine {
-	Engine::new(directory.path().join("index.db"), locale)
+	Engine::new(directory.path().join("index.db"), locale).unwrap()
 }
 
 fn count(engine: &Engine, table: &str) -> i64 {
