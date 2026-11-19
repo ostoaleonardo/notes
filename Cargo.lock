@@ -261,6 +261,7 @@ name = "engine-bindings"
 version = "0.1.0"
 dependencies = [
  "engine",
+ "serde_json",
  "thiserror",
  "uniffi",
 ]

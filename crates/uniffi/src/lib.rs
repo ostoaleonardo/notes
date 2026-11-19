@@ -4,8 +4,11 @@ mod records;
 mod source;
 
 use engine::source::FsSource;
-use records::{EngineError, IndexedNotesReport, NoteRefsReport, QueryReport, SyncReport, Value};
-use source::{ForeignSource, NoteSource, ProgressListener};
+use records::{
+	DecomposedRecord, EngineError, IndexedNotesReport, NoteFieldsRecord, NoteRefsReport,
+	QueryReport, SaveReport, SyncReport, Value,
+};
+use source::{ForeignSink, ForeignSource, NoteSink, NoteSource, ProgressListener};
 use std::collections::HashSet;
 use std::sync::Arc;
 
@@ -56,6 +59,49 @@ impl Engine {
 			.into())
 	}
 
+	pub fn save_note(
+		&self,
+		repository_id: String,
+		sink: Arc<dyn NoteSink>,
+		filename: String,
+		text: String,
+		expected_modified: Option<i64>,
+	) -> Result<SaveReport, EngineError> {
+		let sink = ForeignSink::new(sink);
+
+		Ok(self
+			.inner
+			.save_note(&repository_id, &sink, &filename, &text, expected_modified)?
+			.into())
+	}
+
+	pub fn rename_note(
+		&self,
+		repository_id: String,
+		sink: Arc<dyn NoteSink>,
+		from: String,
+		to: String,
+		text: String,
+	) -> Result<SaveReport, EngineError> {
+		let sink = ForeignSink::new(sink);
+
+		Ok(self
+			.inner
+			.rename_note(&repository_id, &sink, &from, &to, &text)?
+			.into())
+	}
+
+	pub fn delete_note(
+		&self,
+		repository_id: String,
+		sink: Arc<dyn NoteSink>,
+		filename: String,
+	) -> Result<(), EngineError> {
+		let sink = ForeignSink::new(sink);
+
+		Ok(self.inner.delete_note(&repository_id, &sink, &filename)?)
+	}
+
 	pub fn indexed_notes(&self) -> Result<IndexedNotesReport, EngineError> {
 		Ok(self.inner.indexed_notes()?.into())
 	}
@@ -96,4 +142,14 @@ impl Engine {
 			.inner
 			.prune(&keep.into_iter().collect::<HashSet<_>>())?)
 	}
+}
+
+#[uniffi::export]
+pub fn compose_note(fields: NoteFieldsRecord, body: String) -> Result<String, EngineError> {
+	Ok(engine::syntax::compose(&fields.try_into()?, &body))
+}
+
+#[uniffi::export]
+pub fn decompose_note(content: String) -> DecomposedRecord {
+	engine::syntax::decompose(&content).into()
 }

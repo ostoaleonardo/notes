@@ -2,10 +2,10 @@ use super::NoteSource;
 use super::constants::{HIDDEN_PREFIX, NOTE_EXTENSION};
 use super::uri::encode;
 use crate::error::Result;
-use crate::model::SourceFile;
+use crate::model::{FileStamp, SourceFile};
 use rayon::prelude::*;
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::time::UNIX_EPOCH;
 
 pub struct FsSource {
@@ -26,23 +26,13 @@ impl FsSource {
 			return None;
 		}
 
-		let metadata = fs::metadata(self.root.join(&name)).ok()?;
-
-		if metadata.is_dir() {
-			return None;
-		}
-
-		let modified = metadata
-			.modified()
-			.ok()
-			.and_then(|time| time.duration_since(UNIX_EPOCH).ok())
-			.map_or(0, |elapsed| elapsed.as_millis() as i64);
+		let stamp = stamp_of(&self.root, &self.uri_prefix, &name)?;
 
 		Some(SourceFile {
-			uri: format!("{}{}", self.uri_prefix, encode(&name)),
+			uri: stamp.uri,
 			filename: name,
-			modified,
-			size: metadata.len() as i64,
+			modified: stamp.modified,
+			size: stamp.size,
 		})
 	}
 }
@@ -69,6 +59,26 @@ impl NoteSource for FsSource {
 			})
 			.collect())
 	}
+}
+
+pub fn stamp_of(root: &Path, uri_prefix: &str, filename: &str) -> Option<FileStamp> {
+	let metadata = fs::metadata(root.join(filename)).ok()?;
+
+	if metadata.is_dir() {
+		return None;
+	}
+
+	let modified = metadata
+		.modified()
+		.ok()
+		.and_then(|time| time.duration_since(UNIX_EPOCH).ok())
+		.map_or(0, |elapsed| elapsed.as_millis() as i64);
+
+	Some(FileStamp {
+		uri: format!("{uri_prefix}{}", encode(filename)),
+		modified,
+		size: metadata.len() as i64,
+	})
 }
 
 fn is_note(name: &str) -> bool {

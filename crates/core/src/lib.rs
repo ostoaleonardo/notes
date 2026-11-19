@@ -4,6 +4,7 @@ pub mod error;
 pub mod index;
 pub mod model;
 pub mod reconcile;
+mod save;
 pub mod source;
 mod sync;
 pub mod syntax;

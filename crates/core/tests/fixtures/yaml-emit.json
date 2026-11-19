@@ -1,0 +1,189 @@
+[
+	{
+		"value": {
+			"tags": [
+				"personal",
+				"work"
+			]
+		},
+		"expected": "tags:\n  - personal\n  - work\n"
+	},
+	{
+		"value": {
+			"tags": [
+				"a: b",
+				"has \"quotes\"",
+				"it's",
+				"a #b",
+				"#lead",
+				"x/y"
+			]
+		},
+		"expected": "tags:\n  - 'a: b'\n  - has \"quotes\"\n  - it's\n  - 'a #b'\n  - '#lead'\n  - x/y\n"
+	},
+	{
+		"value": {
+			"author": "Ana",
+			"rating": 5,
+			"ratio": 1.5,
+			"done": true,
+			"none": null
+		},
+		"expected": "author: Ana\nrating: 5\nratio: 1.5\ndone: true\nnone: null\n"
+	},
+	{
+		"value": {
+			"due": "2026-10-04",
+			"at": "2026-10-04T09:30"
+		},
+		"expected": "due: 2026-10-04\nat: 2026-10-04T09:30\n"
+	},
+	{
+		"value": {
+			"aliases": [
+				"Alias",
+				"Other name"
+			],
+			"tags": [
+				"a"
+			]
+		},
+		"expected": "aliases:\n  - Alias\n  - Other name\ntags:\n  - a\n"
+	},
+	{
+		"value": {
+			"text": "two words",
+			"url": "https://example.com/a?b=1",
+			"time": "10:30"
+		},
+		"expected": "text: two words\nurl: https://example.com/a?b=1\ntime: 10:30\n"
+	},
+	{
+		"value": {
+			"numeric": "123",
+			"boolish": "true",
+			"nullish": "null",
+			"tilde": "~",
+			"float": "1.5",
+			"exp": "1e3"
+		},
+		"expected": "numeric: '123'\nboolish: 'true'\nnullish: 'null'\ntilde: '~'\nfloat: '1.5'\nexp: '1e3'\n"
+	},
+	{
+		"value": {
+			"empty": "",
+			"space": " lead",
+			"trail": "trail ",
+			"colon": "end:"
+		},
+		"expected": "empty: ''\nspace: ' lead'\ntrail: 'trail '\ncolon: 'end:'\n"
+	},
+	{
+		"value": {
+			"dash": "-a",
+			"question": "?a",
+			"bracket": "[a]",
+			"brace": "{a}",
+			"star": "*a",
+			"amp": "&a",
+			"bang": "!a",
+			"pct": "%a",
+			"at": "@a",
+			"tick": "`a"
+		},
+		"expected": "dash: -a\nquestion: ?a\nbracket: '[a]'\nbrace: '{a}'\nstar: '*a'\namp: '&a'\nbang: '!a'\npct: '%a'\nat: '@a'\ntick: '`a'\n"
+	},
+	{
+		"value": {
+			"nested": {
+				"a": 1,
+				"b": {
+					"c": "deep",
+					"d": [
+						1,
+						2
+					]
+				}
+			}
+		},
+		"expected": "nested:\n  a: 1\n  b:\n    c: deep\n    d:\n      - 1\n      - 2\n"
+	},
+	{
+		"value": {
+			"list": [
+				{
+					"name": "x",
+					"value": 1
+				},
+				{
+					"name": "y",
+					"value": 2
+				}
+			]
+		},
+		"expected": "list:\n  - name: x\n    value: 1\n  - name: y\n    value: 2\n"
+	},
+	{
+		"value": {
+			"emptyList": [],
+			"emptyMap": {}
+		},
+		"expected": "emptyList: []\nemptyMap: {}\n"
+	},
+	{
+		"value": {
+			"unicode": "Año ñandú",
+			"emoji": "ok 🙂",
+			"japanese": "日本語"
+		},
+		"expected": "unicode: Año ñandú\nemoji: ok 🙂\njapanese: 日本語\n"
+	},
+	{
+		"value": {
+			"123": "num key",
+			"key with space": "v",
+			"a:b": "v"
+		},
+		"expected": "'123': num key\nkey with space: v\na:b: v\n"
+	},
+	{
+		"value": {
+			"multi": "line one\nline two"
+		},
+		"expected": "multi: |-\n  line one\n  line two\n"
+	},
+	{
+		"value": {
+			"quote": "say \"hi\"",
+			"apostrophe": "it's",
+			"both": "it's \"x\""
+		},
+		"expected": "quote: say \"hi\"\napostrophe: it's\nboth: it's \"x\"\n"
+	},
+	{
+		"value": {
+			"listOfLists": [
+				[
+					1,
+					2
+				],
+				[
+					3
+				]
+			]
+		},
+		"expected": "listOfLists:\n  - - 1\n    - 2\n  - - 3\n"
+	},
+	{
+		"value": {
+			"mixed": [
+				1,
+				"two",
+				true,
+				null,
+				"x: y"
+			]
+		},
+		"expected": "mixed:\n  - 1\n  - two\n  - true\n  - null\n  - 'x: y'\n"
+	}
+]

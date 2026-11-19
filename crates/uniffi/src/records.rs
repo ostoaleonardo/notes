@@ -1,4 +1,5 @@
 use engine::model;
+use engine::syntax::{Decomposed, NoteFields};
 
 #[derive(uniffi::Record)]
 pub struct SourceRecord {
@@ -6,6 +7,37 @@ pub struct SourceRecord {
 	pub filename: String,
 	pub modified: i64,
 	pub size: i64,
+}
+
+#[derive(uniffi::Record)]
+pub struct FileStampRecord {
+	pub uri: String,
+	pub modified: i64,
+	pub size: i64,
+}
+
+#[derive(uniffi::Enum)]
+pub enum SaveReport {
+	Saved { stamp: FileStampRecord },
+	Conflict { disk_modified: i64 },
+	Missing,
+}
+
+#[derive(uniffi::Record)]
+pub struct NoteFieldsRecord {
+	pub tags: Vec<String>,
+	pub properties_json: String,
+	pub invalid_frontmatter: Option<String>,
+	pub raw_frontmatter: Option<String>,
+}
+
+#[derive(uniffi::Record)]
+pub struct DecomposedRecord {
+	pub body: String,
+	pub tags: Option<Vec<String>>,
+	pub properties_json: Option<String>,
+	pub invalid_frontmatter: Option<String>,
+	pub raw_frontmatter: Option<String>,
 }
 
 #[derive(uniffi::Record)]
@@ -177,6 +209,74 @@ impl From<model::SyncStats> for SyncReport {
 			read_ms: stats.read_ms,
 			parse_ms: stats.parse_ms,
 			write_ms: stats.write_ms,
+		}
+	}
+}
+
+impl From<model::FileStamp> for FileStampRecord {
+	fn from(stamp: model::FileStamp) -> Self {
+		Self {
+			uri: stamp.uri,
+			modified: stamp.modified,
+			size: stamp.size,
+		}
+	}
+}
+
+impl From<FileStampRecord> for model::FileStamp {
+	fn from(record: FileStampRecord) -> Self {
+		Self {
+			uri: record.uri,
+			modified: record.modified,
+			size: record.size,
+		}
+	}
+}
+
+impl From<model::SaveOutcome> for SaveReport {
+	fn from(outcome: model::SaveOutcome) -> Self {
+		match outcome {
+			model::SaveOutcome::Saved(stamp) => Self::Saved {
+				stamp: stamp.into(),
+			},
+			model::SaveOutcome::Conflict { disk_modified } => Self::Conflict { disk_modified },
+			model::SaveOutcome::Missing => Self::Missing,
+		}
+	}
+}
+
+impl TryFrom<NoteFieldsRecord> for NoteFields {
+	type Error = EngineError;
+
+	fn try_from(record: NoteFieldsRecord) -> Result<Self, Self::Error> {
+		let properties = match serde_json::from_str(&record.properties_json) {
+			Ok(serde_json::Value::Object(map)) => map,
+			_ => {
+				return Err(EngineError::Io(
+					"properties must be a json object".to_string(),
+				));
+			}
+		};
+
+		Ok(Self {
+			tags: record.tags,
+			properties,
+			invalid_frontmatter: record.invalid_frontmatter,
+			raw_frontmatter: record.raw_frontmatter,
+		})
+	}
+}
+
+impl From<Decomposed> for DecomposedRecord {
+	fn from(parts: Decomposed) -> Self {
+		Self {
+			body: parts.body,
+			tags: parts.tags,
+			properties_json: parts
+				.properties
+				.map(|map| serde_json::Value::Object(map).to_string()),
+			invalid_frontmatter: parts.invalid_frontmatter,
+			raw_frontmatter: parts.raw_frontmatter,
 		}
 	}
 }

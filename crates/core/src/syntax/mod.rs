@@ -1,11 +1,14 @@
 mod code;
+mod compose;
 mod constants;
 mod frontmatter;
 mod link_name;
 mod links;
 mod patterns;
 mod tags;
+mod yaml_emit;
 
+pub use compose::{Decomposed, NoteFields, compose, decompose};
 pub use link_name::normalize;
 
 use crate::model::{ParsedNote, Tag};

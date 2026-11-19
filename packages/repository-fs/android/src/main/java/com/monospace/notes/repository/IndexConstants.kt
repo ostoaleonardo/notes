@@ -34,3 +34,26 @@ internal object IndexedKeys {
   const val FILENAMES = "filenames"
   const val MODIFIED = "modified"
 }
+
+internal object SaveKeys {
+  const val STATUS = "status"
+  const val URI = "uri"
+  const val MODIFIED = "modified"
+  const val SIZE = "size"
+  const val DISK_MODIFIED = "diskModified"
+  const val SAVED = "saved"
+  const val CONFLICT = "conflict"
+  const val MISSING = "missing"
+}
+
+internal object DecomposedKeys {
+  const val BODY = "body"
+  const val TAGS = "tags"
+  const val PROPERTIES_JSON = "propertiesJson"
+  const val INVALID_FRONTMATTER = "invalidFrontmatter"
+  const val RAW_FRONTMATTER = "rawFrontmatter"
+}
+
+internal const val WRITE_ATTEMPTS = 3
+internal const val MARKDOWN_MIME_TYPE = "text/markdown"
+internal const val WRITE_TRUNCATE_MODE = "wt"

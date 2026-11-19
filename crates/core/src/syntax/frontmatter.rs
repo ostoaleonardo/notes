@@ -58,6 +58,15 @@ pub fn properties(mapping: &Mapping) -> Vec<Property> {
 		.collect()
 }
 
+pub fn json_properties(mapping: &Mapping) -> serde_json::Map<String, serde_json::Value> {
+	mapping
+		.iter()
+		.filter_map(|(key, value)| Some((scalar_text(key)?, value)))
+		.filter(|(key, _)| !TAG_KEYS.contains(&key.as_str()))
+		.map(|(key, value)| (key, to_json(value)))
+		.collect()
+}
+
 fn to_json(value: &Value) -> serde_json::Value {
 	match value {
 		Value::Null => serde_json::Value::Null,

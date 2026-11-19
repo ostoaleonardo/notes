@@ -19,6 +19,9 @@ import expo.modules.kotlin.functions.Coroutine
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import java.io.File
+import uniffi.engine.NoteFieldsRecord
+import uniffi.engine.composeNote
+import uniffi.engine.decomposeNote
 import java.nio.file.Files
 import java.nio.file.attribute.BasicFileAttributes
 import kotlinx.coroutines.CoroutineDispatcher
@@ -113,6 +116,36 @@ class RepositoryFsModule : Module() {
       }
     }
 
+    AsyncFunction("saveNote") Coroutine { repositoryId: String, directoryUri: String, filename: String, text: String, expectedModified: Double? ->
+      withContext(Dispatchers.IO) {
+        openEngine(context).use { engine ->
+          saveReportToMap(engine.saveNote(repositoryId, noteSinkFor(context, directoryUri), filename, text, expectedModified?.toLong()))
+        }
+      }
+    }
+
+    AsyncFunction("renameNote") Coroutine { repositoryId: String, directoryUri: String, from: String, to: String, text: String ->
+      withContext(Dispatchers.IO) {
+        openEngine(context).use { engine ->
+          saveReportToMap(engine.renameNote(repositoryId, noteSinkFor(context, directoryUri), from, to, text))
+        }
+      }
+    }
+
+    AsyncFunction("deleteNote") Coroutine { repositoryId: String, directoryUri: String, filename: String ->
+      withContext(Dispatchers.IO) {
+        openEngine(context).use { it.deleteNote(repositoryId, noteSinkFor(context, directoryUri), filename) }
+      }
+    }
+
+    Function("composeNote") { tags: List<String>, propertiesJson: String, invalidFrontmatter: String?, rawFrontmatter: String?, body: String ->
+      composeNote(NoteFieldsRecord(tags, propertiesJson, invalidFrontmatter, rawFrontmatter), body)
+    }
+
+    Function("decomposeNote") { content: String ->
+      decomposeNoteToMap(decomposeNote(content))
+    }
+
     AsyncFunction("listIndexedNotes") Coroutine { ->
       indexLock.withLock {
         withContext(Dispatchers.IO) { openEngine(context).use(::listIndexed) }
@@ -180,7 +213,7 @@ private fun granted(info: PackageInfo): List<String> {
 private fun hasDirectAccess(): Boolean =
   Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()
 
-private fun documentIdOf(context: Context, uri: Uri): String = if (DocumentsContract.isDocumentUri(context, uri)) {
+internal fun documentIdOf(context: Context, uri: Uri): String = if (DocumentsContract.isDocumentUri(context, uri)) {
   DocumentsContract.getDocumentId(uri)
 } else {
   DocumentsContract.getTreeDocumentId(uri)
@@ -265,7 +298,7 @@ private fun entryOf(uri: Uri, documentId: String, name: String, isDirectory: Boo
   )
 }
 
-private fun findChild(context: Context, uri: Uri, name: String): Map<String, Any?>? {
+internal fun findChild(context: Context, uri: Uri, name: String): Map<String, Any?>? {
   val childId = documentIdOf(context, uri) + PATH_SEPARATOR + name
   val file = directFile(context, uri)?.let { File(it, name) }
 

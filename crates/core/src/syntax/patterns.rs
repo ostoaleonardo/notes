@@ -39,3 +39,12 @@ pub static WIKI_LINK: LazyLock<Regex> =
 
 pub static MARKDOWN_LINK: LazyLock<Regex> =
 	LazyLock::new(|| compile(r"\[([^\]]*)\]\(wikilink://([^)]+)\)"));
+
+pub static YAML_NON_STRING: LazyLock<Regex> = LazyLock::new(|| {
+	compile(concat!(
+		r"^(?:~|null|Null|NULL|true|True|TRUE|false|False|FALSE",
+		r"|[-+]?[0-9]+|0o[0-7]+|0x[0-9a-fA-F]+",
+		r"|[-+]?(?:\.[0-9]+|[0-9]+(?:\.[0-9]*)?)(?:[eE][-+]?[0-9]+)?",
+		r"|[-+]?\.(?:inf|Inf|INF)|\.(?:nan|NaN|NAN))$"
+	))
+});

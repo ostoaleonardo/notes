@@ -142,3 +142,17 @@ pub struct QueryResult {
 	pub columns: Vec<String>,
 	pub rows: Vec<Vec<Value>>,
 }
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct FileStamp {
+	pub uri: String,
+	pub modified: i64,
+	pub size: i64,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum SaveOutcome {
+	Saved(FileStamp),
+	Conflict { disk_modified: i64 },
+	Missing,
+}
