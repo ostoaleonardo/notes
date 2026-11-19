@@ -19,7 +19,9 @@ import expo.modules.kotlin.functions.Coroutine
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import java.io.File
+import uniffi.engine.Engine
 import uniffi.engine.NoteFieldsRecord
+import uniffi.engine.SaveRequestRecord
 import uniffi.engine.composeNote
 import uniffi.engine.decomposeNote
 import java.nio.file.Files
@@ -39,6 +41,12 @@ class RepositoryFsModule : Module() {
 
   private val readDispatcher = Dispatchers.IO.limitedParallelism(READ_PARALLELISM)
   private val indexLock = Mutex()
+  private val engineLock = Any()
+  private var sharedEngine: Engine? = null
+
+  private fun engine(): Engine = synchronized(engineLock) {
+    sharedEngine ?: openEngine(context).also { sharedEngine = it }
+  }
 
   override fun definition() = ModuleDefinition {
     Name("RepositoryFs")
@@ -92,7 +100,7 @@ class RepositoryFsModule : Module() {
     AsyncFunction("indexRepository") Coroutine { repositoryId: String, uri: String ->
       indexLock.withLock {
         withContext(Dispatchers.IO) {
-          openEngine(context).use { engine ->
+          engine().let { engine ->
             val stats = indexRepository(context, engine, repositoryId, uri, readDispatcher) { done, total ->
               sendEvent(
                 INDEX_PROGRESS_EVENT,
@@ -118,15 +126,23 @@ class RepositoryFsModule : Module() {
 
     AsyncFunction("saveNote") Coroutine { repositoryId: String, directoryUri: String, filename: String, text: String, expectedModified: Double? ->
       withContext(Dispatchers.IO) {
-        openEngine(context).use { engine ->
+        engine().let { engine ->
           saveReportToMap(engine.saveNote(repositoryId, noteSinkFor(context, directoryUri), filename, text, expectedModified?.toLong()))
         }
       }
     }
 
+    AsyncFunction("saveNotes") Coroutine { repositoryId: String, directoryUri: String, filenames: List<String>, texts: List<String>, expectedModified: List<Double?> ->
+      withContext(Dispatchers.IO) {
+        val requests = filenames.indices.map { SaveRequestRecord(filenames[it], texts[it], expectedModified[it]?.toLong()) }
+
+        engine().saveNotes(repositoryId, noteSinkFor(context, directoryUri), requests).map(::saveReportToMap)
+      }
+    }
+
     AsyncFunction("renameNote") Coroutine { repositoryId: String, directoryUri: String, from: String, to: String, text: String ->
       withContext(Dispatchers.IO) {
-        openEngine(context).use { engine ->
+        engine().let { engine ->
           saveReportToMap(engine.renameNote(repositoryId, noteSinkFor(context, directoryUri), from, to, text))
         }
       }
@@ -134,7 +150,7 @@ class RepositoryFsModule : Module() {
 
     AsyncFunction("deleteNote") Coroutine { repositoryId: String, directoryUri: String, filename: String ->
       withContext(Dispatchers.IO) {
-        openEngine(context).use { it.deleteNote(repositoryId, noteSinkFor(context, directoryUri), filename) }
+        engine().deleteNote(repositoryId, noteSinkFor(context, directoryUri), filename)
       }
     }
 
@@ -148,39 +164,39 @@ class RepositoryFsModule : Module() {
 
     AsyncFunction("listIndexedNotes") Coroutine { ->
       indexLock.withLock {
-        withContext(Dispatchers.IO) { openEngine(context).use(::listIndexed) }
+        withContext(Dispatchers.IO) { listIndexed(engine()) }
       }
     }
 
     AsyncFunction("queryIndex") Coroutine { sql: String, params: List<Any?> ->
-      withContext(Dispatchers.IO) { openEngine(context).use { runQuery(it, sql, params) } }
+      withContext(Dispatchers.IO) { runQuery(engine(), sql, params) }
     }
 
     AsyncFunction("findBacklinkCandidates") Coroutine { names: List<String>, markdownTarget: String ->
       withContext(Dispatchers.IO) {
-        openEngine(context).use { toRefs(it.backlinkCandidates(names, markdownTarget)) }
+        toRefs(engine().backlinkCandidates(names, markdownTarget))
       }
     }
 
     AsyncFunction("findMentionCandidates") Coroutine { terms: List<String> ->
       withContext(Dispatchers.IO) {
-        openEngine(context).use { engine -> engine.mentionCandidates(terms)?.let(::toRefs) }
+        engine().let { engine -> engine.mentionCandidates(terms)?.let(::toRefs) }
       }
     }
 
     AsyncFunction("listNoteMetadata") Coroutine { repositoryIds: List<String> ->
-      withContext(Dispatchers.IO) { openEngine(context).use { it.listNotes(repositoryIds) } }
+      withContext(Dispatchers.IO) { engine().listNotes(repositoryIds) }
     }
 
     AsyncFunction("pruneRepositoryIndex") Coroutine { keepIds: List<String> ->
       indexLock.withLock {
-        withContext(Dispatchers.IO) { openEngine(context).use { it.prune(keepIds) } }
+        withContext(Dispatchers.IO) { engine().prune(keepIds) }
       }
     }
 
     AsyncFunction("deleteRepositoryIndex") Coroutine { repositoryId: String ->
       indexLock.withLock {
-        withContext(Dispatchers.IO) { openEngine(context).use { it.deleteRepository(repositoryId) } }
+        withContext(Dispatchers.IO) { engine().deleteRepository(repositoryId) }
       }
     }
   }

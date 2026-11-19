@@ -21,6 +21,14 @@ pub enum SaveReport {
 	Saved { stamp: FileStampRecord },
 	Conflict { disk_modified: i64 },
 	Missing,
+	Failed { message: String },
+}
+
+#[derive(uniffi::Record)]
+pub struct SaveRequestRecord {
+	pub filename: String,
+	pub text: String,
+	pub expected_modified: Option<i64>,
 }
 
 #[derive(uniffi::Record)]
@@ -241,6 +249,7 @@ impl From<model::SaveOutcome> for SaveReport {
 			},
 			model::SaveOutcome::Conflict { disk_modified } => Self::Conflict { disk_modified },
 			model::SaveOutcome::Missing => Self::Missing,
+			model::SaveOutcome::Failed(message) => Self::Failed { message },
 		}
 	}
 }
@@ -277,6 +286,16 @@ impl From<Decomposed> for DecomposedRecord {
 				.map(|map| serde_json::Value::Object(map).to_string()),
 			invalid_frontmatter: parts.invalid_frontmatter,
 			raw_frontmatter: parts.raw_frontmatter,
+		}
+	}
+}
+
+impl From<SaveRequestRecord> for model::SaveRequest {
+	fn from(record: SaveRequestRecord) -> Self {
+		Self {
+			filename: record.filename,
+			text: record.text,
+			expected_modified: record.expected_modified,
 		}
 	}
 }

@@ -1,10 +1,10 @@
 use crate::collation::SortKeys;
 use crate::error::Result;
-use crate::index::Index;
 use crate::model::{
 	BatchStats, IndexedNote, IndexedNotes, NoteInput, NoteRef, QueryResult, ReconcilePlan,
 	ScannedFile, Value,
 };
+use crate::pool::{Lease, Pool};
 use crate::reconcile;
 use crate::syntax::parse_note;
 use rayon::prelude::*;
@@ -13,16 +13,14 @@ use std::path::PathBuf;
 use std::time::Instant;
 
 pub struct Engine {
-	database_path: PathBuf,
-	locale_tag: String,
+	pool: Pool,
 	sort_keys: SortKeys,
 }
 
 impl Engine {
 	pub fn new(database_path: impl Into<PathBuf>, locale_tag: &str) -> Result<Self> {
 		Ok(Self {
-			database_path: database_path.into(),
-			locale_tag: locale_tag.to_string(),
+			pool: Pool::new(database_path.into(), locale_tag.to_string()),
 			sort_keys: SortKeys::new(locale_tag)?,
 		})
 	}
@@ -93,8 +91,8 @@ impl Engine {
 		self.open()?.prune(keep)
 	}
 
-	fn open(&self) -> Result<Index> {
-		Index::open(&self.database_path, &self.locale_tag)
+	fn open(&self) -> Result<Lease<'_>> {
+		self.pool.lease()
 	}
 }
 

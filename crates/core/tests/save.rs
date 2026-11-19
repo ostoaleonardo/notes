@@ -1,5 +1,5 @@
 use engine::engine::Engine;
-use engine::model::{SaveOutcome, Value};
+use engine::model::{SaveOutcome, SaveRequest, Value};
 use engine::source::{FsSink, FsSource, NoteSink};
 use std::fs;
 use tempfile::TempDir;
@@ -213,4 +213,94 @@ fn keeps_the_index_consistent_with_a_later_scan() {
 	let stats = vault.engine.sync("repo", &source, &|_, _| {}).unwrap();
 
 	assert_eq!((stats.added, stats.updated, stats.unchanged), (0, 0, 2));
+}
+
+struct FailingSink {
+	inner: FsSink,
+	failing: &'static str,
+}
+
+impl NoteSink for FailingSink {
+	fn stat(&self, filename: &str) -> engine::error::Result<Option<engine::model::FileStamp>> {
+		self.inner.stat(filename)
+	}
+
+	fn write(&self, filename: &str, text: &str) -> engine::error::Result<engine::model::FileStamp> {
+		if filename == self.failing {
+			return Err(std::io::Error::other("disk full").into());
+		}
+
+		self.inner.write(filename, text)
+	}
+
+	fn delete(&self, filename: &str) -> engine::error::Result<()> {
+		self.inner.delete(filename)
+	}
+}
+
+fn request(filename: &str, text: &str, expected: Option<i64>) -> SaveRequest {
+	SaveRequest {
+		filename: filename.to_string(),
+		text: text.to_string(),
+		expected_modified: expected,
+	}
+}
+
+#[test]
+fn saves_several_notes_with_one_call() {
+	let vault = Vault::new();
+
+	let outcomes = vault
+		.engine
+		.save_notes(
+			"repo",
+			&vault.sink,
+			&[request("a.md", "a", None), request("b.md", "b", None)],
+		)
+		.unwrap();
+
+	assert!(outcomes.iter().all(|o| matches!(o, SaveOutcome::Saved(_))));
+	assert_eq!(vault.indexed(), ["a.md", "b.md"]);
+}
+
+#[test]
+fn reports_a_conflict_without_blocking_the_other_notes_of_the_batch() {
+	let vault = Vault::new();
+	saved(vault.save("a.md", "a", None));
+
+	let outcomes = vault
+		.engine
+		.save_notes(
+			"repo",
+			&vault.sink,
+			&[request("a.md", "mine", Some(1)), request("b.md", "b", None)],
+		)
+		.unwrap();
+
+	assert!(matches!(outcomes[0], SaveOutcome::Conflict { .. }));
+	assert!(matches!(outcomes[1], SaveOutcome::Saved(_)));
+	assert_eq!(fs::read_to_string(vault.notes().join("a.md")).unwrap(), "a");
+	assert_eq!(vault.indexed(), ["a.md", "b.md"]);
+}
+
+#[test]
+fn reports_a_failed_write_and_still_indexes_the_rest() {
+	let vault = Vault::new();
+	let sink = FailingSink {
+		inner: FsSink::new(vault.notes(), URI_PREFIX),
+		failing: "bad.md",
+	};
+
+	let outcomes = vault
+		.engine
+		.save_notes(
+			"repo",
+			&sink,
+			&[request("bad.md", "x", None), request("ok.md", "y", None)],
+		)
+		.unwrap();
+
+	assert!(matches!(&outcomes[0], SaveOutcome::Failed(message) if message.contains("disk full")));
+	assert!(matches!(outcomes[1], SaveOutcome::Saved(_)));
+	assert_eq!(vault.indexed(), ["ok.md"]);
 }

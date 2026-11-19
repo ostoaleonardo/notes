@@ -155,4 +155,12 @@ pub enum SaveOutcome {
 	Saved(FileStamp),
 	Conflict { disk_modified: i64 },
 	Missing,
+	Failed(String),
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SaveRequest {
+	pub filename: String,
+	pub text: String,
+	pub expected_modified: Option<i64>,
 }

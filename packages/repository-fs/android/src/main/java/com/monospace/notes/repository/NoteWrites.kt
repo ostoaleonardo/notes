@@ -62,6 +62,7 @@ internal fun saveReportToMap(report: SaveReport): Map<String, Any> = when (repor
   )
   is SaveReport.Conflict -> mapOf(SaveKeys.STATUS to SaveKeys.CONFLICT, SaveKeys.DISK_MODIFIED to report.diskModified)
   is SaveReport.Missing -> mapOf(SaveKeys.STATUS to SaveKeys.MISSING)
+  is SaveReport.Failed -> mapOf(SaveKeys.STATUS to SaveKeys.FAILED)
 }
 
 internal fun decomposeNoteToMap(parts: DecomposedRecord): Map<String, Any?> = mapOf(

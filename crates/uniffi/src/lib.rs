@@ -6,7 +6,7 @@ mod source;
 use engine::source::FsSource;
 use records::{
 	DecomposedRecord, EngineError, IndexedNotesReport, NoteFieldsRecord, NoteRefsReport,
-	QueryReport, SaveReport, SyncReport, Value,
+	QueryReport, SaveReport, SaveRequestRecord, SyncReport, Value,
 };
 use source::{ForeignSink, ForeignSource, NoteSink, NoteSource, ProgressListener};
 use std::collections::HashSet;
@@ -73,6 +73,23 @@ impl Engine {
 			.inner
 			.save_note(&repository_id, &sink, &filename, &text, expected_modified)?
 			.into())
+	}
+
+	pub fn save_notes(
+		&self,
+		repository_id: String,
+		sink: Arc<dyn NoteSink>,
+		requests: Vec<SaveRequestRecord>,
+	) -> Result<Vec<SaveReport>, EngineError> {
+		let sink = ForeignSink::new(sink);
+		let requests: Vec<_> = requests.into_iter().map(Into::into).collect();
+
+		Ok(self
+			.inner
+			.save_notes(&repository_id, &sink, &requests)?
+			.into_iter()
+			.map(Into::into)
+			.collect())
 	}
 
 	pub fn rename_note(

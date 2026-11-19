@@ -44,6 +44,7 @@ internal object SaveKeys {
   const val SAVED = "saved"
   const val CONFLICT = "conflict"
   const val MISSING = "missing"
+  const val FAILED = "failed"
 }
 
 internal object DecomposedKeys {
