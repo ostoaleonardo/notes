@@ -1,52 +1,13 @@
-import { memo, useCallback } from 'react'
-import { View } from 'react-native'
+import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ListSheet } from '@/ui/modal/list-sheet'
-import { ListItem } from '@/ui/list-item'
-import { useTheme } from '@/ui/hooks/use-theme'
+import { CollapsibleTreeSheet } from '@/shared/components/collapsible-tree-sheet'
 
 import { useRepositories } from '@/shared/hooks/use-repositories'
 
-import { Check } from '@/ui/icons/check'
-import { Folder } from '@/icons/folder'
+import { markChildren } from '@/shared/utils/collapsible-tree'
 
-import { SPACING, ICON_SIZE } from '@/shared/constants/theme'
 import { TEST_IDS } from '@/shared/constants/test-ids'
-
-const MoveNoteItem = memo(({
-    item,
-    current,
-    onPress
-}) => {
-    const { colors } = useTheme()
-
-    return (
-        <ListItem
-            uppercase={false}
-            background={colors.surfaceVariant}
-            title={item.alias}
-            onPress={current ? undefined : () => onPress(item.id)}
-            testID={TEST_IDS.MOVE_TARGET}
-            leftContent={(
-                <View style={{ marginLeft: item.depth * SPACING.lg }}>
-                    <Folder
-                        width={ICON_SIZE.xxl}
-                        height={ICON_SIZE.xxl}
-                        color={colors.onBackground}
-                    />
-                </View>
-            )}
-            rightContent={current ? (
-                <Check
-                    width={ICON_SIZE.xxl}
-                    height={ICON_SIZE.xxl}
-                    color={colors.onBackground}
-                />
-            ) : undefined}
-        />
-    )
-})
 
 export const MoveNoteSheet = memo(({
     sheet,
@@ -56,23 +17,22 @@ export const MoveNoteSheet = memo(({
     const { t } = useTranslation()
     const { activeRepositoryTree } = useRepositories()
 
-    const renderItem = useCallback(({ item }) => (
-        <MoveNoteItem
-            item={item}
-            current={item.id === repositoryId}
-            onPress={onSelect}
-        />
-    ), [repositoryId, onSelect])
+    const items = useMemo(() => markChildren(activeRepositoryTree).map((folder) => ({
+        key: folder.id,
+        title: folder.alias,
+        depth: folder.depth,
+        hasChildren: folder.hasChildren,
+        disabled: folder.id === repositoryId,
+        emphasized: folder.id === repositoryId
+    })), [activeRepositoryTree, repositoryId])
 
     return (
-        <ListSheet
+        <CollapsibleTreeSheet
             sheet={sheet}
+            items={items}
+            onSelect={onSelect}
             title={t('button.move')}
-            data={activeRepositoryTree}
-            renderItem={renderItem}
-            keyExtractor={getFolderKey}
+            itemTestID={TEST_IDS.MOVE_TARGET}
         />
     )
 })
-
-const getFolderKey = (item) => item.id

@@ -25,6 +25,7 @@ export const ListItem = ({
     onPress,
     background,
     testID,
+    emphasized = false,
     uppercase = true
 }) => {
     const { colors } = useTheme()
@@ -70,9 +71,9 @@ export const ListItem = ({
     )
 
     const titleStyle = useMemo(() => ({
-        fontFamily: FONTS.azeretLight,
+        fontFamily: emphasized ? FONTS.azeretMedium : FONTS.azeretLight,
         fontSize: TYPOGRAPHY_SIZE_VARIANTS.bodyMedium
-    }), [])
+    }), [emphasized])
 
     const descriptionStyle = useMemo(() => ({
         fontFamily: FONTS.azeretLight,

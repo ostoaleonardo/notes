@@ -4,6 +4,7 @@ import { BLOCK_ANCHOR_PREFIX } from '@/shared/constants/block-refs'
 import { WHITESPACE_RUN_PATTERN } from '@/shared/constants/markdown-patterns'
 
 import { getCodeRanges, isInsideRanges, mapOutsideCode } from '@/shared/utils/outside-code'
+import { getVisibleTree, markChildren } from '@/shared/utils/collapsible-tree'
 import { resolveWikiLink } from '@/shared/utils/wiki-links'
 
 export const normalizeHeading = (text) => (
@@ -50,25 +51,12 @@ export const buildOutline = (headings) => {
         return item
     })
 
-    return items.map((item, position) => ({
-        ...item,
-        hasChildren: items[position + 1]?.depth > item.depth
-    }))
+    return markChildren(items)
 }
 
-export const getVisibleOutline = (items, collapsed) => {
-    const visible = []
-    let hiddenFrom = null
+const getHeadingKey = (item) => item.index
 
-    for (const item of items) {
-        if (hiddenFrom !== null && item.depth > hiddenFrom) continue
-
-        hiddenFrom = collapsed.has(item.index) ? item.depth : null
-        visible.push(item)
-    }
-
-    return visible
-}
+export const getVisibleOutline = (items, collapsed) => getVisibleTree(items, collapsed, getHeadingKey)
 
 export const findHeadingRenames = (previous, next) => {
     const before = findHeadings(previous)
