@@ -179,6 +179,38 @@ describe('save note', () => {
 })
 
 describe('update note', () => {
+    test('saves updates of the same note one after another', async () => {
+        files.set('Groceries.md', '---\ntags: []\n---\n\nold content')
+        const { result } = await renderNotesHook([MOCK_GROCERIES_NOTE])
+        const order = []
+        let releaseFirst
+
+        mockFileStorage.saveNoteFile.mockImplementationOnce(() => new Promise((resolve) => {
+            order.push('first-start')
+            releaseFirst = () => {
+                order.push('first-end')
+                resolve({ fileUri: 'file:///repo/Groceries.md', updatedAt: 3000 })
+            }
+        }))
+        mockFileStorage.saveNoteFile.mockImplementationOnce(async () => {
+            order.push('second-start')
+            return { fileUri: 'file:///repo/Groceries.md', updatedAt: 4000 }
+        })
+
+        let first
+        let second
+
+        await act(async () => {
+            first = result.current.updateNote({ ...MOCK_GROCERIES_NOTE, note: 'one' })
+            second = result.current.updateNote({ ...MOCK_GROCERIES_NOTE, note: 'two' })
+            await new Promise((resolve) => setTimeout(resolve, 0))
+            releaseFirst()
+            await Promise.all([first, second])
+        })
+
+        expect(order).toEqual(['first-start', 'first-end', 'second-start'])
+    })
+
     test('rewrites the file content without renaming when the title is unchanged', async () => {
         files.set('Groceries.md', '---\ntags: []\n---\n\nold content')
         const { result } = await renderNotesHook([MOCK_GROCERIES_NOTE])

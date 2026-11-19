@@ -34,6 +34,8 @@ export function useNotesController() {
         loading
     } = useContext(NoteContext)
 
+    const saveQueues = useRef(new Map())
+    const savedStamps = useRef(new Map())
     const latestRef = useRef(null)
     latestRef.current = { notes, notesByPath, notePaths, repositories, activeRepository }
 
@@ -98,9 +100,37 @@ export function useNotesController() {
             }))
         )
 
-        const updateNote = async (note) => {
-            const { notesByPath: byPath, repositories: currentRepositories } = latest()
-            const previous = byPath.get(note.path)
+        const enqueueSave = (key, task) => {
+            const queues = saveQueues.current
+            const next = (queues.get(key) ?? Promise.resolve()).catch(() => {}).then(task)
+
+            queues.set(key, next)
+            next.catch(() => {}).finally(() => {
+                if (queues.get(key) === next) queues.delete(key)
+            })
+
+            return next
+        }
+
+        const latestPrevious = (path) => {
+            const previous = latest().notesByPath.get(path)
+            const stamp = savedStamps.current.get(path)
+
+            if (previous && stamp && stamp.updatedAt >= previous.updatedAt) return { ...previous, ...stamp }
+
+            return previous
+        }
+
+        const rememberStamp = (oldPath, newPath, times) => {
+            savedStamps.current.delete(oldPath)
+            savedStamps.current.set(newPath, { updatedAt: times.updatedAt, fileUri: times.fileUri })
+        }
+
+        const updateNote = (note) => enqueueSave(note.path, () => runUpdateNote(note))
+
+        const runUpdateNote = async (note) => {
+            const { repositories: currentRepositories } = latest()
+            const previous = latestPrevious(note.path)
             if (!previous) return saveNote(note, note.repositoryId)
 
             const uri = getRepositoryUri(currentRepositories, note.repositoryId)
@@ -144,6 +174,7 @@ export function useNotesController() {
                         { note, previous, uri, plan, repositories: currentRepositories },
                         fileStorage
                     )
+                    rememberStamp(previous.path, path, times)
                     setNotes((prev) => prev.map((n) => (n.path === path ? { ...n, ...merged, ...times } : n)))
 
                     return { path, filename, ...times }
