@@ -216,6 +216,20 @@ const saveNoteFile = async ({ repositoryId, directoryUri, filename, content, exp
     )
 )
 
+const saveNoteFiles = async ({ repositoryId, directoryUri, files }) => {
+    const results = await RepositoryFs.saveNotes(
+        repositoryId,
+        directoryUri,
+        files.map((file) => file.filename),
+        files.map((file) => file.content),
+        files.map((file) => file.expectedModified ?? null)
+    )
+
+    return results.map((result) => (
+        result.status === SAVE_STATUS.SAVED ? { fileUri: result.uri, updatedAt: result.modified } : null
+    ))
+}
+
 const saveRenamedNoteFile = async ({ repositoryId, directoryUri, from, to, content }) => (
     toSavedFile(await RepositoryFs.renameNote(repositoryId, directoryUri, from, to, content), to)
 )
@@ -448,6 +462,7 @@ export const fileStorage = {
     deleteRepositoryIndex,
     writeNoteFile,
     saveNoteFile,
+    saveNoteFiles,
     saveRenamedNoteFile,
     renameNoteFile,
     deleteNoteFile,

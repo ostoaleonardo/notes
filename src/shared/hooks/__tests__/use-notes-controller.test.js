@@ -20,6 +20,7 @@ const mockFileStorage = {
     fileExists: jest.fn(),
     writeNoteFile: jest.fn(),
     saveNoteFile: jest.fn(),
+    saveNoteFiles: jest.fn(),
     saveRenamedNoteFile: jest.fn(),
     deleteNoteFile: jest.fn(),
     findFile: jest.fn(),
@@ -106,6 +107,10 @@ beforeEach(() => {
         files.set(filename, content)
         return { fileUri: `file:///repo/${filename}`, updatedAt: 2000 }
     })
+    mockFileStorage.saveNoteFiles.mockImplementation(async ({ files: batch }) => batch.map((file) => {
+        files.set(file.filename, file.content)
+        return { fileUri: `file:///repo/${file.filename}`, updatedAt: 2000 }
+    }))
     mockFileStorage.saveRenamedNoteFile.mockImplementation(async ({ from, to, content }) => {
         files.delete(from)
         files.set(to, content)

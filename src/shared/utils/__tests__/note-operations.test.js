@@ -384,6 +384,44 @@ describe('plan wiki link rename', () => {
         expect(changedNotes[0].note).toBe('see [[New]]')
     })
 
+    test('only rewrites the notes whose bodies were loaded as linking candidates', () => {
+        const resident = { ...other, note: 'see [[Old]] too' }
+        const bodies = new Map([[linker.path, 'see [[Old]]']])
+        const rewrite = jest.fn((content) => content.replace('[[Old]]', '[[New]]'))
+
+        const { changedNotes } = planWikiLinkRename({
+            targetPath: target.path,
+            newTitle: 'New',
+            notes: [target, linker, resident],
+            notePaths: new Map(),
+            rewrite,
+            bodies
+        })
+
+        expect(rewrite).toHaveBeenCalledTimes(1)
+        expect(changedNotes.map((note) => note.path)).toEqual([linker.path])
+    })
+
+    test('the returned renamer skips the notes whose bodies were not loaded', () => {
+        const resident = { ...other, note: 'see [[Old]] too' }
+        const bodies = new Map([[linker.path, 'see [[Old]]']])
+        const rewrite = jest.fn((content) => content)
+
+        const { renameNote } = planWikiLinkRename({
+            targetPath: target.path,
+            newTitle: 'New',
+            notes: [target, linker, resident],
+            notePaths: new Map(),
+            rewrite,
+            bodies
+        })
+
+        rewrite.mockClear()
+
+        expect(renameNote(resident)).toBe(resident)
+        expect(rewrite).not.toHaveBeenCalled()
+    })
+
     test('leaves a note without a loaded body untouched', () => {
         const bodyless = { ...other, note: undefined }
 
@@ -410,12 +448,17 @@ describe('plan wiki link rename', () => {
 })
 
 describe('write changed notes', () => {
+    const stampsFor = (files) => files.map((file) => ({
+        fileUri: `${REPO_URI}/${file.filename}`,
+        updatedAt: 5
+    }))
+
     test('writes each note into its own repository and skips unknown ones', async () => {
         const storage = createFakeStorage()
-        const writes = []
-        storage.saveNoteFile = async ({ directoryUri, filename }) => {
-            writes.push([directoryUri, filename])
-            return { fileUri: `${directoryUri}/${filename}`, updatedAt: 5 }
+        const calls = []
+        storage.saveNoteFiles = async ({ directoryUri, files }) => {
+            calls.push([directoryUri, files.map((file) => file.filename)])
+            return stampsFor(files)
         }
 
         await writeChangedNotes(
@@ -427,15 +470,35 @@ describe('write changed notes', () => {
             storage
         )
 
-        expect(writes).toEqual([[REPO_URI, 'A.md']])
+        expect(calls).toEqual([[REPO_URI, ['A.md']]])
+    })
+
+    test('saves every note of a repository with one call', async () => {
+        const storage = createFakeStorage()
+        const calls = []
+        storage.saveNoteFiles = async ({ files }) => {
+            calls.push(files.length)
+            return stampsFor(files)
+        }
+
+        await writeChangedNotes(
+            [
+                { repositoryId: 'repo-1', filename: 'A.md', note: 'a', tags: [] },
+                { repositoryId: 'repo-1', filename: 'B.md', note: 'b', tags: [] }
+            ],
+            REPOSITORIES,
+            storage
+        )
+
+        expect(calls).toEqual([2])
     })
 
     test('passes the known modified time so outside edits are not overwritten', async () => {
         const storage = createFakeStorage()
         const expected = []
-        storage.saveNoteFile = async ({ expectedModified }) => {
-            expected.push(expectedModified)
-            return { fileUri: 'u', updatedAt: 5 }
+        storage.saveNoteFiles = async ({ files }) => {
+            expected.push(...files.map((file) => file.expectedModified))
+            return stampsFor(files)
         }
 
         await writeChangedNotes(
@@ -449,6 +512,7 @@ describe('write changed notes', () => {
 
     test('returns the new location and time of every saved note', async () => {
         const storage = createFakeStorage()
+        storage.saveNoteFiles = async ({ files }) => stampsFor(files)
 
         const { failed, saved } = await writeChangedNotes(
             [{ path: 'p/A', repositoryId: 'repo-1', filename: 'A.md', note: 'a', tags: [] }],
@@ -457,33 +521,16 @@ describe('write changed notes', () => {
         )
 
         expect(failed).toEqual([])
-        expect(saved.get('p/A')).toEqual({ fileUri: `${REPO_URI}/A.md`, updatedAt: 20 })
+        expect(saved.get('p/A')).toEqual({ fileUri: `${REPO_URI}/A.md`, updatedAt: 5 })
     })
 
-    test('reports notes whose file changed outside the app', async () => {
+    test('reports the notes whose file could not be saved and keeps the others', async () => {
         const storage = createFakeStorage()
-        storage.saveNoteFile = async () => { throw new Error('conflict') }
+        storage.saveNoteFiles = async ({ files }) => files.map((file, index) => (
+            index === 0 ? null : { fileUri: `${REPO_URI}/${file.filename}`, updatedAt: 5 }
+        ))
 
         const { failed, saved } = await writeChangedNotes(
-            [{ path: 'p/A', repositoryId: 'repo-1', filename: 'A.md', updatedAt: 1, note: 'a' }],
-            REPOSITORIES,
-            storage
-        )
-
-        expect(failed).toEqual(['p/A'])
-        expect(saved.size).toBe(0)
-    })
-
-    test('keeps writing the remaining notes and reports the ones that failed', async () => {
-        const storage = createFakeStorage()
-        const writes = []
-        storage.saveNoteFile = async ({ filename }) => {
-            if (filename === 'A.md') throw new Error('disk full')
-            writes.push(filename)
-            return { fileUri: 'u', updatedAt: 5 }
-        }
-
-        const { failed } = await writeChangedNotes(
             [
                 { path: 'p/A', repositoryId: 'repo-1', filename: 'A.md', note: 'a', tags: [] },
                 { path: 'p/B', repositoryId: 'repo-1', filename: 'B.md', note: 'b', tags: [] }
@@ -493,7 +540,24 @@ describe('write changed notes', () => {
         )
 
         expect(failed).toEqual(['p/A'])
-        expect(writes).toEqual(['B.md'])
+        expect([...saved.keys()]).toEqual(['p/B'])
+    })
+
+    test('reports every note of the repository when the whole call fails', async () => {
+        const storage = createFakeStorage()
+        storage.saveNoteFiles = async () => { throw new Error('bridge down') }
+
+        const { failed, saved } = await writeChangedNotes(
+            [
+                { path: 'p/A', repositoryId: 'repo-1', filename: 'A.md', note: 'a', tags: [] },
+                { path: 'p/B', repositoryId: 'repo-1', filename: 'B.md', note: 'b', tags: [] }
+            ],
+            REPOSITORIES,
+            storage
+        )
+
+        expect(failed).toEqual(['p/A', 'p/B'])
+        expect(saved.size).toBe(0)
     })
 })
 

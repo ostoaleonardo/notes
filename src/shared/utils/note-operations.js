@@ -184,7 +184,7 @@ export const planWikiLinkRename = ({
     bodies
 }) => {
     const renameNote = (note) => {
-        if (note.path === targetPath) return note
+        if (note.path === targetPath || (bodies && !bodies.has(note.path))) return note
 
         const body = bodyOf(note, bodies)
         const renamed = rewrite(body)
@@ -198,26 +198,50 @@ export const planWikiLinkRename = ({
     return { renameNote, changedNotes }
 }
 
-export const writeChangedNotes = async (changedNotes, repositories, fileStorage) => {
-    const failed = []
-    const saved = new Map()
+const groupByRepository = (notes) => {
+    const groups = new Map()
 
-    for (const note of changedNotes) {
-        const uri = getRepositoryUri(repositories, note.repositoryId)
-        if (!uri) continue
+    notes.forEach((note) => {
+        if (groups.has(note.repositoryId)) groups.get(note.repositoryId).push(note)
+        else groups.set(note.repositoryId, [note])
+    })
 
-        try {
-            saved.set(note.path, await fileStorage.saveNoteFile({
-                repositoryId: note.repositoryId,
-                directoryUri: uri,
+    return groups
+}
+
+const saveRepositoryGroup = async ({ repositoryId, uri, notes }, fileStorage) => {
+    try {
+        const stamps = await fileStorage.saveNoteFiles({
+            repositoryId,
+            directoryUri: uri,
+            files: notes.map((note) => ({
                 filename: note.filename,
                 content: buildFileContent(note),
                 expectedModified: note.updatedAt
             }))
-        } catch (error) {
-            logError(LOG_MESSAGES.WRITING_RENAMED_LINKS_IN(note.filename), error)
-            failed.push(note.path)
-        }
+        })
+
+        return stamps
+    } catch (error) {
+        logError(LOG_MESSAGES.WRITING_RENAMED_LINKS_IN(repositoryId), error)
+        return notes.map(() => null)
+    }
+}
+
+export const writeChangedNotes = async (changedNotes, repositories, fileStorage) => {
+    const failed = []
+    const saved = new Map()
+
+    for (const [repositoryId, notes] of groupByRepository(changedNotes)) {
+        const uri = getRepositoryUri(repositories, repositoryId)
+        if (!uri) continue
+
+        const stamps = await saveRepositoryGroup({ repositoryId, uri, notes }, fileStorage)
+
+        notes.forEach((note, index) => {
+            if (stamps[index]) saved.set(note.path, stamps[index])
+            else failed.push(note.path)
+        })
     }
 
     return { failed, saved }

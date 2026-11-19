@@ -13,6 +13,7 @@ const REPOSITORIES = [
 const mockFileStorage = {
     fileExists: jest.fn(),
     saveNoteFile: jest.fn(),
+    saveNoteFiles: jest.fn(),
     getExistingFile: jest.fn(),
     moveNote: jest.fn(),
     renameVersions: jest.fn(async () => {})
@@ -98,6 +99,10 @@ describe('move note', () => {
             updatedAt: 99
         })
         mockFileStorage.getExistingFile.mockReturnValue({ lastModified: 5 })
+        mockFileStorage.saveNoteFiles.mockImplementation(async ({ files }) => files.map((file) => {
+            written.set(file.filename, file.content)
+            return { fileUri: 'file:///x', updatedAt: 6 }
+        }))
         mockFileStorage.saveNoteFile.mockImplementation(async ({ filename, content }) => {
             written.set(filename, content)
             return { fileUri: 'file:///x', updatedAt: 6 }
