@@ -1,7 +1,7 @@
 import { getUniqueFilenameBy, isTitleTakenBy } from '@/shared/utils/note-filename'
 import { logError } from '@/shared/utils/log-error'
 import { buildNotePath, buildRepositoryPaths } from '@/shared/utils/note-path'
-import { buildNoteFileContent, decomposeNoteFileContent } from '@/shared/utils/frontmatter'
+import { composeNoteFile, decomposeNoteFile } from '@/shared/utils/note-file-content'
 import { commitNoteVersion } from '@/shared/utils/note-versions'
 import { planExternalSync, toSyncShape } from '@/shared/utils/external-note-sync'
 import { renameWikiLinksForNote } from '@/shared/utils/wiki-links'
@@ -16,7 +16,7 @@ export const getRepositoryUri = (repositories, repositoryId) => (
     repositories.find((repository) => repository.id === repositoryId)?.uri
 )
 
-export const buildFileContent = (note, body = note.note) => buildNoteFileContent(note, body)
+export const buildFileContent = (note, body = note.note) => composeNoteFile(note, body)
 
 const nameExistsIn = (fileStorage, uri) => (name) => fileStorage.fileExists(uri, name)
 
@@ -92,7 +92,7 @@ export const planNoteUpdate = ({ note, previous, uri }, fileStorage) => {
 }
 
 const readDiskNote = async (existing) => {
-    const { body, ...fields } = decomposeNoteFileContent(await existing.text())
+    const { body, ...fields } = decomposeNoteFile(await existing.text())
     return toSyncShape({ note: body, ...fields })
 }
 

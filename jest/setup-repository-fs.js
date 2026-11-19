@@ -31,6 +31,25 @@ jest.mock('repository-fs', () => {
                 }
             },
             readTextFiles,
+            composeNote: (tags, propertiesJson, invalidFrontmatter, rawFrontmatter, body) => {
+                const { buildNoteFileContent } = require('@/shared/utils/frontmatter')
+
+                return buildNoteFileContent({
+                    tags,
+                    properties: JSON.parse(propertiesJson),
+                    invalidFrontmatter,
+                    rawFrontmatter
+                }, body)
+            },
+            decomposeNote: (content) => {
+                const { decomposeNoteFileContent } = require('@/shared/utils/frontmatter')
+                const parts = decomposeNoteFileContent(content)
+
+                return {
+                    ...parts,
+                    propertiesJson: parts.properties == null ? null : JSON.stringify(parts.properties)
+                }
+            },
             indexRepository: async () => ({}),
             pruneRepositoryIndex: async () => {},
             deleteRepositoryIndex: async () => {},
