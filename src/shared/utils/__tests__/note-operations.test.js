@@ -45,6 +45,15 @@ const createFakeStorage = (initialFiles = {}) => {
             files.set(filename, content)
             return { creationTime: 10, lastModified: 20 }
         },
+        saveNoteFile: async ({ filename, content }) => {
+            files.set(filename, content)
+            return { fileUri: `${REPO_URI}/${filename}`, updatedAt: 20 }
+        },
+        saveRenamedNoteFile: async ({ from, to, content }) => {
+            files.delete(from)
+            files.set(to, content)
+            return { fileUri: `${REPO_URI}/${to}`, updatedAt: 20 }
+        },
         renameVersions: async (_root, from, to) => {
             calls.versions.push([from, to])
         }
@@ -194,7 +203,11 @@ describe('persist note update', () => {
         expect(storage.files.has('Groceries.md')).toBe(false)
         expect(storage.calls.versions).toEqual([['Groceries.md', 'Shopping.md']])
         expect(parseFrontmatter(storage.files.get('Shopping.md')).body).toBe('bread')
-        expect(times).toEqual({ createdAt: 10, updatedAt: 20, merged: null })
+        expect(times).toEqual({
+            fileUri: `${REPO_URI}/Shopping.md`,
+            updatedAt: 20,
+            merged: null
+        })
     })
 
     test('only rewrites the content when the title is unchanged', async () => {

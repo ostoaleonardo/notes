@@ -23,6 +23,7 @@ import {
     REPOSITORY_INDEX_VERSION
 } from '@/shared/constants/file-storage'
 import { MIME_TYPES } from '@/shared/constants/mime-types'
+import { SAVE_CONFLICT_ERROR, SAVE_STATUS } from '@/shared/constants/note-errors'
 import { LOG_MESSAGES } from '@/shared/constants/log-messages'
 import { logError } from './log-error'
 import { bootMark } from './boot-mark'
@@ -197,6 +198,27 @@ const writeNoteFile = (
     writeVerified(file, content)
     return file
 }
+
+const toSavedFile = (result, filename) => {
+    if (result.status === SAVE_STATUS.SAVED) {
+        return { fileUri: result.uri, updatedAt: result.modified }
+    }
+
+    const error = new Error(`saving ${filename} failed: ${result.status}`)
+    error.code = SAVE_CONFLICT_ERROR
+    throw error
+}
+
+const saveNoteFile = async ({ repositoryId, directoryUri, filename, content, expectedModified }) => (
+    toSavedFile(
+        await RepositoryFs.saveNote(repositoryId, directoryUri, filename, content, expectedModified),
+        filename
+    )
+)
+
+const saveRenamedNoteFile = async ({ repositoryId, directoryUri, from, to, content }) => (
+    toSavedFile(await RepositoryFs.renameNote(repositoryId, directoryUri, from, to, content), to)
+)
 
 const renameNoteFile = async (directoryUri, oldFilename, newFilename) => {
     const file = findFile(directoryUri, oldFilename)
@@ -411,6 +433,8 @@ export const fileStorage = {
     writeRepositoryIndex,
     deleteRepositoryIndex,
     writeNoteFile,
+    saveNoteFile,
+    saveRenamedNoteFile,
     renameNoteFile,
     deleteNoteFile,
     clearRepository,

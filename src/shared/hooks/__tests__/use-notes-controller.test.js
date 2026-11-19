@@ -19,6 +19,8 @@ import { parseFrontmatter } from '@/shared/utils/frontmatter'
 const mockFileStorage = {
     fileExists: jest.fn(),
     writeNoteFile: jest.fn(),
+    saveNoteFile: jest.fn(),
+    saveRenamedNoteFile: jest.fn(),
     deleteNoteFile: jest.fn(),
     findFile: jest.fn(),
     getExistingFile: jest.fn(),
@@ -99,6 +101,15 @@ beforeEach(() => {
     mockFileStorage.writeNoteFile.mockImplementation((_uri, filename, content) => {
         files.set(filename, content)
         return { name: filename, creationTime: 1000, lastModified: 2000 }
+    })
+    mockFileStorage.saveNoteFile.mockImplementation(async ({ filename, content }) => {
+        files.set(filename, content)
+        return { fileUri: `file:///repo/${filename}`, updatedAt: 2000 }
+    })
+    mockFileStorage.saveRenamedNoteFile.mockImplementation(async ({ from, to, content }) => {
+        files.delete(from)
+        files.set(to, content)
+        return { fileUri: `file:///repo/${to}`, updatedAt: 2000 }
     })
     mockFileStorage.deleteNoteFile.mockImplementation((_uri, filename) => {
         files.delete(filename)
@@ -215,7 +226,8 @@ describe('update note', () => {
         expect(updated).toEqual({
             path: 'repo-1::New title.md',
             filename: 'New title.md',
-            createdAt: 1000,
+            fileUri: 'file:///repo/New title.md',
+            createdAt: 1,
             updatedAt: 2000
         })
         expect(mockFileStorage.renameVersions).toHaveBeenCalledWith(

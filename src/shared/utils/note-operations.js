@@ -147,22 +147,33 @@ export const persistNoteUpdate = async ({ note, previous, uri, plan, repositorie
         rawFrontmatter: merged ? merged.rawFrontmatter : note.rawFrontmatter ?? previous.rawFrontmatter
     })
 
-    if (!renamed) {
-        return { ...readFileTimes(fileStorage.writeNoteFile(uri, filename, content, undefined, existing)), merged }
+    const saved = renamed
+        ? await fileStorage.saveRenamedNoteFile({
+            repositoryId: note.repositoryId,
+            directoryUri: uri,
+            from: previous.filename,
+            to: filename,
+            content
+        })
+        : await fileStorage.saveNoteFile({
+            repositoryId: note.repositoryId,
+            directoryUri: uri,
+            filename,
+            content,
+            expectedModified: existing.lastModified
+        })
+
+    if (renamed) {
+        const { rootUri, folderPath } = getVersionLocation(repositories, note.repositoryId)
+
+        await fileStorage.renameVersions(
+            rootUri,
+            buildVersionKey(folderPath, previous.filename),
+            buildVersionKey(folderPath, filename)
+        )
     }
 
-    const times = readFileTimes(fileStorage.writeNoteFile(uri, filename, content, undefined, null))
-    existing.delete()
-
-    const { rootUri, folderPath } = getVersionLocation(repositories, note.repositoryId)
-
-    await fileStorage.renameVersions(
-        rootUri,
-        buildVersionKey(folderPath, previous.filename),
-        buildVersionKey(folderPath, filename)
-    )
-
-    return { ...times, merged }
+    return { ...saved, createdAt: previous.createdAt, merged }
 }
 
 export const planWikiLinkRename = ({
