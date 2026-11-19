@@ -79,10 +79,10 @@ describe('get repository uri', () => {
 })
 
 describe('create note', () => {
-    test('writes the file and returns the record with its location and times', () => {
+    test('writes the file and returns the record with its location and times', async () => {
         const storage = createFakeStorage()
 
-        const { record, result } = createNote(
+        const { record, result } = await createNote(
             { note: createNoteDraft(), repositoryId: 'repo-1', uri: REPO_URI },
             storage
         )
@@ -90,17 +90,18 @@ describe('create note', () => {
         expect(result).toEqual({
             path: 'repo-1::Groceries.md',
             filename: 'Groceries.md',
-            createdAt: 10,
+            fileUri: `${REPO_URI}/Groceries.md`,
+            createdAt: 20,
             updatedAt: 20
         })
         expect(record.path).toBe('repo-1::Groceries.md')
         expect(parseFrontmatter(storage.files.get('Groceries.md')).body).toBe('milk')
     })
 
-    test('keeps the record in memory only when there is no repository uri', () => {
+    test('keeps the record in memory only when there is no repository uri', async () => {
         const storage = createFakeStorage()
 
-        const { record, result } = createNote(
+        const { record, result } = await createNote(
             { note: createNoteDraft(), repositoryId: 'repo-1', uri: undefined },
             storage
         )
@@ -409,12 +410,15 @@ describe('plan wiki link rename', () => {
 })
 
 describe('write changed notes', () => {
-    test('writes each note into its own repository and skips unknown ones', () => {
+    test('writes each note into its own repository and skips unknown ones', async () => {
         const storage = createFakeStorage()
         const writes = []
-        storage.writeNoteFile = (uri, filename) => writes.push([uri, filename])
+        storage.saveNoteFile = async ({ directoryUri, filename }) => {
+            writes.push([directoryUri, filename])
+            return { fileUri: `${directoryUri}/${filename}`, updatedAt: 5 }
+        }
 
-        writeChangedNotes(
+        await writeChangedNotes(
             [
                 { repositoryId: 'repo-1', filename: 'A.md', note: 'a', tags: [] },
                 { repositoryId: 'missing', filename: 'B.md', note: 'b', tags: [] }
@@ -426,40 +430,60 @@ describe('write changed notes', () => {
         expect(writes).toEqual([[REPO_URI, 'A.md']])
     })
 
-    test('skips and reports notes whose file changed outside the app', () => {
+    test('passes the known modified time so outside edits are not overwritten', async () => {
         const storage = createFakeStorage()
-        const writes = []
-        storage.getExistingFile = () => ({ lastModified: 99 })
-        storage.writeNoteFile = (_uri, filename) => writes.push(filename)
+        const expected = []
+        storage.saveNoteFile = async ({ expectedModified }) => {
+            expected.push(expectedModified)
+            return { fileUri: 'u', updatedAt: 5 }
+        }
 
-        const failed = writeChangedNotes(
-            [
-                {
-                    path: 'p/A',
-                    repositoryId: 'repo-1',
-                    filename: 'A.md',
-                    fileUri: 'u',
-                    updatedAt: 1,
-                    note: 'a'
-                }
-            ],
+        await writeChangedNotes(
+            [{ repositoryId: 'repo-1', filename: 'A.md', updatedAt: 7, note: 'a', tags: [] }],
+            REPOSITORIES,
+            storage
+        )
+
+        expect(expected).toEqual([7])
+    })
+
+    test('returns the new location and time of every saved note', async () => {
+        const storage = createFakeStorage()
+
+        const { failed, saved } = await writeChangedNotes(
+            [{ path: 'p/A', repositoryId: 'repo-1', filename: 'A.md', note: 'a', tags: [] }],
+            REPOSITORIES,
+            storage
+        )
+
+        expect(failed).toEqual([])
+        expect(saved.get('p/A')).toEqual({ fileUri: `${REPO_URI}/A.md`, updatedAt: 20 })
+    })
+
+    test('reports notes whose file changed outside the app', async () => {
+        const storage = createFakeStorage()
+        storage.saveNoteFile = async () => { throw new Error('conflict') }
+
+        const { failed, saved } = await writeChangedNotes(
+            [{ path: 'p/A', repositoryId: 'repo-1', filename: 'A.md', updatedAt: 1, note: 'a' }],
             REPOSITORIES,
             storage
         )
 
         expect(failed).toEqual(['p/A'])
-        expect(writes).toEqual([])
+        expect(saved.size).toBe(0)
     })
 
-    test('keeps writing the remaining notes and reports the ones that failed', () => {
+    test('keeps writing the remaining notes and reports the ones that failed', async () => {
         const storage = createFakeStorage()
         const writes = []
-        storage.writeNoteFile = (_uri, filename) => {
+        storage.saveNoteFile = async ({ filename }) => {
             if (filename === 'A.md') throw new Error('disk full')
             writes.push(filename)
+            return { fileUri: 'u', updatedAt: 5 }
         }
 
-        const failed = writeChangedNotes(
+        const { failed } = await writeChangedNotes(
             [
                 { path: 'p/A', repositoryId: 'repo-1', filename: 'A.md', note: 'a', tags: [] },
                 { path: 'p/B', repositoryId: 'repo-1', filename: 'B.md', note: 'b', tags: [] }
@@ -515,9 +539,8 @@ describe('persist note move', () => {
 
     const createMoveStorage = (destinationNames = []) => ({
         fileExists: jest.fn((_uri, name) => destinationNames.includes(name)),
-        moveNoteFiles: jest.fn(async () => 'Idea.md'),
-        renameVersions: jest.fn(async () => {}),
-        findFile: jest.fn(() => ({ uri: 'file:///root/Child/Idea.md', lastModified: 99 }))
+        moveNote: jest.fn(async () => ({ fileUri: 'file:///root/Child/Idea.md', updatedAt: 99 })),
+        renameVersions: jest.fn(async () => {})
     })
 
     const NOTE = { path: 'root::Idea.md', filename: 'Idea.md', title: 'Idea', repositoryId: 'root' }
@@ -527,7 +550,11 @@ describe('persist note move', () => {
 
         await persistNoteMove({ note: NOTE, destinationId: 'child', repositories: MOVE_REPOSITORIES }, storage)
 
-        expect(storage.moveNoteFiles).toHaveBeenCalledWith('file:///root', 'Idea.md', 'file:///root/Child')
+        expect(storage.moveNote).toHaveBeenCalledWith({
+            source: { repositoryId: 'root', uri: 'file:///root' },
+            destination: { repositoryId: 'child', uri: 'file:///root/Child' },
+            filename: 'Idea.md'
+        })
         expect(storage.renameVersions).toHaveBeenCalledWith('file:///root', 'Idea.md', 'Child/Idea.md')
     })
 
@@ -552,7 +579,7 @@ describe('persist note move', () => {
         await expect(
             persistNoteMove({ note: NOTE, destinationId: 'child', repositories: MOVE_REPOSITORIES }, storage)
         ).rejects.toMatchObject({ code: 'DUPLICATE_TITLE' })
-        expect(storage.moveNoteFiles).not.toHaveBeenCalled()
+        expect(storage.moveNote).not.toHaveBeenCalled()
     })
 
     test('refuses to move a note to a different repository tree', async () => {
@@ -561,7 +588,7 @@ describe('persist note move', () => {
         await expect(
             persistNoteMove({ note: NOTE, destinationId: 'other', repositories: MOVE_REPOSITORIES }, storage)
         ).rejects.toThrow()
-        expect(storage.moveNoteFiles).not.toHaveBeenCalled()
+        expect(storage.moveNote).not.toHaveBeenCalled()
     })
 })
 

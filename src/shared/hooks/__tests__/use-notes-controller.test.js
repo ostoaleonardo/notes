@@ -137,7 +137,8 @@ describe('save note', () => {
         expect(saved).toEqual({
             path: 'repo-1::Groceries.md',
             filename: 'Groceries.md',
-            createdAt: 1000,
+            fileUri: 'file:///repo/Groceries.md',
+            createdAt: 2000,
             updatedAt: 2000
         })
         expect(result.current.notes).toHaveLength(1)
@@ -368,7 +369,8 @@ describe('update note', () => {
         expect(saved).toEqual({
             path: 'repo-1::Untitled.md',
             filename: 'Untitled.md',
-            createdAt: 1000,
+            fileUri: 'file:///repo/Untitled.md',
+            createdAt: 2000,
             updatedAt: 2000
         })
         expect(result.current.notes).toHaveLength(1)

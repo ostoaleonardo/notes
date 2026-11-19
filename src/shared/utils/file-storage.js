@@ -248,6 +248,20 @@ const moveNoteFiles = async (sourceUri, filename, destinationUri) => {
     return target
 }
 
+const moveNote = async ({ source, destination, filename }) => {
+    const content = await findFile(source.uri, filename).text()
+    const saved = await saveNoteFile({
+        repositoryId: destination.repositoryId,
+        directoryUri: destination.uri,
+        filename,
+        content
+    })
+
+    await RepositoryFs.deleteNote(source.repositoryId, source.uri, filename)
+
+    return saved
+}
+
 const readJson = async (directoryUri, filename, fallback) => {
     const file = findFile(directoryUri, filename)
     if (!file) return fallback
@@ -459,5 +473,6 @@ export const fileStorage = {
     getOrCreateVaultTrashFolder,
     getOrCreateNotesFolder,
     moveNoteFiles,
+    moveNote,
     copyImageFile
 }

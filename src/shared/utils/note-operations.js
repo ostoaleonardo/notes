@@ -20,12 +20,6 @@ export const buildFileContent = (note, body = note.note) => buildNoteFileContent
 
 const nameExistsIn = (fileStorage, uri) => (name) => fileStorage.fileExists(uri, name)
 
-const readFileTimes = (file) => ({
-    fileUri: file.uri,
-    createdAt: file.creationTime ?? file.lastModified,
-    updatedAt: file.lastModified
-})
-
 export const withOptimisticUpdate = async (setNotes, { apply, rollback }, persist) => {
     setNotes(apply)
 
@@ -37,7 +31,7 @@ export const withOptimisticUpdate = async (setNotes, { apply, rollback }, persis
     }
 }
 
-export const createNote = ({ note, repositoryId, uri }, fileStorage) => {
+export const createNote = async ({ note, repositoryId, uri }, fileStorage) => {
     if (!uri) {
         return {
             record: { ...note, repositoryId, filename: '', path: '' },
@@ -47,9 +41,13 @@ export const createNote = ({ note, repositoryId, uri }, fileStorage) => {
 
     const filename = getUniqueFilenameBy(nameExistsIn(fileStorage, uri), note.title, null)
     const path = buildNotePath(repositoryId, filename)
-    const times = readFileTimes(
-        fileStorage.writeNoteFile(uri, filename, buildFileContent(note), undefined, null)
-    )
+    const saved = await fileStorage.saveNoteFile({
+        repositoryId,
+        directoryUri: uri,
+        filename,
+        content: buildFileContent(note)
+    })
+    const times = { fileUri: saved.fileUri, createdAt: saved.updatedAt, updatedAt: saved.updatedAt }
 
     return {
         record: { ...note, repositoryId, filename, path, ...times },
@@ -200,29 +198,29 @@ export const planWikiLinkRename = ({
     return { renameNote, changedNotes }
 }
 
-export const writeChangedNotes = (changedNotes, repositories, fileStorage) => {
+export const writeChangedNotes = async (changedNotes, repositories, fileStorage) => {
     const failed = []
+    const saved = new Map()
 
-    changedNotes.forEach((note) => {
+    for (const note of changedNotes) {
         const uri = getRepositoryUri(repositories, note.repositoryId)
-        if (!uri) return
+        if (!uri) continue
 
         try {
-            const existing = note.fileUri ? fileStorage.getExistingFile(note.fileUri) : undefined
-
-            if (existing && existing.lastModified !== note.updatedAt) {
-                failed.push(note.path)
-                return
-            }
-
-            fileStorage.writeNoteFile(uri, note.filename, buildFileContent(note), undefined, existing)
+            saved.set(note.path, await fileStorage.saveNoteFile({
+                repositoryId: note.repositoryId,
+                directoryUri: uri,
+                filename: note.filename,
+                content: buildFileContent(note),
+                expectedModified: note.updatedAt
+            }))
         } catch (error) {
             logError(LOG_MESSAGES.WRITING_RENAMED_LINKS_IN(note.filename), error)
             failed.push(note.path)
         }
-    })
+    }
 
-    return failed
+    return { failed, saved }
 }
 
 export const persistNoteMove = async ({ note, destinationId, repositories }, fileStorage) => {
@@ -241,7 +239,11 @@ export const persistNoteMove = async ({ note, destinationId, repositories }, fil
         throw error
     }
 
-    await fileStorage.moveNoteFiles(sourceUri, note.filename, destinationUri)
+    const saved = await fileStorage.moveNote({
+        source: { repositoryId: note.repositoryId, uri: sourceUri },
+        destination: { repositoryId: destinationId, uri: destinationUri },
+        filename: note.filename
+    })
 
     await fileStorage.renameVersions(
         to.rootUri,
@@ -249,14 +251,12 @@ export const persistNoteMove = async ({ note, destinationId, repositories }, fil
         buildVersionKey(to.folderPath, note.filename)
     )
 
-    const times = readFileTimes(fileStorage.findFile(destinationUri, note.filename))
-
     return {
         repositoryId: destinationId,
         filename: note.filename,
         path: buildNotePath(destinationId, note.filename),
-        fileUri: times.fileUri,
-        updatedAt: times.updatedAt
+        fileUri: saved.fileUri,
+        updatedAt: saved.updatedAt
     }
 }
 

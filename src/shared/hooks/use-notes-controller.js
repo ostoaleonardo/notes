@@ -42,7 +42,7 @@ export function useNotesController() {
 
         const saveNote = async (note, repositoryId = latest().activeRepository?.id) => {
             const uri = getRepositoryUri(latest().repositories, repositoryId)
-            const { record, result } = createNote({ note, repositoryId, uri }, fileStorage)
+            const { record, result } = await createNote({ note, repositoryId, uri }, fileStorage)
 
             setNotes((prev) => [record, ...prev])
 
@@ -50,15 +50,21 @@ export function useNotesController() {
         }
 
         const applyLinkRewrite = async ({ renameNote, changedNotes }) => {
+            const originals = new Map(latest().notes.map((note) => [note.path, note]))
+
             setNotes((prev) => prev.map(renameNote))
 
-            const failed = writeChangedNotes(changedNotes, latest().repositories, fileStorage)
-            if (!failed.length) return
+            const { failed, saved } = await writeChangedNotes(
+                changedNotes,
+                latest().repositories,
+                fileStorage
+            )
 
-            const originals = new Map(latest().notes.map((note) => [note.path, note]))
-            setNotes((prev) => prev.map((note) => (
-                failed.includes(note.path) ? originals.get(note.path) : note
-            )))
+            setNotes((prev) => prev.map((note) => {
+                if (failed.includes(note.path)) return originals.get(note.path)
+
+                return saved.has(note.path) ? { ...note, ...saved.get(note.path) } : note
+            }))
         }
 
         const loadLinkingBodies = async (targetPath, notesSnapshot, snapshotPaths) => {

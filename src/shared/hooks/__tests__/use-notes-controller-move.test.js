@@ -12,10 +12,9 @@ const REPOSITORIES = [
 
 const mockFileStorage = {
     fileExists: jest.fn(),
-    writeNoteFile: jest.fn(),
-    findFile: jest.fn(),
+    saveNoteFile: jest.fn(),
     getExistingFile: jest.fn(),
-    moveNoteFiles: jest.fn(),
+    moveNote: jest.fn(),
     renameVersions: jest.fn(async () => {})
 }
 
@@ -94,12 +93,14 @@ describe('move note', () => {
         jest.clearAllMocks()
         written = new Map()
         mockFileStorage.fileExists.mockReturnValue(false)
-        mockFileStorage.moveNoteFiles.mockResolvedValue('Idea.md')
-        mockFileStorage.findFile.mockReturnValue({ uri: 'file:///root/Child/Idea.md', lastModified: 99 })
+        mockFileStorage.moveNote.mockResolvedValue({
+            fileUri: 'file:///root/Child/Idea.md',
+            updatedAt: 99
+        })
         mockFileStorage.getExistingFile.mockReturnValue({ lastModified: 5 })
-        mockFileStorage.writeNoteFile.mockImplementation((_uri, filename, content) => {
+        mockFileStorage.saveNoteFile.mockImplementation(async ({ filename, content }) => {
             written.set(filename, content)
-            return { uri: 'file:///x', lastModified: 6, creationTime: 1 }
+            return { fileUri: 'file:///x', updatedAt: 6 }
         })
     })
 
@@ -142,7 +143,7 @@ describe('move note', () => {
         })
 
         expect(moved).toBeNull()
-        expect(mockFileStorage.moveNoteFiles).not.toHaveBeenCalled()
+        expect(mockFileStorage.moveNote).not.toHaveBeenCalled()
     })
 
     test('does nothing when the note does not exist', async () => {
@@ -152,11 +153,11 @@ describe('move note', () => {
             await result.current.moveNote('root::ghost.md', 'child')
         })
 
-        expect(mockFileStorage.moveNoteFiles).not.toHaveBeenCalled()
+        expect(mockFileStorage.moveNote).not.toHaveBeenCalled()
     })
 
     test('keeps the note untouched when the file move fails', async () => {
-        mockFileStorage.moveNoteFiles.mockRejectedValueOnce(new Error('move failed'))
+        mockFileStorage.moveNote.mockRejectedValueOnce(new Error('move failed'))
         const { result } = await renderNotesHook([IDEA], new Map([[IDEA.path, '']]))
 
         await act(async () => {
@@ -185,6 +186,6 @@ describe('move note', () => {
             await result.current.moveNote(IDEA.path, 'child')
         })
 
-        expect(mockFileStorage.writeNoteFile).not.toHaveBeenCalled()
+        expect(mockFileStorage.saveNoteFile).not.toHaveBeenCalled()
     })
 })
