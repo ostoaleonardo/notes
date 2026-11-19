@@ -1,6 +1,7 @@
 import { DOM_FONT_SIZE, OPACITY, RADIUS, SPACING, Z_INDEX } from '@/shared/constants/theme'
 import { TRANSPARENT } from '@/shared/constants/themes'
 import { buildBorder } from '@/shared/utils/css-values'
+import { PROPERTY_INPUT_MIN_WIDTH } from '@/features/editor/shared/constants/properties'
 
 export const buildTitleSectionStyle = () => ({
     boxSizing: 'border-box',
@@ -121,6 +122,11 @@ export const buildPropertyValueStyle = () => ({
     minHeight: '32px',
     padding: '5px 0',
     minWidth: 0
+})
+
+export const buildPropertyInlineInputStyle = () => ({
+    flex: 1,
+    minWidth: PROPERTY_INPUT_MIN_WIDTH
 })
 
 export const buildPropertyInputStyle = ({ colors, typography }, { opacity = 1 } = {}) => ({

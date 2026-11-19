@@ -9,6 +9,8 @@ import {
     TEXT_ICON_PATH
 } from '@/shared/constants/icon-paths'
 
+export const PROPERTY_INPUT_MIN_WIDTH = '24px'
+
 export const PROPERTY_TYPES = {
     TEXT: 'text',
     NUMBER: 'number',

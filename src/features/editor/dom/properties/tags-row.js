@@ -6,6 +6,7 @@ import { ThemeContext } from '@/features/editor/dom/markdown-dom-theme-context'
 import {
     buildChipStyle,
     buildPropertyEntryStyle,
+    buildPropertyInlineInputStyle,
     buildPropertyInputStyle,
     buildPropertyMenuStyle,
     buildPropertyNameStyle,
@@ -36,7 +37,7 @@ const TagInput = ({
     }
 
     return (
-        <div style={{ flex: 1, minWidth: '80px' }}>
+        <div style={buildPropertyInlineInputStyle()}>
             <input
                 type='text'
                 value={text}
