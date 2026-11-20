@@ -1,0 +1,2841 @@
+{
+	"random": {
+		"notes": [
+			{
+				"path": "n0::File 0.md",
+				"title": "Dup",
+				"aliases": [
+					"Café",
+					"Roadmap"
+				]
+			},
+			{
+				"path": "n1::File 1.md",
+				"title": "Ideas",
+				"aliases": [
+					"Año",
+					"plan"
+				]
+			},
+			{
+				"path": "n2::File 2.md",
+				"title": "Q#1",
+				"aliases": []
+			},
+			{
+				"path": "n3::File 3.md",
+				"title": "Q#1",
+				"aliases": []
+			},
+			{
+				"path": "n4::File 4.md",
+				"title": "Café",
+				"aliases": []
+			},
+			{
+				"path": "n5::File 5.md",
+				"title": "Café",
+				"aliases": [
+					"plan",
+					"Ünï"
+				]
+			},
+			{
+				"path": "n6::File 6.md",
+				"title": "Ünï",
+				"aliases": []
+			},
+			{
+				"path": "n7::File 7.md",
+				"title": "Café",
+				"aliases": [
+					"Café",
+					"Dup"
+				]
+			},
+			{
+				"path": "n8::File 8.md",
+				"title": "Ünï",
+				"aliases": []
+			},
+			{
+				"path": "n9::File 9.md",
+				"title": "plan",
+				"aliases": []
+			},
+			{
+				"path": "n10::File 10.md",
+				"title": "Año",
+				"aliases": [
+					"Plan",
+					"Café"
+				]
+			},
+			{
+				"path": "n11::File 11.md",
+				"title": "a/b",
+				"aliases": []
+			},
+			{
+				"path": "n12::File 12.md",
+				"title": "X y Z",
+				"aliases": [
+					"Café",
+					"X y Z"
+				]
+			},
+			{
+				"path": "n13::File 13.md",
+				"title": "X y Z",
+				"aliases": []
+			}
+		],
+		"folders": {
+			"n0::File 0.md": "a/b",
+			"n1::File 1.md": "Work/A",
+			"n2::File 2.md": "",
+			"n3::File 3.md": "",
+			"n4::File 4.md": "Work/A",
+			"n5::File 5.md": "",
+			"n6::File 6.md": "Home",
+			"n7::File 7.md": "Work/B",
+			"n8::File 8.md": "Home",
+			"n9::File 9.md": "Work",
+			"n10::File 10.md": "",
+			"n11::File 11.md": "",
+			"n12::File 12.md": "",
+			"n13::File 13.md": ""
+		},
+		"movedFolders": {
+			"n0::File 0.md": "Moved/Here",
+			"n1::File 1.md": "Work/A",
+			"n2::File 2.md": "",
+			"n3::File 3.md": "",
+			"n4::File 4.md": "Work/A",
+			"n5::File 5.md": "",
+			"n6::File 6.md": "Home",
+			"n7::File 7.md": "Work/B",
+			"n8::File 8.md": "Home",
+			"n9::File 9.md": "Work",
+			"n10::File 10.md": "",
+			"n11::File 11.md": "",
+			"n12::File 12.md": "",
+			"n13::File 13.md": ""
+		},
+		"self": "n0::File 0.md",
+		"resolutions": [
+			{
+				"text": "Work/Ünï#",
+				"note": 6,
+				"target": "Work/Ünï",
+				"anchor": ""
+			},
+			{
+				"text": " plan ",
+				"note": 9,
+				"target": " plan ",
+				"anchor": ""
+			},
+			{
+				"text": "X y Z",
+				"note": 12,
+				"target": "X y Z",
+				"anchor": ""
+			},
+			{
+				"text": " Café #Top",
+				"note": 4,
+				"target": " Café ",
+				"anchor": "Top"
+			},
+			{
+				"text": " Q#1 #Sec 1",
+				"note": null,
+				"target": " Q",
+				"anchor": "1 #Sec 1"
+			},
+			{
+				"text": "PLAN#Sec 1",
+				"note": 9,
+				"target": "PLAN",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "Work/Año",
+				"note": 10,
+				"target": "Work/Año",
+				"anchor": ""
+			},
+			{
+				"text": "a/b/ROADMAP",
+				"note": 0,
+				"target": "a/b/ROADMAP",
+				"anchor": ""
+			},
+			{
+				"text": "Home/Roadmap#Top",
+				"note": 0,
+				"target": "Home/Roadmap",
+				"anchor": "Top"
+			},
+			{
+				"text": "CAFÉ#Top",
+				"note": 4,
+				"target": "CAFÉ",
+				"anchor": "Top"
+			},
+			{
+				"text": "Work/B/CAFÉ",
+				"note": 7,
+				"target": "Work/B/CAFÉ",
+				"anchor": ""
+			},
+			{
+				"text": "Work/ Roadmap #",
+				"note": 0,
+				"target": "Work/ Roadmap ",
+				"anchor": ""
+			},
+			{
+				"text": "DUP#Top",
+				"note": 0,
+				"target": "DUP",
+				"anchor": "Top"
+			},
+			{
+				"text": "a/b/a/b#Top",
+				"note": null,
+				"target": "a/b/a/b",
+				"anchor": "Top"
+			},
+			{
+				"text": "#",
+				"note": 0,
+				"target": "",
+				"anchor": ""
+			},
+			{
+				"text": " Café #Top",
+				"note": 4,
+				"target": " Café ",
+				"anchor": "Top"
+			},
+			{
+				"text": " Plan #Sec 1",
+				"note": 9,
+				"target": " Plan ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": " Ünï #Sec 1",
+				"note": 6,
+				"target": " Ünï ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "#Sec 1",
+				"note": 0,
+				"target": "",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "#Top",
+				"note": 0,
+				"target": "",
+				"anchor": "Top"
+			},
+			{
+				"text": "Plan",
+				"note": 9,
+				"target": "Plan",
+				"anchor": ""
+			},
+			{
+				"text": " Año #Sec 1",
+				"note": 10,
+				"target": " Año ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "Work/ Dup #",
+				"note": 0,
+				"target": "Work/ Dup ",
+				"anchor": ""
+			},
+			{
+				"text": "Work/B/Café",
+				"note": 7,
+				"target": "Work/B/Café",
+				"anchor": ""
+			},
+			{
+				"text": " Año #Sec 1",
+				"note": 10,
+				"target": " Año ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "Work/AÑO#Sec 1",
+				"note": 10,
+				"target": "Work/AÑO",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "Home/ Dup #",
+				"note": 0,
+				"target": "Home/ Dup ",
+				"anchor": ""
+			},
+			{
+				"text": "#Sec 1",
+				"note": 0,
+				"target": "",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "a/b",
+				"note": null,
+				"target": "a/b",
+				"anchor": ""
+			},
+			{
+				"text": "PLAN#Top",
+				"note": 9,
+				"target": "PLAN",
+				"anchor": "Top"
+			},
+			{
+				"text": " a/b #Sec 1",
+				"note": null,
+				"target": " a/b ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "#1 #",
+				"note": 0,
+				"target": "",
+				"anchor": "1 #"
+			},
+			{
+				"text": "Work/B/CAFÉ#",
+				"note": 7,
+				"target": "Work/B/CAFÉ",
+				"anchor": ""
+			},
+			{
+				"text": "a/b#Top",
+				"note": null,
+				"target": "a/b",
+				"anchor": "Top"
+			},
+			{
+				"text": "Año#Sec 1",
+				"note": 10,
+				"target": "Año",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": " plan #",
+				"note": 9,
+				"target": " plan ",
+				"anchor": ""
+			},
+			{
+				"text": " plan ",
+				"note": 9,
+				"target": " plan ",
+				"anchor": ""
+			},
+			{
+				"text": "X y Z",
+				"note": 12,
+				"target": "X y Z",
+				"anchor": ""
+			},
+			{
+				"text": "Q#1",
+				"note": 2,
+				"target": "Q#1",
+				"anchor": ""
+			},
+			{
+				"text": "a/b/Año#Sec 1",
+				"note": 10,
+				"target": "a/b/Año",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "X y Z#Sec 1",
+				"note": 12,
+				"target": "X y Z",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "X y Z#",
+				"note": 12,
+				"target": "X y Z",
+				"anchor": ""
+			},
+			{
+				"text": "ROADMAP#",
+				"note": 0,
+				"target": "ROADMAP",
+				"anchor": ""
+			},
+			{
+				"text": "X y Z",
+				"note": 12,
+				"target": "X y Z",
+				"anchor": ""
+			},
+			{
+				"text": "Work/B/ROADMAP#",
+				"note": 0,
+				"target": "Work/B/ROADMAP",
+				"anchor": ""
+			},
+			{
+				"text": "ÜNÏ#Sec 1",
+				"note": 6,
+				"target": "ÜNÏ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "",
+				"note": null,
+				"target": "",
+				"anchor": ""
+			},
+			{
+				"text": "Work/B/ Café #Top",
+				"note": 7,
+				"target": "Work/B/ Café ",
+				"anchor": "Top"
+			},
+			{
+				"text": "IDEAS",
+				"note": 1,
+				"target": "IDEAS",
+				"anchor": ""
+			},
+			{
+				"text": "A/B#Top",
+				"note": null,
+				"target": "A/B",
+				"anchor": "Top"
+			},
+			{
+				"text": " Café ",
+				"note": 4,
+				"target": " Café ",
+				"anchor": ""
+			},
+			{
+				"text": "ROADMAP",
+				"note": 0,
+				"target": "ROADMAP",
+				"anchor": ""
+			},
+			{
+				"text": "Work/ÜNÏ#",
+				"note": 6,
+				"target": "Work/ÜNÏ",
+				"anchor": ""
+			},
+			{
+				"text": "Work/Café#Top",
+				"note": 4,
+				"target": "Work/Café",
+				"anchor": "Top"
+			},
+			{
+				"text": " plan #Sec 1",
+				"note": 9,
+				"target": " plan ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": " Roadmap #Top",
+				"note": 0,
+				"target": " Roadmap ",
+				"anchor": "Top"
+			},
+			{
+				"text": "a/b/X y Z#Sec 1",
+				"note": 12,
+				"target": "a/b/X y Z",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "X y Z#Sec 1",
+				"note": 12,
+				"target": "X y Z",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "Work/B/plan#Top",
+				"note": 9,
+				"target": "Work/B/plan",
+				"anchor": "Top"
+			},
+			{
+				"text": " Ideas ",
+				"note": 1,
+				"target": " Ideas ",
+				"anchor": ""
+			},
+			{
+				"text": "Dup",
+				"note": 0,
+				"target": "Dup",
+				"anchor": ""
+			},
+			{
+				"text": "",
+				"note": null,
+				"target": "",
+				"anchor": ""
+			},
+			{
+				"text": " Año ",
+				"note": 10,
+				"target": " Año ",
+				"anchor": ""
+			},
+			{
+				"text": "Año#",
+				"note": 10,
+				"target": "Año",
+				"anchor": ""
+			},
+			{
+				"text": "Café",
+				"note": 4,
+				"target": "Café",
+				"anchor": ""
+			},
+			{
+				"text": "X Y Z#Top",
+				"note": 12,
+				"target": "X Y Z",
+				"anchor": "Top"
+			},
+			{
+				"text": "",
+				"note": null,
+				"target": "",
+				"anchor": ""
+			},
+			{
+				"text": "#",
+				"note": 0,
+				"target": "",
+				"anchor": ""
+			},
+			{
+				"text": "a/b/ Q#1 ",
+				"note": 2,
+				"target": "a/b/ Q#1 ",
+				"anchor": ""
+			},
+			{
+				"text": " Café #Top",
+				"note": 4,
+				"target": " Café ",
+				"anchor": "Top"
+			},
+			{
+				"text": "#1 ",
+				"note": 0,
+				"target": "",
+				"anchor": "1 "
+			},
+			{
+				"text": "Work/A/Q#1#Top",
+				"note": null,
+				"target": "Work/A/Q",
+				"anchor": "1#Top"
+			},
+			{
+				"text": "Home/ a/b ",
+				"note": null,
+				"target": "Home/ a/b ",
+				"anchor": ""
+			},
+			{
+				"text": "Ideas#",
+				"note": 1,
+				"target": "Ideas",
+				"anchor": ""
+			},
+			{
+				"text": "IDEAS#",
+				"note": 1,
+				"target": "IDEAS",
+				"anchor": ""
+			},
+			{
+				"text": "CAFÉ#Top",
+				"note": 4,
+				"target": "CAFÉ",
+				"anchor": "Top"
+			},
+			{
+				"text": "Ünï#Sec 1",
+				"note": 6,
+				"target": "Ünï",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "CAFÉ#Sec 1",
+				"note": 4,
+				"target": "CAFÉ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "Q#1#Sec 1",
+				"note": null,
+				"target": "Q",
+				"anchor": "1#Sec 1"
+			},
+			{
+				"text": " X y Z ",
+				"note": 12,
+				"target": " X y Z ",
+				"anchor": ""
+			},
+			{
+				"text": "Roadmap#Sec 1",
+				"note": 0,
+				"target": "Roadmap",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "Ünï",
+				"note": 6,
+				"target": "Ünï",
+				"anchor": ""
+			},
+			{
+				"text": "a/b/ Dup #Top",
+				"note": 0,
+				"target": "a/b/ Dup ",
+				"anchor": "Top"
+			},
+			{
+				"text": "a/b/AÑO",
+				"note": 10,
+				"target": "a/b/AÑO",
+				"anchor": ""
+			},
+			{
+				"text": "#Sec 1",
+				"note": 0,
+				"target": "",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "Work/B/ Año #Top",
+				"note": 10,
+				"target": "Work/B/ Año ",
+				"anchor": "Top"
+			},
+			{
+				"text": " Ünï ",
+				"note": 6,
+				"target": " Ünï ",
+				"anchor": ""
+			},
+			{
+				"text": "Home/CAFÉ",
+				"note": 4,
+				"target": "Home/CAFÉ",
+				"anchor": ""
+			},
+			{
+				"text": "Ünï",
+				"note": 6,
+				"target": "Ünï",
+				"anchor": ""
+			},
+			{
+				"text": "Q#1",
+				"note": 2,
+				"target": "Q#1",
+				"anchor": ""
+			},
+			{
+				"text": " Café #Top",
+				"note": 4,
+				"target": " Café ",
+				"anchor": "Top"
+			},
+			{
+				"text": "X Y Z#Sec 1",
+				"note": 12,
+				"target": "X Y Z",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": " Año #",
+				"note": 10,
+				"target": " Año ",
+				"anchor": ""
+			},
+			{
+				"text": " Roadmap ",
+				"note": 0,
+				"target": " Roadmap ",
+				"anchor": ""
+			},
+			{
+				"text": "PLAN",
+				"note": 9,
+				"target": "PLAN",
+				"anchor": ""
+			},
+			{
+				"text": " Dup #",
+				"note": 0,
+				"target": " Dup ",
+				"anchor": ""
+			},
+			{
+				"text": " Q#1 #",
+				"note": null,
+				"target": " Q",
+				"anchor": "1 #"
+			},
+			{
+				"text": "DUP",
+				"note": 0,
+				"target": "DUP",
+				"anchor": ""
+			},
+			{
+				"text": "X y Z#Top",
+				"note": 12,
+				"target": "X y Z",
+				"anchor": "Top"
+			},
+			{
+				"text": "Café",
+				"note": 4,
+				"target": "Café",
+				"anchor": ""
+			},
+			{
+				"text": "a/b/ Ünï ",
+				"note": 6,
+				"target": "a/b/ Ünï ",
+				"anchor": ""
+			},
+			{
+				"text": " a/b #Sec 1",
+				"note": null,
+				"target": " a/b ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "a/b#",
+				"note": null,
+				"target": "a/b",
+				"anchor": ""
+			},
+			{
+				"text": "X Y Z",
+				"note": 12,
+				"target": "X Y Z",
+				"anchor": ""
+			},
+			{
+				"text": "ÜNÏ#",
+				"note": 6,
+				"target": "ÜNÏ",
+				"anchor": ""
+			},
+			{
+				"text": " Plan #Sec 1",
+				"note": 9,
+				"target": " Plan ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "a/b/CAFÉ#Top",
+				"note": 4,
+				"target": "a/b/CAFÉ",
+				"anchor": "Top"
+			},
+			{
+				"text": "Work/Dup#",
+				"note": 0,
+				"target": "Work/Dup",
+				"anchor": ""
+			},
+			{
+				"text": "#1#Sec 1",
+				"note": 0,
+				"target": "",
+				"anchor": "1#Sec 1"
+			},
+			{
+				"text": "X Y Z#Sec 1",
+				"note": 12,
+				"target": "X Y Z",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "X y Z#Top",
+				"note": 12,
+				"target": "X y Z",
+				"anchor": "Top"
+			},
+			{
+				"text": "plan#Sec 1",
+				"note": 9,
+				"target": "plan",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "Work/B/Café#Sec 1",
+				"note": 7,
+				"target": "Work/B/Café",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "plan#",
+				"note": 9,
+				"target": "plan",
+				"anchor": ""
+			},
+			{
+				"text": " Plan #",
+				"note": 9,
+				"target": " Plan ",
+				"anchor": ""
+			},
+			{
+				"text": "Work/Ideas",
+				"note": 1,
+				"target": "Work/Ideas",
+				"anchor": ""
+			},
+			{
+				"text": "PLAN#Top",
+				"note": 9,
+				"target": "PLAN",
+				"anchor": "Top"
+			},
+			{
+				"text": "PLAN#",
+				"note": 9,
+				"target": "PLAN",
+				"anchor": ""
+			},
+			{
+				"text": " Plan ",
+				"note": 9,
+				"target": " Plan ",
+				"anchor": ""
+			},
+			{
+				"text": "Ünï#Top",
+				"note": 6,
+				"target": "Ünï",
+				"anchor": "Top"
+			},
+			{
+				"text": "Plan",
+				"note": 9,
+				"target": "Plan",
+				"anchor": ""
+			},
+			{
+				"text": " Dup #Top",
+				"note": 0,
+				"target": " Dup ",
+				"anchor": "Top"
+			},
+			{
+				"text": " Plan ",
+				"note": 9,
+				"target": " Plan ",
+				"anchor": ""
+			},
+			{
+				"text": " plan #Sec 1",
+				"note": 9,
+				"target": " plan ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "",
+				"note": null,
+				"target": "",
+				"anchor": ""
+			},
+			{
+				"text": "X y Z",
+				"note": 12,
+				"target": "X y Z",
+				"anchor": ""
+			},
+			{
+				"text": "Café#Top",
+				"note": 4,
+				"target": "Café",
+				"anchor": "Top"
+			},
+			{
+				"text": "a/b#",
+				"note": null,
+				"target": "a/b",
+				"anchor": ""
+			},
+			{
+				"text": "a/b/CAFÉ#Top",
+				"note": 4,
+				"target": "a/b/CAFÉ",
+				"anchor": "Top"
+			},
+			{
+				"text": "ROADMAP",
+				"note": 0,
+				"target": "ROADMAP",
+				"anchor": ""
+			},
+			{
+				"text": "Home/Café",
+				"note": 4,
+				"target": "Home/Café",
+				"anchor": ""
+			},
+			{
+				"text": " Año ",
+				"note": 10,
+				"target": " Año ",
+				"anchor": ""
+			},
+			{
+				"text": "",
+				"note": null,
+				"target": "",
+				"anchor": ""
+			},
+			{
+				"text": "DUP#Top",
+				"note": 0,
+				"target": "DUP",
+				"anchor": "Top"
+			},
+			{
+				"text": "a/b/PLAN#",
+				"note": 9,
+				"target": "a/b/PLAN",
+				"anchor": ""
+			},
+			{
+				"text": " Café #",
+				"note": 4,
+				"target": " Café ",
+				"anchor": ""
+			},
+			{
+				"text": " Plan #Top",
+				"note": 9,
+				"target": " Plan ",
+				"anchor": "Top"
+			},
+			{
+				"text": "AÑO#Sec 1",
+				"note": 10,
+				"target": "AÑO",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "X y Z#",
+				"note": 12,
+				"target": "X y Z",
+				"anchor": ""
+			},
+			{
+				"text": "DUP",
+				"note": 0,
+				"target": "DUP",
+				"anchor": ""
+			},
+			{
+				"text": "DUP#Top",
+				"note": 0,
+				"target": "DUP",
+				"anchor": "Top"
+			},
+			{
+				"text": "#",
+				"note": 0,
+				"target": "",
+				"anchor": ""
+			},
+			{
+				"text": "ROADMAP#Top",
+				"note": 0,
+				"target": "ROADMAP",
+				"anchor": "Top"
+			},
+			{
+				"text": "Café",
+				"note": 4,
+				"target": "Café",
+				"anchor": ""
+			},
+			{
+				"text": "Work/ Plan #Top",
+				"note": 9,
+				"target": "Work/ Plan ",
+				"anchor": "Top"
+			},
+			{
+				"text": " Ünï ",
+				"note": 6,
+				"target": " Ünï ",
+				"anchor": ""
+			},
+			{
+				"text": "Work/Plan",
+				"note": 9,
+				"target": "Work/Plan",
+				"anchor": ""
+			},
+			{
+				"text": "",
+				"note": null,
+				"target": "",
+				"anchor": ""
+			},
+			{
+				"text": " Ideas ",
+				"note": 1,
+				"target": " Ideas ",
+				"anchor": ""
+			},
+			{
+				"text": "Q#1#Top",
+				"note": null,
+				"target": "Q",
+				"anchor": "1#Top"
+			},
+			{
+				"text": " plan #",
+				"note": 9,
+				"target": " plan ",
+				"anchor": ""
+			},
+			{
+				"text": "Dup#Top",
+				"note": 0,
+				"target": "Dup",
+				"anchor": "Top"
+			},
+			{
+				"text": "CAFÉ#",
+				"note": 4,
+				"target": "CAFÉ",
+				"anchor": ""
+			},
+			{
+				"text": "Q#1#",
+				"note": null,
+				"target": "Q",
+				"anchor": "1#"
+			},
+			{
+				"text": " a/b ",
+				"note": null,
+				"target": " a/b ",
+				"anchor": ""
+			},
+			{
+				"text": "Roadmap#Top",
+				"note": 0,
+				"target": "Roadmap",
+				"anchor": "Top"
+			},
+			{
+				"text": " Café #",
+				"note": 4,
+				"target": " Café ",
+				"anchor": ""
+			},
+			{
+				"text": "Work/A/ X y Z #",
+				"note": 12,
+				"target": "Work/A/ X y Z ",
+				"anchor": ""
+			},
+			{
+				"text": "plan",
+				"note": 9,
+				"target": "plan",
+				"anchor": ""
+			},
+			{
+				"text": "X Y Z",
+				"note": 12,
+				"target": "X Y Z",
+				"anchor": ""
+			},
+			{
+				"text": "Roadmap#Top",
+				"note": 0,
+				"target": "Roadmap",
+				"anchor": "Top"
+			},
+			{
+				"text": "Roadmap#",
+				"note": 0,
+				"target": "Roadmap",
+				"anchor": ""
+			},
+			{
+				"text": "CAFÉ#",
+				"note": 4,
+				"target": "CAFÉ",
+				"anchor": ""
+			},
+			{
+				"text": " Café #",
+				"note": 4,
+				"target": " Café ",
+				"anchor": ""
+			},
+			{
+				"text": "Roadmap",
+				"note": 0,
+				"target": "Roadmap",
+				"anchor": ""
+			},
+			{
+				"text": "Work/B/Café#Top",
+				"note": 7,
+				"target": "Work/B/Café",
+				"anchor": "Top"
+			},
+			{
+				"text": " Año #Sec 1",
+				"note": 10,
+				"target": " Año ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "#Sec 1",
+				"note": 0,
+				"target": "",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "Work/A/ Plan ",
+				"note": 9,
+				"target": "Work/A/ Plan ",
+				"anchor": ""
+			},
+			{
+				"text": "CAFÉ#Top",
+				"note": 4,
+				"target": "CAFÉ",
+				"anchor": "Top"
+			},
+			{
+				"text": "Work/A/ X y Z ",
+				"note": 12,
+				"target": "Work/A/ X y Z ",
+				"anchor": ""
+			},
+			{
+				"text": "Work/ Ideas ",
+				"note": 1,
+				"target": "Work/ Ideas ",
+				"anchor": ""
+			},
+			{
+				"text": "ROADMAP#Sec 1",
+				"note": 0,
+				"target": "ROADMAP",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "CAFÉ",
+				"note": 4,
+				"target": "CAFÉ",
+				"anchor": ""
+			},
+			{
+				"text": " a/b ",
+				"note": null,
+				"target": " a/b ",
+				"anchor": ""
+			},
+			{
+				"text": "#",
+				"note": 0,
+				"target": "",
+				"anchor": ""
+			},
+			{
+				"text": "Work/A/Q#1#Sec 1",
+				"note": null,
+				"target": "Work/A/Q",
+				"anchor": "1#Sec 1"
+			},
+			{
+				"text": "Work/B/AÑO#",
+				"note": 10,
+				"target": "Work/B/AÑO",
+				"anchor": ""
+			},
+			{
+				"text": " Ünï #Sec 1",
+				"note": 6,
+				"target": " Ünï ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "Ideas#Sec 1",
+				"note": 1,
+				"target": "Ideas",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "PLAN",
+				"note": 9,
+				"target": "PLAN",
+				"anchor": ""
+			},
+			{
+				"text": "plan",
+				"note": 9,
+				"target": "plan",
+				"anchor": ""
+			},
+			{
+				"text": "PLAN#Top",
+				"note": 9,
+				"target": "PLAN",
+				"anchor": "Top"
+			},
+			{
+				"text": " Ideas #Top",
+				"note": 1,
+				"target": " Ideas ",
+				"anchor": "Top"
+			},
+			{
+				"text": " Plan ",
+				"note": 9,
+				"target": " Plan ",
+				"anchor": ""
+			},
+			{
+				"text": "X y Z",
+				"note": 12,
+				"target": "X y Z",
+				"anchor": ""
+			},
+			{
+				"text": "X Y Z#Top",
+				"note": 12,
+				"target": "X Y Z",
+				"anchor": "Top"
+			},
+			{
+				"text": "Q#1",
+				"note": 2,
+				"target": "Q#1",
+				"anchor": ""
+			},
+			{
+				"text": " Roadmap #Top",
+				"note": 0,
+				"target": " Roadmap ",
+				"anchor": "Top"
+			},
+			{
+				"text": "X Y Z",
+				"note": 12,
+				"target": "X Y Z",
+				"anchor": ""
+			},
+			{
+				"text": " Dup #Top",
+				"note": 0,
+				"target": " Dup ",
+				"anchor": "Top"
+			},
+			{
+				"text": "Ünï#Top",
+				"note": 6,
+				"target": "Ünï",
+				"anchor": "Top"
+			},
+			{
+				"text": " Año #Top",
+				"note": 10,
+				"target": " Año ",
+				"anchor": "Top"
+			},
+			{
+				"text": "Work/A/ Café #",
+				"note": 4,
+				"target": "Work/A/ Café ",
+				"anchor": ""
+			},
+			{
+				"text": "#Sec 1",
+				"note": 0,
+				"target": "",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": " Ünï #Top",
+				"note": 6,
+				"target": " Ünï ",
+				"anchor": "Top"
+			},
+			{
+				"text": "Plan",
+				"note": 9,
+				"target": "Plan",
+				"anchor": ""
+			},
+			{
+				"text": " Dup ",
+				"note": 0,
+				"target": " Dup ",
+				"anchor": ""
+			},
+			{
+				"text": "ÜNÏ#Sec 1",
+				"note": 6,
+				"target": "ÜNÏ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "IDEAS#Sec 1",
+				"note": 1,
+				"target": "IDEAS",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": " plan ",
+				"note": 9,
+				"target": " plan ",
+				"anchor": ""
+			},
+			{
+				"text": "Año#",
+				"note": 10,
+				"target": "Año",
+				"anchor": ""
+			},
+			{
+				"text": "Work/B/ÜNÏ#Top",
+				"note": 6,
+				"target": "Work/B/ÜNÏ",
+				"anchor": "Top"
+			},
+			{
+				"text": "a/b#",
+				"note": null,
+				"target": "a/b",
+				"anchor": ""
+			},
+			{
+				"text": "",
+				"note": null,
+				"target": "",
+				"anchor": ""
+			},
+			{
+				"text": "#",
+				"note": 0,
+				"target": "",
+				"anchor": ""
+			},
+			{
+				"text": "Home/Q#1",
+				"note": 2,
+				"target": "Home/Q#1",
+				"anchor": ""
+			},
+			{
+				"text": " Roadmap #Top",
+				"note": 0,
+				"target": " Roadmap ",
+				"anchor": "Top"
+			},
+			{
+				"text": " Plan ",
+				"note": 9,
+				"target": " Plan ",
+				"anchor": ""
+			},
+			{
+				"text": " Q#1 ",
+				"note": 2,
+				"target": " Q#1 ",
+				"anchor": ""
+			},
+			{
+				"text": "CAFÉ#",
+				"note": 4,
+				"target": "CAFÉ",
+				"anchor": ""
+			},
+			{
+				"text": "IDEAS#Top",
+				"note": 1,
+				"target": "IDEAS",
+				"anchor": "Top"
+			},
+			{
+				"text": "A/B#Sec 1",
+				"note": null,
+				"target": "A/B",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "X y Z",
+				"note": 12,
+				"target": "X y Z",
+				"anchor": ""
+			},
+			{
+				"text": "Work/B/ Ünï #Sec 1",
+				"note": 6,
+				"target": "Work/B/ Ünï ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": " Dup #Top",
+				"note": 0,
+				"target": " Dup ",
+				"anchor": "Top"
+			},
+			{
+				"text": "Home/Café#Sec 1",
+				"note": 4,
+				"target": "Home/Café",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "PLAN#Sec 1",
+				"note": 9,
+				"target": "PLAN",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "Dup",
+				"note": 0,
+				"target": "Dup",
+				"anchor": ""
+			},
+			{
+				"text": " Año #",
+				"note": 10,
+				"target": " Año ",
+				"anchor": ""
+			},
+			{
+				"text": "Café#Top",
+				"note": 4,
+				"target": "Café",
+				"anchor": "Top"
+			},
+			{
+				"text": "Año#",
+				"note": 10,
+				"target": "Año",
+				"anchor": ""
+			},
+			{
+				"text": "Work/B/CAFÉ#Top",
+				"note": 7,
+				"target": "Work/B/CAFÉ",
+				"anchor": "Top"
+			},
+			{
+				"text": "Q#1",
+				"note": 2,
+				"target": "Q#1",
+				"anchor": ""
+			},
+			{
+				"text": "Ideas",
+				"note": 1,
+				"target": "Ideas",
+				"anchor": ""
+			},
+			{
+				"text": "AÑO#Sec 1",
+				"note": 10,
+				"target": "AÑO",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "Ünï#Sec 1",
+				"note": 6,
+				"target": "Ünï",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "Q#1",
+				"note": 2,
+				"target": "Q#1",
+				"anchor": ""
+			},
+			{
+				"text": " X y Z #Sec 1",
+				"note": 12,
+				"target": " X y Z ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "Work/DUP#Sec 1",
+				"note": 0,
+				"target": "Work/DUP",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": " a/b #Sec 1",
+				"note": null,
+				"target": " a/b ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "Work/B/Q#1",
+				"note": 2,
+				"target": "Work/B/Q#1",
+				"anchor": ""
+			},
+			{
+				"text": "ÜNÏ",
+				"note": 6,
+				"target": "ÜNÏ",
+				"anchor": ""
+			},
+			{
+				"text": "Home/Café",
+				"note": 4,
+				"target": "Home/Café",
+				"anchor": ""
+			},
+			{
+				"text": "Q#1#Sec 1",
+				"note": null,
+				"target": "Q",
+				"anchor": "1#Sec 1"
+			},
+			{
+				"text": "X Y Z",
+				"note": 12,
+				"target": "X Y Z",
+				"anchor": ""
+			},
+			{
+				"text": "Work/ a/b ",
+				"note": null,
+				"target": "Work/ a/b ",
+				"anchor": ""
+			},
+			{
+				"text": " Roadmap #Top",
+				"note": 0,
+				"target": " Roadmap ",
+				"anchor": "Top"
+			},
+			{
+				"text": " Año ",
+				"note": 10,
+				"target": " Año ",
+				"anchor": ""
+			},
+			{
+				"text": "#1 ",
+				"note": 0,
+				"target": "",
+				"anchor": "1 "
+			},
+			{
+				"text": "X Y Z#",
+				"note": 12,
+				"target": "X Y Z",
+				"anchor": ""
+			},
+			{
+				"text": "X Y Z",
+				"note": 12,
+				"target": "X Y Z",
+				"anchor": ""
+			},
+			{
+				"text": "PLAN",
+				"note": 9,
+				"target": "PLAN",
+				"anchor": ""
+			},
+			{
+				"text": "#",
+				"note": 0,
+				"target": "",
+				"anchor": ""
+			},
+			{
+				"text": "CAFÉ#Sec 1",
+				"note": 4,
+				"target": "CAFÉ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "",
+				"note": null,
+				"target": "",
+				"anchor": ""
+			},
+			{
+				"text": "#Top",
+				"note": 0,
+				"target": "",
+				"anchor": "Top"
+			},
+			{
+				"text": "Café",
+				"note": 4,
+				"target": "Café",
+				"anchor": ""
+			},
+			{
+				"text": " a/b ",
+				"note": null,
+				"target": " a/b ",
+				"anchor": ""
+			},
+			{
+				"text": " Año ",
+				"note": 10,
+				"target": " Año ",
+				"anchor": ""
+			},
+			{
+				"text": "Roadmap#",
+				"note": 0,
+				"target": "Roadmap",
+				"anchor": ""
+			},
+			{
+				"text": "Ideas#",
+				"note": 1,
+				"target": "Ideas",
+				"anchor": ""
+			},
+			{
+				"text": "IDEAS#Sec 1",
+				"note": 1,
+				"target": "IDEAS",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "#",
+				"note": 0,
+				"target": "",
+				"anchor": ""
+			},
+			{
+				"text": "PLAN",
+				"note": 9,
+				"target": "PLAN",
+				"anchor": ""
+			},
+			{
+				"text": " Q#1 #",
+				"note": null,
+				"target": " Q",
+				"anchor": "1 #"
+			},
+			{
+				"text": " Plan #",
+				"note": 9,
+				"target": " Plan ",
+				"anchor": ""
+			},
+			{
+				"text": "Café#",
+				"note": 4,
+				"target": "Café",
+				"anchor": ""
+			},
+			{
+				"text": "Home/ Dup #Top",
+				"note": 0,
+				"target": "Home/ Dup ",
+				"anchor": "Top"
+			},
+			{
+				"text": "ÜNÏ#Sec 1",
+				"note": 6,
+				"target": "ÜNÏ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": " Plan #Sec 1",
+				"note": 9,
+				"target": " Plan ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "a/b/a/b#Top",
+				"note": null,
+				"target": "a/b/a/b",
+				"anchor": "Top"
+			},
+			{
+				"text": "CAFÉ#",
+				"note": 4,
+				"target": "CAFÉ",
+				"anchor": ""
+			},
+			{
+				"text": "Q#1#",
+				"note": null,
+				"target": "Q",
+				"anchor": "1#"
+			},
+			{
+				"text": "Roadmap#Top",
+				"note": 0,
+				"target": "Roadmap",
+				"anchor": "Top"
+			},
+			{
+				"text": "Home/X y Z",
+				"note": 12,
+				"target": "Home/X y Z",
+				"anchor": ""
+			},
+			{
+				"text": " Dup #Sec 1",
+				"note": 0,
+				"target": " Dup ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "a/b/ X y Z #Sec 1",
+				"note": 12,
+				"target": "a/b/ X y Z ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "Roadmap#Top",
+				"note": 0,
+				"target": "Roadmap",
+				"anchor": "Top"
+			},
+			{
+				"text": "Ünï",
+				"note": 6,
+				"target": "Ünï",
+				"anchor": ""
+			},
+			{
+				"text": "Work/Año#",
+				"note": 10,
+				"target": "Work/Año",
+				"anchor": ""
+			},
+			{
+				"text": "#Top",
+				"note": 0,
+				"target": "",
+				"anchor": "Top"
+			},
+			{
+				"text": "Work/B/Plan",
+				"note": 9,
+				"target": "Work/B/Plan",
+				"anchor": ""
+			},
+			{
+				"text": "X y Z#",
+				"note": 12,
+				"target": "X y Z",
+				"anchor": ""
+			},
+			{
+				"text": "CAFÉ",
+				"note": 4,
+				"target": "CAFÉ",
+				"anchor": ""
+			},
+			{
+				"text": "Work/A/ Ideas #Top",
+				"note": 1,
+				"target": "Work/A/ Ideas ",
+				"anchor": "Top"
+			},
+			{
+				"text": "#",
+				"note": 0,
+				"target": "",
+				"anchor": ""
+			},
+			{
+				"text": "Ideas#Sec 1",
+				"note": 1,
+				"target": "Ideas",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": "Ideas#Sec 1",
+				"note": 1,
+				"target": "Ideas",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": " Q#1 #",
+				"note": null,
+				"target": " Q",
+				"anchor": "1 #"
+			},
+			{
+				"text": "A/B#Sec 1",
+				"note": null,
+				"target": "A/B",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": " a/b ",
+				"note": null,
+				"target": " a/b ",
+				"anchor": ""
+			},
+			{
+				"text": "a/b/IDEAS",
+				"note": 1,
+				"target": "a/b/IDEAS",
+				"anchor": ""
+			},
+			{
+				"text": "ROADMAP",
+				"note": 0,
+				"target": "ROADMAP",
+				"anchor": ""
+			},
+			{
+				"text": "plan",
+				"note": 9,
+				"target": "plan",
+				"anchor": ""
+			},
+			{
+				"text": "PLAN",
+				"note": 9,
+				"target": "PLAN",
+				"anchor": ""
+			},
+			{
+				"text": "PLAN",
+				"note": 9,
+				"target": "PLAN",
+				"anchor": ""
+			},
+			{
+				"text": "X Y Z",
+				"note": 12,
+				"target": "X Y Z",
+				"anchor": ""
+			},
+			{
+				"text": "Ünï",
+				"note": 6,
+				"target": "Ünï",
+				"anchor": ""
+			},
+			{
+				"text": "Work/B/Q#1#",
+				"note": null,
+				"target": "Work/B/Q",
+				"anchor": "1#"
+			},
+			{
+				"text": " Dup #",
+				"note": 0,
+				"target": " Dup ",
+				"anchor": ""
+			},
+			{
+				"text": "#1",
+				"note": 0,
+				"target": "",
+				"anchor": "1"
+			},
+			{
+				"text": "Work/A/IDEAS#Top",
+				"note": 1,
+				"target": "Work/A/IDEAS",
+				"anchor": "Top"
+			},
+			{
+				"text": "Work/Roadmap#Top",
+				"note": 0,
+				"target": "Work/Roadmap",
+				"anchor": "Top"
+			},
+			{
+				"text": "ÜNÏ",
+				"note": 6,
+				"target": "ÜNÏ",
+				"anchor": ""
+			},
+			{
+				"text": "IDEAS#Sec 1",
+				"note": 1,
+				"target": "IDEAS",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": " Ünï #Sec 1",
+				"note": 6,
+				"target": " Ünï ",
+				"anchor": "Sec 1"
+			},
+			{
+				"text": " X y Z ",
+				"note": 12,
+				"target": " X y Z ",
+				"anchor": ""
+			},
+			{
+				"text": "Home/Dup#",
+				"note": 0,
+				"target": "Home/Dup",
+				"anchor": ""
+			},
+			{
+				"text": "X y Z#",
+				"note": 12,
+				"target": "X y Z",
+				"anchor": ""
+			}
+		],
+		"renames": [
+			{
+				"content": "[[Work/A/a/b#Sec 1]] text [[ Café #Sec 1]] text [[X y Z#|Año]] text [[ Café |plan]]",
+				"target": "n12::File 12.md",
+				"title": "a/b",
+				"plain": "[[Work/A/a/b#Sec 1]] text [[ Café #Sec 1]] text [[a/b|Año]] text [[ Café |plan]]",
+				"moved": "[[Work/A/a/b#Sec 1]] text [[ Café #Sec 1]] text [[a/b|Año]] text [[ Café |plan]]"
+			},
+			{
+				"content": "[[#Sec 1]] text [[IDEAS#]] text [[Q#1#Sec 1]] text [[ plan #Top]]",
+				"target": "n11::File 11.md",
+				"title": "X y Z",
+				"plain": "[[#Sec 1]] text [[IDEAS#]] text [[Q#1#Sec 1]] text [[ plan #Top]]",
+				"moved": "[[#Sec 1]] text [[IDEAS#]] text [[Q#1#Sec 1]] text [[ plan #Top]]"
+			},
+			{
+				"content": "[[#Top|Ünï]] text [[Work/B/ROADMAP|Q#1]] text [[ROADMAP#Top]] text [[Café|Ünï]]",
+				"target": "n6::File 6.md",
+				"title": "a/b",
+				"plain": "[[#Top|Ünï]] text [[Work/B/ROADMAP|Q#1]] text [[ROADMAP#Top]] text [[Café|Ünï]]",
+				"moved": "[[#Top|Ünï]] text [[Work/B/ROADMAP|Q#1]] text [[ROADMAP#Top]] text [[Café|Ünï]]"
+			},
+			{
+				"content": "[[Work/ Café ]] text [[Work/ X y Z ]] text [[ Año #|Ünï]] text [[plan#]]",
+				"target": "n2::File 2.md",
+				"title": "X y Z",
+				"plain": "[[Work/ Café ]] text [[Work/ X y Z ]] text [[ Año #|Ünï]] text [[plan#]]",
+				"moved": "[[Work/ Café ]] text [[Work/ X y Z ]] text [[ Año #|Ünï]] text [[plan#]]"
+			},
+			{
+				"content": "[[ Roadmap #Sec 1]] text [[Home/ Café #]] text [[ plan #Sec 1]] text [[Ideas]]",
+				"target": "n2::File 2.md",
+				"title": "a/b",
+				"plain": "[[ Roadmap #Sec 1]] text [[Home/ Café #]] text [[ plan #Sec 1]] text [[Ideas]]",
+				"moved": "[[ Roadmap #Sec 1]] text [[Home/ Café #]] text [[ plan #Sec 1]] text [[Ideas]]"
+			},
+			{
+				"content": "[[a/b/Ideas|Dup]] text [[ plan |Ideas]] text [[#Sec 1]] text [[Home/Plan#Sec 1]]",
+				"target": "n1::File 1.md",
+				"title": "Q#1",
+				"plain": "[[Work/A/Q#1|Dup]] text [[ plan |Ideas]] text [[#Sec 1]] text [[Home/Plan#Sec 1]]",
+				"moved": "[[Work/A/Q#1|Dup]] text [[ plan |Ideas]] text [[#Sec 1]] text [[Home/Plan#Sec 1]]"
+			},
+			{
+				"content": "[[IDEAS#Sec 1]] text [[ plan #Sec 1]] text [[Work/ROADMAP#Sec 1]] text [[ÜNÏ#Top|Roadmap]]",
+				"target": "n9::File 9.md",
+				"title": "Café",
+				"plain": "[[IDEAS#Sec 1]] text [[Work/Café#Sec 1|Café > Sec 1]] text [[Work/ROADMAP#Sec 1]] text [[ÜNÏ#Top|Roadmap]]",
+				"moved": "[[IDEAS#Sec 1]] text [[Work/Café#Sec 1|Café > Sec 1]] text [[Work/ROADMAP#Sec 1]] text [[ÜNÏ#Top|Roadmap]]"
+			},
+			{
+				"content": "[[Café]] text [[Plan#Top]] text [[a/b/ÜNÏ#Top]] text [[Work/A/Q#1#Top|Q#1]]",
+				"target": "n3::File 3.md",
+				"title": "Año",
+				"plain": "[[Café]] text [[Plan#Top]] text [[a/b/ÜNÏ#Top]] text [[Work/A/Q#1#Top|Q#1]]",
+				"moved": "[[Café]] text [[Plan#Top]] text [[a/b/ÜNÏ#Top]] text [[Work/A/Q#1#Top|Q#1]]"
+			},
+			{
+				"content": "[[Work/B/CAFÉ#]] text [[Dup#Top]] text [[Plan#Sec 1]] text [[]]",
+				"target": "n1::File 1.md",
+				"title": "Plan",
+				"plain": "[[Work/B/CAFÉ#]] text [[Dup#Top]] text [[Plan#Sec 1]] text [[]]",
+				"moved": "[[Work/B/CAFÉ#]] text [[Dup#Top]] text [[Plan#Sec 1]] text [[]]"
+			},
+			{
+				"content": "[[Work/B/X y Z|plan]] text [[Ünï#Top]] text [[plan]] text [[AÑO]]",
+				"target": "n10::File 10.md",
+				"title": "Ideas",
+				"plain": "[[Work/B/X y Z|plan]] text [[Ünï#Top]] text [[plan]] text [[Ideas]]",
+				"moved": "[[Work/B/X y Z|plan]] text [[Ünï#Top]] text [[plan]] text [[Ideas]]"
+			},
+			{
+				"content": "[[Café#Sec 1]] text [[ Ünï |Café]] text [[ X y Z #Top]] text [[a/b/ Ünï ]]",
+				"target": "n0::File 0.md",
+				"title": "Café",
+				"plain": "[[Café#Sec 1]] text [[ Ünï |Café]] text [[ X y Z #Top]] text [[a/b/ Ünï ]]",
+				"moved": "[[Café#Sec 1]] text [[ Ünï |Café]] text [[ X y Z #Top]] text [[a/b/ Ünï ]]"
+			},
+			{
+				"content": "[[ Dup #Top]] text [[a/b/X Y Z]] text [[Home/ Q#1 #Sec 1]] text [[ plan ]]",
+				"target": "n2::File 2.md",
+				"title": "Brand new",
+				"plain": "[[ Dup #Top]] text [[a/b/X Y Z]] text [[Home/ Q#1 #Sec 1]] text [[ plan ]]",
+				"moved": "[[ Dup #Top]] text [[a/b/X Y Z]] text [[Home/ Q#1 #Sec 1]] text [[ plan ]]"
+			},
+			{
+				"content": "[[a/b#Sec 1]] text [[Dup#Sec 1]] text [[X Y Z]] text [[ Café #|Café]]",
+				"target": "n1::File 1.md",
+				"title": "a/b",
+				"plain": "[[a/b#Sec 1]] text [[Dup#Sec 1]] text [[X Y Z]] text [[ Café #|Café]]",
+				"moved": "[[a/b#Sec 1]] text [[Dup#Sec 1]] text [[X Y Z]] text [[ Café #|Café]]"
+			},
+			{
+				"content": "[[Work/Café#]] text [[Ünï#|Dup]] text [[Work/B/ Año #]] text [[a/b]]",
+				"target": "n9::File 9.md",
+				"title": "Ünï",
+				"plain": "[[Work/Café#]] text [[Ünï#|Dup]] text [[Work/B/ Año #]] text [[a/b]]",
+				"moved": "[[Work/Café#]] text [[Ünï#|Dup]] text [[Work/B/ Año #]] text [[a/b]]"
+			},
+			{
+				"content": "[[ Café ]] text [[Home/Roadmap#]] text [[#Sec 1]] text [[Work/B/ Año ]]",
+				"target": "n0::File 0.md",
+				"title": "Café",
+				"plain": "[[ Café ]] text [[Home/Roadmap#]] text [[#Sec 1]] text [[Work/B/ Año ]]",
+				"moved": "[[ Café ]] text [[Home/Roadmap#]] text [[#Sec 1]] text [[Work/B/ Año ]]"
+			},
+			{
+				"content": "[[ Año ]] text [[ROADMAP#Sec 1|Café]] text [[ Ideas ]] text [[Ünï#]]",
+				"target": "n11::File 11.md",
+				"title": "Año",
+				"plain": "[[ Año ]] text [[ROADMAP#Sec 1|Café]] text [[ Ideas ]] text [[Ünï#]]",
+				"moved": "[[ Año ]] text [[ROADMAP#Sec 1|Café]] text [[ Ideas ]] text [[Ünï#]]"
+			},
+			{
+				"content": "[[ Ideas ]] text [[IDEAS]] text [[Plan#Top]] text [[Café#]]",
+				"target": "n12::File 12.md",
+				"title": "Dup 2",
+				"plain": "[[ Ideas ]] text [[IDEAS]] text [[Plan#Top]] text [[Café#]]",
+				"moved": "[[ Ideas ]] text [[IDEAS]] text [[Plan#Top]] text [[Café#]]"
+			},
+			{
+				"content": "[[Work/B/Dup]] text [[IDEAS]] text [[plan#Sec 1|a/b]] text [[ Ünï #Top]]",
+				"target": "n1::File 1.md",
+				"title": "Q#1",
+				"plain": "[[Work/B/Dup]] text [[Work/A/Q#1|Q#1]] text [[plan#Sec 1|a/b]] text [[ Ünï #Top]]",
+				"moved": "[[Work/B/Dup]] text [[Work/A/Q#1|Q#1]] text [[plan#Sec 1|a/b]] text [[ Ünï #Top]]"
+			},
+			{
+				"content": "[[a/b#Sec 1|Ünï]] text [[ Año #]] text [[A/B#Top|a/b]] text [[ Roadmap #Sec 1|Café]]",
+				"target": "n0::File 0.md",
+				"title": "Ideas",
+				"plain": "[[a/b#Sec 1|Ünï]] text [[ Año #]] text [[A/B#Top|a/b]] text [[ Roadmap #Sec 1|Café]]",
+				"moved": "[[a/b#Sec 1|Ünï]] text [[ Año #]] text [[A/B#Top|a/b]] text [[ Roadmap #Sec 1|Café]]"
+			},
+			{
+				"content": "[[Work/A/ X y Z #Sec 1]] text [[Home/Plan|X y Z]] text [[Work/A/ Q#1 #Sec 1]] text [[|Roadmap]]",
+				"target": "n11::File 11.md",
+				"title": "plan",
+				"plain": "[[Work/A/ X y Z #Sec 1]] text [[Home/Plan|X y Z]] text [[Work/A/ Q#1 #Sec 1]] text [[|Roadmap]]",
+				"moved": "[[Work/A/ X y Z #Sec 1]] text [[Home/Plan|X y Z]] text [[Work/A/ Q#1 #Sec 1]] text [[|Roadmap]]"
+			},
+			{
+				"content": "[[Work/ Ideas ]] text [[ROADMAP#Top]] text [[Roadmap#Sec 1]] text [[a/b]]",
+				"target": "n5::File 5.md",
+				"title": "plan",
+				"plain": "[[Work/ Ideas ]] text [[ROADMAP#Top]] text [[Roadmap#Sec 1]] text [[a/b]]",
+				"moved": "[[Work/ Ideas ]] text [[ROADMAP#Top]] text [[Roadmap#Sec 1]] text [[a/b]]"
+			},
+			{
+				"content": "[[Dup#Sec 1|X y Z]] text [[Home/Año]] text [[ plan ]] text [[Work/B/ a/b #Top|Café]]",
+				"target": "n2::File 2.md",
+				"title": "X y Z",
+				"plain": "[[Dup#Sec 1|X y Z]] text [[Home/Año]] text [[ plan ]] text [[Work/B/ a/b #Top|Café]]",
+				"moved": "[[Dup#Sec 1|X y Z]] text [[Home/Año]] text [[ plan ]] text [[Work/B/ a/b #Top|Café]]"
+			},
+			{
+				"content": "[[Café#Sec 1]] text [[ Q#1 ]] text [[#]] text [[Año]]",
+				"target": "n7::File 7.md",
+				"title": "Año",
+				"plain": "[[Café#Sec 1]] text [[ Q#1 ]] text [[#]] text [[Año]]",
+				"moved": "[[Café#Sec 1]] text [[ Q#1 ]] text [[#]] text [[Año]]"
+			},
+			{
+				"content": "[[A/B]] text [[]] text [[#Sec 1]] text [[#|plan]]",
+				"target": "n0::File 0.md",
+				"title": "Q#1",
+				"plain": "[[A/B]] text [[]] text [[#Sec 1]] text [[#|plan]]",
+				"moved": "[[A/B]] text [[]] text [[#Sec 1]] text [[#|plan]]"
+			},
+			{
+				"content": "[[Plan#Top]] text [[X y Z#Sec 1]] text [[plan]] text [[Plan]]",
+				"target": "n4::File 4.md",
+				"title": "Año",
+				"plain": "[[Plan#Top]] text [[X y Z#Sec 1]] text [[plan]] text [[Plan]]",
+				"moved": "[[Plan#Top]] text [[X y Z#Sec 1]] text [[plan]] text [[Plan]]"
+			},
+			{
+				"content": "[[AÑO|Café]] text [[X Y Z#]] text [[Q#1|Ünï]] text [[CAFÉ]]",
+				"target": "n9::File 9.md",
+				"title": "Ideas",
+				"plain": "[[AÑO|Café]] text [[X Y Z#]] text [[Q#1|Ünï]] text [[CAFÉ]]",
+				"moved": "[[AÑO|Café]] text [[X Y Z#]] text [[Q#1|Ünï]] text [[CAFÉ]]"
+			},
+			{
+				"content": "[[X y Z|Ideas]] text [[ Año #Top|Q#1]] text [[ Año ]] text [[AÑO#Top]]",
+				"target": "n0::File 0.md",
+				"title": "Brand new",
+				"plain": "[[X y Z|Ideas]] text [[ Año #Top|Q#1]] text [[ Año ]] text [[AÑO#Top]]",
+				"moved": "[[X y Z|Ideas]] text [[ Año #Top|Q#1]] text [[ Año ]] text [[AÑO#Top]]"
+			},
+			{
+				"content": "[[DUP|a/b]] text [[AÑO#]] text [[AÑO]] text [[Ideas#Top|Q#1]]",
+				"target": "n1::File 1.md",
+				"title": "a/b",
+				"plain": "[[DUP|a/b]] text [[AÑO#]] text [[AÑO]] text [[Work/A/a/b#Top|Q#1]]",
+				"moved": "[[DUP|a/b]] text [[AÑO#]] text [[AÑO]] text [[Work/A/a/b#Top|Q#1]]"
+			},
+			{
+				"content": "[[]] text [[a/b/ Café |Ünï]] text [[IDEAS#|X y Z]] text [[Work/B/ Dup #]]",
+				"target": "n0::File 0.md",
+				"title": "Plan",
+				"plain": "[[]] text [[a/b/ Café |Ünï]] text [[IDEAS#|X y Z]] text [[a/b/Plan|Plan]]",
+				"moved": "[[]] text [[a/b/ Café |Ünï]] text [[IDEAS#|X y Z]] text [[Moved/Here/Plan|Plan]]"
+			},
+			{
+				"content": "[[#Sec 1|Café]] text [[AÑO]] text [[Work/B/A/B#Top|Año]] text [[Dup|plan]]",
+				"target": "n13::File 13.md",
+				"title": "Dup",
+				"plain": "[[#Sec 1|Café]] text [[AÑO]] text [[Work/B/A/B#Top|Año]] text [[Dup|plan]]",
+				"moved": "[[#Sec 1|Café]] text [[AÑO]] text [[Work/B/A/B#Top|Año]] text [[Dup|plan]]"
+			},
+			{
+				"content": "[[Work/B/A/B#Top|Dup]] text [[DUP]] text [[Roadmap#Sec 1]] text [[Ideas#Top]]",
+				"target": "n1::File 1.md",
+				"title": "X y Z",
+				"plain": "[[Work/B/A/B#Top|Dup]] text [[DUP]] text [[Roadmap#Sec 1]] text [[Work/A/X y Z#Top|X y Z > Top]]",
+				"moved": "[[Work/B/A/B#Top|Dup]] text [[DUP]] text [[Roadmap#Sec 1]] text [[Work/A/X y Z#Top|X y Z > Top]]"
+			},
+			{
+				"content": "[[ X y Z ]] text [[#Sec 1]] text [[ plan #Top]] text [[Work/B/Roadmap|X y Z]]",
+				"target": "n5::File 5.md",
+				"title": "Ideas",
+				"plain": "[[ X y Z ]] text [[#Sec 1]] text [[ plan #Top]] text [[Work/B/Roadmap|X y Z]]",
+				"moved": "[[ X y Z ]] text [[#Sec 1]] text [[ plan #Top]] text [[Work/B/Roadmap|X y Z]]"
+			},
+			{
+				"content": "[[#Top]] text [[Ünï#Sec 1|Año]] text [[CAFÉ]] text [[X y Z#Sec 1]]",
+				"target": "n1::File 1.md",
+				"title": "X y Z",
+				"plain": "[[#Top]] text [[Ünï#Sec 1|Año]] text [[CAFÉ]] text [[X y Z#Sec 1]]",
+				"moved": "[[#Top]] text [[Ünï#Sec 1|Año]] text [[CAFÉ]] text [[X y Z#Sec 1]]"
+			},
+			{
+				"content": "[[Work/B/Año#Sec 1|Q#1]] text [[ plan |plan]] text [[a/b/Plan]] text [[AÑO]]",
+				"target": "n2::File 2.md",
+				"title": "a/b",
+				"plain": "[[Work/B/Año#Sec 1|Q#1]] text [[ plan |plan]] text [[a/b/Plan]] text [[AÑO]]",
+				"moved": "[[Work/B/Año#Sec 1|Q#1]] text [[ plan |plan]] text [[a/b/Plan]] text [[AÑO]]"
+			},
+			{
+				"content": "[[ X y Z #Top|Ideas]] text [[Work/IDEAS#Top|Roadmap]] text [[Work/B/Roadmap#Sec 1]] text [[ROADMAP#Sec 1]]",
+				"target": "n8::File 8.md",
+				"title": "Plan",
+				"plain": "[[ X y Z #Top|Ideas]] text [[Work/IDEAS#Top|Roadmap]] text [[Work/B/Roadmap#Sec 1]] text [[ROADMAP#Sec 1]]",
+				"moved": "[[ X y Z #Top|Ideas]] text [[Work/IDEAS#Top|Roadmap]] text [[Work/B/Roadmap#Sec 1]] text [[ROADMAP#Sec 1]]"
+			},
+			{
+				"content": "[[Año#|Ünï]] text [[Q#1#]] text [[#|Café]] text [[PLAN]]",
+				"target": "n8::File 8.md",
+				"title": "Plan",
+				"plain": "[[Año#|Ünï]] text [[Q#1#]] text [[#|Café]] text [[PLAN]]",
+				"moved": "[[Año#|Ünï]] text [[Q#1#]] text [[#|Café]] text [[PLAN]]"
+			},
+			{
+				"content": "[[Work/ Plan ]] text [[Dup]] text [[ Año #Top|plan]] text [[a/b/ Café #Sec 1|Café]]",
+				"target": "n12::File 12.md",
+				"title": "Ünï",
+				"plain": "[[Work/ Plan ]] text [[Dup]] text [[ Año #Top|plan]] text [[a/b/ Café #Sec 1|Café]]",
+				"moved": "[[Work/ Plan ]] text [[Dup]] text [[ Año #Top|plan]] text [[a/b/ Café #Sec 1|Café]]"
+			},
+			{
+				"content": "[[Dup|Café]] text [[CAFÉ|Año]] text [[Ünï#]] text [[Dup]]",
+				"target": "n7::File 7.md",
+				"title": "plan",
+				"plain": "[[Dup|Café]] text [[CAFÉ|Año]] text [[Ünï#]] text [[Dup]]",
+				"moved": "[[Dup|Café]] text [[CAFÉ|Año]] text [[Ünï#]] text [[Dup]]"
+			},
+			{
+				"content": "[[Roadmap]] text [[AÑO]] text [[PLAN|Ünï]] text [[Año]]",
+				"target": "n3::File 3.md",
+				"title": "Ideas",
+				"plain": "[[Roadmap]] text [[AÑO]] text [[PLAN|Ünï]] text [[Año]]",
+				"moved": "[[Roadmap]] text [[AÑO]] text [[PLAN|Ünï]] text [[Año]]"
+			},
+			{
+				"content": "[[Q#1|Ideas]] text [[Work/B/X Y Z]] text [[X y Z#]] text [[ Café #Sec 1|Dup]]",
+				"target": "n1::File 1.md",
+				"title": "a/b",
+				"plain": "[[Q#1|Ideas]] text [[Work/B/X Y Z]] text [[X y Z#]] text [[ Café #Sec 1|Dup]]",
+				"moved": "[[Q#1|Ideas]] text [[Work/B/X Y Z]] text [[X y Z#]] text [[ Café #Sec 1|Dup]]"
+			},
+			{
+				"content": "[[a/b#]] text [[A/B]] text [[ROADMAP#|Q#1]] text [[Q#1#|Café]]",
+				"target": "n8::File 8.md",
+				"title": "Plan",
+				"plain": "[[a/b#]] text [[A/B]] text [[ROADMAP#|Q#1]] text [[Q#1#|Café]]",
+				"moved": "[[a/b#]] text [[A/B]] text [[ROADMAP#|Q#1]] text [[Q#1#|Café]]"
+			},
+			{
+				"content": "[[Home/ plan #Sec 1]] text [[#Sec 1]] text [[Plan#]] text [[Café#Sec 1|Plan]]",
+				"target": "n0::File 0.md",
+				"title": "Ünï",
+				"plain": "[[Home/ plan #Sec 1]] text [[#Sec 1]] text [[Plan#]] text [[Café#Sec 1|Plan]]",
+				"moved": "[[Home/ plan #Sec 1]] text [[#Sec 1]] text [[Plan#]] text [[Café#Sec 1|Plan]]"
+			},
+			{
+				"content": "[[Año#Sec 1]] text [[Q#1#]] text [[Home/X Y Z|Café]] text [[Work/CAFÉ]]",
+				"target": "n12::File 12.md",
+				"title": "plan",
+				"plain": "[[Año#Sec 1]] text [[Q#1#]] text [[plan|Café]] text [[Work/CAFÉ]]",
+				"moved": "[[Año#Sec 1]] text [[Q#1#]] text [[plan|Café]] text [[Work/CAFÉ]]"
+			},
+			{
+				"content": "[[ Roadmap #Top|Dup]] text [[Work/B/A/B]] text [[Work/B/Café]] text [[#1 #Sec 1|Plan]]",
+				"target": "n6::File 6.md",
+				"title": "Ideas",
+				"plain": "[[ Roadmap #Top|Dup]] text [[Work/B/A/B]] text [[Work/B/Café]] text [[#1 #Sec 1|Plan]]",
+				"moved": "[[ Roadmap #Top|Dup]] text [[Work/B/A/B]] text [[Work/B/Café]] text [[#1 #Sec 1|Plan]]"
+			},
+			{
+				"content": "[[X Y Z]] text [[DUP|a/b]] text [[ÜNÏ#]] text [[ÜNÏ#Sec 1]]",
+				"target": "n5::File 5.md",
+				"title": "plan",
+				"plain": "[[X Y Z]] text [[DUP|a/b]] text [[ÜNÏ#]] text [[ÜNÏ#Sec 1]]",
+				"moved": "[[X Y Z]] text [[DUP|a/b]] text [[ÜNÏ#]] text [[ÜNÏ#Sec 1]]"
+			},
+			{
+				"content": "[[]] text [[Work/A/ X y Z #Top]] text [[A/B|Plan]] text [[Año]]",
+				"target": "n10::File 10.md",
+				"title": "Dup 2",
+				"plain": "[[]] text [[Work/A/ X y Z #Top]] text [[A/B|Plan]] text [[Dup 2]]",
+				"moved": "[[]] text [[Work/A/ X y Z #Top]] text [[A/B|Plan]] text [[Dup 2]]"
+			},
+			{
+				"content": "[[Home/ Roadmap #Sec 1]] text [[a/b]] text [[Dup#Top]] text [[Plan#]]",
+				"target": "n7::File 7.md",
+				"title": "Roadmap",
+				"plain": "[[Home/ Roadmap #Sec 1]] text [[a/b]] text [[Dup#Top]] text [[Plan#]]",
+				"moved": "[[Home/ Roadmap #Sec 1]] text [[a/b]] text [[Dup#Top]] text [[Plan#]]"
+			},
+			{
+				"content": "[[Q#1#Sec 1]] text [[Q#1#Top|Ünï]] text [[CAFÉ#Top]] text [[#Top]]",
+				"target": "n4::File 4.md",
+				"title": "Ideas",
+				"plain": "[[Q#1#Sec 1]] text [[Q#1#Top|Ünï]] text [[Work/A/Ideas#Top|Ideas > Top]] text [[#Top]]",
+				"moved": "[[Q#1#Sec 1]] text [[Q#1#Top|Ünï]] text [[Work/A/Ideas#Top|Ideas > Top]] text [[#Top]]"
+			},
+			{
+				"content": "[[Año#Sec 1]] text [[ plan #]] text [[Work/B/ Café |X y Z]] text [[ Roadmap ]]",
+				"target": "n7::File 7.md",
+				"title": "Dup",
+				"plain": "[[Año#Sec 1]] text [[ plan #]] text [[Work/B/Dup|X y Z]] text [[ Roadmap ]]",
+				"moved": "[[Año#Sec 1]] text [[ plan #]] text [[Work/B/Dup|X y Z]] text [[ Roadmap ]]"
+			},
+			{
+				"content": "[[Ideas#Top]] text [[Café#]] text [[Ünï#]] text [[Work/A/DUP]]",
+				"target": "n11::File 11.md",
+				"title": "plan",
+				"plain": "[[Ideas#Top]] text [[Café#]] text [[Ünï#]] text [[Work/A/DUP]]",
+				"moved": "[[Ideas#Top]] text [[Café#]] text [[Ünï#]] text [[Work/A/DUP]]"
+			},
+			{
+				"content": "[[CAFÉ#Sec 1]] text [[DUP#]] text [[Q#1#Top|Roadmap]] text [[Q#1#]]",
+				"target": "n7::File 7.md",
+				"title": "Roadmap",
+				"plain": "[[CAFÉ#Sec 1]] text [[DUP#]] text [[Q#1#Top|Roadmap]] text [[Q#1#]]",
+				"moved": "[[CAFÉ#Sec 1]] text [[DUP#]] text [[Q#1#Top|Roadmap]] text [[Q#1#]]"
+			},
+			{
+				"content": "[[Q#1#Sec 1]] text [[a/b/DUP#|X y Z]] text [[ Dup #]] text [[A/B#]]",
+				"target": "n6::File 6.md",
+				"title": "Café",
+				"plain": "[[Q#1#Sec 1]] text [[a/b/DUP#|X y Z]] text [[ Dup #]] text [[A/B#]]",
+				"moved": "[[Q#1#Sec 1]] text [[a/b/DUP#|X y Z]] text [[ Dup #]] text [[A/B#]]"
+			},
+			{
+				"content": "[[Café]] text [[Q#1#Top]] text [[Q#1#Sec 1|Q#1]] text [[a/b/a/b#Top|Ünï]]",
+				"target": "n5::File 5.md",
+				"title": "Plan",
+				"plain": "[[Café]] text [[Q#1#Top]] text [[Q#1#Sec 1|Q#1]] text [[a/b/a/b#Top|Ünï]]",
+				"moved": "[[Café]] text [[Q#1#Top]] text [[Q#1#Sec 1|Q#1]] text [[a/b/a/b#Top|Ünï]]"
+			},
+			{
+				"content": "[[ X y Z #Sec 1]] text [[A/B]] text [[A/B]] text [[Café#Top]]",
+				"target": "n0::File 0.md",
+				"title": "Roadmap",
+				"plain": "[[ X y Z #Sec 1]] text [[A/B]] text [[A/B]] text [[Café#Top]]",
+				"moved": "[[ X y Z #Sec 1]] text [[A/B]] text [[A/B]] text [[Café#Top]]"
+			},
+			{
+				"content": "[[plan]] text [[ Ünï #]] text [[]] text [[IDEAS#]]",
+				"target": "n13::File 13.md",
+				"title": "Plan",
+				"plain": "[[plan]] text [[ Ünï #]] text [[]] text [[IDEAS#]]",
+				"moved": "[[plan]] text [[ Ünï #]] text [[]] text [[IDEAS#]]"
+			},
+			{
+				"content": "[[Año|Roadmap]] text [[Work/Año#Sec 1]] text [[ÜNÏ]] text [[ Ünï |Ideas]]",
+				"target": "n4::File 4.md",
+				"title": "Dup",
+				"plain": "[[Año|Roadmap]] text [[Work/Año#Sec 1]] text [[ÜNÏ]] text [[ Ünï |Ideas]]",
+				"moved": "[[Año|Roadmap]] text [[Work/Año#Sec 1]] text [[ÜNÏ]] text [[ Ünï |Ideas]]"
+			},
+			{
+				"content": "[[Work/B/CAFÉ|Roadmap]] text [[]] text [[A/B#]] text [[Work/Q#1|Ünï]]",
+				"target": "n1::File 1.md",
+				"title": "Café",
+				"plain": "[[Work/B/CAFÉ|Roadmap]] text [[]] text [[A/B#]] text [[Work/Q#1|Ünï]]",
+				"moved": "[[Work/B/CAFÉ|Roadmap]] text [[]] text [[A/B#]] text [[Work/Q#1|Ünï]]"
+			},
+			{
+				"content": "[[#Sec 1]] text [[ Q#1 #Top|Plan]] text [[ÜNÏ#]] text [[ Q#1 |Q#1]]",
+				"target": "n11::File 11.md",
+				"title": "Brand new",
+				"plain": "[[#Sec 1]] text [[ Q#1 #Top|Plan]] text [[ÜNÏ#]] text [[ Q#1 |Q#1]]",
+				"moved": "[[#Sec 1]] text [[ Q#1 #Top|Plan]] text [[ÜNÏ#]] text [[ Q#1 |Q#1]]"
+			},
+			{
+				"content": "[[PLAN#Sec 1|Café]] text [[Work/ROADMAP#Sec 1]] text [[ Dup #Sec 1]] text [[ÜNÏ#]]",
+				"target": "n8::File 8.md",
+				"title": "Ünï",
+				"plain": "[[PLAN#Sec 1|Café]] text [[Work/ROADMAP#Sec 1]] text [[ Dup #Sec 1]] text [[ÜNÏ#]]",
+				"moved": "[[PLAN#Sec 1|Café]] text [[Work/ROADMAP#Sec 1]] text [[ Dup #Sec 1]] text [[ÜNÏ#]]"
+			},
+			{
+				"content": "[[AÑO]] text [[ Dup #Sec 1|Año]] text [[Año#Top]] text [[|Ideas]]",
+				"target": "n0::File 0.md",
+				"title": "Plan",
+				"plain": "[[AÑO]] text [[a/b/Plan#Sec 1|Año]] text [[Año#Top]] text [[|Ideas]]",
+				"moved": "[[AÑO]] text [[Moved/Here/Plan#Sec 1|Año]] text [[Año#Top]] text [[|Ideas]]"
+			},
+			{
+				"content": "[[X y Z#Top]] text [[ plan #Sec 1|Café]] text [[ Roadmap |Café]] text [[Home/Ünï#Top]]",
+				"target": "n12::File 12.md",
+				"title": "Roadmap",
+				"plain": "[[Roadmap#Top]] text [[ plan #Sec 1|Café]] text [[ Roadmap |Café]] text [[Home/Ünï#Top]]",
+				"moved": "[[Roadmap#Top]] text [[ plan #Sec 1|Café]] text [[ Roadmap |Café]] text [[Home/Ünï#Top]]"
+			},
+			{
+				"content": "[[ X y Z #Top]] text [[Plan#Top]] text [[#|Año]] text [[ a/b #Sec 1]]",
+				"target": "n0::File 0.md",
+				"title": "a/b",
+				"plain": "[[ X y Z #Top]] text [[Plan#Top]] text [[#|Año]] text [[ a/b #Sec 1]]",
+				"moved": "[[ X y Z #Top]] text [[Plan#Top]] text [[#|Año]] text [[ a/b #Sec 1]]"
+			},
+			{
+				"content": "[[a/b/X y Z]] text [[a/b/X Y Z]] text [[Work/B/ Plan #]] text [[ Ünï |Café]]",
+				"target": "n2::File 2.md",
+				"title": "Café",
+				"plain": "[[a/b/X y Z]] text [[a/b/X Y Z]] text [[Work/B/ Plan #]] text [[ Ünï |Café]]",
+				"moved": "[[a/b/X y Z]] text [[a/b/X Y Z]] text [[Work/B/ Plan #]] text [[ Ünï |Café]]"
+			},
+			{
+				"content": "[[|Roadmap]] text [[Work/plan#]] text [[#1#Top]] text [[Plan]]",
+				"target": "n13::File 13.md",
+				"title": "Plan",
+				"plain": "[[|Roadmap]] text [[Work/plan#]] text [[#1#Top]] text [[Plan]]",
+				"moved": "[[|Roadmap]] text [[Work/plan#]] text [[#1#Top]] text [[Plan]]"
+			},
+			{
+				"content": "[[]] text [[Work/A/ÜNÏ]] text [[ Año #Top]] text [[X Y Z#Sec 1|a/b]]",
+				"target": "n6::File 6.md",
+				"title": "Brand new",
+				"plain": "[[]] text [[Brand new]] text [[ Año #Top]] text [[X Y Z#Sec 1|a/b]]",
+				"moved": "[[]] text [[Brand new]] text [[ Año #Top]] text [[X Y Z#Sec 1|a/b]]"
+			},
+			{
+				"content": "[[ X y Z ]] text [[#Top]] text [[ Q#1 ]] text [[X y Z#Top|Q#1]]",
+				"target": "n10::File 10.md",
+				"title": "Ünï",
+				"plain": "[[ X y Z ]] text [[#Top]] text [[ Q#1 ]] text [[X y Z#Top|Q#1]]",
+				"moved": "[[ X y Z ]] text [[#Top]] text [[ Q#1 ]] text [[X y Z#Top|Q#1]]"
+			},
+			{
+				"content": "[[PLAN]] text [[Q#1]] text [[#Sec 1]] text [[Año]]",
+				"target": "n0::File 0.md",
+				"title": "Café",
+				"plain": "[[PLAN]] text [[Q#1]] text [[#Sec 1]] text [[Año]]",
+				"moved": "[[PLAN]] text [[Q#1]] text [[#Sec 1]] text [[Año]]"
+			},
+			{
+				"content": "[[ Ünï ]] text [[a/b/A/B#Sec 1]] text [[a/b/Roadmap#Top]] text [[plan#|Café]]",
+				"target": "n11::File 11.md",
+				"title": "Café",
+				"plain": "[[ Ünï ]] text [[a/b/A/B#Sec 1]] text [[a/b/Roadmap#Top]] text [[plan#|Café]]",
+				"moved": "[[ Ünï ]] text [[a/b/A/B#Sec 1]] text [[a/b/Roadmap#Top]] text [[plan#|Café]]"
+			},
+			{
+				"content": "[[Q#1#|Año]] text [[ROADMAP]] text [[#1]] text [[ Año #Top|Q#1]]",
+				"target": "n11::File 11.md",
+				"title": "Plan",
+				"plain": "[[Q#1#|Año]] text [[ROADMAP]] text [[#1]] text [[ Año #Top|Q#1]]",
+				"moved": "[[Q#1#|Año]] text [[ROADMAP]] text [[#1]] text [[ Año #Top|Q#1]]"
+			},
+			{
+				"content": "[[ Ideas #]] text [[ Ünï #Sec 1|Año]] text [[ X y Z ]] text [[A/B|Ideas]]",
+				"target": "n13::File 13.md",
+				"title": "a/b",
+				"plain": "[[ Ideas #]] text [[ Ünï #Sec 1|Año]] text [[ X y Z ]] text [[A/B|Ideas]]",
+				"moved": "[[ Ideas #]] text [[ Ünï #Sec 1|Año]] text [[ X y Z ]] text [[A/B|Ideas]]"
+			},
+			{
+				"content": "[[Home/ Roadmap #]] text [[Work/ Año ]] text [[Ideas#|plan]] text [[DUP#Sec 1|Plan]]",
+				"target": "n12::File 12.md",
+				"title": "Dup",
+				"plain": "[[Home/ Roadmap #]] text [[Work/ Año ]] text [[Ideas#|plan]] text [[DUP#Sec 1|Plan]]",
+				"moved": "[[Home/ Roadmap #]] text [[Work/ Año ]] text [[Ideas#|plan]] text [[DUP#Sec 1|Plan]]"
+			},
+			{
+				"content": "[[Work/B/ a/b #Top]] text [[Año#Top]] text [[X Y Z#Top]] text [[ Ünï #Top]]",
+				"target": "n0::File 0.md",
+				"title": "Dup",
+				"plain": "[[Work/B/ a/b #Top]] text [[Año#Top]] text [[X Y Z#Top]] text [[ Ünï #Top]]",
+				"moved": "[[Work/B/ a/b #Top]] text [[Año#Top]] text [[X Y Z#Top]] text [[ Ünï #Top]]"
+			},
+			{
+				"content": "[[Año#Sec 1]] text [[CAFÉ#Top]] text [[ÜNÏ#Sec 1|Q#1]] text [[Home/PLAN#Top]]",
+				"target": "n12::File 12.md",
+				"title": "Brand new",
+				"plain": "[[Año#Sec 1]] text [[CAFÉ#Top]] text [[ÜNÏ#Sec 1|Q#1]] text [[Home/PLAN#Top]]",
+				"moved": "[[Año#Sec 1]] text [[CAFÉ#Top]] text [[ÜNÏ#Sec 1|Q#1]] text [[Home/PLAN#Top]]"
+			},
+			{
+				"content": "[[Dup#Sec 1|Q#1]] text [[Año#Sec 1]] text [[ Roadmap #Top]] text [[Work/Ünï#Sec 1|Ideas]]",
+				"target": "n9::File 9.md",
+				"title": "Dup",
+				"plain": "[[Dup#Sec 1|Q#1]] text [[Año#Sec 1]] text [[ Roadmap #Top]] text [[Work/Ünï#Sec 1|Ideas]]",
+				"moved": "[[Dup#Sec 1|Q#1]] text [[Año#Sec 1]] text [[ Roadmap #Top]] text [[Work/Ünï#Sec 1|Ideas]]"
+			},
+			{
+				"content": "[[PLAN#|Ideas]] text [[ÜNÏ#]] text [[ X y Z ]] text [[DUP#]]",
+				"target": "n1::File 1.md",
+				"title": "Dup",
+				"plain": "[[PLAN#|Ideas]] text [[ÜNÏ#]] text [[ X y Z ]] text [[DUP#]]",
+				"moved": "[[PLAN#|Ideas]] text [[ÜNÏ#]] text [[ X y Z ]] text [[DUP#]]"
+			},
+			{
+				"content": "[[AÑO]] text [[Café]] text [[Work/plan#Top]] text [[PLAN]]",
+				"target": "n6::File 6.md",
+				"title": "Ünï",
+				"plain": "[[AÑO]] text [[Café]] text [[Work/plan#Top]] text [[PLAN]]",
+				"moved": "[[AÑO]] text [[Café]] text [[Work/plan#Top]] text [[PLAN]]"
+			},
+			{
+				"content": "[[DUP#Sec 1]] text [[CAFÉ#]] text [[Q#1#Top]] text [[]]",
+				"target": "n3::File 3.md",
+				"title": "Q#1",
+				"plain": "[[DUP#Sec 1]] text [[CAFÉ#]] text [[Q#1#Top]] text [[]]",
+				"moved": "[[DUP#Sec 1]] text [[CAFÉ#]] text [[Q#1#Top]] text [[]]"
+			},
+			{
+				"content": "[[Work/Ünï#]] text [[ Ünï ]] text [[Año#]] text [[Work/A/CAFÉ#Sec 1|Café]]",
+				"target": "n5::File 5.md",
+				"title": "Año",
+				"plain": "[[Work/Ünï#]] text [[ Ünï ]] text [[Año#]] text [[Work/A/CAFÉ#Sec 1|Café]]",
+				"moved": "[[Work/Ünï#]] text [[ Ünï ]] text [[Año#]] text [[Work/A/CAFÉ#Sec 1|Café]]"
+			},
+			{
+				"content": "[[Q#1#Top]] text [[ Dup #|X y Z]] text [[PLAN#Sec 1]] text [[CAFÉ]]",
+				"target": "n12::File 12.md",
+				"title": "Año",
+				"plain": "[[Q#1#Top]] text [[ Dup #|X y Z]] text [[PLAN#Sec 1]] text [[CAFÉ]]",
+				"moved": "[[Q#1#Top]] text [[ Dup #|X y Z]] text [[PLAN#Sec 1]] text [[CAFÉ]]"
+			},
+			{
+				"content": "[[X y Z#Sec 1]] text [[CAFÉ]] text [[ROADMAP]] text [[plan#Sec 1]]",
+				"target": "n5::File 5.md",
+				"title": "Plan",
+				"plain": "[[X y Z#Sec 1]] text [[CAFÉ]] text [[ROADMAP]] text [[plan#Sec 1]]",
+				"moved": "[[X y Z#Sec 1]] text [[CAFÉ]] text [[ROADMAP]] text [[plan#Sec 1]]"
+			}
+		]
+	},
+	"notes": [
+		{
+			"path": "r::Plan.md",
+			"title": "Plan",
+			"aliases": [
+				"Roadmap",
+				"Plan B"
+			]
+		},
+		{
+			"path": "r::Ideas.md",
+			"title": "Ideas",
+			"aliases": []
+		},
+		{
+			"path": "r::Año Nuevo.md",
+			"title": "Año Nuevo",
+			"aliases": [
+				"Solo alias"
+			]
+		},
+		{
+			"path": "a::Dup.md",
+			"title": "Dup",
+			"aliases": []
+		},
+		{
+			"path": "b::Dup.md",
+			"title": "Dup",
+			"aliases": []
+		},
+		{
+			"path": "r::Café.md",
+			"title": "Café",
+			"aliases": []
+		},
+		{
+			"path": "r::Empty alias.md",
+			"title": "Empty alias",
+			"aliases": [
+				"",
+				"  "
+			]
+		},
+		{
+			"path": "r::Upper.md",
+			"title": "UPPER Case",
+			"aliases": []
+		},
+		{
+			"path": "b::Plan.md",
+			"title": "Plan",
+			"aliases": []
+		}
+	],
+	"folders": {
+		"r::Plan.md": "",
+		"r::Ideas.md": "",
+		"r::Año Nuevo.md": "",
+		"a::Dup.md": "Work/A",
+		"b::Dup.md": "Work/B",
+		"r::Café.md": "",
+		"r::Empty alias.md": "",
+		"r::Upper.md": "",
+		"b::Plan.md": "Work/B"
+	},
+	"movedFolders": {
+		"r::Plan.md": "",
+		"r::Ideas.md": "Work/B",
+		"r::Año Nuevo.md": "",
+		"a::Dup.md": "Work/A",
+		"b::Dup.md": "Work/B",
+		"r::Café.md": "",
+		"r::Empty alias.md": "",
+		"r::Upper.md": "",
+		"b::Plan.md": "Work/B"
+	},
+	"self": "r::Ideas.md",
+	"resolutions": [
+		{
+			"text": "Plan",
+			"note": 0,
+			"target": "Plan",
+			"anchor": ""
+		},
+		{
+			"text": "plan",
+			"note": 0,
+			"target": "plan",
+			"anchor": ""
+		},
+		{
+			"text": " Plan ",
+			"note": 0,
+			"target": " Plan ",
+			"anchor": ""
+		},
+		{
+			"text": "Roadmap",
+			"note": 0,
+			"target": "Roadmap",
+			"anchor": ""
+		},
+		{
+			"text": "roadmap",
+			"note": 0,
+			"target": "roadmap",
+			"anchor": ""
+		},
+		{
+			"text": "Plan B",
+			"note": 0,
+			"target": "Plan B",
+			"anchor": ""
+		},
+		{
+			"text": "Work/B/Plan",
+			"note": 8,
+			"target": "Work/B/Plan",
+			"anchor": ""
+		},
+		{
+			"text": "work/b/plan",
+			"note": 8,
+			"target": "work/b/plan",
+			"anchor": ""
+		},
+		{
+			"text": "Other/Plan",
+			"note": 0,
+			"target": "Other/Plan",
+			"anchor": ""
+		},
+		{
+			"text": "Plan#Heading",
+			"note": 0,
+			"target": "Plan",
+			"anchor": "Heading"
+		},
+		{
+			"text": "#Heading",
+			"note": 1,
+			"target": "",
+			"anchor": "Heading"
+		},
+		{
+			"text": "Ideas#Top",
+			"note": 1,
+			"target": "Ideas",
+			"anchor": "Top"
+		},
+		{
+			"text": "Missing#Top",
+			"note": null,
+			"target": "Missing",
+			"anchor": "Top"
+		},
+		{
+			"text": "Missing",
+			"note": null,
+			"target": "Missing",
+			"anchor": ""
+		},
+		{
+			"text": "Año Nuevo",
+			"note": 2,
+			"target": "Año Nuevo",
+			"anchor": ""
+		},
+		{
+			"text": "AÑO NUEVO",
+			"note": 2,
+			"target": "AÑO NUEVO",
+			"anchor": ""
+		},
+		{
+			"text": "Solo alias",
+			"note": 2,
+			"target": "Solo alias",
+			"anchor": ""
+		},
+		{
+			"text": "Dup",
+			"note": 3,
+			"target": "Dup",
+			"anchor": ""
+		},
+		{
+			"text": "Work/A/Dup",
+			"note": 3,
+			"target": "Work/A/Dup",
+			"anchor": ""
+		},
+		{
+			"text": "Work/B/Dup",
+			"note": 4,
+			"target": "Work/B/Dup",
+			"anchor": ""
+		},
+		{
+			"text": "Nope/Dup",
+			"note": 3,
+			"target": "Nope/Dup",
+			"anchor": ""
+		},
+		{
+			"text": "Café",
+			"note": 5,
+			"target": "Café",
+			"anchor": ""
+		},
+		{
+			"text": "Café",
+			"note": 5,
+			"target": "Café",
+			"anchor": ""
+		},
+		{
+			"text": "upper case",
+			"note": 7,
+			"target": "upper case",
+			"anchor": ""
+		},
+		{
+			"text": "Empty alias",
+			"note": 6,
+			"target": "Empty alias",
+			"anchor": ""
+		},
+		{
+			"text": "5",
+			"note": null,
+			"target": "5",
+			"anchor": ""
+		},
+		{
+			"text": "",
+			"note": 6,
+			"target": "",
+			"anchor": ""
+		},
+		{
+			"text": "a/b/c",
+			"note": null,
+			"target": "a/b/c",
+			"anchor": ""
+		},
+		{
+			"text": "Plan/",
+			"note": 6,
+			"target": "Plan/",
+			"anchor": ""
+		},
+		{
+			"text": "/Plan",
+			"note": 0,
+			"target": "/Plan",
+			"anchor": ""
+		},
+		{
+			"text": "Plan#",
+			"note": 0,
+			"target": "Plan",
+			"anchor": ""
+		},
+		{
+			"text": "#",
+			"note": 1,
+			"target": "",
+			"anchor": ""
+		},
+		{
+			"text": "Ideas#A#B",
+			"note": 1,
+			"target": "Ideas",
+			"anchor": "A#B"
+		}
+	],
+	"renames": [
+		{
+			"content": "See [[Plan]] and [[Roadmap]] and [[Plan#Heading|label]] and [[Plan|Alias]]",
+			"target": "r::Plan.md",
+			"title": "Plan 2",
+			"plain": "See [[Plan 2]] and [[Roadmap]] and [[Plan 2#Heading|label]] and [[Plan 2|Alias]]",
+			"moved": "See [[Plan 2]] and [[Roadmap]] and [[Plan 2#Heading|label]] and [[Plan 2|Alias]]"
+		},
+		{
+			"content": "See [[Work/B/Dup]] and [[Dup]] and [[Work/A/Dup#S]]",
+			"target": "a::Dup.md",
+			"title": "Dup2",
+			"plain": "See [[Work/B/Dup]] and [[Dup2]] and [[Dup2#S]]",
+			"moved": "See [[Work/B/Dup]] and [[Dup2]] and [[Dup2#S]]"
+		},
+		{
+			"content": "See [[Work/A/Dup]] and [[work/a/dup#S|x]]",
+			"target": "a::Dup.md",
+			"title": "Plan",
+			"plain": "See [[Work/A/Plan|Plan]] and [[Work/A/Plan#S|x]]",
+			"moved": "See [[Work/A/Plan|Plan]] and [[Work/A/Plan#S|x]]"
+		},
+		{
+			"content": "[[Ideas#Top]] [[Ideas]] [[ideas|ID]]",
+			"target": "r::Ideas.md",
+			"title": "Plan",
+			"plain": "[[Plan#Top]] [[Plan]] [[Plan|ID]]",
+			"moved": "[[Work/B/Plan#Top|Plan > Top]] [[Work/B/Plan|Plan]] [[Work/B/Plan|ID]]"
+		},
+		{
+			"content": "[[Año Nuevo]] [[AÑO NUEVO#x]]",
+			"target": "r::Año Nuevo.md",
+			"title": "Nuevo",
+			"plain": "[[Nuevo]] [[Nuevo#x]]",
+			"moved": "[[Nuevo]] [[Nuevo#x]]"
+		},
+		{
+			"content": "no links here",
+			"target": "r::Ideas.md",
+			"title": "X",
+			"plain": "no links here",
+			"moved": "no links here"
+		},
+		{
+			"content": "",
+			"target": "r::Ideas.md",
+			"title": "X",
+			"plain": "",
+			"moved": ""
+		},
+		{
+			"content": "[[Plan]] [[Work/B/Plan]]",
+			"target": "b::Plan.md",
+			"title": "Plan3",
+			"plain": "[[Plan]] [[Plan3]]",
+			"moved": "[[Plan]] [[Plan3]]"
+		},
+		{
+			"content": "[[Café]] [[Café#S]]",
+			"target": "r::Café.md",
+			"title": "Coffee",
+			"plain": "[[Coffee]] [[Coffee#S]]",
+			"moved": "[[Coffee]] [[Coffee#S]]"
+		},
+		{
+			"content": "[[Roadmap]] [[Plan B|b]]",
+			"target": "r::Plan.md",
+			"title": "Roadmap",
+			"plain": "[[Roadmap]] [[Plan B|b]]",
+			"moved": "[[Roadmap]] [[Plan B|b]]"
+		}
+	]
+}

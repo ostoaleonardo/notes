@@ -4,7 +4,7 @@ mod constants;
 mod frontmatter;
 mod link_name;
 mod links;
-mod patterns;
+pub(crate) mod patterns;
 mod tags;
 mod yaml_emit;
 

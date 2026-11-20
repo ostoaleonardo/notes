@@ -3,6 +3,7 @@ mod constants;
 pub mod engine;
 pub mod error;
 pub mod index;
+pub mod links;
 pub mod model;
 mod pool;
 pub mod reconcile;
