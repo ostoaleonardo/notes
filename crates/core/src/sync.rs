@@ -12,14 +12,14 @@ type Batch<'a> = (&'a [&'a SourceFile], Vec<Option<String>>, u64);
 impl Engine {
 	pub fn sync(
 		&self,
-		repository_id: &str,
+		folder_id: &str,
 		source: &dyn NoteSource,
 		progress: &(dyn Fn(u32, u32) + Sync),
 	) -> Result<SyncStats> {
 		let scan_start = Instant::now();
 		let scanned = source.scan()?;
 		let known: Vec<ScannedFile> = scanned.iter().map(ScannedFile::from).collect();
-		let plan = self.plan(repository_id, &known)?;
+		let plan = self.plan(folder_id, &known)?;
 		let changed: Vec<&SourceFile> = plan
 			.changed
 			.iter()
@@ -28,7 +28,7 @@ impl Engine {
 		let scan_ms = elapsed_ms(scan_start);
 
 		if !plan.removed.is_empty() {
-			self.remove(repository_id, &plan.removed)?;
+			self.remove(folder_id, &plan.removed)?;
 		}
 
 		let total = changed.len() as u32;
@@ -76,7 +76,7 @@ impl Engine {
 				stats.unreadable += (batch.len() - inputs.len()) as u32;
 				stats.read_ms += read_ms;
 
-				let report = self.write(repository_id, inputs)?;
+				let report = self.write(folder_id, inputs)?;
 
 				stats.parse_ms += report.parse_ms;
 				stats.write_ms += report.write_ms;

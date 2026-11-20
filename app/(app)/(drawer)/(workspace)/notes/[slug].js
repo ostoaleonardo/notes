@@ -12,7 +12,7 @@ import { useTitleCommit } from '@/shared/hooks/use-title-commit'
 import { useNotes } from '@/shared/hooks/use-notes'
 import { useWikiLinkRenameConfirm } from '@/shared/hooks/use-wiki-link-rename-confirm'
 import { useCurrentNote, useRegisterCurrent } from '@/shared/hooks/use-current-note'
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 import { useNoteVersions } from '@/shared/hooks/use-note-versions'
 import { getVersionLocation } from '@/shared/utils/note-version-location'
 import { logError } from '@/shared/utils/log-error'
@@ -30,7 +30,7 @@ export default function EditNote() {
     const { commitVersion } = useNoteVersions()
     const { registerCurrent } = useCurrentNote()
     const { slug, [ANCHOR_PARAM]: anchor } = useLocalSearchParams()
-    const { repositories, loading: repositoriesLoading } = useRepositories()
+    const { folders, loading: repositoriesLoading } = useFolders()
     const { saveWithLinkCheck, ...renameDialogProps } = useWikiLinkRenameConfirm()
 
     const {
@@ -60,7 +60,7 @@ export default function EditNote() {
         note, setNote,
         tags,
         properties,
-        repositoryId, setRepositoryId,
+        folderId, setFolderId,
         filename, setFilename,
         invalidFrontmatter,
         rawFrontmatter,
@@ -125,7 +125,7 @@ export default function EditNote() {
 
         if (synced.lostExternalText) {
             commitVersion(
-                getVersionLocation(repositories, repositoryId),
+                getVersionLocation(folders, folderId),
                 filename,
                 savedTitleRef.current,
                 synced.original.note
@@ -145,10 +145,10 @@ export default function EditNote() {
         }
     }
 
-    const onMoved = ({ path, filename, repositoryId }) => {
+    const onMoved = ({ path, filename, folderId }) => {
         pathRef.current = path
         setFilename(filename)
-        setRepositoryId(repositoryId)
+        setFolderId(folderId)
         registerCurrent(path)
         router.setParams({ slug: path })
     }
@@ -193,7 +193,7 @@ export default function EditNote() {
         note,
         tags,
         properties,
-        repositoryId,
+        folderId,
         invalidFrontmatter,
         rawFrontmatter
     ], {

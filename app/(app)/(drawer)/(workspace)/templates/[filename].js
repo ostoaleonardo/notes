@@ -13,7 +13,7 @@ import { useAutosave } from '@/shared/hooks/use-autosave'
 import { useEditorChrome } from '@/shared/hooks/use-editor-chrome'
 import { useRegisterCurrent } from '@/shared/hooks/use-current-note'
 import { useRecentNotes } from '@/shared/hooks/use-recent-notes'
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 import { useTemplates } from '@/shared/hooks/use-templates'
 import { useUtils } from '@/shared/hooks/use-utils'
 import { splitTemplatePath, joinTemplatePath } from '@/shared/utils/template-path'
@@ -35,7 +35,7 @@ export default function EditTemplate() {
     const { getTemplate, getFolderUri, updateTemplate, deleteTemplate } = useTemplates()
     const { pinned, updatePinned } = useUtils()
     const { removeRecent } = useRecentNotes()
-    const { activeRepository, getRootRepository } = useRepositories()
+    const { activeFolder, getRootRepository } = useFolders()
 
     const tabId = TEMPLATE_TAB_PREFIX + filename
     useRegisterCurrent(tabId)
@@ -56,9 +56,9 @@ export default function EditTemplate() {
     const { recentsSheet, searchSheet } = chrome
 
     const location = useMemo(() => (
-        folderUri && activeRepository
+        folderUri && activeFolder
             ? {
-                rootUri: getRootRepository(activeRepository).uri,
+                rootUri: getRootRepository(activeFolder).uri,
                 folderUri,
                 folderPath: joinTemplatePath(
                     TEMPLATES_FOLDER_NAME,
@@ -66,7 +66,7 @@ export default function EditTemplate() {
                 )
             }
             : null
-    ), [folderUri, activeRepository, getRootRepository, filename])
+    ), [folderUri, activeFolder, getRootRepository, filename])
 
     const versionNoteId = splitTemplatePath(currentFilename.current).base
 
@@ -152,10 +152,10 @@ export default function EditTemplate() {
     }, [name, content], { skip: loading || !name.trim() })
 
     useEffect(() => {
-        if (!activeRepository) return
+        if (!activeFolder) return
 
         getFolderUri(splitTemplatePath(filename).dir).then((uri) => setFolderUri(uri || ''))
-    }, [activeRepository, filename, getFolderUri])
+    }, [activeFolder, filename, getFolderUri])
 
     if (loading) return <LoadingOverlay />
 

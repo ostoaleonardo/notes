@@ -15,14 +15,14 @@ describe('repository note count', () => {
 })
 
 describe('repository note counts', () => {
-    test('maps each repository id to its note count', async () => {
-        const repositories = [
+    test('maps each folder id to its note count', async () => {
+        const folders = [
             { id: 'r1', uri: 'repo-a' },
             { id: 'r2', uri: 'repo-b' }
         ]
         const scanMarkdownFiles = async (uri) => (uri === 'repo-a' ? [{ name: 'a.md' }] : [])
 
-        expect(await getRepositoryNoteCounts(repositories, scanMarkdownFiles)).toEqual({ r1: 1, r2: 0 })
+        expect(await getRepositoryNoteCounts(folders, scanMarkdownFiles)).toEqual({ r1: 1, r2: 0 })
     })
 
     test('returns an empty object for no repositories', async () => {

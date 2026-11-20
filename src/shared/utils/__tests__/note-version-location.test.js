@@ -1,6 +1,6 @@
 import { buildVersionKey, getVersionLocation } from '../note-version-location'
 
-const repositories = [
+const folders = [
     { id: 'root', uri: 'file:///vault' },
     { id: 'sub', uri: 'file:///vault/Work', parentId: 'root', alias: 'Work' },
     { id: 'deep', uri: 'file:///vault/Work/Q1', parentId: 'sub', alias: 'Q1' }
@@ -18,7 +18,7 @@ describe('version key', () => {
 
 describe('version location', () => {
     test('points a root note at its own folder', () => {
-        expect(getVersionLocation(repositories, 'root')).toEqual({
+        expect(getVersionLocation(folders, 'root')).toEqual({
             rootUri: 'file:///vault',
             folderUri: 'file:///vault',
             folderPath: ''
@@ -26,7 +26,7 @@ describe('version location', () => {
     })
 
     test('resolves the vault root and relative path for nested folders', () => {
-        expect(getVersionLocation(repositories, 'deep')).toEqual({
+        expect(getVersionLocation(folders, 'deep')).toEqual({
             rootUri: 'file:///vault',
             folderUri: 'file:///vault/Work/Q1',
             folderPath: 'Work/Q1'
@@ -34,6 +34,6 @@ describe('version location', () => {
     })
 
     test('returns null for an unknown repository', () => {
-        expect(getVersionLocation(repositories, 'missing')).toBeNull()
+        expect(getVersionLocation(folders, 'missing')).toBeNull()
     })
 })

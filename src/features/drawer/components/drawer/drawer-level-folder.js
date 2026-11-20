@@ -7,23 +7,23 @@ import { TreeRow } from '@/ui/tree-row'
 import { useMenuAction } from '@/shared/hooks/use-menu-action'
 
 export const DrawerLevelFolder = memo(({
-    repository,
+    folder,
     onEnter,
     onAction
 }) => {
     const menu = useMenuAction()
 
-    const onPress = useCallback(() => onEnter(repository.id), [onEnter, repository.id])
+    const onPress = useCallback(() => onEnter(folder.id), [onEnter, folder.id])
 
     const handleAction = useCallback((action) => {
-        onAction(action, repository.id)
-    }, [onAction, repository.id])
+        onAction(action, folder.id)
+    }, [onAction, folder.id])
 
     return (
         <View>
             <TreeRow
                 collapsed
-                label={repository.alias}
+                label={folder.alias}
                 onPress={onPress}
                 onLongPress={menu.onOpen}
             />

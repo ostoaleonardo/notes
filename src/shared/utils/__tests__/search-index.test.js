@@ -7,7 +7,7 @@ jest.mock('repository-fs', () => ({ __esModule: true, default: {} }))
 const buildNote = (name, updatedAt = 1) => ({
     path: buildNotePath('repo', `${name}.md`),
     filename: `${name}.md`,
-    repositoryId: 'repo',
+    folderId: 'repo',
     title: name,
     note: '',
     updatedAt
@@ -19,14 +19,14 @@ const AST = parseSearchQuery('agenda')
 const SORT = 'name-asc'
 
 const buildIndexed = (notes) => ({
-    repositoryIds: notes.map(() => 'repo'),
+    folderIds: notes.map(() => 'repo'),
     filenames: notes.map((note) => note.filename),
     modified: notes.map((note) => note.updatedAt)
 })
 
 const row = (note, id) => ({
     id,
-    repositoryId: 'repo',
+    folderId: 'repo',
     filename: note.filename,
     sortKey: `key-${note.title}`,
     modified: note.updatedAt

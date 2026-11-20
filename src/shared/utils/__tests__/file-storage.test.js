@@ -540,7 +540,7 @@ describe('repository index', () => {
     const INDEX = `documents/${REPOSITORY_INDEX_FOLDER_NAME}/repo.json`
     const notes = [{ path: 'repo::a.md', note: 'body' }]
 
-    test('returns no notes when the repository was never indexed', async () => {
+    test('returns no notes when the folder was never indexed', async () => {
         expect(await fileStorage.readRepositoryIndex('repo')).toEqual([])
     })
 
@@ -598,7 +598,7 @@ describe('repository index', () => {
     test('deletes the index of a repository', async () => {
         fileStorage.writeRepositoryIndex('repo', notes)
 
-        fileStorage.deleteRepositoryIndex('repo')
+        fileStorage.deleteFolderIndex('repo')
 
         expect(mockFs.has(INDEX)).toBe(false)
     })

@@ -11,7 +11,7 @@ const mockFileStorage = {
     listMarkdownFiles: jest.fn(() => []),
     listSubdirectories: jest.fn(() => []),
     scanSubdirectories: jest.fn(async () => []),
-    deleteRepositoryIndex: jest.fn(),
+    deleteFolderIndex: jest.fn(),
     writeNoteFile: jest.fn(),
     createSubdirectory: jest.fn(),
     deleteDirectory: jest.fn(),
@@ -42,18 +42,18 @@ jest.mock('../use-pro', () => ({
     usePro: () => ({ pro: mockPro })
 }))
 
-const renderRepositoriesHook = (initialRepositories = [], activeRepositoryId = '') => {
+const renderFoldersHook = (initialFolders = [], activeFolderId = '') => {
     const Wrapper = ({ children }) => {
-        const [repositories, setRepositories] = useState(initialRepositories)
-        const [activeId, setActiveId] = useState(activeRepositoryId)
+        const [folders, setFolders] = useState(initialFolders)
+        const [activeId, setActiveId] = useState(activeFolderId)
 
         return (
             <RepositoryStateContext.Provider
                 value={{
-                    repositories,
-                    setRepositories,
-                    activeRepositoryId: activeId,
-                    setActiveRepositoryId: setActiveId,
+                    folders,
+                    setFolders,
+                    activeFolderId: activeId,
+                    setActiveFolderId: setActiveId,
                     loading: false,
                     busyRef: { current: false }
                 }}
@@ -77,7 +77,7 @@ describe('add subfolder permission', () => {
         const root = { id: 'root-1', uri: 'content://root-1', parentId: null }
         mockFileStorage.createSubdirectory.mockReturnValue({ uri: 'content://new', name: 'new' })
 
-        const { result } = await renderRepositoriesHook([root])
+        const { result } = await renderFoldersHook([root])
 
         let outcome
         await act(async () => {
@@ -91,7 +91,7 @@ describe('add subfolder permission', () => {
     test('blocks a second subfolder on a free-tier root repository', async () => {
         const root = { id: 'root-1', uri: 'content://root-1', parentId: null }
         const existingChild = { id: 'child-1', uri: 'content://child-1', parentId: 'root-1' }
-        const { result } = await renderRepositoriesHook([root, existingChild])
+        const { result } = await renderFoldersHook([root, existingChild])
 
         let outcome
         await act(async () => {
@@ -105,7 +105,7 @@ describe('add subfolder permission', () => {
     test('blocks any subfolder nested deeper than one level on free tier', async () => {
         const root = { id: 'root-1', uri: 'content://root-1', parentId: null }
         const child = { id: 'child-1', uri: 'content://child-1', parentId: 'root-1' }
-        const { result } = await renderRepositoriesHook([root, child])
+        const { result } = await renderFoldersHook([root, child])
 
         let outcome
         await act(async () => {
@@ -122,7 +122,7 @@ describe('add subfolder permission', () => {
         const child = { id: 'child-1', uri: 'content://child-1', parentId: 'root-1' }
         mockFileStorage.createSubdirectory.mockReturnValue({ uri: 'content://new', name: 'new' })
 
-        const { result } = await renderRepositoriesHook([root, child])
+        const { result } = await renderFoldersHook([root, child])
 
         let outcome
         await act(async () => {
@@ -135,10 +135,10 @@ describe('add subfolder permission', () => {
 })
 
 describe('remove repository', () => {
-    test('refuses to remove a repository that is an ancestor of the active one', async () => {
+    test('refuses to remove a folder that is an ancestor of the active one', async () => {
         const root = { id: 'root-1', uri: 'content://root-1', parentId: null }
         const child = { id: 'child-1', uri: 'content://child-1', parentId: 'root-1' }
-        const { result } = await renderRepositoriesHook([root, child], 'child-1')
+        const { result } = await renderFoldersHook([root, child], 'child-1')
 
         let outcome
         await act(async () => {
@@ -149,11 +149,11 @@ describe('remove repository', () => {
         expect(mockFileStorage.deleteDirectory).not.toHaveBeenCalled()
     })
 
-    test('removes a repository and its descendants unless it holds the active one', async () => {
+    test('removes a folder and its descendants unless it holds the active one', async () => {
         const root = { id: 'root-1', uri: 'content://root-1', parentId: null }
         const other = { id: 'other-1', uri: 'content://other-1', parentId: null }
         const child = { id: 'child-1', uri: 'content://child-1', parentId: 'root-1' }
-        const { result } = await renderRepositoriesHook([root, other, child], 'other-1')
+        const { result } = await renderFoldersHook([root, other, child], 'other-1')
 
         let outcome
         await act(async () => {
@@ -172,7 +172,7 @@ describe('remove repository', () => {
             alias: 'child',
             parentId: 'root-1'
         }
-        const { result } = await renderRepositoriesHook([root, child], 'root-1')
+        const { result } = await renderFoldersHook([root, child], 'root-1')
 
         await act(async () => {
             await result.current.removeRepository('child-1')
@@ -186,14 +186,14 @@ describe('remove repository', () => {
 })
 
 describe('reconcile repositories', () => {
-    test('drops tracked repositories whose folder no longer exists on disk', async () => {
+    test('drops tracked folders whose folder no longer exists on disk', async () => {
         const root = { id: 'root-1', uri: 'content://root-1', parentId: null }
         mockFileStorage.directoryExists.mockReturnValue(false)
 
-        const { result } = await renderRepositoriesHook([root], 'root-1')
+        const { result } = await renderFoldersHook([root], 'root-1')
 
         await act(async () => {
-            await result.current.reconcileRepositories()
+            await result.current.reconcileFolders()
         })
 
         expect(mockSetItem).toHaveBeenCalledWith('folders', JSON.stringify([]))
@@ -207,17 +207,17 @@ describe('reconcile repositories', () => {
             uri === 'content://root-1' ? [{ uri: 'content://new-folder', name: 'new-folder' }] : []
         ))
 
-        const { result } = await renderRepositoriesHook([root], 'root-1')
+        const { result } = await renderFoldersHook([root], 'root-1')
 
         await act(async () => {
-            await result.current.reconcileRepositories()
+            await result.current.reconcileFolders()
         })
 
         const [, persisted] = mockSetItem.mock.calls.find(([key]) => key === 'folders')
-        const persistedRepositories = JSON.parse(persisted)
+        const persistedFolders = JSON.parse(persisted)
 
-        expect(persistedRepositories).toHaveLength(2)
-        expect(persistedRepositories[1]).toMatchObject({
+        expect(persistedFolders).toHaveLength(2)
+        expect(persistedFolders[1]).toMatchObject({
             uri: 'content://new-folder',
             parentId: 'root-1'
         })
@@ -225,7 +225,7 @@ describe('reconcile repositories', () => {
 })
 
 describe('rename repository', () => {
-    test('relinks descendant uris after renaming a nested repository folder', async () => {
+    test('relinks descendant uris after renaming a nested folder folder', async () => {
         const root = { id: 'root-1', uri: 'content://root-1', parentId: null }
         const child = {
             id: 'child-1',
@@ -248,15 +248,15 @@ describe('rename repository', () => {
             return []
         })
 
-        const { result } = await renderRepositoriesHook([root, child, grandchild])
+        const { result } = await renderFoldersHook([root, child, grandchild])
 
         await act(async () => {
-            await result.current.renameRepository('child-1', 'renamed')
+            await result.current.renameFolder('child-1', 'renamed')
         })
 
         const [, persisted] = mockSetItem.mock.calls.find(([key]) => key === 'folders')
-        const persistedRepositories = JSON.parse(persisted)
-        const persistedGrandchild = persistedRepositories.find((r) => r.id === 'grand-1')
+        const persistedFolders = JSON.parse(persisted)
+        const persistedGrandchild = persistedFolders.find((r) => r.id === 'grand-1')
 
         expect(persistedGrandchild.uri).toBe('content://root-1/renamed/grand')
     })
@@ -272,10 +272,10 @@ describe('rename repository', () => {
 
         mockFileStorage.renameDirectory.mockReturnValue('content://root-1/renamed')
 
-        const { result } = await renderRepositoriesHook([root, child])
+        const { result } = await renderFoldersHook([root, child])
 
         await act(async () => {
-            await result.current.renameRepository('child-1', 'renamed')
+            await result.current.renameFolder('child-1', 'renamed')
         })
 
         expect(mockFileStorage.renameVersionsUnder).toHaveBeenCalledWith(
@@ -299,7 +299,7 @@ describe('ensure templates folder', () => {
             name: 'templates'
         })
 
-        const { result } = await renderRepositoriesHook([root])
+        const { result } = await renderFoldersHook([root])
 
         let uri
         await act(async () => {
@@ -323,7 +323,7 @@ describe('ensure templates folder', () => {
             name: 'templates'
         })
 
-        const { result } = await renderRepositoriesHook([root])
+        const { result } = await renderFoldersHook([root])
 
         await act(async () => {
             await result.current.ensureTemplatesFolder(root)
@@ -347,7 +347,7 @@ describe('ensure templates folder', () => {
             uri: 'content://root-1/templates'
         })
 
-        const { result } = await renderRepositoriesHook([root])
+        const { result } = await renderFoldersHook([root])
 
         let uri
         await act(async () => {
@@ -368,7 +368,7 @@ describe('get root repository', () => {
             uri: 'content://grandchild-1',
             parentId: 'child-1'
         }
-        const { result } = await renderRepositoriesHook([root, child, grandchild], 'root-1')
+        const { result } = await renderFoldersHook([root, child, grandchild], 'root-1')
 
         expect(result.current.getRootRepository(grandchild)).toEqual(root)
     })

@@ -20,7 +20,7 @@ import { usePropertiesPanel } from '@/features/editor/native/hooks/use-propertie
 import { useTitleField } from '@/features/editor/native/hooks/use-title-field'
 import { useNoteSharing } from '@/features/editor/native/hooks/use-note-sharing'
 import { useNoteTemplates } from '@/features/editor/native/hooks/use-note-templates'
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 import { useTagSearchSeed } from '@/features/editor/native/hooks/use-tag-search-seed'
 import { useVersionHistory } from '@/shared/hooks/use-version-history'
 import { getVersionLocation } from '@/shared/utils/note-version-location'
@@ -30,7 +30,7 @@ import { EDITOR_MODES } from '@/shared/constants/editor-modes'
 export const NoteEditorScreen = ({
     id,
     filename,
-    repositoryId,
+    folderId,
     title, setTitle,
     onTitleBlur,
     onRestoreVersion,
@@ -47,10 +47,10 @@ export const NoteEditorScreen = ({
     onMoved
 }) => {
     const { t } = useTranslation()
-    const { repositories } = useRepositories()
+    const { folders } = useFolders()
     const location = useMemo(
-        () => getVersionLocation(repositories, repositoryId),
-        [repositories, repositoryId]
+        () => getVersionLocation(folders, folderId),
+        [folders, folderId]
     )
 
     const [showBacklinks, setShowBacklinks] = useState(true)
@@ -166,7 +166,7 @@ export const NoteEditorScreen = ({
             actions={actions}
             onSetMode={onSetMode}
             toggleProps={toggleProps}
-            repositoryId={repositoryId}
+            folderId={folderId}
             initialSearch={searchSeed}
             versionHistory={versionHistory}
             sheets={(
@@ -189,7 +189,7 @@ export const NoteEditorScreen = ({
 
                     <MoveNoteSheet
                         sheet={noteMove.sheet}
-                        repositoryId={repositoryId}
+                        folderId={folderId}
                         onSelect={noteMove.onSelect}
                     />
 

@@ -1,6 +1,6 @@
 import {
     createNote,
-    getRepositoryUri,
+    getFolderUri,
     persistNoteMove,
     persistNoteUpdate,
     planMovedNoteLinks,
@@ -64,17 +64,17 @@ const createNoteDraft = (overrides = {}) => ({
     title: 'Groceries',
     note: 'milk',
     tags: [],
-    repositoryId: 'repo-1',
+    folderId: 'repo-1',
     ...overrides
 })
 
-describe('get repository uri', () => {
+describe('get folder uri', () => {
     test('returns the uri of the matching repository', () => {
-        expect(getRepositoryUri(REPOSITORIES, 'repo-1')).toBe(REPO_URI)
+        expect(getFolderUri(REPOSITORIES, 'repo-1')).toBe(REPO_URI)
     })
 
-    test('returns undefined when the repository is unknown', () => {
-        expect(getRepositoryUri(REPOSITORIES, 'missing')).toBeUndefined()
+    test('returns undefined when the folder is unknown', () => {
+        expect(getFolderUri(REPOSITORIES, 'missing')).toBeUndefined()
     })
 })
 
@@ -83,7 +83,7 @@ describe('create note', () => {
         const storage = createFakeStorage()
 
         const { record, result } = await createNote(
-            { note: createNoteDraft(), repositoryId: 'repo-1', uri: REPO_URI },
+            { note: createNoteDraft(), folderId: 'repo-1', uri: REPO_URI },
             storage
         )
 
@@ -98,11 +98,11 @@ describe('create note', () => {
         expect(parseFrontmatter(storage.files.get('Groceries.md')).body).toBe('milk')
     })
 
-    test('keeps the record in memory only when there is no repository uri', async () => {
+    test('keeps the record in memory only when there is no folder uri', async () => {
         const storage = createFakeStorage()
 
         const { record, result } = await createNote(
-            { note: createNoteDraft(), repositoryId: 'repo-1', uri: undefined },
+            { note: createNoteDraft(), folderId: 'repo-1', uri: undefined },
             storage
         )
 
@@ -197,7 +197,7 @@ describe('persist note update', () => {
         const plan = planNoteUpdate({ note, previous, uri: REPO_URI }, storage)
 
         const times = await persistNoteUpdate(
-            { note, previous, uri: REPO_URI, plan, repositories: REPOSITORIES },
+            { note, previous, uri: REPO_URI, plan, folders: REPOSITORIES },
             storage
         )
 
@@ -217,7 +217,7 @@ describe('persist note update', () => {
         const plan = planNoteUpdate({ note, previous, uri: REPO_URI }, storage)
 
         await persistNoteUpdate(
-            { note, previous, uri: REPO_URI, plan, repositories: REPOSITORIES },
+            { note, previous, uri: REPO_URI, plan, folders: REPOSITORIES },
             storage
         )
 
@@ -247,7 +247,7 @@ describe('persist note update with external edits', () => {
         return {
             storage,
             run: () => persistNoteUpdate(
-                { note, previous, uri: REPO_URI, plan, repositories: REPOSITORIES },
+                { note, previous, uri: REPO_URI, plan, folders: REPOSITORIES },
                 storage
             )
         }
@@ -292,7 +292,7 @@ describe('persist note update with external edits', () => {
         const plan = { filename: 'Groceries.md', renamed: false, existing: disk }
 
         const { merged } = await persistNoteUpdate(
-            { note: { ...opened, note: `${base} typed` }, previous: opened, uri: REPO_URI, plan, repositories: REPOSITORIES },
+            { note: { ...opened, note: `${base} typed` }, previous: opened, uri: REPO_URI, plan, folders: REPOSITORIES },
             storage
         )
 
@@ -308,7 +308,7 @@ describe('persist note update with external edits', () => {
         const plan = { filename: 'Groceries.md', renamed: false, existing: disk }
 
         const { merged } = await persistNoteUpdate(
-            { note: { ...opened, note: `${base} typed` }, previous: opened, uri: REPO_URI, plan, repositories: REPOSITORIES },
+            { note: { ...opened, note: `${base} typed` }, previous: opened, uri: REPO_URI, plan, folders: REPOSITORIES },
             storage
         )
 
@@ -335,7 +335,7 @@ describe('plan wiki link rename', () => {
         note,
         filename: `${title}.md`,
         path: `repo-1::${title}.md`,
-        repositoryId: 'repo-1'
+        folderId: 'repo-1'
     })
 
     const target = buildNote('Old', 'self [[Old]]')
@@ -453,7 +453,7 @@ describe('write changed notes', () => {
         updatedAt: 5
     }))
 
-    test('writes each note into its own repository and skips unknown ones', async () => {
+    test('writes each note into its own folder and skips unknown ones', async () => {
         const storage = createFakeStorage()
         const calls = []
         storage.saveNoteFiles = async ({ directoryUri, files }) => {
@@ -463,8 +463,8 @@ describe('write changed notes', () => {
 
         await writeChangedNotes(
             [
-                { repositoryId: 'repo-1', filename: 'A.md', note: 'a', tags: [] },
-                { repositoryId: 'missing', filename: 'B.md', note: 'b', tags: [] }
+                { folderId: 'repo-1', filename: 'A.md', note: 'a', tags: [] },
+                { folderId: 'missing', filename: 'B.md', note: 'b', tags: [] }
             ],
             REPOSITORIES,
             storage
@@ -473,7 +473,7 @@ describe('write changed notes', () => {
         expect(calls).toEqual([[REPO_URI, ['A.md']]])
     })
 
-    test('saves every note of a repository with one call', async () => {
+    test('saves every note of a folder with one call', async () => {
         const storage = createFakeStorage()
         const calls = []
         storage.saveNoteFiles = async ({ files }) => {
@@ -483,8 +483,8 @@ describe('write changed notes', () => {
 
         await writeChangedNotes(
             [
-                { repositoryId: 'repo-1', filename: 'A.md', note: 'a', tags: [] },
-                { repositoryId: 'repo-1', filename: 'B.md', note: 'b', tags: [] }
+                { folderId: 'repo-1', filename: 'A.md', note: 'a', tags: [] },
+                { folderId: 'repo-1', filename: 'B.md', note: 'b', tags: [] }
             ],
             REPOSITORIES,
             storage
@@ -502,7 +502,7 @@ describe('write changed notes', () => {
         }
 
         await writeChangedNotes(
-            [{ repositoryId: 'repo-1', filename: 'A.md', updatedAt: 7, note: 'a', tags: [] }],
+            [{ folderId: 'repo-1', filename: 'A.md', updatedAt: 7, note: 'a', tags: [] }],
             REPOSITORIES,
             storage
         )
@@ -515,7 +515,7 @@ describe('write changed notes', () => {
         storage.saveNoteFiles = async ({ files }) => stampsFor(files)
 
         const { failed, saved } = await writeChangedNotes(
-            [{ path: 'p/A', repositoryId: 'repo-1', filename: 'A.md', note: 'a', tags: [] }],
+            [{ path: 'p/A', folderId: 'repo-1', filename: 'A.md', note: 'a', tags: [] }],
             REPOSITORIES,
             storage
         )
@@ -532,8 +532,8 @@ describe('write changed notes', () => {
 
         const { failed, saved } = await writeChangedNotes(
             [
-                { path: 'p/A', repositoryId: 'repo-1', filename: 'A.md', note: 'a', tags: [] },
-                { path: 'p/B', repositoryId: 'repo-1', filename: 'B.md', note: 'b', tags: [] }
+                { path: 'p/A', folderId: 'repo-1', filename: 'A.md', note: 'a', tags: [] },
+                { path: 'p/B', folderId: 'repo-1', filename: 'B.md', note: 'b', tags: [] }
             ],
             REPOSITORIES,
             storage
@@ -543,14 +543,14 @@ describe('write changed notes', () => {
         expect([...saved.keys()]).toEqual(['p/B'])
     })
 
-    test('reports every note of the repository when the whole call fails', async () => {
+    test('reports every note of the folder when the whole call fails', async () => {
         const storage = createFakeStorage()
         storage.saveNoteFiles = async () => { throw new Error('bridge down') }
 
         const { failed, saved } = await writeChangedNotes(
             [
-                { path: 'p/A', repositoryId: 'repo-1', filename: 'A.md', note: 'a', tags: [] },
-                { path: 'p/B', repositoryId: 'repo-1', filename: 'B.md', note: 'b', tags: [] }
+                { path: 'p/A', folderId: 'repo-1', filename: 'A.md', note: 'a', tags: [] },
+                { path: 'p/B', folderId: 'repo-1', filename: 'B.md', note: 'b', tags: [] }
             ],
             REPOSITORIES,
             storage
@@ -607,16 +607,16 @@ describe('persist note move', () => {
         renameVersions: jest.fn(async () => {})
     })
 
-    const NOTE = { path: 'root::Idea.md', filename: 'Idea.md', title: 'Idea', repositoryId: 'root' }
+    const NOTE = { path: 'root::Idea.md', filename: 'Idea.md', title: 'Idea', folderId: 'root' }
 
     test('moves the file and its version history to the destination folder', async () => {
         const storage = createMoveStorage()
 
-        await persistNoteMove({ note: NOTE, destinationId: 'child', repositories: MOVE_REPOSITORIES }, storage)
+        await persistNoteMove({ note: NOTE, destinationId: 'child', folders: MOVE_REPOSITORIES }, storage)
 
         expect(storage.moveNote).toHaveBeenCalledWith({
-            source: { repositoryId: 'root', uri: 'file:///root' },
-            destination: { repositoryId: 'child', uri: 'file:///root/Child' },
+            source: { folderId: 'root', uri: 'file:///root' },
+            destination: { folderId: 'child', uri: 'file:///root/Child' },
             filename: 'Idea.md'
         })
         expect(storage.renameVersions).toHaveBeenCalledWith('file:///root', 'Idea.md', 'Child/Idea.md')
@@ -624,12 +624,12 @@ describe('persist note move', () => {
 
     test('returns the new location of the note', async () => {
         const result = await persistNoteMove(
-            { note: NOTE, destinationId: 'child', repositories: MOVE_REPOSITORIES },
+            { note: NOTE, destinationId: 'child', folders: MOVE_REPOSITORIES },
             createMoveStorage()
         )
 
         expect(result).toEqual({
-            repositoryId: 'child',
+            folderId: 'child',
             filename: 'Idea.md',
             path: 'child::Idea.md',
             fileUri: 'file:///root/Child/Idea.md',
@@ -641,16 +641,16 @@ describe('persist note move', () => {
         const storage = createMoveStorage(['Idea.md'])
 
         await expect(
-            persistNoteMove({ note: NOTE, destinationId: 'child', repositories: MOVE_REPOSITORIES }, storage)
+            persistNoteMove({ note: NOTE, destinationId: 'child', folders: MOVE_REPOSITORIES }, storage)
         ).rejects.toMatchObject({ code: 'DUPLICATE_TITLE' })
         expect(storage.moveNote).not.toHaveBeenCalled()
     })
 
-    test('refuses to move a note to a different repository tree', async () => {
+    test('refuses to move a note to a different folder tree', async () => {
         const storage = createMoveStorage()
 
         await expect(
-            persistNoteMove({ note: NOTE, destinationId: 'other', repositories: MOVE_REPOSITORIES }, storage)
+            persistNoteMove({ note: NOTE, destinationId: 'other', folders: MOVE_REPOSITORIES }, storage)
         ).rejects.toThrow()
         expect(storage.moveNote).not.toHaveBeenCalled()
     })
@@ -662,9 +662,9 @@ describe('plan moved note links', () => {
         { id: 'child', uri: 'file:///root/Child', alias: 'Child', parentId: 'root' }
     ]
 
-    const moved = { path: 'root::Idea.md', title: 'Idea', repositoryId: 'root', note: '' }
-    const twin = { path: 'child::Idea.md', title: 'Idea', repositoryId: 'child', note: '' }
-    const linker = { path: 'root::Index.md', title: 'Index', repositoryId: 'root', note: 'See [[Idea]]' }
+    const moved = { path: 'root::Idea.md', title: 'Idea', folderId: 'root', note: '' }
+    const twin = { path: 'child::Idea.md', title: 'Idea', folderId: 'child', note: '' }
+    const linker = { path: 'root::Index.md', title: 'Index', folderId: 'root', note: 'See [[Idea]]' }
     const NOTES = [moved, twin, linker]
     const NOTE_PATHS = new Map([['root::Idea.md', ''], ['child::Idea.md', 'Child'], ['root::Index.md', '']])
 
@@ -674,7 +674,7 @@ describe('plan moved note links', () => {
             destinationId: 'child',
             notes: NOTES,
             notePaths: NOTE_PATHS,
-            repositories: REPOSITORIES_WITH_FOLDER,
+            folders: REPOSITORIES_WITH_FOLDER,
             currentNotes: NOTES
         })
 
@@ -690,7 +690,7 @@ describe('plan moved note links', () => {
             destinationId: 'child',
             notes: unique,
             notePaths: new Map([['root::Idea.md', ''], ['root::Index.md', '']]),
-            repositories: REPOSITORIES_WITH_FOLDER,
+            folders: REPOSITORIES_WITH_FOLDER,
             currentNotes: unique
         })
 

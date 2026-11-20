@@ -190,16 +190,16 @@ const toSavedFile = (result, filename) => {
     throw error
 }
 
-const saveNoteFile = async ({ repositoryId, directoryUri, filename, content, expectedModified }) => (
+const saveNoteFile = async ({ folderId, directoryUri, filename, content, expectedModified }) => (
     toSavedFile(
-        await RepositoryFs.saveNote(repositoryId, directoryUri, filename, content, expectedModified),
+        await RepositoryFs.saveNote(folderId, directoryUri, filename, content, expectedModified),
         filename
     )
 )
 
-const saveNoteFiles = async ({ repositoryId, directoryUri, files }) => {
+const saveNoteFiles = async ({ folderId, directoryUri, files }) => {
     const results = await RepositoryFs.saveNotes(
-        repositoryId,
+        folderId,
         directoryUri,
         files.map((file) => file.filename),
         files.map((file) => file.content),
@@ -211,8 +211,8 @@ const saveNoteFiles = async ({ repositoryId, directoryUri, files }) => {
     ))
 }
 
-const saveRenamedNoteFile = async ({ repositoryId, directoryUri, from, to, content }) => (
-    toSavedFile(await RepositoryFs.renameNote(repositoryId, directoryUri, from, to, content), to)
+const saveRenamedNoteFile = async ({ folderId, directoryUri, from, to, content }) => (
+    toSavedFile(await RepositoryFs.renameNote(folderId, directoryUri, from, to, content), to)
 )
 
 const renameNoteFile = async (directoryUri, oldFilename, newFilename) => {
@@ -250,13 +250,13 @@ const moveNoteFiles = async (sourceUri, filename, destinationUri) => {
 const moveNote = async ({ source, destination, filename }) => {
     const content = await findFile(source.uri, filename).text()
     const saved = await saveNoteFile({
-        repositoryId: destination.repositoryId,
+        folderId: destination.folderId,
         directoryUri: destination.uri,
         filename,
         content
     })
 
-    await RepositoryFs.deleteNote(source.repositoryId, source.uri, filename)
+    await RepositoryFs.deleteNote(source.folderId, source.uri, filename)
 
     return saved
 }
@@ -329,8 +329,8 @@ const migrateLegacyVersions = (folderUri, rootUri, folderPath) => (
     RepositoryFs.versionsMigrateLegacy(rootUri, folderPath)
 )
 
-const getRepositoryIndexFile = (repositoryId) => (
-    new File(Paths.document, REPOSITORY_INDEX_FOLDER_NAME, `${repositoryId}.json`)
+const getRepositoryIndexFile = (folderId) => (
+    new File(Paths.document, REPOSITORY_INDEX_FOLDER_NAME, `${folderId}.json`)
 )
 
 const restoreNotes = (notes, tags, links) => {
@@ -342,8 +342,8 @@ const restoreNotes = (notes, tags, links) => {
     return notes
 }
 
-const readRepositoryIndex = async (repositoryId) => {
-    const file = getRepositoryIndexFile(repositoryId)
+const readRepositoryIndex = async (folderId) => {
+    const file = getRepositoryIndexFile(folderId)
     if (!file.exists) return []
 
     try {
@@ -369,12 +369,12 @@ const readRepositoryIndex = async (repositoryId) => {
     }
 }
 
-const writeRepositoryIndex = (repositoryId, notes) => {
+const writeRepositoryIndex = (folderId, notes) => {
     try {
         const folder = new Directory(Paths.document, REPOSITORY_INDEX_FOLDER_NAME)
         if (!folder.exists) folder.create()
 
-        const file = getRepositoryIndexFile(repositoryId)
+        const file = getRepositoryIndexFile(folderId)
         if (!file.exists) file.create()
         const stringifyStart = Date.now()
         const payload = JSON.stringify({
@@ -397,11 +397,11 @@ const writeRepositoryIndex = (repositoryId, notes) => {
     }
 }
 
-const deleteRepositoryIndex = (repositoryId) => {
-    const file = getRepositoryIndexFile(repositoryId)
+const deleteFolderIndex = (folderId) => {
+    const file = getRepositoryIndexFile(folderId)
     if (file.exists) file.delete()
 
-    RepositoryFs.deleteRepositoryIndex(repositoryId).catch((error) => {
+    RepositoryFs.deleteFolderIndex(folderId).catch((error) => {
         logError(LOG_MESSAGES.ERROR_DELETING_NATIVE_INDEX, error)
     })
 }
@@ -419,7 +419,7 @@ export const fileStorage = {
     readTextFiles,
     readRepositoryIndex,
     writeRepositoryIndex,
-    deleteRepositoryIndex,
+    deleteFolderIndex,
     writeNoteFile,
     saveNoteFile,
     saveNoteFiles,

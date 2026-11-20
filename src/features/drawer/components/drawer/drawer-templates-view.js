@@ -9,7 +9,7 @@ import { DrawerLevelNote } from './drawer-level-note'
 import { DrawerTemplateFolderItem } from './drawer-template-folder-item'
 
 import { useCurrentNote } from '@/shared/hooks/use-current-note'
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 import { useTemplatesList } from '@/shared/hooks/use-templates-list'
 import { useUtils } from '@/shared/hooks/use-utils'
 import { openEditor } from '@/shared/utils/open-editor'
@@ -29,8 +29,8 @@ export const DrawerTemplatesView = ({ closeDrawer }) => {
     const { t } = useTranslation()
     const { currentId } = useCurrentNote()
     const { collapsedFolders, setFoldersCollapsed } = useUtils()
-    const { activeRepository } = useRepositories()
-    const { templates, folders, loading, refresh } = useTemplatesList([activeRepository?.id])
+    const { activeFolder } = useFolders()
+    const { templates, folders, loading, refresh } = useTemplatesList([activeFolder?.id])
     const [addTemplateFolderPath, setAddTemplateFolderPath] = useState(null)
     const [addSubfolderParent, setAddSubfolderParent] = useState(null)
 

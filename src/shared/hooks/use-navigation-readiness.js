@@ -2,11 +2,11 @@ import { useRef } from 'react'
 
 export function useNavigationReadiness({
     loading,
-    activeRepository,
+    activeFolder,
     notesLoading
 }) {
-    const isReady = !loading && !!activeRepository && !notesLoading
-    const needsGate = !loading && !activeRepository
+    const isReady = !loading && !!activeFolder && !notesLoading
+    const needsGate = !loading && !activeFolder
 
     const hasNeededGate = useRef(false)
     const hasBeenReady = useRef(false)

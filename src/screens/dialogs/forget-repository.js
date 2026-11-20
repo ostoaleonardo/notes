@@ -3,21 +3,21 @@ import { useTranslation } from 'react-i18next'
 import { ConfirmDialog } from '@/shared/components/confirm-dialog'
 
 import { useHaptics } from '@/shared/hooks/use-haptics'
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 
 import { FEEDBACK_TYPES } from '@/shared/constants/feedback-types'
 
 export const ForgetRepository = ({
     visible,
     onDismiss,
-    repositoryId
+    folderId
 }) => {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
-    const { forgetRepository } = useRepositories()
+    const { forgetRepository } = useFolders()
 
     const onForget = () => {
-        forgetRepository(repositoryId)
+        forgetRepository(folderId)
         vibrate(FEEDBACK_TYPES.SUCCESS)
     }
 

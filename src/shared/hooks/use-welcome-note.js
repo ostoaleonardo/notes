@@ -15,7 +15,7 @@ export function useWelcomeNote() {
     const { getItem, setItem } = useStorage()
     const { fileExists, writeNoteFile } = useFileStorage()
 
-    const seedWelcomeNote = useCallback(async (uri, repositoryId) => {
+    const seedWelcomeNote = useCallback(async (uri, folderId) => {
         const alreadyCreated = await getItem(STORAGE_KEYS.WELCOME_NOTE_CREATED)
         if (alreadyCreated) return null
 
@@ -26,7 +26,7 @@ export function useWelcomeNote() {
 
         writeNoteFile(uri, filename, composeNoteFile({ tags: [] }, content))
 
-        return buildNotePath(repositoryId, filename)
+        return buildNotePath(folderId, filename)
     }, [
         getItem,
         setItem,

@@ -8,7 +8,7 @@ describe('build duplicate note', () => {
             title: 'Groceries',
             note: 'Milk, eggs',
             tags: ['tag-1'],
-            repositoryId: 'repo-1',
+            folderId: 'repo-1',
             createdAt: 1700000000000,
             updatedAt: 1700000100000
         }
@@ -24,7 +24,7 @@ describe('build duplicate note', () => {
             title: 'Groceries (copy)',
             note: 'Milk, eggs',
             tags: ['tag-1'],
-            repositoryId: 'repo-1',
+            folderId: 'repo-1',
             createdAt: 1700000200000,
             updatedAt: ''
         })

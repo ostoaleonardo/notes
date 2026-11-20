@@ -96,7 +96,7 @@ const legacyNotes = hasLegacyFixtures ? JSON.parse(fs.readFileSync(LEGACY_NOTES_
 const legacyTags = hasLegacyFixtures ? JSON.parse(fs.readFileSync(LEGACY_TAGS_PATH, 'utf8')) : []
 
 const REPO_URI = 'content://fake/repo'
-const repository = { uri: REPO_URI }
+const folder = { uri: REPO_URI }
 
 const seedLegacyStorage = () => createFakeStorage({
     [STORAGE_KEYS.NOTES]: JSON.stringify(legacyNotes),
@@ -115,7 +115,7 @@ describeLegacyFixtures('legacy AsyncStorage migration', () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage()
 
-        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
+        const { notes } = await loadRepositoryData([folder], folder, storage, fileStorage)
 
         expect(notes).toHaveLength(legacyNotes.length)
         for (const legacyNote of legacyNotes) {
@@ -128,7 +128,7 @@ describeLegacyFixtures('legacy AsyncStorage migration', () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage()
 
-        await loadRepositoryData([repository], repository, storage, fileStorage)
+        await loadRepositoryData([folder], folder, storage, fileStorage)
 
         expect(await storage.getItem(STORAGE_KEYS.NOTES)).toBeNull()
         expect(await getLegacyNoteKeys(storage)).toHaveLength(0)
@@ -138,10 +138,10 @@ describeLegacyFixtures('legacy AsyncStorage migration', () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage()
 
-        await loadRepositoryData([repository], repository, storage, fileStorage)
+        await loadRepositoryData([folder], folder, storage, fileStorage)
         const { notes: secondLoad } = await loadRepositoryData(
-            [repository],
-            repository,
+            [folder],
+            folder,
             storage,
             fileStorage
         )
@@ -156,7 +156,7 @@ describeLegacyFixtures('legacy AsyncStorage migration', () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage()
 
-        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
+        const { notes } = await loadRepositoryData([folder], folder, storage, fileStorage)
         const migrated = notes.find((note) => note.note.startsWith(legacyNoteWithTags.note))
 
         expect(migrated.tags.sort()).toEqual([...legacyNoteWithTags.categories].sort())
@@ -173,7 +173,7 @@ describe('legacy per-note storage entries', () => {
     })
 
     const readMigrated = async (storage, fileStorage) => {
-        await loadRepositoryData([repository], repository, storage, fileStorage)
+        await loadRepositoryData([folder], folder, storage, fileStorage)
         const file = fileStorage.listMarkdownFiles(REPO_URI).find((item) => item.name === 'Note.md')
         return parseFrontmatter(await file.text())
     }
@@ -254,7 +254,7 @@ describe('legacy blob note content', () => {
 })
 
 describeLegacyFixtures('legacy image migration', () => {
-    test('copies a legacy cache-referenced image into the repository images/ folder', async () => {
+    test('copies a legacy cache-referenced image into the folder images/ folder', async () => {
         const legacyNoteWithImage = legacyNotes.find((note) => note.images.length > 0)
         expect(legacyNoteWithImage).toBeDefined()
 
@@ -263,7 +263,7 @@ describeLegacyFixtures('legacy image migration', () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage(deviceCache)
 
-        await loadRepositoryData([repository], repository, storage, fileStorage)
+        await loadRepositoryData([folder], folder, storage, fileStorage)
 
         const expectedCount = legacyNotes.reduce((total, note) => total + note.images.length, 0)
         const copiedFiles = fileStorage.listFiles(`${REPO_URI}/images`)
@@ -278,8 +278,8 @@ describeLegacyFixtures('legacy image migration', () => {
         const fileStorage = createFakeFileStorage(new Map())
 
         const { migration } = await loadRepositoryData(
-            [repository],
-            repository,
+            [folder],
+            folder,
             storage,
             fileStorage
         )
@@ -299,8 +299,8 @@ describeLegacyFixtures('legacy image migration', () => {
         const fileStorage = createFakeFileStorage(new Map())
 
         const { migration } = await loadRepositoryData(
-            [repository],
-            repository,
+            [folder],
+            folder,
             storage,
             fileStorage
         )
@@ -317,7 +317,7 @@ describeLegacyFixtures('legacy image migration', () => {
         const storage = seedLegacyStorage()
         const fileStorage = createFakeFileStorage(deviceCache)
 
-        await loadRepositoryData([repository], repository, storage, fileStorage)
+        await loadRepositoryData([folder], folder, storage, fileStorage)
 
         const copiedFiles = fileStorage.listFiles(`${REPO_URI}/images`)
         expect(copiedFiles).toHaveLength(allImageUris.length)
@@ -330,7 +330,7 @@ describe('steady state (no legacy data)', () => {
         const fileStorage = createFakeFileStorage()
         fileStorage.writeNoteFile(REPO_URI, 'External note.md', 'Added from outside the app.')
 
-        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
+        const { notes } = await loadRepositoryData([folder], folder, storage, fileStorage)
 
         expect(notes).toHaveLength(1)
         expect(notes[0].title).toBe('External note')
@@ -343,7 +343,7 @@ describe('steady state (no legacy data)', () => {
         const rawContent = '---\ntags: [unterminated\n---\n\ncontent'
         fileStorage.writeNoteFile(REPO_URI, 'Note.md', rawContent)
 
-        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
+        const { notes } = await loadRepositoryData([folder], folder, storage, fileStorage)
 
         expect(notes[0].tags).toEqual([])
         expect(notes[0].invalidFrontmatter).toBe('tags: [unterminated')
@@ -361,7 +361,7 @@ describe('steady state (no legacy data)', () => {
         const rawContent = '---\naliases:\n  - Alias\ntags: one, two\n---\n\ncontent'
         fileStorage.writeNoteFile(REPO_URI, 'Note.md', rawContent)
 
-        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
+        const { notes } = await loadRepositoryData([folder], folder, storage, fileStorage)
 
         expect(notes[0].tags).toEqual(['one', 'two'])
         expect(notes[0].properties).toEqual({ aliases: ['Alias'] })
@@ -374,7 +374,7 @@ describe('legacy versions migration', () => {
         const fileStorage = createFakeFileStorage()
         fileStorage.findDirectory.mockReturnValue({ uri: `${REPO_URI}/templates` })
 
-        await loadRepositoryData([repository], repository, createFakeStorage(), fileStorage)
+        await loadRepositoryData([folder], folder, createFakeStorage(), fileStorage)
 
         expect(fileStorage.migrateLegacyVersions).toHaveBeenCalledWith(REPO_URI, REPO_URI, '')
         expect(fileStorage.migrateLegacyVersions).toHaveBeenCalledWith(
@@ -388,9 +388,9 @@ describe('legacy versions migration', () => {
         const fileStorage = createFakeFileStorage()
         const storage = createFakeStorage()
 
-        await loadRepositoryData([repository], repository, storage, fileStorage)
+        await loadRepositoryData([folder], folder, storage, fileStorage)
         fileStorage.migrateLegacyVersions.mockClear()
-        await loadRepositoryData([repository], repository, storage, fileStorage)
+        await loadRepositoryData([folder], folder, storage, fileStorage)
 
         expect(fileStorage.migrateLegacyVersions).not.toHaveBeenCalled()
     })
@@ -410,11 +410,11 @@ describe('interrupted migration', () => {
         }
 
         await expect(
-            loadRepositoryData([repository], repository, storage, fileStorage)
+            loadRepositoryData([folder], folder, storage, fileStorage)
         ).rejects.toThrow('disk full')
 
         fileStorage.writeNoteFile = writeNoteFile
-        const { notes } = await loadRepositoryData([repository], repository, storage, fileStorage)
+        const { notes } = await loadRepositoryData([folder], folder, storage, fileStorage)
 
         expect(notes.map((note) => note.title).sort()).toEqual(['First', 'Second'])
         expect(await getLegacyNoteKeys(storage)).toEqual([])
@@ -422,7 +422,7 @@ describe('interrupted migration', () => {
 })
 
 describe('tree-wide loading', () => {
-    test('merges notes from every folder, each stamped with its repositoryId', async () => {
+    test('merges notes from every folder, each stamped with its folderId', async () => {
         const storage = createFakeStorage()
         const fileStorage = createFakeFileStorage()
 
@@ -439,8 +439,8 @@ describe('tree-wide loading', () => {
         const rootNote = notes.find((note) => note.title === 'Root note')
         const subNote = notes.find((note) => note.title === 'Sub note')
 
-        expect(rootNote.repositoryId).toBe('root-id')
-        expect(subNote.repositoryId).toBe('sub-id')
+        expect(rootNote.folderId).toBe('root-id')
+        expect(subNote.folderId).toBe('sub-id')
     })
 })
 

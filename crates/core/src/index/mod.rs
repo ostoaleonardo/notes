@@ -23,8 +23,8 @@ impl Index {
 		Ok(Self { connection })
 	}
 
-	pub fn metas(&self, repository_id: &str) -> Result<HashMap<String, FileMeta>> {
-		reader::metas(&self.connection, repository_id)
+	pub fn metas(&self, folder_id: &str) -> Result<HashMap<String, FileMeta>> {
+		reader::metas(&self.connection, folder_id)
 	}
 
 	pub fn indexed_notes(&self) -> Result<IndexedNotes> {
@@ -35,8 +35,8 @@ impl Index {
 		reader::query(&self.connection, statement, params)
 	}
 
-	pub fn list_notes(&self, repository_ids: &[String]) -> Result<String> {
-		notes_json::list(&self.connection, repository_ids)
+	pub fn list_notes(&self, folder_ids: &[String]) -> Result<String> {
+		notes_json::list(&self.connection, folder_ids)
 	}
 
 	pub fn backlink_candidates(
@@ -53,34 +53,34 @@ impl Index {
 
 	pub fn write(
 		&mut self,
-		repository_id: &str,
+		folder_id: &str,
 		notes: &[IndexedNote],
 		removed: &[String],
 		keys: &SortKeys,
 	) -> Result<()> {
 		let transaction = self.immediate()?;
-		writer::write_batch(&transaction, repository_id, notes, removed, keys)?;
+		writer::write_batch(&transaction, folder_id, notes, removed, keys)?;
 		transaction.commit()?;
 
 		Ok(())
 	}
 
-	pub fn delete_repository(&mut self, repository_id: &str) -> Result<()> {
+	pub fn delete_folder(&mut self, folder_id: &str) -> Result<()> {
 		let transaction = self.immediate()?;
-		writer::delete_repository(&transaction, repository_id)?;
+		writer::delete_folder(&transaction, folder_id)?;
 		transaction.commit()?;
 
 		Ok(())
 	}
 
 	pub fn prune(&mut self, keep: &HashSet<String>) -> Result<()> {
-		let stale: Vec<String> = reader::repositories(&self.connection)?
+		let stale: Vec<String> = reader::folders(&self.connection)?
 			.into_iter()
-			.filter(|repository| !keep.contains(repository))
+			.filter(|folder| !keep.contains(folder))
 			.collect();
 
-		for repository in stale {
-			self.delete_repository(&repository)?;
+		for folder in stale {
+			self.delete_folder(&folder)?;
 		}
 
 		Ok(())

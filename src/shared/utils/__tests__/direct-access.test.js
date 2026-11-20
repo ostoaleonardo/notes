@@ -11,7 +11,7 @@ const prompt = (overrides) => shouldPromptDirectAccess({
 })
 
 describe('direct access prompt', () => {
-    test('shows for a large repository without the permission', () => {
+    test('shows for a large folder without the permission', () => {
         expect(prompt()).toBe(true)
     })
 

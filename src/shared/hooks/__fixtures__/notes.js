@@ -18,7 +18,7 @@ export const MOCK_GROCERIES_NOTE = {
     title: 'Groceries',
     note: 'old content',
     tags: [],
-    repositoryId: 'repo-1',
+    folderId: 'repo-1',
     createdAt: 1
 }
 
@@ -28,7 +28,7 @@ export const MOCK_OLD_TITLE_NOTE = {
     title: 'Old title',
     note: 'content',
     tags: [],
-    repositoryId: 'repo-1',
+    folderId: 'repo-1',
     createdAt: 1
 }
 
@@ -38,7 +38,7 @@ export const MOCK_GHOST_NOTE = {
     title: 'Ghost',
     note: 'x',
     tags: [],
-    repositoryId: 'repo-1',
+    folderId: 'repo-1',
     createdAt: 1
 }
 
@@ -48,7 +48,7 @@ export const MOCK_ORPHANED_NOTE = {
     title: 'Orphaned',
     note: 'x',
     tags: [],
-    repositoryId: 'missing-repo',
+    folderId: 'missing-repo',
     createdAt: 1
 }
 
@@ -56,7 +56,7 @@ export const MOCK_UNSAVED_NOTE = {
     title: 'Untitled',
     note: 'quick note content',
     tags: [],
-    repositoryId: 'repo-1',
+    folderId: 'repo-1',
     createdAt: 1
 }
 

@@ -24,7 +24,7 @@ describe('decide whether a vault is loaded without note bodies', () => {
         expect(await check(['repo'])).toBe(false)
     })
 
-    test('asks for the repositories it was given', async () => {
+    test('asks for the folders it was given', async () => {
         const count = jest.fn(async () => 0)
 
         await createBodylessCheck({ count })(['a', 'b'])

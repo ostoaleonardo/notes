@@ -8,7 +8,7 @@ import legacyTags from '../../../legacy/categories.json'
 import { useStorage } from './use-storage'
 import { usePro } from './use-pro'
 import { useFileStorage } from './use-file-storage'
-import { useRepositories } from './use-repositories'
+import { useFolders } from './use-folders'
 
 import { getWelcomeNote } from '@/shared/utils/welcome-note'
 import { hasDirectAccess, requestDirectAccess } from '@/shared/utils/direct-access'
@@ -68,17 +68,17 @@ export function useDevMenu() {
     } = useFileStorage()
 
     const {
-        repositories,
-        activeRepository,
-        activeRepositoryId,
-        buildRepository
-    } = useRepositories()
+        folders,
+        activeFolder,
+        activeFolderId,
+        buildFolder
+    } = useFolders()
 
     const resetApp = async () => {
-        if (activeRepository) {
-            await clearRepository(activeRepository.uri, getVersionLocation(repositories, activeRepository.id))
-            deleteDirectory(getOrCreateTemplatesFolder(activeRepository.uri).uri)
-            deleteDirectory(getOrCreateNotesFolder(activeRepository.uri).uri)
+        if (activeFolder) {
+            await clearRepository(activeFolder.uri, getVersionLocation(folders, activeFolder.id))
+            deleteDirectory(getOrCreateTemplatesFolder(activeFolder.uri).uri)
+            deleteDirectory(getOrCreateNotesFolder(activeFolder.uri).uri)
         }
 
         await setItem(STORAGE_KEYS.REPOSITORIES, JSON.stringify([]))
@@ -143,30 +143,30 @@ export function useDevMenu() {
             const plan = buildDevTestPlan(groupDevData(await loadDevData()))
             const generated = []
 
-            let root = activeRepository
+            let root = activeFolder
             if (!root) {
                 const directory = await Directory.pickDirectoryAsync()
-                if (repositories.some((repository) => repository.uri === directory.uri)) return
+                if (folders.some((folder) => folder.uri === directory.uri)) return
 
-                root = buildRepository(directory, null, true)
+                root = buildFolder(directory, null, true)
                 generated.push(root)
             }
 
             const uriByFolder = new Map([['', root.uri]])
             const repositoryByFolder = new Map([['', root]])
 
-            plan.folders.forEach((folder) => {
-                const parentKey = folder.slice(0, -1).join('/')
+            plan.folders.forEach((segments) => {
+                const parentKey = segments.slice(0, -1).join('/')
                 const parentUri = uriByFolder.get(parentKey)
-                const name = folder.at(-1)
+                const name = segments.at(-1)
 
                 const directory = findDirectory(parentUri, name) || createSubdirectory(parentUri, name)
-                const existing = repositories.find((repository) => repository.uri === directory.uri)
-                const repository = existing || buildRepository(directory, repositoryByFolder.get(parentKey).id, false)
-                if (!existing) generated.push(repository)
+                const existing = folders.find((folder) => folder.uri === directory.uri)
+                const folder = existing || buildFolder(directory, repositoryByFolder.get(parentKey).id, false)
+                if (!existing) generated.push(folder)
 
-                uriByFolder.set(folder.join('/'), repository.uri)
-                repositoryByFolder.set(folder.join('/'), repository)
+                uriByFolder.set(segments.join('/'), folder.uri)
+                repositoryByFolder.set(segments.join('/'), folder)
             })
 
             writeTestNotes(plan.notes, uriByFolder)
@@ -180,9 +180,9 @@ export function useDevMenu() {
             await setItem(STORAGE_KEYS.PINNED, JSON.stringify([...pinned]))
 
             if (generated.length) {
-                await setItem(STORAGE_KEYS.REPOSITORIES, JSON.stringify([...repositories, ...generated]))
+                await setItem(STORAGE_KEYS.REPOSITORIES, JSON.stringify([...folders, ...generated]))
             }
-            if (!activeRepositoryId) await setItem(STORAGE_KEYS.ACTIVE_REPOSITORY, root.id)
+            if (!activeFolderId) await setItem(STORAGE_KEYS.ACTIVE_REPOSITORY, root.id)
 
             DevSettings.reload()
         } catch (error) {
@@ -191,9 +191,9 @@ export function useDevMenu() {
     }
 
     const createWelcomeNote = async () => {
-        if (!activeRepository) return
+        if (!activeFolder) return
 
-        const uri = activeRepository.uri
+        const uri = activeFolder.uri
         const { title, content } = getWelcomeNote()
         const filename = `${sanitizeFilename(title)}${NOTE_FILE_EXTENSION}`
 
@@ -219,7 +219,7 @@ export function useDevMenu() {
             },
             {
                 name: 'Check native index',
-                callback: () => checkIndex(repositories, scanMarkdownFiles).catch((error) => console.log('[index] failed', error)),
+                callback: () => checkIndex(folders, scanMarkdownFiles).catch((error) => console.log('[index] failed', error)),
                 shouldCollapse: true
             },
             {
@@ -274,8 +274,8 @@ export function useDevMenu() {
         registerItems()
     }, [
         pro,
-        repositories,
-        activeRepository,
-        activeRepositoryId
+        folders,
+        activeFolder,
+        activeFolderId
     ])
 }

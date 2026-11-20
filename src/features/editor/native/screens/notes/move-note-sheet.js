@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { CollapsibleTreeSheet } from '@/shared/components/collapsible-tree-sheet'
 
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 
 import { markChildren } from '@/shared/utils/collapsible-tree'
 
@@ -11,20 +11,20 @@ import { TEST_IDS } from '@/shared/constants/test-ids'
 
 export const MoveNoteSheet = memo(({
     sheet,
-    repositoryId,
+    folderId,
     onSelect
 }) => {
     const { t } = useTranslation()
-    const { activeRepositoryTree } = useRepositories()
+    const { activeFolderTree } = useFolders()
 
-    const items = useMemo(() => markChildren(activeRepositoryTree).map((folder) => ({
+    const items = useMemo(() => markChildren(activeFolderTree).map((folder) => ({
         key: folder.id,
         title: folder.alias,
         depth: folder.depth,
         hasChildren: folder.hasChildren,
-        disabled: folder.id === repositoryId,
-        emphasized: folder.id === repositoryId
-    })), [activeRepositoryTree, repositoryId])
+        disabled: folder.id === folderId,
+        emphasized: folder.id === folderId
+    })), [activeFolderTree, folderId])
 
     return (
         <CollapsibleTreeSheet

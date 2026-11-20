@@ -18,9 +18,9 @@ import { useOpenDailyNote } from '@/shared/hooks/use-open-daily-note'
 import { usePickMarkdownImport } from '@/features/drawer/hooks/use-pick-markdown-import'
 import { useNoteSort } from '@/features/drawer/hooks/use-note-sort'
 import { useNotes } from '@/shared/hooks/use-notes'
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 import { useUtils } from '@/shared/hooks/use-utils'
-import { buildLevelRows, buildRepositoryTree, resolveLevel } from '@/features/drawer/utils/drawer-tree'
+import { buildLevelRows, buildFolderTree, resolveLevel } from '@/features/drawer/utils/drawer-tree'
 import { openEditor } from '@/shared/utils/open-editor'
 import { pushOnce } from '@/shared/utils/navigation'
 
@@ -52,7 +52,7 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
     const { currentId } = useCurrentNote()
     const { drawerFolderId, setDrawerFolderId } = useUtils()
     const { sort, onChangeSort } = useNoteSort()
-    const { activeRepositoryTree } = useRepositories()
+    const { activeFolderTree } = useFolders()
 
     const [editFolderId, setEditFolderId] = useState('')
     const [subfolderParentId, setSubfolderParentId] = useState('')
@@ -64,23 +64,23 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
     const notesByRepository = useMemo(() => {
         const map = new Map()
         notes.forEach((note) => {
-            if (!map.has(note.repositoryId)) map.set(note.repositoryId, [])
-            map.get(note.repositoryId).push(note)
+            if (!map.has(note.folderId)) map.set(note.folderId, [])
+            map.get(note.folderId).push(note)
         })
         return map
     }, [notes])
 
     const tree = useMemo(
-        () => buildRepositoryTree(activeRepositoryTree, notesByRepository, sort),
-        [activeRepositoryTree, notesByRepository, sort]
+        () => buildFolderTree(activeFolderTree, notesByRepository, sort),
+        [activeFolderTree, notesByRepository, sort]
     )
 
     const level = useMemo(() => resolveLevel(tree, drawerFolderId), [tree, drawerFolderId])
     const rows = useMemo(() => (level ? buildLevelRows(level) : []), [level])
     const hasFolders = useMemo(() => rows.some((row) => row.type === DRAWER_ITEM_TYPES.REPOSITORY), [rows])
 
-    const folderId = level?.repository.id
-    const parentId = level?.repository.parentId || null
+    const folderId = level?.folder.id
+    const parentId = level?.folder.parentId || null
     const isRoot = !parentId
 
     const goToFolder = useCallback((id, next) => {
@@ -102,7 +102,7 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
 
     const revealCurrentNote = useEffectEvent(() => {
         const note = notes.find((item) => item.path === currentId)
-        if (note) goToFolder(note.repositoryId, LEVEL_DIRECTIONS.FORWARD)
+        if (note) goToFolder(note.folderId, LEVEL_DIRECTIONS.FORWARD)
     })
 
     useEffect(() => {
@@ -127,19 +127,19 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
         openEditor(id, currentId)
     }, [closeDrawer, currentId])
 
-    const onCreateNote = useCallback((repositoryId) => {
+    const onCreateNote = useCallback((folderId) => {
         pushOnce({
             pathname: ROUTES.ADD_NOTE,
-            params: { repositoryId }
+            params: { folderId }
         })
         closeDrawer()
     }, [closeDrawer])
 
-    const onRepositoryAction = useCallback((action, repositoryId) => {
-        if (action === REPOSITORY_ACTIONS.CREATE_NOTE) return onCreateNote(repositoryId)
-        if (action === REPOSITORY_ACTIONS.ADD_SUBFOLDER) return setSubfolderParentId(repositoryId)
-        if (action === REPOSITORY_ACTIONS.EDIT_FOLDER) return setEditFolderId(repositoryId)
-        if (action === REPOSITORY_ACTIONS.DELETE) return setDeleteId(repositoryId)
+    const onRepositoryAction = useCallback((action, folderId) => {
+        if (action === REPOSITORY_ACTIONS.CREATE_NOTE) return onCreateNote(folderId)
+        if (action === REPOSITORY_ACTIONS.ADD_SUBFOLDER) return setSubfolderParentId(folderId)
+        if (action === REPOSITORY_ACTIONS.EDIT_FOLDER) return setEditFolderId(folderId)
+        if (action === REPOSITORY_ACTIONS.DELETE) return setDeleteId(folderId)
     }, [onCreateNote])
 
     const [onOpenDailyNote] = useOpenDailyNote({ currentId, onOpened: closeDrawer })
@@ -231,7 +231,7 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
         if (item.type === DRAWER_ITEM_TYPES.LEVEL) {
             return (
                 <DrawerLevelHeader
-                    repository={item.repository}
+                    folder={item.folder}
                     onBack={onUpLevel}
                 />
             )
@@ -239,7 +239,7 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
 
         return (
             <DrawerLevelFolder
-                repository={item.repository}
+                folder={item.folder}
                 onEnter={onEnterFolder}
                 onAction={onRepositoryAction}
             />
@@ -262,7 +262,7 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
 
             <RenameRepository
                 visible={!!editFolderId}
-                repositoryId={editFolderId}
+                folderId={editFolderId}
                 onDismiss={onDismissEdit}
             />
             <AddSubfolder
@@ -272,7 +272,7 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
             />
             <DeleteRepository
                 visible={!!deleteId}
-                repositoryId={deleteId}
+                folderId={deleteId}
                 onDismiss={onDismissDelete}
             />
         </>

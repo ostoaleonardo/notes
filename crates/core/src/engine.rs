@@ -25,17 +25,17 @@ impl Engine {
 		})
 	}
 
-	pub fn plan(&self, repository_id: &str, scanned: &[ScannedFile]) -> Result<ReconcilePlan> {
-		let existing = self.open()?.metas(repository_id)?;
+	pub fn plan(&self, folder_id: &str, scanned: &[ScannedFile]) -> Result<ReconcilePlan> {
+		let existing = self.open()?.metas(folder_id)?;
 		Ok(reconcile::plan(&existing, scanned))
 	}
 
-	pub fn remove(&self, repository_id: &str, filenames: &[String]) -> Result<()> {
+	pub fn remove(&self, folder_id: &str, filenames: &[String]) -> Result<()> {
 		self.open()?
-			.write(repository_id, &[], filenames, &self.sort_keys)
+			.write(folder_id, &[], filenames, &self.sort_keys)
 	}
 
-	pub fn write(&self, repository_id: &str, inputs: Vec<NoteInput>) -> Result<BatchStats> {
+	pub fn write(&self, folder_id: &str, inputs: Vec<NoteInput>) -> Result<BatchStats> {
 		let parse_start = Instant::now();
 
 		let notes: Vec<IndexedNote> = inputs
@@ -50,7 +50,7 @@ impl Engine {
 		let write_start = Instant::now();
 
 		self.open()?
-			.write(repository_id, &notes, &[], &self.sort_keys)?;
+			.write(folder_id, &notes, &[], &self.sort_keys)?;
 
 		Ok(BatchStats {
 			notes: notes.len() as u32,
@@ -67,8 +67,8 @@ impl Engine {
 		self.open()?.query(statement, params)
 	}
 
-	pub fn list_notes(&self, repository_ids: &[String]) -> Result<String> {
-		self.open()?.list_notes(repository_ids)
+	pub fn list_notes(&self, folder_ids: &[String]) -> Result<String> {
+		self.open()?.list_notes(folder_ids)
 	}
 
 	pub fn backlink_candidates(
@@ -83,8 +83,8 @@ impl Engine {
 		self.open()?.mention_candidates(terms)
 	}
 
-	pub fn delete_repository(&self, repository_id: &str) -> Result<()> {
-		self.open()?.delete_repository(repository_id)
+	pub fn delete_folder(&self, folder_id: &str) -> Result<()> {
+		self.open()?.delete_folder(folder_id)
 	}
 
 	pub fn prune(&self, keep: &HashSet<String>) -> Result<()> {

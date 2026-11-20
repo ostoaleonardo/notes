@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react-native'
 
 import { useNoteDraft } from '../use-note-draft'
 
-const pathRef = { current: { repositoryId: 'r1', filename: 'a.md' } }
+const pathRef = { current: { folderId: 'r1', filename: 'a.md' } }
 
 describe('note draft', () => {
     test('starts empty', async () => {
@@ -21,7 +21,7 @@ describe('note draft', () => {
             note: 'body',
             tags: ['x'],
             properties: { status: 'done' },
-            repositoryId: 'r1',
+            folderId: 'r1',
             filename: 'a.md'
         }
 
@@ -40,7 +40,7 @@ describe('note draft', () => {
         await act(async () => {
             result.current.setNote('  body  ')
             result.current.setTags(['x'])
-            result.current.setRepositoryId('r1')
+            result.current.setFolderId('r1')
         })
 
         expect(result.current.buildPayload('  Title  ')).toEqual({
@@ -49,7 +49,7 @@ describe('note draft', () => {
             note: 'body',
             tags: ['x'],
             properties: {},
-            repositoryId: 'r1',
+            folderId: 'r1',
             invalidFrontmatter: null,
             rawFrontmatter: null
         })
@@ -81,11 +81,11 @@ describe('note draft', () => {
         expect(result.current.buildPayload).not.toBe(first)
     })
 
-    test('exposes the editor props without the repository setters', async () => {
+    test('exposes the editor props without the folder setters', async () => {
         const { result } = await renderHook(() => useNoteDraft(pathRef))
 
         expect(result.current.editorProps).toHaveProperty('setTitle')
-        expect(result.current.editorProps).not.toHaveProperty('setRepositoryId')
+        expect(result.current.editorProps).not.toHaveProperty('setFolderId')
         expect(result.current.editorProps).not.toHaveProperty('setFilename')
     })
 

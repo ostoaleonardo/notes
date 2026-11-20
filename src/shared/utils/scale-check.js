@@ -20,7 +20,7 @@ import {
     SCALE_CHECK_FTS_QUERIES,
     SCALE_CHECK_LOG_PREFIX,
     SCALE_CHECK_READ_BATCH,
-    SCALE_CHECK_REPOSITORY_ID,
+    SCALE_CHECK_FOLDER_ID,
     SCALE_CHECK_RUNS,
     SCALE_CHECK_SEARCHES,
     SCALE_CHECK_SORT,
@@ -63,8 +63,8 @@ const buildNotes = (names, uris, texts, modified) => names.map((filename, index)
 
     return {
         filename,
-        repositoryId: SCALE_CHECK_REPOSITORY_ID,
-        path: buildNotePath(SCALE_CHECK_REPOSITORY_ID, filename),
+        folderId: SCALE_CHECK_FOLDER_ID,
+        path: buildNotePath(SCALE_CHECK_FOLDER_ID, filename),
         fileUri: uris[index],
         title: filename.slice(0, -NOTE_FILE_EXTENSION.length),
         note: body,
@@ -167,14 +167,14 @@ const queryTime = async (label, sql, ...params) => {
 
 const measureNative = async () => {
     const indexed = await best(async () => {
-        await RepositoryFs.deleteRepositoryIndex(SCALE_CHECK_REPOSITORY_ID)
-        return RepositoryFs.indexRepository(SCALE_CHECK_REPOSITORY_ID, SCALE_CHECK_FOLDER_URI)
+        await RepositoryFs.deleteFolderIndex(SCALE_CHECK_FOLDER_ID)
+        return RepositoryFs.indexRepository(SCALE_CHECK_FOLDER_ID, SCALE_CHECK_FOLDER_URI)
     })
 
     const stats = indexed.result
     log(`native cold index: best ${indexed.ms} ms (scan ${stats.scanMs}, read+parse ${stats.readParseMs}, write ${stats.writeMs}), ${stats.total} notes`)
 
-    const noop = await best(() => RepositoryFs.indexRepository(SCALE_CHECK_REPOSITORY_ID, SCALE_CHECK_FOLDER_URI))
+    const noop = await best(() => RepositoryFs.indexRepository(SCALE_CHECK_FOLDER_ID, SCALE_CHECK_FOLDER_URI))
     log(`native reconcile with no changes: best ${noop.ms} ms`)
 
     await queryTime('tags with counts', SCALE_CHECK_SQL.TAGS)
@@ -184,7 +184,7 @@ const measureNative = async () => {
         await queryTime(`fts ${query}`, SCALE_CHECK_SQL.SEARCH, query)
     }
 
-    await queryTime('resolved link edges', SCALE_CHECK_SQL.EDGES, SCALE_CHECK_REPOSITORY_ID)
+    await queryTime('resolved link edges', SCALE_CHECK_SQL.EDGES, SCALE_CHECK_FOLDER_ID)
 
 }
 

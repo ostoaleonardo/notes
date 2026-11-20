@@ -19,13 +19,13 @@ fn input(name: &str, text: &str) -> NoteInput {
 	}
 }
 
-fn listed(inputs: Vec<NoteInput>, repositories: &[&str]) -> Vec<Value> {
+fn listed(inputs: Vec<NoteInput>, folders: &[&str]) -> Vec<Value> {
 	let directory = TempDir::new().unwrap();
 	let engine = Engine::new(directory.path().join("index.db"), "en").unwrap();
 
 	engine.write(REPOSITORY, inputs).unwrap();
 
-	let ids: Vec<String> = repositories.iter().map(|id| id.to_string()).collect();
+	let ids: Vec<String> = folders.iter().map(|id| id.to_string()).collect();
 	let json = engine.list_notes(&ids).unwrap();
 
 	serde_json::from_str::<Value>(&json)
@@ -58,7 +58,7 @@ fn lists_every_indexed_note_with_its_file_fields() {
 	let first = &notes[0];
 
 	assert_eq!(notes.len(), corpus().len());
-	assert_eq!(first["repositoryId"], REPOSITORY);
+	assert_eq!(first["folderId"], REPOSITORY);
 	assert_eq!(first["updatedAt"], MODIFIED);
 	assert_eq!(first["createdAt"], MODIFIED);
 	assert_eq!(

@@ -11,19 +11,19 @@ import { useTheme } from '@/ui/hooks/use-theme'
 import { useDescendantNoteCounts } from '@/features/repositories/hooks/use-descendant-note-counts'
 import { useFileStorage } from '@/shared/hooks/use-file-storage'
 import { useGroupPosition } from '@/ui/hooks/use-group-position'
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 import { getStackedRadiusStyle } from '@/ui/utils/group-position'
 import { IconButton } from '@/ui/button/icon-button'
 import { Progress } from '@/ui/progress'
 import { getChildFolderCounts } from '@/shared/utils/repository-note-counts'
-import { getRepositoryPath } from '@/features/repositories/utils/repository-path'
+import { getFolderPath } from '@/features/repositories/utils/repository-path'
 
 import { OpenInNew } from '@/icons/open-in-new'
 import { SPACING, OPACITY } from '@/shared/constants/theme'
 import { PENDING_COUNT } from '@/features/repositories/constants/repository-counts'
 
 export const RepositoryItem = memo(({
-    repository,
+    folder,
     count,
     active,
     onOpen,
@@ -33,20 +33,20 @@ export const RepositoryItem = memo(({
 }) => {
     const { t } = useTranslation()
     const { colors } = useTheme()
-    const { getDescendants } = useRepositories()
+    const { getDescendants } = useFolders()
     const { scanMarkdownFiles } = useFileStorage()
     const position = useGroupPosition()
 
     const [expanded, setExpanded] = useState(false)
     const onToggleExpanded = useCallback(() => setExpanded((prev) => !prev), [])
-    const repositoryId = repository.id
-    const onPressOpen = useCallback(() => onOpen(repositoryId), [onOpen, repositoryId])
-    const onPressRename = useCallback(() => onRename(repositoryId), [onRename, repositoryId])
-    const onPressForget = useCallback(() => onForget(repositoryId), [onForget, repositoryId])
-    const onPressDelete = useCallback(() => onDelete(repositoryId), [onDelete, repositoryId])
+    const folderId = folder.id
+    const onPressOpen = useCallback(() => onOpen(folderId), [onOpen, folderId])
+    const onPressRename = useCallback(() => onRename(folderId), [onRename, folderId])
+    const onPressForget = useCallback(() => onForget(folderId), [onForget, folderId])
+    const onPressDelete = useCallback(() => onDelete(folderId), [onDelete, folderId])
     const descendants = useMemo(
-        () => getDescendants(repository.id),
-        [getDescendants, repository.id]
+        () => getDescendants(folder.id),
+        [getDescendants, folder.id]
     )
     const folderCount = useMemo(
         () => descendants.filter((descendant) => descendant.depth === 0).length,
@@ -82,13 +82,13 @@ export const RepositoryItem = memo(({
                         bold={active}
                         uppercase
                     >
-                        {repository.alias}
+                        {folder.alias}
                     </Typography>
                     <Typography
                         variant='bodySmall'
                         opacity={OPACITY.disabled}
                     >
-                        {getRepositoryPath(repository.uri)}
+                        {getFolderPath(folder.uri)}
                     </Typography>
 
                     <Typography

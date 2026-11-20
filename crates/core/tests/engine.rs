@@ -142,7 +142,7 @@ fn removes_files_by_name() {
 }
 
 #[test]
-fn deletes_a_repository_with_all_its_rows() {
+fn deletes_a_folder_with_all_its_rows() {
 	let directory = TempDir::new().unwrap();
 	let engine = engine(&directory, "en");
 
@@ -150,7 +150,7 @@ fn deletes_a_repository_with_all_its_rows() {
 		.write("one", vec![input("A.md", "#t [[x]]")])
 		.unwrap();
 	engine.write("two", vec![input("A.md", "#t")]).unwrap();
-	engine.delete_repository("one").unwrap();
+	engine.delete_folder("one").unwrap();
 
 	assert_eq!(count(&engine, "notes"), 1);
 	assert_eq!(count(&engine, "links"), 0);
@@ -158,7 +158,7 @@ fn deletes_a_repository_with_all_its_rows() {
 }
 
 #[test]
-fn prunes_repositories_that_are_not_kept() {
+fn prunes_folders_that_are_not_kept() {
 	let directory = TempDir::new().unwrap();
 	let engine = engine(&directory, "en");
 
@@ -168,7 +168,7 @@ fn prunes_repositories_that_are_not_kept() {
 
 	let notes = engine.indexed_notes().unwrap();
 
-	assert_eq!(notes.repository_ids, ["keep"]);
+	assert_eq!(notes.folder_ids, ["keep"]);
 	assert_eq!(notes.filenames, ["A.md"]);
 }
 

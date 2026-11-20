@@ -64,14 +64,14 @@ pub struct SyncReport {
 
 #[derive(uniffi::Record)]
 pub struct IndexedNotesReport {
-	pub repository_ids: Vec<String>,
+	pub folder_ids: Vec<String>,
 	pub filenames: Vec<String>,
 	pub modified: Vec<i64>,
 }
 
 #[derive(uniffi::Record)]
 pub struct NoteRefsReport {
-	pub repository_ids: Vec<String>,
+	pub folder_ids: Vec<String>,
 	pub filenames: Vec<String>,
 }
 
@@ -118,7 +118,7 @@ impl From<engine::error::Error> for EngineError {
 impl From<model::IndexedNotes> for IndexedNotesReport {
 	fn from(notes: model::IndexedNotes) -> Self {
 		Self {
-			repository_ids: notes.repository_ids,
+			folder_ids: notes.folder_ids,
 			filenames: notes.filenames,
 			modified: notes.modified,
 		}
@@ -162,13 +162,13 @@ impl From<Value> for model::Value {
 
 impl From<Vec<model::NoteRef>> for NoteRefsReport {
 	fn from(notes: Vec<model::NoteRef>) -> Self {
-		let (repository_ids, filenames) = notes
+		let (folder_ids, filenames) = notes
 			.into_iter()
-			.map(|note| (note.repository_id, note.filename))
+			.map(|note| (note.folder_id, note.filename))
 			.unzip();
 
 		Self {
-			repository_ids,
+			folder_ids,
 			filenames,
 		}
 	}

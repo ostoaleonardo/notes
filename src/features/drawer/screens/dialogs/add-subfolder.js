@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { NameDialog } from '@/features/drawer/components/name-dialog'
 
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 
 import { REPOSITORY_RESULTS } from '@/shared/constants/repository-results'
 
@@ -13,7 +13,7 @@ export const AddSubfolder = ({
     parentId
 }) => {
     const { t } = useTranslation()
-    const { addSubfolder } = useRepositories()
+    const { addSubfolder } = useFolders()
 
     const onSubmit = async (name) => {
         const result = await addSubfolder(parentId, name)

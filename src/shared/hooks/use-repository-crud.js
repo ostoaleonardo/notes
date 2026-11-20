@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { Directory } from 'expo-file-system'
 
 import { sanitizeFilename } from '@/shared/utils/note-filename'
-import { buildRepositoryPaths } from '@/shared/utils/note-path'
+import { buildFolderPaths } from '@/shared/utils/note-path'
 import { withBusy } from '@/shared/utils/with-busy'
 import { yieldToUi } from '@/shared/utils/yield-to-ui'
 import { resolveAttachmentTarget } from '@/shared/utils/attachments'
@@ -14,21 +14,21 @@ import { LOG_MESSAGES } from '@/shared/constants/log-messages'
 import { logError } from '@/shared/utils/log-error'
 
 export function useRepositoryCrud({
-    repositories,
-    activeRepository,
-    activeRepositoryId,
+    folders,
+    activeFolder,
+    activeFolderId,
     pro,
     busyRef,
     fileStorage,
     seedWelcomeNote,
     setPendingWelcomeNoteId,
-    persistRepositories,
-    persistActiveRepository,
+    persistFolders,
+    persistActiveFolder,
     getRootRepository,
     getDescendants,
     isAncestorOf,
     seedTemplates,
-    buildRepository,
+    buildFolder,
     discoverSubfolders,
     relinkUris
 }) {
@@ -41,7 +41,7 @@ export function useRepositoryCrud({
         getOrCreateImagesFolder,
         renameVersionsUnder,
         deleteVersionsUnder,
-        deleteRepositoryIndex
+        deleteFolderIndex
     } = fileStorage
 
     const addRepository = useCallback((onPicked) => withBusy(busyRef, async () => {
@@ -50,19 +50,19 @@ export function useRepositoryCrud({
             onPicked?.()
             await yieldToUi()
 
-            if (repositories.some((repository) => repository.uri === directory.uri)) {
+            if (folders.some((folder) => folder.uri === directory.uri)) {
                 return REPOSITORY_RESULTS.DUPLICATE
             }
 
-            const repository = buildRepository(directory)
-            const discovered = await discoverSubfolders(directory, repository.id)
-            const welcomeNotePath = await seedWelcomeNote(directory.uri, repository.id)
+            const folder = buildFolder(directory)
+            const discovered = await discoverSubfolders(directory, folder.id)
+            const welcomeNotePath = await seedWelcomeNote(directory.uri, folder.id)
             if (welcomeNotePath) setPendingWelcomeNoteId(welcomeNotePath)
 
-            await persistRepositories([...repositories, repository, ...discovered])
-            if (!activeRepositoryId) await persistActiveRepository(repository.id)
+            await persistFolders([...folders, folder, ...discovered])
+            if (!activeFolderId) await persistActiveFolder(folder.id)
 
-            return { ...repository, welcomeNotePath }
+            return { ...folder, welcomeNotePath }
         } catch (error) {
             if (error.code === PICKER_ERROR_CODES.CANCELLED) return null
 
@@ -70,14 +70,14 @@ export function useRepositoryCrud({
             return REPOSITORY_RESULTS.ERROR
         }
     }), [
-        repositories,
-        activeRepositoryId,
-        buildRepository,
+        folders,
+        activeFolderId,
+        buildFolder,
         discoverSubfolders,
         seedWelcomeNote,
         setPendingWelcomeNoteId,
-        persistRepositories,
-        persistActiveRepository,
+        persistFolders,
+        persistActiveFolder,
         busyRef
     ])
 
@@ -88,43 +88,43 @@ export function useRepositoryCrud({
     const canAddSubfolder = useCallback((parentId) => {
         if (pro) return true
 
-        const parent = repositories.find((repository) => repository.id === parentId)
+        const parent = folders.find((folder) => folder.id === parentId)
         if (!parent) return false
         if (parent.parentId) return false
 
-        const siblingCount = repositories.filter((repository) => repository.parentId === parentId).length
+        const siblingCount = folders.filter((folder) => folder.parentId === parentId).length
         return siblingCount < FREE_SUBFOLDERS_PER_REPOSITORY
-    }, [pro, repositories])
+    }, [pro, folders])
 
     const addSubfolder = useCallback(async (parentId, name) => {
         if (!canAddSubfolder(parentId)) return REPOSITORY_RESULTS.PRO_REQUIRED
 
-        const parent = repositories.find((repository) => repository.id === parentId)
+        const parent = folders.find((folder) => folder.id === parentId)
         if (!parent) return null
 
         return withBusy(busyRef, async () => {
             const directory = createSubdirectory(parent.uri, sanitizeFilename(name))
-            const repository = buildRepository(directory, parentId, false)
+            const folder = buildFolder(directory, parentId, false)
 
-            await persistRepositories([...repositories, repository])
-            return repository
+            await persistFolders([...folders, folder])
+            return folder
         })
     }, [
-        repositories,
-        buildRepository,
+        folders,
+        buildFolder,
         canAddSubfolder,
         createSubdirectory,
-        persistRepositories,
+        persistFolders,
         busyRef
     ])
 
-    const ensureTemplatesFolder = useCallback(async (repository) => {
-        const root = getRootRepository(repository)
+    const ensureTemplatesFolder = useCallback(async (folder) => {
+        const root = getRootRepository(folder)
         const existing = findDirectory(root.uri, TEMPLATES_FOLDER_NAME)
 
         if (existing) {
             if (root.templatesUri !== existing.uri) {
-                await persistRepositories(repositories.map((r) => (
+                await persistFolders(folders.map((r) => (
                     r.id === root.id ? { ...r, templatesUri: existing.uri } : r
                 )))
             }
@@ -136,7 +136,7 @@ export function useRepositoryCrud({
             const templatesDirectory = getOrCreateTemplatesFolder(root.uri)
             seedTemplates(templatesDirectory.uri)
 
-            await persistRepositories(repositories.map((r) => (
+            await persistFolders(folders.map((r) => (
                 r.id === root.id ? { ...r, templatesUri: templatesDirectory.uri } : r
             )))
 
@@ -147,20 +147,20 @@ export function useRepositoryCrud({
         findDirectory,
         getOrCreateTemplatesFolder,
         seedTemplates,
-        persistRepositories,
-        repositories,
+        persistFolders,
+        folders,
         busyRef
     ])
 
-    const ensureImagesFolder = useCallback((repository) => {
-        const root = getRootRepository(repository)
+    const ensureImagesFolder = useCallback((folder) => {
+        const root = getRootRepository(folder)
         return getOrCreateImagesFolder(root.uri).uri
     }, [getRootRepository, getOrCreateImagesFolder])
 
-    const ensureAttachmentsFolder = useCallback((repository, settings) => {
+    const ensureAttachmentsFolder = useCallback((folder, settings) => {
         const { parentUri, folderName } = resolveAttachmentTarget(settings, {
-            rootUri: getRootRepository(repository).uri,
-            noteFolderUri: repository.uri
+            rootUri: getRootRepository(folder).uri,
+            noteFolderUri: folder.uri
         })
 
         if (!folderName) return parentUri
@@ -168,34 +168,34 @@ export function useRepositoryCrud({
         return (findDirectory(parentUri, folderName) || createSubdirectory(parentUri, folderName)).uri
     }, [getRootRepository, findDirectory, createSubdirectory])
 
-    const renameRepository = useCallback(async (id, alias) => {
-        const repository = repositories.find((r) => r.id === id)
-        if (!repository) return null
+    const renameFolder = useCallback(async (id, alias) => {
+        const folder = folders.find((r) => r.id === id)
+        if (!folder) return null
 
-        if (!repository.parentId) {
-            await persistRepositories(repositories.map((r) => (r.id === id ? { ...r, alias } : r)))
-            return repository
+        if (!folder.parentId) {
+            await persistFolders(folders.map((r) => (r.id === id ? { ...r, alias } : r)))
+            return folder
         }
 
         return withBusy(busyRef, async () => {
             try {
-                const parent = repositories.find((r) => r.id === repository.parentId)
+                const parent = folders.find((r) => r.id === folder.parentId)
                 if (!parent) return REPOSITORY_RESULTS.ERROR
 
                 const sanitized = sanitizeFilename(alias)
-                const paths = buildRepositoryPaths(repositories)
+                const paths = buildFolderPaths(folders)
                 const oldPath = paths.get(id)
                 const parentPath = paths.get(parent.id)
                 const newPath = parentPath ? `${parentPath}/${sanitized}` : sanitized
-                const newUri = await renameDirectory(repository.uri, parent.uri, sanitized)
+                const newUri = await renameDirectory(folder.uri, parent.uri, sanitized)
                 const affected = [id, ...getDescendants(id).map((d) => d.id)]
-                await Promise.all(affected.map((repositoryId) => deleteRepositoryIndex(repositoryId)))
-                await renameVersionsUnder(getRootRepository(repository).uri, oldPath, newPath)
-                const renamedRepository = { ...repository, uri: newUri, alias: sanitized }
+                await Promise.all(affected.map((folderId) => deleteFolderIndex(folderId)))
+                await renameVersionsUnder(getRootRepository(folder).uri, oldPath, newPath)
+                const renamedRepository = { ...folder, uri: newUri, alias: sanitized }
                 const relinked = await relinkUris(renamedRepository)
                 const relinkedById = new Map(relinked.map((r) => [r.id, r]))
 
-                await persistRepositories(repositories.map((r) => {
+                await persistFolders(folders.map((r) => {
                     if (r.id === id) return renamedRepository
                     return relinkedById.get(r.id) || r
                 }))
@@ -207,71 +207,71 @@ export function useRepositoryCrud({
             }
         })
     }, [
-        repositories,
-        persistRepositories,
+        folders,
+        persistFolders,
         renameDirectory,
         renameVersionsUnder,
         getRootRepository,
         getDescendants,
-        deleteRepositoryIndex,
+        deleteFolderIndex,
         relinkUris,
         busyRef
     ])
 
     const removeRepositoriesFromList = useCallback(async (ids) => {
         const idSet = new Set(ids)
-        const remaining = repositories.filter((r) => !idSet.has(r.id))
-        await persistRepositories(remaining)
-        ids.forEach(deleteRepositoryIndex)
+        const remaining = folders.filter((r) => !idSet.has(r.id))
+        await persistFolders(remaining)
+        ids.forEach(deleteFolderIndex)
 
-        if (idSet.has(activeRepositoryId)) {
-            await persistActiveRepository(remaining[0]?.id || '')
+        if (idSet.has(activeFolderId)) {
+            await persistActiveFolder(remaining[0]?.id || '')
         }
     }, [
-        repositories,
-        persistRepositories,
-        deleteRepositoryIndex,
-        activeRepositoryId,
-        persistActiveRepository
+        folders,
+        persistFolders,
+        deleteFolderIndex,
+        activeFolderId,
+        persistActiveFolder
     ])
 
     const forgetRepository = useCallback(async (id) => {
-        const repository = repositories.find((r) => r.id === id)
-        if (!repository) return
+        const folder = folders.find((r) => r.id === id)
+        if (!folder) return
 
         return withBusy(busyRef, async () => {
             const descendantIds = getDescendants(id).map((d) => d.id)
             await removeRepositoriesFromList([id, ...descendantIds])
         })
     }, [
-        repositories,
+        folders,
         getDescendants,
         removeRepositoriesFromList,
         busyRef
     ])
 
     const removeRepository = useCallback(async (id) => {
-        const repository = repositories.find((r) => r.id === id)
-        if (!repository) return null
+        const folder = folders.find((r) => r.id === id)
+        if (!folder) return null
 
-        if (activeRepository && isAncestorOf(id, activeRepository)) {
+        if (activeFolder && isAncestorOf(id, activeFolder)) {
             return REPOSITORY_RESULTS.ACTIVE
         }
 
         return withBusy(busyRef, async () => {
-            const path = buildRepositoryPaths(repositories).get(id)
+            const path = buildFolderPaths(folders).get(id)
             const descendantIds = getDescendants(id).map((d) => d.id)
 
             await removeRepositoriesFromList([id, ...descendantIds])
 
-            deleteDirectory(repository.uri)
-            if (repository.parentId) await deleteVersionsUnder(getRootRepository(repository).uri, path)
+            deleteDirectory(folder.uri)
+            if (folder.parentId) await deleteVersionsUnder(getRootRepository(folder).uri, path)
 
-            return repository
+            return folder
         })
     }, [
-        repositories,
-        activeRepository,
+        folders,
+        activeFolder,
         isAncestorOf,
         deleteDirectory,
         deleteVersionsUnder,
@@ -281,18 +281,18 @@ export function useRepositoryCrud({
         busyRef
     ])
 
-    const setActiveRepository = useCallback((id) => {
-        persistActiveRepository(id)
-    }, [persistActiveRepository])
+    const setActiveFolder = useCallback((id) => {
+        persistActiveFolder(id)
+    }, [persistActiveFolder])
 
     return {
         addRepository,
         clearPendingWelcomeNote,
         addSubfolder,
-        renameRepository,
+        renameFolder,
         forgetRepository,
         removeRepository,
-        setActiveRepository,
+        setActiveFolder,
         ensureTemplatesFolder,
         ensureImagesFolder,
         ensureAttachmentsFolder

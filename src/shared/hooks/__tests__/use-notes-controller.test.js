@@ -45,11 +45,11 @@ jest.mock('../use-storage', () => ({
 jest.mock('../use-repository-data', () => ({
     useRepositoryData: () => async () => ({ notes: [], tags: [] })
 }))
-jest.mock('../use-repositories', () => ({
-    useRepositories: () => ({
-        activeRepository: { id: 'repo-1', uri: MOCK_REPO_URI },
-        repositories: [{ id: 'repo-1', uri: MOCK_REPO_URI }],
-        getRootRepository: (repository) => repository
+jest.mock('../use-folders', () => ({
+    useFolders: () => ({
+        activeFolder: { id: 'repo-1', uri: MOCK_REPO_URI },
+        folders: [{ id: 'repo-1', uri: MOCK_REPO_URI }],
+        getRootRepository: (folder) => folder
     })
 }))
 
@@ -147,7 +147,7 @@ describe('save note', () => {
             updatedAt: 2000
         })
         expect(result.current.notes).toHaveLength(1)
-        expect(result.current.notes[0].repositoryId).toBe('repo-1')
+        expect(result.current.notes[0].folderId).toBe('repo-1')
         expect(result.current.notes[0].path).toBe('repo-1::Groceries.md')
         expect(readBody('Groceries.md')).toBe('milk, eggs')
         expect(readFrontmatter('Groceries.md')).toEqual({})
@@ -165,7 +165,7 @@ describe('save note', () => {
         expect(readFrontmatter('Groceries (2).md')).toEqual({})
     })
 
-    test('adds the note to state only when the repository is unknown', async () => {
+    test('adds the note to state only when the folder is unknown', async () => {
         const { result } = await renderNotesHook()
 
         await act(async () => {
@@ -285,7 +285,7 @@ describe('update note', () => {
             title: 'Linker',
             note: 'See [[Old title]] for details',
             tags: [],
-            repositoryId: 'repo-1',
+            folderId: 'repo-1',
             createdAt: 1
         }
 
@@ -312,7 +312,7 @@ describe('update note', () => {
             title: 'Linker',
             note: 'See [[Old title]] for details',
             tags: [],
-            repositoryId: 'repo-1',
+            folderId: 'repo-1',
             createdAt: 1
         }
 
@@ -351,7 +351,7 @@ describe('update note', () => {
             title: 'Linker',
             note: 'See [[Old title#Old]] and [[Other#Old]]',
             tags: [],
-            repositoryId: 'repo-1',
+            folderId: 'repo-1',
             createdAt: 1
         }
 
@@ -384,7 +384,7 @@ describe('update note', () => {
         expect(mockFileStorage.writeNoteFile).not.toHaveBeenCalled()
     })
 
-    test('does nothing when the note repository cannot be resolved', async () => {
+    test('does nothing when the note folder cannot be resolved', async () => {
         const { result } = await renderNotesHook([MOCK_ORPHANED_NOTE])
 
         await act(async () => {
@@ -472,7 +472,7 @@ describe('delete note', () => {
         expect(mockFileStorage.deleteNoteFile).not.toHaveBeenCalled()
     })
 
-    test('removes the note from state only when the repository is unknown', async () => {
+    test('removes the note from state only when the folder is unknown', async () => {
         const { result } = await renderNotesHook([MOCK_ORPHANED_NOTE])
 
         await act(async () => {

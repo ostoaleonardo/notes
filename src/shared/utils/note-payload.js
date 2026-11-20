@@ -4,7 +4,7 @@ export const buildNotePayload = ({
     note,
     tags,
     properties,
-    repositoryId,
+    folderId,
     invalidFrontmatter = null,
     rawFrontmatter = null
 }) => ({
@@ -13,7 +13,7 @@ export const buildNotePayload = ({
     note: note.trim(),
     tags,
     properties,
-    repositoryId,
+    folderId,
     invalidFrontmatter,
     rawFrontmatter
 })

@@ -5,7 +5,7 @@ const buildScan = () => jest.fn(async (uri) => [{ filename: 'photo.png', uri: `$
 describe('media index', () => {
     beforeEach(() => invalidateMediaIndex())
 
-    test('scans the repository only once while it is cached', async () => {
+    test('scans the folder only once while it is cached', async () => {
         const scan = buildScan()
 
         await getAttachmentEntries('root', scan)
@@ -33,7 +33,7 @@ describe('media index', () => {
         expect(scan).toHaveBeenCalledTimes(2)
     })
 
-    test('scans again when the repository root changes', async () => {
+    test('scans again when the folder root changes', async () => {
         const scan = buildScan()
 
         await getAttachmentEntries('root', scan)

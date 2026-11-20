@@ -17,19 +17,19 @@ const hasChanges = (stats) => (
 export const createRepositoryIndexSync = (fs) => {
     let running = false
 
-    return async (tree, repositories) => {
+    return async (tree, folders) => {
         if (running) return true
         running = true
 
         let changed = false
 
         try {
-            await fs.pruneRepositoryIndex(repositories.map((repository) => repository.id))
+            await fs.pruneRepositoryIndex(folders.map((folder) => folder.id))
 
-            for (const repository of tree) {
-                const stats = await fs.indexRepository(repository.id, repository.uri)
+            for (const folder of tree) {
+                const stats = await fs.indexRepository(folder.id, folder.uri)
 
-                bootMark(BOOT_MARKS.INDEX_SYNC, { repositoryId: repository.id, ...stats })
+                bootMark(BOOT_MARKS.INDEX_SYNC, { folderId: folder.id, ...stats })
                 changed = hasChanges(stats) || changed
             }
         } catch (error) {

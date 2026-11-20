@@ -83,7 +83,7 @@ export const RecentNotes = ({ onClose, home = false }) => {
         onClose()
         pushOnce({
             pathname: ROUTES.ADD_NOTE,
-            params: { repositoryId: defaultFolderId }
+            params: { folderId: defaultFolderId }
         })
     }
 

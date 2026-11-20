@@ -36,8 +36,8 @@ describe('push once', () => {
     })
 
     test('treats the same route with different params as different', () => {
-        pushOnce({ pathname: '/notes/new', params: { repositoryId: 'a' } }, 1000)
-        pushOnce({ pathname: '/notes/new', params: { repositoryId: 'b' } }, 1001)
+        pushOnce({ pathname: '/notes/new', params: { folderId: 'a' } }, 1000)
+        pushOnce({ pathname: '/notes/new', params: { folderId: 'b' } }, 1001)
 
         expect(router.push).toHaveBeenCalledTimes(2)
     })
@@ -70,15 +70,15 @@ describe('push once', () => {
     })
 
     test('pushes the same pathname when the params differ', () => {
-        setCurrentRoute('/notes/new', { repositoryId: 'a' })
-        pushOnce({ pathname: '/notes/new', params: { repositoryId: 'b' } }, 1000)
+        setCurrentRoute('/notes/new', { folderId: 'a' })
+        pushOnce({ pathname: '/notes/new', params: { folderId: 'b' } }, 1000)
 
         expect(router.push).toHaveBeenCalledTimes(1)
     })
 
     test('ignores the same pathname when the params match', () => {
-        setCurrentRoute('/notes/new', { repositoryId: 'a' })
-        pushOnce({ pathname: '/notes/new', params: { repositoryId: 'a' } }, 1000)
+        setCurrentRoute('/notes/new', { folderId: 'a' })
+        pushOnce({ pathname: '/notes/new', params: { folderId: 'a' } }, 1000)
 
         expect(router.push).not.toHaveBeenCalled()
     })

@@ -4,8 +4,8 @@ import { useStorage } from './use-storage'
 import { useFileStorage } from './use-file-storage'
 import { usePro } from './use-pro'
 import { useWelcomeNote } from './use-welcome-note'
-import { useRepositoryTree } from './use-repository-tree'
-import { useRepositoryTreeOps } from './use-repository-tree-ops'
+import { useFolderTree } from './use-folder-tree'
+import { useFolderTreeOps } from './use-folder-tree-ops'
 import { useRepositoryCrud } from './use-repository-crud'
 import { useRepositorySync } from './use-repository-sync'
 import { RepositoryStateContext } from '@/shared/context/repository-state-context'
@@ -19,108 +19,108 @@ export function useRepositoryController() {
     const fileStorage = useFileStorage()
 
     const {
-        repositories,
-        setRepositories,
-        activeRepositoryId,
-        setActiveRepositoryId,
+        folders,
+        setFolders,
+        activeFolderId,
+        setActiveFolderId,
         loading,
         pendingWelcomeNoteId,
         setPendingWelcomeNoteId,
         busyRef
     } = useContext(RepositoryStateContext)
 
-    const activeRepository = useMemo(
-        () => repositories.find((repository) => repository.id === activeRepositoryId) || null,
-        [repositories, activeRepositoryId]
+    const activeFolder = useMemo(
+        () => folders.find((folder) => folder.id === activeFolderId) || null,
+        [folders, activeFolderId]
     )
 
-    const persistRepositories = useCallback(async (localRepositories) => {
-        setRepositories(localRepositories)
-        await setItem(STORAGE_KEYS.REPOSITORIES, JSON.stringify(localRepositories))
-    }, [setRepositories, setItem])
+    const persistFolders = useCallback(async (localFolders) => {
+        setFolders(localFolders)
+        await setItem(STORAGE_KEYS.REPOSITORIES, JSON.stringify(localFolders))
+    }, [setFolders, setItem])
 
-    const persistActiveRepository = useCallback(async (id) => {
-        setActiveRepositoryId(id)
+    const persistActiveFolder = useCallback(async (id) => {
+        setActiveFolderId(id)
         await setItem(STORAGE_KEYS.ACTIVE_REPOSITORY, id)
-    }, [setActiveRepositoryId, setItem])
+    }, [setActiveFolderId, setItem])
 
-    const tree = useRepositoryTree({ repositories, activeRepository })
-    const treeOps = useRepositoryTreeOps({ repositories, fileStorage })
+    const tree = useFolderTree({ folders, activeFolder })
+    const treeOps = useFolderTreeOps({ folders, fileStorage })
 
     const crud = useRepositoryCrud({
-        repositories,
-        activeRepository,
-        activeRepositoryId,
+        folders,
+        activeFolder,
+        activeFolderId,
         pro,
         busyRef,
         fileStorage,
         seedWelcomeNote,
         setPendingWelcomeNoteId,
-        persistRepositories,
-        persistActiveRepository,
+        persistFolders,
+        persistActiveFolder,
         getRootRepository: tree.getRootRepository,
         getDescendants: tree.getDescendants,
         isAncestorOf: tree.isAncestorOf,
         seedTemplates: treeOps.seedTemplates,
-        buildRepository: treeOps.buildRepository,
+        buildFolder: treeOps.buildFolder,
         discoverSubfolders: treeOps.discoverSubfolders,
         relinkUris: treeOps.relinkUris
     })
 
-    const { reconcileRepositories } = useRepositorySync({
-        repositories,
-        activeRepositoryId,
+    const { reconcileFolders } = useRepositorySync({
+        folders,
+        activeFolderId,
         busyRef,
         directoryExists: fileStorage.directoryExists,
         scanSubdirectories: fileStorage.scanSubdirectories,
-        deleteRepositoryIndex: fileStorage.deleteRepositoryIndex,
-        buildRepository: treeOps.buildRepository,
+        deleteFolderIndex: fileStorage.deleteFolderIndex,
+        buildFolder: treeOps.buildFolder,
         discoverSubfolders: treeOps.discoverSubfolders,
-        persistRepositories,
-        persistActiveRepository
+        persistFolders,
+        persistActiveFolder
     })
 
     return useMemo(() => ({
-        repositories,
-        activeRepositoryTree: tree.activeRepositoryTree,
-        activeRepository,
-        activeRepositoryId,
+        folders,
+        activeFolderTree: tree.activeFolderTree,
+        activeFolder,
+        activeFolderId,
         loading,
         pendingWelcomeNoteId,
         clearPendingWelcomeNote: crud.clearPendingWelcomeNote,
         addRepository: crud.addRepository,
         addSubfolder: crud.addSubfolder,
-        renameRepository: crud.renameRepository,
+        renameFolder: crud.renameFolder,
         forgetRepository: crud.forgetRepository,
         removeRepository: crud.removeRepository,
-        setActiveRepository: crud.setActiveRepository,
+        setActiveFolder: crud.setActiveFolder,
         ensureTemplatesFolder: crud.ensureTemplatesFolder,
         ensureImagesFolder: crud.ensureImagesFolder,
         ensureAttachmentsFolder: crud.ensureAttachmentsFolder,
         getDescendants: tree.getDescendants,
         getRootRepository: tree.getRootRepository,
-        buildRepository: treeOps.buildRepository,
-        reconcileRepositories
+        buildFolder: treeOps.buildFolder,
+        reconcileFolders
     }), [
-        repositories,
-        tree.activeRepositoryTree,
-        activeRepository,
-        activeRepositoryId,
+        folders,
+        tree.activeFolderTree,
+        activeFolder,
+        activeFolderId,
         loading,
         pendingWelcomeNoteId,
         crud.clearPendingWelcomeNote,
         crud.addRepository,
         crud.addSubfolder,
-        crud.renameRepository,
+        crud.renameFolder,
         crud.forgetRepository,
         crud.removeRepository,
-        crud.setActiveRepository,
+        crud.setActiveFolder,
         crud.ensureTemplatesFolder,
         crud.ensureImagesFolder,
         crud.ensureAttachmentsFolder,
         tree.getDescendants,
         tree.getRootRepository,
-        treeOps.buildRepository,
-        reconcileRepositories
+        treeOps.buildFolder,
+        reconcileFolders
     ])
 }

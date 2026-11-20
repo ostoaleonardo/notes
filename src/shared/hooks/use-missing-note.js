@@ -1,15 +1,15 @@
 import { useCallback, useMemo, useState } from 'react'
 
 import { useNotes } from './use-notes'
-import { useRepositories } from './use-repositories'
+import { useFolders } from './use-folders'
 import { getEditorPath } from '@/shared/utils/editor-path'
 import { getDate } from '@/shared/utils/date'
-import { buildRepositoryPaths } from '@/shared/utils/note-path'
+import { buildFolderPaths } from '@/shared/utils/note-path'
 import { pushOnce } from '@/shared/utils/navigation'
 
 export function useMissingNote() {
     const { saveNote } = useNotes()
-    const { repositories, activeRepositoryTree } = useRepositories()
+    const { folders, activeFolderTree } = useFolders()
 
     const [missing, setMissing] = useState(null)
 
@@ -17,10 +17,10 @@ export function useMissingNote() {
 
     const create = useCallback(async () => {
         const now = getDate()
-        const repositoryPaths = buildRepositoryPaths(repositories)
+        const folderPaths = buildFolderPaths(folders)
 
-        const targetRepository = activeRepositoryTree.find((repository) => (
-            (repositoryPaths.get(repository.id) || '') === missing.path
+        const targetRepository = activeFolderTree.find((folder) => (
+            (folderPaths.get(folder.id) || '') === missing.path
         ))
 
         const { path } = await saveNote({
@@ -32,7 +32,7 @@ export function useMissingNote() {
         }, targetRepository?.id)
 
         pushOnce(getEditorPath(path))
-    }, [missing, repositories, activeRepositoryTree, saveNote])
+    }, [missing, folders, activeFolderTree, saveNote])
 
     return useMemo(
         () => ({ missing, setMissing, dismiss, create }),

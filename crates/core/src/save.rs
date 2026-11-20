@@ -6,7 +6,7 @@ use crate::source::NoteSink;
 impl Engine {
 	pub fn save_note(
 		&self,
-		repository_id: &str,
+		folder_id: &str,
 		sink: &dyn NoteSink,
 		filename: &str,
 		text: &str,
@@ -18,14 +18,14 @@ impl Engine {
 			expected_modified,
 		};
 
-		let mut outcomes = self.save_notes(repository_id, sink, &[request])?;
+		let mut outcomes = self.save_notes(folder_id, sink, &[request])?;
 
 		Ok(outcomes.remove(0))
 	}
 
 	pub fn save_notes(
 		&self,
-		repository_id: &str,
+		folder_id: &str,
 		sink: &dyn NoteSink,
 		requests: &[SaveRequest],
 	) -> Result<Vec<SaveOutcome>> {
@@ -44,7 +44,7 @@ impl Engine {
 		}
 
 		if !inputs.is_empty() {
-			self.write(repository_id, inputs)?;
+			self.write(folder_id, inputs)?;
 		}
 
 		Ok(outcomes)
@@ -52,7 +52,7 @@ impl Engine {
 
 	pub fn rename_note(
 		&self,
-		repository_id: &str,
+		folder_id: &str,
 		sink: &dyn NoteSink,
 		from: &str,
 		to: &str,
@@ -62,34 +62,29 @@ impl Engine {
 			return Ok(SaveOutcome::Conflict { disk_modified: 0 });
 		}
 
-		let stamp = self.store(repository_id, sink, to, text)?;
+		let stamp = self.store(folder_id, sink, to, text)?;
 
 		sink.delete(from)?;
-		self.remove(repository_id, &[from.to_string()])?;
+		self.remove(folder_id, &[from.to_string()])?;
 
 		Ok(SaveOutcome::Saved(stamp))
 	}
 
-	pub fn delete_note(
-		&self,
-		repository_id: &str,
-		sink: &dyn NoteSink,
-		filename: &str,
-	) -> Result<()> {
+	pub fn delete_note(&self, folder_id: &str, sink: &dyn NoteSink, filename: &str) -> Result<()> {
 		sink.delete(filename)?;
-		self.remove(repository_id, &[filename.to_string()])
+		self.remove(folder_id, &[filename.to_string()])
 	}
 
 	fn store(
 		&self,
-		repository_id: &str,
+		folder_id: &str,
 		sink: &dyn NoteSink,
 		filename: &str,
 		text: &str,
 	) -> Result<FileStamp> {
 		let stamp = sink.write(filename, text)?;
 
-		self.write(repository_id, vec![note_input(filename, text, &stamp)])?;
+		self.write(folder_id, vec![note_input(filename, text, &stamp)])?;
 
 		Ok(stamp)
 	}

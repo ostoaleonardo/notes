@@ -9,7 +9,7 @@ import { NOT_FOUND_REDIRECT_DELAY } from '@/shared/constants/default-values'
 
 const mockState = {
     loading: false,
-    activeRepository: { id: 'repo' },
+    activeFolder: { id: 'repo' },
     dailyPath: null
 }
 
@@ -24,8 +24,8 @@ jest.mock('@/shared/hooks/use-current-note', () => ({
     useCurrentNote: () => ({ currentId: null })
 }))
 
-jest.mock('@/shared/hooks/use-repositories', () => ({
-    useRepositories: () => ({ activeRepository: mockState.activeRepository })
+jest.mock('@/shared/hooks/use-folders', () => ({
+    useFolders: () => ({ activeFolder: mockState.activeFolder })
 }))
 
 jest.mock('@/shared/hooks/use-storage', () => ({
@@ -46,13 +46,13 @@ afterEach(() => jest.useRealTimers())
 
 beforeEach(() => {
     mockState.loading = false
-    mockState.activeRepository = { id: 'repo' }
+    mockState.activeFolder = { id: 'repo' }
     mockState.dailyPath = null
 })
 
 describe('startup route', () => {
-    test('shows the repository gate while there is no active repository', async () => {
-        mockState.activeRepository = null
+    test('shows the folder gate while there is no active repository', async () => {
+        mockState.activeFolder = null
 
         const app = await renderRouter({ index: App, ...screens })
 

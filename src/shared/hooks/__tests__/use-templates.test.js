@@ -22,9 +22,9 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
 jest.mock('../use-file-storage', () => ({
     useFileStorage: () => mockFileStorage
 }))
-jest.mock('../use-repositories', () => ({
-    useRepositories: () => ({
-        activeRepository: { id: 'repo-1', uri: MOCK_REPO_URI },
+jest.mock('../use-folders', () => ({
+    useFolders: () => ({
+        activeFolder: { id: 'repo-1', uri: MOCK_REPO_URI },
         ensureTemplatesFolder: async () => MOCK_TEMPLATES_URI
     })
 }))

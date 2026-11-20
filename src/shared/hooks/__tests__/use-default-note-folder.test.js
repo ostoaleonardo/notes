@@ -12,9 +12,9 @@ let mockDescendants = [{ id: 'child' }]
 jest.mock('../use-storage', () => ({
     useStorage: () => mockStorage
 }))
-jest.mock('../use-repositories', () => ({
-    useRepositories: () => ({
-        activeRepository: mockActive,
+jest.mock('../use-folders', () => ({
+    useFolders: () => ({
+        activeFolder: mockActive,
         getDescendants: () => mockDescendants
     })
 }))
@@ -27,7 +27,7 @@ describe('default note folder', () => {
         mockStorage.getItem.mockResolvedValue(null)
     })
 
-    test('is the repository root when nothing is stored', async () => {
+    test('is the folder root when nothing is stored', async () => {
         const { result } = await renderHook(() => useDefaultNoteFolder())
 
         expect(result.current).toBe('root')

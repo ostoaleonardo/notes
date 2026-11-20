@@ -13,7 +13,7 @@ import { SavedSearches } from './saved-searches'
 import { SearchBar } from '@/shared/components/input/search-bar'
 
 import { useNotes } from '@/shared/hooks/use-notes'
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 import { useDebouncedValue } from '@/features/search/hooks/use-debounced-value'
 import { useIndicatorFlag } from '@/features/search/hooks/use-indicator-flag'
 import { useSearchOptions } from '@/features/search/hooks/use-search-options'
@@ -43,7 +43,7 @@ export const NoteSearch = ({ onClose, initialQuery = '' }) => {
     const { pinned } = useUtils()
     const { notes, notePaths } = useNotes()
     const { getItem, setItem } = useStorage()
-    const { repositories } = useRepositories()
+    const { folders } = useFolders()
 
     const [query, setQuery] = useState(initialQuery)
     const [recent, setRecent] = useState([])
@@ -66,8 +66,8 @@ export const NoteSearch = ({ onClose, initialQuery = '' }) => {
     }, [getItem])
 
     const aliasById = useMemo(() => (
-        new Map(repositories.map((repository) => [repository.id, repository.alias]))
-    ), [repositories])
+        new Map(folders.map((folder) => [folder.id, folder.alias]))
+    ), [folders])
 
     const ast = useMemo(() => parseSearchQuery(query), [query])
     const chips = useMemo(() => getQueryChips(ast), [ast])

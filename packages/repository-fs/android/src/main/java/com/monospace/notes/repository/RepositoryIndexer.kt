@@ -58,7 +58,7 @@ private class ProgressBridge(private val onProgress: (done: Int, total: Int) -> 
 fun indexRepository(
   context: Context,
   engine: Engine,
-  repositoryId: String,
+  folderId: String,
   directoryUri: String,
   dispatcher: CoroutineDispatcher,
   onProgress: (done: Int, total: Int) -> Unit
@@ -67,9 +67,9 @@ fun indexRepository(
   val direct = directNotesTarget(context, Uri.parse(directoryUri))
 
   val report = if (direct != null) {
-    engine.syncDirectory(repositoryId, direct.path, direct.uriPrefix, listener)
+    engine.syncDirectory(folderId, direct.path, direct.uriPrefix, listener)
   } else {
-    engine.sync(repositoryId, ProviderNoteSource(context, directoryUri, dispatcher), listener)
+    engine.sync(folderId, ProviderNoteSource(context, directoryUri, dispatcher), listener)
   }
 
   return IndexStats(

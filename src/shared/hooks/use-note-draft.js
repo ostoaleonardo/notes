@@ -7,7 +7,7 @@ const EMPTY_DRAFT = {
     note: '',
     tags: [],
     properties: {},
-    repositoryId: '',
+    folderId: '',
     filename: '',
     invalidFrontmatter: null,
     rawFrontmatter: null
@@ -44,7 +44,7 @@ export function useNoteDraft(pathRef, initial = {}) {
         note,
         tags,
         properties,
-        repositoryId,
+        folderId,
         filename,
         invalidFrontmatter,
         rawFrontmatter
@@ -56,7 +56,7 @@ export function useNoteDraft(pathRef, initial = {}) {
         note: payloadNote,
         tags,
         properties,
-        repositoryId,
+        folderId,
         invalidFrontmatter,
         rawFrontmatter
     }), [
@@ -64,7 +64,7 @@ export function useNoteDraft(pathRef, initial = {}) {
         note,
         tags,
         properties,
-        repositoryId,
+        folderId,
         invalidFrontmatter,
         rawFrontmatter
     ])
@@ -74,7 +74,7 @@ export function useNoteDraft(pathRef, initial = {}) {
         note, setNote: setters.note,
         tags, setTags: setters.tags,
         properties, setProperties: setters.properties,
-        repositoryId,
+        folderId,
         filename,
         invalidFrontmatter,
         rawFrontmatter,
@@ -88,7 +88,7 @@ export function useNoteDraft(pathRef, initial = {}) {
         note, setNote: setters.note,
         tags, setTags: setters.tags,
         properties, setProperties: setters.properties,
-        repositoryId, setRepositoryId: setters.repositoryId,
+        folderId, setFolderId: setters.folderId,
         filename, setFilename: setters.filename,
         invalidFrontmatter, setInvalidFrontmatter: setters.invalidFrontmatter,
         rawFrontmatter, setRawFrontmatter: setters.rawFrontmatter,

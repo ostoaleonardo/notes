@@ -15,8 +15,8 @@ const mockWriteRepositoryIndex = jest.fn()
 const mockIsBodylessVault = jest.fn()
 const mockLoadNotesFromIndex = jest.fn()
 
-let mockActiveRepository = null
-let mockActiveRepositoryTree = []
+let mockActiveFolder = null
+let mockActiveFolderTree = []
 let mockPinned = new Set()
 let mockRecent = []
 
@@ -38,11 +38,11 @@ jest.mock('../../hooks/use-file-storage', () => ({
         writeRepositoryIndex: mockWriteRepositoryIndex
     })
 }))
-jest.mock('../../hooks/use-repositories', () => ({
-    useRepositories: () => ({
-        repositories: [],
-        activeRepository: mockActiveRepository,
-        activeRepositoryTree: mockActiveRepositoryTree
+jest.mock('../../hooks/use-folders', () => ({
+    useFolders: () => ({
+        folders: [],
+        activeFolder: mockActiveFolder,
+        activeFolderTree: mockActiveFolderTree
     })
 }))
 jest.mock('../../hooks/use-utils', () => ({
@@ -56,8 +56,8 @@ const renderNoteContext = () => renderHook(() => useContext(NoteContext), { wrap
 
 beforeEach(() => {
     jest.clearAllMocks()
-    mockActiveRepository = null
-    mockActiveRepositoryTree = []
+    mockActiveFolder = null
+    mockActiveFolderTree = []
     mockPinned = new Set()
     mockRecent = []
     mockReadRepositoryIndex.mockResolvedValue([])
@@ -74,10 +74,10 @@ describe('loading notes on mount', () => {
         expect(result.current.loading).toBe(true)
     })
 
-    test('loads notes and tags for the active repository tree', async () => {
+    test('loads notes and tags for the active folder tree', async () => {
         const root = { id: 'repo-1', uri: 'content://repo-1' }
-        mockActiveRepository = root
-        mockActiveRepositoryTree = [root]
+        mockActiveFolder = root
+        mockActiveFolderTree = [root]
         mockLoadRepositoryData.mockResolvedValue({
             notes: [{ id: 'note-1', title: 'Hello', tags: ['work'], note: 'a #work/todo' }],
             changed: true
@@ -93,8 +93,8 @@ describe('loading notes on mount', () => {
 
     test('stops loading and keeps prior state when loadRepositoryData throws', async () => {
         const root = { id: 'repo-1', uri: 'content://repo-1' }
-        mockActiveRepository = root
-        mockActiveRepositoryTree = [root]
+        mockActiveFolder = root
+        mockActiveFolderTree = [root]
         mockLoadRepositoryData.mockRejectedValue(new Error('disk error'))
 
         const { result } = await renderNoteContext()
@@ -104,16 +104,16 @@ describe('loading notes on mount', () => {
     })
 })
 
-describe('loading from the repository index', () => {
+describe('loading from the folder index', () => {
     const root = { id: 'repo-1', uri: 'content://repo-1' }
     const cached = [{ path: 'repo-1::A.md', title: 'A' }]
 
     beforeEach(() => {
-        mockActiveRepository = root
-        mockActiveRepositoryTree = [root]
+        mockActiveFolder = root
+        mockActiveFolderTree = [root]
     })
 
-    test('shows the indexed notes before the repository is scanned', async () => {
+    test('shows the indexed notes before the folder is scanned', async () => {
         mockReadRepositoryIndex.mockResolvedValue(cached)
         mockLoadRepositoryData.mockReturnValue(new Promise(() => {}))
 
@@ -138,7 +138,7 @@ describe('loading from the repository index', () => {
         expect(mockWriteRepositoryIndex).not.toHaveBeenCalled()
     })
 
-    test('stores the index again when the repository changed', async () => {
+    test('stores the index again when the folder changed', async () => {
         const loaded = [{ path: 'repo-1::B.md', title: 'B' }]
         mockReadRepositoryIndex.mockResolvedValue(cached)
         mockLoadRepositoryData.mockResolvedValue({
@@ -152,7 +152,7 @@ describe('loading from the repository index', () => {
         expect(mockWriteRepositoryIndex).toHaveBeenCalledWith('repo-1', loaded)
     })
 
-    test('keeps a note edited while the repository was being scanned', async () => {
+    test('keeps a note edited while the folder was being scanned', async () => {
         let finishLoading
         mockReadRepositoryIndex.mockResolvedValue(cached)
         mockLoadRepositoryData.mockReturnValue(new Promise((resolve) => {
@@ -180,8 +180,8 @@ describe('indexing status', () => {
     const root = { id: 'repo-1', uri: 'content://repo-1' }
 
     const loadReporting = (total) => {
-        mockActiveRepository = root
-        mockActiveRepositoryTree = [root]
+        mockActiveFolder = root
+        mockActiveFolderTree = [root]
         mockReadRepositoryIndex.mockResolvedValue([{ path: 'repo-1::A.md' }])
 
         let finishLoading
@@ -219,9 +219,9 @@ describe('indexing status', () => {
         expect(getIndexingStatus()).toBeNull()
     })
 
-    test('announces indexing right away when the repository has no index yet', async () => {
-        mockActiveRepository = root
-        mockActiveRepositoryTree = [root]
+    test('announces indexing right away when the folder has no index yet', async () => {
+        mockActiveFolder = root
+        mockActiveFolderTree = [root]
         mockLoadRepositoryData.mockReturnValue(new Promise(() => {}))
 
         const { result } = await renderNoteContext()
@@ -231,8 +231,8 @@ describe('indexing status', () => {
     })
 
     test('clears the status when loading fails', async () => {
-        mockActiveRepository = root
-        mockActiveRepositoryTree = [root]
+        mockActiveFolder = root
+        mockActiveFolderTree = [root]
         mockLoadRepositoryData.mockRejectedValue(new Error('disk error'))
 
         await renderNoteContext()
@@ -244,8 +244,8 @@ describe('indexing status', () => {
 describe('reload on app foreground', () => {
     test('refreshes notes without toggling the loading flag', async () => {
         const root = { id: 'repo-1', uri: 'content://repo-1' }
-        mockActiveRepository = root
-        mockActiveRepositoryTree = [root]
+        mockActiveFolder = root
+        mockActiveFolderTree = [root]
 
         const addEventListenerSpy = jest.spyOn(AppState, 'addEventListener')
 
@@ -271,8 +271,8 @@ describe('reload on app foreground', () => {
 describe('pruning stale pinned and recent entries', () => {
     test('removes pinned and recent notes that no longer resolve after loading', async () => {
         const root = { id: 'repo-1', uri: 'content://repo-1' }
-        mockActiveRepository = root
-        mockActiveRepositoryTree = [root]
+        mockActiveFolder = root
+        mockActiveFolderTree = [root]
         mockPinned = new Set(['repo-1::Gone.md', 'repo-1::Kept.md'])
         mockRecent = ['repo-1::Gone.md', 'repo-1::AlsoGone.md']
         mockLoadRepositoryData.mockResolvedValue({
@@ -289,8 +289,8 @@ describe('pruning stale pinned and recent entries', () => {
 
     test('never prunes pinned template entries', async () => {
         const root = { id: 'repo-1', uri: 'content://repo-1' }
-        mockActiveRepository = root
-        mockActiveRepositoryTree = [root]
+        mockActiveFolder = root
+        mockActiveFolderTree = [root]
         mockPinned = new Set(['template:Weekly.md'])
         mockLoadRepositoryData.mockResolvedValue({ notes: [] })
 
@@ -301,8 +301,8 @@ describe('pruning stale pinned and recent entries', () => {
 
     test('does nothing when every pinned and recent entry still resolves', async () => {
         const root = { id: 'repo-1', uri: 'content://repo-1' }
-        mockActiveRepository = root
-        mockActiveRepositoryTree = [root]
+        mockActiveFolder = root
+        mockActiveFolderTree = [root]
         mockPinned = new Set(['repo-1::Kept.md'])
         mockRecent = ['repo-1::Kept.md']
         mockLoadRepositoryData.mockResolvedValue({
@@ -320,8 +320,8 @@ describe('pruning stale pinned and recent entries', () => {
 describe('clear', () => {
     test('empties notes and the tags derived from them', async () => {
         const root = { id: 'repo-1', uri: 'content://repo-1' }
-        mockActiveRepository = root
-        mockActiveRepositoryTree = [root]
+        mockActiveFolder = root
+        mockActiveFolderTree = [root]
         mockLoadRepositoryData.mockResolvedValue({
             notes: [{ id: 'note-1', title: 'Hello', tags: ['work'] }],
             changed: true
@@ -344,8 +344,8 @@ describe('loading a large vault without note bodies', () => {
     const listed = [{ path: 'repo-1::A.md', title: 'A' }]
 
     beforeEach(() => {
-        mockActiveRepository = root
-        mockActiveRepositoryTree = [root]
+        mockActiveFolder = root
+        mockActiveFolderTree = [root]
         mockIsBodylessVault.mockResolvedValue(true)
         mockLoadNotesFromIndex.mockResolvedValue(listed)
     })

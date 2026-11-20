@@ -3,24 +3,24 @@ import { router } from 'expo-router'
 
 import { useDailyNote } from '@/shared/hooks/use-daily-note'
 import { useNotes } from '@/shared/hooks/use-notes'
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 import { getEditorPath } from '@/shared/utils/editor-path'
 
 export default function DailyNote() {
     const { loading } = useNotes()
-    const { activeRepository } = useRepositories()
+    const { activeFolder } = useFolders()
     const openDailyNote = useDailyNote()
     const handled = useRef(false)
 
     useEffect(() => {
-        if (handled.current || loading || !activeRepository) return
+        if (handled.current || loading || !activeFolder) return
 
         handled.current = true
 
         openDailyNote().then((path) => {
             if (path) router.replace(getEditorPath(path))
         })
-    }, [loading, activeRepository, openDailyNote])
+    }, [loading, activeFolder, openDailyNote])
 
     return null
 }

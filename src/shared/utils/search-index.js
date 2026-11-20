@@ -62,8 +62,8 @@ export const createSearchIndex = ({
                     exhausted = rows.length < SEARCH_DATABASE_PAGE_SIZE
                     cursor = rows.length ? rows.at(-1) : cursor
 
-                    rows.forEach(({ repositoryId, filename }) => {
-                        const note = notesByPath.get(buildNotePath(repositoryId, filename))
+                    rows.forEach(({ folderId, filename }) => {
+                        const note = notesByPath.get(buildNotePath(folderId, filename))
                         if (!note || !isCovered(note)) return
 
                         flushBefore(batch, note)

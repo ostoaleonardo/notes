@@ -2,11 +2,11 @@ import { sortNotes } from '@/shared/utils/note-sort'
 
 import { DRAWER_ITEM_TYPES } from '@/shared/constants/drawer-views'
 
-const createNode = (repository, notes, sort, subfolders) => {
+const createNode = (folder, notes, sort, subfolders) => {
     let sorted = null
 
     return {
-        repository,
+        folder,
         subfolders,
         get notes() {
             sorted ??= sortNotes(notes, sort)
@@ -15,20 +15,20 @@ const createNode = (repository, notes, sort, subfolders) => {
     }
 }
 
-export const buildRepositoryTree = (flatList, notesByRepository, sort, parentId = null) => (
+export const buildFolderTree = (flatList, notesByRepository, sort, parentId = null) => (
     flatList
-        .filter((repository) => (repository.parentId || null) === parentId)
-        .map((repository) => createNode(
-            repository,
-            notesByRepository.get(repository.id) || [],
+        .filter((folder) => (folder.parentId || null) === parentId)
+        .map((folder) => createNode(
+            folder,
+            notesByRepository.get(folder.id) || [],
             sort,
-            buildRepositoryTree(flatList, notesByRepository, sort, repository.id)
+            buildFolderTree(flatList, notesByRepository, sort, folder.id)
         ))
 )
 
 export const findFolderNode = (tree, folderId) => {
     for (const node of tree) {
-        if (node.repository.id === folderId) return node
+        if (node.folder.id === folderId) return node
 
         const found = findFolderNode(node.subfolders, folderId)
         if (found) return found
@@ -39,16 +39,16 @@ export const findFolderNode = (tree, folderId) => {
 
 export const resolveLevel = (tree, folderId) => findFolderNode(tree, folderId) || tree[0] || null
 
-export const buildLevelRows = ({ repository, notes, subfolders }) => [
-    ...(repository.parentId ? [{
+export const buildLevelRows = ({ folder, notes, subfolders }) => [
+    ...(folder.parentId ? [{
         type: DRAWER_ITEM_TYPES.LEVEL,
-        id: 'level:' + repository.id,
-        repository
+        id: 'level:' + folder.id,
+        folder
     }] : []),
     ...subfolders.map((node) => ({
         type: DRAWER_ITEM_TYPES.REPOSITORY,
-        id: 'repository:' + node.repository.id,
-        repository: node.repository
+        id: 'folder:' + node.folder.id,
+        folder: node.folder
     })),
     ...notes.map((note) => ({
         type: DRAWER_ITEM_TYPES.NOTE,

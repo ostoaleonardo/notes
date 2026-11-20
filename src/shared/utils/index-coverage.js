@@ -6,9 +6,9 @@ export const createIndexCoverage = ({ listIndexedNotes }) => {
     let covered = new WeakSet()
 
     const refresh = async (notes) => {
-        const { repositoryIds, filenames, modified } = await listIndexedNotes()
+        const { folderIds, filenames, modified } = await listIndexedNotes()
         const indexed = new Map(filenames.map((filename, index) => [
-            buildNotePath(repositoryIds[index], filename),
+            buildNotePath(folderIds[index], filename),
             modified[index]
         ]))
 

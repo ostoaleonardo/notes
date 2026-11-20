@@ -1,4 +1,4 @@
-export const getRepositoryPath = (uri) => {
+export const getFolderPath = (uri) => {
     try {
         const decoded = decodeURIComponent(uri)
         const documentIndex = decoded.lastIndexOf('/document/')

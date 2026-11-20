@@ -7,7 +7,7 @@ internal const val PIPELINE_DEPTH = 1
 internal const val NANOS_PER_MILLI = 1_000_000L
 
 internal object ProgressKeys {
-  const val REPOSITORY_ID = "repositoryId"
+  const val FOLDER_ID = "folderId"
   const val DONE = "done"
   const val TOTAL = "total"
 }
@@ -30,7 +30,7 @@ internal object QueryKeys {
 }
 
 internal object IndexedKeys {
-  const val REPOSITORY_IDS = "repositoryIds"
+  const val FOLDER_IDS = "folderIds"
   const val FILENAMES = "filenames"
   const val MODIFIED = "modified"
 }

@@ -1,7 +1,7 @@
 import { useContext, useMemo, useRef } from 'react'
 
 import { useFileStorage } from './use-file-storage'
-import { useRepositories } from './use-repositories'
+import { useFolders } from './use-folders'
 import { useStorage } from './use-storage'
 import { NoteContext } from '@/shared/context/note-context'
 import { deleteNoteFiles, readDeleteBehavior } from '@/shared/utils/delete-note-files'
@@ -11,7 +11,7 @@ import { noteBodies } from '@/shared/utils/note-body'
 import { getVersionLocation } from '@/shared/utils/note-version-location'
 import {
     createNote,
-    getRepositoryUri,
+    getFolderUri,
     persistNoteMove,
     persistNoteUpdate,
     planMovedNoteLinks,
@@ -24,7 +24,7 @@ import {
 export function useNotesController() {
     const fileStorage = useFileStorage()
     const { getItem } = useStorage()
-    const { activeRepository, repositories } = useRepositories()
+    const { activeFolder, folders } = useFolders()
 
     const {
         notes,
@@ -37,14 +37,14 @@ export function useNotesController() {
     const saveQueues = useRef(new Map())
     const savedStamps = useRef(new Map())
     const latestRef = useRef(null)
-    latestRef.current = { notes, notesByPath, notePaths, repositories, activeRepository }
+    latestRef.current = { notes, notesByPath, notePaths, folders, activeFolder }
 
     const actions = useMemo(() => {
         const latest = () => latestRef.current
 
-        const saveNote = async (note, repositoryId = latest().activeRepository?.id) => {
-            const uri = getRepositoryUri(latest().repositories, repositoryId)
-            const { record, result } = await createNote({ note, repositoryId, uri }, fileStorage)
+        const saveNote = async (note, folderId = latest().activeFolder?.id) => {
+            const uri = getFolderUri(latest().folders, folderId)
+            const { record, result } = await createNote({ note, folderId, uri }, fileStorage)
 
             setNotes((prev) => [record, ...prev])
 
@@ -58,7 +58,7 @@ export function useNotesController() {
 
             const { failed, saved } = await writeChangedNotes(
                 changedNotes,
-                latest().repositories,
+                latest().folders,
                 fileStorage
             )
 
@@ -129,11 +129,11 @@ export function useNotesController() {
         const updateNote = (note) => enqueueSave(note.path, () => runUpdateNote(note))
 
         const runUpdateNote = async (note) => {
-            const { repositories: currentRepositories } = latest()
+            const { folders: currentFolders } = latest()
             const previous = latestPrevious(note.path)
-            if (!previous) return saveNote(note, note.repositoryId)
+            if (!previous) return saveNote(note, note.folderId)
 
-            const uri = getRepositoryUri(currentRepositories, note.repositoryId)
+            const uri = getFolderUri(currentFolders, note.folderId)
             const unchanged = {
                 path: previous.path,
                 filename: previous.filename,
@@ -171,7 +171,7 @@ export function useNotesController() {
                     if (!existing) return { ...unchanged, path, filename }
 
                     const { merged, ...times } = await persistNoteUpdate(
-                        { note, previous, uri, plan, repositories: currentRepositories },
+                        { note, previous, uri, plan, folders: currentFolders },
                         fileStorage
                     )
                     rememberStamp(previous.path, path, times)
@@ -183,11 +183,11 @@ export function useNotesController() {
         }
 
         const deleteNote = async (path) => {
-            const { notesByPath: byPath, repositories: currentRepositories } = latest()
+            const { notesByPath: byPath, folders: currentFolders } = latest()
             const note = byPath.get(path)
             if (!note) return
 
-            const uri = getRepositoryUri(currentRepositories, note.repositoryId)
+            const uri = getFolderUri(currentFolders, note.folderId)
 
             await withOptimisticUpdate(
                 setNotes,
@@ -199,7 +199,7 @@ export function useNotesController() {
                     if (!uri || !fileStorage.findFile(uri, note.filename)) return
 
                     const behavior = await readDeleteBehavior(getItem)
-                    const { rootUri, folderPath } = getVersionLocation(currentRepositories, note.repositoryId)
+                    const { rootUri, folderPath } = getVersionLocation(currentFolders, note.folderId)
 
                     await deleteNoteFiles(behavior, {
                         uri,
@@ -212,18 +212,18 @@ export function useNotesController() {
         }
 
         const moveNote = async (path, destinationId) => {
-            const { notesByPath: byPath, notePaths: currentPaths, repositories: currentRepositories } = latest()
+            const { notesByPath: byPath, notePaths: currentPaths, folders: currentFolders } = latest()
             const note = byPath.get(path)
-            if (!note || note.repositoryId === destinationId) return null
+            if (!note || note.folderId === destinationId) return null
 
-            const moved = await persistNoteMove({ note, destinationId, repositories: currentRepositories }, fileStorage)
+            const moved = await persistNoteMove({ note, destinationId, folders: currentFolders }, fileStorage)
 
             await applyLinkRewrite(planMovedNoteLinks({
                 note,
                 destinationId,
                 notes: latest().notes,
                 notePaths: currentPaths,
-                repositories: currentRepositories,
+                folders: currentFolders,
                 currentNotes: latest().notes,
                 bodies: await loadLinkingBodies(note.path, latest().notes, currentPaths)
             }))
@@ -237,10 +237,10 @@ export function useNotesController() {
         const deleteAll = async () => {
             setNotes([])
 
-            const { activeRepository: active, repositories: currentRepositories } = latest()
+            const { activeFolder: active, folders: currentFolders } = latest()
             if (!active) return
 
-            await fileStorage.clearRepository(active.uri, getVersionLocation(currentRepositories, active.id))
+            await fileStorage.clearRepository(active.uri, getVersionLocation(currentFolders, active.id))
         }
 
         return {

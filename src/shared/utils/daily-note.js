@@ -9,21 +9,21 @@ export const getDailyNoteTitle = (date = new Date()) => {
     return `${year}-${month}-${day}`
 }
 
-const resolveDailyNoteRepository = ({ folderId, activeRepository, descendants }, directoryExists) => {
-    const selected = [activeRepository, ...descendants].find((repository) => repository.id === folderId)
+const resolveDailyNoteRepository = ({ folderId, activeFolder, descendants }, directoryExists) => {
+    const selected = [activeFolder, ...descendants].find((folder) => folder.id === folderId)
 
     if (selected && directoryExists(selected.uri)) return selected
 
-    return directoryExists(activeRepository.uri) ? activeRepository : null
+    return directoryExists(activeFolder.uri) ? activeFolder : null
 }
 
-export const planDailyNote = ({ title, notes, folderId, activeRepository, descendants }, directoryExists) => {
-    const repository = resolveDailyNoteRepository({ folderId, activeRepository, descendants }, directoryExists)
-    if (!repository) return null
+export const planDailyNote = ({ title, notes, folderId, activeFolder, descendants }, directoryExists) => {
+    const folder = resolveDailyNoteRepository({ folderId, activeFolder, descendants }, directoryExists)
+    if (!folder) return null
 
-    const existing = notes.find((note) => note.repositoryId === repository.id && note.title === title)
+    const existing = notes.find((note) => note.folderId === folder.id && note.title === title)
 
-    return { repository, existing }
+    return { folder, existing }
 }
 
 export const isDailyNoteTitle = (title) => DAILY_NOTE_TITLE_PATTERN.test(title)
@@ -32,7 +32,7 @@ export const findAdjacentDailyNote = (notes, current, direction) => {
     if (!current || !isDailyNoteTitle(current.title)) return null
 
     const dailies = notes.filter((note) => (
-        note.repositoryId === current.repositoryId && isDailyNoteTitle(note.title)
+        note.folderId === current.folderId && isDailyNoteTitle(note.title)
     ))
 
     const isPrevious = direction === DAILY_DIRECTIONS.PREVIOUS

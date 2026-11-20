@@ -29,7 +29,7 @@ jest.mock('@/shared/utils/log-error', () => ({
 
 let mockPinned
 
-const MOVED = { path: 'child::Idea.md', filename: 'Idea.md', repositoryId: 'child', updatedAt: 9 }
+const MOVED = { path: 'child::Idea.md', filename: 'Idea.md', folderId: 'child', updatedAt: 9 }
 
 const setup = async (overrides = {}) => {
     const props = {

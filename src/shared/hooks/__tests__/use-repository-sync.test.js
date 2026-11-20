@@ -9,15 +9,15 @@ const kept = repo('kept', 'file:///root/kept', 'root')
 const removed = repo('removed', 'file:///root/removed', 'root')
 
 const setup = async ({
-    repositories,
-    activeRepositoryId = '',
+    folders,
+    activeFolderId = '',
     busy = false,
     existingUris = null,
     diskSubdirectories = {}
 }) => {
     const props = {
-        repositories,
-        activeRepositoryId,
+        folders,
+        activeFolderId,
         busyRef: { current: busy },
         directoryExists: jest.fn((uri) => !existingUris || existingUris.includes(uri)),
         scanSubdirectories: jest.fn(async (uri) => {
@@ -25,16 +25,16 @@ const setup = async ({
             if (entry instanceof Error) throw entry
             return entry || []
         }),
-        buildRepository: jest.fn((directory, parentId) => ({
+        buildFolder: jest.fn((directory, parentId) => ({
             id: `new-${directory.name}`,
             uri: directory.uri,
             alias: directory.name,
             parentId
         })),
         discoverSubfolders: jest.fn(() => []),
-        deleteRepositoryIndex: jest.fn(),
-        persistRepositories: jest.fn(() => Promise.resolve()),
-        persistActiveRepository: jest.fn(() => Promise.resolve())
+        deleteFolderIndex: jest.fn(),
+        persistFolders: jest.fn(() => Promise.resolve()),
+        persistActiveFolder: jest.fn(() => Promise.resolve())
     }
 
     const hook = await renderHook(() => useRepositorySync(props))
@@ -44,130 +44,130 @@ const setup = async ({
 
 describe('repository sync', () => {
     test('does nothing while another operation is busy', async () => {
-        const { props, result } = await setup({ repositories: [root], busy: true })
+        const { props, result } = await setup({ folders: [root], busy: true })
 
-        await result.current.reconcileRepositories()
+        await result.current.reconcileFolders()
 
-        expect(props.persistRepositories).not.toHaveBeenCalled()
+        expect(props.persistFolders).not.toHaveBeenCalled()
     })
 
     test('discards the scan when another operation started meanwhile', async () => {
-        const { props, result } = await setup({ repositories: [root] })
+        const { props, result } = await setup({ folders: [root] })
         props.scanSubdirectories.mockImplementation(async () => {
             props.busyRef.current = true
             return []
         })
 
-        await result.current.reconcileRepositories()
+        await result.current.reconcileFolders()
 
-        expect(props.persistRepositories).not.toHaveBeenCalled()
+        expect(props.persistFolders).not.toHaveBeenCalled()
     })
 
-    test('does not persist when every tracked repository still exists on disk', async () => {
+    test('does not persist when every tracked folder still exists on disk', async () => {
         const { props, result } = await setup({
-            repositories: [root, kept],
+            folders: [root, kept],
             diskSubdirectories: { 'file:///root': [{ name: 'kept', uri: kept.uri }] }
         })
 
-        await result.current.reconcileRepositories()
+        await result.current.reconcileFolders()
 
-        expect(props.persistRepositories).not.toHaveBeenCalled()
+        expect(props.persistFolders).not.toHaveBeenCalled()
     })
 
     test('drops tracked subfolders that disappeared from disk', async () => {
         const { props, result } = await setup({
-            repositories: [root, kept, removed],
+            folders: [root, kept, removed],
             diskSubdirectories: { 'file:///root': [{ name: 'kept', uri: kept.uri }] }
         })
 
-        await result.current.reconcileRepositories()
+        await result.current.reconcileFolders()
 
-        expect(props.persistRepositories).toHaveBeenCalledWith([root, kept])
+        expect(props.persistFolders).toHaveBeenCalledWith([root, kept])
     })
 
     test('deletes the index of a root that disappeared from disk', async () => {
         const other = repo('other', 'file:///other')
         const { props, result } = await setup({
-            repositories: [root, other],
+            folders: [root, other],
             existingUris: ['file:///other']
         })
 
-        await result.current.reconcileRepositories()
+        await result.current.reconcileFolders()
 
-        expect(props.deleteRepositoryIndex).toHaveBeenCalledTimes(1)
-        expect(props.deleteRepositoryIndex).toHaveBeenCalledWith('root')
+        expect(props.deleteFolderIndex).toHaveBeenCalledTimes(1)
+        expect(props.deleteFolderIndex).toHaveBeenCalledWith('root')
     })
 
     test('adds folders created on disk and their descendants', async () => {
         const { props, result } = await setup({
-            repositories: [root],
+            folders: [root],
             diskSubdirectories: { 'file:///root': [{ name: 'fresh', uri: 'file:///root/fresh' }] }
         })
         props.discoverSubfolders.mockReturnValue([
             repo('deep', 'file:///root/fresh/deep', 'new-fresh')
         ])
 
-        await result.current.reconcileRepositories()
+        await result.current.reconcileFolders()
 
-        const [persisted] = props.persistRepositories.mock.calls[0]
+        const [persisted] = props.persistFolders.mock.calls[0]
         expect(persisted.map((entry) => entry.id)).toEqual(['root', 'new-fresh', 'deep'])
     })
 
     test('drops a root whose directory no longer exists', async () => {
         const { props, result } = await setup({
-            repositories: [root, kept],
+            folders: [root, kept],
             existingUris: []
         })
 
-        await result.current.reconcileRepositories()
+        await result.current.reconcileFolders()
 
-        expect(props.persistRepositories).toHaveBeenCalledWith([])
+        expect(props.persistFolders).toHaveBeenCalledWith([])
     })
 
     test('treats an unreadable folder as having no subfolders', async () => {
         const { props, result } = await setup({
-            repositories: [root, kept],
+            folders: [root, kept],
             diskSubdirectories: { 'file:///root': new Error('denied') }
         })
 
-        await result.current.reconcileRepositories()
+        await result.current.reconcileFolders()
 
-        expect(props.persistRepositories).toHaveBeenCalledWith([root])
+        expect(props.persistFolders).toHaveBeenCalledWith([root])
     })
 
-    test('moves the active repository to the first remaining root when it vanishes', async () => {
+    test('moves the active folder to the first remaining root when it vanishes', async () => {
         const other = repo('other', 'file:///other')
         const { props, result } = await setup({
-            repositories: [root, other],
-            activeRepositoryId: 'root',
+            folders: [root, other],
+            activeFolderId: 'root',
             existingUris: ['file:///other']
         })
 
-        await result.current.reconcileRepositories()
+        await result.current.reconcileFolders()
 
-        expect(props.persistActiveRepository).toHaveBeenCalledWith('other')
+        expect(props.persistActiveFolder).toHaveBeenCalledWith('other')
     })
 
-    test('clears the active repository when no roots remain', async () => {
+    test('clears the active folder when no roots remain', async () => {
         const { props, result } = await setup({
-            repositories: [root],
-            activeRepositoryId: 'root',
+            folders: [root],
+            activeFolderId: 'root',
             existingUris: []
         })
 
-        await result.current.reconcileRepositories()
+        await result.current.reconcileFolders()
 
-        expect(props.persistActiveRepository).toHaveBeenCalledWith('')
+        expect(props.persistActiveFolder).toHaveBeenCalledWith('')
     })
 
-    test('keeps the active repository when it still exists', async () => {
+    test('keeps the active folder when it still exists', async () => {
         const { props, result } = await setup({
-            repositories: [root],
-            activeRepositoryId: 'root'
+            folders: [root],
+            activeFolderId: 'root'
         })
 
-        await result.current.reconcileRepositories()
+        await result.current.reconcileFolders()
 
-        expect(props.persistActiveRepository).not.toHaveBeenCalled()
+        expect(props.persistActiveFolder).not.toHaveBeenCalled()
     })
 })

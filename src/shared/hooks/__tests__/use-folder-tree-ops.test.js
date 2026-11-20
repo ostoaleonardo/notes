@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-native'
 
-import { useRepositoryTreeOps } from '../use-repository-tree-ops'
+import { useFolderTreeOps } from '../use-folder-tree-ops'
 import { setBundledContent } from '@/shared/utils/bundled-content'
 import { DEFAULT_TEMPLATE_FILES } from '@/shared/constants/default-templates'
 
@@ -34,9 +34,9 @@ const makeFileStorage = ({ existing = [], subdirectories = {} } = {}) => ({
     getOrCreateTemplatesFolder: jest.fn((uri) => ({ uri: `${uri}/templates` }))
 })
 
-const setup = async ({ repositories = [], ...storageOptions } = {}) => {
+const setup = async ({ folders = [], ...storageOptions } = {}) => {
     const fileStorage = makeFileStorage(storageOptions)
-    const hook = await renderHook(() => useRepositoryTreeOps({ repositories, fileStorage }))
+    const hook = await renderHook(() => useFolderTreeOps({ folders, fileStorage }))
     return { fileStorage, ...hook }
 }
 
@@ -69,12 +69,12 @@ describe('repository tree ops', () => {
     })
 
     describe('build repository', () => {
-        test('creates a repository entry with a seeded templates folder', async () => {
+        test('creates a folder entry with a seeded templates folder', async () => {
             const { result, fileStorage } = await setup()
 
-            const repository = result.current.buildRepository(dir('notes'))
+            const folder = result.current.buildFolder(dir('notes'))
 
-            expect(repository).toMatchObject({
+            expect(folder).toMatchObject({
                 id: 'uuid-1',
                 uri: 'file:///notes',
                 alias: 'notes',
@@ -87,10 +87,10 @@ describe('repository tree ops', () => {
         test('skips the templates folder when seeding is disabled', async () => {
             const { result, fileStorage } = await setup()
 
-            const repository = result.current.buildRepository(dir('sub'), 'parent', false)
+            const folder = result.current.buildFolder(dir('sub'), 'parent', false)
 
-            expect(repository.templatesUri).toBeNull()
-            expect(repository.parentId).toBe('parent')
+            expect(folder.templatesUri).toBeNull()
+            expect(folder.parentId).toBe('parent')
             expect(fileStorage.getOrCreateTemplatesFolder).not.toHaveBeenCalled()
         })
     })
@@ -126,7 +126,7 @@ describe('repository tree ops', () => {
 
         test('updates tracked children uris from the matching folders on disk', async () => {
             const { result } = await setup({
-                repositories: [root, child, grand],
+                folders: [root, child, grand],
                 subdirectories: {
                     'file:///root': [dir('a', 'file:///root/a')],
                     'file:///root/a': [dir('b', 'file:///root/a/b')]
@@ -143,7 +143,7 @@ describe('repository tree ops', () => {
 
         test('drops tracked children that no longer exist on disk', async () => {
             const { result } = await setup({
-                repositories: [root, child],
+                folders: [root, child],
                 subdirectories: { 'file:///root': [] }
             })
 
@@ -152,7 +152,7 @@ describe('repository tree ops', () => {
 
         test('treats an unreadable folder as having no children', async () => {
             const { result } = await setup({
-                repositories: [root, child],
+                folders: [root, child],
                 subdirectories: { 'file:///root': new Error('denied') }
             })
 

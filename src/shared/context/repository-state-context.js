@@ -10,8 +10,8 @@ export const RepositoryStateContext = createContext()
 
 export const RepositoryStateProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
-    const [repositories, setRepositories] = useState([])
-    const [activeRepositoryId, setActiveRepositoryId] = useState('')
+    const [folders, setFolders] = useState([])
+    const [activeFolderId, setActiveFolderId] = useState('')
     const [pendingWelcomeNoteId, setPendingWelcomeNoteId] = useState(null)
 
     const busyRef = useRef(false)
@@ -20,11 +20,11 @@ export const RepositoryStateProvider = ({ children }) => {
     useEffect(() => {
         const getRepositories = async () => {
             try {
-                const repositories = await getItem(STORAGE_KEYS.REPOSITORIES)
-                const activeRepositoryId = await getItem(STORAGE_KEYS.ACTIVE_REPOSITORY)
+                const folders = await getItem(STORAGE_KEYS.REPOSITORIES)
+                const activeFolderId = await getItem(STORAGE_KEYS.ACTIVE_REPOSITORY)
 
-                if (repositories) setRepositories(JSON.parse(repositories))
-                if (activeRepositoryId) setActiveRepositoryId(activeRepositoryId)
+                if (folders) setFolders(JSON.parse(folders))
+                if (activeFolderId) setActiveFolderId(activeFolderId)
             } catch (error) {
                 logError(LOG_MESSAGES.ERROR_LOADING_REPOSITORIES, error)
             } finally {
@@ -36,18 +36,18 @@ export const RepositoryStateProvider = ({ children }) => {
     }, [getItem])
 
     const value = useMemo(() => ({
-        repositories,
-        setRepositories,
-        activeRepositoryId,
-        setActiveRepositoryId,
+        folders,
+        setFolders,
+        activeFolderId,
+        setActiveFolderId,
         loading,
         pendingWelcomeNoteId,
         setPendingWelcomeNoteId,
         busyRef
     }), [
         loading,
-        repositories,
-        activeRepositoryId,
+        folders,
+        activeFolderId,
         pendingWelcomeNoteId
     ])
 

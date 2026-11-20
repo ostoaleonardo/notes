@@ -62,7 +62,7 @@ jest.mock('repository-fs', () => {
             },
             indexRepository: async () => ({}),
             pruneRepositoryIndex: async () => {},
-            deleteRepositoryIndex: async () => {},
+            deleteFolderIndex: async () => {},
             listAttachments: async (uri) => {
                 const { Directory, File } = require('expo-file-system')
                 const found = []

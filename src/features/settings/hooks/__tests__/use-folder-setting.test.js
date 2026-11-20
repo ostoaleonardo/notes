@@ -18,9 +18,9 @@ const DESCENDANTS = [
 jest.mock('@/shared/hooks/use-storage', () => ({
     useStorage: () => mockStorage
 }))
-jest.mock('@/shared/hooks/use-repositories', () => ({
-    useRepositories: () => ({
-        activeRepository: ACTIVE,
+jest.mock('@/shared/hooks/use-folders', () => ({
+    useFolders: () => ({
+        activeFolder: ACTIVE,
         getDescendants: () => DESCENDANTS
     })
 }))
@@ -59,7 +59,7 @@ describe('folder setting', () => {
         expect(result.current.description).toBe('Beta')
     })
 
-    test('stores the selected folder under the active repository key', async () => {
+    test('stores the selected folder under the active folder key', async () => {
         const { result } = await renderHook(() => useFolderSetting(STORAGE_KEYS.DEFAULT_NOTE_FOLDER, 'Root label'))
 
         await act(async () => result.current.onSelect('a'))

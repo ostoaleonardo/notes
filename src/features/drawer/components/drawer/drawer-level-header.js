@@ -8,7 +8,7 @@ import { ArrowBack } from '@/icons/arrow-back'
 import { SPACING } from '@/shared/constants/theme'
 
 export const DrawerLevelHeader = memo(({
-    repository,
+    folder,
     onBack
 }) => (
     <View style={styles.container}>
@@ -17,7 +17,7 @@ export const DrawerLevelHeader = memo(({
             variant='titleSmall'
             icon={ArrowBack}
             expandable={false}
-            label={repository.alias}
+            label={folder.alias}
             onPress={onBack}
         />
     </View>

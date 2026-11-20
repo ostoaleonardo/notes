@@ -6,38 +6,34 @@ use rusqlite::{Transaction, params};
 
 pub fn write_batch(
 	transaction: &Transaction<'_>,
-	repository_id: &str,
+	folder_id: &str,
 	notes: &[IndexedNote],
 	removed: &[String],
 	keys: &SortKeys,
 ) -> Result<()> {
 	for filename in removed {
-		delete_existing(transaction, repository_id, filename)?;
+		delete_existing(transaction, folder_id, filename)?;
 	}
 
 	for note in notes {
-		delete_existing(transaction, repository_id, &note.input.filename)?;
-		insert(transaction, repository_id, note, keys)?;
+		delete_existing(transaction, folder_id, &note.input.filename)?;
+		insert(transaction, folder_id, note, keys)?;
 	}
 
 	Ok(())
 }
 
-pub fn delete_repository(transaction: &Transaction<'_>, repository_id: &str) -> Result<()> {
-	transaction.execute(sql::DELETE_FTS_BY_REPOSITORY, [repository_id])?;
-	transaction.execute(sql::DELETE_NOTES_BY_REPOSITORY, [repository_id])?;
+pub fn delete_folder(transaction: &Transaction<'_>, folder_id: &str) -> Result<()> {
+	transaction.execute(sql::DELETE_FTS_BY_REPOSITORY, [folder_id])?;
+	transaction.execute(sql::DELETE_NOTES_BY_REPOSITORY, [folder_id])?;
 
 	Ok(())
 }
 
-fn delete_existing(
-	transaction: &Transaction<'_>,
-	repository_id: &str,
-	filename: &str,
-) -> Result<()> {
+fn delete_existing(transaction: &Transaction<'_>, folder_id: &str, filename: &str) -> Result<()> {
 	let id: Option<i64> = transaction
 		.prepare_cached(sql::SELECT_NOTE_ID)?
-		.query_row(params![repository_id, filename], |row| {
+		.query_row(params![folder_id, filename], |row| {
 			row.get(sql::FIRST_COLUMN)
 		})
 		.ok();
@@ -54,7 +50,7 @@ fn delete_existing(
 
 fn insert(
 	transaction: &Transaction<'_>,
-	repository_id: &str,
+	folder_id: &str,
 	note: &IndexedNote,
 	keys: &SortKeys,
 ) -> Result<()> {
@@ -65,7 +61,7 @@ fn insert(
 	transaction
 		.prepare_cached(sql::INSERT_NOTE)?
 		.execute(params![
-			repository_id,
+			folder_id,
 			input.filename,
 			input.uri,
 			title,

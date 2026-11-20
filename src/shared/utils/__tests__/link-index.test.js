@@ -6,7 +6,7 @@ jest.mock('repository-fs', () => ({ __esModule: true, default: {} }))
 const buildNote = (name, body = '', updatedAt = 1) => ({
     path: buildNotePath('repo', `${name}.md`),
     filename: `${name}.md`,
-    repositoryId: 'repo',
+    folderId: 'repo',
     title: name,
     note: body,
     updatedAt
@@ -16,7 +16,7 @@ const FILLER = Array.from({ length: 1000 }, (_, index) => buildNote(`filler${ind
 const NOTE_PATHS = new Map()
 
 const refs = (...notes) => ({
-    repositoryIds: notes.map(() => 'repo'),
+    folderIds: notes.map(() => 'repo'),
     filenames: notes.map((note) => note.filename)
 })
 

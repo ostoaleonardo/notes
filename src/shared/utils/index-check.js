@@ -48,8 +48,8 @@ const groupByNote = (rows) => {
     return grouped
 }
 
-const readIndex = async (repositoryId) => {
-    const notes = await queryIndex(INDEX_CHECK_SQL.NOTES, repositoryId)
+const readIndex = async (folderId) => {
+    const notes = await queryIndex(INDEX_CHECK_SQL.NOTES, folderId)
 
     const [tags, links, keys] = await Promise.all([
         queryIndex(INDEX_CHECK_SQL.TAGS),
@@ -129,38 +129,38 @@ const describe = (label, ms, stats) => (
     + `(scan ${stats.scanMs} ms, read+parse ${stats.readParseMs} ms, write ${stats.writeMs} ms)`
 )
 
-export const checkIndex = async (repositories, scanMarkdownFiles) => {
-    const scans = await Promise.all(repositories.map(async (repository) => ({
-        repository,
-        files: await scanMarkdownFiles(repository.uri)
+export const checkIndex = async (folders, scanMarkdownFiles) => {
+    const scans = await Promise.all(folders.map(async (folder) => ({
+        folder,
+        files: await scanMarkdownFiles(folder.uri)
     })))
 
-    const { repository, files } = scans.sort((a, b) => b.files.length - a.files.length)[0]
-    log(`repository ${repository.alias || repository.id}: ${files.length} notes`)
+    const { folder, files } = scans.sort((a, b) => b.files.length - a.files.length)[0]
+    log(`repository ${folder.alias || folder.id}: ${files.length} notes`)
 
     let progressEvents = 0
     const subscription = RepositoryFs.addListener(INDEX_PROGRESS_EVENT, () => { progressEvents += 1 })
 
-    await RepositoryFs.pruneRepositoryIndex([repository.id])
-    await RepositoryFs.deleteRepositoryIndex(repository.id)
-    const cold = await timed(() => RepositoryFs.indexRepository(repository.id, repository.uri))
+    await RepositoryFs.pruneRepositoryIndex([folder.id])
+    await RepositoryFs.deleteFolderIndex(folder.id)
+    const cold = await timed(() => RepositoryFs.indexRepository(folder.id, folder.uri))
     log(describe('cold index', cold.ms, cold.result))
     log(`progress events during the cold index: ${progressEvents}`)
 
-    const warm = await timed(() => RepositoryFs.indexRepository(repository.id, repository.uri))
+    const warm = await timed(() => RepositoryFs.indexRepository(folder.id, folder.uri))
     log(describe('unchanged reconcile', warm.ms, warm.result))
 
     await queryIndex(
         INDEX_CHECK_SQL.TOUCH,
-        repository.id,
+        folder.id,
         INDEX_CHECK_TOUCHED_NOTES
     )
 
-    const touched = await timed(() => RepositoryFs.indexRepository(repository.id, repository.uri))
+    const touched = await timed(() => RepositoryFs.indexRepository(folder.id, folder.uri))
     log(describe(`reconcile after touching ${INDEX_CHECK_TOUCHED_NOTES} notes`, touched.ms, touched.result))
 
     const texts = await RepositoryFs.readTextFiles(files.map((file) => file.uri))
-    const indexed = await readIndex(repository.id)
+    const indexed = await readIndex(folder.id)
     const parity = compareWithJs(files, texts, indexed)
 
     log(`parity with the JS parsers: ${files.length - parity.different - parity.missing}/${files.length} equal, `

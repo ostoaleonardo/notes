@@ -38,7 +38,7 @@ beforeEach(() => {
 })
 
 describe('direct access prompt hook', () => {
-    test('shows for a large repository without the permission', async () => {
+    test('shows for a large folder without the permission', async () => {
         const { result } = await renderHook(() => useDirectAccessPrompt())
 
         await waitFor(() => expect(result.current.visible).toBe(true))

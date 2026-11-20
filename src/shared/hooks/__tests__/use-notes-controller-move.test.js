@@ -31,11 +31,11 @@ jest.mock('../use-storage', () => ({
 jest.mock('../use-repository-data', () => ({
     useRepositoryData: () => async () => ({ notes: [], tags: [] })
 }))
-jest.mock('../use-repositories', () => ({
-    useRepositories: () => ({
-        activeRepository: REPOSITORIES[0],
-        repositories: REPOSITORIES,
-        getRootRepository: (repository) => repository
+jest.mock('../use-folders', () => ({
+    useFolders: () => ({
+        activeFolder: REPOSITORIES[0],
+        folders: REPOSITORIES,
+        getRootRepository: (folder) => folder
     })
 }))
 
@@ -45,18 +45,18 @@ const IDEA = {
     title: 'Idea',
     note: 'body',
     tags: [],
-    repositoryId: 'root',
+    folderId: 'root',
     createdAt: 1,
     updatedAt: 2
 }
-const TWIN = { ...IDEA, path: 'child::Idea.md', repositoryId: 'child', note: '' }
+const TWIN = { ...IDEA, path: 'child::Idea.md', folderId: 'child', note: '' }
 const INDEX = {
     path: 'root::Index.md',
     filename: 'Index.md',
     title: 'Index',
     note: 'See [[Idea]]',
     tags: [],
-    repositoryId: 'root',
+    folderId: 'root',
     fileUri: 'file:///root/Index.md',
     updatedAt: 5
 }
@@ -119,7 +119,7 @@ describe('move note', () => {
         expect(result.current.notes).toEqual([
             expect.objectContaining({
                 path: 'child::Idea.md',
-                repositoryId: 'child',
+                folderId: 'child',
                 note: 'body',
                 createdAt: 1,
                 updatedAt: 99,
@@ -136,7 +136,7 @@ describe('move note', () => {
             moved = await result.current.moveNote(IDEA.path, 'child')
         })
 
-        expect(moved).toMatchObject({ path: 'child::Idea.md', repositoryId: 'child' })
+        expect(moved).toMatchObject({ path: 'child::Idea.md', folderId: 'child' })
     })
 
     test('does nothing when the destination is the current folder', async () => {

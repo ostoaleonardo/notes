@@ -34,8 +34,8 @@ export const createLinkIndex = ({
         if (!refs) return null
 
         const pool = new Set(uncovered.map((note) => note.path))
-        refs.repositoryIds.forEach((repositoryId, index) => {
-            pool.add(buildNotePath(repositoryId, refs.filenames[index]))
+        refs.folderIds.forEach((folderId, index) => {
+            pool.add(buildNotePath(folderId, refs.filenames[index]))
         })
 
         return pool

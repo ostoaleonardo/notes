@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 import { useStorage } from '@/shared/hooks/use-storage'
 import { useStorageEffect } from '@/shared/hooks/use-storage-effect'
 import { scopedStorageKey } from '@/shared/utils/scoped-storage-key'
@@ -9,11 +9,11 @@ import { SPACING } from '@/shared/constants/theme'
 
 export function useFolderSetting(storageKey, rootLabel) {
     const { setItem } = useStorage()
-    const { activeRepository, getDescendants } = useRepositories()
+    const { activeFolder, getDescendants } = useFolders()
 
     const [folderId, setFolderId] = useState('')
 
-    const scopedKey = activeRepository ? scopedStorageKey(storageKey, activeRepository.id) : null
+    const scopedKey = activeFolder ? scopedStorageKey(storageKey, activeFolder.id) : null
 
     useEffect(() => setFolderId(''), [scopedKey])
     useStorageEffect(scopedKey, (value) => {
@@ -26,19 +26,19 @@ export function useFolderSetting(storageKey, rootLabel) {
     }, [scopedKey, setItem])
 
     const descendants = useMemo(() => (
-        activeRepository ? getDescendants(activeRepository.id) : []
-    ), [activeRepository, getDescendants])
+        activeFolder ? getDescendants(activeFolder.id) : []
+    ), [activeFolder, getDescendants])
 
     const items = useMemo(() => [
         { value: '', title: rootLabel },
-        ...descendants.map((repository) => ({
-            value: repository.id,
-            title: repository.alias,
-            indent: repository.depth * SPACING.lg
+        ...descendants.map((folder) => ({
+            value: folder.id,
+            title: folder.alias,
+            indent: folder.depth * SPACING.lg
         }))
     ], [descendants, rootLabel])
 
-    const selected = descendants.find((repository) => repository.id === folderId)
+    const selected = descendants.find((folder) => folder.id === folderId)
 
     return {
         items,

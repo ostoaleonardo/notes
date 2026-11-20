@@ -3,10 +3,10 @@ import { renderHook } from '@testing-library/react-native'
 import { useNavigationReadiness } from '../use-navigation-readiness'
 
 describe('navigation readiness', () => {
-    test('renders nothing while repositories are still loading', async () => {
+    test('renders nothing while folders are still loading', async () => {
         const { result } = await renderHook(() => useNavigationReadiness({
             loading: true,
-            activeRepository: null,
+            activeFolder: null,
             notesLoading: true
         }))
 
@@ -21,7 +21,7 @@ describe('navigation readiness', () => {
     test('needs the gate once settled with no active repository', async () => {
         const { result } = await renderHook(() => useNavigationReadiness({
             loading: false,
-            activeRepository: null,
+            activeFolder: null,
             notesLoading: false
         }))
 
@@ -36,7 +36,7 @@ describe('navigation readiness', () => {
     test('is ready and shows the drawer once settled with notes loaded', async () => {
         const { result } = await renderHook(() => useNavigationReadiness({
             loading: false,
-            activeRepository: { id: 'r1' },
+            activeFolder: { id: 'r1' },
             notesLoading: false
         }))
 
@@ -54,7 +54,7 @@ describe('navigation readiness', () => {
             {
                 initialProps: {
                     loading: false,
-                    activeRepository: { id: 'r1' },
+                    activeFolder: { id: 'r1' },
                     notesLoading: false
                 }
             }
@@ -64,7 +64,7 @@ describe('navigation readiness', () => {
 
         await rerender({
             loading: false,
-            activeRepository: { id: 'r1' },
+            activeFolder: { id: 'r1' },
             notesLoading: true
         })
 
@@ -76,13 +76,13 @@ describe('navigation readiness', () => {
         })
     })
 
-    test('goes back to the gate while a forgotten repository is replaced and its notes load', async () => {
+    test('goes back to the gate while a forgotten folder is replaced and its notes load', async () => {
         const { result, rerender } = await renderHook(
             (props) => useNavigationReadiness(props),
             {
                 initialProps: {
                     loading: false,
-                    activeRepository: { id: 'r1' },
+                    activeFolder: { id: 'r1' },
                     notesLoading: false
                 }
             }
@@ -90,12 +90,12 @@ describe('navigation readiness', () => {
 
         await rerender({
             loading: false,
-            activeRepository: null,
+            activeFolder: null,
             notesLoading: false
         })
         await rerender({
             loading: false,
-            activeRepository: { id: 'r2' },
+            activeFolder: { id: 'r2' },
             notesLoading: true
         })
 
@@ -109,7 +109,7 @@ describe('navigation readiness', () => {
             {
                 initialProps: {
                     loading: false,
-                    activeRepository: { id: 'r1' },
+                    activeFolder: { id: 'r1' },
                     notesLoading: false
                 }
             }
@@ -119,7 +119,7 @@ describe('navigation readiness', () => {
 
         await rerender({
             loading: true,
-            activeRepository: { id: 'r1' },
+            activeFolder: { id: 'r1' },
             notesLoading: false
         })
 
@@ -137,7 +137,7 @@ describe('navigation readiness', () => {
             {
                 initialProps: {
                     loading: false,
-                    activeRepository: null,
+                    activeFolder: null,
                     notesLoading: false
                 }
             }
@@ -147,7 +147,7 @@ describe('navigation readiness', () => {
 
         await rerender({
             loading: false,
-            activeRepository: { id: 'r1' },
+            activeFolder: { id: 'r1' },
             notesLoading: true
         })
 

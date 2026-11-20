@@ -18,7 +18,7 @@ pub mod metas_column {
 }
 
 pub mod indexed_column {
-	pub const REPOSITORY_ID: usize = 0;
+	pub const FOLDER_ID: usize = 0;
 	pub const FILENAME: usize = 1;
 	pub const MODIFIED: usize = 2;
 }
@@ -42,7 +42,7 @@ pub const DROP_ORDER: &[&str] = &[
 pub const SCHEMA: &[&str] = &[
 	"CREATE TABLE notes(
 		id INTEGER PRIMARY KEY,
-		repository_id TEXT NOT NULL,
+		folder_id TEXT NOT NULL,
 		filename TEXT NOT NULL,
 		uri TEXT NOT NULL,
 		title TEXT NOT NULL,
@@ -51,7 +51,7 @@ pub const SCHEMA: &[&str] = &[
 		size INTEGER NOT NULL,
 		invalid_frontmatter INTEGER NOT NULL,
 		frontmatter TEXT,
-		UNIQUE(repository_id, filename)
+		UNIQUE(folder_id, filename)
 	)",
 	"CREATE TABLE tags(
 		note_id INTEGER NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
@@ -102,19 +102,18 @@ pub const CREATE_FTS: &str = "CREATE VIRTUAL TABLE note_fts USING fts5(
 pub const SELECT_META: &str = "SELECT value FROM meta WHERE key = ?1";
 pub const UPSERT_META: &str = "INSERT OR REPLACE INTO meta(key, value) VALUES(?1, ?2)";
 
-pub const SELECT_METAS: &str =
-	"SELECT filename, modified, size FROM notes WHERE repository_id = ?1";
-pub const SELECT_INDEXED: &str = "SELECT repository_id, filename, modified FROM notes";
-pub const SELECT_REPOSITORIES: &str = "SELECT DISTINCT repository_id FROM notes";
-pub const SELECT_NOTE_ID: &str = "SELECT id FROM notes WHERE repository_id = ?1 AND filename = ?2";
+pub const SELECT_METAS: &str = "SELECT filename, modified, size FROM notes WHERE folder_id = ?1";
+pub const SELECT_INDEXED: &str = "SELECT folder_id, filename, modified FROM notes";
+pub const SELECT_REPOSITORIES: &str = "SELECT DISTINCT folder_id FROM notes";
+pub const SELECT_NOTE_ID: &str = "SELECT id FROM notes WHERE folder_id = ?1 AND filename = ?2";
 pub const DELETE_FTS: &str = "DELETE FROM note_fts WHERE rowid = ?1";
 pub const DELETE_NOTE: &str = "DELETE FROM notes WHERE id = ?1";
 pub const DELETE_FTS_BY_REPOSITORY: &str =
-	"DELETE FROM note_fts WHERE rowid IN (SELECT id FROM notes WHERE repository_id = ?1)";
-pub const DELETE_NOTES_BY_REPOSITORY: &str = "DELETE FROM notes WHERE repository_id = ?1";
+	"DELETE FROM note_fts WHERE rowid IN (SELECT id FROM notes WHERE folder_id = ?1)";
+pub const DELETE_NOTES_BY_REPOSITORY: &str = "DELETE FROM notes WHERE folder_id = ?1";
 
 pub const INSERT_NOTE: &str = "INSERT INTO notes(
-	repository_id, filename, uri, title, sort_key, modified, size, invalid_frontmatter, frontmatter
+	folder_id, filename, uri, title, sort_key, modified, size, invalid_frontmatter, frontmatter
 ) VALUES(?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)";
 pub const INSERT_TAG: &str =
 	"INSERT INTO tags(note_id, position, name, inline) VALUES(?1,?2,?3,?4)";
@@ -126,15 +125,15 @@ pub const INSERT_PROPERTY: &str =
 	"INSERT INTO properties(note_id, position, key, value) VALUES(?1,?2,?3,?4)";
 pub const INSERT_FTS: &str = "INSERT INTO note_fts(rowid, title, content) VALUES(?1,?2,?3)";
 
-pub const BACKLINK_BY_NAME_HEAD: &str = "SELECT DISTINCT n.repository_id, n.filename
+pub const BACKLINK_BY_NAME_HEAD: &str = "SELECT DISTINCT n.folder_id, n.filename
 	FROM links l JOIN notes n ON n.id = l.note_id
 	WHERE l.name IN (";
 pub const BACKLINK_BY_NAME_MIDDLE: &str = ") OR l.anchor_name IN (";
 pub const BACKLINK_BY_NAME_TAIL: &str = ")";
-pub const BACKLINK_BY_MARKDOWN: &str = "SELECT DISTINCT n.repository_id, n.filename
+pub const BACKLINK_BY_MARKDOWN: &str = "SELECT DISTINCT n.folder_id, n.filename
 	FROM markdown_links m JOIN notes n ON n.id = m.note_id
 	WHERE m.target = ?1";
-pub const MENTION_CANDIDATES: &str = "SELECT n.repository_id, n.filename
+pub const MENTION_CANDIDATES: &str = "SELECT n.folder_id, n.filename
 	FROM note_fts JOIN notes n ON n.id = note_fts.rowid
 	WHERE note_fts MATCH ?1";
 
@@ -146,7 +145,7 @@ pub const FTS_OR: &str = " OR ";
 pub const MIN_TRIGRAM_LENGTH: usize = 3;
 
 pub mod ref_column {
-	pub const REPOSITORY_ID: usize = 0;
+	pub const FOLDER_ID: usize = 0;
 	pub const FILENAME: usize = 1;
 }
 
@@ -157,7 +156,7 @@ pub fn placeholders(count: usize, offset: usize) -> String {
 		.join(PLACEHOLDER_SEPARATOR)
 }
 
-pub const LIST_NOTES: &str = "SELECT id, repository_id, filename, uri, title, modified,
+pub const LIST_NOTES: &str = "SELECT id, folder_id, filename, uri, title, modified,
 	invalid_frontmatter, frontmatter
 	FROM notes ORDER BY id";
 pub const LIST_TAGS: &str = "SELECT note_id, name, inline FROM tags ORDER BY note_id, rowid";
@@ -167,7 +166,7 @@ pub const LIST_LINKS: &str = "SELECT note_id, text FROM links ORDER BY note_id, 
 
 pub mod list_note_column {
 	pub const ID: usize = 0;
-	pub const REPOSITORY_ID: usize = 1;
+	pub const FOLDER_ID: usize = 1;
 	pub const FILENAME: usize = 2;
 	pub const URI: usize = 3;
 	pub const TITLE: usize = 4;

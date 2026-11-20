@@ -7,7 +7,7 @@ import { PositionGroup } from '@/ui/position-group'
 import { useStorage } from '@/shared/hooks/use-storage'
 import { useStorageEffect } from '@/shared/hooks/use-storage-effect'
 import { useFolderSetting } from '@/features/settings/hooks/use-folder-setting'
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 import { useTemplates } from '@/shared/hooks/use-templates'
 import { scopedStorageKey } from '@/shared/utils/scoped-storage-key'
 
@@ -17,7 +17,7 @@ import { getSettingTestId } from '@/features/settings/utils/test-ids'
 export const DailyNoteOption = () => {
     const { t } = useTranslation()
     const { setItem } = useStorage()
-    const { activeRepository } = useRepositories()
+    const { activeFolder } = useFolders()
     const { listTemplates } = useTemplates()
 
     const [dailyTemplate, setDailyTemplate] = useState('')
@@ -25,8 +25,8 @@ export const DailyNoteOption = () => {
 
     const folder = useFolderSetting(STORAGE_KEYS.DAILY_NOTE_FOLDER, t('settings.daily_note.folder.root'))
 
-    const templateStorageKey = activeRepository
-        ? scopedStorageKey(STORAGE_KEYS.DAILY_NOTE_TEMPLATE, activeRepository.id)
+    const templateStorageKey = activeFolder
+        ? scopedStorageKey(STORAGE_KEYS.DAILY_NOTE_TEMPLATE, activeFolder.id)
         : null
 
     useEffect(() => setDailyTemplate(''), [templateStorageKey])
@@ -35,13 +35,13 @@ export const DailyNoteOption = () => {
     })
 
     useEffect(() => {
-        if (!activeRepository) return
+        if (!activeFolder) return
 
         let cancelled = false
         listTemplates({ withContent: false }).then((value) => { if (!cancelled) setTemplates(value) })
 
         return () => { cancelled = true }
-    }, [activeRepository, listTemplates])
+    }, [activeFolder, listTemplates])
 
     const onSelectTemplate = (filename) => {
         setDailyTemplate(filename)

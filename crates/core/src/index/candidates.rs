@@ -77,7 +77,7 @@ fn collect<P: rusqlite::Params>(
 
 	while let Some(row) = rows.next()? {
 		found.push(NoteRef {
-			repository_id: row.get(sql::ref_column::REPOSITORY_ID)?,
+			folder_id: row.get(sql::ref_column::FOLDER_ID)?,
 			filename: row.get(sql::ref_column::FILENAME)?,
 		});
 	}

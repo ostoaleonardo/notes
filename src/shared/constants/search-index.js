@@ -50,7 +50,7 @@ export const SEARCH_INDEX_SQL = {
     MATCH_OR: ' OR ',
     INTERSECT: ' INTERSECT ',
     UNION: ' UNION ',
-    NOTES: 'SELECT n.repository_id AS repositoryId, n.filename AS filename FROM notes n WHERE n.id IN '
+    NOTES: 'SELECT n.repository_id AS folderId, n.filename AS filename FROM notes n WHERE n.id IN '
 }
 
 const SORT_KEY = { column: 'n.sort_key', field: 'sortKey' }
@@ -83,7 +83,7 @@ export const SEARCH_SORT_ORDERS = {
 }
 
 export const SEARCH_PAGE_SQL = {
-    SELECT: 'SELECT n.id AS id, n.repository_id AS repositoryId, n.filename AS filename, n.sort_key AS sortKey, n.modified AS modified FROM notes n',
+    SELECT: 'SELECT n.id AS id, n.repository_id AS folderId, n.filename AS filename, n.sort_key AS sortKey, n.modified AS modified FROM notes n',
     WHERE: ' WHERE ',
     AND: ' AND ',
     ID_IN: 'n.id IN ',

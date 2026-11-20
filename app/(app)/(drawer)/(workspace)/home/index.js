@@ -60,7 +60,7 @@ export default function Home() {
     const onCreateNote = () => {
         pushOnce({
             pathname: ROUTES.ADD_NOTE,
-            params: { repositoryId: defaultFolderId }
+            params: { folderId: defaultFolderId }
         })
     }
 

@@ -69,7 +69,7 @@ describe('go up and jump', () => {
         expect(state.trail).toEqual([ROOT_ENTITY, folder])
     })
 
-    test('stays at the repository when there is nowhere to go', () => {
+    test('stays at the folder when there is nowhere to go', () => {
         const state = focusReducer(INITIAL_FOCUS_STATE, { type: FOCUS_ACTIONS.UP })
 
         expect(state).toBe(INITIAL_FOCUS_STATE)

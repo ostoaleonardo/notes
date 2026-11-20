@@ -3,7 +3,7 @@ import { randomUUID } from 'expo-crypto'
 
 import { getDefaultTemplates } from '@/shared/utils/default-templates'
 
-export function useRepositoryTreeOps({ repositories, fileStorage }) {
+export function useFolderTreeOps({ folders, fileStorage }) {
     const {
         listMarkdownFiles,
         scanSubdirectories,
@@ -18,7 +18,7 @@ export function useRepositoryTreeOps({ repositories, fileStorage }) {
         })
     }, [listMarkdownFiles, writeNoteFile])
 
-    const buildRepository = useCallback((
+    const buildFolder = useCallback((
         directory,
         parentId = null,
         seedTemplatesFolder = true
@@ -45,23 +45,23 @@ export function useRepositoryTreeOps({ repositories, fileStorage }) {
         const subdirectories = await scanSubdirectories(directory.uri)
 
         const discovered = await Promise.all(subdirectories.map(async (subdirectory) => {
-            const entry = buildRepository(subdirectory, parentId, false)
+            const entry = buildFolder(subdirectory, parentId, false)
             return [entry, ...await discoverSubfolders(subdirectory, entry.id)]
         }))
 
         return discovered.flat()
-    }, [scanSubdirectories, buildRepository])
+    }, [scanSubdirectories, buildFolder])
 
-    const relinkUris = useCallback(async (repository) => {
+    const relinkUris = useCallback(async (folder) => {
         let diskChildren
 
         try {
-            diskChildren = await scanSubdirectories(repository.uri)
+            diskChildren = await scanSubdirectories(folder.uri)
         } catch {
             diskChildren = []
         }
 
-        const trackedChildren = repositories.filter((r) => r.parentId === repository.id)
+        const trackedChildren = folders.filter((r) => r.parentId === folder.id)
         const diskByName = new Map(diskChildren.map((d) => [d.name, d]))
 
         const relinked = await Promise.all(trackedChildren.map(async (child) => {
@@ -73,11 +73,11 @@ export function useRepositoryTreeOps({ repositories, fileStorage }) {
         }))
 
         return relinked.flat()
-    }, [scanSubdirectories, repositories])
+    }, [scanSubdirectories, folders])
 
     return {
         seedTemplates,
-        buildRepository,
+        buildFolder,
         discoverSubfolders,
         relinkUris
     }

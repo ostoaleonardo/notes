@@ -69,7 +69,7 @@ export const useNoteActionsMenu = ({
             copySuffix: t('notes.copy_suffix')
         })
 
-        const { path } = await saveNote(duplicate, note.repositoryId)
+        const { path } = await saveNote(duplicate, note.folderId)
         pushOnce(getEditorPath(path))
     })
 

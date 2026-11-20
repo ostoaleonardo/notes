@@ -1,32 +1,32 @@
 import { useCallback, useRef } from 'react'
 
 export function useRepositorySync({
-    repositories,
-    activeRepositoryId,
+    folders,
+    activeFolderId,
     busyRef,
     directoryExists,
     scanSubdirectories,
-    buildRepository,
+    buildFolder,
     discoverSubfolders,
-    deleteRepositoryIndex,
-    persistRepositories,
-    persistActiveRepository
+    deleteFolderIndex,
+    persistFolders,
+    persistActiveFolder
 }) {
-    const repositoriesRef = useRef(repositories)
-    repositoriesRef.current = repositories
+    const foldersRef = useRef(folders)
+    foldersRef.current = folders
 
-    const reconcileTree = useCallback(async (repository) => {
-        if (!directoryExists(repository.uri)) return []
+    const reconcileTree = useCallback(async (folder) => {
+        if (!directoryExists(folder.uri)) return []
 
         let diskSubdirectories
 
         try {
-            diskSubdirectories = await scanSubdirectories(repository.uri)
+            diskSubdirectories = await scanSubdirectories(folder.uri)
         } catch {
             diskSubdirectories = []
         }
 
-        const trackedChildren = repositories.filter((r) => r.parentId === repository.id)
+        const trackedChildren = folders.filter((r) => r.parentId === folder.id)
         const diskUris = new Set(diskSubdirectories.map((d) => d.uri))
         const trackedUris = new Set(trackedChildren.map((r) => r.uri))
 
@@ -40,50 +40,50 @@ export function useRepositorySync({
             diskSubdirectories
                 .filter((d) => !trackedUris.has(d.uri))
                 .map(async (d) => {
-                    const entry = buildRepository(d, repository.id, false)
+                    const entry = buildFolder(d, folder.id, false)
                     return [entry, ...await discoverSubfolders(d, entry.id)]
                 })
         )
 
-        return [repository, ...survivingDescendants.flat(), ...newDescendants.flat()]
+        return [folder, ...survivingDescendants.flat(), ...newDescendants.flat()]
     }, [
-        repositories,
-        buildRepository,
+        folders,
+        buildFolder,
         directoryExists,
         scanSubdirectories,
         discoverSubfolders
     ])
 
-    const reconcileRepositories = useCallback(async () => {
+    const reconcileFolders = useCallback(async () => {
         if (busyRef.current) return
 
-        const roots = repositories.filter((r) => !r.parentId)
+        const roots = folders.filter((r) => !r.parentId)
         const reconciled = (await Promise.all(roots.map(reconcileTree))).flat()
-        if (busyRef.current || repositoriesRef.current !== repositories) return
+        if (busyRef.current || foldersRef.current !== folders) return
 
-        if (JSON.stringify(reconciled) !== JSON.stringify(repositories)) {
-            const keptIds = new Set(reconciled.map((repository) => repository.id))
+        if (JSON.stringify(reconciled) !== JSON.stringify(folders)) {
+            const keptIds = new Set(reconciled.map((folder) => folder.id))
 
-            repositories
-                .filter((repository) => !keptIds.has(repository.id))
-                .forEach((repository) => deleteRepositoryIndex(repository.id))
+            folders
+                .filter((folder) => !keptIds.has(folder.id))
+                .forEach((folder) => deleteFolderIndex(folder.id))
 
-            await persistRepositories(reconciled)
+            await persistFolders(reconciled)
         }
 
-        if (activeRepositoryId && !reconciled.some((r) => r.id === activeRepositoryId)) {
+        if (activeFolderId && !reconciled.some((r) => r.id === activeFolderId)) {
             const remainingRoots = reconciled.filter((r) => !r.parentId)
-            await persistActiveRepository(remainingRoots[0]?.id || '')
+            await persistActiveFolder(remainingRoots[0]?.id || '')
         }
     }, [
-        repositories,
-        activeRepositoryId,
+        folders,
+        activeFolderId,
         reconcileTree,
-        deleteRepositoryIndex,
-        persistRepositories,
-        persistActiveRepository,
+        deleteFolderIndex,
+        persistFolders,
+        persistActiveFolder,
         busyRef
     ])
 
-    return { reconcileRepositories }
+    return { reconcileFolders }
 }

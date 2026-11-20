@@ -11,8 +11,8 @@ import { IndexingNotice } from '@/shared/components/indexing-notice'
 import { useNotes } from '@/shared/hooks/use-notes'
 import { useIndexingStatus } from '@/shared/hooks/use-indexing-status'
 import { useNavigationReadiness } from '@/shared/hooks/use-navigation-readiness'
-import { useRepositories } from '@/shared/hooks/use-repositories'
-import { useRepositoryReconciliation } from '@/shared/hooks/use-repository-reconciliation'
+import { useFolders } from '@/shared/hooks/use-folders'
+import { useFolderReconciliation } from '@/shared/hooks/use-folder-reconciliation'
 import { useImportMarkdown } from '@/shared/hooks/use-import-markdown'
 import { getScreenContentStyle } from '@/shared/utils/screen-content-style'
 import { getEditorPath } from '@/shared/utils/editor-path'
@@ -33,12 +33,12 @@ export default function AppLayout() {
 
     const {
         loading,
-        activeRepository,
+        activeFolder,
         pendingWelcomeNoteId,
         clearPendingWelcomeNote
-    } = useRepositories()
+    } = useFolders()
 
-    useRepositoryReconciliation()
+    useFolderReconciliation()
     useDevMenu()
 
     const {
@@ -48,7 +48,7 @@ export default function AppLayout() {
         shouldRenderNothing
     } = useNavigationReadiness({
         loading,
-        activeRepository,
+        activeFolder,
         notesLoading
     })
 

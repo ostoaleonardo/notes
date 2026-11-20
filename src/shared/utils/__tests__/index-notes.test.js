@@ -4,7 +4,7 @@ import { getNoteTags } from '../note-tags'
 import { buildNotePath } from '../note-path'
 
 const metadata = (overrides = {}) => ({
-    repositoryId: 'repo',
+    folderId: 'repo',
     filename: 'Daily.md',
     fileUri: 'file:///Daily.md',
     title: 'Daily',
@@ -26,7 +26,7 @@ describe('build a note from index metadata', () => {
 
         expect(note).toEqual({
             filename: 'Daily.md',
-            repositoryId: 'repo',
+            folderId: 'repo',
             path: buildNotePath('repo', 'Daily.md'),
             fileUri: 'file:///Daily.md',
             title: 'Daily',
@@ -63,7 +63,7 @@ describe('build a note from index metadata', () => {
 })
 
 describe('load notes from the index', () => {
-    test('asks for the repositories and builds every note in order', async () => {
+    test('asks for the folders and builds every note in order', async () => {
         const listNoteMetadata = jest.fn(async () => JSON.stringify([
             metadata({ filename: 'B.md', title: 'B' }),
             metadata({ filename: 'A.md', title: 'A' })

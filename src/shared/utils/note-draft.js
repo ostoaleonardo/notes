@@ -8,7 +8,7 @@ export const toDraft = (stored, untitled, body) => {
         note = '',
         tags = [],
         properties = {},
-        repositoryId = '',
+        folderId = '',
         filename = '',
         invalidFrontmatter = null,
         rawFrontmatter = null
@@ -19,7 +19,7 @@ export const toDraft = (stored, untitled, body) => {
         note: body ?? note,
         tags,
         properties,
-        repositoryId,
+        folderId,
         filename,
         invalidFrontmatter,
         rawFrontmatter
@@ -47,11 +47,11 @@ export const isDraftSaved = (draft, saved) => (
     draft.rawFrontmatter === saved.rawFrontmatter
 )
 
-export const resolveNewNoteRepositoryId = ({ targetRepositoryId, defaultFolderId, activeRepositoryId }) => (
-    targetRepositoryId || defaultFolderId || activeRepositoryId
+export const resolveNewNoteFolderId = ({ targetFolderId, defaultFolderId, activeFolderId }) => (
+    targetFolderId || defaultFolderId || activeFolderId
 )
 
-export const getNewNoteTitle = (notes, repositoryId, untitled) => getUniqueTitle(
-    notes.filter((note) => note.repositoryId === repositoryId).map((note) => note.title),
+export const getNewNoteTitle = (notes, folderId, untitled) => getUniqueTitle(
+    notes.filter((note) => note.folderId === folderId).map((note) => note.title),
     untitled
 )

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 
-import { useRepositories } from './use-repositories'
+import { useFolders } from './use-folders'
 import { useStorageEffect } from './use-storage-effect'
 import { resolveDefaultNoteFolder } from '@/shared/utils/default-note-folder'
 import { scopedStorageKey } from '@/shared/utils/scoped-storage-key'
@@ -8,22 +8,22 @@ import { scopedStorageKey } from '@/shared/utils/scoped-storage-key'
 import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
 
 export function useDefaultNoteFolder() {
-    const { activeRepository, getDescendants } = useRepositories()
+    const { activeFolder, getDescendants } = useFolders()
     const [storedId, setStoredId] = useState('')
 
-    const scopedKey = activeRepository
-        ? scopedStorageKey(STORAGE_KEYS.DEFAULT_NOTE_FOLDER, activeRepository.id)
+    const scopedKey = activeFolder
+        ? scopedStorageKey(STORAGE_KEYS.DEFAULT_NOTE_FOLDER, activeFolder.id)
         : null
 
     useStorageEffect(scopedKey, (value) => setStoredId(value || ''))
 
     return useMemo(() => {
-        if (!activeRepository) return ''
+        if (!activeFolder) return ''
 
         return resolveDefaultNoteFolder({
             storedId,
-            activeRepository,
-            descendants: getDescendants(activeRepository.id)
+            activeFolder,
+            descendants: getDescendants(activeFolder.id)
         })
-    }, [storedId, activeRepository, getDescendants])
+    }, [storedId, activeFolder, getDescendants])
 }

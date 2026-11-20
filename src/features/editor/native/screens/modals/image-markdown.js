@@ -12,7 +12,7 @@ import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 import { useTheme } from '@/ui/hooks/use-theme'
 
 import { useFileStorage } from '@/shared/hooks/use-file-storage'
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 import { useStorage } from '@/shared/hooks/use-storage'
 import { useSingleFlight } from '@/shared/hooks/use-single-flight'
 import { readAttachmentSettings } from '@/shared/utils/attachments'
@@ -31,12 +31,12 @@ import { logError } from '@/shared/utils/log-error'
 export const ImageMarkdown = ({
     onClose,
     onInsert,
-    repositoryId
+    folderId
 }) => {
     const { t } = useTranslation()
     const { copyImageFile } = useFileStorage()
     const { getItem } = useStorage()
-    const { repositories, activeRepository, ensureAttachmentsFolder } = useRepositories()
+    const { folders, activeFolder, ensureAttachmentsFolder } = useFolders()
     const { colors } = useTheme()
 
     const [title, setTitle] = useState('')
@@ -81,9 +81,9 @@ export const ImageMarkdown = ({
         if (!asset) return
 
         try {
-            const repository = repositories.find((item) => item.id === repositoryId) || activeRepository
+            const folder = folders.find((item) => item.id === folderId) || activeFolder
             const settings = await readAttachmentSettings(getItem)
-            const attachmentsUri = ensureAttachmentsFolder(repository, settings)
+            const attachmentsUri = ensureAttachmentsFolder(folder, settings)
             const extension = IMAGE_EXTENSION_BY_MIME_TYPE[asset.mimeType] || 'jpg'
             const file = await copyImageFile(asset.uri, attachmentsUri, `${randomUUID()}.${extension}`)
 

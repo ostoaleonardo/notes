@@ -23,7 +23,7 @@ describe('repository index sync', () => {
         logError.mockClear()
     })
 
-    test('indexes every repository in the tree in order', async () => {
+    test('indexes every folder in the tree in order', async () => {
         const fs = buildFs()
         const sync = createRepositoryIndexSync(fs)
 
@@ -35,7 +35,7 @@ describe('repository index sync', () => {
         ])
     })
 
-    test('prunes the index of repositories that no longer exist', async () => {
+    test('prunes the index of folders that no longer exist', async () => {
         const fs = buildFs()
         const sync = createRepositoryIndexSync(fs)
 
@@ -80,14 +80,14 @@ describe('repository index sync', () => {
         expect(fs.indexRepository).toHaveBeenCalledTimes(2)
     })
 
-    test('reports no change when every repository is up to date', async () => {
+    test('reports no change when every folder is up to date', async () => {
         const fs = buildFs()
         fs.indexRepository.mockResolvedValue({ added: 0, updated: 0, removed: 0 })
 
         expect(await createRepositoryIndexSync(fs)([root, child], [root, child])).toBe(false)
     })
 
-    test('reports a change when any repository added, updated or removed notes', async () => {
+    test('reports a change when any folder added, updated or removed notes', async () => {
         const fs = buildFs()
         fs.indexRepository
             .mockResolvedValueOnce({ added: 0, updated: 0, removed: 0 })

@@ -20,6 +20,7 @@ This project uses the `test-renderer` peer dependency, never `react-test-rendere
 
 ## General conventions for this project
 
+- Vocabulary: a repository is the root folder the user picks (the equivalent of an Obsidian vault); every directory in its tree, root included, is a folder (`folderId`, `activeFolder`, `folders`). Notes only move between folders of the same repository, never between repositories.
 - No comments in code. If a line truly needs one (a non-obvious constraint or workaround), keep it to a short one-liner. Never explain what code does when the naming already makes it clear.
 - No hardcoded/inline constants. Constants live in `src/shared/constants/` (used by several features) or in `src/features/<feature>/constants/` (used only by that feature), one file per concern.
 - Code layout: `src/features/<feature>/` holds everything used only by that feature (hooks, utils, constants, components, tests); anything used by two or more features lives in `src/shared/`. The editor splits by runtime: `dom/` (WebView only, no React Native or Expo native imports), `native/` (app side) and `shared/` (both). `scripts/feature-tool.js` moves files and rewrites imports.

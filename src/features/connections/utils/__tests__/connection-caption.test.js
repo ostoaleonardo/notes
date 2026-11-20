@@ -19,7 +19,7 @@ const model = buildConnectionModel({
 const t = (key, options) => (options ? `${key}:${options.count}` : key)
 
 describe('describe entity', () => {
-    test('shows the folder of a note or the repository name at the root', () => {
+    test('shows the folder of a note or the folder name at the root', () => {
         expect(describeEntity(makeEntity(NOTE, 'd::Gamma.md'), model, t)).toBe('Projects/Deep')
         expect(describeEntity(makeEntity(NOTE, 'r::Index.md'), model, t)).toBe('Vault')
     })
@@ -28,7 +28,7 @@ describe('describe entity', () => {
         expect(describeEntity(makeEntity(FILE, 'file:photo'), model, t)).toBe('attachments')
     })
 
-    test('counts the notes inside a repository, folder or tag', () => {
+    test('counts the notes inside a folder, folder or tag', () => {
         expect(describeEntity(ROOT_ENTITY, model, t)).toBe('count.notes:5')
         expect(describeEntity(makeEntity(FOLDER, 'Projects'), model, t)).toBe('count.notes:2')
         expect(describeEntity(makeEntity(TAG, 'work'), model, t)).toBe('count.notes:2')

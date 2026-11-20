@@ -1,32 +1,32 @@
 import { NOTE_PATH_SEPARATOR } from '@/shared/constants/file-storage'
 
-export const buildNotePath = (repositoryId, filename) => `${repositoryId}${NOTE_PATH_SEPARATOR}${filename}`
+export const buildNotePath = (folderId, filename) => `${folderId}${NOTE_PATH_SEPARATOR}${filename}`
 
-export const buildRepositoryPaths = (repositories) => {
-    const byId = new Map(repositories.map((repository) => [repository.id, repository]))
+export const buildFolderPaths = (folders) => {
+    const byId = new Map(folders.map((folder) => [folder.id, folder]))
     const cache = new Map()
 
     const resolve = (id) => {
         if (cache.has(id)) return cache.get(id)
 
-        const repository = byId.get(id)
-        if (!repository || !repository.parentId) {
+        const folder = byId.get(id)
+        if (!folder || !folder.parentId) {
             cache.set(id, '')
             return ''
         }
 
-        const parentPath = resolve(repository.parentId)
-        const path = parentPath ? `${parentPath}/${repository.alias}` : repository.alias
+        const parentPath = resolve(folder.parentId)
+        const path = parentPath ? `${parentPath}/${folder.alias}` : folder.alias
 
         cache.set(id, path)
         return path
     }
 
-    repositories.forEach((repository) => resolve(repository.id))
+    folders.forEach((folder) => resolve(folder.id))
     return cache
 }
 
-export const getNotePaths = (notes, repositories) => {
-    const repositoryPaths = buildRepositoryPaths(repositories)
-    return new Map(notes.map((note) => [note.path, repositoryPaths.get(note.repositoryId) || '']))
+export const getNotePaths = (notes, folders) => {
+    const folderPaths = buildFolderPaths(folders)
+    return new Map(notes.map((note) => [note.path, folderPaths.get(note.folderId) || '']))
 }

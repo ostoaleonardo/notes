@@ -1,7 +1,7 @@
 import { collectTags, getNoteTags, seedNoteTags } from '../note-tags'
 import { buildLinkGraph } from '../connection-model'
 import { getNoteLinkTexts, seedNoteLinkTexts } from '../note-links'
-import { buildRepositoryTree } from '@/features/drawer/utils/drawer-tree'
+import { buildFolderTree } from '@/features/drawer/utils/drawer-tree'
 import { getNotePaths } from '../note-path'
 import { mergeLoadedNotes } from '../merge-loaded-notes'
 import { loadRepositoryData } from '../load-repository-data'
@@ -113,7 +113,7 @@ describe('startup budgets', () => {
 
         within(
             'repository tree',
-            timeOnce(() => buildRepositoryTree([REPOSITORY], byRepository)).elapsed,
+            timeOnce(() => buildFolderTree([REPOSITORY], byRepository)).elapsed,
             PERF_BUDGETS_MS.repositoryTree
         )
     })
@@ -130,7 +130,7 @@ describe('startup budgets', () => {
         )
     })
 
-    test('loads the repository cold and warm', async () => {
+    test('loads the folder cold and warm', async () => {
         const notes = buildNotes(PERF_NOTE_COUNT)
         const fileStorage = buildFileStorage(notes)
 

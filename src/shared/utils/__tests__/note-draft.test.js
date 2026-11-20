@@ -2,7 +2,7 @@ import {
     fromSavedSnapshot,
     getNewNoteTitle,
     isDraftSaved,
-    resolveNewNoteRepositoryId,
+    resolveNewNoteFolderId,
     toDraft,
     toSavedSnapshot
 } from '../note-draft'
@@ -22,7 +22,7 @@ describe('stored note to draft', () => {
             note: 'body',
             tags: ['a'],
             properties: { x: 1 },
-            repositoryId: 'r1',
+            folderId: 'r1',
             filename: 'a.md',
             invalidFrontmatter: 'bad',
             rawFrontmatter: 'raw'
@@ -33,7 +33,7 @@ describe('stored note to draft', () => {
             note: 'body',
             tags: ['a'],
             properties: { x: 1 },
-            repositoryId: 'r1',
+            folderId: 'r1',
             filename: 'a.md',
             invalidFrontmatter: 'bad',
             rawFrontmatter: 'raw'
@@ -46,7 +46,7 @@ describe('stored note to draft', () => {
             note: '',
             tags: [],
             properties: {},
-            repositoryId: '',
+            folderId: '',
             filename: '',
             invalidFrontmatter: null,
             rawFrontmatter: null
@@ -96,18 +96,18 @@ describe('draft saved check', () => {
 
 describe('resolve new note repository', () => {
     test('prefers the requested folder, then the default folder, then the active one', () => {
-        const ids = { targetRepositoryId: 't', defaultFolderId: 'd', activeRepositoryId: 'a' }
+        const ids = { targetFolderId: 't', defaultFolderId: 'd', activeFolderId: 'a' }
 
-        expect(resolveNewNoteRepositoryId(ids)).toBe('t')
-        expect(resolveNewNoteRepositoryId({ ...ids, targetRepositoryId: undefined })).toBe('d')
-        expect(resolveNewNoteRepositoryId({ activeRepositoryId: 'a' })).toBe('a')
+        expect(resolveNewNoteFolderId(ids)).toBe('t')
+        expect(resolveNewNoteFolderId({ ...ids, targetFolderId: undefined })).toBe('d')
+        expect(resolveNewNoteFolderId({ activeFolderId: 'a' })).toBe('a')
     })
 })
 
 describe('new note title', () => {
     const notes = [
-        { repositoryId: 'r1', title: 'Untitled' },
-        { repositoryId: 'r2', title: 'Untitled (2)' }
+        { folderId: 'r1', title: 'Untitled' },
+        { folderId: 'r2', title: 'Untitled (2)' }
     ]
 
     test('numbers the title when it is taken in the same folder', () => {

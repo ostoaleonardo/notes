@@ -11,7 +11,7 @@ export const MarkdownInsertSheets = memo(({
     linkSheet,
     tableSheet,
     imageSheet,
-    repositoryId,
+    folderId,
     action
 }) => {
     return (
@@ -45,7 +45,7 @@ export const MarkdownInsertSheets = memo(({
             >
                 <ImageMarkdown
                     onClose={imageSheet.onClose}
-                    repositoryId={repositoryId}
+                    folderId={folderId}
                     onInsert={(payload) => action.run(
                         payload.embed ? MARKDOWN_ACTIONS.IMAGE_EMBED : MARKDOWN_ACTIONS.IMAGE,
                         payload

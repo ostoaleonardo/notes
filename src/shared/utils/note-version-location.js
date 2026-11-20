@@ -1,23 +1,23 @@
-import { buildRepositoryPaths } from '@/shared/utils/note-path'
+import { buildFolderPaths } from '@/shared/utils/note-path'
 
 export const buildVersionKey = (folderPath, filename) => (
     folderPath ? `${folderPath}/${filename}` : filename
 )
 
-export const getVersionLocation = (repositories, repositoryId) => {
-    const repository = repositories.find((r) => r.id === repositoryId)
-    if (!repository) return null
+export const getVersionLocation = (folders, folderId) => {
+    const folder = folders.find((r) => r.id === folderId)
+    if (!folder) return null
 
-    let root = repository
+    let root = folder
     while (root.parentId) {
-        const parent = repositories.find((r) => r.id === root.parentId)
+        const parent = folders.find((r) => r.id === root.parentId)
         if (!parent) break
         root = parent
     }
 
     return {
         rootUri: root.uri,
-        folderUri: repository.uri,
-        folderPath: buildRepositoryPaths(repositories).get(repositoryId) || ''
+        folderUri: folder.uri,
+        folderPath: buildFolderPaths(folders).get(folderId) || ''
     }
 }

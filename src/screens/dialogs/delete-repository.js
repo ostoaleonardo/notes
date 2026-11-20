@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { ConfirmDialog } from '@/shared/components/confirm-dialog'
 
 import { useHaptics } from '@/shared/hooks/use-haptics'
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 
 import { FEEDBACK_TYPES } from '@/shared/constants/feedback-types'
 import { REPOSITORY_RESULTS } from '@/shared/constants/repository-results'
@@ -12,16 +12,16 @@ import { REPOSITORY_RESULTS } from '@/shared/constants/repository-results'
 export const DeleteRepository = ({
     visible,
     onDismiss,
-    repositoryId
+    folderId
 }) => {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
-    const { repositories, removeRepository } = useRepositories()
+    const { folders, removeRepository } = useFolders()
 
-    const isFolder = !!repositories.find((repository) => repository.id === repositoryId)?.parentId
+    const isFolder = !!folders.find((folder) => folder.id === folderId)?.parentId
 
     const onDelete = async () => {
-        const result = await removeRepository(repositoryId)
+        const result = await removeRepository(folderId)
 
         if (result === REPOSITORY_RESULTS.ACTIVE) {
             ToastAndroid.show(t('repositories.delete.active_error'), ToastAndroid.SHORT)

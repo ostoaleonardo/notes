@@ -30,7 +30,7 @@ impl Engine {
 
 	pub fn sync(
 		&self,
-		repository_id: String,
+		folder_id: String,
 		source: Arc<dyn NoteSource>,
 		listener: Arc<dyn ProgressListener>,
 	) -> Result<SyncReport, EngineError> {
@@ -38,7 +38,7 @@ impl Engine {
 
 		Ok(self
 			.inner
-			.sync(&repository_id, &source, &|done, total| {
+			.sync(&folder_id, &source, &|done, total| {
 				listener.on_progress(done, total)
 			})?
 			.into())
@@ -46,7 +46,7 @@ impl Engine {
 
 	pub fn sync_directory(
 		&self,
-		repository_id: String,
+		folder_id: String,
 		path: String,
 		uri_prefix: String,
 		listener: Arc<dyn ProgressListener>,
@@ -55,7 +55,7 @@ impl Engine {
 
 		Ok(self
 			.inner
-			.sync(&repository_id, &source, &|done, total| {
+			.sync(&folder_id, &source, &|done, total| {
 				listener.on_progress(done, total)
 			})?
 			.into())
@@ -63,7 +63,7 @@ impl Engine {
 
 	pub fn save_note(
 		&self,
-		repository_id: String,
+		folder_id: String,
 		sink: Arc<dyn NoteSink>,
 		filename: String,
 		text: String,
@@ -73,13 +73,13 @@ impl Engine {
 
 		Ok(self
 			.inner
-			.save_note(&repository_id, &sink, &filename, &text, expected_modified)?
+			.save_note(&folder_id, &sink, &filename, &text, expected_modified)?
 			.into())
 	}
 
 	pub fn save_notes(
 		&self,
-		repository_id: String,
+		folder_id: String,
 		sink: Arc<dyn NoteSink>,
 		requests: Vec<SaveRequestRecord>,
 	) -> Result<Vec<SaveReport>, EngineError> {
@@ -88,7 +88,7 @@ impl Engine {
 
 		Ok(self
 			.inner
-			.save_notes(&repository_id, &sink, &requests)?
+			.save_notes(&folder_id, &sink, &requests)?
 			.into_iter()
 			.map(Into::into)
 			.collect())
@@ -96,7 +96,7 @@ impl Engine {
 
 	pub fn rename_note(
 		&self,
-		repository_id: String,
+		folder_id: String,
 		sink: Arc<dyn NoteSink>,
 		from: String,
 		to: String,
@@ -106,19 +106,19 @@ impl Engine {
 
 		Ok(self
 			.inner
-			.rename_note(&repository_id, &sink, &from, &to, &text)?
+			.rename_note(&folder_id, &sink, &from, &to, &text)?
 			.into())
 	}
 
 	pub fn delete_note(
 		&self,
-		repository_id: String,
+		folder_id: String,
 		sink: Arc<dyn NoteSink>,
 		filename: String,
 	) -> Result<(), EngineError> {
 		let sink = ForeignSink::new(sink);
 
-		Ok(self.inner.delete_note(&repository_id, &sink, &filename)?)
+		Ok(self.inner.delete_note(&folder_id, &sink, &filename)?)
 	}
 
 	pub fn indexed_notes(&self) -> Result<IndexedNotesReport, EngineError> {
@@ -130,8 +130,8 @@ impl Engine {
 		Ok(self.inner.query(&sql, &bound)?.into())
 	}
 
-	pub fn list_notes(&self, repository_ids: Vec<String>) -> Result<String, EngineError> {
-		Ok(self.inner.list_notes(&repository_ids)?)
+	pub fn list_notes(&self, folder_ids: Vec<String>) -> Result<String, EngineError> {
+		Ok(self.inner.list_notes(&folder_ids)?)
 	}
 
 	pub fn backlink_candidates(
@@ -152,8 +152,8 @@ impl Engine {
 		Ok(self.inner.mention_candidates(&terms)?.map(Into::into))
 	}
 
-	pub fn delete_repository(&self, repository_id: String) -> Result<(), EngineError> {
-		Ok(self.inner.delete_repository(&repository_id)?)
+	pub fn delete_folder(&self, folder_id: String) -> Result<(), EngineError> {
+		Ok(self.inner.delete_folder(&folder_id)?)
 	}
 
 	pub fn prune(&self, keep: Vec<String>) -> Result<(), EngineError> {

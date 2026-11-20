@@ -47,7 +47,7 @@ export const SearchResults = ({
                         <SearchResultRow
                             note={item}
                             title={item.title || t('notes.untitled')}
-                            caption={aliasById.get(item.repositoryId)}
+                            caption={aliasById.get(item.folderId)}
                             highlights={highlights}
                             snippetLimit={snippetLimit}
                             onPress={onPress}

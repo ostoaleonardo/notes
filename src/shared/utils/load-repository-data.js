@@ -2,7 +2,7 @@ import { randomUUID } from 'expo-crypto'
 
 import { getNoteKey } from '@/shared/utils/note-key'
 import { getUniqueFilename, stripNoteExtension } from '@/shared/utils/note-filename'
-import { buildNotePath, buildRepositoryPaths } from '@/shared/utils/note-path'
+import { buildNotePath, buildFolderPaths } from '@/shared/utils/note-path'
 import {
     extractProperties,
     readFrontmatterTags,
@@ -100,22 +100,22 @@ const migrateStorageNotesToFiles = async (rootRepository, storage, fileStorage, 
     return report
 }
 
-const scanFolder = async (repository, fileStorage) => {
-    const files = await fileStorage.scanMarkdownFiles(repository.uri)
+const scanFolder = async (folder, fileStorage) => {
+    const files = await fileStorage.scanMarkdownFiles(folder.uri)
 
     return files.map((file) => ({
         file,
-        repositoryId: repository.id,
-        path: buildNotePath(repository.id, file.name)
+        folderId: folder.id,
+        path: buildNotePath(folder.id, file.name)
     }))
 }
 
-const buildNote = ({ file, repositoryId, path }, content) => {
+const buildNote = ({ file, folderId, path }, content) => {
     const { frontmatter, body, error, rawFrontmatter } = parseFrontmatter(content)
 
     const note = {
         filename: file.name,
-        repositoryId,
+        folderId,
         path,
         fileUri: file.uri,
         title: getTitle(file.name),
@@ -154,7 +154,7 @@ const readChangedNotes = async (changed, fileStorage, onProgress) => {
 
 const loadNotes = async (tree, fileStorage, previousNotes, onProgress) => {
     const previousByPath = new Map(previousNotes.map((note) => [note.path, note]))
-    const scanned = (await Promise.all(tree.map((repository) => scanFolder(repository, fileStorage)))).flat()
+    const scanned = (await Promise.all(tree.map((folder) => scanFolder(folder, fileStorage)))).flat()
 
     const changed = scanned.filter(({ file, path }) => (
         previousByPath.get(path)?.updatedAt !== file.lastModified
@@ -175,7 +175,7 @@ const loadIndexedNotes = async (tree, previousNotes, indexed) => {
     if ((await indexed.sync(tree)) === false) return { notes: previousNotes, changed: false }
 
     const previousByPath = new Map(previousNotes.map((note) => [note.path, note]))
-    const listed = await indexed.list(tree.map((repository) => repository.id))
+    const listed = await indexed.list(tree.map((folder) => folder.id))
 
     const notes = listed.map((note) => {
         const previous = previousByPath.get(note.path)
@@ -193,10 +193,10 @@ const migrateLegacyVersionFiles = async (tree, rootUri, storage, fileStorage) =>
     const migratedKey = STORAGE_KEYS.LEGACY_VERSIONS_MIGRATED_PREFIX + rootUri
     if (await storage.getItem(migratedKey)) return
 
-    const folderPaths = buildRepositoryPaths(tree)
+    const folderPaths = buildFolderPaths(tree)
 
-    for (const repository of tree) {
-        await fileStorage.migrateLegacyVersions(repository.uri, rootUri, folderPaths.get(repository.id) || '')
+    for (const folder of tree) {
+        await fileStorage.migrateLegacyVersions(folder.uri, rootUri, folderPaths.get(folder.id) || '')
     }
 
     const templates = fileStorage.findDirectory(rootUri, TEMPLATES_FOLDER_NAME)

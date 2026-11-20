@@ -23,27 +23,27 @@ describe('plan daily note', () => {
         title,
         notes: [],
         folderId: '',
-        activeRepository: root,
+        activeFolder: root,
         descendants: [child],
         ...overrides
     }, directoryExists)
 
-    test('targets the active repository when no folder is selected', () => {
-        expect(plan().repository).toBe(root)
+    test('targets the active folder when no folder is selected', () => {
+        expect(plan().folder).toBe(root)
     })
 
     test('targets the selected subfolder', () => {
-        expect(plan({ folderId: 'child' }).repository).toBe(child)
+        expect(plan({ folderId: 'child' }).folder).toBe(child)
     })
 
-    test('falls back to the active repository when the selected folder is unknown', () => {
-        expect(plan({ folderId: 'gone' }).repository).toBe(root)
+    test('falls back to the active folder when the selected folder is unknown', () => {
+        expect(plan({ folderId: 'gone' }).folder).toBe(root)
     })
 
-    test('falls back to the active repository when the selected folder is missing on disk', () => {
+    test('falls back to the active folder when the selected folder is missing on disk', () => {
         const directoryExists = (uri) => uri !== child.uri
 
-        expect(plan({ folderId: 'child' }, directoryExists).repository).toBe(root)
+        expect(plan({ folderId: 'child' }, directoryExists).folder).toBe(root)
     })
 
     test('returns null when no target folder exists on disk', () => {
@@ -51,26 +51,26 @@ describe('plan daily note', () => {
     })
 
     test('finds the existing note in the target folder', () => {
-        const note = { repositoryId: 'child', title, path: 'child/2026-01-05.md' }
+        const note = { folderId: 'child', title, path: 'child/2026-01-05.md' }
 
         expect(plan({ folderId: 'child', notes: [note] }).existing).toBe(note)
     })
 
     test('ignores a note with the same title in another folder', () => {
-        const note = { repositoryId: 'root', title, path: 'root/2026-01-05.md' }
+        const note = { folderId: 'root', title, path: 'root/2026-01-05.md' }
 
         expect(plan({ folderId: 'child', notes: [note] }).existing).toBeUndefined()
     })
 })
 
 describe('adjacent daily notes', () => {
-    const daily = (title, repositoryId = 'root') => ({ title, repositoryId, path: title })
+    const daily = (title, folderId = 'root') => ({ title, folderId, path: title })
     const notes = [
         daily('2026-01-01'),
         daily('2026-01-05'),
         daily('2026-01-09'),
         daily('2026-01-07', 'other'),
-        { title: 'Meeting', repositoryId: 'root', path: 'Meeting' }
+        { title: 'Meeting', folderId: 'root', path: 'Meeting' }
     ]
 
     test('finds the closest earlier daily note skipping gaps', () => {

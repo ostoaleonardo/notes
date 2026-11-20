@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { File } from 'expo-file-system'
 
 import { useFileStorage } from './use-file-storage'
-import { useRepositories } from './use-repositories'
+import { useFolders } from './use-folders'
 import { getUniqueFilename, sanitizeFilename, stripNoteExtension } from '@/shared/utils/note-filename'
 import { joinTemplatePath, splitTemplatePath } from '@/shared/utils/template-path'
 import { notifyTemplatesChanged } from '@/shared/utils/templates-events'
@@ -10,7 +10,7 @@ import { notifyTemplatesChanged } from '@/shared/utils/templates-events'
 import { TEMPLATE_FILE_EXTENSION_PATTERN } from '@/shared/constants/markdown-patterns'
 
 export function useTemplates() {
-    const { activeRepository, ensureTemplatesFolder } = useRepositories()
+    const { activeFolder, ensureTemplatesFolder } = useFolders()
     const {
         findFile,
         findDirectory,
@@ -24,9 +24,9 @@ export function useTemplates() {
     } = useFileStorage()
 
     const getTemplatesUri = useCallback(async () => {
-        if (!activeRepository) return null
-        return await ensureTemplatesFolder(activeRepository)
-    }, [activeRepository, ensureTemplatesFolder])
+        if (!activeFolder) return null
+        return await ensureTemplatesFolder(activeFolder)
+    }, [activeFolder, ensureTemplatesFolder])
 
     const getFolderUri = useCallback(async (dir = '') => {
         let uri = await getTemplatesUri()

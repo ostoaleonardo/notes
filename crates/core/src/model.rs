@@ -19,7 +19,7 @@ pub struct Link {
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct NoteRef {
-	pub repository_id: String,
+	pub folder_id: String,
 	pub filename: String,
 }
 
@@ -124,7 +124,7 @@ pub struct BatchStats {
 
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct IndexedNotes {
-	pub repository_ids: Vec<String>,
+	pub folder_ids: Vec<String>,
 	pub filenames: Vec<String>,
 	pub modified: Vec<i64>,
 }

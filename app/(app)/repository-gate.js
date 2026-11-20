@@ -5,7 +5,7 @@ import { MessageScreen } from '@/ui/message-screen'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 
 import { useNotes } from '@/shared/hooks/use-notes'
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 import { useSingleFlight } from '@/shared/hooks/use-single-flight'
 import { setIndexingStatus } from '@/shared/utils/indexing-status'
 
@@ -15,7 +15,7 @@ import { REPOSITORY_RESULTS } from '@/shared/constants/repository-results'
 export default function RepositoryGate() {
     const { t } = useTranslation()
     const { loading } = useNotes()
-    const { activeRepository, addRepository } = useRepositories()
+    const { activeFolder, addRepository } = useFolders()
 
     const [onAddRepository, adding] = useSingleFlight(async () => {
         const result = await addRepository(() => setIndexingStatus(INDEXING_STARTED))
@@ -31,7 +31,7 @@ export default function RepositoryGate() {
         >
             <FilledButton
                 onPress={onAddRepository}
-                loading={adding || (!!activeRepository && loading)}
+                loading={adding || (!!activeFolder && loading)}
             >
                 {t('repositories.choose.button')}
             </FilledButton>

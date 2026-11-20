@@ -5,9 +5,9 @@ use rusqlite::types::{Value as SqlValue, ValueRef};
 use rusqlite::{Connection, params_from_iter};
 use std::collections::HashMap;
 
-pub fn metas(connection: &Connection, repository_id: &str) -> Result<HashMap<String, FileMeta>> {
+pub fn metas(connection: &Connection, folder_id: &str) -> Result<HashMap<String, FileMeta>> {
 	let mut statement = connection.prepare_cached(sql::SELECT_METAS)?;
-	let rows = statement.query_map([repository_id], |row| {
+	let rows = statement.query_map([folder_id], |row| {
 		Ok((
 			row.get::<_, String>(sql::metas_column::FILENAME)?,
 			FileMeta {
@@ -27,8 +27,8 @@ pub fn indexed_notes(connection: &Connection) -> Result<IndexedNotes> {
 
 	while let Some(row) = rows.next()? {
 		notes
-			.repository_ids
-			.push(row.get(sql::indexed_column::REPOSITORY_ID)?);
+			.folder_ids
+			.push(row.get(sql::indexed_column::FOLDER_ID)?);
 		notes
 			.filenames
 			.push(row.get(sql::indexed_column::FILENAME)?);
@@ -38,7 +38,7 @@ pub fn indexed_notes(connection: &Connection) -> Result<IndexedNotes> {
 	Ok(notes)
 }
 
-pub fn repositories(connection: &Connection) -> Result<Vec<String>> {
+pub fn folders(connection: &Connection) -> Result<Vec<String>> {
 	let mut statement = connection.prepare_cached(sql::SELECT_REPOSITORIES)?;
 	let rows = statement.query_map([], |row| row.get(sql::FIRST_COLUMN))?;
 

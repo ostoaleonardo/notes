@@ -16,7 +16,7 @@ export const EditorShell = ({
     actions,
     versionHistory,
     toggleProps,
-    repositoryId,
+    folderId,
     initialSearch,
     sheets,
     children
@@ -63,7 +63,7 @@ export const EditorShell = ({
                 linkSheet={chrome.linkSheet}
                 tableSheet={chrome.tableSheet}
                 imageSheet={chrome.imageSheet}
-                repositoryId={repositoryId}
+                folderId={folderId}
             />
 
             <NoteToolbarSheets

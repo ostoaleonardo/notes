@@ -10,16 +10,16 @@ const mockSetItem = jest.fn()
 const mockDirectoryExists = jest.fn()
 const mockGetDescendants = jest.fn()
 
-const mockActiveRepository = { id: 'repo', uri: 'content://repo' }
+const mockActiveFolder = { id: 'repo', uri: 'content://repo' }
 let mockNotes = []
 
 jest.mock('../use-notes', () => ({
     useNotes: () => ({ notes: mockNotes, saveNote: mockSaveNote })
 }))
 
-jest.mock('../use-repositories', () => ({
-    useRepositories: () => ({
-        activeRepository: mockActiveRepository,
+jest.mock('../use-folders', () => ({
+    useFolders: () => ({
+        activeFolder: mockActiveFolder,
         getDescendants: mockGetDescendants
     })
 }))
@@ -72,7 +72,7 @@ describe('daily note', () => {
     })
 
     test('returns the existing note without creating another', async () => {
-        mockNotes = [{ repositoryId: 'repo', title: '2024-01-05', path: 'existing' }]
+        mockNotes = [{ folderId: 'repo', title: '2024-01-05', path: 'existing' }]
         const { result } = await renderHook(() => useDailyNote())
 
         const path = await result.current()
@@ -81,7 +81,7 @@ describe('daily note', () => {
         expect(mockSaveNote).not.toHaveBeenCalled()
     })
 
-    test('returns null when the repository folder is gone', async () => {
+    test('returns null when the folder folder is gone', async () => {
         mockDirectoryExists.mockReturnValue(false)
         const { result } = await renderHook(() => useDailyNote())
 

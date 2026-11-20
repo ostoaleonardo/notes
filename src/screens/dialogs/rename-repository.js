@@ -8,7 +8,7 @@ import { FilledTextField } from '@/ui/input/filled-text-field'
 import { useEditDialogInput } from '@/shared/hooks/use-dialog-input'
 import { useHaptics } from '@/shared/hooks/use-haptics'
 import { useSingleFlight } from '@/shared/hooks/use-single-flight'
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 
 import { FEEDBACK_TYPES } from '@/shared/constants/feedback-types'
 import { REPOSITORY_RESULTS } from '@/shared/constants/repository-results'
@@ -16,21 +16,21 @@ import { REPOSITORY_RESULTS } from '@/shared/constants/repository-results'
 export const RenameRepository = ({
     visible,
     onDismiss,
-    repositoryId
+    folderId
 }) => {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
-    const { repositories, renameRepository } = useRepositories()
+    const { folders, renameFolder } = useFolders()
 
-    const isFolder = !!repositories.find((repository) => repository.id === repositoryId)?.parentId
+    const isFolder = !!folders.find((folder) => folder.id === folderId)?.parentId
 
-    const getInitialAlias = (id) => repositories.find((repository) => repository.id === id)?.alias || ''
-    const [alias, setAlias, placeholder, disabled] = useEditDialogInput(repositoryId, getInitialAlias)
+    const getInitialAlias = (id) => folders.find((folder) => folder.id === id)?.alias || ''
+    const [alias, setAlias, placeholder, disabled] = useEditDialogInput(folderId, getInitialAlias)
 
     const [onUpdate, updating] = useSingleFlight(async () => {
         if (disabled) return
 
-        const result = await renameRepository(repositoryId, alias.trim())
+        const result = await renameFolder(folderId, alias.trim())
         onDismiss()
 
         if (result === REPOSITORY_RESULTS.ERROR) {

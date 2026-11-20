@@ -11,12 +11,12 @@ import { useTitleCommit } from '@/shared/hooks/use-title-commit'
 import { useNotes } from '@/shared/hooks/use-notes'
 import { useWikiLinkRenameConfirm } from '@/shared/hooks/use-wiki-link-rename-confirm'
 import { useRegisterCurrent } from '@/shared/hooks/use-current-note'
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 import { useDefaultNoteFolder } from '@/shared/hooks/use-default-note-folder'
 import {
     getNewNoteTitle,
     isDraftSaved,
-    resolveNewNoteRepositoryId,
+    resolveNewNoteFolderId,
     toSavedSnapshot
 } from '@/shared/utils/note-draft'
 
@@ -24,9 +24,9 @@ import { EDITOR_MODES } from '@/shared/constants/editor-modes'
 
 export default function Note() {
     const { t } = useTranslation()
-    const { activeRepository } = useRepositories()
+    const { activeFolder } = useFolders()
     const { notes, saveNote, updateNote } = useNotes()
-    const { repositoryId: targetRepositoryId } = useLocalSearchParams()
+    const { folderId: targetFolderId } = useLocalSearchParams()
     const { saveWithLinkCheck, ...renameDialogProps } = useWikiLinkRenameConfirm()
     const defaultFolderId = useDefaultNoteFolder()
 
@@ -52,8 +52,8 @@ export default function Note() {
         setNote,
         tags,
         properties,
-        repositoryId,
-        setRepositoryId,
+        folderId,
+        setFolderId,
         setFilename,
         invalidFrontmatter,
         rawFrontmatter,
@@ -68,23 +68,23 @@ export default function Note() {
     initDraftRef.current = () => {
         firstRender.current = false
 
-        const resolvedRepositoryId = resolveNewNoteRepositoryId({
-            targetRepositoryId,
+        const resolvedFolderId = resolveNewNoteFolderId({
+            targetFolderId,
             defaultFolderId: defaultFolderRef.current,
-            activeRepositoryId: activeRepository.id
+            activeFolderId: activeFolder.id
         })
-        setRepositoryId(resolvedRepositoryId)
+        setFolderId(resolvedFolderId)
 
-        const autoTitle = getNewNoteTitle(notesRef.current, resolvedRepositoryId, t('notes.untitled'))
+        const autoTitle = getNewNoteTitle(notesRef.current, resolvedFolderId, t('notes.untitled'))
         autoTitleRef.current = autoTitle
         setTitle(autoTitle)
     }
 
     useEffect(() => {
-        if (targetRepositoryId || isSaved.current || !defaultFolderId) return
+        if (targetFolderId || isSaved.current || !defaultFolderId) return
 
-        setRepositoryId(defaultFolderId)
-    }, [targetRepositoryId, defaultFolderId, setRepositoryId])
+        setFolderId(defaultFolderId)
+    }, [targetFolderId, defaultFolderId, setFolderId])
 
     useFocusEffect(
         useCallback(() => initDraftRef.current(), [])
@@ -101,7 +101,7 @@ export default function Note() {
 
         if (!isSaved.current) {
             const payload = buildPayload(title)
-            const saved = await saveNote(payload, repositoryId)
+            const saved = await saveNote(payload, folderId)
 
             applySaved(saved)
             isSaved.current = true
@@ -121,7 +121,7 @@ export default function Note() {
         note,
         tags,
         properties,
-        repositoryId,
+        folderId,
         invalidFrontmatter,
         rawFrontmatter
     ], {

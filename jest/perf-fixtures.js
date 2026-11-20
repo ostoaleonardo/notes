@@ -51,7 +51,7 @@ export const buildNotes = (count) => Array.from({ length: count }, (_, i) => {
     return {
         path: `repo::Note ${i}.md`,
         filename: `Note ${i}.md`,
-        repositoryId: 'repo',
+        folderId: 'repo',
         title: i === 7 ? 'Project Alpha' : `Note ${i}`,
         note: lines.join('\n'),
         tags: [`tag${i % 30}`],

@@ -30,28 +30,28 @@ describe('repository state context', () => {
         console.warn.mockRestore()
     })
 
-    test('finishes loading with no repositories when storage is empty', async () => {
+    test('finishes loading with no folders when storage is empty', async () => {
         stubStorage({})
 
         const { result } = await setup()
 
         await waitFor(() => expect(result.current.loading).toBe(false))
-        expect(result.current.repositories).toEqual([])
-        expect(result.current.activeRepositoryId).toBe('')
+        expect(result.current.folders).toEqual([])
+        expect(result.current.activeFolderId).toBe('')
     })
 
-    test('loads stored repositories and the active repository', async () => {
-        const repositories = [{ id: 'a', alias: 'A' }]
+    test('loads stored folders and the active repository', async () => {
+        const folders = [{ id: 'a', alias: 'A' }]
         stubStorage({
-            [STORAGE_KEYS.REPOSITORIES]: JSON.stringify(repositories),
+            [STORAGE_KEYS.REPOSITORIES]: JSON.stringify(folders),
             [STORAGE_KEYS.ACTIVE_REPOSITORY]: 'a'
         })
 
         const { result } = await setup()
 
         await waitFor(() => expect(result.current.loading).toBe(false))
-        expect(result.current.repositories).toEqual(repositories)
-        expect(result.current.activeRepositoryId).toBe('a')
+        expect(result.current.folders).toEqual(folders)
+        expect(result.current.activeFolderId).toBe('a')
     })
 
     test('stops loading and logs when stored data is corrupt', async () => {
@@ -60,7 +60,7 @@ describe('repository state context', () => {
         const { result } = await setup()
 
         await waitFor(() => expect(result.current.loading).toBe(false))
-        expect(result.current.repositories).toEqual([])
+        expect(result.current.folders).toEqual([])
         expect(console.warn).toHaveBeenCalled()
     })
 

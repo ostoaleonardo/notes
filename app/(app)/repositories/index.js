@@ -16,7 +16,7 @@ import { showSnackbar } from '@/ui/snackbar/snackbar-host'
 import { useFileStorage } from '@/shared/hooks/use-file-storage'
 import { useOnForeground } from '@/shared/hooks/use-on-foreground'
 import { usePro } from '@/shared/hooks/use-pro'
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 import { useSingleFlight } from '@/shared/hooks/use-single-flight'
 import { getRepositoryNoteCounts } from '@/shared/utils/repository-note-counts'
 
@@ -35,15 +35,15 @@ export default function Repositories() {
     const { scanMarkdownFiles } = useFileStorage()
 
     const {
-        repositories,
-        activeRepositoryId,
+        folders,
+        activeFolderId,
         addRepository,
-        setActiveRepository
-    } = useRepositories()
+        setActiveFolder
+    } = useFolders()
 
     const rootRepositories = useMemo(() => (
-        repositories.filter((repository) => !repository.parentId)
-    ), [repositories])
+        folders.filter((folder) => !folder.parentId)
+    ), [folders])
 
     const [counts, setCounts] = useState({})
     const [renameId, setRenameId] = useState('')
@@ -76,26 +76,26 @@ export default function Repositories() {
     })
 
     const onOpen = useCallback((id) => {
-        setActiveRepository(id)
+        setActiveFolder(id)
         router.replace(ROUTES.HOME)
-    }, [setActiveRepository])
+    }, [setActiveFolder])
 
-    const keyExtractor = useCallback((repository) => repository.id, [])
+    const keyExtractor = useCallback((folder) => folder.id, [])
     const onDismissRename = useCallback(() => setRenameId(''), [])
     const onDismissForget = useCallback(() => setForgetId(''), [])
     const onDismissDelete = useCallback(() => setDeleteId(''), [])
 
     const renderItem = useCallback(({ item }) => (
         <RepositoryItem
-            repository={item}
+            folder={item}
             count={t('count.notes', { count: counts[item.id] || 0 })}
-            active={item.id === activeRepositoryId}
+            active={item.id === activeFolderId}
             onOpen={onOpen}
             onRename={setRenameId}
             onForget={setForgetId}
             onDelete={setDeleteId}
         />
-    ), [t, counts, activeRepositoryId, onOpen])
+    ), [t, counts, activeFolderId, onOpen])
 
     return (
         <View style={{ flex: 1 }}>
@@ -118,17 +118,17 @@ export default function Repositories() {
 
             <RenameRepository
                 visible={!!renameId}
-                repositoryId={renameId}
+                folderId={renameId}
                 onDismiss={onDismissRename}
             />
             <ForgetRepository
                 visible={!!forgetId}
-                repositoryId={forgetId}
+                folderId={forgetId}
                 onDismiss={onDismissForget}
             />
             <DeleteRepository
                 visible={!!deleteId}
-                repositoryId={deleteId}
+                folderId={deleteId}
                 onDismiss={onDismissDelete}
             />
         </View>

@@ -11,7 +11,7 @@ import {
 import { useOnForeground } from '@/shared/hooks/use-on-foreground'
 import { useFileStorage } from '@/shared/hooks/use-file-storage'
 import { useRepositoryData } from '@/shared/hooks/use-repository-data'
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 import { useStableMap } from '@/shared/hooks/use-stable-map'
 import { useUtils } from '@/shared/hooks/use-utils'
 import { useRecentNotes } from '@/shared/hooks/use-recent-notes'
@@ -35,23 +35,23 @@ export const NoteContext = createContext()
 
 export const NoteProvider = ({ children }) => {
     const [notes, setNotes] = useState([])
-    const [loadedRepositoryId, setLoadedRepositoryId] = useState(null)
+    const [loadedFolderId, setLoadedFolderId] = useState(null)
     const [indexSyncRequest, setIndexSyncRequest] = useState(0)
 
     const loadRepositoryData = useRepositoryData()
     const { readRepositoryIndex, writeRepositoryIndex } = useFileStorage()
 
     const {
-        repositories,
-        activeRepository,
-        activeRepositoryTree
-    } = useRepositories()
+        folders,
+        activeFolder,
+        activeFolderTree
+    } = useFolders()
 
     const { pinned, updatePinned } = useUtils()
     const { recent, removeRecent } = useRecentNotes()
 
-    const treeKey = activeRepositoryTree.map((repository) => repository.uri).join('|')
-    const previousRepositoryIdRef = useRef(null)
+    const treeKey = activeFolderTree.map((folder) => folder.uri).join('|')
+    const previousFolderIdRef = useRef(null)
 
     const pruneStaleFavoritesRef = useRef(null)
     pruneStaleFavoritesRef.current = (loadedNotes) => {
@@ -72,12 +72,12 @@ export const NoteProvider = ({ children }) => {
     const bodylessRef = useRef(false)
 
     const indexedSource = useMemo(() => ({
-        sync: (tree) => syncRepositoryIndex(tree, repositories),
+        sync: (tree) => syncRepositoryIndex(tree, folders),
         list: loadNotesFromIndex
-    }), [repositories])
+    }), [folders])
 
     const readStartSnapshot = async (rootId) => {
-        const ids = activeRepositoryTree.map((repository) => repository.id)
+        const ids = activeFolderTree.map((folder) => folder.id)
 
         bodylessRef.current = await isBodylessVault(ids)
 
@@ -95,7 +95,7 @@ export const NoteProvider = ({ children }) => {
 
     const getNotesRef = useRef(null)
     getNotesRef.current = async (isRepositorySwitch) => {
-        if (!activeRepository) return
+        if (!activeFolder) return
 
         const run = loadRunRef.current
         const id = ++run.id
@@ -103,7 +103,7 @@ export const NoteProvider = ({ children }) => {
         run.running = true
         bootMark(BOOT_MARKS.LOAD_START, { isRepositorySwitch })
 
-        const rootRepository = activeRepositoryTree[0] || activeRepository
+        const rootRepository = activeFolderTree[0] || activeFolder
         const reportProgress = (done, total) => {
             if (!isCurrent()) return
 
@@ -116,18 +116,18 @@ export const NoteProvider = ({ children }) => {
             let snapshot = notes
 
             if (isRepositorySwitch) {
-                setLoadedRepositoryId(null)
+                setLoadedFolderId(null)
                 snapshot = await readStartSnapshot(rootRepository.id)
                 if (!isCurrent()) return
 
                 setNotes(snapshot)
                 bootMark(BOOT_MARKS.SNAPSHOT_SET, { notes: snapshot.length })
-                if (snapshot.length) setLoadedRepositoryId(activeRepository.id)
+                if (snapshot.length) setLoadedFolderId(activeFolder.id)
                 else setIndexingStatus(INDEXING_STARTED)
             }
 
             const { notes: loaded, changed } = await loadRepositoryData(
-                activeRepositoryTree,
+                activeFolderTree,
                 rootRepository,
                 snapshot,
                 reportProgress,
@@ -147,7 +147,7 @@ export const NoteProvider = ({ children }) => {
         } finally {
             if (isCurrent()) {
                 run.running = false
-                setLoadedRepositoryId(activeRepository.id)
+                setLoadedFolderId(activeFolder.id)
                 bootMark(BOOT_MARKS.LOAD_END)
                 if (getIndexingStatus()) setIndexingStatus(INDEXING_COMPLETE)
                 setIndexSyncRequest((request) => request + 1)
@@ -156,10 +156,10 @@ export const NoteProvider = ({ children }) => {
     }
 
     const reloadForTree = useEffectEvent(() => {
-        if (!activeRepository) return
+        if (!activeFolder) return
 
-        const isRepositorySwitch = previousRepositoryIdRef.current !== activeRepository.id
-        previousRepositoryIdRef.current = activeRepository.id
+        const isRepositorySwitch = previousFolderIdRef.current !== activeFolder.id
+        previousFolderIdRef.current = activeFolder.id
 
         getNotesRef.current(isRepositorySwitch)
     })
@@ -175,7 +175,7 @@ export const NoteProvider = ({ children }) => {
     const syncIndex = useEffectEvent(async () => {
         const startNotes = notes
 
-        await syncRepositoryIndex(activeRepositoryTree, repositories)
+        await syncRepositoryIndex(activeFolderTree, folders)
 
         try {
             await searchIndex.refresh(startNotes)
@@ -188,7 +188,7 @@ export const NoteProvider = ({ children }) => {
         if (indexSyncRequest > 0) syncIndex()
     }, [indexSyncRequest])
 
-    const loading = loadedRepositoryId !== activeRepository?.id
+    const loading = loadedFolderId !== activeFolder?.id
 
     const clear = useCallback(() => {
         setNotes([])
@@ -197,7 +197,7 @@ export const NoteProvider = ({ children }) => {
     const tags = useMemo(() => collectTags(notes), [notes])
     const notesByPath = useMemo(() => new Map(notes.map((note) => [note.path, note])), [notes])
 
-    const notePaths = useStableMap(useMemo(() => getNotePaths(notes, repositories), [notes, repositories]))
+    const notePaths = useStableMap(useMemo(() => getNotePaths(notes, folders), [notes, folders]))
 
     const value = useMemo(() => ({
         notes,

@@ -4,7 +4,7 @@ use rusqlite::{Connection, Rows};
 use std::collections::HashSet;
 
 mod key {
-	pub const REPOSITORY_ID: &str = "repositoryId";
+	pub const FOLDER_ID: &str = "folderId";
 	pub const FILENAME: &str = "filename";
 	pub const FILE_URI: &str = "fileUri";
 	pub const TITLE: &str = "title";
@@ -104,12 +104,12 @@ fn read_link(row: &rusqlite::Row<'_>) -> rusqlite::Result<(i64, String)> {
 	))
 }
 
-pub fn list(connection: &Connection, repository_ids: &[String]) -> Result<String> {
+pub fn list(connection: &Connection, folder_ids: &[String]) -> Result<String> {
 	let mut out = String::new();
 	out.push(token::ARRAY_OPEN);
 
-	if !repository_ids.is_empty() {
-		write_notes(connection, repository_ids, &mut out)?;
+	if !folder_ids.is_empty() {
+		write_notes(connection, folder_ids, &mut out)?;
 	}
 
 	out.push(token::ARRAY_CLOSE);
@@ -117,8 +117,8 @@ pub fn list(connection: &Connection, repository_ids: &[String]) -> Result<String
 	Ok(out)
 }
 
-fn write_notes(connection: &Connection, repository_ids: &[String], out: &mut String) -> Result<()> {
-	let wanted: HashSet<&str> = repository_ids.iter().map(String::as_str).collect();
+fn write_notes(connection: &Connection, folder_ids: &[String], out: &mut String) -> Result<()> {
+	let wanted: HashSet<&str> = folder_ids.iter().map(String::as_str).collect();
 	let mut notes = connection.prepare(sql::LIST_NOTES)?;
 	let mut tags = connection.prepare(sql::LIST_TAGS)?;
 	let mut properties = connection.prepare(sql::LIST_PROPERTIES)?;
@@ -131,8 +131,8 @@ fn write_notes(connection: &Connection, repository_ids: &[String], out: &mut Str
 	let mut first = true;
 
 	while let Some(row) = rows.next()? {
-		let repository: String = row.get(sql::list_note_column::REPOSITORY_ID)?;
-		if !wanted.contains(repository.as_str()) {
+		let folder: String = row.get(sql::list_note_column::FOLDER_ID)?;
+		if !wanted.contains(folder.as_str()) {
 			continue;
 		}
 
@@ -160,8 +160,8 @@ fn write_notes(connection: &Connection, repository_ids: &[String], out: &mut Str
 
 		string_field(
 			out,
-			key::REPOSITORY_ID,
-			&row.get::<_, String>(sql::list_note_column::REPOSITORY_ID)?,
+			key::FOLDER_ID,
+			&row.get::<_, String>(sql::list_note_column::FOLDER_ID)?,
 		);
 		out.push(token::SEPARATOR);
 		string_field(

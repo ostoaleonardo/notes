@@ -18,8 +18,8 @@ import {
 export const buildNoteFromMetadata = (metadata) => {
     const note = {
         filename: metadata.filename,
-        repositoryId: metadata.repositoryId,
-        path: buildNotePath(metadata.repositoryId, metadata.filename),
+        folderId: metadata.folderId,
+        path: buildNotePath(metadata.folderId, metadata.filename),
         fileUri: metadata.fileUri,
         title: metadata.title,
         tags: metadata.tags,
@@ -36,9 +36,9 @@ export const buildNoteFromMetadata = (metadata) => {
     return note
 }
 
-export const createIndexedNotesLoader = (fs) => async (repositoryIds) => {
+export const createIndexedNotesLoader = (fs) => async (folderIds) => {
     const nativeStart = Date.now()
-    const json = await fs.listNoteMetadata(repositoryIds)
+    const json = await fs.listNoteMetadata(folderIds)
     const parseStart = Date.now()
     const metadata = JSON.parse(json)
     const buildStart = Date.now()
@@ -57,13 +57,13 @@ export const createIndexedNotesLoader = (fs) => async (repositoryIds) => {
 
 export const loadNotesFromIndex = createIndexedNotesLoader(RepositoryFs)
 
-export const createIndexedNotesCounter = (query) => async (repositoryIds) => {
-    if (!repositoryIds.length) return 0
+export const createIndexedNotesCounter = (query) => async (folderIds) => {
+    if (!folderIds.length) return 0
 
-    const placeholders = repositoryIds.map(() => COUNT_PLACEHOLDER).join(COUNT_PLACEHOLDER_SEPARATOR)
+    const placeholders = folderIds.map(() => COUNT_PLACEHOLDER).join(COUNT_PLACEHOLDER_SEPARATOR)
     const [row] = await query(
         `${COUNT_INDEXED_NOTES_HEAD}${placeholders}${COUNT_INDEXED_NOTES_TAIL}`,
-        ...repositoryIds
+        ...folderIds
     )
 
     return row?.count ?? 0

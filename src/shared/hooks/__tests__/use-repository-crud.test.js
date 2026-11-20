@@ -24,17 +24,17 @@ const grand = repo('grand', 'child')
 const other = repo('other')
 
 const makeProps = (overrides = {}) => {
-    const repositories = overrides.repositories || [root, child, grand, other]
-    const getRootRepository = jest.fn((repository) => (
-        repository.parentId
-            ? repositories.find((candidate) => candidate.id === 'root')
-            : repository
+    const folders = overrides.folders || [root, child, grand, other]
+    const getRootRepository = jest.fn((folder) => (
+        folder.parentId
+            ? folders.find((candidate) => candidate.id === 'root')
+            : folder
     ))
 
     return {
-        repositories,
-        activeRepository: null,
-        activeRepositoryId: '',
+        folders,
+        activeFolder: null,
+        activeFolderId: '',
         pro: false,
         busyRef: { current: false },
         fileStorage: {
@@ -46,12 +46,12 @@ const makeProps = (overrides = {}) => {
             getOrCreateImagesFolder: jest.fn((uri) => ({ uri: `${uri}/images` })),
             renameVersionsUnder: jest.fn(async () => {}),
             deleteVersionsUnder: jest.fn(),
-            deleteRepositoryIndex: jest.fn()
+            deleteFolderIndex: jest.fn()
         },
         seedWelcomeNote: jest.fn(async () => null),
         setPendingWelcomeNoteId: jest.fn(),
-        persistRepositories: jest.fn(async () => {}),
-        persistActiveRepository: jest.fn(async () => {}),
+        persistFolders: jest.fn(async () => {}),
+        persistActiveFolder: jest.fn(async () => {}),
         getRootRepository,
         getDescendants: jest.fn((id) => ({
             root: [{ id: 'child' }, { id: 'grand' }],
@@ -59,7 +59,7 @@ const makeProps = (overrides = {}) => {
         })[id] || []),
         isAncestorOf: jest.fn(() => false),
         seedTemplates: jest.fn(),
-        buildRepository: jest.fn((directory, parentId) => ({
+        buildFolder: jest.fn((directory, parentId) => ({
             id: 'built',
             uri: directory.uri,
             alias: directory.name,
@@ -78,7 +78,7 @@ const setup = async (overrides) => {
 }
 
 const persistedIds = (props) => (
-    props.persistRepositories.mock.calls[0][0].map((repository) => repository.id)
+    props.persistFolders.mock.calls[0][0].map((folder) => folder.id)
 )
 
 describe('repository crud', () => {
@@ -94,9 +94,9 @@ describe('repository crud', () => {
     describe('add repository', () => {
         const picked = { uri: 'file:///picked', name: 'picked' }
 
-        test('persists the repository with its discovered subfolders', async () => {
+        test('persists the folder with its discovered subfolders', async () => {
             Directory.pickDirectoryAsync.mockResolvedValue(picked)
-            const { props, api } = await setup({ repositories: [] })
+            const { props, api } = await setup({ folders: [] })
             props.discoverSubfolders.mockReturnValue([{ id: 'sub' }])
 
             const result = await api.addRepository()
@@ -105,22 +105,22 @@ describe('repository crud', () => {
             expect(result.id).toBe('built')
         })
 
-        test('activates the repository when none is active', async () => {
+        test('activates the folder when none is active', async () => {
             Directory.pickDirectoryAsync.mockResolvedValue(picked)
-            const { props, api } = await setup({ repositories: [] })
+            const { props, api } = await setup({ folders: [] })
 
             await api.addRepository()
 
-            expect(props.persistActiveRepository).toHaveBeenCalledWith('built')
+            expect(props.persistActiveFolder).toHaveBeenCalledWith('built')
         })
 
         test('keeps the current active repository', async () => {
             Directory.pickDirectoryAsync.mockResolvedValue(picked)
-            const { props, api } = await setup({ activeRepositoryId: 'root' })
+            const { props, api } = await setup({ activeFolderId: 'root' })
 
             await api.addRepository()
 
-            expect(props.persistActiveRepository).not.toHaveBeenCalled()
+            expect(props.persistActiveFolder).not.toHaveBeenCalled()
         })
 
         test('returns duplicate when the folder is already tracked', async () => {
@@ -130,12 +130,12 @@ describe('repository crud', () => {
             const result = await api.addRepository()
 
             expect(result).toBe(REPOSITORY_RESULTS.DUPLICATE)
-            expect(props.persistRepositories).not.toHaveBeenCalled()
+            expect(props.persistFolders).not.toHaveBeenCalled()
         })
 
         test('tells the caller once a folder was picked', async () => {
             Directory.pickDirectoryAsync.mockResolvedValue(picked)
-            const { api } = await setup({ repositories: [] })
+            const { api } = await setup({ folders: [] })
             const onPicked = jest.fn()
 
             await api.addRepository(onPicked)
@@ -169,7 +169,7 @@ describe('repository crud', () => {
 
         test('marks the welcome note as pending when one is seeded', async () => {
             Directory.pickDirectoryAsync.mockResolvedValue(picked)
-            const { props, api } = await setup({ repositories: [] })
+            const { props, api } = await setup({ folders: [] })
             props.seedWelcomeNote.mockResolvedValue('built::Welcome.md')
 
             const result = await api.addRepository()
@@ -180,7 +180,7 @@ describe('repository crud', () => {
 
         test('releases the busy flag when it finishes', async () => {
             Directory.pickDirectoryAsync.mockResolvedValue(picked)
-            const { props, api } = await setup({ repositories: [] })
+            const { props, api } = await setup({ folders: [] })
 
             await api.addRepository()
 
@@ -220,7 +220,7 @@ describe('repository crud', () => {
         })
 
         test('allows a free subfolder when the parent has none', async () => {
-            const { api } = await setup({ repositories: [root] })
+            const { api } = await setup({ folders: [root] })
 
             const result = await api.addSubfolder('root', 'First')
 
@@ -243,13 +243,13 @@ describe('repository crud', () => {
     describe('ensure templates folder', () => {
         test('returns the existing folder without persisting when already linked', async () => {
             const linked = { ...root, templatesUri: 'file:///root/templates' }
-            const { props, api } = await setup({ repositories: [linked, child] })
+            const { props, api } = await setup({ folders: [linked, child] })
             props.fileStorage.findDirectory.mockReturnValue({ uri: 'file:///root/templates' })
 
             const uri = await api.ensureTemplatesFolder(child)
 
             expect(uri).toBe('file:///root/templates')
-            expect(props.persistRepositories).not.toHaveBeenCalled()
+            expect(props.persistFolders).not.toHaveBeenCalled()
         })
 
         test('links an existing folder that is not yet tracked', async () => {
@@ -258,7 +258,7 @@ describe('repository crud', () => {
 
             await api.ensureTemplatesFolder(root)
 
-            const persisted = props.persistRepositories.mock.calls[0][0]
+            const persisted = props.persistFolders.mock.calls[0][0]
             expect(persisted.find((r) => r.id === 'root').templatesUri)
                 .toBe('file:///root/templates')
         })
@@ -323,15 +323,15 @@ describe('repository crud', () => {
         test('returns null for an unknown repository', async () => {
             const { api } = await setup()
 
-            expect(await api.renameRepository('missing', 'Name')).toBeNull()
+            expect(await api.renameFolder('missing', 'Name')).toBeNull()
         })
 
         test('only changes the alias of a root repository', async () => {
             const { props, api } = await setup()
 
-            await api.renameRepository('root', 'Renamed')
+            await api.renameFolder('root', 'Renamed')
 
-            const persisted = props.persistRepositories.mock.calls[0][0]
+            const persisted = props.persistFolders.mock.calls[0][0]
             expect(persisted.find((r) => r.id === 'root').alias).toBe('Renamed')
             expect(props.fileStorage.renameDirectory).not.toHaveBeenCalled()
         })
@@ -340,14 +340,14 @@ describe('repository crud', () => {
             const { props, api } = await setup()
             props.relinkUris.mockReturnValue([{ ...grand, uri: 'file:///root/New/grand' }])
 
-            const result = await api.renameRepository('child', 'New')
+            const result = await api.renameFolder('child', 'New')
 
             expect(props.fileStorage.renameDirectory)
                 .toHaveBeenCalledWith('file:///child', 'file:///root', 'New')
             expect(props.fileStorage.renameVersionsUnder)
                 .toHaveBeenCalledWith('file:///root', 'child', 'New')
             expect(result).toMatchObject({ alias: 'New', uri: 'file:///root/New' })
-            const persisted = props.persistRepositories.mock.calls[0][0]
+            const persisted = props.persistFolders.mock.calls[0][0]
             expect(persisted.find((r) => r.id === 'grand').uri).toBe('file:///root/New/grand')
         })
 
@@ -355,22 +355,22 @@ describe('repository crud', () => {
             const { props, api } = await setup()
             props.fileStorage.renameDirectory.mockRejectedValue(new Error('exists'))
 
-            const result = await api.renameRepository('child', 'New')
+            const result = await api.renameFolder('child', 'New')
 
             expect(result).toBe(REPOSITORY_RESULTS.ERROR)
-            expect(props.persistRepositories).not.toHaveBeenCalled()
+            expect(props.persistFolders).not.toHaveBeenCalled()
             expect(props.busyRef.current).toBe(false)
         })
 
-        test('returns error when the parent repository is missing', async () => {
-            const { api } = await setup({ repositories: [child] })
+        test('returns error when the parent folder is missing', async () => {
+            const { api } = await setup({ folders: [child] })
 
-            expect(await api.renameRepository('child', 'New')).toBe(REPOSITORY_RESULTS.ERROR)
+            expect(await api.renameFolder('child', 'New')).toBe(REPOSITORY_RESULTS.ERROR)
         })
     })
 
     describe('forget repository', () => {
-        test('removes the repository and its descendants from the list only', async () => {
+        test('removes the folder and its descendants from the list only', async () => {
             const { props, api } = await setup()
 
             await api.forgetRepository('root')
@@ -379,12 +379,12 @@ describe('repository crud', () => {
             expect(props.fileStorage.deleteDirectory).not.toHaveBeenCalled()
         })
 
-        test('moves the active repository to the first remaining one', async () => {
-            const { props, api } = await setup({ activeRepositoryId: 'root' })
+        test('moves the active folder to the first remaining one', async () => {
+            const { props, api } = await setup({ activeFolderId: 'root' })
 
             await api.forgetRepository('root')
 
-            expect(props.persistActiveRepository).toHaveBeenCalledWith('other')
+            expect(props.persistActiveFolder).toHaveBeenCalledWith('other')
         })
 
         test('ignores an unknown repository', async () => {
@@ -392,14 +392,14 @@ describe('repository crud', () => {
 
             await api.forgetRepository('missing')
 
-            expect(props.persistRepositories).not.toHaveBeenCalled()
+            expect(props.persistFolders).not.toHaveBeenCalled()
         })
     })
 
     describe('remove repository', () => {
         test('refuses to remove an ancestor of the active repository', async () => {
             const { props, api } = await setup({
-                activeRepository: grand,
+                activeFolder: grand,
                 isAncestorOf: jest.fn(() => true)
             })
 
@@ -409,7 +409,7 @@ describe('repository crud', () => {
             expect(props.fileStorage.deleteDirectory).not.toHaveBeenCalled()
         })
 
-        test('deletes a root repository folder without touching versions', async () => {
+        test('deletes a root folder folder without touching versions', async () => {
             const { props, api } = await setup()
 
             const result = await api.removeRepository('other')
@@ -437,12 +437,12 @@ describe('repository crud', () => {
     })
 
     describe('set active repository', () => {
-        test('persists the chosen repository id', async () => {
+        test('persists the chosen folder id', async () => {
             const { props, api } = await setup()
 
-            api.setActiveRepository('other')
+            api.setActiveFolder('other')
 
-            expect(props.persistActiveRepository).toHaveBeenCalledWith('other')
+            expect(props.persistActiveFolder).toHaveBeenCalledWith('other')
         })
     })
 })

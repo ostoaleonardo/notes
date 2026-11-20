@@ -106,14 +106,14 @@ class RepositoryFsModule : Module() {
 
     Events(INDEX_PROGRESS_EVENT)
 
-    AsyncFunction("indexRepository") Coroutine { repositoryId: String, uri: String ->
+    AsyncFunction("indexRepository") Coroutine { folderId: String, uri: String ->
       indexLock.withLock {
         withContext(Dispatchers.IO) {
           engine().let { engine ->
-            val stats = indexRepository(context, engine, repositoryId, uri, readDispatcher) { done, total ->
+            val stats = indexRepository(context, engine, folderId, uri, readDispatcher) { done, total ->
               sendEvent(
                 INDEX_PROGRESS_EVENT,
-                mapOf(ProgressKeys.REPOSITORY_ID to repositoryId, ProgressKeys.DONE to done, ProgressKeys.TOTAL to total)
+                mapOf(ProgressKeys.FOLDER_ID to folderId, ProgressKeys.DONE to done, ProgressKeys.TOTAL to total)
               )
             }
 
@@ -133,33 +133,33 @@ class RepositoryFsModule : Module() {
       }
     }
 
-    AsyncFunction("saveNote") Coroutine { repositoryId: String, directoryUri: String, filename: String, text: String, expectedModified: Double? ->
+    AsyncFunction("saveNote") Coroutine { folderId: String, directoryUri: String, filename: String, text: String, expectedModified: Double? ->
       withContext(Dispatchers.IO) {
         engine().let { engine ->
-          saveReportToMap(engine.saveNote(repositoryId, noteSinkFor(context, directoryUri), filename, text, expectedModified?.toLong()))
+          saveReportToMap(engine.saveNote(folderId, noteSinkFor(context, directoryUri), filename, text, expectedModified?.toLong()))
         }
       }
     }
 
-    AsyncFunction("saveNotes") Coroutine { repositoryId: String, directoryUri: String, filenames: List<String>, texts: List<String>, expectedModified: List<Double?> ->
+    AsyncFunction("saveNotes") Coroutine { folderId: String, directoryUri: String, filenames: List<String>, texts: List<String>, expectedModified: List<Double?> ->
       withContext(Dispatchers.IO) {
         val requests = filenames.indices.map { SaveRequestRecord(filenames[it], texts[it], expectedModified[it]?.toLong()) }
 
-        engine().saveNotes(repositoryId, noteSinkFor(context, directoryUri), requests).map(::saveReportToMap)
+        engine().saveNotes(folderId, noteSinkFor(context, directoryUri), requests).map(::saveReportToMap)
       }
     }
 
-    AsyncFunction("renameNote") Coroutine { repositoryId: String, directoryUri: String, from: String, to: String, text: String ->
+    AsyncFunction("renameNote") Coroutine { folderId: String, directoryUri: String, from: String, to: String, text: String ->
       withContext(Dispatchers.IO) {
         engine().let { engine ->
-          saveReportToMap(engine.renameNote(repositoryId, noteSinkFor(context, directoryUri), from, to, text))
+          saveReportToMap(engine.renameNote(folderId, noteSinkFor(context, directoryUri), from, to, text))
         }
       }
     }
 
-    AsyncFunction("deleteNote") Coroutine { repositoryId: String, directoryUri: String, filename: String ->
+    AsyncFunction("deleteNote") Coroutine { folderId: String, directoryUri: String, filename: String ->
       withContext(Dispatchers.IO) {
-        engine().deleteNote(repositoryId, noteSinkFor(context, directoryUri), filename)
+        engine().deleteNote(folderId, noteSinkFor(context, directoryUri), filename)
       }
     }
 
@@ -249,8 +249,8 @@ class RepositoryFsModule : Module() {
       }
     }
 
-    AsyncFunction("listNoteMetadata") Coroutine { repositoryIds: List<String> ->
-      withContext(Dispatchers.IO) { engine().listNotes(repositoryIds) }
+    AsyncFunction("listNoteMetadata") Coroutine { folderIds: List<String> ->
+      withContext(Dispatchers.IO) { engine().listNotes(folderIds) }
     }
 
     AsyncFunction("pruneRepositoryIndex") Coroutine { keepIds: List<String> ->
@@ -259,9 +259,9 @@ class RepositoryFsModule : Module() {
       }
     }
 
-    AsyncFunction("deleteRepositoryIndex") Coroutine { repositoryId: String ->
+    AsyncFunction("deleteFolderIndex") Coroutine { folderId: String ->
       indexLock.withLock {
-        withContext(Dispatchers.IO) { engine().deleteRepository(repositoryId) }
+        withContext(Dispatchers.IO) { engine().deleteFolder(folderId) }
       }
     }
   }

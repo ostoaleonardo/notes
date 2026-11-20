@@ -36,7 +36,7 @@ beforeEach(() => {
     jest.clearAllMocks()
 })
 
-describe('load repository data', () => {
+describe('load folder data', () => {
     test('passes the tree, root, storage and file storage to the loader', async () => {
         loadRepositoryData.mockResolvedValue({ notes: [], migration: {} })
 

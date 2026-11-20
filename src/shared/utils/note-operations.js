@@ -1,6 +1,6 @@
 import { getUniqueFilenameBy, isTitleTakenBy } from '@/shared/utils/note-filename'
 import { logError } from '@/shared/utils/log-error'
-import { buildNotePath, buildRepositoryPaths } from '@/shared/utils/note-path'
+import { buildNotePath, buildFolderPaths } from '@/shared/utils/note-path'
 import { composeNoteFile, decomposeNoteFile } from '@/shared/utils/note-file-content'
 import { commitNoteVersion } from '@/shared/utils/note-versions'
 import { planExternalSync, toSyncShape } from '@/shared/utils/external-note-sync'
@@ -12,8 +12,8 @@ import { buildVersionKey, getVersionLocation } from '@/shared/utils/note-version
 import { DUPLICATE_TITLE_ERROR } from '@/shared/constants/note-errors'
 import { LOG_MESSAGES } from '@/shared/constants/log-messages'
 
-export const getRepositoryUri = (repositories, repositoryId) => (
-    repositories.find((repository) => repository.id === repositoryId)?.uri
+export const getFolderUri = (folders, folderId) => (
+    folders.find((folder) => folder.id === folderId)?.uri
 )
 
 export const buildFileContent = (note, body = note.note) => composeNoteFile(note, body)
@@ -31,18 +31,18 @@ export const withOptimisticUpdate = async (setNotes, { apply, rollback }, persis
     }
 }
 
-export const createNote = async ({ note, repositoryId, uri }, fileStorage) => {
+export const createNote = async ({ note, folderId, uri }, fileStorage) => {
     if (!uri) {
         return {
-            record: { ...note, repositoryId, filename: '', path: '' },
+            record: { ...note, folderId, filename: '', path: '' },
             result: { path: '', filename: '' }
         }
     }
 
     const filename = getUniqueFilenameBy(nameExistsIn(fileStorage, uri), note.title, null)
-    const path = buildNotePath(repositoryId, filename)
+    const path = buildNotePath(folderId, filename)
     const saved = await fileStorage.saveNoteFile({
-        repositoryId,
+        folderId,
         directoryUri: uri,
         filename,
         content: buildFileContent(note)
@@ -50,7 +50,7 @@ export const createNote = async ({ note, repositoryId, uri }, fileStorage) => {
     const times = { fileUri: saved.fileUri, createdAt: saved.updatedAt, updatedAt: saved.updatedAt }
 
     return {
-        record: { ...note, repositoryId, filename, path, ...times },
+        record: { ...note, folderId, filename, path, ...times },
         result: { path, filename, ...times }
     }
 }
@@ -85,7 +85,7 @@ export const planNoteUpdate = ({ note, previous, uri }, fileStorage) => {
 
     return {
         filename,
-        path: buildNotePath(note.repositoryId, filename),
+        path: buildNotePath(note.folderId, filename),
         renamed: filename !== previous.filename,
         existing: fileStorage.findFile(uri, previous.filename)
     }
@@ -96,16 +96,16 @@ const readDiskNote = async (existing) => {
     return toSyncShape({ note: body, ...fields })
 }
 
-const keepExternalText = async ({ previous, text, repositories, repositoryId }, fileStorage) => {
+const keepExternalText = async ({ previous, text, folders, folderId }, fileStorage) => {
     try {
-        const location = getVersionLocation(repositories, repositoryId)
+        const location = getVersionLocation(folders, folderId)
         await commitNoteVersion(fileStorage, location, previous.filename, previous.title, text)
     } catch (error) {
         logError(LOG_MESSAGES.KEEPING_EXTERNAL_TEXT_OF(previous.filename), error)
     }
 }
 
-const mergeExternalEdits = async ({ note, previous, existing, repositories }, fileStorage) => {
+const mergeExternalEdits = async ({ note, previous, existing, folders }, fileStorage) => {
     if (!existing || existing.lastModified === previous.updatedAt) return null
 
     const incoming = await readDiskNote(existing)
@@ -113,7 +113,7 @@ const mergeExternalEdits = async ({ note, previous, existing, repositories }, fi
 
     if (base === undefined) {
         await keepExternalText(
-            { previous, text: incoming.note, repositories, repositoryId: note.repositoryId },
+            { previous, text: incoming.note, folders, folderId: note.folderId },
             fileStorage
         )
 
@@ -126,7 +126,7 @@ const mergeExternalEdits = async ({ note, previous, existing, repositories }, fi
 
     if (plan.lostExternalText) {
         await keepExternalText(
-            { previous, text: incoming.note, repositories, repositoryId: note.repositoryId },
+            { previous, text: incoming.note, folders, folderId: note.folderId },
             fileStorage
         )
     }
@@ -134,10 +134,10 @@ const mergeExternalEdits = async ({ note, previous, existing, repositories }, fi
     return plan.draft
 }
 
-export const persistNoteUpdate = async ({ note, previous, uri, plan, repositories }, fileStorage) => {
+export const persistNoteUpdate = async ({ note, previous, uri, plan, folders }, fileStorage) => {
     const { filename, renamed, existing } = plan
 
-    const merged = await mergeExternalEdits({ note, previous, existing, repositories }, fileStorage)
+    const merged = await mergeExternalEdits({ note, previous, existing, folders }, fileStorage)
 
     const content = buildFileContent({
         ...note,
@@ -147,14 +147,14 @@ export const persistNoteUpdate = async ({ note, previous, uri, plan, repositorie
 
     const saved = renamed
         ? await fileStorage.saveRenamedNoteFile({
-            repositoryId: note.repositoryId,
+            folderId: note.folderId,
             directoryUri: uri,
             from: previous.filename,
             to: filename,
             content
         })
         : await fileStorage.saveNoteFile({
-            repositoryId: note.repositoryId,
+            folderId: note.folderId,
             directoryUri: uri,
             filename,
             content,
@@ -162,7 +162,7 @@ export const persistNoteUpdate = async ({ note, previous, uri, plan, repositorie
         })
 
     if (renamed) {
-        const { rootUri, folderPath } = getVersionLocation(repositories, note.repositoryId)
+        const { rootUri, folderPath } = getVersionLocation(folders, note.folderId)
 
         await fileStorage.renameVersions(
             rootUri,
@@ -202,17 +202,17 @@ const groupByRepository = (notes) => {
     const groups = new Map()
 
     notes.forEach((note) => {
-        if (groups.has(note.repositoryId)) groups.get(note.repositoryId).push(note)
-        else groups.set(note.repositoryId, [note])
+        if (groups.has(note.folderId)) groups.get(note.folderId).push(note)
+        else groups.set(note.folderId, [note])
     })
 
     return groups
 }
 
-const saveRepositoryGroup = async ({ repositoryId, uri, notes }, fileStorage) => {
+const saveRepositoryGroup = async ({ folderId, uri, notes }, fileStorage) => {
     try {
         const stamps = await fileStorage.saveNoteFiles({
-            repositoryId,
+            folderId,
             directoryUri: uri,
             files: notes.map((note) => ({
                 filename: note.filename,
@@ -223,20 +223,20 @@ const saveRepositoryGroup = async ({ repositoryId, uri, notes }, fileStorage) =>
 
         return stamps
     } catch (error) {
-        logError(LOG_MESSAGES.WRITING_RENAMED_LINKS_IN(repositoryId), error)
+        logError(LOG_MESSAGES.WRITING_RENAMED_LINKS_IN(folderId), error)
         return notes.map(() => null)
     }
 }
 
-export const writeChangedNotes = async (changedNotes, repositories, fileStorage) => {
+export const writeChangedNotes = async (changedNotes, folders, fileStorage) => {
     const failed = []
     const saved = new Map()
 
-    for (const [repositoryId, notes] of groupByRepository(changedNotes)) {
-        const uri = getRepositoryUri(repositories, repositoryId)
+    for (const [folderId, notes] of groupByRepository(changedNotes)) {
+        const uri = getFolderUri(folders, folderId)
         if (!uri) continue
 
-        const stamps = await saveRepositoryGroup({ repositoryId, uri, notes }, fileStorage)
+        const stamps = await saveRepositoryGroup({ folderId, uri, notes }, fileStorage)
 
         notes.forEach((note, index) => {
             if (stamps[index]) saved.set(note.path, stamps[index])
@@ -247,11 +247,11 @@ export const writeChangedNotes = async (changedNotes, repositories, fileStorage)
     return { failed, saved }
 }
 
-export const persistNoteMove = async ({ note, destinationId, repositories }, fileStorage) => {
-    const sourceUri = getRepositoryUri(repositories, note.repositoryId)
-    const destinationUri = getRepositoryUri(repositories, destinationId)
-    const from = getVersionLocation(repositories, note.repositoryId)
-    const to = getVersionLocation(repositories, destinationId)
+export const persistNoteMove = async ({ note, destinationId, folders }, fileStorage) => {
+    const sourceUri = getFolderUri(folders, note.folderId)
+    const destinationUri = getFolderUri(folders, destinationId)
+    const from = getVersionLocation(folders, note.folderId)
+    const to = getVersionLocation(folders, destinationId)
 
     if (!sourceUri || !destinationUri || !from || !to || from.rootUri !== to.rootUri) {
         throw new Error('The note cannot be moved to that folder')
@@ -264,8 +264,8 @@ export const persistNoteMove = async ({ note, destinationId, repositories }, fil
     }
 
     const saved = await fileStorage.moveNote({
-        source: { repositoryId: note.repositoryId, uri: sourceUri },
-        destination: { repositoryId: destinationId, uri: destinationUri },
+        source: { folderId: note.folderId, uri: sourceUri },
+        destination: { folderId: destinationId, uri: destinationUri },
         filename: note.filename
     })
 
@@ -276,7 +276,7 @@ export const persistNoteMove = async ({ note, destinationId, repositories }, fil
     )
 
     return {
-        repositoryId: destinationId,
+        folderId: destinationId,
         filename: note.filename,
         path: buildNotePath(destinationId, note.filename),
         fileUri: saved.fileUri,
@@ -289,11 +289,11 @@ export const planMovedNoteLinks = ({
     destinationId,
     notes,
     notePaths,
-    repositories,
+    folders,
     currentNotes,
     bodies
 }) => {
-    const destinationPath = buildRepositoryPaths(repositories).get(destinationId) || ''
+    const destinationPath = buildFolderPaths(folders).get(destinationId) || ''
     const qualifyPaths = new Map(notePaths).set(note.path, destinationPath)
 
     return planWikiLinkRename({

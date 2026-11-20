@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react'
 
 import { useOnForeground } from './use-on-foreground'
-import { useRepositories } from './use-repositories'
+import { useFolders } from './use-folders'
 
-export function useRepositoryReconciliation() {
-    const { loading, reconcileRepositories } = useRepositories()
+export function useFolderReconciliation() {
+    const { loading, reconcileFolders } = useFolders()
 
-    const reconcileRef = useRef(reconcileRepositories)
-    reconcileRef.current = reconcileRepositories
+    const reconcileRef = useRef(reconcileFolders)
+    reconcileRef.current = reconcileFolders
 
     useEffect(() => {
         if (loading) return

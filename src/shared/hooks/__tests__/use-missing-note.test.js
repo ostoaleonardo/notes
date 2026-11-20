@@ -16,10 +16,10 @@ jest.mock('expo-router', () => ({
 jest.mock('../use-notes', () => ({
     useNotes: () => ({ saveNote: mockSaveNote })
 }))
-jest.mock('../use-repositories', () => ({
-    useRepositories: () => ({
-        repositories: mockRepositories,
-        activeRepositoryTree: mockRepositories
+jest.mock('../use-folders', () => ({
+    useFolders: () => ({
+        folders: mockRepositories,
+        activeFolderTree: mockRepositories
     })
 }))
 
@@ -44,7 +44,7 @@ describe('missing note', () => {
         expect(result.current.missing).toBeNull()
     })
 
-    test('creates the note in the repository matching the link folder and opens it', async () => {
+    test('creates the note in the folder matching the link folder and opens it', async () => {
         const { result } = await renderHook(() => useMissingNote())
 
         await act(async () => result.current.setMissing({ path: 'Work', title: 'Ideas' }))
@@ -57,7 +57,7 @@ describe('missing note', () => {
         expect(router.push).toHaveBeenCalledTimes(1)
     })
 
-    test('creates the note in the default repository when the folder is unknown', async () => {
+    test('creates the note in the default folder when the folder is unknown', async () => {
         const { result } = await renderHook(() => useMissingNote())
 
         await act(async () => result.current.setMissing({ path: 'Nowhere', title: 'Ideas' }))

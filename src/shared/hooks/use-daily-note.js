@@ -1,7 +1,7 @@
 import { useCallback, useRef } from 'react'
 
 import { useNotes } from './use-notes'
-import { useRepositories } from './use-repositories'
+import { useFolders } from './use-folders'
 import { useTemplates } from './use-templates'
 import { useLanguage } from './use-language'
 import { useStorage } from './use-storage'
@@ -21,17 +21,17 @@ export function useDailyNote() {
     const { currentLanguage } = useLanguage()
     const { directoryExists } = useFileStorage()
     const { notes, saveNote, updateNote } = useNotes()
-    const { activeRepository, getDescendants } = useRepositories()
+    const { activeFolder, getDescendants } = useFolders()
     const busy = useRef(false)
 
     const open = async ({ append } = {}) => {
-        if (busy.current || !activeRepository) return null
+        if (busy.current || !activeFolder) return null
 
         busy.current = true
 
         try {
-            const folderKey = scopedStorageKey(STORAGE_KEYS.DAILY_NOTE_FOLDER, activeRepository.id)
-            const templateKey = scopedStorageKey(STORAGE_KEYS.DAILY_NOTE_TEMPLATE, activeRepository.id)
+            const folderKey = scopedStorageKey(STORAGE_KEYS.DAILY_NOTE_FOLDER, activeFolder.id)
+            const templateKey = scopedStorageKey(STORAGE_KEYS.DAILY_NOTE_TEMPLATE, activeFolder.id)
             const [folderId, templateFilename] = await Promise.all([getItem(folderKey), getItem(templateKey)])
 
             const title = getDailyNoteTitle()
@@ -39,8 +39,8 @@ export function useDailyNote() {
                 title,
                 notes,
                 folderId,
-                activeRepository,
-                descendants: getDescendants(activeRepository.id)
+                activeFolder,
+                descendants: getDescendants(activeFolder.id)
             }, directoryExists)
 
             if (!plan) return null
@@ -64,7 +64,7 @@ export function useDailyNote() {
 
             const { path } = await saveNote(
                 { title, note, tags: [], createdAt: getDate() },
-                plan.repository.id
+                plan.folder.id
             )
 
             return path

@@ -6,10 +6,10 @@ import { useRepositoryController } from '@/shared/hooks/use-repository-controlle
 export const RepositoryContext = createContext()
 
 const RepositoryApiProvider = ({ children }) => {
-    const repositories = useRepositoryController()
+    const folders = useRepositoryController()
 
     return (
-        <RepositoryContext.Provider value={repositories}>
+        <RepositoryContext.Provider value={folders}>
             {children}
         </RepositoryContext.Provider>
     )

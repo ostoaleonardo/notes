@@ -40,13 +40,13 @@ fun listIndexed(engine: Engine): Map<String, List<Any>> {
   val notes = engine.indexedNotes()
 
   return mapOf(
-    IndexedKeys.REPOSITORY_IDS to notes.repositoryIds,
+    IndexedKeys.FOLDER_IDS to notes.folderIds,
     IndexedKeys.FILENAMES to notes.filenames,
     IndexedKeys.MODIFIED to notes.modified
   )
 }
 
 fun toRefs(report: NoteRefsReport): Map<String, List<String>> = mapOf(
-  IndexedKeys.REPOSITORY_IDS to report.repositoryIds,
+  IndexedKeys.FOLDER_IDS to report.folderIds,
   IndexedKeys.FILENAMES to report.filenames
 )

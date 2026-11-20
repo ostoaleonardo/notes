@@ -3,7 +3,7 @@ import { Redirect, router } from 'expo-router'
 
 import { useCurrentNote } from '@/shared/hooks/use-current-note'
 import { useNotes } from '@/shared/hooks/use-notes'
-import { useRepositories } from '@/shared/hooks/use-repositories'
+import { useFolders } from '@/shared/hooks/use-folders'
 import { useStorage } from '@/shared/hooks/use-storage'
 import { getStartupTarget } from '@/shared/utils/startup-target'
 import { pushOnce } from '@/shared/utils/navigation'
@@ -15,7 +15,7 @@ import { STARTUP_BEHAVIORS } from '@/shared/constants/startup-behavior'
 export default function App() {
     const { loading } = useNotes()
     const { currentId } = useCurrentNote()
-    const { activeRepository } = useRepositories()
+    const { activeFolder } = useFolders()
     const { getItem } = useStorage()
 
     const [startupBehavior, setStartupBehavior] = useState(null)
@@ -30,7 +30,7 @@ export default function App() {
         return () => { cancelled = true }
     }, [getItem])
 
-    const isReady = !!activeRepository && !loading && !!startupBehavior
+    const isReady = !!activeFolder && !loading && !!startupBehavior
 
     useEffect(() => {
         if (!isReady) return
