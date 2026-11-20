@@ -16,3 +16,4 @@ thiserror = "2"
 
 [dev-dependencies]
 tempfile = "3.27.0"
+proptest = "1"
