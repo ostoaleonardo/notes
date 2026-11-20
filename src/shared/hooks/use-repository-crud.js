@@ -188,6 +188,8 @@ export function useRepositoryCrud({
                 const parentPath = paths.get(parent.id)
                 const newPath = parentPath ? `${parentPath}/${sanitized}` : sanitized
                 const newUri = await renameDirectory(repository.uri, parent.uri, sanitized)
+                const affected = [id, ...getDescendants(id).map((d) => d.id)]
+                await Promise.all(affected.map((repositoryId) => deleteRepositoryIndex(repositoryId)))
                 await renameVersionsUnder(getRootRepository(repository).uri, oldPath, newPath)
                 const renamedRepository = { ...repository, uri: newUri, alias: sanitized }
                 const relinked = await relinkUris(renamedRepository)
@@ -210,6 +212,8 @@ export function useRepositoryCrud({
         renameDirectory,
         renameVersionsUnder,
         getRootRepository,
+        getDescendants,
+        deleteRepositoryIndex,
         relinkUris,
         busyRef
     ])

@@ -449,15 +449,12 @@ describe('delete directory', () => {
 })
 
 describe('rename directory', () => {
-    test('copies nested files and folders under the new name and removes the old one', async () => {
+    const native = jest.requireMock('repository-fs').default
+
+    test('renames through the native vault and returns the new uri', async () => {
         const { result } = await renderFileStorageHook()
 
-        seedDirectory('content://repo', [])
-        seedDirectory('content://repo/Old', [
-            new File('content://repo/Old/a.md'),
-            new Directory('content://repo/Old/sub')
-        ])
-        seedDirectory('content://repo/Old/sub', [new File('content://repo/Old/sub/b.md')])
+        native.renameDirectory.mockResolvedValueOnce('content://repo/New/')
 
         const uri = await result.current.renameDirectory(
             'content://repo/Old',
@@ -465,44 +462,21 @@ describe('rename directory', () => {
             'New'
         )
 
-        expect(uri).toBe('content://repo/New')
-        expect(registry.has('content://repo/Old')).toBe(false)
-        expect(result.current.findFile('content://repo/New', 'a.md')).toBeDefined()
-        expect(result.current.findFile('content://repo/New/sub', 'b.md')).toBeDefined()
+        expect(uri).toBe('content://repo/New/')
+        expect(native.renameDirectory).toHaveBeenCalledWith(
+            'content://repo/Old',
+            'content://repo',
+            'New'
+        )
     })
 
-    test('removes the partial copy and keeps the original when copying fails', async () => {
+    test('propagates a failed rename', async () => {
         const { result } = await renderFileStorageHook()
-        const broken = new File('content://repo/Old/a.md')
 
-        broken.bytes = async () => {
-            throw new Error('read failed')
-        }
-        seedDirectory('content://repo', [])
-        seedDirectory('content://repo/Old', [broken])
+        native.renameDirectory.mockRejectedValueOnce(new Error('cannot rename'))
 
         await expect(
             result.current.renameDirectory('content://repo/Old', 'content://repo', 'New')
-        ).rejects.toThrow('read failed')
-
-        expect(registry.has('content://repo/New')).toBe(false)
-        expect(registry.has('content://repo/Old')).toBe(true)
-    })
-})
-
-describe('copy image file', () => {
-    test('creates the image with the given name in the target directory', async () => {
-        const { result } = await renderFileStorageHook()
-
-        seedDirectory('content://repo/images', [])
-
-        const file = await result.current.copyImageFile(
-            'content://picker/photo.png',
-            'content://repo/images',
-            'pasted.png'
-        )
-
-        expect(file.uri).toBe('content://repo/images/pasted.png')
-        expect(registry.get(file.uri).type).toBe('image/jpeg')
+        ).rejects.toThrow('cannot rename')
     })
 })

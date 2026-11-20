@@ -422,29 +422,25 @@ describe('directories', () => {
         expect(mockFs.has(`${FOLDER}/a.md`)).toBe(false)
     })
 
-    test('renames a directory copying nested content and removing the old one', async () => {
-        seedFile(`${FOLDER}/a.md`, 'a', MIME_TYPES.MARKDOWN)
-        seedDir(`${FOLDER}/sub`)
-        seedFile(`${FOLDER}/sub/b.md`, 'b')
+    test('renames a directory through the native vault and returns its new uri', async () => {
+        const native = jest.requireMock('repository-fs').default
+
+        native.renameDirectory.mockResolvedValueOnce(`${ROOT}/renamed/`)
 
         const uri = await fileStorage.renameDirectory(FOLDER, ROOT, 'renamed')
 
-        expect(uri).toBe(`${ROOT}/renamed`)
-        expect(readText(`${ROOT}/renamed/a.md`)).toBe('a')
-        expect(readText(`${ROOT}/renamed/sub/b.md`)).toBe('b')
-        expect(mockFs.has(FOLDER)).toBe(false)
+        expect(uri).toBe(`${ROOT}/renamed/`)
+        expect(native.renameDirectory).toHaveBeenCalledWith(FOLDER, ROOT, 'renamed')
     })
 
-    test('removes the partial copy and keeps the original when copying fails', async () => {
-        seedFile(`${FOLDER}/a.md`, 'a')
-        mockState.failBytes = true
+    test('propagates a failed rename', async () => {
+        const native = jest.requireMock('repository-fs').default
+
+        native.renameDirectory.mockRejectedValueOnce(new Error('cannot rename'))
 
         await expect(fileStorage.renameDirectory(FOLDER, ROOT, 'renamed')).rejects.toThrow(
-            'read failed'
+            'cannot rename'
         )
-
-        expect(mockFs.has(`${ROOT}/renamed`)).toBe(false)
-        expect(readText(`${FOLDER}/a.md`)).toBe('a')
     })
 })
 

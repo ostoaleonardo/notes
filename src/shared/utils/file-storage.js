@@ -134,31 +134,11 @@ const deleteDirectory = (directoryUri) => {
 
 const directoryExists = (directoryUri) => new Directory(directoryUri).exists
 
-const copyDirectoryContents = async (source, destination) => {
-    for (const entry of source.list()) {
-        if (entry instanceof Directory) {
-            await copyDirectoryContents(entry, destination.createDirectory(entry.name))
-        } else {
-            destination.createFile(entry.name, entry.type || null).write(await entry.bytes())
-        }
-    }
-}
-
 const renameDirectory = async (directoryUri, parentUri, newName) => {
-    const directory = new Directory(directoryUri)
-    const newDirectory = new Directory(parentUri).createDirectory(newName)
-
-    try {
-        await copyDirectoryContents(directory, newDirectory)
-    } catch (error) {
-        newDirectory.delete()
-        throw error
-    }
-
-    directory.delete()
+    const newUri = await RepositoryFs.renameDirectory(directoryUri, parentUri, newName)
     invalidateMediaIndex()
 
-    return newDirectory.uri
+    return newUri
 }
 
 const copyImageFile = async (sourceUri, directoryUri, filename) => {
@@ -250,6 +230,10 @@ const deleteNoteFile = (directoryUri, filename) => {
 }
 
 const moveNoteFiles = async (sourceUri, filename, destinationUri) => {
+    if (!fileExists(destinationUri, filename) && await RepositoryFs.moveFile(sourceUri, filename, destinationUri)) {
+        return filename
+    }
+
     const source = findFile(sourceUri, filename)
     const target = getUniqueFilenameBy(
         (name) => fileExists(destinationUri, name),

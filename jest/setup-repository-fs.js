@@ -31,6 +31,8 @@ jest.mock('repository-fs', () => {
                 }
             },
             readTextFiles,
+            renameDirectory: jest.fn(async (directoryUri, parentUri, newName) => `${parentUri}/${newName}/`),
+            moveFile: jest.fn(async () => false),
             versionsRead: jest.fn(async () => null),
             versionsWrite: jest.fn(async () => {}),
             versionsDelete: jest.fn(async () => {}),

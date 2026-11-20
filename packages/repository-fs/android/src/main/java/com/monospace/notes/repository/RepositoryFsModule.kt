@@ -211,6 +211,14 @@ class RepositoryFsModule : Module() {
       withContext(Dispatchers.IO) { versionsFor(rootUri).migrateLegacy(folderPath, folderPath) }
     }
 
+    AsyncFunction("renameDirectory") Coroutine { directoryUri: String, parentUri: String, newName: String ->
+      withContext(Dispatchers.IO) { renameDirectory(context, directoryUri, parentUri, newName) }
+    }
+
+    AsyncFunction("moveFile") Coroutine { sourceDirectoryUri: String, filename: String, destinationDirectoryUri: String ->
+      withContext(Dispatchers.IO) { moveFile(context, sourceDirectoryUri, filename, destinationDirectoryUri) }
+    }
+
     Function("composeNote") { tags: List<String>, propertiesJson: String, invalidFrontmatter: String?, rawFrontmatter: String?, body: String ->
       composeNote(NoteFieldsRecord(tags, propertiesJson, invalidFrontmatter, rawFrontmatter), body)
     }
@@ -292,7 +300,7 @@ internal fun documentIdOf(context: Context, uri: Uri): String = if (DocumentsCon
   DocumentsContract.getTreeDocumentId(uri)
 }
 
-private fun directFile(context: Context, uri: Uri): File? {
+internal fun directFile(context: Context, uri: Uri): File? {
   if (uri.authority != EXTERNAL_STORAGE_AUTHORITY || !hasDirectAccess()) return null
 
   val documentId = runCatching { documentIdOf(context, uri) }.getOrNull() ?: return null
