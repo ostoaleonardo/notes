@@ -22,6 +22,7 @@ import java.io.File
 import uniffi.engine.Engine
 import uniffi.engine.LinkNoteRecord
 import uniffi.engine.NoteFieldsRecord
+import uniffi.engine.buildLineDeltaJson
 import uniffi.engine.findBacklinkPaths
 import uniffi.engine.renameLinksInBodies
 import uniffi.engine.SaveRequestRecord
@@ -172,6 +173,8 @@ class RepositoryFsModule : Module() {
         renameLinksInBodies(notes, folders, resolveFolders, targetPath, newTitle, bodies)
       }
     }
+
+    Function("buildLineDelta") { from: String, to: String -> buildLineDeltaJson(from, to) }
 
     Function("composeNote") { tags: List<String>, propertiesJson: String, invalidFrontmatter: String?, rawFrontmatter: String?, body: String ->
       composeNote(NoteFieldsRecord(tags, propertiesJson, invalidFrontmatter, rawFrontmatter), body)

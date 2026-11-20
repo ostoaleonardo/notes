@@ -1,0 +1,11 @@
+pub const LINE_SEPARATOR: char = '\n';
+pub const MAX_DIFF_CELLS: usize = 4_000_000;
+pub const KEY_HEAD: &str = "head";
+pub const KEY_ENTRIES: &str = "entries";
+pub const KEY_ID: &str = "id";
+pub const KEY_TITLE: &str = "title";
+pub const KEY_CREATED_AT: &str = "createdAt";
+pub const KEY_DELTA: &str = "delta";
+pub const KEY_AT: &str = "at";
+pub const KEY_REMOVE: &str = "remove";
+pub const KEY_INSERT: &str = "insert";

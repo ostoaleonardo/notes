@@ -1,3 +1,5 @@
+import RepositoryFs from 'repository-fs'
+
 import { diffLineArrays } from './diff-lines'
 
 import { VERSION_DIFF_MAX_CELLS } from '@/shared/constants/default-values'
@@ -47,7 +49,7 @@ const diffToHunks = (ops, offset) => {
     return hunks
 }
 
-export const buildLineDelta = (from, to) => {
+const buildLineDeltaInJs = (from, to) => {
     const a = from.split('\n')
     const b = to.split('\n')
     const prefix = sharedPrefixLength(a, b)
@@ -63,6 +65,12 @@ export const buildLineDelta = (from, to) => {
 
     return diffToHunks(diffLineArrays(middleA, middleB), prefix)
 }
+
+export const buildLineDelta = (from, to) => (
+    typeof RepositoryFs.buildLineDelta === 'function'
+        ? JSON.parse(RepositoryFs.buildLineDelta(from, to))
+        : buildLineDeltaInJs(from, to)
+)
 
 export const applyLineDelta = (text, delta) => {
     const lines = text.split('\n')

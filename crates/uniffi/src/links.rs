@@ -64,3 +64,19 @@ pub fn rename_links_in_bodies(
 		.map(|body| rename_links(body, &target_path, &new_title, &index, &folders, resolve))
 		.collect()
 }
+
+#[uniffi::export]
+pub fn build_line_delta_json(from: String, to: String) -> String {
+	let hunks: Vec<serde_json::Value> = engine::versions::build_line_delta(&from, &to)
+		.into_iter()
+		.map(|hunk| {
+			serde_json::json!({
+				"at": hunk.at,
+				"remove": hunk.remove,
+				"insert": hunk.insert,
+			})
+		})
+		.collect();
+
+	serde_json::Value::Array(hunks).to_string()
+}
