@@ -4,6 +4,7 @@ import { buildNotes, report } from '../../../../jest/perf-fixtures'
 import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
 
 jest.mock('expo-crypto', () => ({ randomUUID: () => 'id' }))
+jest.mock('repository-fs', () => ({ __esModule: true, default: {} }))
 
 const SIZES = [1000, 3000, 5000]
 const REPOSITORY = { id: 'repo', uri: 'file:///repo' }

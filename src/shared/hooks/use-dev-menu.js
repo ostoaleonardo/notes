@@ -16,7 +16,7 @@ import { revokePermissions } from '@/shared/utils/permissions'
 import { startStallDetector } from '@/shared/utils/stall-detector'
 import { sanitizeFilename } from '@/shared/utils/note-filename'
 import { getVersionLocation } from '@/shared/utils/note-version-location'
-import { buildNoteFileContent, parseFrontmatter } from '@/shared/utils/frontmatter'
+import { composeNoteFile, decomposeNoteFile } from '@/shared/utils/note-file-content'
 import { buildDevTestPlan, groupDevData, parseDevDataKey } from '@/shared/utils/dev-test-data'
 import { readBundledBytes, readBundledText } from '@/shared/utils/bundled-asset'
 import { getFileMimeType } from '@/shared/utils/attachments'
@@ -198,9 +198,9 @@ export function useDevMenu() {
         const filename = `${sanitizeFilename(title)}${NOTE_FILE_EXTENSION}`
 
         const existing = findFile(uri, filename)
-        const previous = existing ? parseFrontmatter(await existing.text()).frontmatter : null
+        const previous = existing ? decomposeNoteFile(await existing.text()) : null
 
-        writeNoteFile(uri, filename, buildNoteFileContent({ tags: previous?.tags || [] }, content))
+        writeNoteFile(uri, filename, composeNoteFile({ tags: previous?.tags || [] }, content))
 
         DevSettings.reload()
     }

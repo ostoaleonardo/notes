@@ -1,4 +1,4 @@
-import { buildNoteFileContent } from '@/shared/utils/frontmatter'
+import { composeNoteFile } from '@/shared/utils/note-file-content'
 import { parseBundledKey } from '@/shared/utils/bundled-asset'
 
 import { NOTE_FILE_EXTENSION } from '@/shared/constants/file-storage'
@@ -33,7 +33,7 @@ const buildFolderNotes = (folder, label, notesPerFolder) => (
         return {
             folder,
             filename: `${title}${NOTE_FILE_EXTENSION}`,
-            content: buildNoteFileContent(
+            content: composeNoteFile(
                 { tags: [`folders/${label}`] },
                 `# ${title}\n\nExample content.${link}\n`
             )

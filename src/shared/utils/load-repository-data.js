@@ -4,11 +4,11 @@ import { getNoteKey } from '@/shared/utils/note-key'
 import { getUniqueFilename, stripNoteExtension } from '@/shared/utils/note-filename'
 import { buildNotePath, buildRepositoryPaths } from '@/shared/utils/note-path'
 import {
-    buildNoteFileContent,
     extractProperties,
     readFrontmatterTags,
     parseFrontmatter
 } from '@/shared/utils/frontmatter'
+import { composeNoteFile } from '@/shared/utils/note-file-content'
 import { buildLegacyNoteBody } from '@/shared/utils/legacy-note-body'
 import { getNoteLinkTexts } from '@/shared/utils/note-links'
 import { getNoteTags } from '@/shared/utils/note-tags'
@@ -91,7 +91,7 @@ const migrateStorageNotesToFiles = async (rootRepository, storage, fileStorage, 
         report.failedImages += failed
 
         const tags = resolveTagNames(note.tags || note.categories || [], tagNameById)
-        const content = buildNoteFileContent({ tags }, buildLegacyNoteBody(note, imageUris))
+        const content = composeNoteFile({ tags }, buildLegacyNoteBody(note, imageUris))
 
         fileStorage.writeNoteFile(rootRepository.uri, filename, content)
         await storage.removeItem(key)

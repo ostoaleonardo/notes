@@ -4,7 +4,7 @@ import { File } from 'expo-file-system'
 import { useTranslation } from 'react-i18next'
 
 import { useNotes } from '@/shared/hooks/use-notes'
-import { extractProperties, readFrontmatterTags, parseFrontmatter } from '@/shared/utils/frontmatter'
+import { decomposeNoteFile } from '@/shared/utils/note-file-content'
 
 import { ROUTES } from '@/shared/constants/routes'
 import { MARKDOWN_FILE_NAME_PATTERN } from '@/shared/constants/markdown-patterns'
@@ -26,16 +26,15 @@ export const ImportProvider = ({ children }) => {
             setImporting(true)
 
             const file = new File(url)
-            const { frontmatter, body } = parseFrontmatter(await file.text())
+            const { body, tags, properties } = decomposeNoteFile(await file.text())
             const match = (name || file.name).match(MARKDOWN_FILE_NAME_PATTERN)
             const title = match ? match[1] : t('notes.untitled')
-            const tags = readFrontmatterTags(frontmatter)
 
             await saveNote({
                 title,
                 note: body,
-                tags,
-                properties: extractProperties(frontmatter)
+                tags: tags ?? [],
+                properties: properties ?? {}
             }, repositoryId)
 
             pushOnce(ROUTES.HOME)

@@ -11,6 +11,7 @@ import { PERF_BUDGETS_MS, PERF_NOTE_COUNT } from '../../../../jest/perf-budgets'
 import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
 
 jest.mock('expo-crypto', () => ({ randomUUID: () => 'id' }))
+jest.mock('repository-fs', () => ({ __esModule: true, default: {} }))
 
 const REPOSITORY = { id: 'repo', uri: 'file:///repo', parentId: null }
 

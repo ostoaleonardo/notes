@@ -6,7 +6,7 @@ import { useFileStorage } from './use-file-storage'
 import { getWelcomeNote } from '@/shared/utils/welcome-note'
 import { getUniqueFilenameBy } from '@/shared/utils/note-filename'
 import { buildNotePath } from '@/shared/utils/note-path'
-import { buildNoteFileContent } from '@/shared/utils/frontmatter'
+import { composeNoteFile } from '@/shared/utils/note-file-content'
 
 import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
 import { STORAGE_BOOLEAN } from '@/shared/constants/storage-values'
@@ -24,7 +24,7 @@ export function useWelcomeNote() {
         const { title, content } = getWelcomeNote()
         const filename = getUniqueFilenameBy((name) => fileExists(uri, name), title, null)
 
-        writeNoteFile(uri, filename, buildNoteFileContent({ tags: [] }, content))
+        writeNoteFile(uri, filename, composeNoteFile({ tags: [] }, content))
 
         return buildNotePath(repositoryId, filename)
     }, [
