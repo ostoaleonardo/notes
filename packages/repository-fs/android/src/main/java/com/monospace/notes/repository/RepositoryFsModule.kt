@@ -20,7 +20,10 @@ import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import java.io.File
 import uniffi.engine.Engine
+import uniffi.engine.LinkNoteRecord
 import uniffi.engine.NoteFieldsRecord
+import uniffi.engine.findBacklinkPaths
+import uniffi.engine.renameLinksInBodies
 import uniffi.engine.SaveRequestRecord
 import uniffi.engine.composeNote
 import uniffi.engine.decomposeNote
@@ -151,6 +154,22 @@ class RepositoryFsModule : Module() {
     AsyncFunction("deleteNote") Coroutine { repositoryId: String, directoryUri: String, filename: String ->
       withContext(Dispatchers.IO) {
         engine().deleteNote(repositoryId, noteSinkFor(context, directoryUri), filename)
+      }
+    }
+
+    AsyncFunction("findBacklinkPaths") Coroutine { titles: List<String>, aliases: List<List<String>>, paths: List<String>, folders: Map<String, String>, targetPath: String, candidatePaths: List<String>, candidateBodies: List<String> ->
+      withContext(Dispatchers.Default) {
+        val notes = paths.indices.map { LinkNoteRecord(paths[it], titles[it], aliases[it]) }
+
+        findBacklinkPaths(notes, folders, targetPath, candidatePaths, candidateBodies)
+      }
+    }
+
+    AsyncFunction("renameLinksInBodies") Coroutine { titles: List<String>, aliases: List<List<String>>, paths: List<String>, folders: Map<String, String>, resolveFolders: Map<String, String>?, targetPath: String, newTitle: String, bodies: List<String> ->
+      withContext(Dispatchers.Default) {
+        val notes = paths.indices.map { LinkNoteRecord(paths[it], titles[it], aliases[it]) }
+
+        renameLinksInBodies(notes, folders, resolveFolders, targetPath, newTitle, bodies)
       }
     }
 

@@ -1,4 +1,4 @@
-use engine::links::{FolderPaths, LinkNote, NoteIndex, rename_links};
+use engine::links::{Candidate, FolderPaths, LinkNote, NoteIndex, find_backlinks, rename_links};
 use serde_json::Value;
 use std::fs;
 use std::path::PathBuf;
@@ -108,5 +108,67 @@ fn check_renames(data: &Fixture) {
 			case["moved"].as_str().unwrap(),
 			"moved rename of {content:?}"
 		);
+	}
+}
+
+#[test]
+fn finds_backlinks_like_the_javascript_verifier() {
+	let whole = fixture(None);
+	let data = fixture(Some("random"));
+	let index = NoteIndex::new(&data.notes);
+	let bodies = whole.raw["backlinks"]["bodies"].as_object().unwrap();
+
+	let candidates: Vec<Candidate<'_>> = data
+		.notes
+		.iter()
+		.map(|note| Candidate {
+			path: note.path.as_str(),
+			body: bodies[&note.path].as_str().unwrap(),
+		})
+		.collect();
+
+	for case in whole.raw["backlinks"]["results"].as_array().unwrap() {
+		let target = case["target"].as_str().unwrap();
+		let expected: Vec<&str> = case["found"]
+			.as_array()
+			.unwrap()
+			.iter()
+			.map(|path| path.as_str().unwrap())
+			.collect();
+
+		assert_eq!(
+			find_backlinks(target, &index, &data.folders, &candidates),
+			expected,
+			"backlinks of {target}"
+		);
+	}
+}
+
+#[test]
+fn scans_wiki_targets_like_the_regular_expression() {
+	use engine::links::wiki_targets;
+	use regex::Regex;
+
+	let pattern = Regex::new(r"\[\[([^\]|]+)(?:\|([^\]]+))?\]\]").unwrap();
+	let alphabet = ['[', ']', '|', 'a', ' ', '#', 'é'];
+	let mut state: u64 = 7;
+	let mut next = || {
+		state = state
+			.wrapping_mul(6364136223846793005)
+			.wrapping_add(1442695040888963407);
+		(state >> 33) as usize
+	};
+
+	for _ in 0..20000 {
+		let length = next() % 14;
+		let text: String = (0..length)
+			.map(|_| alphabet[next() % alphabet.len()])
+			.collect();
+		let expected: Vec<&str> = pattern
+			.captures_iter(&text)
+			.map(|captures| captures.get(1).unwrap().as_str())
+			.collect();
+
+		assert_eq!(wiki_targets(&text), expected, "text {text:?}");
 	}
 }

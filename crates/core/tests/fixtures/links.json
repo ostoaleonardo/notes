@@ -1,4 +1,136 @@
 {
+	"backlinks": {
+		"bodies": {
+			"n0::File 0.md": "[[A/B#Sec 1]] [[ Roadmap #Sec 1]] [[Home/Ünï]] [[ÜNÏ#]] [[ Ünï #Sec 1]]",
+			"n1::File 1.md": "[[Dup#]] [[PLAN#Top]] [[a/b/CAFÉ#]] [[Work/A/AÑO#Top]] [label](wikilink://n11::File 11.md)",
+			"n2::File 2.md": "[[CAFÉ#Top]] [[Café]] [[IDEAS]] [label](wikilink://n2::File 2.md) [label](wikilink://n1::File 1.md)",
+			"n3::File 3.md": "[[PLAN#Sec 1]] [label](wikilink://n10::File 10.md) [[Q#1#]] [label](wikilink://n12::File 12.md) [label](wikilink://n1::File 1.md)",
+			"n4::File 4.md": "[[Café]] [[#]] [[Ünï#Top]] [[Home/Año#]] [label](wikilink://n9::File 9.md)",
+			"n5::File 5.md": "[[ Ideas #]] [[#Top]] [[Work/ÜNÏ]] [[Home/ROADMAP#Sec 1]] [[ Q#1 #Top]]",
+			"n6::File 6.md": "[[ Q#1 #]] [label](wikilink://n1::File 1.md) [[Home/ Plan ]] [[]] [label](wikilink://n7::File 7.md)",
+			"n7::File 7.md": "[[CAFÉ#Top]] [[Home/Café#Sec 1]] [[Work/B/Café#Sec 1]] [label](wikilink://n13::File 13.md) [[Café]]",
+			"n8::File 8.md": "[[CAFÉ]] [[Work/A/Plan#Top]] [[ Año ]] [[IDEAS#]] [[A/B#Sec 1]]",
+			"n9::File 9.md": "[[AÑO#Sec 1]] [[Plan]] [[Ideas]] [label](wikilink://n12::File 12.md) [[Work/B/Ünï#Top]]",
+			"n10::File 10.md": "[[Año#]] [[X y Z]] [[ Q#1 #Top]] [[IDEAS#Top]] [[IDEAS#]]",
+			"n11::File 11.md": "[[Work/plan]] [[ Ünï #Top]] [[ Café ]] [[plan]] [[a/b/Ideas#]]",
+			"n12::File 12.md": "[[DUP]] [[IDEAS]] [[]] [[a/b#Sec 1]] [[Ünï#]]",
+			"n13::File 13.md": "[[Work/A/Año]] [label](wikilink://n5::File 5.md) [label](wikilink://n3::File 3.md) [[Q#1#Top]] [[ Dup #Sec 1]]"
+		},
+		"results": [
+			{
+				"target": "n0::File 0.md",
+				"found": [
+					"n1::File 1.md",
+					"n5::File 5.md",
+					"n12::File 12.md",
+					"n13::File 13.md"
+				]
+			},
+			{
+				"target": "n1::File 1.md",
+				"found": [
+					"n2::File 2.md",
+					"n3::File 3.md",
+					"n5::File 5.md",
+					"n6::File 6.md",
+					"n8::File 8.md",
+					"n9::File 9.md",
+					"n10::File 10.md",
+					"n11::File 11.md",
+					"n12::File 12.md"
+				]
+			},
+			{
+				"target": "n2::File 2.md",
+				"found": []
+			},
+			{
+				"target": "n3::File 3.md",
+				"found": [
+					"n13::File 13.md"
+				]
+			},
+			{
+				"target": "n4::File 4.md",
+				"found": [
+					"n1::File 1.md",
+					"n2::File 2.md",
+					"n7::File 7.md",
+					"n8::File 8.md",
+					"n11::File 11.md"
+				]
+			},
+			{
+				"target": "n5::File 5.md",
+				"found": [
+					"n13::File 13.md"
+				]
+			},
+			{
+				"target": "n6::File 6.md",
+				"found": [
+					"n0::File 0.md",
+					"n4::File 4.md",
+					"n5::File 5.md",
+					"n9::File 9.md",
+					"n11::File 11.md",
+					"n12::File 12.md"
+				]
+			},
+			{
+				"target": "n7::File 7.md",
+				"found": [
+					"n6::File 6.md"
+				]
+			},
+			{
+				"target": "n8::File 8.md",
+				"found": []
+			},
+			{
+				"target": "n9::File 9.md",
+				"found": [
+					"n1::File 1.md",
+					"n3::File 3.md",
+					"n4::File 4.md",
+					"n6::File 6.md",
+					"n8::File 8.md",
+					"n11::File 11.md"
+				]
+			},
+			{
+				"target": "n10::File 10.md",
+				"found": [
+					"n1::File 1.md",
+					"n3::File 3.md",
+					"n4::File 4.md",
+					"n8::File 8.md",
+					"n9::File 9.md",
+					"n13::File 13.md"
+				]
+			},
+			{
+				"target": "n11::File 11.md",
+				"found": [
+					"n1::File 1.md"
+				]
+			},
+			{
+				"target": "n12::File 12.md",
+				"found": [
+					"n3::File 3.md",
+					"n9::File 9.md",
+					"n10::File 10.md"
+				]
+			},
+			{
+				"target": "n13::File 13.md",
+				"found": [
+					"n7::File 7.md"
+				]
+			}
+		]
+	},
 	"random": {
 		"notes": [
 			{

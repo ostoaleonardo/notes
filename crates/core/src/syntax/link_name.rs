@@ -25,6 +25,10 @@ fn title_of(text: &str) -> &str {
 }
 
 pub fn normalize(text: &str) -> String {
+	if text.is_ascii() {
+		return text.trim().to_ascii_lowercase();
+	}
+
 	ComposingNormalizerBorrowed::new_nfc()
 		.normalize(text)
 		.trim()

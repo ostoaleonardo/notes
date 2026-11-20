@@ -1,5 +1,6 @@
 uniffi::setup_scaffolding!("engine");
 
+mod links;
 mod records;
 mod source;
 

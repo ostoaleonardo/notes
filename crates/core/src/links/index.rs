@@ -102,6 +102,21 @@ impl<'a> NoteIndex<'a> {
 			.or_else(|| candidates.first().copied())
 	}
 
+	pub fn locate(&self, link_text: &str, folders: &FolderPaths) -> Option<usize> {
+		if let Some(note) = self.find(link_text, folders) {
+			return Some(note);
+		}
+
+		let split = link_text.find(ANCHOR_SEPARATOR)?;
+		let target = &link_text[..split];
+
+		if target.trim().is_empty() {
+			return None;
+		}
+
+		self.find(target, folders)
+	}
+
 	pub fn resolve(
 		&self,
 		link_text: &str,
