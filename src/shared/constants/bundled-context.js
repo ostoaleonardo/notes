@@ -1,1 +1,1 @@
-export const bundledContent = require.context('../content', true, /\.md$/)
+export const bundledContent = require.context('../../content', true, /\.md$/)
