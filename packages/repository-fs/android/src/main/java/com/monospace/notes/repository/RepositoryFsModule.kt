@@ -291,8 +291,9 @@ private fun granted(info: PackageInfo): List<String> {
   return names.filterIndexed { index, _ -> flags[index] and PackageInfo.REQUESTED_PERMISSION_GRANTED != 0 }
 }
 
-private fun hasDirectAccess(): Boolean =
+internal var hasDirectAccess: () -> Boolean = {
   Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()
+}
 
 internal fun documentIdOf(context: Context, uri: Uri): String = if (DocumentsContract.isDocumentUri(context, uri)) {
   DocumentsContract.getDocumentId(uri)
