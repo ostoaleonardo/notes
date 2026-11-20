@@ -15,10 +15,10 @@ export const deleteNoteFiles = async (behavior, location, fileStorage) => {
         const folder = fileStorage.getOrCreateVaultTrashFolder(rootUri)
         const target = await fileStorage.moveNoteFiles(uri, filename, folder.uri)
 
-        fileStorage.deleteVersions(rootUri, key)
+        await fileStorage.deleteVersions(rootUri, key)
         return target
     }
 
     fileStorage.deleteNoteFile(uri, filename)
-    fileStorage.deleteVersions(rootUri, key)
+    await fileStorage.deleteVersions(rootUri, key)
 }

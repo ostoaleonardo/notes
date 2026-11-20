@@ -76,7 +76,7 @@ export function useDevMenu() {
 
     const resetApp = async () => {
         if (activeRepository) {
-            clearRepository(activeRepository.uri, getVersionLocation(repositories, activeRepository.id))
+            await clearRepository(activeRepository.uri, getVersionLocation(repositories, activeRepository.id))
             deleteDirectory(getOrCreateTemplatesFolder(activeRepository.uri).uri)
             deleteDirectory(getOrCreateNotesFolder(activeRepository.uri).uri)
         }

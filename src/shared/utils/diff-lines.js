@@ -4,7 +4,7 @@ export const diffLines = (oldText, newText) => (
     diffLineArrays((oldText || '').split('\n'), (newText || '').split('\n'))
 )
 
-export const diffLineArrays = (oldLines, newLines) => {
+const diffLineArrays = (oldLines, newLines) => {
     const m = oldLines.length
     const n = newLines.length
 

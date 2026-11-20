@@ -155,3 +155,162 @@ fn times_a_delta_of_a_six_hundred_line_note() {
 
 	println!("delta {:?} hunks {}", start.elapsed(), delta.len());
 }
+
+mod vault {
+	use engine::vault::FsVault;
+	use engine::versions::VersionVault;
+	use serde_json::Value;
+	use std::fs;
+	use std::sync::Arc;
+	use tempfile::TempDir;
+
+	const MAX: usize = 200;
+
+	fn setup() -> (TempDir, Arc<FsVault>) {
+		let directory = TempDir::new().unwrap();
+		let vault = Arc::new(FsVault::new(directory.path()));
+
+		(directory, vault)
+	}
+
+	fn commit(versions: &VersionVault, key: &str, title: &str, content: &str, id: &str) -> bool {
+		versions.commit(key, title, content, id, 1, MAX).unwrap()
+	}
+
+	fn names(directory: &TempDir) -> Vec<String> {
+		let mut found: Vec<String> = fs::read_dir(directory.path().join(".notes"))
+			.map(|entries| {
+				entries
+					.map(|entry| entry.unwrap().file_name().into_string().unwrap())
+					.collect()
+			})
+			.unwrap_or_default();
+
+		found.sort();
+		found
+	}
+
+	#[test]
+	fn names_files_like_encode_uri_component() {
+		let (directory, vault) = setup();
+		let versions = VersionVault::new(vault);
+
+		for case in super::fixture()["filenames"].as_array().unwrap() {
+			let key = case["key"].as_str().unwrap();
+
+			versions.write(key, "[]").unwrap();
+
+			let expected = format!("{}.versions.json", case["encoded"].as_str().unwrap());
+
+			assert!(names(&directory).contains(&expected), "file for {key:?}");
+		}
+	}
+
+	#[test]
+	fn commits_and_reads_versions_back() {
+		let (_directory, vault) = setup();
+		let versions = VersionVault::new(vault);
+
+		assert!(commit(&versions, "Folder/Note.md", "T", "one", "a"));
+		assert!(!commit(&versions, "Folder/Note.md", "T", "one", "b"));
+		assert!(commit(&versions, "Folder/Note.md", "T", "one\ntwo", "c"));
+
+		let store: Value =
+			serde_json::from_str(&versions.read("Folder/Note.md").unwrap().unwrap()).unwrap();
+
+		assert_eq!(store["head"], "one\ntwo");
+		assert_eq!(store["entries"].as_array().unwrap().len(), 2);
+	}
+
+	#[test]
+	fn renames_a_store_and_ignores_missing_or_empty_ones() {
+		let (directory, vault) = setup();
+		let versions = VersionVault::new(vault);
+
+		commit(&versions, "Old.md", "T", "text", "a");
+		versions.rename("Old.md", "New.md").unwrap();
+		versions.rename("Missing.md", "Other.md").unwrap();
+		versions
+			.write("Empty.md", r#"{"head":"","entries":[]}"#)
+			.unwrap();
+		versions.rename("Empty.md", "Moved.md").unwrap();
+
+		let found = names(&directory);
+
+		assert!(found.contains(&"New.md.versions.json".to_string()));
+		assert!(!found.contains(&"Old.md.versions.json".to_string()));
+		assert!(!found.contains(&"Other.md.versions.json".to_string()));
+		assert!(found.contains(&"Empty.md.versions.json".to_string()));
+		assert!(!found.contains(&"Moved.md.versions.json".to_string()));
+	}
+
+	#[test]
+	fn renames_and_deletes_every_store_under_a_folder_prefix() {
+		let (directory, vault) = setup();
+		let versions = VersionVault::new(vault);
+
+		commit(&versions, "Work/A.md", "T", "a", "1");
+		commit(&versions, "Work/Sub/B.md", "T", "b", "2");
+		commit(&versions, "Workshop/C.md", "T", "c", "3");
+		commit(&versions, "Año/D.md", "T", "d", "4");
+
+		versions.rename_under("Work", "Job").unwrap();
+		versions.rename_under("Año", "Year").unwrap();
+
+		let found = names(&directory);
+
+		assert!(found.contains(&"Job%2FA.md.versions.json".to_string()));
+		assert!(found.contains(&"Job%2FSub%2FB.md.versions.json".to_string()));
+		assert!(found.contains(&"Workshop%2FC.md.versions.json".to_string()));
+		assert!(found.contains(&"Year%2FD.md.versions.json".to_string()));
+
+		versions.delete_under("Job").unwrap();
+
+		let remaining = names(&directory);
+
+		assert!(!remaining.iter().any(|name| name.starts_with("Job")));
+		assert!(remaining.contains(&"Workshop%2FC.md.versions.json".to_string()));
+	}
+
+	#[test]
+	fn keeps_a_copy_of_a_corrupt_store_and_starts_over() {
+		let (directory, vault) = setup();
+		let versions = VersionVault::new(vault);
+
+		fs::create_dir_all(directory.path().join(".notes")).unwrap();
+		fs::write(
+			directory.path().join(".notes/Bad.md.versions.json"),
+			"{ nope",
+		)
+		.unwrap();
+
+		assert!(versions.read("Bad.md").unwrap().is_none());
+		assert!(names(&directory).contains(&"Bad.md.versions.json.corrupt".to_string()));
+		assert!(commit(&versions, "Bad.md", "T", "fresh", "a"));
+	}
+
+	#[test]
+	fn moves_legacy_store_files_into_the_notes_folder() {
+		let (directory, vault) = setup();
+		let versions = VersionVault::new(vault);
+
+		fs::create_dir_all(directory.path().join("Folder")).unwrap();
+		fs::write(
+			directory.path().join("Folder/Old.md.versions.json"),
+			r#"[{"id":"a","title":"T","createdAt":1,"content":"x"}]"#,
+		)
+		.unwrap();
+		fs::write(directory.path().join("Folder/Note.md"), "body").unwrap();
+
+		versions.migrate_legacy("Folder", "Folder").unwrap();
+
+		assert!(
+			!directory
+				.path()
+				.join("Folder/Old.md.versions.json")
+				.exists()
+		);
+		assert!(directory.path().join("Folder/Note.md").exists());
+		assert!(names(&directory).contains(&"Folder%2FOld.md.versions.json".to_string()));
+	}
+}

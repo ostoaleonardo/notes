@@ -21,8 +21,8 @@ import expo.modules.kotlin.modules.ModuleDefinition
 import java.io.File
 import uniffi.engine.Engine
 import uniffi.engine.LinkNoteRecord
+import uniffi.engine.VersionsHandle
 import uniffi.engine.NoteFieldsRecord
-import uniffi.engine.buildLineDeltaJson
 import uniffi.engine.findBacklinkPaths
 import uniffi.engine.renameLinksInBodies
 import uniffi.engine.SaveRequestRecord
@@ -47,6 +47,11 @@ class RepositoryFsModule : Module() {
   private val indexLock = Mutex()
   private val engineLock = Any()
   private var sharedEngine: Engine? = null
+
+  private val versionStores = java.util.concurrent.ConcurrentHashMap<String, VersionsHandle>()
+
+  private fun versionsFor(rootUri: String): VersionsHandle =
+    versionStores.getOrPut("$rootUri#${hasDirectAccess()}") { VersionsHandle(vaultFor(context, rootUri)) }
 
   private fun engine(): Engine = synchronized(engineLock) {
     sharedEngine ?: openEngine(context).also { sharedEngine = it }
@@ -174,7 +179,37 @@ class RepositoryFsModule : Module() {
       }
     }
 
-    Function("buildLineDelta") { from: String, to: String -> buildLineDeltaJson(from, to) }
+    AsyncFunction("versionsRead") Coroutine { rootUri: String, key: String ->
+      withContext(Dispatchers.IO) { versionsFor(rootUri).read(key) }
+    }
+
+    AsyncFunction("versionsWrite") Coroutine { rootUri: String, key: String, json: String ->
+      withContext(Dispatchers.IO) { versionsFor(rootUri).write(key, json) }
+    }
+
+    AsyncFunction("versionsDelete") Coroutine { rootUri: String, key: String ->
+      withContext(Dispatchers.IO) { versionsFor(rootUri).delete(key) }
+    }
+
+    AsyncFunction("versionsCommit") Coroutine { rootUri: String, key: String, title: String, content: String, id: String, createdAt: Double, maxVersions: Int ->
+      withContext(Dispatchers.IO) { versionsFor(rootUri).commit(key, title, content, id, createdAt.toLong(), maxVersions.toUInt()) }
+    }
+
+    AsyncFunction("versionsRename") Coroutine { rootUri: String, oldKey: String, newKey: String ->
+      withContext(Dispatchers.IO) { versionsFor(rootUri).rename(oldKey, newKey) }
+    }
+
+    AsyncFunction("versionsRenameUnder") Coroutine { rootUri: String, oldPrefix: String, newPrefix: String ->
+      withContext(Dispatchers.IO) { versionsFor(rootUri).renameUnder(oldPrefix, newPrefix) }
+    }
+
+    AsyncFunction("versionsDeleteUnder") Coroutine { rootUri: String, prefix: String ->
+      withContext(Dispatchers.IO) { versionsFor(rootUri).deleteUnder(prefix) }
+    }
+
+    AsyncFunction("versionsMigrateLegacy") Coroutine { rootUri: String, folderPath: String ->
+      withContext(Dispatchers.IO) { versionsFor(rootUri).migrateLegacy(folderPath, folderPath) }
+    }
 
     Function("composeNote") { tags: List<String>, propertiesJson: String, invalidFrontmatter: String?, rawFrontmatter: String?, body: String ->
       composeNote(NoteFieldsRecord(tags, propertiesJson, invalidFrontmatter, rawFrontmatter), body)

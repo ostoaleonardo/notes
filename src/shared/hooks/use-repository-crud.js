@@ -261,7 +261,7 @@ export function useRepositoryCrud({
             await removeRepositoriesFromList([id, ...descendantIds])
 
             deleteDirectory(repository.uri)
-            if (repository.parentId) deleteVersionsUnder(getRootRepository(repository).uri, path)
+            if (repository.parentId) await deleteVersionsUnder(getRootRepository(repository).uri, path)
 
             return repository
         })

@@ -1,39 +1,22 @@
-import { applyLineDelta, buildLineDelta } from '../line-delta'
+import { applyLineDelta } from '../line-delta'
 
-import { VERSION_DIFF_MAX_CELLS } from '@/shared/constants/default-values'
-
-const roundTrip = (from, to) => applyLineDelta(to, buildLineDelta(to, from))
-
-describe('line delta', () => {
-    test('is empty when both texts are equal', () => {
-        expect(buildLineDelta('a\nb', 'a\nb')).toEqual([])
+describe('apply line delta', () => {
+    test('returns the text untouched for an empty delta', () => {
+        expect(applyLineDelta('a\nb', [])).toBe('a\nb')
     })
 
-    test('recovers the original text from the new one', () => {
-        expect(roundTrip('a\nb\nc', 'a\nB\nc\nd')).toBe('a\nb\nc')
+    test('replaces the lines of a hunk', () => {
+        expect(applyLineDelta('a\nb\nc\nd', [{ at: 1, remove: 1, insert: ['B'] }])).toBe('a\nB\nc\nd')
     })
 
-    test('handles insertions at the start and deletions at the end', () => {
-        expect(roundTrip('b\nc\nd', 'a\nb\nc')).toBe('b\nc\nd')
+    test('inserts at the start and removes at the end', () => {
+        const delta = [{ at: 0, remove: 0, insert: ['a'] }, { at: 2, remove: 1, insert: [] }]
+
+        expect(applyLineDelta('b\nc\nd', delta)).toBe('a\nb\nc')
     })
 
     test('handles an empty text on either side', () => {
-        expect(roundTrip('', 'a\nb')).toBe('')
-        expect(roundTrip('a\nb', '')).toBe('a\nb')
-    })
-
-    test('stores only the changed lines', () => {
-        const delta = buildLineDelta('a\nb\nc\nd', 'a\nB\nc\nd')
-
-        expect(delta).toEqual([{ at: 1, remove: 1, insert: ['B'] }])
-    })
-
-    test('falls back to a single replace hunk for very large changes', () => {
-        const size = Math.ceil(Math.sqrt(VERSION_DIFF_MAX_CELLS)) + 1
-        const from = Array.from({ length: size }, (_, i) => `a${i}`).join('\n')
-        const to = Array.from({ length: size }, (_, i) => `b${i}`).join('\n')
-
-        expect(buildLineDelta(from, to)).toHaveLength(1)
-        expect(roundTrip(from, to)).toBe(from)
+        expect(applyLineDelta('', [{ at: 0, remove: 1, insert: ['a', 'b'] }])).toBe('a\nb')
+        expect(applyLineDelta('a\nb', [{ at: 0, remove: 2, insert: [''] }])).toBe('')
     })
 })

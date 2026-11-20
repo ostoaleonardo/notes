@@ -31,6 +31,14 @@ jest.mock('repository-fs', () => {
                 }
             },
             readTextFiles,
+            versionsRead: jest.fn(async () => null),
+            versionsWrite: jest.fn(async () => {}),
+            versionsDelete: jest.fn(async () => {}),
+            versionsCommit: jest.fn(async () => true),
+            versionsRename: jest.fn(async () => {}),
+            versionsRenameUnder: jest.fn(async () => {}),
+            versionsDeleteUnder: jest.fn(async () => {}),
+            versionsMigrateLegacy: jest.fn(async () => {}),
             composeNote: (tags, propertiesJson, invalidFrontmatter, rawFrontmatter, body) => {
                 const { buildNoteFileContent } = require('@/shared/utils/frontmatter')
 

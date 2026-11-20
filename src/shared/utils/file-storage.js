@@ -1,3 +1,4 @@
+import { randomUUID } from 'expo-crypto'
 import { Directory, File, FileMode, Paths } from 'expo-file-system'
 
 import RepositoryFs from 'repository-fs'
@@ -11,7 +12,6 @@ import { readFileText } from '@/shared/utils/read-file-text'
 
 import {
     NOTE_FILE_EXTENSION,
-    VERSIONS_FILENAME_SUFFIX,
     TEMPLATES_FOLDER_NAME,
     IMAGES_FOLDER_NAME,
     VAULT_TRASH_FOLDER_NAME,
@@ -22,6 +22,7 @@ import {
     REPOSITORY_INDEX_FOLDER_NAME,
     REPOSITORY_INDEX_VERSION
 } from '@/shared/constants/file-storage'
+import { MAX_STORED_VERSIONS } from '@/shared/constants/default-values'
 import { MIME_TYPES } from '@/shared/constants/mime-types'
 import { SAVE_CONFLICT_ERROR, SAVE_STATUS } from '@/shared/constants/note-errors'
 import { LOG_MESSAGES } from '@/shared/constants/log-messages'
@@ -309,65 +310,40 @@ const deleteNotesFile = (rootUri, filename) => {
     if (folder) deleteNoteFile(folder.uri, filename)
 }
 
-const getVersionsFilename = (key) => encodeURIComponent(key) + VERSIONS_FILENAME_SUFFIX
+const readVersions = async (rootUri, key) => {
+    const raw = await RepositoryFs.versionsRead(rootUri, key)
 
-const readVersions = (rootUri, key) => readNotesJson(rootUri, getVersionsFilename(key), [])
-const writeVersions = (rootUri, key, versions) => writeNotesJson(rootUri, getVersionsFilename(key), versions)
-const deleteVersions = (rootUri, key) => deleteNotesFile(rootUri, getVersionsFilename(key))
+    return raw ? JSON.parse(raw) : []
+}
 
-const clearRepository = (directoryUri, { rootUri, folderPath }) => {
-    listMarkdownFiles(directoryUri).forEach((file) => {
+const writeVersions = (rootUri, key, versions) => (
+    RepositoryFs.versionsWrite(rootUri, key, JSON.stringify(versions))
+)
+
+const deleteVersions = (rootUri, key) => RepositoryFs.versionsDelete(rootUri, key)
+
+const commitVersion = (rootUri, key, title, content) => (
+    RepositoryFs.versionsCommit(rootUri, key, title, content, randomUUID(), Date.now(), MAX_STORED_VERSIONS)
+)
+
+const renameVersions = (rootUri, oldKey, newKey) => RepositoryFs.versionsRename(rootUri, oldKey, newKey)
+
+const renameVersionsUnder = (rootUri, oldPrefix, newPrefix) => (
+    RepositoryFs.versionsRenameUnder(rootUri, oldPrefix, newPrefix)
+)
+
+const deleteVersionsUnder = (rootUri, prefix) => RepositoryFs.versionsDeleteUnder(rootUri, prefix)
+
+const clearRepository = async (directoryUri, { rootUri, folderPath }) => {
+    for (const file of listMarkdownFiles(directoryUri)) {
         new File(file.uri).delete()
-        deleteVersions(rootUri, buildVersionKey(folderPath, file.name))
-    })
-}
-
-const renameVersions = async (rootUri, oldKey, newKey) => {
-    const versions = await readVersions(rootUri, oldKey)
-    if (Array.isArray(versions) ? !versions.length : !versions.entries?.length) return
-
-    writeVersions(rootUri, newKey, versions)
-    deleteVersions(rootUri, oldKey)
-}
-
-const listVersionsUnder = (rootUri, prefix) => {
-    const folder = findDirectory(rootUri, NOTES_FOLDER_NAME)
-    if (!folder) return []
-
-    const encodedPrefix = encodeURIComponent(prefix + '/')
-
-    return listEntries(folder.uri)
-        .filter((entry) => (
-            !entry.isDirectory &&
-            entry.name.startsWith(encodedPrefix) &&
-            entry.name.endsWith(VERSIONS_FILENAME_SUFFIX)
-        ))
-        .map((entry) => decodeURIComponent(entry.name.slice(0, -VERSIONS_FILENAME_SUFFIX.length)))
-}
-
-const renameVersionsUnder = async (rootUri, oldPrefix, newPrefix) => {
-    for (const key of listVersionsUnder(rootUri, oldPrefix)) {
-        await renameVersions(rootUri, key, newPrefix + key.slice(oldPrefix.length))
+        await deleteVersions(rootUri, buildVersionKey(folderPath, file.name))
     }
 }
 
-const deleteVersionsUnder = (rootUri, prefix) => {
-    listVersionsUnder(rootUri, prefix).forEach((key) => deleteVersions(rootUri, key))
-}
-
-const migrateLegacyVersions = async (folderUri, rootUri, folderPath) => {
-    const legacyFiles = (await scanEntries(folderUri)).filter((entry) => (
-        !entry.isDirectory && entry.name.endsWith(VERSIONS_FILENAME_SUFFIX)
-    ))
-
-    for (const file of legacyFiles) {
-        const filename = file.name.slice(0, -VERSIONS_FILENAME_SUFFIX.length)
-        const versions = await readJson(folderUri, file.name, null)
-
-        if (versions) writeVersions(rootUri, buildVersionKey(folderPath, filename), versions)
-        new File(file.uri).delete()
-    }
-}
+const migrateLegacyVersions = (folderUri, rootUri, folderPath) => (
+    RepositoryFs.versionsMigrateLegacy(rootUri, folderPath)
+)
 
 const getRepositoryIndexFile = (repositoryId) => (
     new File(Paths.document, REPOSITORY_INDEX_FOLDER_NAME, `${repositoryId}.json`)
@@ -472,6 +448,7 @@ export const fileStorage = {
     renameDirectory,
     readVersions,
     writeVersions,
+    commitVersion,
     deleteVersions,
     renameVersions,
     renameVersionsUnder,

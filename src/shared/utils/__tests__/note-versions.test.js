@@ -1,15 +1,8 @@
-import { randomUUID } from 'expo-crypto'
-
-import { MAX_STORED_VERSIONS } from '@/shared/constants/default-values'
-
 import {
     commitNoteVersion,
     loadNoteVersions,
-    packVersions,
     unpackVersions
 } from '../note-versions'
-
-jest.mock('expo-crypto', () => ({ randomUUID: jest.fn() }))
 
 const FILENAME = 'note-1.md'
 const LOCATION = {
@@ -21,8 +14,7 @@ const KEY = `${LOCATION.rootUri}|sub/${FILENAME}`
 
 const createFakeFileStorage = (seed = new Map(), existing = true) => ({
     findFile: () => existing,
-    readVersions: async (rootUri, key) => seed.get(`${rootUri}|${key}`) || [],
-    writeVersions: (rootUri, key, versions) => { seed.set(`${rootUri}|${key}`, versions) }
+    readVersions: async (rootUri, key) => seed.get(`${rootUri}|${key}`) || []
 })
 
 const legacyVersion = (id, content, title = 'Note') => ({
@@ -32,39 +24,34 @@ const legacyVersion = (id, content, title = 'Note') => ({
     createdAt: 1
 })
 
-beforeEach(() => {
-    let counter = 0
-    randomUUID.mockImplementation(() => `uuid-${++counter}`)
-})
-
-describe('pack and unpack versions', () => {
-    const versions = [
-        legacyVersion('v1', 'a\nb\nc'),
-        legacyVersion('v2', 'a\nB\nc\nd'),
-        legacyVersion('v3', 'a\nB\nd')
+const DELTA_STORE = {
+    head: 'three',
+    entries: [
+        { id: 'v1', title: 'Note', createdAt: 1, delta: [{ at: 0, remove: 1, insert: ['one'] }] },
+        { id: 'v2', title: 'Note', createdAt: 1, delta: [{ at: 0, remove: 1, insert: ['two'] }] },
+        { id: 'v3', title: 'Note', createdAt: 1, delta: null }
     ]
+}
 
-    test('restores every snapshot from the packed store', () => {
-        expect(unpackVersions(packVersions(versions))).toEqual(versions)
+describe('unpack versions', () => {
+    test('restores every snapshot from the delta store', () => {
+        const contents = unpackVersions(DELTA_STORE).map((version) => version.content)
+
+        expect(contents).toEqual(['one', 'two', 'three'])
     })
 
     test('keeps only the newest versions when a limit is given', () => {
-        expect(unpackVersions(packVersions(versions), 2)).toEqual(versions.slice(1))
+        expect(unpackVersions(DELTA_STORE, 2).map((version) => version.id)).toEqual(['v2', 'v3'])
     })
 
     test('limits a legacy snapshot array the same way', () => {
+        const versions = [legacyVersion('v1', 'a'), legacyVersion('v2', 'b'), legacyVersion('v3', 'c')]
+
         expect(unpackVersions(versions, 1)).toEqual(versions.slice(2))
     })
 
-    test('packs an empty history into an empty store', () => {
-        expect(unpackVersions(packVersions([]))).toEqual([])
-    })
-
-    test('stores only the head content as a full snapshot', () => {
-        const store = packVersions(versions)
-
-        expect(store.head).toBe('a\nB\nd')
-        expect(store.entries.every((entry) => !('content' in entry))).toBe(true)
+    test('unpacks an empty store into an empty list', () => {
+        expect(unpackVersions({ head: '', entries: [] })).toEqual([])
     })
 })
 
@@ -85,12 +72,7 @@ describe('load note versions', () => {
     })
 
     test('applies the limit to a delta store', async () => {
-        const seeded = packVersions([
-            legacyVersion('v1', 'one'),
-            legacyVersion('v2', 'two'),
-            legacyVersion('v3', 'three')
-        ])
-        const fileStorage = createFakeFileStorage(new Map([[KEY, seeded]]))
+        const fileStorage = createFakeFileStorage(new Map([[KEY, DELTA_STORE]]))
 
         const versions = await loadNoteVersions(fileStorage, LOCATION, FILENAME, 2)
 
@@ -99,86 +81,21 @@ describe('load note versions', () => {
 })
 
 describe('commit note version', () => {
-    test('stores the first version as the head', async () => {
-        const seed = new Map()
+    test('delegates the commit to the file storage with the version key', async () => {
+        const commitVersion = jest.fn(async () => true)
+        const fileStorage = { findFile: () => true, commitVersion }
 
-        const committed = await commitNoteVersion(
-            createFakeFileStorage(seed),
-            LOCATION,
-            FILENAME,
-            'Note',
-            'hello'
-        )
+        const committed = await commitNoteVersion(fileStorage, LOCATION, FILENAME, 'Note', 'hello')
 
         expect(committed).toBe(true)
-        expect(seed.get(KEY)).toEqual({
-            head: 'hello',
-            entries: [
-                { id: 'uuid-1', title: 'Note', createdAt: expect.any(Number), delta: null }
-            ]
-        })
+        expect(commitVersion).toHaveBeenCalledWith(LOCATION.rootUri, `sub/${FILENAME}`, 'Note', 'hello')
     })
 
-    test('keeps every earlier snapshot recoverable after several commits', async () => {
-        const seed = new Map()
-        const fileStorage = createFakeFileStorage(seed)
-
-        await commitNoteVersion(fileStorage, LOCATION, FILENAME, 'Note', 'a\nb')
-        await commitNoteVersion(fileStorage, LOCATION, FILENAME, 'Note', 'a\nb\nc')
-        await commitNoteVersion(fileStorage, LOCATION, FILENAME, 'Note', 'x\nb\nc')
-
-        const versions = await loadNoteVersions(fileStorage, LOCATION, FILENAME)
-
-        expect(versions.map((version) => version.content)).toEqual([
-            'a\nb',
-            'a\nb\nc',
-            'x\nb\nc'
-        ])
-    })
-
-    test('does not add a version when title and content match the last one', async () => {
-        const seed = new Map([[KEY, packVersions([legacyVersion('v1', 'same')])]])
+    test('returns false without committing when the note file no longer exists', async () => {
+        const commitVersion = jest.fn()
 
         const committed = await commitNoteVersion(
-            createFakeFileStorage(seed),
-            LOCATION,
-            FILENAME,
-            'Note',
-            'same'
-        )
-
-        expect(committed).toBe(false)
-        expect(seed.get(KEY).entries).toHaveLength(1)
-    })
-
-    test('adds a version when only the title changed', async () => {
-        const seed = new Map([[KEY, packVersions([legacyVersion('v1', 'content', 'Old')])]])
-        const fileStorage = createFakeFileStorage(seed)
-
-        await commitNoteVersion(fileStorage, LOCATION, FILENAME, 'New', 'content')
-
-        const versions = await loadNoteVersions(fileStorage, LOCATION, FILENAME)
-
-        expect(versions.map((version) => version.title)).toEqual(['Old', 'New'])
-    })
-
-    test('upgrades a legacy snapshot array to a delta store on commit', async () => {
-        const seed = new Map([[KEY, [legacyVersion('v1', 'old')]]])
-        const fileStorage = createFakeFileStorage(seed)
-
-        await commitNoteVersion(fileStorage, LOCATION, FILENAME, 'Note', 'new')
-
-        expect(Array.isArray(seed.get(KEY))).toBe(false)
-        expect(
-            (await loadNoteVersions(fileStorage, LOCATION, FILENAME)).map((v) => v.content)
-        ).toEqual(['old', 'new'])
-    })
-
-    test('does not write a history file when the note no longer exists', async () => {
-        const seed = new Map()
-
-        const committed = await commitNoteVersion(
-            createFakeFileStorage(seed, false),
+            { findFile: () => undefined, commitVersion },
             LOCATION,
             FILENAME,
             'Note',
@@ -186,24 +103,6 @@ describe('commit note version', () => {
         )
 
         expect(committed).toBe(false)
-        expect(seed.size).toBe(0)
-    })
-})
-
-describe('version pruning', () => {
-    test('drops the oldest versions once the cap is exceeded', async () => {
-        const seed = new Map()
-        const fileStorage = createFakeFileStorage(seed)
-        const total = MAX_STORED_VERSIONS + 3
-
-        for (let index = 0; index < total; index++) {
-            await commitNoteVersion(fileStorage, LOCATION, FILENAME, 'Note', `line ${index}`)
-        }
-
-        const versions = await loadNoteVersions(fileStorage, LOCATION, FILENAME)
-
-        expect(versions).toHaveLength(MAX_STORED_VERSIONS)
-        expect(versions[0].content).toBe('line 3')
-        expect(versions[versions.length - 1].content).toBe(`line ${total - 1}`)
+        expect(commitVersion).not.toHaveBeenCalled()
     })
 })

@@ -1,7 +1,6 @@
 import { DEFAULT_ATTACHMENT_FOLDER } from './attachments'
 
 export const NOTE_FILE_EXTENSION = '.md'
-export const VERSIONS_FILENAME_SUFFIX = '.versions.json'
 export const CORRUPT_FILE_SUFFIX = '.corrupt'
 export const NOTE_PATH_SEPARATOR = '::'
 

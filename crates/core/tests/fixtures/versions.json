@@ -1,4 +1,50 @@
 {
+	"filenames": [
+		{
+			"key": "Note.md",
+			"encoded": "Note.md"
+		},
+		{
+			"key": "Folder 1/Note.md",
+			"encoded": "Folder%201%2FNote.md"
+		},
+		{
+			"key": "A/B/C/Año Nuevo.md",
+			"encoded": "A%2FB%2FC%2FA%C3%B1o%20Nuevo.md"
+		},
+		{
+			"key": "Café/x y z.md",
+			"encoded": "Caf%C3%A9%2Fx%20y%20z.md"
+		},
+		{
+			"key": "weird!~*'()-_.md",
+			"encoded": "weird!~*'()-_.md"
+		},
+		{
+			"key": "100% sure #1?.md",
+			"encoded": "100%25%20sure%20%231%3F.md"
+		},
+		{
+			"key": "a+b=c&d.md",
+			"encoded": "a%2Bb%3Dc%26d.md"
+		},
+		{
+			"key": "日本語/ノート.md",
+			"encoded": "%E6%97%A5%E6%9C%AC%E8%AA%9E%2F%E3%83%8E%E3%83%BC%E3%83%88.md"
+		},
+		{
+			"key": "emoji 🙂/n.md",
+			"encoded": "emoji%20%F0%9F%99%82%2Fn.md"
+		},
+		{
+			"key": "tab\there.md",
+			"encoded": "tab%09here.md"
+		},
+		{
+			"key": "q\"uote\\back.md",
+			"encoded": "q%22uote%5Cback.md"
+		}
+	],
 	"deltas": [
 		{
 			"from": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n# Title\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\nalpha\nñandú\ndelta\nalpha",

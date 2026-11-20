@@ -33,6 +33,8 @@ const mutate = (text) => {
     return lines.join('\n')
 }
 
+const KEYS = ['Note.md', 'Folder 1/Note.md', 'A/B/C/Año Nuevo.md', 'Café/x y z.md', 'weird!~*\'()-_.md', '100% sure #1?.md', 'a+b=c&d.md', '日本語/ノート.md', 'emoji 🙂/n.md', 'tab\there.md', 'q"uote\\back.md']
+
 test('generates version fixtures', () => {
     const { buildLineDelta, applyLineDelta } = require('@/shared/utils/line-delta')
     const { commitNoteVersion } = require('@/shared/utils/note-versions')
@@ -100,6 +102,6 @@ test('generates version fixtures', () => {
 
     return collect().then((commits) => {
         const ids = commits.filter((commit) => commit.after).map((commit) => commit.after.entries[commit.after.entries.length - 1].id)
-        fs.writeFileSync(path.join(process.cwd(), 'crates/core/tests/fixtures/versions.json'), `${JSON.stringify({ deltas, commits, ids, applyChecks: deltas.map((entry) => applyLineDelta(entry.from, entry.delta) === entry.to) }, null, '\t')}\n`)
+        fs.writeFileSync(path.join(process.cwd(), 'crates/core/tests/fixtures/versions.json'), `${JSON.stringify({ filenames: KEYS.map((key) => ({ key, encoded: encodeURIComponent(key) })), deltas, commits, ids, applyChecks: deltas.map((entry) => applyLineDelta(entry.from, entry.delta) === entry.to) }, null, '\t')}\n`)
     })
 })

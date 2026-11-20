@@ -234,13 +234,13 @@ export function useNotesController() {
 
         const getNote = (path) => latest().notesByPath.get(path) || {}
 
-        const deleteAll = () => {
+        const deleteAll = async () => {
             setNotes([])
 
             const { activeRepository: active, repositories: currentRepositories } = latest()
             if (!active) return
 
-            fileStorage.clearRepository(active.uri, getVersionLocation(currentRepositories, active.id))
+            await fileStorage.clearRepository(active.uri, getVersionLocation(currentRepositories, active.id))
         }
 
         return {

@@ -329,140 +329,50 @@ describe('notes folder', () => {
 })
 
 describe('versions', () => {
-    test('stores each note versions under its encoded relative key', async () => {
+    const native = jest.requireMock('repository-fs').default
+
+    test('writes and reads the versions of a note through the native vault', async () => {
         const { result } = await renderFileStorageHook()
 
-        seedDirectory('content://root', [])
+        await result.current.writeVersions('content://root', 'Work/note.md', [{ id: 'v1' }])
+        native.versionsRead.mockResolvedValueOnce('[{"id":"v1"}]')
 
-        result.current.writeVersions('content://root', 'Work/note.md', [{ id: 'v1' }])
-
-        expect(registry.has('content://root/.notes/Work%2Fnote.md.versions.json')).toBe(true)
+        expect(native.versionsWrite).toHaveBeenCalledWith(
+            'content://root',
+            'Work/note.md',
+            '[{"id":"v1"}]'
+        )
         expect(
             await result.current.readVersions('content://root', 'Work/note.md')
         ).toEqual([{ id: 'v1' }])
     })
 
-    test('keeps notes with the same filename in different folders apart', async () => {
+    test('forwards the rename and delete of folder versions to the native vault', async () => {
         const { result } = await renderFileStorageHook()
-
-        seedDirectory('content://root', [])
-
-        result.current.writeVersions('content://root', 'a/note.md', [{ id: 'a' }])
-        result.current.writeVersions('content://root', 'b/note.md', [{ id: 'b' }])
-
-        expect(
-            await result.current.readVersions('content://root', 'a/note.md')
-        ).toEqual([{ id: 'a' }])
-        expect(
-            await result.current.readVersions('content://root', 'b/note.md')
-        ).toEqual([{ id: 'b' }])
-    })
-
-    test('removes the versions of a deleted note', async () => {
-        const { result } = await renderFileStorageHook()
-
-        seedDirectory('content://root', [])
-        result.current.writeVersions('content://root', 'note.md', [{ id: 'v1' }])
-
-        result.current.deleteVersions('content://root', 'note.md')
-
-        expect(await result.current.readVersions('content://root', 'note.md')).toEqual([])
-    })
-
-    test('moves the versions to the new key when a note is renamed', async () => {
-        const { result } = await renderFileStorageHook()
-
-        seedDirectory('content://root', [])
-        result.current.writeVersions('content://root', 'old.md', [{ id: 'v1' }])
-
-        await result.current.renameVersions('content://root', 'old.md', 'new.md')
-
-        expect(await result.current.readVersions('content://root', 'old.md')).toEqual([])
-        expect(
-            await result.current.readVersions('content://root', 'new.md')
-        ).toEqual([{ id: 'v1' }])
-    })
-
-    test('does nothing when there are no versions to rename', async () => {
-        const { result } = await renderFileStorageHook()
-
-        seedDirectory('content://root', [])
-
-        await result.current.renameVersions('content://root', 'old.md', 'new.md')
-
-        expect(registry.has('content://root/.notes')).toBe(false)
-    })
-
-    test('renames the versions of every note under a renamed folder', async () => {
-        const { result } = await renderFileStorageHook()
-
-        seedDirectory('content://root', [])
-        result.current.writeVersions('content://root', 'Work/a.md', [{ id: 'a' }])
-        result.current.writeVersions('content://root', 'Work/Q1/b.md', [{ id: 'b' }])
-        result.current.writeVersions('content://root', 'Workshop/c.md', [{ id: 'c' }])
 
         await result.current.renameVersionsUnder('content://root', 'Work', 'Job')
+        await result.current.deleteVersionsUnder('content://root', 'Work')
 
-        expect(
-            await result.current.readVersions('content://root', 'Job/a.md')
-        ).toEqual([{ id: 'a' }])
-        expect(
-            await result.current.readVersions('content://root', 'Job/Q1/b.md')
-        ).toEqual([{ id: 'b' }])
-        expect(await result.current.readVersions('content://root', 'Work/a.md')).toEqual([])
-        expect(
-            await result.current.readVersions('content://root', 'Workshop/c.md')
-        ).toEqual([{ id: 'c' }])
-    })
-
-    test('deletes the versions of every note under a deleted folder', async () => {
-        const { result } = await renderFileStorageHook()
-
-        seedDirectory('content://root', [])
-        result.current.writeVersions('content://root', 'Work/a.md', [{ id: 'a' }])
-        result.current.writeVersions('content://root', 'Work/Q1/b.md', [{ id: 'b' }])
-        result.current.writeVersions('content://root', 'Workshop/c.md', [{ id: 'c' }])
-
-        result.current.deleteVersionsUnder('content://root', 'Work')
-
-        expect(await result.current.readVersions('content://root', 'Work/a.md')).toEqual([])
-        expect(await result.current.readVersions('content://root', 'Work/Q1/b.md')).toEqual([])
-        expect(
-            await result.current.readVersions('content://root', 'Workshop/c.md')
-        ).toEqual([{ id: 'c' }])
-    })
-
-    test('moves legacy versions files beside notes into the notes folder', async () => {
-        const { result } = await renderFileStorageHook()
-
-        seedDirectory('content://root', [])
-        seedDirectory('content://root/Work', [new File('content://root/Work/a.md.versions.json')])
-        setFileContent('content://root/Work/a.md.versions.json', JSON.stringify([{ id: 'v1' }]))
-
-        await result.current.migrateLegacyVersions('content://root/Work', 'content://root', 'Work')
-
-        expect(
-            await result.current.readVersions('content://root', 'Work/a.md')
-        ).toEqual([{ id: 'v1' }])
-        expect(result.current.findFile('content://root/Work', 'a.md.versions.json')).toBeUndefined()
+        expect(native.versionsRenameUnder).toHaveBeenCalledWith('content://root', 'Work', 'Job')
+        expect(native.versionsDeleteUnder).toHaveBeenCalledWith('content://root', 'Work')
     })
 })
 
 describe('clear repository', () => {
     test('deletes every note and its versions', async () => {
+        const native = jest.requireMock('repository-fs').default
         const { result } = await renderFileStorageHook()
 
         seedDirectory('content://root', [])
         seedDirectory('content://root/Work', [new File('content://root/Work/a.md')])
-        result.current.writeVersions('content://root', 'Work/a.md', [{ id: 'v1' }])
 
-        result.current.clearRepository(
+        await result.current.clearRepository(
             'content://root/Work',
             { rootUri: 'content://root', folderPath: 'Work' }
         )
 
         expect(result.current.findFile('content://root/Work', 'a.md')).toBeUndefined()
-        expect(await result.current.readVersions('content://root', 'Work/a.md')).toEqual([])
+        expect(native.versionsDelete).toHaveBeenCalledWith('content://root', 'Work/a.md')
     })
 })
 

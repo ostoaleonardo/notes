@@ -2,7 +2,7 @@ pub mod constants;
 mod fs;
 mod fs_sink;
 mod sink;
-mod uri;
+pub(crate) mod uri;
 
 pub use fs::FsSource;
 pub use fs_sink::FsSink;

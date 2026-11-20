@@ -9,3 +9,7 @@ pub const KEY_DELTA: &str = "delta";
 pub const KEY_AT: &str = "at";
 pub const KEY_REMOVE: &str = "remove";
 pub const KEY_INSERT: &str = "insert";
+pub const NOTES_FOLDER: &str = ".notes";
+pub const VERSIONS_SUFFIX: &str = ".versions.json";
+pub const CORRUPT_SUFFIX: &str = ".corrupt";
+pub const PATH_SEPARATOR: &str = "/";

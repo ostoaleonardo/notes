@@ -11,8 +11,7 @@ import {
     TEMPLATES_FOLDER_NAME,
     VAULT_TRASH_FOLDER_NAME,
     REPOSITORY_INDEX_FOLDER_NAME,
-    REPOSITORY_INDEX_VERSION,
-    VERSIONS_FILENAME_SUFFIX
+    REPOSITORY_INDEX_VERSION
 } from '@/shared/constants/file-storage'
 import { MIME_TYPES } from '@/shared/constants/mime-types'
 
@@ -280,20 +279,20 @@ describe('renaming, moving and deleting notes', () => {
 })
 
 describe('clearing a repository', () => {
-    test('deletes every note and its versions but keeps other files', () => {
+    test('deletes every note and its versions but keeps other files', async () => {
+        const native = jest.requireMock('repository-fs').default
+
         seedDir(NOTES)
         seedFile(`${FOLDER}/a.md`)
         seedFile(`${FOLDER}/b.md`)
         seedFile(`${FOLDER}/keep.txt`)
-        seedFile(`${NOTES}/${encodeURIComponent('work/a.md')}${VERSIONS_FILENAME_SUFFIX}`, '[]')
 
-        fileStorage.clearRepository(FOLDER, { rootUri: ROOT, folderPath: 'work' })
+        await fileStorage.clearRepository(FOLDER, { rootUri: ROOT, folderPath: 'work' })
 
         expect(names(fileStorage.listMarkdownFiles(FOLDER))).toEqual([])
         expect(mockFs.has(`${FOLDER}/keep.txt`)).toBe(true)
-        expect(fileStorage.listMarkdownFiles(NOTES)).toEqual([])
-        expect(names(fileStorage.listSubdirectories(ROOT))).toEqual(['work'])
-        expect(mockFs.size).toBe(4)
+        expect(native.versionsDelete).toHaveBeenCalledWith(ROOT, 'work/a.md')
+        expect(native.versionsDelete).toHaveBeenCalledWith(ROOT, 'work/b.md')
     })
 })
 
@@ -343,97 +342,48 @@ describe('notes folder json', () => {
 })
 
 describe('note versions', () => {
-    const versionsFile = (key) => `${NOTES}/${encodeURIComponent(key)}${VERSIONS_FILENAME_SUFFIX}`
+    const native = jest.requireMock('repository-fs').default
 
     test('returns an empty list when a note has no versions', async () => {
+        native.versionsRead.mockResolvedValueOnce(null)
+
         expect(await fileStorage.readVersions(ROOT, 'a.md')).toEqual([])
     })
 
-    test('stores versions under an encoded key', async () => {
-        fileStorage.writeVersions(ROOT, 'work/a.md', [{ title: 'v1' }])
+    test('parses the stored versions of a note', async () => {
+        native.versionsRead.mockResolvedValueOnce('[{"title":"v1"}]')
 
-        expect(mockFs.has(versionsFile('work/a.md'))).toBe(true)
         expect(await fileStorage.readVersions(ROOT, 'work/a.md')).toEqual([{ title: 'v1' }])
+        expect(native.versionsRead).toHaveBeenCalledWith(ROOT, 'work/a.md')
     })
 
-    test('deletes the versions of a note', () => {
-        fileStorage.writeVersions(ROOT, 'a.md', [1])
+    test('writes versions as json under the note key', async () => {
+        await fileStorage.writeVersions(ROOT, 'work/a.md', [{ title: 'v1' }])
 
-        fileStorage.deleteVersions(ROOT, 'a.md')
-
-        expect(mockFs.has(versionsFile('a.md'))).toBe(false)
+        expect(native.versionsWrite).toHaveBeenCalledWith(ROOT, 'work/a.md', '[{"title":"v1"}]')
     })
 
-    test('moves versions to a new key', async () => {
-        fileStorage.writeVersions(ROOT, 'old.md', [{ title: 'v1' }])
+    test('commits a version with the version cap', async () => {
+        await fileStorage.commitVersion(ROOT, 'work/a.md', 'Title', 'body')
 
+        const [root, key, title, body, , createdAt, cap] = native.versionsCommit.mock.calls[0]
+
+        expect([root, key, title, body, cap]).toEqual([ROOT, 'work/a.md', 'Title', 'body', 200])
+        expect(createdAt).toEqual(expect.any(Number))
+    })
+
+    test('forwards deletes and renames to the native vault', async () => {
+        await fileStorage.deleteVersions(ROOT, 'a.md')
         await fileStorage.renameVersions(ROOT, 'old.md', 'new.md')
-
-        expect(mockFs.has(versionsFile('old.md'))).toBe(false)
-        expect(await fileStorage.readVersions(ROOT, 'new.md')).toEqual([{ title: 'v1' }])
-    })
-
-    test('moves versions stored as an object with entries', async () => {
-        fileStorage.writeVersions(ROOT, 'old.md', { entries: [{ title: 'v1' }] })
-
-        await fileStorage.renameVersions(ROOT, 'old.md', 'new.md')
-
-        expect(await fileStorage.readVersions(ROOT, 'new.md')).toEqual({
-            entries: [{ title: 'v1' }]
-        })
-    })
-
-    test('skips renaming when there are no versions', async () => {
-        fileStorage.writeVersions(ROOT, 'old.md', [])
-
-        await fileStorage.renameVersions(ROOT, 'old.md', 'new.md')
-
-        expect(mockFs.has(versionsFile('old.md'))).toBe(true)
-        expect(mockFs.has(versionsFile('new.md'))).toBe(false)
-    })
-
-    test('renames every version under a folder prefix', async () => {
-        fileStorage.writeVersions(ROOT, 'old/a.md', [1])
-        fileStorage.writeVersions(ROOT, 'old/sub/b.md', [2])
-        fileStorage.writeVersions(ROOT, 'other/c.md', [3])
-
         await fileStorage.renameVersionsUnder(ROOT, 'old', 'new')
-
-        expect(await fileStorage.readVersions(ROOT, 'new/a.md')).toEqual([1])
-        expect(await fileStorage.readVersions(ROOT, 'new/sub/b.md')).toEqual([2])
-        expect(await fileStorage.readVersions(ROOT, 'other/c.md')).toEqual([3])
-        expect(mockFs.has(versionsFile('old/a.md'))).toBe(false)
-    })
-
-    test('deletes every version under a folder prefix', () => {
-        fileStorage.writeVersions(ROOT, 'old/a.md', [1])
-        fileStorage.writeVersions(ROOT, 'old/sub/b.md', [2])
-        fileStorage.writeVersions(ROOT, 'other/c.md', [3])
-
-        fileStorage.deleteVersionsUnder(ROOT, 'old')
-
-        expect(mockFs.has(versionsFile('old/a.md'))).toBe(false)
-        expect(mockFs.has(versionsFile('old/sub/b.md'))).toBe(false)
-        expect(mockFs.has(versionsFile('other/c.md'))).toBe(true)
-    })
-
-    test('ignores prefixes when there is no notes folder', async () => {
-        await fileStorage.renameVersionsUnder(ROOT, 'old', 'new')
-        fileStorage.deleteVersionsUnder(ROOT, 'old')
-
-        expect(mockFs.has(NOTES)).toBe(false)
-    })
-
-    test('migrates legacy versions next to the note into the notes folder', async () => {
-        seedFile(`${FOLDER}/a.md${VERSIONS_FILENAME_SUFFIX}`, '[{"title":"v1"}]')
-        seedFile(`${FOLDER}/b.md${VERSIONS_FILENAME_SUFFIX}`, '{broken')
-
+        await fileStorage.deleteVersionsUnder(ROOT, 'old')
         await fileStorage.migrateLegacyVersions(FOLDER, ROOT, 'work')
 
-        expect(await fileStorage.readVersions(ROOT, 'work/a.md')).toEqual([{ title: 'v1' }])
-        expect(await fileStorage.readVersions(ROOT, 'work/b.md')).toEqual([])
-        expect(mockFs.has(`${FOLDER}/a.md${VERSIONS_FILENAME_SUFFIX}`)).toBe(false)
-        expect(mockFs.has(`${FOLDER}/b.md${VERSIONS_FILENAME_SUFFIX}`)).toBe(false)
+        expect(native.versionsDelete).toHaveBeenCalledWith(ROOT, 'a.md')
+        expect(native.versionsRename).toHaveBeenCalledWith(ROOT, 'old.md', 'new.md')
+        expect(native.versionsRenameUnder).toHaveBeenCalledWith(ROOT, 'old', 'new')
+        expect(native.versionsDeleteUnder).toHaveBeenCalledWith(ROOT, 'old')
+        expect(native.versionsMigrateLegacy).toHaveBeenCalledWith(ROOT, 'work')
     })
 })
 

@@ -11,4 +11,5 @@ mod save;
 pub mod source;
 mod sync;
 pub mod syntax;
+pub mod vault;
 pub mod versions;

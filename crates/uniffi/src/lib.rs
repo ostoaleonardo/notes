@@ -3,6 +3,7 @@ uniffi::setup_scaffolding!("engine");
 mod links;
 mod records;
 mod source;
+mod vault;
 
 use engine::source::FsSource;
 use records::{
