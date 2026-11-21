@@ -19,7 +19,7 @@ export function useMissingNote() {
         const now = getDate()
         const folderPaths = buildFolderPaths(folders)
 
-        const targetRepository = activeFolderTree.find((folder) => (
+        const targetFolder = activeFolderTree.find((folder) => (
             (folderPaths.get(folder.id) || '') === missing.path
         ))
 
@@ -29,7 +29,7 @@ export function useMissingNote() {
             tags: [],
             createdAt: now,
             updatedAt: now
-        }, targetRepository?.id)
+        }, targetFolder?.id)
 
         pushOnce(getEditorPath(path))
     }, [missing, folders, activeFolderTree, saveNote])

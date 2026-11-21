@@ -61,7 +61,7 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
     const direction = useRef(null)
     const listRef = useRef(null)
 
-    const notesByRepository = useMemo(() => {
+    const notesByFolder = useMemo(() => {
         const map = new Map()
         notes.forEach((note) => {
             if (!map.has(note.folderId)) map.set(note.folderId, [])
@@ -71,8 +71,8 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
     }, [notes])
 
     const tree = useMemo(
-        () => buildFolderTree(activeFolderTree, notesByRepository, sort),
-        [activeFolderTree, notesByRepository, sort]
+        () => buildFolderTree(activeFolderTree, notesByFolder, sort),
+        [activeFolderTree, notesByFolder, sort]
     )
 
     const level = useMemo(() => resolveLevel(tree, drawerFolderId), [tree, drawerFolderId])

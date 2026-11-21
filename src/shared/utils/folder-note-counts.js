@@ -1,10 +1,10 @@
-export const getRepositoryNoteCount = async (uri, scanMarkdownFiles) => (await scanMarkdownFiles(uri)).length
+export const getFolderNoteCount = async (uri, scanMarkdownFiles) => (await scanMarkdownFiles(uri)).length
 
-export const getRepositoryNoteCounts = async (folders, scanMarkdownFiles) => (
+export const getFolderNoteCounts = async (folders, scanMarkdownFiles) => (
     Object.fromEntries(await Promise.all(
         folders.map(async (folder) => [
             folder.id,
-            await getRepositoryNoteCount(folder.uri, scanMarkdownFiles)
+            await getFolderNoteCount(folder.uri, scanMarkdownFiles)
         ])
     ))
 )

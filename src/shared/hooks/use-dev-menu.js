@@ -153,7 +153,7 @@ export function useDevMenu() {
             }
 
             const uriByFolder = new Map([['', root.uri]])
-            const repositoryByFolder = new Map([['', root]])
+            const folderByPath = new Map([['', root]])
 
             plan.folders.forEach((segments) => {
                 const parentKey = segments.slice(0, -1).join('/')
@@ -162,11 +162,11 @@ export function useDevMenu() {
 
                 const directory = findDirectory(parentUri, name) || createSubdirectory(parentUri, name)
                 const existing = folders.find((folder) => folder.uri === directory.uri)
-                const folder = existing || buildFolder(directory, repositoryByFolder.get(parentKey).id, false)
+                const folder = existing || buildFolder(directory, folderByPath.get(parentKey).id, false)
                 if (!existing) generated.push(folder)
 
                 uriByFolder.set(segments.join('/'), folder.uri)
-                repositoryByFolder.set(segments.join('/'), folder)
+                folderByPath.set(segments.join('/'), folder)
             })
 
             writeTestNotes(plan.notes, uriByFolder)

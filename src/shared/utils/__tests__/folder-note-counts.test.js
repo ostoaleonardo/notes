@@ -1,8 +1,8 @@
 import {
     getChildFolderCounts,
-    getRepositoryNoteCount,
-    getRepositoryNoteCounts
-} from '../repository-note-counts'
+    getFolderNoteCount,
+    getFolderNoteCounts
+} from '../folder-note-counts'
 
 describe('repository note count', () => {
     test('returns the number of markdown files at the given uri', async () => {
@@ -10,7 +10,7 @@ describe('repository note count', () => {
             uri === 'repo-a' ? [{ name: 'a.md' }, { name: 'b.md' }] : []
         )
 
-        expect(await getRepositoryNoteCount('repo-a', scanMarkdownFiles)).toBe(2)
+        expect(await getFolderNoteCount('repo-a', scanMarkdownFiles)).toBe(2)
     })
 })
 
@@ -22,11 +22,11 @@ describe('repository note counts', () => {
         ]
         const scanMarkdownFiles = async (uri) => (uri === 'repo-a' ? [{ name: 'a.md' }] : [])
 
-        expect(await getRepositoryNoteCounts(folders, scanMarkdownFiles)).toEqual({ r1: 1, r2: 0 })
+        expect(await getFolderNoteCounts(folders, scanMarkdownFiles)).toEqual({ r1: 1, r2: 0 })
     })
 
     test('returns an empty object for no repositories', async () => {
-        expect(await getRepositoryNoteCounts([], async () => [])).toEqual({})
+        expect(await getFolderNoteCounts([], async () => [])).toEqual({})
     })
 })
 

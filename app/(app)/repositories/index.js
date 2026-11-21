@@ -18,7 +18,7 @@ import { useOnForeground } from '@/shared/hooks/use-on-foreground'
 import { usePro } from '@/shared/hooks/use-pro'
 import { useFolders } from '@/shared/hooks/use-folders'
 import { useSingleFlight } from '@/shared/hooks/use-single-flight'
-import { getRepositoryNoteCounts } from '@/shared/utils/repository-note-counts'
+import { getFolderNoteCounts } from '@/shared/utils/folder-note-counts'
 
 import { Folder } from '@/icons/folder'
 
@@ -51,7 +51,7 @@ export default function Repositories() {
     const [deleteId, setDeleteId] = useState('')
 
     const refreshCounts = useCallback(() => (
-        getRepositoryNoteCounts(rootRepositories, scanMarkdownFiles).then(setCounts)
+        getFolderNoteCounts(rootRepositories, scanMarkdownFiles).then(setCounts)
     ), [rootRepositories, scanMarkdownFiles])
 
     useEffect(() => {

@@ -9,7 +9,7 @@ export const getDailyNoteTitle = (date = new Date()) => {
     return `${year}-${month}-${day}`
 }
 
-const resolveDailyNoteRepository = ({ folderId, activeFolder, descendants }, directoryExists) => {
+const resolveDailyNoteFolder = ({ folderId, activeFolder, descendants }, directoryExists) => {
     const selected = [activeFolder, ...descendants].find((folder) => folder.id === folderId)
 
     if (selected && directoryExists(selected.uri)) return selected
@@ -18,7 +18,7 @@ const resolveDailyNoteRepository = ({ folderId, activeFolder, descendants }, dir
 }
 
 export const planDailyNote = ({ title, notes, folderId, activeFolder, descendants }, directoryExists) => {
-    const folder = resolveDailyNoteRepository({ folderId, activeFolder, descendants }, directoryExists)
+    const folder = resolveDailyNoteFolder({ folderId, activeFolder, descendants }, directoryExists)
     if (!folder) return null
 
     const existing = notes.find((note) => note.folderId === folder.id && note.title === title)

@@ -595,7 +595,7 @@ describe('with optimistic update', () => {
 })
 
 describe('persist note move', () => {
-    const MOVE_REPOSITORIES = [
+    const MOVE_FOLDERS = [
         { id: 'root', uri: 'file:///root', alias: 'Root' },
         { id: 'child', uri: 'file:///root/Child', alias: 'Child', parentId: 'root' },
         { id: 'other', uri: 'file:///other', alias: 'Other' }
@@ -612,7 +612,7 @@ describe('persist note move', () => {
     test('moves the file and its version history to the destination folder', async () => {
         const storage = createMoveStorage()
 
-        await persistNoteMove({ note: NOTE, destinationId: 'child', folders: MOVE_REPOSITORIES }, storage)
+        await persistNoteMove({ note: NOTE, destinationId: 'child', folders: MOVE_FOLDERS }, storage)
 
         expect(storage.moveNote).toHaveBeenCalledWith({
             source: { folderId: 'root', uri: 'file:///root' },
@@ -624,7 +624,7 @@ describe('persist note move', () => {
 
     test('returns the new location of the note', async () => {
         const result = await persistNoteMove(
-            { note: NOTE, destinationId: 'child', folders: MOVE_REPOSITORIES },
+            { note: NOTE, destinationId: 'child', folders: MOVE_FOLDERS },
             createMoveStorage()
         )
 
@@ -641,7 +641,7 @@ describe('persist note move', () => {
         const storage = createMoveStorage(['Idea.md'])
 
         await expect(
-            persistNoteMove({ note: NOTE, destinationId: 'child', folders: MOVE_REPOSITORIES }, storage)
+            persistNoteMove({ note: NOTE, destinationId: 'child', folders: MOVE_FOLDERS }, storage)
         ).rejects.toMatchObject({ code: 'DUPLICATE_TITLE' })
         expect(storage.moveNote).not.toHaveBeenCalled()
     })
@@ -650,7 +650,7 @@ describe('persist note move', () => {
         const storage = createMoveStorage()
 
         await expect(
-            persistNoteMove({ note: NOTE, destinationId: 'other', folders: MOVE_REPOSITORIES }, storage)
+            persistNoteMove({ note: NOTE, destinationId: 'other', folders: MOVE_FOLDERS }, storage)
         ).rejects.toThrow()
         expect(storage.moveNote).not.toHaveBeenCalled()
     })

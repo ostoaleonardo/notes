@@ -109,12 +109,12 @@ describe('startup budgets', () => {
 
     test('builds the drawer tree', () => {
         const notes = buildNotes(PERF_NOTE_COUNT)
-        const byRepository = new Map([[REPOSITORY.id, notes]])
+        const byFolder = new Map([[REPOSITORY.id, notes]])
 
         within(
             'repository tree',
-            timeOnce(() => buildFolderTree([REPOSITORY], byRepository)).elapsed,
-            PERF_BUDGETS_MS.repositoryTree
+            timeOnce(() => buildFolderTree([REPOSITORY], byFolder)).elapsed,
+            PERF_BUDGETS_MS.folderTree
         )
     })
 

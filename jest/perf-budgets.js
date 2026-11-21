@@ -7,7 +7,7 @@ export const PERF_BUDGETS_MS = {
     notePaths: 20,
     linkGraphCold: 250,
     linkGraphSeeded: 120,
-    repositoryTree: 60,
+    folderTree: 60,
     mergeLoadedNotes: 20,
     loadCold: 400,
     loadWarm: 30

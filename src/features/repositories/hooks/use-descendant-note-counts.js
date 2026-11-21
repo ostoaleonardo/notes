@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { getRepositoryNoteCount } from '@/shared/utils/repository-note-counts'
+import { getFolderNoteCount } from '@/shared/utils/folder-note-counts'
 
 import { REPOSITORY_COUNT_BATCH } from '@/features/repositories/constants/repository-counts'
 
@@ -22,7 +22,7 @@ export function useDescendantNoteCounts(descendants, scanMarkdownFiles, enabled)
                 const batch = descendants.slice(index, index + REPOSITORY_COUNT_BATCH)
 
                 const batchCounts = await Promise.all(batch.map(({ uri }) => (
-                    getRepositoryNoteCount(uri, scanMarkdownFiles)
+                    getFolderNoteCount(uri, scanMarkdownFiles)
                 )))
                 if (cancelled) return
 

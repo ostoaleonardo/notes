@@ -198,7 +198,7 @@ export const planWikiLinkRename = ({
     return { renameNote, changedNotes }
 }
 
-const groupByRepository = (notes) => {
+const groupByFolder = (notes) => {
     const groups = new Map()
 
     notes.forEach((note) => {
@@ -209,7 +209,7 @@ const groupByRepository = (notes) => {
     return groups
 }
 
-const saveRepositoryGroup = async ({ folderId, uri, notes }, fileStorage) => {
+const saveFolderGroup = async ({ folderId, uri, notes }, fileStorage) => {
     try {
         const stamps = await fileStorage.saveNoteFiles({
             folderId,
@@ -232,11 +232,11 @@ export const writeChangedNotes = async (changedNotes, folders, fileStorage) => {
     const failed = []
     const saved = new Map()
 
-    for (const [folderId, notes] of groupByRepository(changedNotes)) {
+    for (const [folderId, notes] of groupByFolder(changedNotes)) {
         const uri = getFolderUri(folders, folderId)
         if (!uri) continue
 
-        const stamps = await saveRepositoryGroup({ folderId, uri, notes }, fileStorage)
+        const stamps = await saveFolderGroup({ folderId, uri, notes }, fileStorage)
 
         notes.forEach((note, index) => {
             if (stamps[index]) saved.set(note.path, stamps[index])

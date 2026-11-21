@@ -15,7 +15,7 @@ import { useFolders } from '@/shared/hooks/use-folders'
 import { getStackedRadiusStyle } from '@/ui/utils/group-position'
 import { IconButton } from '@/ui/button/icon-button'
 import { Progress } from '@/ui/progress'
-import { getChildFolderCounts } from '@/shared/utils/repository-note-counts'
+import { getChildFolderCounts } from '@/shared/utils/folder-note-counts'
 import { getFolderPath } from '@/features/repositories/utils/repository-path'
 
 import { OpenInNew } from '@/icons/open-in-new'

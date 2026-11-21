@@ -191,16 +191,16 @@ export function useRepositoryCrud({
                 const affected = [id, ...getDescendants(id).map((d) => d.id)]
                 await Promise.all(affected.map((folderId) => deleteFolderIndex(folderId)))
                 await renameVersionsUnder(getRootRepository(folder).uri, oldPath, newPath)
-                const renamedRepository = { ...folder, uri: newUri, alias: sanitized }
-                const relinked = await relinkUris(renamedRepository)
+                const renamedFolder = { ...folder, uri: newUri, alias: sanitized }
+                const relinked = await relinkUris(renamedFolder)
                 const relinkedById = new Map(relinked.map((r) => [r.id, r]))
 
                 await persistFolders(folders.map((r) => {
-                    if (r.id === id) return renamedRepository
+                    if (r.id === id) return renamedFolder
                     return relinkedById.get(r.id) || r
                 }))
 
-                return renamedRepository
+                return renamedFolder
             } catch (error) {
                 logError(LOG_MESSAGES.ERROR_RENAMING_REPOSITORY_FOLDER, error)
                 return REPOSITORY_RESULTS.ERROR

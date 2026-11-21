@@ -15,14 +15,14 @@ const createNode = (folder, notes, sort, subfolders) => {
     }
 }
 
-export const buildFolderTree = (flatList, notesByRepository, sort, parentId = null) => (
+export const buildFolderTree = (flatList, notesByFolder, sort, parentId = null) => (
     flatList
         .filter((folder) => (folder.parentId || null) === parentId)
         .map((folder) => createNode(
             folder,
-            notesByRepository.get(folder.id) || [],
+            notesByFolder.get(folder.id) || [],
             sort,
-            buildFolderTree(flatList, notesByRepository, sort, folder.id)
+            buildFolderTree(flatList, notesByFolder, sort, folder.id)
         ))
 )
 
