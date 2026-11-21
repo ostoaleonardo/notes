@@ -28,6 +28,6 @@ export const SCALE_CHECK_SQL = {
     SEARCH: 'SELECT rowid FROM note_fts WHERE note_fts MATCH ?',
     EDGES: `SELECT l.note_id AS source, t.id AS target FROM links l
         JOIN notes n ON n.id = l.note_id
-        JOIN notes t ON t.repository_id = n.repository_id AND t.title = l.text COLLATE NOCASE
-        WHERE n.repository_id = ?`
+        JOIN notes t ON t.folder_id = n.folder_id AND t.title = l.text COLLATE NOCASE
+        WHERE n.folder_id = ?`
 }

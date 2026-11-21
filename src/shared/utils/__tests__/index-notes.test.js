@@ -90,7 +90,7 @@ describe('count the indexed notes', () => {
 
         expect(count).toBe(42)
         expect(query).toHaveBeenCalledWith(
-            'SELECT COUNT(*) AS count FROM notes WHERE repository_id IN (?,?)',
+            'SELECT COUNT(*) AS count FROM notes WHERE folder_id IN (?,?)',
             'a',
             'b'
         )
