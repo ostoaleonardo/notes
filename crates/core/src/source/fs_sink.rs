@@ -1,4 +1,4 @@
-use super::constants::{TEMP_PREFIX, TEMP_SUFFIX, WRITE_ATTEMPTS};
+use super::constants::{ERROR_WRITE_VERIFICATION, TEMP_PREFIX, TEMP_SUFFIX, WRITE_ATTEMPTS};
 use super::fs::stamp_of;
 use super::{LocationScheme, NoteSink};
 use crate::error::Result;
@@ -50,7 +50,7 @@ impl NoteSink for FsSink {
 			}
 		}
 
-		Err(io::Error::other(format!("write verification failed for {filename}")).into())
+		Err(io::Error::other(format!("{ERROR_WRITE_VERIFICATION} {filename}")).into())
 	}
 
 	fn delete(&self, filename: &str) -> Result<()> {

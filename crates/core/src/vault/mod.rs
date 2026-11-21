@@ -1,3 +1,4 @@
+mod constants;
 mod fs_vault;
 
 pub use fs_vault::FsVault;

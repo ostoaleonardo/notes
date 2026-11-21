@@ -1,4 +1,5 @@
 use super::VaultFs;
+use super::constants::PATH_SEPARATOR;
 use crate::error::Result;
 use std::fs;
 use std::io::{self, ErrorKind};
@@ -14,7 +15,7 @@ impl FsVault {
 	}
 
 	fn resolve(&self, path: &str) -> PathBuf {
-		path.split('/')
+		path.split(PATH_SEPARATOR)
 			.filter(|segment| !segment.is_empty())
 			.fold(self.root.clone(), |resolved, segment| {
 				resolved.join(segment)

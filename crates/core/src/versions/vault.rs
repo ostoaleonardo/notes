@@ -1,4 +1,6 @@
-use super::constants::{CORRUPT_SUFFIX, NOTES_FOLDER, PATH_SEPARATOR, VERSIONS_SUFFIX};
+use super::constants::{
+	CORRUPT_SUFFIX, ERROR_LOCK_POISONED, KEY_ENTRIES, NOTES_FOLDER, PATH_SEPARATOR, VERSIONS_SUFFIX,
+};
 use super::store::{NewVersion, commit_version};
 use crate::error::{Error, Result};
 use crate::source::percent::{decode, encode};
@@ -23,7 +25,7 @@ fn notes_path(filename: &str) -> String {
 fn is_empty_store(value: &Value) -> bool {
 	match value {
 		Value::Array(items) => items.is_empty(),
-		other => other["entries"].as_array().is_none_or(Vec::is_empty),
+		other => other[KEY_ENTRIES].as_array().is_none_or(Vec::is_empty),
 	}
 }
 
@@ -38,7 +40,7 @@ impl VersionVault {
 	fn lock(&self) -> Result<std::sync::MutexGuard<'_, ()>> {
 		self.guard
 			.lock()
-			.map_err(|_| Error::Io(io::Error::other("version lock poisoned")))
+			.map_err(|_| Error::Io(io::Error::other(ERROR_LOCK_POISONED)))
 	}
 
 	fn read_valid(&self, directory: &str, filename: &str) -> Result<Option<String>> {

@@ -1,4 +1,4 @@
-use super::constants::{PERCENT, URI_UNRESERVED};
+use super::constants::{HEX_LETTER_BASE, HEX_RADIX, PERCENT, URI_UNRESERVED};
 use std::fmt::Write;
 
 pub fn encode(text: &str) -> String {
@@ -26,7 +26,7 @@ pub fn decode(text: &str) -> String {
 				let high = bytes.get(position + 1).copied().and_then(hex)?;
 				let low = bytes.get(position + 2).copied().and_then(hex)?;
 
-				Some(high * 16 + low)
+				Some(high * HEX_RADIX + low)
 			})
 			.flatten();
 
@@ -48,8 +48,8 @@ pub fn decode(text: &str) -> String {
 fn hex(byte: u8) -> Option<u8> {
 	match byte {
 		b'0'..=b'9' => Some(byte - b'0'),
-		b'a'..=b'f' => Some(byte - b'a' + 10),
-		b'A'..=b'F' => Some(byte - b'A' + 10),
+		b'a'..=b'f' => Some(byte - b'a' + HEX_LETTER_BASE),
+		b'A'..=b'F' => Some(byte - b'A' + HEX_LETTER_BASE),
 		_ => None,
 	}
 }

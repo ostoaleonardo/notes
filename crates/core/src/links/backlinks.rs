@@ -1,4 +1,4 @@
-use super::constants::{LINK_OPEN, MARKDOWN_TARGET_OPEN};
+use super::constants::{LABEL_CLOSE, LINK_OPEN, MARKDOWN_TARGET_OPEN};
 use super::index::{FolderPaths, NoteIndex};
 use super::scan::wiki_targets;
 use crate::syntax::patterns::MARKDOWN_LINK;
@@ -42,7 +42,7 @@ pub fn find_backlinks<'a>(
 }
 
 fn markdown_target(link: &str) -> &str {
-	let label_end = link.find(']').unwrap_or(0);
+	let label_end = link.find(LABEL_CLOSE).unwrap_or(0);
 
 	&link[label_end + 1 + MARKDOWN_TARGET_OPEN.len()..link.len() - 1]
 }

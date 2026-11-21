@@ -13,3 +13,5 @@ pub const NOTES_FOLDER: &str = ".notes";
 pub const VERSIONS_SUFFIX: &str = ".versions.json";
 pub const CORRUPT_SUFFIX: &str = ".corrupt";
 pub const PATH_SEPARATOR: &str = "/";
+pub const KEY_HEAD_CONTENT: &str = "content";
+pub const ERROR_LOCK_POISONED: &str = "version lock poisoned";

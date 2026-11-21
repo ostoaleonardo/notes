@@ -7,3 +7,6 @@ pub const PERCENT: char = '%';
 pub const WRITE_ATTEMPTS: usize = 3;
 pub const TEMP_PREFIX: &str = ".";
 pub const TEMP_SUFFIX: &str = ".tmp";
+pub const ERROR_WRITE_VERIFICATION: &str = "write verification failed for";
+pub const HEX_RADIX: u8 = 16;
+pub const HEX_LETTER_BASE: u8 = 10;

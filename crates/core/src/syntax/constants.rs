@@ -36,3 +36,5 @@ pub const FRONTMATTER_FENCE: &str = "---\n";
 pub const FRONTMATTER_BODY_GAP: &str = "---\n\n";
 pub const LINE_END: char = '\n';
 pub const TAGS_KEY: &str = "tags";
+pub const YAML_MAPPING_SUFFIX: char = ':';
+pub const YAML_TAB: char = '\t';

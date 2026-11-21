@@ -1,7 +1,7 @@
 use super::constants::{
 	LINE_END, YAML_COMMENT_MARKER, YAML_EMPTY_MAPPING, YAML_EMPTY_SEQUENCE, YAML_ESCAPED_QUOTE,
-	YAML_INDENT, YAML_INDICATORS, YAML_KEY_SEPARATOR, YAML_LITERAL_HEADER, YAML_NULL,
-	YAML_SEQUENCE_MARKER, YAML_SINGLE_QUOTE, YAML_SPACED_INDICATORS,
+	YAML_INDENT, YAML_INDICATORS, YAML_KEY_SEPARATOR, YAML_LITERAL_HEADER, YAML_MAPPING_SUFFIX,
+	YAML_NULL, YAML_SEQUENCE_MARKER, YAML_SINGLE_QUOTE, YAML_SPACED_INDICATORS, YAML_TAB,
 };
 use super::patterns::YAML_NON_STRING;
 use serde_json::{Map, Value};
@@ -153,10 +153,10 @@ fn is_plain(text: &str) -> bool {
 		&& !spaced_indicator
 		&& !text.starts_with(char::is_whitespace)
 		&& !text.ends_with(char::is_whitespace)
-		&& !text.ends_with(':')
+		&& !text.ends_with(YAML_MAPPING_SUFFIX)
 		&& !text.contains(YAML_KEY_SEPARATOR)
 		&& !text.contains(YAML_COMMENT_MARKER)
-		&& !text.contains('\t')
+		&& !text.contains(YAML_TAB)
 		&& !YAML_NON_STRING.is_match(text)
 }
 

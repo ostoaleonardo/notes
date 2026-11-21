@@ -1,3 +1,4 @@
+use crate::constants::ERROR_PROPERTIES_NOT_OBJECT;
 use engine::model;
 use engine::syntax::{Decomposed, NoteFields};
 
@@ -261,9 +262,7 @@ impl TryFrom<NoteFieldsRecord> for NoteFields {
 		let properties = match serde_json::from_str(&record.properties_json) {
 			Ok(serde_json::Value::Object(map)) => map,
 			_ => {
-				return Err(EngineError::Io(
-					"properties must be a json object".to_string(),
-				));
+				return Err(EngineError::Io(ERROR_PROPERTIES_NOT_OBJECT.to_string()));
 			}
 		};
 

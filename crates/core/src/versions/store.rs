@@ -1,6 +1,6 @@
 use super::constants::{
-	KEY_AT, KEY_CREATED_AT, KEY_DELTA, KEY_ENTRIES, KEY_HEAD, KEY_ID, KEY_INSERT, KEY_REMOVE,
-	KEY_TITLE,
+	KEY_AT, KEY_CREATED_AT, KEY_DELTA, KEY_ENTRIES, KEY_HEAD, KEY_HEAD_CONTENT, KEY_ID, KEY_INSERT,
+	KEY_REMOVE, KEY_TITLE,
 };
 use super::delta::{Hunk, build_line_delta};
 use serde_json::{Map, Value, json};
@@ -52,8 +52,6 @@ fn pack(versions: &[Value]) -> Value {
 
 	json!({ KEY_HEAD: text(last), KEY_ENTRIES: entries })
 }
-
-const KEY_HEAD_CONTENT: &str = "content";
 
 pub struct NewVersion<'a> {
 	pub id: &'a str,
