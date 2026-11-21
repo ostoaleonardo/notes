@@ -1,0 +1,603 @@
+{
+  "sync": {
+    "first": {
+      "total": 6,
+      "added": 6,
+      "updated": 0,
+      "removed": 0,
+      "unchanged": 0,
+      "unreadable": 0
+    },
+    "sub": {
+      "total": 2,
+      "added": 2,
+      "updated": 0,
+      "removed": 0,
+      "unchanged": 0,
+      "unreadable": 0
+    },
+    "second": {
+      "total": 6,
+      "added": 0,
+      "updated": 0,
+      "removed": 0,
+      "unchanged": 6,
+      "unreadable": 0
+    },
+    "after_external_changes": {
+      "total": 5,
+      "added": 0,
+      "updated": 1,
+      "removed": 1,
+      "unchanged": 4,
+      "unreadable": 0
+    }
+  },
+  "listing": [
+    {
+      "folderId": "root",
+      "filename": "Alpha.md",
+      "fileUri": "content://tree/document/root%2FAlpha.md",
+      "title": "Alpha",
+      "createdAt": 1700000000000,
+      "updatedAt": 1700000000000,
+      "tags": [
+        "project",
+        "area/work"
+      ],
+      "inlineTags": [
+        "inline"
+      ],
+      "properties": {
+        "aliases": [
+          "A"
+        ],
+        "status": "draft",
+        "priority": 2
+      },
+      "linkTexts": [
+        "Beta",
+        "Beta",
+        "Gamma#Heading",
+        "Beta"
+      ],
+      "invalidFrontmatter": null,
+      "rawFrontmatter": "tags:\n  - project\n  - area/work\naliases:\n  - A\nstatus: draft\npriority: 2"
+    },
+    {
+      "folderId": "root",
+      "filename": "Gamma.md",
+      "fileUri": "content://tree/document/root%2FGamma.md",
+      "title": "Gamma",
+      "createdAt": 1700000002000,
+      "updatedAt": 1700000002000,
+      "tags": [],
+      "inlineTags": [],
+      "properties": {},
+      "linkTexts": [],
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    },
+    {
+      "folderId": "root",
+      "filename": "Ünïcode título.md",
+      "fileUri": "content://tree/document/root%2F%C3%9Cn%C3%AFcode%20t%C3%ADtulo.md",
+      "title": "Ünïcode título",
+      "createdAt": 1700000003000,
+      "updatedAt": 1700000003000,
+      "tags": [
+        "é",
+        "日本"
+      ],
+      "inlineTags": [],
+      "properties": {},
+      "linkTexts": [
+        "Beta"
+      ],
+      "invalidFrontmatter": null,
+      "rawFrontmatter": "tags: [é, 日本]"
+    },
+    {
+      "folderId": "root",
+      "filename": "Invalid fm.md",
+      "fileUri": "content://tree/document/root%2FInvalid%20fm.md",
+      "title": "Invalid fm",
+      "createdAt": 1700000004000,
+      "updatedAt": 1700000004000,
+      "tags": [],
+      "inlineTags": [],
+      "properties": {},
+      "linkTexts": [],
+      "invalidFrontmatter": "tags: [unclosed",
+      "rawFrontmatter": null
+    },
+    {
+      "folderId": "root",
+      "filename": "Beta.md",
+      "fileUri": "content://tree/document/root%2FBeta.md",
+      "title": "Beta",
+      "createdAt": 1700000001000,
+      "updatedAt": 1700000001000,
+      "tags": [],
+      "inlineTags": [],
+      "properties": {},
+      "linkTexts": [
+        "Alpha"
+      ],
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    },
+    {
+      "folderId": "root",
+      "filename": "Empty.md",
+      "fileUri": "content://tree/document/root%2FEmpty.md",
+      "title": "Empty",
+      "createdAt": 1700000005000,
+      "updatedAt": 1700000005000,
+      "tags": [],
+      "inlineTags": [],
+      "properties": {},
+      "linkTexts": [],
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    },
+    {
+      "folderId": "sub",
+      "filename": "Alpha.md",
+      "fileUri": "content://tree/document/root%2FAlpha.md",
+      "title": "Alpha",
+      "createdAt": 1700000000000,
+      "updatedAt": 1700000000000,
+      "tags": [],
+      "inlineTags": [],
+      "properties": {},
+      "linkTexts": [
+        "Beta"
+      ],
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    },
+    {
+      "folderId": "sub",
+      "filename": "Delta.md",
+      "fileUri": "content://tree/document/root%2FDelta.md",
+      "title": "Delta",
+      "createdAt": 1700000001000,
+      "updatedAt": 1700000001000,
+      "tags": [],
+      "inlineTags": [],
+      "properties": {},
+      "linkTexts": [
+        "Alpha",
+        "sub/Alpha"
+      ],
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    }
+  ],
+  "indexed": [
+    "root/Alpha.md",
+    "root/Beta.md",
+    "root/Empty.md",
+    "root/Gamma.md",
+    "root/Invalid fm.md",
+    "root/Ünïcode título.md",
+    "sub/Alpha.md",
+    "sub/Delta.md"
+  ],
+  "tags": {
+    "columns": [
+      "folder_id",
+      "filename",
+      "position",
+      "name",
+      "inline"
+    ],
+    "rows": [
+      [
+        "root",
+        "Alpha.md",
+        0,
+        "project",
+        0
+      ],
+      [
+        "root",
+        "Alpha.md",
+        1,
+        "area/work",
+        0
+      ],
+      [
+        "root",
+        "Alpha.md",
+        2,
+        "inline",
+        1
+      ],
+      [
+        "root",
+        "Ünïcode título.md",
+        0,
+        "é",
+        0
+      ],
+      [
+        "root",
+        "Ünïcode título.md",
+        1,
+        "日本",
+        0
+      ]
+    ]
+  },
+  "links": {
+    "columns": [
+      "folder_id",
+      "filename",
+      "position",
+      "text",
+      "name",
+      "anchor_name"
+    ],
+    "rows": [
+      [
+        "root",
+        "Alpha.md",
+        0,
+        "Beta",
+        "beta",
+        null
+      ],
+      [
+        "root",
+        "Alpha.md",
+        1,
+        "Beta",
+        "beta",
+        null
+      ],
+      [
+        "root",
+        "Alpha.md",
+        2,
+        "Gamma#Heading",
+        "gamma#heading",
+        "gamma"
+      ],
+      [
+        "root",
+        "Alpha.md",
+        3,
+        "Beta",
+        "beta",
+        null
+      ],
+      [
+        "root",
+        "Beta.md",
+        0,
+        "Alpha",
+        "alpha",
+        null
+      ],
+      [
+        "root",
+        "Ünïcode título.md",
+        0,
+        "Beta",
+        "beta",
+        null
+      ],
+      [
+        "sub",
+        "Alpha.md",
+        0,
+        "Beta",
+        "beta",
+        null
+      ],
+      [
+        "sub",
+        "Delta.md",
+        0,
+        "Alpha",
+        "alpha",
+        null
+      ],
+      [
+        "sub",
+        "Delta.md",
+        1,
+        "sub/Alpha",
+        "alpha",
+        null
+      ]
+    ]
+  },
+  "markdown_links": {
+    "columns": [
+      "folder_id",
+      "filename",
+      "position",
+      "target"
+    ],
+    "rows": []
+  },
+  "properties": {
+    "columns": [
+      "folder_id",
+      "filename",
+      "position",
+      "key",
+      "value"
+    ],
+    "rows": [
+      [
+        "root",
+        "Alpha.md",
+        0,
+        "aliases",
+        "[\"A\"]"
+      ],
+      [
+        "root",
+        "Alpha.md",
+        1,
+        "status",
+        "\"draft\""
+      ],
+      [
+        "root",
+        "Alpha.md",
+        2,
+        "priority",
+        "2"
+      ]
+    ]
+  },
+  "order": {
+    "columns": [
+      "folder_id",
+      "filename"
+    ],
+    "rows": [
+      [
+        "root",
+        "Alpha.md"
+      ],
+      [
+        "sub",
+        "Alpha.md"
+      ],
+      [
+        "root",
+        "Beta.md"
+      ],
+      [
+        "sub",
+        "Delta.md"
+      ],
+      [
+        "root",
+        "Empty.md"
+      ],
+      [
+        "root",
+        "Gamma.md"
+      ],
+      [
+        "root",
+        "Invalid fm.md"
+      ],
+      [
+        "root",
+        "Ünïcode título.md"
+      ]
+    ]
+  },
+  "candidates": {
+    "backlinks": [
+      "root/Beta.md",
+      "sub/Delta.md"
+    ],
+    "mentions": [
+      "root/Alpha.md",
+      "root/Beta.md",
+      "root/Gamma.md",
+      "sub/Alpha.md",
+      "sub/Delta.md"
+    ]
+  },
+  "saves": {
+    "created": {
+      "saved": {
+        "size": 8
+      }
+    },
+    "stale": {
+      "conflict": {
+        "disk_modified_known": true
+      }
+    },
+    "fresh": {
+      "saved": {
+        "size": 14
+      }
+    },
+    "missing": "missing",
+    "renamed": {
+      "saved": {
+        "size": 10
+      }
+    },
+    "rename_collision": {
+      "conflict": {
+        "disk_modified_known": false
+      }
+    },
+    "after_rename": [
+      "root/Alpha.md",
+      "root/Beta.md",
+      "root/Empty.md",
+      "root/Gamma.md",
+      "root/Invalid fm.md",
+      "root/Renamed.md",
+      "root/Ünïcode título.md",
+      "sub/Alpha.md",
+      "sub/Delta.md"
+    ],
+    "after_delete": [
+      "root/Alpha.md",
+      "root/Beta.md",
+      "root/Empty.md",
+      "root/Gamma.md",
+      "root/Invalid fm.md",
+      "root/Ünïcode título.md",
+      "sub/Alpha.md",
+      "sub/Delta.md"
+    ]
+  },
+  "after_folder_delete": [
+    "root/Alpha.md",
+    "root/Beta.md",
+    "root/Empty.md",
+    "root/Invalid fm.md",
+    "root/Ünïcode título.md"
+  ],
+  "parsing": {
+    "alpha": {
+      "parsed": "ParsedNote { tags: [Tag { name: \"project\", inline: false }, Tag { name: \"area/work\", inline: false }, Tag { name: \"inline\", inline: true }], links: [Link { text: \"Beta\", name: \"beta\", anchor_name: None }, Link { text: \"Beta\", name: \"beta\", anchor_name: None }, Link { text: \"Gamma#Heading\", name: \"gamma#heading\", anchor_name: Some(\"gamma\") }, Link { text: \"Beta\", name: \"beta\", anchor_name: None }], markdown_links: [], properties: [Property { key: \"aliases\", value: \"[\\\"A\\\"]\" }, Property { key: \"status\", value: \"\\\"draft\\\"\" }, Property { key: \"priority\", value: \"2\" }], frontmatter: Some(\"tags:\\n  - project\\n  - area/work\\naliases:\\n  - A\\nstatus: draft\\npriority: 2\"), invalid_frontmatter: false, content: \"tags:\\n  - project\\n  - area/work\\naliases:\\n  - A\\nstatus: draft\\npriority: 2\\nIntro with #inline and a [[Beta]] link,\\na [[Beta|aliased]] one, a [[Gamma#Heading]] anchor,\\nan embed ![[Beta]] and a [markdown](Beta.md) link.\\n\\n```\\n#not-a-tag [[Not a link]]\\n```\\n\" }",
+      "inline_tags": [
+        "inline"
+      ],
+      "wiki_links": [
+        "Beta",
+        "Beta",
+        "Gamma#Heading",
+        "Beta"
+      ],
+      "decomposed": {
+        "body": "Intro with #inline and a [[Beta]] link,\na [[Beta|aliased]] one, a [[Gamma#Heading]] anchor,\nan embed ![[Beta]] and a [markdown](Beta.md) link.\n\n```\n#not-a-tag [[Not a link]]\n```\n",
+        "tags": [
+          "project",
+          "area/work"
+        ],
+        "properties": {
+          "aliases": [
+            "A"
+          ],
+          "status": "draft",
+          "priority": 2
+        },
+        "invalid_frontmatter": null,
+        "raw_frontmatter": "tags:\n  - project\n  - area/work\naliases:\n  - A\nstatus: draft\npriority: 2"
+      }
+    },
+    "unicode": {
+      "parsed": "ParsedNote { tags: [Tag { name: \"é\", inline: false }, Tag { name: \"日本\", inline: false }], links: [Link { text: \"Beta\", name: \"beta\", anchor_name: None }], markdown_links: [], properties: [], frontmatter: Some(\"tags: [é, 日本]\"), invalid_frontmatter: false, content: \"tags: [é, 日本]\\nUnicode título [[Beta]]\\n\" }",
+      "inline_tags": [],
+      "wiki_links": [
+        "Beta"
+      ],
+      "decomposed": {
+        "body": "Unicode título [[Beta]]\n",
+        "tags": [
+          "é",
+          "日本"
+        ],
+        "properties": {},
+        "invalid_frontmatter": null,
+        "raw_frontmatter": "tags: [é, 日本]"
+      }
+    },
+    "invalid": {
+      "parsed": "ParsedNote { tags: [], links: [], markdown_links: [], properties: [], frontmatter: Some(\"tags: [unclosed\"), invalid_frontmatter: true, content: \"tags: [unclosed\\nBroken frontmatter\\n\" }",
+      "inline_tags": [],
+      "wiki_links": [],
+      "decomposed": {
+        "body": "Broken frontmatter\n",
+        "tags": null,
+        "properties": null,
+        "invalid_frontmatter": "tags: [unclosed",
+        "raw_frontmatter": null
+      }
+    },
+    "empty": {
+      "parsed": "ParsedNote { tags: [], links: [], markdown_links: [], properties: [], frontmatter: None, invalid_frontmatter: false, content: \"\" }",
+      "inline_tags": [],
+      "wiki_links": [],
+      "decomposed": {
+        "body": "",
+        "tags": [],
+        "properties": {},
+        "invalid_frontmatter": null,
+        "raw_frontmatter": null
+      }
+    }
+  },
+  "composing": {
+    "with_fields": "---\nstatus: draft\npriority: 2\ntags:\n  - project\n  - area/work\n---\n\nBody\n",
+    "without_fields": "Body\n",
+    "body_with_frontmatter_lookalike": "---\n{}\n---\n\n---\nx: 1\n---\n\nBody\n"
+  },
+  "linking": {
+    "find_alpha": "root/Alpha.md",
+    "find_alias": "root/Alpha.md",
+    "find_qualified": "sub/Alpha.md",
+    "find_missing": null,
+    "resolve_anchor": "Resolution { note: None, target: \"Gamma\", anchor: \"Heading\" }",
+    "backlinks_of_alpha": [
+      "root/Beta.md",
+      "sub/Delta.md"
+    ],
+    "rename_beta": "See [[Omega]] and [[Omega|alias]] and [[sub/Alpha]]",
+    "normalize": [
+      "hello",
+      "áéí",
+      "日本"
+    ]
+  },
+  "deltas": [
+    "[Hunk { at: 0, remove: 1, insert: [\"one\"] }]",
+    "[Hunk { at: 1, remove: 1, insert: [] }]",
+    "[Hunk { at: 1, remove: 0, insert: [\"x\"] }, Hunk { at: 3, remove: 0, insert: [\"y\"] }]",
+    "[]",
+    "[Hunk { at: 1, remove: 1, insert: [\"c\"] }]"
+  ],
+  "versions": {
+    "commits": [
+      true,
+      true,
+      false
+    ],
+    "stored": {
+      "head": "one\ntwo\n",
+      "entries": [
+        {
+          "id": "v1",
+          "title": "Alpha",
+          "createdAt": 1000,
+          "delta": [
+            {
+              "at": 1,
+              "remove": 1,
+              "insert": []
+            }
+          ]
+        },
+        {
+          "id": "v2",
+          "title": "Alpha",
+          "createdAt": 2000,
+          "delta": null
+        }
+      ]
+    },
+    "after_rename": {
+      "old": null,
+      "new_exists": true
+    },
+    "after_delete": null
+  }
+}

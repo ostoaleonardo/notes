@@ -30,6 +30,12 @@ cargo clippy --all-targets -- -D warnings
 cargo test
 ```
 
+`crates/core/tests/contract.rs` runs a fixed vault through sync, listing, queries, saves, links, versions and parsing, and compares the result with `crates/core/tests/fixtures/contract.json`. When a change to the output is intended, regenerate the snapshot and review the diff:
+
+```bash
+CONTRACT_UPDATE=1 cargo test -p engine --test contract
+```
+
 ## Architecture
 
 - Rust owns parsing, the SQLite index (schema, writer, reconciliation, queries) and the locale sort keys (ICU4X collator).
