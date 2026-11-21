@@ -10,7 +10,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import uniffi.engine.EngineException
-import uniffi.engine.MoveStatus
+import uniffi.engine.MoveResult
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34])
@@ -136,7 +136,7 @@ class ProviderRepositoryTest {
     repository.writeText("a/note.md", "text")
     repository.createDir("b")
 
-    assertEquals(MoveStatus.MOVED, repository.moveFile("a/note.md", "b/note.md"))
+    assertEquals(MoveResult.MOVED, repository.moveFile("a/note.md", "b/note.md"))
     assertEquals("text", repository.readText("b/note.md"))
     assertNull(repository.readText("a/note.md"))
   }
@@ -147,7 +147,7 @@ class ProviderRepositoryTest {
     repository.writeText("a/note.md", "text")
     repository.createDir("trash")
 
-    assertEquals(MoveStatus.MOVED, repository.moveFile("a/note.md", "trash/note (2).md"))
+    assertEquals(MoveResult.MOVED, repository.moveFile("a/note.md", "trash/note (2).md"))
     assertEquals("text", repository.readText("trash/note (2).md"))
     assertNull(repository.readText("a/note.md"))
   }
@@ -158,8 +158,8 @@ class ProviderRepositoryTest {
     repository.writeText("a/note.md", "mine")
     repository.writeText("b/note.md", "theirs")
 
-    assertEquals(MoveStatus.TARGET_EXISTS, repository.moveFile("a/note.md", "b/note.md"))
-    assertEquals(MoveStatus.SOURCE_MISSING, repository.moveFile("a/gone.md", "b/gone.md"))
+    assertEquals(MoveResult.TARGET_EXISTS, repository.moveFile("a/note.md", "b/note.md"))
+    assertEquals(MoveResult.SOURCE_MISSING, repository.moveFile("a/gone.md", "b/gone.md"))
     assertEquals("mine", repository.readText("a/note.md"))
     assertEquals("theirs", repository.readText("b/note.md"))
   }

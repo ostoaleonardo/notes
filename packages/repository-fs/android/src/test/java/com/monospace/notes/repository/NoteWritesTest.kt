@@ -5,13 +5,13 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import uniffi.engine.DecomposedRecord
-import uniffi.engine.FileStampRecord
+import uniffi.engine.FileStamp
 import uniffi.engine.SaveReport
 
 class NoteWritesTest {
   @Test
   fun `saved report exposes the new stamp`() {
-    val report = SaveReport.Saved(FileStampRecord("content://note", 42L, 7L))
+    val report = SaveReport.Saved(FileStamp("content://note", 42L, 7L))
 
     assertEquals(
       mapOf(

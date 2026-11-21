@@ -25,7 +25,7 @@ import uniffi.engine.VersionsHandle
 import uniffi.engine.NoteFieldsRecord
 import uniffi.engine.findBacklinkPaths
 import uniffi.engine.renameLinksInBodies
-import uniffi.engine.SaveRequestRecord
+import uniffi.engine.SaveRequest
 import uniffi.engine.composeNote
 import uniffi.engine.decomposeNote
 import uniffi.engine.sanitizeFilename
@@ -145,7 +145,7 @@ class RepositoryFsModule : Module() {
 
     AsyncFunction("saveNotes") Coroutine { folderId: String, directoryUri: String, filenames: List<String>, texts: List<String>, expectedModified: List<Double?> ->
       withContext(Dispatchers.IO) {
-        val requests = filenames.indices.map { SaveRequestRecord(filenames[it], texts[it], expectedModified[it]?.toLong()) }
+        val requests = filenames.indices.map { SaveRequest(filenames[it], texts[it], expectedModified[it]?.toLong()) }
 
         engine().saveNotes(folderId, noteSinkFor(context, directoryUri), requests).map(::saveReportToMap)
       }

@@ -4,16 +4,16 @@ import android.content.Context
 import android.net.Uri
 import android.provider.DocumentsContract
 import uniffi.engine.DecomposedRecord
-import uniffi.engine.FileStampRecord
+import uniffi.engine.FileStamp
 import uniffi.engine.FsNoteSink
 import uniffi.engine.MoveReport
 import uniffi.engine.NoteSink
 import uniffi.engine.SaveReport
 
 private class ProviderNoteSink(private val context: Context, private val directory: Uri) : NoteSink {
-  override fun stat(filename: String): FileStampRecord? = findChild(context, directory, filename)?.let(::stampOf)
+  override fun stat(filename: String): FileStamp? = findChild(context, directory, filename)?.let(::stampOf)
 
-  override fun write(filename: String, text: String): FileStampRecord {
+  override fun write(filename: String, text: String): FileStamp {
     val bytes = text.toByteArray(Charsets.UTF_8)
 
     repeat(WRITE_ATTEMPTS) {
@@ -41,7 +41,7 @@ private class ProviderNoteSink(private val context: Context, private val directo
       ?: throw java.io.IOException("cannot create $filename")
   }
 
-  private fun stampOf(entry: Map<String, Any?>) = FileStampRecord(
+  private fun stampOf(entry: Map<String, Any?>) = FileStamp(
     entry[EntryKeys.URI] as String,
     (entry[EntryKeys.LAST_MODIFIED] as Double?)?.toLong() ?: 0L,
     (entry[EntryKeys.SIZE] as Double?)?.toLong() ?: 0L

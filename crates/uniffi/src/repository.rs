@@ -1,4 +1,4 @@
-use crate::records::{DirEntryRecord, EngineError, MoveStatus};
+use crate::records::EngineError;
 use engine::error::Result as CoreResult;
 use engine::repository::{
 	DirEntry, MoveResult, RepositoryFiles as CoreRepositoryFiles,
@@ -13,11 +13,11 @@ pub trait RepositoryFiles: Send + Sync {
 	fn write_text(&self, path: String, text: String) -> Result<(), EngineError>;
 	fn delete_file(&self, path: String) -> Result<(), EngineError>;
 	fn list_files(&self, directory: String) -> Result<Vec<String>, EngineError>;
-	fn list_dir(&self, path: String) -> Result<Vec<DirEntryRecord>, EngineError>;
+	fn list_dir(&self, path: String) -> Result<Vec<DirEntry>, EngineError>;
 	fn exists(&self, path: String) -> Result<bool, EngineError>;
 	fn create_dir(&self, path: String) -> Result<(), EngineError>;
 	fn rename_dir(&self, path: String, new_name: String) -> Result<(), EngineError>;
-	fn move_file(&self, from: String, to: String) -> Result<MoveStatus, EngineError>;
+	fn move_file(&self, from: String, to: String) -> Result<MoveResult, EngineError>;
 	fn remove_dir(&self, path: String) -> Result<(), EngineError>;
 }
 
@@ -51,12 +51,7 @@ impl ForeignRepository {
 
 impl CoreRepositoryOps for ForeignRepository {
 	fn list_dir(&self, path: &str) -> CoreResult<Vec<DirEntry>> {
-		Ok(self
-			.inner
-			.list_dir(path.to_string())?
-			.into_iter()
-			.map(Into::into)
-			.collect())
+		Ok(self.inner.list_dir(path.to_string())?)
 	}
 
 	fn exists(&self, path: &str) -> CoreResult<bool> {
@@ -74,10 +69,7 @@ impl CoreRepositoryOps for ForeignRepository {
 	}
 
 	fn move_file(&self, from: &str, to: &str) -> CoreResult<MoveResult> {
-		Ok(self
-			.inner
-			.move_file(from.to_string(), to.to_string())?
-			.into())
+		Ok(self.inner.move_file(from.to_string(), to.to_string())?)
 	}
 
 	fn remove_dir(&self, path: &str) -> CoreResult<()> {
@@ -118,11 +110,8 @@ impl RepositoryFiles for FsRepositoryHandle {
 		Ok(CoreRepositoryFiles::list_files(&self.inner, &directory)?)
 	}
 
-	fn list_dir(&self, path: String) -> Result<Vec<DirEntryRecord>, EngineError> {
-		Ok(CoreRepositoryOps::list_dir(&self.inner, &path)?
-			.into_iter()
-			.map(Into::into)
-			.collect())
+	fn list_dir(&self, path: String) -> Result<Vec<DirEntry>, EngineError> {
+		Ok(CoreRepositoryOps::list_dir(&self.inner, &path)?)
 	}
 
 	fn exists(&self, path: String) -> Result<bool, EngineError> {
@@ -141,8 +130,8 @@ impl RepositoryFiles for FsRepositoryHandle {
 		)?)
 	}
 
-	fn move_file(&self, from: String, to: String) -> Result<MoveStatus, EngineError> {
-		Ok(CoreRepositoryOps::move_file(&self.inner, &from, &to)?.into())
+	fn move_file(&self, from: String, to: String) -> Result<MoveResult, EngineError> {
+		Ok(CoreRepositoryOps::move_file(&self.inner, &from, &to)?)
 	}
 
 	fn remove_dir(&self, path: String) -> Result<(), EngineError> {

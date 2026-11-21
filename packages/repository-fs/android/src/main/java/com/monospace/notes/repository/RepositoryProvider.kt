@@ -5,10 +5,10 @@ import android.net.Uri
 import android.provider.DocumentsContract
 import android.provider.DocumentsContract.Document
 import java.io.IOException
-import uniffi.engine.DirEntryRecord
+import uniffi.engine.DirEntry
 import uniffi.engine.EngineException
 import uniffi.engine.FsRepositoryHandle
-import uniffi.engine.MoveStatus
+import uniffi.engine.MoveResult
 import uniffi.engine.RepositoryFiles
 
 internal class ProviderRepository(private val context: Context, private val root: Uri) : RepositoryFiles {
@@ -53,11 +53,11 @@ internal class ProviderRepository(private val context: Context, private val root
       .map { it[EntryKeys.NAME] as String }
   }
 
-  override fun listDir(path: String): List<DirEntryRecord> {
+  override fun listDir(path: String): List<DirEntry> {
     val directory = directoryUri(segmentsOf(path)) ?: return emptyList()
 
     return listDirectory(context, directory)
-      .map { DirEntryRecord(it[EntryKeys.NAME] as String, it[EntryKeys.IS_DIRECTORY] == true) }
+      .map { DirEntry(it[EntryKeys.NAME] as String, it[EntryKeys.IS_DIRECTORY] == true) }
       .sortedBy { it.name }
   }
 
@@ -84,22 +84,22 @@ internal class ProviderRepository(private val context: Context, private val root
     renameDirectory(context, directory.toString(), parent.toString(), newName)
   }
 
-  override fun moveFile(from: String, to: String): MoveStatus {
+  override fun moveFile(from: String, to: String): MoveResult {
     val source = segmentsOf(from)
     val target = segmentsOf(to)
-    val sourceDirectory = directoryUri(source.dropLast(1)) ?: return MoveStatus.SOURCE_MISSING
+    val sourceDirectory = directoryUri(source.dropLast(1)) ?: return MoveResult.SOURCE_MISSING
     val entry = child(sourceDirectory, source.last())?.takeIf { it[EntryKeys.IS_DIRECTORY] != true }
-      ?: return MoveStatus.SOURCE_MISSING
+      ?: return MoveResult.SOURCE_MISSING
     val targetDirectory = directoryUri(target.dropLast(1)) ?: throw IOException("missing ${to}")
 
-    if (child(targetDirectory, target.last()) != null) return MoveStatus.TARGET_EXISTS
+    if (child(targetDirectory, target.last()) != null) return MoveResult.TARGET_EXISTS
 
     val moved = source.last() == target.last() &&
       moveFile(context, sourceDirectory.toString(), source.last(), targetDirectory.toString())
 
     if (!moved) copyAndDelete(Uri.parse(entry[EntryKeys.URI] as String), targetDirectory, target.last())
 
-    return MoveStatus.MOVED
+    return MoveResult.MOVED
   }
 
   override fun removeDir(path: String) {

@@ -1,35 +1,15 @@
 use crate::constants::ERROR_PROPERTIES_NOT_OBJECT;
-use engine::model;
+use engine::error::ErrorCode;
+use engine::model::{self, FileStamp, IndexedNotes, SaveRequest, SourceFile, SyncStats};
+use engine::repository::{DirEntry, MoveResult};
 use engine::syntax::{Decomposed, NoteFields};
-
-#[derive(uniffi::Record)]
-pub struct SourceRecord {
-	pub location: String,
-	pub filename: String,
-	pub modified: i64,
-	pub size: i64,
-}
-
-#[derive(uniffi::Record)]
-pub struct FileStampRecord {
-	pub location: String,
-	pub modified: i64,
-	pub size: i64,
-}
 
 #[derive(uniffi::Enum)]
 pub enum SaveReport {
-	Saved { stamp: FileStampRecord },
+	Saved { stamp: FileStamp },
 	Conflict { disk_modified: i64 },
 	Missing,
 	Failed { message: String },
-}
-
-#[derive(uniffi::Record)]
-pub struct SaveRequestRecord {
-	pub filename: String,
-	pub text: String,
-	pub expected_modified: Option<i64>,
 }
 
 #[derive(uniffi::Record)]
@@ -47,27 +27,6 @@ pub struct DecomposedRecord {
 	pub properties_json: Option<String>,
 	pub invalid_frontmatter: Option<String>,
 	pub raw_frontmatter: Option<String>,
-}
-
-#[derive(uniffi::Record)]
-pub struct SyncReport {
-	pub total: u32,
-	pub added: u32,
-	pub updated: u32,
-	pub removed: u32,
-	pub unchanged: u32,
-	pub unreadable: u32,
-	pub scan_ms: u64,
-	pub read_ms: u64,
-	pub parse_ms: u64,
-	pub write_ms: u64,
-}
-
-#[derive(uniffi::Record)]
-pub struct IndexedNotesReport {
-	pub folder_ids: Vec<String>,
-	pub filenames: Vec<String>,
-	pub modified: Vec<i64>,
 }
 
 #[derive(uniffi::Record)]
@@ -109,25 +68,15 @@ pub enum EngineError {
 
 impl From<engine::error::Error> for EngineError {
 	fn from(error: engine::error::Error) -> Self {
-		let message = error.to_string();
+		let report = error.report();
 
-		match error {
-			engine::error::Error::Busy(_) => Self::Busy(message),
-			engine::error::Error::Database(_) => Self::Database(message),
-			engine::error::Error::Collation { .. } => Self::Collation(message),
-			engine::error::Error::Io(_) => Self::Io(message),
-			engine::error::Error::AlreadyExists(_) => Self::AlreadyExists(message),
-			engine::error::Error::InvalidName(_) => Self::InvalidName(message),
-		}
-	}
-}
-
-impl From<model::IndexedNotes> for IndexedNotesReport {
-	fn from(notes: model::IndexedNotes) -> Self {
-		Self {
-			folder_ids: notes.folder_ids,
-			filenames: notes.filenames,
-			modified: notes.modified,
+		match report.code {
+			ErrorCode::Busy => Self::Busy(report.message),
+			ErrorCode::Database => Self::Database(report.message),
+			ErrorCode::Collation => Self::Collation(report.message),
+			ErrorCode::Io => Self::Io(report.message),
+			ErrorCode::AlreadyExists => Self::AlreadyExists(report.message),
+			ErrorCode::InvalidName => Self::InvalidName(report.message),
 		}
 	}
 }
@@ -202,60 +151,10 @@ impl From<EngineError> for engine::error::Error {
 	}
 }
 
-impl From<SourceRecord> for model::SourceFile {
-	fn from(record: SourceRecord) -> Self {
-		Self {
-			location: record.location,
-			filename: record.filename,
-			modified: record.modified,
-			size: record.size,
-		}
-	}
-}
-
-impl From<model::SyncStats> for SyncReport {
-	fn from(stats: model::SyncStats) -> Self {
-		Self {
-			total: stats.total,
-			added: stats.added,
-			updated: stats.updated,
-			removed: stats.removed,
-			unchanged: stats.unchanged,
-			unreadable: stats.unreadable,
-			scan_ms: stats.scan_ms,
-			read_ms: stats.read_ms,
-			parse_ms: stats.parse_ms,
-			write_ms: stats.write_ms,
-		}
-	}
-}
-
-impl From<model::FileStamp> for FileStampRecord {
-	fn from(stamp: model::FileStamp) -> Self {
-		Self {
-			location: stamp.location,
-			modified: stamp.modified,
-			size: stamp.size,
-		}
-	}
-}
-
-impl From<FileStampRecord> for model::FileStamp {
-	fn from(record: FileStampRecord) -> Self {
-		Self {
-			location: record.location,
-			modified: record.modified,
-			size: record.size,
-		}
-	}
-}
-
 impl From<model::SaveOutcome> for SaveReport {
 	fn from(outcome: model::SaveOutcome) -> Self {
 		match outcome {
-			model::SaveOutcome::Saved(stamp) => Self::Saved {
-				stamp: stamp.into(),
-			},
+			model::SaveOutcome::Saved(stamp) => Self::Saved { stamp },
 			model::SaveOutcome::Conflict { disk_modified } => Self::Conflict { disk_modified },
 			model::SaveOutcome::Missing => Self::Missing,
 			model::SaveOutcome::Failed(message) => Self::Failed { message },
@@ -297,82 +196,75 @@ impl From<Decomposed> for DecomposedRecord {
 	}
 }
 
-impl From<SaveRequestRecord> for model::SaveRequest {
-	fn from(record: SaveRequestRecord) -> Self {
-		Self {
-			filename: record.filename,
-			text: record.text,
-			expected_modified: record.expected_modified,
-		}
-	}
-}
-
-#[derive(uniffi::Enum)]
-pub enum MoveStatus {
-	Moved,
-	TargetExists,
-	SourceMissing,
-}
-
 #[derive(uniffi::Enum)]
 pub enum MoveReport {
-	Moved { stamp: FileStampRecord },
+	Moved { stamp: FileStamp },
 	TargetExists,
 	SourceMissing,
-}
-
-impl From<MoveStatus> for engine::repository::MoveResult {
-	fn from(status: MoveStatus) -> Self {
-		match status {
-			MoveStatus::Moved => Self::Moved,
-			MoveStatus::TargetExists => Self::TargetExists,
-			MoveStatus::SourceMissing => Self::SourceMissing,
-		}
-	}
-}
-
-impl From<engine::repository::MoveResult> for MoveStatus {
-	fn from(result: engine::repository::MoveResult) -> Self {
-		match result {
-			engine::repository::MoveResult::Moved => Self::Moved,
-			engine::repository::MoveResult::TargetExists => Self::TargetExists,
-			engine::repository::MoveResult::SourceMissing => Self::SourceMissing,
-		}
-	}
 }
 
 impl From<engine::ops::MoveOutcome> for MoveReport {
 	fn from(outcome: engine::ops::MoveOutcome) -> Self {
 		match outcome {
-			engine::ops::MoveOutcome::Moved(stamp) => Self::Moved {
-				stamp: stamp.into(),
-			},
+			engine::ops::MoveOutcome::Moved(stamp) => Self::Moved { stamp },
 			engine::ops::MoveOutcome::TargetExists => Self::TargetExists,
 			engine::ops::MoveOutcome::SourceMissing => Self::SourceMissing,
 		}
 	}
 }
 
-#[derive(uniffi::Record)]
-pub struct DirEntryRecord {
+#[uniffi::remote(Record)]
+pub struct SourceFile {
+	pub location: String,
+	pub filename: String,
+	pub modified: i64,
+	pub size: i64,
+}
+
+#[uniffi::remote(Record)]
+pub struct FileStamp {
+	pub location: String,
+	pub modified: i64,
+	pub size: i64,
+}
+
+#[uniffi::remote(Record)]
+pub struct SaveRequest {
+	pub filename: String,
+	pub text: String,
+	pub expected_modified: Option<i64>,
+}
+
+#[uniffi::remote(Record)]
+pub struct SyncStats {
+	pub total: u32,
+	pub added: u32,
+	pub updated: u32,
+	pub removed: u32,
+	pub unchanged: u32,
+	pub unreadable: u32,
+	pub scan_ms: u64,
+	pub read_ms: u64,
+	pub parse_ms: u64,
+	pub write_ms: u64,
+}
+
+#[uniffi::remote(Record)]
+pub struct IndexedNotes {
+	pub folder_ids: Vec<String>,
+	pub filenames: Vec<String>,
+	pub modified: Vec<i64>,
+}
+
+#[uniffi::remote(Record)]
+pub struct DirEntry {
 	pub name: String,
 	pub is_dir: bool,
 }
 
-impl From<engine::repository::DirEntry> for DirEntryRecord {
-	fn from(entry: engine::repository::DirEntry) -> Self {
-		Self {
-			name: entry.name,
-			is_dir: entry.is_dir,
-		}
-	}
-}
-
-impl From<DirEntryRecord> for engine::repository::DirEntry {
-	fn from(record: DirEntryRecord) -> Self {
-		Self {
-			name: record.name,
-			is_dir: record.is_dir,
-		}
-	}
+#[uniffi::remote(Enum)]
+pub enum MoveResult {
+	Moved,
+	TargetExists,
+	SourceMissing,
 }

@@ -6,10 +6,11 @@ mod records;
 mod repository;
 mod source;
 
+use engine::model::{IndexedNotes, SaveRequest, SyncStats};
 use engine::source::{FsSource, LocationScheme};
 use records::{
-	DecomposedRecord, EngineError, IndexedNotesReport, MoveReport, NoteFieldsRecord,
-	NoteRefsReport, QueryReport, SaveReport, SaveRequestRecord, SyncReport, Value,
+	DecomposedRecord, EngineError, MoveReport, NoteFieldsRecord, NoteRefsReport, QueryReport,
+	SaveReport, Value,
 };
 use repository::{ForeignRepository, RepositoryFiles, VersionsHandle};
 use source::{ForeignSink, ForeignSource, NoteSink, NoteSource, ProgressListener};
@@ -35,15 +36,12 @@ impl Engine {
 		folder_id: String,
 		source: Arc<dyn NoteSource>,
 		listener: Arc<dyn ProgressListener>,
-	) -> Result<SyncReport, EngineError> {
+	) -> Result<SyncStats, EngineError> {
 		let source = ForeignSource::new(source);
 
-		Ok(self
-			.inner
-			.sync(&folder_id, &source, &|done, total| {
-				listener.on_progress(done, total)
-			})?
-			.into())
+		Ok(self.inner.sync(&folder_id, &source, &|done, total| {
+			listener.on_progress(done, total)
+		})?)
 	}
 
 	pub fn sync_directory(
@@ -52,15 +50,12 @@ impl Engine {
 		path: String,
 		uri_prefix: String,
 		listener: Arc<dyn ProgressListener>,
-	) -> Result<SyncReport, EngineError> {
+	) -> Result<SyncStats, EngineError> {
 		let source = FsSource::new(path, LocationScheme::android(uri_prefix));
 
-		Ok(self
-			.inner
-			.sync(&folder_id, &source, &|done, total| {
-				listener.on_progress(done, total)
-			})?
-			.into())
+		Ok(self.inner.sync(&folder_id, &source, &|done, total| {
+			listener.on_progress(done, total)
+		})?)
 	}
 
 	pub fn save_note(
@@ -83,10 +78,9 @@ impl Engine {
 		&self,
 		folder_id: String,
 		sink: Arc<dyn NoteSink>,
-		requests: Vec<SaveRequestRecord>,
+		requests: Vec<SaveRequest>,
 	) -> Result<Vec<SaveReport>, EngineError> {
 		let sink = ForeignSink::new(sink);
-		let requests: Vec<_> = requests.into_iter().map(Into::into).collect();
 
 		Ok(self
 			.inner
@@ -218,8 +212,8 @@ impl Engine {
 			.into())
 	}
 
-	pub fn indexed_notes(&self) -> Result<IndexedNotesReport, EngineError> {
-		Ok(self.inner.indexed_notes()?.into())
+	pub fn indexed_notes(&self) -> Result<IndexedNotes, EngineError> {
+		Ok(self.inner.indexed_notes()?)
 	}
 
 	pub fn query(&self, sql: String, params: Vec<Value>) -> Result<QueryReport, EngineError> {

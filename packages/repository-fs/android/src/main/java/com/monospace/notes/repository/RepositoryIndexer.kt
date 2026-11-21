@@ -7,7 +7,7 @@ import kotlinx.coroutines.runBlocking
 import uniffi.engine.Engine
 import uniffi.engine.NoteSource
 import uniffi.engine.ProgressListener
-import uniffi.engine.SourceRecord
+import uniffi.engine.SourceFile
 
 data class ScannedFile(val uri: String, val filename: String, val modified: Long, val size: Long)
 
@@ -44,8 +44,8 @@ private class ProviderNoteSource(
   private val directoryUri: String,
   private val dispatcher: CoroutineDispatcher
 ) : NoteSource {
-  override fun scan(): List<SourceRecord> =
-    scanNotes(context, directoryUri).map { SourceRecord(it.uri, it.filename, it.modified, it.size) }
+  override fun scan(): List<SourceFile> =
+    scanNotes(context, directoryUri).map { SourceFile(it.uri, it.filename, it.modified, it.size) }
 
   override fun read(locations: List<String>): List<String?> =
     runBlocking { readAll(context, locations, dispatcher) { it } }

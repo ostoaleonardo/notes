@@ -1,4 +1,4 @@
-use crate::records::{EngineError, FileStampRecord, SourceRecord};
+use crate::records::EngineError;
 use engine::error::Result as EngineResult;
 use engine::model::{FileStamp, SourceFile};
 use engine::source::LocationScheme;
@@ -6,7 +6,7 @@ use std::sync::Arc;
 
 #[uniffi::export(with_foreign)]
 pub trait NoteSource: Send + Sync {
-	fn scan(&self) -> Result<Vec<SourceRecord>, EngineError>;
+	fn scan(&self) -> Result<Vec<SourceFile>, EngineError>;
 	fn read(&self, locations: Vec<String>) -> Result<Vec<Option<String>>, EngineError>;
 }
 
@@ -27,12 +27,7 @@ impl ForeignSource {
 
 impl engine::source::NoteSource for ForeignSource {
 	fn scan(&self) -> EngineResult<Vec<SourceFile>> {
-		Ok(self
-			.inner
-			.scan()?
-			.into_iter()
-			.map(SourceFile::from)
-			.collect())
+		Ok(self.inner.scan()?)
 	}
 
 	fn read(&self, files: &[&SourceFile]) -> EngineResult<Vec<Option<String>>> {
@@ -44,8 +39,8 @@ impl engine::source::NoteSource for ForeignSource {
 
 #[uniffi::export(with_foreign)]
 pub trait NoteSink: Send + Sync {
-	fn stat(&self, filename: String) -> Result<Option<FileStampRecord>, EngineError>;
-	fn write(&self, filename: String, text: String) -> Result<FileStampRecord, EngineError>;
+	fn stat(&self, filename: String) -> Result<Option<FileStamp>, EngineError>;
+	fn write(&self, filename: String, text: String) -> Result<FileStamp, EngineError>;
 	fn delete(&self, filename: String) -> Result<(), EngineError>;
 }
 
@@ -61,14 +56,11 @@ impl ForeignSink {
 
 impl engine::source::NoteSink for ForeignSink {
 	fn stat(&self, filename: &str) -> EngineResult<Option<FileStamp>> {
-		Ok(self.inner.stat(filename.to_string())?.map(FileStamp::from))
+		Ok(self.inner.stat(filename.to_string())?)
 	}
 
 	fn write(&self, filename: &str, text: &str) -> EngineResult<FileStamp> {
-		Ok(self
-			.inner
-			.write(filename.to_string(), text.to_string())?
-			.into())
+		Ok(self.inner.write(filename.to_string(), text.to_string())?)
 	}
 
 	fn delete(&self, filename: &str) -> EngineResult<()> {
@@ -93,12 +85,16 @@ impl FsNoteSink {
 
 #[uniffi::export]
 impl NoteSink for FsNoteSink {
-	fn stat(&self, filename: String) -> Result<Option<FileStampRecord>, EngineError> {
-		Ok(engine::source::NoteSink::stat(&self.inner, &filename)?.map(Into::into))
+	fn stat(&self, filename: String) -> Result<Option<FileStamp>, EngineError> {
+		Ok(engine::source::NoteSink::stat(&self.inner, &filename)?)
 	}
 
-	fn write(&self, filename: String, text: String) -> Result<FileStampRecord, EngineError> {
-		Ok(engine::source::NoteSink::write(&self.inner, &filename, &text)?.into())
+	fn write(&self, filename: String, text: String) -> Result<FileStamp, EngineError> {
+		Ok(engine::source::NoteSink::write(
+			&self.inner,
+			&filename,
+			&text,
+		)?)
 	}
 
 	fn delete(&self, filename: String) -> Result<(), EngineError> {
