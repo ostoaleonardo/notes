@@ -8,9 +8,10 @@ use crate::repository::{MoveResult, RepositoryOps, validate_name};
 use crate::source::NoteSink;
 use crate::versions::RepositoryVersions;
 use constants::{NOTE_EXTENSION, PATH_SEPARATOR};
+use serde::{Deserialize, Serialize};
 use std::io::{self, ErrorKind};
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum MoveOutcome {
 	Moved(FileStamp),
 	TargetExists,

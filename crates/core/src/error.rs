@@ -1,4 +1,5 @@
-use rusqlite::ErrorCode;
+use rusqlite::ErrorCode as SqliteCode;
+use serde::{Deserialize, Serialize, Serializer};
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -16,9 +17,50 @@ pub enum Error {
 	InvalidName(String),
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ErrorCode {
+	Busy,
+	Database,
+	Collation,
+	Io,
+	AlreadyExists,
+	InvalidName,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ErrorReport {
+	pub code: ErrorCode,
+	pub message: String,
+}
+
 impl Error {
+	pub fn code(&self) -> ErrorCode {
+		match self {
+			Self::Busy(_) => ErrorCode::Busy,
+			Self::Database(_) => ErrorCode::Database,
+			Self::Collation { .. } => ErrorCode::Collation,
+			Self::Io(_) => ErrorCode::Io,
+			Self::AlreadyExists(_) => ErrorCode::AlreadyExists,
+			Self::InvalidName(_) => ErrorCode::InvalidName,
+		}
+	}
+
+	pub fn report(&self) -> ErrorReport {
+		ErrorReport {
+			code: self.code(),
+			message: self.to_string(),
+		}
+	}
+
 	pub fn is_retryable(&self) -> bool {
 		matches!(self, Self::Busy(_))
+	}
+}
+
+impl Serialize for Error {
+	fn serialize<S: Serializer>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error> {
+		self.report().serialize(serializer)
 	}
 }
 
@@ -28,7 +70,7 @@ impl From<rusqlite::Error> for Error {
 			rusqlite::Error::SqliteFailure(failure, _)
 				if matches!(
 					failure.code,
-					ErrorCode::DatabaseBusy | ErrorCode::DatabaseLocked
+					SqliteCode::DatabaseBusy | SqliteCode::DatabaseLocked
 				) =>
 			{
 				Self::Busy(error)

@@ -3,9 +3,10 @@ use super::frontmatter::{json_properties, read_metadata, split};
 use super::patterns::FRONTMATTER;
 use super::tags::frontmatter_tags;
 use super::yaml_emit::emit;
+use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 
-#[derive(Debug, Clone, Default, PartialEq)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct NoteFields {
 	pub tags: Vec<String>,
 	pub properties: Map<String, Value>,
@@ -13,7 +14,7 @@ pub struct NoteFields {
 	pub raw_frontmatter: Option<String>,
 }
 
-#[derive(Debug, Clone, Default, PartialEq)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Decomposed {
 	pub body: String,
 	pub tags: Option<Vec<String>>,

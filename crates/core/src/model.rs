@@ -1,3 +1,5 @@
+use serde::{Deserialize, Serialize};
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Tag {
 	pub name: String,
@@ -17,7 +19,7 @@ pub struct Link {
 	pub anchor_name: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct NoteRef {
 	pub folder_id: String,
 	pub filename: String,
@@ -56,7 +58,7 @@ pub struct ScannedFile {
 	pub size: i64,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SourceFile {
 	pub location: String,
 	pub filename: String,
@@ -86,7 +88,7 @@ impl NoteInput {
 	}
 }
 
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SyncStats {
 	pub total: u32,
 	pub added: u32,
@@ -122,14 +124,14 @@ pub struct BatchStats {
 	pub write_ms: u64,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Eq)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct IndexedNotes {
 	pub folder_ids: Vec<String>,
 	pub filenames: Vec<String>,
 	pub modified: Vec<i64>,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum Value {
 	Null,
 	Integer(i64),
@@ -137,20 +139,20 @@ pub enum Value {
 	Text(String),
 }
 
-#[derive(Debug, Clone, Default, PartialEq)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct QueryResult {
 	pub columns: Vec<String>,
 	pub rows: Vec<Vec<Value>>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct FileStamp {
 	pub location: String,
 	pub modified: i64,
 	pub size: i64,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum SaveOutcome {
 	Saved(FileStamp),
 	Conflict { disk_modified: i64 },
@@ -158,7 +160,7 @@ pub enum SaveOutcome {
 	Failed(String),
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SaveRequest {
 	pub filename: String,
 	pub text: String,

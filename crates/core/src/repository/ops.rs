@@ -1,15 +1,16 @@
 use super::RepositoryFiles;
 use super::constants::{BACKSLASH, CURRENT_DIRECTORY, NUL, PARENT_DIRECTORY, PATH_SEPARATOR};
 use crate::error::{Error, Result};
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum MoveResult {
 	Moved,
 	TargetExists,
 	SourceMissing,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct DirEntry {
 	pub name: String,
 	pub is_dir: bool,
