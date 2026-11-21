@@ -5,6 +5,7 @@ pub mod error;
 pub mod index;
 pub mod links;
 pub mod model;
+pub mod names;
 pub mod ops;
 mod pool;
 pub mod reconcile;

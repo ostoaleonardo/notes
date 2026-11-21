@@ -1,0 +1,16 @@
+pub const DEFAULT_FILENAME: &str = "Untitled";
+pub const FILENAME_MAX_BYTES: usize = 255;
+pub const UNIQUE_SUFFIX_RESERVE_BYTES: usize = 8;
+pub const REPLACEMENT_CHAR: char = ' ';
+pub const ILLEGAL_CHARS: [char; 8] = ['/', '\\', ':', '*', '?', '"', '<', '>'];
+pub const PIPE_CHAR: char = '|';
+pub const LAST_CONTROL_CHAR: char = '\u{1f}';
+pub const BYTE_ORDER_MARK: char = '\u{feff}';
+pub const TRAILING_TRIMMED: [char; 2] = ['.', ' '];
+pub const RESERVED_SUFFIX: &str = "_";
+pub const STEM_END: char = '.';
+pub const RESERVED_DEVICES: [&str; 4] = ["CON", "PRN", "AUX", "NUL"];
+pub const NUMBERED_DEVICES: [&str; 2] = ["COM", "LPT"];
+pub const NUMBERED_DEVICE_DIGITS: &str = "123456789";
+pub const LINK_BREAKING_CHARS: [char; 4] = ['#', '^', '[', ']'];
+pub const FIRST_COPY_NUMBER: u32 = 2;
