@@ -39,7 +39,7 @@ pub fn indexed_notes(connection: &Connection) -> Result<IndexedNotes> {
 }
 
 pub fn folders(connection: &Connection) -> Result<Vec<String>> {
-	let mut statement = connection.prepare_cached(sql::SELECT_REPOSITORIES)?;
+	let mut statement = connection.prepare_cached(sql::SELECT_FOLDER_IDS)?;
 	let rows = statement.query_map([], |row| row.get(sql::FIRST_COLUMN))?;
 
 	Ok(rows.collect::<std::result::Result<_, _>>()?)

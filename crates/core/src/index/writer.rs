@@ -24,8 +24,8 @@ pub fn write_batch(
 }
 
 pub fn delete_folder(transaction: &Transaction<'_>, folder_id: &str) -> Result<()> {
-	transaction.execute(sql::DELETE_FTS_BY_REPOSITORY, [folder_id])?;
-	transaction.execute(sql::DELETE_NOTES_BY_REPOSITORY, [folder_id])?;
+	transaction.execute(sql::DELETE_FTS_BY_FOLDER, [folder_id])?;
+	transaction.execute(sql::DELETE_NOTES_BY_FOLDER, [folder_id])?;
 
 	Ok(())
 }

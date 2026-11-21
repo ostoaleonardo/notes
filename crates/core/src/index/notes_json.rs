@@ -139,7 +139,7 @@ fn write_notes(connection: &Connection, folder_ids: &[String], out: &mut String)
 		string_field(
 			out,
 			key::FILE_URI,
-			&row.get::<_, String>(sql::list_note_column::URI)?,
+			&row.get::<_, String>(sql::list_note_column::LOCATION)?,
 		);
 		out.push(token::SEPARATOR);
 		string_field(

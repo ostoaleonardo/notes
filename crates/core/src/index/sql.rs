@@ -104,13 +104,13 @@ pub const UPSERT_META: &str = "INSERT OR REPLACE INTO meta(key, value) VALUES(?1
 
 pub const SELECT_METAS: &str = "SELECT filename, modified, size FROM notes WHERE folder_id = ?1";
 pub const SELECT_INDEXED: &str = "SELECT folder_id, filename, modified FROM notes";
-pub const SELECT_REPOSITORIES: &str = "SELECT DISTINCT folder_id FROM notes";
+pub const SELECT_FOLDER_IDS: &str = "SELECT DISTINCT folder_id FROM notes";
 pub const SELECT_NOTE_ID: &str = "SELECT id FROM notes WHERE folder_id = ?1 AND filename = ?2";
 pub const DELETE_FTS: &str = "DELETE FROM note_fts WHERE rowid = ?1";
 pub const DELETE_NOTE: &str = "DELETE FROM notes WHERE id = ?1";
-pub const DELETE_FTS_BY_REPOSITORY: &str =
+pub const DELETE_FTS_BY_FOLDER: &str =
 	"DELETE FROM note_fts WHERE rowid IN (SELECT id FROM notes WHERE folder_id = ?1)";
-pub const DELETE_NOTES_BY_REPOSITORY: &str = "DELETE FROM notes WHERE folder_id = ?1";
+pub const DELETE_NOTES_BY_FOLDER: &str = "DELETE FROM notes WHERE folder_id = ?1";
 
 pub const INSERT_NOTE: &str = "INSERT INTO notes(
 	folder_id, filename, location, title, sort_key, modified, size, invalid_frontmatter, frontmatter
@@ -168,7 +168,7 @@ pub mod list_note_column {
 	pub const ID: usize = 0;
 	pub const FOLDER_ID: usize = 1;
 	pub const FILENAME: usize = 2;
-	pub const URI: usize = 3;
+	pub const LOCATION: usize = 3;
 	pub const TITLE: usize = 4;
 	pub const MODIFIED: usize = 5;
 	pub const INVALID_FRONTMATTER: usize = 6;
