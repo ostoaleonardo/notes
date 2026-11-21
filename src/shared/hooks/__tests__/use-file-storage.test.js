@@ -256,40 +256,38 @@ describe('rename note file', () => {
     })
 })
 
-describe('move note files', () => {
-    test('moves the note to the destination and removes the source', async () => {
+describe('native note moves', () => {
+    const native = jest.requireMock('repository-fs').default
+
+    test('moves a note through the native vault', async () => {
         const { result } = await renderFileStorageHook()
 
-        seedDirectory('content://repo', [new File('content://repo/note.md')])
-        seedDirectory('content://bin', [])
-        setFileContent('content://repo/note.md', 'hello')
+        native.moveNote.mockResolvedValueOnce({ status: 'moved', uri: 'content://bin/note.md', modified: 3 })
 
-        const target = await result.current.moveNoteFiles(
-            'content://repo',
-            'note.md',
-            'content://bin'
-        )
+        const moved = await result.current.moveNote({
+            rootUri: 'content://root',
+            filename: 'note.md',
+            from: { folderId: 'a', path: '' },
+            to: { folderId: 'b', path: 'Bin', uri: 'content://bin' }
+        })
 
-        expect(target).toBe('note.md')
-        expect(await new File('content://bin/note.md').text()).toBe('hello')
-        expect(result.current.findFile('content://repo', 'note.md')).toBeUndefined()
+        expect(moved).toEqual({ status: 'moved', fileUri: 'content://bin/note.md', updatedAt: 3 })
     })
 
-    test('picks a unique filename when the destination already has one', async () => {
+    test('trashes a note through the native vault', async () => {
         const { result } = await renderFileStorageHook()
 
-        seedDirectory('content://repo', [new File('content://repo/note.md')])
-        seedDirectory('content://bin', [new File('content://bin/note.md')])
-        setFileContent('content://repo/note.md', 'new')
+        native.trashNote.mockResolvedValueOnce('note (2).md')
 
-        const target = await result.current.moveNoteFiles(
-            'content://repo',
-            'note.md',
-            'content://bin'
-        )
+        const target = await result.current.trashNote({
+            rootUri: 'content://root',
+            folderId: 'a',
+            folderPath: '',
+            filename: 'note.md'
+        })
 
         expect(target).toBe('note (2).md')
-        expect(await new File('content://bin/note (2).md').text()).toBe('new')
+        expect(native.trashNote).toHaveBeenCalledWith('content://root', 'a', '', 'note.md', '.trash')
     })
 })
 
@@ -345,16 +343,6 @@ describe('versions', () => {
         expect(
             await result.current.readVersions('content://root', 'Work/note.md')
         ).toEqual([{ id: 'v1' }])
-    })
-
-    test('forwards the rename and delete of folder versions to the native vault', async () => {
-        const { result } = await renderFileStorageHook()
-
-        await result.current.renameVersionsUnder('content://root', 'Work', 'Job')
-        await result.current.deleteVersionsUnder('content://root', 'Work')
-
-        expect(native.versionsRenameUnder).toHaveBeenCalledWith('content://root', 'Work', 'Job')
-        expect(native.versionsDeleteUnder).toHaveBeenCalledWith('content://root', 'Work')
     })
 })
 
@@ -448,35 +436,38 @@ describe('delete directory', () => {
     })
 })
 
-describe('rename directory', () => {
+describe('rename folder', () => {
     const native = jest.requireMock('repository-fs').default
+    const request = {
+        rootUri: 'content://root',
+        path: 'Old',
+        newName: 'New',
+        folderIds: ['a'],
+        parentUri: 'content://repo'
+    }
 
     test('renames through the native vault and returns the new uri', async () => {
         const { result } = await renderFileStorageHook()
 
-        native.renameDirectory.mockResolvedValueOnce('content://repo/New/')
+        native.renameFolder.mockResolvedValueOnce({ path: 'New', uri: 'content://repo/New/' })
 
-        const uri = await result.current.renameDirectory(
-            'content://repo/Old',
-            'content://repo',
-            'New'
-        )
+        const renamed = await result.current.renameFolder(request)
 
-        expect(uri).toBe('content://repo/New/')
-        expect(native.renameDirectory).toHaveBeenCalledWith(
-            'content://repo/Old',
-            'content://repo',
-            'New'
+        expect(renamed).toEqual({ path: 'New', uri: 'content://repo/New/' })
+        expect(native.renameFolder).toHaveBeenCalledWith(
+            'content://root',
+            'Old',
+            'New',
+            ['a'],
+            'content://repo'
         )
     })
 
     test('propagates a failed rename', async () => {
         const { result } = await renderFileStorageHook()
 
-        native.renameDirectory.mockRejectedValueOnce(new Error('cannot rename'))
+        native.renameFolder.mockRejectedValueOnce(new Error('cannot rename'))
 
-        await expect(
-            result.current.renameDirectory('content://repo/Old', 'content://repo', 'New')
-        ).rejects.toThrow('cannot rename')
+        await expect(result.current.renameFolder(request)).rejects.toThrow('cannot rename')
     })
 })

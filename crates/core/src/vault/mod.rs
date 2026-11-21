@@ -1,7 +1,9 @@
 mod constants;
 mod fs_vault;
+mod ops;
 
 pub use fs_vault::FsVault;
+pub use ops::{MoveResult, VaultOps, validate_name};
 
 use crate::error::Result;
 

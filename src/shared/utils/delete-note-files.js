@@ -8,15 +8,11 @@ export const readDeleteBehavior = async (getItem) => (
 )
 
 export const deleteNoteFiles = async (behavior, location, fileStorage) => {
-    const { uri, rootUri, folderPath, filename } = location
+    const { uri, rootUri, folderId, folderPath, filename } = location
     const key = buildVersionKey(folderPath, filename)
 
     if (behavior === DELETE_BEHAVIORS.VAULT_TRASH) {
-        const folder = fileStorage.getOrCreateVaultTrashFolder(rootUri)
-        const target = await fileStorage.moveNoteFiles(uri, filename, folder.uri)
-
-        await fileStorage.deleteVersions(rootUri, key)
-        return target
+        return fileStorage.trashNote({ rootUri, folderId, folderPath, filename })
     }
 
     fileStorage.deleteNoteFile(uri, filename)

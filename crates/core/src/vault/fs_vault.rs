@@ -1,6 +1,6 @@
-use super::VaultFs;
 use super::constants::PATH_SEPARATOR;
-use crate::error::Result;
+use super::{MoveResult, VaultFs, VaultOps, validate_name};
+use crate::error::{Error, Result};
 use std::fs;
 use std::io::{self, ErrorKind};
 use std::path::PathBuf;
@@ -75,5 +75,58 @@ impl VaultFs for FsVault {
 		names.sort();
 
 		Ok(names)
+	}
+}
+
+impl VaultOps for FsVault {
+	fn exists(&self, path: &str) -> Result<bool> {
+		Ok(self.resolve(path).exists())
+	}
+
+	fn create_dir(&self, path: &str) -> Result<()> {
+		fs::create_dir_all(self.resolve(path))?;
+
+		Ok(())
+	}
+
+	fn rename_dir(&self, path: &str, new_name: &str) -> Result<()> {
+		validate_name(new_name)?;
+
+		let source = self.resolve(path);
+		let target = source
+			.parent()
+			.map(|parent| parent.join(new_name))
+			.ok_or_else(|| Error::InvalidName(path.to_string()))?;
+
+		if target.exists() {
+			return Err(Error::AlreadyExists(new_name.to_string()));
+		}
+
+		fs::rename(source, target)?;
+
+		Ok(())
+	}
+
+	fn move_file(&self, from: &str, to: &str) -> Result<MoveResult> {
+		let source = self.resolve(from);
+		let target = self.resolve(to);
+
+		if !source.is_file() {
+			return Ok(MoveResult::SourceMissing);
+		}
+
+		if target.exists() {
+			return Ok(MoveResult::TargetExists);
+		}
+
+		fs::rename(source, target)?;
+
+		Ok(MoveResult::Moved)
+	}
+
+	fn remove_dir(&self, path: &str) -> Result<()> {
+		missing_is_none(fs::remove_dir_all(self.resolve(path)))?;
+
+		Ok(())
 	}
 }

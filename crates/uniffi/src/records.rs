@@ -101,6 +101,10 @@ pub enum EngineError {
 	Collation(String),
 	#[error("{0}")]
 	Io(String),
+	#[error("{0}")]
+	AlreadyExists(String),
+	#[error("{0}")]
+	InvalidName(String),
 }
 
 impl From<engine::error::Error> for EngineError {
@@ -112,6 +116,8 @@ impl From<engine::error::Error> for EngineError {
 			engine::error::Error::Database(_) => Self::Database(message),
 			engine::error::Error::Collation { .. } => Self::Collation(message),
 			engine::error::Error::Io(_) => Self::Io(message),
+			engine::error::Error::AlreadyExists(_) => Self::AlreadyExists(message),
+			engine::error::Error::InvalidName(_) => Self::InvalidName(message),
 		}
 	}
 }
@@ -187,7 +193,9 @@ impl From<EngineError> for engine::error::Error {
 			EngineError::Busy(message)
 			| EngineError::Database(message)
 			| EngineError::Collation(message)
-			| EngineError::Io(message) => message,
+			| EngineError::Io(message)
+			| EngineError::AlreadyExists(message)
+			| EngineError::InvalidName(message) => message,
 		};
 
 		Self::Io(std::io::Error::other(message))
@@ -295,6 +303,52 @@ impl From<SaveRequestRecord> for model::SaveRequest {
 			filename: record.filename,
 			text: record.text,
 			expected_modified: record.expected_modified,
+		}
+	}
+}
+
+#[derive(uniffi::Enum)]
+pub enum MoveStatus {
+	Moved,
+	TargetExists,
+	SourceMissing,
+}
+
+#[derive(uniffi::Enum)]
+pub enum MoveReport {
+	Moved { stamp: FileStampRecord },
+	TargetExists,
+	SourceMissing,
+}
+
+impl From<MoveStatus> for engine::vault::MoveResult {
+	fn from(status: MoveStatus) -> Self {
+		match status {
+			MoveStatus::Moved => Self::Moved,
+			MoveStatus::TargetExists => Self::TargetExists,
+			MoveStatus::SourceMissing => Self::SourceMissing,
+		}
+	}
+}
+
+impl From<engine::vault::MoveResult> for MoveStatus {
+	fn from(result: engine::vault::MoveResult) -> Self {
+		match result {
+			engine::vault::MoveResult::Moved => Self::Moved,
+			engine::vault::MoveResult::TargetExists => Self::TargetExists,
+			engine::vault::MoveResult::SourceMissing => Self::SourceMissing,
+		}
+	}
+}
+
+impl From<engine::ops::MoveOutcome> for MoveReport {
+	fn from(outcome: engine::ops::MoveOutcome) -> Self {
+		match outcome {
+			engine::ops::MoveOutcome::Moved(stamp) => Self::Moved {
+				stamp: stamp.into(),
+			},
+			engine::ops::MoveOutcome::TargetExists => Self::TargetExists,
+			engine::ops::MoveOutcome::SourceMissing => Self::SourceMissing,
 		}
 	}
 }

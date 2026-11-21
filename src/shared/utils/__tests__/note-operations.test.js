@@ -601,25 +601,27 @@ describe('persist note move', () => {
         { id: 'other', uri: 'file:///other', alias: 'Other' }
     ]
 
-    const createMoveStorage = (destinationNames = []) => ({
-        fileExists: jest.fn((_uri, name) => destinationNames.includes(name)),
-        moveNote: jest.fn(async () => ({ fileUri: 'file:///root/Child/Idea.md', updatedAt: 99 })),
-        renameVersions: jest.fn(async () => {})
+    const createMoveStorage = (status = 'moved') => ({
+        moveNote: jest.fn(async () => ({
+            status,
+            fileUri: 'file:///root/Child/Idea.md',
+            updatedAt: 99
+        }))
     })
 
     const NOTE = { path: 'root::Idea.md', filename: 'Idea.md', title: 'Idea', folderId: 'root' }
 
-    test('moves the file and its version history to the destination folder', async () => {
+    test('moves the file and its version history to the destination folder natively', async () => {
         const storage = createMoveStorage()
 
         await persistNoteMove({ note: NOTE, destinationId: 'child', folders: MOVE_FOLDERS }, storage)
 
         expect(storage.moveNote).toHaveBeenCalledWith({
-            source: { folderId: 'root', uri: 'file:///root' },
-            destination: { folderId: 'child', uri: 'file:///root/Child' },
-            filename: 'Idea.md'
+            rootUri: 'file:///root',
+            filename: 'Idea.md',
+            from: { folderId: 'root', path: '' },
+            to: { folderId: 'child', path: 'Child', uri: 'file:///root/Child' }
         })
-        expect(storage.renameVersions).toHaveBeenCalledWith('file:///root', 'Idea.md', 'Child/Idea.md')
     })
 
     test('returns the new location of the note', async () => {
@@ -638,12 +640,19 @@ describe('persist note move', () => {
     })
 
     test('throws a duplicate-title error when the destination has the same filename', async () => {
-        const storage = createMoveStorage(['Idea.md'])
+        const storage = createMoveStorage('targetExists')
 
         await expect(
             persistNoteMove({ note: NOTE, destinationId: 'child', folders: MOVE_FOLDERS }, storage)
         ).rejects.toMatchObject({ code: 'DUPLICATE_TITLE' })
-        expect(storage.moveNote).not.toHaveBeenCalled()
+    })
+
+    test('throws when the note no longer exists', async () => {
+        const storage = createMoveStorage('sourceMissing')
+
+        await expect(
+            persistNoteMove({ note: NOTE, destinationId: 'child', folders: MOVE_FOLDERS }, storage)
+        ).rejects.toThrow()
     })
 
     test('refuses to move a note to a different folder tree', async () => {

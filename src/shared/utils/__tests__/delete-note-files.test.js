@@ -3,13 +3,13 @@ import { deleteNoteFiles } from '../delete-note-files'
 const location = {
     uri: 'file:///vault/sub',
     rootUri: 'file:///vault',
+    folderId: 'sub-id',
     folderPath: 'sub',
     filename: 'Groceries.md'
 }
 
 const createFileStorage = () => ({
-    getOrCreateVaultTrashFolder: jest.fn(() => ({ uri: 'file:///vault/.trash' })),
-    moveNoteFiles: jest.fn(async () => 'Groceries.md'),
+    trashNote: jest.fn(async () => 'Groceries.md'),
     deleteNoteFile: jest.fn(),
     deleteVersions: jest.fn()
 })
@@ -18,15 +18,16 @@ describe('delete note files', () => {
     test('moves the note into the vault root trash folder', async () => {
         const fileStorage = createFileStorage()
 
-        await deleteNoteFiles('vault-trash', location, fileStorage)
+        const target = await deleteNoteFiles('vault-trash', location, fileStorage)
 
-        expect(fileStorage.getOrCreateVaultTrashFolder).toHaveBeenCalledWith('file:///vault')
-        expect(fileStorage.moveNoteFiles).toHaveBeenCalledWith(
-            'file:///vault/sub',
-            'Groceries.md',
-            'file:///vault/.trash'
-        )
-        expect(fileStorage.deleteVersions).toHaveBeenCalledWith('file:///vault', 'sub/Groceries.md')
+        expect(target).toBe('Groceries.md')
+        expect(fileStorage.trashNote).toHaveBeenCalledWith({
+            rootUri: 'file:///vault',
+            folderId: 'sub-id',
+            folderPath: 'sub',
+            filename: 'Groceries.md'
+        })
+        expect(fileStorage.deleteNoteFile).not.toHaveBeenCalled()
     })
 
     test('deletes the note and its versions for permanent deletion', async () => {
@@ -36,6 +37,6 @@ describe('delete note files', () => {
 
         expect(fileStorage.deleteNoteFile).toHaveBeenCalledWith('file:///vault/sub', 'Groceries.md')
         expect(fileStorage.deleteVersions).toHaveBeenCalledWith('file:///vault', 'sub/Groceries.md')
-        expect(fileStorage.moveNoteFiles).not.toHaveBeenCalled()
+        expect(fileStorage.trashNote).not.toHaveBeenCalled()
     })
 })

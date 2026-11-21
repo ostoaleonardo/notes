@@ -15,10 +15,9 @@ const mockFileStorage = {
     writeNoteFile: jest.fn(),
     createSubdirectory: jest.fn(),
     deleteDirectory: jest.fn(),
-    renameVersionsUnder: jest.fn(),
-    deleteVersionsUnder: jest.fn(),
+    removeFolder: jest.fn(async () => {}),
+    renameFolder: jest.fn(),
     directoryExists: jest.fn(() => true),
-    renameDirectory: jest.fn(),
     findDirectory: jest.fn(() => undefined),
     getOrCreateTemplatesFolder: jest.fn(() => ({ uri: 'content://fake/templates' })),
     getOrCreateImagesFolder: jest.fn(() => ({ uri: 'content://fake/images' }))
@@ -178,10 +177,12 @@ describe('remove repository', () => {
             await result.current.removeRepository('child-1')
         })
 
-        expect(mockFileStorage.deleteVersionsUnder).toHaveBeenCalledWith(
-            'content://root-1',
-            'child'
-        )
+        expect(mockFileStorage.removeFolder).toHaveBeenCalledWith({
+            rootUri: 'content://root-1',
+            path: 'child',
+            folderIds: ['child-1'],
+            dropVersions: true
+        })
     })
 })
 
@@ -240,7 +241,10 @@ describe('rename repository', () => {
             parentId: 'child-1'
         }
 
-        mockFileStorage.renameDirectory.mockReturnValue('content://root-1/renamed')
+        mockFileStorage.renameFolder.mockResolvedValue({
+            path: 'renamed',
+            uri: 'content://root-1/renamed'
+        })
         mockFileStorage.scanSubdirectories.mockImplementation(async (uri) => {
             if (uri === 'content://root-1/renamed') {
                 return [{ uri: 'content://root-1/renamed/grand', name: 'grand' }]
@@ -261,7 +265,7 @@ describe('rename repository', () => {
         expect(persistedGrandchild.uri).toBe('content://root-1/renamed/grand')
     })
 
-    test('moves the version history of the folder to its new path', async () => {
+    test('renames the folder and its version history in one native call', async () => {
         const root = { id: 'root-1', uri: 'content://root-1', parentId: null }
         const child = {
             id: 'child-1',
@@ -270,7 +274,10 @@ describe('rename repository', () => {
             parentId: 'root-1'
         }
 
-        mockFileStorage.renameDirectory.mockReturnValue('content://root-1/renamed')
+        mockFileStorage.renameFolder.mockResolvedValue({
+            path: 'renamed',
+            uri: 'content://root-1/renamed'
+        })
 
         const { result } = await renderFoldersHook([root, child])
 
@@ -278,11 +285,13 @@ describe('rename repository', () => {
             await result.current.renameFolder('child-1', 'renamed')
         })
 
-        expect(mockFileStorage.renameVersionsUnder).toHaveBeenCalledWith(
-            'content://root-1',
-            'child',
-            'renamed'
-        )
+        expect(mockFileStorage.renameFolder).toHaveBeenCalledWith({
+            rootUri: 'content://root-1',
+            path: 'child',
+            newName: 'renamed',
+            folderIds: ['child-1'],
+            parentUri: 'content://root-1'
+        })
     })
 })
 

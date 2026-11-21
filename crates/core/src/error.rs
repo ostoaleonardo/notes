@@ -10,6 +10,10 @@ pub enum Error {
 	Collation { locale: String, reason: String },
 	#[error("file error: {0}")]
 	Io(#[from] std::io::Error),
+	#[error("already exists: {0}")]
+	AlreadyExists(String),
+	#[error("invalid name: {0}")]
+	InvalidName(String),
 }
 
 impl Error {

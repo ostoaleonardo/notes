@@ -15,8 +15,7 @@ const mockFileStorage = {
     saveNoteFile: jest.fn(),
     saveNoteFiles: jest.fn(),
     getExistingFile: jest.fn(),
-    moveNote: jest.fn(),
-    renameVersions: jest.fn(async () => {})
+    moveNote: jest.fn()
 }
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
@@ -95,6 +94,7 @@ describe('move note', () => {
         written = new Map()
         mockFileStorage.fileExists.mockReturnValue(false)
         mockFileStorage.moveNote.mockResolvedValue({
+            status: 'moved',
             fileUri: 'file:///root/Child/Idea.md',
             updatedAt: 99
         })

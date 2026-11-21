@@ -6,6 +6,7 @@ import android.provider.DocumentsContract
 import uniffi.engine.DecomposedRecord
 import uniffi.engine.FileStampRecord
 import uniffi.engine.FsNoteSink
+import uniffi.engine.MoveReport
 import uniffi.engine.NoteSink
 import uniffi.engine.SaveReport
 
@@ -72,3 +73,14 @@ internal fun decomposeNoteToMap(parts: DecomposedRecord): Map<String, Any?> = ma
   DecomposedKeys.INVALID_FRONTMATTER to parts.invalidFrontmatter,
   DecomposedKeys.RAW_FRONTMATTER to parts.rawFrontmatter
 )
+
+internal fun moveReportToMap(report: MoveReport): Map<String, Any> = when (report) {
+  is MoveReport.Moved -> mapOf(
+    MoveKeys.STATUS to MoveKeys.MOVED,
+    MoveKeys.URI to report.stamp.location,
+    MoveKeys.MODIFIED to report.stamp.modified,
+    MoveKeys.SIZE to report.stamp.size
+  )
+  is MoveReport.TargetExists -> mapOf(MoveKeys.STATUS to MoveKeys.TARGET_EXISTS)
+  is MoveReport.SourceMissing -> mapOf(MoveKeys.STATUS to MoveKeys.SOURCE_MISSING)
+}

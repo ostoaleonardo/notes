@@ -31,15 +31,18 @@ jest.mock('repository-fs', () => {
                 }
             },
             readTextFiles,
-            renameDirectory: jest.fn(async (directoryUri, parentUri, newName) => `${parentUri}/${newName}/`),
-            moveFile: jest.fn(async () => false),
+            renameFolder: jest.fn(async (rootUri, path, newName, folderIds, parentUri) => ({
+                path: newName,
+                uri: `${parentUri}/${newName}/`
+            })),
+            removeFolder: jest.fn(async () => {}),
+            trashNote: jest.fn(async (rootUri, folderId, folderPath, filename) => filename),
+            moveNote: jest.fn(async () => ({ status: 'moved', uri: null, modified: 0 })),
             versionsRead: jest.fn(async () => null),
             versionsWrite: jest.fn(async () => {}),
             versionsDelete: jest.fn(async () => {}),
             versionsCommit: jest.fn(async () => true),
             versionsRename: jest.fn(async () => {}),
-            versionsRenameUnder: jest.fn(async () => {}),
-            versionsDeleteUnder: jest.fn(async () => {}),
             versionsMigrateLegacy: jest.fn(async () => {}),
             composeNote: (tags, propertiesJson, invalidFrontmatter, rawFrontmatter, body) => {
                 const { buildNoteFileContent } = require('@/shared/utils/frontmatter')

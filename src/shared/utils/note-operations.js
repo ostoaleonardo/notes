@@ -9,7 +9,7 @@ import { noteBodies } from '@/shared/utils/note-body'
 import { bodyOf } from '@/shared/utils/note-body-of'
 import { buildVersionKey, getVersionLocation } from '@/shared/utils/note-version-location'
 
-import { DUPLICATE_TITLE_ERROR } from '@/shared/constants/note-errors'
+import { DUPLICATE_TITLE_ERROR, MOVE_STATUS } from '@/shared/constants/note-errors'
 import { LOG_MESSAGES } from '@/shared/constants/log-messages'
 
 export const getFolderUri = (folders, folderId) => (
@@ -257,30 +257,27 @@ export const persistNoteMove = async ({ note, destinationId, folders }, fileStor
         throw new Error('The note cannot be moved to that folder')
     }
 
-    if (fileStorage.fileExists(destinationUri, note.filename)) {
+    const moved = await fileStorage.moveNote({
+        rootUri: to.rootUri,
+        filename: note.filename,
+        from: { folderId: note.folderId, path: from.folderPath },
+        to: { folderId: destinationId, path: to.folderPath, uri: destinationUri }
+    })
+
+    if (moved.status === MOVE_STATUS.TARGET_EXISTS) {
         const error = new Error('A note with this title already exists in that folder')
         error.code = DUPLICATE_TITLE_ERROR
         throw error
     }
 
-    const saved = await fileStorage.moveNote({
-        source: { folderId: note.folderId, uri: sourceUri },
-        destination: { folderId: destinationId, uri: destinationUri },
-        filename: note.filename
-    })
-
-    await fileStorage.renameVersions(
-        to.rootUri,
-        buildVersionKey(from.folderPath, note.filename),
-        buildVersionKey(to.folderPath, note.filename)
-    )
+    if (moved.status !== MOVE_STATUS.MOVED) throw new Error('The note no longer exists')
 
     return {
         folderId: destinationId,
         filename: note.filename,
         path: buildNotePath(destinationId, note.filename),
-        fileUri: saved.fileUri,
-        updatedAt: saved.updatedAt
+        fileUri: moved.fileUri,
+        updatedAt: moved.updatedAt
     }
 }
 

@@ -199,24 +199,54 @@ class RepositoryFsModule : Module() {
       withContext(Dispatchers.IO) { versionsFor(rootUri).rename(oldKey, newKey) }
     }
 
-    AsyncFunction("versionsRenameUnder") Coroutine { rootUri: String, oldPrefix: String, newPrefix: String ->
-      withContext(Dispatchers.IO) { versionsFor(rootUri).renameUnder(oldPrefix, newPrefix) }
-    }
-
-    AsyncFunction("versionsDeleteUnder") Coroutine { rootUri: String, prefix: String ->
-      withContext(Dispatchers.IO) { versionsFor(rootUri).deleteUnder(prefix) }
-    }
-
     AsyncFunction("versionsMigrateLegacy") Coroutine { rootUri: String, folderPath: String ->
       withContext(Dispatchers.IO) { versionsFor(rootUri).migrateLegacy(folderPath, folderPath) }
     }
 
-    AsyncFunction("renameDirectory") Coroutine { directoryUri: String, parentUri: String, newName: String ->
-      withContext(Dispatchers.IO) { renameDirectory(context, directoryUri, parentUri, newName) }
+    AsyncFunction("renameFolder") Coroutine { rootUri: String, path: String, newName: String, folderIds: List<String>, parentUri: String ->
+      indexLock.withLock {
+        withContext(Dispatchers.IO) {
+          val newPath = engine().renameFolder(vaultFor(context, rootUri), versionsFor(rootUri), path, newName, folderIds)
+          val renamed = findChild(context, Uri.parse(parentUri.trimEnd('/')), newName)
+
+          mapOf(RenamedKeys.PATH to newPath, RenamedKeys.URI to renamed?.get(EntryKeys.URI))
+        }
+      }
     }
 
-    AsyncFunction("moveFile") Coroutine { sourceDirectoryUri: String, filename: String, destinationDirectoryUri: String ->
-      withContext(Dispatchers.IO) { moveFile(context, sourceDirectoryUri, filename, destinationDirectoryUri) }
+    AsyncFunction("removeFolder") Coroutine { rootUri: String, path: String, folderIds: List<String>, dropVersions: Boolean ->
+      indexLock.withLock {
+        withContext(Dispatchers.IO) {
+          engine().removeFolder(vaultFor(context, rootUri), versionsFor(rootUri), path, folderIds, dropVersions)
+        }
+      }
+    }
+
+    AsyncFunction("trashNote") Coroutine { rootUri: String, folderId: String, folderPath: String, filename: String, trashPath: String ->
+      indexLock.withLock {
+        withContext(Dispatchers.IO) {
+          engine().trashNote(vaultFor(context, rootUri), versionsFor(rootUri), folderId, folderPath, filename, trashPath)
+        }
+      }
+    }
+
+    AsyncFunction("moveNote") Coroutine { rootUri: String, filename: String, fromFolderId: String, fromPath: String, toFolderId: String, toPath: String, destinationUri: String ->
+      indexLock.withLock {
+        withContext(Dispatchers.IO) {
+          moveReportToMap(
+            engine().moveNote(
+              vaultFor(context, rootUri),
+              versionsFor(rootUri),
+              filename,
+              fromFolderId,
+              fromPath,
+              toFolderId,
+              toPath,
+              noteSinkFor(context, destinationUri)
+            )
+          )
+        }
+      }
     }
 
     Function("composeNote") { tags: List<String>, propertiesJson: String, invalidFrontmatter: String?, rawFrontmatter: String?, body: String ->

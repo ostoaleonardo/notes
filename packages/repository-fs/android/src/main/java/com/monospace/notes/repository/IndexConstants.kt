@@ -60,3 +60,18 @@ internal const val MARKDOWN_MIME_TYPE = "text/markdown"
 internal const val WRITE_TRUNCATE_MODE = "wt"
 
 internal const val VAULT_JSON_MIME = "application/json"
+
+internal object MoveKeys {
+  const val STATUS = "status"
+  const val URI = "uri"
+  const val MODIFIED = "modified"
+  const val SIZE = "size"
+  const val MOVED = "moved"
+  const val TARGET_EXISTS = "targetExists"
+  const val SOURCE_MISSING = "sourceMissing"
+}
+
+internal object RenamedKeys {
+  const val PATH = "path"
+  const val URI = "uri"
+}

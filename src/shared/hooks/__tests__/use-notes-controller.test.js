@@ -27,8 +27,7 @@ const mockFileStorage = {
     getExistingFile: jest.fn(),
     renameVersions: jest.fn(async () => { }),
     deleteVersions: jest.fn(),
-    moveNoteFiles: jest.fn(async () => { }),
-    getOrCreateVaultTrashFolder: jest.fn(() => ({ uri: 'file:///repo/.trash' }))
+    trashNote: jest.fn(async () => 'Groceries.md')
 }
 
 let mockDeleteBehavior = null
@@ -440,16 +439,16 @@ describe('delete note', () => {
             await result.current.deleteNote('repo-1::Groceries.md')
         })
 
-        expect(mockFileStorage.getOrCreateVaultTrashFolder).toHaveBeenCalledWith(MOCK_REPO_URI)
-        expect(mockFileStorage.moveNoteFiles).toHaveBeenCalledWith(
-            MOCK_REPO_URI,
-            'Groceries.md',
-            'file:///repo/.trash'
-        )
+        expect(mockFileStorage.trashNote).toHaveBeenCalledWith({
+            rootUri: MOCK_REPO_URI,
+            folderId: 'repo-1',
+            folderPath: '',
+            filename: 'Groceries.md'
+        })
     })
 
     test('restores the note in state when moving it fails', async () => {
-        mockFileStorage.moveNoteFiles.mockRejectedValueOnce(new Error('move failed'))
+        mockFileStorage.trashNote.mockRejectedValueOnce(new Error('move failed'))
         files.set('Groceries.md', '---\ntags: []\n---\n\ncontent')
         const { result } = await renderNotesHook([MOCK_GROCERIES_NOTE])
 

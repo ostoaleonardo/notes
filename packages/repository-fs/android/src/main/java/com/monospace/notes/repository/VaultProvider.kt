@@ -5,7 +5,9 @@ import android.net.Uri
 import android.provider.DocumentsContract
 import android.provider.DocumentsContract.Document
 import java.io.IOException
+import uniffi.engine.EngineException
 import uniffi.engine.FsVaultHandle
+import uniffi.engine.MoveStatus
 import uniffi.engine.VaultFs
 
 internal class ProviderVault(private val context: Context, private val root: Uri) : VaultFs {
@@ -48,6 +50,62 @@ internal class ProviderVault(private val context: Context, private val root: Uri
     return listDirectory(context, uri)
       .filter { it[EntryKeys.IS_DIRECTORY] != true }
       .map { it[EntryKeys.NAME] as String }
+  }
+
+  override fun exists(path: String): Boolean {
+    val segments = segmentsOf(path)
+    if (segments.isEmpty()) return true
+
+    val parent = directoryUri(segments.dropLast(1)) ?: return false
+
+    return child(parent, segments.last()) != null
+  }
+
+  override fun createDir(path: String) {
+    ensureDirectory(segmentsOf(path))
+  }
+
+  override fun renameDir(path: String, newName: String) {
+    val segments = segmentsOf(path)
+    val directory = directoryUri(segments) ?: throw IOException("missing $path")
+    val parent = directoryUri(segments.dropLast(1)) ?: throw IOException("missing parent of $path")
+
+    if (child(parent, newName) != null) throw EngineException.AlreadyExists(newName)
+
+    renameDirectory(context, directory.toString(), parent.toString(), newName)
+  }
+
+  override fun moveFile(from: String, to: String): MoveStatus {
+    val source = segmentsOf(from)
+    val target = segmentsOf(to)
+    val sourceDirectory = directoryUri(source.dropLast(1)) ?: return MoveStatus.SOURCE_MISSING
+    val entry = child(sourceDirectory, source.last())?.takeIf { it[EntryKeys.IS_DIRECTORY] != true }
+      ?: return MoveStatus.SOURCE_MISSING
+    val targetDirectory = directoryUri(target.dropLast(1)) ?: throw IOException("missing ${to}")
+
+    if (child(targetDirectory, target.last()) != null) return MoveStatus.TARGET_EXISTS
+
+    val moved = source.last() == target.last() &&
+      moveFile(context, sourceDirectory.toString(), source.last(), targetDirectory.toString())
+
+    if (!moved) copyAndDelete(Uri.parse(entry[EntryKeys.URI] as String), targetDirectory, target.last())
+
+    return MoveStatus.MOVED
+  }
+
+  override fun removeDir(path: String) {
+    val directory = directoryUri(segmentsOf(path)) ?: return
+
+    runCatching { DocumentsContract.deleteDocument(context.contentResolver, directory) }
+  }
+
+  private fun copyAndDelete(source: Uri, targetDirectory: Uri, name: String) {
+    val bytes = context.contentResolver.openInputStream(source)?.use { it.readBytes() }
+      ?: throw IOException("cannot read $source")
+    val target = create(targetDirectory, name, MARKDOWN_MIME_TYPE)
+
+    context.contentResolver.openOutputStream(target, WRITE_TRUNCATE_MODE)?.use { it.write(bytes) }
+    DocumentsContract.deleteDocument(context.contentResolver, source)
   }
 
   private fun segmentsOf(path: String) = path.split(PATH_SEPARATOR).filter { it.isNotEmpty() }

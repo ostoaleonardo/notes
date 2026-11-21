@@ -36,6 +36,17 @@ cargo test
 CONTRACT_UPDATE=1 cargo test -p engine --test contract
 ```
 
+## Vault operations
+
+`VaultOps` (`crates/core/src/vault/ops.rs`) extends `VaultFs` with path-based file operations relative to the vault root: `exists`, `create_dir`, `rename_dir`, `move_file` (reports `Moved`, `TargetExists` or `SourceMissing`, never overwrites) and `remove_dir`. `FsVault` implements it with `std::fs`; Android SAF implements it in Kotlin (`ProviderVault`) and direct access reuses `FsVaultHandle`. Names are checked with `validate_name`, so a name can never contain a separator or be `.` or `..`.
+
+The engine composes them in `crates/core/src/ops`, each as one call that keeps files, index rows and version history consistent:
+
+- `rename_folder` renames the directory, drops the index rows of the affected folders and renames the versions under the old prefix, restoring the directory name if a later step fails.
+- `remove_folder` drops the rows, removes the directory and optionally its versions.
+- `trash_note` moves a note into the trash directory under a free name and drops its versions and row.
+- `move_note` moves the file, renames its versions (undoing the move if that fails) and refreshes both index folders.
+
 ## Architecture
 
 - Rust owns parsing, the SQLite index (schema, writer, reconciliation, queries) and the locale sort keys (ICU4X collator).

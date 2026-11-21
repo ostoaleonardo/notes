@@ -3,7 +3,6 @@ import { Directory, File, FileMode, Paths } from 'expo-file-system'
 
 import RepositoryFs from 'repository-fs'
 
-import { getUniqueFilenameBy, stripNoteExtension } from '@/shared/utils/note-filename'
 import { buildVersionKey } from '@/shared/utils/note-version-location'
 import { invalidateMediaIndex } from '@/shared/utils/media-index'
 import { getNoteLinkTexts, seedNoteLinkTexts } from '@/shared/utils/note-links'
@@ -82,10 +81,6 @@ const getOrCreateImagesFolder = (directoryUri) => (
     findDirectory(directoryUri, IMAGES_FOLDER_NAME) || createSubdirectory(directoryUri, IMAGES_FOLDER_NAME)
 )
 
-const getOrCreateVaultTrashFolder = (directoryUri) => (
-    findDirectory(directoryUri, VAULT_TRASH_FOLDER_NAME) || createSubdirectory(directoryUri, VAULT_TRASH_FOLDER_NAME)
-)
-
 const getOrCreateNotesFolder = (directoryUri) => (
     findDirectory(directoryUri, NOTES_FOLDER_NAME) || createSubdirectory(directoryUri, NOTES_FOLDER_NAME)
 )
@@ -134,11 +129,16 @@ const deleteDirectory = (directoryUri) => {
 
 const directoryExists = (directoryUri) => new Directory(directoryUri).exists
 
-const renameDirectory = async (directoryUri, parentUri, newName) => {
-    const newUri = await RepositoryFs.renameDirectory(directoryUri, parentUri, newName)
+const renameFolder = async ({ rootUri, path, newName, folderIds, parentUri }) => {
+    const renamed = await RepositoryFs.renameFolder(rootUri, path, newName, folderIds, parentUri)
     invalidateMediaIndex()
 
-    return newUri
+    return renamed
+}
+
+const removeFolder = async ({ rootUri, path, folderIds, dropVersions }) => {
+    await RepositoryFs.removeFolder(rootUri, path, folderIds, dropVersions)
+    invalidateMediaIndex()
 }
 
 const copyImageFile = async (sourceUri, directoryUri, filename) => {
@@ -229,36 +229,22 @@ const deleteNoteFile = (directoryUri, filename) => {
     if (file) file.delete()
 }
 
-const moveNoteFiles = async (sourceUri, filename, destinationUri) => {
-    if (!fileExists(destinationUri, filename) && await RepositoryFs.moveFile(sourceUri, filename, destinationUri)) {
-        return filename
-    }
+const trashNote = ({ rootUri, folderId, folderPath, filename }) => (
+    RepositoryFs.trashNote(rootUri, folderId, folderPath, filename, VAULT_TRASH_FOLDER_NAME)
+)
 
-    const source = findFile(sourceUri, filename)
-    const target = getUniqueFilenameBy(
-        (name) => fileExists(destinationUri, name),
-        stripNoteExtension(filename),
-        null
+const moveNote = async ({ rootUri, filename, from, to }) => {
+    const moved = await RepositoryFs.moveNote(
+        rootUri,
+        filename,
+        from.folderId,
+        from.path,
+        to.folderId,
+        to.path,
+        to.uri
     )
 
-    writeNoteFile(destinationUri, target, await source.text())
-    source.delete()
-
-    return target
-}
-
-const moveNote = async ({ source, destination, filename }) => {
-    const content = await findFile(source.uri, filename).text()
-    const saved = await saveNoteFile({
-        folderId: destination.folderId,
-        directoryUri: destination.uri,
-        filename,
-        content
-    })
-
-    await RepositoryFs.deleteNote(source.folderId, source.uri, filename)
-
-    return saved
+    return { status: moved.status, fileUri: moved.uri, updatedAt: moved.modified }
 }
 
 const readJson = async (directoryUri, filename, fallback) => {
@@ -311,12 +297,6 @@ const commitVersion = (rootUri, key, title, content) => (
 )
 
 const renameVersions = (rootUri, oldKey, newKey) => RepositoryFs.versionsRename(rootUri, oldKey, newKey)
-
-const renameVersionsUnder = (rootUri, oldPrefix, newPrefix) => (
-    RepositoryFs.versionsRenameUnder(rootUri, oldPrefix, newPrefix)
-)
-
-const deleteVersionsUnder = (rootUri, prefix) => RepositoryFs.versionsDeleteUnder(rootUri, prefix)
 
 const clearRepository = async (directoryUri, { rootUri, folderPath }) => {
     for (const file of listMarkdownFiles(directoryUri)) {
@@ -429,14 +409,14 @@ export const fileStorage = {
     clearRepository,
     deleteDirectory,
     directoryExists,
-    renameDirectory,
+    renameFolder,
+    removeFolder,
+    trashNote,
     readVersions,
     writeVersions,
     commitVersion,
     deleteVersions,
     renameVersions,
-    renameVersionsUnder,
-    deleteVersionsUnder,
     migrateLegacyVersions,
     readJson,
     writeJson,
@@ -446,9 +426,7 @@ export const fileStorage = {
     createSubdirectory,
     getOrCreateTemplatesFolder,
     getOrCreateImagesFolder,
-    getOrCreateVaultTrashFolder,
     getOrCreateNotesFolder,
-    moveNoteFiles,
     moveNote,
     copyImageFile
 }

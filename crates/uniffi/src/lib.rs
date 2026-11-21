@@ -8,12 +8,13 @@ mod vault;
 
 use engine::source::{FsSource, LocationScheme};
 use records::{
-	DecomposedRecord, EngineError, IndexedNotesReport, NoteFieldsRecord, NoteRefsReport,
-	QueryReport, SaveReport, SaveRequestRecord, SyncReport, Value,
+	DecomposedRecord, EngineError, IndexedNotesReport, MoveReport, NoteFieldsRecord,
+	NoteRefsReport, QueryReport, SaveReport, SaveRequestRecord, SyncReport, Value,
 };
 use source::{ForeignSink, ForeignSource, NoteSink, NoteSource, ProgressListener};
 use std::collections::HashSet;
 use std::sync::Arc;
+use vault::{ForeignVault, VaultFs, VersionsHandle};
 
 #[derive(uniffi::Object)]
 pub struct Engine {
@@ -120,6 +121,97 @@ impl Engine {
 		let sink = ForeignSink::new(sink);
 
 		Ok(self.inner.delete_note(&folder_id, &sink, &filename)?)
+	}
+
+	pub fn rename_folder(
+		&self,
+		vault: Arc<dyn VaultFs>,
+		versions: Arc<VersionsHandle>,
+		path: String,
+		new_name: String,
+		affected_folder_ids: Vec<String>,
+	) -> Result<String, EngineError> {
+		let ops = ForeignVault::new(vault);
+		let vault = engine::ops::Vault {
+			ops: &ops,
+			versions: versions.core(),
+		};
+
+		Ok(self
+			.inner
+			.rename_folder(&vault, &path, &new_name, &affected_folder_ids)?)
+	}
+
+	pub fn remove_folder(
+		&self,
+		vault: Arc<dyn VaultFs>,
+		versions: Arc<VersionsHandle>,
+		path: String,
+		folder_ids: Vec<String>,
+		drop_versions: bool,
+	) -> Result<(), EngineError> {
+		let ops = ForeignVault::new(vault);
+		let vault = engine::ops::Vault {
+			ops: &ops,
+			versions: versions.core(),
+		};
+
+		Ok(self
+			.inner
+			.remove_folder(&vault, &path, &folder_ids, drop_versions)?)
+	}
+
+	pub fn trash_note(
+		&self,
+		vault: Arc<dyn VaultFs>,
+		versions: Arc<VersionsHandle>,
+		folder_id: String,
+		folder_path: String,
+		filename: String,
+		trash_path: String,
+	) -> Result<String, EngineError> {
+		let ops = ForeignVault::new(vault);
+		let vault = engine::ops::Vault {
+			ops: &ops,
+			versions: versions.core(),
+		};
+
+		Ok(self
+			.inner
+			.trash_note(&vault, &folder_id, &folder_path, &filename, &trash_path)?)
+	}
+
+	#[allow(clippy::too_many_arguments)]
+	pub fn move_note(
+		&self,
+		vault: Arc<dyn VaultFs>,
+		versions: Arc<VersionsHandle>,
+		filename: String,
+		from_folder_id: String,
+		from_path: String,
+		to_folder_id: String,
+		to_path: String,
+		to_sink: Arc<dyn NoteSink>,
+	) -> Result<MoveReport, EngineError> {
+		let ops = ForeignVault::new(vault);
+		let vault = engine::ops::Vault {
+			ops: &ops,
+			versions: versions.core(),
+		};
+		let sink = ForeignSink::new(to_sink);
+
+		Ok(self
+			.inner
+			.move_note(
+				&vault,
+				&filename,
+				&from_folder_id,
+				&from_path,
+				&to_folder_id,
+				&to_path,
+				&sink,
+			)?
+			.into())
 	}
 
 	pub fn indexed_notes(&self) -> Result<IndexedNotesReport, EngineError> {

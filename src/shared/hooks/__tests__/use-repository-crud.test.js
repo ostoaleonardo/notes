@@ -40,12 +40,14 @@ const makeProps = (overrides = {}) => {
         fileStorage: {
             createSubdirectory: jest.fn((uri, name) => ({ uri: `${uri}/${name}`, name })),
             deleteDirectory: jest.fn(),
-            renameDirectory: jest.fn(async (uri, parentUri, name) => `${parentUri}/${name}`),
+            renameFolder: jest.fn(async ({ parentUri, newName }) => ({
+                path: newName,
+                uri: `${parentUri}/${newName}`
+            })),
+            removeFolder: jest.fn(async () => {}),
             findDirectory: jest.fn(() => null),
             getOrCreateTemplatesFolder: jest.fn((uri) => ({ uri: `${uri}/templates` })),
             getOrCreateImagesFolder: jest.fn((uri) => ({ uri: `${uri}/images` })),
-            renameVersionsUnder: jest.fn(async () => {}),
-            deleteVersionsUnder: jest.fn(),
             deleteFolderIndex: jest.fn()
         },
         seedWelcomeNote: jest.fn(async () => null),
@@ -333,7 +335,7 @@ describe('repository crud', () => {
 
             const persisted = props.persistFolders.mock.calls[0][0]
             expect(persisted.find((r) => r.id === 'root').alias).toBe('Renamed')
-            expect(props.fileStorage.renameDirectory).not.toHaveBeenCalled()
+            expect(props.fileStorage.renameFolder).not.toHaveBeenCalled()
         })
 
         test('renames the folder and relinks descendants for a subfolder', async () => {
@@ -342,10 +344,13 @@ describe('repository crud', () => {
 
             const result = await api.renameFolder('child', 'New')
 
-            expect(props.fileStorage.renameDirectory)
-                .toHaveBeenCalledWith('file:///child', 'file:///root', 'New')
-            expect(props.fileStorage.renameVersionsUnder)
-                .toHaveBeenCalledWith('file:///root', 'child', 'New')
+            expect(props.fileStorage.renameFolder).toHaveBeenCalledWith({
+                rootUri: 'file:///root',
+                path: 'child',
+                newName: 'New',
+                folderIds: ['child', 'grand'],
+                parentUri: 'file:///root'
+            })
             expect(result).toMatchObject({ alias: 'New', uri: 'file:///root/New' })
             const persisted = props.persistFolders.mock.calls[0][0]
             expect(persisted.find((r) => r.id === 'grand').uri).toBe('file:///root/New/grand')
@@ -353,7 +358,7 @@ describe('repository crud', () => {
 
         test('returns error when the folder rename fails', async () => {
             const { props, api } = await setup()
-            props.fileStorage.renameDirectory.mockRejectedValue(new Error('exists'))
+            props.fileStorage.renameFolder.mockRejectedValue(new Error('exists'))
 
             const result = await api.renameFolder('child', 'New')
 
@@ -409,13 +414,13 @@ describe('repository crud', () => {
             expect(props.fileStorage.deleteDirectory).not.toHaveBeenCalled()
         })
 
-        test('deletes a root folder folder without touching versions', async () => {
+        test('deletes a root folder from the device', async () => {
             const { props, api } = await setup()
 
             const result = await api.removeRepository('other')
 
             expect(props.fileStorage.deleteDirectory).toHaveBeenCalledWith('file:///other')
-            expect(props.fileStorage.deleteVersionsUnder).not.toHaveBeenCalled()
+            expect(props.fileStorage.removeFolder).not.toHaveBeenCalled()
             expect(result.id).toBe('other')
         })
 
@@ -425,8 +430,13 @@ describe('repository crud', () => {
             await api.removeRepository('child')
 
             expect(persistedIds(props)).toEqual(['root', 'other'])
-            expect(props.fileStorage.deleteVersionsUnder)
-                .toHaveBeenCalledWith('file:///root', 'child')
+            expect(props.fileStorage.removeFolder).toHaveBeenCalledWith({
+                rootUri: 'file:///root',
+                path: 'child',
+                folderIds: ['child', 'grand'],
+                dropVersions: true
+            })
+            expect(props.fileStorage.deleteDirectory).not.toHaveBeenCalled()
         })
 
         test('returns null for an unknown repository', async () => {

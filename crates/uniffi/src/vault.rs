@@ -1,6 +1,6 @@
-use crate::records::EngineError;
+use crate::records::{EngineError, MoveStatus};
 use engine::error::Result as CoreResult;
-use engine::vault::VaultFs as CoreVaultFs;
+use engine::vault::{MoveResult, VaultFs as CoreVaultFs, VaultOps as CoreVaultOps};
 use engine::versions::VersionVault;
 use std::sync::Arc;
 
@@ -10,9 +10,14 @@ pub trait VaultFs: Send + Sync {
 	fn write_text(&self, path: String, text: String) -> Result<(), EngineError>;
 	fn delete_file(&self, path: String) -> Result<(), EngineError>;
 	fn list_files(&self, directory: String) -> Result<Vec<String>, EngineError>;
+	fn exists(&self, path: String) -> Result<bool, EngineError>;
+	fn create_dir(&self, path: String) -> Result<(), EngineError>;
+	fn rename_dir(&self, path: String, new_name: String) -> Result<(), EngineError>;
+	fn move_file(&self, from: String, to: String) -> Result<MoveStatus, EngineError>;
+	fn remove_dir(&self, path: String) -> Result<(), EngineError>;
 }
 
-struct ForeignVault {
+pub(crate) struct ForeignVault {
 	inner: Arc<dyn VaultFs>,
 }
 
@@ -31,6 +36,39 @@ impl CoreVaultFs for ForeignVault {
 
 	fn list_files(&self, directory: &str) -> CoreResult<Vec<String>> {
 		Ok(self.inner.list_files(directory.to_string())?)
+	}
+}
+
+impl ForeignVault {
+	pub(crate) fn new(inner: Arc<dyn VaultFs>) -> Self {
+		Self { inner }
+	}
+}
+
+impl CoreVaultOps for ForeignVault {
+	fn exists(&self, path: &str) -> CoreResult<bool> {
+		Ok(self.inner.exists(path.to_string())?)
+	}
+
+	fn create_dir(&self, path: &str) -> CoreResult<()> {
+		Ok(self.inner.create_dir(path.to_string())?)
+	}
+
+	fn rename_dir(&self, path: &str, new_name: &str) -> CoreResult<()> {
+		Ok(self
+			.inner
+			.rename_dir(path.to_string(), new_name.to_string())?)
+	}
+
+	fn move_file(&self, from: &str, to: &str) -> CoreResult<MoveResult> {
+		Ok(self
+			.inner
+			.move_file(from.to_string(), to.to_string())?
+			.into())
+	}
+
+	fn remove_dir(&self, path: &str) -> CoreResult<()> {
+		Ok(self.inner.remove_dir(path.to_string())?)
 	}
 }
 
@@ -66,6 +104,26 @@ impl VaultFs for FsVaultHandle {
 	fn list_files(&self, directory: String) -> Result<Vec<String>, EngineError> {
 		Ok(CoreVaultFs::list_files(&self.inner, &directory)?)
 	}
+
+	fn exists(&self, path: String) -> Result<bool, EngineError> {
+		Ok(CoreVaultOps::exists(&self.inner, &path)?)
+	}
+
+	fn create_dir(&self, path: String) -> Result<(), EngineError> {
+		Ok(CoreVaultOps::create_dir(&self.inner, &path)?)
+	}
+
+	fn rename_dir(&self, path: String, new_name: String) -> Result<(), EngineError> {
+		Ok(CoreVaultOps::rename_dir(&self.inner, &path, &new_name)?)
+	}
+
+	fn move_file(&self, from: String, to: String) -> Result<MoveStatus, EngineError> {
+		Ok(CoreVaultOps::move_file(&self.inner, &from, &to)?.into())
+	}
+
+	fn remove_dir(&self, path: String) -> Result<(), EngineError> {
+		Ok(CoreVaultOps::remove_dir(&self.inner, &path)?)
+	}
 }
 
 #[derive(uniffi::Object)]
@@ -73,12 +131,18 @@ pub struct VersionsHandle {
 	inner: VersionVault,
 }
 
+impl VersionsHandle {
+	pub(crate) fn core(&self) -> &VersionVault {
+		&self.inner
+	}
+}
+
 #[uniffi::export]
 impl VersionsHandle {
 	#[uniffi::constructor]
 	pub fn new(vault: Arc<dyn VaultFs>) -> Arc<Self> {
 		Arc::new(Self {
-			inner: VersionVault::new(Arc::new(ForeignVault { inner: vault })),
+			inner: VersionVault::new(Arc::new(ForeignVault::new(vault))),
 		})
 	}
 

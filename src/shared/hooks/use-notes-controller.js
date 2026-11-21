@@ -204,6 +204,7 @@ export function useNotesController() {
                     await deleteNoteFiles(behavior, {
                         uri,
                         rootUri,
+                        folderId: note.folderId,
                         folderPath,
                         filename: note.filename
                     }, fileStorage)

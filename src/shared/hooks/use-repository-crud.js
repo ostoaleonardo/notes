@@ -35,12 +35,11 @@ export function useRepositoryCrud({
     const {
         createSubdirectory,
         deleteDirectory,
-        renameDirectory,
+        renameFolder: renameFolderFiles,
+        removeFolder: removeFolderFiles,
         findDirectory,
         getOrCreateTemplatesFolder,
         getOrCreateImagesFolder,
-        renameVersionsUnder,
-        deleteVersionsUnder,
         deleteFolderIndex
     } = fileStorage
 
@@ -183,14 +182,15 @@ export function useRepositoryCrud({
                 if (!parent) return REPOSITORY_RESULTS.ERROR
 
                 const sanitized = sanitizeFilename(alias)
-                const paths = buildFolderPaths(folders)
-                const oldPath = paths.get(id)
-                const parentPath = paths.get(parent.id)
-                const newPath = parentPath ? `${parentPath}/${sanitized}` : sanitized
-                const newUri = await renameDirectory(folder.uri, parent.uri, sanitized)
+                const oldPath = buildFolderPaths(folders).get(id)
                 const affected = [id, ...getDescendants(id).map((d) => d.id)]
-                await Promise.all(affected.map((folderId) => deleteFolderIndex(folderId)))
-                await renameVersionsUnder(getRootRepository(folder).uri, oldPath, newPath)
+                const { uri: newUri } = await renameFolderFiles({
+                    rootUri: getRootRepository(folder).uri,
+                    path: oldPath,
+                    newName: sanitized,
+                    folderIds: affected,
+                    parentUri: parent.uri
+                })
                 const renamedFolder = { ...folder, uri: newUri, alias: sanitized }
                 const relinked = await relinkUris(renamedFolder)
                 const relinkedById = new Map(relinked.map((r) => [r.id, r]))
@@ -209,11 +209,9 @@ export function useRepositoryCrud({
     }, [
         folders,
         persistFolders,
-        renameDirectory,
-        renameVersionsUnder,
+        renameFolderFiles,
         getRootRepository,
         getDescendants,
-        deleteFolderIndex,
         relinkUris,
         busyRef
     ])
@@ -264,8 +262,16 @@ export function useRepositoryCrud({
 
             await removeRepositoriesFromList([id, ...descendantIds])
 
-            deleteDirectory(folder.uri)
-            if (folder.parentId) await deleteVersionsUnder(getRootRepository(folder).uri, path)
+            if (folder.parentId) {
+                await removeFolderFiles({
+                    rootUri: getRootRepository(folder).uri,
+                    path,
+                    folderIds: [id, ...descendantIds],
+                    dropVersions: true
+                })
+            } else {
+                deleteDirectory(folder.uri)
+            }
 
             return folder
         })
@@ -274,7 +280,7 @@ export function useRepositoryCrud({
         activeFolder,
         isAncestorOf,
         deleteDirectory,
-        deleteVersionsUnder,
+        removeFolderFiles,
         getRootRepository,
         getDescendants,
         removeRepositoriesFromList,

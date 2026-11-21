@@ -9,7 +9,6 @@ import {
     NOTES_FOLDER_NAME,
     RESERVED_FOLDER_NAMES,
     TEMPLATES_FOLDER_NAME,
-    VAULT_TRASH_FOLDER_NAME,
     REPOSITORY_INDEX_FOLDER_NAME,
     REPOSITORY_INDEX_VERSION
 } from '@/shared/constants/file-storage'
@@ -252,29 +251,44 @@ describe('renaming, moving and deleting notes', () => {
         expect(mockFs.has(`${FOLDER}/a.md`)).toBe(false)
     })
 
-    test('moves a note to another folder', async () => {
-        const destination = `${ROOT}/other`
-        seedDir(destination)
-        seedFile(`${FOLDER}/a.md`, 'body')
+    test('moves a note natively and maps the result', async () => {
+        const native = jest.requireMock('repository-fs').default
 
-        const target = await fileStorage.moveNoteFiles(FOLDER, 'a.md', destination)
+        native.moveNote.mockResolvedValueOnce({ status: 'moved', uri: 'content://x/a.md', modified: 7 })
 
-        expect(target).toBe('a.md')
-        expect(mockFs.has(`${FOLDER}/a.md`)).toBe(false)
-        expect(readText(`${destination}/a.md`)).toBe('body')
+        const moved = await fileStorage.moveNote({
+            rootUri: ROOT,
+            filename: 'a.md',
+            from: { folderId: 'f', path: 'Folder' },
+            to: { folderId: 'o', path: 'Other', uri: `${ROOT}/other` }
+        })
+
+        expect(moved).toEqual({ status: 'moved', fileUri: 'content://x/a.md', updatedAt: 7 })
+        expect(native.moveNote).toHaveBeenCalledWith(
+            ROOT,
+            'a.md',
+            'f',
+            'Folder',
+            'o',
+            'Other',
+            `${ROOT}/other`
+        )
     })
 
-    test('moves a note under a unique name when the destination has the same one', async () => {
-        const destination = `${ROOT}/other`
-        seedDir(destination)
-        seedFile(`${FOLDER}/a.md`, 'incoming')
-        seedFile(`${destination}/a.md`, 'existing')
+    test('trashes a note natively into the vault trash folder', async () => {
+        const native = jest.requireMock('repository-fs').default
 
-        const target = await fileStorage.moveNoteFiles(FOLDER, 'a.md', destination)
+        native.trashNote.mockResolvedValueOnce('a (2).md')
+
+        const target = await fileStorage.trashNote({
+            rootUri: ROOT,
+            folderId: 'f',
+            folderPath: 'Folder',
+            filename: 'a.md'
+        })
 
         expect(target).toBe('a (2).md')
-        expect(readText(`${destination}/a.md`)).toBe('existing')
-        expect(readText(`${destination}/a (2).md`)).toBe('incoming')
+        expect(native.trashNote).toHaveBeenCalledWith(ROOT, 'f', 'Folder', 'a.md', '.trash')
     })
 })
 
@@ -375,14 +389,10 @@ describe('note versions', () => {
     test('forwards deletes and renames to the native vault', async () => {
         await fileStorage.deleteVersions(ROOT, 'a.md')
         await fileStorage.renameVersions(ROOT, 'old.md', 'new.md')
-        await fileStorage.renameVersionsUnder(ROOT, 'old', 'new')
-        await fileStorage.deleteVersionsUnder(ROOT, 'old')
         await fileStorage.migrateLegacyVersions(FOLDER, ROOT, 'work')
 
         expect(native.versionsDelete).toHaveBeenCalledWith(ROOT, 'a.md')
         expect(native.versionsRename).toHaveBeenCalledWith(ROOT, 'old.md', 'new.md')
-        expect(native.versionsRenameUnder).toHaveBeenCalledWith(ROOT, 'old', 'new')
-        expect(native.versionsDeleteUnder).toHaveBeenCalledWith(ROOT, 'old')
         expect(native.versionsMigrateLegacy).toHaveBeenCalledWith(ROOT, 'work')
     })
 })
@@ -391,7 +401,6 @@ describe('special folders', () => {
     test.each([
         ['templates', 'getOrCreateTemplatesFolder', TEMPLATES_FOLDER_NAME],
         ['images', 'getOrCreateImagesFolder', IMAGES_FOLDER_NAME],
-        ['vault trash', 'getOrCreateVaultTrashFolder', VAULT_TRASH_FOLDER_NAME],
         ['notes', 'getOrCreateNotesFolder', NOTES_FOLDER_NAME]
     ])('creates the %s folder once and reuses it', (_label, method, folderName) => {
         const created = fileStorage[method](ROOT)
@@ -422,25 +431,50 @@ describe('directories', () => {
         expect(mockFs.has(`${FOLDER}/a.md`)).toBe(false)
     })
 
-    test('renames a directory through the native vault and returns its new uri', async () => {
+    test('renames a folder through the native vault and returns its new uri', async () => {
         const native = jest.requireMock('repository-fs').default
 
-        native.renameDirectory.mockResolvedValueOnce(`${ROOT}/renamed/`)
+        native.renameFolder.mockResolvedValueOnce({ path: 'renamed', uri: `${ROOT}/renamed/` })
 
-        const uri = await fileStorage.renameDirectory(FOLDER, ROOT, 'renamed')
+        const renamed = await fileStorage.renameFolder({
+            rootUri: ROOT,
+            path: 'old',
+            newName: 'renamed',
+            folderIds: ['a', 'b'],
+            parentUri: ROOT
+        })
 
-        expect(uri).toBe(`${ROOT}/renamed/`)
-        expect(native.renameDirectory).toHaveBeenCalledWith(FOLDER, ROOT, 'renamed')
+        expect(renamed).toEqual({ path: 'renamed', uri: `${ROOT}/renamed/` })
+        expect(native.renameFolder).toHaveBeenCalledWith(ROOT, 'old', 'renamed', ['a', 'b'], ROOT)
     })
 
-    test('propagates a failed rename', async () => {
+    test('propagates a failed folder rename', async () => {
         const native = jest.requireMock('repository-fs').default
 
-        native.renameDirectory.mockRejectedValueOnce(new Error('cannot rename'))
+        native.renameFolder.mockRejectedValueOnce(new Error('cannot rename'))
 
-        await expect(fileStorage.renameDirectory(FOLDER, ROOT, 'renamed')).rejects.toThrow(
-            'cannot rename'
-        )
+        await expect(
+            fileStorage.renameFolder({
+                rootUri: ROOT,
+                path: 'old',
+                newName: 'renamed',
+                folderIds: [],
+                parentUri: ROOT
+            })
+        ).rejects.toThrow('cannot rename')
+    })
+
+    test('removes a folder natively', async () => {
+        const native = jest.requireMock('repository-fs').default
+
+        await fileStorage.removeFolder({
+            rootUri: ROOT,
+            path: 'old',
+            folderIds: ['a'],
+            dropVersions: true
+        })
+
+        expect(native.removeFolder).toHaveBeenCalledWith(ROOT, 'old', ['a'], true)
     })
 })
 
