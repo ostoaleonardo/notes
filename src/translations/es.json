@@ -61,7 +61,8 @@
 			"message": "Esto eliminará permanentemente este repositorio, sus subcarpetas y todas sus notas del dispositivo.",
 			"folder_title": "Eliminar carpeta",
 			"folder_message": "Esto eliminará permanentemente esta carpeta, sus subcarpetas y todas sus notas del dispositivo.",
-			"active_error": "Cambia a otro repositorio antes de eliminar este"
+			"active_error": "Cambia a otro repositorio antes de eliminar este",
+			"error": "No se pudo eliminar. Revisa el acceso al almacenamiento e inténtalo de nuevo"
 		},
 		"choose": {
 			"title": "Elige un repositorio",

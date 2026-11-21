@@ -61,7 +61,8 @@
 			"message": "Toto úložiště, jeho podsložky a všechny jejich poznámky budou trvale smazány z tvého zařízení.",
 			"folder_title": "Smazat složku",
 			"folder_message": "Tato složka, její podsložky a všechny jejich poznámky budou trvale smazány z tvého zařízení.",
-			"active_error": "Před smazáním tohoto úložiště přepni na jiné"
+			"active_error": "Před smazáním tohoto úložiště přepni na jiné",
+			"error": "Smazání se nezdařilo. Zkontrolujte přístup k úložišti a zkuste to znovu"
 		},
 		"choose": {
 			"title": "Vyber úložiště",

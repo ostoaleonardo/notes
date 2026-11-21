@@ -260,18 +260,22 @@ export function useRepositoryCrud({
             const path = buildFolderPaths(folders).get(id)
             const descendantIds = getDescendants(id).map((d) => d.id)
 
-            await removeRepositoriesFromList([id, ...descendantIds])
-
-            if (folder.parentId) {
-                await removeFolderFiles({
-                    rootUri: getRootRepository(folder).uri,
-                    path,
-                    folderIds: [id, ...descendantIds],
-                    dropVersions: true
-                })
-            } else {
-                deleteDirectory(folder.uri)
+            try {
+                if (folder.parentId) {
+                    await removeFolderFiles({
+                        rootUri: getRootRepository(folder).uri,
+                        path,
+                        folderIds: [id, ...descendantIds],
+                        dropVersions: true
+                    })
+                } else {
+                    await deleteDirectory(folder.uri)
+                }
+            } catch {
+                return REPOSITORY_RESULTS.ERROR
             }
+
+            await removeRepositoriesFromList([id, ...descendantIds])
 
             return folder
         })

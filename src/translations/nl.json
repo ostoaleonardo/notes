@@ -61,7 +61,8 @@
 			"message": "Hiermee worden deze repository, de submappen en alle bijbehorende notities definitief van je apparaat verwijderd.",
 			"folder_title": "Map verwijderen",
 			"folder_message": "Hiermee worden deze map, de submappen en alle bijbehorende notities definitief van je apparaat verwijderd.",
-			"active_error": "Schakel over naar een andere repository voordat je deze verwijdert"
+			"active_error": "Schakel over naar een andere repository voordat je deze verwijdert",
+			"error": "Verwijderen mislukt. Controleer de opslagtoegang en probeer het opnieuw"
 		},
 		"choose": {
 			"title": "Kies een repository",

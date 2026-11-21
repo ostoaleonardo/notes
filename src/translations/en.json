@@ -61,7 +61,8 @@
 			"message": "This will permanently delete this repository, its subfolders, and all their notes from your device.",
 			"folder_title": "Delete folder",
 			"folder_message": "This will permanently delete this folder, its subfolders, and all their notes from your device.",
-			"active_error": "Switch to another repository before deleting this one"
+			"active_error": "Switch to another repository before deleting this one",
+			"error": "Couldn't delete it. Check storage access and try again"
 		},
 		"choose": {
 			"title": "Choose a repository",

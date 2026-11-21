@@ -61,7 +61,8 @@
 			"message": "Bu işlem, bu depoyu, alt klasörlerini ve içindeki tüm notları cihazından kalıcı olarak siler.",
 			"folder_title": "Klasörü sil",
 			"folder_message": "Bu işlem, bu klasörü, alt klasörlerini ve içindeki tüm notları cihazından kalıcı olarak siler.",
-			"active_error": "Bu depoyu silmeden önce başka bir depoya geç"
+			"active_error": "Bu depoyu silmeden önce başka bir depoya geç",
+			"error": "Silinemedi. Depolama erişimini kontrol edip tekrar dene"
 		},
 		"choose": {
 			"title": "Bir depo seç",

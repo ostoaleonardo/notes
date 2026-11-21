@@ -28,6 +28,11 @@ export const DeleteRepository = ({
             return
         }
 
+        if (result === REPOSITORY_RESULTS.ERROR) {
+            ToastAndroid.show(t('repositories.delete.error'), ToastAndroid.SHORT)
+            return
+        }
+
         vibrate(FEEDBACK_TYPES.SUCCESS)
     }
 

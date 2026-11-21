@@ -61,7 +61,8 @@
 			"message": "Questo repository, le sue sottocartelle e tutte le loro note verranno eliminati definitivamente dal tuo dispositivo.",
 			"folder_title": "Elimina cartella",
 			"folder_message": "Questa cartella, le sue sottocartelle e tutte le loro note verranno eliminate definitivamente dal tuo dispositivo.",
-			"active_error": "Passa a un altro repository prima di eliminare questo"
+			"active_error": "Passa a un altro repository prima di eliminare questo",
+			"error": "Impossibile eliminare. Controlla l'accesso all'archiviazione e riprova"
 		},
 		"choose": {
 			"title": "Scegli un repository",

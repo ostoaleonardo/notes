@@ -61,7 +61,8 @@
 			"message": "Isso excluirá permanentemente este repositório, suas subpastas e todas as notas delas do seu dispositivo.",
 			"folder_title": "Excluir pasta",
 			"folder_message": "Isso excluirá permanentemente esta pasta, suas subpastas e todas as notas delas do seu dispositivo.",
-			"active_error": "Mude para outro repositório antes de excluir este"
+			"active_error": "Mude para outro repositório antes de excluir este",
+			"error": "Não foi possível excluir. Verifique o acesso ao armazenamento e tente novamente"
 		},
 		"choose": {
 			"title": "Escolha um repositório",

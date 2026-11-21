@@ -163,6 +163,24 @@ describe('remove repository', () => {
         expect(mockFileStorage.deleteDirectory).toHaveBeenCalledWith('content://root-1')
     })
 
+    test('reports an error and keeps the repository when its directory cannot be deleted', async () => {
+        const root = { id: 'root-1', uri: 'content://root-1', parentId: null }
+        const other = { id: 'other-1', uri: 'content://other-1', parentId: null }
+        const { result } = await renderFoldersHook([root, other], 'other-1')
+
+        mockFileStorage.deleteDirectory.mockImplementationOnce(() => {
+            throw new Error('denied')
+        })
+
+        let outcome
+        await act(async () => {
+            outcome = await result.current.removeRepository('root-1')
+        })
+
+        expect(outcome).toBe('error')
+        expect(result.current.folders.map((folder) => folder.id)).toContain('root-1')
+    })
+
     test('deletes the version history of a removed subfolder', async () => {
         const root = { id: 'root-1', uri: 'content://root-1', parentId: null }
         const child = {

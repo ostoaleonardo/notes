@@ -61,7 +61,8 @@
 			"message": "Ce dépôt, ses sous-dossiers et toutes leurs notes seront définitivement supprimés de votre appareil.",
 			"folder_title": "Supprimer le dossier",
 			"folder_message": "Ce dossier, ses sous-dossiers et toutes leurs notes seront définitivement supprimés de votre appareil.",
-			"active_error": "Passez à un autre dépôt avant de supprimer celui-ci"
+			"active_error": "Passez à un autre dépôt avant de supprimer celui-ci",
+			"error": "Suppression impossible. Vérifiez l'accès au stockage et réessayez"
 		},
 		"choose": {
 			"title": "Choisir un dépôt",

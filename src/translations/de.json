@@ -61,7 +61,8 @@
 			"message": "Dieses Repository, seine Unterordner und alle darin enthaltenen Notizen werden dauerhaft von deinem Gerät gelöscht.",
 			"folder_title": "Ordner löschen",
 			"folder_message": "Dieser Ordner, seine Unterordner und alle darin enthaltenen Notizen werden dauerhaft von deinem Gerät gelöscht.",
-			"active_error": "Wechsle zu einem anderen Repository, bevor du dieses löschst"
+			"active_error": "Wechsle zu einem anderen Repository, bevor du dieses löschst",
+			"error": "Löschen fehlgeschlagen. Prüfe den Speicherzugriff und versuche es erneut"
 		},
 		"choose": {
 			"title": "Repository auswählen",

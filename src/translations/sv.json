@@ -61,7 +61,8 @@
 			"message": "Det här förrådet, dess undermappar och alla deras anteckningar raderas permanent från din enhet.",
 			"folder_title": "Radera mapp",
 			"folder_message": "Den här mappen, dess undermappar och alla deras anteckningar raderas permanent från din enhet.",
-			"active_error": "Byt till ett annat förråd innan du raderar det här"
+			"active_error": "Byt till ett annat förråd innan du raderar det här",
+			"error": "Det gick inte att ta bort. Kontrollera lagringsåtkomsten och försök igen"
 		},
 		"choose": {
 			"title": "Välj ett förråd",
