@@ -1,12 +1,13 @@
 use crate::records::{EngineError, FileStampRecord, SourceRecord};
 use engine::error::Result as EngineResult;
 use engine::model::{FileStamp, SourceFile};
+use engine::source::LocationScheme;
 use std::sync::Arc;
 
 #[uniffi::export(with_foreign)]
 pub trait NoteSource: Send + Sync {
 	fn scan(&self) -> Result<Vec<SourceRecord>, EngineError>;
-	fn read(&self, uris: Vec<String>) -> Result<Vec<Option<String>>, EngineError>;
+	fn read(&self, locations: Vec<String>) -> Result<Vec<Option<String>>, EngineError>;
 }
 
 #[uniffi::export(with_foreign)]
@@ -35,9 +36,9 @@ impl engine::source::NoteSource for ForeignSource {
 	}
 
 	fn read(&self, files: &[&SourceFile]) -> EngineResult<Vec<Option<String>>> {
-		let uris = files.iter().map(|file| file.uri.clone()).collect();
+		let locations = files.iter().map(|file| file.location.clone()).collect();
 
-		Ok(self.inner.read(uris)?)
+		Ok(self.inner.read(locations)?)
 	}
 }
 
@@ -85,7 +86,7 @@ impl FsNoteSink {
 	#[uniffi::constructor]
 	pub fn new(path: String, uri_prefix: String) -> Arc<Self> {
 		Arc::new(Self {
-			inner: engine::source::FsSink::new(path, uri_prefix),
+			inner: engine::source::FsSink::new(path, LocationScheme::android(uri_prefix)),
 		})
 	}
 }

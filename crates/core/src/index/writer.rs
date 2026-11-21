@@ -63,7 +63,7 @@ fn insert(
 		.execute(params![
 			folder_id,
 			input.filename,
-			input.uri,
+			input.location,
 			title,
 			keys.key(title),
 			input.modified,

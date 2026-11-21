@@ -5,7 +5,7 @@ mod records;
 mod source;
 mod vault;
 
-use engine::source::FsSource;
+use engine::source::{FsSource, LocationScheme};
 use records::{
 	DecomposedRecord, EngineError, IndexedNotesReport, NoteFieldsRecord, NoteRefsReport,
 	QueryReport, SaveReport, SaveRequestRecord, SyncReport, Value,
@@ -51,7 +51,7 @@ impl Engine {
 		uri_prefix: String,
 		listener: Arc<dyn ProgressListener>,
 	) -> Result<SyncReport, EngineError> {
-		let source = FsSource::new(path, uri_prefix);
+		let source = FsSource::new(path, LocationScheme::android(uri_prefix));
 
 		Ok(self
 			.inner

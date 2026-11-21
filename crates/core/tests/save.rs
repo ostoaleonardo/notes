@@ -1,6 +1,6 @@
 use engine::engine::Engine;
 use engine::model::{SaveOutcome, SaveRequest, Value};
-use engine::source::{FsSink, FsSource, NoteSink};
+use engine::source::{FsSink, FsSource, LocationScheme, NoteSink};
 use std::fs;
 use tempfile::TempDir;
 
@@ -20,7 +20,7 @@ impl Vault {
 
 		Self {
 			engine: Engine::new(directory.path().join("index.db"), "en").unwrap(),
-			sink: FsSink::new(&notes, URI_PREFIX),
+			sink: FsSink::new(&notes, LocationScheme::android(URI_PREFIX)),
 			directory,
 		}
 	}
@@ -66,7 +66,7 @@ fn creates_the_file_and_indexes_the_note() {
 		fs::read_to_string(vault.notes().join("a.md")).unwrap(),
 		"#tag a"
 	);
-	assert_eq!(stamp.uri, format!("{URI_PREFIX}a.md"));
+	assert_eq!(stamp.location, format!("{URI_PREFIX}a.md"));
 	assert_eq!(stamp.size, 6);
 	assert_eq!(vault.indexed(), ["a.md"]);
 }
@@ -209,7 +209,7 @@ fn keeps_the_index_consistent_with_a_later_scan() {
 	saved(vault.save("a.md", "a", None));
 	saved(vault.save("b.md", "b", None));
 
-	let source = FsSource::new(vault.notes(), URI_PREFIX);
+	let source = FsSource::new(vault.notes(), LocationScheme::android(URI_PREFIX));
 	let stats = vault.engine.sync("repo", &source, &|_, _| {}).unwrap();
 
 	assert_eq!((stats.added, stats.updated, stats.unchanged), (0, 0, 2));
@@ -287,7 +287,7 @@ fn reports_a_conflict_without_blocking_the_other_notes_of_the_batch() {
 fn reports_a_failed_write_and_still_indexes_the_rest() {
 	let vault = Vault::new();
 	let sink = FailingSink {
-		inner: FsSink::new(vault.notes(), URI_PREFIX),
+		inner: FsSink::new(vault.notes(), LocationScheme::android(URI_PREFIX)),
 		failing: "bad.md",
 	};
 

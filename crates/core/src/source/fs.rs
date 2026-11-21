@@ -1,6 +1,6 @@
+use super::LocationScheme;
 use super::NoteSource;
 use super::constants::{HIDDEN_PREFIX, NOTE_EXTENSION};
-use super::uri::encode;
 use crate::error::Result;
 use crate::model::{FileStamp, SourceFile};
 use rayon::prelude::*;
@@ -10,14 +10,14 @@ use std::time::UNIX_EPOCH;
 
 pub struct FsSource {
 	root: PathBuf,
-	uri_prefix: String,
+	scheme: LocationScheme,
 }
 
 impl FsSource {
-	pub fn new(root: impl Into<PathBuf>, uri_prefix: impl Into<String>) -> Self {
+	pub fn new(root: impl Into<PathBuf>, scheme: LocationScheme) -> Self {
 		Self {
 			root: root.into(),
-			uri_prefix: uri_prefix.into(),
+			scheme,
 		}
 	}
 
@@ -26,10 +26,10 @@ impl FsSource {
 			return None;
 		}
 
-		let stamp = stamp_of(&self.root, &self.uri_prefix, &name)?;
+		let stamp = stamp_of(&self.root, &self.scheme, &name)?;
 
 		Some(SourceFile {
-			uri: stamp.uri,
+			location: stamp.location,
 			filename: name,
 			modified: stamp.modified,
 			size: stamp.size,
@@ -61,7 +61,7 @@ impl NoteSource for FsSource {
 	}
 }
 
-pub fn stamp_of(root: &Path, uri_prefix: &str, filename: &str) -> Option<FileStamp> {
+pub fn stamp_of(root: &Path, scheme: &LocationScheme, filename: &str) -> Option<FileStamp> {
 	let metadata = fs::metadata(root.join(filename)).ok()?;
 
 	if metadata.is_dir() {
@@ -75,7 +75,7 @@ pub fn stamp_of(root: &Path, uri_prefix: &str, filename: &str) -> Option<FileSta
 		.map_or(0, |elapsed| elapsed.as_millis() as i64);
 
 	Some(FileStamp {
-		uri: format!("{uri_prefix}{}", encode(filename)),
+		location: scheme.locate(root, filename),
 		modified,
 		size: metadata.len() as i64,
 	})

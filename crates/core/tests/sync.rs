@@ -1,7 +1,7 @@
 use engine::engine::Engine;
 use engine::error::{Error, Result};
 use engine::model::{SourceFile, Value};
-use engine::source::{FsSource, NoteSource};
+use engine::source::{FsSource, LocationScheme, NoteSource};
 use std::collections::BTreeMap;
 use std::fs;
 use std::io;
@@ -48,7 +48,7 @@ impl NoteSource for MemorySource {
 			.unwrap()
 			.iter()
 			.map(|(filename, (modified, text))| SourceFile {
-				uri: format!("{URI_PREFIX}{filename}"),
+				location: format!("{URI_PREFIX}{filename}"),
 				filename: filename.clone(),
 				modified: *modified,
 				size: text.as_ref().map_or(0, |text| text.len() as i64),
@@ -194,13 +194,15 @@ fn lists_only_visible_notes_of_a_directory() {
 	fs::write(directory.path().join("image.png"), "png").unwrap();
 	fs::create_dir(directory.path().join("folder.md")).unwrap();
 
-	let mut files = FsSource::new(directory.path(), URI_PREFIX).scan().unwrap();
+	let mut files = FsSource::new(directory.path(), LocationScheme::android(URI_PREFIX))
+		.scan()
+		.unwrap();
 	files.sort_by(|left, right| left.filename.cmp(&right.filename));
 
 	let names: Vec<_> = files.iter().map(|file| file.filename.as_str()).collect();
 
 	assert_eq!(names, ["Stress 1.md", "Upper.MD"]);
-	assert_eq!(files[0].uri, format!("{URI_PREFIX}Stress%201.md"));
+	assert_eq!(files[0].location, format!("{URI_PREFIX}Stress%201.md"));
 	assert_eq!(files[0].size, 5);
 	assert!(files[0].modified > 0);
 }
@@ -210,10 +212,12 @@ fn encodes_file_names_like_the_platform_uri_builder() {
 	let directory = TempDir::new().unwrap();
 	fs::write(directory.path().join("Año (1) #2.md"), "x").unwrap();
 
-	let files = FsSource::new(directory.path(), URI_PREFIX).scan().unwrap();
+	let files = FsSource::new(directory.path(), LocationScheme::android(URI_PREFIX))
+		.scan()
+		.unwrap();
 
 	assert_eq!(
-		files[0].uri,
+		files[0].location,
 		format!("{URI_PREFIX}A%C3%B1o%20(1)%20%232.md")
 	);
 }
@@ -222,9 +226,9 @@ fn encodes_file_names_like_the_platform_uri_builder() {
 fn reads_files_replacing_invalid_utf8_and_missing_ones() {
 	let directory = TempDir::new().unwrap();
 	fs::write(directory.path().join("a.md"), b"caf\xff").unwrap();
-	let source = FsSource::new(directory.path(), URI_PREFIX);
+	let source = FsSource::new(directory.path(), LocationScheme::android(URI_PREFIX));
 	let present = SourceFile {
-		uri: String::new(),
+		location: String::new(),
 		filename: "a.md".to_string(),
 		modified: 0,
 		size: 0,
@@ -248,7 +252,10 @@ fn indexes_a_directory_end_to_end() {
 	fs::write(vault.join("b.md"), "#tag b").unwrap();
 	let engine = Engine::new(directory.path().join("index.db"), "en").unwrap();
 
-	let stats = sync(&engine, &FsSource::new(&vault, URI_PREFIX));
+	let stats = sync(
+		&engine,
+		&FsSource::new(&vault, LocationScheme::android(URI_PREFIX)),
+	);
 
 	assert_eq!((stats.added, stats.unreadable), (2, 0));
 	assert_eq!(titles(&engine), ["a", "b"]);

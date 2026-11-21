@@ -1,6 +1,6 @@
-use super::NoteSink;
 use super::constants::{TEMP_PREFIX, TEMP_SUFFIX, WRITE_ATTEMPTS};
 use super::fs::stamp_of;
+use super::{LocationScheme, NoteSink};
 use crate::error::Result;
 use crate::model::FileStamp;
 use std::fs;
@@ -9,14 +9,14 @@ use std::path::PathBuf;
 
 pub struct FsSink {
 	root: PathBuf,
-	uri_prefix: String,
+	scheme: LocationScheme,
 }
 
 impl FsSink {
-	pub fn new(root: impl Into<PathBuf>, uri_prefix: impl Into<String>) -> Self {
+	pub fn new(root: impl Into<PathBuf>, scheme: LocationScheme) -> Self {
 		Self {
 			root: root.into(),
-			uri_prefix: uri_prefix.into(),
+			scheme,
 		}
 	}
 
@@ -36,14 +36,14 @@ impl FsSink {
 
 impl NoteSink for FsSink {
 	fn stat(&self, filename: &str) -> Result<Option<FileStamp>> {
-		Ok(stamp_of(&self.root, &self.uri_prefix, filename))
+		Ok(stamp_of(&self.root, &self.scheme, filename))
 	}
 
 	fn write(&self, filename: &str, text: &str) -> Result<FileStamp> {
 		for _ in 0..WRITE_ATTEMPTS {
 			self.write_once(filename, text.as_bytes())?;
 
-			if let Some(stamp) = stamp_of(&self.root, &self.uri_prefix, filename)
+			if let Some(stamp) = stamp_of(&self.root, &self.scheme, filename)
 				&& stamp.size == text.len() as i64
 			{
 				return Ok(stamp);

@@ -124,7 +124,7 @@ fn check(sink: &dyn NoteSink, request: &SaveRequest) -> Result<Option<SaveOutcom
 fn note_input(filename: &str, text: &str, stamp: &FileStamp) -> NoteInput {
 	NoteInput {
 		filename: filename.to_string(),
-		uri: stamp.uri.clone(),
+		location: stamp.location.clone(),
 		modified: stamp.modified,
 		size: stamp.size,
 		text: text.to_string(),

@@ -3,7 +3,7 @@ use engine::syntax::{Decomposed, NoteFields};
 
 #[derive(uniffi::Record)]
 pub struct SourceRecord {
-	pub uri: String,
+	pub location: String,
 	pub filename: String,
 	pub modified: i64,
 	pub size: i64,
@@ -11,7 +11,7 @@ pub struct SourceRecord {
 
 #[derive(uniffi::Record)]
 pub struct FileStampRecord {
-	pub uri: String,
+	pub location: String,
 	pub modified: i64,
 	pub size: i64,
 }
@@ -196,7 +196,7 @@ impl From<EngineError> for engine::error::Error {
 impl From<SourceRecord> for model::SourceFile {
 	fn from(record: SourceRecord) -> Self {
 		Self {
-			uri: record.uri,
+			location: record.location,
 			filename: record.filename,
 			modified: record.modified,
 			size: record.size,
@@ -224,7 +224,7 @@ impl From<model::SyncStats> for SyncReport {
 impl From<model::FileStamp> for FileStampRecord {
 	fn from(stamp: model::FileStamp) -> Self {
 		Self {
-			uri: stamp.uri,
+			location: stamp.location,
 			modified: stamp.modified,
 			size: stamp.size,
 		}
@@ -234,7 +234,7 @@ impl From<model::FileStamp> for FileStampRecord {
 impl From<FileStampRecord> for model::FileStamp {
 	fn from(record: FileStampRecord) -> Self {
 		Self {
-			uri: record.uri,
+			location: record.location,
 			modified: record.modified,
 			size: record.size,
 		}

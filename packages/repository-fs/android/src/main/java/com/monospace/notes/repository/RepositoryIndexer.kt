@@ -47,8 +47,8 @@ private class ProviderNoteSource(
   override fun scan(): List<SourceRecord> =
     scanNotes(context, directoryUri).map { SourceRecord(it.uri, it.filename, it.modified, it.size) }
 
-  override fun read(uris: List<String>): List<String?> =
-    runBlocking { readAll(context, uris, dispatcher) { it } }
+  override fun read(locations: List<String>): List<String?> =
+    runBlocking { readAll(context, locations, dispatcher) { it } }
 }
 
 private class ProgressBridge(private val onProgress: (done: Int, total: Int) -> Unit) : ProgressListener {

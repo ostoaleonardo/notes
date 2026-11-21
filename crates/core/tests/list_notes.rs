@@ -12,7 +12,7 @@ const MODIFIED: i64 = 7;
 fn input(name: &str, text: &str) -> NoteInput {
 	NoteInput {
 		filename: format!("{name}.md"),
-		uri: format!("file:///{name}.md"),
+		location: format!("file:///{name}.md"),
 		modified: MODIFIED,
 		size: text.len() as i64,
 		text: text.to_string(),

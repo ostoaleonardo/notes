@@ -44,7 +44,7 @@ pub const SCHEMA: &[&str] = &[
 		id INTEGER PRIMARY KEY,
 		folder_id TEXT NOT NULL,
 		filename TEXT NOT NULL,
-		uri TEXT NOT NULL,
+		location TEXT NOT NULL,
 		title TEXT NOT NULL,
 		sort_key TEXT NOT NULL,
 		modified INTEGER NOT NULL,
@@ -113,7 +113,7 @@ pub const DELETE_FTS_BY_REPOSITORY: &str =
 pub const DELETE_NOTES_BY_REPOSITORY: &str = "DELETE FROM notes WHERE folder_id = ?1";
 
 pub const INSERT_NOTE: &str = "INSERT INTO notes(
-	folder_id, filename, uri, title, sort_key, modified, size, invalid_frontmatter, frontmatter
+	folder_id, filename, location, title, sort_key, modified, size, invalid_frontmatter, frontmatter
 ) VALUES(?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)";
 pub const INSERT_TAG: &str =
 	"INSERT INTO tags(note_id, position, name, inline) VALUES(?1,?2,?3,?4)";
@@ -156,7 +156,7 @@ pub fn placeholders(count: usize, offset: usize) -> String {
 		.join(PLACEHOLDER_SEPARATOR)
 }
 
-pub const LIST_NOTES: &str = "SELECT id, folder_id, filename, uri, title, modified,
+pub const LIST_NOTES: &str = "SELECT id, folder_id, filename, location, title, modified,
 	invalid_frontmatter, frontmatter
 	FROM notes ORDER BY id";
 pub const LIST_TAGS: &str = "SELECT note_id, name, inline FROM tags ORDER BY note_id, rowid";

@@ -6,7 +6,7 @@ use tempfile::TempDir;
 fn input(filename: &str, text: &str) -> NoteInput {
 	NoteInput {
 		filename: filename.to_string(),
-		uri: format!("file:///{filename}"),
+		location: format!("file:///{filename}"),
 		modified: 1,
 		size: text.len() as i64,
 		text: text.to_string(),

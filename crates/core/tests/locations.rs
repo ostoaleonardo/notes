@@ -1,0 +1,171 @@
+use engine::engine::Engine;
+use engine::model::{SaveOutcome, Value};
+use engine::source::{FsSink, FsSource, LocationScheme, NoteSink, NoteSource};
+use serde_json::Value as Json;
+use std::fs;
+use tempfile::TempDir;
+
+const PREFIX: &str = "content://tree/document/root%2F";
+const FOLDER: &str = "repo";
+const LOCALE: &str = "en";
+
+struct Vault {
+	directory: TempDir,
+	engine: Engine,
+}
+
+impl Vault {
+	fn new(names: &[&str]) -> Self {
+		let directory = TempDir::new().unwrap();
+
+		fs::create_dir(directory.path().join("notes")).unwrap();
+
+		for name in names {
+			fs::write(directory.path().join("notes").join(name), "# Title\n").unwrap();
+		}
+
+		Self {
+			engine: Engine::new(directory.path().join("index.db"), LOCALE).unwrap(),
+			directory,
+		}
+	}
+
+	fn notes(&self) -> std::path::PathBuf {
+		self.directory.path().join("notes")
+	}
+
+	fn sync(&self, scheme: LocationScheme) {
+		let source = FsSource::new(self.notes(), scheme);
+
+		self.engine.sync(FOLDER, &source, &|_, _| {}).unwrap();
+	}
+
+	fn indexed_locations(&self) -> Vec<String> {
+		self.engine
+			.query("SELECT location FROM notes ORDER BY filename", &[])
+			.unwrap()
+			.rows
+			.into_iter()
+			.map(|row| match &row[0] {
+				Value::Text(text) => text.clone(),
+				other => panic!("unexpected {other:?}"),
+			})
+			.collect()
+	}
+}
+
+#[test]
+fn android_locations_percent_encode_the_filename_after_the_prefix() {
+	let vault = Vault::new(&[
+		"plain.md",
+		"with space.md",
+		"hash#tag.md",
+		"100%.md",
+		"é日本.md",
+	]);
+	let mut files = FsSource::new(vault.notes(), LocationScheme::android(PREFIX))
+		.scan()
+		.unwrap();
+
+	files.sort_by(|a, b| a.filename.cmp(&b.filename));
+
+	let locations: Vec<&str> = files.iter().map(|file| file.location.as_str()).collect();
+
+	assert_eq!(
+		locations,
+		[
+			"content://tree/document/root%2F100%25.md",
+			"content://tree/document/root%2Fhash%23tag.md",
+			"content://tree/document/root%2Fplain.md",
+			"content://tree/document/root%2Fwith%20space.md",
+			"content://tree/document/root%2F%C3%A9%E6%97%A5%E6%9C%AC.md",
+		]
+	);
+}
+
+#[test]
+fn file_path_locations_are_the_paths_of_the_files() {
+	let vault = Vault::new(&["plain.md", "with space.md", "é日本.md"]);
+	let mut files = FsSource::new(vault.notes(), LocationScheme::FilePath)
+		.scan()
+		.unwrap();
+
+	files.sort_by(|a, b| a.filename.cmp(&b.filename));
+
+	for file in &files {
+		assert_eq!(
+			file.location,
+			vault.notes().join(&file.filename).to_string_lossy()
+		);
+	}
+
+	assert_eq!(files.len(), 3);
+}
+
+#[test]
+fn the_index_stores_whichever_location_the_scheme_produces() {
+	let android = Vault::new(&["a b.md"]);
+	let path = Vault::new(&["a b.md"]);
+
+	android.sync(LocationScheme::android(PREFIX));
+	path.sync(LocationScheme::FilePath);
+
+	assert_eq!(
+		android.indexed_locations(),
+		["content://tree/document/root%2Fa%20b.md"]
+	);
+	assert_eq!(
+		path.indexed_locations(),
+		[path.notes().join("a b.md").to_string_lossy().into_owned()]
+	);
+}
+
+#[test]
+fn the_listing_exposes_the_location_under_the_file_uri_key() {
+	let vault = Vault::new(&["note.md"]);
+
+	vault.sync(LocationScheme::FilePath);
+
+	let listing: Json =
+		serde_json::from_str(&vault.engine.list_notes(&[FOLDER.to_string()]).unwrap()).unwrap();
+
+	assert_eq!(
+		listing[0]["fileUri"],
+		Json::String(vault.notes().join("note.md").to_string_lossy().into_owned())
+	);
+}
+
+#[test]
+fn notes_have_the_same_metadata_under_both_schemes() {
+	let android = Vault::new(&["note.md"]);
+	let path = Vault::new(&["note.md"]);
+
+	android.sync(LocationScheme::android(PREFIX));
+	path.sync(LocationScheme::FilePath);
+
+	let query = "SELECT filename, title, sort_key, size, invalid_frontmatter FROM notes";
+
+	assert_eq!(
+		android.engine.query(query, &[]).unwrap(),
+		path.engine.query(query, &[]).unwrap()
+	);
+}
+
+#[test]
+fn saving_under_the_file_path_scheme_stamps_and_indexes_the_path() {
+	let vault = Vault::new(&[]);
+	let sink = FsSink::new(vault.notes(), LocationScheme::FilePath);
+	let outcome = vault
+		.engine
+		.save_note(FOLDER, &sink, "new.md", "# New\n", None)
+		.unwrap();
+	let expected = vault.notes().join("new.md").to_string_lossy().into_owned();
+
+	match outcome {
+		SaveOutcome::Saved(stamp) => assert_eq!(stamp.location, expected),
+		other => panic!("unexpected {other:?}"),
+	}
+
+	assert_eq!(sink.stat("new.md").unwrap().unwrap().location, expected);
+	assert_eq!(vault.indexed_locations(), [expected]);
+}

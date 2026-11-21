@@ -37,7 +37,7 @@ pub struct ParsedNote {
 #[derive(Debug, Clone)]
 pub struct NoteInput {
 	pub filename: String,
-	pub uri: String,
+	pub location: String,
 	pub modified: i64,
 	pub size: i64,
 	pub text: String,
@@ -58,7 +58,7 @@ pub struct ScannedFile {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SourceFile {
-	pub uri: String,
+	pub location: String,
 	pub filename: String,
 	pub modified: i64,
 	pub size: i64,
@@ -78,7 +78,7 @@ impl NoteInput {
 	pub fn from_file(file: &SourceFile, text: String) -> Self {
 		Self {
 			filename: file.filename.clone(),
-			uri: file.uri.clone(),
+			location: file.location.clone(),
 			modified: file.modified,
 			size: file.size,
 			text,
@@ -145,7 +145,7 @@ pub struct QueryResult {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FileStamp {
-	pub uri: String,
+	pub location: String,
 	pub modified: i64,
 	pub size: i64,
 }

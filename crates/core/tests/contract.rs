@@ -1,7 +1,7 @@
 use engine::engine::Engine;
 use engine::links::{Candidate, FolderPaths, LinkNote, NoteIndex, find_backlinks, rename_links};
 use engine::model::{QueryResult, SaveOutcome, SyncStats, Value};
-use engine::source::{FsSink, FsSource};
+use engine::source::{FsSink, FsSource, LocationScheme};
 use engine::syntax::{
 	NoteFields, compose, decompose, inline_tags, normalize, parse_note, wiki_links,
 };
@@ -77,7 +77,7 @@ impl Vault {
 	}
 
 	fn sync(&self, folder: &str, root: &Path) -> Json {
-		let source = FsSource::new(root, URI_PREFIX);
+		let source = FsSource::new(root, LocationScheme::android(URI_PREFIX));
 
 		stats(&self.engine.sync(folder, &source, &|_, _| {}).unwrap())
 	}
@@ -338,7 +338,7 @@ fn versioning(vault: &Vault) -> Json {
 
 fn scenario() -> Json {
 	let vault = Vault::new();
-	let sink = FsSink::new(vault.notes(), URI_PREFIX);
+	let sink = FsSink::new(vault.notes(), LocationScheme::android(URI_PREFIX));
 
 	let first_sync = vault.sync(ROOT_FOLDER, &vault.notes());
 	let sub_sync = vault.sync(SUB_FOLDER, &vault.sub());

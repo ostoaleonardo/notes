@@ -56,7 +56,7 @@ internal fun noteSinkFor(context: Context, directoryUri: String): NoteSink {
 internal fun saveReportToMap(report: SaveReport): Map<String, Any> = when (report) {
   is SaveReport.Saved -> mapOf(
     SaveKeys.STATUS to SaveKeys.SAVED,
-    SaveKeys.URI to report.stamp.uri,
+    SaveKeys.URI to report.stamp.location,
     SaveKeys.MODIFIED to report.stamp.modified,
     SaveKeys.SIZE to report.stamp.size
   )

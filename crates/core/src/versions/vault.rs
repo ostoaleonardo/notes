@@ -1,7 +1,7 @@
 use super::constants::{CORRUPT_SUFFIX, NOTES_FOLDER, PATH_SEPARATOR, VERSIONS_SUFFIX};
 use super::store::{NewVersion, commit_version};
 use crate::error::{Error, Result};
-use crate::source::uri::{decode, encode};
+use crate::source::percent::{decode, encode};
 use crate::vault::VaultFs;
 use serde_json::Value;
 use std::io;
