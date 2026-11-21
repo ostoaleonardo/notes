@@ -131,7 +131,7 @@ export function useTemplates() {
 
     const addTemplateFolder = useCallback(async (name, parent = '') => {
         const uri = await getFolderUri(parent)
-        const folderName = sanitizeFilename(name)
+        const folderName = sanitizeFilename(name, '')
 
         if (!findDirectory(uri, folderName)) createSubdirectory(uri, folderName)
         notifyTemplatesChanged()

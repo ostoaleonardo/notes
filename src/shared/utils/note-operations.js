@@ -1,4 +1,4 @@
-import { getUniqueFilenameBy, isTitleTakenBy } from '@/shared/utils/note-filename'
+import { getUniqueFilename, isTitleTaken } from '@/shared/utils/note-filename'
 import { logError } from '@/shared/utils/log-error'
 import { buildNotePath, buildFolderPaths } from '@/shared/utils/note-path'
 import { composeNoteFile, decomposeNoteFile } from '@/shared/utils/note-file-content'
@@ -18,7 +18,9 @@ export const getFolderUri = (folders, folderId) => (
 
 export const buildFileContent = (note, body = note.note) => composeNoteFile(note, body)
 
-const nameExistsIn = (fileStorage, uri) => (name) => fileStorage.fileExists(uri, name)
+const noteNamesIn = (fileStorage, uri) => (
+    fileStorage.listMarkdownFiles(uri).map((entry) => entry.name)
+)
 
 export const withOptimisticUpdate = async (setNotes, { apply, rollback }, persist) => {
     setNotes(apply)
@@ -39,7 +41,7 @@ export const createNote = async ({ note, folderId, uri }, fileStorage) => {
         }
     }
 
-    const filename = getUniqueFilenameBy(nameExistsIn(fileStorage, uri), note.title, null)
+    const filename = getUniqueFilename(noteNamesIn(fileStorage, uri), note.title, null)
     const path = buildNotePath(folderId, filename)
     const saved = await fileStorage.saveNoteFile({
         folderId,
@@ -73,15 +75,15 @@ export const planNoteUpdate = ({ note, previous, uri }, fileStorage) => {
         if (inPlace) return inPlace
     }
 
-    const exists = nameExistsIn(fileStorage, uri)
+    const names = noteNamesIn(fileStorage, uri)
 
-    if (note.title !== previous.title && isTitleTakenBy(exists, note.title, previous.filename)) {
+    if (note.title !== previous.title && isTitleTaken(names, note.title, previous.filename)) {
         const error = new Error('A note with this title already exists')
         error.code = DUPLICATE_TITLE_ERROR
         throw error
     }
 
-    const filename = getUniqueFilenameBy(exists, note.title, previous.filename)
+    const filename = getUniqueFilename(names, note.title, previous.filename)
 
     return {
         filename,

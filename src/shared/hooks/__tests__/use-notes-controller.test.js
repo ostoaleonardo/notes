@@ -18,6 +18,7 @@ import { parseFrontmatter } from '@/shared/utils/frontmatter'
 
 const mockFileStorage = {
     fileExists: jest.fn(),
+    listMarkdownFiles: jest.fn(() => []),
     writeNoteFile: jest.fn(),
     saveNoteFile: jest.fn(),
     saveNoteFiles: jest.fn(),
@@ -89,6 +90,9 @@ beforeEach(() => {
 
     jest.clearAllMocks()
     mockFileStorage.fileExists.mockImplementation((_uri, name) => files.has(name))
+    mockFileStorage.listMarkdownFiles.mockImplementation(() => (
+        [...files.keys()].map((name) => ({ name }))
+    ))
     mockFileStorage.getExistingFile.mockImplementation((name) => (
         files.has(name)
             ? {
@@ -172,7 +176,7 @@ describe('save note', () => {
         })
 
         expect(result.current.notes).toHaveLength(1)
-        expect(mockFileStorage.fileExists).not.toHaveBeenCalled()
+        expect(mockFileStorage.listMarkdownFiles).not.toHaveBeenCalled()
         expect(mockFileStorage.writeNoteFile).not.toHaveBeenCalled()
     })
 })
@@ -223,7 +227,7 @@ describe('update note', () => {
         expect(result.current.notes[0].note).toBe('updated content')
     })
 
-    test('looks up the file by name instead of listing the directory', async () => {
+    test('checks the new title against the listed notes and finds the old file by name', async () => {
         files.set('Old title.md', '---\ntags: []\n---\n\ncontent')
         const { result } = await renderNotesHook([MOCK_OLD_TITLE_NOTE])
 
@@ -231,7 +235,7 @@ describe('update note', () => {
             await result.current.updateNote({ ...MOCK_OLD_TITLE_NOTE, title: 'New title' })
         })
 
-        expect(mockFileStorage.fileExists).toHaveBeenCalledWith(MOCK_REPO_URI, 'New title.md')
+        expect(mockFileStorage.listMarkdownFiles).toHaveBeenCalledWith(MOCK_REPO_URI)
         expect(mockFileStorage.findFile).toHaveBeenCalledTimes(1)
     })
 

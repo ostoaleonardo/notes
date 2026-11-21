@@ -150,16 +150,27 @@ Each takes a `Repository { ops, versions }` and runs as one call that keeps file
 | `rename_folder(repository, path, new_name, affected_folder_ids)` | Renames a directory, drops the index rows of the folder and its descendants (their locations changed) and renames the versions under the old prefix. Restores the directory name if a later step fails. Returns the new path. |
 | `remove_folder(repository, path, folder_ids, drop_versions)` | Drops the rows, removes the directory with its contents and optionally its versions. |
 | `trash_note(repository, folder_id, folder_path, filename, trash_path)` | Moves the note into the trash directory under a free name (`name (2).md`, …), keeping its modified time, and drops its versions and index row. Returns the final name. |
-| `move_note(repository, filename, from_id, from_path, to_id, to_path, to_sink)` | Moves the file (never overwriting), renames its versions (undoing the move if that fails) and refreshes both index folders. Returns `Moved(stamp)`, `TargetExists` or `SourceMissing`. |
+| `move_note(repository, filename, from_id, from_path, to_id, to_path, to_sink)` | Moves the file (never overwriting, and refusing a name that collides in case or normalization), renames its versions (undoing the move if that fails) and refreshes both index folders. Returns `Moved(stamp)`, `TargetExists` or `SourceMissing`. |
 
 Not covered: deleting a **repository root**. The root is the folder the user granted, so its relative path is empty and on SAF its tree root cannot be removed like a subdirectory. That case stays in JS (`deleteDirectory`).
+
+### `names` — portable file names
+
+| Function | What it does |
+|---|---|
+| `sanitize_filename(title, extension)` | Builds a file name stem from a title: invalid characters (`/ \ : * ? " < > |` and control characters) become spaces, the text is normalized to NFC, surrounding whitespace, BOMs and trailing dots and spaces are removed, names reserved on Windows (`CON`, `PRN`, `AUX`, `NUL`, `COM1-9`, `LPT1-9`) get an `_` after the device part (`con.backup` becomes `con_.backup`), and the result is cut to 255 bytes minus the extension and 8 bytes kept for a ` (n)` suffix, on a character boundary. An empty result becomes `Untitled`. |
+| `name_key(name)`, `names_collide(a, b)` | NFC plus lower-case. Names that differ only in case or normalization collide, so a repository stays valid on macOS and Windows. |
+| `unique_name(existing, stem, extension, current)` | The first free `stem.ext`, `stem (2).ext`, `stem (3).ext`…, comparing with `name_key`. `current` is the note being renamed: it may keep or re-case its own name. |
+| `has_link_breaking_chars(title)` | True when a title contains `#`, `^`, `[` or `]`, which break wiki links. |
+
+Existing files are never renamed. The rules apply to new names and to comparisons only.
 
 ### `repository` — path-based files
 
 | Item | What it does |
 |---|---|
 | `RepositoryFiles` | `read_text`, `write_text`, `delete_file`, `list_files` by repository-relative path. |
-| `RepositoryOps` | `exists`, `create_dir` (recursive), `rename_dir` (fails with `AlreadyExists` instead of overwriting), `move_file` (`Moved`, `TargetExists`, `SourceMissing`), `remove_dir` (recursive, a missing directory is fine). |
+| `RepositoryOps` | `list_dir` (names and whether each is a directory, sorted; names that are not valid UTF-8 are skipped), `exists`, `create_dir` (recursive), `rename_dir` (fails with `AlreadyExists` instead of overwriting), `move_file` (`Moved`, `TargetExists`, `SourceMissing`), `remove_dir` (recursive, a missing directory is fine). |
 | `FsRepository::new(root)` | `std::fs` implementation of both. Path segments are joined under the root; empty segments are ignored. |
 | `validate_name(name)` | Rejects empty names, `.`, `..` and names containing `/`, `\` or NUL with `InvalidName`. Used before every rename. |
 
@@ -223,9 +234,9 @@ Each note has one JSON file in `.notes/`, named with the percent-encoded key `fo
 
 `crates/uniffi` exports `Engine` and the free functions below, plus the foreign traits Kotlin implements (`NoteSource`, `NoteSink`, `RepositoryFiles`, `ProgressListener`) and the objects `FsNoteSink`, `FsRepositoryHandle` (direct access) and `VersionsHandle`. Errors map one to one to `EngineError`. The trait `RepositoryFiles` there carries the repository operations too, so one Kotlin class serves versions and folder operations.
 
-Free functions: `compose_note`, `decompose_note`, `find_backlink_paths`, `rename_links_in_bodies`. Engine methods exported: `sync`, `sync_directory` (direct access, builds a `FsSource`), `save_note`, `save_notes`, `rename_note`, `delete_note`, `rename_folder`, `remove_folder`, `trash_note`, `move_note`, `indexed_notes`, `query`, `list_notes`, `backlink_candidates`, `mention_candidates`, `delete_folder`, `prune`.
+Free functions: `compose_note`, `decompose_note`, `find_backlink_paths`, `rename_links_in_bodies`, `sanitize_filename`, `unique_filename`. Engine methods exported: `sync`, `sync_directory` (direct access, builds a `FsSource`), `save_note`, `save_notes`, `rename_note`, `delete_note`, `rename_folder`, `remove_folder`, `trash_note`, `move_note`, `indexed_notes`, `query`, `list_notes`, `backlink_candidates`, `mention_candidates`, `delete_folder`, `prune`.
 
-The Expo module `repository-fs` exposes to JS: `indexRepository`, `saveNote`, `saveNotes`, `renameNote`, `deleteNote`, `renameFolder`, `removeFolder`, `trashNote`, `moveNote`, `composeNote`, `decomposeNote`, `listIndexedNotes`, `queryIndex`, `listNoteMetadata`, `findBacklinkCandidates`, `findMentionCandidates`, `findBacklinkPaths`, `renameLinksInBodies`, `pruneRepositoryIndex`, `deleteFolderIndex`, the `versions*` functions, and SAF helpers (`listDirectory`, `listDirectorySync`, `readTextFiles`, `findChild`, `listAttachments`, direct access permissions).
+The Expo module `repository-fs` exposes to JS: `indexRepository`, `saveNote`, `saveNotes`, `renameNote`, `deleteNote`, `renameFolder`, `removeFolder`, `trashNote`, `moveNote`, `composeNote`, `decomposeNote`, `sanitizeFilename`, `uniqueFilename`, `listIndexedNotes`, `queryIndex`, `listNoteMetadata`, `findBacklinkCandidates`, `findMentionCandidates`, `findBacklinkPaths`, `renameLinksInBodies`, `pruneRepositoryIndex`, `deleteFolderIndex`, the `versions*` functions, and SAF helpers (`listDirectory`, `listDirectorySync`, `readTextFiles`, `findChild`, `listAttachments`, direct access permissions).
 
 The index-changing operations (`indexRepository`, `pruneRepositoryIndex`, `deleteFolderIndex`, `renameFolder`, `removeFolder`, `trashNote`, `moveNote`) run under one lock in Kotlin so they do not interleave. The shared engine and the version stores are created once per process.
 

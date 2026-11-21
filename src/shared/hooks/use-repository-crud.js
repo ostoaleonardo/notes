@@ -102,7 +102,7 @@ export function useRepositoryCrud({
         if (!parent) return null
 
         return withBusy(busyRef, async () => {
-            const directory = createSubdirectory(parent.uri, sanitizeFilename(name))
+            const directory = createSubdirectory(parent.uri, sanitizeFilename(name, ''))
             const folder = buildFolder(directory, parentId, false)
 
             await persistFolders([...folders, folder])
@@ -181,7 +181,7 @@ export function useRepositoryCrud({
                 const parent = folders.find((r) => r.id === folder.parentId)
                 if (!parent) return REPOSITORY_RESULTS.ERROR
 
-                const sanitized = sanitizeFilename(alias)
+                const sanitized = sanitizeFilename(alias, '')
                 const oldPath = buildFolderPaths(folders).get(id)
                 const affected = [id, ...getDescendants(id).map((d) => d.id)]
                 const { uri: newUri } = await renameFolderFiles({

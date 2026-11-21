@@ -269,3 +269,18 @@ pub fn compose_note(fields: NoteFieldsRecord, body: String) -> Result<String, En
 pub fn decompose_note(content: String) -> DecomposedRecord {
 	engine::syntax::decompose(&content).into()
 }
+
+#[uniffi::export]
+pub fn sanitize_filename(title: String, extension: String) -> String {
+	engine::names::sanitize_filename(&title, &extension)
+}
+
+#[uniffi::export]
+pub fn unique_filename(
+	existing: Vec<String>,
+	stem: String,
+	extension: String,
+	current: Option<String>,
+) -> String {
+	engine::names::unique_name(&existing, &stem, &extension, current.as_deref())
+}

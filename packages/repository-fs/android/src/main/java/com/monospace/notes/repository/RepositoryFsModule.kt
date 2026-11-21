@@ -28,6 +28,8 @@ import uniffi.engine.renameLinksInBodies
 import uniffi.engine.SaveRequestRecord
 import uniffi.engine.composeNote
 import uniffi.engine.decomposeNote
+import uniffi.engine.sanitizeFilename
+import uniffi.engine.uniqueFilename
 import java.nio.file.Files
 import java.nio.file.attribute.BasicFileAttributes
 import kotlinx.coroutines.CoroutineDispatcher
@@ -247,6 +249,14 @@ class RepositoryFsModule : Module() {
           )
         }
       }
+    }
+
+    Function("sanitizeFilename") { title: String, extension: String ->
+      sanitizeFilename(title, extension)
+    }
+
+    Function("uniqueFilename") { existing: List<String>, stem: String, extension: String, current: String? ->
+      uniqueFilename(existing, stem, extension, current)
     }
 
     Function("composeNote") { tags: List<String>, propertiesJson: String, invalidFrontmatter: String?, rawFrontmatter: String?, body: String ->

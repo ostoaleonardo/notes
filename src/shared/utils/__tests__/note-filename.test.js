@@ -16,9 +16,17 @@ describe('sanitize filename', () => {
         expect(sanitizeFilename('   ')).toBe('Untitled')
     })
 
-    test('truncates titles longer than 200 characters', () => {
-        const long = 'a'.repeat(250)
-        expect(sanitizeFilename(long)).toHaveLength(200)
+    test('truncates long titles to leave room for the extension and a copy suffix', () => {
+        const long = 'a'.repeat(300)
+        expect(sanitizeFilename(long)).toHaveLength(244)
+    })
+
+    test('does not leave a trailing dot or space', () => {
+        expect(sanitizeFilename('Notes. ')).toBe('Notes')
+    })
+
+    test('protects names reserved on Windows', () => {
+        expect(sanitizeFilename('CON')).toBe('CON_')
     })
 })
 
@@ -35,6 +43,10 @@ describe('get unique title', () => {
 describe('get unique filename', () => {
     test('appends .md to a free title', () => {
         expect(getUniqueFilename([], 'Groceries', null)).toBe('Groceries.md')
+    })
+
+    test('treats names that differ only in case as taken', () => {
+        expect(getUniqueFilename(['groceries.md'], 'Groceries', null)).toBe('Groceries (2).md')
     })
 
     test('disambiguates against existing files', () => {

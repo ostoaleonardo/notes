@@ -44,6 +44,16 @@ jest.mock('repository-fs', () => {
             versionsCommit: jest.fn(async () => true),
             versionsRename: jest.fn(async () => {}),
             versionsMigrateLegacy: jest.fn(async () => {}),
+            sanitizeFilename: (title, extension) => {
+                const { sanitizeFilename } = require('../jest/core-names')
+
+                return sanitizeFilename(title, extension)
+            },
+            uniqueFilename: (existing, stem, extension, current) => {
+                const { uniqueFilename } = require('../jest/core-names')
+
+                return uniqueFilename(existing, stem, extension, current)
+            },
             composeNote: (tags, propertiesJson, invalidFrontmatter, rawFrontmatter, body) => {
                 const { buildNoteFileContent } = require('@/shared/utils/frontmatter')
 

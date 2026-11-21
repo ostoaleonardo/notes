@@ -26,6 +26,7 @@ const createFakeStorage = (initialFiles = {}) => {
         files,
         calls,
         fileExists: jest.fn((_uri, name) => files.has(name)),
+        listMarkdownFiles: jest.fn(() => [...files.keys()].map((name) => ({ name }))),
         findFile: jest.fn((_uri, name) => (
             files.has(name)
                 ? { name, uri: `${REPO_URI}/${name}`, delete: () => files.delete(name) }
@@ -150,7 +151,7 @@ describe('plan note update', () => {
         expect(storage.findFile).toHaveBeenCalledTimes(1)
     })
 
-    test('checks the new name by lookup when the title changes', () => {
+    test('checks the new name against the listed notes when the title changes', () => {
         const storage = createFakeStorage({ 'Groceries.md': 'x' })
         const located = { ...previous, fileUri: HANDLE.uri }
 
@@ -159,7 +160,7 @@ describe('plan note update', () => {
             storage
         )
 
-        expect(storage.fileExists).toHaveBeenCalledWith(REPO_URI, 'Shopping.md')
+        expect(storage.listMarkdownFiles).toHaveBeenCalledWith(REPO_URI)
     })
 
     test('flags a rename when the title changes', () => {

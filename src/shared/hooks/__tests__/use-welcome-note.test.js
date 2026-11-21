@@ -11,7 +11,7 @@ const mockStorage = {
     setItem: jest.fn()
 }
 const mockFileStorage = {
-    fileExists: jest.fn(),
+    listMarkdownFiles: jest.fn(() => []),
     writeNoteFile: jest.fn()
 }
 
@@ -33,7 +33,7 @@ describe('seed welcome note', () => {
     beforeEach(() => {
         jest.clearAllMocks()
         mockStorage.getItem.mockResolvedValue(null)
-        mockFileStorage.fileExists.mockReturnValue(false)
+        mockFileStorage.listMarkdownFiles.mockReturnValue([])
     })
 
     test('writes the welcome note and returns its path', async () => {
@@ -71,7 +71,7 @@ describe('seed welcome note', () => {
     })
 
     test('picks a unique filename when the title is taken', async () => {
-        mockFileStorage.fileExists.mockImplementation((_uri, name) => name === 'Welcome.md')
+        mockFileStorage.listMarkdownFiles.mockReturnValue([{ name: 'Welcome.md' }])
         const { result } = await setup()
 
         const path = await result.current.seedWelcomeNote('file:///repo', 'r1')
