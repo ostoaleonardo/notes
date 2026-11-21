@@ -66,53 +66,6 @@
     },
     {
       "folderId": "root",
-      "filename": "Gamma.md",
-      "fileUri": "content://tree/document/root%2FGamma.md",
-      "title": "Gamma",
-      "createdAt": 1700000002000,
-      "updatedAt": 1700000002000,
-      "tags": [],
-      "inlineTags": [],
-      "properties": {},
-      "linkTexts": [],
-      "invalidFrontmatter": null,
-      "rawFrontmatter": null
-    },
-    {
-      "folderId": "root",
-      "filename": "Ünïcode título.md",
-      "fileUri": "content://tree/document/root%2F%C3%9Cn%C3%AFcode%20t%C3%ADtulo.md",
-      "title": "Ünïcode título",
-      "createdAt": 1700000003000,
-      "updatedAt": 1700000003000,
-      "tags": [
-        "é",
-        "日本"
-      ],
-      "inlineTags": [],
-      "properties": {},
-      "linkTexts": [
-        "Beta"
-      ],
-      "invalidFrontmatter": null,
-      "rawFrontmatter": "tags: [é, 日本]"
-    },
-    {
-      "folderId": "root",
-      "filename": "Invalid fm.md",
-      "fileUri": "content://tree/document/root%2FInvalid%20fm.md",
-      "title": "Invalid fm",
-      "createdAt": 1700000004000,
-      "updatedAt": 1700000004000,
-      "tags": [],
-      "inlineTags": [],
-      "properties": {},
-      "linkTexts": [],
-      "invalidFrontmatter": "tags: [unclosed",
-      "rawFrontmatter": null
-    },
-    {
-      "folderId": "root",
       "filename": "Beta.md",
       "fileUri": "content://tree/document/root%2FBeta.md",
       "title": "Beta",
@@ -140,6 +93,53 @@
       "linkTexts": [],
       "invalidFrontmatter": null,
       "rawFrontmatter": null
+    },
+    {
+      "folderId": "root",
+      "filename": "Gamma.md",
+      "fileUri": "content://tree/document/root%2FGamma.md",
+      "title": "Gamma",
+      "createdAt": 1700000002000,
+      "updatedAt": 1700000002000,
+      "tags": [],
+      "inlineTags": [],
+      "properties": {},
+      "linkTexts": [],
+      "invalidFrontmatter": null,
+      "rawFrontmatter": null
+    },
+    {
+      "folderId": "root",
+      "filename": "Invalid fm.md",
+      "fileUri": "content://tree/document/root%2FInvalid%20fm.md",
+      "title": "Invalid fm",
+      "createdAt": 1700000004000,
+      "updatedAt": 1700000004000,
+      "tags": [],
+      "inlineTags": [],
+      "properties": {},
+      "linkTexts": [],
+      "invalidFrontmatter": "tags: [unclosed",
+      "rawFrontmatter": null
+    },
+    {
+      "folderId": "root",
+      "filename": "Ünïcode título.md",
+      "fileUri": "content://tree/document/root%2F%C3%9Cn%C3%AFcode%20t%C3%ADtulo.md",
+      "title": "Ünïcode título",
+      "createdAt": 1700000003000,
+      "updatedAt": 1700000003000,
+      "tags": [
+        "é",
+        "日本"
+      ],
+      "inlineTags": [],
+      "properties": {},
+      "linkTexts": [
+        "Beta"
+      ],
+      "invalidFrontmatter": null,
+      "rawFrontmatter": "tags: [é, 日本]"
     },
     {
       "folderId": "sub",

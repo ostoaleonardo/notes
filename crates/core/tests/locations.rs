@@ -180,3 +180,14 @@ fn saving_under_the_file_path_scheme_stamps_and_indexes_the_path() {
 	assert_eq!(sink.stat("new.md").unwrap().unwrap().location, expected);
 	assert_eq!(repository.indexed_locations(), [expected]);
 }
+
+#[test]
+fn scanning_returns_the_files_sorted_by_name_whatever_the_directory_order() {
+	let vault = Repository::new(&["zeta.md", "Alpha.md", "mid.md", "Beta.md"]);
+	let files = FsSource::new(vault.notes(), LocationScheme::FilePath)
+		.scan()
+		.unwrap();
+	let names: Vec<&str> = files.iter().map(|file| file.filename.as_str()).collect();
+
+	assert_eq!(names, ["Alpha.md", "Beta.md", "mid.md", "zeta.md"]);
+}

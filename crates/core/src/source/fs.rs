@@ -39,9 +39,11 @@ impl FsSource {
 
 impl NoteSource for FsSource {
 	fn scan(&self) -> Result<Vec<SourceFile>> {
-		let names: Vec<String> = fs::read_dir(&self.root)?
+		let mut names: Vec<String> = fs::read_dir(&self.root)?
 			.filter_map(|entry| entry.ok()?.file_name().into_string().ok())
 			.collect();
+
+		names.sort();
 
 		Ok(names
 			.into_par_iter()
