@@ -9,10 +9,27 @@ describe('note key', () => {
 })
 
 describe('note payload', () => {
-    test('trims title and body', () => {
-        const payload = buildNotePayload({ path: 'p', title: ' T ', note: ' N ', tags: [] })
+    test('trims the title', () => {
+        const payload = buildNotePayload({ path: 'p', title: ' T ', note: 'N', tags: [] })
 
-        expect(payload).toMatchObject({ title: 'T', note: 'N' })
+        expect(payload.title).toBe('T')
+    })
+
+    test('keeps the whitespace around the body', () => {
+        const payload = buildNotePayload({
+            path: 'p',
+            title: 'T',
+            note: '\n  indented\n\nlast line\n',
+            tags: []
+        })
+
+        expect(payload.note).toBe('\n  indented\n\nlast line\n')
+    })
+
+    test('keeps a whitespace-only body as it is', () => {
+        const payload = buildNotePayload({ path: 'p', title: 'T', note: ' \n\n ', tags: [] })
+
+        expect(payload.note).toBe(' \n\n ')
     })
 
     test('defaults frontmatter fields to null', () => {

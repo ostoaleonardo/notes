@@ -10,7 +10,7 @@ export const buildNotePayload = ({
 }) => ({
     path,
     title: title.trim(),
-    note: note.trim(),
+    note,
     tags,
     properties,
     folderId,

@@ -34,7 +34,7 @@ describe('note draft', () => {
         expect(result.current.filename).toBe('a.md')
     })
 
-    test('builds a trimmed payload from the current draft', async () => {
+    test('builds the payload from the current draft with a trimmed title', async () => {
         const { result } = await renderHook(() => useNoteDraft(pathRef))
 
         await act(async () => {
@@ -46,7 +46,7 @@ describe('note draft', () => {
         expect(result.current.buildPayload('  Title  ')).toEqual({
             path: pathRef.current,
             title: 'Title',
-            note: 'body',
+            note: '  body  ',
             tags: ['x'],
             properties: {},
             folderId: 'r1',
