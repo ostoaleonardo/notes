@@ -5,6 +5,7 @@ import android.net.Uri
 import android.provider.DocumentsContract
 import android.provider.DocumentsContract.Document
 import java.io.IOException
+import uniffi.engine.DirEntryRecord
 import uniffi.engine.EngineException
 import uniffi.engine.FsRepositoryHandle
 import uniffi.engine.MoveStatus
@@ -50,6 +51,14 @@ internal class ProviderRepository(private val context: Context, private val root
     return listDirectory(context, uri)
       .filter { it[EntryKeys.IS_DIRECTORY] != true }
       .map { it[EntryKeys.NAME] as String }
+  }
+
+  override fun listDir(path: String): List<DirEntryRecord> {
+    val directory = directoryUri(segmentsOf(path)) ?: return emptyList()
+
+    return listDirectory(context, directory)
+      .map { DirEntryRecord(it[EntryKeys.NAME] as String, it[EntryKeys.IS_DIRECTORY] == true) }
+      .sortedBy { it.name }
   }
 
   override fun exists(path: String): Boolean {

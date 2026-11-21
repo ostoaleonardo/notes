@@ -3,7 +3,7 @@ mod fs_repository;
 mod ops;
 
 pub use fs_repository::FsRepository;
-pub use ops::{MoveResult, RepositoryOps, validate_name};
+pub use ops::{DirEntry, MoveResult, RepositoryOps, validate_name};
 
 use crate::error::Result;
 

@@ -1,5 +1,7 @@
 use engine::error::Error;
-use engine::repository::{FsRepository, MoveResult, RepositoryFiles, RepositoryOps, validate_name};
+use engine::repository::{
+	DirEntry, FsRepository, MoveResult, RepositoryFiles, RepositoryOps, validate_name,
+};
 use std::fs;
 use std::time::{Duration, UNIX_EPOCH};
 use tempfile::TempDir;
@@ -180,4 +182,69 @@ fn renaming_with_an_invalid_name_does_not_touch_the_repository() {
 	));
 	assert!(directory.path().join("old/note.md").exists());
 	assert!(!directory.path().parent().unwrap().join("escape").exists());
+}
+
+#[test]
+fn listing_a_directory_reports_files_and_directories_sorted_by_name() {
+	let (_directory, repository) = repository();
+
+	repository.write_text("b.md", "x").unwrap();
+	repository.create_dir("a").unwrap();
+	repository.write_text("c/inner.md", "x").unwrap();
+
+	assert_eq!(
+		repository.list_dir("").unwrap(),
+		[
+			DirEntry {
+				name: "a".into(),
+				is_dir: true
+			},
+			DirEntry {
+				name: "b.md".into(),
+				is_dir: false
+			},
+			DirEntry {
+				name: "c".into(),
+				is_dir: true
+			},
+		]
+	);
+}
+
+#[test]
+fn listing_a_missing_directory_gives_nothing() {
+	let (_directory, repository) = repository();
+
+	assert!(repository.list_dir("ghost").unwrap().is_empty());
+}
+
+#[cfg(target_os = "linux")]
+#[test]
+fn listing_skips_names_that_are_not_valid_utf8() {
+	use std::ffi::OsStr;
+	use std::os::unix::ffi::OsStrExt;
+
+	let (directory, repository) = repository();
+
+	fs::write(directory.path().join(OsStr::from_bytes(b"bad\xff.md")), "x").unwrap();
+	repository.write_text("good.md", "x").unwrap();
+
+	let names: Vec<String> = repository
+		.list_dir("")
+		.unwrap()
+		.into_iter()
+		.map(|entry| entry.name)
+		.collect();
+
+	assert_eq!(names, ["good.md"]);
+}
+
+#[test]
+fn a_directory_can_be_renamed_to_a_different_case_of_its_own_name() {
+	let (directory, repository) = repository();
+
+	repository.write_text("Notes/a.md", "x").unwrap();
+	repository.rename_dir("Notes", "NOTES").unwrap();
+
+	assert!(directory.path().join("NOTES/a.md").exists());
 }

@@ -352,3 +352,27 @@ impl From<engine::ops::MoveOutcome> for MoveReport {
 		}
 	}
 }
+
+#[derive(uniffi::Record)]
+pub struct DirEntryRecord {
+	pub name: String,
+	pub is_dir: bool,
+}
+
+impl From<engine::repository::DirEntry> for DirEntryRecord {
+	fn from(entry: engine::repository::DirEntry) -> Self {
+		Self {
+			name: entry.name,
+			is_dir: entry.is_dir,
+		}
+	}
+}
+
+impl From<DirEntryRecord> for engine::repository::DirEntry {
+	fn from(record: DirEntryRecord) -> Self {
+		Self {
+			name: record.name,
+			is_dir: record.is_dir,
+		}
+	}
+}

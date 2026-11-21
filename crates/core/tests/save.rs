@@ -1,5 +1,6 @@
 use engine::engine::Engine;
-use engine::model::{SaveOutcome, SaveRequest, Value};
+use engine::error::Result as EngineResult;
+use engine::model::{FileStamp, SaveOutcome, SaveRequest, Value};
 use engine::source::{FsSink, FsSource, LocationScheme, NoteSink};
 use std::fs;
 use tempfile::TempDir;
@@ -309,4 +310,63 @@ fn reports_a_failed_write_and_still_indexes_the_rest() {
 	assert!(matches!(&outcomes[0], SaveOutcome::Failed(message) if message.contains("disk full")));
 	assert!(matches!(outcomes[1], SaveOutcome::Saved(_)));
 	assert_eq!(repository.indexed(), ["ok.md"]);
+}
+
+const COARSE_MILLIS: i64 = 2_000;
+
+struct CoarseClockSink {
+	inner: FsSink,
+}
+
+impl CoarseClockSink {
+	fn coarse(mut stamp: FileStamp) -> FileStamp {
+		stamp.modified -= stamp.modified % COARSE_MILLIS;
+
+		stamp
+	}
+}
+
+impl NoteSink for CoarseClockSink {
+	fn stat(&self, filename: &str) -> EngineResult<Option<FileStamp>> {
+		Ok(self.inner.stat(filename)?.map(Self::coarse))
+	}
+
+	fn write(&self, filename: &str, text: &str) -> EngineResult<FileStamp> {
+		Ok(Self::coarse(self.inner.write(filename, text)?))
+	}
+
+	fn delete(&self, filename: &str) -> EngineResult<()> {
+		self.inner.delete(filename)
+	}
+}
+
+#[test]
+fn saving_with_the_returned_stamp_never_conflicts_on_a_coarse_clock() {
+	let repository = Repository::new();
+	let sink = CoarseClockSink {
+		inner: FsSink::new(repository.notes(), LocationScheme::android(URI_PREFIX)),
+	};
+
+	let first = repository
+		.engine
+		.save_note("repo", &sink, "a.md", "one", None)
+		.unwrap();
+	let SaveOutcome::Saved(stamp) = first else {
+		panic!("the first save must succeed");
+	};
+
+	for round in 0..5 {
+		let outcome = repository
+			.engine
+			.save_note(
+				"repo",
+				&sink,
+				"a.md",
+				&format!("round {round}"),
+				Some(stamp.modified),
+			)
+			.unwrap();
+
+		assert!(matches!(outcome, SaveOutcome::Saved(_)), "round {round}");
+	}
 }

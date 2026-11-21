@@ -9,7 +9,14 @@ pub enum MoveResult {
 	SourceMissing,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct DirEntry {
+	pub name: String,
+	pub is_dir: bool,
+}
+
 pub trait RepositoryOps: RepositoryFiles {
+	fn list_dir(&self, path: &str) -> Result<Vec<DirEntry>>;
 	fn exists(&self, path: &str) -> Result<bool>;
 	fn create_dir(&self, path: &str) -> Result<()>;
 	fn rename_dir(&self, path: &str, new_name: &str) -> Result<()>;

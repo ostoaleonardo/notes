@@ -3,10 +3,11 @@ mod constants;
 use crate::engine::Engine;
 use crate::error::{Error, Result};
 use crate::model::{FileStamp, NoteInput};
+use crate::names::{names_collide, unique_name};
 use crate::repository::{MoveResult, RepositoryOps, validate_name};
 use crate::source::NoteSink;
 use crate::versions::RepositoryVersions;
-use constants::{FIRST_COPY_NUMBER, NOTE_EXTENSION, PATH_SEPARATOR};
+use constants::{NOTE_EXTENSION, PATH_SEPARATOR};
 use std::io::{self, ErrorKind};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -34,29 +35,44 @@ fn parent_of(path: &str) -> &str {
 		.map_or("", |(parent, _)| parent)
 }
 
-fn stem_and_extension(filename: &str) -> (&str, &str) {
-	match filename.strip_suffix(NOTE_EXTENSION) {
-		Some(stem) => (stem, NOTE_EXTENSION),
-		None => (filename, ""),
-	}
+fn colliding_sibling(
+	repository: &dyn RepositoryOps,
+	directory: &str,
+	name: &str,
+	ignoring: Option<&str>,
+) -> Result<bool> {
+	Ok(repository
+		.list_dir(directory)?
+		.iter()
+		.any(|entry| ignoring != Some(entry.name.as_str()) && names_collide(&entry.name, name)))
 }
 
-fn unique_name(repository: &dyn RepositoryOps, directory: &str, filename: &str) -> Result<String> {
-	if !repository.exists(&join(directory, filename))? {
-		return Ok(filename.to_string());
-	}
+fn entry_names(repository: &dyn RepositoryOps, directory: &str) -> Result<Vec<String>> {
+	Ok(repository
+		.list_dir(directory)?
+		.into_iter()
+		.map(|entry| entry.name)
+		.collect())
+}
 
-	let (stem, extension) = stem_and_extension(filename);
+fn free_trash_name(
+	repository: &dyn RepositoryOps,
+	trash_path: &str,
+	filename: &str,
+) -> Result<String> {
+	let stem = filename.strip_suffix(NOTE_EXTENSION).unwrap_or(filename);
+	let extension = if stem.len() == filename.len() {
+		""
+	} else {
+		NOTE_EXTENSION
+	};
 
-	for number in FIRST_COPY_NUMBER.. {
-		let candidate = format!("{stem} ({number}){extension}");
-
-		if !repository.exists(&join(directory, &candidate))? {
-			return Ok(candidate);
-		}
-	}
-
-	unreachable!("an unused copy number always exists")
+	Ok(unique_name(
+		&entry_names(repository, trash_path)?,
+		stem,
+		extension,
+		None,
+	))
 }
 
 impl Engine {
@@ -74,6 +90,10 @@ impl Engine {
 		let old_name = path
 			.rsplit_once(PATH_SEPARATOR)
 			.map_or(path, |(_, name)| name);
+
+		if colliding_sibling(repository.ops, parent, new_name, Some(old_name))? {
+			return Err(Error::AlreadyExists(new_name.to_string()));
+		}
 
 		repository.ops.rename_dir(path, new_name)?;
 
@@ -123,7 +143,7 @@ impl Engine {
 		repository.ops.create_dir(trash_path)?;
 
 		let source = join(folder_path, filename);
-		let mut target_name = unique_name(repository.ops, trash_path, filename)?;
+		let mut target_name = free_trash_name(repository.ops, trash_path, filename)?;
 
 		loop {
 			match repository
@@ -135,7 +155,7 @@ impl Engine {
 					return Err(Error::Io(io::Error::new(ErrorKind::NotFound, source)));
 				}
 				MoveResult::TargetExists => {
-					target_name = unique_name(repository.ops, trash_path, filename)?;
+					target_name = free_trash_name(repository.ops, trash_path, filename)?;
 				}
 			}
 		}
@@ -161,6 +181,10 @@ impl Engine {
 
 		let source = join(from_path, filename);
 		let target = join(to_path, filename);
+
+		if colliding_sibling(repository.ops, to_path, filename, None)? {
+			return Ok(MoveOutcome::TargetExists);
+		}
 
 		match repository.ops.move_file(&source, &target)? {
 			MoveResult::TargetExists => return Ok(MoveOutcome::TargetExists),

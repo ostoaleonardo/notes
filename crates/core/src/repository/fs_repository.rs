@@ -1,9 +1,9 @@
 use super::constants::PATH_SEPARATOR;
-use super::{MoveResult, RepositoryFiles, RepositoryOps, validate_name};
+use super::{DirEntry, MoveResult, RepositoryFiles, RepositoryOps, validate_name};
 use crate::error::{Error, Result};
 use std::fs;
 use std::io::{self, ErrorKind};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 pub struct FsRepository {
 	root: PathBuf,
@@ -78,7 +78,37 @@ impl RepositoryFiles for FsRepository {
 	}
 }
 
+fn is_same_entry(first: &Path, second: &Path) -> bool {
+	match (fs::canonicalize(first), fs::canonicalize(second)) {
+		(Ok(first), Ok(second)) => first == second,
+		_ => false,
+	}
+}
+
 impl RepositoryOps for FsRepository {
+	fn list_dir(&self, path: &str) -> Result<Vec<DirEntry>> {
+		let Some(entries) = missing_is_none(fs::read_dir(self.resolve(path)))? else {
+			return Ok(Vec::new());
+		};
+
+		let mut listed = Vec::new();
+
+		for entry in entries {
+			let entry = entry?;
+
+			if let Ok(name) = entry.file_name().into_string() {
+				listed.push(DirEntry {
+					name,
+					is_dir: entry.file_type()?.is_dir(),
+				});
+			}
+		}
+
+		listed.sort_by(|first, second| first.name.cmp(&second.name));
+
+		Ok(listed)
+	}
+
 	fn exists(&self, path: &str) -> Result<bool> {
 		Ok(self.resolve(path).exists())
 	}
@@ -98,7 +128,7 @@ impl RepositoryOps for FsRepository {
 			.map(|parent| parent.join(new_name))
 			.ok_or_else(|| Error::InvalidName(path.to_string()))?;
 
-		if target.exists() {
+		if target.exists() && !is_same_entry(&source, &target) {
 			return Err(Error::AlreadyExists(new_name.to_string()));
 		}
 

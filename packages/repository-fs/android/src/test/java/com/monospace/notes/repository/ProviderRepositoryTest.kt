@@ -174,4 +174,21 @@ class ProviderRepositoryTest {
 
     assertFalse(repository.exists("a"))
   }
+
+  @Test
+  fun `listing a directory reports files and directories sorted by name`() {
+    val repository = repository()
+    repository.writeText("b.md", "x")
+    repository.createDir("a")
+    repository.writeText("c/inner.md", "x")
+
+    val listed = repository.listDir("").map { it.name to it.isDir }
+
+    assertEquals(listOf("a" to true, "b.md" to false, "c" to true), listed)
+  }
+
+  @Test
+  fun `listing a missing directory gives nothing`() {
+    assertEquals(emptyList<String>(), repository().listDir("ghost").map { it.name })
+  }
 }

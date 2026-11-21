@@ -426,3 +426,71 @@ fn a_failing_versions_store_puts_the_moved_note_back() {
 	assert!(!fixture.exists("Other/a.md"));
 	assert_eq!(fixture.indexed(), ["f/a.md", "o/c.md", "s/b.md"]);
 }
+
+#[test]
+fn renaming_to_a_name_that_differs_only_in_case_from_a_sibling_is_refused() {
+	let fixture = populated();
+
+	let result =
+		fixture
+			.engine
+			.rename_folder(&fixture.repository(), "Folder", "other", &ids(&["f", "s"]));
+
+	assert!(matches!(result, Err(Error::AlreadyExists(_))));
+	assert!(fixture.exists("Folder/a.md"));
+	assert_eq!(fixture.indexed(), ["f/a.md", "o/c.md", "s/b.md"]);
+}
+
+#[test]
+fn renaming_to_a_different_case_of_the_same_folder_is_allowed() {
+	let fixture = populated();
+
+	let new_path = fixture
+		.engine
+		.rename_folder(&fixture.repository(), "Folder", "FOLDER", &ids(&["f", "s"]))
+		.unwrap();
+
+	assert_eq!(new_path, "FOLDER");
+	assert!(fixture.exists("FOLDER/a.md"));
+}
+
+#[test]
+fn moving_onto_a_note_that_differs_only_in_case_is_refused() {
+	let fixture = populated();
+
+	fixture.write("Other/A.MD", "# theirs\n");
+
+	let outcome = fixture
+		.engine
+		.move_note(
+			&fixture.repository(),
+			"a.md",
+			"f",
+			"Folder",
+			"o",
+			"Other",
+			&fixture.sink("Other"),
+		)
+		.unwrap();
+
+	assert_eq!(outcome, MoveOutcome::TargetExists);
+	assert_eq!(fixture.read("Folder/a.md"), "# A\n");
+}
+
+#[test]
+fn trashing_picks_a_free_name_even_when_the_trash_has_the_same_name_in_another_case() {
+	let fixture = populated();
+
+	fixture.write("Other/A.md", "# upper\n");
+	fixture
+		.engine
+		.trash_note(&fixture.repository(), "o", "Other", "A.md", TRASH)
+		.unwrap();
+
+	let name = fixture
+		.engine
+		.trash_note(&fixture.repository(), "f", "Folder", "a.md", TRASH)
+		.unwrap();
+
+	assert_eq!(name, "a (2).md");
+}
