@@ -29,7 +29,7 @@ export const readAttachmentSettings = async (getItem) => {
 
 export const resolveAttachmentTarget = ({ location, folderName }, { rootUri, noteFolderUri }) => {
     switch (location) {
-        case ATTACHMENT_LOCATIONS.VAULT:
+        case ATTACHMENT_LOCATIONS.REPOSITORY:
             return { parentUri: rootUri, folderName: null }
         case ATTACHMENT_LOCATIONS.SAME_FOLDER:
             return { parentUri: noteFolderUri, folderName: null }

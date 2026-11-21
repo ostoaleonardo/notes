@@ -1,15 +1,15 @@
 use super::constants::PATH_SEPARATOR;
-use super::{MoveResult, VaultFs, VaultOps, validate_name};
+use super::{MoveResult, RepositoryFiles, RepositoryOps, validate_name};
 use crate::error::{Error, Result};
 use std::fs;
 use std::io::{self, ErrorKind};
 use std::path::PathBuf;
 
-pub struct FsVault {
+pub struct FsRepository {
 	root: PathBuf,
 }
 
-impl FsVault {
+impl FsRepository {
 	pub fn new(root: impl Into<PathBuf>) -> Self {
 		Self { root: root.into() }
 	}
@@ -31,7 +31,7 @@ fn missing_is_none<T>(result: io::Result<T>) -> Result<Option<T>> {
 	}
 }
 
-impl VaultFs for FsVault {
+impl RepositoryFiles for FsRepository {
 	fn read_text(&self, path: &str) -> Result<Option<String>> {
 		missing_is_none(fs::read(self.resolve(path)))
 			.map(|bytes| bytes.map(|bytes| String::from_utf8_lossy(&bytes).into_owned()))
@@ -78,7 +78,7 @@ impl VaultFs for FsVault {
 	}
 }
 
-impl VaultOps for FsVault {
+impl RepositoryOps for FsRepository {
 	fn exists(&self, path: &str) -> Result<bool> {
 		Ok(self.resolve(path).exists())
 	}

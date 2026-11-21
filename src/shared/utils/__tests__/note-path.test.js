@@ -8,7 +8,7 @@ describe('build note path', () => {
 
 describe('build folder paths', () => {
     test('gives root folders an empty path', () => {
-        const folders = [{ id: 'root', alias: 'Vault', parentId: null }]
+        const folders = [{ id: 'root', alias: 'Repository', parentId: null }]
 
         const paths = buildFolderPaths(folders)
 
@@ -17,7 +17,7 @@ describe('build folder paths', () => {
 
     test('gives a subfolder its alias as the path', () => {
         const folders = [
-            { id: 'root', alias: 'Vault', parentId: null },
+            { id: 'root', alias: 'Repository', parentId: null },
             { id: 'one', alias: 'one', parentId: 'root' }
         ]
 
@@ -28,7 +28,7 @@ describe('build folder paths', () => {
 
     test('joins nested subfolders with a slash', () => {
         const folders = [
-            { id: 'root', alias: 'Vault', parentId: null },
+            { id: 'root', alias: 'Repository', parentId: null },
             { id: 'one', alias: 'one', parentId: 'root' },
             { id: 'two', alias: 'two', parentId: 'one' }
         ]
@@ -42,7 +42,7 @@ describe('build folder paths', () => {
 describe('get note paths', () => {
     test('maps each note path to its folder path', () => {
         const folders = [
-            { id: 'root', alias: 'Vault', parentId: null },
+            { id: 'root', alias: 'Repository', parentId: null },
             { id: 'one', alias: 'one', parentId: 'root' }
         ]
         const notes = [

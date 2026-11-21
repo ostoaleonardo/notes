@@ -1,6 +1,6 @@
 export const DELETE_BEHAVIORS = {
-    VAULT_TRASH: 'vault-trash',
+    REPOSITORY_TRASH: 'repository-trash',
     PERMANENT: 'permanent'
 }
 
-export const DEFAULT_DELETE_BEHAVIOR = DELETE_BEHAVIORS.VAULT_TRASH
+export const DEFAULT_DELETE_BEHAVIOR = DELETE_BEHAVIORS.REPOSITORY_TRASH

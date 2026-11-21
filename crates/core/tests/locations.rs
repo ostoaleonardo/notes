@@ -9,12 +9,12 @@ const PREFIX: &str = "content://tree/document/root%2F";
 const FOLDER: &str = "repo";
 const LOCALE: &str = "en";
 
-struct Vault {
+struct Repository {
 	directory: TempDir,
 	engine: Engine,
 }
 
-impl Vault {
+impl Repository {
 	fn new(names: &[&str]) -> Self {
 		let directory = TempDir::new().unwrap();
 
@@ -56,14 +56,14 @@ impl Vault {
 
 #[test]
 fn android_locations_percent_encode_the_filename_after_the_prefix() {
-	let vault = Vault::new(&[
+	let repository = Repository::new(&[
 		"plain.md",
 		"with space.md",
 		"hash#tag.md",
 		"100%.md",
 		"é日本.md",
 	]);
-	let mut files = FsSource::new(vault.notes(), LocationScheme::android(PREFIX))
+	let mut files = FsSource::new(repository.notes(), LocationScheme::android(PREFIX))
 		.scan()
 		.unwrap();
 
@@ -85,8 +85,8 @@ fn android_locations_percent_encode_the_filename_after_the_prefix() {
 
 #[test]
 fn file_path_locations_are_the_paths_of_the_files() {
-	let vault = Vault::new(&["plain.md", "with space.md", "é日本.md"]);
-	let mut files = FsSource::new(vault.notes(), LocationScheme::FilePath)
+	let repository = Repository::new(&["plain.md", "with space.md", "é日本.md"]);
+	let mut files = FsSource::new(repository.notes(), LocationScheme::FilePath)
 		.scan()
 		.unwrap();
 
@@ -95,7 +95,7 @@ fn file_path_locations_are_the_paths_of_the_files() {
 	for file in &files {
 		assert_eq!(
 			file.location,
-			vault.notes().join(&file.filename).to_string_lossy()
+			repository.notes().join(&file.filename).to_string_lossy()
 		);
 	}
 
@@ -104,8 +104,8 @@ fn file_path_locations_are_the_paths_of_the_files() {
 
 #[test]
 fn the_index_stores_whichever_location_the_scheme_produces() {
-	let android = Vault::new(&["a b.md"]);
-	let path = Vault::new(&["a b.md"]);
+	let android = Repository::new(&["a b.md"]);
+	let path = Repository::new(&["a b.md"]);
 
 	android.sync(LocationScheme::android(PREFIX));
 	path.sync(LocationScheme::FilePath);
@@ -122,23 +122,30 @@ fn the_index_stores_whichever_location_the_scheme_produces() {
 
 #[test]
 fn the_listing_exposes_the_location_under_the_file_uri_key() {
-	let vault = Vault::new(&["note.md"]);
+	let repository = Repository::new(&["note.md"]);
 
-	vault.sync(LocationScheme::FilePath);
+	repository.sync(LocationScheme::FilePath);
 
 	let listing: Json =
-		serde_json::from_str(&vault.engine.list_notes(&[FOLDER.to_string()]).unwrap()).unwrap();
+		serde_json::from_str(&repository.engine.list_notes(&[FOLDER.to_string()]).unwrap())
+			.unwrap();
 
 	assert_eq!(
 		listing[0]["fileUri"],
-		Json::String(vault.notes().join("note.md").to_string_lossy().into_owned())
+		Json::String(
+			repository
+				.notes()
+				.join("note.md")
+				.to_string_lossy()
+				.into_owned()
+		)
 	);
 }
 
 #[test]
 fn notes_have_the_same_metadata_under_both_schemes() {
-	let android = Vault::new(&["note.md"]);
-	let path = Vault::new(&["note.md"]);
+	let android = Repository::new(&["note.md"]);
+	let path = Repository::new(&["note.md"]);
 
 	android.sync(LocationScheme::android(PREFIX));
 	path.sync(LocationScheme::FilePath);
@@ -153,13 +160,17 @@ fn notes_have_the_same_metadata_under_both_schemes() {
 
 #[test]
 fn saving_under_the_file_path_scheme_stamps_and_indexes_the_path() {
-	let vault = Vault::new(&[]);
-	let sink = FsSink::new(vault.notes(), LocationScheme::FilePath);
-	let outcome = vault
+	let repository = Repository::new(&[]);
+	let sink = FsSink::new(repository.notes(), LocationScheme::FilePath);
+	let outcome = repository
 		.engine
 		.save_note(FOLDER, &sink, "new.md", "# New\n", None)
 		.unwrap();
-	let expected = vault.notes().join("new.md").to_string_lossy().into_owned();
+	let expected = repository
+		.notes()
+		.join("new.md")
+		.to_string_lossy()
+		.into_owned();
 
 	match outcome {
 		SaveOutcome::Saved(stamp) => assert_eq!(stamp.location, expected),
@@ -167,5 +178,5 @@ fn saving_under_the_file_path_scheme_stamps_and_indexes_the_path() {
 	}
 
 	assert_eq!(sink.stat("new.md").unwrap().unwrap().location, expected);
-	assert_eq!(vault.indexed_locations(), [expected]);
+	assert_eq!(repository.indexed_locations(), [expected]);
 }

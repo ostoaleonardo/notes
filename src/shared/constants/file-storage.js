@@ -14,7 +14,7 @@ export const REPOSITORY_INDEX_VERSION = 4
 export const TEMPLATES_FOLDER_NAME = 'templates'
 export const IMAGES_FOLDER_NAME = 'images'
 const FILES_FOLDER_NAME = DEFAULT_ATTACHMENT_FOLDER
-export const VAULT_TRASH_FOLDER_NAME = '.trash'
+export const REPOSITORY_TRASH_FOLDER_NAME = '.trash'
 export const NOTES_FOLDER_NAME = '.notes'
 
 export const RESERVED_FOLDER_NAMES = [

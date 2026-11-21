@@ -431,7 +431,7 @@ describe('delete note', () => {
         expect(mockFileStorage.deleteVersions).toHaveBeenCalledWith(MOCK_REPO_URI, 'Groceries.md')
     })
 
-    test('moves the note to the vault trash folder by default', async () => {
+    test('moves the note to the repository trash folder by default', async () => {
         files.set('Groceries.md', '---\ntags: []\n---\n\ncontent')
         const { result } = await renderNotesHook([MOCK_GROCERIES_NOTE])
 

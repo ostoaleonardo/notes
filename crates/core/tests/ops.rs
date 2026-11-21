@@ -1,10 +1,10 @@
 use engine::engine::Engine;
 use engine::error::{Error, Result};
 use engine::model::Value;
-use engine::ops::{MoveOutcome, Vault};
+use engine::ops::{MoveOutcome, Repository};
+use engine::repository::{FsRepository, RepositoryFiles};
 use engine::source::{FsSink, FsSource, LocationScheme};
-use engine::vault::{FsVault, VaultFs};
-use engine::versions::VersionVault;
+use engine::versions::RepositoryVersions;
 use std::fs;
 use std::io;
 use std::sync::Arc;
@@ -21,13 +21,13 @@ const NON_EMPTY_STORE: &str = r#"{"entries":[{"id":"1"}]}"#;
 struct Fixture {
 	directory: TempDir,
 	engine: Engine,
-	ops: FsVault,
-	versions: VersionVault,
+	ops: FsRepository,
+	versions: RepositoryVersions,
 }
 
 struct BrokenVersions;
 
-impl VaultFs for BrokenVersions {
+impl RepositoryFiles for BrokenVersions {
 	fn read_text(&self, _path: &str) -> Result<Option<String>> {
 		Ok(Some(NON_EMPTY_STORE.to_string()))
 	}
@@ -57,14 +57,14 @@ impl Fixture {
 
 		Self {
 			engine: Engine::new(root.join("index.db"), LOCALE).unwrap(),
-			ops: FsVault::new(&root),
-			versions: VersionVault::new(Arc::new(FsVault::new(&root))),
+			ops: FsRepository::new(&root),
+			versions: RepositoryVersions::new(Arc::new(FsRepository::new(&root))),
 			directory,
 		}
 	}
 
-	fn vault(&self) -> Vault<'_> {
-		Vault {
+	fn repository(&self) -> Repository<'_> {
+		Repository {
 			ops: &self.ops,
 			versions: &self.versions,
 		}
@@ -165,7 +165,12 @@ fn renaming_a_folder_moves_it_clears_its_index_rows_and_renames_its_versions() {
 
 	let new_path = fixture
 		.engine
-		.rename_folder(&fixture.vault(), "Folder", "Renamed", &ids(&["f", "s"]))
+		.rename_folder(
+			&fixture.repository(),
+			"Folder",
+			"Renamed",
+			&ids(&["f", "s"]),
+		)
 		.unwrap();
 
 	assert_eq!(new_path, "Renamed");
@@ -185,7 +190,7 @@ fn renaming_a_nested_folder_keeps_the_parent_in_the_new_path() {
 
 	let new_path = fixture
 		.engine
-		.rename_folder(&fixture.vault(), "Folder/Sub", "Inner", &ids(&["s"]))
+		.rename_folder(&fixture.repository(), "Folder/Sub", "Inner", &ids(&["s"]))
 		.unwrap();
 
 	assert_eq!(new_path, "Folder/Inner");
@@ -201,7 +206,7 @@ fn renaming_onto_an_existing_folder_changes_nothing() {
 	let result =
 		fixture
 			.engine
-			.rename_folder(&fixture.vault(), "Folder", "Other", &ids(&["f", "s"]));
+			.rename_folder(&fixture.repository(), "Folder", "Other", &ids(&["f", "s"]));
 
 	assert!(matches!(result, Err(Error::AlreadyExists(_))));
 	assert!(fixture.exists("Folder/a.md"));
@@ -215,7 +220,7 @@ fn renaming_with_a_path_like_name_is_rejected_before_touching_anything() {
 
 	let result = fixture
 		.engine
-		.rename_folder(&fixture.vault(), "Folder", "a/b", &ids(&["f"]));
+		.rename_folder(&fixture.repository(), "Folder", "a/b", &ids(&["f"]));
 
 	assert!(matches!(result, Err(Error::InvalidName(_))));
 	assert!(fixture.exists("Folder/a.md"));
@@ -225,16 +230,16 @@ fn renaming_with_a_path_like_name_is_rejected_before_touching_anything() {
 #[test]
 fn a_failing_versions_store_rolls_the_folder_rename_back() {
 	let fixture = populated();
-	let broken = VersionVault::new(Arc::new(BrokenVersions));
-	let ops = FsVault::new(fixture.directory.path());
-	let vault = Vault {
+	let broken = RepositoryVersions::new(Arc::new(BrokenVersions));
+	let ops = FsRepository::new(fixture.directory.path());
+	let repository = Repository {
 		ops: &ops,
 		versions: &broken,
 	};
 
 	let result = fixture
 		.engine
-		.rename_folder(&vault, "Folder", "Renamed", &ids(&["f", "s"]));
+		.rename_folder(&repository, "Folder", "Renamed", &ids(&["f", "s"]));
 
 	assert!(result.is_err());
 	assert!(fixture.exists("Folder/a.md"));
@@ -247,7 +252,7 @@ fn removing_a_folder_clears_rows_directory_and_versions() {
 
 	fixture
 		.engine
-		.remove_folder(&fixture.vault(), "Folder", &ids(&["f", "s"]), true)
+		.remove_folder(&fixture.repository(), "Folder", &ids(&["f", "s"]), true)
 		.unwrap();
 
 	assert!(!fixture.exists("Folder"));
@@ -262,7 +267,7 @@ fn removing_a_folder_can_keep_its_versions() {
 
 	fixture
 		.engine
-		.remove_folder(&fixture.vault(), "Folder/Sub", &ids(&["s"]), false)
+		.remove_folder(&fixture.repository(), "Folder/Sub", &ids(&["s"]), false)
 		.unwrap();
 
 	assert!(!fixture.exists("Folder/Sub"));
@@ -276,7 +281,7 @@ fn trashing_a_note_moves_it_keeping_its_time_and_drops_its_index_row_and_version
 
 	let name = fixture
 		.engine
-		.trash_note(&fixture.vault(), "f", "Folder", "a.md", TRASH)
+		.trash_note(&fixture.repository(), "f", "Folder", "a.md", TRASH)
 		.unwrap();
 
 	assert_eq!(name, "a.md");
@@ -294,12 +299,12 @@ fn trashing_a_second_note_with_the_same_name_picks_a_free_name() {
 	fixture.write("Other/a.md", "# other\n");
 	fixture
 		.engine
-		.trash_note(&fixture.vault(), "f", "Folder", "a.md", TRASH)
+		.trash_note(&fixture.repository(), "f", "Folder", "a.md", TRASH)
 		.unwrap();
 
 	let name = fixture
 		.engine
-		.trash_note(&fixture.vault(), "o", "Other", "a.md", TRASH)
+		.trash_note(&fixture.repository(), "o", "Other", "a.md", TRASH)
 		.unwrap();
 
 	assert_eq!(name, "a (2).md");
@@ -313,7 +318,7 @@ fn trashing_a_missing_note_fails_without_side_effects() {
 
 	let result = fixture
 		.engine
-		.trash_note(&fixture.vault(), "f", "Folder", "ghost.md", TRASH);
+		.trash_note(&fixture.repository(), "f", "Folder", "ghost.md", TRASH);
 
 	assert!(matches!(result, Err(Error::Io(_))));
 	assert_eq!(fixture.indexed().len(), 3);
@@ -328,7 +333,7 @@ fn moving_a_note_updates_files_versions_and_both_index_folders() {
 	let outcome = fixture
 		.engine
 		.move_note(
-			&fixture.vault(),
+			&fixture.repository(),
 			"a.md",
 			"f",
 			"Folder",
@@ -360,7 +365,7 @@ fn moving_onto_an_existing_note_changes_nothing() {
 	let outcome = fixture
 		.engine
 		.move_note(
-			&fixture.vault(),
+			&fixture.repository(),
 			"a.md",
 			"f",
 			"Folder",
@@ -383,7 +388,7 @@ fn moving_a_missing_note_reports_it() {
 	let outcome = fixture
 		.engine
 		.move_note(
-			&fixture.vault(),
+			&fixture.repository(),
 			"ghost.md",
 			"f",
 			"Folder",
@@ -399,15 +404,15 @@ fn moving_a_missing_note_reports_it() {
 #[test]
 fn a_failing_versions_store_puts_the_moved_note_back() {
 	let fixture = populated();
-	let broken = VersionVault::new(Arc::new(BrokenVersions));
-	let ops = FsVault::new(fixture.directory.path());
-	let vault = Vault {
+	let broken = RepositoryVersions::new(Arc::new(BrokenVersions));
+	let ops = FsRepository::new(fixture.directory.path());
+	let repository = Repository {
 		ops: &ops,
 		versions: &broken,
 	};
 
 	let result = fixture.engine.move_note(
-		&vault,
+		&repository,
 		"a.md",
 		"f",
 		"Folder",

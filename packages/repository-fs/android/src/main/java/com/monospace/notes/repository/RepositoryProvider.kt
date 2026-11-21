@@ -6,11 +6,11 @@ import android.provider.DocumentsContract
 import android.provider.DocumentsContract.Document
 import java.io.IOException
 import uniffi.engine.EngineException
-import uniffi.engine.FsVaultHandle
+import uniffi.engine.FsRepositoryHandle
 import uniffi.engine.MoveStatus
-import uniffi.engine.VaultFs
+import uniffi.engine.RepositoryFiles
 
-internal class ProviderVault(private val context: Context, private val root: Uri) : VaultFs {
+internal class ProviderRepository(private val context: Context, private val root: Uri) : RepositoryFiles {
   override fun readText(path: String): String? {
     val file = resolve(path) ?: return null
 
@@ -26,7 +26,7 @@ internal class ProviderVault(private val context: Context, private val root: Uri
     val bytes = text.toByteArray(Charsets.UTF_8)
 
     repeat(WRITE_ATTEMPTS) {
-      val target = child(parent, name)?.let { Uri.parse(it[EntryKeys.URI] as String) } ?: create(parent, name, VAULT_JSON_MIME)
+      val target = child(parent, name)?.let { Uri.parse(it[EntryKeys.URI] as String) } ?: create(parent, name, REPOSITORY_JSON_MIME)
 
       context.contentResolver.openOutputStream(target, WRITE_TRUNCATE_MODE)?.use { it.write(bytes) }
 
@@ -140,8 +140,8 @@ internal class ProviderVault(private val context: Context, private val root: Uri
   }
 }
 
-internal fun vaultFor(context: Context, rootUri: String): VaultFs {
+internal fun repositoryFor(context: Context, rootUri: String): RepositoryFiles {
   val uri = Uri.parse(rootUri)
 
-  return directNotesTarget(context, uri)?.let { FsVaultHandle(it.path) } ?: ProviderVault(context, uri)
+  return directNotesTarget(context, uri)?.let { FsRepositoryHandle(it.path) } ?: ProviderRepository(context, uri)
 }

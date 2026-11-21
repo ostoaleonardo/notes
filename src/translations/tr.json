@@ -13,7 +13,7 @@
 			"title": "Notu sil",
 			"failed": "Bu not silinemedi",
 			"message": {
-				"vault-trash": "Not, deponun gizli .trash klasörüne taşınacak. Uygulamada artık görünmeyecek, ancak bir dosya yöneticisiyle yine de kurtarabilirsin.",
+				"repository-trash": "Not, deponun gizli .trash klasörüne taşınacak. Uygulamada artık görünmeyecek, ancak bir dosya yöneticisiyle yine de kurtarabilirsin.",
 				"permanent": "Bu not sonsuza dek silinecek ve geri getirilemeyecek."
 			}
 		},
@@ -127,7 +127,7 @@
 			},
 			"delete": {
 				"title": "Silerken",
-				"vault-trash": ".trash klasörüne taşı",
+				"repository-trash": ".trash klasörüne taşı",
 				"permanent": "Kalıcı olarak sil"
 			},
 			"default_folder": {
@@ -184,7 +184,7 @@
 			"title": "Ekler",
 			"location": {
 				"title": "Yeni ekler nereye kaydedilsin",
-				"vault": "Depo kökü",
+				"repository": "Depo kökü",
 				"same": "Her notun yanına",
 				"subfolder": "Her notun yanında alt klasör",
 				"folder": "Ortak tek klasör"

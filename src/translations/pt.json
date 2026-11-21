@@ -13,7 +13,7 @@
 			"title": "Excluir nota",
 			"failed": "Não foi possível excluir esta nota",
 			"message": {
-				"vault-trash": "A nota será movida para a pasta oculta .trash do seu repositório. Ela não aparecerá mais no app, mas você ainda poderá recuperá-la com um gerenciador de arquivos.",
+				"repository-trash": "A nota será movida para a pasta oculta .trash do seu repositório. Ela não aparecerá mais no app, mas você ainda poderá recuperá-la com um gerenciador de arquivos.",
 				"permanent": "Esta nota será excluída para sempre e não poderá ser recuperada."
 			}
 		},
@@ -128,7 +128,7 @@
 			},
 			"delete": {
 				"title": "Ao excluir",
-				"vault-trash": "Mover para a pasta .trash",
+				"repository-trash": "Mover para a pasta .trash",
 				"permanent": "Excluir permanentemente"
 			},
 			"default_folder": {
@@ -188,7 +188,7 @@
 			"title": "Anexos",
 			"location": {
 				"title": "Onde salvar novos anexos",
-				"vault": "Raiz do repositório",
+				"repository": "Raiz do repositório",
 				"same": "Ao lado de cada nota",
 				"subfolder": "Subpasta ao lado de cada nota",
 				"folder": "Uma pasta compartilhada"

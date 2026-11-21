@@ -3,14 +3,14 @@ use super::constants::{
 };
 use super::store::{NewVersion, commit_version};
 use crate::error::{Error, Result};
+use crate::repository::RepositoryFiles;
 use crate::source::percent::{decode, encode};
-use crate::vault::VaultFs;
 use serde_json::Value;
 use std::io;
 use std::sync::{Arc, Mutex};
 
-pub struct VersionVault {
-	vault: Arc<dyn VaultFs>,
+pub struct RepositoryVersions {
+	repository: Arc<dyn RepositoryFiles>,
 	guard: Mutex<()>,
 }
 
@@ -29,10 +29,10 @@ fn is_empty_store(value: &Value) -> bool {
 	}
 }
 
-impl VersionVault {
-	pub fn new(vault: Arc<dyn VaultFs>) -> Self {
+impl RepositoryVersions {
+	pub fn new(repository: Arc<dyn RepositoryFiles>) -> Self {
 		Self {
-			vault,
+			repository,
 			guard: Mutex::new(()),
 		}
 	}
@@ -45,7 +45,7 @@ impl VersionVault {
 
 	fn read_valid(&self, directory: &str, filename: &str) -> Result<Option<String>> {
 		let path = format!("{directory}{PATH_SEPARATOR}{filename}");
-		let Some(text) = self.vault.read_text(&path)? else {
+		let Some(text) = self.repository.read_text(&path)? else {
 			return Ok(None);
 		};
 
@@ -53,7 +53,7 @@ impl VersionVault {
 			return Ok(Some(text));
 		}
 
-		self.vault
+		self.repository
 			.write_text(&format!("{path}{CORRUPT_SUFFIX}"), &text)?;
 
 		Ok(None)
@@ -68,13 +68,14 @@ impl VersionVault {
 	pub fn write(&self, key: &str, json: &str) -> Result<()> {
 		let _lock = self.lock()?;
 
-		self.vault.write_text(&notes_path(&filename_of(key)), json)
+		self.repository
+			.write_text(&notes_path(&filename_of(key)), json)
 	}
 
 	pub fn delete(&self, key: &str) -> Result<()> {
 		let _lock = self.lock()?;
 
-		self.vault.delete_file(&notes_path(&filename_of(key)))
+		self.repository.delete_file(&notes_path(&filename_of(key)))
 	}
 
 	pub fn commit(
@@ -104,7 +105,7 @@ impl VersionVault {
 
 		match written {
 			Some(json) => {
-				self.vault.write_text(&notes_path(&filename), &json)?;
+				self.repository.write_text(&notes_path(&filename), &json)?;
 
 				Ok(true)
 			}
@@ -129,16 +130,17 @@ impl VersionVault {
 			return Ok(());
 		}
 
-		self.vault
+		self.repository
 			.write_text(&notes_path(&filename_of(new_key)), &raw)?;
-		self.vault.delete_file(&notes_path(&filename_of(old_key)))
+		self.repository
+			.delete_file(&notes_path(&filename_of(old_key)))
 	}
 
 	fn keys_under(&self, prefix: &str) -> Result<Vec<String>> {
 		let wanted = encode(&format!("{prefix}{PATH_SEPARATOR}"));
 
 		Ok(self
-			.vault
+			.repository
 			.list_files(NOTES_FOLDER)?
 			.into_iter()
 			.filter(|name| name.starts_with(&wanted) && name.ends_with(VERSIONS_SUFFIX))
@@ -162,7 +164,8 @@ impl VersionVault {
 		let _lock = self.lock()?;
 
 		for key in self.keys_under(prefix)? {
-			self.vault.delete_file(&notes_path(&filename_of(&key)))?;
+			self.repository
+				.delete_file(&notes_path(&filename_of(&key)))?;
 		}
 
 		Ok(())
@@ -171,7 +174,7 @@ impl VersionVault {
 	pub fn migrate_legacy(&self, folder: &str, folder_path: &str) -> Result<()> {
 		let _lock = self.lock()?;
 
-		for name in self.vault.list_files(folder)? {
+		for name in self.repository.list_files(folder)? {
 			let Some(filename) = name.strip_suffix(VERSIONS_SUFFIX) else {
 				continue;
 			};
@@ -183,11 +186,11 @@ impl VersionVault {
 					format!("{folder_path}{PATH_SEPARATOR}{filename}")
 				};
 
-				self.vault
+				self.repository
 					.write_text(&notes_path(&filename_of(&key)), &raw)?;
 			}
 
-			self.vault
+			self.repository
 				.delete_file(&format!("{folder}{PATH_SEPARATOR}{name}"))?;
 		}
 

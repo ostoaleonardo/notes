@@ -13,7 +13,7 @@
 			"title": "メモを削除",
 			"failed": "このメモを削除できませんでした",
 			"message": {
-				"vault-trash": "メモはリポジトリの非表示の .trash フォルダに移動されます。アプリには表示されなくなりますが、ファイルマネージャーで復元できます。",
+				"repository-trash": "メモはリポジトリの非表示の .trash フォルダに移動されます。アプリには表示されなくなりますが、ファイルマネージャーで復元できます。",
 				"permanent": "このメモは完全に削除され、復元できません。"
 			}
 		},
@@ -127,7 +127,7 @@
 			},
 			"delete": {
 				"title": "削除時",
-				"vault-trash": ".trash フォルダに移動",
+				"repository-trash": ".trash フォルダに移動",
 				"permanent": "完全に削除"
 			},
 			"default_folder": {
@@ -184,7 +184,7 @@
 			"title": "添付ファイル",
 			"location": {
 				"title": "新しい添付ファイルの保存先",
-				"vault": "リポジトリのルート",
+				"repository": "リポジトリのルート",
 				"same": "各メモの隣",
 				"subfolder": "各メモの隣のサブフォルダ",
 				"folder": "共有フォルダ1つ"

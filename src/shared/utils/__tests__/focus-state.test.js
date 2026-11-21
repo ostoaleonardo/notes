@@ -124,7 +124,7 @@ describe('valid trail', () => {
         notes: MOCK_CONNECTION_NOTES,
         notePaths: MOCK_CONNECTION_NOTE_PATHS,
         files: MOCK_CONNECTION_FILES,
-        rootName: 'Vault'
+        rootName: 'Repository'
     })
 
     test('keeps a trail whose entities still exist', () => {

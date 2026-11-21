@@ -1,44 +1,44 @@
 use engine::error::Error;
-use engine::vault::{FsVault, MoveResult, VaultFs, VaultOps, validate_name};
+use engine::repository::{FsRepository, MoveResult, RepositoryFiles, RepositoryOps, validate_name};
 use std::fs;
 use std::time::{Duration, UNIX_EPOCH};
 use tempfile::TempDir;
 
-fn vault() -> (TempDir, FsVault) {
+fn repository() -> (TempDir, FsRepository) {
 	let directory = TempDir::new().unwrap();
-	let vault = FsVault::new(directory.path());
+	let repository = FsRepository::new(directory.path());
 
-	(directory, vault)
+	(directory, repository)
 }
 
 #[test]
 fn exists_reports_files_and_directories() {
-	let (_directory, vault) = vault();
+	let (_directory, repository) = repository();
 
-	vault.create_dir("a/b").unwrap();
-	vault.write_text("a/b/note.md", "x").unwrap();
+	repository.create_dir("a/b").unwrap();
+	repository.write_text("a/b/note.md", "x").unwrap();
 
-	assert!(vault.exists("a").unwrap());
-	assert!(vault.exists("a/b/note.md").unwrap());
-	assert!(!vault.exists("a/missing").unwrap());
+	assert!(repository.exists("a").unwrap());
+	assert!(repository.exists("a/b/note.md").unwrap());
+	assert!(!repository.exists("a/missing").unwrap());
 }
 
 #[test]
 fn creating_a_directory_twice_is_not_an_error() {
-	let (_directory, vault) = vault();
+	let (_directory, repository) = repository();
 
-	vault.create_dir("a/b").unwrap();
-	vault.create_dir("a/b").unwrap();
+	repository.create_dir("a/b").unwrap();
+	repository.create_dir("a/b").unwrap();
 
-	assert!(vault.exists("a/b").unwrap());
+	assert!(repository.exists("a/b").unwrap());
 }
 
 #[test]
 fn renaming_a_directory_keeps_its_contents() {
-	let (directory, vault) = vault();
+	let (directory, repository) = repository();
 
-	vault.write_text("old/inner/note.md", "text").unwrap();
-	vault.rename_dir("old", "fresh").unwrap();
+	repository.write_text("old/inner/note.md", "text").unwrap();
+	repository.rename_dir("old", "fresh").unwrap();
 
 	assert!(!directory.path().join("old").exists());
 	assert_eq!(
@@ -49,23 +49,23 @@ fn renaming_a_directory_keeps_its_contents() {
 
 #[test]
 fn renaming_a_nested_directory_stays_under_its_parent() {
-	let (directory, vault) = vault();
+	let (directory, repository) = repository();
 
-	vault.write_text("parent/old/note.md", "text").unwrap();
-	vault.rename_dir("parent/old", "fresh").unwrap();
+	repository.write_text("parent/old/note.md", "text").unwrap();
+	repository.rename_dir("parent/old", "fresh").unwrap();
 
 	assert!(directory.path().join("parent/fresh/note.md").exists());
 }
 
 #[test]
 fn renaming_onto_an_existing_directory_fails_and_changes_nothing() {
-	let (directory, vault) = vault();
+	let (directory, repository) = repository();
 
-	vault.write_text("old/note.md", "old").unwrap();
-	vault.write_text("taken/note.md", "taken").unwrap();
+	repository.write_text("old/note.md", "old").unwrap();
+	repository.write_text("taken/note.md", "taken").unwrap();
 
 	assert!(matches!(
-		vault.rename_dir("old", "taken"),
+		repository.rename_dir("old", "taken"),
 		Err(Error::AlreadyExists(_))
 	));
 	assert_eq!(
@@ -80,20 +80,20 @@ fn renaming_onto_an_existing_directory_fails_and_changes_nothing() {
 
 #[test]
 fn renaming_a_missing_directory_fails() {
-	let (_directory, vault) = vault();
+	let (_directory, repository) = repository();
 
 	assert!(matches!(
-		vault.rename_dir("ghost", "fresh"),
+		repository.rename_dir("ghost", "fresh"),
 		Err(Error::Io(_))
 	));
 }
 
 #[test]
 fn moving_a_file_keeps_its_modified_time() {
-	let (directory, vault) = vault();
+	let (directory, repository) = repository();
 
-	vault.write_text("a/note.md", "text").unwrap();
-	vault.create_dir("b").unwrap();
+	repository.write_text("a/note.md", "text").unwrap();
+	repository.create_dir("b").unwrap();
 
 	let time = UNIX_EPOCH + Duration::from_secs(1_700_000_000);
 
@@ -105,7 +105,7 @@ fn moving_a_file_keeps_its_modified_time() {
 		.unwrap();
 
 	assert_eq!(
-		vault.move_file("a/note.md", "b/note.md").unwrap(),
+		repository.move_file("a/note.md", "b/note.md").unwrap(),
 		MoveResult::Moved
 	);
 	assert!(!directory.path().join("a/note.md").exists());
@@ -120,17 +120,17 @@ fn moving_a_file_keeps_its_modified_time() {
 
 #[test]
 fn moving_never_overwrites_and_reports_missing_sources() {
-	let (directory, vault) = vault();
+	let (directory, repository) = repository();
 
-	vault.write_text("a/note.md", "mine").unwrap();
-	vault.write_text("b/note.md", "theirs").unwrap();
+	repository.write_text("a/note.md", "mine").unwrap();
+	repository.write_text("b/note.md", "theirs").unwrap();
 
 	assert_eq!(
-		vault.move_file("a/note.md", "b/note.md").unwrap(),
+		repository.move_file("a/note.md", "b/note.md").unwrap(),
 		MoveResult::TargetExists
 	);
 	assert_eq!(
-		vault.move_file("a/gone.md", "b/gone.md").unwrap(),
+		repository.move_file("a/gone.md", "b/gone.md").unwrap(),
 		MoveResult::SourceMissing
 	);
 	assert_eq!(
@@ -145,11 +145,11 @@ fn moving_never_overwrites_and_reports_missing_sources() {
 
 #[test]
 fn removing_a_directory_deletes_everything_under_it_and_ignores_a_missing_one() {
-	let (directory, vault) = vault();
+	let (directory, repository) = repository();
 
-	vault.write_text("a/b/note.md", "x").unwrap();
-	vault.remove_dir("a").unwrap();
-	vault.remove_dir("a").unwrap();
+	repository.write_text("a/b/note.md", "x").unwrap();
+	repository.remove_dir("a").unwrap();
+	repository.remove_dir("a").unwrap();
 
 	assert!(!directory.path().join("a").exists());
 }
@@ -169,13 +169,13 @@ fn names_with_separators_or_dots_are_invalid() {
 }
 
 #[test]
-fn renaming_with_an_invalid_name_does_not_touch_the_vault() {
-	let (directory, vault) = vault();
+fn renaming_with_an_invalid_name_does_not_touch_the_repository() {
+	let (directory, repository) = repository();
 
-	vault.write_text("old/note.md", "x").unwrap();
+	repository.write_text("old/note.md", "x").unwrap();
 
 	assert!(matches!(
-		vault.rename_dir("old", "../escape"),
+		repository.rename_dir("old", "../escape"),
 		Err(Error::InvalidName(_))
 	));
 	assert!(directory.path().join("old/note.md").exists());

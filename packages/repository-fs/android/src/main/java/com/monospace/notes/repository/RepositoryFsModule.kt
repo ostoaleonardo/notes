@@ -51,7 +51,7 @@ class RepositoryFsModule : Module() {
   private val versionStores = java.util.concurrent.ConcurrentHashMap<String, VersionsHandle>()
 
   private fun versionsFor(rootUri: String): VersionsHandle =
-    versionStores.getOrPut("$rootUri#${hasDirectAccess()}") { VersionsHandle(vaultFor(context, rootUri)) }
+    versionStores.getOrPut("$rootUri#${hasDirectAccess()}") { VersionsHandle(repositoryFor(context, rootUri)) }
 
   private fun engine(): Engine = synchronized(engineLock) {
     sharedEngine ?: openEngine(context).also { sharedEngine = it }
@@ -206,7 +206,7 @@ class RepositoryFsModule : Module() {
     AsyncFunction("renameFolder") Coroutine { rootUri: String, path: String, newName: String, folderIds: List<String>, parentUri: String ->
       indexLock.withLock {
         withContext(Dispatchers.IO) {
-          val newPath = engine().renameFolder(vaultFor(context, rootUri), versionsFor(rootUri), path, newName, folderIds)
+          val newPath = engine().renameFolder(repositoryFor(context, rootUri), versionsFor(rootUri), path, newName, folderIds)
           val renamed = findChild(context, Uri.parse(parentUri.trimEnd('/')), newName)
 
           mapOf(RenamedKeys.PATH to newPath, RenamedKeys.URI to renamed?.get(EntryKeys.URI))
@@ -217,7 +217,7 @@ class RepositoryFsModule : Module() {
     AsyncFunction("removeFolder") Coroutine { rootUri: String, path: String, folderIds: List<String>, dropVersions: Boolean ->
       indexLock.withLock {
         withContext(Dispatchers.IO) {
-          engine().removeFolder(vaultFor(context, rootUri), versionsFor(rootUri), path, folderIds, dropVersions)
+          engine().removeFolder(repositoryFor(context, rootUri), versionsFor(rootUri), path, folderIds, dropVersions)
         }
       }
     }
@@ -225,7 +225,7 @@ class RepositoryFsModule : Module() {
     AsyncFunction("trashNote") Coroutine { rootUri: String, folderId: String, folderPath: String, filename: String, trashPath: String ->
       indexLock.withLock {
         withContext(Dispatchers.IO) {
-          engine().trashNote(vaultFor(context, rootUri), versionsFor(rootUri), folderId, folderPath, filename, trashPath)
+          engine().trashNote(repositoryFor(context, rootUri), versionsFor(rootUri), folderId, folderPath, filename, trashPath)
         }
       }
     }
@@ -235,7 +235,7 @@ class RepositoryFsModule : Module() {
         withContext(Dispatchers.IO) {
           moveReportToMap(
             engine().moveNote(
-              vaultFor(context, rootUri),
+              repositoryFor(context, rootUri),
               versionsFor(rootUri),
               filename,
               fromFolderId,

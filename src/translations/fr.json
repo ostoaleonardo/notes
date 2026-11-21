@@ -13,7 +13,7 @@
 			"title": "Supprimer la note",
 			"failed": "Impossible de supprimer cette note",
 			"message": {
-				"vault-trash": "La note sera déplacée dans le dossier caché .trash de votre dépôt. Elle n'apparaîtra plus dans l'application, mais vous pourrez la récupérer avec un gestionnaire de fichiers.",
+				"repository-trash": "La note sera déplacée dans le dossier caché .trash de votre dépôt. Elle n'apparaîtra plus dans l'application, mais vous pourrez la récupérer avec un gestionnaire de fichiers.",
 				"permanent": "Cette note sera supprimée définitivement et ne pourra pas être récupérée."
 			}
 		},
@@ -127,7 +127,7 @@
 			},
 			"delete": {
 				"title": "À la suppression",
-				"vault-trash": "Déplacer vers le dossier .trash",
+				"repository-trash": "Déplacer vers le dossier .trash",
 				"permanent": "Supprimer définitivement"
 			},
 			"default_folder": {
@@ -184,7 +184,7 @@
 			"title": "Pièces jointes",
 			"location": {
 				"title": "Où enregistrer les nouvelles pièces jointes",
-				"vault": "Racine du dépôt",
+				"repository": "Racine du dépôt",
 				"same": "À côté de chaque note",
 				"subfolder": "Sous-dossier à côté de chaque note",
 				"folder": "Un dossier partagé"

@@ -13,7 +13,7 @@
 			"title": "노트 삭제",
 			"failed": "이 노트를 삭제할 수 없습니다",
 			"message": {
-				"vault-trash": "노트가 저장소의 숨겨진 .trash 폴더로 이동됩니다. 앱에는 더 이상 표시되지 않지만 파일 관리자로 복구할 수 있습니다.",
+				"repository-trash": "노트가 저장소의 숨겨진 .trash 폴더로 이동됩니다. 앱에는 더 이상 표시되지 않지만 파일 관리자로 복구할 수 있습니다.",
 				"permanent": "이 노트는 영구적으로 삭제되며 복구할 수 없습니다."
 			}
 		},
@@ -127,7 +127,7 @@
 			},
 			"delete": {
 				"title": "삭제 시",
-				"vault-trash": ".trash 폴더로 이동",
+				"repository-trash": ".trash 폴더로 이동",
 				"permanent": "영구 삭제"
 			},
 			"default_folder": {
@@ -184,7 +184,7 @@
 			"title": "첨부 파일",
 			"location": {
 				"title": "새 첨부 파일을 저장할 위치",
-				"vault": "저장소 루트",
+				"repository": "저장소 루트",
 				"same": "각 노트 옆",
 				"subfolder": "각 노트 옆의 하위 폴더",
 				"folder": "공유 폴더 하나"

@@ -13,7 +13,7 @@
 			"title": "Notiz löschen",
 			"failed": "Diese Notiz konnte nicht gelöscht werden",
 			"message": {
-				"vault-trash": "Die Notiz wird in den versteckten Ordner .trash deines Repositorys verschoben. Sie wird in der App nicht mehr angezeigt, kann aber mit einem Dateimanager wiederhergestellt werden.",
+				"repository-trash": "Die Notiz wird in den versteckten Ordner .trash deines Repositorys verschoben. Sie wird in der App nicht mehr angezeigt, kann aber mit einem Dateimanager wiederhergestellt werden.",
 				"permanent": "Diese Notiz wird endgültig gelöscht und kann nicht wiederhergestellt werden."
 			}
 		},
@@ -127,7 +127,7 @@
 			},
 			"delete": {
 				"title": "Beim Löschen",
-				"vault-trash": "In den Ordner .trash verschieben",
+				"repository-trash": "In den Ordner .trash verschieben",
 				"permanent": "Dauerhaft löschen"
 			},
 			"default_folder": {
@@ -184,7 +184,7 @@
 			"title": "Anhänge",
 			"location": {
 				"title": "Speicherort für neue Anhänge",
-				"vault": "Stammordner des Repositorys",
+				"repository": "Stammordner des Repositorys",
 				"same": "Neben jeder Notiz",
 				"subfolder": "Unterordner neben jeder Notiz",
 				"folder": "Ein gemeinsamer Ordner"

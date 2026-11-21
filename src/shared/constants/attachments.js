@@ -1,5 +1,5 @@
 export const ATTACHMENT_LOCATIONS = {
-    VAULT: 'vault',
+    REPOSITORY: 'repository',
     SAME_FOLDER: 'same',
     SUBFOLDER: 'subfolder',
     FOLDER: 'folder'

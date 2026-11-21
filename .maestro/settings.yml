@@ -37,7 +37,7 @@ appId: com.monospace.notes
     id: setting-delete-behavior
 - waitForAnimationToEnd
 - tapOn:
-    id: menu-item-vault-trash
+    id: menu-item-repository-trash
 - waitForAnimationToEnd
 - scrollUntilVisible:
     element:

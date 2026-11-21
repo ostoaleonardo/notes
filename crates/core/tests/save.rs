@@ -6,13 +6,13 @@ use tempfile::TempDir;
 
 const URI_PREFIX: &str = "content://tree/document/root%2F";
 
-struct Vault {
+struct Repository {
 	directory: TempDir,
 	engine: Engine,
 	sink: FsSink,
 }
 
-impl Vault {
+impl Repository {
 	fn new() -> Self {
 		let directory = TempDir::new().unwrap();
 		let notes = directory.path().join("notes");
@@ -58,28 +58,28 @@ fn saved(outcome: SaveOutcome) -> engine::model::FileStamp {
 
 #[test]
 fn creates_the_file_and_indexes_the_note() {
-	let vault = Vault::new();
+	let repository = Repository::new();
 
-	let stamp = saved(vault.save("a.md", "#tag a", None));
+	let stamp = saved(repository.save("a.md", "#tag a", None));
 
 	assert_eq!(
-		fs::read_to_string(vault.notes().join("a.md")).unwrap(),
+		fs::read_to_string(repository.notes().join("a.md")).unwrap(),
 		"#tag a"
 	);
 	assert_eq!(stamp.location, format!("{URI_PREFIX}a.md"));
 	assert_eq!(stamp.size, 6);
-	assert_eq!(vault.indexed(), ["a.md"]);
+	assert_eq!(repository.indexed(), ["a.md"]);
 }
 
 #[test]
 fn updates_a_note_that_was_not_changed_outside() {
-	let vault = Vault::new();
-	let first = saved(vault.save("a.md", "one", None));
+	let repository = Repository::new();
+	let first = saved(repository.save("a.md", "one", None));
 
-	let second = saved(vault.save("a.md", "two words", Some(first.modified)));
+	let second = saved(repository.save("a.md", "two words", Some(first.modified)));
 
 	assert_eq!(
-		fs::read_to_string(vault.notes().join("a.md")).unwrap(),
+		fs::read_to_string(repository.notes().join("a.md")).unwrap(),
 		"two words"
 	);
 	assert_eq!(second.size, 9);
@@ -87,12 +87,12 @@ fn updates_a_note_that_was_not_changed_outside() {
 
 #[test]
 fn reports_a_conflict_when_the_file_changed_outside() {
-	let vault = Vault::new();
-	let first = saved(vault.save("a.md", "one", None));
-	fs::write(vault.notes().join("a.md"), "edited elsewhere").unwrap();
-	let touched = filetime_after(&vault, "a.md", first.modified);
+	let repository = Repository::new();
+	let first = saved(repository.save("a.md", "one", None));
+	fs::write(repository.notes().join("a.md"), "edited elsewhere").unwrap();
+	let touched = filetime_after(&repository, "a.md", first.modified);
 
-	let outcome = vault.save("a.md", "mine", Some(first.modified));
+	let outcome = repository.save("a.md", "mine", Some(first.modified));
 
 	assert_eq!(
 		outcome,
@@ -101,18 +101,18 @@ fn reports_a_conflict_when_the_file_changed_outside() {
 		}
 	);
 	assert_eq!(
-		fs::read_to_string(vault.notes().join("a.md")).unwrap(),
+		fs::read_to_string(repository.notes().join("a.md")).unwrap(),
 		"edited elsewhere"
 	);
 }
 
-fn filetime_after(vault: &Vault, filename: &str, previous: i64) -> i64 {
-	let mut stamp = vault.sink.stat(filename).unwrap().unwrap();
+fn filetime_after(repository: &Repository, filename: &str, previous: i64) -> i64 {
+	let mut stamp = repository.sink.stat(filename).unwrap().unwrap();
 
 	while stamp.modified == previous {
 		std::thread::sleep(std::time::Duration::from_millis(5));
-		fs::write(vault.notes().join(filename), "edited elsewhere").unwrap();
-		stamp = vault.sink.stat(filename).unwrap().unwrap();
+		fs::write(repository.notes().join(filename), "edited elsewhere").unwrap();
+		stamp = repository.sink.stat(filename).unwrap().unwrap();
 	}
 
 	stamp.modified
@@ -120,33 +120,36 @@ fn filetime_after(vault: &Vault, filename: &str, previous: i64) -> i64 {
 
 #[test]
 fn reports_a_missing_file_when_updating_a_deleted_note() {
-	let vault = Vault::new();
+	let repository = Repository::new();
 
-	assert_eq!(vault.save("gone.md", "text", Some(1)), SaveOutcome::Missing);
-	assert!(vault.indexed().is_empty());
+	assert_eq!(
+		repository.save("gone.md", "text", Some(1)),
+		SaveOutcome::Missing
+	);
+	assert!(repository.indexed().is_empty());
 }
 
 #[test]
 fn refuses_to_create_over_an_existing_file() {
-	let vault = Vault::new();
-	saved(vault.save("a.md", "one", None));
+	let repository = Repository::new();
+	saved(repository.save("a.md", "one", None));
 
 	assert!(matches!(
-		vault.save("a.md", "other", None),
+		repository.save("a.md", "other", None),
 		SaveOutcome::Conflict { .. }
 	));
 	assert_eq!(
-		fs::read_to_string(vault.notes().join("a.md")).unwrap(),
+		fs::read_to_string(repository.notes().join("a.md")).unwrap(),
 		"one"
 	);
 }
 
 #[test]
 fn leaves_no_temporary_file_behind() {
-	let vault = Vault::new();
-	saved(vault.save("a.md", "one", None));
+	let repository = Repository::new();
+	saved(repository.save("a.md", "one", None));
 
-	let names: Vec<_> = fs::read_dir(vault.notes())
+	let names: Vec<_> = fs::read_dir(repository.notes())
 		.unwrap()
 		.map(|entry| entry.unwrap().file_name().into_string().unwrap())
 		.collect();
@@ -156,61 +159,61 @@ fn leaves_no_temporary_file_behind() {
 
 #[test]
 fn renames_a_note_in_the_file_and_in_the_index() {
-	let vault = Vault::new();
-	saved(vault.save("old.md", "body", None));
+	let repository = Repository::new();
+	saved(repository.save("old.md", "body", None));
 
-	let outcome = vault
+	let outcome = repository
 		.engine
-		.rename_note("repo", &vault.sink, "old.md", "new.md", "body")
+		.rename_note("repo", &repository.sink, "old.md", "new.md", "body")
 		.unwrap();
 
 	assert!(matches!(outcome, SaveOutcome::Saved(_)));
-	assert!(!vault.notes().join("old.md").exists());
-	assert!(vault.notes().join("new.md").exists());
-	assert_eq!(vault.indexed(), ["new.md"]);
+	assert!(!repository.notes().join("old.md").exists());
+	assert!(repository.notes().join("new.md").exists());
+	assert_eq!(repository.indexed(), ["new.md"]);
 }
 
 #[test]
 fn refuses_to_rename_onto_an_existing_note() {
-	let vault = Vault::new();
-	saved(vault.save("a.md", "a", None));
-	saved(vault.save("b.md", "b", None));
+	let repository = Repository::new();
+	saved(repository.save("a.md", "a", None));
+	saved(repository.save("b.md", "b", None));
 
-	let outcome = vault
+	let outcome = repository
 		.engine
-		.rename_note("repo", &vault.sink, "a.md", "b.md", "a")
+		.rename_note("repo", &repository.sink, "a.md", "b.md", "a")
 		.unwrap();
 
 	assert!(matches!(outcome, SaveOutcome::Conflict { .. }));
-	assert_eq!(vault.indexed(), ["a.md", "b.md"]);
+	assert_eq!(repository.indexed(), ["a.md", "b.md"]);
 }
 
 #[test]
 fn deletes_a_note_from_the_file_and_the_index() {
-	let vault = Vault::new();
-	saved(vault.save("a.md", "a", None));
+	let repository = Repository::new();
+	saved(repository.save("a.md", "a", None));
 
-	vault
+	repository
 		.engine
-		.delete_note("repo", &vault.sink, "a.md")
+		.delete_note("repo", &repository.sink, "a.md")
 		.unwrap();
-	vault
+	repository
 		.engine
-		.delete_note("repo", &vault.sink, "a.md")
+		.delete_note("repo", &repository.sink, "a.md")
 		.unwrap();
 
-	assert!(!vault.notes().join("a.md").exists());
-	assert!(vault.indexed().is_empty());
+	assert!(!repository.notes().join("a.md").exists());
+	assert!(repository.indexed().is_empty());
 }
 
 #[test]
 fn keeps_the_index_consistent_with_a_later_scan() {
-	let vault = Vault::new();
-	saved(vault.save("a.md", "a", None));
-	saved(vault.save("b.md", "b", None));
+	let repository = Repository::new();
+	saved(repository.save("a.md", "a", None));
+	saved(repository.save("b.md", "b", None));
 
-	let source = FsSource::new(vault.notes(), LocationScheme::android(URI_PREFIX));
-	let stats = vault.engine.sync("repo", &source, &|_, _| {}).unwrap();
+	let source = FsSource::new(repository.notes(), LocationScheme::android(URI_PREFIX));
+	let stats = repository.engine.sync("repo", &source, &|_, _| {}).unwrap();
 
 	assert_eq!((stats.added, stats.updated, stats.unchanged), (0, 0, 2));
 }
@@ -248,50 +251,53 @@ fn request(filename: &str, text: &str, expected: Option<i64>) -> SaveRequest {
 
 #[test]
 fn saves_several_notes_with_one_call() {
-	let vault = Vault::new();
+	let repository = Repository::new();
 
-	let outcomes = vault
+	let outcomes = repository
 		.engine
 		.save_notes(
 			"repo",
-			&vault.sink,
+			&repository.sink,
 			&[request("a.md", "a", None), request("b.md", "b", None)],
 		)
 		.unwrap();
 
 	assert!(outcomes.iter().all(|o| matches!(o, SaveOutcome::Saved(_))));
-	assert_eq!(vault.indexed(), ["a.md", "b.md"]);
+	assert_eq!(repository.indexed(), ["a.md", "b.md"]);
 }
 
 #[test]
 fn reports_a_conflict_without_blocking_the_other_notes_of_the_batch() {
-	let vault = Vault::new();
-	saved(vault.save("a.md", "a", None));
+	let repository = Repository::new();
+	saved(repository.save("a.md", "a", None));
 
-	let outcomes = vault
+	let outcomes = repository
 		.engine
 		.save_notes(
 			"repo",
-			&vault.sink,
+			&repository.sink,
 			&[request("a.md", "mine", Some(1)), request("b.md", "b", None)],
 		)
 		.unwrap();
 
 	assert!(matches!(outcomes[0], SaveOutcome::Conflict { .. }));
 	assert!(matches!(outcomes[1], SaveOutcome::Saved(_)));
-	assert_eq!(fs::read_to_string(vault.notes().join("a.md")).unwrap(), "a");
-	assert_eq!(vault.indexed(), ["a.md", "b.md"]);
+	assert_eq!(
+		fs::read_to_string(repository.notes().join("a.md")).unwrap(),
+		"a"
+	);
+	assert_eq!(repository.indexed(), ["a.md", "b.md"]);
 }
 
 #[test]
 fn reports_a_failed_write_and_still_indexes_the_rest() {
-	let vault = Vault::new();
+	let repository = Repository::new();
 	let sink = FailingSink {
-		inner: FsSink::new(vault.notes(), LocationScheme::android(URI_PREFIX)),
+		inner: FsSink::new(repository.notes(), LocationScheme::android(URI_PREFIX)),
 		failing: "bad.md",
 	};
 
-	let outcomes = vault
+	let outcomes = repository
 		.engine
 		.save_notes(
 			"repo",
@@ -302,5 +308,5 @@ fn reports_a_failed_write_and_still_indexes_the_rest() {
 
 	assert!(matches!(&outcomes[0], SaveOutcome::Failed(message) if message.contains("disk full")));
 	assert!(matches!(outcomes[1], SaveOutcome::Saved(_)));
-	assert_eq!(vault.indexed(), ["ok.md"]);
+	assert_eq!(repository.indexed(), ["ok.md"]);
 }

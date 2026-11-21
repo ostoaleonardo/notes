@@ -16,9 +16,9 @@ import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
 const paths = { rootUri: 'root', noteFolderUri: 'root/notes' }
 
 describe('resolve attachment target', () => {
-    test('uses the vault root for the vault location', () => {
+    test('uses the repository root for the repository location', () => {
         const target = resolveAttachmentTarget(
-            { location: ATTACHMENT_LOCATIONS.VAULT, folderName: 'files' },
+            { location: ATTACHMENT_LOCATIONS.REPOSITORY, folderName: 'files' },
             paths
         )
 
@@ -43,7 +43,7 @@ describe('resolve attachment target', () => {
         expect(target).toEqual({ parentUri: 'root/notes', folderName: 'files' })
     })
 
-    test('puts the folder in the vault root for the folder location', () => {
+    test('puts the folder in the repository root for the folder location', () => {
         const target = resolveAttachmentTarget(
             { location: ATTACHMENT_LOCATIONS.FOLDER, folderName: 'files' },
             paths
@@ -65,13 +65,13 @@ describe('attachment settings', () => {
 
     test('reads the stored location and folder name', async () => {
         const stored = {
-            [STORAGE_KEYS.ATTACHMENT_LOCATION]: ATTACHMENT_LOCATIONS.VAULT,
+            [STORAGE_KEYS.ATTACHMENT_LOCATION]: ATTACHMENT_LOCATIONS.REPOSITORY,
             [STORAGE_KEYS.ATTACHMENT_FOLDER]: 'files'
         }
 
         const settings = await readAttachmentSettings(async (key) => stored[key])
 
-        expect(settings).toEqual({ location: ATTACHMENT_LOCATIONS.VAULT, folderName: 'files' })
+        expect(settings).toEqual({ location: ATTACHMENT_LOCATIONS.REPOSITORY, folderName: 'files' })
     })
 
     test('ignores an unknown stored location', async () => {

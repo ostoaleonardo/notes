@@ -514,7 +514,7 @@
       "Inside Html Block",
       "In Comment",
       "Inside Inline Html",
-      "In Obsidian Comment",
+      "In Standard Comment",
       "In Highlight"
     ],
     "tags": [
@@ -541,7 +541,7 @@
           "insertAt": 117
         },
         {
-          "text": "%% [[In Obsidian Comment]] %%",
+          "text": "%% [[In Standard Comment]] %%",
           "insertAt": 148
         },
         {

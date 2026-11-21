@@ -287,7 +287,7 @@ describe('repository crud', () => {
             const { api } = await setup()
 
             const uri = api.ensureAttachmentsFolder(child, {
-                location: ATTACHMENT_LOCATIONS.VAULT,
+                location: ATTACHMENT_LOCATIONS.REPOSITORY,
                 folderName: 'files'
             })
 

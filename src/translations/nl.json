@@ -13,7 +13,7 @@
 			"title": "Notitie verwijderen",
 			"failed": "Deze notitie kon niet worden verwijderd",
 			"message": {
-				"vault-trash": "De notitie wordt verplaatst naar de verborgen map .trash van je repository. Ze verschijnt niet meer in de app, maar je kunt haar nog herstellen met een bestandsbeheerder.",
+				"repository-trash": "De notitie wordt verplaatst naar de verborgen map .trash van je repository. Ze verschijnt niet meer in de app, maar je kunt haar nog herstellen met een bestandsbeheerder.",
 				"permanent": "Deze notitie wordt definitief verwijderd en kan niet worden hersteld."
 			}
 		},
@@ -127,7 +127,7 @@
 			},
 			"delete": {
 				"title": "Bij verwijderen",
-				"vault-trash": "Verplaatsen naar map .trash",
+				"repository-trash": "Verplaatsen naar map .trash",
 				"permanent": "Definitief verwijderen"
 			},
 			"default_folder": {
@@ -184,7 +184,7 @@
 			"title": "Bijlagen",
 			"location": {
 				"title": "Waar nieuwe bijlagen worden opgeslagen",
-				"vault": "Hoofdmap van de repository",
+				"repository": "Hoofdmap van de repository",
 				"same": "Naast elke notitie",
 				"subfolder": "Submap naast elke notitie",
 				"folder": "Eén gedeelde map"

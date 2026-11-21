@@ -53,10 +53,10 @@ describe('note as html', () => {
 
     test('replaces local image urls with the resolved ones', () => {
         const html = getNoteAsHtml(
-            { title: 'T', note: '![pic](content://vault/pic.png)' },
+            { title: 'T', note: '![pic](content://repository/pic.png)' },
             {
                 notes,
-                imageUrls: new Map([['content://vault/pic.png', 'data:image/png;base64,BBB']])
+                imageUrls: new Map([['content://repository/pic.png', 'data:image/png;base64,BBB']])
             }
         )
 

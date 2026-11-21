@@ -275,7 +275,7 @@ describe('renaming, moving and deleting notes', () => {
         )
     })
 
-    test('trashes a note natively into the vault trash folder', async () => {
+    test('trashes a note natively into the repository trash folder', async () => {
         const native = jest.requireMock('repository-fs').default
 
         native.trashNote.mockResolvedValueOnce('a (2).md')
@@ -386,7 +386,7 @@ describe('note versions', () => {
         expect(createdAt).toEqual(expect.any(Number))
     })
 
-    test('forwards deletes and renames to the native vault', async () => {
+    test('forwards deletes and renames to the native repository', async () => {
         await fileStorage.deleteVersions(ROOT, 'a.md')
         await fileStorage.renameVersions(ROOT, 'old.md', 'new.md')
         await fileStorage.migrateLegacyVersions(FOLDER, ROOT, 'work')
@@ -431,7 +431,7 @@ describe('directories', () => {
         expect(mockFs.has(`${FOLDER}/a.md`)).toBe(false)
     })
 
-    test('renames a folder through the native vault and returns its new uri', async () => {
+    test('renames a folder through the native repository and returns its new uri', async () => {
         const native = jest.requireMock('repository-fs').default
 
         native.renameFolder.mockResolvedValueOnce({ path: 'renamed', uri: `${ROOT}/renamed/` })

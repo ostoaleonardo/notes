@@ -1,13 +1,13 @@
 import { buildVersionKey, getVersionLocation } from '../note-version-location'
 
 const folders = [
-    { id: 'root', uri: 'file:///vault' },
-    { id: 'sub', uri: 'file:///vault/Work', parentId: 'root', alias: 'Work' },
-    { id: 'deep', uri: 'file:///vault/Work/Q1', parentId: 'sub', alias: 'Q1' }
+    { id: 'root', uri: 'file:///repository' },
+    { id: 'sub', uri: 'file:///repository/Work', parentId: 'root', alias: 'Work' },
+    { id: 'deep', uri: 'file:///repository/Work/Q1', parentId: 'sub', alias: 'Q1' }
 ]
 
 describe('version key', () => {
-    test('is the bare filename at the vault root', () => {
+    test('is the bare filename at the repository root', () => {
         expect(buildVersionKey('', 'note.md')).toBe('note.md')
     })
 
@@ -19,16 +19,16 @@ describe('version key', () => {
 describe('version location', () => {
     test('points a root note at its own folder', () => {
         expect(getVersionLocation(folders, 'root')).toEqual({
-            rootUri: 'file:///vault',
-            folderUri: 'file:///vault',
+            rootUri: 'file:///repository',
+            folderUri: 'file:///repository',
             folderPath: ''
         })
     })
 
-    test('resolves the vault root and relative path for nested folders', () => {
+    test('resolves the repository root and relative path for nested folders', () => {
         expect(getVersionLocation(folders, 'deep')).toEqual({
-            rootUri: 'file:///vault',
-            folderUri: 'file:///vault/Work/Q1',
+            rootUri: 'file:///repository',
+            folderUri: 'file:///repository/Work/Q1',
             folderPath: 'Work/Q1'
         })
     })

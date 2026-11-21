@@ -13,7 +13,7 @@ import {
     NOTE_FILE_EXTENSION,
     TEMPLATES_FOLDER_NAME,
     IMAGES_FOLDER_NAME,
-    VAULT_TRASH_FOLDER_NAME,
+    REPOSITORY_TRASH_FOLDER_NAME,
     NOTES_FOLDER_NAME,
     RESERVED_FOLDER_NAMES,
     CORRUPT_FILE_SUFFIX,
@@ -230,7 +230,7 @@ const deleteNoteFile = (directoryUri, filename) => {
 }
 
 const trashNote = ({ rootUri, folderId, folderPath, filename }) => (
-    RepositoryFs.trashNote(rootUri, folderId, folderPath, filename, VAULT_TRASH_FOLDER_NAME)
+    RepositoryFs.trashNote(rootUri, folderId, folderPath, filename, REPOSITORY_TRASH_FOLDER_NAME)
 )
 
 const moveNote = async ({ rootUri, filename, from, to }) => {

@@ -321,7 +321,7 @@ pub enum MoveReport {
 	SourceMissing,
 }
 
-impl From<MoveStatus> for engine::vault::MoveResult {
+impl From<MoveStatus> for engine::repository::MoveResult {
 	fn from(status: MoveStatus) -> Self {
 		match status {
 			MoveStatus::Moved => Self::Moved,
@@ -331,12 +331,12 @@ impl From<MoveStatus> for engine::vault::MoveResult {
 	}
 }
 
-impl From<engine::vault::MoveResult> for MoveStatus {
-	fn from(result: engine::vault::MoveResult) -> Self {
+impl From<engine::repository::MoveResult> for MoveStatus {
+	fn from(result: engine::repository::MoveResult) -> Self {
 		match result {
-			engine::vault::MoveResult::Moved => Self::Moved,
-			engine::vault::MoveResult::TargetExists => Self::TargetExists,
-			engine::vault::MoveResult::SourceMissing => Self::SourceMissing,
+			engine::repository::MoveResult::Moved => Self::Moved,
+			engine::repository::MoveResult::TargetExists => Self::TargetExists,
+			engine::repository::MoveResult::SourceMissing => Self::SourceMissing,
 		}
 	}
 }

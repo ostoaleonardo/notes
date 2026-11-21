@@ -12,7 +12,7 @@ const mockUpdatePinned = jest.fn()
 const mockRemoveRecent = jest.fn()
 const mockReadRepositoryIndex = jest.fn()
 const mockWriteRepositoryIndex = jest.fn()
-const mockIsBodylessVault = jest.fn()
+const mockIsBodylessRepository = jest.fn()
 const mockLoadNotesFromIndex = jest.fn()
 
 let mockActiveFolder = null
@@ -24,7 +24,7 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
     default: {}
 }))
 jest.mock('@/shared/utils/body-mode', () => ({
-    isBodylessVault: (...args) => mockIsBodylessVault(...args)
+    isBodylessRepository: (...args) => mockIsBodylessRepository(...args)
 }))
 jest.mock('@/shared/utils/index-notes', () => ({
     loadNotesFromIndex: (...args) => mockLoadNotesFromIndex(...args)
@@ -61,7 +61,7 @@ beforeEach(() => {
     mockPinned = new Set()
     mockRecent = []
     mockReadRepositoryIndex.mockResolvedValue([])
-    mockIsBodylessVault.mockResolvedValue(false)
+    mockIsBodylessRepository.mockResolvedValue(false)
     mockLoadNotesFromIndex.mockResolvedValue([])
     setIndexingStatus(null)
 })
@@ -339,14 +339,14 @@ describe('clear', () => {
     })
 })
 
-describe('loading a large vault without note bodies', () => {
+describe('loading a large repository without note bodies', () => {
     const root = { id: 'repo-1', uri: 'content://repo-1' }
     const listed = [{ path: 'repo-1::A.md', title: 'A' }]
 
     beforeEach(() => {
         mockActiveFolder = root
         mockActiveFolderTree = [root]
-        mockIsBodylessVault.mockResolvedValue(true)
+        mockIsBodylessRepository.mockResolvedValue(true)
         mockLoadNotesFromIndex.mockResolvedValue(listed)
     })
 
@@ -355,7 +355,7 @@ describe('loading a large vault without note bodies', () => {
 
         const { result } = await renderNoteContext()
 
-        expect(mockIsBodylessVault).toHaveBeenCalledWith(['repo-1'])
+        expect(mockIsBodylessRepository).toHaveBeenCalledWith(['repo-1'])
         expect(mockLoadNotesFromIndex).toHaveBeenCalledWith(['repo-1'])
         expect(mockReadRepositoryIndex).not.toHaveBeenCalled()
         expect(result.current.notes).toBe(listed)

@@ -156,9 +156,9 @@ fn times_a_delta_of_a_six_hundred_line_note() {
 	println!("delta {:?} hunks {}", start.elapsed(), delta.len());
 }
 
-mod vault {
-	use engine::vault::FsVault;
-	use engine::versions::VersionVault;
+mod repository {
+	use engine::repository::FsRepository;
+	use engine::versions::RepositoryVersions;
 	use serde_json::Value;
 	use std::fs;
 	use std::sync::Arc;
@@ -166,14 +166,20 @@ mod vault {
 
 	const MAX: usize = 200;
 
-	fn setup() -> (TempDir, Arc<FsVault>) {
+	fn setup() -> (TempDir, Arc<FsRepository>) {
 		let directory = TempDir::new().unwrap();
-		let vault = Arc::new(FsVault::new(directory.path()));
+		let repository = Arc::new(FsRepository::new(directory.path()));
 
-		(directory, vault)
+		(directory, repository)
 	}
 
-	fn commit(versions: &VersionVault, key: &str, title: &str, content: &str, id: &str) -> bool {
+	fn commit(
+		versions: &RepositoryVersions,
+		key: &str,
+		title: &str,
+		content: &str,
+		id: &str,
+	) -> bool {
 		versions.commit(key, title, content, id, 1, MAX).unwrap()
 	}
 
@@ -192,8 +198,8 @@ mod vault {
 
 	#[test]
 	fn names_files_like_encode_uri_component() {
-		let (directory, vault) = setup();
-		let versions = VersionVault::new(vault);
+		let (directory, repository) = setup();
+		let versions = RepositoryVersions::new(repository);
 
 		for case in super::fixture()["filenames"].as_array().unwrap() {
 			let key = case["key"].as_str().unwrap();
@@ -208,8 +214,8 @@ mod vault {
 
 	#[test]
 	fn commits_and_reads_versions_back() {
-		let (_directory, vault) = setup();
-		let versions = VersionVault::new(vault);
+		let (_directory, repository) = setup();
+		let versions = RepositoryVersions::new(repository);
 
 		assert!(commit(&versions, "Folder/Note.md", "T", "one", "a"));
 		assert!(!commit(&versions, "Folder/Note.md", "T", "one", "b"));
@@ -224,8 +230,8 @@ mod vault {
 
 	#[test]
 	fn renames_a_store_and_ignores_missing_or_empty_ones() {
-		let (directory, vault) = setup();
-		let versions = VersionVault::new(vault);
+		let (directory, repository) = setup();
+		let versions = RepositoryVersions::new(repository);
 
 		commit(&versions, "Old.md", "T", "text", "a");
 		versions.rename("Old.md", "New.md").unwrap();
@@ -246,8 +252,8 @@ mod vault {
 
 	#[test]
 	fn renames_and_deletes_every_store_under_a_folder_prefix() {
-		let (directory, vault) = setup();
-		let versions = VersionVault::new(vault);
+		let (directory, repository) = setup();
+		let versions = RepositoryVersions::new(repository);
 
 		commit(&versions, "Work/A.md", "T", "a", "1");
 		commit(&versions, "Work/Sub/B.md", "T", "b", "2");
@@ -274,8 +280,8 @@ mod vault {
 
 	#[test]
 	fn keeps_a_copy_of_a_corrupt_store_and_starts_over() {
-		let (directory, vault) = setup();
-		let versions = VersionVault::new(vault);
+		let (directory, repository) = setup();
+		let versions = RepositoryVersions::new(repository);
 
 		fs::create_dir_all(directory.path().join(".notes")).unwrap();
 		fs::write(
@@ -291,8 +297,8 @@ mod vault {
 
 	#[test]
 	fn moves_legacy_store_files_into_the_notes_folder() {
-		let (directory, vault) = setup();
-		let versions = VersionVault::new(vault);
+		let (directory, repository) = setup();
+		let versions = RepositoryVersions::new(repository);
 
 		fs::create_dir_all(directory.path().join("Folder")).unwrap();
 		fs::write(

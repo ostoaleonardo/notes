@@ -13,7 +13,7 @@
 			"title": "Radera anteckning",
 			"failed": "Det gick inte att radera anteckningen",
 			"message": {
-				"vault-trash": "Anteckningen flyttas till den dolda mappen .trash i ditt förråd. Den visas inte längre i appen, men du kan fortfarande återställa den med en filhanterare.",
+				"repository-trash": "Anteckningen flyttas till den dolda mappen .trash i ditt förråd. Den visas inte längre i appen, men du kan fortfarande återställa den med en filhanterare.",
 				"permanent": "Den här anteckningen raderas för alltid och kan inte återställas."
 			}
 		},
@@ -127,7 +127,7 @@
 			},
 			"delete": {
 				"title": "Vid radering",
-				"vault-trash": "Flytta till mappen .trash",
+				"repository-trash": "Flytta till mappen .trash",
 				"permanent": "Radera permanent"
 			},
 			"default_folder": {
@@ -184,7 +184,7 @@
 			"title": "Bilagor",
 			"location": {
 				"title": "Var nya bilagor ska sparas",
-				"vault": "Förrådets rot",
+				"repository": "Förrådets rot",
 				"same": "Bredvid varje anteckning",
 				"subfolder": "Undermapp bredvid varje anteckning",
 				"folder": "En delad mapp"

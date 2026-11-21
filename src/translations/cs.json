@@ -13,7 +13,7 @@
 			"title": "Smazat poznámku",
 			"failed": "Tuto poznámku se nepodařilo smazat",
 			"message": {
-				"vault-trash": "Poznámka bude přesunuta do skryté složky .trash ve tvém úložišti. V aplikaci se již nezobrazí, ale stále ji můžeš obnovit pomocí správce souborů.",
+				"repository-trash": "Poznámka bude přesunuta do skryté složky .trash ve tvém úložišti. V aplikaci se již nezobrazí, ale stále ji můžeš obnovit pomocí správce souborů.",
 				"permanent": "Tato poznámka bude navždy smazána a nepůjde obnovit."
 			}
 		},
@@ -127,7 +127,7 @@
 			},
 			"delete": {
 				"title": "Při smazání",
-				"vault-trash": "Přesunout do složky .trash",
+				"repository-trash": "Přesunout do složky .trash",
 				"permanent": "Smazat trvale"
 			},
 			"default_folder": {
@@ -184,7 +184,7 @@
 			"title": "Přílohy",
 			"location": {
 				"title": "Kam ukládat nové přílohy",
-				"vault": "Kořen úložiště",
+				"repository": "Kořen úložiště",
 				"same": "Vedle každé poznámky",
 				"subfolder": "Podsložka vedle každé poznámky",
 				"folder": "Jedna sdílená složka"

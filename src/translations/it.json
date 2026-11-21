@@ -13,7 +13,7 @@
 			"title": "Elimina nota",
 			"failed": "Impossibile eliminare questa nota",
 			"message": {
-				"vault-trash": "La nota verrà spostata nella cartella nascosta .trash del tuo repository. Non comparirà più nell'app, ma potrai comunque recuperarla con un file manager.",
+				"repository-trash": "La nota verrà spostata nella cartella nascosta .trash del tuo repository. Non comparirà più nell'app, ma potrai comunque recuperarla con un file manager.",
 				"permanent": "Questa nota verrà eliminata per sempre e non potrà essere recuperata."
 			}
 		},
@@ -127,7 +127,7 @@
 			},
 			"delete": {
 				"title": "All'eliminazione",
-				"vault-trash": "Sposta nella cartella .trash",
+				"repository-trash": "Sposta nella cartella .trash",
 				"permanent": "Elimina definitivamente"
 			},
 			"default_folder": {
@@ -184,7 +184,7 @@
 			"title": "Allegati",
 			"location": {
 				"title": "Dove salvare i nuovi allegati",
-				"vault": "Radice del repository",
+				"repository": "Radice del repository",
 				"same": "Accanto a ogni nota",
 				"subfolder": "Sottocartella accanto a ogni nota",
 				"folder": "Una cartella condivisa"

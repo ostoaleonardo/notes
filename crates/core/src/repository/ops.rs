@@ -1,4 +1,4 @@
-use super::VaultFs;
+use super::RepositoryFiles;
 use super::constants::{BACKSLASH, CURRENT_DIRECTORY, NUL, PARENT_DIRECTORY, PATH_SEPARATOR};
 use crate::error::{Error, Result};
 
@@ -9,7 +9,7 @@ pub enum MoveResult {
 	SourceMissing,
 }
 
-pub trait VaultOps: VaultFs {
+pub trait RepositoryOps: RepositoryFiles {
 	fn exists(&self, path: &str) -> Result<bool>;
 	fn create_dir(&self, path: &str) -> Result<()>;
 	fn rename_dir(&self, path: &str, new_name: &str) -> Result<()>;

@@ -534,7 +534,7 @@ describe('unicode normalization', () => {
 })
 
 describe('file links', () => {
-    test('renders a link to a vault file as a file link', () => {
+    test('renders a link to a repository file as a file link', () => {
         const result = renderLink('[[docs/sample doc.pdf]]', notes)
 
         expect(result).toBe(

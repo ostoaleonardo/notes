@@ -11,7 +11,7 @@ export const deleteNoteFiles = async (behavior, location, fileStorage) => {
     const { uri, rootUri, folderId, folderPath, filename } = location
     const key = buildVersionKey(folderPath, filename)
 
-    if (behavior === DELETE_BEHAVIORS.VAULT_TRASH) {
+    if (behavior === DELETE_BEHAVIORS.REPOSITORY_TRASH) {
         return fileStorage.trashNote({ rootUri, folderId, folderPath, filename })
     }
 

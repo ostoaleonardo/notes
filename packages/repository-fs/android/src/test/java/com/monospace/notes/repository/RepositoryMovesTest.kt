@@ -13,7 +13,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34])
-class VaultMovesTest {
+class RepositoryMovesTest {
   private lateinit var fixture: SafFixture
 
   @Before

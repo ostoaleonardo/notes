@@ -246,15 +246,15 @@ fn reads_files_replacing_invalid_utf8_and_missing_ones() {
 #[test]
 fn indexes_a_directory_end_to_end() {
 	let directory = TempDir::new().unwrap();
-	let vault = directory.path().join("vault");
-	fs::create_dir(&vault).unwrap();
-	fs::write(vault.join("a.md"), "# a [[b]]").unwrap();
-	fs::write(vault.join("b.md"), "#tag b").unwrap();
+	let repository = directory.path().join("repository");
+	fs::create_dir(&repository).unwrap();
+	fs::write(repository.join("a.md"), "# a [[b]]").unwrap();
+	fs::write(repository.join("b.md"), "#tag b").unwrap();
 	let engine = Engine::new(directory.path().join("index.db"), "en").unwrap();
 
 	let stats = sync(
 		&engine,
-		&FsSource::new(&vault, LocationScheme::android(URI_PREFIX)),
+		&FsSource::new(&repository, LocationScheme::android(URI_PREFIX)),
 	);
 
 	assert_eq!((stats.added, stats.unreadable), (2, 0));

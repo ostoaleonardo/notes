@@ -259,7 +259,7 @@ describe('rename note file', () => {
 describe('native note moves', () => {
     const native = jest.requireMock('repository-fs').default
 
-    test('moves a note through the native vault', async () => {
+    test('moves a note through the native repository', async () => {
         const { result } = await renderFileStorageHook()
 
         native.moveNote.mockResolvedValueOnce({ status: 'moved', uri: 'content://bin/note.md', modified: 3 })
@@ -274,7 +274,7 @@ describe('native note moves', () => {
         expect(moved).toEqual({ status: 'moved', fileUri: 'content://bin/note.md', updatedAt: 3 })
     })
 
-    test('trashes a note through the native vault', async () => {
+    test('trashes a note through the native repository', async () => {
         const { result } = await renderFileStorageHook()
 
         native.trashNote.mockResolvedValueOnce('note (2).md')
@@ -329,7 +329,7 @@ describe('notes folder', () => {
 describe('versions', () => {
     const native = jest.requireMock('repository-fs').default
 
-    test('writes and reads the versions of a note through the native vault', async () => {
+    test('writes and reads the versions of a note through the native repository', async () => {
         const { result } = await renderFileStorageHook()
 
         await result.current.writeVersions('content://root', 'Work/note.md', [{ id: 'v1' }])
@@ -446,7 +446,7 @@ describe('rename folder', () => {
         parentUri: 'content://repo'
     }
 
-    test('renames through the native vault and returns the new uri', async () => {
+    test('renames through the native repository and returns the new uri', async () => {
         const { result } = await renderFileStorageHook()
 
         native.renameFolder.mockResolvedValueOnce({ path: 'New', uri: 'content://repo/New/' })

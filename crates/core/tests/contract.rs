@@ -1,12 +1,12 @@
 use engine::engine::Engine;
 use engine::links::{Candidate, FolderPaths, LinkNote, NoteIndex, find_backlinks, rename_links};
 use engine::model::{QueryResult, SaveOutcome, SyncStats, Value};
+use engine::repository::FsRepository;
 use engine::source::{FsSink, FsSource, LocationScheme};
 use engine::syntax::{
 	NoteFields, compose, decompose, inline_tags, normalize, parse_note, wiki_links,
 };
-use engine::vault::FsVault;
-use engine::versions::{VersionVault, build_line_delta};
+use engine::versions::{RepositoryVersions, build_line_delta};
 use serde_json::{Map, Value as Json, json};
 use std::fs::{self, File};
 use std::path::{Path, PathBuf};
@@ -42,12 +42,12 @@ const ROOT_NOTES: [(&str, &str); 6] = [
 
 const SUB_NOTES: [(&str, &str); 2] = [("Alpha.md", SUB_ALPHA), ("Delta.md", SUB_DELTA)];
 
-struct Vault {
+struct Repository {
 	directory: TempDir,
 	engine: Engine,
 }
 
-impl Vault {
+impl Repository {
 	fn new() -> Self {
 		let directory = TempDir::new().unwrap();
 
@@ -301,13 +301,13 @@ fn deltas() -> Json {
 	)
 }
 
-fn versioning(vault: &Vault) -> Json {
-	let root = vault.directory.path().join("vault");
+fn versioning(repository: &Repository) -> Json {
+	let root = repository.directory.path().join("repository");
 
 	fs::create_dir(&root).unwrap();
 	fs::create_dir(root.join(".notes")).unwrap();
 
-	let versions = VersionVault::new(Arc::new(FsVault::new(&root)));
+	let versions = RepositoryVersions::new(Arc::new(FsRepository::new(&root)));
 	let first = versions
 		.commit("Alpha.md", "Alpha", "one\n", "v1", 1_000, MAX_VERSIONS)
 		.unwrap();
@@ -337,48 +337,48 @@ fn versioning(vault: &Vault) -> Json {
 }
 
 fn scenario() -> Json {
-	let vault = Vault::new();
-	let sink = FsSink::new(vault.notes(), LocationScheme::android(URI_PREFIX));
+	let repository = Repository::new();
+	let sink = FsSink::new(repository.notes(), LocationScheme::android(URI_PREFIX));
 
-	let first_sync = vault.sync(ROOT_FOLDER, &vault.notes());
-	let sub_sync = vault.sync(SUB_FOLDER, &vault.sub());
-	let second_sync = vault.sync(ROOT_FOLDER, &vault.notes());
+	let first_sync = repository.sync(ROOT_FOLDER, &repository.notes());
+	let sub_sync = repository.sync(SUB_FOLDER, &repository.sub());
+	let second_sync = repository.sync(ROOT_FOLDER, &repository.notes());
 
-	let listed = vault
+	let listed = repository
 		.engine
 		.list_notes(&[ROOT_FOLDER.to_string(), SUB_FOLDER.to_string()])
 		.unwrap();
 	let listing: Json = serde_json::from_str(&listed).unwrap();
 
-	let indexed_before_changes = vault.indexed();
+	let indexed_before_changes = repository.indexed();
 
-	let tags = vault.query(
+	let tags = repository.query(
 		"SELECT n.folder_id, n.filename, t.position, t.name, t.inline FROM tags t JOIN notes n ON n.id = t.note_id ORDER BY n.folder_id, n.filename, t.position",
 	);
-	let links = vault.query(
+	let links = repository.query(
 		"SELECT n.folder_id, n.filename, l.position, l.text, l.name, l.anchor_name FROM links l JOIN notes n ON n.id = l.note_id ORDER BY n.folder_id, n.filename, l.position",
 	);
-	let markdown = vault.query(
+	let markdown = repository.query(
 		"SELECT n.folder_id, n.filename, m.position, m.target FROM markdown_links m JOIN notes n ON n.id = m.note_id ORDER BY n.folder_id, n.filename, m.position",
 	);
-	let properties = vault.query(
+	let properties = repository.query(
 		"SELECT n.folder_id, n.filename, p.position, p.key, p.value FROM properties p JOIN notes n ON n.id = p.note_id ORDER BY n.folder_id, n.filename, p.position",
 	);
-	let order = vault.query("SELECT folder_id, filename FROM notes ORDER BY sort_key, id");
+	let order = repository.query("SELECT folder_id, filename FROM notes ORDER BY sort_key, id");
 
 	let backlink_candidates = references(
-		&vault
+		&repository
 			.engine
 			.backlink_candidates(&["Alpha".to_string()], "Alpha.md")
 			.unwrap(),
 	);
-	let mention_candidates = vault
+	let mention_candidates = repository
 		.engine
 		.mention_candidates(&["alpha".to_string()])
 		.unwrap()
 		.map(|refs| references(&refs));
 
-	let saved = vault
+	let saved = repository
 		.engine
 		.save_note(ROOT_FOLDER, &sink, "Saved.md", "# Saved\n", None)
 		.unwrap();
@@ -386,11 +386,11 @@ fn scenario() -> Json {
 		SaveOutcome::Saved(stamp) => stamp.modified,
 		_ => panic!("the first save must succeed"),
 	};
-	let stale = vault
+	let stale = repository
 		.engine
 		.save_note(ROOT_FOLDER, &sink, "Saved.md", "stale\n", Some(stamp - 1))
 		.unwrap();
-	let fresh = vault
+	let fresh = repository
 		.engine
 		.save_note(
 			ROOT_FOLDER,
@@ -400,36 +400,36 @@ fn scenario() -> Json {
 			Some(stamp),
 		)
 		.unwrap();
-	let missing = vault
+	let missing = repository
 		.engine
 		.save_note(ROOT_FOLDER, &sink, "Ghost.md", "ghost\n", Some(1))
 		.unwrap();
-	let renamed = vault
+	let renamed = repository
 		.engine
 		.rename_note(ROOT_FOLDER, &sink, "Saved.md", "Renamed.md", "# Renamed\n")
 		.unwrap();
-	let rename_collision = vault
+	let rename_collision = repository
 		.engine
 		.rename_note(ROOT_FOLDER, &sink, "Renamed.md", "Alpha.md", "# Clash\n")
 		.unwrap();
-	let after_rename = vault.indexed();
+	let after_rename = repository.indexed();
 
-	vault
+	repository
 		.engine
 		.delete_note(ROOT_FOLDER, &sink, "Renamed.md")
 		.unwrap();
-	let after_delete = vault.indexed();
+	let after_delete = repository.indexed();
 
-	let beta = vault.notes().join("Beta.md");
+	let beta = repository.notes().join("Beta.md");
 
 	fs::write(&beta, "Back to [[Alpha]] and [[Gamma]].\n").unwrap();
 	set_time(&beta, 500);
-	fs::remove_file(vault.notes().join("Gamma.md")).unwrap();
+	fs::remove_file(repository.notes().join("Gamma.md")).unwrap();
 
-	let external_sync = vault.sync(ROOT_FOLDER, &vault.notes());
+	let external_sync = repository.sync(ROOT_FOLDER, &repository.notes());
 
-	vault.engine.delete_folder(SUB_FOLDER).unwrap();
-	let after_folder_delete = vault.indexed();
+	repository.engine.delete_folder(SUB_FOLDER).unwrap();
+	let after_folder_delete = repository.indexed();
 
 	json!({
 		"sync": {
@@ -464,7 +464,7 @@ fn scenario() -> Json {
 		"composing": composing(),
 		"linking": linking(),
 		"deltas": deltas(),
-		"versions": versioning(&vault),
+		"versions": versioning(&repository),
 	})
 }
 

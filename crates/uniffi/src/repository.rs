@@ -1,11 +1,13 @@
 use crate::records::{EngineError, MoveStatus};
 use engine::error::Result as CoreResult;
-use engine::vault::{MoveResult, VaultFs as CoreVaultFs, VaultOps as CoreVaultOps};
-use engine::versions::VersionVault;
+use engine::repository::{
+	MoveResult, RepositoryFiles as CoreRepositoryFiles, RepositoryOps as CoreRepositoryOps,
+};
+use engine::versions::RepositoryVersions;
 use std::sync::Arc;
 
 #[uniffi::export(with_foreign)]
-pub trait VaultFs: Send + Sync {
+pub trait RepositoryFiles: Send + Sync {
 	fn read_text(&self, path: String) -> Result<Option<String>, EngineError>;
 	fn write_text(&self, path: String, text: String) -> Result<(), EngineError>;
 	fn delete_file(&self, path: String) -> Result<(), EngineError>;
@@ -17,11 +19,11 @@ pub trait VaultFs: Send + Sync {
 	fn remove_dir(&self, path: String) -> Result<(), EngineError>;
 }
 
-pub(crate) struct ForeignVault {
-	inner: Arc<dyn VaultFs>,
+pub(crate) struct ForeignRepository {
+	inner: Arc<dyn RepositoryFiles>,
 }
 
-impl CoreVaultFs for ForeignVault {
+impl CoreRepositoryFiles for ForeignRepository {
 	fn read_text(&self, path: &str) -> CoreResult<Option<String>> {
 		Ok(self.inner.read_text(path.to_string())?)
 	}
@@ -39,13 +41,13 @@ impl CoreVaultFs for ForeignVault {
 	}
 }
 
-impl ForeignVault {
-	pub(crate) fn new(inner: Arc<dyn VaultFs>) -> Self {
+impl ForeignRepository {
+	pub(crate) fn new(inner: Arc<dyn RepositoryFiles>) -> Self {
 		Self { inner }
 	}
 }
 
-impl CoreVaultOps for ForeignVault {
+impl CoreRepositoryOps for ForeignRepository {
 	fn exists(&self, path: &str) -> CoreResult<bool> {
 		Ok(self.inner.exists(path.to_string())?)
 	}
@@ -73,66 +75,70 @@ impl CoreVaultOps for ForeignVault {
 }
 
 #[derive(uniffi::Object)]
-pub struct FsVaultHandle {
-	inner: engine::vault::FsVault,
+pub struct FsRepositoryHandle {
+	inner: engine::repository::FsRepository,
 }
 
 #[uniffi::export]
-impl FsVaultHandle {
+impl FsRepositoryHandle {
 	#[uniffi::constructor]
 	pub fn new(path: String) -> Arc<Self> {
 		Arc::new(Self {
-			inner: engine::vault::FsVault::new(path),
+			inner: engine::repository::FsRepository::new(path),
 		})
 	}
 }
 
 #[uniffi::export]
-impl VaultFs for FsVaultHandle {
+impl RepositoryFiles for FsRepositoryHandle {
 	fn read_text(&self, path: String) -> Result<Option<String>, EngineError> {
-		Ok(CoreVaultFs::read_text(&self.inner, &path)?)
+		Ok(CoreRepositoryFiles::read_text(&self.inner, &path)?)
 	}
 
 	fn write_text(&self, path: String, text: String) -> Result<(), EngineError> {
-		Ok(CoreVaultFs::write_text(&self.inner, &path, &text)?)
+		Ok(CoreRepositoryFiles::write_text(&self.inner, &path, &text)?)
 	}
 
 	fn delete_file(&self, path: String) -> Result<(), EngineError> {
-		Ok(CoreVaultFs::delete_file(&self.inner, &path)?)
+		Ok(CoreRepositoryFiles::delete_file(&self.inner, &path)?)
 	}
 
 	fn list_files(&self, directory: String) -> Result<Vec<String>, EngineError> {
-		Ok(CoreVaultFs::list_files(&self.inner, &directory)?)
+		Ok(CoreRepositoryFiles::list_files(&self.inner, &directory)?)
 	}
 
 	fn exists(&self, path: String) -> Result<bool, EngineError> {
-		Ok(CoreVaultOps::exists(&self.inner, &path)?)
+		Ok(CoreRepositoryOps::exists(&self.inner, &path)?)
 	}
 
 	fn create_dir(&self, path: String) -> Result<(), EngineError> {
-		Ok(CoreVaultOps::create_dir(&self.inner, &path)?)
+		Ok(CoreRepositoryOps::create_dir(&self.inner, &path)?)
 	}
 
 	fn rename_dir(&self, path: String, new_name: String) -> Result<(), EngineError> {
-		Ok(CoreVaultOps::rename_dir(&self.inner, &path, &new_name)?)
+		Ok(CoreRepositoryOps::rename_dir(
+			&self.inner,
+			&path,
+			&new_name,
+		)?)
 	}
 
 	fn move_file(&self, from: String, to: String) -> Result<MoveStatus, EngineError> {
-		Ok(CoreVaultOps::move_file(&self.inner, &from, &to)?.into())
+		Ok(CoreRepositoryOps::move_file(&self.inner, &from, &to)?.into())
 	}
 
 	fn remove_dir(&self, path: String) -> Result<(), EngineError> {
-		Ok(CoreVaultOps::remove_dir(&self.inner, &path)?)
+		Ok(CoreRepositoryOps::remove_dir(&self.inner, &path)?)
 	}
 }
 
 #[derive(uniffi::Object)]
 pub struct VersionsHandle {
-	inner: VersionVault,
+	inner: RepositoryVersions,
 }
 
 impl VersionsHandle {
-	pub(crate) fn core(&self) -> &VersionVault {
+	pub(crate) fn core(&self) -> &RepositoryVersions {
 		&self.inner
 	}
 }
@@ -140,9 +146,9 @@ impl VersionsHandle {
 #[uniffi::export]
 impl VersionsHandle {
 	#[uniffi::constructor]
-	pub fn new(vault: Arc<dyn VaultFs>) -> Arc<Self> {
+	pub fn new(repository: Arc<dyn RepositoryFiles>) -> Arc<Self> {
 		Arc::new(Self {
-			inner: VersionVault::new(Arc::new(ForeignVault::new(vault))),
+			inner: RepositoryVersions::new(Arc::new(ForeignRepository::new(repository))),
 		})
 	}
 

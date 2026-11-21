@@ -14,7 +14,7 @@ const timeOnce = (fn) => {
     return performance.now() - start
 }
 
-describe('vault operations', () => {
+describe('repository operations', () => {
     const results = []
 
     test.each(SIZES)('runs link and search operations on %i notes', (count) => {
@@ -35,5 +35,5 @@ describe('vault operations', () => {
         )
     })
 
-    afterAll(() => report('Vault operations (median)', results))
+    afterAll(() => report('Repository operations (median)', results))
 })

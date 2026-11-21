@@ -19,7 +19,7 @@ import { collectTags } from '@/shared/utils/note-tags'
 import { getNotePaths } from '@/shared/utils/note-path'
 import { mergeLoadedNotes } from '@/shared/utils/merge-loaded-notes'
 import { getIndexingStatus, setIndexingStatus } from '@/shared/utils/indexing-status'
-import { isBodylessVault } from '@/shared/utils/body-mode'
+import { isBodylessRepository } from '@/shared/utils/body-mode'
 import { loadNotesFromIndex } from '@/shared/utils/index-notes'
 import { syncRepositoryIndex } from '@/shared/utils/repository-index'
 import { searchIndex } from '@/shared/utils/search-index'
@@ -79,7 +79,7 @@ export const NoteProvider = ({ children }) => {
     const readStartSnapshot = async (rootId) => {
         const ids = activeFolderTree.map((folder) => folder.id)
 
-        bodylessRef.current = await isBodylessVault(ids)
+        bodylessRef.current = await isBodylessRepository(ids)
 
         if (bodylessRef.current) {
             try {

@@ -3,9 +3,9 @@ mod constants;
 use crate::engine::Engine;
 use crate::error::{Error, Result};
 use crate::model::{FileStamp, NoteInput};
+use crate::repository::{MoveResult, RepositoryOps, validate_name};
 use crate::source::NoteSink;
-use crate::vault::{MoveResult, VaultOps, validate_name};
-use crate::versions::VersionVault;
+use crate::versions::RepositoryVersions;
 use constants::{FIRST_COPY_NUMBER, NOTE_EXTENSION, PATH_SEPARATOR};
 use std::io::{self, ErrorKind};
 
@@ -16,9 +16,9 @@ pub enum MoveOutcome {
 	SourceMissing,
 }
 
-pub struct Vault<'a> {
-	pub ops: &'a dyn VaultOps,
-	pub versions: &'a VersionVault,
+pub struct Repository<'a> {
+	pub ops: &'a dyn RepositoryOps,
+	pub versions: &'a RepositoryVersions,
 }
 
 fn join(directory: &str, name: &str) -> String {
@@ -41,8 +41,8 @@ fn stem_and_extension(filename: &str) -> (&str, &str) {
 	}
 }
 
-fn unique_name(vault: &dyn VaultOps, directory: &str, filename: &str) -> Result<String> {
-	if !vault.exists(&join(directory, filename))? {
+fn unique_name(repository: &dyn RepositoryOps, directory: &str, filename: &str) -> Result<String> {
+	if !repository.exists(&join(directory, filename))? {
 		return Ok(filename.to_string());
 	}
 
@@ -51,7 +51,7 @@ fn unique_name(vault: &dyn VaultOps, directory: &str, filename: &str) -> Result<
 	for number in FIRST_COPY_NUMBER.. {
 		let candidate = format!("{stem} ({number}){extension}");
 
-		if !vault.exists(&join(directory, &candidate))? {
+		if !repository.exists(&join(directory, &candidate))? {
 			return Ok(candidate);
 		}
 	}
@@ -62,7 +62,7 @@ fn unique_name(vault: &dyn VaultOps, directory: &str, filename: &str) -> Result<
 impl Engine {
 	pub fn rename_folder(
 		&self,
-		vault: &Vault<'_>,
+		repository: &Repository<'_>,
 		path: &str,
 		new_name: &str,
 		affected_folder_ids: &[String],
@@ -75,15 +75,15 @@ impl Engine {
 			.rsplit_once(PATH_SEPARATOR)
 			.map_or(path, |(_, name)| name);
 
-		vault.ops.rename_dir(path, new_name)?;
+		repository.ops.rename_dir(path, new_name)?;
 
 		let rest = affected_folder_ids
 			.iter()
 			.try_for_each(|id| self.delete_folder(id))
-			.and_then(|()| vault.versions.rename_under(path, &new_path));
+			.and_then(|()| repository.versions.rename_under(path, &new_path));
 
 		if let Err(error) = rest {
-			let _ = vault.ops.rename_dir(&new_path, old_name);
+			let _ = repository.ops.rename_dir(&new_path, old_name);
 
 			return Err(error);
 		}
@@ -93,7 +93,7 @@ impl Engine {
 
 	pub fn remove_folder(
 		&self,
-		vault: &Vault<'_>,
+		repository: &Repository<'_>,
 		path: &str,
 		folder_ids: &[String],
 		drop_versions: bool,
@@ -102,10 +102,10 @@ impl Engine {
 			self.delete_folder(id)?;
 		}
 
-		vault.ops.remove_dir(path)?;
+		repository.ops.remove_dir(path)?;
 
 		if drop_versions {
-			vault.versions.delete_under(path)?;
+			repository.versions.delete_under(path)?;
 		}
 
 		Ok(())
@@ -113,20 +113,20 @@ impl Engine {
 
 	pub fn trash_note(
 		&self,
-		vault: &Vault<'_>,
+		repository: &Repository<'_>,
 		folder_id: &str,
 		folder_path: &str,
 		filename: &str,
 		trash_path: &str,
 	) -> Result<String> {
 		validate_name(filename)?;
-		vault.ops.create_dir(trash_path)?;
+		repository.ops.create_dir(trash_path)?;
 
 		let source = join(folder_path, filename);
-		let mut target_name = unique_name(vault.ops, trash_path, filename)?;
+		let mut target_name = unique_name(repository.ops, trash_path, filename)?;
 
 		loop {
-			match vault
+			match repository
 				.ops
 				.move_file(&source, &join(trash_path, &target_name))?
 			{
@@ -135,12 +135,12 @@ impl Engine {
 					return Err(Error::Io(io::Error::new(ErrorKind::NotFound, source)));
 				}
 				MoveResult::TargetExists => {
-					target_name = unique_name(vault.ops, trash_path, filename)?;
+					target_name = unique_name(repository.ops, trash_path, filename)?;
 				}
 			}
 		}
 
-		vault.versions.delete(&source)?;
+		repository.versions.delete(&source)?;
 		self.remove(folder_id, &[filename.to_string()])?;
 
 		Ok(target_name)
@@ -149,7 +149,7 @@ impl Engine {
 	#[allow(clippy::too_many_arguments)]
 	pub fn move_note(
 		&self,
-		vault: &Vault<'_>,
+		repository: &Repository<'_>,
 		filename: &str,
 		from_folder_id: &str,
 		from_path: &str,
@@ -162,16 +162,16 @@ impl Engine {
 		let source = join(from_path, filename);
 		let target = join(to_path, filename);
 
-		match vault.ops.move_file(&source, &target)? {
+		match repository.ops.move_file(&source, &target)? {
 			MoveResult::TargetExists => return Ok(MoveOutcome::TargetExists),
 			MoveResult::SourceMissing => return Ok(MoveOutcome::SourceMissing),
 			MoveResult::Moved => {}
 		}
 
-		let renamed = vault.versions.rename(&source, &target);
+		let renamed = repository.versions.rename(&source, &target);
 
 		if let Err(error) = renamed {
-			let _ = vault.ops.move_file(&target, &source);
+			let _ = repository.ops.move_file(&target, &source);
 
 			return Err(error);
 		}
@@ -182,7 +182,7 @@ impl Engine {
 
 		let _ = self.remove(from_folder_id, &[filename.to_string()]);
 
-		if let Some(text) = vault.ops.read_text(&target)? {
+		if let Some(text) = repository.ops.read_text(&target)? {
 			let _ = self.write(
 				to_folder_id,
 				vec![NoteInput {

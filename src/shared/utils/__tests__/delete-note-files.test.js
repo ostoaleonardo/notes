@@ -1,8 +1,8 @@
 import { deleteNoteFiles } from '../delete-note-files'
 
 const location = {
-    uri: 'file:///vault/sub',
-    rootUri: 'file:///vault',
+    uri: 'file:///repository/sub',
+    rootUri: 'file:///repository',
     folderId: 'sub-id',
     folderPath: 'sub',
     filename: 'Groceries.md'
@@ -15,14 +15,14 @@ const createFileStorage = () => ({
 })
 
 describe('delete note files', () => {
-    test('moves the note into the vault root trash folder', async () => {
+    test('moves the note into the repository root trash folder', async () => {
         const fileStorage = createFileStorage()
 
-        const target = await deleteNoteFiles('vault-trash', location, fileStorage)
+        const target = await deleteNoteFiles('repository-trash', location, fileStorage)
 
         expect(target).toBe('Groceries.md')
         expect(fileStorage.trashNote).toHaveBeenCalledWith({
-            rootUri: 'file:///vault',
+            rootUri: 'file:///repository',
             folderId: 'sub-id',
             folderPath: 'sub',
             filename: 'Groceries.md'
@@ -35,8 +35,8 @@ describe('delete note files', () => {
 
         await deleteNoteFiles('permanent', location, fileStorage)
 
-        expect(fileStorage.deleteNoteFile).toHaveBeenCalledWith('file:///vault/sub', 'Groceries.md')
-        expect(fileStorage.deleteVersions).toHaveBeenCalledWith('file:///vault', 'sub/Groceries.md')
+        expect(fileStorage.deleteNoteFile).toHaveBeenCalledWith('file:///repository/sub', 'Groceries.md')
+        expect(fileStorage.deleteVersions).toHaveBeenCalledWith('file:///repository', 'sub/Groceries.md')
         expect(fileStorage.trashNote).not.toHaveBeenCalled()
     })
 })

@@ -22,7 +22,7 @@ const model = buildConnectionModel({
     notes: MOCK_CONNECTION_NOTES,
     notePaths: MOCK_CONNECTION_NOTE_PATHS,
     files: MOCK_CONNECTION_FILES,
-    rootName: 'Vault'
+    rootName: 'Repository'
 })
 
 const section = (entity, key) => listRelations(entity, model).find((item) => item.key === key)
@@ -132,7 +132,7 @@ describe('list relations', () => {
 
 describe('entity helpers', () => {
     test('resolves a readable title for every entity type', () => {
-        expect(entityTitle(ROOT_ENTITY, model)).toBe('Vault')
+        expect(entityTitle(ROOT_ENTITY, model)).toBe('Repository')
         expect(entityTitle(makeEntity(NOTE, 'r::Alpha.md'), model)).toBe('Alpha')
         expect(entityTitle(makeEntity(FILE, 'file:spec'), model)).toBe('spec.pdf')
         expect(entityTitle(makeEntity(FOLDER, 'Projects/Deep'), model)).toBe('Deep')

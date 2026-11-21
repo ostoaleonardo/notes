@@ -6,6 +6,6 @@
 
 <span>inline [[Inside Inline Html]]</span>
 
-%% [[In Obsidian Comment]] %%
+%% [[In Standard Comment]] %%
 
 ==highlight [[In Highlight]]==

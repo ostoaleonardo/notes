@@ -59,7 +59,7 @@ internal const val WRITE_ATTEMPTS = 3
 internal const val MARKDOWN_MIME_TYPE = "text/markdown"
 internal const val WRITE_TRUNCATE_MODE = "wt"
 
-internal const val VAULT_JSON_MIME = "application/json"
+internal const val REPOSITORY_JSON_MIME = "application/json"
 
 internal object MoveKeys {
   const val STATUS = "status"

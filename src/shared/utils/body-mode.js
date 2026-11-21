@@ -10,4 +10,4 @@ export const createBodylessCheck = ({ count, minNotes = BODYLESS_MIN_NOTES }) =>
     }
 }
 
-export const isBodylessVault = createBodylessCheck({ count: countIndexedNotes })
+export const isBodylessRepository = createBodylessCheck({ count: countIndexedNotes })

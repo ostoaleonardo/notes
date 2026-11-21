@@ -11,7 +11,7 @@ const model = buildConnectionModel({
     notes: MOCK_CONNECTION_NOTES,
     notePaths: MOCK_CONNECTION_NOTE_PATHS,
     files: MOCK_CONNECTION_FILES,
-    rootName: 'Vault'
+    rootName: 'Repository'
 })
 
 const ids = (nodes) => nodes.map((node) => node.id)

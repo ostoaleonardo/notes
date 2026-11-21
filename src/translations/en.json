@@ -13,7 +13,7 @@
 			"title": "Delete note",
 			"failed": "Couldn't delete this note",
 			"message": {
-				"vault-trash": "The note will be moved to the hidden .trash folder of your repository. It won't show up in the app anymore, but you can still recover it with a file manager.",
+				"repository-trash": "The note will be moved to the hidden .trash folder of your repository. It won't show up in the app anymore, but you can still recover it with a file manager.",
 				"permanent": "This note will be deleted forever and can't be recovered."
 			}
 		},
@@ -128,7 +128,7 @@
 			},
 			"delete": {
 				"title": "On delete",
-				"vault-trash": "Move to .trash folder",
+				"repository-trash": "Move to .trash folder",
 				"permanent": "Delete permanently"
 			},
 			"default_folder": {
@@ -177,7 +177,7 @@
 			"title": "Daily note",
 			"folder": {
 				"title": "Daily note location",
-				"root": "Vault root"
+				"root": "Repository root"
 			},
 			"template": {
 				"title": "Daily note template",
@@ -188,7 +188,7 @@
 			"title": "Attachments",
 			"location": {
 				"title": "Where to save new attachments",
-				"vault": "Repository root",
+				"repository": "Repository root",
 				"same": "Next to each note",
 				"subfolder": "Subfolder beside each note",
 				"folder": "One shared folder"
