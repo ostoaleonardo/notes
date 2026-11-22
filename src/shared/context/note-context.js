@@ -22,6 +22,7 @@ import { getIndexingStatus, setIndexingStatus } from '@/shared/utils/indexing-st
 import { isBodylessRepository } from '@/shared/utils/body-mode'
 import { loadNotesFromIndex } from '@/shared/utils/index-notes'
 import { syncRepositoryIndex } from '@/shared/utils/repository-index'
+import { nativeSearch } from '@/shared/utils/native-search'
 import { searchIndex } from '@/shared/utils/search-index'
 
 import { BOOT_MARKS } from '@/shared/constants/boot-marks'
@@ -181,6 +182,14 @@ export const NoteProvider = ({ children }) => {
             await searchIndex.refresh(startNotes)
         } catch (error) {
             logError(LOG_MESSAGES.ERROR_REFRESHING_SEARCH_INDEX, error)
+        }
+
+        if (!nativeSearch.isEligible(startNotes)) return
+
+        try {
+            await nativeSearch.warm(startNotes)
+        } catch (error) {
+            logError(LOG_MESSAGES.ERROR_WARMING_SEARCH, error)
         }
     })
 

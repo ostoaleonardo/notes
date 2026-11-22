@@ -10,5 +10,6 @@ export const BOOT_MARKS = {
     SNAPSHOT_WRITE: 'snapshot-write',
     INDEX_LIST: 'index-list',
     INDEX_SYNC: 'index-sync',
-    LOAD_END: 'load-end'
+    LOAD_END: 'load-end',
+    SEARCH_FIRST_PAGE: 'search-first-page'
 }

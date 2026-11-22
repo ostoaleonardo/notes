@@ -51,6 +51,7 @@ class RepositoryFsModule : Module() {
   private var sharedEngine: Engine? = null
 
   private val versionStores = java.util.concurrent.ConcurrentHashMap<String, VersionsHandle>()
+  private val searches = SearchRegistry()
 
   private fun versionsFor(rootUri: String): VersionsHandle =
     versionStores.getOrPut("$rootUri#${hasDirectAccess()}") { VersionsHandle(repositoryFor(context, rootUri)) }
@@ -276,6 +277,27 @@ class RepositoryFsModule : Module() {
     AsyncFunction("queryIndex") Coroutine { sql: String, params: List<Any?> ->
       withContext(Dispatchers.IO) { runQuery(engine(), sql, params) }
     }
+
+    AsyncFunction("searchOpen") Coroutine { queryJson: String, sort: String, folderIds: List<String>, pathFolderIds: List<String>, pathValues: List<String>, pinned: List<String>, matchCase: Boolean ->
+      withContext(Dispatchers.IO) {
+        searches.open(
+          context,
+          engine(),
+          readDispatcher,
+          searchRequest(queryJson, sort, folderIds, pathFolderIds, pathValues, pinned, matchCase)
+        )
+      }
+    }
+
+    AsyncFunction("searchStep") Coroutine { id: Int, size: Int ->
+      withContext(Dispatchers.IO) { searches.step(id, size) }
+    }
+
+    AsyncFunction("searchWarm") Coroutine { folderIds: List<String> ->
+      withContext(Dispatchers.IO) { searches.warm(context, engine(), readDispatcher, folderIds) }
+    }
+
+    Function("searchClose") { id: Int -> searches.close(id) }
 
     AsyncFunction("findBacklinkCandidates") Coroutine { names: List<String>, markdownTarget: String ->
       withContext(Dispatchers.IO) {

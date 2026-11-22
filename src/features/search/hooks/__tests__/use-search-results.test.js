@@ -3,6 +3,7 @@ import { act, renderHook } from '@testing-library/react-native'
 import { useSearchResults } from '../use-search-results'
 import { logError } from '@/shared/utils/log-error'
 import { SourceOverflowError, searchIndex } from '@/shared/utils/search-index'
+import { nativeSearch } from '@/shared/utils/native-search'
 import { parseSearchQuery } from '@/shared/utils/search-parser'
 import { MOCK_NOTE_PATHS, MOCK_SEARCH_NOTES } from '@/shared/utils/__fixtures__/search-query'
 
@@ -13,6 +14,9 @@ jest.mock('@/shared/constants/search-scan', () => ({
     SEARCH_SORT_CHUNK_SIZE: 2000
 }))
 jest.mock('@/shared/utils/log-error', () => ({ logError: jest.fn() }))
+jest.mock('@/shared/utils/native-search', () => ({
+    nativeSearch: { isEligible: jest.fn(), open: jest.fn() }
+}))
 jest.mock('@/shared/utils/search-index', () => ({
     SourceOverflowError: class SourceOverflowError extends Error {},
     searchIndex: { createSource: jest.fn() }
@@ -43,6 +47,9 @@ describe('search results', () => {
         logError.mockClear()
         searchIndex.createSource.mockReset()
         searchIndex.createSource.mockReturnValue(null)
+        nativeSearch.isEligible.mockReset()
+        nativeSearch.isEligible.mockReturnValue(false)
+        nativeSearch.open.mockReset()
     })
 
     afterEach(() => {
@@ -246,5 +253,104 @@ describe('search results', () => {
         await rerender(buildProps('happy', { enabled: false }))
 
         expect(result.current.results).toEqual([])
+    })
+
+    describe('with the native search', () => {
+        const createCursor = (batches) => {
+            const next = jest.fn()
+
+            batches.forEach((batch) => next.mockImplementationOnce(async (target, onProgress) => {
+                if (batch.found.length) onProgress?.(batch.found)
+
+                return batch
+            }))
+
+            return { next, close: jest.fn() }
+        }
+
+        beforeEach(() => {
+            nativeSearch.isEligible.mockReturnValue(true)
+        })
+
+        test('shows what the native search finds', async () => {
+            const cursor = createCursor([{ found: [MOCK_SEARCH_NOTES[2]], done: true }])
+            nativeSearch.open.mockResolvedValue(cursor)
+
+            const props = buildProps('happy')
+            const { result } = await renderHook(() => useSearchResults(props))
+
+            await flush()
+
+            expect(paths(result)).toEqual(['note-3'])
+            expect(result.current.done).toBe(true)
+            expect(searchIndex.createSource).not.toHaveBeenCalled()
+        })
+
+        test('falls back to the other sources when the core cannot evaluate the query', async () => {
+            nativeSearch.open.mockResolvedValue(null)
+
+            const props = buildProps('happy')
+            const { result } = await renderHook(() => useSearchResults(props))
+
+            await flush()
+
+            expect(paths(result)).toEqual(['note-3'])
+            expect(searchIndex.createSource).toHaveBeenCalled()
+        })
+
+        test('falls back when the native search fails to open', async () => {
+            nativeSearch.open.mockRejectedValue(new Error('no engine'))
+
+            const props = buildProps('happy')
+            const { result } = await renderHook(() => useSearchResults(props))
+
+            await flush()
+
+            expect(paths(result)).toEqual(['note-3'])
+            expect(logError).toHaveBeenCalled()
+        })
+
+        test('falls back to scanning the notes when a native step fails', async () => {
+            const cursor = createCursor([])
+            cursor.next.mockRejectedValue(new Error('read failed'))
+            nativeSearch.open.mockResolvedValue(cursor)
+
+            const props = buildProps('happy')
+            const { result } = await renderHook(() => useSearchResults(props))
+
+            await flush()
+
+            expect(cursor.close).toHaveBeenCalled()
+            expect(paths(result)).toEqual(['note-3'])
+            expect(result.current.done).toBe(true)
+        })
+
+        test('closes the native search when the search changes or ends', async () => {
+            const cursor = createCursor([{ found: [], done: false }])
+            nativeSearch.open.mockResolvedValue(cursor)
+
+            const props = buildProps('happy')
+            const { unmount } = await renderHook(() => useSearchResults(props))
+
+            await flush()
+            await unmount()
+
+            expect(cursor.close).toHaveBeenCalled()
+        })
+
+        test('closes a native search that opens after the search was cancelled', async () => {
+            const cursor = createCursor([])
+            let release
+            nativeSearch.open.mockReturnValue(new Promise((resolve) => { release = resolve }))
+
+            const props = buildProps('happy')
+            const { unmount } = await renderHook(() => useSearchResults(props))
+
+            await unmount()
+            await act(async () => release(cursor))
+
+            expect(cursor.close).toHaveBeenCalled()
+            expect(cursor.next).not.toHaveBeenCalled()
+        })
     })
 })

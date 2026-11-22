@@ -4,6 +4,7 @@ mod constants;
 mod links;
 mod records;
 mod repository;
+mod search;
 mod source;
 
 use engine::model::{IndexedNotes, SaveRequest, SyncStats};
@@ -13,6 +14,7 @@ use records::{
 	SaveReport, Value,
 };
 use repository::{ForeignRepository, RepositoryFiles, VersionsHandle};
+use search::{SearchHandle, SearchRequestRecord, WarmHandle};
 use source::{ForeignSink, ForeignSource, NoteSink, NoteSource, ProgressListener};
 use std::collections::HashSet;
 use std::sync::Arc;
@@ -219,6 +221,22 @@ impl Engine {
 	pub fn query(&self, sql: String, params: Vec<Value>) -> Result<QueryReport, EngineError> {
 		let bound: Vec<_> = params.into_iter().map(Into::into).collect();
 		Ok(self.inner.query(&sql, &bound)?.into())
+	}
+
+	pub fn search(
+		&self,
+		request: SearchRequestRecord,
+		source: Arc<dyn NoteSource>,
+	) -> Result<Arc<SearchHandle>, EngineError> {
+		search::open(&self.inner, request, source)
+	}
+
+	pub fn warm(
+		&self,
+		folder_ids: Vec<String>,
+		source: Arc<dyn NoteSource>,
+	) -> Result<Arc<WarmHandle>, EngineError> {
+		search::warm(&self.inner, folder_ids, source)
 	}
 
 	pub fn list_notes(&self, folder_ids: Vec<String>) -> Result<String, EngineError> {

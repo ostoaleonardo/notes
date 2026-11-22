@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { createMemorySource, createSearchCursor } from '@/shared/utils/search-cursor'
+import { bootMark } from '@/shared/utils/boot-mark'
 import { logError } from '@/shared/utils/log-error'
+import { nativeSearch } from '@/shared/utils/native-search'
 import { noteBodies } from '@/shared/utils/note-body'
 import { SourceOverflowError, searchIndex } from '@/shared/utils/search-index'
 
+import { BOOT_MARKS } from '@/shared/constants/boot-marks'
 import { LOG_MESSAGES } from '@/shared/constants/log-messages'
 import { SEARCH_PAGE_SIZE } from '@/shared/constants/search-index'
 
@@ -37,6 +40,17 @@ export function useSearchResults({ enabled, ast, notes, notePaths, pinned, match
             if (!result || session.cancelled) return
 
             session.done = result.done
+
+            if (!session.reported) {
+                session.reported = true
+                bootMark(BOOT_MARKS.SEARCH_FIRST_PAGE, {
+                    source: session.close ? 'native' : 'js',
+                    matches: session.matches.length,
+                    done: result.done,
+                    ms: Date.now() - session.startedAt
+                })
+            }
+
             setState({ matches: session.matches, done: result.done, scanning: false, settledAst: session.ast })
         } catch (error) {
             if (session.cancelled) return
@@ -74,6 +88,9 @@ export function useSearchResults({ enabled, ast, notes, notePaths, pinned, match
             done: false,
             matches: NO_MATCHES,
             cursor: null,
+            close: null,
+            reported: false,
+            startedAt: Date.now(),
             fallback: false,
             restart: null
         }
@@ -92,16 +109,61 @@ export function useSearchResults({ enabled, ast, notes, notePaths, pinned, match
 
         session.restart = () => {
             session.fallback = true
+            session.close?.()
+            session.close = null
             start(createMemorySource(notes, sort))
             setState({ matches: NO_MATCHES, done: false, scanning: false, settledAst: null })
             fill(session, SEARCH_PAGE_SIZE)
         }
 
-        sessionRef.current = session
-        start(openSource(query))
-        fill(session, SEARCH_PAGE_SIZE)
+        const beginNative = async () => {
+            try {
+                const cursor = await nativeSearch.open({
+                    ast,
+                    notes,
+                    notePaths,
+                    pinned,
+                    matchCase,
+                    sort,
+                    isCancelled: () => session.cancelled
+                })
 
-        return () => { session.cancelled = true }
+                if (session.cancelled) {
+                    cursor?.close()
+                    return
+                }
+
+                if (!cursor) {
+                    start(openSource(query))
+                } else {
+                    session.cursor = cursor
+                    session.close = cursor.close
+                    session.matches = NO_MATCHES
+                    session.done = false
+                }
+            } catch (error) {
+                if (session.cancelled) return
+
+                logError(LOG_MESSAGES.ERROR_SEARCHING_INDEX, error)
+                start(openSource(query))
+            }
+
+            fill(session, SEARCH_PAGE_SIZE)
+        }
+
+        sessionRef.current = session
+
+        if (nativeSearch.isEligible(notes)) {
+            beginNative()
+        } else {
+            start(openSource(query))
+            fill(session, SEARCH_PAGE_SIZE)
+        }
+
+        return () => {
+            session.cancelled = true
+            session.close?.()
+        }
     }, [enabled, ast, notes, notePaths, pinned, matchCase, sort, fill])
 
     const loadMore = useCallback(() => {

@@ -64,6 +64,8 @@ pub enum EngineError {
 	AlreadyExists(String),
 	#[error("{0}")]
 	InvalidName(String),
+	#[error("{0}")]
+	InvalidQuery(String),
 }
 
 impl From<engine::error::Error> for EngineError {
@@ -77,6 +79,7 @@ impl From<engine::error::Error> for EngineError {
 			ErrorCode::Io => Self::Io(report.message),
 			ErrorCode::AlreadyExists => Self::AlreadyExists(report.message),
 			ErrorCode::InvalidName => Self::InvalidName(report.message),
+			ErrorCode::InvalidQuery => Self::InvalidQuery(report.message),
 		}
 	}
 }
@@ -144,7 +147,8 @@ impl From<EngineError> for engine::error::Error {
 			| EngineError::Collation(message)
 			| EngineError::Io(message)
 			| EngineError::AlreadyExists(message)
-			| EngineError::InvalidName(message) => message,
+			| EngineError::InvalidName(message)
+			| EngineError::InvalidQuery(message) => message,
 		};
 
 		Self::Io(std::io::Error::other(message))

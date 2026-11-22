@@ -22,6 +22,7 @@ export const LOG_MESSAGES = {
     ERROR_LISTING_INDEXED_NOTES: 'error listing the indexed notes',
     ERROR_INDEXING_REPOSITORY: 'error indexing repository',
     ERROR_SEARCHING_INDEX: 'error searching the native index',
+    ERROR_WARMING_SEARCH: 'error warming the search cache',
     ERROR_REFRESHING_SEARCH_INDEX: 'error refreshing the search index coverage',
     ERROR_DELETING_NATIVE_INDEX: 'error deleting native folder index',
     ERROR_WRITING_REPOSITORY_INDEX: 'error writing folder index',
