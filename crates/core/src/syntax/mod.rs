@@ -50,6 +50,17 @@ pub fn parse_note(text: &str) -> ParsedNote {
 	}
 }
 
+pub fn search_text(text: &str) -> String {
+	let split = frontmatter::split(text);
+
+	match split.raw {
+		Some(raw) if !raw.is_empty() => {
+			[raw, constants::FRONTMATTER_PROPERTY_SEPARATOR, split.body].concat()
+		}
+		_ => split.body.to_string(),
+	}
+}
+
 pub fn inline_tags(text: &str) -> Vec<String> {
 	tags::inline_tags(frontmatter::split(text).body)
 }

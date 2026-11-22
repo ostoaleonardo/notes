@@ -122,7 +122,7 @@ const createParser = (source, { property = false } = {}) => {
         if (!regexes || index === pos + 1) return null
         if (!isSpace(boundary) && boundary !== GROUP_BRACKETS.CLOSE) return null
 
-        return { regexes, end: index + 1 }
+        return { regexes, pattern: source.slice(pos + 1, index), end: index + 1 }
     }
 
     const parseRegex = () => {
@@ -131,7 +131,10 @@ const createParser = (source, { property = false } = {}) => {
         if (!found) return null
 
         pos = found.end
-        return createNode(SEARCH_NODE_TYPES.REGEX, start, { regexes: found.regexes })
+        return createNode(SEARCH_NODE_TYPES.REGEX, start, {
+            regexes: found.regexes,
+            pattern: found.pattern
+        })
     }
 
     const parseWord = () => {

@@ -1,0 +1,29 @@
+pub const FTS_LEAF: &str = "SELECT rowid AS id FROM note_fts WHERE note_fts MATCH ?";
+pub const TAG_LEAF: &str =
+	"SELECT note_id AS id FROM tags WHERE name = ? COLLATE NOCASE OR name LIKE ? ESCAPE '\\'";
+pub const MATCH_AND: &str = " AND ";
+pub const MATCH_OR: &str = " OR ";
+pub const INTERSECT: &str = " INTERSECT ";
+pub const UNION: &str = " UNION ";
+pub const SELECT_IDS_HEAD: &str = "SELECT id FROM (";
+pub const SELECT_IDS_TAIL: &str = ")";
+pub const TAG_CHILD_SUFFIX: &str = "/%";
+pub const FTS_COLUMN_SEPARATOR: &str = " ";
+pub const QUOTE: &str = "\"";
+pub const ESCAPED_QUOTE: &str = "\"\"";
+pub const LIKE_ESCAPE: char = '\\';
+pub const LIKE_WILDCARDS: [char; 3] = ['\\', '%', '_'];
+
+pub const CANDIDATES_HEAD: &str = "SELECT n.id, n.folder_id, n.filename, n.location, n.modified, n.size, n.title FROM notes n WHERE n.folder_id IN (";
+pub const CANDIDATES_FOLDERS_TAIL: &str = ")";
+pub const CANDIDATES_IDS_HEAD: &str = " AND n.id IN ";
+pub const CANDIDATES_ORDER: &str = " ORDER BY ";
+pub const PLACEHOLDER: &str = "?";
+pub const PLACEHOLDER_SEPARATOR: &str = ",";
+pub const ORDER_SEPARATOR: &str = ", ";
+
+pub const BY_SORT_KEY: &str = "n.sort_key";
+pub const BY_MODIFIED: &str = "n.modified";
+pub const BY_ID: &str = "n.id";
+pub const ASCENDING: &str = " ASC";
+pub const DESCENDING: &str = " DESC";

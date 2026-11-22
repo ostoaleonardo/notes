@@ -11,6 +11,7 @@ mod pool;
 pub mod reconcile;
 pub mod repository;
 mod save;
+pub mod search;
 pub mod source;
 mod sync;
 pub mod syntax;

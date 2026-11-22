@@ -9,7 +9,7 @@ use constants::{
 use icu_normalizer::ComposingNormalizerBorrowed;
 use std::collections::HashSet;
 
-fn nfc(text: &str) -> String {
+pub(crate) fn nfc(text: &str) -> String {
 	ComposingNormalizerBorrowed::new_nfc()
 		.normalize(text)
 		.into_owned()

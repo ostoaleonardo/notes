@@ -3,6 +3,7 @@ mod constants;
 mod notes_json;
 mod reader;
 mod schema;
+mod search;
 mod sql;
 mod writer;
 
@@ -12,6 +13,8 @@ use crate::model::{FileMeta, IndexedNote, IndexedNotes, NoteRef, QueryResult, Va
 use rusqlite::{Connection, TransactionBehavior};
 use std::collections::{HashMap, HashSet};
 use std::path::Path;
+
+pub use search::{Candidate, Facets};
 
 pub struct Index {
 	connection: Connection,
@@ -34,6 +37,14 @@ impl Index {
 
 	pub fn query(&self, statement: &str, params: &[Value]) -> Result<QueryResult> {
 		reader::query(&self.connection, statement, params)
+	}
+
+	pub fn search_candidates(&self, statement: &str, params: &[String]) -> Result<Vec<Candidate>> {
+		search::candidates(&self.connection, statement, params)
+	}
+
+	pub fn facets(&self, ids: &[i64]) -> Result<Facets> {
+		search::facets(&self.connection, ids)
 	}
 
 	pub fn list_notes(&self, folder_ids: &[String]) -> Result<String> {

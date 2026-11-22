@@ -180,3 +180,27 @@ pub mod list_child_column {
 	pub const FIRST: usize = 1;
 	pub const SECOND: usize = 2;
 }
+
+pub const FACET_TAGS_HEAD: &str = "SELECT note_id, name FROM tags WHERE note_id IN (";
+pub const FACET_TAGS_TAIL: &str = ") ORDER BY note_id, rowid";
+pub const FACET_PROPERTIES_HEAD: &str =
+	"SELECT note_id, key, value FROM properties WHERE note_id IN (";
+pub const FACET_PROPERTIES_TAIL: &str = ") ORDER BY note_id, rowid";
+pub const FACET_PLACEHOLDER: &str = "?";
+pub const FACET_SEPARATOR: &str = ",";
+
+pub mod candidate_column {
+	pub const ID: usize = 0;
+	pub const FOLDER_ID: usize = 1;
+	pub const FILENAME: usize = 2;
+	pub const LOCATION: usize = 3;
+	pub const MODIFIED: usize = 4;
+	pub const SIZE: usize = 5;
+	pub const TITLE: usize = 6;
+}
+
+pub mod facet_column {
+	pub const NOTE_ID: usize = 0;
+	pub const NAME: usize = 1;
+	pub const VALUE: usize = 2;
+}

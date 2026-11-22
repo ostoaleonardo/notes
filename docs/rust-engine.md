@@ -222,21 +222,41 @@ Each note has one JSON file in `.notes/`, named with the percent-encoded key `fo
 | `rename_under(old_prefix, new_prefix)`, `delete_under(prefix)` | The same for every key of a folder. |
 | `migrate_legacy(folder, folder_path)` | Moves the old per-folder version files into the repository-level `.notes/` store. |
 
+### `search` — query evaluation
+
+The search query is parsed in JS (the interface needs its positions for chips and highlights). The parsed tree goes to Rust as JSON (`Node`), where it is compiled once and evaluated per note.
+
+| Function | What it does |
+|---|---|
+| `Query::compile(node)` | Compiles the tree: regex nodes and quoted phrases become `regex::Regex`. A pattern Rust cannot compile (look-around, back-references) is `Error::InvalidQuery`, so the caller can fall back to the JS evaluator. |
+| `Query::matches(note, match_case)` | Whether a `NoteView { title, filename, folder, content, tags, properties, pinned }` satisfies the query: plain text, phrases (whole word on content, lines, blocks, sections and tasks), regex, `file:`, `path:`, `content:`, `tag:` (with children), `line:`, `block:`, `section:`, `task:`, `task-todo:`, `task-done:`, `has:images`, `has:files`, `is:pinned`, `match-case:`, `ignore-case:`, `[property]`, `[property:value]` with comparisons and `null`. |
+| `requirement_of(query, folders)` | The prefilter: what every matching note must contain, as a `Requirement` tree of trigram terms (`Fts`), tags (`Tag`), `And` and `Or`. Only stable terms count (3 characters or more, no `.` or `/`, same length when lowercased, already NFC), and a term that could match a folder name is skipped for `path:`. `None` means the query cannot be narrowed (regex, properties, negations). |
+| `compile_match_ids(tree)` | The SQL (`INTERSECT`/`UNION` of FTS and tag lookups) and its parameters that give the candidate ids. |
+| `candidates_sql(tree, folder_ids, sort)` | The ordered candidate query: `id, folder_id, filename, location` of the notes in the folders, narrowed by the prefilter, in one of the six sort orders. |
+| `Engine::search(request, source)` | Opens a `SearchSession`: compiles the query, runs `candidates_sql` for the folders, and loads the tags and properties of the candidates (in chunks of 500). `SearchRequest` carries the query, the sort, the folder ids, the folder paths (for `path:`), the pinned note paths (`folderId::filename`) and `match_case`. Fails with `InvalidQuery` when the query cannot be evaluated. |
+| `SearchSession::step(size)` | Takes the next `size` candidates, reads the files that are not cached through the `NoteSource` in one call, evaluates them in parallel and returns the matches (`folder_id`, `filename`) in the requested order, plus `done`. |
+| `Engine::warm(folder_ids, source)` | Opens a `Warmup` that reads every note of the folders into the `BodyCache` in steps (`step(size)` returns `true` when done, `cancel()` stops it). The app runs it after each index sync so the first search does not read files. |
+| `BodyCache` | Owned by the `Engine` and shared by its searches: the searchable text of each note, keyed by location and checked against `modified` and `size`, capped at 64 MB and evicted least recently used down to 75%. |
+| `SearchSession::cancel()` | Makes the following steps return `done` without reading anything. |
+| `frontmatter_joined(frontmatter, body)` | The text that content searches see: the raw frontmatter, a newline, the body. |
+
+The evaluator follows the JS one on purpose: numbers parse like `Number()`, strings compare by UTF-16 units, property values convert like `String()`, and user regexes are translated to JS semantics for `\w`, `\d`, `\b` and `.`. `tests/search.rs` checks it against `tests/fixtures/search.json`, and `tests/search_prefilter.rs` checks that the prefilter builds the same trees and SQL as the JS one and never drops a note the evaluator selects. Jest regenerates the fixture from the JS evaluator (`SEARCH_FIXTURE_UPDATE=1 npx jest src/shared/utils/__tests__/search-parity.test.js`).
+
 ### Others
 
 | Item | What it does |
 |---|---|
 | `collation::SortKeys::new(locale)` / `key(text)` | ICU4X collation key as upper-case hex. Needs the locale's data (about 1.3 MB for the full set). |
 | `reconcile::plan(existing, scanned)` | The pure diff behind `Engine::plan`. |
-| `error::Error` | `Busy` (retryable), `Database`, `Collation`, `Io`, `AlreadyExists`, `InvalidName`. |
+| `error::Error` | `Busy` (retryable), `Database`, `Collation`, `Io`, `AlreadyExists`, `InvalidName`, `InvalidQuery`; `code()` gives a stable `ErrorCode` and `report()` a serializable `{ code, message }`. |
 
 ## Adapter and Android
 
 `crates/uniffi` exports `Engine` and the free functions below, plus the foreign traits Kotlin implements (`NoteSource`, `NoteSink`, `RepositoryFiles`, `ProgressListener`) and the objects `FsNoteSink`, `FsRepositoryHandle` (direct access) and `VersionsHandle`. Errors map one to one to `EngineError`. The trait `RepositoryFiles` there carries the repository operations too, so one Kotlin class serves versions and folder operations.
 
-Free functions: `compose_note`, `decompose_note`, `find_backlink_paths`, `rename_links_in_bodies`, `sanitize_filename`, `unique_filename`. Engine methods exported: `sync`, `sync_directory` (direct access, builds a `FsSource`), `save_note`, `save_notes`, `rename_note`, `delete_note`, `rename_folder`, `remove_folder`, `trash_note`, `move_note`, `indexed_notes`, `query`, `list_notes`, `backlink_candidates`, `mention_candidates`, `delete_folder`, `prune`.
+Free functions: `compose_note`, `decompose_note`, `find_backlink_paths`, `rename_links_in_bodies`, `sanitize_filename`, `unique_filename`. Engine methods exported: `sync`, `sync_directory` (direct access, builds a `FsSource`), `save_note`, `save_notes`, `rename_note`, `delete_note`, `search`, `rename_folder`, `remove_folder`, `trash_note`, `move_note`, `indexed_notes`, `query`, `list_notes`, `backlink_candidates`, `mention_candidates`, `delete_folder`, `prune`.
 
-The Expo module `repository-fs` exposes to JS: `indexRepository`, `saveNote`, `saveNotes`, `renameNote`, `deleteNote`, `renameFolder`, `removeFolder`, `trashNote`, `moveNote`, `composeNote`, `decomposeNote`, `sanitizeFilename`, `uniqueFilename`, `listIndexedNotes`, `queryIndex`, `listNoteMetadata`, `findBacklinkCandidates`, `findMentionCandidates`, `findBacklinkPaths`, `renameLinksInBodies`, `pruneRepositoryIndex`, `deleteFolderIndex`, the `versions*` functions, and SAF helpers (`listDirectory`, `listDirectorySync`, `readTextFiles`, `findChild`, `listAttachments`, direct access permissions).
+The Expo module `repository-fs` exposes to JS: `indexRepository`, `saveNote`, `saveNotes`, `renameNote`, `deleteNote`, `searchOpen`, `searchStep`, `searchClose`, `renameFolder`, `removeFolder`, `trashNote`, `moveNote`, `composeNote`, `decomposeNote`, `sanitizeFilename`, `uniqueFilename`, `listIndexedNotes`, `queryIndex`, `listNoteMetadata`, `findBacklinkCandidates`, `findMentionCandidates`, `findBacklinkPaths`, `renameLinksInBodies`, `pruneRepositoryIndex`, `deleteFolderIndex`, the `versions*` functions, and SAF helpers (`listDirectory`, `listDirectorySync`, `readTextFiles`, `findChild`, `listAttachments`, direct access permissions).
 
 The index-changing operations (`indexRepository`, `pruneRepositoryIndex`, `deleteFolderIndex`, `renameFolder`, `removeFolder`, `trashNote`, `moveNote`) run under one lock in Kotlin so they do not interleave. The shared engine and the version stores are created once per process.
 

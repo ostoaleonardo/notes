@@ -15,6 +15,8 @@ pub enum Error {
 	AlreadyExists(String),
 	#[error("invalid name: {0}")]
 	InvalidName(String),
+	#[error("invalid search query: {0}")]
+	InvalidQuery(String),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -26,6 +28,7 @@ pub enum ErrorCode {
 	Io,
 	AlreadyExists,
 	InvalidName,
+	InvalidQuery,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -43,6 +46,7 @@ impl Error {
 			Self::Io(_) => ErrorCode::Io,
 			Self::AlreadyExists(_) => ErrorCode::AlreadyExists,
 			Self::InvalidName(_) => ErrorCode::InvalidName,
+			Self::InvalidQuery(_) => ErrorCode::InvalidQuery,
 		}
 	}
 
