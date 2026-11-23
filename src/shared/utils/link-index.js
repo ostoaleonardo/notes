@@ -1,10 +1,12 @@
 import RepositoryFs from 'repository-fs'
 
+import { bootMark } from '@/shared/utils/boot-mark'
 import { indexCoverage } from '@/shared/utils/index-coverage'
 import { noteBodies } from '@/shared/utils/note-body'
 import { buildNotePath } from '@/shared/utils/note-path'
 import { findBacklinks as scanBacklinks, getAliases } from '@/shared/utils/wiki-links'
 
+import { BOOT_MARKS } from '@/shared/constants/boot-marks'
 import { LINK_INDEX_MIN_NOTES, LINK_INDEX_UNCOVERED_RATIO } from '@/shared/constants/link-index'
 
 const getNames = (target) => (
@@ -42,6 +44,7 @@ export const createLinkIndex = ({
     }
 
     const findBacklinks = async (target, notes, notePaths) => {
+        const startedAt = Date.now()
         const names = getNames(target)
         const pool = names.length
             ? await selectPool(notes, () => backlinkCandidates(names, target.path))
@@ -49,8 +52,15 @@ export const createLinkIndex = ({
         const candidates = pool ? notes.filter((note) => pool.has(note.path)) : notes
 
         const bodies = await loadBodies(candidates)
+        const backlinks = scanBacklinks(target.path, notes, notePaths, candidates, bodies)
 
-        return scanBacklinks(target.path, notes, notePaths, candidates, bodies)
+        bootMark(BOOT_MARKS.BACKLINKS, {
+            candidates: candidates.length,
+            backlinks: backlinks.length,
+            ms: Date.now() - startedAt
+        })
+
+        return backlinks
     }
 
     return { findBacklinks, selectPool, mentionCandidates, loadBodies }

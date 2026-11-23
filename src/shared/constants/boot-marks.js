@@ -11,5 +11,6 @@ export const BOOT_MARKS = {
     INDEX_LIST: 'index-list',
     INDEX_SYNC: 'index-sync',
     LOAD_END: 'load-end',
-    SEARCH_FIRST_PAGE: 'search-first-page'
+    SEARCH_FIRST_PAGE: 'search-first-page',
+    BACKLINKS: 'backlinks'
 }
