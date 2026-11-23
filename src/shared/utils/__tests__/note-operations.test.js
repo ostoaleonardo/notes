@@ -50,13 +50,11 @@ const createFakeStorage = (initialFiles = {}) => {
             files.set(filename, content)
             return { fileUri: `${REPO_URI}/${filename}`, updatedAt: 20 }
         },
-        saveRenamedNoteFile: async ({ from, to, content }) => {
+        saveRenamedNoteFile: async ({ from, to, content, history }) => {
             files.delete(from)
             files.set(to, content)
+            calls.versions.push([history.fromKey, history.toKey])
             return { fileUri: `${REPO_URI}/${to}`, updatedAt: 20 }
-        },
-        renameVersions: async (_root, from, to) => {
-            calls.versions.push([from, to])
         }
     }
 }
@@ -192,7 +190,7 @@ describe('persist note update', () => {
         filename: 'Groceries.md'
     }
 
-    test('renames the file and its versions before writing the new content', async () => {
+    test('renames the file and moves its versions in the same call', async () => {
         const storage = createFakeStorage({ 'Groceries.md': 'x' })
         const note = { ...previous, title: 'Shopping', note: 'bread' }
         const plan = planNoteUpdate({ note, previous, uri: REPO_URI }, storage)

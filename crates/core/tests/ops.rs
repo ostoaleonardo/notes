@@ -275,7 +275,7 @@ fn removing_a_folder_can_keep_its_versions() {
 }
 
 #[test]
-fn trashing_a_note_moves_it_keeping_its_time_and_drops_its_index_row_and_versions() {
+fn trashing_a_note_moves_it_keeping_its_time_and_versions_and_drops_its_index_row() {
 	let fixture = populated();
 	let before = fixture.modified("Folder/a.md");
 
@@ -289,7 +289,7 @@ fn trashing_a_note_moves_it_keeping_its_time_and_drops_its_index_row_and_version
 	assert_eq!(fixture.read(".trash/a.md"), "# A\n");
 	assert_eq!(fixture.modified(".trash/a.md"), before);
 	assert_eq!(fixture.indexed(), ["o/c.md", "s/b.md"]);
-	assert!(!fixture.has_versions("Folder/a.md"));
+	assert!(fixture.has_versions("Folder/a.md"));
 }
 
 #[test]

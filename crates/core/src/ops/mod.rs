@@ -161,7 +161,6 @@ impl Engine {
 			}
 		}
 
-		repository.versions.delete(&source)?;
 		self.remove(folder_id, &[filename.to_string()])?;
 
 		Ok(target_name)

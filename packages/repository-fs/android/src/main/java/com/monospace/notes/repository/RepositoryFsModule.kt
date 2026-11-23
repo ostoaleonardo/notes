@@ -152,10 +152,12 @@ class RepositoryFsModule : Module() {
       }
     }
 
-    AsyncFunction("renameNote") Coroutine { folderId: String, directoryUri: String, from: String, to: String, text: String ->
+    AsyncFunction("renameNote") Coroutine { folderId: String, directoryUri: String, from: String, to: String, text: String, rootUri: String, fromKey: String, toKey: String ->
       withContext(Dispatchers.IO) {
         engine().let { engine ->
-          saveReportToMap(engine.renameNote(folderId, noteSinkFor(context, directoryUri), from, to, text))
+          val sink = noteSinkFor(context, directoryUri)
+
+          saveReportToMap(engine.renameNote(folderId, sink, from, to, text, versionsFor(rootUri), fromKey, toKey))
         }
       }
     }
@@ -196,10 +198,6 @@ class RepositoryFsModule : Module() {
 
     AsyncFunction("versionsCommit") Coroutine { rootUri: String, key: String, title: String, content: String, id: String, createdAt: Double, maxVersions: Int ->
       withContext(Dispatchers.IO) { versionsFor(rootUri).commit(key, title, content, id, createdAt.toLong(), maxVersions.toUInt()) }
-    }
-
-    AsyncFunction("versionsRename") Coroutine { rootUri: String, oldKey: String, newKey: String ->
-      withContext(Dispatchers.IO) { versionsFor(rootUri).rename(oldKey, newKey) }
     }
 
     AsyncFunction("versionsMigrateLegacy") Coroutine { rootUri: String, folderPath: String ->

@@ -26,7 +26,6 @@ const mockFileStorage = {
     deleteNoteFile: jest.fn(),
     findFile: jest.fn(),
     getExistingFile: jest.fn(),
-    renameVersions: jest.fn(async () => { }),
     deleteVersions: jest.fn(),
     trashNote: jest.fn(async () => 'Groceries.md')
 }
@@ -223,7 +222,7 @@ describe('update note', () => {
         })
 
         expect(readBody('Groceries.md')).toBe('updated content')
-        expect(mockFileStorage.renameVersions).not.toHaveBeenCalled()
+        expect(mockFileStorage.saveRenamedNoteFile).not.toHaveBeenCalled()
         expect(result.current.notes[0].note).toBe('updated content')
     })
 
@@ -271,10 +270,14 @@ describe('update note', () => {
             createdAt: 1,
             updatedAt: 2000
         })
-        expect(mockFileStorage.renameVersions).toHaveBeenCalledWith(
-            MOCK_REPO_URI,
-            'Old title.md',
-            'New title.md'
+        expect(mockFileStorage.saveRenamedNoteFile).toHaveBeenCalledWith(
+            expect.objectContaining({
+                history: {
+                    rootUri: MOCK_REPO_URI,
+                    fromKey: 'Old title.md',
+                    toKey: 'New title.md'
+                }
+            })
         )
         expect(files.has('Old title.md')).toBe(false)
         expect(readFrontmatter('New title.md')).toEqual({})

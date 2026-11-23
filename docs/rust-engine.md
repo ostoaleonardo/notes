@@ -138,7 +138,7 @@ The entry point; owns the connection pool and the sort keys.
 |---|---|
 | `save_note(folder_id, sink, filename, text, expected_modified)` | Writes one note. `expected_modified` is the modified time the caller last saw: `None` means "create, must not exist" and a mismatch means someone else changed the file. Returns `Saved(stamp)`, `Conflict { disk_modified }`, `Missing` or `Failed`. Updates the index row. |
 | `save_notes(folder_id, sink, requests)` | The same for a batch, indexing the saved ones in one transaction. Each request gets its own outcome. |
-| `rename_note(folder_id, sink, from, to, text)` | Writes the new file, deletes the old one and swaps the index rows. Returns `Conflict` if `to` already exists. |
+| `rename_note(folder_id, sink, from, to, text, history)` | Writes the new file, moves the history, deletes the old file and swaps the index rows. `history` is an optional `HistoryMove { versions, from_key, to_key }`: the history of `from_key` replaces whatever was stored under `to_key` (even when the note has none, so a note never inherits a stale one). If the history cannot be moved, the new file is removed and the original note stays untouched. Returns `Conflict` if `to` already exists. |
 | `delete_note(folder_id, sink, filename)` | Deletes the file and its index row. A missing file is not an error. |
 
 ### `ops` — compound repository operations
@@ -149,7 +149,7 @@ Each takes a `Repository { ops, versions }` and runs as one call that keeps file
 |---|---|
 | `rename_folder(repository, path, new_name, affected_folder_ids)` | Renames a directory, drops the index rows of the folder and its descendants (their locations changed) and renames the versions under the old prefix. Restores the directory name if a later step fails. Returns the new path. |
 | `remove_folder(repository, path, folder_ids, drop_versions)` | Drops the rows, removes the directory with its contents and optionally its versions. |
-| `trash_note(repository, folder_id, folder_path, filename, trash_path)` | Moves the note into the trash directory under a free name (`name (2).md`, …), keeping its modified time, and drops its versions and index row. Returns the final name. |
+| `trash_note(repository, folder_id, folder_path, filename, trash_path)` | Moves the note into the trash directory under a free name (`name (2).md`, …), keeping its modified time, and drops its index row. Its versions stay under the original key. Returns the final name. |
 | `move_note(repository, filename, from_id, from_path, to_id, to_path, to_sink)` | Moves the file (never overwriting, and refusing a name that collides in case or normalization), renames its versions (undoing the move if that fails) and refreshes both index folders. Returns `Moved(stamp)`, `TargetExists` or `SourceMissing`. |
 
 Not covered: deleting a **repository root**. The root is the folder the user granted, so its relative path is empty and on SAF its tree root cannot be removed like a subdirectory. That case stays in JS (`deleteDirectory`).
@@ -219,6 +219,7 @@ Each note has one JSON file in `.notes/`, named with the percent-encoded key `fo
 | `RepositoryVersions::new(repository)` | Version store over a `RepositoryFiles`, serialized by a lock. |
 | `read`, `write`, `delete`, `commit` | By key. A corrupt file is moved aside with a `.corrupt` suffix and treated as missing. |
 | `rename(old, new)` | Moves one note's history (empty stores are not moved). |
+| `replace(old, new)` | Like `rename`, but the target is always overwritten: when the note has no history, the one stored under the new key is deleted. Used by `rename_note`. |
 | `rename_under(old_prefix, new_prefix)`, `delete_under(prefix)` | The same for every key of a folder. |
 | `migrate_legacy(folder, folder_path)` | Moves the old per-folder version files into the repository-level `.notes/` store. |
 

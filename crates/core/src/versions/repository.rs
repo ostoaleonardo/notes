@@ -9,6 +9,12 @@ use serde_json::Value;
 use std::io;
 use std::sync::{Arc, Mutex};
 
+pub struct HistoryMove<'a> {
+	pub versions: &'a RepositoryVersions,
+	pub from_key: &'a str,
+	pub to_key: &'a str,
+}
+
 pub struct RepositoryVersions {
 	repository: Arc<dyn RepositoryFiles>,
 	guard: Mutex<()>,
@@ -117,6 +123,20 @@ impl RepositoryVersions {
 		let _lock = self.lock()?;
 
 		self.move_store(old_key, new_key)
+	}
+
+	pub fn replace(&self, old_key: &str, new_key: &str) -> Result<()> {
+		let _lock = self.lock()?;
+		let moving = self.read_valid(NOTES_FOLDER, &filename_of(old_key))?;
+		let has_history = moving
+			.is_some_and(|raw| !is_empty_store(&serde_json::from_str(&raw).unwrap_or(Value::Null)));
+
+		if has_history {
+			return self.move_store(old_key, new_key);
+		}
+
+		self.repository
+			.delete_file(&notes_path(&filename_of(new_key)))
 	}
 
 	fn move_store(&self, old_key: &str, new_key: &str) -> Result<()> {

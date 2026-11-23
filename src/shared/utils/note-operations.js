@@ -136,6 +136,16 @@ const mergeExternalEdits = async ({ note, previous, existing, folders }, fileSto
     return plan.draft
 }
 
+const getHistoryMove = (folders, folderId, from, to) => {
+    const { rootUri, folderPath } = getVersionLocation(folders, folderId)
+
+    return {
+        rootUri,
+        fromKey: buildVersionKey(folderPath, from),
+        toKey: buildVersionKey(folderPath, to)
+    }
+}
+
 export const persistNoteUpdate = async ({ note, previous, uri, plan, folders }, fileStorage) => {
     const { filename, renamed, existing } = plan
 
@@ -153,7 +163,8 @@ export const persistNoteUpdate = async ({ note, previous, uri, plan, folders }, 
             directoryUri: uri,
             from: previous.filename,
             to: filename,
-            content
+            content,
+            history: getHistoryMove(folders, note.folderId, previous.filename, filename)
         })
         : await fileStorage.saveNoteFile({
             folderId: note.folderId,
@@ -162,16 +173,6 @@ export const persistNoteUpdate = async ({ note, previous, uri, plan, folders }, 
             content,
             expectedModified: existing.lastModified
         })
-
-    if (renamed) {
-        const { rootUri, folderPath } = getVersionLocation(folders, note.folderId)
-
-        await fileStorage.renameVersions(
-            rootUri,
-            buildVersionKey(folderPath, previous.filename),
-            buildVersionKey(folderPath, filename)
-        )
-    }
 
     return { ...saved, createdAt: previous.createdAt, merged }
 }

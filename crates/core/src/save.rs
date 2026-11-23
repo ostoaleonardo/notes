@@ -2,6 +2,7 @@ use crate::engine::Engine;
 use crate::error::Result;
 use crate::model::{FileStamp, NoteInput, SaveOutcome, SaveRequest};
 use crate::source::NoteSink;
+use crate::versions::HistoryMove;
 
 impl Engine {
 	pub fn save_note(
@@ -57,12 +58,22 @@ impl Engine {
 		from: &str,
 		to: &str,
 		text: &str,
+		history: Option<&HistoryMove<'_>>,
 	) -> Result<SaveOutcome> {
 		if sink.stat(to)?.is_some() {
 			return Ok(SaveOutcome::Conflict { disk_modified: 0 });
 		}
 
 		let stamp = self.store(folder_id, sink, to, text)?;
+
+		if let Some(history) = history
+			&& let Err(error) = history.versions.replace(history.from_key, history.to_key)
+		{
+			let _ = sink.delete(to);
+			let _ = self.remove(folder_id, &[to.to_string()]);
+
+			return Err(error);
+		}
 
 		sink.delete(from)?;
 		self.remove(folder_id, &[from.to_string()])?;

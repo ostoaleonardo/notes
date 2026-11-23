@@ -9,6 +9,7 @@ mod source;
 
 use engine::model::{IndexedNotes, SaveRequest, SyncStats};
 use engine::source::{FsSource, LocationScheme};
+use engine::versions::HistoryMove;
 use records::{
 	DecomposedRecord, EngineError, MoveReport, NoteFieldsRecord, NoteRefsReport, QueryReport,
 	SaveReport, Value,
@@ -92,6 +93,7 @@ impl Engine {
 			.collect())
 	}
 
+	#[allow(clippy::too_many_arguments)]
 	pub fn rename_note(
 		&self,
 		folder_id: String,
@@ -99,12 +101,20 @@ impl Engine {
 		from: String,
 		to: String,
 		text: String,
+		versions: Option<Arc<VersionsHandle>>,
+		from_key: String,
+		to_key: String,
 	) -> Result<SaveReport, EngineError> {
 		let sink = ForeignSink::new(sink);
+		let history = versions.as_ref().map(|handle| HistoryMove {
+			versions: handle.core(),
+			from_key: &from_key,
+			to_key: &to_key,
+		});
 
 		Ok(self
 			.inner
-			.rename_note(&folder_id, &sink, &from, &to, &text)?
+			.rename_note(&folder_id, &sink, &from, &to, &text, history.as_ref())?
 			.into())
 	}
 

@@ -1,8 +1,11 @@
 use engine::engine::Engine;
-use engine::error::Result as EngineResult;
+use engine::error::{Error, Result as EngineResult};
 use engine::model::{FileStamp, SaveOutcome, SaveRequest, Value};
+use engine::repository::{FsRepository, RepositoryFiles};
 use engine::source::{FsSink, FsSource, LocationScheme, NoteSink};
+use engine::versions::{HistoryMove, RepositoryVersions};
 use std::fs;
+use std::sync::Arc;
 use tempfile::TempDir;
 
 const URI_PREFIX: &str = "content://tree/document/root%2F";
@@ -165,7 +168,7 @@ fn renames_a_note_in_the_file_and_in_the_index() {
 
 	let outcome = repository
 		.engine
-		.rename_note("repo", &repository.sink, "old.md", "new.md", "body")
+		.rename_note("repo", &repository.sink, "old.md", "new.md", "body", None)
 		.unwrap();
 
 	assert!(matches!(outcome, SaveOutcome::Saved(_)));
@@ -182,7 +185,7 @@ fn refuses_to_rename_onto_an_existing_note() {
 
 	let outcome = repository
 		.engine
-		.rename_note("repo", &repository.sink, "a.md", "b.md", "a")
+		.rename_note("repo", &repository.sink, "a.md", "b.md", "a", None)
 		.unwrap();
 
 	assert!(matches!(outcome, SaveOutcome::Conflict { .. }));
@@ -369,4 +372,129 @@ fn saving_with_the_returned_stamp_never_conflicts_on_a_coarse_clock() {
 
 		assert!(matches!(outcome, SaveOutcome::Saved(_)), "round {round}");
 	}
+}
+
+const HISTORY_MAX: usize = 200;
+
+fn history_of(repository: &Repository) -> RepositoryVersions {
+	std::fs::create_dir_all(repository.directory.path().join(".notes")).unwrap();
+
+	RepositoryVersions::new(Arc::new(FsRepository::new(repository.directory.path())))
+}
+
+fn commit(versions: &RepositoryVersions, key: &str, content: &str) {
+	versions
+		.commit(key, "title", content, content, 1, HISTORY_MAX)
+		.unwrap();
+}
+
+fn rename_with_history(
+	repository: &Repository,
+	versions: &RepositoryVersions,
+	from: &str,
+	to: &str,
+) -> engine::error::Result<SaveOutcome> {
+	repository.engine.rename_note(
+		"repo",
+		&repository.sink,
+		from,
+		to,
+		"body",
+		Some(&HistoryMove {
+			versions,
+			from_key: from,
+			to_key: to,
+		}),
+	)
+}
+
+#[test]
+fn renaming_a_note_moves_its_history_to_the_new_name() {
+	let repository = Repository::new();
+	let versions = history_of(&repository);
+	saved(repository.save("old.md", "body", None));
+	commit(&versions, "old.md", "first");
+
+	rename_with_history(&repository, &versions, "old.md", "new.md").unwrap();
+
+	assert!(versions.read("old.md").unwrap().is_none());
+	assert!(versions.read("new.md").unwrap().is_some());
+}
+
+#[test]
+fn renaming_replaces_a_history_that_was_left_under_the_new_name() {
+	let repository = Repository::new();
+	let versions = history_of(&repository);
+	saved(repository.save("old.md", "body", None));
+	commit(&versions, "old.md", "moving");
+	commit(&versions, "new.md", "stale");
+
+	rename_with_history(&repository, &versions, "old.md", "new.md").unwrap();
+
+	let stored = versions.read("new.md").unwrap().unwrap();
+
+	assert!(stored.contains("moving"));
+	assert!(!stored.contains("stale"));
+}
+
+#[test]
+fn renaming_a_note_without_history_clears_a_stale_one_under_the_new_name() {
+	let repository = Repository::new();
+	let versions = history_of(&repository);
+	saved(repository.save("old.md", "body", None));
+	commit(&versions, "new.md", "stale");
+
+	rename_with_history(&repository, &versions, "old.md", "new.md").unwrap();
+
+	assert!(versions.read("new.md").unwrap().is_none());
+}
+
+#[test]
+fn renaming_onto_an_existing_note_keeps_both_histories() {
+	let repository = Repository::new();
+	let versions = history_of(&repository);
+	saved(repository.save("a.md", "a", None));
+	saved(repository.save("b.md", "b", None));
+	commit(&versions, "a.md", "from a");
+	commit(&versions, "b.md", "from b");
+
+	let outcome = rename_with_history(&repository, &versions, "a.md", "b.md").unwrap();
+
+	assert!(matches!(outcome, SaveOutcome::Conflict { .. }));
+	assert!(versions.read("a.md").unwrap().unwrap().contains("from a"));
+	assert!(versions.read("b.md").unwrap().unwrap().contains("from b"));
+}
+
+struct RefusingHistory;
+
+impl RepositoryFiles for RefusingHistory {
+	fn read_text(&self, _path: &str) -> EngineResult<Option<String>> {
+		Ok(Some(r#"{"entries":[{"id":"1"}]}"#.to_string()))
+	}
+
+	fn write_text(&self, _path: &str, _text: &str) -> EngineResult<()> {
+		Err(Error::Io(std::io::Error::other("write refused")))
+	}
+
+	fn delete_file(&self, _path: &str) -> EngineResult<()> {
+		Ok(())
+	}
+
+	fn list_files(&self, _directory: &str) -> EngineResult<Vec<String>> {
+		Ok(Vec::new())
+	}
+}
+
+#[test]
+fn a_failed_history_move_leaves_the_original_note_untouched() {
+	let repository = Repository::new();
+	let refusing = RepositoryVersions::new(Arc::new(RefusingHistory));
+	saved(repository.save("old.md", "body", None));
+
+	let result = rename_with_history(&repository, &refusing, "old.md", "new.md");
+
+	assert!(result.is_err());
+	assert!(repository.notes().join("old.md").exists());
+	assert!(!repository.notes().join("new.md").exists());
+	assert_eq!(repository.indexed(), ["old.md"]);
 }

@@ -406,11 +406,25 @@ fn scenario() -> Json {
 		.unwrap();
 	let renamed = repository
 		.engine
-		.rename_note(ROOT_FOLDER, &sink, "Saved.md", "Renamed.md", "# Renamed\n")
+		.rename_note(
+			ROOT_FOLDER,
+			&sink,
+			"Saved.md",
+			"Renamed.md",
+			"# Renamed\n",
+			None,
+		)
 		.unwrap();
 	let rename_collision = repository
 		.engine
-		.rename_note(ROOT_FOLDER, &sink, "Renamed.md", "Alpha.md", "# Clash\n")
+		.rename_note(
+			ROOT_FOLDER,
+			&sink,
+			"Renamed.md",
+			"Alpha.md",
+			"# Clash\n",
+			None,
+		)
 		.unwrap();
 	let after_rename = repository.indexed();
 

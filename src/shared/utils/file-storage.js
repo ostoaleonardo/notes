@@ -211,8 +211,20 @@ const saveNoteFiles = async ({ folderId, directoryUri, files }) => {
     ))
 }
 
-const saveRenamedNoteFile = async ({ folderId, directoryUri, from, to, content }) => (
-    toSavedFile(await RepositoryFs.renameNote(folderId, directoryUri, from, to, content), to)
+const saveRenamedNoteFile = async ({ folderId, directoryUri, from, to, content, history }) => (
+    toSavedFile(
+        await RepositoryFs.renameNote(
+            folderId,
+            directoryUri,
+            from,
+            to,
+            content,
+            history.rootUri,
+            history.fromKey,
+            history.toKey
+        ),
+        to
+    )
 )
 
 const renameNoteFile = async (directoryUri, oldFilename, newFilename) => {
@@ -296,7 +308,6 @@ const commitVersion = (rootUri, key, title, content) => (
     RepositoryFs.versionsCommit(rootUri, key, title, content, randomUUID(), Date.now(), MAX_STORED_VERSIONS)
 )
 
-const renameVersions = (rootUri, oldKey, newKey) => RepositoryFs.versionsRename(rootUri, oldKey, newKey)
 
 const clearRepository = async (directoryUri, { rootUri, folderPath }) => {
     for (const file of listMarkdownFiles(directoryUri)) {
@@ -416,7 +427,6 @@ export const fileStorage = {
     writeVersions,
     commitVersion,
     deleteVersions,
-    renameVersions,
     migrateLegacyVersions,
     readJson,
     writeJson,

@@ -386,13 +386,11 @@ describe('note versions', () => {
         expect(createdAt).toEqual(expect.any(Number))
     })
 
-    test('forwards deletes and renames to the native repository', async () => {
+    test('forwards deletes and legacy migration to the native repository', async () => {
         await fileStorage.deleteVersions(ROOT, 'a.md')
-        await fileStorage.renameVersions(ROOT, 'old.md', 'new.md')
         await fileStorage.migrateLegacyVersions(FOLDER, ROOT, 'work')
 
         expect(native.versionsDelete).toHaveBeenCalledWith(ROOT, 'a.md')
-        expect(native.versionsRename).toHaveBeenCalledWith(ROOT, 'old.md', 'new.md')
         expect(native.versionsMigrateLegacy).toHaveBeenCalledWith(ROOT, 'work')
     })
 })
