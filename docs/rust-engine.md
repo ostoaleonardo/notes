@@ -215,7 +215,7 @@ Each note has one JSON file in `.notes/`, named with the percent-encoded key `fo
 |---|---|
 | `build_line_delta(from, to)` | Line-based diff (LCS) as `Hunk { at, remove, insert }`. Falls back to one hunk when the diff would exceed 4 000 000 cells. |
 | `apply_line_delta(text, delta)` | Applies a delta. `apply(from, build(from, to)) == to`. |
-| `commit_version(raw, new_version)` | Pure function: adds a version unless the head and title did not change, converts the legacy array format, and keeps at most `max_versions`. |
+| `commit_version(raw, new_version)` | Pure function: adds a version unless the head and title did not change, converts the legacy array format, and keeps at most `max_versions` entries and, when `max_age_ms` is above zero, none older than that (only the oldest entries are dropped, so the delta chain stays valid and the newest version is always kept). |
 | `RepositoryVersions::new(repository)` | Version store over a `RepositoryFiles`, serialized by a lock. |
 | `read`, `write`, `delete`, `commit` | By key. A corrupt file is moved aside with a `.corrupt` suffix and treated as missing. |
 | `rename(old, new)` | Moves one note's history (empty stores are not moved). |

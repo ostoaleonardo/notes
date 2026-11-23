@@ -384,7 +384,7 @@ fn history_of(repository: &Repository) -> RepositoryVersions {
 
 fn commit(versions: &RepositoryVersions, key: &str, content: &str) {
 	versions
-		.commit(key, "title", content, content, 1, HISTORY_MAX)
+		.commit(key, "title", content, content, 1, HISTORY_MAX, 0)
 		.unwrap();
 }
 

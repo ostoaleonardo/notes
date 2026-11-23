@@ -84,6 +84,7 @@ impl RepositoryVersions {
 		self.repository.delete_file(&notes_path(&filename_of(key)))
 	}
 
+	#[allow(clippy::too_many_arguments)]
 	pub fn commit(
 		&self,
 		key: &str,
@@ -92,6 +93,7 @@ impl RepositoryVersions {
 		id: &str,
 		created_at: i64,
 		max_versions: usize,
+		max_age_ms: i64,
 	) -> Result<bool> {
 		let _lock = self.lock()?;
 		let filename = filename_of(key);
@@ -105,6 +107,7 @@ impl RepositoryVersions {
 				created_at,
 				content,
 				max_versions,
+				max_age_ms,
 			},
 		)
 		.map_err(|message| Error::Io(io::Error::other(message)))?;

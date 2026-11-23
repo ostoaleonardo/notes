@@ -196,8 +196,8 @@ class RepositoryFsModule : Module() {
       withContext(Dispatchers.IO) { versionsFor(rootUri).delete(key) }
     }
 
-    AsyncFunction("versionsCommit") Coroutine { rootUri: String, key: String, title: String, content: String, id: String, createdAt: Double, maxVersions: Int ->
-      withContext(Dispatchers.IO) { versionsFor(rootUri).commit(key, title, content, id, createdAt.toLong(), maxVersions.toUInt()) }
+    AsyncFunction("versionsCommit") Coroutine { rootUri: String, key: String, title: String, content: String, id: String, createdAt: Double, maxVersions: Int, maxAgeMs: Double ->
+      withContext(Dispatchers.IO) { versionsFor(rootUri).commit(key, title, content, id, createdAt.toLong(), maxVersions.toUInt(), maxAgeMs.toLong()) }
     }
 
     AsyncFunction("versionsMigrateLegacy") Coroutine { rootUri: String, folderPath: String ->

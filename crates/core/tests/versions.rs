@@ -79,6 +79,7 @@ fn commits_versions_like_the_javascript_store() {
 				created_at: case["createdAt"].as_i64().unwrap(),
 				content: case["content"].as_str().unwrap(),
 				max_versions: MAX_VERSIONS,
+				max_age_ms: 0,
 			},
 		)
 		.unwrap();
@@ -115,6 +116,7 @@ fn keeps_only_the_most_recent_versions() {
 				created_at: number,
 				content: &content,
 				max_versions: MAX_VERSIONS,
+				max_age_ms: 0,
 			},
 		)
 		.unwrap();
@@ -126,6 +128,104 @@ fn keeps_only_the_most_recent_versions() {
 	assert_eq!(entries.len(), MAX_VERSIONS);
 	assert_eq!(entries[0]["id"], "id-5");
 	assert_eq!(store["head"], "line 204");
+}
+
+const DAY_MS: i64 = 86_400_000;
+
+fn commit_at(raw: Option<String>, number: i64, created_at: i64, max_age_ms: i64) -> Option<String> {
+	let id = format!("id-{number}");
+	let content = format!("line {number}");
+
+	commit_version(
+		raw.as_deref(),
+		&NewVersion {
+			id: &id,
+			title: "T",
+			created_at,
+			content: &content,
+			max_versions: MAX_VERSIONS,
+			max_age_ms,
+		},
+	)
+	.unwrap()
+}
+
+fn kept_ids(raw: &str) -> Vec<String> {
+	let store: Value = serde_json::from_str(raw).unwrap();
+
+	store["entries"]
+		.as_array()
+		.unwrap()
+		.iter()
+		.map(|entry| entry["id"].as_str().unwrap().to_string())
+		.collect()
+}
+
+#[test]
+fn drops_versions_older_than_the_retention_period() {
+	let mut raw = None;
+
+	for (number, day) in [(0, 0), (1, 3), (2, 6), (3, 9)] {
+		raw = commit_at(raw, number, day * DAY_MS, 7 * DAY_MS);
+	}
+
+	assert_eq!(kept_ids(&raw.unwrap()), ["id-1", "id-2", "id-3"]);
+}
+
+#[test]
+fn keeps_every_version_when_there_is_no_retention_period() {
+	let mut raw = None;
+
+	for (number, day) in [(0, 0), (1, 400), (2, 800)] {
+		raw = commit_at(raw, number, day * DAY_MS, 0);
+	}
+
+	assert_eq!(kept_ids(&raw.unwrap()), ["id-0", "id-1", "id-2"]);
+}
+
+#[test]
+fn always_keeps_the_newest_version_even_when_it_is_older_than_the_period() {
+	let raw = commit_at(None, 0, 0, DAY_MS);
+	let raw = commit_at(raw, 1, 30 * DAY_MS, DAY_MS);
+
+	assert_eq!(kept_ids(&raw.unwrap()), ["id-1"]);
+}
+
+#[test]
+fn still_rebuilds_older_versions_after_dropping_the_oldest() {
+	let mut raw = None;
+
+	for (number, day) in [(0, 0), (1, 3), (2, 6), (3, 9)] {
+		raw = commit_at(raw, number, day * DAY_MS, 7 * DAY_MS);
+	}
+
+	let store: Value = serde_json::from_str(&raw.unwrap()).unwrap();
+	let entries = store["entries"].as_array().unwrap();
+	let mut text = store["head"].as_str().unwrap().to_string();
+
+	assert_eq!(text, "line 3");
+
+	for entry in entries[..entries.len() - 1].iter().rev() {
+		let delta: Vec<Hunk> = entry["delta"]
+			.as_array()
+			.unwrap()
+			.iter()
+			.map(|hunk| Hunk {
+				at: hunk["at"].as_u64().unwrap() as usize,
+				remove: hunk["remove"].as_u64().unwrap() as usize,
+				insert: hunk["insert"]
+					.as_array()
+					.unwrap()
+					.iter()
+					.map(|line| line.as_str().unwrap().to_string())
+					.collect(),
+			})
+			.collect();
+
+		text = apply_line_delta(&text, &delta);
+	}
+
+	assert_eq!(text, "line 1");
 }
 
 #[test]
@@ -180,7 +280,7 @@ mod repository {
 		content: &str,
 		id: &str,
 	) -> bool {
-		versions.commit(key, title, content, id, 1, MAX).unwrap()
+		versions.commit(key, title, content, id, 1, MAX, 0).unwrap()
 	}
 
 	fn names(directory: &TempDir) -> Vec<String> {

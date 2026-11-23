@@ -100,7 +100,7 @@ impl Fixture {
 
 	fn commit_version(&self, key: &str) {
 		self.versions
-			.commit(key, "Title", "text\n", "v1", 1_000, MAX_VERSIONS)
+			.commit(key, "Title", "text\n", "v1", 1_000, MAX_VERSIONS, 0)
 			.unwrap();
 	}
 

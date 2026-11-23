@@ -59,6 +59,20 @@ pub struct NewVersion<'a> {
 	pub created_at: i64,
 	pub content: &'a str,
 	pub max_versions: usize,
+	pub max_age_ms: i64,
+}
+
+fn expired_prefix(entries: &[Value], version: &NewVersion<'_>) -> usize {
+	if version.max_age_ms <= 0 {
+		return 0;
+	}
+
+	let cutoff = version.created_at.saturating_sub(version.max_age_ms);
+
+	entries[..entries.len() - 1]
+		.iter()
+		.take_while(|entry| entry[KEY_CREATED_AT].as_i64().is_some_and(|at| at < cutoff))
+		.count()
 }
 
 pub fn commit_version(
@@ -109,8 +123,9 @@ pub fn commit_version(
 		KEY_DELTA: Value::Null,
 	}));
 
-	let skip = next.len().saturating_sub(version.max_versions);
-	let kept: Vec<Value> = next.into_iter().skip(skip).collect();
+	let by_count = next.len().saturating_sub(version.max_versions);
+	let by_age = expired_prefix(&next, version);
+	let kept: Vec<Value> = next.into_iter().skip(by_count.max(by_age)).collect();
 
 	Ok(Some(
 		json!({ KEY_HEAD: version.content, KEY_ENTRIES: kept }).to_string(),

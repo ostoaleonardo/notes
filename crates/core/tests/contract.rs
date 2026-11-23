@@ -309,13 +309,29 @@ fn versioning(repository: &Repository) -> Json {
 
 	let versions = RepositoryVersions::new(Arc::new(FsRepository::new(&root)));
 	let first = versions
-		.commit("Alpha.md", "Alpha", "one\n", "v1", 1_000, MAX_VERSIONS)
+		.commit("Alpha.md", "Alpha", "one\n", "v1", 1_000, MAX_VERSIONS, 0)
 		.unwrap();
 	let second = versions
-		.commit("Alpha.md", "Alpha", "one\ntwo\n", "v2", 2_000, MAX_VERSIONS)
+		.commit(
+			"Alpha.md",
+			"Alpha",
+			"one\ntwo\n",
+			"v2",
+			2_000,
+			MAX_VERSIONS,
+			0,
+		)
 		.unwrap();
 	let repeated = versions
-		.commit("Alpha.md", "Alpha", "one\ntwo\n", "v3", 3_000, MAX_VERSIONS)
+		.commit(
+			"Alpha.md",
+			"Alpha",
+			"one\ntwo\n",
+			"v3",
+			3_000,
+			MAX_VERSIONS,
+			0,
+		)
 		.unwrap();
 	let stored = versions.read("Alpha.md").unwrap();
 

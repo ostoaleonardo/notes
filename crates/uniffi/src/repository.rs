@@ -171,6 +171,7 @@ impl VersionsHandle {
 		Ok(self.inner.delete(&key)?)
 	}
 
+	#[allow(clippy::too_many_arguments)]
 	pub fn commit(
 		&self,
 		key: String,
@@ -179,6 +180,7 @@ impl VersionsHandle {
 		id: String,
 		created_at: i64,
 		max_versions: u32,
+		max_age_ms: i64,
 	) -> Result<bool, EngineError> {
 		Ok(self.inner.commit(
 			&key,
@@ -187,6 +189,7 @@ impl VersionsHandle {
 			&id,
 			created_at,
 			max_versions as usize,
+			max_age_ms,
 		)?)
 	}
 
