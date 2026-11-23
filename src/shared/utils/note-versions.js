@@ -24,13 +24,14 @@ export const loadNoteVersions = async (fileStorage, location, filename, limit) =
     return unpackVersions(await fileStorage.readVersions(location.rootUri, key), limit)
 }
 
-export const commitNoteVersion = async (fileStorage, location, filename, title, content) => {
+export const commitNoteVersion = async (fileStorage, location, filename, title, content, limits) => {
     if (!fileStorage.findFile(location.folderUri, filename)) return false
 
     return fileStorage.commitVersion(
         location.rootUri,
         buildVersionKey(location.folderPath, filename),
         title,
-        content
+        content,
+        limits
     )
 }

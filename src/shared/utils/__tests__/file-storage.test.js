@@ -380,10 +380,24 @@ describe('note versions', () => {
     test('commits a version with the version cap', async () => {
         await fileStorage.commitVersion(ROOT, 'work/a.md', 'Title', 'body')
 
-        const [root, key, title, body, , createdAt, cap] = native.versionsCommit.mock.calls[0]
+        const [root, key, title, body, , createdAt, cap, maxAge] = native.versionsCommit.mock.calls[0]
 
-        expect([root, key, title, body, cap]).toEqual([ROOT, 'work/a.md', 'Title', 'body', 200])
+        expect([root, key, title, body, cap, maxAge]).toEqual([ROOT, 'work/a.md', 'Title', 'body', 200, 0])
         expect(createdAt).toEqual(expect.any(Number))
+    })
+
+    test('commits a version with the limits chosen in the settings', async () => {
+        await fileStorage.commitVersion(
+            ROOT,
+            'work/a.md',
+            'Title',
+            'body',
+            { maxVersions: 25, maxAgeMs: 604800000 }
+        )
+
+        const [, , , , , , cap, maxAge] = native.versionsCommit.mock.calls[0]
+
+        expect([cap, maxAge]).toEqual([25, 604800000])
     })
 
     test('forwards deletes and legacy migration to the native repository', async () => {

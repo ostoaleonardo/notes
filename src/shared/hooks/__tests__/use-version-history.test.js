@@ -2,9 +2,14 @@ import { act, renderHook } from '@testing-library/react-native'
 
 import { useVersionHistory } from '../use-version-history'
 
-import { VERSION_SNAPSHOT_INTERVAL, VERSION_UNMOUNT_COMMIT_DELAY } from '@/shared/constants/default-values'
+import { VERSION_UNMOUNT_COMMIT_DELAY } from '@/shared/constants/default-values'
+import { MS_PER_MINUTE } from '@/shared/constants/history-settings'
+import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
+
+const DEFAULT_INTERVAL = 5 * MS_PER_MINUTE
 
 const mockCommitVersion = jest.fn()
+const mockGetItem = jest.fn()
 const mockOpenVersionHistory = jest.fn()
 const LOCATION = {
     rootUri: 'uri',
@@ -16,12 +21,17 @@ jest.mock('@/shared/utils/version-history-session', () => ({
     openVersionHistory: (...args) => mockOpenVersionHistory(...args)
 }))
 
+jest.mock('../use-storage', () => ({
+    useStorage: () => ({ getItem: mockGetItem })
+}))
+
 jest.mock('../use-note-versions', () => ({
     useNoteVersions: () => ({ commitVersion: mockCommitVersion })
 }))
 
 beforeEach(() => {
     jest.clearAllMocks()
+    mockGetItem.mockResolvedValue(null)
     jest.useFakeTimers()
 })
 
@@ -119,11 +129,32 @@ describe('periodic snapshot', () => {
 
         await renderHook(() => useVersionHistory({ location: LOCATION, latestContent }))
 
-        await act(() => {
-            jest.advanceTimersByTime(VERSION_SNAPSHOT_INTERVAL)
+        await act(async () => {
+            jest.advanceTimersByTime(DEFAULT_INTERVAL)
         })
 
         expect(mockCommitVersion).toHaveBeenCalledWith(LOCATION, 'note-1', 'Title', 'Content')
+    })
+
+    test('uses the interval chosen in the settings', async () => {
+        mockGetItem.mockImplementation(async (key) => (
+            key === STORAGE_KEYS.HISTORY_INTERVAL ? '1' : null
+        ))
+        const latestContent = { current: { noteId: 'note-1', title: 'Title', content: 'Content' } }
+
+        await renderHook(() => useVersionHistory({ location: LOCATION, latestContent }))
+
+        await act(async () => {
+            jest.advanceTimersByTime(MS_PER_MINUTE - 1)
+        })
+
+        expect(mockCommitVersion).not.toHaveBeenCalled()
+
+        await act(async () => {
+            jest.advanceTimersByTime(1)
+        })
+
+        expect(mockCommitVersion).toHaveBeenCalledTimes(1)
     })
 
     test('does not schedule a snapshot without a location', async () => {
@@ -131,8 +162,8 @@ describe('periodic snapshot', () => {
 
         await renderHook(() => useVersionHistory({ location: null, latestContent }))
 
-        await act(() => {
-            jest.advanceTimersByTime(VERSION_SNAPSHOT_INTERVAL)
+        await act(async () => {
+            jest.advanceTimersByTime(DEFAULT_INTERVAL)
         })
 
         expect(mockCommitVersion).not.toHaveBeenCalled()

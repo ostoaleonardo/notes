@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useRef } from 'react'
 
 import { useNoteVersions } from './use-note-versions'
+import { useStorage } from './use-storage'
+import { readHistorySettings } from '@/shared/utils/history-settings'
 import { openVersionHistory } from '@/shared/utils/version-history-session'
 
-import { VERSION_SNAPSHOT_INTERVAL, VERSION_UNMOUNT_COMMIT_DELAY } from '@/shared/constants/default-values'
+import { VERSION_UNMOUNT_COMMIT_DELAY } from '@/shared/constants/default-values'
 
 export function useVersionHistory({ location, latestContent, onRestore }) {
     const { commitVersion } = useNoteVersions()
+    const { getItem } = useStorage()
 
     const folderUri = location?.folderUri
 
@@ -36,9 +39,18 @@ export function useVersionHistory({ location, latestContent, onRestore }) {
     useEffect(() => {
         if (!folderUri) return
 
-        const interval = setInterval(() => commitLatest.current(), VERSION_SNAPSHOT_INTERVAL)
-        return () => clearInterval(interval)
-    }, [folderUri])
+        let interval = null
+        let cancelled = false
+
+        readHistorySettings(getItem).then(({ intervalMs }) => {
+            if (!cancelled) interval = setInterval(() => commitLatest.current(), intervalMs)
+        })
+
+        return () => {
+            cancelled = true
+            clearInterval(interval)
+        }
+    }, [folderUri, getItem])
 
     const onRestoreRef = useRef(onRestore)
     onRestoreRef.current = onRestore

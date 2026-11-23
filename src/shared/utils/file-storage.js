@@ -21,7 +21,7 @@ import {
     REPOSITORY_INDEX_FOLDER_NAME,
     REPOSITORY_INDEX_VERSION
 } from '@/shared/constants/file-storage'
-import { MAX_STORED_VERSIONS } from '@/shared/constants/default-values'
+import { DEFAULT_HISTORY_SETTINGS } from '@/shared/utils/history-settings'
 import { MIME_TYPES } from '@/shared/constants/mime-types'
 import { SAVE_CONFLICT_ERROR, SAVE_STATUS } from '@/shared/constants/note-errors'
 import { LOG_MESSAGES } from '@/shared/constants/log-messages'
@@ -304,8 +304,17 @@ const writeVersions = (rootUri, key, versions) => (
 
 const deleteVersions = (rootUri, key) => RepositoryFs.versionsDelete(rootUri, key)
 
-const commitVersion = (rootUri, key, title, content) => (
-    RepositoryFs.versionsCommit(rootUri, key, title, content, randomUUID(), Date.now(), MAX_STORED_VERSIONS)
+const commitVersion = (rootUri, key, title, content, limits = DEFAULT_HISTORY_SETTINGS) => (
+    RepositoryFs.versionsCommit(
+        rootUri,
+        key,
+        title,
+        content,
+        randomUUID(),
+        Date.now(),
+        limits.maxVersions,
+        limits.maxAgeMs
+    )
 )
 
 

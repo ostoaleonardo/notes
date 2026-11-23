@@ -12,7 +12,9 @@ export const StorageSelectOption = ({
     translationKey,
     values,
     defaultValue,
-    translateValues = true
+    translateValues = true,
+    countLabel = false,
+    zeroValue = null
 }) => {
     const { t } = useTranslation()
     const { setItem } = useStorage()
@@ -23,10 +25,12 @@ export const StorageSelectOption = ({
         if (values.includes(value)) setCurrent(value)
     })
 
-    const getValueLabel = useCallback(
-        (value) => translateValues ? t(`${translationKey}.${value}`) : String(value),
-        [translateValues, translationKey, t]
-    )
+    const getValueLabel = useCallback((value) => {
+        if (value === zeroValue) return t(`${translationKey}.zero`)
+        if (countLabel) return t(`${translationKey}.value`, { count: Number(value) })
+
+        return translateValues ? t(`${translationKey}.${value}`) : String(value)
+    }, [translateValues, countLabel, zeroValue, translationKey, t])
 
     const items = useMemo(() => values.map((value) => ({
         value,

@@ -25,7 +25,7 @@ import { OpenInNew } from '@/icons/open-in-new'
 
 import { LINKS } from '@/shared/constants/links'
 import { SPACING } from '@/shared/constants/theme'
-import { EDITOR_SELECT_OPTIONS, NOTES_SELECT_OPTIONS } from '@/shared/constants/settings-select-options'
+import { EDITOR_SELECT_OPTIONS, HISTORY_SELECT_OPTIONS, NOTES_SELECT_OPTIONS } from '@/shared/constants/settings-select-options'
 
 export default function Settings() {
     const { t } = useTranslation()
@@ -57,6 +57,19 @@ export default function Settings() {
                         />
                     ))}
                     <DefaultNoteFolderOption />
+                </Section>
+
+                <Section
+                    title={t('settings.history.title')}
+                    containerStyle={styles.section}
+                    contentStyle={styles.items}
+                >
+                    {HISTORY_SELECT_OPTIONS.map((option) => (
+                        <StorageSelectOption
+                            key={option.storageKey}
+                            {...option}
+                        />
+                    ))}
                 </Section>
 
                 <Section

@@ -85,10 +85,25 @@ describe('commit note version', () => {
         const commitVersion = jest.fn(async () => true)
         const fileStorage = { findFile: () => true, commitVersion }
 
-        const committed = await commitNoteVersion(fileStorage, LOCATION, FILENAME, 'Note', 'hello')
+        const limits = { maxVersions: 25, maxAgeMs: 0 }
+
+        const committed = await commitNoteVersion(
+            fileStorage,
+            LOCATION,
+            FILENAME,
+            'Note',
+            'hello',
+            limits
+        )
 
         expect(committed).toBe(true)
-        expect(commitVersion).toHaveBeenCalledWith(LOCATION.rootUri, `sub/${FILENAME}`, 'Note', 'hello')
+        expect(commitVersion).toHaveBeenCalledWith(
+            LOCATION.rootUri,
+            `sub/${FILENAME}`,
+            'Note',
+            'hello',
+            limits
+        )
     })
 
     test('returns false without committing when the note file no longer exists', async () => {

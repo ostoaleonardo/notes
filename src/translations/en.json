@@ -137,6 +137,25 @@
 				"root": "Repository root"
 			}
 		},
+		"history": {
+			"title": "Version history",
+			"interval": {
+				"title": "Save a version every",
+				"value_one": "{{count}} minute",
+				"value_other": "{{count}} minutes"
+			},
+			"retention": {
+				"title": "Keep versions for",
+				"zero": "No time limit",
+				"value_one": "{{count}} day",
+				"value_other": "{{count}} days"
+			},
+			"max": {
+				"title": "Versions kept per note",
+				"value_one": "{{count}} version",
+				"value_other": "{{count}} versions"
+			}
+		},
 		"editor": {
 			"title": "Editor",
 			"font_size": {

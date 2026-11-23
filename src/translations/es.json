@@ -137,6 +137,25 @@
 				"root": "Raíz del repositorio"
 			}
 		},
+		"history": {
+			"title": "Historial de versiones",
+			"interval": {
+				"title": "Guardar una versión cada",
+				"value_one": "{{count}} minuto",
+				"value_other": "{{count}} minutos"
+			},
+			"retention": {
+				"title": "Conservar versiones durante",
+				"zero": "Sin límite de tiempo",
+				"value_one": "{{count}} día",
+				"value_other": "{{count}} días"
+			},
+			"max": {
+				"title": "Versiones guardadas por nota",
+				"value_one": "{{count}} versión",
+				"value_other": "{{count}} versiones"
+			}
+		},
 		"editor": {
 			"title": "Editor",
 			"font_size": {
