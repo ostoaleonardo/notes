@@ -8,8 +8,8 @@ appId: com.monospace.notes
     times: 8
     commands:
       - swipe:
-          start: 75%,45%
-          end: 75%,25%
+          start: 75%,62%
+          end: 75%,42%
           duration: 400
 - tapOn:
     id: menu-item-.*
