@@ -1,3 +1,4 @@
+use crate::convert::{count_u32, millis_u64};
 use crate::engine::Engine;
 use crate::error::Result;
 use crate::model::{NoteInput, ScannedFile, SourceFile, SyncStats};
@@ -31,12 +32,12 @@ impl Engine {
 			self.remove(folder_id, &plan.removed)?;
 		}
 
-		let total = changed.len() as u32;
+		let total = count_u32(changed.len());
 		let mut stats = SyncStats {
 			total: plan.unchanged + plan.added + plan.updated,
 			added: plan.added,
 			updated: plan.updated,
-			removed: plan.removed.len() as u32,
+			removed: count_u32(plan.removed.len()),
 			unchanged: plan.unchanged,
 			scan_ms,
 			..SyncStats::default()
@@ -73,14 +74,14 @@ impl Engine {
 					.filter_map(|(file, text)| text.map(|text| NoteInput::from_file(file, text)))
 					.collect();
 
-				stats.unreadable += (batch.len() - inputs.len()) as u32;
+				stats.unreadable += count_u32(batch.len() - inputs.len());
 				stats.read_ms += read_ms;
 
 				let report = self.write(folder_id, inputs)?;
 
 				stats.parse_ms += report.parse_ms;
 				stats.write_ms += report.write_ms;
-				done += batch.len() as u32;
+				done += count_u32(batch.len());
 				progress(done, total);
 			}
 
@@ -92,5 +93,5 @@ impl Engine {
 }
 
 fn elapsed_ms(start: Instant) -> u64 {
-	start.elapsed().as_millis() as u64
+	millis_u64(start.elapsed())
 }

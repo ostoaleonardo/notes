@@ -1,6 +1,7 @@
 use super::LocationScheme;
 use super::constants::{HIDDEN_PREFIX, NOTE_EXTENSION};
 use super::{NoteReader, NoteSource};
+use crate::convert::{millis_i64, size_i64};
 use crate::error::Result;
 use crate::model::{FileStamp, SourceFile};
 use rayon::prelude::*;
@@ -76,12 +77,12 @@ pub fn stamp_of(root: &Path, scheme: &LocationScheme, filename: &str) -> Option<
 		.modified()
 		.ok()
 		.and_then(|time| time.duration_since(UNIX_EPOCH).ok())
-		.map_or(0, |elapsed| elapsed.as_millis() as i64);
+		.map_or(0, millis_i64);
 
 	Some(FileStamp {
 		location: scheme.locate(root, filename),
 		modified,
-		size: metadata.len() as i64,
+		size: size_i64(metadata.len()),
 	})
 }
 

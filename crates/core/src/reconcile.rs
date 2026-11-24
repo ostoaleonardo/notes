@@ -1,3 +1,4 @@
+use crate::convert::count_u32;
 use crate::model::{FileMeta, ReconcilePlan, ScannedFile};
 use std::collections::{HashMap, HashSet};
 
@@ -8,11 +9,11 @@ pub fn plan(existing: &HashMap<String, FileMeta>, scanned: &[ScannedFile]) -> Re
 		match existing.get(&file.filename) {
 			None => {
 				plan.added += 1;
-				plan.changed.push(position as u32);
+				plan.changed.push(count_u32(position));
 			}
 			Some(known) if known.modified != file.modified || known.size != file.size => {
 				plan.updated += 1;
-				plan.changed.push(position as u32);
+				plan.changed.push(count_u32(position));
 			}
 			Some(_) => {}
 		}
@@ -25,7 +26,7 @@ pub fn plan(existing: &HashMap<String, FileMeta>, scanned: &[ScannedFile]) -> Re
 		.filter(|filename| !present.contains(filename.as_str()))
 		.cloned()
 		.collect();
-	plan.unchanged = (scanned.len() - plan.changed.len()) as u32;
+	plan.unchanged = count_u32(scanned.len() - plan.changed.len());
 
 	plan
 }

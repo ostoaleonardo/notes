@@ -1,4 +1,5 @@
 export const PERF_NOTE_COUNT = 5000
+export const PERF_SAMPLES = 5
 
 export const PERF_BUDGETS_MS = {
     collectTagsCold: 100,

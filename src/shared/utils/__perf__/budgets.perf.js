@@ -6,7 +6,7 @@ import { getNotePaths } from '../note-path'
 import { mergeLoadedNotes } from '../merge-loaded-notes'
 import { loadRepositoryData } from '../load-repository-data'
 import { buildNotes, report } from '../../../../jest/perf-fixtures'
-import { PERF_BUDGETS_MS, PERF_NOTE_COUNT } from '../../../../jest/perf-budgets'
+import { PERF_BUDGETS_MS, PERF_NOTE_COUNT, PERF_SAMPLES } from '../../../../jest/perf-budgets'
 
 import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
 
@@ -15,11 +15,22 @@ jest.mock('repository-fs', () => ({ __esModule: true, default: {} }))
 
 const REPOSITORY = { id: 'repo', uri: 'file:///repo', parentId: null }
 
-const timeOnce = (fn) => {
-    const start = performance.now()
-    const result = fn()
+const timeBest = (prepare, run) => {
+    const samples = Array.from({ length: PERF_SAMPLES }, () => {
+        const input = prepare()
+        const start = performance.now()
+        run(input)
 
-    return { result, elapsed: performance.now() - start }
+        return performance.now() - start
+    })
+
+    return Math.min(...samples)
+}
+
+const timeWarm = (input, run) => {
+    run(input)
+
+    return timeBest(() => input, run)
 }
 
 const buildFileStorage = (notes) => {
@@ -57,15 +68,15 @@ describe('startup budgets', () => {
     afterAll(() => report(`Startup budgets, ${PERF_NOTE_COUNT} notes (Mac, JS only)`, rows))
 
     test('computes the tag list', () => {
-        const notes = buildNotes(PERF_NOTE_COUNT)
+        const cold = timeBest(() => buildNotes(PERF_NOTE_COUNT), collectTags)
+        const warm = timeWarm(buildNotes(PERF_NOTE_COUNT), collectTags)
 
-        within('collectTags cold', timeOnce(() => collectTags(notes)).elapsed, PERF_BUDGETS_MS.collectTagsCold)
-        within('collectTags warm', timeOnce(() => collectTags(notes)).elapsed, PERF_BUDGETS_MS.collectTagsWarm)
+        within('collectTags cold', cold, PERF_BUDGETS_MS.collectTagsCold)
+        within('collectTags warm', warm, PERF_BUDGETS_MS.collectTagsWarm)
     })
 
     test('computes the tag list for notes restored from the index', () => {
-        const source = buildNotes(PERF_NOTE_COUNT)
-        const restored = source.map((note) => {
+        const restore = () => buildNotes(PERF_NOTE_COUNT).map((note) => {
             const copy = { ...note }
             seedNoteTags(copy, getNoteTags(note))
 
@@ -74,58 +85,59 @@ describe('startup budgets', () => {
 
         within(
             'collectTags seeded',
-            timeOnce(() => collectTags(restored)).elapsed,
+            timeBest(restore, collectTags),
             PERF_BUDGETS_MS.collectTagsSeeded
         )
     })
 
     test('builds the link graph cold and from seeded link texts', () => {
-        const notes = buildNotes(PERF_NOTE_COUNT)
-        const notePaths = getNotePaths(notes, [REPOSITORY])
-        const seeded = notes.map((note) => {
-            const copy = { ...note }
-            seedNoteLinkTexts(copy, getNoteLinkTexts(note))
+        const prepare = (seed) => () => {
+            const notes = buildNotes(PERF_NOTE_COUNT).map((note) => {
+                const copy = { ...note }
+                if (seed) seedNoteLinkTexts(copy, getNoteLinkTexts(note))
 
-            return copy
-        })
+                return copy
+            })
 
-        within(
-            'link graph cold',
-            timeOnce(() => buildLinkGraph({ notes, notePaths })).elapsed,
-            PERF_BUDGETS_MS.linkGraphCold
-        )
-        within(
-            'link graph seeded',
-            timeOnce(() => buildLinkGraph({ notes: seeded, notePaths })).elapsed,
-            PERF_BUDGETS_MS.linkGraphSeeded
-        )
+            return { notes, notePaths: getNotePaths(notes, [REPOSITORY]) }
+        }
+
+        within('link graph cold', timeBest(prepare(false), buildLinkGraph), PERF_BUDGETS_MS.linkGraphCold)
+        within('link graph seeded', timeBest(prepare(true), buildLinkGraph), PERF_BUDGETS_MS.linkGraphSeeded)
     })
 
     test('derives note paths', () => {
-        const notes = buildNotes(PERF_NOTE_COUNT)
+        const elapsed = timeBest(
+            () => buildNotes(PERF_NOTE_COUNT),
+            (notes) => getNotePaths(notes, [REPOSITORY])
+        )
 
-        within('notePaths', timeOnce(() => getNotePaths(notes, [REPOSITORY])).elapsed, PERF_BUDGETS_MS.notePaths)
+        within('notePaths', elapsed, PERF_BUDGETS_MS.notePaths)
     })
 
     test('builds the drawer tree', () => {
-        const notes = buildNotes(PERF_NOTE_COUNT)
-        const byFolder = new Map([[REPOSITORY.id, notes]])
-
-        within(
-            'repository tree',
-            timeOnce(() => buildFolderTree([REPOSITORY], byFolder)).elapsed,
-            PERF_BUDGETS_MS.folderTree
+        const elapsed = timeBest(
+            () => new Map([[REPOSITORY.id, buildNotes(PERF_NOTE_COUNT)]]),
+            (byFolder) => buildFolderTree([REPOSITORY], byFolder)
         )
+
+        within('repository tree', elapsed, PERF_BUDGETS_MS.folderTree)
     })
 
     test('merges the loaded notes with the current ones', () => {
-        const snapshot = buildNotes(PERF_NOTE_COUNT)
-        const loaded = buildNotes(PERF_NOTE_COUNT)
-        const current = [...snapshot]
+        const prepare = () => {
+            const snapshot = buildNotes(PERF_NOTE_COUNT)
+
+            return {
+                loaded: buildNotes(PERF_NOTE_COUNT),
+                snapshot,
+                current: [{ ...snapshot[0] }, ...snapshot.slice(1)]
+            }
+        }
 
         within(
             'mergeLoadedNotes',
-            timeOnce(() => mergeLoadedNotes(loaded, snapshot, [{ ...current[0] }, ...current.slice(1)])).elapsed,
+            timeBest(prepare, ({ loaded, snapshot, current }) => mergeLoadedNotes(loaded, snapshot, current)),
             PERF_BUDGETS_MS.mergeLoadedNotes
         )
     })

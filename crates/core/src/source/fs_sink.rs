@@ -1,6 +1,7 @@
 use super::constants::{ERROR_WRITE_VERIFICATION, TEMP_PREFIX, TEMP_SUFFIX, WRITE_ATTEMPTS};
 use super::fs::stamp_of;
 use super::{LocationScheme, NoteSink};
+use crate::convert::count_i64;
 use crate::error::Result;
 use crate::model::FileStamp;
 use std::fs;
@@ -44,7 +45,7 @@ impl NoteSink for FsSink {
 			self.write_once(filename, text.as_bytes())?;
 
 			if let Some(stamp) = stamp_of(&self.root, &self.scheme, filename)
-				&& stamp.size == text.len() as i64
+				&& stamp.size == count_i64(text.len())
 			{
 				return Ok(stamp);
 			}

@@ -1,5 +1,6 @@
 use crate::collation::SortKeys;
 use crate::constants::FACET_CHUNK;
+use crate::convert::{count_u32, millis_u64};
 use crate::error::Result;
 use crate::index::{Candidate, Facets, Index};
 use crate::model::{
@@ -60,7 +61,7 @@ impl Engine {
 			.write(folder_id, &notes, &[], &self.sort_keys)?;
 
 		Ok(BatchStats {
-			notes: notes.len() as u32,
+			notes: count_u32(notes.len()),
 			parse_ms,
 			write_ms: elapsed_ms(write_start),
 		})
@@ -138,7 +139,7 @@ impl Engine {
 }
 
 fn elapsed_ms(start: Instant) -> u64 {
-	start.elapsed().as_millis() as u64
+	millis_u64(start.elapsed())
 }
 
 fn load_indexed_facets(index: &Index, candidates: &[Candidate], facets: &mut Facets) -> Result<()> {

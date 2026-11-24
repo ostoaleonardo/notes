@@ -1,5 +1,6 @@
 use super::prefilter::Sort;
 use crate::collation::SortKeys;
+use crate::convert::count_i64;
 use crate::index::{Candidate, Facets};
 use serde::Deserialize;
 use serde_json::{Map, Value};
@@ -46,7 +47,7 @@ fn compare(sort: Sort, left: &Ranked, right: &Ranked) -> Ordering {
 }
 
 fn synthetic_id(position: usize) -> i64 {
-	-(position as i64) - 1
+	-count_i64(position) - 1
 }
 
 pub fn combine(

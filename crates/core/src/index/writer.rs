@@ -1,5 +1,6 @@
 use super::sql;
 use crate::collation::SortKeys;
+use crate::convert::count_i64;
 use crate::error::Result;
 use crate::model::{IndexedNote, Link, Property, Tag};
 use rusqlite::{Transaction, params};
@@ -97,7 +98,7 @@ fn insert_tags(transaction: &Transaction<'_>, note_id: i64, tags: &[Tag]) -> Res
 	for (position, tag) in tags.iter().enumerate() {
 		prepared.execute(params![
 			note_id,
-			position as i64,
+			count_i64(position),
 			tag.name,
 			i64::from(tag.inline)
 		])?;
@@ -116,7 +117,7 @@ fn insert_properties(
 	for (position, property) in properties.iter().enumerate() {
 		prepared.execute(params![
 			note_id,
-			position as i64,
+			count_i64(position),
 			property.key,
 			property.value
 		])?;
@@ -131,7 +132,7 @@ fn insert_links(transaction: &Transaction<'_>, note_id: i64, links: &[Link]) -> 
 	for (position, link) in links.iter().enumerate() {
 		prepared.execute(params![
 			note_id,
-			position as i64,
+			count_i64(position),
 			link.text,
 			link.name,
 			link.anchor_name
@@ -150,7 +151,7 @@ fn insert_all(
 	let mut prepared = transaction.prepare_cached(statement)?;
 
 	for (position, value) in values.iter().enumerate() {
-		prepared.execute(params![note_id, position as i64, value])?;
+		prepared.execute(params![note_id, count_i64(position), value])?;
 	}
 
 	Ok(())
