@@ -31,6 +31,8 @@ pub const TASK_DONE_STATUSES: [char; 2] = ['x', 'X'];
 
 pub const WORD_CHARACTER_CLASS: &str = r"[\p{L}\p{N}_]";
 pub const INSENSITIVE_FLAG: &str = "(?i)";
+pub const ECMASCRIPT_FLAGS_SENSITIVE: &str = "u";
+pub const ECMASCRIPT_FLAGS_INSENSITIVE: &str = "iu";
 pub const ASCII_WORD: &str = "[A-Za-z0-9_]";
 pub const ASCII_NOT_WORD: &str = "[^A-Za-z0-9_]";
 pub const ASCII_DIGIT: &str = "[0-9]";

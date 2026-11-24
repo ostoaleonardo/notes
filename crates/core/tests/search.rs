@@ -4,8 +4,6 @@ use std::collections::HashSet;
 use std::fs;
 use std::path::PathBuf;
 
-const UNSUPPORTED_PATTERNS: [&str; 1] = ["/(?<!x)y/"];
-
 struct FixtureNote {
 	path: String,
 	title: String,
@@ -79,13 +77,7 @@ fn selects_the_same_notes_as_the_reference_evaluator() {
 
 		let compiled = match Query::compile(&node) {
 			Ok(compiled) => compiled,
-			Err(_) => {
-				assert!(
-					UNSUPPORTED_PATTERNS.contains(&query.as_str()),
-					"unexpected compile failure for {query}"
-				);
-				continue;
-			}
+			Err(error) => panic!("cannot compile {query}: {error}"),
 		};
 
 		let match_case = case["matchCase"].as_bool().expect("matchCase");

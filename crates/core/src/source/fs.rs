@@ -1,6 +1,6 @@
 use super::LocationScheme;
-use super::NoteSource;
 use super::constants::{HIDDEN_PREFIX, NOTE_EXTENSION};
+use super::{NoteReader, NoteSource};
 use crate::error::Result;
 use crate::model::{FileStamp, SourceFile};
 use rayon::prelude::*;
@@ -50,7 +50,9 @@ impl NoteSource for FsSource {
 			.filter_map(|name| self.describe(name))
 			.collect())
 	}
+}
 
+impl NoteReader for FsSource {
 	fn read(&self, files: &[&SourceFile]) -> Result<Vec<Option<String>>> {
 		Ok(files
 			.par_iter()

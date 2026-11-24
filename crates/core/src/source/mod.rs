@@ -13,7 +13,10 @@ pub use sink::NoteSink;
 use crate::error::Result;
 use crate::model::SourceFile;
 
-pub trait NoteSource: Send + Sync {
-	fn scan(&self) -> Result<Vec<SourceFile>>;
+pub trait NoteReader: Send + Sync {
 	fn read(&self, files: &[&SourceFile]) -> Result<Vec<Option<String>>>;
+}
+
+pub trait NoteSource: NoteReader {
+	fn scan(&self) -> Result<Vec<SourceFile>>;
 }

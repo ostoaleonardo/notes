@@ -1,11 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { createMemorySource, createSearchCursor } from '@/shared/utils/search-cursor'
 import { bootMark } from '@/shared/utils/boot-mark'
 import { logError } from '@/shared/utils/log-error'
 import { nativeSearch } from '@/shared/utils/native-search'
-import { noteBodies } from '@/shared/utils/note-body'
-import { SourceOverflowError, searchIndex } from '@/shared/utils/search-index'
 
 import { BOOT_MARKS } from '@/shared/constants/boot-marks'
 import { LOG_MESSAGES } from '@/shared/constants/log-messages'
@@ -14,14 +11,25 @@ import { SEARCH_PAGE_SIZE } from '@/shared/constants/search-index'
 const NO_MATCHES = []
 const IDLE = { matches: NO_MATCHES, done: true, scanning: false, settledAst: null }
 
-const openSource = (query) => searchIndex.createSource(query) || createMemorySource(query.notes, query.sort)
-
-export function useSearchResults({ enabled, ast, notes, notePaths, pinned, matchCase, sort }) {
+export function useSearchResults({
+    enabled,
+    ast,
+    notes,
+    notePaths,
+    pinned,
+    matchCase,
+    sort
+}) {
     const [state, setState] = useState(IDLE)
     const sessionRef = useRef(null)
 
+    const finish = useCallback((session) => {
+        session.done = true
+        setState({ matches: session.matches, done: true, scanning: false, settledAst: session.ast })
+    }, [])
+
     const fill = useCallback(async (session, target) => {
-        if (session.running || session.done) return
+        if (session.running || session.done || !session.cursor) return
 
         session.running = true
         setState((current) => ({ ...current, scanning: true }))
@@ -33,8 +41,6 @@ export function useSearchResults({ enabled, ast, notes, notePaths, pinned, match
             setState({ matches: session.matches, done: false, scanning: true, settledAst: session.ast })
         }
 
-        let failed = false
-
         try {
             const result = await session.cursor.next(target, publish)
             if (!result || session.cancelled) return
@@ -44,32 +50,27 @@ export function useSearchResults({ enabled, ast, notes, notePaths, pinned, match
             if (!session.reported) {
                 session.reported = true
                 bootMark(BOOT_MARKS.SEARCH_FIRST_PAGE, {
-                    source: session.close ? 'native' : 'js',
                     matches: session.matches.length,
                     done: result.done,
                     ms: Date.now() - session.startedAt
                 })
             }
 
-            setState({ matches: session.matches, done: result.done, scanning: false, settledAst: session.ast })
+            setState({
+                matches: session.matches,
+                done: result.done,
+                scanning: false,
+                settledAst: session.ast
+            })
         } catch (error) {
             if (session.cancelled) return
 
-            if (!(error instanceof SourceOverflowError)) logError(LOG_MESSAGES.ERROR_SEARCHING_INDEX, error)
-            failed = true
+            logError(LOG_MESSAGES.ERROR_SEARCHING_INDEX, error)
+            finish(session)
         } finally {
             session.running = false
         }
-
-        if (!failed) return
-
-        if (session.fallback) {
-            setState({ matches: session.matches, done: true, scanning: false, settledAst: session.ast })
-            return
-        }
-
-        session.restart()
-    }, [])
+    }, [finish])
 
     useEffect(() => {
         if (!enabled) {
@@ -78,9 +79,6 @@ export function useSearchResults({ enabled, ast, notes, notePaths, pinned, match
             return undefined
         }
 
-        const query = { ast, notes, notePaths, sort }
-        const context = { pinned, notePaths, matchCase }
-
         const session = {
             ast,
             cancelled: false,
@@ -88,35 +86,11 @@ export function useSearchResults({ enabled, ast, notes, notePaths, pinned, match
             done: false,
             matches: NO_MATCHES,
             cursor: null,
-            close: null,
             reported: false,
-            startedAt: Date.now(),
-            fallback: false,
-            restart: null
+            startedAt: Date.now()
         }
 
-        const start = (source) => {
-            session.cursor = createSearchCursor({
-                source,
-                ast,
-                context,
-                isCancelled: () => session.cancelled,
-                loadBodies: noteBodies.load
-            })
-            session.matches = NO_MATCHES
-            session.done = false
-        }
-
-        session.restart = () => {
-            session.fallback = true
-            session.close?.()
-            session.close = null
-            start(createMemorySource(notes, sort))
-            setState({ matches: NO_MATCHES, done: false, scanning: false, settledAst: null })
-            fill(session, SEARCH_PAGE_SIZE)
-        }
-
-        const beginNative = async () => {
+        const begin = async () => {
             try {
                 const cursor = await nativeSearch.open({
                     ast,
@@ -134,37 +108,30 @@ export function useSearchResults({ enabled, ast, notes, notePaths, pinned, match
                 }
 
                 if (!cursor) {
-                    start(openSource(query))
-                } else {
-                    session.cursor = cursor
-                    session.close = cursor.close
-                    session.matches = NO_MATCHES
-                    session.done = false
+                    finish(session)
+                    return
                 }
+
+                session.cursor = cursor
             } catch (error) {
                 if (session.cancelled) return
 
                 logError(LOG_MESSAGES.ERROR_SEARCHING_INDEX, error)
-                start(openSource(query))
+                finish(session)
+                return
             }
 
             fill(session, SEARCH_PAGE_SIZE)
         }
 
         sessionRef.current = session
-
-        if (nativeSearch.isEligible(notes)) {
-            beginNative()
-        } else {
-            start(openSource(query))
-            fill(session, SEARCH_PAGE_SIZE)
-        }
+        begin()
 
         return () => {
             session.cancelled = true
-            session.close?.()
+            session.cursor?.close()
         }
-    }, [enabled, ast, notes, notePaths, pinned, matchCase, sort, fill])
+    }, [enabled, ast, notes, notePaths, pinned, matchCase, sort, fill, finish])
 
     const loadMore = useCallback(() => {
         const session = sessionRef.current

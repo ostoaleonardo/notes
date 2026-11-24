@@ -4,6 +4,7 @@ use super::constants::{
 	OPERATOR_LINE, OPERATOR_MATCH_CASE, OPERATOR_PATH, OPERATOR_SECTION, OPERATOR_TAG,
 	OPERATOR_TASK_DONE, OPERATOR_TASK_TODO, TAG_HASH_PREFIX,
 };
+use super::pattern::{TextPattern, compile_pattern};
 use super::query::Node;
 use super::regex_js;
 use crate::error::Result;
@@ -21,8 +22,8 @@ pub struct TextMatcher {
 }
 
 pub struct RegexMatcher {
-	pub sensitive: Regex,
-	pub insensitive: Regex,
+	pub sensitive: Box<dyn TextPattern>,
+	pub insensitive: Box<dyn TextPattern>,
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -153,8 +154,8 @@ pub fn compile(node: &Node) -> Result<Compiled> {
 			},
 		}),
 		Node::Regex { pattern } => Compiled::Regex(RegexMatcher {
-			sensitive: regex_js::compile(pattern, false)?,
-			insensitive: regex_js::compile(pattern, true)?,
+			sensitive: compile_pattern(pattern, false)?,
+			insensitive: compile_pattern(pattern, true)?,
 		}),
 		Node::Filter { name, argument } => Compiled::Filter(Filter {
 			kind: kind_of(name, argument),

@@ -3,12 +3,14 @@ mod compiled;
 mod constants;
 mod evaluate;
 mod js;
+mod pattern;
 mod patterns;
 mod prefilter;
 mod query;
 mod regex_js;
 mod session;
 mod sql;
+mod unindexed;
 mod warm;
 
 pub use cache::BodyCache;
@@ -18,6 +20,8 @@ pub use prefilter::{
 };
 pub use query::Node;
 pub use session::{SearchRequest, SearchSession, SearchStep, plan};
+pub use unindexed::UnindexedNote;
+pub(crate) use unindexed::{Combined, combine};
 pub use warm::{Warmup, statement as warm_statement};
 
 use crate::error::Result;

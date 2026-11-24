@@ -56,7 +56,7 @@ crates/core (engine)          parsing · index · saves · links · versions · 
 
 - **Rust (`crates/core`)**: parsing of markdown and frontmatter, the SQLite index (schema, writer, reconciliation, queries, listing), locale sort keys, indexing passes (`sync`), atomic note saves with conflict detection, frontmatter compose and decompose, wiki link resolution and rewriting, version history, and path-based repository operations (rename, move, trash, remove).
 - **Kotlin**: SAF listing and reading, resolving the direct file path when the app has all-files access, implementing the foreign traits for SAF (`ProviderNoteSource`, `ProviderNoteSink`, `ProviderRepository`), computing Android document URIs, and marshalling for Expo (`RepositoryFsModule`, `RepositoryIndexer`, `EngineBridge`).
-- **JS**: UI, state, deciding which action to run, search (parser, filters, cursor), link verification, external-edit merge, templates, daily notes, attachments, export, and the in-memory note model.
+- **JS**: UI, state, deciding which action to run, the search parser (query chips) and link verification, external-edit merge, templates, daily notes, attachments, export, and the in-memory note model.
 
 ### Platform seams
 
@@ -178,7 +178,8 @@ Existing files are never renamed. The rules apply to new names and to comparison
 
 | Item | What it does |
 |---|---|
-| `NoteSource` | `scan()` returns the notes of a folder as `SourceFile { location, filename, modified, size }`; `read(files)` returns their text (`None` when unreadable). |
+| `NoteReader` | `read(files)` returns the text of the given `SourceFile { location, filename, modified, size }` (`None` when unreadable). It is all the search, its cache and the warm-up need. |
+| `NoteSource` | A `NoteReader` that can also `scan()` the notes of a folder. Indexing uses it. |
 | `FsSource::new(root, scheme)` | `std::fs` scan (parallel stat) and read. Ignores hidden files (`.` prefix) and anything not ending in `.md` (case-insensitive). Invalid UTF-8 is replaced, not rejected. |
 | `NoteSink` | `stat(filename)`, `write(filename, text)`, `delete(filename)`. |
 | `FsSink::new(root, scheme)` | Writes a hidden temporary file and renames it over the target, then verifies the size and retries up to 3 times. |
@@ -229,19 +230,19 @@ The search query is parsed in JS (the interface needs its positions for chips an
 
 | Function | What it does |
 |---|---|
-| `Query::compile(node)` | Compiles the tree: regex nodes and quoted phrases become `regex::Regex`. A pattern Rust cannot compile (look-around, back-references) is `Error::InvalidQuery`, so the caller can fall back to the JS evaluator. |
+| `Query::compile(node)` | Compiles the tree: quoted phrases become `regex::Regex` and a user regex becomes a `TextPattern`: the fast `regex` engine (with `\w`, `\d`, `\b` and `.` translated to JavaScript semantics) when it accepts the pattern, otherwise `regress`, an ECMAScript engine, so look-around and back-references work like in JavaScript (flags `u` and `iu`, the ones Obsidian's search relies on). A pattern neither engine accepts is `Error::InvalidQuery`, and the app shows no results for that query. |
 | `Query::matches(note, match_case)` | Whether a `NoteView { title, filename, folder, content, tags, properties, pinned }` satisfies the query: plain text, phrases (whole word on content, lines, blocks, sections and tasks), regex, `file:`, `path:`, `content:`, `tag:` (with children), `line:`, `block:`, `section:`, `task:`, `task-todo:`, `task-done:`, `has:images`, `has:files`, `is:pinned`, `match-case:`, `ignore-case:`, `[property]`, `[property:value]` with comparisons and `null`. |
 | `requirement_of(query, folders)` | The prefilter: what every matching note must contain, as a `Requirement` tree of trigram terms (`Fts`), tags (`Tag`), `And` and `Or`. Only stable terms count (3 characters or more, no `.` or `/`, same length when lowercased, already NFC), and a term that could match a folder name is skipped for `path:`. `None` means the query cannot be narrowed (regex, properties, negations). |
 | `compile_match_ids(tree)` | The SQL (`INTERSECT`/`UNION` of FTS and tag lookups) and its parameters that give the candidate ids. |
 | `candidates_sql(tree, folder_ids, sort)` | The ordered candidate query: `id, folder_id, filename, location` of the notes in the folders, narrowed by the prefilter, in one of the six sort orders. |
-| `Engine::search(request, source)` | Opens a `SearchSession`: compiles the query, runs `candidates_sql` for the folders, and loads the tags and properties of the candidates (in chunks of 500). `SearchRequest` carries the query, the sort, the folder ids, the folder paths (for `path:`), the pinned note paths (`folderId::filename`) and `match_case`. Fails with `InvalidQuery` when the query cannot be evaluated. |
-| `SearchSession::step(size)` | Takes the next `size` candidates, reads the files that are not cached through the `NoteSource` in one call, evaluates them in parallel and returns the matches (`folder_id`, `filename`) in the requested order, plus `done`. |
+| `Engine::search(request, source)` | Opens a `SearchSession`: compiles the query, runs `candidates_sql` for the folders, and loads the tags and properties of the candidates (in chunks of 500). `SearchRequest` (deserialized from one camelCase JSON) carries the query, the sort, the folder ids, the folder paths (for `path:`), the pinned note paths (`folderId::filename`), `match_case` and `unindexed`: the notes the app already lists but the index does not cover yet, with their title, modified time, tags and properties. They are evaluated like the others, replace an indexed note with the same folder and filename, and take their place in the requested order (negative synthetic ids). Fails with `InvalidQuery` when the query cannot be evaluated. |
+| `SearchSession::step(size)` | Takes the next `size` candidates, reads the files that are not cached through the `NoteReader` in one call, evaluates them in parallel and returns the matches (`folder_id`, `filename`) in the requested order, plus `done`. |
 | `Engine::warm(folder_ids, source)` | Opens a `Warmup` that reads every note of the folders into the `BodyCache` in steps (`step(size)` returns `true` when done, `cancel()` stops it). The app runs it after each index sync so the first search does not read files. |
 | `BodyCache` | Owned by the `Engine` and shared by its searches: the searchable text of each note, keyed by location and checked against `modified` and `size`, capped at 64 MB and evicted least recently used down to 75%. |
 | `SearchSession::cancel()` | Makes the following steps return `done` without reading anything. |
 | `frontmatter_joined(frontmatter, body)` | The text that content searches see: the raw frontmatter, a newline, the body. |
 
-The evaluator follows the JS one on purpose: numbers parse like `Number()`, strings compare by UTF-16 units, property values convert like `String()`, and user regexes are translated to JS semantics for `\w`, `\d`, `\b` and `.`. `tests/search.rs` checks it against `tests/fixtures/search.json`, and `tests/search_prefilter.rs` checks that the prefilter builds the same trees and SQL as the JS one and never drops a note the evaluator selects. Jest regenerates the fixture from the JS evaluator (`SEARCH_FIXTURE_UPDATE=1 npx jest src/shared/utils/__tests__/search-parity.test.js`).
+The evaluator keeps the semantics of the old JS one on purpose: numbers parse like `Number()`, strings compare by UTF-16 units, property values convert like `String()`, and user regexes are translated to JS semantics for `\w`, `\d`, `\b` and `.`. `tests/search.rs` checks it against `tests/fixtures/search.json`, and `tests/search_prefilter.rs` checks that the prefilter builds the expected trees and SQL and never drops a note the evaluator selects. The fixture was produced by the JS evaluator before it was removed and is now the reference: when a rule changes on purpose, edit the expected values in the fixture together with the Rust code.
 
 ### Others
 
@@ -253,11 +254,11 @@ The evaluator follows the JS one on purpose: numbers parse like `Number()`, stri
 
 ## Adapter and Android
 
-`crates/uniffi` exports `Engine` and the free functions below, plus the foreign traits Kotlin implements (`NoteSource`, `NoteSink`, `RepositoryFiles`, `ProgressListener`) and the objects `FsNoteSink`, `FsRepositoryHandle` (direct access) and `VersionsHandle`. Errors map one to one to `EngineError`. The trait `RepositoryFiles` there carries the repository operations too, so one Kotlin class serves versions and folder operations.
+`crates/uniffi` exports `Engine` and the free functions below, plus the foreign traits Kotlin implements (`NoteReader`, `NoteSource`, `NoteSink`, `RepositoryFiles`, `ProgressListener`) and the objects `FsNoteSink`, `FsRepositoryHandle` (direct access) and `VersionsHandle`. Errors map one to one to `EngineError`. The trait `RepositoryFiles` there carries the repository operations too, so one Kotlin class serves versions and folder operations.
 
 Free functions: `compose_note`, `decompose_note`, `find_backlink_paths`, `rename_links_in_bodies`, `sanitize_filename`, `unique_filename`. Engine methods exported: `sync`, `sync_directory` (direct access, builds a `FsSource`), `save_note`, `save_notes`, `rename_note`, `delete_note`, `search`, `rename_folder`, `remove_folder`, `trash_note`, `move_note`, `indexed_notes`, `query`, `list_notes`, `backlink_candidates`, `mention_candidates`, `delete_folder`, `prune`.
 
-The Expo module `repository-fs` exposes to JS: `indexRepository`, `saveNote`, `saveNotes`, `renameNote`, `deleteNote`, `searchOpen`, `searchStep`, `searchClose`, `renameFolder`, `removeFolder`, `trashNote`, `moveNote`, `composeNote`, `decomposeNote`, `sanitizeFilename`, `uniqueFilename`, `listIndexedNotes`, `queryIndex`, `listNoteMetadata`, `findBacklinkCandidates`, `findMentionCandidates`, `findBacklinkPaths`, `renameLinksInBodies`, `pruneRepositoryIndex`, `deleteFolderIndex`, the `versions*` functions, and SAF helpers (`listDirectory`, `listDirectorySync`, `readTextFiles`, `findChild`, `listAttachments`, direct access permissions).
+The Expo module `repository-fs` exposes to JS: `indexRepository`, `saveNote`, `saveNotes`, `renameNote`, `deleteNote`, `searchOpen(requestJson)`, `searchStep`, `searchWarm`, `searchClose`, `renameFolder`, `removeFolder`, `trashNote`, `moveNote`, `composeNote`, `decomposeNote`, `sanitizeFilename`, `uniqueFilename`, `listIndexedNotes`, `queryIndex`, `listNoteMetadata`, `findBacklinkCandidates`, `findMentionCandidates`, `findBacklinkPaths`, `renameLinksInBodies`, `pruneRepositoryIndex`, `deleteFolderIndex`, the `versions*` functions, and SAF helpers (`listDirectory`, `listDirectorySync`, `readTextFiles`, `findChild`, `listAttachments`, direct access permissions).
 
 The index-changing operations (`indexRepository`, `pruneRepositoryIndex`, `deleteFolderIndex`, `renameFolder`, `removeFolder`, `trashNote`, `moveNote`) run under one lock in Kotlin so they do not interleave. The shared engine and the version stores are created once per process.
 

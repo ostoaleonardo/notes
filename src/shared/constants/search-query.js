@@ -56,16 +56,8 @@ export const OPERATOR_PREFIX_REGEX = /^([a-z-]+):/i
 export const PROPERTY_BRACKETS = { OPEN: '[', CLOSE: ']' }
 export const GROUP_BRACKETS = { OPEN: '(', CLOSE: ')' }
 
-export const TASK_STATUS_LINE_REGEX = /^\s*(?:>\s*)*(?:[-*+]|\d+[.)])\s+\[(.)\]\s/
-export const BLOCK_SEPARATOR_REGEX = /\n[ \t]*\n/
-export const HEADING_LINE_REGEX = /^#{1,6}\s/
-export const IMAGE_REFERENCE_REGEX = /!\[[^\]]*\]\([^)]+\)|!\[\[[^\]]+\.(?:png|jpe?g|gif|webp|avif|bmp|svg|heic)(?:[|#][^\]]*)?\]\]/i
-export const FILE_REFERENCE_REGEX = /!?\[\[[^\]|#]+\.(?!(?:md|png|jpe?g|gif|webp|avif|bmp|svg|heic)\b)\w+(?:[|#][^\]]*)?\]\]|\[[^\]]*\]\((?:file|content):[^)]+\)/i
 
-export const TASK_STATUS_TODO = ' '
-export const TASK_STATUSES_DONE = ['x', 'X']
 
-export const WORD_CHARACTER_PATTERN = '[\\p{L}\\p{N}_]'
 
 export const NEGATION_PREFIX = '-'
 export const OR_KEYWORD = 'OR'

@@ -276,14 +276,9 @@ class RepositoryFsModule : Module() {
       withContext(Dispatchers.IO) { runQuery(engine(), sql, params) }
     }
 
-    AsyncFunction("searchOpen") Coroutine { queryJson: String, sort: String, folderIds: List<String>, pathFolderIds: List<String>, pathValues: List<String>, pinned: List<String>, matchCase: Boolean ->
+    AsyncFunction("searchOpen") Coroutine { requestJson: String ->
       withContext(Dispatchers.IO) {
-        searches.open(
-          context,
-          engine(),
-          readDispatcher,
-          searchRequest(queryJson, sort, folderIds, pathFolderIds, pathValues, pinned, matchCase)
-        )
+        searches.open(context, engine(), readDispatcher, requestJson)
       }
     }
 

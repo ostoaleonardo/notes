@@ -1,13 +1,10 @@
 import RepositoryFs from 'repository-fs'
 
+import { indexCoverage } from '@/shared/utils/index-coverage'
 import { buildNotePath } from '@/shared/utils/note-path'
 
 import { SEARCH_NODE_TYPES } from '@/shared/constants/search-query'
-import {
-    SEARCH_NATIVE_ENABLED,
-    SEARCH_NATIVE_MIN_NOTES,
-    SEARCH_NATIVE_STEP_SIZE
-} from '@/shared/constants/search-index'
+import { SEARCH_NATIVE_STEP_SIZE } from '@/shared/constants/search-index'
 
 const nodeOrNull = (node) => (node ? toNativeNode(node) : null)
 
@@ -32,6 +29,16 @@ export const toNativeNode = (node) => {
             return { type: SEARCH_NODE_TYPES.NULL }
     }
 }
+
+const toUnindexed = (note) => ({
+    folderId: note.folderId,
+    filename: note.filename,
+    location: note.fileUri,
+    title: note.title,
+    modified: note.updatedAt,
+    tags: note.tags ?? [],
+    properties: note.properties ?? {}
+})
 
 const collectFolders = (notes, notePaths) => {
     const paths = new Map()
@@ -83,26 +90,29 @@ export const createNativeCursor = ({ fs, id, notesByPath, size, isCancelled }) =
 }
 
 export const createNativeSearch = (fs, {
-    enabled = SEARCH_NATIVE_ENABLED,
-    minNotes = SEARCH_NATIVE_MIN_NOTES,
-    size = SEARCH_NATIVE_STEP_SIZE
+    size = SEARCH_NATIVE_STEP_SIZE,
+    isIndexed = () => true
 } = {}) => ({
-    isEligible: (notes) => enabled && typeof fs.searchOpen === 'function' && notes.length >= minNotes,
+    warm: async (notes) => {
+        if (typeof fs.searchWarm !== 'function') return
 
-    warm: (notes) => fs.searchWarm([...new Set(notes.map((note) => note.folderId))]),
+        await fs.searchWarm([...new Set(notes.map((note) => note.folderId))])
+    },
 
     open: async ({ ast, notes, notePaths, pinned, matchCase, sort, isCancelled }) => {
+        if (typeof fs.searchOpen !== 'function') return null
+
         const folders = collectFolders(notes, notePaths)
 
-        const id = await fs.searchOpen(
-            JSON.stringify(toNativeNode(ast)),
+        const id = await fs.searchOpen(JSON.stringify({
+            query: toNativeNode(ast),
             sort,
-            folders.ids,
-            folders.ids,
-            folders.paths,
-            [...pinned],
-            !!matchCase
-        )
+            folderIds: folders.ids,
+            folderPaths: Object.fromEntries(folders.ids.map((folderId, index) => [folderId, folders.paths[index]])),
+            pinned: [...pinned],
+            matchCase: !!matchCase,
+            unindexed: notes.filter((note) => !isIndexed(note)).map(toUnindexed)
+        }))
 
         if (id == null) return null
 
@@ -116,4 +126,4 @@ export const createNativeSearch = (fs, {
     }
 })
 
-export const nativeSearch = createNativeSearch(RepositoryFs)
+export const nativeSearch = createNativeSearch(RepositoryFs, { isIndexed: indexCoverage.isCovered })

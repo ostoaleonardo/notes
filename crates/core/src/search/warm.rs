@@ -3,12 +3,12 @@ use super::prefilter::{Sort, candidates_sql};
 use crate::error::Result;
 use crate::index::Candidate;
 use crate::model::SourceFile;
-use crate::source::NoteSource;
+use crate::source::NoteReader;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 
 pub struct Warmup {
-	source: Arc<dyn NoteSource>,
+	source: Arc<dyn NoteReader>,
 	cache: Arc<BodyCache>,
 	files: Vec<SourceFile>,
 	position: Mutex<usize>,
@@ -24,7 +24,7 @@ pub fn statement(folder_ids: &[String]) -> (String, Vec<String>) {
 impl Warmup {
 	pub fn new(
 		candidates: Vec<Candidate>,
-		source: Arc<dyn NoteSource>,
+		source: Arc<dyn NoteReader>,
 		cache: Arc<BodyCache>,
 	) -> Self {
 		let files = candidates

@@ -23,7 +23,7 @@ import { isBodylessRepository } from '@/shared/utils/body-mode'
 import { loadNotesFromIndex } from '@/shared/utils/index-notes'
 import { syncRepositoryIndex } from '@/shared/utils/repository-index'
 import { nativeSearch } from '@/shared/utils/native-search'
-import { searchIndex } from '@/shared/utils/search-index'
+import { indexCoverage } from '@/shared/utils/index-coverage'
 
 import { BOOT_MARKS } from '@/shared/constants/boot-marks'
 import { INDEXING_COMPLETE, INDEXING_NOTICE_MIN_FILES, INDEXING_STARTED } from '@/shared/constants/indexing'
@@ -179,12 +179,10 @@ export const NoteProvider = ({ children }) => {
         await syncRepositoryIndex(activeFolderTree, folders)
 
         try {
-            await searchIndex.refresh(startNotes)
+            await indexCoverage.refresh(startNotes)
         } catch (error) {
             logError(LOG_MESSAGES.ERROR_REFRESHING_SEARCH_INDEX, error)
         }
-
-        if (!nativeSearch.isEligible(startNotes)) return
 
         try {
             await nativeSearch.warm(startNotes)

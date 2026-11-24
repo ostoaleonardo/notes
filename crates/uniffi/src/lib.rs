@@ -15,8 +15,8 @@ use records::{
 	SaveReport, Value,
 };
 use repository::{ForeignRepository, RepositoryFiles, VersionsHandle};
-use search::{SearchHandle, SearchRequestRecord, WarmHandle};
-use source::{ForeignSink, ForeignSource, NoteSink, NoteSource, ProgressListener};
+use search::{SearchHandle, WarmHandle};
+use source::{ForeignSink, ForeignSource, NoteReader, NoteSink, NoteSource, ProgressListener};
 use std::collections::HashSet;
 use std::sync::Arc;
 
@@ -235,18 +235,18 @@ impl Engine {
 
 	pub fn search(
 		&self,
-		request: SearchRequestRecord,
-		source: Arc<dyn NoteSource>,
+		request_json: String,
+		reader: Arc<dyn NoteReader>,
 	) -> Result<Arc<SearchHandle>, EngineError> {
-		search::open(&self.inner, request, source)
+		search::open(&self.inner, request_json, reader)
 	}
 
 	pub fn warm(
 		&self,
 		folder_ids: Vec<String>,
-		source: Arc<dyn NoteSource>,
+		reader: Arc<dyn NoteReader>,
 	) -> Result<Arc<WarmHandle>, EngineError> {
-		search::warm(&self.inner, folder_ids, source)
+		search::warm(&self.inner, folder_ids, reader)
 	}
 
 	pub fn list_notes(&self, folder_ids: Vec<String>) -> Result<String, EngineError> {

@@ -1,8 +1,8 @@
 use engine::engine::Engine;
 use engine::error::{Error, Result};
 use engine::model::{NoteInput, SourceFile};
-use engine::search::{Node, SearchRequest, Sort};
-use engine::source::NoteSource;
+use engine::search::{Node, SearchRequest, Sort, UnindexedNote};
+use engine::source::NoteReader;
 use serde_json::Value;
 use std::collections::{HashMap, HashSet};
 use std::fs;
@@ -18,11 +18,7 @@ struct MapSource {
 	texts: HashMap<String, String>,
 }
 
-impl NoteSource for MapSource {
-	fn scan(&self) -> Result<Vec<SourceFile>> {
-		Ok(Vec::new())
-	}
-
+impl NoteReader for MapSource {
 	fn read(&self, files: &[&SourceFile]) -> Result<Vec<Option<String>>> {
 		Ok(files
 			.iter()
@@ -97,7 +93,7 @@ fn finds_the_same_notes_as_the_reference_evaluator_through_the_index() {
 		.filter(|(_, path)| pinned_paths.contains(*path))
 		.map(|((folder_id, filename), _)| format!("{folder_id}::{filename}"))
 		.collect();
-	let source: Arc<dyn NoteSource> = Arc::new(MapSource { texts });
+	let source: Arc<dyn NoteReader> = Arc::new(MapSource { texts });
 	let mut checked = 0;
 
 	for case in fixture["cases"].as_array().expect("cases") {
@@ -110,13 +106,12 @@ fn finds_the_same_notes_as_the_reference_evaluator_through_the_index() {
 			folder_paths: folder_paths.clone(),
 			pinned: pinned.clone(),
 			match_case: case["matchCase"].as_bool().expect("matchCase"),
+			unindexed: Vec::new(),
 		};
 
-		let session = match engine.search(request, source.clone()) {
-			Ok(session) => session,
-			Err(Error::InvalidQuery(_)) => continue,
-			Err(error) => panic!("{query}: {error}"),
-		};
+		let session = engine
+			.search(request, source.clone())
+			.unwrap_or_else(|error| panic!("{query}: {error}"));
 
 		let mut found: Vec<String> = Vec::new();
 
@@ -155,7 +150,7 @@ fn finds_the_same_notes_as_the_reference_evaluator_through_the_index() {
 fn stops_when_cancelled_and_reports_unsupported_regexes() {
 	let directory = TempDir::new().unwrap();
 	let engine = Engine::new(directory.path().join("index.db"), "en").unwrap();
-	let source: Arc<dyn NoteSource> = Arc::new(MapSource {
+	let source: Arc<dyn NoteReader> = Arc::new(MapSource {
 		texts: HashMap::new(),
 	});
 	let request = |query: Node| SearchRequest {
@@ -165,10 +160,11 @@ fn stops_when_cancelled_and_reports_unsupported_regexes() {
 		folder_paths: HashMap::new(),
 		pinned: HashSet::new(),
 		match_case: false,
+		unindexed: Vec::new(),
 	};
 
 	let unsupported = Node::Regex {
-		pattern: "(?<!x)y".to_string(),
+		pattern: "(".to_string(),
 	};
 	assert!(matches!(
 		engine.search(request(unsupported), source.clone()),
@@ -210,11 +206,7 @@ struct CountingSource {
 	reads: AtomicUsize,
 }
 
-impl NoteSource for CountingSource {
-	fn scan(&self) -> Result<Vec<SourceFile>> {
-		Ok(Vec::new())
-	}
-
+impl NoteReader for CountingSource {
 	fn read(&self, files: &[&SourceFile]) -> Result<Vec<Option<String>>> {
 		self.reads.fetch_add(files.len(), Ordering::Relaxed);
 
@@ -251,6 +243,7 @@ fn reuses_cached_bodies_until_the_file_changes() {
 			folder_paths: HashMap::new(),
 			pinned: HashSet::new(),
 			match_case: false,
+			unindexed: Vec::new(),
 		};
 		let session = engine.search(request, source.clone()).unwrap();
 
@@ -297,9 +290,151 @@ fn warming_fills_the_cache_before_the_first_search() {
 		folder_paths: HashMap::new(),
 		pinned: HashSet::new(),
 		match_case: false,
+		unindexed: Vec::new(),
 	};
 	let session = engine.search(request, source.clone()).unwrap();
 
 	assert_eq!(session.step(10).unwrap().matches.len(), 1);
 	assert_eq!(source.reads.load(Ordering::Relaxed), 1);
+}
+
+fn indexed_note(filename: &str, modified: i64) -> NoteInput {
+	NoteInput {
+		filename: filename.to_string(),
+		location: format!("file:///{filename}"),
+		modified,
+		size: 5,
+		text: "hello".to_string(),
+	}
+}
+
+fn unindexed_note(filename: &str, title: &str, tags: &[&str]) -> UnindexedNote {
+	UnindexedNote {
+		folder_id: ROOT_FOLDER.to_string(),
+		filename: filename.to_string(),
+		location: format!("file:///{filename}"),
+		title: title.to_string(),
+		modified: 9,
+		size: 0,
+		tags: tags.iter().map(|tag| tag.to_string()).collect(),
+		properties: serde_json::Map::new(),
+	}
+}
+
+fn run_with(
+	engine: &Engine,
+	query: Node,
+	unindexed: Vec<UnindexedNote>,
+	sort: Sort,
+	texts: &[(&str, &str)],
+) -> Vec<String> {
+	let source: Arc<dyn NoteReader> = Arc::new(MapSource {
+		texts: texts
+			.iter()
+			.map(|(name, text)| (format!("file:///{name}"), text.to_string()))
+			.collect(),
+	});
+	let request = SearchRequest {
+		query,
+		sort,
+		folder_ids: vec![ROOT_FOLDER.to_string()],
+		folder_paths: HashMap::new(),
+		pinned: HashSet::new(),
+		match_case: false,
+		unindexed,
+	};
+	let session = engine.search(request, source).unwrap();
+
+	session
+		.step(50)
+		.unwrap()
+		.matches
+		.into_iter()
+		.map(|note| note.filename)
+		.collect()
+}
+
+fn text_node(value: &str) -> Node {
+	Node::Text {
+		value: value.to_string(),
+		phrase: false,
+	}
+}
+
+#[test]
+fn finds_a_note_the_index_does_not_know_yet() {
+	let directory = TempDir::new().unwrap();
+	let engine = Engine::new(directory.path().join("index.db"), "en").unwrap();
+
+	engine
+		.write(ROOT_FOLDER, vec![indexed_note("known.md", 1)])
+		.unwrap();
+
+	let found = run_with(
+		&engine,
+		text_node("fresh"),
+		vec![unindexed_note("late.md", "Late", &[])],
+		Sort::NameAsc,
+		&[("late.md", "a fresh note"), ("known.md", "hello")],
+	);
+
+	assert_eq!(found, ["late.md"]);
+}
+
+#[test]
+fn prefers_the_metadata_of_the_unindexed_copy_and_never_lists_a_note_twice() {
+	let directory = TempDir::new().unwrap();
+	let engine = Engine::new(directory.path().join("index.db"), "en").unwrap();
+
+	engine
+		.write(ROOT_FOLDER, vec![indexed_note("same.md", 1)])
+		.unwrap();
+
+	let found = run_with(
+		&engine,
+		Node::Filter {
+			name: "tag".to_string(),
+			argument: Some(Box::new(text_node("fresh"))),
+		},
+		vec![unindexed_note("same.md", "Same", &["fresh"])],
+		Sort::NameAsc,
+		&[("same.md", "hello")],
+	);
+
+	assert_eq!(found, ["same.md"]);
+}
+
+#[test]
+fn places_unindexed_notes_in_the_requested_order() {
+	let directory = TempDir::new().unwrap();
+	let engine = Engine::new(directory.path().join("index.db"), "en").unwrap();
+
+	engine
+		.write(
+			ROOT_FOLDER,
+			vec![indexed_note("beta.md", 1), indexed_note("delta.md", 2)],
+		)
+		.unwrap();
+
+	let texts = [
+		("alpha.md", "hello"),
+		("beta.md", "hello"),
+		("charlie.md", "hello"),
+		("delta.md", "hello"),
+	];
+	let extra = || {
+		vec![
+			unindexed_note("alpha.md", "alpha", &[]),
+			unindexed_note("charlie.md", "charlie", &[]),
+		]
+	};
+
+	assert_eq!(
+		run_with(&engine, text_node("hello"), extra(), Sort::NameAsc, &texts),
+		["alpha.md", "beta.md", "charlie.md", "delta.md"]
+	);
+	assert_eq!(
+		run_with(&engine, text_node("hello"), extra(), Sort::NameDesc, &texts),
+		["delta.md", "charlie.md", "beta.md", "alpha.md"]
+	);
 }

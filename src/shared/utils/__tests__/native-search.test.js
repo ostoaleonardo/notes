@@ -61,13 +61,20 @@ describe('native search query', () => {
     })
 })
 
-describe('native search eligibility', () => {
-    test('needs the native functions and enough notes', () => {
-        const search = createNativeSearch({ searchOpen: jest.fn() }, { minNotes: 3 })
+describe('native search without the native functions', () => {
+    test('opens nothing and warms nothing', async () => {
+        const search = createNativeSearch({})
 
-        expect(search.isEligible(NOTES)).toBe(true)
-        expect(search.isEligible(NOTES.slice(0, 2))).toBe(false)
-        expect(createNativeSearch({}, { minNotes: 0 }).isEligible(NOTES)).toBe(false)
+        expect(await search.open({
+            ast: parseSearchQuery('milk'),
+            notes: NOTES,
+            notePaths: NOTE_PATHS,
+            pinned: new Set(),
+            matchCase: false,
+            sort: 'name-asc',
+            isCancelled: () => false
+        })).toBeNull()
+        await expect(search.warm(NOTES)).resolves.toBeUndefined()
     })
 })
 
@@ -75,14 +82,14 @@ describe('warm native search', () => {
     test('asks the core to read the notes of every folder once', async () => {
         const fs = { searchOpen: jest.fn(), searchWarm: jest.fn().mockResolvedValue(undefined) }
 
-        await createNativeSearch(fs, { minNotes: 0 }).warm(NOTES)
+        await createNativeSearch(fs).warm(NOTES)
 
         expect(fs.searchWarm).toHaveBeenCalledWith(['a', 'b'])
     })
 })
 
 describe('open native search', () => {
-    const open = (fs, overrides = {}) => createNativeSearch(fs, { minNotes: 0, size: 2 }).open({
+    const open = (fs, overrides = {}) => createNativeSearch(fs, { size: 2 }).open({
         ast: parseSearchQuery('milk'),
         notes: NOTES,
         notePaths: NOTE_PATHS,
@@ -93,23 +100,58 @@ describe('open native search', () => {
         ...overrides
     })
 
-    test('sends the query, the folders and their paths, and what is pinned', async () => {
+    const sentRequest = (fs) => JSON.parse(fs.searchOpen.mock.calls[0][0])
+
+    test('sends one request with the query, the folders and their paths, and what is pinned', async () => {
         const fs = createFs([])
 
         await open(fs)
 
-        expect(fs.searchOpen).toHaveBeenCalledWith(
-            JSON.stringify({
+        expect(sentRequest(fs)).toEqual({
+            query: {
                 type: 'and',
                 children: [{ type: 'text', value: 'milk', phrase: false }]
-            }),
-            'name-asc',
-            ['a', 'b'],
-            ['a', 'b'],
-            ['Work', ''],
-            ['a::one.md'],
-            true
-        )
+            },
+            sort: 'name-asc',
+            folderIds: ['a', 'b'],
+            folderPaths: { a: 'Work', b: '' },
+            pinned: ['a::one.md'],
+            matchCase: true,
+            unindexed: []
+        })
+    })
+
+    test('sends the notes the index does not know yet with what the app knows of them', async () => {
+        const fs = createFs([])
+        const fresh = {
+            ...note('a', 'fresh.md'),
+            fileUri: 'file:///repo/fresh.md',
+            title: 'Fresh',
+            updatedAt: 42,
+            tags: ['new'],
+            properties: { status: 'open' }
+        }
+        const isIndexed = (candidate) => candidate !== fresh
+
+        await createNativeSearch(fs, { size: 2, isIndexed }).open({
+            ast: parseSearchQuery('milk'),
+            notes: [...NOTES, fresh],
+            notePaths: NOTE_PATHS,
+            pinned: new Set(),
+            matchCase: false,
+            sort: 'name-asc',
+            isCancelled: () => false
+        })
+
+        expect(sentRequest(fs).unindexed).toEqual([{
+            folderId: 'a',
+            filename: 'fresh.md',
+            location: 'file:///repo/fresh.md',
+            title: 'Fresh',
+            modified: 42,
+            tags: ['new'],
+            properties: { status: 'open' }
+        }])
     })
 
     test('answers nothing when the core cannot evaluate the query', async () => {

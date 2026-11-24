@@ -4,17 +4,21 @@ use super::constants::NOTE_PATH_SEPARATOR;
 use super::evaluate::NoteView;
 use super::prefilter::{Sort, candidates_sql, requirement_of};
 use super::query::Node;
+use super::unindexed::UnindexedNote;
 use crate::error::Result;
 use crate::index::{Candidate, Facets};
 use crate::model::{NoteRef, SourceFile};
-use crate::source::NoteSource;
+use crate::source::NoteReader;
 use rayon::prelude::*;
+use serde::Deserialize;
 use serde_json::Map;
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
 use std::sync::Mutex;
 use std::sync::atomic::{AtomicBool, Ordering};
 
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct SearchRequest {
 	pub query: Node,
 	pub sort: Sort,
@@ -22,6 +26,8 @@ pub struct SearchRequest {
 	pub folder_paths: HashMap<String, String>,
 	pub pinned: HashSet<String>,
 	pub match_case: bool,
+	#[serde(default)]
+	pub unindexed: Vec<UnindexedNote>,
 }
 
 pub struct SearchStep {
@@ -30,7 +36,7 @@ pub struct SearchStep {
 }
 
 pub struct SearchSession {
-	source: Arc<dyn NoteSource>,
+	source: Arc<dyn NoteReader>,
 	cache: Arc<BodyCache>,
 	query: Query,
 	candidates: Vec<Candidate>,
@@ -67,7 +73,7 @@ impl SearchSession {
 		query: Query,
 		candidates: Vec<Candidate>,
 		facets: Facets,
-		source: Arc<dyn NoteSource>,
+		source: Arc<dyn NoteReader>,
 		cache: Arc<BodyCache>,
 	) -> Self {
 		Self {

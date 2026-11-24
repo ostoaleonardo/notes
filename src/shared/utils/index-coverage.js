@@ -2,7 +2,7 @@ import RepositoryFs from 'repository-fs'
 
 import { buildNotePath } from '@/shared/utils/note-path'
 
-export const createIndexCoverage = ({ listIndexedNotes }) => {
+const createIndexCoverage = ({ listIndexedNotes }) => {
     let covered = new WeakSet()
 
     const refresh = async (notes) => {

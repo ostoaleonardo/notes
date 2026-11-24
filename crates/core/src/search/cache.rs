@@ -1,7 +1,7 @@
 use super::constants::{CACHE_EVICT_TO_PERCENT, CACHE_MAX_BYTES};
 use crate::error::Result;
 use crate::model::SourceFile;
-use crate::source::NoteSource;
+use crate::source::NoteReader;
 use crate::syntax::search_text;
 use rayon::prelude::*;
 use std::collections::HashMap;
@@ -66,7 +66,7 @@ impl BodyCache {
 
 	pub fn load(
 		&self,
-		source: &dyn NoteSource,
+		source: &dyn NoteReader,
 		files: &[SourceFile],
 	) -> Result<Vec<Option<Arc<str>>>> {
 		let mut contents: Vec<Option<Arc<str>>> = files.iter().map(|file| self.get(file)).collect();

@@ -5,18 +5,13 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.runBlocking
 import uniffi.engine.Engine
 import uniffi.engine.EngineException
-import uniffi.engine.FolderPathRecord
-import uniffi.engine.NoteSource
+import uniffi.engine.NoteReader
 import uniffi.engine.SearchHandle
-import uniffi.engine.SearchRequestRecord
-import uniffi.engine.SourceFile
 
-internal class LocationNoteSource(
+internal class LocationNoteReader(
   private val context: Context,
   private val dispatcher: CoroutineDispatcher
-) : NoteSource {
-  override fun scan(): List<SourceFile> = emptyList()
-
+) : NoteReader {
   override fun read(locations: List<String>): List<String?> =
     runBlocking { readAll(context, locations, dispatcher) { it } }
 }
@@ -30,10 +25,10 @@ internal class SearchRegistry {
     context: Context,
     engine: Engine,
     dispatcher: CoroutineDispatcher,
-    request: SearchRequestRecord
+    requestJson: String
   ): Int? {
     val handle = try {
-      engine.search(request, LocationNoteSource(context, dispatcher))
+      engine.search(requestJson, LocationNoteReader(context, dispatcher))
     } catch (error: EngineException.InvalidQuery) {
       return null
     }
@@ -64,7 +59,7 @@ internal class SearchRegistry {
     if (!warming.compareAndSet(false, true)) return
 
     try {
-      val warmup = engine.warm(folderIds, LocationNoteSource(context, dispatcher))
+      val warmup = engine.warm(folderIds, LocationNoteReader(context, dispatcher))
 
       while (!warmup.step(WARM_STEP_SIZE.toUInt())) {
         continue
@@ -74,23 +69,6 @@ internal class SearchRegistry {
     }
   }
 }
-
-internal fun searchRequest(
-  queryJson: String,
-  sort: String,
-  folderIds: List<String>,
-  pathFolderIds: List<String>,
-  pathValues: List<String>,
-  pinned: List<String>,
-  matchCase: Boolean
-) = SearchRequestRecord(
-  queryJson,
-  sort,
-  folderIds,
-  pathFolderIds.zip(pathValues).map { (folderId, path) -> FolderPathRecord(folderId, path) },
-  pinned,
-  matchCase
-)
 
 internal object SearchKeys {
   const val FOLDER_IDS = "folderIds"

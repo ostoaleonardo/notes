@@ -1,15 +1,15 @@
 use crate::collation::SortKeys;
 use crate::constants::FACET_CHUNK;
 use crate::error::Result;
-use crate::index::Facets;
+use crate::index::{Candidate, Facets, Index};
 use crate::model::{
 	BatchStats, IndexedNote, IndexedNotes, NoteInput, NoteRef, QueryResult, ReconcilePlan,
 	ScannedFile, Value,
 };
 use crate::pool::{Lease, Pool};
 use crate::reconcile;
-use crate::search::{self, BodyCache, SearchRequest, SearchSession, Warmup};
-use crate::source::NoteSource;
+use crate::search::{self, BodyCache, Combined, SearchRequest, SearchSession, Warmup};
+use crate::source::NoteReader;
 use crate::syntax::parse_note;
 use rayon::prelude::*;
 use std::collections::HashSet;
@@ -76,21 +76,20 @@ impl Engine {
 
 	pub fn search(
 		&self,
-		request: SearchRequest,
-		source: Arc<dyn NoteSource>,
+		mut request: SearchRequest,
+		source: Arc<dyn NoteReader>,
 	) -> Result<SearchSession> {
 		let planned = search::plan(&request)?;
+		let unindexed = std::mem::take(&mut request.unindexed);
 		let index = self.open()?;
-		let candidates = index.search_candidates(&planned.statement, &planned.params)?;
-		let ids: Vec<i64> = candidates.iter().map(|candidate| candidate.id).collect();
-		let mut facets = Facets::default();
+		let indexed = index.search_candidates(&planned.statement, &planned.params)?;
+		let combined = search::combine(indexed, unindexed, request.sort, &self.sort_keys);
+		let Combined {
+			candidates,
+			mut facets,
+		} = combined;
 
-		for chunk in ids.chunks(FACET_CHUNK) {
-			let part = index.facets(chunk)?;
-
-			facets.tags.extend(part.tags);
-			facets.properties.extend(part.properties);
-		}
+		load_indexed_facets(&index, &candidates, &mut facets)?;
 
 		Ok(SearchSession::new(
 			request,
@@ -102,7 +101,7 @@ impl Engine {
 		))
 	}
 
-	pub fn warm(&self, folder_ids: &[String], source: Arc<dyn NoteSource>) -> Result<Warmup> {
+	pub fn warm(&self, folder_ids: &[String], source: Arc<dyn NoteReader>) -> Result<Warmup> {
 		let (statement, params) = search::warm_statement(folder_ids);
 		let candidates = self.open()?.search_candidates(&statement, &params)?;
 
@@ -140,4 +139,21 @@ impl Engine {
 
 fn elapsed_ms(start: Instant) -> u64 {
 	start.elapsed().as_millis() as u64
+}
+
+fn load_indexed_facets(index: &Index, candidates: &[Candidate], facets: &mut Facets) -> Result<()> {
+	let ids: Vec<i64> = candidates
+		.iter()
+		.map(|candidate| candidate.id)
+		.filter(|id| *id > 0)
+		.collect();
+
+	for chunk in ids.chunks(FACET_CHUNK) {
+		let part = index.facets(chunk)?;
+
+		facets.tags.extend(part.tags);
+		facets.properties.extend(part.properties);
+	}
+
+	Ok(())
 }

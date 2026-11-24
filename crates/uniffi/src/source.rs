@@ -5,6 +5,11 @@ use engine::source::LocationScheme;
 use std::sync::Arc;
 
 #[uniffi::export(with_foreign)]
+pub trait NoteReader: Send + Sync {
+	fn read(&self, locations: Vec<String>) -> Result<Vec<Option<String>>, EngineError>;
+}
+
+#[uniffi::export(with_foreign)]
 pub trait NoteSource: Send + Sync {
 	fn scan(&self) -> Result<Vec<SourceFile>, EngineError>;
 	fn read(&self, locations: Vec<String>) -> Result<Vec<Option<String>>, EngineError>;
@@ -25,15 +30,35 @@ impl ForeignSource {
 	}
 }
 
+fn locations_of(files: &[&SourceFile]) -> Vec<String> {
+	files.iter().map(|file| file.location.clone()).collect()
+}
+
+impl engine::source::NoteReader for ForeignSource {
+	fn read(&self, files: &[&SourceFile]) -> EngineResult<Vec<Option<String>>> {
+		Ok(self.inner.read(locations_of(files))?)
+	}
+}
+
 impl engine::source::NoteSource for ForeignSource {
 	fn scan(&self) -> EngineResult<Vec<SourceFile>> {
 		Ok(self.inner.scan()?)
 	}
+}
 
+pub struct ForeignReader {
+	inner: Arc<dyn NoteReader>,
+}
+
+impl ForeignReader {
+	pub fn new(inner: Arc<dyn NoteReader>) -> Self {
+		Self { inner }
+	}
+}
+
+impl engine::source::NoteReader for ForeignReader {
 	fn read(&self, files: &[&SourceFile]) -> EngineResult<Vec<Option<String>>> {
-		let locations = files.iter().map(|file| file.location.clone()).collect();
-
-		Ok(self.inner.read(locations)?)
+		Ok(self.inner.read(locations_of(files))?)
 	}
 }
 

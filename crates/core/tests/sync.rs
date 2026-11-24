@@ -1,7 +1,7 @@
 use engine::engine::Engine;
 use engine::error::{Error, Result};
 use engine::model::{SourceFile, Value};
-use engine::source::{FsSource, LocationScheme, NoteSource};
+use engine::source::{FsSource, LocationScheme, NoteReader, NoteSource};
 use std::collections::BTreeMap;
 use std::fs;
 use std::io;
@@ -55,7 +55,9 @@ impl NoteSource for MemorySource {
 			})
 			.collect())
 	}
+}
 
+impl NoteReader for MemorySource {
 	fn read(&self, files: &[&SourceFile]) -> Result<Vec<Option<String>>> {
 		if self.fail_reads {
 			return Err(Error::Io(io::Error::other("storage went away")));
