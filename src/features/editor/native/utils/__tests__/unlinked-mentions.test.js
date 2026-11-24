@@ -17,7 +17,7 @@ describe('find unlinked mentions with loaded bodies', () => {
         const bodyless = { path: 'a', title: 'a' }
         const bodies = new Map([['a', 'Working on project alpha today']])
 
-        expect(findUnlinkedMentions(target, [target, bodyless], undefined, { bodies })).toEqual([bodyless])
+        expect(findUnlinkedMentions(target, [target, bodyless], { bodies })).toEqual([bodyless])
     })
 })
 
@@ -37,7 +37,7 @@ describe('find unlinked mentions', () => {
     test('skips notes that already link to the target', () => {
         const notes = [target, buildNote('a', 'See [[Project Alpha]] and Project Alpha again')]
 
-        expect(findUnlinkedMentions(target, notes)).toEqual([])
+        expect(findUnlinkedMentions(target, notes, { linked: new Set(['a']) })).toEqual([])
     })
 
     test('skips mentions inside links, code and tags', () => {

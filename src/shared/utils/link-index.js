@@ -4,7 +4,8 @@ import { bootMark } from '@/shared/utils/boot-mark'
 import { indexCoverage } from '@/shared/utils/index-coverage'
 import { noteBodies } from '@/shared/utils/note-body'
 import { buildNotePath } from '@/shared/utils/note-path'
-import { findBacklinks as scanBacklinks, getAliases } from '@/shared/utils/wiki-links'
+import { bodyOf } from '@/shared/utils/note-body-of'
+import { getAliases } from '@/shared/utils/wiki-links'
 
 import { BOOT_MARKS } from '@/shared/constants/boot-marks'
 import { LINK_INDEX_MIN_NOTES, LINK_INDEX_UNCOVERED_RATIO } from '@/shared/constants/link-index'
@@ -17,6 +18,7 @@ export const createLinkIndex = ({
     coverage,
     backlinkCandidates,
     mentionCandidates,
+    verifyBacklinks,
     loadBodies = async () => undefined
 }) => {
     const selectPool = async (notes, fetchRefs) => {
@@ -52,7 +54,8 @@ export const createLinkIndex = ({
         const candidates = pool ? notes.filter((note) => pool.has(note.path)) : notes
 
         const bodies = await loadBodies(candidates)
-        const backlinks = scanBacklinks(target.path, notes, notePaths, candidates, bodies)
+        const linking = new Set(await verifyBacklinks({ target, notes, notePaths, candidates, bodies }))
+        const backlinks = candidates.filter((note) => linking.has(note.path))
 
         bootMark(BOOT_MARKS.BACKLINKS, {
             candidates: candidates.length,
@@ -66,9 +69,22 @@ export const createLinkIndex = ({
     return { findBacklinks, selectPool, mentionCandidates, loadBodies }
 }
 
+const verifyBacklinksNatively = ({ target, notes, notePaths, candidates, bodies }) => (
+    RepositoryFs.findBacklinkPaths(
+        notes.map((note) => note.title || ''),
+        notes.map(getAliases),
+        notes.map((note) => note.path),
+        Object.fromEntries(notePaths),
+        target.path,
+        candidates.map((note) => note.path),
+        candidates.map((note) => bodyOf(note, bodies))
+    )
+)
+
 export const linkIndex = createLinkIndex({
     coverage: indexCoverage,
     backlinkCandidates: (names, path) => RepositoryFs.findBacklinkCandidates(names, path),
     mentionCandidates: (terms) => RepositoryFs.findMentionCandidates(terms),
+    verifyBacklinks: verifyBacklinksNatively,
     loadBodies: noteBodies.load
 })

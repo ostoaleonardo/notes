@@ -39,7 +39,7 @@ export function useBacklinksHtml(id, enabled) {
 
             if (cancelled) return
 
-            const mentions = findUnlinkedMentions(target, notes, notePaths, { linked, pool, bodies })
+            const mentions = findUnlinkedMentions(target, notes, { linked, pool, bodies })
 
             setHtml((current) => ({
                 ...current,

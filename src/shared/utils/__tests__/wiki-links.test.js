@@ -2,7 +2,6 @@ import {
     renderWikiLink,
     resolveWikiLinkDetails,
     resolveWikiLinkTarget,
-    findBacklinks,
     renameWikiLinksForNote,
     buildBacklinksHtml,
     parseMissingWikiLinkTarget
@@ -121,101 +120,6 @@ describe('duplicate titles across folders', () => {
         const result = renderLink('[[one/Test]]', duplicateNotes, notePaths)
 
         expect(result).toBe('<a href="wikilink://sub-test" class="wiki-link">Test</a>')
-    })
-})
-
-describe('find backlinks', () => {
-    const linkingNotes = [
-        { path: 'target', title: 'Grocery List', note: 'Some content.' },
-        { path: 'a', title: 'Recipe', note: 'See [[Grocery List]] for what to buy.' },
-        { path: 'b', title: 'Other', note: 'No links here.' },
-        { path: 'c', title: 'Alias Note', note: 'Mentions [[grocery list|itself]] via alias.' }
-    ]
-
-    test('finds notes whose content links to the given note', () => {
-        const result = findBacklinks('target', linkingNotes)
-
-        expect(result.map((note) => note.path)).toEqual(['a', 'c'])
-    })
-
-    test('reflects an edited note when the notes array is replaced', () => {
-        findBacklinks('target', linkingNotes)
-        const edited = linkingNotes.map((note) => (
-            note.path === 'b' ? { ...note, note: 'Now links to [[Grocery List]].' } : note
-        ))
-
-        expect(findBacklinks('target', edited).map((note) => note.path)).toEqual(['a', 'b', 'c'])
-    })
-
-    test('follows a renamed target when the notes array is replaced', () => {
-        findBacklinks('target', linkingNotes)
-        const renamed = linkingNotes.map((note) => (
-            note.path === 'target' ? { ...note, title: 'Shopping' } : note
-        ))
-
-        expect(findBacklinks('target', renamed)).toEqual([])
-    })
-
-    test('matches case-insensitively and through aliases', () => {
-        const result = findBacklinks('target', linkingNotes)
-
-        expect(result.map((note) => note.path)).toContain('c')
-    })
-
-    test('never includes the note itself', () => {
-        const result = findBacklinks('target', linkingNotes)
-
-        expect(result.map((note) => note.path)).not.toContain('target')
-    })
-
-    test('returns an empty array when nothing links to the note', () => {
-        const result = findBacklinks('unlinked-path', linkingNotes)
-
-        expect(result).toEqual([])
-    })
-
-    test('only counts links that resolve to the note in the right folder', () => {
-        const duplicateNotes = [
-            { path: 'root-test', title: 'Test', note: '' },
-            { path: 'sub-test', title: 'Test', note: '' },
-            { path: 'linker', title: 'Linker', note: 'See [[one/Test]] for details' }
-        ]
-        const notePaths = new Map([
-            ['root-test', ''],
-            ['sub-test', 'one']
-        ])
-
-        expect(findBacklinks('sub-test', duplicateNotes, notePaths).map((n) => n.path)).toEqual(
-            ['linker']
-        )
-        expect(findBacklinks('root-test', duplicateNotes, notePaths)).toEqual([])
-    })
-
-    test('also counts markdown-format internal links', () => {
-        const markdownLinkingNotes = [
-            { path: 'target', title: 'Grocery List', note: '' },
-            {
-                path: 'a',
-                title: 'Recipe',
-                note: 'See [Grocery List](wikilink://target) for what to buy.'
-            },
-            { path: 'b', title: 'Other', note: 'See [something](wikilink://other-path) instead.' }
-        ]
-
-        const result = findBacklinks('target', markdownLinkingNotes)
-
-        expect(result.map((note) => note.path)).toEqual(['a'])
-    })
-})
-
-describe('find backlinks with loaded bodies', () => {
-    test('reads the links from the loaded body instead of the note', () => {
-        const target = { path: 'target', title: 'Grocery List' }
-        const bodyless = { path: 'a', title: 'Recipe' }
-        const bodies = new Map([['a', 'See [[Grocery List]].']])
-
-        expect(findBacklinks('target', [target, bodyless], undefined, undefined, bodies))
-            .toEqual([bodyless])
     })
 })
 
@@ -458,15 +362,6 @@ describe('heading and block anchors', () => {
         expect(result).toContain('href="wikilink://note-1#%5Eabc123"')
     })
 
-    test('counts heading links as backlinks', () => {
-        const linkingNotes = [
-            { path: 'target', title: 'Grocery List', note: '' },
-            { path: 'a', title: 'Recipe', note: 'See [[Grocery List#Fruit]]' }
-        ]
-
-        expect(findBacklinks('target', linkingNotes).map((note) => note.path)).toEqual(['a'])
-    })
-
     test('keeps the anchor when renaming', () => {
         const notesForRename = [{ path: 'target', title: 'Grocery List' }]
         const result = renameWikiLinksForNote(
@@ -505,12 +400,6 @@ describe('frontmatter aliases', () => {
         const target = resolveWikiLinkTarget('Standup', aliasNotes)
 
         expect(target.path).toBe('note-2')
-    })
-
-    test('counts alias links as backlinks', () => {
-        const linkingNotes = [...aliasNotes, { path: 'a', title: 'Recipe', note: 'See [[Sync]]' }]
-
-        expect(findBacklinks('note-1', linkingNotes).map((note) => note.path)).toEqual(['a'])
     })
 
     test('does not rewrite links that matched through an alias when the title changes', () => {

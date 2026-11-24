@@ -95,7 +95,7 @@ const load = () => {
 }
 
 test('generates link fixtures', () => {
-    const { resolveWikiLink, renameWikiLinksForNote, findBacklinks } = load()
+    const { resolveWikiLink, renameWikiLinksForNote } = load()
     const notePaths = new Map(Object.entries(FOLDERS))
     const movedPaths = new Map(Object.entries(MOVED_FOLDERS))
     const byPath = new Map(NOTES.map((note, index) => [note, index]))
@@ -129,20 +129,7 @@ test('generates link fixtures', () => {
         moved: renameWikiLinksForNote(entry.content, entry.target, entry.title, RANDOM_NOTES, movedRandomPaths, randomPaths)
     }))
 
-    const markdownLink = () => `[label](wikilink://${pick(RANDOM_NOTES).path})`
-    const bodies = new Map(RANDOM_NOTES.map((note) => [
-        note.path,
-        Array.from({ length: 5 }, () => (random() < 0.25 ? markdownLink() : `[[${randomLink()}]]`)).join(' ')
-    ]))
-    const bodyNotes = RANDOM_NOTES.map((note) => ({ ...note, note: undefined }))
-
-    const backlinks = RANDOM_NOTES.map((target) => ({
-        target: target.path,
-        found: findBacklinks(target.path, RANDOM_NOTES, randomPaths, bodyNotes, bodies).map((note) => note.path)
-    }))
-
     const output = {
-        backlinks: { bodies: Object.fromEntries(bodies), results: backlinks },
         random: {
             notes: RANDOM_NOTES.map((note) => ({
                 path: note.path,

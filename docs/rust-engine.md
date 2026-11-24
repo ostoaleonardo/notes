@@ -56,7 +56,7 @@ crates/core (engine)          parsing · index · saves · links · versions · 
 
 - **Rust (`crates/core`)**: parsing of markdown and frontmatter, the SQLite index (schema, writer, reconciliation, queries, listing), locale sort keys, indexing passes (`sync`), atomic note saves with conflict detection, frontmatter compose and decompose, wiki link resolution and rewriting, version history, and path-based repository operations (rename, move, trash, remove).
 - **Kotlin**: SAF listing and reading, resolving the direct file path when the app has all-files access, implementing the foreign traits for SAF (`ProviderNoteSource`, `ProviderNoteSink`, `ProviderRepository`), computing Android document URIs, and marshalling for Expo (`RepositoryFsModule`, `RepositoryIndexer`, `EngineBridge`).
-- **JS**: UI, state, deciding which action to run, the search parser (query chips) and link verification, external-edit merge, templates, daily notes, attachments, export, and the in-memory note model.
+- **JS**: UI, state, deciding which action to run, the search parser (query chips), link resolution while rendering the editor, external-edit merge, templates, daily notes, attachments, export, and the in-memory note model.
 
 ### Platform seams
 
@@ -78,7 +78,7 @@ Vocabulary: a *repository* is the root folder the user picks; every directory in
 - **Indexing** (`Engine::sync`): scan the folder, reconcile against the indexed `(filename, modified, size)` rows, then read changed notes in batches of 500 on a reader thread while the previous batch is parsed in parallel (rayon) and written in one transaction. The channel depth is 1, so reading overlaps with writing without unbounded memory. A `progress(done, total)` callback reports advancement.
 - **Saving** (`save_note`, `save_notes`, `rename_note`, `delete_note`): the sink writes (temporary hidden file, rename, size verification, up to 3 attempts) and the index row is updated in the same call, so the next sync sees the note as unchanged.
 - **Compose and decompose** split and join the file text. `decompose` returns body, tags, properties, raw frontmatter, or the raw text flagged invalid when the YAML does not parse. `compose` reuses the original raw frontmatter byte for byte while tags and properties are unchanged and only re-emits YAML when they changed.
-- **Links**: names are normalized when a note is indexed so backlink candidates are one indexed lookup. The index only narrows candidates; JS (or `find_backlinks`) verifies them with the full resolution rules and always checks notes the index has not covered yet.
+- **Links**: names are normalized when a note is indexed so backlink candidates are one indexed lookup. The index only narrows candidates; `find_backlinks` (through `findBacklinkPaths`) verifies them with the full resolution rules, and JS always adds the notes the index has not covered yet to the candidates.
 
 ## Database
 

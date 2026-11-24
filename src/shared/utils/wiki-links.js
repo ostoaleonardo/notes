@@ -4,11 +4,8 @@ import {
     WIKI_LINK_PATTERN,
     WIKI_LINK_ANCHOR_SEPARATOR,
     WIKI_LINK_ANCHOR_LABEL_SEPARATOR,
-    NOTE_ALIASES_PROPERTY,
-    MARKDOWN_WIKI_LINK_PATTERN,
-    MARKDOWN_WIKI_LINK_OPENING
+    NOTE_ALIASES_PROPERTY
 } from '@/shared/constants/wiki-links'
-import { WIKI_LINK_OPEN } from '@/shared/constants/markdown-syntax'
 import {
     BACKLINKS_CLASS,
     BACKLINKS_TITLE_CLASS,
@@ -16,7 +13,6 @@ import {
     BACKLINK_PATH_CLASS
 } from '@/shared/constants/backlinks'
 import { mapOutsideCode } from '@/shared/utils/outside-code'
-import { bodyOf } from '@/shared/utils/note-body-of'
 import { EMPTY_NOTE_PATHS } from '@/shared/constants/note-paths'
 import { buildFileLinkUrl, isFileLinkTarget } from '@/shared/utils/file-links'
 
@@ -168,50 +164,6 @@ export const parseMissingWikiLinkTarget = (encoded) => {
         title: decodeURIComponent(encoded.slice(separatorIndex + 1))
     }
 }
-
-const NO_TARGETS = []
-const linkTargetsCache = new WeakMap()
-
-const getLinkTargets = (note, bodies) => {
-    const body = bodyOf(note, bodies)
-
-    const cached = linkTargetsCache.get(note)
-    if (cached?.body === body) return cached
-
-    const entry = {
-        body,
-        wiki: body.includes(WIKI_LINK_OPEN)
-            ? Array.from(body.matchAll(WIKI_LINK_PATTERN), (match) => match[1])
-            : NO_TARGETS,
-        markdown: body.includes(MARKDOWN_WIKI_LINK_OPENING)
-            ? Array.from(body.matchAll(MARKDOWN_WIKI_LINK_PATTERN), (match) => match[2])
-            : NO_TARGETS
-    }
-
-    linkTargetsCache.set(note, entry)
-
-    return entry
-}
-
-const noteLinksTo = (note, targetPath, notes, notePaths = EMPTY_NOTE_PATHS, bodies) => {
-    const { wiki, markdown } = getLinkTargets(note, bodies)
-
-    return markdown.includes(targetPath) || wiki.some((linkText) => (
-        resolveWikiLinkTarget(linkText, notes, notePaths)?.path === targetPath
-    ))
-}
-
-export const findBacklinks = (
-    targetPath,
-    notes,
-    notePaths = EMPTY_NOTE_PATHS,
-    candidates = notes,
-    bodies
-) => (
-    candidates.filter((note) => (
-        note.path !== targetPath && noteLinksTo(note, targetPath, notes, notePaths, bodies)
-    ))
-)
 
 export const renameWikiLinksForNote = (
     content,

@@ -54,6 +54,11 @@ jest.mock('repository-fs', () => {
 
                 return uniqueFilename(existing, stem, extension, current)
             },
+            findBacklinkPaths: async (...args) => {
+                const { findBacklinkPaths } = require('../jest/core-links')
+
+                return findBacklinkPaths(...args)
+            },
             composeNote: (tags, propertiesJson, invalidFrontmatter, rawFrontmatter, body) => {
                 const { buildNoteFileContent } = require('@/shared/utils/frontmatter')
 

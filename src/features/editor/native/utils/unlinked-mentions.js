@@ -1,4 +1,4 @@
-import { buildBacklinkLink, escapeHtml, findBacklinks, getAliases } from '@/shared/utils/wiki-links'
+import { buildBacklinkLink, escapeHtml, getAliases } from '@/shared/utils/wiki-links'
 import { fillTemplate } from '@/shared/utils/fill-template'
 import { mapOutsideCode } from '@/shared/utils/outside-code'
 import { bodyOf } from '@/shared/utils/note-body-of'
@@ -59,22 +59,16 @@ export const linkMentions = (text, target) => {
     ))
 }
 
-export const findUnlinkedMentions = (
-    target,
-    notes,
-    notePaths = EMPTY_NOTE_PATHS,
-    { linked, pool = null, bodies } = {}
-) => {
+export const findUnlinkedMentions = (target, notes, { linked = new Set(), pool = null, bodies } = {}) => {
     const names = getMentionNames(target)
     if (!names.length) return []
 
-    const linkedPaths = linked || new Set(findBacklinks(target.path, notes, notePaths, notes, bodies).map((note) => note.path))
     const candidates = pool ? notes.filter((note) => pool.has(note.path)) : notes
     const probe = new RegExp(names.map(escapeRegExp).join('|'), 'i')
     const pattern = buildMentionPattern(names)
 
     return candidates.filter((note) => {
-        if (note.path === target.path || linkedPaths.has(note.path)) return false
+        if (note.path === target.path || linked.has(note.path)) return false
 
         const body = bodyOf(note, bodies)
 

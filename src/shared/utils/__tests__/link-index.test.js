@@ -20,6 +20,10 @@ const refs = (...notes) => ({
     filenames: notes.map((note) => note.filename)
 })
 
+const linkingTargets = ({ candidates, bodies }) => candidates
+    .filter((note) => (bodies?.get(note.path) ?? note.note).includes('[[Target]]'))
+    .map((note) => note.path)
+
 const build = ({
     covered = () => true,
     backlinks = refs(),
@@ -28,14 +32,16 @@ const build = ({
 } = {}) => {
     const backlinkCandidates = jest.fn(async () => backlinks)
     const mentionCandidates = jest.fn(async () => mentions)
+    const verifyBacklinks = jest.fn(async (request) => linkingTargets(request))
     const index = createLinkIndex({
         coverage: { isCovered: covered },
         backlinkCandidates,
         mentionCandidates,
+        verifyBacklinks,
         loadBodies
     })
 
-    return { index, backlinkCandidates, mentionCandidates }
+    return { index, backlinkCandidates, mentionCandidates, verifyBacklinks }
 }
 
 describe('find backlinks through the index', () => {
@@ -62,13 +68,19 @@ describe('find backlinks through the index', () => {
         expect(found).toEqual([hidden])
     })
 
-    test('drops candidates that do not really resolve to the target', async () => {
+    test('keeps only the candidates the core confirms', async () => {
         const decoy = buildNote('Decoy', 'see [[Other]]')
-        const { index } = build({ backlinks: refs(decoy) })
+        const { index, verifyBacklinks } = build({ backlinks: refs(decoy, linker) })
+        const notes = [target, decoy, linker, ...FILLER]
 
-        const found = await index.findBacklinks(target, [target, decoy, ...FILLER], NOTE_PATHS)
+        const found = await index.findBacklinks(target, notes, NOTE_PATHS)
 
-        expect(found).toEqual([])
+        expect(found).toEqual([linker])
+        expect(verifyBacklinks).toHaveBeenCalledWith(expect.objectContaining({
+            target,
+            notes,
+            candidates: [decoy, linker]
+        }))
     })
 
     test('scans every note when the collection is small', async () => {

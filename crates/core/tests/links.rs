@@ -111,37 +111,138 @@ fn check_renames(data: &Fixture) {
 	}
 }
 
-#[test]
-fn finds_backlinks_like_the_javascript_verifier() {
-	let whole = fixture(None);
-	let data = fixture(Some("random"));
-	let index = NoteIndex::new(&data.notes);
-	let bodies = whole.raw["backlinks"]["bodies"].as_object().unwrap();
+fn note(path: &str, title: &str, aliases: &[&str]) -> LinkNote {
+	LinkNote {
+		path: path.to_string(),
+		title: title.to_string(),
+		aliases: aliases.iter().map(|alias| alias.to_string()).collect(),
+	}
+}
 
-	let candidates: Vec<Candidate<'_>> = data
-		.notes
+fn backlinks_of(
+	target: &str,
+	notes: &[LinkNote],
+	folders: &FolderPaths,
+	bodies: &[(&str, &str)],
+) -> Vec<String> {
+	let index = NoteIndex::new(notes);
+	let candidates: Vec<Candidate<'_>> = bodies
 		.iter()
-		.map(|note| Candidate {
-			path: note.path.as_str(),
-			body: bodies[&note.path].as_str().unwrap(),
-		})
+		.map(|(path, body)| Candidate { path, body })
 		.collect();
 
-	for case in whole.raw["backlinks"]["results"].as_array().unwrap() {
-		let target = case["target"].as_str().unwrap();
-		let expected: Vec<&str> = case["found"]
-			.as_array()
-			.unwrap()
-			.iter()
-			.map(|path| path.as_str().unwrap())
-			.collect();
+	find_backlinks(target, &index, folders, &candidates)
+		.into_iter()
+		.map(str::to_string)
+		.collect()
+}
 
-		assert_eq!(
-			find_backlinks(target, &index, &data.folders, &candidates),
-			expected,
-			"backlinks of {target}"
-		);
-	}
+fn grocery_notes() -> Vec<LinkNote> {
+	vec![
+		note("target", "Grocery List", &[]),
+		note("a", "Recipe", &[]),
+		note("b", "Other", &[]),
+		note("c", "Alias Note", &[]),
+	]
+}
+
+const GROCERY_BODIES: [(&str, &str); 4] = [
+	("target", "Some content."),
+	("a", "See [[Grocery List]] for what to buy."),
+	("b", "No links here."),
+	("c", "Mentions [[grocery list|itself]] via alias."),
+];
+
+#[test]
+fn finds_notes_that_link_to_the_target_ignoring_case() {
+	let found = backlinks_of(
+		"target",
+		&grocery_notes(),
+		&FolderPaths::new(),
+		&GROCERY_BODIES,
+	);
+
+	assert_eq!(found, ["a", "c"]);
+}
+
+#[test]
+fn never_includes_the_target_itself() {
+	let bodies = [("target", "[[Grocery List]]")];
+
+	assert!(backlinks_of("target", &grocery_notes(), &FolderPaths::new(), &bodies).is_empty());
+}
+
+#[test]
+fn finds_nothing_when_no_note_links_to_the_target() {
+	let found = backlinks_of(
+		"unlinked-path",
+		&grocery_notes(),
+		&FolderPaths::new(),
+		&GROCERY_BODIES,
+	);
+
+	assert!(found.is_empty());
+}
+
+#[test]
+fn follows_a_renamed_target() {
+	let mut notes = grocery_notes();
+	notes[0].title = "Shopping".to_string();
+
+	let found = backlinks_of("target", &notes, &FolderPaths::new(), &GROCERY_BODIES);
+
+	assert!(found.is_empty());
+}
+
+#[test]
+fn counts_heading_and_alias_links() {
+	let notes = vec![
+		note("target", "Grocery List", &["Sync"]),
+		note("a", "Recipe", &[]),
+		note("b", "Other", &[]),
+	];
+	let bodies = [("a", "See [[Grocery List#Fruit]]"), ("b", "See [[Sync]]")];
+
+	let found = backlinks_of("target", &notes, &FolderPaths::new(), &bodies);
+
+	assert_eq!(found, ["a", "b"]);
+}
+
+#[test]
+fn counts_markdown_internal_links() {
+	let bodies = [
+		(
+			"a",
+			"See [Grocery List](wikilink://target) for what to buy.",
+		),
+		("b", "See [something](wikilink://other-path) instead."),
+	];
+
+	let found = backlinks_of("target", &grocery_notes(), &FolderPaths::new(), &bodies);
+
+	assert_eq!(found, ["a"]);
+}
+
+#[test]
+fn only_counts_links_that_resolve_to_the_note_in_the_right_folder() {
+	let notes = vec![
+		note("root-test", "Test", &[]),
+		note("sub-test", "Test", &[]),
+		note("linker", "Linker", &[]),
+	];
+	let folders: FolderPaths = [
+		("root-test".to_string(), String::new()),
+		("sub-test".to_string(), "one".to_string()),
+	]
+	.into_iter()
+	.collect();
+	let bodies = [("linker", "See [[one/Test]] for details")];
+
+	assert_eq!(
+		backlinks_of("sub-test", &notes, &folders, &bodies),
+		["linker"]
+	);
+	assert!(backlinks_of("root-test", &notes, &folders, &bodies).is_empty());
 }
 
 #[test]
