@@ -2,7 +2,7 @@
 export PATH="$PATH:$HOME/.maestro/bin"
 
 adb reverse tcp:8081 tcp:8081 || true
-bash "$(dirname "$0")/reset-maestro-state.sh" || true
+bash "$(dirname "$0")/reset-maestro-state.sh" || exit 1
 adb shell 'for d in /sdcard/Documents/*/; do mkdir -p "$d/maestro-folder"; done' || true
 maestro test "${@:-.maestro}"
 status=$?

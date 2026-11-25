@@ -8,6 +8,12 @@ STARTUP_HOME=home
 TMP=$(mktemp)
 
 adb shell am force-stop "$PACKAGE"
+
+if ! adb shell run-as "$PACKAGE" true >/dev/null 2>&1; then
+  echo "run-as is not available for $PACKAGE: install a debug build or set Open on startup to Home by hand" >&2
+  exit 1
+fi
+
 adb exec-out run-as "$PACKAGE" cat "$DB" > "$TMP"
 python3 - "$TMP" "$KEYS" "$STARTUP_HOME" <<'PY'
 import sqlite3, sys
