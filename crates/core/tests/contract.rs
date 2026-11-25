@@ -6,7 +6,7 @@ use engine::source::{FsSink, FsSource, LocationScheme};
 use engine::syntax::{
 	NoteFields, compose, decompose, inline_tags, normalize, parse_note, wiki_links,
 };
-use engine::versions::{RepositoryVersions, build_line_delta};
+use engine::versions::{NewVersion, RepositoryVersions, build_line_delta};
 use serde_json::{Map, Value as Json, json};
 use std::fs::{self, File};
 use std::path::{Path, PathBuf};
@@ -22,6 +22,17 @@ const SUB_FOLDER: &str = "sub";
 const LOCALE: &str = "en";
 const BASE_SECONDS: u64 = 1_700_000_000;
 const MAX_VERSIONS: usize = 200;
+
+fn version<'a>(id: &'a str, content: &'a str, created_at: i64) -> NewVersion<'a> {
+	NewVersion {
+		id,
+		title: "Alpha",
+		created_at,
+		content,
+		max_versions: MAX_VERSIONS,
+		max_age_ms: 0,
+	}
+}
 
 const ALPHA: &str = "---\ntags:\n  - project\n  - area/work\naliases:\n  - A\nstatus: draft\npriority: 2\n---\n\nIntro with #inline and a [[Beta]] link,\na [[Beta|aliased]] one, a [[Gamma#Heading]] anchor,\nan embed ![[Beta]] and a [markdown](Beta.md) link.\n\n```\n#not-a-tag [[Not a link]]\n```\n";
 const BETA: &str = "Back to [[Alpha]].\n";
@@ -309,29 +320,13 @@ fn versioning(repository: &Repository) -> Json {
 
 	let versions = RepositoryVersions::new(Arc::new(FsRepository::new(&root)));
 	let first = versions
-		.commit("Alpha.md", "Alpha", "one\n", "v1", 1_000, MAX_VERSIONS, 0)
+		.commit("Alpha.md", &version("v1", "one\n", 1_000))
 		.unwrap();
 	let second = versions
-		.commit(
-			"Alpha.md",
-			"Alpha",
-			"one\ntwo\n",
-			"v2",
-			2_000,
-			MAX_VERSIONS,
-			0,
-		)
+		.commit("Alpha.md", &version("v2", "one\ntwo\n", 2_000))
 		.unwrap();
 	let repeated = versions
-		.commit(
-			"Alpha.md",
-			"Alpha",
-			"one\ntwo\n",
-			"v3",
-			3_000,
-			MAX_VERSIONS,
-			0,
-		)
+		.commit("Alpha.md", &version("v3", "one\ntwo\n", 3_000))
 		.unwrap();
 	let stored = versions.read("Alpha.md").unwrap();
 

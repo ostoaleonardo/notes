@@ -272,3 +272,31 @@ pub enum MoveResult {
 	TargetExists,
 	SourceMissing,
 }
+
+#[derive(uniffi::Record)]
+pub struct VersionRecord {
+	pub id: String,
+	pub title: String,
+	pub content: String,
+	pub created_at: i64,
+	pub max_versions: u32,
+	pub max_age_ms: i64,
+}
+
+#[derive(uniffi::Record)]
+pub struct MoveRequestRecord {
+	pub filename: String,
+	pub from_folder_id: String,
+	pub from_path: String,
+	pub to_folder_id: String,
+	pub to_path: String,
+}
+
+#[derive(uniffi::Record)]
+pub struct RenameRequestRecord {
+	pub from: String,
+	pub to: String,
+	pub text: String,
+	pub from_key: String,
+	pub to_key: String,
+}

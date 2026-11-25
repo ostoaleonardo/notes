@@ -3,7 +3,7 @@ use engine::error::{Error, Result as EngineResult};
 use engine::model::{FileStamp, SaveOutcome, SaveRequest, Value};
 use engine::repository::{FsRepository, RepositoryFiles};
 use engine::source::{FsSink, FsSource, LocationScheme, NoteSink};
-use engine::versions::{HistoryMove, RepositoryVersions};
+use engine::versions::{HistoryMove, NewVersion, RepositoryVersions};
 use std::fs;
 use std::sync::Arc;
 use tempfile::TempDir;
@@ -384,7 +384,17 @@ fn history_of(repository: &Repository) -> RepositoryVersions {
 
 fn commit(versions: &RepositoryVersions, key: &str, content: &str) {
 	versions
-		.commit(key, "title", content, content, 1, HISTORY_MAX, 0)
+		.commit(
+			key,
+			&NewVersion {
+				id: content,
+				title: "title",
+				created_at: 1,
+				content,
+				max_versions: HISTORY_MAX,
+				max_age_ms: 0,
+			},
+		)
 		.unwrap();
 }
 

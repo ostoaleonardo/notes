@@ -55,7 +55,7 @@ crates/core (engine)          parsing · index · saves · links · versions · 
 ### Who owns what
 
 - **Rust (`crates/core`)**: parsing of markdown and frontmatter, the SQLite index (schema, writer, reconciliation, queries, listing), locale sort keys, indexing passes (`sync`), atomic note saves with conflict detection, frontmatter compose and decompose, wiki link resolution and rewriting, version history, and path-based repository operations (rename, move, trash, remove).
-- **Kotlin**: SAF listing and reading, resolving the direct file path when the app has all-files access, implementing the foreign traits for SAF (`ProviderNoteSource`, `ProviderNoteSink`, `ProviderRepository`), computing Android document URIs, and marshalling for Expo (`RepositoryFsModule`, `RepositoryIndexer`, `EngineBridge`).
+- **Kotlin**: SAF listing and reading, resolving the direct file path when the app has all-files access, implementing the foreign traits for SAF (`ProviderNoteSource`, `ProviderNoteSink`, `ProviderRepository`), computing Android document URIs, and marshalling for Expo. `RepositoryFsModule` only wires the areas (`defineStorage`, `defineIndex`, `defineNotes`, `defineLinks`, `defineVersions`, `defineNames`, `defineSearch`), each in its own `*Definition.kt` over a shared `RepositoryRuntime` (context, engine, locks, version stores); `RepositoryIndexer` and `EngineBridge` do the indexing and engine setup.
 - **JS**: UI, state, deciding which action to run, the search parser (query chips), link resolution while rendering the editor, external-edit merge, templates, daily notes, attachments, export, and the in-memory note model.
 
 ### Platform seams
@@ -150,7 +150,7 @@ Each takes a `Repository { ops, versions }` and runs as one call that keeps file
 | `rename_folder(repository, path, new_name, affected_folder_ids)` | Renames a directory, drops the index rows of the folder and its descendants (their locations changed) and renames the versions under the old prefix. Restores the directory name if a later step fails. Returns the new path. |
 | `remove_folder(repository, path, folder_ids, drop_versions)` | Drops the rows, removes the directory with its contents and optionally its versions. |
 | `trash_note(repository, folder_id, folder_path, filename, trash_path)` | Moves the note into the trash directory under a free name (`name (2).md`, …), keeping its modified time, and drops its index row. Its versions stay under the original key. Returns the final name. |
-| `move_note(repository, filename, from_id, from_path, to_id, to_path, to_sink)` | Moves the file (never overwriting, and refusing a name that collides in case or normalization), renames its versions (undoing the move if that fails) and refreshes both index folders. Returns `Moved(stamp)`, `TargetExists` or `SourceMissing`. |
+| `move_note(repository, request, to_sink)` with `MoveRequest { filename, from, to }` (each a `FolderRef { id, path }`) | Moves the file (never overwriting, and refusing a name that collides in case or normalization), renames its versions (undoing the move if that fails) and refreshes both index folders. Returns `Moved(stamp)`, `TargetExists` or `SourceMissing`. |
 
 Not covered: deleting a **repository root**. The root is the folder the user granted, so its relative path is empty and on SAF its tree root cannot be removed like a subdirectory. That case stays in JS (`deleteDirectory`).
 

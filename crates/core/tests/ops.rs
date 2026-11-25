@@ -1,10 +1,10 @@
 use engine::engine::Engine;
 use engine::error::{Error, Result};
 use engine::model::Value;
-use engine::ops::{MoveOutcome, Repository};
+use engine::ops::{FolderRef, MoveOutcome, MoveRequest, Repository};
 use engine::repository::{FsRepository, RepositoryFiles};
 use engine::source::{FsSink, FsSource, LocationScheme};
-use engine::versions::RepositoryVersions;
+use engine::versions::{NewVersion, RepositoryVersions};
 use std::fs;
 use std::io;
 use std::sync::Arc;
@@ -100,7 +100,17 @@ impl Fixture {
 
 	fn commit_version(&self, key: &str) {
 		self.versions
-			.commit(key, "Title", "text\n", "v1", 1_000, MAX_VERSIONS, 0)
+			.commit(
+				key,
+				&NewVersion {
+					id: "v1",
+					title: "Title",
+					created_at: 1_000,
+					content: "text\n",
+					max_versions: MAX_VERSIONS,
+					max_age_ms: 0,
+				},
+			)
 			.unwrap();
 	}
 
@@ -334,11 +344,17 @@ fn moving_a_note_updates_files_versions_and_both_index_folders() {
 		.engine
 		.move_note(
 			&fixture.repository(),
-			"a.md",
-			"f",
-			"Folder",
-			"o",
-			"Other",
+			&MoveRequest {
+				filename: "a.md",
+				from: FolderRef {
+					id: "f",
+					path: "Folder",
+				},
+				to: FolderRef {
+					id: "o",
+					path: "Other",
+				},
+			},
 			&fixture.sink("Other"),
 		)
 		.unwrap();
@@ -366,11 +382,17 @@ fn moving_onto_an_existing_note_changes_nothing() {
 		.engine
 		.move_note(
 			&fixture.repository(),
-			"a.md",
-			"f",
-			"Folder",
-			"o",
-			"Other",
+			&MoveRequest {
+				filename: "a.md",
+				from: FolderRef {
+					id: "f",
+					path: "Folder",
+				},
+				to: FolderRef {
+					id: "o",
+					path: "Other",
+				},
+			},
 			&fixture.sink("Other"),
 		)
 		.unwrap();
@@ -389,11 +411,17 @@ fn moving_a_missing_note_reports_it() {
 		.engine
 		.move_note(
 			&fixture.repository(),
-			"ghost.md",
-			"f",
-			"Folder",
-			"o",
-			"Other",
+			&MoveRequest {
+				filename: "ghost.md",
+				from: FolderRef {
+					id: "f",
+					path: "Folder",
+				},
+				to: FolderRef {
+					id: "o",
+					path: "Other",
+				},
+			},
 			&fixture.sink("Other"),
 		)
 		.unwrap();
@@ -413,11 +441,17 @@ fn a_failing_versions_store_puts_the_moved_note_back() {
 
 	let result = fixture.engine.move_note(
 		&repository,
-		"a.md",
-		"f",
-		"Folder",
-		"o",
-		"Other",
+		&MoveRequest {
+			filename: "a.md",
+			from: FolderRef {
+				id: "f",
+				path: "Folder",
+			},
+			to: FolderRef {
+				id: "o",
+				path: "Other",
+			},
+		},
 		&fixture.sink("Other"),
 	);
 
@@ -464,11 +498,17 @@ fn moving_onto_a_note_that_differs_only_in_case_is_refused() {
 		.engine
 		.move_note(
 			&fixture.repository(),
-			"a.md",
-			"f",
-			"Folder",
-			"o",
-			"Other",
+			&MoveRequest {
+				filename: "a.md",
+				from: FolderRef {
+					id: "f",
+					path: "Folder",
+				},
+				to: FolderRef {
+					id: "o",
+					path: "Other",
+				},
+			},
 			&fixture.sink("Other"),
 		)
 		.unwrap();

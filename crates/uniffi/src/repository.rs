@@ -1,10 +1,10 @@
-use crate::records::EngineError;
+use crate::records::{EngineError, VersionRecord};
 use engine::error::Result as CoreResult;
 use engine::repository::{
 	DirEntry, MoveResult, RepositoryFiles as CoreRepositoryFiles,
 	RepositoryOps as CoreRepositoryOps,
 };
-use engine::versions::RepositoryVersions;
+use engine::versions::{NewVersion, RepositoryVersions};
 use std::sync::Arc;
 
 #[uniffi::export(with_foreign)]
@@ -171,25 +171,17 @@ impl VersionsHandle {
 		Ok(self.inner.delete(&key)?)
 	}
 
-	#[allow(clippy::too_many_arguments)]
-	pub fn commit(
-		&self,
-		key: String,
-		title: String,
-		content: String,
-		id: String,
-		created_at: i64,
-		max_versions: u32,
-		max_age_ms: i64,
-	) -> Result<bool, EngineError> {
+	pub fn commit(&self, key: String, version: VersionRecord) -> Result<bool, EngineError> {
 		Ok(self.inner.commit(
 			&key,
-			&title,
-			&content,
-			&id,
-			created_at,
-			max_versions as usize,
-			max_age_ms,
+			&NewVersion {
+				id: &version.id,
+				title: &version.title,
+				created_at: version.created_at,
+				content: &version.content,
+				max_versions: version.max_versions as usize,
+				max_age_ms: version.max_age_ms,
+			},
 		)?)
 	}
 

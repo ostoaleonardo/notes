@@ -258,7 +258,7 @@ fn times_a_delta_of_a_six_hundred_line_note() {
 
 mod repository {
 	use engine::repository::FsRepository;
-	use engine::versions::RepositoryVersions;
+	use engine::versions::{NewVersion, RepositoryVersions};
 	use serde_json::Value;
 	use std::fs;
 	use std::sync::Arc;
@@ -280,7 +280,19 @@ mod repository {
 		content: &str,
 		id: &str,
 	) -> bool {
-		versions.commit(key, title, content, id, 1, MAX, 0).unwrap()
+		versions
+			.commit(
+				key,
+				&NewVersion {
+					id,
+					title,
+					created_at: 1,
+					content,
+					max_versions: MAX,
+					max_age_ms: 0,
+				},
+			)
+			.unwrap()
 	}
 
 	fn names(directory: &TempDir) -> Vec<String> {

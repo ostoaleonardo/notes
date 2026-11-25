@@ -18,6 +18,17 @@ pub enum MoveOutcome {
 	SourceMissing,
 }
 
+pub struct FolderRef<'a> {
+	pub id: &'a str,
+	pub path: &'a str,
+}
+
+pub struct MoveRequest<'a> {
+	pub filename: &'a str,
+	pub from: FolderRef<'a>,
+	pub to: FolderRef<'a>,
+}
+
 pub struct Repository<'a> {
 	pub ops: &'a dyn RepositoryOps,
 	pub versions: &'a RepositoryVersions,
@@ -166,23 +177,20 @@ impl Engine {
 		Ok(target_name)
 	}
 
-	#[allow(clippy::too_many_arguments)]
 	pub fn move_note(
 		&self,
 		repository: &Repository<'_>,
-		filename: &str,
-		from_folder_id: &str,
-		from_path: &str,
-		to_folder_id: &str,
-		to_path: &str,
+		request: &MoveRequest<'_>,
 		to_sink: &dyn NoteSink,
 	) -> Result<MoveOutcome> {
+		let MoveRequest { filename, from, to } = request;
+
 		validate_name(filename)?;
 
-		let source = join(from_path, filename);
-		let target = join(to_path, filename);
+		let source = join(from.path, filename);
+		let target = join(to.path, filename);
 
-		if colliding_sibling(repository.ops, to_path, filename, None)? {
+		if colliding_sibling(repository.ops, to.path, filename, None)? {
 			return Ok(MoveOutcome::TargetExists);
 		}
 
@@ -204,11 +212,11 @@ impl Engine {
 			.stat(filename)?
 			.ok_or_else(|| Error::Io(io::Error::new(ErrorKind::NotFound, target.clone())))?;
 
-		let _ = self.remove(from_folder_id, &[filename.to_string()]);
+		let _ = self.remove(from.id, &[filename.to_string()]);
 
 		if let Some(text) = repository.ops.read_text(&target)? {
 			let _ = self.write(
-				to_folder_id,
+				to.id,
 				vec![NoteInput {
 					filename: filename.to_string(),
 					location: stamp.location.clone(),

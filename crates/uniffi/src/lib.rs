@@ -8,11 +8,12 @@ mod search;
 mod source;
 
 use engine::model::{IndexedNotes, SaveRequest, SyncStats};
+use engine::ops::{FolderRef, MoveRequest};
 use engine::source::{FsSource, LocationScheme};
 use engine::versions::HistoryMove;
 use records::{
-	DecomposedRecord, EngineError, MoveReport, NoteFieldsRecord, NoteRefsReport, QueryReport,
-	SaveReport, Value,
+	DecomposedRecord, EngineError, MoveReport, MoveRequestRecord, NoteFieldsRecord, NoteRefsReport,
+	QueryReport, RenameRequestRecord, SaveReport, Value,
 };
 use repository::{ForeignRepository, RepositoryFiles, VersionsHandle};
 use search::{SearchHandle, WarmHandle};
@@ -93,28 +94,30 @@ impl Engine {
 			.collect())
 	}
 
-	#[allow(clippy::too_many_arguments)]
 	pub fn rename_note(
 		&self,
 		folder_id: String,
 		sink: Arc<dyn NoteSink>,
-		from: String,
-		to: String,
-		text: String,
+		request: RenameRequestRecord,
 		versions: Option<Arc<VersionsHandle>>,
-		from_key: String,
-		to_key: String,
 	) -> Result<SaveReport, EngineError> {
 		let sink = ForeignSink::new(sink);
 		let history = versions.as_ref().map(|handle| HistoryMove {
 			versions: handle.core(),
-			from_key: &from_key,
-			to_key: &to_key,
+			from_key: &request.from_key,
+			to_key: &request.to_key,
 		});
 
 		Ok(self
 			.inner
-			.rename_note(&folder_id, &sink, &from, &to, &text, history.as_ref())?
+			.rename_note(
+				&folder_id,
+				&sink,
+				&request.from,
+				&request.to,
+				&request.text,
+				history.as_ref(),
+			)?
 			.into())
 	}
 
@@ -191,16 +194,11 @@ impl Engine {
 		)?)
 	}
 
-	#[allow(clippy::too_many_arguments)]
 	pub fn move_note(
 		&self,
 		repository: Arc<dyn RepositoryFiles>,
 		versions: Arc<VersionsHandle>,
-		filename: String,
-		from_folder_id: String,
-		from_path: String,
-		to_folder_id: String,
-		to_path: String,
+		request: MoveRequestRecord,
 		to_sink: Arc<dyn NoteSink>,
 	) -> Result<MoveReport, EngineError> {
 		let ops = ForeignRepository::new(repository);
@@ -214,11 +212,17 @@ impl Engine {
 			.inner
 			.move_note(
 				&repository,
-				&filename,
-				&from_folder_id,
-				&from_path,
-				&to_folder_id,
-				&to_path,
+				&MoveRequest {
+					filename: &request.filename,
+					from: FolderRef {
+						id: &request.from_folder_id,
+						path: &request.from_path,
+					},
+					to: FolderRef {
+						id: &request.to_folder_id,
+						path: &request.to_path,
+					},
+				},
 				&sink,
 			)?
 			.into())
