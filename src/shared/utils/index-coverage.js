@@ -1,4 +1,4 @@
-import RepositoryFs from 'repository-fs'
+import { repositoryEngine } from '@/shared/utils/repository-engine'
 
 import { buildNotePath } from '@/shared/utils/note-path'
 
@@ -21,5 +21,5 @@ const createIndexCoverage = ({ listIndexedNotes }) => {
 }
 
 export const indexCoverage = createIndexCoverage({
-    listIndexedNotes: () => RepositoryFs.listIndexedNotes()
+    listIndexedNotes: () => repositoryEngine.listIndexedNotes()
 })

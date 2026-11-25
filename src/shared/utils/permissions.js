@@ -1,3 +1,3 @@
-import RepositoryFs from 'repository-fs'
+import { repositoryEngine } from '@/shared/utils/repository-engine'
 
-export const revokePermissions = () => RepositoryFs.revokePermissions()
+export const revokePermissions = () => repositoryEngine.revokePermissions()

@@ -1,11 +1,11 @@
-import RepositoryFs from 'repository-fs'
+import { repositoryEngine } from '@/shared/utils/repository-engine'
 
 export const composeNoteFile = ({
     tags,
     properties,
     invalidFrontmatter = null,
     rawFrontmatter = null
-}, body) => RepositoryFs.composeNote(
+}, body) => repositoryEngine.composeNote(
     tags ?? [],
     JSON.stringify(properties ?? {}),
     invalidFrontmatter,
@@ -14,7 +14,7 @@ export const composeNoteFile = ({
 )
 
 export const decomposeNoteFile = (content) => {
-    const parts = RepositoryFs.decomposeNote(content)
+    const parts = repositoryEngine.decomposeNote(content)
 
     return {
         body: parts.body,

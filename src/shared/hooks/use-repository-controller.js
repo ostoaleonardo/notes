@@ -6,7 +6,9 @@ import { usePro } from './use-pro'
 import { useWelcomeNote } from './use-welcome-note'
 import { useFolderTree } from './use-folder-tree'
 import { useFolderTreeOps } from './use-folder-tree-ops'
-import { useRepositoryCrud } from './use-repository-crud'
+import { useRepositoryList } from './use-repository-list'
+import { useSubfolders } from './use-subfolders'
+import { useSpecialFolders } from './use-special-folders'
 import { useRepositorySync } from './use-repository-sync'
 import { RepositoryStateContext } from '@/shared/context/repository-state-context'
 
@@ -47,11 +49,10 @@ export function useRepositoryController() {
     const tree = useFolderTree({ folders, activeFolder })
     const treeOps = useFolderTreeOps({ folders, fileStorage })
 
-    const crud = useRepositoryCrud({
+    const list = useRepositoryList({
         folders,
         activeFolder,
         activeFolderId,
-        pro,
         busyRef,
         fileStorage,
         seedWelcomeNote,
@@ -61,10 +62,29 @@ export function useRepositoryController() {
         getRootRepository: tree.getRootRepository,
         getDescendants: tree.getDescendants,
         isAncestorOf: tree.isAncestorOf,
-        seedTemplates: treeOps.seedTemplates,
         buildFolder: treeOps.buildFolder,
-        discoverSubfolders: treeOps.discoverSubfolders,
+        discoverSubfolders: treeOps.discoverSubfolders
+    })
+
+    const subfolders = useSubfolders({
+        folders,
+        pro,
+        busyRef,
+        fileStorage,
+        persistFolders,
+        getRootRepository: tree.getRootRepository,
+        getDescendants: tree.getDescendants,
+        buildFolder: treeOps.buildFolder,
         relinkUris: treeOps.relinkUris
+    })
+
+    const special = useSpecialFolders({
+        folders,
+        busyRef,
+        fileStorage,
+        persistFolders,
+        getRootRepository: tree.getRootRepository,
+        seedTemplates: treeOps.seedTemplates
     })
 
     const { reconcileFolders } = useRepositorySync({
@@ -87,16 +107,16 @@ export function useRepositoryController() {
         activeFolderId,
         loading,
         pendingWelcomeNoteId,
-        clearPendingWelcomeNote: crud.clearPendingWelcomeNote,
-        addRepository: crud.addRepository,
-        addSubfolder: crud.addSubfolder,
-        renameFolder: crud.renameFolder,
-        forgetRepository: crud.forgetRepository,
-        removeRepository: crud.removeRepository,
-        setActiveFolder: crud.setActiveFolder,
-        ensureTemplatesFolder: crud.ensureTemplatesFolder,
-        ensureImagesFolder: crud.ensureImagesFolder,
-        ensureAttachmentsFolder: crud.ensureAttachmentsFolder,
+        clearPendingWelcomeNote: list.clearPendingWelcomeNote,
+        addRepository: list.addRepository,
+        addSubfolder: subfolders.addSubfolder,
+        renameFolder: subfolders.renameFolder,
+        forgetRepository: list.forgetRepository,
+        removeRepository: list.removeRepository,
+        setActiveFolder: list.setActiveFolder,
+        ensureTemplatesFolder: special.ensureTemplatesFolder,
+        ensureImagesFolder: special.ensureImagesFolder,
+        ensureAttachmentsFolder: special.ensureAttachmentsFolder,
         getDescendants: tree.getDescendants,
         getRootRepository: tree.getRootRepository,
         buildFolder: treeOps.buildFolder,
@@ -108,16 +128,16 @@ export function useRepositoryController() {
         activeFolderId,
         loading,
         pendingWelcomeNoteId,
-        crud.clearPendingWelcomeNote,
-        crud.addRepository,
-        crud.addSubfolder,
-        crud.renameFolder,
-        crud.forgetRepository,
-        crud.removeRepository,
-        crud.setActiveFolder,
-        crud.ensureTemplatesFolder,
-        crud.ensureImagesFolder,
-        crud.ensureAttachmentsFolder,
+        list.clearPendingWelcomeNote,
+        list.addRepository,
+        subfolders.addSubfolder,
+        subfolders.renameFolder,
+        list.forgetRepository,
+        list.removeRepository,
+        list.setActiveFolder,
+        special.ensureTemplatesFolder,
+        special.ensureImagesFolder,
+        special.ensureAttachmentsFolder,
         tree.getDescendants,
         tree.getRootRepository,
         treeOps.buildFolder,

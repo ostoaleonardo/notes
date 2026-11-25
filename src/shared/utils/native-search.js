@@ -1,4 +1,4 @@
-import RepositoryFs from 'repository-fs'
+import { repositoryEngine } from '@/shared/utils/repository-engine'
 
 import { indexCoverage } from '@/shared/utils/index-coverage'
 import { buildNotePath } from '@/shared/utils/note-path'
@@ -126,4 +126,4 @@ export const createNativeSearch = (fs, {
     }
 })
 
-export const nativeSearch = createNativeSearch(RepositoryFs, { isIndexed: indexCoverage.isCovered })
+export const nativeSearch = createNativeSearch(repositoryEngine, { isIndexed: indexCoverage.isCovered })

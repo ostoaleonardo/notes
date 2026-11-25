@@ -1,4 +1,4 @@
-import RepositoryFs from 'repository-fs'
+import { repositoryEngine } from '@/shared/utils/repository-engine'
 
 import { splitBody } from '@/shared/utils/note-body-of'
 
@@ -84,5 +84,5 @@ export const createNoteBodyLoader = ({
 }
 
 export const noteBodies = createNoteBodyLoader({
-    readTextFiles: (uris) => RepositoryFs.readTextFiles(uris)
+    readTextFiles: (uris) => repositoryEngine.readTextFiles(uris)
 })

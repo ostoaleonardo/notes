@@ -1,4 +1,4 @@
-import RepositoryFs from 'repository-fs'
+import { repositoryEngine } from '@/shared/utils/repository-engine'
 
 import { bootMark } from '@/shared/utils/boot-mark'
 
@@ -43,4 +43,4 @@ export const createRepositoryIndexSync = (fs) => {
     }
 }
 
-export const syncRepositoryIndex = createRepositoryIndexSync(RepositoryFs)
+export const syncRepositoryIndex = createRepositoryIndexSync(repositoryEngine)

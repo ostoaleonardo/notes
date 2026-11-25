@@ -1,4 +1,4 @@
-import RepositoryFs from 'repository-fs'
+import { repositoryEngine } from '@/shared/utils/repository-engine'
 
 import { queryIndex } from '@/shared/utils/index-query'
 import { extractProperties, parseFrontmatter, readFrontmatterTags } from '@/shared/utils/frontmatter'
@@ -139,15 +139,15 @@ export const checkIndex = async (folders, scanMarkdownFiles) => {
     log(`repository ${folder.alias || folder.id}: ${files.length} notes`)
 
     let progressEvents = 0
-    const subscription = RepositoryFs.addListener(INDEX_PROGRESS_EVENT, () => { progressEvents += 1 })
+    const subscription = repositoryEngine.addListener(INDEX_PROGRESS_EVENT, () => { progressEvents += 1 })
 
-    await RepositoryFs.pruneRepositoryIndex([folder.id])
-    await RepositoryFs.deleteFolderIndex(folder.id)
-    const cold = await timed(() => RepositoryFs.indexRepository(folder.id, folder.uri))
+    await repositoryEngine.pruneRepositoryIndex([folder.id])
+    await repositoryEngine.deleteFolderIndex(folder.id)
+    const cold = await timed(() => repositoryEngine.indexRepository(folder.id, folder.uri))
     log(describe('cold index', cold.ms, cold.result))
     log(`progress events during the cold index: ${progressEvents}`)
 
-    const warm = await timed(() => RepositoryFs.indexRepository(folder.id, folder.uri))
+    const warm = await timed(() => repositoryEngine.indexRepository(folder.id, folder.uri))
     log(describe('unchanged reconcile', warm.ms, warm.result))
 
     await queryIndex(
@@ -156,10 +156,10 @@ export const checkIndex = async (folders, scanMarkdownFiles) => {
         INDEX_CHECK_TOUCHED_NOTES
     )
 
-    const touched = await timed(() => RepositoryFs.indexRepository(folder.id, folder.uri))
+    const touched = await timed(() => repositoryEngine.indexRepository(folder.id, folder.uri))
     log(describe(`reconcile after touching ${INDEX_CHECK_TOUCHED_NOTES} notes`, touched.ms, touched.result))
 
-    const texts = await RepositoryFs.readTextFiles(files.map((file) => file.uri))
+    const texts = await repositoryEngine.readTextFiles(files.map((file) => file.uri))
     const indexed = await readIndex(folder.id)
     const parity = compareWithJs(files, texts, indexed)
 

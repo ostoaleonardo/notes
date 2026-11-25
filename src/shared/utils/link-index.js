@@ -1,4 +1,4 @@
-import RepositoryFs from 'repository-fs'
+import { repositoryEngine } from '@/shared/utils/repository-engine'
 
 import { bootMark } from '@/shared/utils/boot-mark'
 import { indexCoverage } from '@/shared/utils/index-coverage'
@@ -70,7 +70,7 @@ export const createLinkIndex = ({
 }
 
 const verifyBacklinksNatively = ({ target, notes, notePaths, candidates, bodies }) => (
-    RepositoryFs.findBacklinkPaths(
+    repositoryEngine.findBacklinkPaths(
         notes.map((note) => note.title || ''),
         notes.map(getAliases),
         notes.map((note) => note.path),
@@ -83,8 +83,8 @@ const verifyBacklinksNatively = ({ target, notes, notePaths, candidates, bodies 
 
 export const linkIndex = createLinkIndex({
     coverage: indexCoverage,
-    backlinkCandidates: (names, path) => RepositoryFs.findBacklinkCandidates(names, path),
-    mentionCandidates: (terms) => RepositoryFs.findMentionCandidates(terms),
+    backlinkCandidates: (names, path) => repositoryEngine.findBacklinkCandidates(names, path),
+    mentionCandidates: (terms) => repositoryEngine.findMentionCandidates(terms),
     verifyBacklinks: verifyBacklinksNatively,
     loadBodies: noteBodies.load
 })

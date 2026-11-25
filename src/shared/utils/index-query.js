@@ -1,4 +1,4 @@
-import RepositoryFs from 'repository-fs'
+import { repositoryEngine } from '@/shared/utils/repository-engine'
 
 export const toRows = ({ columns, values }) => {
     const count = values[0]?.length ?? 0
@@ -10,4 +10,4 @@ export const toRows = ({ columns, values }) => {
 
 export const createIndexQuery = (fs) => async (sql, ...params) => toRows(await fs.queryIndex(sql, params))
 
-export const queryIndex = createIndexQuery(RepositoryFs)
+export const queryIndex = createIndexQuery(repositoryEngine)

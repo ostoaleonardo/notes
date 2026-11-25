@@ -1,4 +1,4 @@
-import RepositoryFs from 'repository-fs'
+import { repositoryEngine } from '@/shared/utils/repository-engine'
 
 import { NOTE_FILE_EXTENSION } from '@/shared/constants/file-storage'
 import {
@@ -9,13 +9,13 @@ import {
 export const stripNoteExtension = (filename) => filename.replace(NOTE_FILE_EXTENSION_REGEX, '')
 
 export const sanitizeFilename = (title, extension = NOTE_FILE_EXTENSION) => (
-    RepositoryFs.sanitizeFilename(title || '', extension)
+    repositoryEngine.sanitizeFilename(title || '', extension)
 )
 
 export const hasLinkBreakingChars = (title) => LINK_BREAKING_FILENAME_CHARS.test(title || '')
 
 export const getUniqueTitle = (existingTitles, base) => (
-    RepositoryFs.uniqueFilename(existingTitles, base, '', null)
+    repositoryEngine.uniqueFilename(existingTitles, base, '', null)
 )
 
 export const getUniqueFilename = (
@@ -23,7 +23,7 @@ export const getUniqueFilename = (
     title,
     currentFilename,
     extension = NOTE_FILE_EXTENSION
-) => RepositoryFs.uniqueFilename(
+) => repositoryEngine.uniqueFilename(
     existingNames,
     sanitizeFilename(title, extension),
     extension,

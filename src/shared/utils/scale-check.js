@@ -1,4 +1,4 @@
-import RepositoryFs from 'repository-fs'
+import { repositoryEngine } from '@/shared/utils/repository-engine'
 
 import { queryIndex } from '@/shared/utils/index-query'
 import { buildLinkGraph } from '@/shared/utils/connection-model'
@@ -43,7 +43,7 @@ const readAll = async (uris) => {
     const texts = []
 
     for (let from = 0; from < uris.length; from += SCALE_CHECK_READ_BATCH) {
-        texts.push(...await RepositoryFs.readTextFiles(uris.slice(from, from + SCALE_CHECK_READ_BATCH)))
+        texts.push(...await repositoryEngine.readTextFiles(uris.slice(from, from + SCALE_CHECK_READ_BATCH)))
     }
 
     return texts
@@ -87,14 +87,14 @@ const queryTime = async (label, sql, ...params) => {
 
 const measureNative = async () => {
     const indexed = await best(async () => {
-        await RepositoryFs.deleteFolderIndex(SCALE_CHECK_FOLDER_ID)
-        return RepositoryFs.indexRepository(SCALE_CHECK_FOLDER_ID, SCALE_CHECK_FOLDER_URI)
+        await repositoryEngine.deleteFolderIndex(SCALE_CHECK_FOLDER_ID)
+        return repositoryEngine.indexRepository(SCALE_CHECK_FOLDER_ID, SCALE_CHECK_FOLDER_URI)
     })
 
     const stats = indexed.result
     log(`native cold index: best ${indexed.ms} ms (scan ${stats.scanMs}, read+parse ${stats.readParseMs}, write ${stats.writeMs}), ${stats.total} notes`)
 
-    const noop = await best(() => RepositoryFs.indexRepository(SCALE_CHECK_FOLDER_ID, SCALE_CHECK_FOLDER_URI))
+    const noop = await best(() => repositoryEngine.indexRepository(SCALE_CHECK_FOLDER_ID, SCALE_CHECK_FOLDER_URI))
     log(`native reconcile with no changes: best ${noop.ms} ms`)
 
     await queryTime('tags with counts', SCALE_CHECK_SQL.TAGS)
@@ -111,7 +111,7 @@ const measureNative = async () => {
 export const checkScale = async () => {
     log(`js heap at start: ${heapMb()}`)
 
-    const scan = await best(() => RepositoryFs.listDirectory(SCALE_CHECK_FOLDER_URI))
+    const scan = await best(() => repositoryEngine.listDirectory(SCALE_CHECK_FOLDER_URI))
     const { uris, names, lastModified } = scan.result
     const markdown = names.map((_, index) => index).filter((index) => names[index].endsWith(NOTE_FILE_EXTENSION))
     const noteNames = markdown.map((index) => names[index])

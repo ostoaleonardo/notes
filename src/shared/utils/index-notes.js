@@ -1,4 +1,4 @@
-import RepositoryFs from 'repository-fs'
+import { repositoryEngine } from '@/shared/utils/repository-engine'
 
 import { bootMark } from '@/shared/utils/boot-mark'
 import { queryIndex } from '@/shared/utils/index-query'
@@ -55,7 +55,7 @@ export const createIndexedNotesLoader = (fs) => async (folderIds) => {
     return notes
 }
 
-export const loadNotesFromIndex = createIndexedNotesLoader(RepositoryFs)
+export const loadNotesFromIndex = createIndexedNotesLoader(repositoryEngine)
 
 export const createIndexedNotesCounter = (query) => async (folderIds) => {
     if (!folderIds.length) return 0

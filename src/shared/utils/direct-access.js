@@ -1,8 +1,8 @@
-import RepositoryFs from 'repository-fs'
+import { repositoryEngine } from '@/shared/utils/repository-engine'
 
-export const hasDirectAccess = () => RepositoryFs.hasDirectAccess()
+export const hasDirectAccess = () => repositoryEngine.hasDirectAccess()
 
-export const requestDirectAccess = () => RepositoryFs.requestDirectAccess()
+export const requestDirectAccess = () => repositoryEngine.requestDirectAccess()
 
 export const shouldPromptDirectAccess = ({ granted, dismissed, noteCount, minNotes }) => (
     !granted && !dismissed && noteCount >= minNotes
