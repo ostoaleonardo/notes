@@ -32,3 +32,25 @@ jobs:
           tool: cargo-ndk,cargo-audit
       - run: cargo ndk -t arm64-v8a -t x86_64 build -p engine-bindings
       - run: cargo audit
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - run: rustup show
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-ndk
+      - uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew :repository-fs:testDebugUnitTest -PreactNativeArchitectures=arm64-v8a
+        working-directory: android
