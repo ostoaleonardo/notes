@@ -4,7 +4,7 @@ import { buildNotePath, buildFolderPaths } from '@/shared/utils/note-path'
 import { composeNoteFile, decomposeNoteFile } from '@/shared/utils/note-file-content'
 import { commitNoteVersion } from '@/shared/utils/note-versions'
 import { planExternalSync, toSyncShape } from '@/shared/utils/external-note-sync'
-import { renameWikiLinksForNote } from '@/shared/utils/wiki-links'
+import { renameLinksInBodies } from '@/shared/utils/link-rewrite'
 import { noteBodies } from '@/shared/utils/note-body'
 import { bodyOf } from '@/shared/utils/note-body-of'
 import { buildVersionKey, getVersionLocation } from '@/shared/utils/note-version-location'
@@ -177,28 +177,34 @@ export const persistNoteUpdate = async ({ note, previous, uri, plan, folders }, 
     return { ...saved, createdAt: previous.createdAt, merged }
 }
 
-export const planWikiLinkRename = ({
+export const planWikiLinkRename = async ({
     targetPath,
     newTitle,
     notes,
     notePaths,
     currentNotes = notes,
-    rewrite = (content) => renameWikiLinksForNote(content, targetPath, newTitle, notes, notePaths),
+    rewriteBodies = (texts) => renameLinksInBodies({ notes, notePaths, targetPath, newTitle, bodies: texts }),
     bodies
 }) => {
-    const renameNote = (note) => {
-        if (note.path === targetPath || (bodies && !bodies.has(note.path))) return note
+    const candidates = currentNotes.filter((note) => (
+        note.path !== targetPath && (!bodies || bodies.has(note.path))
+    ))
+    const originals = candidates.map((note) => bodyOf(note, bodies))
+    const rewritten = candidates.length ? await rewriteBodies(originals) : []
+    const renamed = new Map()
 
-        const body = bodyOf(note, bodies)
-        const renamed = rewrite(body)
-        return renamed === body ? note : { ...note, note: renamed }
+    candidates.forEach((note, index) => {
+        if (rewritten[index] !== originals[index]) renamed.set(note.path, rewritten[index])
+    })
+
+    const renameNote = (note) => (
+        renamed.has(note.path) ? { ...note, note: renamed.get(note.path) } : note
+    )
+
+    return {
+        renameNote,
+        changedNotes: candidates.filter((note) => renamed.has(note.path)).map(renameNote)
     }
-
-    const changedNotes = currentNotes
-        .map(renameNote)
-        .filter((note, index) => note !== currentNotes[index])
-
-    return { renameNote, changedNotes }
 }
 
 const groupByFolder = (notes) => {
@@ -302,6 +308,13 @@ export const planMovedNoteLinks = ({
         notePaths,
         currentNotes,
         bodies,
-        rewrite: (content) => renameWikiLinksForNote(content, note.path, note.title, notes, qualifyPaths, notePaths)
+        rewriteBodies: (texts) => renameLinksInBodies({
+            notes,
+            notePaths: qualifyPaths,
+            resolvePaths: notePaths,
+            targetPath: note.path,
+            newTitle: note.title,
+            bodies: texts
+        })
     })
 }

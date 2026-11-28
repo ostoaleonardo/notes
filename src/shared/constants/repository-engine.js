@@ -20,6 +20,7 @@ export const REPOSITORY_ENGINE_METHODS = [
     'readTextFiles',
     'removeFolder',
     'renameFolder',
+    'renameLinksInBodies',
     'renameNote',
     'requestDirectAccess',
     'revokePermissions',

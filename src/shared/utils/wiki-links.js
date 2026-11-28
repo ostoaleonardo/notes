@@ -165,37 +165,6 @@ export const parseMissingWikiLinkTarget = (encoded) => {
     }
 }
 
-export const renameWikiLinksForNote = (
-    content,
-    targetPath,
-    newTitle,
-    notes,
-    notePaths = EMPTY_NOTE_PATHS,
-    resolvePaths = notePaths
-) => {
-    if (!content) return content
-
-    const folderPath = notePaths.get(targetPath) || ''
-    const normalizedNewTitle = normalizeName(newTitle)
-    const isAmbiguous = folderPath && notes.some((note) => (
-        note.path !== targetPath && normalizeName(note.title || '') === normalizedNewTitle
-    ))
-    const qualifiedTitle = isAmbiguous ? `${folderPath}/${newTitle}` : newTitle
-
-    return content.replace(WIKI_LINK_PATTERN, (match, linkText, alias) => {
-        const { note, target, anchor } = resolveWikiLink(linkText, notes, resolvePaths)
-        if (note?.path !== targetPath) return match
-        if (normalizeName(parseWikiLinkText(target).title) !== normalizeName(note.title || '')) return match
-
-        const suffix = anchor ? `${WIKI_LINK_ANCHOR_SEPARATOR}${anchor}` : ''
-        if (alias !== undefined) return `[[${qualifiedTitle}${suffix}|${alias}]]`
-        if (!isAmbiguous) return `[[${newTitle}${suffix}]]`
-
-        const label = anchor ? `${newTitle}${WIKI_LINK_ANCHOR_LABEL_SEPARATOR}${anchor}` : newTitle
-        return `[[${qualifiedTitle}${suffix}|${label}]]`
-    })
-}
-
 export const buildBacklinkLink = (note, notePaths) => {
     const path = notePaths.get(note.path) || ''
 

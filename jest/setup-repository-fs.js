@@ -59,6 +59,11 @@ jest.mock('repository-fs', () => {
 
                 return findBacklinkPaths(...args)
             },
+            renameLinksInBodies: async (...args) => {
+                const { renameLinksInBodies } = require('../jest/core-links')
+
+                return renameLinksInBodies(...args)
+            },
             composeNote: (tags, propertiesJson, invalidFrontmatter, rawFrontmatter, body) => {
                 const { buildNoteFileContent } = require('@/shared/utils/frontmatter')
 

@@ -79,7 +79,7 @@ export function useNotesController() {
         }
 
         const propagateWikiLinkRename = async (targetPath, newTitle, notesSnapshot, snapshotPaths) => (
-            applyLinkRewrite(planWikiLinkRename({
+            applyLinkRewrite(await planWikiLinkRename({
                 targetPath,
                 newTitle,
                 notes: notesSnapshot,
@@ -90,13 +90,15 @@ export function useNotesController() {
         )
 
         const propagateHeadingRename = async (targetPath, renames, notesSnapshot, snapshotPaths) => (
-            applyLinkRewrite(planWikiLinkRename({
+            applyLinkRewrite(await planWikiLinkRename({
                 targetPath,
                 notes: notesSnapshot,
                 notePaths: snapshotPaths,
                 currentNotes: latest().notes,
                 bodies: await loadLinkingBodies(targetPath, notesSnapshot, snapshotPaths),
-                rewrite: (content) => renameHeadingLinks(content, targetPath, renames, notesSnapshot, snapshotPaths)
+                rewriteBodies: async (texts) => texts.map((content) => (
+                    renameHeadingLinks(content, targetPath, renames, notesSnapshot, snapshotPaths)
+                ))
             }))
         )
 
@@ -219,7 +221,7 @@ export function useNotesController() {
 
             const moved = await persistNoteMove({ note, destinationId, folders: currentFolders }, fileStorage)
 
-            await applyLinkRewrite(planMovedNoteLinks({
+            await applyLinkRewrite(await planMovedNoteLinks({
                 note,
                 destinationId,
                 notes: latest().notes,

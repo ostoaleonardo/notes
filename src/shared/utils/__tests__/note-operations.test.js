@@ -341,8 +341,8 @@ describe('plan wiki link rename', () => {
     const linker = buildNote('Linker', 'see [[Old]]')
     const other = buildNote('Other', 'nothing')
 
-    test('rewrites links only in notes that reference the target', () => {
-        const { changedNotes } = planWikiLinkRename({
+    test('rewrites links only in notes that reference the target', async () => {
+        const { changedNotes } = await planWikiLinkRename({
             targetPath: target.path,
             newTitle: 'New',
             notes: [target, linker, other],
@@ -353,10 +353,10 @@ describe('plan wiki link rename', () => {
         expect(changedNotes[0].note).toBe('see [[New]]')
     })
 
-    test('rewrites the current content of notes edited after the snapshot', () => {
+    test('rewrites the current content of notes edited after the snapshot', async () => {
         const edited = { ...linker, note: 'edited [[Old]] again' }
 
-        const { changedNotes } = planWikiLinkRename({
+        const { changedNotes } = await planWikiLinkRename({
             targetPath: target.path,
             newTitle: 'New',
             notes: [target, linker],
@@ -367,11 +367,11 @@ describe('plan wiki link rename', () => {
         expect(changedNotes[0].note).toBe('edited [[New]] again')
     })
 
-    test('rewrites the loaded body of a note that has none in memory', () => {
+    test('rewrites the loaded body of a note that has none in memory', async () => {
         const bodyless = { ...linker, note: undefined }
         const bodies = new Map([[linker.path, 'see [[Old]]']])
 
-        const { changedNotes } = planWikiLinkRename({
+        const { changedNotes } = await planWikiLinkRename({
             targetPath: target.path,
             newTitle: 'New',
             notes: [target, bodyless],
@@ -383,48 +383,48 @@ describe('plan wiki link rename', () => {
         expect(changedNotes[0].note).toBe('see [[New]]')
     })
 
-    test('only rewrites the notes whose bodies were loaded as linking candidates', () => {
+    test('only rewrites the notes whose bodies were loaded as linking candidates', async () => {
         const resident = { ...other, note: 'see [[Old]] too' }
         const bodies = new Map([[linker.path, 'see [[Old]]']])
-        const rewrite = jest.fn((content) => content.replace('[[Old]]', '[[New]]'))
+        const rewriteBodies = jest.fn(async (texts) => texts.map((content) => content.replace('[[Old]]', '[[New]]')))
 
-        const { changedNotes } = planWikiLinkRename({
+        const { changedNotes } = await planWikiLinkRename({
             targetPath: target.path,
             newTitle: 'New',
             notes: [target, linker, resident],
             notePaths: new Map(),
-            rewrite,
+            rewriteBodies,
             bodies
         })
 
-        expect(rewrite).toHaveBeenCalledTimes(1)
+        expect(rewriteBodies).toHaveBeenCalledWith(['see [[Old]]'])
         expect(changedNotes.map((note) => note.path)).toEqual([linker.path])
     })
 
-    test('the returned renamer skips the notes whose bodies were not loaded', () => {
+    test('the returned renamer skips the notes whose bodies were not loaded', async () => {
         const resident = { ...other, note: 'see [[Old]] too' }
         const bodies = new Map([[linker.path, 'see [[Old]]']])
-        const rewrite = jest.fn((content) => content)
+        const rewriteBodies = jest.fn(async (texts) => texts)
 
-        const { renameNote } = planWikiLinkRename({
+        const { renameNote } = await planWikiLinkRename({
             targetPath: target.path,
             newTitle: 'New',
             notes: [target, linker, resident],
             notePaths: new Map(),
-            rewrite,
+            rewriteBodies,
             bodies
         })
 
-        rewrite.mockClear()
+        rewriteBodies.mockClear()
 
         expect(renameNote(resident)).toBe(resident)
-        expect(rewrite).not.toHaveBeenCalled()
+        expect(rewriteBodies).not.toHaveBeenCalled()
     })
 
-    test('leaves a note without a loaded body untouched', () => {
+    test('leaves a note without a loaded body untouched', async () => {
         const bodyless = { ...other, note: undefined }
 
-        const { changedNotes } = planWikiLinkRename({
+        const { changedNotes } = await planWikiLinkRename({
             targetPath: target.path,
             newTitle: 'New',
             notes: [target, bodyless],
@@ -434,8 +434,8 @@ describe('plan wiki link rename', () => {
         expect(changedNotes).toEqual([])
     })
 
-    test('never rewrites the target note itself', () => {
-        const { renameNote } = planWikiLinkRename({
+    test('never rewrites the target note itself', async () => {
+        const { renameNote } = await planWikiLinkRename({
             targetPath: target.path,
             newTitle: 'New',
             notes: [target],
@@ -676,8 +676,8 @@ describe('plan moved note links', () => {
     const NOTES = [moved, twin, linker]
     const NOTE_PATHS = new Map([['root::Idea.md', ''], ['child::Idea.md', 'Child'], ['root::Index.md', '']])
 
-    test('qualifies links with the new folder when the title exists elsewhere', () => {
-        const plan = planMovedNoteLinks({
+    test('qualifies links with the new folder when the title exists elsewhere', async () => {
+        const plan = await planMovedNoteLinks({
             note: moved,
             destinationId: 'child',
             notes: NOTES,
@@ -690,10 +690,10 @@ describe('plan moved note links', () => {
         expect(plan.changedNotes[0].note).toBe('See [[Child/Idea|Idea]]')
     })
 
-    test('leaves links alone when the title is unique', () => {
+    test('leaves links alone when the title is unique', async () => {
         const unique = [moved, linker]
 
-        const plan = planMovedNoteLinks({
+        const plan = await planMovedNoteLinks({
             note: moved,
             destinationId: 'child',
             notes: unique,

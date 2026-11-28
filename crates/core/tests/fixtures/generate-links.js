@@ -95,7 +95,8 @@ const load = () => {
 }
 
 test('generates link fixtures', () => {
-    const { resolveWikiLink, renameWikiLinksForNote } = load()
+    const { resolveWikiLink } = load()
+    const { renameWikiLinksForNote } = require('../../../../jest/core-links')
     const notePaths = new Map(Object.entries(FOLDERS))
     const movedPaths = new Map(Object.entries(MOVED_FOLDERS))
     const byPath = new Map(NOTES.map((note, index) => [note, index]))

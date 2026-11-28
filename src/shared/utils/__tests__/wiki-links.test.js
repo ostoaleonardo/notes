@@ -2,7 +2,6 @@ import {
     renderWikiLink,
     resolveWikiLinkDetails,
     resolveWikiLinkTarget,
-    renameWikiLinksForNote,
     buildBacklinksHtml,
     parseMissingWikiLinkTarget
 } from '../wiki-links'
@@ -120,122 +119,6 @@ describe('duplicate titles across folders', () => {
         const result = renderLink('[[one/Test]]', duplicateNotes, notePaths)
 
         expect(result).toBe('<a href="wikilink://sub-test" class="wiki-link">Test</a>')
-    })
-})
-
-describe('rename wiki links for note', () => {
-    test('renames a link that resolves to the target note', () => {
-        const notesForRename = [{ path: 'target', title: 'Grocery List' }]
-        const result = renameWikiLinksForNote(
-            'See [[Grocery List]] for details',
-            'target',
-            'Shopping List',
-            notesForRename
-        )
-
-        expect(result).toBe('See [[Shopping List]] for details')
-    })
-
-    test('preserves the alias when renaming', () => {
-        const notesForRename = [{ path: 'target', title: 'Grocery List' }]
-        const result = renameWikiLinksForNote(
-            'See [[Grocery List|the list]] for details',
-            'target',
-            'Shopping List',
-            notesForRename
-        )
-
-        expect(result).toBe('See [[Shopping List|the list]] for details')
-    })
-
-    test('matches case-insensitively', () => {
-        const notesForRename = [{ path: 'target', title: 'Grocery List' }]
-        const result = renameWikiLinksForNote(
-            '[[grocery list]]',
-            'target',
-            'Shopping List',
-            notesForRename
-        )
-
-        expect(result).toBe('[[Shopping List]]')
-    })
-
-    test('leaves links that resolve to a different note unchanged', () => {
-        const notesForRename = [
-            { path: 'target', title: 'Grocery List' },
-            { path: 'other', title: 'Meeting Notes' }
-        ]
-        const result = renameWikiLinksForNote(
-            '[[Meeting Notes]]',
-            'target',
-            'Shopping List',
-            notesForRename
-        )
-
-        expect(result).toBe('[[Meeting Notes]]')
-    })
-
-    test('leaves a same-titled note in a different folder unchanged', () => {
-        const duplicateNotes = [
-            { path: 'root-test', title: 'Test' },
-            { path: 'sub-test', title: 'Test' }
-        ]
-        const notePaths = new Map([
-            ['root-test', ''],
-            ['sub-test', 'one']
-        ])
-
-        const result = renameWikiLinksForNote(
-            'Links to [[Test]] and [[one/Test]]',
-            'root-test',
-            'Renamed',
-            duplicateNotes,
-            notePaths
-        )
-
-        expect(result).toBe('Links to [[Renamed]] and [[one/Test]]')
-    })
-
-    test('re-qualifies with the folder path when the new title collides with another note', () => {
-        const duplicateNotes = [
-            { path: 'sub-test', title: 'Test' },
-            { path: 'other', title: 'Fold' }
-        ]
-        const notePaths = new Map([
-            ['sub-test', 'one'],
-            ['other', '']
-        ])
-
-        const result = renameWikiLinksForNote(
-            'See [[Test]] here',
-            'sub-test',
-            'Fold',
-            duplicateNotes,
-            notePaths
-        )
-
-        expect(result).toBe('See [[one/Fold|Fold]] here')
-    })
-
-    test('does not qualify when the renamed note has no folder to qualify with', () => {
-        const duplicateNotes = [
-            { path: 'root-test', title: 'Test' },
-            { path: 'other', title: 'Fold' }
-        ]
-        const notePaths = new Map([
-            ['root-test', ''],
-            ['other', '']
-        ])
-
-        const result = renameWikiLinksForNote(
-            'See [[Test]] here',
-            'root-test',
-            'Fold',
-            duplicateNotes,
-            notePaths
-        )
-
-        expect(result).toBe('See [[Fold]] here')
     })
 })
 
@@ -361,18 +244,6 @@ describe('heading and block anchors', () => {
 
         expect(result).toContain('href="wikilink://note-1#%5Eabc123"')
     })
-
-    test('keeps the anchor when renaming', () => {
-        const notesForRename = [{ path: 'target', title: 'Grocery List' }]
-        const result = renameWikiLinksForNote(
-            '[[Grocery List#Fruit]] and [[Grocery List#^b1|block]]',
-            'target',
-            'Shopping List',
-            notesForRename
-        )
-
-        expect(result).toBe('[[Shopping List#Fruit]] and [[Shopping List#^b1|block]]')
-    })
 })
 
 describe('frontmatter aliases', () => {
@@ -400,17 +271,6 @@ describe('frontmatter aliases', () => {
         const target = resolveWikiLinkTarget('Standup', aliasNotes)
 
         expect(target.path).toBe('note-2')
-    })
-
-    test('does not rewrite links that matched through an alias when the title changes', () => {
-        const result = renameWikiLinksForNote(
-            '[[Sync]] and [[Meeting Notes]]',
-            'note-1',
-            'Retro',
-            aliasNotes
-        )
-
-        expect(result).toBe('[[Sync]] and [[Retro]]')
     })
 })
 

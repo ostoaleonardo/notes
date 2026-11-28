@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useNotes } from './use-notes'
 import { useStorage } from './use-storage'
 import { linkIndex } from '@/shared/utils/link-index'
-import { renameWikiLinksForNote } from '@/shared/utils/wiki-links'
+import { renameLinksInBodies } from '@/shared/utils/link-rewrite'
 import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
 import { STORAGE_BOOLEAN } from '@/shared/constants/storage-values'
 import { useSingleFlight } from '@/shared/hooks/use-single-flight'
@@ -30,9 +30,16 @@ export function useWikiLinkRenameConfirm() {
     const saveWithLinkCheck = async (note, previousTitle) => {
         const titleChanged = previousTitle && previousTitle !== note.title
 
-        const savedNote = titleChanged
-            ? { ...note, note: renameWikiLinksForNote(note.note, note.path, note.title, notes, notePaths) }
-            : note
+        const [renamedBody] = titleChanged && note.note
+            ? await renameLinksInBodies({
+                notes,
+                notePaths,
+                targetPath: note.path,
+                newTitle: note.title,
+                bodies: [note.note]
+            })
+            : [note.note]
+        const savedNote = renamedBody === note.note ? note : { ...note, note: renamedBody }
 
         const { path, filename, createdAt, updatedAt } = await updateNote(savedNote)
 

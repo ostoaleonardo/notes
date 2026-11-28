@@ -273,3 +273,159 @@ fn scans_wiki_targets_like_the_regular_expression() {
 		assert_eq!(wiki_targets(&text), expected, "text {text:?}");
 	}
 }
+
+fn folders_of(entries: &[(&str, &str)]) -> FolderPaths {
+	entries
+		.iter()
+		.map(|(path, folder)| (path.to_string(), folder.to_string()))
+		.collect()
+}
+
+fn renamed(
+	content: &str,
+	target: &str,
+	title: &str,
+	notes: &[LinkNote],
+	folders: &FolderPaths,
+) -> String {
+	let index = NoteIndex::new(notes);
+
+	rename_links(content, target, title, &index, folders, folders)
+}
+
+#[test]
+fn renames_a_link_that_resolves_to_the_target() {
+	let notes = [note("target", "Grocery List", &[])];
+	let folders = FolderPaths::new();
+
+	assert_eq!(
+		renamed(
+			"See [[Grocery List]] for details",
+			"target",
+			"Shopping List",
+			&notes,
+			&folders
+		),
+		"See [[Shopping List]] for details"
+	);
+	assert_eq!(
+		renamed(
+			"See [[Grocery List|the list]] here",
+			"target",
+			"Shopping List",
+			&notes,
+			&folders
+		),
+		"See [[Shopping List|the list]] here"
+	);
+	assert_eq!(
+		renamed(
+			"[[grocery list]]",
+			"target",
+			"Shopping List",
+			&notes,
+			&folders
+		),
+		"[[Shopping List]]"
+	);
+}
+
+#[test]
+fn keeps_the_anchor_when_renaming() {
+	let notes = [note("target", "Grocery List", &[])];
+
+	assert_eq!(
+		renamed(
+			"[[Grocery List#Fruit]] and [[Grocery List#^b1|block]]",
+			"target",
+			"Shopping List",
+			&notes,
+			&FolderPaths::new()
+		),
+		"[[Shopping List#Fruit]] and [[Shopping List#^b1|block]]"
+	);
+}
+
+#[test]
+fn leaves_links_to_other_notes_unchanged() {
+	let notes = [
+		note("target", "Grocery List", &[]),
+		note("other", "Meeting Notes", &[]),
+	];
+
+	assert_eq!(
+		renamed(
+			"[[Meeting Notes]]",
+			"target",
+			"Shopping List",
+			&notes,
+			&FolderPaths::new()
+		),
+		"[[Meeting Notes]]"
+	);
+}
+
+#[test]
+fn leaves_a_same_titled_note_in_another_folder_unchanged() {
+	let notes = [
+		note("root-test", "Test", &[]),
+		note("sub-test", "Test", &[]),
+	];
+	let folders = folders_of(&[("root-test", ""), ("sub-test", "one")]);
+
+	assert_eq!(
+		renamed(
+			"Links to [[Test]] and [[one/Test]]",
+			"root-test",
+			"Renamed",
+			&notes,
+			&folders
+		),
+		"Links to [[Renamed]] and [[one/Test]]"
+	);
+}
+
+#[test]
+fn qualifies_with_the_folder_when_the_new_title_collides() {
+	let notes = [note("sub-test", "Test", &[]), note("other", "Fold", &[])];
+
+	assert_eq!(
+		renamed(
+			"See [[Test]] here",
+			"sub-test",
+			"Fold",
+			&notes,
+			&folders_of(&[("sub-test", "one"), ("other", "")])
+		),
+		"See [[one/Fold|Fold]] here"
+	);
+	assert_eq!(
+		renamed(
+			"See [[Test]] here",
+			"sub-test",
+			"Fold",
+			&[note("sub-test", "Test", &[]), note("other", "Fold", &[])],
+			&folders_of(&[("sub-test", ""), ("other", "")])
+		),
+		"See [[Fold]] here"
+	);
+}
+
+#[test]
+fn does_not_rewrite_links_that_matched_through_an_alias() {
+	let notes = [
+		note("note-1", "Meeting Notes", &["Standup", "Sync"]),
+		note("note-2", "Standup", &[]),
+	];
+
+	assert_eq!(
+		renamed(
+			"[[Sync]] and [[Meeting Notes]]",
+			"note-1",
+			"Retro",
+			&notes,
+			&FolderPaths::new()
+		),
+		"[[Sync]] and [[Retro]]"
+	);
+}
