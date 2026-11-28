@@ -29,7 +29,7 @@ import { TEMPLATE_SCOPE } from '@/shared/constants/toolbar'
 import { LOG_MESSAGES } from '@/shared/constants/log-messages'
 import { logError } from '@/shared/utils/log-error'
 
-export default function EditTemplate() {
+export const TemplateScreen = () => {
     const { t } = useTranslation()
     const { filename } = useLocalSearchParams()
     const { getTemplate, getFolderUri, updateTemplate, deleteTemplate } = useTemplates()

@@ -24,7 +24,7 @@ import { ROUTES } from '@/shared/constants/routes'
 import { APP_BAR_MODES } from '@/shared/constants/app-bar'
 import { APP_NAME, APP_NAME_PRO_SUFFIX } from '@/shared/constants/app-name'
 
-export default function Home() {
+export const HomeScreen = () => {
     const { notes } = useNotes()
     const { pinned } = useUtils()
     const { pro } = usePro()

@@ -25,7 +25,7 @@ import { ANCHOR_PARAM } from '@/shared/constants/block-refs'
 import { ROUTES } from '@/shared/constants/routes'
 import { LOG_MESSAGES } from '@/shared/constants/log-messages'
 
-export default function EditNote() {
+export const NoteScreen = () => {
     const { t } = useTranslation()
     const { commitVersion } = useNoteVersions()
     const { registerCurrent } = useCurrentNote()

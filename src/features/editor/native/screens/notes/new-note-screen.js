@@ -22,7 +22,7 @@ import {
 
 import { EDITOR_MODES } from '@/shared/constants/editor-modes'
 
-export default function Note() {
+export const NewNoteScreen = () => {
     const { t } = useTranslation()
     const { activeFolder } = useFolders()
     const { notes, saveNote, updateNote } = useNotes()

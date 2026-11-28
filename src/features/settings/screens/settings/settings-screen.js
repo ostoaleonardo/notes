@@ -27,7 +27,7 @@ import { LINKS } from '@/shared/constants/links'
 import { SPACING } from '@/shared/constants/theme'
 import { EDITOR_SELECT_OPTIONS, HISTORY_SELECT_OPTIONS, NOTES_SELECT_OPTIONS } from '@/shared/constants/settings-select-options'
 
-export default function Settings() {
+export const SettingsScreen = () => {
     const { t } = useTranslation()
     const { colors } = useTheme()
     const { bottom } = useSafeAreaInsets()

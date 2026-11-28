@@ -13,7 +13,7 @@ import { clearVersionHistorySession, getVersionHistorySession } from '@/shared/u
 
 import { SPACING } from '@/shared/constants/theme'
 
-export default function VersionHistoryScreen() {
+export const VersionHistoryScreen = () => {
     const { t } = useTranslation()
     const { currentLanguage } = useLanguage()
 

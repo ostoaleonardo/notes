@@ -136,7 +136,7 @@ const ConnectionsPendingContent = () => {
     )
 }
 
-export default function ConnectionsPending() {
+export const PendingConnectionsScreen = () => {
     const ready = useDeferredReady()
 
     if (ready) return <ConnectionsPendingContent />

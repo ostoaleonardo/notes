@@ -132,7 +132,7 @@ const ConnectionsContent = () => {
     )
 }
 
-export default function Connections() {
+export const ConnectionsScreen = () => {
     const { t } = useTranslation()
     const ready = useDeferredReady()
 

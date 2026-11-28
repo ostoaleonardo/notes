@@ -28,7 +28,7 @@ import { SPACING } from '@/shared/constants/theme'
 import { REPOSITORY_RESULTS } from '@/shared/constants/repository-results'
 import { TEST_IDS } from '@/shared/constants/test-ids'
 
-export default function Repositories() {
+export const RepositoriesScreen = () => {
     const { t } = useTranslation()
     const { bottom } = useSafeAreaInsets()
     const { pro } = usePro()
