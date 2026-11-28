@@ -3,7 +3,7 @@ import { Decoration } from '@codemirror/view'
 import { isRangeSelected } from './utils'
 
 import { HORIZONTAL_RULE_NODE_NAMES } from '@/features/editor/dom/constants/markdown-live-formatting'
-import { buildBorder } from '@/shared/utils/css-values'
+import { buildBorder } from '@/features/editor/dom/css-values'
 
 export const horizontalRuleNodeNames = HORIZONTAL_RULE_NODE_NAMES
 

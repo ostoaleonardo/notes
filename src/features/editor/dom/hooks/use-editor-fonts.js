@@ -1,7 +1,7 @@
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 
-import { fontFacesCss } from '../shared/markdown-dom-fonts'
-import { katexFontFacesCss } from './markdown-dom-katex-fonts'
+import { fontFacesCss } from '../../shared/markdown-dom-fonts'
+import { katexFontFacesCss } from '../markdown-dom-katex-fonts'
 
 import { NO_KATEX_FONTS } from '@/features/editor/shared/constants/markdown-math'
 

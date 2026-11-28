@@ -5,7 +5,7 @@ import { filterBlockSuggestions } from '@/features/editor/shared/utils/note-entr
 
 import { WIKI_LINK_FORMATS, WIKI_LINK_CLOSING, WIKI_LINK_TYPING_PATTERN } from '@/shared/constants/wiki-links'
 import { BLOCK_COMPLETION_PATTERN } from '@/shared/constants/block-refs'
-import { WIKI_LINK_OPEN, WIKI_LINK_CLOSE } from '@/shared/constants/markdown-syntax'
+import { WIKI_LINK_OPEN, WIKI_LINK_CLOSE } from '@/features/editor/dom/constants/markdown-syntax'
 
 export const noteSearchFacet = Facet.define({
     combine: (values) => values[values.length - 1]

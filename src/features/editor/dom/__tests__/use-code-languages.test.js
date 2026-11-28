@@ -1,6 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react-native'
 
-import { useCodeLanguages } from '../use-code-languages'
+import { useCodeLanguages } from '../hooks/use-code-languages'
 
 const JS_FENCE = '```js\nx\n```'
 

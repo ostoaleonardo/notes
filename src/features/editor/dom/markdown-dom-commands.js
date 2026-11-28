@@ -7,7 +7,7 @@ import { snippet } from '@codemirror/autocomplete'
 import { LIST_MARKERS, LIST_TYPES, WRAP_MARKERS, LEADING_WHITESPACE_PATTERN } from '@/shared/constants/markdown-patterns'
 import { HEADING_LINE_PATTERN, HEADING_MARKER_PATTERN } from '@/shared/constants/headings'
 import { MARKDOWN_ACTIONS, HEADING_ACTION_LEVELS } from '@/shared/constants/markdown-actions'
-import { QUOTE_PREFIX, QUOTE_MARKER, HORIZONTAL_RULE, LINK_URL_PLACEHOLDER } from '@/shared/constants/markdown-syntax'
+import { QUOTE_PREFIX, QUOTE_MARKER, HORIZONTAL_RULE, LINK_URL_PLACEHOLDER } from '@/features/editor/dom/constants/markdown-syntax'
 import { DEFAULT_TABLE_SIZE } from '@/features/editor/shared/constants/table'
 
 const insertWikiLinkSnippet = snippet('[[${}]]')

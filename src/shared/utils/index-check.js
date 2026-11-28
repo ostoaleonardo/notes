@@ -16,6 +16,7 @@ import {
     INDEX_CHECK_WORD_FLAGS
 } from '@/shared/constants/index-check'
 import { INDEX_INVALID_FLAG, INDEX_PROGRESS_EVENT } from '@/shared/constants/repository-index'
+import { sameList } from '@/shared/utils/same-list'
 
 const log = (line) => console.log(`${INDEX_CHECK_LOG_PREFIX} ${line}`)
 
@@ -66,8 +67,6 @@ const readIndex = async (folderId) => {
         invalid: invalid === INDEX_INVALID_FLAG
     }]))
 }
-
-const sameList = (a, b) => a.length === b.length && a.every((value, index) => value === b[index])
 
 const compareWithJs = (files, texts, indexed) => {
     let different = 0

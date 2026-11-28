@@ -13,6 +13,7 @@ import {
 } from '@/shared/constants/connections'
 import { WIKI_LINK_ANCHOR_SEPARATOR } from '@/shared/constants/wiki-links'
 import { compareText } from '@/shared/utils/compare-text'
+import { pushToMap } from '@/shared/utils/push-to-map'
 
 const { ROOT, NOTE, FOLDER, FILE, TAG, MISSING } = CONNECTION_TYPES
 const { LINKS_OUT, LINKS_IN, TAGS, FILES, NOTES, FOLDERS, RELATED_TAGS } = CONNECTION_SECTIONS
@@ -24,13 +25,6 @@ export const entityKey = (entity) => `${entity.type}:${entity.id}`
 export const ROOT_ENTITY = makeEntity(ROOT, ROOT_ENTITY_ID)
 
 export const splitFolder = (folder) => folder.split(FOLDER_SEPARATOR).filter(Boolean)
-
-const pushTo = (map, key, value) => {
-    const list = map.get(key)
-
-    if (list) list.push(value)
-    else map.set(key, [value])
-}
 
 const unique = (values) => [...new Set(values)]
 
@@ -83,7 +77,7 @@ export const buildLinkGraph = ({ notes, notePaths }) => {
 
         links.forEach((link) => {
             if (link.path) {
-                pushTo(incoming, link.path, note.path)
+                pushToMap(incoming, link.path, note.path)
                 return
             }
 
@@ -93,7 +87,7 @@ export const buildLinkGraph = ({ notes, notePaths }) => {
             unresolved.set(link.key, entry)
         })
 
-        unique(note.tags || []).forEach((tag) => pushTo(tagNotes, tag, note.path))
+        unique(note.tags || []).forEach((tag) => pushToMap(tagNotes, tag, note.path))
     })
 
     return {
@@ -114,8 +108,8 @@ const buildFileLinks = ({ notes, files }) => {
     if (files.length) {
         notes.forEach((note) => {
             resolveFileTargets(getFileTargets(getNoteLinkTexts(note)), files).forEach((file) => {
-                pushTo(noteFiles, note.path, file.id)
-                pushTo(fileNotes, file.id, note.path)
+                pushToMap(noteFiles, note.path, file.id)
+                pushToMap(fileNotes, file.id, note.path)
             })
         })
     }

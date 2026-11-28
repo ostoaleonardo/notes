@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 
-import { resolvePreviewClick } from './markdown-dom-preview-click'
-import { copyText } from './markdown-dom-clipboard'
-import { markCodeCopied } from './markdown-dom-code-copy'
+import { resolvePreviewClick } from '../markdown-dom-preview-click'
+import { copyText } from '../markdown-dom-clipboard'
+import { markCodeCopied } from '../markdown-dom-code-copy'
 
 import { PREVIEW_CLICK_TYPES } from '@/features/editor/dom/constants/preview-click'
 

@@ -1,6 +1,6 @@
 import { DOM_FONT_SIZE, OPACITY, RADIUS, SPACING, Z_INDEX } from '@/shared/constants/theme'
 import { TRANSPARENT } from '@/shared/constants/themes'
-import { buildBorder } from '@/shared/utils/css-values'
+import { buildBorder } from '@/features/editor/dom/css-values'
 import { PROPERTY_INPUT_MIN_WIDTH } from '@/features/editor/shared/constants/properties'
 
 export const buildTitleSectionStyle = () => ({

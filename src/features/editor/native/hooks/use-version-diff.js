@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { diffLines } from '@/shared/utils/diff-lines'
+import { diffLines } from '@/features/editor/native/utils/diff-lines'
 
 export function useVersionDiff(selected, currentContentRef) {
     const [diff, setDiff] = useState(null)

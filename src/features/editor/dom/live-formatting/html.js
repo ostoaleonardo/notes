@@ -6,7 +6,7 @@ import { renderMarkdownHtml } from '@/features/editor/shared/markdown-dom-render
 
 import { HTML_BLOCK_NODE_NAMES, HTML_NODE_NAMES, HTML_RENDER_CACHE_LIMIT } from '@/features/editor/dom/constants/markdown-live-formatting'
 import { OPACITY, INLINE_CODE_STYLE, MONOSPACE_FONT_FAMILY } from '@/shared/constants/theme'
-import { buildBorder } from '@/shared/utils/css-values'
+import { buildBorder } from '@/features/editor/dom/css-values'
 
 const BLOCK_NODE_NAMES = new Set(HTML_BLOCK_NODE_NAMES)
 const htmlCache = new Map()

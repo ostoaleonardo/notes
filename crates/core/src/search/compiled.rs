@@ -4,9 +4,9 @@ use super::constants::{
 	OPERATOR_LINE, OPERATOR_MATCH_CASE, OPERATOR_PATH, OPERATOR_SECTION, OPERATOR_TAG,
 	OPERATOR_TASK_DONE, OPERATOR_TASK_TODO, TAG_HASH_PREFIX,
 };
-use super::pattern::{TextPattern, compile_pattern};
+use super::ecmascript_regex;
 use super::query::Node;
-use super::regex_js;
+use super::text_pattern::{TextPattern, compile_pattern};
 use crate::error::Result;
 use regex::Regex;
 
@@ -79,7 +79,7 @@ pub enum Compiled {
 }
 
 fn word_regex(value: &str, insensitive: bool) -> Result<Regex> {
-	regex_js::compile(&regex::escape(value), insensitive)
+	ecmascript_regex::compile(&regex::escape(value), insensitive)
 }
 
 fn comparison_of(operator: &str) -> Comparison {
@@ -176,7 +176,7 @@ pub fn compile(node: &Node) -> Result<Compiled> {
 		Node::Compare { operator, value } => Compiled::Compare {
 			comparison: comparison_of(operator),
 			value: value.clone(),
-			number: super::js::js_number(value),
+			number: super::js_values::js_number(value),
 		},
 		Node::Null => Compiled::Null,
 	})

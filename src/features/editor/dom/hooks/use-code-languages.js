@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import { findPendingFenceLanguages } from './syntax-highlighting/preview-code-highlight'
+import { findPendingFenceLanguages } from '../syntax-highlighting/preview-code-highlight'
 
 export const useCodeLanguages = (text) => {
     const [loadedText, setLoadedText] = useState(null)

@@ -1,5 +1,5 @@
 use super::constants::{ECMASCRIPT_FLAGS_INSENSITIVE, ECMASCRIPT_FLAGS_SENSITIVE};
-use super::regex_js;
+use super::ecmascript_regex;
 use crate::error::{Error, Result};
 
 pub trait TextPattern: Send + Sync {
@@ -21,7 +21,7 @@ impl TextPattern for Backtracking {
 }
 
 pub fn compile_pattern(source: &str, insensitive: bool) -> Result<Box<dyn TextPattern>> {
-	if let Ok(fast) = regex_js::compile(source, insensitive) {
+	if let Ok(fast) = ecmascript_regex::compile(source, insensitive) {
 		return Ok(Box::new(fast));
 	}
 

@@ -1,8 +1,7 @@
 import { mergeNoteChanges } from './merge-note-changes'
+import { sameList } from '@/shared/utils/same-list'
 
 const sameContent = (a, b) => (a ?? '').trim() === (b ?? '').trim()
-
-const sameList = (a, b) => a.length === b.length && a.every((item, index) => item === b[index])
 
 const matches = (left, right) => (
     sameContent(left.note, right.note) &&

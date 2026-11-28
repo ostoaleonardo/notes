@@ -21,6 +21,7 @@ import { ANCHOR_TEMPLATE, WIKI_LINK_BROKEN_CLASS, WIKI_LINK_CLASS } from '@/shar
 import { BACKLINK_ITEM_TEMPLATE, BACKLINK_LINK_TEMPLATE, BACKLINK_PATH_TEMPLATE, BACKLINKS_TEMPLATE } from '@/shared/constants/backlinks-html'
 import { fillTemplate } from '@/shared/utils/fill-template'
 import { HTML_ESCAPE_PATTERN, HTML_ESCAPES } from '@/shared/constants/html-sanitize'
+import { pushToMap } from '@/shared/utils/push-to-map'
 
 export const escapeHtml = (text) => text.replace(HTML_ESCAPE_PATTERN, (char) => HTML_ESCAPES[char])
 
@@ -47,11 +48,6 @@ const splitAnchor = (text) => {
 
 const indexCache = new WeakMap()
 
-const pushTo = (map, key, note) => {
-    if (map.has(key)) map.get(key).push(note)
-    else map.set(key, [note])
-}
-
 const getNoteIndex = (notes) => {
     if (indexCache.has(notes)) return indexCache.get(notes)
 
@@ -59,8 +55,8 @@ const getNoteIndex = (notes) => {
     const byAlias = new Map()
 
     for (const note of notes) {
-        pushTo(byTitle, normalizeName(note.title || ''), note)
-        for (const alias of new Set(getAliases(note).map(normalizeName))) pushTo(byAlias, alias, note)
+        pushToMap(byTitle, normalizeName(note.title || ''), note)
+        for (const alias of new Set(getAliases(note).map(normalizeName))) pushToMap(byAlias, alias, note)
     }
 
     const index = { byTitle, byAlias }
@@ -149,6 +145,8 @@ export const renderWikiLink = (alias, { path: notePath, target, anchor }) => {
         label
     })
 }
+
+export const missingWikiLinkDetails = (target) => ({ path: null, anchor: '', target })
 
 export const resolveWikiLinkDetails = (linkText, notes, notePaths, selfPath) => {
     const { note, target, anchor } = resolveWikiLink(linkText, notes, notePaths, selfPath)

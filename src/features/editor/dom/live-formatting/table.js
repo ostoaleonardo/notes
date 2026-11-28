@@ -16,7 +16,7 @@ import {
 import { TRANSPARENT } from '@/shared/constants/themes'
 import { RADIUS, SPACING, OPACITY, Z_INDEX, INLINE_CODE_STYLE, DOM_FONT_SIZE } from '@/shared/constants/theme'
 import { LEZER_NODES } from '@/features/editor/dom/constants/lezer-nodes'
-import { buildBorder } from '@/shared/utils/css-values'
+import { buildBorder } from '@/features/editor/dom/css-values'
 
 export const decorateTable = (node, context) => {
     const { doc, ranges, tableLabels } = context

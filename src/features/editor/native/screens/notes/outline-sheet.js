@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CollapsibleTreeSheet } from '@/shared/components/collapsible-tree-sheet'
+import { CollapsibleTreeSheet } from '@/features/editor/native/screens/notes/collapsible-tree-sheet'
 import { useBottomSheet } from '@/shared/hooks/use-bottom-sheet'
 
 import { buildOutline, findHeadings } from '@/shared/utils/headings'

@@ -2,7 +2,7 @@ import { isFileLinkTarget } from '@/shared/utils/file-links'
 import { extractLocalUrls } from '@/features/editor/shared/utils/local-images'
 import { buildEmbedBlockHtml, buildMediaHtml } from '@/features/editor/shared/utils/embed-html'
 import { parseEmbedMedia } from '@/features/editor/shared/utils/embed-media'
-import { renderWikiLink } from '@/shared/utils/wiki-links'
+import { missingWikiLinkDetails, renderWikiLink } from '@/shared/utils/wiki-links'
 
 import { EMBED_MAX_DEPTH } from '@/shared/constants/embeds'
 import { LOCAL_URL_PATTERN } from '@/features/editor/dom/constants/local-urls'
@@ -135,10 +135,8 @@ const embedBlockRule = (state, startLine, endLine, silent) => {
     return true
 }
 
-const missingDetails = (linkText) => ({ path: null, anchor: '', target: linkText })
-
 const renderLinkFallback = (env, { linkText, alias }) => (
-    renderWikiLink(alias, env.wikiResolved?.get(linkText) ?? missingDetails(linkText))
+    renderWikiLink(alias, env.wikiResolved?.get(linkText) ?? missingWikiLinkDetails(linkText))
 )
 
 const renderWikiLinkToken = (tokens, idx, options, env) => renderLinkFallback(env, tokens[idx].meta)

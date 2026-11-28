@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { useLatestRef } from '../shared/use-latest-ref'
-import { createReadCache, resolveReadContext } from './read-resolution'
+import { useLatestRef } from '../../shared/use-latest-ref'
+import { createReadCache, resolveReadContext } from '../read-resolution'
 
 const EMPTY_CONTEXT = { details: new Map(), media: new Map(), local: new Map(), embeds: new Map() }
 

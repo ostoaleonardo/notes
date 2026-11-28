@@ -9,7 +9,7 @@ const mockFiles = {
 }
 
 jest.mock('@/shared/constants/bundled-context', () => ({
-    bundledContent: Object.assign((key) => key, { keys: () => Object.keys(mockFiles) })
+    BUNDLED_CONTENT: Object.assign((key) => key, { keys: () => Object.keys(mockFiles) })
 }))
 
 jest.mock('../bundled-asset', () => ({

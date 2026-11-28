@@ -1,1 +1,0 @@
-export const SEARCH_SORT_CHUNK_SIZE = 2000

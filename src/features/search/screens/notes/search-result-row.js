@@ -7,7 +7,7 @@ import { useTheme } from '@/ui/hooks/use-theme'
 import { useNoteBodies } from '@/shared/hooks/use-note-bodies'
 
 import { getSnippets } from '@/features/search/utils/search-context'
-import { getSearchText } from '@/shared/utils/search-text'
+import { getSearchText } from '@/features/search/utils/search-text'
 import { makeEntity } from '@/shared/utils/connection-model'
 
 import { CONNECTION_TYPES } from '@/shared/constants/connections'

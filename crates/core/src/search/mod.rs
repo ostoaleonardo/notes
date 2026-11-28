@@ -1,15 +1,15 @@
 mod cache;
 mod compiled;
 mod constants;
+mod ecmascript_regex;
 mod evaluate;
-mod js;
-mod pattern;
+mod js_values;
 mod patterns;
 mod prefilter;
 mod query;
-mod regex_js;
 mod session;
 mod sql;
+mod text_pattern;
 mod unindexed;
 mod warm;
 

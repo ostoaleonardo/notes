@@ -6,7 +6,7 @@ import { buildLiveFormattingTheme } from './live-formatting/live-formatting'
 import { RADIUS, OPACITY } from '@/shared/constants/theme'
 import { INLINE_TAG_CLASS } from '@/shared/constants/tags'
 import { TRANSPARENT } from '@/shared/constants/themes'
-import { buildBorder } from '@/shared/utils/css-values'
+import { buildBorder } from '@/features/editor/dom/css-values'
 
 export const buildEditorTheme = ({ colors, typography }) => {
     const derived = buildDerivedColors(colors)

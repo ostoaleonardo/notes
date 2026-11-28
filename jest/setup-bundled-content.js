@@ -1,3 +1,3 @@
 jest.mock('@/shared/constants/bundled-context', () => ({
-    bundledContent: Object.assign(() => 1, { keys: () => [] })
+    BUNDLED_CONTENT: Object.assign(() => 1, { keys: () => [] })
 }))

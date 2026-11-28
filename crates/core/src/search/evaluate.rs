@@ -3,7 +3,7 @@ use super::constants::{
 	FRONTMATTER_JOINER, LINE_SEPARATOR, PATH_SEPARATOR, SECTION_JOINER, TAG_PATH_SEPARATOR,
 	TASK_DONE_STATUSES, TASK_TODO_STATUS,
 };
-use super::js::{compare_utf16, js_number, js_string, js_trim};
+use super::js_values::{compare_utf16, js_number, js_string, js_trim};
 use super::patterns::{
 	BLOCK_SEPARATOR, FILE_EMBED, FILE_LINK, HEADING_LINE, IMAGE_REFERENCE, TASK_LINE,
 	WORD_CHARACTER,

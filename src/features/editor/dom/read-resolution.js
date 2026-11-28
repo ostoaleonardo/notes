@@ -1,6 +1,7 @@
 import { parseNoteMarkdown } from '../shared/markdown-dom-render-html'
 
 import { EMBED_MAX_DEPTH } from '@/shared/constants/embeds'
+import { missingWikiLinkDetails } from '@/shared/utils/wiki-links'
 
 const NO_RESULTS = {}
 
@@ -12,8 +13,6 @@ export const createReadCache = () => ({
 })
 
 const unknownOf = (items, known) => [...new Set(items)].filter((item) => !known.has(item))
-
-const missingDetails = (target) => ({ path: null, anchor: '', target })
 
 const ask = (items, request) => (items.length ? request(items) : Promise.resolve(NO_RESULTS))
 
@@ -40,7 +39,7 @@ export const resolveReadContext = async (parsed, services, cache) => {
             ask(embeds, services.loadEmbeds)
         ])
 
-        links.forEach((target) => cache.details.set(target, details[target] ?? missingDetails(target)))
+        links.forEach((target) => cache.details.set(target, details[target] ?? missingWikiLinkDetails(target)))
         names.forEach((name) => cache.media.set(name, media[name] ?? null))
         urls.forEach((url) => cache.local.set(url, local[url] ?? url))
         embeds.forEach((target) => cache.embeds.set(

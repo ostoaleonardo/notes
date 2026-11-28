@@ -2,7 +2,7 @@ import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { createRoot } from 'react-dom/client'
 
-import { useChunkedPreview } from '../use-chunked-preview'
+import { useChunkedPreview } from '../hooks/use-chunked-preview'
 
 const buildReader = (count) => ({
     count,

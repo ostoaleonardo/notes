@@ -2,7 +2,7 @@ import i18n from '@/i18n/i18next'
 import { parseBundledKey, readBundledText } from '@/shared/utils/bundled-asset'
 
 import { BUNDLED_CONTENT_KINDS, BUNDLED_MARKDOWN_EXTENSION } from '@/shared/constants/bundled-content'
-import { bundledContent } from '@/shared/constants/bundled-context'
+import { BUNDLED_CONTENT } from '@/shared/constants/bundled-context'
 import { DEFAULT_LANGUAGE } from '@/shared/constants/languages'
 
 let loaded = { welcome: {}, templates: {} }
@@ -12,9 +12,9 @@ const stripExtension = (filename) => filename.slice(0, -BUNDLED_MARKDOWN_EXTENSI
 export const loadBundledContent = async () => {
     const next = { welcome: {}, templates: {} }
 
-    await Promise.all(bundledContent.keys().map(async (key) => {
+    await Promise.all(BUNDLED_CONTENT.keys().map(async (key) => {
         const { kind, folder, filename } = parseBundledKey(key)
-        const text = await readBundledText(bundledContent(key))
+        const text = await readBundledText(BUNDLED_CONTENT(key))
 
         if (kind === BUNDLED_CONTENT_KINDS.WELCOME) {
             next.welcome[stripExtension(filename)] = text

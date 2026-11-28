@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { renderPdfPage } from './pdf-render'
+import { renderPdfPage } from '../pdf-render'
 
 import { EMBED_PDF_CLASS, EMBED_PDF_DEFAULT_PAGE } from '@/shared/constants/embeds'
 import { FILE_LINK_CLASS } from '@/shared/constants/file-links'
