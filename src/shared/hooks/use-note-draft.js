@@ -26,7 +26,7 @@ const mergeDraft = (draft, changes) => {
 }
 
 export function useNoteDraft(pathRef, initial = {}) {
-    const [draft, setDraft] = useState(() => buildInitialDraft(initial))
+    const [state, setDraft] = useState(() => buildInitialDraft(initial))
 
     const update = useCallback((changes) => setDraft((current) => mergeDraft(current, changes)), [])
 
@@ -48,7 +48,7 @@ export function useNoteDraft(pathRef, initial = {}) {
         filename,
         invalidFrontmatter,
         rawFrontmatter
-    } = draft
+    } = state
 
     const buildPayload = useCallback((payloadTitle, payloadNote = note) => buildNotePayload({
         path: pathRef.current,
@@ -69,7 +69,7 @@ export function useNoteDraft(pathRef, initial = {}) {
         rawFrontmatter
     ])
 
-    const editorProps = {
+    const draft = {
         title, setTitle: setters.title,
         note, setNote: setters.note,
         tags, setTags: setters.tags,
@@ -82,7 +82,7 @@ export function useNoteDraft(pathRef, initial = {}) {
     }
 
     return {
-        editorProps,
+        draft,
         update,
         title, setTitle: setters.title,
         note, setNote: setters.note,

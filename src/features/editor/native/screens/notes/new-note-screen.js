@@ -45,7 +45,7 @@ export const NewNoteScreen = () => {
     useRegisterCurrent(path)
 
     const {
-        editorProps,
+        draft,
         title,
         setTitle,
         note,
@@ -146,7 +146,7 @@ export const NewNoteScreen = () => {
             <NoteEditorScreen
                 id={path}
                 flush={flush}
-                {...editorProps}
+                draft={draft}
                 onTitleBlur={onTitleBlur}
                 onRestoreVersion={onRestoreVersion}
                 initialMode={EDITOR_MODES.LIVE}

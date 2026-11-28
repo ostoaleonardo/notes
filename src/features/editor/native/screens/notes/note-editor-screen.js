@@ -29,23 +29,26 @@ import { EDITOR_MODES } from '@/shared/constants/editor-modes'
 
 export const NoteEditorScreen = ({
     id,
-    filename,
-    folderId,
-    title, setTitle,
+    draft,
     onTitleBlur,
     onRestoreVersion,
-    note, setNote,
-    tags, setTags,
-    properties, setProperties,
-    invalidFrontmatter,
-    rawFrontmatter,
-    update,
     initialMode = EDITOR_MODES.READ,
     anchor,
     flush,
     busyRef,
     onMoved
 }) => {
+    const {
+        filename,
+        folderId,
+        title, setTitle,
+        note, setNote,
+        tags, setTags,
+        properties, setProperties,
+        invalidFrontmatter,
+        rawFrontmatter,
+        update
+    } = draft
     const { t } = useTranslation()
     const { folders } = useFolders()
     const location = useMemo(
@@ -130,6 +133,20 @@ export const NoteEditorScreen = ({
     }, [onRestoreVersion, setTitle, setNote])
 
     const versionHistory = useVersionHistory({ location, latestContent, onRestore })
+
+    const titleInput = useMemo(() => ({
+        field: titleField,
+        onChange: setTitle,
+        onBlur: onTitleBlur
+    }), [titleField, setTitle, onTitleBlur])
+
+    const propertiesInput = useMemo(() => ({
+        panel: propertiesPanel,
+        onToggle: onToggleProperties,
+        onChange: onChangeProperty,
+        onRemoveTag,
+        onAddTag
+    }), [propertiesPanel, onToggleProperties, onChangeProperty, onRemoveTag, onAddTag])
 
     const actions = useMemo(() => ({
         onOpenTemplates: noteTemplates.onOpen,
@@ -222,14 +239,8 @@ export const NoteEditorScreen = ({
                 id={id}
                 mode={mode}
                 onEdit={onEdit}
-                titleField={titleField}
-                onTitleChange={setTitle}
-                onTitleBlur={onTitleBlur}
-                propertiesPanel={propertiesPanel}
-                onToggleProperties={onToggleProperties}
-                onChangeProperty={onChangeProperty}
-                onRemoveTag={onRemoveTag}
-                onAddTag={onAddTag}
+                title={titleInput}
+                properties={propertiesInput}
                 onTagPress={onTagPress}
                 search={searchField}
                 value={editorValue}
@@ -239,10 +250,7 @@ export const NoteEditorScreen = ({
                 onFocus={onFocus}
                 placeholder={t('placeholder.note')}
                 action={action}
-                anchor={jump.anchor}
-                onJumpToAnchor={jump.onJumpToAnchor}
-                headingIndex={jump.headingIndex}
-                jumpNonce={jump.jumpNonce}
+                jump={jump}
                 showBacklinks={showBacklinks}
             />
         </EditorShell>

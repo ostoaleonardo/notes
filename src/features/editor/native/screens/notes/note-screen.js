@@ -13,24 +13,19 @@ import { useNotes } from '@/shared/hooks/use-notes'
 import { useWikiLinkRenameConfirm } from '@/shared/hooks/use-wiki-link-rename-confirm'
 import { useCurrentNote, useRegisterCurrent } from '@/shared/hooks/use-current-note'
 import { useFolders } from '@/shared/hooks/use-folders'
-import { useNoteVersions } from '@/shared/hooks/use-note-versions'
-import { getVersionLocation } from '@/shared/utils/note-version-location'
-import { logError } from '@/shared/utils/log-error'
+import { useExternalNoteSync } from '@/features/editor/native/hooks/use-external-note-sync'
 import { noteBodies } from '@/shared/utils/note-body'
 import { planHeadingRenames } from '@/shared/utils/headings'
-import { planExternalSync, toSyncShape } from '@/shared/utils/external-note-sync'
-import { fromSavedSnapshot, isDraftSaved, toDraft, toSavedSnapshot } from '@/shared/utils/note-draft'
+import { isDraftSaved, toDraft, toSavedSnapshot } from '@/shared/utils/note-draft'
 
 import { ANCHOR_PARAM } from '@/shared/constants/block-refs'
 import { ROUTES } from '@/shared/constants/routes'
-import { LOG_MESSAGES } from '@/shared/constants/log-messages'
 
 export const NoteScreen = () => {
     const { t } = useTranslation()
-    const { commitVersion } = useNoteVersions()
     const { registerCurrent } = useCurrentNote()
     const { slug, [ANCHOR_PARAM]: anchor } = useLocalSearchParams()
-    const { folders, loading: repositoriesLoading } = useFolders()
+    const { loading: repositoriesLoading } = useFolders()
     const { saveWithLinkCheck, ...renameDialogProps } = useWikiLinkRenameConfirm()
 
     const {
@@ -54,7 +49,7 @@ export const NoteScreen = () => {
     })
 
     const {
-        editorProps,
+        draft,
         update,
         title, setTitle,
         note, setNote,
@@ -102,40 +97,17 @@ export const NoteScreen = () => {
         if (!notes.some((n) => n.path === pathRef.current)) router.replace(ROUTES.HOME)
     }, [notes, notesLoading, repositoriesLoading])
 
-    const latestDraftRef = useRef(null)
-    latestDraftRef.current = { note, tags, properties, invalidFrontmatter, rawFrontmatter }
-
-    const syncExternalChanges = useEffectEvent(async () => {
-        if (loading || isSavingRef.current) return
-
-        const incoming = notes.find((n) => n.path === pathRef.current)
-        const incomingShape = incoming && toSyncShape(incoming, await noteBodies.get(incoming))
-        if (isSavingRef.current || pathRef.current !== incoming?.path) return
-
-        const synced = planExternalSync({
-            draft: latestDraftRef.current,
-            original: fromSavedSnapshot(savedRef.current),
-            incoming: incomingShape
-        })
-        if (!synced) return
-
-        update(synced.draft)
-        savedRef.current = toSavedSnapshot(synced.original)
-        noteBodies.pin(incoming, synced.original.note)
-
-        if (synced.lostExternalText) {
-            commitVersion(
-                getVersionLocation(folders, folderId),
-                filename,
-                savedTitleRef.current,
-                synced.original.note
-            ).catch((error) => logError(LOG_MESSAGES.ERROR_KEEPING_EXTERNAL_TEXT, error))
-        }
+    useExternalNoteSync({
+        enabled: !loading,
+        pathRef,
+        isSavingRef,
+        savedRef,
+        savedTitleRef,
+        content: { note, tags, properties, invalidFrontmatter, rawFrontmatter },
+        update,
+        folderId,
+        filename
     })
-
-    useEffect(() => {
-        syncExternalChanges()
-    }, [notes])
 
     const applySaved = ({ path, filename }) => {
         if (path !== pathRef.current) {
@@ -223,7 +195,7 @@ export const NoteScreen = () => {
                 flush={flush}
                 busyRef={isSavingRef}
                 onMoved={onMoved}
-                {...editorProps}
+                draft={draft}
                 onTitleBlur={onTitleBlur}
                 onRestoreVersion={onRestoreVersion}
                 anchor={anchor}

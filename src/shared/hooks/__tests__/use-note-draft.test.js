@@ -84,9 +84,9 @@ describe('note draft', () => {
     test('exposes the editor props without the folder setters', async () => {
         const { result } = await renderHook(() => useNoteDraft(pathRef))
 
-        expect(result.current.editorProps).toHaveProperty('setTitle')
-        expect(result.current.editorProps).not.toHaveProperty('setFolderId')
-        expect(result.current.editorProps).not.toHaveProperty('setFilename')
+        expect(result.current.draft).toHaveProperty('setTitle')
+        expect(result.current.draft).not.toHaveProperty('setFolderId')
+        expect(result.current.draft).not.toHaveProperty('setFilename')
     })
 
     test('applies several changes in a single update', async () => {
@@ -112,7 +112,7 @@ describe('note draft', () => {
 
         await act(async () => result.current.update({ unknown: 1 }))
 
-        expect(result.current.editorProps).not.toHaveProperty('unknown')
+        expect(result.current.draft).not.toHaveProperty('unknown')
     })
 
     test('keeps the draft untouched when an update changes nothing', async () => {

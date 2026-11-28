@@ -35,6 +35,10 @@ import { WIKI_LINK_FORMATS } from '@/shared/constants/wiki-links'
 
 const MarkdownDomEditor = memo(RawMarkdownDomEditor)
 
+const NO_TITLE = {}
+const NO_PROPERTIES = {}
+const NO_JUMP = {}
+
 export const MarkdownInput = ({
     id,
     mode = EDITOR_MODES.LIVE,
@@ -46,22 +50,22 @@ export const MarkdownInput = ({
     onFocus,
     onBlur,
     placeholder,
-    titleField,
-    onTitleChange,
-    onTitleBlur,
-    propertiesPanel,
-    onToggleProperties,
-    onChangeProperty,
-    onRemoveTag,
-    onAddTag,
+    title = NO_TITLE,
+    properties = NO_PROPERTIES,
     onTagPress,
     search,
-    anchor,
-    onJumpToAnchor,
-    headingIndex,
-    jumpNonce,
+    jump = NO_JUMP,
     showBacklinks = true
 }) => {
+    const { field: titleField, onChange: onTitleChange, onBlur: onTitleBlur } = title
+    const {
+        panel: propertiesPanel,
+        onToggle: onToggleProperties,
+        onChange: onChangeProperty,
+        onRemoveTag,
+        onAddTag
+    } = properties
+    const { anchor, onJumpToAnchor, headingIndex, jumpNonce } = jump
     const { t } = useTranslation()
     const { tags: knownTags } = useTags()
 
