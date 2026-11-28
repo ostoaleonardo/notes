@@ -29,7 +29,7 @@ export function useNotesController() {
     const {
         notes,
         notesByPath,
-        notePaths,
+        folderPathByNote,
         setNotes,
         loading
     } = useContext(NoteContext)
@@ -37,7 +37,7 @@ export function useNotesController() {
     const saveQueues = useRef(new Map())
     const savedStamps = useRef(new Map())
     const latestRef = useRef(null)
-    latestRef.current = { notes, notesByPath, notePaths, folders, activeFolder }
+    latestRef.current = { notes, notesByPath, folderPathByNote, folders, activeFolder }
 
     const actions = useMemo(() => {
         const latest = () => latestRef.current
@@ -83,7 +83,7 @@ export function useNotesController() {
                 targetPath,
                 newTitle,
                 notes: notesSnapshot,
-                notePaths: snapshotPaths,
+                folderPathByNote: snapshotPaths,
                 currentNotes: latest().notes,
                 bodies: await loadLinkingBodies(targetPath, notesSnapshot, snapshotPaths)
             }))
@@ -93,7 +93,7 @@ export function useNotesController() {
             applyLinkRewrite(await planWikiLinkRename({
                 targetPath,
                 notes: notesSnapshot,
-                notePaths: snapshotPaths,
+                folderPathByNote: snapshotPaths,
                 currentNotes: latest().notes,
                 bodies: await loadLinkingBodies(targetPath, notesSnapshot, snapshotPaths),
                 rewriteBodies: async (texts) => texts.map((content) => (
@@ -215,7 +215,7 @@ export function useNotesController() {
         }
 
         const moveNote = async (path, destinationId) => {
-            const { notesByPath: byPath, notePaths: currentPaths, folders: currentFolders } = latest()
+            const { notesByPath: byPath, folderPathByNote: currentPaths, folders: currentFolders } = latest()
             const note = byPath.get(path)
             if (!note || note.folderId === destinationId) return null
 
@@ -225,7 +225,7 @@ export function useNotesController() {
                 note,
                 destinationId,
                 notes: latest().notes,
-                notePaths: currentPaths,
+                folderPathByNote: currentPaths,
                 folders: currentFolders,
                 currentNotes: latest().notes,
                 bodies: await loadLinkingBodies(note.path, latest().notes, currentPaths)
@@ -260,8 +260,8 @@ export function useNotesController() {
 
     return useMemo(() => ({
         notes,
-        notePaths,
+        folderPathByNote,
         loading,
         ...actions
-    }), [notes, notePaths, loading, actions])
+    }), [notes, folderPathByNote, loading, actions])
 }

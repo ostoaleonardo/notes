@@ -2,7 +2,7 @@ import { NOTE_PATH_SEPARATOR } from '@/shared/constants/file-storage'
 
 export const buildNotePath = (folderId, filename) => `${folderId}${NOTE_PATH_SEPARATOR}${filename}`
 
-export const buildFolderPaths = (folders) => {
+export const buildFolderPathById = (folders) => {
     const byId = new Map(folders.map((folder) => [folder.id, folder]))
     const cache = new Map()
 
@@ -26,7 +26,7 @@ export const buildFolderPaths = (folders) => {
     return cache
 }
 
-export const getNotePaths = (notes, folders) => {
-    const folderPaths = buildFolderPaths(folders)
-    return new Map(notes.map((note) => [note.path, folderPaths.get(note.folderId) || '']))
+export const getFolderPathByNote = (notes, folders) => {
+    const folderPathById = buildFolderPathById(folders)
+    return new Map(notes.map((note) => [note.path, folderPathById.get(note.folderId) || '']))
 }

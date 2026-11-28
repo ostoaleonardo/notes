@@ -15,7 +15,7 @@ export function useSearchResults({
     enabled,
     ast,
     notes,
-    notePaths,
+    folderPathByNote,
     pinned,
     matchCase,
     sort
@@ -95,7 +95,7 @@ export function useSearchResults({
                 const cursor = await nativeSearch.open({
                     ast,
                     notes,
-                    notePaths,
+                    folderPathByNote,
                     pinned,
                     matchCase,
                     sort,
@@ -131,7 +131,7 @@ export function useSearchResults({
             session.cancelled = true
             session.cursor?.close()
         }
-    }, [enabled, ast, notes, notePaths, pinned, matchCase, sort, fill, finish])
+    }, [enabled, ast, notes, folderPathByNote, pinned, matchCase, sort, fill, finish])
 
     const loadMore = useCallback(() => {
         const session = sessionRef.current

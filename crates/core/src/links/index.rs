@@ -9,7 +9,7 @@ pub struct LinkNote {
 	pub aliases: Vec<String>,
 }
 
-pub type FolderPaths = HashMap<String, String>;
+pub type FolderPathByNote = HashMap<String, String>;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Resolution {
@@ -74,7 +74,7 @@ impl<'a> NoteIndex<'a> {
 		self.notes
 	}
 
-	pub fn find(&self, link_text: &str, folders: &FolderPaths) -> Option<usize> {
+	pub fn find(&self, link_text: &str, folders: &FolderPathByNote) -> Option<usize> {
 		let parsed = parse_link_text(link_text);
 		let name = normalize(parsed.title);
 
@@ -102,7 +102,7 @@ impl<'a> NoteIndex<'a> {
 			.or_else(|| candidates.first().copied())
 	}
 
-	pub fn locate(&self, link_text: &str, folders: &FolderPaths) -> Option<usize> {
+	pub fn locate(&self, link_text: &str, folders: &FolderPathByNote) -> Option<usize> {
 		if let Some(note) = self.find(link_text, folders) {
 			return Some(note);
 		}
@@ -120,7 +120,7 @@ impl<'a> NoteIndex<'a> {
 	pub fn resolve(
 		&self,
 		link_text: &str,
-		folders: &FolderPaths,
+		folders: &FolderPathByNote,
 		self_path: Option<&str>,
 	) -> Resolution {
 		if let Some(note) = self.find(link_text, folders) {

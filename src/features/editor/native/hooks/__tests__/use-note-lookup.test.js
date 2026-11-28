@@ -7,7 +7,7 @@ let mockNotes = []
 jest.mock('@/shared/hooks/use-notes', () => ({
     useNotes: () => ({
         notes: mockNotes,
-        notePaths: new Map(mockNotes.map((note) => [note.path, 'work'])),
+        folderPathByNote: new Map(mockNotes.map((note) => [note.path, 'work'])),
         getNote: (path) => mockNotes.find((note) => note.path === path) || {}
     })
 }))

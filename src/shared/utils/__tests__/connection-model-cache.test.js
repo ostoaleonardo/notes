@@ -2,7 +2,7 @@ import { clearConnectionModelCache, getConnectionModel } from '../connection-mod
 
 const makeInput = (overrides = {}) => ({
     notes: [],
-    notePaths: new Map(),
+    folderPathByNote: new Map(),
     files: [],
     rootName: 'root',
     ...overrides

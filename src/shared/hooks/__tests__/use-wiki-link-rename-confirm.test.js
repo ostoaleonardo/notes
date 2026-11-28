@@ -10,7 +10,7 @@ let mockStoredValue = null
 jest.mock('../use-notes', () => ({
     useNotes: () => ({
         notes: mockNotes,
-        notePaths: new Map(mockNotes.map((note) => [note.path, ''])),
+        folderPathByNote: new Map(mockNotes.map((note) => [note.path, ''])),
         updateNote: mockUpdateNote,
         propagateWikiLinkRename: mockPropagateWikiLinkRename
     })

@@ -3,9 +3,9 @@ import { buildConnectionModel, buildLinkGraph } from '@/shared/utils/connection-
 let last = null
 let graph = null
 
-const getLinkGraph = ({ notes, notePaths }) => {
-    if (graph?.notes !== notes || graph.notePaths !== notePaths) {
-        graph = { notes, notePaths, value: buildLinkGraph({ notes, notePaths }) }
+const getLinkGraph = ({ notes, folderPathByNote }) => {
+    if (graph?.notes !== notes || graph.folderPathByNote !== folderPathByNote) {
+        graph = { notes, folderPathByNote, value: buildLinkGraph({ notes, folderPathByNote }) }
     }
 
     return graph.value
@@ -18,7 +18,7 @@ const sameFiles = (a, b) => (
 const isSameInput = (input) => (
     last !== null &&
     last.input.notes === input.notes &&
-    last.input.notePaths === input.notePaths &&
+    last.input.folderPathByNote === input.folderPathByNote &&
     last.input.rootName === input.rootName &&
     sameFiles(last.input.files, input.files)
 )

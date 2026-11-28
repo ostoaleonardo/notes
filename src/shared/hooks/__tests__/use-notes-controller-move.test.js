@@ -60,7 +60,7 @@ const INDEX = {
     updatedAt: 5
 }
 
-const renderNotesHook = (initialNotes, notePaths) => {
+const renderNotesHook = (initialNotes, folderPathByNote) => {
     const Wrapper = ({ children }) => {
         const [notes, setNotes] = useState(initialNotes)
         const notesByPath = useMemo(() => new Map(notes.map((note) => [note.path, note])), [notes])
@@ -70,7 +70,7 @@ const renderNotesHook = (initialNotes, notePaths) => {
                 value={{
                     notes,
                     notesByPath,
-                    notePaths,
+                    folderPathByNote,
                     setNotes,
                     tags: [],
                     setTags: () => {},
@@ -173,8 +173,8 @@ describe('move note', () => {
     })
 
     test('qualifies links in other notes when the title exists in another folder', async () => {
-        const notePaths = new Map([[IDEA.path, ''], [TWIN.path, 'Child'], [INDEX.path, '']])
-        const { result } = await renderNotesHook([IDEA, TWIN, INDEX], notePaths)
+        const folderPathByNote = new Map([[IDEA.path, ''], [TWIN.path, 'Child'], [INDEX.path, '']])
+        const { result } = await renderNotesHook([IDEA, TWIN, INDEX], folderPathByNote)
 
         await act(async () => {
             await result.current.moveNote(IDEA.path, 'child')
@@ -184,8 +184,8 @@ describe('move note', () => {
     })
 
     test('leaves other notes alone when the title is unique', async () => {
-        const notePaths = new Map([[IDEA.path, ''], [INDEX.path, '']])
-        const { result } = await renderNotesHook([IDEA, INDEX], notePaths)
+        const folderPathByNote = new Map([[IDEA.path, ''], [INDEX.path, '']])
+        const { result } = await renderNotesHook([IDEA, INDEX], folderPathByNote)
 
         await act(async () => {
             await result.current.moveNote(IDEA.path, 'child')

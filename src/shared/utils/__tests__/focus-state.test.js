@@ -3,7 +3,7 @@ import { ROOT_ENTITY, buildConnectionModel, makeEntity } from '../connection-mod
 import {
     MOCK_CONNECTION_FILES,
     MOCK_CONNECTION_NOTES,
-    MOCK_CONNECTION_NOTE_PATHS
+    MOCK_CONNECTION_FOLDER_PATH_BY_NOTE
 } from '../__fixtures__/connections'
 import { CONNECTION_TYPES, FOCUS_ACTIONS, HISTORY_LIMIT } from '@/shared/constants/connections'
 
@@ -122,7 +122,7 @@ describe('change page and origin', () => {
 describe('valid trail', () => {
     const model = buildConnectionModel({
         notes: MOCK_CONNECTION_NOTES,
-        notePaths: MOCK_CONNECTION_NOTE_PATHS,
+        folderPathByNote: MOCK_CONNECTION_FOLDER_PATH_BY_NOTE,
         files: MOCK_CONNECTION_FILES,
         rootName: 'Repository'
     })

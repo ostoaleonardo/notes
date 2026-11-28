@@ -5,7 +5,7 @@ const notes = [
     { path: 'self.md', title: 'Self', note: 'me' }
 ]
 
-const context = { notes, notePaths: new Map(), selfPath: 'self.md' }
+const context = { notes, folderPathByNote: new Map(), selfPath: 'self.md' }
 
 describe('load embed notes', () => {
     test('returns the whole text for a plain target', async () => {
@@ -42,7 +42,7 @@ describe('load embed notes', () => {
 
         const result = await loadEmbedNotes(['Alpha'], {
             notes: [bodyless],
-            notePaths: new Map(),
+            folderPathByNote: new Map(),
             selfPath: 'self',
             loadBodies
         })

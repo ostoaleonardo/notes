@@ -2,7 +2,7 @@ import { randomUUID } from 'expo-crypto'
 
 import { getNoteKey } from '@/shared/utils/note-key'
 import { getUniqueFilename, stripNoteExtension } from '@/shared/utils/note-filename'
-import { buildNotePath, buildFolderPaths } from '@/shared/utils/note-path'
+import { buildNotePath, buildFolderPathById } from '@/shared/utils/note-path'
 import {
     extractProperties,
     readFrontmatterTags,
@@ -193,10 +193,10 @@ const migrateLegacyVersionFiles = async (tree, rootUri, storage, fileStorage) =>
     const migratedKey = STORAGE_KEYS.LEGACY_VERSIONS_MIGRATED_PREFIX + rootUri
     if (await storage.getItem(migratedKey)) return
 
-    const folderPaths = buildFolderPaths(tree)
+    const folderPathById = buildFolderPathById(tree)
 
     for (const folder of tree) {
-        await fileStorage.migrateLegacyVersions(folder.uri, rootUri, folderPaths.get(folder.id) || '')
+        await fileStorage.migrateLegacyVersions(folder.uri, rootUri, folderPathById.get(folder.id) || '')
     }
 
     const templates = fileStorage.findDirectory(rootUri, TEMPLATES_FOLDER_NAME)

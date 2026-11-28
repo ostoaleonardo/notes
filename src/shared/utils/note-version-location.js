@@ -1,4 +1,4 @@
-import { buildFolderPaths } from '@/shared/utils/note-path'
+import { buildFolderPathById } from '@/shared/utils/note-path'
 
 export const buildVersionKey = (folderPath, filename) => (
     folderPath ? `${folderPath}/${filename}` : filename
@@ -18,6 +18,6 @@ export const getVersionLocation = (folders, folderId) => {
     return {
         rootUri: root.uri,
         folderUri: folder.uri,
-        folderPath: buildFolderPaths(folders).get(folderId) || ''
+        folderPath: buildFolderPathById(folders).get(folderId) || ''
     }
 }

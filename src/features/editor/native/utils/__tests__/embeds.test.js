@@ -252,7 +252,7 @@ describe('embeds of notes without a body in memory', () => {
     test('collects the bodies of nested embeds level by level', async () => {
         const bodies = await collectEmbedBodies('![[Alpha]]', {
             notes: bodyless,
-            notePaths: new Map(),
+            folderPathByNote: new Map(),
             selfPath: 'self',
             loadBodies
         })
@@ -265,7 +265,7 @@ describe('embeds of notes without a body in memory', () => {
         const looping = [{ path: 'l', title: 'Loop' }]
         const bodies = await collectEmbedBodies('![[Loop]]', {
             notes: looping,
-            notePaths: new Map(),
+            folderPathByNote: new Map(),
             selfPath: 'self',
             loadBodies: async (list) => new Map(list.map(({ path }) => [path, '![[Loop]]']))
         })
@@ -276,7 +276,7 @@ describe('embeds of notes without a body in memory', () => {
     test('ignores media, files, code and the note itself', async () => {
         await collectEmbedBodies('![[a.png]] ![[manual.pdf]] `![[Alpha]]` ![[Self]]', {
             notes: [...bodyless, { path: 'self', title: 'Self' }],
-            notePaths: new Map(),
+            folderPathByNote: new Map(),
             selfPath: 'self',
             loadBodies
         })
@@ -287,7 +287,7 @@ describe('embeds of notes without a body in memory', () => {
     test('collects nothing for a note without embeds', async () => {
         const bodies = await collectEmbedBodies('plain text', {
             notes: bodyless,
-            notePaths: new Map(),
+            folderPathByNote: new Map(),
             selfPath: 'self',
             loadBodies
         })

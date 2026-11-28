@@ -63,16 +63,16 @@ export const findFileReferences = (content, files) => (
     resolveFileTargets(getFileTargets(extractWikiLinkTexts(content)), files)
 )
 
-export const buildLinkGraph = ({ notes, notePaths }) => {
+export const buildLinkGraph = ({ notes, folderPathByNote }) => {
     const noteByPath = new Map(notes.map((note) => [note.path, note]))
-    const folderByNote = new Map(notes.map((note) => [note.path, notePaths.get(note.path) || '']))
+    const folderByNote = new Map(notes.map((note) => [note.path, folderPathByNote.get(note.path) || '']))
     const outgoing = new Map()
     const incoming = new Map()
     const unresolved = new Map()
     const tagNotes = new Map()
 
     notes.forEach((note) => {
-        const links = resolveOutgoingLinks(getNoteLinkTexts(note), note.path, notes, notePaths)
+        const links = resolveOutgoingLinks(getNoteLinkTexts(note), note.path, notes, folderPathByNote)
         outgoing.set(note.path, links)
 
         links.forEach((link) => {
@@ -118,8 +118,8 @@ const buildFileLinks = ({ notes, files }) => {
 }
 
 export const buildConnectionModel = (
-    { notes, notePaths, files, rootName = '' },
-    graph = buildLinkGraph({ notes, notePaths })
+    { notes, folderPathByNote, files, rootName = '' },
+    graph = buildLinkGraph({ notes, folderPathByNote })
 ) => ({
     rootName,
     notes,

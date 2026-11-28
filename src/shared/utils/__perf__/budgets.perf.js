@@ -2,7 +2,7 @@ import { collectTags, getNoteTags, seedNoteTags } from '../note-tags'
 import { buildLinkGraph } from '../connection-model'
 import { getNoteLinkTexts, seedNoteLinkTexts } from '../note-links'
 import { buildFolderTree } from '@/features/drawer/utils/drawer-tree'
-import { getNotePaths } from '../note-path'
+import { getFolderPathByNote } from '../note-path'
 import { mergeLoadedNotes } from '../merge-loaded-notes'
 import { loadRepositoryData } from '../load-repository-data'
 import { buildNotes, report } from '../../../../jest/perf-fixtures'
@@ -99,7 +99,7 @@ describe('startup budgets', () => {
                 return copy
             })
 
-            return { notes, notePaths: getNotePaths(notes, [REPOSITORY]) }
+            return { notes, folderPathByNote: getFolderPathByNote(notes, [REPOSITORY]) }
         }
 
         within('link graph cold', timeBest(prepare(false), buildLinkGraph), PERF_BUDGETS_MS.linkGraphCold)
@@ -109,10 +109,10 @@ describe('startup budgets', () => {
     test('derives note paths', () => {
         const elapsed = timeBest(
             () => buildNotes(PERF_NOTE_COUNT),
-            (notes) => getNotePaths(notes, [REPOSITORY])
+            (notes) => getFolderPathByNote(notes, [REPOSITORY])
         )
 
-        within('notePaths', elapsed, PERF_BUDGETS_MS.notePaths)
+        within('folderPathByNote', elapsed, PERF_BUDGETS_MS.folderPathByNote)
     })
 
     test('builds the drawer tree', () => {

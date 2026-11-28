@@ -35,7 +35,7 @@ export default function EditNote() {
 
     const {
         notes,
-        notePaths,
+        folderPathByNote,
         getNote,
         updateNote,
         propagateHeadingRename,
@@ -159,10 +159,10 @@ export default function EditNote() {
             next: savedContent,
             path: pathRef.current,
             notes,
-            notePaths
+            folderPathByNote
         })
 
-        if (renames.length) propagateHeadingRename(pathRef.current, renames, notes, notePaths)
+        if (renames.length) propagateHeadingRename(pathRef.current, renames, notes, folderPathByNote)
         if (rewritten) setNote((current) => (current === savedContent ? rewritten : current))
 
         savedRef.current = toSavedSnapshot({

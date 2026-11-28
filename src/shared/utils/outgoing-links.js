@@ -4,11 +4,11 @@ import { resolveWikiLink } from '@/shared/utils/wiki-links'
 
 import { MISSING_LINK_KEY_PREFIX } from '@/shared/constants/outgoing-links'
 
-export const resolveOutgoingLinks = (linkTexts, selfPath, notes, notePaths = new Map()) => {
+export const resolveOutgoingLinks = (linkTexts, selfPath, notes, folderPathByNote = new Map()) => {
     const links = new Map()
 
     linkTexts.forEach((linkText) => {
-        const { note, target } = resolveWikiLink(linkText, notes, notePaths, selfPath)
+        const { note, target } = resolveWikiLink(linkText, notes, folderPathByNote, selfPath)
         const name = target.trim()
 
         if (note?.path === selfPath || !name) return
@@ -21,6 +21,6 @@ export const resolveOutgoingLinks = (linkTexts, selfPath, notes, notePaths = new
     return [...links.values()]
 }
 
-export const findOutgoingLinks = (content, selfPath, notes, notePaths) => (
-    resolveOutgoingLinks(extractWikiLinkTexts(content), selfPath, notes, notePaths)
+export const findOutgoingLinks = (content, selfPath, notes, folderPathByNote) => (
+    resolveOutgoingLinks(extractWikiLinkTexts(content), selfPath, notes, folderPathByNote)
 )

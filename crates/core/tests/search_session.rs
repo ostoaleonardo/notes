@@ -55,7 +55,7 @@ fn finds_the_same_notes_as_the_reference_evaluator_through_the_index() {
 	let mut by_folder: HashMap<String, Vec<NoteInput>> = HashMap::new();
 	let mut texts = HashMap::new();
 	let mut path_of: HashMap<(String, String), String> = HashMap::new();
-	let mut folder_paths = HashMap::new();
+	let mut folder_path_by_id = HashMap::new();
 
 	for note in notes {
 		let folder = note["folder"].as_str().unwrap_or_default().to_string();
@@ -66,7 +66,7 @@ fn finds_the_same_notes_as_the_reference_evaluator_through_the_index() {
 
 		texts.insert(location.clone(), file.clone());
 		path_of.insert((folder_id.clone(), filename.clone()), text(&note["path"]));
-		folder_paths.insert(folder_id.clone(), folder);
+		folder_path_by_id.insert(folder_id.clone(), folder);
 		by_folder.entry(folder_id).or_default().push(NoteInput {
 			filename,
 			location,
@@ -103,7 +103,7 @@ fn finds_the_same_notes_as_the_reference_evaluator_through_the_index() {
 			query: node,
 			sort: Sort::NameAsc,
 			folder_ids: folder_ids.clone(),
-			folder_paths: folder_paths.clone(),
+			folder_path_by_id: folder_path_by_id.clone(),
 			pinned: pinned.clone(),
 			match_case: case["matchCase"].as_bool().expect("matchCase"),
 			unindexed: Vec::new(),
@@ -157,7 +157,7 @@ fn stops_when_cancelled_and_reports_unsupported_regexes() {
 		query,
 		sort: Sort::NameAsc,
 		folder_ids: vec![ROOT_FOLDER.to_string()],
-		folder_paths: HashMap::new(),
+		folder_path_by_id: HashMap::new(),
 		pinned: HashSet::new(),
 		match_case: false,
 		unindexed: Vec::new(),
@@ -240,7 +240,7 @@ fn reuses_cached_bodies_until_the_file_changes() {
 			},
 			sort: Sort::NameAsc,
 			folder_ids: vec![ROOT_FOLDER.to_string()],
-			folder_paths: HashMap::new(),
+			folder_path_by_id: HashMap::new(),
 			pinned: HashSet::new(),
 			match_case: false,
 			unindexed: Vec::new(),
@@ -287,7 +287,7 @@ fn warming_fills_the_cache_before_the_first_search() {
 		},
 		sort: Sort::NameAsc,
 		folder_ids: vec![ROOT_FOLDER.to_string()],
-		folder_paths: HashMap::new(),
+		folder_path_by_id: HashMap::new(),
 		pinned: HashSet::new(),
 		match_case: false,
 		unindexed: Vec::new(),
@@ -338,7 +338,7 @@ fn run_with(
 		query,
 		sort,
 		folder_ids: vec![ROOT_FOLDER.to_string()],
-		folder_paths: HashMap::new(),
+		folder_path_by_id: HashMap::new(),
 		pinned: HashSet::new(),
 		match_case: false,
 		unindexed,

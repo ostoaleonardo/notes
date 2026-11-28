@@ -4,7 +4,7 @@ import { parseSearchQuery } from '../search-parser'
 const note = (folderId, filename) => ({ folderId, filename, path: `${folderId}::${filename}` })
 
 const NOTES = [note('a', 'one.md'), note('a', 'two.md'), note('b', 'three.md')]
-const NOTE_PATHS = new Map([
+const FOLDER_PATH_BY_NOTE = new Map([
     ['a::one.md', 'Work'],
     ['a::two.md', 'Work'],
     ['b::three.md', '']
@@ -68,7 +68,7 @@ describe('native search without the native functions', () => {
         expect(await search.open({
             ast: parseSearchQuery('milk'),
             notes: NOTES,
-            notePaths: NOTE_PATHS,
+            folderPathByNote: FOLDER_PATH_BY_NOTE,
             pinned: new Set(),
             matchCase: false,
             sort: 'name-asc',
@@ -92,7 +92,7 @@ describe('open native search', () => {
     const open = (fs, overrides = {}) => createNativeSearch(fs, { size: 2 }).open({
         ast: parseSearchQuery('milk'),
         notes: NOTES,
-        notePaths: NOTE_PATHS,
+        folderPathByNote: FOLDER_PATH_BY_NOTE,
         pinned: new Set(['a::one.md']),
         matchCase: true,
         sort: 'name-asc',
@@ -114,7 +114,7 @@ describe('open native search', () => {
             },
             sort: 'name-asc',
             folderIds: ['a', 'b'],
-            folderPaths: { a: 'Work', b: '' },
+            folderPathById: { a: 'Work', b: '' },
             pinned: ['a::one.md'],
             matchCase: true,
             unindexed: []
@@ -136,7 +136,7 @@ describe('open native search', () => {
         await createNativeSearch(fs, { size: 2, isIndexed }).open({
             ast: parseSearchQuery('milk'),
             notes: [...NOTES, fresh],
-            notePaths: NOTE_PATHS,
+            folderPathByNote: FOLDER_PATH_BY_NOTE,
             pinned: new Set(),
             matchCase: false,
             sort: 'name-asc',

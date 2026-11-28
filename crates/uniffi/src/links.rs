@@ -1,4 +1,6 @@
-use engine::links::{Candidate, FolderPaths, LinkNote, NoteIndex, find_backlinks, rename_links};
+use engine::links::{
+	Candidate, FolderPathByNote, LinkNote, NoteIndex, find_backlinks, rename_links,
+};
 use std::collections::HashMap;
 
 #[derive(uniffi::Record)]
@@ -32,7 +34,7 @@ pub fn find_backlink_paths(
 ) -> Vec<String> {
 	let notes = notes_of(notes);
 	let index = NoteIndex::new(&notes);
-	let folders: FolderPaths = folders;
+	let folders: FolderPathByNote = folders;
 
 	let candidates: Vec<Candidate<'_>> = candidate_paths
 		.iter()

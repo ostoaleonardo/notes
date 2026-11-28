@@ -26,7 +26,7 @@ const replaceEmbeds = (value, context, depth, visited) => mapOutsideCode(
 
             if (isFileLinkTarget(target)) return match.slice(1)
 
-            const { note, anchor } = resolveWikiLink(target, context.notes, context.notePaths, context.selfPath)
+            const { note, anchor } = resolveWikiLink(target, context.notes, context.folderPathByNote, context.selfPath)
             if (!note || depth >= EMBED_MAX_DEPTH || visited.has(note.path)) return match.slice(1)
 
             const source = extractEmbedSource(bodyOf(note, context.bodies), anchor)
@@ -47,11 +47,11 @@ const replaceEmbeds = (value, context, depth, visited) => mapOutsideCode(
 
 export const resolveEmbeds = (
     value,
-    { notes, notePaths = new Map(), getMediaUrl, selfPath, withOpenLink = false, bodies }
+    { notes, folderPathByNote = new Map(), getMediaUrl, selfPath, withOpenLink = false, bodies }
 ) => (
     !value.includes(EMBED_OPENING) ? value : replaceEmbeds(
         value,
-        { notes, notePaths, getMediaUrl, selfPath, withOpenLink, bodies },
+        { notes, folderPathByNote, getMediaUrl, selfPath, withOpenLink, bodies },
         0,
         new Set(selfPath ? [selfPath] : [])
     )
@@ -77,7 +77,7 @@ const extractEmbedNames = (value, accepts) => {
 export const extractEmbedImageNames = (value) => extractEmbedNames(value, (kind) => kind === FILE_KINDS.IMAGE)
 
 
-const findNoteEmbeds = (text, { notes, notePaths, selfPath }) => {
+const findNoteEmbeds = (text, { notes, folderPathByNote, selfPath }) => {
     const found = []
 
     mapOutsideCode(text, (segment) => {
@@ -85,7 +85,7 @@ const findNoteEmbeds = (text, { notes, notePaths, selfPath }) => {
             const target = match[1].trim()
             if (parseEmbedMedia(target).kind || isFileLinkTarget(target)) continue
 
-            const { note, anchor } = resolveWikiLink(target, notes, notePaths, selfPath)
+            const { note, anchor } = resolveWikiLink(target, notes, folderPathByNote, selfPath)
             if (note && note.path !== selfPath) found.push({ note, anchor })
         }
 
@@ -95,12 +95,12 @@ const findNoteEmbeds = (text, { notes, notePaths, selfPath }) => {
     return found
 }
 
-export const collectEmbedBodies = async (value, { notes, notePaths, selfPath, loadBodies }) => {
+export const collectEmbedBodies = async (value, { notes, folderPathByNote, selfPath, loadBodies }) => {
     const bodies = new Map()
     let texts = [value]
 
     for (let depth = 0; depth < EMBED_MAX_DEPTH && texts.length; depth += 1) {
-        const embeds = texts.flatMap((text) => findNoteEmbeds(text, { notes, notePaths, selfPath }))
+        const embeds = texts.flatMap((text) => findNoteEmbeds(text, { notes, folderPathByNote, selfPath }))
         if (!embeds.length) break
 
         const loaded = await loadBodies(embeds.map(({ note }) => note))

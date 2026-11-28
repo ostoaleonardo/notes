@@ -1,4 +1,4 @@
-use engine::links::{Candidate, FolderPaths, LinkNote, NoteIndex, find_backlinks};
+use engine::links::{Candidate, FolderPathByNote, LinkNote, NoteIndex, find_backlinks};
 use std::time::Instant;
 
 #[test]
@@ -21,7 +21,7 @@ fn times_backlink_verification_over_five_thousand_notes() {
 		})
 		.collect();
 
-	let folders: FolderPaths = FolderPaths::new();
+	let folders: FolderPathByNote = FolderPathByNote::new();
 	let candidates: Vec<Candidate<'_>> = notes
 		.iter()
 		.zip(&bodies)

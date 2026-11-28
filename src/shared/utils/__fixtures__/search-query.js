@@ -32,7 +32,7 @@ export const MOCK_SEARCH_NOTES = [
     }
 ]
 
-export const MOCK_NOTE_PATHS = new Map([
+export const MOCK_FOLDER_PATH_BY_NOTE = new Map([
     ['note-1', 'Work/Meetings'],
     ['note-2', 'Home'],
     ['note-3', '']

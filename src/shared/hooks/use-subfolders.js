@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
 import { sanitizeFilename } from '@/shared/utils/note-filename'
-import { buildFolderPaths } from '@/shared/utils/note-path'
+import { buildFolderPathById } from '@/shared/utils/note-path'
 import { withBusy } from '@/shared/utils/with-busy'
 import { logError } from '@/shared/utils/log-error'
 import { FREE_SUBFOLDERS_PER_REPOSITORY } from '@/shared/constants/default-values'
@@ -69,7 +69,7 @@ export function useSubfolders({
                 if (!parent) return REPOSITORY_RESULTS.ERROR
 
                 const sanitized = sanitizeFilename(alias, '')
-                const oldPath = buildFolderPaths(folders).get(id)
+                const oldPath = buildFolderPathById(folders).get(id)
                 const affected = [id, ...getDescendants(id).map((d) => d.id)]
                 const { uri: newUri } = await renameFolderFiles({
                     rootUri: getRootRepository(folder).uri,

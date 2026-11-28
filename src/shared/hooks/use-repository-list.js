@@ -3,7 +3,7 @@ import { Directory } from 'expo-file-system'
 
 import { withBusy } from '@/shared/utils/with-busy'
 import { yieldToUi } from '@/shared/utils/yield-to-ui'
-import { buildFolderPaths } from '@/shared/utils/note-path'
+import { buildFolderPathById } from '@/shared/utils/note-path'
 import { logError } from '@/shared/utils/log-error'
 import { REPOSITORY_RESULTS } from '@/shared/constants/repository-results'
 import { PICKER_ERROR_CODES } from '@/shared/constants/picker-errors'
@@ -68,7 +68,7 @@ export function useRepositoryList({
         setPendingWelcomeNoteId(null)
     }, [setPendingWelcomeNoteId])
 
-    const removeRepositoriesFromList = useCallback(async (ids) => {
+    const removeFoldersFromList = useCallback(async (ids) => {
         const idSet = new Set(ids)
         const remaining = folders.filter((r) => !idSet.has(r.id))
         await persistFolders(remaining)
@@ -91,16 +91,16 @@ export function useRepositoryList({
 
         return withBusy(busyRef, async () => {
             const descendantIds = getDescendants(id).map((d) => d.id)
-            await removeRepositoriesFromList([id, ...descendantIds])
+            await removeFoldersFromList([id, ...descendantIds])
         })
     }, [
         folders,
         getDescendants,
-        removeRepositoriesFromList,
+        removeFoldersFromList,
         busyRef
     ])
 
-    const removeRepository = useCallback(async (id) => {
+    const deleteFolder = useCallback(async (id) => {
         const folder = folders.find((r) => r.id === id)
         if (!folder) return null
 
@@ -109,7 +109,7 @@ export function useRepositoryList({
         }
 
         return withBusy(busyRef, async () => {
-            const path = buildFolderPaths(folders).get(id)
+            const path = buildFolderPathById(folders).get(id)
             const descendantIds = getDescendants(id).map((d) => d.id)
 
             try {
@@ -127,7 +127,7 @@ export function useRepositoryList({
                 return REPOSITORY_RESULTS.ERROR
             }
 
-            await removeRepositoriesFromList([id, ...descendantIds])
+            await removeFoldersFromList([id, ...descendantIds])
 
             return folder
         })
@@ -139,7 +139,7 @@ export function useRepositoryList({
         removeFolderFiles,
         getRootRepository,
         getDescendants,
-        removeRepositoriesFromList,
+        removeFoldersFromList,
         busyRef
     ])
 
@@ -153,7 +153,7 @@ export function useRepositoryList({
         addRepository,
         clearPendingWelcomeNote,
         forgetRepository,
-        removeRepository,
+        deleteFolder,
         setActiveFolder
     }
 }

@@ -1,5 +1,5 @@
 use super::constants::{LABEL_CLOSE, LINK_OPEN, MARKDOWN_TARGET_OPEN};
-use super::index::{FolderPaths, NoteIndex};
+use super::index::{FolderPathByNote, NoteIndex};
 use super::scan::wiki_targets;
 use crate::syntax::patterns::MARKDOWN_LINK;
 
@@ -8,7 +8,12 @@ pub struct Candidate<'a> {
 	pub body: &'a str,
 }
 
-fn links_to(body: &str, target_path: &str, index: &NoteIndex<'_>, folders: &FolderPaths) -> bool {
+fn links_to(
+	body: &str,
+	target_path: &str,
+	index: &NoteIndex<'_>,
+	folders: &FolderPathByNote,
+) -> bool {
 	let markdown = body.contains(MARKDOWN_TARGET_OPEN)
 		&& MARKDOWN_LINK
 			.find_iter(body)
@@ -29,7 +34,7 @@ fn links_to(body: &str, target_path: &str, index: &NoteIndex<'_>, folders: &Fold
 pub fn find_backlinks<'a>(
 	target_path: &str,
 	index: &NoteIndex<'_>,
-	folders: &FolderPaths,
+	folders: &FolderPathByNote,
 	candidates: &[Candidate<'a>],
 ) -> Vec<&'a str> {
 	candidates

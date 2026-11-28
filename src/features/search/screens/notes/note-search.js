@@ -41,7 +41,7 @@ const NO_RESULTS = []
 export const NoteSearch = ({ onClose, initialQuery = '' }) => {
     const { t } = useTranslation()
     const { pinned } = useUtils()
-    const { notes, notePaths } = useNotes()
+    const { notes, folderPathByNote } = useNotes()
     const { getItem, setItem } = useStorage()
     const { folders } = useFolders()
 
@@ -82,7 +82,7 @@ export const NoteSearch = ({ onClose, initialQuery = '' }) => {
         enabled: hasResultsQuery,
         ast: deferredAst,
         notes,
-        notePaths,
+        folderPathByNote,
         pinned,
         matchCase,
         sort

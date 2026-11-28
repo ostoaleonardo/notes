@@ -23,7 +23,7 @@ pub struct SearchRequest {
 	pub query: Node,
 	pub sort: Sort,
 	pub folder_ids: Vec<String>,
-	pub folder_paths: HashMap<String, String>,
+	pub folder_path_by_id: HashMap<String, String>,
 	pub pinned: HashSet<String>,
 	pub match_case: bool,
 	#[serde(default)]
@@ -41,7 +41,7 @@ pub struct SearchSession {
 	query: Query,
 	candidates: Vec<Candidate>,
 	facets: Facets,
-	folder_paths: HashMap<String, String>,
+	folder_path_by_id: HashMap<String, String>,
 	pinned: HashSet<String>,
 	match_case: bool,
 	position: Mutex<usize>,
@@ -56,7 +56,7 @@ pub struct Plan {
 
 pub fn plan(request: &SearchRequest) -> Result<Plan> {
 	let query = Query::compile(&request.query)?;
-	let folders: Vec<String> = request.folder_paths.values().cloned().collect();
+	let folders: Vec<String> = request.folder_path_by_id.values().cloned().collect();
 	let tree = requirement_of(&request.query, &folders);
 	let statement = candidates_sql(tree.as_ref(), &request.folder_ids, request.sort);
 
@@ -82,7 +82,7 @@ impl SearchSession {
 			query,
 			candidates,
 			facets,
-			folder_paths: request.folder_paths,
+			folder_path_by_id: request.folder_path_by_id,
 			pinned: request.pinned,
 			match_case: request.match_case,
 			position: Mutex::new(0),
@@ -162,7 +162,7 @@ impl SearchSession {
 				title: &candidate.title,
 				filename: &candidate.filename,
 				folder: self
-					.folder_paths
+					.folder_path_by_id
 					.get(&candidate.folder_id)
 					.map(String::as_str),
 				content,

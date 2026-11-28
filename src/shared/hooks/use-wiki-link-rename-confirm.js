@@ -11,7 +11,7 @@ import { useSingleFlight } from '@/shared/hooks/use-single-flight'
 export function useWikiLinkRenameConfirm() {
     const {
         notes,
-        notePaths,
+        folderPathByNote,
         updateNote,
         propagateWikiLinkRename
     } = useNotes()
@@ -33,7 +33,7 @@ export function useWikiLinkRenameConfirm() {
         const [renamedBody] = titleChanged && note.note
             ? await renameLinksInBodies({
                 notes,
-                notePaths,
+                folderPathByNote,
                 targetPath: note.path,
                 newTitle: note.title,
                 bodies: [note.note]
@@ -46,11 +46,11 @@ export function useWikiLinkRenameConfirm() {
         if (!titleChanged) return { savedNote, path, filename, createdAt, updatedAt }
 
         const previous = notes.find((entry) => entry.path === note.path)
-        const backlinks = previous ? await linkIndex.findBacklinks(previous, notes, notePaths) : []
+        const backlinks = previous ? await linkIndex.findBacklinks(previous, notes, folderPathByNote) : []
         if (!backlinks.length) return { savedNote, path, filename, createdAt, updatedAt }
 
         if (alwaysUpdate) {
-            propagateWikiLinkRename(note.path, note.title, notes, notePaths)
+            propagateWikiLinkRename(note.path, note.title, notes, folderPathByNote)
             return { savedNote, path, filename, createdAt, updatedAt }
         }
 
@@ -58,14 +58,14 @@ export function useWikiLinkRenameConfirm() {
             targetPath: note.path,
             newTitle: note.title,
             notesSnapshot: notes,
-            notePaths,
+            folderPathByNote,
             count: backlinks.length
         })
         return { savedNote, path, filename, createdAt, updatedAt }
     }
 
-    const propagatePending = ({ targetPath, newTitle, notesSnapshot, notePaths }) => (
-        propagateWikiLinkRename(targetPath, newTitle, notesSnapshot, notePaths)
+    const propagatePending = ({ targetPath, newTitle, notesSnapshot, folderPathByNote }) => (
+        propagateWikiLinkRename(targetPath, newTitle, notesSnapshot, folderPathByNote)
     )
 
     const onDismiss = () => setPending(null)

@@ -4,7 +4,7 @@ import { buildPathTree } from '../connection-tree'
 import {
     MOCK_CONNECTION_FILES,
     MOCK_CONNECTION_NOTES,
-    MOCK_CONNECTION_NOTE_PATHS
+    MOCK_CONNECTION_FOLDER_PATH_BY_NOTE
 } from '../__fixtures__/connections'
 import { CONNECTION_TYPES, RELATION_BADGES } from '@/shared/constants/connections'
 
@@ -12,7 +12,7 @@ const { NOTE, FOLDER, TAG, FILE, MISSING } = CONNECTION_TYPES
 
 const model = buildConnectionModel({
     notes: MOCK_CONNECTION_NOTES,
-    notePaths: MOCK_CONNECTION_NOTE_PATHS,
+    folderPathByNote: MOCK_CONNECTION_FOLDER_PATH_BY_NOTE,
     files: MOCK_CONNECTION_FILES,
     rootName: 'Repository'
 })

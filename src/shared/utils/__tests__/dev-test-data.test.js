@@ -33,7 +33,7 @@ const toNotes = (plan) => plan.notes.map(({ folder, filename, content }) => {
     }
 })
 
-const toNotePaths = (notes) => new Map(notes.map((note) => [note.path, note.folder]))
+const toFolderPathByNote = (notes) => new Map(notes.map((note) => [note.path, note.folder]))
 
 describe('parse dev data key', () => {
     test('splits the kind, the folder and the filename', () => {
@@ -111,7 +111,7 @@ describe('dev test plan', () => {
     describe('link features', () => {
         const notes = toNotes(plan)
         const summary = summarizeConnections(
-            buildConnectionModel({ notes, notePaths: toNotePaths(notes), files: [] })
+            buildConnectionModel({ notes, folderPathByNote: toFolderPathByNote(notes), files: [] })
         )
 
         test('has orphan notes and keeps linked notes out of that list', () => {

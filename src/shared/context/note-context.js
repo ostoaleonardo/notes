@@ -16,7 +16,7 @@ import { useStableMap } from '@/shared/hooks/use-stable-map'
 import { useUtils } from '@/shared/hooks/use-utils'
 import { useRecentNotes } from '@/shared/hooks/use-recent-notes'
 import { collectTags } from '@/shared/utils/note-tags'
-import { getNotePaths } from '@/shared/utils/note-path'
+import { getFolderPathByNote } from '@/shared/utils/note-path'
 import { mergeLoadedNotes } from '@/shared/utils/merge-loaded-notes'
 import { getIndexingStatus, setIndexingStatus } from '@/shared/utils/indexing-status'
 import { isBodylessRepository } from '@/shared/utils/body-mode'
@@ -56,8 +56,8 @@ export const NoteProvider = ({ children }) => {
 
     const pruneStaleFavoritesRef = useRef(null)
     pruneStaleFavoritesRef.current = (loadedNotes) => {
-        const notePaths = new Set(loadedNotes.map((note) => note.path))
-        const isStale = (entry) => !entry.startsWith(TEMPLATE_TAB_PREFIX) && !notePaths.has(entry)
+        const folderPathByNote = new Set(loadedNotes.map((note) => note.path))
+        const isStale = (entry) => !entry.startsWith(TEMPLATE_TAB_PREFIX) && !folderPathByNote.has(entry)
 
         const stalePinned = [...pinned].filter(isStale)
         if (stalePinned.length > 0) {
@@ -204,17 +204,17 @@ export const NoteProvider = ({ children }) => {
     const tags = useMemo(() => collectTags(notes), [notes])
     const notesByPath = useMemo(() => new Map(notes.map((note) => [note.path, note])), [notes])
 
-    const notePaths = useStableMap(useMemo(() => getNotePaths(notes, folders), [notes, folders]))
+    const folderPathByNote = useStableMap(useMemo(() => getFolderPathByNote(notes, folders), [notes, folders]))
 
     const value = useMemo(() => ({
         notes,
         notesByPath,
-        notePaths,
+        folderPathByNote,
         setNotes,
         tags,
         loading,
         clear
-    }), [notes, notesByPath, notePaths, tags, loading, clear])
+    }), [notes, notesByPath, folderPathByNote, tags, loading, clear])
 
     return (
         <NoteContext.Provider value={value}>

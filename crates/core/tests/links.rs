@@ -1,17 +1,19 @@
-use engine::links::{Candidate, FolderPaths, LinkNote, NoteIndex, find_backlinks, rename_links};
+use engine::links::{
+	Candidate, FolderPathByNote, LinkNote, NoteIndex, find_backlinks, rename_links,
+};
 use serde_json::Value;
 use std::fs;
 use std::path::PathBuf;
 
 struct Fixture {
 	notes: Vec<LinkNote>,
-	folders: FolderPaths,
-	moved: FolderPaths,
+	folders: FolderPathByNote,
+	moved: FolderPathByNote,
 	self_path: String,
 	raw: Value,
 }
 
-fn paths(value: &Value) -> FolderPaths {
+fn paths(value: &Value) -> FolderPathByNote {
 	value
 		.as_object()
 		.unwrap()
@@ -122,7 +124,7 @@ fn note(path: &str, title: &str, aliases: &[&str]) -> LinkNote {
 fn backlinks_of(
 	target: &str,
 	notes: &[LinkNote],
-	folders: &FolderPaths,
+	folders: &FolderPathByNote,
 	bodies: &[(&str, &str)],
 ) -> Vec<String> {
 	let index = NoteIndex::new(notes);
@@ -158,7 +160,7 @@ fn finds_notes_that_link_to_the_target_ignoring_case() {
 	let found = backlinks_of(
 		"target",
 		&grocery_notes(),
-		&FolderPaths::new(),
+		&FolderPathByNote::new(),
 		&GROCERY_BODIES,
 	);
 
@@ -169,7 +171,15 @@ fn finds_notes_that_link_to_the_target_ignoring_case() {
 fn never_includes_the_target_itself() {
 	let bodies = [("target", "[[Grocery List]]")];
 
-	assert!(backlinks_of("target", &grocery_notes(), &FolderPaths::new(), &bodies).is_empty());
+	assert!(
+		backlinks_of(
+			"target",
+			&grocery_notes(),
+			&FolderPathByNote::new(),
+			&bodies
+		)
+		.is_empty()
+	);
 }
 
 #[test]
@@ -177,7 +187,7 @@ fn finds_nothing_when_no_note_links_to_the_target() {
 	let found = backlinks_of(
 		"unlinked-path",
 		&grocery_notes(),
-		&FolderPaths::new(),
+		&FolderPathByNote::new(),
 		&GROCERY_BODIES,
 	);
 
@@ -189,7 +199,7 @@ fn follows_a_renamed_target() {
 	let mut notes = grocery_notes();
 	notes[0].title = "Shopping".to_string();
 
-	let found = backlinks_of("target", &notes, &FolderPaths::new(), &GROCERY_BODIES);
+	let found = backlinks_of("target", &notes, &FolderPathByNote::new(), &GROCERY_BODIES);
 
 	assert!(found.is_empty());
 }
@@ -203,7 +213,7 @@ fn counts_heading_and_alias_links() {
 	];
 	let bodies = [("a", "See [[Grocery List#Fruit]]"), ("b", "See [[Sync]]")];
 
-	let found = backlinks_of("target", &notes, &FolderPaths::new(), &bodies);
+	let found = backlinks_of("target", &notes, &FolderPathByNote::new(), &bodies);
 
 	assert_eq!(found, ["a", "b"]);
 }
@@ -218,7 +228,12 @@ fn counts_markdown_internal_links() {
 		("b", "See [something](wikilink://other-path) instead."),
 	];
 
-	let found = backlinks_of("target", &grocery_notes(), &FolderPaths::new(), &bodies);
+	let found = backlinks_of(
+		"target",
+		&grocery_notes(),
+		&FolderPathByNote::new(),
+		&bodies,
+	);
 
 	assert_eq!(found, ["a"]);
 }
@@ -230,7 +245,7 @@ fn only_counts_links_that_resolve_to_the_note_in_the_right_folder() {
 		note("sub-test", "Test", &[]),
 		note("linker", "Linker", &[]),
 	];
-	let folders: FolderPaths = [
+	let folders: FolderPathByNote = [
 		("root-test".to_string(), String::new()),
 		("sub-test".to_string(), "one".to_string()),
 	]
@@ -274,7 +289,7 @@ fn scans_wiki_targets_like_the_regular_expression() {
 	}
 }
 
-fn folders_of(entries: &[(&str, &str)]) -> FolderPaths {
+fn folders_of(entries: &[(&str, &str)]) -> FolderPathByNote {
 	entries
 		.iter()
 		.map(|(path, folder)| (path.to_string(), folder.to_string()))
@@ -286,7 +301,7 @@ fn renamed(
 	target: &str,
 	title: &str,
 	notes: &[LinkNote],
-	folders: &FolderPaths,
+	folders: &FolderPathByNote,
 ) -> String {
 	let index = NoteIndex::new(notes);
 
@@ -296,7 +311,7 @@ fn renamed(
 #[test]
 fn renames_a_link_that_resolves_to_the_target() {
 	let notes = [note("target", "Grocery List", &[])];
-	let folders = FolderPaths::new();
+	let folders = FolderPathByNote::new();
 
 	assert_eq!(
 		renamed(
@@ -340,7 +355,7 @@ fn keeps_the_anchor_when_renaming() {
 			"target",
 			"Shopping List",
 			&notes,
-			&FolderPaths::new()
+			&FolderPathByNote::new()
 		),
 		"[[Shopping List#Fruit]] and [[Shopping List#^b1|block]]"
 	);
@@ -359,7 +374,7 @@ fn leaves_links_to_other_notes_unchanged() {
 			"target",
 			"Shopping List",
 			&notes,
-			&FolderPaths::new()
+			&FolderPathByNote::new()
 		),
 		"[[Meeting Notes]]"
 	);
@@ -424,7 +439,7 @@ fn does_not_rewrite_links_that_matched_through_an_alias() {
 			"note-1",
 			"Retro",
 			&notes,
-			&FolderPaths::new()
+			&FolderPathByNote::new()
 		),
 		"[[Sync]] and [[Retro]]"
 	);

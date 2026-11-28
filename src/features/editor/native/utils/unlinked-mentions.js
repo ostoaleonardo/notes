@@ -4,7 +4,6 @@ import { mapOutsideCode } from '@/shared/utils/outside-code'
 import { bodyOf } from '@/shared/utils/note-body-of'
 
 import { BACKLINKS_TEMPLATE, MENTION_ITEM_TEMPLATE } from '@/shared/constants/backlinks-html'
-import { EMPTY_NOTE_PATHS } from '@/shared/constants/note-paths'
 import { REGEXP_SPECIAL_CHARS_PATTERN } from '@/shared/constants/markdown-patterns'
 import {
     BACKLINKS_CLASS,
@@ -76,12 +75,17 @@ export const findUnlinkedMentions = (target, notes, { linked = new Set(), pool =
     })
 }
 
-export const buildUnlinkedMentionsHtml = (mentions, label, actionLabel, notePaths = EMPTY_NOTE_PATHS) => {
+export const buildUnlinkedMentionsHtml = (
+    mentions,
+    label,
+    actionLabel,
+    folderPathByNote = new Map()
+) => {
     if (!mentions.length) return ''
 
     const items = mentions.map((note) => fillTemplate(MENTION_ITEM_TEMPLATE, {
         rowClass: MENTION_ROW_CLASS,
-        link: buildBacklinkLink(note, notePaths),
+        link: buildBacklinkLink(note, folderPathByNote),
         actionHref: `${LINK_MENTION_SCHEME}${encodeURIComponent(note.path)}`,
         actionClass: MENTION_ACTION_CLASS,
         action: escapeHtml(actionLabel)

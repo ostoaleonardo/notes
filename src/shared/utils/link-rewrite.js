@@ -3,7 +3,7 @@ import { getAliases } from '@/shared/utils/wiki-links'
 
 export const renameLinksInBodies = ({
     notes,
-    notePaths,
+    folderPathByNote,
     resolvePaths = null,
     targetPath,
     newTitle,
@@ -13,7 +13,7 @@ export const renameLinksInBodies = ({
         notes.map((note) => note.title || ''),
         notes.map(getAliases),
         notes.map((note) => note.path),
-        Object.fromEntries(notePaths),
+        Object.fromEntries(folderPathByNote),
         resolvePaths && Object.fromEntries(resolvePaths),
         targetPath,
         newTitle,

@@ -14,7 +14,7 @@ export const MOCK_CONNECTION_NOTES = [
     note('r::Lonely.md', 'Lonely', '')
 ]
 
-export const MOCK_CONNECTION_NOTE_PATHS = new Map([
+export const MOCK_CONNECTION_FOLDER_PATH_BY_NOTE = new Map([
     ['r::Index.md', ''],
     ['r::Alpha.md', ''],
     ['p::Beta.md', 'Projects'],

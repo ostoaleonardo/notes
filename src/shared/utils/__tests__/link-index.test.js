@@ -13,7 +13,7 @@ const buildNote = (name, body = '', updatedAt = 1) => ({
 })
 
 const FILLER = Array.from({ length: 1000 }, (_, index) => buildNote(`filler${index}`, 'nothing'))
-const NOTE_PATHS = new Map()
+const FOLDER_PATH_BY_NOTE = new Map()
 
 const refs = (...notes) => ({
     folderIds: notes.map(() => 'repo'),
@@ -53,7 +53,7 @@ describe('find backlinks through the index', () => {
         const { index, backlinkCandidates } = build({ backlinks: refs(linker) })
         const notes = [target, linker, hidden, ...FILLER]
 
-        const found = await index.findBacklinks(target, notes, NOTE_PATHS)
+        const found = await index.findBacklinks(target, notes, FOLDER_PATH_BY_NOTE)
 
         expect(found).toEqual([linker])
         expect(backlinkCandidates).toHaveBeenCalledWith(['Target'], target.path)
@@ -63,7 +63,7 @@ describe('find backlinks through the index', () => {
         const { index } = build({ covered: (note) => note !== hidden, backlinks: refs() })
         const notes = [target, linker, hidden, ...FILLER]
 
-        const found = await index.findBacklinks(target, notes, NOTE_PATHS)
+        const found = await index.findBacklinks(target, notes, FOLDER_PATH_BY_NOTE)
 
         expect(found).toEqual([hidden])
     })
@@ -73,7 +73,7 @@ describe('find backlinks through the index', () => {
         const { index, verifyBacklinks } = build({ backlinks: refs(decoy, linker) })
         const notes = [target, decoy, linker, ...FILLER]
 
-        const found = await index.findBacklinks(target, notes, NOTE_PATHS)
+        const found = await index.findBacklinks(target, notes, FOLDER_PATH_BY_NOTE)
 
         expect(found).toEqual([linker])
         expect(verifyBacklinks).toHaveBeenCalledWith(expect.objectContaining({
@@ -86,7 +86,7 @@ describe('find backlinks through the index', () => {
     test('scans every note when the collection is small', async () => {
         const { index, backlinkCandidates } = build()
 
-        const found = await index.findBacklinks(target, [target, linker], NOTE_PATHS)
+        const found = await index.findBacklinks(target, [target, linker], FOLDER_PATH_BY_NOTE)
 
         expect(found).toEqual([linker])
         expect(backlinkCandidates).not.toHaveBeenCalled()
@@ -95,7 +95,7 @@ describe('find backlinks through the index', () => {
     test('scans every note when too many notes are not covered', async () => {
         const { index, backlinkCandidates } = build({ covered: () => false })
 
-        const found = await index.findBacklinks(target, [target, linker, ...FILLER], NOTE_PATHS)
+        const found = await index.findBacklinks(target, [target, linker, ...FILLER], FOLDER_PATH_BY_NOTE)
 
         expect(found).toEqual([linker])
         expect(backlinkCandidates).not.toHaveBeenCalled()
@@ -105,7 +105,7 @@ describe('find backlinks through the index', () => {
         const { index, backlinkCandidates } = build()
         backlinkCandidates.mockRejectedValue(new Error('index unavailable'))
 
-        const found = await index.findBacklinks(target, [target, linker, ...FILLER], NOTE_PATHS)
+        const found = await index.findBacklinks(target, [target, linker, ...FILLER], FOLDER_PATH_BY_NOTE)
 
         expect(found).toEqual([linker])
     })
@@ -114,7 +114,7 @@ describe('find backlinks through the index', () => {
         const aliased = { ...buildNote('Real'), properties: { aliases: ['Nick'] } }
         const { index, backlinkCandidates } = build()
 
-        await index.findBacklinks(aliased, [aliased, ...FILLER], NOTE_PATHS)
+        await index.findBacklinks(aliased, [aliased, ...FILLER], FOLDER_PATH_BY_NOTE)
 
         expect(backlinkCandidates).toHaveBeenCalledWith(['Real', 'Nick'], aliased.path)
     })
@@ -122,7 +122,7 @@ describe('find backlinks through the index', () => {
     test('scans every note when the target has no known names', async () => {
         const { index, backlinkCandidates } = build()
 
-        await index.findBacklinks({ path: 'missing' }, [target, ...FILLER], NOTE_PATHS)
+        await index.findBacklinks({ path: 'missing' }, [target, ...FILLER], FOLDER_PATH_BY_NOTE)
 
         expect(backlinkCandidates).not.toHaveBeenCalled()
     })
@@ -136,7 +136,7 @@ describe('find backlinks for notes without a body in memory', () => {
         const loadBodies = jest.fn(async () => new Map([[linker.path, 'see [[Target]]']]))
         const { index } = build({ backlinks: refs(linker), loadBodies })
 
-        const found = await index.findBacklinks(target, [target, linker, ...FILLER], NOTE_PATHS)
+        const found = await index.findBacklinks(target, [target, linker, ...FILLER], FOLDER_PATH_BY_NOTE)
 
         expect(loadBodies).toHaveBeenCalledWith([linker])
         expect(found).toEqual([linker])
@@ -146,7 +146,7 @@ describe('find backlinks for notes without a body in memory', () => {
         const loadBodies = async () => new Map([[linker.path, 'nothing here']])
         const { index } = build({ backlinks: refs(linker), loadBodies })
 
-        expect(await index.findBacklinks(target, [target, linker, ...FILLER], NOTE_PATHS)).toEqual([])
+        expect(await index.findBacklinks(target, [target, linker, ...FILLER], FOLDER_PATH_BY_NOTE)).toEqual([])
     })
 })
 

@@ -13,7 +13,7 @@ import { noteBodies } from '@/shared/utils/note-body'
 export function useEmbedLookup(selfId) {
     const pdf = usePdfEmbed()
     const listMediaUris = useMediaUris()
-    const { notes, notePaths } = useNotes()
+    const { notes, folderPathByNote } = useNotes()
 
     const mediaCacheRef = useRef(new Map())
     const localCacheRef = useRef(new Map())
@@ -34,11 +34,11 @@ export function useEmbedLookup(selfId) {
 
     const onLoadEmbeds = useStableCallback(async (targets) => (
         loadEmbedNotes(targets, {
-        notes,
-        notePaths,
-        selfPath: selfId,
-        loadBodies: noteBodies.load
-    })
+            notes,
+            folderPathByNote,
+            selfPath: selfId,
+            loadBodies: noteBodies.load
+        })
     ))
 
     return { onResolveMedia, onResolveLocalUrls, onLoadEmbeds }

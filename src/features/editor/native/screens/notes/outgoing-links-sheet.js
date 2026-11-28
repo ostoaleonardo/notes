@@ -35,11 +35,11 @@ export const OutgoingLinksSheet = memo(({
     onClose
 }) => {
     const { t } = useTranslation()
-    const { notes, notePaths } = useNotes()
+    const { notes, folderPathByNote } = useNotes()
     const sheet = useBottomSheet()
 
     const [links] = useState(() => (
-        findOutgoingLinks(contentRef.current.content, selfPath, notes, notePaths)
+        findOutgoingLinks(contentRef.current.content, selfPath, notes, folderPathByNote)
     ))
 
     const onPress = useCallback((path) => {

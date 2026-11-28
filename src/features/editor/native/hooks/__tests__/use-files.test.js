@@ -70,7 +70,7 @@ jest.mock('@/shared/hooks/use-notes', () => ({
     useNotes: () => ({
         getNote: () => mockNote,
         notes: [mockNote],
-        notePaths: new Map()
+        folderPathByNote: new Map()
     })
 }))
 jest.mock('../use-media-uris', () => ({

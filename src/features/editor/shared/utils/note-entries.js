@@ -36,14 +36,14 @@ export const areNoteEntriesEqual = (previous, next) => (
     previous.every((entry, index) => areEntriesEqual(entry, next[index]))
 )
 
-export const buildNoteEntries = (notes, notePaths) => (
+export const buildNoteEntries = (notes, folderPathByNote) => (
     notes
         .filter((note) => note.title)
         .map((note) => ({
             id: note.path,
             title: note.title,
             aliases: getAliases(note),
-            path: notePaths.get(note.path) || ''
+            path: folderPathByNote.get(note.path) || ''
         }))
 )
 
@@ -51,7 +51,7 @@ const getEntryResolverInputs = (entries) => {
     if (!resolverInputsByEntries.has(entries)) {
         resolverInputsByEntries.set(entries, {
             notes: entries.map(({ id, title, aliases }) => ({ path: id, title, properties: { aliases } })),
-            notePaths: new Map(entries.map(({ id, path }) => [id, path]))
+            folderPathByNote: new Map(entries.map(({ id, path }) => [id, path]))
         })
     }
 
@@ -59,9 +59,9 @@ const getEntryResolverInputs = (entries) => {
 }
 
 export const resolveBlockTarget = (entries, linkTarget) => {
-    const { notes, notePaths } = getEntryResolverInputs(entries)
+    const { notes, folderPathByNote } = getEntryResolverInputs(entries)
 
-    return resolveWikiLinkTarget(linkTarget, notes, notePaths)?.path || null
+    return resolveWikiLinkTarget(linkTarget, notes, folderPathByNote)?.path || null
 }
 
 export const filterBlockSuggestions = (path, blocks, query) => {
@@ -78,18 +78,18 @@ export const filterBlockSuggestions = (path, blocks, query) => {
 }
 
 export const resolveLinkTargets = (entries, targets) => {
-    const { notes, notePaths } = getEntryResolverInputs(entries)
+    const { notes, folderPathByNote } = getEntryResolverInputs(entries)
 
     return Object.fromEntries(targets.map((target) => (
-        [target, !!resolveWikiLinkTarget(target, notes, notePaths)]
+        [target, !!resolveWikiLinkTarget(target, notes, folderPathByNote)]
     )))
 }
 
 export const resolveLinkDetails = (entries, targets, selfPath) => {
-    const { notes, notePaths } = getEntryResolverInputs(entries)
+    const { notes, folderPathByNote } = getEntryResolverInputs(entries)
 
     return Object.fromEntries(targets.map((target) => (
-        [target, resolveWikiLinkDetails(target, notes, notePaths, selfPath)]
+        [target, resolveWikiLinkDetails(target, notes, folderPathByNote, selfPath)]
     )))
 }
 

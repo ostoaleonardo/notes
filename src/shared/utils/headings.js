@@ -71,13 +71,13 @@ export const findHeadingRenames = (previous, next) => {
     })
 }
 
-export const renameHeadingLinks = (content, targetPath, renames, notes, notePaths = new Map()) => {
+export const renameHeadingLinks = (content, targetPath, renames, notes, folderPathByNote = new Map()) => {
     if (!content || !renames.length) return content
 
     const targets = new Map(renames.map(({ from, to }) => [normalizeHeading(from), to]))
 
     return mapOutsideCode(content, (segment) => segment.replace(WIKI_LINK_PATTERN, (match, linkText, alias) => {
-        const { note, target, anchor } = resolveWikiLink(linkText, notes, notePaths, targetPath)
+        const { note, target, anchor } = resolveWikiLink(linkText, notes, folderPathByNote, targetPath)
         if (note?.path !== targetPath || !anchor || anchor.startsWith(BLOCK_ANCHOR_PREFIX)) return match
 
         const renamed = targets.get(normalizeHeading(anchor))
@@ -88,11 +88,11 @@ export const renameHeadingLinks = (content, targetPath, renames, notes, notePath
     }))
 }
 
-export const planHeadingRenames = ({ previous, next, path, notes, notePaths }) => {
+export const planHeadingRenames = ({ previous, next, path, notes, folderPathByNote }) => {
     const renames = findHeadingRenames(previous || '', next || '')
     if (!renames.length) return { renames, rewritten: null }
 
-    const rewritten = renameHeadingLinks(next, path, renames, notes, notePaths)
+    const rewritten = renameHeadingLinks(next, path, renames, notes, folderPathByNote)
 
     return { renames, rewritten: rewritten === next ? null : rewritten }
 }

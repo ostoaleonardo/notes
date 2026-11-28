@@ -3,7 +3,7 @@ import { buildConnectionModel, makeEntity, ROOT_ENTITY } from '@/shared/utils/co
 import {
     MOCK_CONNECTION_FILES,
     MOCK_CONNECTION_NOTES,
-    MOCK_CONNECTION_NOTE_PATHS
+    MOCK_CONNECTION_FOLDER_PATH_BY_NOTE
 } from '@/shared/utils/__fixtures__/connections'
 import { CONNECTION_TYPES } from '@/shared/constants/connections'
 
@@ -11,7 +11,7 @@ const { NOTE, FILE, TAG, FOLDER, MISSING } = CONNECTION_TYPES
 
 const model = buildConnectionModel({
     notes: MOCK_CONNECTION_NOTES,
-    notePaths: MOCK_CONNECTION_NOTE_PATHS,
+    folderPathByNote: MOCK_CONNECTION_FOLDER_PATH_BY_NOTE,
     files: MOCK_CONNECTION_FILES,
     rootName: 'Repository'
 })

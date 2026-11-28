@@ -13,12 +13,12 @@ const mockTranslate = (key) => key
 jest.mock('react-i18next', () => ({
     useTranslation: () => ({ t: mockTranslate })
 }))
-const mockNotePaths = new Map(mockNotes.map((note) => [note.path, '']))
+const mockFolderPathByNote = new Map(mockNotes.map((note) => [note.path, '']))
 
 jest.mock('@/shared/hooks/use-notes', () => ({
     useNotes: () => ({
         notes: mockNotes,
-        notePaths: mockNotePaths
+        folderPathByNote: mockFolderPathByNote
     })
 }))
 

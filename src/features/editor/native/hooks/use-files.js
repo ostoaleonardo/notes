@@ -30,7 +30,7 @@ import { LOG_MESSAGES } from '@/shared/constants/log-messages'
 
 export function useFiles() {
     const { t } = useTranslation()
-    const { getNote, notes, notePaths } = useNotes()
+    const { getNote, notes, folderPathByNote } = useNotes()
     const listMediaUris = useMediaUris()
     const { fontKey, fontFamily: headingFont } = useHeadingFont()
     const domFonts = useDomFonts()
@@ -39,7 +39,7 @@ export function useFiles() {
         const body = await noteBodies.get(note)
         const bodies = await collectEmbedBodies(body, {
             notes,
-            notePaths,
+            folderPathByNote,
             selfPath: note.path,
             loadBodies: noteBodies.load
         })
@@ -56,7 +56,7 @@ export function useFiles() {
 
         const context = {
             notes,
-            notePaths,
+            folderPathByNote,
             bodies,
             getMediaUrl: (name) => images.get(name)
         }

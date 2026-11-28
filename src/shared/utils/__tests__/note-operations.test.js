@@ -346,7 +346,7 @@ describe('plan wiki link rename', () => {
             targetPath: target.path,
             newTitle: 'New',
             notes: [target, linker, other],
-            notePaths: new Map()
+            folderPathByNote: new Map()
         })
 
         expect(changedNotes.map((note) => note.path)).toEqual([linker.path])
@@ -360,7 +360,7 @@ describe('plan wiki link rename', () => {
             targetPath: target.path,
             newTitle: 'New',
             notes: [target, linker],
-            notePaths: new Map(),
+            folderPathByNote: new Map(),
             currentNotes: [target, edited]
         })
 
@@ -375,7 +375,7 @@ describe('plan wiki link rename', () => {
             targetPath: target.path,
             newTitle: 'New',
             notes: [target, bodyless],
-            notePaths: new Map(),
+            folderPathByNote: new Map(),
             bodies
         })
 
@@ -392,7 +392,7 @@ describe('plan wiki link rename', () => {
             targetPath: target.path,
             newTitle: 'New',
             notes: [target, linker, resident],
-            notePaths: new Map(),
+            folderPathByNote: new Map(),
             rewriteBodies,
             bodies
         })
@@ -410,7 +410,7 @@ describe('plan wiki link rename', () => {
             targetPath: target.path,
             newTitle: 'New',
             notes: [target, linker, resident],
-            notePaths: new Map(),
+            folderPathByNote: new Map(),
             rewriteBodies,
             bodies
         })
@@ -428,7 +428,7 @@ describe('plan wiki link rename', () => {
             targetPath: target.path,
             newTitle: 'New',
             notes: [target, bodyless],
-            notePaths: new Map()
+            folderPathByNote: new Map()
         })
 
         expect(changedNotes).toEqual([])
@@ -439,7 +439,7 @@ describe('plan wiki link rename', () => {
             targetPath: target.path,
             newTitle: 'New',
             notes: [target],
-            notePaths: new Map()
+            folderPathByNote: new Map()
         })
 
         expect(renameNote(target)).toBe(target)
@@ -674,14 +674,14 @@ describe('plan moved note links', () => {
     const twin = { path: 'child::Idea.md', title: 'Idea', folderId: 'child', note: '' }
     const linker = { path: 'root::Index.md', title: 'Index', folderId: 'root', note: 'See [[Idea]]' }
     const NOTES = [moved, twin, linker]
-    const NOTE_PATHS = new Map([['root::Idea.md', ''], ['child::Idea.md', 'Child'], ['root::Index.md', '']])
+    const FOLDER_PATH_BY_NOTE = new Map([['root::Idea.md', ''], ['child::Idea.md', 'Child'], ['root::Index.md', '']])
 
     test('qualifies links with the new folder when the title exists elsewhere', async () => {
         const plan = await planMovedNoteLinks({
             note: moved,
             destinationId: 'child',
             notes: NOTES,
-            notePaths: NOTE_PATHS,
+            folderPathByNote: FOLDER_PATH_BY_NOTE,
             folders: REPOSITORIES_WITH_FOLDER,
             currentNotes: NOTES
         })
@@ -697,7 +697,7 @@ describe('plan moved note links', () => {
             note: moved,
             destinationId: 'child',
             notes: unique,
-            notePaths: new Map([['root::Idea.md', ''], ['root::Index.md', '']]),
+            folderPathByNote: new Map([['root::Idea.md', ''], ['root::Index.md', '']]),
             folders: REPOSITORIES_WITH_FOLDER,
             currentNotes: unique
         })

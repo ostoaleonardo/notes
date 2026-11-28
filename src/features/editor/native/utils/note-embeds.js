@@ -4,11 +4,11 @@ import { bodyOf } from '@/shared/utils/note-body-of'
 
 export const loadEmbedNotes = async (
     targets,
-    { notes, notePaths, selfPath, loadBodies = async () => undefined }
+    { notes, folderPathByNote, selfPath, loadBodies = async () => undefined }
 ) => {
     const resolved = targets.map((request) => ({
         request,
-        ...resolveWikiLink(request, notes, notePaths, selfPath)
+        ...resolveWikiLink(request, notes, folderPathByNote, selfPath)
     }))
     const embedded = resolved.filter(({ note }) => note && note.path !== selfPath)
     const bodies = await loadBodies(embedded.map(({ note }) => note))

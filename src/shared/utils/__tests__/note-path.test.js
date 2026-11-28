@@ -1,4 +1,4 @@
-import { buildNotePath, buildFolderPaths, getNotePaths } from '../note-path'
+import { buildNotePath, buildFolderPathById, getFolderPathByNote } from '../note-path'
 
 describe('build note path', () => {
     test('joins the folder id and filename with the separator', () => {
@@ -10,7 +10,7 @@ describe('build folder paths', () => {
     test('gives root folders an empty path', () => {
         const folders = [{ id: 'root', alias: 'Repository', parentId: null }]
 
-        const paths = buildFolderPaths(folders)
+        const paths = buildFolderPathById(folders)
 
         expect(paths.get('root')).toBe('')
     })
@@ -21,7 +21,7 @@ describe('build folder paths', () => {
             { id: 'one', alias: 'one', parentId: 'root' }
         ]
 
-        const paths = buildFolderPaths(folders)
+        const paths = buildFolderPathById(folders)
 
         expect(paths.get('one')).toBe('one')
     })
@@ -33,7 +33,7 @@ describe('build folder paths', () => {
             { id: 'two', alias: 'two', parentId: 'one' }
         ]
 
-        const paths = buildFolderPaths(folders)
+        const paths = buildFolderPathById(folders)
 
         expect(paths.get('two')).toBe('one/two')
     })
@@ -50,7 +50,7 @@ describe('get note paths', () => {
             { path: 'one::b.md', folderId: 'one' }
         ]
 
-        const paths = getNotePaths(notes, folders)
+        const paths = getFolderPathByNote(notes, folders)
 
         expect(paths.get('root::a.md')).toBe('')
         expect(paths.get('one::b.md')).toBe('one')

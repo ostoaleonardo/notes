@@ -40,11 +40,11 @@ const toUnindexed = (note) => ({
     properties: note.properties ?? {}
 })
 
-const collectFolders = (notes, notePaths) => {
+const collectFolders = (notes, folderPathByNote) => {
     const paths = new Map()
 
     notes.forEach((note) => {
-        if (!paths.has(note.folderId)) paths.set(note.folderId, notePaths?.get(note.path) ?? '')
+        if (!paths.has(note.folderId)) paths.set(note.folderId, folderPathByNote?.get(note.path) ?? '')
     })
 
     return { ids: [...paths.keys()], paths: [...paths.values()] }
@@ -99,16 +99,16 @@ export const createNativeSearch = (fs, {
         await fs.searchWarm([...new Set(notes.map((note) => note.folderId))])
     },
 
-    open: async ({ ast, notes, notePaths, pinned, matchCase, sort, isCancelled }) => {
+    open: async ({ ast, notes, folderPathByNote, pinned, matchCase, sort, isCancelled }) => {
         if (typeof fs.searchOpen !== 'function') return null
 
-        const folders = collectFolders(notes, notePaths)
+        const folders = collectFolders(notes, folderPathByNote)
 
         const id = await fs.searchOpen(JSON.stringify({
             query: toNativeNode(ast),
             sort,
             folderIds: folders.ids,
-            folderPaths: Object.fromEntries(folders.ids.map((folderId, index) => [folderId, folders.paths[index]])),
+            folderPathById: Object.fromEntries(folders.ids.map((folderId, index) => [folderId, folders.paths[index]])),
             pinned: [...pinned],
             matchCase: !!matchCase,
             unindexed: notes.filter((note) => !isIndexed(note)).map(toUnindexed)

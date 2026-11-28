@@ -68,7 +68,7 @@ const buildNotes = (names, uris, texts, modified) => names.map((filename, index)
 })
 
 const measureJs = async (notes) => {
-    const notePaths = new Map(notes.map((note) => [note.path, '']))
+    const folderPathByNote = new Map(notes.map((note) => [note.path, '']))
 
     const coldTags = await best(() => collectTags(notes))
     log(`js tags collect (first run computes inline tags): first ${coldTags.first} ms, warm ${coldTags.ms} ms, ${coldTags.result.length} tags`)
@@ -76,7 +76,7 @@ const measureJs = async (notes) => {
     const tree = await best(() => buildTagTree(notes))
     log(`js tag tree for the drawer: best ${tree.ms} ms`)
 
-    const graph = await best(() => buildLinkGraph({ notes, notePaths }))
+    const graph = await best(() => buildLinkGraph({ notes, folderPathByNote }))
     log(`js link graph for connections (first run extracts links): first ${graph.first} ms, warm ${graph.ms} ms`)
 }
 

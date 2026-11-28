@@ -13,7 +13,6 @@ import {
     BACKLINK_PATH_CLASS
 } from '@/shared/constants/backlinks'
 import { mapOutsideCode } from '@/shared/utils/outside-code'
-import { EMPTY_NOTE_PATHS } from '@/shared/constants/note-paths'
 import { buildFileLinkUrl, isFileLinkTarget } from '@/shared/utils/file-links'
 
 import { FILE_LINK_CLASS } from '@/shared/constants/file-links'
@@ -64,7 +63,7 @@ const getNoteIndex = (notes) => {
     return index
 }
 
-const findNote = (linkText, notes, notePaths) => {
+const findNote = (linkText, notes, folderPathByNote) => {
     const { path, title } = parseWikiLinkText(linkText)
     const name = normalizeName(title)
     const { byTitle, byAlias } = getNoteIndex(notes)
@@ -73,18 +72,20 @@ const findNote = (linkText, notes, notePaths) => {
     if (candidates.length < 2 || !path) return candidates[0]
 
     const normalizedPath = normalizeName(path)
-    return candidates.find((note) => normalizeName(notePaths.get(note.path) || '') === normalizedPath) || candidates[0]
+    const inFolder = (note) => normalizeName(folderPathByNote.get(note.path) || '') === normalizedPath
+
+    return candidates.find(inFolder) || candidates[0]
 }
 
-export const resolveWikiLink = (linkText, notes, notePaths, selfPath) => {
-    const whole = findNote(linkText, notes, notePaths)
+export const resolveWikiLink = (linkText, notes, folderPathByNote, selfPath) => {
+    const whole = findNote(linkText, notes, folderPathByNote)
     if (whole) return { note: whole, target: linkText, anchor: '' }
 
     const split = splitAnchor(linkText)
     if (!split) return { note: undefined, target: linkText, anchor: '' }
 
     const note = split.target.trim()
-        ? findNote(split.target, notes, notePaths)
+        ? findNote(split.target, notes, folderPathByNote)
         : notes.find(({ path }) => path === selfPath)
 
     return { note, ...split }
@@ -92,8 +93,8 @@ export const resolveWikiLink = (linkText, notes, notePaths, selfPath) => {
 
 export const isSameNoteTarget = (linkText) => linkText.trim().startsWith(WIKI_LINK_ANCHOR_SEPARATOR)
 
-export const resolveWikiLinkTarget = (linkText, notes, notePaths = EMPTY_NOTE_PATHS) => (
-    resolveWikiLink(linkText, notes, notePaths).note
+export const resolveWikiLinkTarget = (linkText, notes, folderPathByNote = new Map()) => (
+    resolveWikiLink(linkText, notes, folderPathByNote).note
 )
 
 const buildDefaultLabel = (title, anchor) => {
@@ -148,8 +149,8 @@ export const renderWikiLink = (alias, { path: notePath, target, anchor }) => {
 
 export const missingWikiLinkDetails = (target) => ({ path: null, anchor: '', target })
 
-export const resolveWikiLinkDetails = (linkText, notes, notePaths, selfPath) => {
-    const { note, target, anchor } = resolveWikiLink(linkText, notes, notePaths, selfPath)
+export const resolveWikiLinkDetails = (linkText, notes, folderPathByNote, selfPath) => {
+    const { note, target, anchor } = resolveWikiLink(linkText, notes, folderPathByNote, selfPath)
 
     return { path: note ? note.path : null, target, anchor }
 }
@@ -163,8 +164,8 @@ export const parseMissingWikiLinkTarget = (encoded) => {
     }
 }
 
-export const buildBacklinkLink = (note, notePaths) => {
-    const path = notePaths.get(note.path) || ''
+export const buildBacklinkLink = (note, folderPathByNote) => {
+    const path = folderPathByNote.get(note.path) || ''
 
     return fillTemplate(BACKLINK_LINK_TEMPLATE, {
         href: `${WIKI_LINK_SCHEME}${encodeURIComponent(note.path)}`,
@@ -175,11 +176,11 @@ export const buildBacklinkLink = (note, notePaths) => {
     })
 }
 
-export const buildBacklinksHtml = (backlinks, label, notePaths = EMPTY_NOTE_PATHS) => {
+export const buildBacklinksHtml = (backlinks, label, folderPathByNote = new Map()) => {
     if (!backlinks.length) return ''
 
     const items = backlinks
-        .map((note) => fillTemplate(BACKLINK_ITEM_TEMPLATE, { link: buildBacklinkLink(note, notePaths) }))
+        .map((note) => fillTemplate(BACKLINK_ITEM_TEMPLATE, { link: buildBacklinkLink(note, folderPathByNote) }))
         .join('')
 
     return fillTemplate(BACKLINKS_TEMPLATE, {

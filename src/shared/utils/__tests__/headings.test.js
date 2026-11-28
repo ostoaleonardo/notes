@@ -160,7 +160,7 @@ describe('plan heading renames', () => {
             next: '# Plan\n## New\n[[#Old]]\n',
             path: 'target',
             notes,
-            notePaths: new Map()
+            folderPathByNote: new Map()
         })
 
         expect(plan.renames).toEqual([{ from: 'Old', to: 'New' }])
@@ -173,7 +173,7 @@ describe('plan heading renames', () => {
             next: '# Plan\nmore text\n',
             path: 'target',
             notes,
-            notePaths: new Map()
+            folderPathByNote: new Map()
         })
 
         expect(plan).toEqual({ renames: [], rewritten: null })
@@ -185,7 +185,7 @@ describe('plan heading renames', () => {
             next: '## New\n',
             path: 'target',
             notes,
-            notePaths: new Map()
+            folderPathByNote: new Map()
         })
 
         expect(plan.renames).toHaveLength(1)

@@ -16,12 +16,12 @@ export const DeleteFolderDialog = ({
 }) => {
     const { t } = useTranslation()
     const { vibrate } = useHaptics()
-    const { folders, removeRepository } = useFolders()
+    const { folders, deleteFolder } = useFolders()
 
     const isFolder = !!folders.find((folder) => folder.id === folderId)?.parentId
 
     const onDelete = async () => {
-        const result = await removeRepository(folderId)
+        const result = await deleteFolder(folderId)
 
         if (result === REPOSITORY_RESULTS.ACTIVE) {
             ToastAndroid.show(t('repositories.delete.active_error'), ToastAndroid.SHORT)

@@ -3,13 +3,13 @@ import { buildPathTree } from '../connection-tree'
 import {
     MOCK_CONNECTION_FILES,
     MOCK_CONNECTION_NOTES,
-    MOCK_CONNECTION_NOTE_PATHS
+    MOCK_CONNECTION_FOLDER_PATH_BY_NOTE
 } from '../__fixtures__/connections'
 import { CONNECTION_NODE_KINDS } from '@/shared/constants/connections'
 
 const model = buildConnectionModel({
     notes: MOCK_CONNECTION_NOTES,
-    notePaths: MOCK_CONNECTION_NOTE_PATHS,
+    folderPathByNote: MOCK_CONNECTION_FOLDER_PATH_BY_NOTE,
     files: MOCK_CONNECTION_FILES,
     rootName: 'Repository'
 })

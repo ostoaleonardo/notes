@@ -160,14 +160,14 @@ describe('repository list', () => {
         })
     })
 
-    describe('remove repository', () => {
+    describe('delete folder', () => {
         test('refuses to remove an ancestor of the active repository', async () => {
             const { props, api } = await setup({
                 activeFolder: grand,
                 isAncestorOf: jest.fn(() => true)
             })
 
-            const result = await api.removeRepository('root')
+            const result = await api.deleteFolder('root')
 
             expect(result).toBe(REPOSITORY_RESULTS.ACTIVE)
             expect(props.fileStorage.deleteDirectory).not.toHaveBeenCalled()
@@ -176,7 +176,7 @@ describe('repository list', () => {
         test('deletes a root folder from the device', async () => {
             const { props, api } = await setup()
 
-            const result = await api.removeRepository('other')
+            const result = await api.deleteFolder('other')
 
             expect(props.fileStorage.deleteDirectory).toHaveBeenCalledWith('file:///other')
             expect(props.fileStorage.removeFolder).not.toHaveBeenCalled()
@@ -186,7 +186,7 @@ describe('repository list', () => {
         test('deletes a subfolder together with its versions', async () => {
             const { props, api } = await setup()
 
-            await api.removeRepository('child')
+            await api.deleteFolder('child')
 
             expect(persistedIds(props)).toEqual(['root', 'other'])
             expect(props.fileStorage.removeFolder).toHaveBeenCalledWith({
@@ -201,7 +201,7 @@ describe('repository list', () => {
         test('returns null for an unknown repository', async () => {
             const { api } = await setup()
 
-            expect(await api.removeRepository('missing')).toBeNull()
+            expect(await api.deleteFolder('missing')).toBeNull()
         })
     })
 

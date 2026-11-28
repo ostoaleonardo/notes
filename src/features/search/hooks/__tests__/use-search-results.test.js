@@ -4,7 +4,7 @@ import { useSearchResults } from '../use-search-results'
 import { logError } from '@/shared/utils/log-error'
 import { nativeSearch } from '@/shared/utils/native-search'
 import { parseSearchQuery } from '@/shared/utils/search-parser'
-import { MOCK_NOTE_PATHS, MOCK_SEARCH_NOTES } from '@/shared/utils/__fixtures__/search-query'
+import { MOCK_FOLDER_PATH_BY_NOTE, MOCK_SEARCH_NOTES } from '@/shared/utils/__fixtures__/search-query'
 
 import { NOTE_SORTS } from '@/shared/constants/note-sort'
 
@@ -19,7 +19,7 @@ const buildProps = (query, overrides = {}) => ({
     enabled: true,
     ast: parseSearchQuery(query),
     notes: MOCK_SEARCH_NOTES,
-    notePaths: MOCK_NOTE_PATHS,
+    folderPathByNote: MOCK_FOLDER_PATH_BY_NOTE,
     pinned: PINNED,
     matchCase: false,
     sort: NOTE_SORTS.NAME_ASC,

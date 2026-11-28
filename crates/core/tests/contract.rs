@@ -1,5 +1,7 @@
 use engine::engine::Engine;
-use engine::links::{Candidate, FolderPaths, LinkNote, NoteIndex, find_backlinks, rename_links};
+use engine::links::{
+	Candidate, FolderPathByNote, LinkNote, NoteIndex, find_backlinks, rename_links,
+};
 use engine::model::{QueryResult, SaveOutcome, SyncStats, Value};
 use engine::repository::FsRepository;
 use engine::source::{FsSink, FsSource, LocationScheme};
@@ -249,7 +251,7 @@ fn linking() -> Json {
 			aliases: Vec::new(),
 		},
 	];
-	let mut folders = FolderPaths::new();
+	let mut folders = FolderPathByNote::new();
 
 	folders.insert("root/Alpha.md".into(), String::new());
 	folders.insert("root/Beta.md".into(), String::new());

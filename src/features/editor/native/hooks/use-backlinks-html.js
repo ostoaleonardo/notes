@@ -14,7 +14,7 @@ const EMPTY_HTML = { backlinks: '', mentions: '' }
 
 export function useBacklinksHtml(id, enabled) {
     const { t } = useTranslation()
-    const { notes, notePaths } = useNotes()
+    const { notes, folderPathByNote } = useNotes()
     const [html, setHtml] = useState(EMPTY_HTML)
 
     useEffect(() => {
@@ -47,17 +47,17 @@ export function useBacklinksHtml(id, enabled) {
                     mentions,
                     t('title.unlinked_mentions'),
                     t('button.link_mention'),
-                    notePaths
+                    folderPathByNote
                 )
             }))
         }
 
         const load = async () => {
-            const backlinks = await linkIndex.findBacklinks(target || { path: id }, notes, notePaths)
+            const backlinks = await linkIndex.findBacklinks(target || { path: id }, notes, folderPathByNote)
             if (cancelled) return
 
             setHtml({
-                backlinks: buildBacklinksHtml(backlinks, t('title.backlinks'), notePaths),
+                backlinks: buildBacklinksHtml(backlinks, t('title.backlinks'), folderPathByNote),
                 mentions: ''
             })
 
@@ -70,7 +70,7 @@ export function useBacklinksHtml(id, enabled) {
             cancelled = true
             if (task !== null) cancelIdleCallback(task)
         }
-    }, [enabled, id, notes, notePaths, t])
+    }, [enabled, id, notes, folderPathByNote, t])
 
     return html.backlinks + html.mentions
 }

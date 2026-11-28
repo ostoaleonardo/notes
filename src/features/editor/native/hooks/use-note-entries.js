@@ -4,9 +4,9 @@ import { useNotes } from '@/shared/hooks/use-notes'
 import { areNoteEntriesEqual, buildNoteEntries } from '@/features/editor/shared/utils/note-entries'
 
 export function useNoteEntries() {
-    const { notes, notePaths } = useNotes()
+    const { notes, folderPathByNote } = useNotes()
     const deferredNotes = useDeferredValue(notes)
-    const deferredPaths = useDeferredValue(notePaths)
+    const deferredPaths = useDeferredValue(folderPathByNote)
     const cacheRef = useRef([])
 
     return useMemo(() => {

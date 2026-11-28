@@ -1,6 +1,6 @@
 import { getUniqueFilename, isTitleTaken } from '@/shared/utils/note-filename'
 import { logError } from '@/shared/utils/log-error'
-import { buildNotePath, buildFolderPaths } from '@/shared/utils/note-path'
+import { buildNotePath, buildFolderPathById } from '@/shared/utils/note-path'
 import { composeNoteFile, decomposeNoteFile } from '@/shared/utils/note-file-content'
 import { commitNoteVersion } from '@/shared/utils/note-versions'
 import { planExternalSync, toSyncShape } from '@/shared/utils/external-note-sync'
@@ -181,9 +181,9 @@ export const planWikiLinkRename = async ({
     targetPath,
     newTitle,
     notes,
-    notePaths,
+    folderPathByNote,
     currentNotes = notes,
-    rewriteBodies = (texts) => renameLinksInBodies({ notes, notePaths, targetPath, newTitle, bodies: texts }),
+    rewriteBodies = (texts) => renameLinksInBodies({ notes, folderPathByNote, targetPath, newTitle, bodies: texts }),
     bodies
 }) => {
     const candidates = currentNotes.filter((note) => (
@@ -294,24 +294,24 @@ export const planMovedNoteLinks = ({
     note,
     destinationId,
     notes,
-    notePaths,
+    folderPathByNote,
     folders,
     currentNotes,
     bodies
 }) => {
-    const destinationPath = buildFolderPaths(folders).get(destinationId) || ''
-    const qualifyPaths = new Map(notePaths).set(note.path, destinationPath)
+    const destinationPath = buildFolderPathById(folders).get(destinationId) || ''
+    const qualifyPaths = new Map(folderPathByNote).set(note.path, destinationPath)
 
     return planWikiLinkRename({
         targetPath: note.path,
         notes,
-        notePaths,
+        folderPathByNote,
         currentNotes,
         bodies,
         rewriteBodies: (texts) => renameLinksInBodies({
             notes,
-            notePaths: qualifyPaths,
-            resolvePaths: notePaths,
+            folderPathByNote: qualifyPaths,
+            resolvePaths: folderPathByNote,
             targetPath: note.path,
             newTitle: note.title,
             bodies: texts

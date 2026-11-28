@@ -45,7 +45,7 @@ export const createLinkIndex = ({
         return pool
     }
 
-    const findBacklinks = async (target, notes, notePaths) => {
+    const findBacklinks = async (target, notes, folderPathByNote) => {
         const startedAt = Date.now()
         const names = getNames(target)
         const pool = names.length
@@ -54,7 +54,7 @@ export const createLinkIndex = ({
         const candidates = pool ? notes.filter((note) => pool.has(note.path)) : notes
 
         const bodies = await loadBodies(candidates)
-        const linking = new Set(await verifyBacklinks({ target, notes, notePaths, candidates, bodies }))
+        const linking = new Set(await verifyBacklinks({ target, notes, folderPathByNote, candidates, bodies }))
         const backlinks = candidates.filter((note) => linking.has(note.path))
 
         bootMark(BOOT_MARKS.BACKLINKS, {
@@ -69,12 +69,12 @@ export const createLinkIndex = ({
     return { findBacklinks, selectPool, mentionCandidates, loadBodies }
 }
 
-const verifyBacklinksNatively = ({ target, notes, notePaths, candidates, bodies }) => (
+const verifyBacklinksNatively = ({ target, notes, folderPathByNote, candidates, bodies }) => (
     repositoryEngine.findBacklinkPaths(
         notes.map((note) => note.title || ''),
         notes.map(getAliases),
         notes.map((note) => note.path),
-        Object.fromEntries(notePaths),
+        Object.fromEntries(folderPathByNote),
         target.path,
         candidates.map((note) => note.path),
         candidates.map((note) => bodyOf(note, bodies))

@@ -8,7 +8,7 @@ import { getConnectionModel } from '@/shared/utils/connection-model-cache'
 const NO_FILES = []
 
 export function useConnectionModel() {
-    const { notes, notePaths } = useNotes()
+    const { notes, folderPathByNote } = useNotes()
     const { activeFolder, getRootRepository } = useFolders()
     const listFiles = useAttachmentFiles()
     const [files, setFiles] = useState(NO_FILES)
@@ -26,6 +26,6 @@ export function useConnectionModel() {
     const rootName = activeFolder ? getRootRepository(activeFolder).alias : ''
 
     return useMemo(() => (
-        getConnectionModel({ notes, notePaths, files, rootName })
-    ), [notes, notePaths, files, rootName])
+        getConnectionModel({ notes, folderPathByNote, files, rootName })
+    ), [notes, folderPathByNote, files, rootName])
 }

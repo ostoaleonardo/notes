@@ -133,7 +133,7 @@ describe('add subfolder permission', () => {
     })
 })
 
-describe('remove repository', () => {
+describe('delete folder', () => {
     test('refuses to remove a folder that is an ancestor of the active one', async () => {
         const root = { id: 'root-1', uri: 'content://root-1', parentId: null }
         const child = { id: 'child-1', uri: 'content://child-1', parentId: 'root-1' }
@@ -141,7 +141,7 @@ describe('remove repository', () => {
 
         let outcome
         await act(async () => {
-            outcome = await result.current.removeRepository('root-1')
+            outcome = await result.current.deleteFolder('root-1')
         })
 
         expect(outcome).toBe('active')
@@ -156,7 +156,7 @@ describe('remove repository', () => {
 
         let outcome
         await act(async () => {
-            outcome = await result.current.removeRepository('root-1')
+            outcome = await result.current.deleteFolder('root-1')
         })
 
         expect(outcome).toEqual(root)
@@ -174,7 +174,7 @@ describe('remove repository', () => {
 
         let outcome
         await act(async () => {
-            outcome = await result.current.removeRepository('root-1')
+            outcome = await result.current.deleteFolder('root-1')
         })
 
         expect(outcome).toBe('error')
@@ -192,7 +192,7 @@ describe('remove repository', () => {
         const { result } = await renderFoldersHook([root, child], 'root-1')
 
         await act(async () => {
-            await result.current.removeRepository('child-1')
+            await result.current.deleteFolder('child-1')
         })
 
         expect(mockFileStorage.removeFolder).toHaveBeenCalledWith({

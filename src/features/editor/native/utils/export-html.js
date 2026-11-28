@@ -19,15 +19,13 @@ import {
 } from '@/features/editor/native/constants/export'
 
 const NO_MEDIA = () => null
-const NO_URLS = new Map()
-
 export const getExportMarkdown = (
     note,
-    { notes = [], notePaths, getMediaUrl = NO_MEDIA, bodies } = {}
+    { notes = [], folderPathByNote, getMediaUrl = NO_MEDIA, bodies } = {}
 ) => {
     const embedded = resolveEmbeds(bodyOf(note, bodies), {
         notes,
-        notePaths,
+        folderPathByNote,
         getMediaUrl,
         selfPath: note.path,
         bodies
@@ -39,7 +37,7 @@ export const getExportMarkdown = (
 export const getNoteAsHtml = (
     note,
     {
-        imageUrls = NO_URLS,
+        imageUrls = new Map(),
         headingFont = getHeadingFontFamily(DEFAULT_HEADING_FONT),
         fonts,
         ...context

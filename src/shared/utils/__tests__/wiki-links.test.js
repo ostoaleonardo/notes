@@ -6,10 +6,10 @@ import {
     parseMissingWikiLinkTarget
 } from '../wiki-links'
 
-const renderLink = (value, notes, notePaths = new Map(), selfPath) => {
+const renderLink = (value, notes, folderPathByNote = new Map(), selfPath) => {
     const [, linkText, alias] = /^\[\[([^\]|]+)(?:\|([^\]]+))?\]\]$/.exec(value)
 
-    return renderWikiLink(alias, resolveWikiLinkDetails(linkText, notes, notePaths, selfPath))
+    return renderWikiLink(alias, resolveWikiLinkDetails(linkText, notes, folderPathByNote, selfPath))
 }
 
 const notes = [
@@ -98,25 +98,25 @@ describe('duplicate titles across folders', () => {
         { path: 'root-test', title: 'Test' },
         { path: 'sub-test', title: 'Test' }
     ]
-    const notePaths = new Map([
+    const folderPathByNote = new Map([
         ['root-test', ''],
         ['sub-test', 'one']
     ])
 
     test('a bare title resolves to the first candidate', () => {
-        const target = resolveWikiLinkTarget('Test', duplicateNotes, notePaths)
+        const target = resolveWikiLinkTarget('Test', duplicateNotes, folderPathByNote)
 
         expect(target.path).toBe('root-test')
     })
 
     test('a path-qualified link resolves to the note in that folder', () => {
-        const target = resolveWikiLinkTarget('one/Test', duplicateNotes, notePaths)
+        const target = resolveWikiLinkTarget('one/Test', duplicateNotes, folderPathByNote)
 
         expect(target.path).toBe('sub-test')
     })
 
     test('renders a path-qualified link to the disambiguated note', () => {
-        const result = renderLink('[[one/Test]]', duplicateNotes, notePaths)
+        const result = renderLink('[[one/Test]]', duplicateNotes, folderPathByNote)
 
         expect(result).toBe('<a href="wikilink://sub-test" class="wiki-link">Test</a>')
     })
@@ -147,22 +147,22 @@ describe('backlinks html', () => {
     })
 
     test('shows the folder path under the title when the note is not at the root', () => {
-        const notePaths = new Map([['note-1', 'one']])
+        const folderPathByNote = new Map([['note-1', 'one']])
         const result = buildBacklinksHtml(
             [{ path: 'note-1', title: 'Test' }],
             'Backlinks',
-            notePaths
+            folderPathByNote
         )
 
         expect(result).toContain('<span class="backlink-path">one</span>')
     })
 
     test('omits the path subtext for a root-level note', () => {
-        const notePaths = new Map([['note-1', '']])
+        const folderPathByNote = new Map([['note-1', '']])
         const result = buildBacklinksHtml(
             [{ path: 'note-1', title: 'Test' }],
             'Backlinks',
-            notePaths
+            folderPathByNote
         )
 
         expect(result).not.toContain('backlink-path')
@@ -195,12 +195,12 @@ describe('heading and block anchors', () => {
             { path: 'root-test', title: 'Test' },
             { path: 'sub-test', title: 'Test' }
         ]
-        const notePaths = new Map([
+        const folderPathByNote = new Map([
             ['root-test', ''],
             ['sub-test', 'one']
         ])
 
-        const target = resolveWikiLinkTarget('one/Test#Heading', duplicateNotes, notePaths)
+        const target = resolveWikiLinkTarget('one/Test#Heading', duplicateNotes, folderPathByNote)
 
         expect(target.path).toBe('sub-test')
     })

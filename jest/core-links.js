@@ -31,7 +31,7 @@ export const findBacklinkPaths = (
     candidateBodies
 ) => {
     const notes = toNotes(titles, aliases, paths)
-    const notePaths = new Map(Object.entries(folders))
+    const folderPathByNote = new Map(Object.entries(folders))
 
     return candidatePaths.filter((path, index) => {
         if (path === targetPath) return false
@@ -41,7 +41,7 @@ export const findBacklinkPaths = (
         const wiki = Array.from(body.matchAll(WIKI_LINK_PATTERN), (match) => match[1])
 
         return markdown.includes(targetPath) || wiki.some((text) => (
-            resolveWikiLinkTarget(text, notes, notePaths)?.path === targetPath
+            resolveWikiLinkTarget(text, notes, folderPathByNote)?.path === targetPath
         ))
     })
 }
@@ -51,12 +51,12 @@ export const renameWikiLinksForNote = (
     targetPath,
     newTitle,
     notes,
-    notePaths = new Map(),
-    resolvePaths = notePaths
+    folderPathByNote = new Map(),
+    resolvePaths = folderPathByNote
 ) => {
     if (!content) return content
 
-    const folderPath = notePaths.get(targetPath) || ''
+    const folderPath = folderPathByNote.get(targetPath) || ''
     const normalizedNewTitle = normalizeName(newTitle)
     const isAmbiguous = folderPath && notes.some((note) => (
         note.path !== targetPath && normalizeName(note.title || '') === normalizedNewTitle
@@ -88,10 +88,10 @@ export const renameLinksInBodies = (
     bodies
 ) => {
     const notes = toNotes(titles, aliases, paths)
-    const notePaths = new Map(Object.entries(folders))
-    const resolvePaths = resolveFolders ? new Map(Object.entries(resolveFolders)) : notePaths
+    const folderPathByNote = new Map(Object.entries(folders))
+    const resolvePaths = resolveFolders ? new Map(Object.entries(resolveFolders)) : folderPathByNote
 
     return bodies.map((body) => (
-        renameWikiLinksForNote(body, targetPath, newTitle, notes, notePaths, resolvePaths)
+        renameWikiLinksForNote(body, targetPath, newTitle, notes, folderPathByNote, resolvePaths)
     ))
 }

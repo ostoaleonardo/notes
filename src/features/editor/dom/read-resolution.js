@@ -3,8 +3,6 @@ import { parseNoteMarkdown } from '../shared/markdown-dom-render-html'
 import { EMBED_MAX_DEPTH } from '@/shared/constants/embeds'
 import { missingWikiLinkDetails } from '@/shared/utils/wiki-links'
 
-const NO_RESULTS = {}
-
 export const createReadCache = () => ({
     details: new Map(),
     media: new Map(),
@@ -14,7 +12,7 @@ export const createReadCache = () => ({
 
 const unknownOf = (items, known) => [...new Set(items)].filter((item) => !known.has(item))
 
-const ask = (items, request) => (items.length ? request(items) : Promise.resolve(NO_RESULTS))
+const ask = (items, request) => (items.length ? request(items) : Promise.resolve({}))
 
 const childrenOf = (level, cache) => [...new Set(
     level.flatMap((parsed) => parsed.embedTargets)

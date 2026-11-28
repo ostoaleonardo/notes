@@ -5,7 +5,7 @@ export const PERF_BUDGETS_MS = {
     collectTagsCold: 100,
     collectTagsSeeded: 15,
     collectTagsWarm: 20,
-    notePaths: 20,
+    folderPathByNote: 20,
     linkGraphCold: 250,
     linkGraphSeeded: 120,
     folderTree: 60,

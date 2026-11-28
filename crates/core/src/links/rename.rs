@@ -2,7 +2,7 @@ use super::constants::{
 	ALIAS_SEPARATOR, ANCHOR_LABEL_SEPARATOR, ANCHOR_SEPARATOR, LINK_CLOSE, LINK_OPEN,
 	PATH_SEPARATOR,
 };
-use super::index::{FolderPaths, NoteIndex, parse_link_text};
+use super::index::{FolderPathByNote, NoteIndex, parse_link_text};
 use crate::syntax::normalize;
 use crate::syntax::patterns::WIKI_LINK;
 
@@ -11,8 +11,8 @@ pub fn rename_links(
 	target_path: &str,
 	new_title: &str,
 	index: &NoteIndex<'_>,
-	folders: &FolderPaths,
-	resolve_folders: &FolderPaths,
+	folders: &FolderPathByNote,
+	resolve_folders: &FolderPathByNote,
 ) -> String {
 	if content.is_empty() {
 		return String::new();
