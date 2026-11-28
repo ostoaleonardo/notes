@@ -4,7 +4,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import uniffi.engine.DecomposedRecord
+import uniffi.engine.DecomposeReport
 import uniffi.engine.FileStamp
 import uniffi.engine.SaveReport
 
@@ -40,7 +40,7 @@ class NoteWritesTest {
 
     @Test
     fun `decomposed note keeps every part and null frontmatter fields`() {
-        val parts = DecomposedRecord("body", listOf("a", "b"), "{\"k\":1}", null, "raw")
+        val parts = DecomposeReport("body", listOf("a", "b"), "{\"k\":1}", null, "raw")
         val map = decomposeNoteToMap(parts)
 
         assertEquals("body", map[DecomposedKeys.BODY])

@@ -6,8 +6,8 @@ import expo.modules.kotlin.modules.ModuleDefinitionBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import uniffi.engine.MoveRequestRecord
-import uniffi.engine.RenameRequestRecord
+import uniffi.engine.MoveRequest
+import uniffi.engine.RenameRequest
 import uniffi.engine.SaveRequest
 
 internal fun ModuleDefinitionBuilder.defineNotes(runtime: RepositoryRuntime) = with(runtime) {
@@ -32,7 +32,7 @@ internal fun ModuleDefinitionBuilder.defineNotes(runtime: RepositoryRuntime) = w
             engine().let { engine ->
                 val sink = noteSinkFor(context, directoryUri)
 
-                saveReportToMap(engine.renameNote(folderId, sink, RenameRequestRecord(from, to, text, fromKey, toKey), versionsFor(rootUri)))
+                saveReportToMap(engine.renameNote(folderId, sink, RenameRequest(from, to, text, fromKey, toKey), versionsFor(rootUri)))
             }
         }
     }
@@ -77,7 +77,7 @@ internal fun ModuleDefinitionBuilder.defineNotes(runtime: RepositoryRuntime) = w
                     engine().moveNote(
                         repositoryFor(context, rootUri),
                         versionsFor(rootUri),
-                        MoveRequestRecord(filename, fromFolderId, fromPath, toFolderId, toPath),
+                        MoveRequest(filename, fromFolderId, fromPath, toFolderId, toPath),
                         noteSinkFor(context, destinationUri)
                     )
                 )

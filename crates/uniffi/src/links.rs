@@ -3,36 +3,14 @@ use engine::links::{
 };
 use std::collections::HashMap;
 
-#[derive(uniffi::Record)]
-pub struct LinkNoteRecord {
-	pub path: String,
-	pub title: String,
-	pub aliases: Vec<String>,
-}
-
-impl From<LinkNoteRecord> for LinkNote {
-	fn from(record: LinkNoteRecord) -> Self {
-		Self {
-			path: record.path,
-			title: record.title,
-			aliases: record.aliases,
-		}
-	}
-}
-
-fn notes_of(records: Vec<LinkNoteRecord>) -> Vec<LinkNote> {
-	records.into_iter().map(Into::into).collect()
-}
-
 #[uniffi::export]
 pub fn find_backlink_paths(
-	notes: Vec<LinkNoteRecord>,
+	notes: Vec<LinkNote>,
 	folders: HashMap<String, String>,
 	target_path: String,
 	candidate_paths: Vec<String>,
 	candidate_bodies: Vec<String>,
 ) -> Vec<String> {
-	let notes = notes_of(notes);
 	let index = NoteIndex::new(&notes);
 	let folders: FolderPathByNote = folders;
 
@@ -50,14 +28,13 @@ pub fn find_backlink_paths(
 
 #[uniffi::export]
 pub fn rename_links_in_bodies(
-	notes: Vec<LinkNoteRecord>,
+	notes: Vec<LinkNote>,
 	folders: HashMap<String, String>,
 	resolve_folders: Option<HashMap<String, String>>,
 	target_path: String,
 	new_title: String,
 	bodies: Vec<String>,
 ) -> Vec<String> {
-	let notes = notes_of(notes);
 	let index = NoteIndex::new(&notes);
 	let resolve = resolve_folders.as_ref().unwrap_or(&folders);
 

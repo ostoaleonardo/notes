@@ -1,7 +1,7 @@
 package com.monospace.notes.repository
 
 import expo.modules.kotlin.modules.ModuleDefinitionBuilder
-import uniffi.engine.NoteFieldsRecord
+import uniffi.engine.NoteFieldsRequest
 import uniffi.engine.composeNote
 import uniffi.engine.decomposeNote
 import uniffi.engine.sanitizeFilename
@@ -17,7 +17,7 @@ internal fun ModuleDefinitionBuilder.defineNames(runtime: RepositoryRuntime) = w
     }
 
     Function("composeNote") { tags: List<String>, propertiesJson: String, invalidFrontmatter: String?, rawFrontmatter: String?, body: String ->
-        composeNote(NoteFieldsRecord(tags, propertiesJson, invalidFrontmatter, rawFrontmatter), body)
+        composeNote(NoteFieldsRequest(tags, propertiesJson, invalidFrontmatter, rawFrontmatter), body)
     }
 
     Function("decomposeNote") { content: String ->

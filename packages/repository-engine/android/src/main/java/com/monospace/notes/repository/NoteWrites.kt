@@ -3,7 +3,7 @@ package com.monospace.notes.repository
 import android.content.Context
 import android.net.Uri
 import android.provider.DocumentsContract
-import uniffi.engine.DecomposedRecord
+import uniffi.engine.DecomposeReport
 import uniffi.engine.FileStamp
 import uniffi.engine.FsNoteSink
 import uniffi.engine.MoveReport
@@ -66,7 +66,7 @@ internal fun saveReportToMap(report: SaveReport): Map<String, Any> = when (repor
     is SaveReport.Failed -> mapOf(SaveKeys.STATUS to SaveKeys.FAILED)
 }
 
-internal fun decomposeNoteToMap(parts: DecomposedRecord): Map<String, Any?> = mapOf(
+internal fun decomposeNoteToMap(parts: DecomposeReport): Map<String, Any?> = mapOf(
     DecomposedKeys.BODY to parts.body,
     DecomposedKeys.TAGS to parts.tags,
     DecomposedKeys.PROPERTIES_JSON to parts.propertiesJson,

@@ -1,5 +1,6 @@
 use crate::constants::ERROR_PROPERTIES_NOT_OBJECT;
 use engine::error::ErrorCode;
+use engine::links::LinkNote;
 use engine::model::{self, FileStamp, IndexedNotes, SaveRequest, SourceFile, SyncStats};
 use engine::repository::{DirEntry, MoveResult};
 use engine::syntax::{Decomposed, NoteFields};
@@ -13,7 +14,7 @@ pub enum SaveReport {
 }
 
 #[derive(uniffi::Record)]
-pub struct NoteFieldsRecord {
+pub struct NoteFieldsRequest {
 	pub tags: Vec<String>,
 	pub properties_json: String,
 	pub invalid_frontmatter: Option<String>,
@@ -21,7 +22,7 @@ pub struct NoteFieldsRecord {
 }
 
 #[derive(uniffi::Record)]
-pub struct DecomposedRecord {
+pub struct DecomposeReport {
 	pub body: String,
 	pub tags: Option<Vec<String>>,
 	pub properties_json: Option<String>,
@@ -166,10 +167,10 @@ impl From<model::SaveOutcome> for SaveReport {
 	}
 }
 
-impl TryFrom<NoteFieldsRecord> for NoteFields {
+impl TryFrom<NoteFieldsRequest> for NoteFields {
 	type Error = EngineError;
 
-	fn try_from(record: NoteFieldsRecord) -> Result<Self, Self::Error> {
+	fn try_from(record: NoteFieldsRequest) -> Result<Self, Self::Error> {
 		let properties = match serde_json::from_str(&record.properties_json) {
 			Ok(serde_json::Value::Object(map)) => map,
 			_ => {
@@ -186,7 +187,7 @@ impl TryFrom<NoteFieldsRecord> for NoteFields {
 	}
 }
 
-impl From<Decomposed> for DecomposedRecord {
+impl From<Decomposed> for DecomposeReport {
 	fn from(parts: Decomposed) -> Self {
 		Self {
 			body: parts.body,
@@ -215,6 +216,13 @@ impl From<engine::ops::MoveOutcome> for MoveReport {
 			engine::ops::MoveOutcome::SourceMissing => Self::SourceMissing,
 		}
 	}
+}
+
+#[uniffi::remote(Record)]
+pub struct LinkNote {
+	pub path: String,
+	pub title: String,
+	pub aliases: Vec<String>,
 }
 
 #[uniffi::remote(Record)]
@@ -274,7 +282,7 @@ pub enum MoveResult {
 }
 
 #[derive(uniffi::Record)]
-pub struct VersionRecord {
+pub struct VersionRequest {
 	pub id: String,
 	pub title: String,
 	pub content: String,
@@ -284,7 +292,7 @@ pub struct VersionRecord {
 }
 
 #[derive(uniffi::Record)]
-pub struct MoveRequestRecord {
+pub struct MoveRequest {
 	pub filename: String,
 	pub from_folder_id: String,
 	pub from_path: String,
@@ -293,7 +301,7 @@ pub struct MoveRequestRecord {
 }
 
 #[derive(uniffi::Record)]
-pub struct RenameRequestRecord {
+pub struct RenameRequest {
 	pub from: String,
 	pub to: String,
 	pub text: String,

@@ -1,4 +1,4 @@
-use crate::records::{EngineError, VersionRecord};
+use crate::records::{EngineError, VersionRequest};
 use engine::error::Result as CoreResult;
 use engine::repository::{
 	DirEntry, MoveResult, RepositoryFiles as CoreRepositoryFiles,
@@ -171,7 +171,7 @@ impl VersionsHandle {
 		Ok(self.inner.delete(&key)?)
 	}
 
-	pub fn commit(&self, key: String, version: VersionRecord) -> Result<bool, EngineError> {
+	pub fn commit(&self, key: String, version: VersionRequest) -> Result<bool, EngineError> {
 		Ok(self.inner.commit(
 			&key,
 			&NewVersion {

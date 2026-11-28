@@ -1,3 +1,4 @@
+use crate::Engine;
 use crate::records::EngineError;
 use crate::source::{ForeignReader, NoteReader};
 use engine::engine::Engine as CoreEngine;
@@ -6,7 +7,7 @@ use engine::search::{SearchRequest, SearchSession, Warmup};
 use std::sync::Arc;
 
 #[derive(uniffi::Record)]
-pub struct SearchStepRecord {
+pub struct SearchStepReport {
 	pub folder_ids: Vec<String>,
 	pub filenames: Vec<String>,
 	pub done: bool,
@@ -19,7 +20,7 @@ pub struct SearchHandle {
 
 #[uniffi::export]
 impl SearchHandle {
-	pub fn step(&self, size: u32) -> Result<SearchStepRecord, EngineError> {
+	pub fn step(&self, size: u32) -> Result<SearchStepReport, EngineError> {
 		let step = self.inner.step(size as usize)?;
 		let (folder_ids, filenames) = step
 			.matches
@@ -27,7 +28,7 @@ impl SearchHandle {
 			.map(|note| (note.folder_id, note.filename))
 			.unzip();
 
-		Ok(SearchStepRecord {
+		Ok(SearchStepReport {
 			folder_ids,
 			filenames,
 			done: step.done,
@@ -79,4 +80,23 @@ pub fn warm(
 	let inner = engine.warm(&folder_ids, Arc::new(ForeignReader::new(reader)))?;
 
 	Ok(Arc::new(WarmHandle { inner }))
+}
+
+#[uniffi::export]
+impl Engine {
+	pub fn search(
+		&self,
+		request_json: String,
+		reader: Arc<dyn NoteReader>,
+	) -> Result<Arc<SearchHandle>, EngineError> {
+		open(&self.inner, request_json, reader)
+	}
+
+	pub fn warm(
+		&self,
+		folder_ids: Vec<String>,
+		reader: Arc<dyn NoteReader>,
+	) -> Result<Arc<WarmHandle>, EngineError> {
+		warm(&self.inner, folder_ids, reader)
+	}
 }
