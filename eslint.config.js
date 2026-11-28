@@ -12,7 +12,7 @@ const UI_FORBIDDEN_PACKAGES = [
 ]
 
 const REPOSITORY_ENGINE_PATH = {
-    name: 'repository-fs',
+    name: 'repository-engine',
     message: 'Use repositoryEngine from @/shared/utils/repository-engine: it is the only importer of the native module.'
 }
 

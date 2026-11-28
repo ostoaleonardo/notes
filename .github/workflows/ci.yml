@@ -53,5 +53,5 @@ jobs:
           tool: cargo-ndk
       - run: npx expo prebuild --platform android --no-install
       - uses: gradle/actions/setup-gradle@v6
-      - run: ./gradlew :repository-fs:testDebugUnitTest -PreactNativeArchitectures=arm64-v8a
+      - run: ./gradlew :repository-engine:testDebugUnitTest -PreactNativeArchitectures=arm64-v8a
         working-directory: android

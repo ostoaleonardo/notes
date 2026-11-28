@@ -35,4 +35,4 @@ This project uses the `test-renderer` peer dependency, never `react-test-rendere
 - `crates/core` (package `engine`) holds parsing, the index and queries; it must stay free of platform code. `crates/uniffi` only translates types for Android. See `docs/rust-engine.md`.
 - Before pushing Rust changes run `cargo fmt --all --check`, `cargo clippy --all-targets -- -D warnings` and `cargo test`. CI runs the same.
 - No literals in Rust logic: SQL and schema live in `crates/core/src/index/sql.rs`, regex and capture-group indexes in `syntax/patterns.rs`, other markers in `syntax/constants.rs`.
-- Generated bindings and shared libraries are build output (`packages/repository-fs/android/build/engine`); never commit them.
+- Generated bindings and shared libraries are build output (`packages/repository-engine/android/build/engine`); never commit them.

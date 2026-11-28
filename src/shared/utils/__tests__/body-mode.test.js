@@ -1,6 +1,6 @@
 import { createBodylessCheck } from '../body-mode'
 
-jest.mock('repository-fs', () => ({ __esModule: true, default: {} }))
+jest.mock('repository-engine', () => ({ __esModule: true, default: {} }))
 
 describe('decide whether a repository is loaded without note bodies', () => {
     test('is bodyless from the minimum number of indexed notes', async () => {

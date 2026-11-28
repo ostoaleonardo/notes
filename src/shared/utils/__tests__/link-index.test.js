@@ -1,7 +1,7 @@
 import { createLinkIndex } from '../link-index'
 import { buildNotePath } from '../note-path'
 
-jest.mock('repository-fs', () => ({ __esModule: true, default: {} }))
+jest.mock('repository-engine', () => ({ __esModule: true, default: {} }))
 
 const buildNote = (name, body = '', updatedAt = 1) => ({
     path: buildNotePath('repo', `${name}.md`),

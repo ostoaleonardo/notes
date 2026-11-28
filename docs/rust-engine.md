@@ -20,7 +20,7 @@ cargo install cargo-ndk
 
 ## Build
 
-Gradle runs `scripts/build-engine.sh` before every Android build. It writes the shared libraries and the generated Kotlin bindings to `packages/repository-fs/android/build/engine`.
+Gradle runs `scripts/build-engine.sh` before every Android build. It writes the shared libraries and the generated Kotlin bindings to `packages/repository-engine/android/build/engine`.
 
 ## Checks
 
@@ -44,8 +44,8 @@ Rust code rules: no literals in logic. SQL and schema live in `index/sql.rs`, re
 
 ```
 JS (React Native)             decides what to do, renders, orchestrates user actions
-  │  Expo module `repository-fs`
-Kotlin (packages/repository-fs)   only what needs Android APIs
+  │  Expo module `repository-engine`
+Kotlin (packages/repository-engine)   only what needs Android APIs
   │  uniffi (generated Kotlin bindings)
 crates/uniffi                 type and error translation
   │
@@ -55,7 +55,7 @@ crates/core (engine)          parsing · index · saves · links · versions · 
 ### Who owns what
 
 - **Rust (`crates/core`)**: parsing of markdown and frontmatter, the SQLite index (schema, writer, reconciliation, queries, listing), locale sort keys, indexing passes (`sync`), atomic note saves with conflict detection, frontmatter compose and decompose, wiki link resolution and rewriting, version history, and path-based repository operations (rename, move, trash, remove).
-- **Kotlin**: SAF listing and reading, resolving the direct file path when the app has all-files access, implementing the foreign traits for SAF (`ProviderNoteSource`, `ProviderNoteSink`, `ProviderRepository`), computing Android document URIs, and marshalling for Expo. `RepositoryFsModule` only wires the areas (`defineStorage`, `defineIndex`, `defineNotes`, `defineLinks`, `defineVersions`, `defineNames`, `defineSearch`), each in its own `*Definition.kt` over a shared `RepositoryRuntime` (context, engine, locks, version stores); `RepositoryIndexer` and `EngineBridge` do the indexing and engine setup.
+- **Kotlin**: SAF listing and reading, resolving the direct file path when the app has all-files access, implementing the foreign traits for SAF (`ProviderNoteSource`, `ProviderNoteSink`, `ProviderRepository`), computing Android document URIs, and marshalling for Expo. `RepositoryEngineModule` only wires the areas (`defineStorage`, `defineIndex`, `defineNotes`, `defineLinks`, `defineVersions`, `defineNames`, `defineSearch`), each in its own `*Definition.kt` over a shared `RepositoryRuntime` (context, engine, locks, version stores); `RepositoryIndexer` and `EngineBridge` do the indexing and engine setup.
 - **JS**: UI, state, deciding which action to run, the search parser (query chips), link resolution while rendering the editor, external-edit merge, templates, daily notes, attachments, export, and the in-memory note model.
 
 ### Platform seams
@@ -258,12 +258,12 @@ The evaluator keeps the semantics of the old JS one on purpose: numbers parse li
 
 Free functions: `compose_note`, `decompose_note`, `find_backlink_paths`, `rename_links_in_bodies`, `sanitize_filename`, `unique_filename`. Engine methods exported: `sync`, `sync_directory` (direct access, builds a `FsSource`), `save_note`, `save_notes`, `rename_note`, `delete_note`, `search`, `rename_folder`, `remove_folder`, `trash_note`, `move_note`, `indexed_notes`, `query`, `list_notes`, `backlink_candidates`, `mention_candidates`, `delete_folder`, `prune`.
 
-The Expo module `repository-fs` exposes to JS: `indexRepository`, `saveNote`, `saveNotes`, `renameNote`, `deleteNote`, `searchOpen(requestJson)`, `searchStep`, `searchWarm`, `searchClose`, `renameFolder`, `removeFolder`, `trashNote`, `moveNote`, `composeNote`, `decomposeNote`, `sanitizeFilename`, `uniqueFilename`, `listIndexedNotes`, `queryIndex`, `listNoteMetadata`, `findBacklinkCandidates`, `findMentionCandidates`, `findBacklinkPaths`, `renameLinksInBodies`, `pruneRepositoryIndex`, `deleteFolderIndex`, the `versions*` functions, and SAF helpers (`listDirectory`, `listDirectorySync`, `readTextFiles`, `findChild`, `listAttachments`, direct access permissions).
+The Expo module `repository-engine` exposes to JS: `indexRepository`, `saveNote`, `saveNotes`, `renameNote`, `deleteNote`, `searchOpen(requestJson)`, `searchStep`, `searchWarm`, `searchClose`, `renameFolder`, `removeFolder`, `trashNote`, `moveNote`, `composeNote`, `decomposeNote`, `sanitizeFilename`, `uniqueFilename`, `listIndexedNotes`, `queryIndex`, `listNoteMetadata`, `findBacklinkCandidates`, `findMentionCandidates`, `findBacklinkPaths`, `renameLinksInBodies`, `pruneRepositoryIndex`, `deleteFolderIndex`, the `versions*` functions, and SAF helpers (`listDirectory`, `listDirectorySync`, `readTextFiles`, `findChild`, `listAttachments`, direct access permissions).
 
 The index-changing operations (`indexRepository`, `pruneRepositoryIndex`, `deleteFolderIndex`, `renameFolder`, `removeFolder`, `trashNote`, `moveNote`) run under one lock in Kotlin so they do not interleave. The shared engine and the version stores are created once per process.
 
 ## Testing
 
 - Rust: `cargo test` runs the unit, parity, property (`proptest`) and contract tests described above.
-- Kotlin: `./gradlew :repository-fs:testDebugUnitTest -x lint -PreactNativeArchitectures=arm64-v8a` runs Robolectric tests against a fake in-memory documents provider (SAF) and temp directories (direct access).
+- Kotlin: `./gradlew :repository-engine:testDebugUnitTest -x lint -PreactNativeArchitectures=arm64-v8a` runs Robolectric tests against a fake in-memory documents provider (SAF) and temp directories (direct access).
 - JS: `npm test`.

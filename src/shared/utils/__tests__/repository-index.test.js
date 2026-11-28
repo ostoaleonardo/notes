@@ -5,7 +5,7 @@ jest.mock('../log-error', () => ({
     logError: jest.fn()
 }))
 
-jest.mock('repository-fs', () => ({
+jest.mock('repository-engine', () => ({
     __esModule: true,
     default: {}
 }))

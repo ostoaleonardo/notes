@@ -1,6 +1,6 @@
 import { createIndexQuery, toRows } from '../index-query'
 
-jest.mock('repository-fs', () => ({ __esModule: true, default: {} }))
+jest.mock('repository-engine', () => ({ __esModule: true, default: {} }))
 
 describe('index query rows', () => {
     test('turns columns into one object per row', () => {

@@ -1,5 +1,5 @@
 {
-  "name": "repository-fs",
+  "name": "repository-engine",
   "version": "1.0.0",
   "private": true,
   "main": "index.js",

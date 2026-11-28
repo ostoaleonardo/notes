@@ -1,7 +1,7 @@
 import { createNoteBodyLoader } from '../note-body'
 import { bodyOf, splitBody } from '../note-body-of'
 
-jest.mock('repository-fs', () => ({ __esModule: true, default: {} }))
+jest.mock('repository-engine', () => ({ __esModule: true, default: {} }))
 
 const bodyless = (name, updatedAt = 1) => ({
     path: `repo::${name}.md`,

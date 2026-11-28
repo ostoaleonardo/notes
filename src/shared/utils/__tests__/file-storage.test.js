@@ -1,4 +1,4 @@
-import RepositoryFs from 'repository-fs'
+import RepositoryEngine from 'repository-engine'
 import { fileStorage } from '../file-storage'
 import { logError } from '../log-error'
 import { getNoteLinkTexts } from '../note-links'
@@ -252,7 +252,7 @@ describe('renaming, moving and deleting notes', () => {
     })
 
     test('moves a note natively and maps the result', async () => {
-        const native = jest.requireMock('repository-fs').default
+        const native = jest.requireMock('repository-engine').default
 
         native.moveNote.mockResolvedValueOnce({ status: 'moved', uri: 'content://x/a.md', modified: 7 })
 
@@ -276,7 +276,7 @@ describe('renaming, moving and deleting notes', () => {
     })
 
     test('trashes a note natively into the repository trash folder', async () => {
-        const native = jest.requireMock('repository-fs').default
+        const native = jest.requireMock('repository-engine').default
 
         native.trashNote.mockResolvedValueOnce('a (2).md')
 
@@ -294,7 +294,7 @@ describe('renaming, moving and deleting notes', () => {
 
 describe('clearing a repository', () => {
     test('deletes every note and its versions but keeps other files', async () => {
-        const native = jest.requireMock('repository-fs').default
+        const native = jest.requireMock('repository-engine').default
 
         seedDir(NOTES)
         seedFile(`${FOLDER}/a.md`)
@@ -356,7 +356,7 @@ describe('notes folder json', () => {
 })
 
 describe('note versions', () => {
-    const native = jest.requireMock('repository-fs').default
+    const native = jest.requireMock('repository-engine').default
 
     test('returns an empty list when a note has no versions', async () => {
         native.versionsRead.mockResolvedValueOnce(null)
@@ -444,7 +444,7 @@ describe('directories', () => {
     })
 
     test('renames a folder through the native repository and returns its new uri', async () => {
-        const native = jest.requireMock('repository-fs').default
+        const native = jest.requireMock('repository-engine').default
 
         native.renameFolder.mockResolvedValueOnce({ path: 'renamed', uri: `${ROOT}/renamed/` })
 
@@ -461,7 +461,7 @@ describe('directories', () => {
     })
 
     test('propagates a failed folder rename', async () => {
-        const native = jest.requireMock('repository-fs').default
+        const native = jest.requireMock('repository-engine').default
 
         native.renameFolder.mockRejectedValueOnce(new Error('cannot rename'))
 
@@ -477,7 +477,7 @@ describe('directories', () => {
     })
 
     test('removes a folder natively', async () => {
-        const native = jest.requireMock('repository-fs').default
+        const native = jest.requireMock('repository-engine').default
 
         await fileStorage.removeFolder({
             rootUri: ROOT,
@@ -514,7 +514,7 @@ describe('copying images', () => {
 
 describe('looking up entries by name', () => {
     test('finds a file without listing the folder', () => {
-        const listDirectory = jest.spyOn(RepositoryFs, 'listDirectorySync')
+        const listDirectory = jest.spyOn(RepositoryEngine, 'listDirectorySync')
         seedFile(`${FOLDER}/a.md`)
 
         expect(fileStorage.findFile(FOLDER, 'a.md').name).toBe('a.md')
@@ -544,7 +544,7 @@ describe('scanning a folder', () => {
     })
 
     test('shares one listing between scans of the same folder that overlap', async () => {
-        const listDirectory = jest.spyOn(RepositoryFs, 'listDirectory')
+        const listDirectory = jest.spyOn(RepositoryEngine, 'listDirectory')
         seedFile(`${FOLDER}/a.md`)
 
         await Promise.all([

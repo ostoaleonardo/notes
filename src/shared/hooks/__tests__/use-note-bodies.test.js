@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react-native'
 
 import { useNoteBodies } from '../use-note-bodies'
 
-jest.mock('repository-fs', () => ({ __esModule: true, default: {} }))
+jest.mock('repository-engine', () => ({ __esModule: true, default: {} }))
 
 const NOTES = [{ path: 'a' }]
 

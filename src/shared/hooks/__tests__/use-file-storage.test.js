@@ -257,7 +257,7 @@ describe('rename note file', () => {
 })
 
 describe('native note moves', () => {
-    const native = jest.requireMock('repository-fs').default
+    const native = jest.requireMock('repository-engine').default
 
     test('moves a note through the native repository', async () => {
         const { result } = await renderFileStorageHook()
@@ -327,7 +327,7 @@ describe('notes folder', () => {
 })
 
 describe('versions', () => {
-    const native = jest.requireMock('repository-fs').default
+    const native = jest.requireMock('repository-engine').default
 
     test('writes and reads the versions of a note through the native repository', async () => {
         const { result } = await renderFileStorageHook()
@@ -348,7 +348,7 @@ describe('versions', () => {
 
 describe('clear repository', () => {
     test('deletes every note and its versions', async () => {
-        const native = jest.requireMock('repository-fs').default
+        const native = jest.requireMock('repository-engine').default
         const { result } = await renderFileStorageHook()
 
         seedDirectory('content://root', [])
@@ -437,7 +437,7 @@ describe('delete directory', () => {
 })
 
 describe('rename folder', () => {
-    const native = jest.requireMock('repository-fs').default
+    const native = jest.requireMock('repository-engine').default
     const request = {
         rootUri: 'content://root',
         path: 'Old',
