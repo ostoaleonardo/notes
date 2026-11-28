@@ -3,9 +3,9 @@ import { BackHandler } from 'react-native'
 import { SlideInLeft, SlideInRight } from 'react-native-reanimated'
 import { useTranslation } from 'react-i18next'
 
-import { RenameRepository } from '@/screens/dialogs/rename-repository'
+import { RenameFolderDialog } from '@/shared/components/rename-folder-dialog'
 import { AddSubfolder } from '@/features/drawer/screens/dialogs/add-subfolder'
-import { DeleteRepository } from '@/screens/dialogs/delete-repository'
+import { DeleteFolderDialog } from '@/shared/components/delete-folder-dialog'
 import { DrawerView } from './drawer-view'
 import { DrawerNotesEmpty } from './drawer-empty'
 import { DrawerSortMenu } from './drawer-sort-menu'
@@ -260,7 +260,7 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
                 listEntering={ENTERINGS[direction.current]}
             />
 
-            <RenameRepository
+            <RenameFolderDialog
                 visible={!!editFolderId}
                 folderId={editFolderId}
                 onDismiss={onDismissEdit}
@@ -270,7 +270,7 @@ export const DrawerNotesView = ({ closeDrawer, drawerOpen }) => {
                 parentId={subfolderParentId}
                 onDismiss={onDismissSubfolder}
             />
-            <DeleteRepository
+            <DeleteFolderDialog
                 visible={!!deleteId}
                 folderId={deleteId}
                 onDismiss={onDismissDelete}

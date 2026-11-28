@@ -19,7 +19,6 @@ const REPOSITORY_ENGINE_PATH = {
 const UI_APP_FOLDERS = [
     '@/shared/**',
     '@/features/**',
-    '@/screens/**',
     '@/icons/**',
     '@/i18n/**',
     '@/translations/**'
@@ -43,7 +42,7 @@ const DOM_FORBIDDEN_PATTERNS = [
             '@/shared/hooks/**',
             '!@/shared/hooks/use-memo-by-deps',
             '@/shared/context/**',
-            '@/screens/**'
+            '@/shared/components/**'
         ],
         message: 'DOM and shared editor code run in the WebView: it cannot import app (React Native) code.'
     },
@@ -105,7 +104,6 @@ module.exports = [
     {
         files: [
             'src/shared/**/*.js',
-            'src/screens/**/*.js',
             'app/**/*.js',
             'src/features/!(editor)/**/*.js',
             'src/features/editor/native/**/*.js'

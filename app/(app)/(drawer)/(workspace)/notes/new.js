@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 
 import { NoteEditorScreen } from '@/features/editor/native/screens/notes/note-editor-screen'
-import { RenameLinksDialog } from '@/screens/dialogs/rename-links-dialog'
+import { RenameLinksDialog } from '@/features/editor/native/screens/notes/rename-links-dialog'
 
 import { useAutosave } from '@/shared/hooks/use-autosave'
 import { useNoteDraft } from '@/shared/hooks/use-note-draft'

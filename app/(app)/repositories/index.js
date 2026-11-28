@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { RepositoryItem } from '@/features/repositories/screens/repositories/repository-item'
-import { DeleteRepository } from '@/screens/dialogs/delete-repository'
-import { ForgetRepository } from '@/screens/dialogs/forget-repository'
-import { RenameRepository } from '@/screens/dialogs/rename-repository'
+import { DeleteFolderDialog } from '@/shared/components/delete-folder-dialog'
+import { ForgetRepositoryDialog } from '@/features/repositories/screens/repositories/forget-repository-dialog'
+import { RenameFolderDialog } from '@/shared/components/rename-folder-dialog'
 import { AnimatedList } from '@/ui/animated/animated-list'
 import { FloatingActionButton } from '@/ui/button/floating-action-button'
 import { GroupedList } from '@/ui/grouped-list'
@@ -116,17 +116,17 @@ export default function Repositories() {
                 testID={TEST_IDS.REPOSITORIES_ADD}
             />
 
-            <RenameRepository
+            <RenameFolderDialog
                 visible={!!renameId}
                 folderId={renameId}
                 onDismiss={onDismissRename}
             />
-            <ForgetRepository
+            <ForgetRepositoryDialog
                 visible={!!forgetId}
                 folderId={forgetId}
                 onDismiss={onDismissForget}
             />
-            <DeleteRepository
+            <DeleteFolderDialog
                 visible={!!deleteId}
                 folderId={deleteId}
                 onDismiss={onDismissDelete}

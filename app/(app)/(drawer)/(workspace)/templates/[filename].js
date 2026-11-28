@@ -4,7 +4,7 @@ import { router, useLocalSearchParams } from 'expo-router'
 
 import { EditorShell } from '@/features/editor/native/screens/notes/editor-shell'
 import { TemplateEditorForm } from '@/features/templates/screens/templates/template-editor-form'
-import { TemplatePlaceholders } from '@/screens/dialogs/template-placeholders'
+import { TemplatePlaceholdersDialog } from '@/features/templates/screens/templates/template-placeholders-dialog'
 import { LoadingOverlay } from '@/ui/layout'
 import { ConfirmDialog } from '@/shared/components/confirm-dialog'
 import { showSnackbar } from '@/ui/snackbar/snackbar-host'
@@ -170,7 +170,7 @@ export default function EditTemplate() {
             versionHistory={versionHistory}
             sheets={(
                 <>
-                    <TemplatePlaceholders
+                    <TemplatePlaceholdersDialog
                         visible={placeholdersVisible}
                         onDismiss={onClosePlaceholders}
                     />

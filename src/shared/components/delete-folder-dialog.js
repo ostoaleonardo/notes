@@ -9,7 +9,7 @@ import { useFolders } from '@/shared/hooks/use-folders'
 import { FEEDBACK_TYPES } from '@/shared/constants/feedback-types'
 import { REPOSITORY_RESULTS } from '@/shared/constants/repository-results'
 
-export const DeleteRepository = ({
+export const DeleteFolderDialog = ({
     visible,
     onDismiss,
     folderId

@@ -7,7 +7,7 @@ import { useFolders } from '@/shared/hooks/use-folders'
 
 import { FEEDBACK_TYPES } from '@/shared/constants/feedback-types'
 
-export const ForgetRepository = ({
+export const ForgetRepositoryDialog = ({
     visible,
     onDismiss,
     folderId
