@@ -106,7 +106,8 @@
 				"ntype82": "フォント 1",
 				"geist": "フォント 2",
 				"description": "見出しに使うフォント"
-			}
+			},
+			"language_system": "システムのデフォルト"
 		},
 		"pro": "Pro にアップグレード",
 		"about": {
@@ -168,6 +169,9 @@
 				"title": "インラインタイトル",
 				"on": "オン",
 				"off": "オフ"
+			},
+			"autocorrect": {
+				"title": "自動修正"
 			}
 		},
 		"daily_note": {
@@ -214,6 +218,33 @@
 				"title": "すべてのファイルへのアクセス",
 				"granted": "許可済み。大きなリポジトリをより速く読み込めます。",
 				"denied": "未許可。許可すると大きなリポジトリをより速く読み込めます。"
+			}
+		},
+		"history": {
+			"title": "バージョン履歴",
+			"interval": {
+				"title": "バージョンの保存間隔",
+				"value_one": "{{count}}分",
+				"value_other": "{{count}}分"
+			},
+			"retention": {
+				"title": "バージョンの保持期間",
+				"zero": "期限なし",
+				"value_one": "{{count}}日",
+				"value_other": "{{count}}日"
+			},
+			"max": {
+				"title": "メモごとの保持数",
+				"value_one": "{{count}}件",
+				"value_other": "{{count}}件"
+			}
+		},
+		"widgets": {
+			"title": "ウィジェット",
+			"glass": {
+				"title": "ガラス効果",
+				"description": "半透明のウィジェット背景",
+				"opacity": "不透明度"
 			}
 		}
 	},
@@ -279,7 +310,11 @@
 		"dont_update": "スキップ",
 		"update_once": "今回のみ更新",
 		"update_always": "常に更新",
-		"move": "移動先"
+		"move": "移動先",
+		"random_note": "ランダムなメモ",
+		"previous_daily": "前のデイリーノート",
+		"next_daily": "次のデイリーノート",
+		"clear": "クリア"
 	},
 	"count": {
 		"notes_one": "{{count}} 件のメモ",
@@ -557,5 +592,34 @@
 	"direct_access": {
 		"title": "より高速に読み込み",
 		"message": "すべてのファイルへのアクセスを許可すると、大きなリポジトリをより速く読み込めます。許可しなくても Notes は動作します。"
+	},
+	"templates": {
+		"names": {
+			"journal": "日記",
+			"checklist": "チェックリスト",
+			"meeting": "会議",
+			"ideas": "ブレインストーミング",
+			"goals": "目標"
+		},
+		"new": "新しいテンプレート",
+		"import": "インポート",
+		"save": {
+			"success": "テンプレートを保存しました",
+			"failed": "テンプレートを保存できませんでした"
+		},
+		"delete": {
+			"title": "テンプレートを削除",
+			"failed": "テンプレートを削除できませんでした",
+			"message": "このテンプレートはデバイスから完全に削除されます。"
+		},
+		"placeholders": {
+			"title": "メモのタイトル",
+			"view": "使用できる変数を表示",
+			"heading": "使用できる変数",
+			"date": "現在の日付",
+			"time": "現在の時刻",
+			"example": "例: {{value}}",
+			"title_example": "会議メモ"
+		}
 	}
 }

@@ -106,7 +106,8 @@
 				"ntype82": "Yazı tipi 1",
 				"geist": "Yazı tipi 2",
 				"description": "Başlıklarda kullanılan yazı tipi"
-			}
+			},
+			"language_system": "Sistem varsayılanı"
 		},
 		"pro": "Pro'ya yükselt",
 		"about": {
@@ -168,6 +169,9 @@
 				"title": "Satır içi başlık",
 				"on": "Açık",
 				"off": "Kapalı"
+			},
+			"autocorrect": {
+				"title": "Otomatik düzeltme"
 			}
 		},
 		"daily_note": {
@@ -214,6 +218,33 @@
 				"title": "Tüm dosyalara erişim",
 				"granted": "İzin verildi. Büyük depolar daha hızlı yüklenir.",
 				"denied": "İzin verilmedi. Büyük depoların daha hızlı yüklenmesi için izin verin."
+			}
+		},
+		"history": {
+			"title": "Sürüm geçmişi",
+			"interval": {
+				"title": "Sürüm kaydetme aralığı",
+				"value_one": "{{count}} dakika",
+				"value_other": "{{count}} dakika"
+			},
+			"retention": {
+				"title": "Sürümleri saklama süresi",
+				"zero": "Süre sınırı yok",
+				"value_one": "{{count}} gün",
+				"value_other": "{{count}} gün"
+			},
+			"max": {
+				"title": "Not başına saklanan sürüm",
+				"value_one": "{{count}} sürüm",
+				"value_other": "{{count}} sürüm"
+			}
+		},
+		"widgets": {
+			"title": "Widget'lar",
+			"glass": {
+				"title": "Cam efekti",
+				"description": "Yarı saydam widget arka planı",
+				"opacity": "Opaklık"
 			}
 		}
 	},
@@ -279,7 +310,11 @@
 		"dont_update": "Atla",
 		"update_once": "Bir kez güncelle",
 		"update_always": "Her zaman güncelle",
-		"move": "Şuraya taşı"
+		"move": "Şuraya taşı",
+		"random_note": "Rastgele not",
+		"previous_daily": "Önceki günlük not",
+		"next_daily": "Sonraki günlük not",
+		"clear": "Temizle"
 	},
 	"count": {
 		"notes_one": "{{count}} not",
@@ -557,5 +592,34 @@
 	"direct_access": {
 		"title": "Daha hızlı yükleme",
 		"message": "Büyük depoların daha hızlı yüklenmesi için tüm dosyalara erişime izin verin. Notes bunsuz da çalışır."
+	},
+	"templates": {
+		"names": {
+			"journal": "Günlük",
+			"checklist": "Kontrol listesi",
+			"meeting": "Toplantı",
+			"ideas": "Beyin fırtınası",
+			"goals": "Hedef"
+		},
+		"new": "Yeni şablon",
+		"import": "İçe aktar",
+		"save": {
+			"success": "Şablon kaydedildi",
+			"failed": "Şablon kaydedilemedi"
+		},
+		"delete": {
+			"title": "Şablonu sil",
+			"failed": "Şablon silinemedi",
+			"message": "Bu şablon cihazınızdan kalıcı olarak silinecek."
+		},
+		"placeholders": {
+			"title": "Not başlığı",
+			"view": "Kullanılabilir değişkenleri görüntüle",
+			"heading": "Kullanılabilir değişkenler",
+			"date": "Geçerli tarih",
+			"time": "Geçerli saat",
+			"example": "ör. {{value}}",
+			"title_example": "Toplantı notları"
+		}
 	}
 }

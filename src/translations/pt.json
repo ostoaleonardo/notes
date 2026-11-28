@@ -227,6 +227,25 @@
 				"granted": "Permitido. Repositórios grandes carregam mais rápido.",
 				"denied": "Não permitido. Permita para que repositórios grandes carreguem mais rápido."
 			}
+		},
+		"history": {
+			"title": "Histórico de versões",
+			"interval": {
+				"title": "Salvar uma versão a cada",
+				"value_one": "{{count}} minuto",
+				"value_other": "{{count}} minutos"
+			},
+			"retention": {
+				"title": "Manter versões por",
+				"zero": "Sem limite de tempo",
+				"value_one": "{{count}} dia",
+				"value_other": "{{count}} dias"
+			},
+			"max": {
+				"title": "Versões mantidas por nota",
+				"value_one": "{{count}} versão",
+				"value_other": "{{count}} versões"
+			}
 		}
 	},
 	"pro": {
@@ -291,7 +310,11 @@
 		"dont_update": "Ignorar",
 		"update_once": "Atualizar uma vez",
 		"update_always": "Sempre atualizar",
-		"move": "Mover para"
+		"move": "Mover para",
+		"random_note": "Nota aleatória",
+		"previous_daily": "Nota diária anterior",
+		"next_daily": "Próxima nota diária",
+		"clear": "Limpar"
 	},
 	"count": {
 		"notes_one": "{{count}} nota",
@@ -569,5 +592,34 @@
 	"direct_access": {
 		"title": "Carregamento mais rápido",
 		"message": "Permita o acesso a todos os arquivos para que repositórios grandes carreguem mais rápido. O Notes funciona sem isso."
+	},
+	"templates": {
+		"names": {
+			"journal": "Diário",
+			"checklist": "Lista de verificação",
+			"meeting": "Reunião",
+			"ideas": "Ideias",
+			"goals": "Meta"
+		},
+		"new": "Novo modelo",
+		"import": "Importar",
+		"save": {
+			"success": "Modelo salvo",
+			"failed": "Não foi possível salvar o modelo"
+		},
+		"delete": {
+			"title": "Excluir modelo",
+			"failed": "Não foi possível excluir o modelo",
+			"message": "Isso excluirá permanentemente este modelo do seu dispositivo."
+		},
+		"placeholders": {
+			"title": "Título da nota",
+			"view": "Ver variáveis disponíveis",
+			"heading": "Variáveis disponíveis",
+			"date": "Data atual",
+			"time": "Hora atual",
+			"example": "ex.: {{value}}",
+			"title_example": "Notas da reunião"
+		}
 	}
 }

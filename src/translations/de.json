@@ -106,7 +106,8 @@
 				"ntype82": "Schrift 1",
 				"geist": "Schrift 2",
 				"description": "Schrift für Überschriften"
-			}
+			},
+			"language_system": "Systemstandard"
 		},
 		"pro": "Auf Pro upgraden",
 		"about": {
@@ -168,6 +169,9 @@
 				"title": "Titel im Text",
 				"on": "An",
 				"off": "Aus"
+			},
+			"autocorrect": {
+				"title": "Autokorrektur"
 			}
 		},
 		"daily_note": {
@@ -214,6 +218,33 @@
 				"title": "Zugriff auf alle Dateien",
 				"granted": "Erlaubt. Große Repositorys laden schneller.",
 				"denied": "Nicht erlaubt. Erlaube es, damit große Repositorys schneller laden."
+			}
+		},
+		"history": {
+			"title": "Versionsverlauf",
+			"interval": {
+				"title": "Version speichern alle",
+				"value_one": "{{count}} Minute",
+				"value_other": "{{count}} Minuten"
+			},
+			"retention": {
+				"title": "Versionen behalten für",
+				"zero": "Ohne Zeitlimit",
+				"value_one": "{{count}} Tag",
+				"value_other": "{{count}} Tage"
+			},
+			"max": {
+				"title": "Versionen pro Notiz",
+				"value_one": "{{count}} Version",
+				"value_other": "{{count}} Versionen"
+			}
+		},
+		"widgets": {
+			"title": "Widgets",
+			"glass": {
+				"title": "Glaseffekt",
+				"description": "Durchscheinender Widget-Hintergrund",
+				"opacity": "Deckkraft"
 			}
 		}
 	},
@@ -279,7 +310,11 @@
 		"dont_update": "Überspringen",
 		"update_once": "Einmal aktualisieren",
 		"update_always": "Immer aktualisieren",
-		"move": "Verschieben nach"
+		"move": "Verschieben nach",
+		"random_note": "Zufällige Notiz",
+		"previous_daily": "Vorherige tägliche Notiz",
+		"next_daily": "Nächste tägliche Notiz",
+		"clear": "Leeren"
 	},
 	"count": {
 		"notes_one": "{{count}} Notiz",
@@ -557,5 +592,34 @@
 	"direct_access": {
 		"title": "Schnelleres Laden",
 		"message": "Erlaube den Zugriff auf alle Dateien, damit große Repositorys schneller laden. Notes funktioniert auch ohne."
+	},
+	"templates": {
+		"names": {
+			"journal": "Tagebuch",
+			"checklist": "Checkliste",
+			"meeting": "Besprechung",
+			"ideas": "Brainstorming",
+			"goals": "Ziel"
+		},
+		"new": "Neue Vorlage",
+		"import": "Importieren",
+		"save": {
+			"success": "Vorlage gespeichert",
+			"failed": "Vorlage konnte nicht gespeichert werden"
+		},
+		"delete": {
+			"title": "Vorlage löschen",
+			"failed": "Vorlage konnte nicht gelöscht werden",
+			"message": "Diese Vorlage wird dauerhaft von deinem Gerät gelöscht."
+		},
+		"placeholders": {
+			"title": "Notiztitel",
+			"view": "Verfügbare Variablen anzeigen",
+			"heading": "Verfügbare Variablen",
+			"date": "Aktuelles Datum",
+			"time": "Aktuelle Uhrzeit",
+			"example": "z. B. {{value}}",
+			"title_example": "Besprechungsnotizen"
+		}
 	}
 }

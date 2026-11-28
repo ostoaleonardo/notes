@@ -106,7 +106,8 @@
 				"ntype82": "글꼴 1",
 				"geist": "글꼴 2",
 				"description": "제목에 사용하는 글꼴"
-			}
+			},
+			"language_system": "시스템 기본값"
 		},
 		"pro": "Pro로 업그레이드",
 		"about": {
@@ -168,6 +169,9 @@
 				"title": "인라인 제목",
 				"on": "켜짐",
 				"off": "꺼짐"
+			},
+			"autocorrect": {
+				"title": "자동 수정"
 			}
 		},
 		"daily_note": {
@@ -214,6 +218,33 @@
 				"title": "모든 파일에 대한 접근",
 				"granted": "허용됨. 큰 저장소를 더 빠르게 불러옵니다.",
 				"denied": "허용 안 됨. 허용하면 큰 저장소를 더 빠르게 불러옵니다."
+			}
+		},
+		"history": {
+			"title": "버전 기록",
+			"interval": {
+				"title": "버전 저장 간격",
+				"value_one": "{{count}}분",
+				"value_other": "{{count}}분"
+			},
+			"retention": {
+				"title": "버전 보관 기간",
+				"zero": "기간 제한 없음",
+				"value_one": "{{count}}일",
+				"value_other": "{{count}}일"
+			},
+			"max": {
+				"title": "노트별 보관 버전 수",
+				"value_one": "{{count}}개",
+				"value_other": "{{count}}개"
+			}
+		},
+		"widgets": {
+			"title": "위젯",
+			"glass": {
+				"title": "유리 효과",
+				"description": "반투명 위젯 배경",
+				"opacity": "불투명도"
 			}
 		}
 	},
@@ -279,7 +310,11 @@
 		"dont_update": "건너뛰기",
 		"update_once": "한 번만 업데이트",
 		"update_always": "항상 업데이트",
-		"move": "이동할 위치"
+		"move": "이동할 위치",
+		"random_note": "무작위 노트",
+		"previous_daily": "이전 데일리 노트",
+		"next_daily": "다음 데일리 노트",
+		"clear": "지우기"
 	},
 	"count": {
 		"notes_one": "노트 {{count}}개",
@@ -557,5 +592,34 @@
 	"direct_access": {
 		"title": "더 빠른 로딩",
 		"message": "모든 파일에 대한 접근을 허용하면 큰 저장소를 더 빠르게 불러옵니다. 허용하지 않아도 Notes는 작동합니다."
+	},
+	"templates": {
+		"names": {
+			"journal": "일기",
+			"checklist": "체크리스트",
+			"meeting": "회의",
+			"ideas": "브레인스토밍",
+			"goals": "목표"
+		},
+		"new": "새 템플릿",
+		"import": "가져오기",
+		"save": {
+			"success": "템플릿을 저장했습니다",
+			"failed": "템플릿을 저장할 수 없습니다"
+		},
+		"delete": {
+			"title": "템플릿 삭제",
+			"failed": "템플릿을 삭제할 수 없습니다",
+			"message": "이 템플릿이 기기에서 영구적으로 삭제됩니다."
+		},
+		"placeholders": {
+			"title": "노트 제목",
+			"view": "사용 가능한 변수 보기",
+			"heading": "사용 가능한 변수",
+			"date": "현재 날짜",
+			"time": "현재 시간",
+			"example": "예: {{value}}",
+			"title_example": "회의록"
+		}
 	}
 }

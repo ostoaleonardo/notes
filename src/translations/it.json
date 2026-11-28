@@ -106,7 +106,8 @@
 				"ntype82": "Carattere 1",
 				"geist": "Carattere 2",
 				"description": "Carattere usato per i titoli"
-			}
+			},
+			"language_system": "Predefinita di sistema"
 		},
 		"pro": "Passa a Pro",
 		"about": {
@@ -168,6 +169,9 @@
 				"title": "Titolo in linea",
 				"on": "Attivo",
 				"off": "Disattivo"
+			},
+			"autocorrect": {
+				"title": "Correzione automatica"
 			}
 		},
 		"daily_note": {
@@ -214,6 +218,33 @@
 				"title": "Accesso a tutti i file",
 				"granted": "Consentito. I repository grandi si caricano più velocemente.",
 				"denied": "Non consentito. Consentilo per caricare più velocemente i repository grandi."
+			}
+		},
+		"history": {
+			"title": "Cronologia versioni",
+			"interval": {
+				"title": "Salva una versione ogni",
+				"value_one": "{{count}} minuto",
+				"value_other": "{{count}} minuti"
+			},
+			"retention": {
+				"title": "Conserva le versioni per",
+				"zero": "Nessun limite di tempo",
+				"value_one": "{{count}} giorno",
+				"value_other": "{{count}} giorni"
+			},
+			"max": {
+				"title": "Versioni conservate per nota",
+				"value_one": "{{count}} versione",
+				"value_other": "{{count}} versioni"
+			}
+		},
+		"widgets": {
+			"title": "Widget",
+			"glass": {
+				"title": "Effetto vetro",
+				"description": "Sfondo del widget traslucido",
+				"opacity": "Opacità"
 			}
 		}
 	},
@@ -279,7 +310,11 @@
 		"dont_update": "Salta",
 		"update_once": "Aggiorna una volta",
 		"update_always": "Aggiorna sempre",
-		"move": "Sposta in"
+		"move": "Sposta in",
+		"random_note": "Nota casuale",
+		"previous_daily": "Nota giornaliera precedente",
+		"next_daily": "Nota giornaliera successiva",
+		"clear": "Cancella"
 	},
 	"count": {
 		"notes_one": "{{count}} nota",
@@ -557,5 +592,34 @@
 	"direct_access": {
 		"title": "Caricamento più veloce",
 		"message": "Consenti l'accesso a tutti i file per caricare più velocemente i repository grandi. Notes funziona anche senza."
+	},
+	"templates": {
+		"names": {
+			"journal": "Diario",
+			"checklist": "Lista di controllo",
+			"meeting": "Riunione",
+			"ideas": "Brainstorming",
+			"goals": "Obiettivo"
+		},
+		"new": "Nuovo modello",
+		"import": "Importa",
+		"save": {
+			"success": "Modello salvato",
+			"failed": "Impossibile salvare il modello"
+		},
+		"delete": {
+			"title": "Elimina modello",
+			"failed": "Impossibile eliminare il modello",
+			"message": "Questo modello verrà eliminato definitivamente dal tuo dispositivo."
+		},
+		"placeholders": {
+			"title": "Titolo della nota",
+			"view": "Mostra le variabili disponibili",
+			"heading": "Variabili disponibili",
+			"date": "Data corrente",
+			"time": "Ora corrente",
+			"example": "es. {{value}}",
+			"title_example": "Appunti della riunione"
+		}
 	}
 }

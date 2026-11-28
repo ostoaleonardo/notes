@@ -106,7 +106,8 @@
 				"ntype82": "Police 1",
 				"geist": "Police 2",
 				"description": "Police utilisée pour les titres"
-			}
+			},
+			"language_system": "Par défaut du système"
 		},
 		"pro": "Passer à Pro",
 		"about": {
@@ -168,6 +169,9 @@
 				"title": "Titre intégré",
 				"on": "Activé",
 				"off": "Désactivé"
+			},
+			"autocorrect": {
+				"title": "Correction automatique"
 			}
 		},
 		"daily_note": {
@@ -214,6 +218,33 @@
 				"title": "Accès à tous les fichiers",
 				"granted": "Autorisé. Les grands dépôts se chargent plus vite.",
 				"denied": "Non autorisé. Autorisez-le pour charger plus vite les grands dépôts."
+			}
+		},
+		"history": {
+			"title": "Historique des versions",
+			"interval": {
+				"title": "Enregistrer une version toutes les",
+				"value_one": "{{count}} minute",
+				"value_other": "{{count}} minutes"
+			},
+			"retention": {
+				"title": "Conserver les versions pendant",
+				"zero": "Sans limite de temps",
+				"value_one": "{{count}} jour",
+				"value_other": "{{count}} jours"
+			},
+			"max": {
+				"title": "Versions conservées par note",
+				"value_one": "{{count}} version",
+				"value_other": "{{count}} versions"
+			}
+		},
+		"widgets": {
+			"title": "Widgets",
+			"glass": {
+				"title": "Effet verre",
+				"description": "Arrière-plan de widget translucide",
+				"opacity": "Opacité"
 			}
 		}
 	},
@@ -279,7 +310,11 @@
 		"dont_update": "Ignorer",
 		"update_once": "Mettre à jour une fois",
 		"update_always": "Toujours mettre à jour",
-		"move": "Déplacer vers"
+		"move": "Déplacer vers",
+		"random_note": "Note aléatoire",
+		"previous_daily": "Note quotidienne précédente",
+		"next_daily": "Note quotidienne suivante",
+		"clear": "Effacer"
 	},
 	"count": {
 		"notes_one": "{{count}} note",
@@ -557,5 +592,34 @@
 	"direct_access": {
 		"title": "Chargement plus rapide",
 		"message": "Autorisez l'accès à tous les fichiers pour charger plus vite les grands dépôts. Notes fonctionne sans."
+	},
+	"templates": {
+		"names": {
+			"journal": "Journal",
+			"checklist": "Liste de contrôle",
+			"meeting": "Réunion",
+			"ideas": "Remue-méninges",
+			"goals": "Objectif"
+		},
+		"new": "Nouveau modèle",
+		"import": "Importer",
+		"save": {
+			"success": "Modèle enregistré",
+			"failed": "Impossible d'enregistrer le modèle"
+		},
+		"delete": {
+			"title": "Supprimer le modèle",
+			"failed": "Impossible de supprimer le modèle",
+			"message": "Ce modèle sera définitivement supprimé de votre appareil."
+		},
+		"placeholders": {
+			"title": "Titre de la note",
+			"view": "Voir les variables disponibles",
+			"heading": "Variables disponibles",
+			"date": "Date actuelle",
+			"time": "Heure actuelle",
+			"example": "ex. {{value}}",
+			"title_example": "Notes de réunion"
+		}
 	}
 }

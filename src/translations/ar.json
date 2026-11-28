@@ -106,7 +106,8 @@
 				"ntype82": "الخط 1",
 				"geist": "الخط 2",
 				"description": "الخط المستخدم في العناوين"
-			}
+			},
+			"language_system": "الافتراضي للنظام"
 		},
 		"pro": "الترقية إلى Pro",
 		"about": {
@@ -168,6 +169,9 @@
 				"title": "العنوان المضمّن",
 				"on": "تشغيل",
 				"off": "إيقاف"
+			},
+			"autocorrect": {
+				"title": "التصحيح التلقائي"
 			}
 		},
 		"daily_note": {
@@ -214,6 +218,45 @@
 				"title": "الوصول إلى جميع الملفات",
 				"granted": "مسموح. تُحمَّل المستودعات الكبيرة بشكل أسرع.",
 				"denied": "غير مسموح. اسمح به لتحميل المستودعات الكبيرة بشكل أسرع."
+			}
+		},
+		"history": {
+			"title": "سجل الإصدارات",
+			"interval": {
+				"title": "حفظ إصدار كل",
+				"value_zero": "{{count}} دقيقة",
+				"value_one": "{{count}} دقيقة",
+				"value_two": "{{count}} دقيقتان",
+				"value_few": "{{count}} دقائق",
+				"value_many": "{{count}} دقيقة",
+				"value_other": "{{count}} دقيقة"
+			},
+			"retention": {
+				"title": "الاحتفاظ بالإصدارات لمدة",
+				"zero": "بلا حد زمني",
+				"value_zero": "{{count}} يوم",
+				"value_one": "{{count}} يوم",
+				"value_two": "{{count}} يومان",
+				"value_few": "{{count}} أيام",
+				"value_many": "{{count}} يومًا",
+				"value_other": "{{count}} يوم"
+			},
+			"max": {
+				"title": "الإصدارات المحفوظة لكل ملاحظة",
+				"value_zero": "{{count}} إصدار",
+				"value_one": "{{count}} إصدار",
+				"value_two": "{{count}} إصداران",
+				"value_few": "{{count}} إصدارات",
+				"value_many": "{{count}} إصدارًا",
+				"value_other": "{{count}} إصدار"
+			}
+		},
+		"widgets": {
+			"title": "الأدوات",
+			"glass": {
+				"title": "تأثير الزجاج",
+				"description": "خلفية أداة شبه شفافة",
+				"opacity": "العتامة"
 			}
 		}
 	},
@@ -279,7 +322,11 @@
 		"dont_update": "تخطي",
 		"update_once": "التحديث مرة واحدة",
 		"update_always": "التحديث دائمًا",
-		"move": "نقل إلى"
+		"move": "نقل إلى",
+		"random_note": "ملاحظة عشوائية",
+		"previous_daily": "الملاحظة اليومية السابقة",
+		"next_daily": "الملاحظة اليومية التالية",
+		"clear": "مسح"
 	},
 	"count": {
 		"notes_one": "{{count}} ملاحظة",
@@ -577,5 +624,34 @@
 	"direct_access": {
 		"title": "تحميل أسرع",
 		"message": "اسمح بالوصول إلى جميع الملفات لتحميل المستودعات الكبيرة بشكل أسرع. يعمل Notes بدونه."
+	},
+	"templates": {
+		"names": {
+			"journal": "يوميات",
+			"checklist": "قائمة مهام",
+			"meeting": "اجتماع",
+			"ideas": "عصف ذهني",
+			"goals": "هدف"
+		},
+		"new": "قالب جديد",
+		"import": "استيراد",
+		"save": {
+			"success": "تم حفظ القالب",
+			"failed": "تعذّر حفظ القالب"
+		},
+		"delete": {
+			"title": "حذف القالب",
+			"failed": "تعذّر حذف القالب",
+			"message": "سيؤدي هذا إلى حذف هذا القالب نهائيًا من جهازك."
+		},
+		"placeholders": {
+			"title": "عنوان الملاحظة",
+			"view": "عرض المتغيرات المتاحة",
+			"heading": "المتغيرات المتاحة",
+			"date": "التاريخ الحالي",
+			"time": "الوقت الحالي",
+			"example": "مثال: {{value}}",
+			"title_example": "ملاحظات الاجتماع"
+		}
 	}
 }

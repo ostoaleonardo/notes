@@ -106,7 +106,8 @@
 				"ntype82": "Lettertype 1",
 				"geist": "Lettertype 2",
 				"description": "Lettertype voor titels"
-			}
+			},
+			"language_system": "Systeemstandaard"
 		},
 		"pro": "Upgraden naar Pro",
 		"about": {
@@ -168,6 +169,9 @@
 				"title": "Inline titel",
 				"on": "Aan",
 				"off": "Uit"
+			},
+			"autocorrect": {
+				"title": "Autocorrectie"
 			}
 		},
 		"daily_note": {
@@ -214,6 +218,33 @@
 				"title": "Toegang tot alle bestanden",
 				"granted": "Toegestaan. Grote repositories laden sneller.",
 				"denied": "Niet toegestaan. Sta het toe zodat grote repositories sneller laden."
+			}
+		},
+		"history": {
+			"title": "Versiegeschiedenis",
+			"interval": {
+				"title": "Sla een versie op elke",
+				"value_one": "{{count}} minuut",
+				"value_other": "{{count}} minuten"
+			},
+			"retention": {
+				"title": "Versies bewaren gedurende",
+				"zero": "Geen tijdslimiet",
+				"value_one": "{{count}} dag",
+				"value_other": "{{count}} dagen"
+			},
+			"max": {
+				"title": "Versies per notitie",
+				"value_one": "{{count}} versie",
+				"value_other": "{{count}} versies"
+			}
+		},
+		"widgets": {
+			"title": "Widgets",
+			"glass": {
+				"title": "Glaseffect",
+				"description": "Doorschijnende widgetachtergrond",
+				"opacity": "Dekking"
 			}
 		}
 	},
@@ -279,7 +310,11 @@
 		"dont_update": "Overslaan",
 		"update_once": "Eenmalig bijwerken",
 		"update_always": "Altijd bijwerken",
-		"move": "Verplaatsen naar"
+		"move": "Verplaatsen naar",
+		"random_note": "Willekeurige notitie",
+		"previous_daily": "Vorige dagelijkse notitie",
+		"next_daily": "Volgende dagelijkse notitie",
+		"clear": "Wissen"
 	},
 	"count": {
 		"notes_one": "{{count}} notitie",
@@ -557,5 +592,34 @@
 	"direct_access": {
 		"title": "Sneller laden",
 		"message": "Sta toegang tot alle bestanden toe zodat grote repositories sneller laden. Notes werkt ook zonder."
+	},
+	"templates": {
+		"names": {
+			"journal": "Dagboek",
+			"checklist": "Checklist",
+			"meeting": "Vergadering",
+			"ideas": "Brainstorm",
+			"goals": "Doel"
+		},
+		"new": "Nieuwe sjabloon",
+		"import": "Importeren",
+		"save": {
+			"success": "Sjabloon opgeslagen",
+			"failed": "Kan de sjabloon niet opslaan"
+		},
+		"delete": {
+			"title": "Sjabloon verwijderen",
+			"failed": "Kan de sjabloon niet verwijderen",
+			"message": "Deze sjabloon wordt permanent van je apparaat verwijderd."
+		},
+		"placeholders": {
+			"title": "Notitietitel",
+			"view": "Beschikbare variabelen bekijken",
+			"heading": "Beschikbare variabelen",
+			"date": "Huidige datum",
+			"time": "Huidige tijd",
+			"example": "bijv. {{value}}",
+			"title_example": "Vergadernotities"
+		}
 	}
 }

@@ -106,7 +106,8 @@
 				"ntype82": "Typsnitt 1",
 				"geist": "Typsnitt 2",
 				"description": "Typsnitt för rubriker"
-			}
+			},
+			"language_system": "Systemstandard"
 		},
 		"pro": "Uppgradera till Pro",
 		"about": {
@@ -168,6 +169,9 @@
 				"title": "Inbäddad titel",
 				"on": "På",
 				"off": "Av"
+			},
+			"autocorrect": {
+				"title": "Autokorrigering"
 			}
 		},
 		"daily_note": {
@@ -214,6 +218,33 @@
 				"title": "Åtkomst till alla filer",
 				"granted": "Tillåtet. Stora arkiv läses in snabbare.",
 				"denied": "Inte tillåtet. Tillåt det så att stora arkiv läses in snabbare."
+			}
+		},
+		"history": {
+			"title": "Versionshistorik",
+			"interval": {
+				"title": "Spara en version var",
+				"value_one": "{{count}} minut",
+				"value_other": "{{count}} minuter"
+			},
+			"retention": {
+				"title": "Behåll versioner i",
+				"zero": "Ingen tidsgräns",
+				"value_one": "{{count}} dag",
+				"value_other": "{{count}} dagar"
+			},
+			"max": {
+				"title": "Versioner per anteckning",
+				"value_one": "{{count}} version",
+				"value_other": "{{count}} versioner"
+			}
+		},
+		"widgets": {
+			"title": "Widgetar",
+			"glass": {
+				"title": "Glaseffekt",
+				"description": "Genomskinlig widgetbakgrund",
+				"opacity": "Opacitet"
 			}
 		}
 	},
@@ -279,7 +310,11 @@
 		"dont_update": "Hoppa över",
 		"update_once": "Uppdatera en gång",
 		"update_always": "Uppdatera alltid",
-		"move": "Flytta till"
+		"move": "Flytta till",
+		"random_note": "Slumpmässig anteckning",
+		"previous_daily": "Föregående dagsanteckning",
+		"next_daily": "Nästa dagsanteckning",
+		"clear": "Rensa"
 	},
 	"count": {
 		"notes_one": "{{count}} anteckning",
@@ -557,5 +592,34 @@
 	"direct_access": {
 		"title": "Snabbare inläsning",
 		"message": "Tillåt åtkomst till alla filer så att stora arkiv läses in snabbare. Notes fungerar även utan."
+	},
+	"templates": {
+		"names": {
+			"journal": "Dagbok",
+			"checklist": "Checklista",
+			"meeting": "Möte",
+			"ideas": "Brainstorming",
+			"goals": "Mål"
+		},
+		"new": "Ny mall",
+		"import": "Importera",
+		"save": {
+			"success": "Mallen sparades",
+			"failed": "Det gick inte att spara mallen"
+		},
+		"delete": {
+			"title": "Radera mall",
+			"failed": "Det gick inte att radera mallen",
+			"message": "Mallen raderas permanent från din enhet."
+		},
+		"placeholders": {
+			"title": "Anteckningens titel",
+			"view": "Visa tillgängliga variabler",
+			"heading": "Tillgängliga variabler",
+			"date": "Aktuellt datum",
+			"time": "Aktuell tid",
+			"example": "t.ex. {{value}}",
+			"title_example": "Mötesanteckningar"
+		}
 	}
 }

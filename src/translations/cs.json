@@ -106,7 +106,8 @@
 				"ntype82": "Písmo 1",
 				"geist": "Písmo 2",
 				"description": "Písmo používané pro nadpisy"
-			}
+			},
+			"language_system": "Podle systému"
 		},
 		"pro": "Přejít na Pro",
 		"about": {
@@ -168,6 +169,9 @@
 				"title": "Vložený název",
 				"on": "Zapnuto",
 				"off": "Vypnuto"
+			},
+			"autocorrect": {
+				"title": "Automatické opravy"
 			}
 		},
 		"daily_note": {
@@ -214,6 +218,39 @@
 				"title": "Přístup ke všem souborům",
 				"granted": "Povoleno. Velká úložiště se načítají rychleji.",
 				"denied": "Nepovoleno. Povolte, aby se velká úložiště načítala rychleji."
+			}
+		},
+		"history": {
+			"title": "Historie verzí",
+			"interval": {
+				"title": "Ukládat verzi každých",
+				"value_one": "{{count}} minuta",
+				"value_few": "{{count}} minuty",
+				"value_many": "{{count}} minuty",
+				"value_other": "{{count}} minut"
+			},
+			"retention": {
+				"title": "Uchovávat verze",
+				"zero": "Bez časového omezení",
+				"value_one": "{{count}} den",
+				"value_few": "{{count}} dny",
+				"value_many": "{{count}} dne",
+				"value_other": "{{count}} dní"
+			},
+			"max": {
+				"title": "Verzí na poznámku",
+				"value_one": "{{count}} verze",
+				"value_few": "{{count}} verze",
+				"value_many": "{{count}} verze",
+				"value_other": "{{count}} verzí"
+			}
+		},
+		"widgets": {
+			"title": "Widgety",
+			"glass": {
+				"title": "Efekt skla",
+				"description": "Průsvitné pozadí widgetu",
+				"opacity": "Neprůhlednost"
 			}
 		}
 	},
@@ -279,7 +316,11 @@
 		"dont_update": "Přeskočit",
 		"update_once": "Aktualizovat jednou",
 		"update_always": "Vždy aktualizovat",
-		"move": "Přesunout do"
+		"move": "Přesunout do",
+		"random_note": "Náhodná poznámka",
+		"previous_daily": "Předchozí denní poznámka",
+		"next_daily": "Další denní poznámka",
+		"clear": "Vymazat"
 	},
 	"count": {
 		"notes_one": "{{count}} poznámka",
@@ -567,5 +608,34 @@
 	"direct_access": {
 		"title": "Rychlejší načítání",
 		"message": "Povolte přístup ke všem souborům, aby se velká úložiště načítala rychleji. Notes funguje i bez něj."
+	},
+	"templates": {
+		"names": {
+			"journal": "Deník",
+			"checklist": "Kontrolní seznam",
+			"meeting": "Schůzka",
+			"ideas": "Brainstorming",
+			"goals": "Cíl"
+		},
+		"new": "Nová šablona",
+		"import": "Importovat",
+		"save": {
+			"success": "Šablona uložena",
+			"failed": "Šablonu se nepodařilo uložit"
+		},
+		"delete": {
+			"title": "Smazat šablonu",
+			"failed": "Šablonu se nepodařilo smazat",
+			"message": "Tato šablona bude z vašeho zařízení trvale smazána."
+		},
+		"placeholders": {
+			"title": "Název poznámky",
+			"view": "Zobrazit dostupné proměnné",
+			"heading": "Dostupné proměnné",
+			"date": "Aktuální datum",
+			"time": "Aktuální čas",
+			"example": "např. {{value}}",
+			"title_example": "Poznámky ze schůzky"
+		}
 	}
 }
