@@ -7,52 +7,52 @@ internal const val PIPELINE_DEPTH = 1
 internal const val NANOS_PER_MILLI = 1_000_000L
 
 internal object ProgressKeys {
-  const val FOLDER_ID = "folderId"
-  const val DONE = "done"
-  const val TOTAL = "total"
+    const val FOLDER_ID = "folderId"
+    const val DONE = "done"
+    const val TOTAL = "total"
 }
 
 internal object StatsKeys {
-  const val TOTAL = "total"
-  const val ADDED = "added"
-  const val UPDATED = "updated"
-  const val REMOVED = "removed"
-  const val UNCHANGED = "unchanged"
-  const val UNREADABLE = "unreadable"
-  const val SCAN_MS = "scanMs"
-  const val READ_PARSE_MS = "readParseMs"
-  const val WRITE_MS = "writeMs"
+    const val TOTAL = "total"
+    const val ADDED = "added"
+    const val UPDATED = "updated"
+    const val REMOVED = "removed"
+    const val UNCHANGED = "unchanged"
+    const val UNREADABLE = "unreadable"
+    const val SCAN_MS = "scanMs"
+    const val READ_PARSE_MS = "readParseMs"
+    const val WRITE_MS = "writeMs"
 }
 
 internal object QueryKeys {
-  const val COLUMNS = "columns"
-  const val VALUES = "values"
+    const val COLUMNS = "columns"
+    const val VALUES = "values"
 }
 
 internal object IndexedKeys {
-  const val FOLDER_IDS = "folderIds"
-  const val FILENAMES = "filenames"
-  const val MODIFIED = "modified"
+    const val FOLDER_IDS = "folderIds"
+    const val FILENAMES = "filenames"
+    const val MODIFIED = "modified"
 }
 
 internal object SaveKeys {
-  const val STATUS = "status"
-  const val URI = "uri"
-  const val MODIFIED = "modified"
-  const val SIZE = "size"
-  const val DISK_MODIFIED = "diskModified"
-  const val SAVED = "saved"
-  const val CONFLICT = "conflict"
-  const val MISSING = "missing"
-  const val FAILED = "failed"
+    const val STATUS = "status"
+    const val URI = "uri"
+    const val MODIFIED = "modified"
+    const val SIZE = "size"
+    const val DISK_MODIFIED = "diskModified"
+    const val SAVED = "saved"
+    const val CONFLICT = "conflict"
+    const val MISSING = "missing"
+    const val FAILED = "failed"
 }
 
 internal object DecomposedKeys {
-  const val BODY = "body"
-  const val TAGS = "tags"
-  const val PROPERTIES_JSON = "propertiesJson"
-  const val INVALID_FRONTMATTER = "invalidFrontmatter"
-  const val RAW_FRONTMATTER = "rawFrontmatter"
+    const val BODY = "body"
+    const val TAGS = "tags"
+    const val PROPERTIES_JSON = "propertiesJson"
+    const val INVALID_FRONTMATTER = "invalidFrontmatter"
+    const val RAW_FRONTMATTER = "rawFrontmatter"
 }
 
 internal const val WRITE_ATTEMPTS = 3
@@ -62,16 +62,16 @@ internal const val WRITE_TRUNCATE_MODE = "wt"
 internal const val REPOSITORY_JSON_MIME = "application/json"
 
 internal object MoveKeys {
-  const val STATUS = "status"
-  const val URI = "uri"
-  const val MODIFIED = "modified"
-  const val SIZE = "size"
-  const val MOVED = "moved"
-  const val TARGET_EXISTS = "targetExists"
-  const val SOURCE_MISSING = "sourceMissing"
+    const val STATUS = "status"
+    const val URI = "uri"
+    const val MODIFIED = "modified"
+    const val SIZE = "size"
+    const val MOVED = "moved"
+    const val TARGET_EXISTS = "targetExists"
+    const val SOURCE_MISSING = "sourceMissing"
 }
 
 internal object RenamedKeys {
-  const val PATH = "path"
-  const val URI = "uri"
+    const val PATH = "path"
+    const val URI = "uri"
 }

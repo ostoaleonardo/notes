@@ -22,197 +22,197 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 
 internal fun revokePermissions(context: Context) {
-  val resolver = context.contentResolver
-  val access = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+    val resolver = context.contentResolver
+    val access = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
 
-  resolver.persistedUriPermissions.forEach { resolver.releasePersistableUriPermission(it.uri, access) }
+    resolver.persistedUriPermissions.forEach { resolver.releasePersistableUriPermission(it.uri, access) }
 
-  if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
 
-  val packageManager = context.packageManager
-  val info = packageManager.getPackageInfo(context.packageName, PackageManager.PackageInfoFlags.of(PackageManager.GET_PERMISSIONS.toLong()))
-  val runtimePermissions = granted(info).filter { name ->
-    runCatching { packageManager.getPermissionInfo(name, 0).protection == PermissionInfo.PROTECTION_DANGEROUS }.getOrDefault(false)
-  }
+    val packageManager = context.packageManager
+    val info = packageManager.getPackageInfo(context.packageName, PackageManager.PackageInfoFlags.of(PackageManager.GET_PERMISSIONS.toLong()))
+    val runtimePermissions = granted(info).filter { name ->
+        runCatching { packageManager.getPermissionInfo(name, 0).protection == PermissionInfo.PROTECTION_DANGEROUS }.getOrDefault(false)
+    }
 
-  if (runtimePermissions.isNotEmpty()) context.revokeSelfPermissionsOnKill(runtimePermissions)
+    if (runtimePermissions.isNotEmpty()) context.revokeSelfPermissionsOnKill(runtimePermissions)
 }
 
 private fun granted(info: PackageInfo): List<String> {
-  val names = info.requestedPermissions ?: return emptyList()
-  val flags = info.requestedPermissionsFlags ?: return emptyList()
+    val names = info.requestedPermissions ?: return emptyList()
+    val flags = info.requestedPermissionsFlags ?: return emptyList()
 
-  return names.filterIndexed { index, _ -> flags[index] and PackageInfo.REQUESTED_PERMISSION_GRANTED != 0 }
+    return names.filterIndexed { index, _ -> flags[index] and PackageInfo.REQUESTED_PERMISSION_GRANTED != 0 }
 }
 
 internal var hasDirectAccess: () -> Boolean = {
-  Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()
+    Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()
 }
 
 internal fun documentIdOf(context: Context, uri: Uri): String = if (DocumentsContract.isDocumentUri(context, uri)) {
-  DocumentsContract.getDocumentId(uri)
+    DocumentsContract.getDocumentId(uri)
 } else {
-  DocumentsContract.getTreeDocumentId(uri)
+    DocumentsContract.getTreeDocumentId(uri)
 }
 
 internal fun directFile(context: Context, uri: Uri): File? {
-  if (uri.authority != EXTERNAL_STORAGE_AUTHORITY || !hasDirectAccess()) return null
+    if (uri.authority != EXTERNAL_STORAGE_AUTHORITY || !hasDirectAccess()) return null
 
-  val documentId = runCatching { documentIdOf(context, uri) }.getOrNull() ?: return null
-  val volume = documentId.substringBefore(VOLUME_SEPARATOR)
-  val relativePath = documentId.substringAfter(VOLUME_SEPARATOR, "")
-  val root = if (volume == PRIMARY_VOLUME) Environment.getExternalStorageDirectory() else File("/storage/$volume")
+    val documentId = runCatching { documentIdOf(context, uri) }.getOrNull() ?: return null
+    val volume = documentId.substringBefore(VOLUME_SEPARATOR)
+    val relativePath = documentId.substringAfter(VOLUME_SEPARATOR, "")
+    val root = if (volume == PRIMARY_VOLUME) Environment.getExternalStorageDirectory() else File("/storage/$volume")
 
-  return File(root, relativePath)
+    return File(root, relativePath)
 }
 
 internal data class DirectNotesTarget(val path: String, val uriPrefix: String)
 
 internal fun directNotesTarget(context: Context, uri: Uri): DirectNotesTarget? {
-  val directory = directFile(context, uri)?.takeIf { it.isDirectory } ?: return null
-  val childPrefix = DocumentsContract.buildDocumentUriUsingTree(uri, documentIdOf(context, uri) + PATH_SEPARATOR)
+    val directory = directFile(context, uri)?.takeIf { it.isDirectory } ?: return null
+    val childPrefix = DocumentsContract.buildDocumentUriUsingTree(uri, documentIdOf(context, uri) + PATH_SEPARATOR)
 
-  return DirectNotesTarget(directory.path, childPrefix.toString())
+    return DirectNotesTarget(directory.path, childPrefix.toString())
 }
 
 internal fun listDirectory(context: Context, uri: Uri): List<Map<String, Any?>> =
-  directFile(context, uri)?.takeIf { it.isDirectory && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O }?.let { listDirectDirectory(uri, documentIdOf(context, uri), it) }
-    ?: listProviderDirectory(context, uri)
+    directFile(context, uri)?.takeIf { it.isDirectory && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O }?.let { listDirectDirectory(uri, documentIdOf(context, uri), it) }
+        ?: listProviderDirectory(context, uri)
 
 @RequiresApi(Build.VERSION_CODES.O)
 private fun listDirectDirectory(uri: Uri, documentId: String, directory: File): List<Map<String, Any?>> =
-  directory.listFiles().orEmpty().mapNotNull { file ->
-    val attributes = runCatching {
-      Files.readAttributes(file.toPath(), BasicFileAttributes::class.java)
-    }.getOrNull() ?: return@mapNotNull null
+    directory.listFiles().orEmpty().mapNotNull { file ->
+        val attributes = runCatching {
+            Files.readAttributes(file.toPath(), BasicFileAttributes::class.java)
+        }.getOrNull() ?: return@mapNotNull null
 
-    val childId = documentId + PATH_SEPARATOR + file.name
-    val childUri = DocumentsContract.buildDocumentUriUsingTree(uri, childId).toString()
-    val isDirectory = attributes.isDirectory
+        val childId = documentId + PATH_SEPARATOR + file.name
+        val childUri = DocumentsContract.buildDocumentUriUsingTree(uri, childId).toString()
+        val isDirectory = attributes.isDirectory
 
-    mapOf(
-      EntryKeys.URI to if (isDirectory) "$childUri/" else childUri,
-      EntryKeys.NAME to file.name,
-      EntryKeys.IS_DIRECTORY to isDirectory,
-      EntryKeys.LAST_MODIFIED to attributes.lastModifiedTime().toMillis().toDouble(),
-      EntryKeys.SIZE to attributes.size().toDouble()
-    )
-  }
+        mapOf(
+            EntryKeys.URI to if (isDirectory) "$childUri/" else childUri,
+            EntryKeys.NAME to file.name,
+            EntryKeys.IS_DIRECTORY to isDirectory,
+            EntryKeys.LAST_MODIFIED to attributes.lastModifiedTime().toMillis().toDouble(),
+            EntryKeys.SIZE to attributes.size().toDouble()
+        )
+    }
 
 internal fun walkAttachments(context: Context, uri: Uri, folder: String, found: MutableList<Triple<String, String, String>>) {
-  listDirectory(context, uri).forEach { entry ->
-    val name = entry[EntryKeys.NAME] as String
-    val entryUri = entry[EntryKeys.URI] as String
+    listDirectory(context, uri).forEach { entry ->
+        val name = entry[EntryKeys.NAME] as String
+        val entryUri = entry[EntryKeys.URI] as String
 
-    if (name.startsWith(HIDDEN_PREFIX)) return@forEach
+        if (name.startsWith(HIDDEN_PREFIX)) return@forEach
 
-    if (entry[EntryKeys.IS_DIRECTORY] == true) {
-      walkAttachments(context, Uri.parse(entryUri), if (folder.isEmpty()) name else "$folder$PATH_SEPARATOR$name", found)
-    } else if (!name.endsWith(NOTE_EXTENSION, ignoreCase = true)) {
-      found.add(Triple(entryUri, name, folder))
+        if (entry[EntryKeys.IS_DIRECTORY] == true) {
+            walkAttachments(context, Uri.parse(entryUri), if (folder.isEmpty()) name else "$folder$PATH_SEPARATOR$name", found)
+        } else if (!name.endsWith(NOTE_EXTENSION, ignoreCase = true)) {
+            found.add(Triple(entryUri, name, folder))
+        }
     }
-  }
 }
 
 internal fun toColumns(entries: List<Map<String, Any?>>): Map<String, List<Any?>> = mapOf(
-  ColumnKeys.URIS to entries.map { it[EntryKeys.URI] },
-  ColumnKeys.NAMES to entries.map { it[EntryKeys.NAME] },
-  ColumnKeys.DIRECTORIES to entries.map { it[EntryKeys.IS_DIRECTORY] },
-  ColumnKeys.LAST_MODIFIED to entries.map { it[EntryKeys.LAST_MODIFIED] },
-  ColumnKeys.SIZES to entries.map { it[EntryKeys.SIZE] }
+    ColumnKeys.URIS to entries.map { it[EntryKeys.URI] },
+    ColumnKeys.NAMES to entries.map { it[EntryKeys.NAME] },
+    ColumnKeys.DIRECTORIES to entries.map { it[EntryKeys.IS_DIRECTORY] },
+    ColumnKeys.LAST_MODIFIED to entries.map { it[EntryKeys.LAST_MODIFIED] },
+    ColumnKeys.SIZES to entries.map { it[EntryKeys.SIZE] }
 )
 
 private fun entryOf(uri: Uri, documentId: String, name: String, isDirectory: Boolean, lastModified: Long?, size: Long?): Map<String, Any?> {
-  val childUri = DocumentsContract.buildDocumentUriUsingTree(uri, documentId).toString()
+    val childUri = DocumentsContract.buildDocumentUriUsingTree(uri, documentId).toString()
 
-  return mapOf(
-    EntryKeys.URI to if (isDirectory) "$childUri/" else childUri,
-    EntryKeys.NAME to name,
-    EntryKeys.IS_DIRECTORY to isDirectory,
-    EntryKeys.LAST_MODIFIED to lastModified?.toDouble(),
-    EntryKeys.SIZE to size?.toDouble()
-  )
+    return mapOf(
+        EntryKeys.URI to if (isDirectory) "$childUri/" else childUri,
+        EntryKeys.NAME to name,
+        EntryKeys.IS_DIRECTORY to isDirectory,
+        EntryKeys.LAST_MODIFIED to lastModified?.toDouble(),
+        EntryKeys.SIZE to size?.toDouble()
+    )
 }
 
 internal fun findChild(context: Context, uri: Uri, name: String): Map<String, Any?>? {
-  val childId = documentIdOf(context, uri) + PATH_SEPARATOR + name
-  val file = directFile(context, uri)?.let { File(it, name) }
+    val childId = documentIdOf(context, uri) + PATH_SEPARATOR + name
+    val file = directFile(context, uri)?.let { File(it, name) }
 
-  if (file != null) {
-    return if (file.exists()) entryOf(uri, childId, name, file.isDirectory, file.lastModified(), file.length()) else null
-  }
-
-  val childUri = DocumentsContract.buildDocumentUriUsingTree(uri, childId)
-
-  return runCatching {
-    context.contentResolver.query(childUri, CHILD_COLUMNS, null, null, null)?.use { cursor ->
-      if (!cursor.moveToFirst()) return@use null
-
-      entryOf(
-        uri,
-        childId,
-        cursor.getString(1) ?: name,
-        cursor.getString(2) == Document.MIME_TYPE_DIR,
-        if (cursor.isNull(3)) null else cursor.getLong(3),
-        if (cursor.isNull(4)) null else cursor.getLong(4)
-      )
+    if (file != null) {
+        return if (file.exists()) entryOf(uri, childId, name, file.isDirectory, file.lastModified(), file.length()) else null
     }
-  }.getOrNull()
+
+    val childUri = DocumentsContract.buildDocumentUriUsingTree(uri, childId)
+
+    return runCatching {
+        context.contentResolver.query(childUri, CHILD_COLUMNS, null, null, null)?.use { cursor ->
+            if (!cursor.moveToFirst()) return@use null
+
+            entryOf(
+                uri,
+                childId,
+                cursor.getString(1) ?: name,
+                cursor.getString(2) == Document.MIME_TYPE_DIR,
+                if (cursor.isNull(3)) null else cursor.getLong(3),
+                if (cursor.isNull(4)) null else cursor.getLong(4)
+            )
+        }
+    }.getOrNull()
 }
 
 private fun listProviderDirectory(context: Context, uri: Uri): List<Map<String, Any?>> {
-  val documentId = documentIdOf(context, uri)
-  val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(uri, documentId)
-  val entries = mutableListOf<Map<String, Any?>>()
+    val documentId = documentIdOf(context, uri)
+    val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(uri, documentId)
+    val entries = mutableListOf<Map<String, Any?>>()
 
-  context.contentResolver.query(childrenUri, CHILD_COLUMNS, null, null, null)?.use { cursor ->
-    while (cursor.moveToNext()) {
-      val isDirectory = cursor.getString(2) == Document.MIME_TYPE_DIR
-      val childUri = DocumentsContract.buildDocumentUriUsingTree(uri, cursor.getString(0)).toString()
+    context.contentResolver.query(childrenUri, CHILD_COLUMNS, null, null, null)?.use { cursor ->
+        while (cursor.moveToNext()) {
+            val isDirectory = cursor.getString(2) == Document.MIME_TYPE_DIR
+            val childUri = DocumentsContract.buildDocumentUriUsingTree(uri, cursor.getString(0)).toString()
 
-      entries.add(
-        mapOf(
-          EntryKeys.URI to if (isDirectory) "$childUri/" else childUri,
-          EntryKeys.NAME to cursor.getString(1),
-          EntryKeys.IS_DIRECTORY to isDirectory,
-          EntryKeys.LAST_MODIFIED to if (cursor.isNull(3)) null else cursor.getLong(3).toDouble(),
-          EntryKeys.SIZE to if (cursor.isNull(4)) null else cursor.getLong(4).toDouble()
-        )
-      )
+            entries.add(
+                mapOf(
+                    EntryKeys.URI to if (isDirectory) "$childUri/" else childUri,
+                    EntryKeys.NAME to cursor.getString(1),
+                    EntryKeys.IS_DIRECTORY to isDirectory,
+                    EntryKeys.LAST_MODIFIED to if (cursor.isNull(3)) null else cursor.getLong(3).toDouble(),
+                    EntryKeys.SIZE to if (cursor.isNull(4)) null else cursor.getLong(4).toDouble()
+                )
+            )
+        }
     }
-  }
 
-  return entries
+    return entries
 }
 
 private fun readText(client: ContentProviderClient, uri: Uri): String? = runCatching {
-  client.openFile(uri, "r")?.let(ParcelFileDescriptor::AutoCloseInputStream)?.use {
-    it.readBytes().toString(Charsets.UTF_8)
-  }
+    client.openFile(uri, "r")?.let(ParcelFileDescriptor::AutoCloseInputStream)?.use {
+        it.readBytes().toString(Charsets.UTF_8)
+    }
 }.getOrNull()
 
 private fun readText(file: File): String? = runCatching { file.readText() }.getOrNull()
 
 suspend fun <T> readAll(
-  context: Context,
-  uris: List<String>,
-  dispatcher: CoroutineDispatcher,
-  transform: (String) -> T
+    context: Context,
+    uris: List<String>,
+    dispatcher: CoroutineDispatcher,
+    transform: (String) -> T
 ): List<T?> {
-  val documents = uris.map(Uri::parse)
-  val client = lazy {
-    documents.firstOrNull()?.authority?.let(context.contentResolver::acquireUnstableContentProviderClient)
-  }
-
-  return try {
-    coroutineScope {
-      documents.map { uri ->
-        async(dispatcher) {
-          (directFile(context, uri)?.let(::readText) ?: client.value?.let { readText(it, uri) })?.let(transform)
-        }
-      }.awaitAll()
+    val documents = uris.map(Uri::parse)
+    val client = lazy {
+        documents.firstOrNull()?.authority?.let(context.contentResolver::acquireUnstableContentProviderClient)
     }
-  } finally {
-    if (client.isInitialized()) client.value?.close()
-  }
+
+    return try {
+        coroutineScope {
+            documents.map { uri ->
+                async(dispatcher) {
+                    (directFile(context, uri)?.let(::readText) ?: client.value?.let { readText(it, uri) })?.let(transform)
+                }
+            }.awaitAll()
+        }
+    } finally {
+        if (client.isInitialized()) client.value?.close()
+    }
 }

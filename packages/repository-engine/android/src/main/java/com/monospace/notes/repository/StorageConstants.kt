@@ -12,26 +12,26 @@ internal const val HIDDEN_PREFIX = "."
 internal const val NOTE_EXTENSION = ".md"
 
 internal val CHILD_COLUMNS = arrayOf(
-  Document.COLUMN_DOCUMENT_ID,
-  Document.COLUMN_DISPLAY_NAME,
-  Document.COLUMN_MIME_TYPE,
-  Document.COLUMN_LAST_MODIFIED,
-  Document.COLUMN_SIZE
+    Document.COLUMN_DOCUMENT_ID,
+    Document.COLUMN_DISPLAY_NAME,
+    Document.COLUMN_MIME_TYPE,
+    Document.COLUMN_LAST_MODIFIED,
+    Document.COLUMN_SIZE
 )
 
 internal object EntryKeys {
-  const val URI = "uri"
-  const val NAME = "name"
-  const val IS_DIRECTORY = "isDirectory"
-  const val LAST_MODIFIED = "lastModified"
-  const val SIZE = "size"
+    const val URI = "uri"
+    const val NAME = "name"
+    const val IS_DIRECTORY = "isDirectory"
+    const val LAST_MODIFIED = "lastModified"
+    const val SIZE = "size"
 }
 
 internal object ColumnKeys {
-  const val URIS = "uris"
-  const val NAMES = "names"
-  const val DIRECTORIES = "directories"
-  const val LAST_MODIFIED = "lastModified"
-  const val SIZES = "sizes"
-  const val FOLDERS = "folders"
+    const val URIS = "uris"
+    const val NAMES = "names"
+    const val DIRECTORIES = "directories"
+    const val LAST_MODIFIED = "lastModified"
+    const val SIZES = "sizes"
+    const val FOLDERS = "folders"
 }

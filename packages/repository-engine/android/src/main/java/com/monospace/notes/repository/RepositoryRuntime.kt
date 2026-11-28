@@ -8,24 +8,24 @@ import uniffi.engine.Engine
 import uniffi.engine.VersionsHandle
 
 internal class RepositoryRuntime(
-  private val contextProvider: () -> Context,
-  val sendEvent: (String, Map<String, Any?>) -> Unit
+    private val contextProvider: () -> Context,
+    val sendEvent: (String, Map<String, Any?>) -> Unit
 ) {
-  val context: Context
-    get() = contextProvider()
+    val context: Context
+        get() = contextProvider()
 
-  val readDispatcher = Dispatchers.IO.limitedParallelism(READ_PARALLELISM)
-  val indexLock = Mutex()
-  val searches = SearchRegistry()
+    val readDispatcher = Dispatchers.IO.limitedParallelism(READ_PARALLELISM)
+    val indexLock = Mutex()
+    val searches = SearchRegistry()
 
-  private val engineLock = Any()
-  private var sharedEngine: Engine? = null
-  private val versionStores = ConcurrentHashMap<String, VersionsHandle>()
+    private val engineLock = Any()
+    private var sharedEngine: Engine? = null
+    private val versionStores = ConcurrentHashMap<String, VersionsHandle>()
 
-  fun engine(): Engine = synchronized(engineLock) {
-    sharedEngine ?: openEngine(context).also { sharedEngine = it }
-  }
+    fun engine(): Engine = synchronized(engineLock) {
+        sharedEngine ?: openEngine(context).also { sharedEngine = it }
+    }
 
-  fun versionsFor(rootUri: String): VersionsHandle =
-    versionStores.getOrPut("$rootUri#${hasDirectAccess()}") { VersionsHandle(repositoryFor(context, rootUri)) }
+    fun versionsFor(rootUri: String): VersionsHandle =
+        versionStores.getOrPut("$rootUri#${hasDirectAccess()}") { VersionsHandle(repositoryFor(context, rootUri)) }
 }

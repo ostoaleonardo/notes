@@ -8,19 +8,19 @@ import uniffi.engine.sanitizeFilename
 import uniffi.engine.uniqueFilename
 
 internal fun ModuleDefinitionBuilder.defineNames(runtime: RepositoryRuntime) = with(runtime) {
-  Function("sanitizeFilename") { title: String, extension: String ->
-    sanitizeFilename(title, extension)
-  }
+    Function("sanitizeFilename") { title: String, extension: String ->
+        sanitizeFilename(title, extension)
+    }
 
-  Function("uniqueFilename") { existing: List<String>, stem: String, extension: String, current: String? ->
-    uniqueFilename(existing, stem, extension, current)
-  }
+    Function("uniqueFilename") { existing: List<String>, stem: String, extension: String, current: String? ->
+        uniqueFilename(existing, stem, extension, current)
+    }
 
-  Function("composeNote") { tags: List<String>, propertiesJson: String, invalidFrontmatter: String?, rawFrontmatter: String?, body: String ->
-    composeNote(NoteFieldsRecord(tags, propertiesJson, invalidFrontmatter, rawFrontmatter), body)
-  }
+    Function("composeNote") { tags: List<String>, propertiesJson: String, invalidFrontmatter: String?, rawFrontmatter: String?, body: String ->
+        composeNote(NoteFieldsRecord(tags, propertiesJson, invalidFrontmatter, rawFrontmatter), body)
+    }
 
-  Function("decomposeNote") { content: String ->
-    decomposeNoteToMap(decomposeNote(content))
-  }
+    Function("decomposeNote") { content: String ->
+        decomposeNoteToMap(decomposeNote(content))
+    }
 }
